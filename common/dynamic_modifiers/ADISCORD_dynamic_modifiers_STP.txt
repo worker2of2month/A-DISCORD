@@ -137,3 +137,16 @@ STP_ps_nodes_dynamic = {
 	planning_speed = STP_ps_node_planning
 	army_speed_factor = STP_ps_node_redeployment
 }
+
+STP_ch_institutions = {
+	icon = GFX_idea_STP_apparatus_loyalty
+	enable = {
+		STP_ch_current = yes
+	}
+	army_org_factor = STP_ch_organization
+	industrial_capacity_factory = STP_ch_output
+	ADISCORD_economy_trade_income_factor = STP_ch_trade
+	ADISCORD_economy_admin_expense_factor = STP_ch_administration
+	stability_factor = STP_ch_stability
+	political_power_factor = STP_ch_political_power
+}

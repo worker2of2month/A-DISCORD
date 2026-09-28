@@ -88,4 +88,6 @@ VAL_order_1_deadline
 VAL_order_2_deadline
 
 VAL_military_deadline
+
+STP_ch_crisis_deadline
 ADISCORD_economy_demobilization_deadline

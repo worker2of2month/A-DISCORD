@@ -3411,6 +3411,118 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_postwar",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.1",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 1,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.2",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 2,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.3",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 3,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.4",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 4,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.5",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 5,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.6",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 6,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.7",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 7,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.8",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 8,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.9",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 9,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.10",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 10,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.11",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 11,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.12",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 12,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.13",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 13,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.14",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 14,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_political_chapters",
+      "status": "active"
     }
   ]
 }

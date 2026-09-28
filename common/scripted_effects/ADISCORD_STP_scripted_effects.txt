@@ -4392,6 +4392,7 @@ STP_pw_update_recovery = {
 	else_if = { limit = { has_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } } remove_dynamic_modifier = { modifier = STP_pw_reconstruction_dynamic } }
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
+	STP_ch_schedule_refresh = yes
 }
 
 # The deposit is the shared slot and the receipt; clear it before returning money.
@@ -4578,6 +4579,7 @@ STP_pw_refresh_modifier = {
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
+	STP_ch_schedule_refresh = yes
 }
 
 
@@ -5744,6 +5746,7 @@ STP_pf_refresh_programs = {
 STP_pf_apply_focus_program = {
 	if = { limit = { STP_pf_active = yes has_country_flag = STP_pf_initialized } STP_refresh_apparatus_loyalty = yes }
 	set_temp_variable = { var = STP_pf_finishing_program value = 0 }
+	STP_ch_schedule_refresh = yes
 }
 
 # Rebuild derived effects on load without replacing support, influence or negotiation dates.
@@ -5762,6 +5765,7 @@ STP_pf_calculate = {
 		STP_pw_party_refresh_constitution = yes
 	}
 	STP_pf_refresh_programs = yes
+	if = { limit = { has_variable = STP_ch_phase } STP_ch_recount = yes }
 	set_variable = { var = STP_apparatus_loyalty value = 0 }
 	clamp_variable = { var = STP_pf_conservatives_support min = 0 max = 100 }
 	set_variable = { var = STP_pf_conservatives_contribution value = STP_pf_conservatives_support }
@@ -6113,6 +6117,7 @@ STP_pf_shift = {
 }
 
 STP_pf_clear = {
+	if = { limit = { has_variable = STP_ch_phase } STP_ch_clear = yes }
 	if = { limit = { has_country_flag = STP_pf_initialized }
 		STP_pw_party_clear_constitution = yes
 		clr_country_flag = STP_pf_initialized
@@ -6239,8 +6244,11 @@ STP_pw_party_start_nod_invasion_threat = {
 			else = {
 				STP_pw_party_break_nod_alliance = yes
 				set_country_flag = STP_pw_party_nod_threat_active
-				activate_mission = STP_pw_party_nod_invasion_countdown
-				country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+				if = { limit = { has_variable = STP_ch_phase } STP_ch_start_pressure = yes }
+				else = {
+					activate_mission = STP_pw_party_nod_invasion_countdown
+					country_event = { id = ADISCORD_STP_pc.28 hours = 1 }
+				}
 			}
 		}
 		else = {
@@ -6302,23 +6310,45 @@ STP_pw_party_launch_nod_invasion = {
 STP_pw_party_settle_nod_invasion_defeat = {
 	if = {
 		limit = {
-			tag = STP
+			STP_ch_current = yes
 			has_country_flag = STP_pw_party_nod_invasion_active
-			NOD = { exists = yes has_war_with = STP }
+			has_war_with = NOD
 		}
-		NOD = {
-			if = { limit = { has_war_with = STP } white_peace = STP }
-			remove_ideas = STP_pw_nod_invasion_mandate
-			add_war_support = -0.10
+		if = {
+			limit = {
+				has_country_flag = STP_ch_liberation_war
+			}
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_defeated
+			white_peace = NOD
+			set_country_flag = STP_ch_liberated
+			STP_ch_open_congress = yes
 		}
-		clr_country_flag = STP_pw_party_nod_threat_active
-			clr_country_flag = STP_pw_party_compact_pending
-		clr_country_flag = STP_pw_party_nod_invasion_active
-		set_country_flag = STP_pw_party_nod_invasion_defeated
-		add_stability = 0.08
-		add_political_power = 100
-		mark_focus_tree_layout_dirty = yes
-		country_event = { id = ADISCORD_STP_pc.30 hours = 1 }
+		else = {
+			STP_pw_party_begin_nod_subject = yes
+		}
+	}
+	else = {
+		if = {
+				limit = {
+					tag = STP
+					has_country_flag = STP_pw_party_nod_invasion_active
+					NOD = { exists = yes has_war_with = STP }
+				}
+				NOD = {
+					if = { limit = { has_war_with = STP } white_peace = STP }
+					remove_ideas = STP_pw_nod_invasion_mandate
+					add_war_support = -0.10
+				}
+				clr_country_flag = STP_pw_party_nod_threat_active
+					clr_country_flag = STP_pw_party_compact_pending
+				clr_country_flag = STP_pw_party_nod_invasion_active
+				set_country_flag = STP_pw_party_nod_invasion_defeated
+				add_stability = 0.08
+				add_political_power = 100
+				mark_focus_tree_layout_dirty = yes
+				country_event = { id = ADISCORD_STP_pc.30 hours = 1 }
+			}
 	}
 }
 
@@ -6336,30 +6366,49 @@ STP_pw_party_close_nod_invasion_after_foreign_defeat = {
 		white_peace = NOD
 	}
 	mark_focus_tree_layout_dirty = yes
+	if = {
+		limit = { has_country_flag = STP_ch_liberation_war }
+		clr_country_flag = STP_ch_liberation_war
+		set_country_flag = STP_ch_liberated
+	}
+	STP_ch_reconcile = yes
 }
 
 STP_pw_party_settle_nod_invasion_victory = {
 	if = {
 		limit = {
-			tag = NOD
 			STP = {
-				exists = yes
+				has_variable = STP_ch_phase
 				has_country_flag = STP_pw_party_nod_invasion_active
-				has_war_with = NOD
 			}
 		}
-		remove_ideas = STP_pw_nod_invasion_mandate
-		set_country_flag = STP_pw_party_invasion_victorious
-		STP = { STP_close_competing_ultimatum_wars_after_defeat = yes }
-		if = { limit = { has_war_with = STP } white_peace = STP }
 		STP = {
-			clr_country_flag = STP_pw_party_nod_threat_active
-			clr_country_flag = STP_pw_party_compact_pending
-			clr_country_flag = STP_pw_party_nod_invasion_active
-			set_country_flag = STP_pw_party_nod_invasion_lost
-			STP_pw_party_clear_constitution = yes
+			STP_ch_prepare_protectorate = yes
 		}
-		annex_country = { target = STP transfer_troops = yes }
+	}
+	else = {
+		if = {
+				limit = {
+					tag = NOD
+					STP = {
+						exists = yes
+						has_country_flag = STP_pw_party_nod_invasion_active
+						has_war_with = NOD
+					}
+				}
+				remove_ideas = STP_pw_nod_invasion_mandate
+				set_country_flag = STP_pw_party_invasion_victorious
+				STP = { STP_close_competing_ultimatum_wars_after_defeat = yes }
+				if = { limit = { has_war_with = STP } white_peace = STP }
+				STP = {
+					clr_country_flag = STP_pw_party_nod_threat_active
+					clr_country_flag = STP_pw_party_compact_pending
+					clr_country_flag = STP_pw_party_nod_invasion_active
+					set_country_flag = STP_pw_party_nod_invasion_lost
+					STP_pw_party_clear_constitution = yes
+				}
+				annex_country = { target = STP transfer_troops = yes }
+			}
 	}
 }
 
@@ -7754,6 +7803,7 @@ STP_pw_party_begin_nod_subject = {
 			NOT = { has_country_flag = STP_pw_party_nod_subject_pending }
 		}
 		set_country_flag = STP_pw_party_nod_subject_pending
+		STP_ch_close_pressure = yes
 		STP_pw_party_close_northern_operations = yes
 		clr_country_flag = STP_pw_party_nod_threat_active
 		clr_country_flag = STP_pw_party_compact_pending
@@ -7788,6 +7838,7 @@ STP_pw_party_finalize_nod_subject = {
 			NOD = { ADISCORD_economy_mark_dirty = yes }
 			ADISCORD_economy_mark_dirty = yes
 			mark_focus_tree_layout_dirty = yes
+			STP_ch_open_congress = yes
 			NOD = { STP_pw_party_sync_revolution_subject = yes }
 			country_event = { id = ADISCORD_STP_pc.42 hours = 1 }
 		}
@@ -7797,7 +7848,8 @@ STP_pw_party_finalize_nod_subject = {
 STP_pw_party_win_nod_campaign = {
 	if = {
 		limit = { STP_pw_party_revolution_current = yes has_completed_focus = STP_pw_party_nod_congress has_war_with = NOD NOD = { is_subject = no } }
-		STP_pw_party_begin_nod_subject = yes
+		if = { limit = { has_country_flag = STP_ch_liberation_war } STP_pw_party_settle_nod_invasion_defeat = yes }
+		else = { STP_pw_party_begin_nod_subject = yes }
 	}
 }
 
@@ -8586,5 +8638,1970 @@ STP_pw_party_clear_constitution = {
 	remove_ideas = {
 		STP_pw_party_high_houses_government
 		STP_pw_party_unbound_government
+	}
+}
+
+# Political chapters: external settlement, congress, programme and inherited obligations.
+
+STP_ch_initialize = {
+	if = {
+		limit = {
+			STP_pf_active = yes
+			STP_pw_can_reconstruct = yes
+			NOT = {
+				has_variable = STP_ch_phase
+			}
+		}
+		STP_pf_initialize = yes
+		set_variable = { var = STP_ch_pressure_target value = 2 }
+		set_variable = {
+			var = STP_ch_phase
+			value = 1
+		}
+		set_variable = {
+			var = STP_ch_nominee
+			value = 1
+		}
+		set_variable = {
+			var = STP_ch_cooperation
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_endorse_conservatives
+			value = 1
+		}
+		set_variable = {
+			var = STP_ch_endorse_borons
+			value = 1
+		}
+		set_variable = {
+			var = STP_ch_endorse_security
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_endorse_army
+			value = 3
+		}
+		set_variable = {
+			var = STP_ch_endorse_advisers
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_endorse_merchants
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_endorse_radicals
+			value = 2
+		}
+		set_country_flag = STP_ch_army_access
+		set_country_flag = STP_ch_economy_access
+		set_country_flag = STP_ch_party_access
+		STP_ch_refresh = yes
+		STP_ch_select_ai_nominee = yes
+		if = {
+			limit = {
+				is_subject_of = NOD
+			}
+			STP_ch_enter_protectorate = yes
+		}
+		else_if = {
+			limit = {
+				NOD = {
+					exists = yes
+					is_subject = no
+					has_capitulated = no
+				}
+			}
+			STP_pw_party_start_nod_invasion_threat = yes
+		}
+		else = {
+			STP_ch_open_congress = yes
+		}
+	}
+}
+
+STP_ch_recount = {
+	if = {
+		limit = {
+			STP_ch_campaigning = yes
+		}
+		set_variable = {
+			var = STP_ch_votes_1
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_votes_2
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_votes_3
+			value = 0
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_conservatives
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_conservatives_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_conservatives
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_conservatives_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_conservatives
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_conservatives_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_borons
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_borons_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_borons
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_borons_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_borons
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_borons_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_security
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_security_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_security
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_security_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_security
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_security_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_army
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_army_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_army
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_army_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_army
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_army_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_advisers
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_advisers_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_advisers
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_advisers_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_advisers
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_advisers_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_merchants
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_merchants_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_merchants
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_merchants_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_merchants
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_merchants_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_radicals
+					value = 1
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_1
+				value = STP_pf_radicals_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_radicals
+					value = 2
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_2
+				value = STP_pf_radicals_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_radicals
+					value = 3
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_3
+				value = STP_pf_radicals_influence
+			}
+		}
+	}
+}
+
+STP_ch_refresh = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+		}
+		STP_ch_recount = yes
+		set_variable = {
+			var = STP_ch_unpaid_promises
+			value = 0
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_conservatives
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_conservatives
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_borons
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_borons
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_security
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_security
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_army
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_army
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_advisers
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_advisers
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_merchants
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_merchants
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_government
+				check_variable = {
+					var = STP_ch_pledge_radicals
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_radicals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_unpaid_promises
+				value = 1
+			}
+		}
+		set_variable = {
+			var = STP_ch_army_capacity
+			value = 0
+		}
+		if = {
+			limit = {
+				STP_ch_army_ready = yes
+			}
+			set_variable = {
+				var = STP_ch_army_capacity
+				value = 1
+			}
+		}
+		set_variable = {
+			var = STP_ch_economy_capacity
+			value = 0
+		}
+		if = {
+			limit = {
+				STP_ch_economy_ready = yes
+			}
+			set_variable = {
+				var = STP_ch_economy_capacity
+				value = 1
+			}
+		}
+		set_variable = {
+			var = STP_ch_party_capacity
+			value = 0
+		}
+		if = {
+			limit = {
+				STP_ch_party_ready = yes
+			}
+			set_variable = {
+				var = STP_ch_party_capacity
+				value = 1
+			}
+		}
+		set_variable = {
+			var = STP_ch_organization
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_output
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_trade
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_administration
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_stability
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_political_power
+			value = 0
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = STP_ch_army_access
+				}
+				STP_ch_army_ready = no
+			}
+			set_variable = {
+				var = STP_ch_organization
+				value = -0.15
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = STP_ch_economy_access
+				}
+				STP_ch_economy_ready = no
+			}
+			set_variable = {
+				var = STP_ch_output
+				value = -0.2
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = STP_ch_party_access
+				}
+				STP_ch_party_ready = no
+			}
+			set_variable = {
+				var = STP_ch_administration
+				value = 0.15
+			}
+		}
+		if = {
+			limit = {
+				STP_ch_cold = yes
+				check_variable = {
+					var = STP_ch_escalation
+					value = 2
+					compare = greater_than_or_equals
+				}
+				has_country_flag = STP_ch_economy_access
+			}
+			set_variable = {
+				var = STP_ch_trade
+				value = -0.15
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_fulfilled_merchants
+			}
+			add_to_variable = {
+				var = STP_ch_trade
+				value = 0.05
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_fulfilled_borons
+			}
+			add_to_variable = {
+				var = STP_ch_administration
+				value = -0.04
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_fulfilled_conservatives
+			}
+			add_to_variable = {
+				var = STP_ch_stability
+				value = 0.02
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_fulfilled_radicals
+			}
+			add_to_variable = {
+				var = STP_ch_stability
+				value = 0.02
+			}
+			add_to_variable = {
+				var = STP_ch_administration
+				value = 0.03
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_security_ministry
+					value = 1
+					compare = equals
+				}
+				STP_ch_army_ready = yes
+			}
+			add_to_variable = {
+				var = STP_ch_organization
+				value = 0.03
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_military_veto
+			}
+			add_to_variable = {
+				var = STP_ch_political_power
+				value = -0.1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_dynamic_modifier = {
+						modifier = STP_ch_institutions
+					}
+				}
+			}
+			add_dynamic_modifier = {
+				modifier = STP_ch_institutions
+			}
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ch_close_pressure = {
+	# Invalidate the threat before remove_mission can dispatch cancel_effect.
+	clr_country_flag = STP_pw_party_nod_threat_active
+	clr_country_flag = STP_pw_party_compact_pending
+	clr_country_flag = STP_pw_party_nod_offer_pending
+	clr_country_flag = STP_pw_party_nod_offer_accepted
+	remove_mission = STP_ch_pressure_1
+	remove_mission = STP_ch_pressure_2
+	remove_mission = STP_ch_pressure_3
+	remove_mission = STP_ch_pressure_4
+	remove_mission = STP_pw_party_nod_invasion_countdown
+}
+
+STP_ch_start_pressure = {
+	if = {
+		limit = {
+			STP_ch_pressure_current = yes
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_variable = STP_ch_escalation
+				}
+			}
+			set_variable = {
+				var = STP_ch_escalation
+				value = 1
+			}
+			activate_mission = STP_ch_pressure_1
+			country_event = {
+				id = ADISCORD_STP_ch.2
+				hours = 1
+			}
+		}
+	}
+}
+
+STP_ch_escalate_1 = {
+	if = {
+		limit = {
+			STP_ch_pressure_current = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 1
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ch_escalation
+			value = 2
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_economy_access
+			}
+			set_variable = {
+				var = STP_ch_pressure_target
+				value = 2
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					has_country_flag = STP_ch_party_access
+				}
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 3
+				}
+				set_temp_variable = {
+					var = STP_pf_selected
+					value = 5
+				}
+				STP_pf_shift = yes
+			}
+			else = {
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 1
+				}
+			}
+		}
+		activate_mission = STP_ch_pressure_2
+		STP_ch_refresh = yes
+		country_event = {
+			id = ADISCORD_STP_ch.2
+			hours = 1
+		}
+	}
+}
+
+STP_ch_escalate_2 = {
+	if = {
+		limit = {
+			STP_ch_pressure_current = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 2
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ch_escalation
+			value = 3
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_economy_access
+			}
+			set_variable = {
+				var = STP_ch_pressure_target
+				value = 2
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					has_country_flag = STP_ch_party_access
+				}
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 3
+				}
+				set_temp_variable = {
+					var = STP_pf_selected
+					value = 5
+				}
+				STP_pf_shift = yes
+			}
+			else = {
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 1
+				}
+			}
+		}
+		activate_mission = STP_ch_pressure_3
+		STP_ch_refresh = yes
+		country_event = {
+			id = ADISCORD_STP_ch.2
+			hours = 1
+		}
+	}
+}
+
+STP_ch_escalate_3 = {
+	if = {
+		limit = {
+			STP_ch_pressure_current = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 3
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ch_escalation
+			value = 4
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_economy_access
+			}
+			set_variable = {
+				var = STP_ch_pressure_target
+				value = 2
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					has_country_flag = STP_ch_party_access
+				}
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 3
+				}
+				set_temp_variable = {
+					var = STP_pf_selected
+					value = 5
+				}
+				STP_pf_shift = yes
+			}
+			else = {
+				set_variable = {
+					var = STP_ch_pressure_target
+					value = 1
+				}
+			}
+		}
+		activate_mission = STP_ch_pressure_4
+		STP_ch_refresh = yes
+		country_event = {
+			id = ADISCORD_STP_ch.2
+			hours = 1
+		}
+	}
+}
+
+STP_ch_issue_invasion = {
+	if = {
+		limit = {
+			STP_ch_pressure_current = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 4
+				compare = equals
+			}
+		}
+		STP_pw_party_launch_nod_invasion = yes
+	}
+}
+
+STP_ch_open_congress = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			is_subject = no
+			NOT = {
+				has_war_with = NOD
+			}
+		}
+		if = {
+			limit = {
+				has_variable = STP_ch_resume_phase
+			}
+			set_variable = {
+				var = STP_ch_phase
+				value = STP_ch_resume_phase
+			}
+			clear_variable = STP_ch_resume_phase
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_ch_phase
+						value = 3
+						compare = equals
+					}
+					has_country_flag = STP_ch_ballot_closed
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.6
+					hours = 1
+				}
+			}
+		}
+		else = {
+			set_variable = {
+				var = STP_ch_phase
+				value = 3
+			}
+			country_event = {
+				id = ADISCORD_STP_ch.3
+				hours = 1
+			}
+		}
+		STP_ch_close_pressure = yes
+		clr_country_flag = STP_ch_release_pending
+		clr_country_flag = STP_ch_liberation_war
+		STP_ch_resume_crisis = yes
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_enter_protectorate = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			NOT = {
+				check_variable = {
+					var = STP_ch_phase
+					value = 2
+					compare = equals
+				}
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_phase
+					value = 2
+					compare = greater_than
+				}
+				NOT = {
+					has_variable = STP_ch_resume_phase
+				}
+			}
+			set_variable = {
+				var = STP_ch_resume_phase
+				value = STP_ch_phase
+			}
+		}
+		STP_ch_pause_crisis = yes
+		set_variable = {
+			var = STP_ch_phase
+			value = 2
+		}
+		remove_mission = STP_ch_crisis_deadline
+		STP_ch_close_pressure = yes
+		clr_country_flag = STP_ch_liberation_war
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		clr_country_flag = STP_pw_party_nod_campaign_active
+		clr_country_flag = STP_ch_release_pending
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+		country_event = {
+			id = ADISCORD_STP_ch.4
+			hours = 1
+		}
+	}
+}
+
+STP_ch_prepare_protectorate = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			NOD = {
+				exists = yes
+				is_subject = no
+			}
+			NOT = {
+				has_country_flag = STP_ch_subject_pending
+			}
+		}
+		set_country_flag = STP_ch_subject_pending
+		STP_ch_close_pressure = yes
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		STP_pw_party_close_northern_operations = yes
+		if = {
+			limit = {
+				has_war_with = NOD
+			}
+			white_peace = NOD
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				NOT = {
+					is_in_faction_with = NOD
+				}
+			}
+			if = {
+				limit = {
+					is_faction_leader = yes
+				}
+				dismantle_faction = yes
+			}
+			else = {
+				faction_leader = {
+					remove_from_faction = STP
+				}
+			}
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.5
+			days = 1
+		}
+	}
+}
+
+STP_ch_finalize_protectorate = {
+	if = {
+		limit = {
+			has_country_flag = STP_ch_subject_pending
+		}
+		clr_country_flag = STP_ch_subject_pending
+		if = {
+			limit = {
+				STP_ch_current = yes
+				is_subject = no
+				NOD = {
+					exists = yes
+					is_subject = no
+				}
+				NOT = {
+					has_war_with = NOD
+				}
+			}
+			NOD = {
+				set_autonomy = {
+					target = STP
+					autonomy_state = autonomy_puppet
+					end_wars = no
+					end_civil_wars = no
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			STP_ch_enter_protectorate = yes
+		}
+	}
+}
+
+STP_ch_reconcile = {
+	STP_ch_initialize = yes
+	if = {
+		limit = {
+			STP_ch_current = yes
+		}
+		if = {
+			limit = {
+				is_subject_of = NOD
+				NOT = {
+					check_variable = {
+						var = STP_ch_phase
+						value = 2
+						compare = equals
+					}
+				}
+			}
+			STP_ch_enter_protectorate = yes
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_phase
+					value = 2
+					compare = equals
+				}
+				is_subject = no
+				NOT = {
+					has_war_with = NOD
+				}
+				NOT = {
+					has_country_flag = STP_ch_subject_pending
+				}
+				NOT = { has_country_flag = STP_ch_liberation_war }
+			}
+			STP_ch_open_congress = yes
+		}
+		if = {
+			limit = {
+				STP_ch_cold = yes
+				NOT = {
+					has_country_flag = STP_ch_subject_pending
+				}
+				NOT = { has_country_flag = STP_ch_liberation_war }
+				NOT = {
+					has_country_flag = STP_pw_party_nod_subject_pending
+				}
+				OR = {
+					NOD = {
+						exists = no
+					}
+					NOD = {
+						is_subject = yes
+					}
+					has_country_flag = STP_pw_party_nod_compact
+					has_country_flag = STP_pw_party_nod_invasion_defeated
+				}
+				NOT = {
+					has_war_with = NOD
+				}
+			}
+			STP_ch_open_congress = yes
+		}
+	}
+}
+
+STP_ch_close_ballot = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 3
+				compare = equals
+			}
+			is_subject = no
+			NOT = {
+				has_country_flag = STP_ch_ballot_closed
+			}
+		}
+		STP_ch_recount = yes
+		set_country_flag = STP_ch_ballot_closed
+		country_event = {
+			id = ADISCORD_STP_ch.6
+			hours = 1
+		}
+	}
+}
+
+STP_ch_elect_1 = {
+	if = {
+		limit = {
+			STP_ch_candidate_1_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 1
+		}
+		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		if = {
+			limit = {
+				has_character = STP_rufus_hedersett
+			}
+			promote_character = STP_rufus_hedersett
+		}
+		else = {
+			create_country_leader = {
+				name = STP_ch_leader_1
+				desc = STP_ch_leader_1_desc
+				ideology = aristocratic_hedonism
+				expire = "2300.1.1"
+			}
+		}
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_elect_2 = {
+	if = {
+		limit = {
+			STP_ch_candidate_2_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 2
+		}
+		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		create_country_leader = {
+			name = STP_ch_leader_2
+			desc = STP_ch_leader_2_desc
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_elect_3 = {
+	if = {
+		limit = {
+			STP_ch_candidate_3_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 3
+		}
+		remove_ideas = { STP_pw_party_high_houses_government STP_pw_party_unbound_government }
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		if = {
+			limit = {
+				has_character = STP_August_Veil
+			}
+			add_country_leader_role = {
+				character = STP_August_Veil
+				promote_leader = yes
+				country_leader = {
+					ideology = hedonism_ideology
+					expire = "2300.1.1"
+				}
+			}
+			promote_character = {
+				character = STP_August_Veil
+				ideology = hedonism_ideology
+			}
+		}
+		else = {
+			create_country_leader = {
+				name = STP_ch_leader_3
+				desc = STP_ch_leader_3_desc
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
+			}
+		}
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_begin_crisis = {
+	if = {
+		limit = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+		}
+		clr_country_flag = STP_ch_army_crisis
+		clr_country_flag = STP_ch_north_crisis
+		clr_country_flag = STP_ch_trade_crisis
+		if = {
+			limit = {
+				has_country_flag = STP_ch_emergency_powers
+				NOT = {
+					has_country_flag = STP_ch_civilian_control
+				}
+			}
+			set_country_flag = STP_ch_army_crisis
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_north_breach
+				NOD = {
+					is_subject_of = STP
+				}
+			}
+			set_country_flag = STP_ch_north_crisis
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_supply_strain
+				NOT = {
+					has_country_flag = STP_ch_supply_buffer
+				}
+			}
+			set_country_flag = STP_ch_trade_crisis
+		}
+		set_variable = {
+			var = STP_ch_phase
+			value = 6
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+		if = {
+			limit = {
+				STP_ch_no_crisis = yes
+			}
+			STP_ch_finish_crisis = yes
+		}
+		else = {
+			activate_mission = STP_ch_crisis_deadline
+			country_event = {
+				id = ADISCORD_STP_ch.9
+				hours = 1
+			}
+		}
+	}
+}
+
+STP_ch_finish_crisis = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 6
+				compare = equals
+			}
+		}
+		set_variable = {
+			var = STP_ch_phase
+			value = 7
+		}
+		remove_mission = STP_ch_crisis_deadline
+		if = {
+			limit = {
+				has_country_flag = STP_ch_army_crisis
+			}
+			set_country_flag = STP_ch_military_veto
+			add_stability = -0.12
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_north_crisis
+				NOD = {
+					is_subject_of = STP
+				}
+			}
+			set_autonomy = {
+				target = NOD
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+			NOD = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_stability = -0.08
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_trade_crisis
+			}
+			add_timed_idea = {
+				idea = STP_ch_supply_crisis
+				days = 180
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_conservatives
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_conservatives
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_conservatives_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_conservatives
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_borons
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_borons
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_borons_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_borons
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_security
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_security
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_security_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_security
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_army
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_army
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_army_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_army
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_advisers
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_advisers
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_advisers_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_advisers
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_merchants
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_merchants
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_merchants_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_merchants
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_pledge_radicals
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_radicals
+				}
+			}
+			subtract_from_variable = {
+				var = STP_pf_radicals_support
+				value = 15
+			}
+			set_country_flag = STP_ch_broken_radicals
+		}
+		STP_refresh_apparatus_loyalty = yes
+		STP_ch_refresh = yes
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.10
+			hours = 1
+		}
+	}
+}
+
+STP_ch_accept_release = {
+	if = {
+		limit = {
+			STP_ch_release_offer_current = yes
+		}
+		set_autonomy = {
+			target = STP
+			autonomy_state = autonomy_free
+			end_wars = no
+			end_civil_wars = no
+		}
+		ADISCORD_economy_mark_dirty = yes
+		STP = {
+			clr_country_flag = STP_ch_release_pending
+			set_country_flag = STP_ch_liberated
+			STP_ch_open_congress = yes
+		}
+	}
+}
+
+STP_ch_refuse_release = {
+	if = {
+		limit = {
+			has_country_flag = STP_ch_release_pending
+		}
+		clr_country_flag = STP_ch_release_pending
+		country_event = {
+			id = ADISCORD_STP_ch.8
+			hours = 1
+		}
+	}
+}
+
+STP_ch_begin_liberation_war = {
+	if = {
+		limit = {
+			STP_ch_protectorate = yes
+			STP_ch_liberation_window = yes
+		}
+		NOD = {
+			set_autonomy = {
+				target = STP
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		clr_country_flag = STP_ch_release_pending
+		set_country_flag = STP_ch_liberation_war
+		set_country_flag = STP_pw_party_nod_invasion_active
+		STP_pw_party_break_nod_alliance = yes
+		country_event = {
+			id = ADISCORD_STP_ch.12
+			days = 1
+		}
+	}
+}
+
+STP_ch_launch_liberation_war = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			has_country_flag = STP_ch_liberation_war
+			is_subject = no
+			NOD = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+			}
+			NOT = {
+				has_war_with = NOD
+			}
+		}
+		declare_war_on = { target = NOD type = puppet_wargoal_focus }
+	}
+	else = {
+		if = {
+			limit = {
+				STP_ch_current = yes
+				has_country_flag = STP_ch_liberation_war
+				is_subject = no
+				NOT = {
+					has_war_with = NOD
+				}
+			}
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			clr_country_flag = STP_ch_liberation_war
+			STP_ch_open_congress = yes
+		}
+	}
+}
+
+STP_ch_train_army_finish = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_army_deposit
+		}
+		if = {
+			limit = {
+				STP_ch_current = yes
+				has_capitulated = no
+			}
+			clear_variable = STP_ch_train_army_deposit
+			set_country_flag = STP_ch_army_institution
+			set_temp_variable = {
+				var = STP_pf_selected
+				value = 4
+			}
+			STP_pf_shift = yes
+			STP_ch_refresh = yes
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_ch_train_army_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_ch_train_army_deposit
+			}
+			clear_variable = STP_ch_train_army_deposit
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_ch_train_army_refund = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_army_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_ch_train_army_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_ch_train_army_deposit
+		}
+		clear_variable = STP_ch_train_army_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ch_train_economy_finish = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_economy_deposit
+		}
+		if = {
+			limit = {
+				STP_ch_current = yes
+				has_capitulated = no
+			}
+			clear_variable = STP_ch_train_economy_deposit
+			set_country_flag = STP_ch_economy_institution
+			set_temp_variable = {
+				var = STP_pf_selected
+				value = 6
+			}
+			STP_pf_shift = yes
+			STP_ch_refresh = yes
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_ch_train_economy_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_ch_train_economy_deposit
+			}
+			clear_variable = STP_ch_train_economy_deposit
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_ch_train_economy_refund = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_economy_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_ch_train_economy_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_ch_train_economy_deposit
+		}
+		clear_variable = STP_ch_train_economy_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ch_train_party_finish = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_party_deposit
+		}
+		if = {
+			limit = {
+				STP_ch_current = yes
+				has_capitulated = no
+			}
+			clear_variable = STP_ch_train_party_deposit
+			set_country_flag = STP_ch_party_institution
+			set_temp_variable = {
+				var = STP_pf_selected
+				value = 2
+			}
+			STP_pf_shift = yes
+			STP_ch_refresh = yes
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_ch_train_party_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_ch_train_party_deposit
+			}
+			clear_variable = STP_ch_train_party_deposit
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_ch_train_party_refund = {
+	if = {
+		limit = {
+			has_variable = STP_ch_train_party_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_ch_train_party_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_ch_train_party_deposit
+		}
+		clear_variable = STP_ch_train_party_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_ch_clear = {
+	if = {
+		limit = {
+			has_variable = STP_ch_phase
+		}
+		# Cancellation callbacks must no longer see an active chapter.
+		clear_variable = STP_ch_phase
+		clear_variable = STP_ch_resume_phase
+		clr_country_flag = STP_ch_refresh_pending
+		STP_ch_train_army_refund = yes
+		STP_ch_train_economy_refund = yes
+		STP_ch_train_party_refund = yes
+		clear_variable = STP_ch_crisis_paused_days
+		STP_ch_close_pressure = yes
+		remove_mission = STP_ch_crisis_deadline
+		if = {
+			limit = {
+				has_dynamic_modifier = {
+					modifier = STP_ch_institutions
+				}
+			}
+			remove_dynamic_modifier = {
+				modifier = STP_ch_institutions
+			}
+		}
+		remove_ideas = STP_ch_supply_crisis
+		clr_country_flag = STP_ch_release_pending
+		clr_country_flag = STP_ch_aid_pending
+		clr_country_flag = STP_ch_subject_pending
+		clr_country_flag = STP_ch_liberation_war
+	}
+}
+
+STP_ch_accept_aid = {
+	if = {
+		limit = {
+			STP_ch_aid_offer_current = yes
+			STP_ch_aid_affordable = yes
+		}
+		STP = {
+			clr_country_flag = STP_ch_aid_pending
+		}
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -6000 }
+		subtract_from_variable = {
+			var = ADISCORD_economy_treasury
+			value = 450
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_costs
+			value = 450
+		}
+		ADISCORD_economy_mark_dirty = yes
+		STP = {
+			clr_country_flag = STP_ch_aid_pending
+			set_country_flag = STP_ch_aid_received
+			set_country_flag = STP_ch_army_access
+			set_country_flag = STP_ch_economy_access
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = NOD }
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = 450
+			}
+			set_temp_variable = {
+				var = STP_pf_selected
+				value = 5
+			}
+			STP_pf_shift = yes
+			STP_ch_refresh = yes
+		}
+	}
+}
+
+STP_ch_pause_crisis = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 6
+				compare = equals
+			}
+			NOT = {
+				has_variable = STP_ch_crisis_paused_days
+			}
+		}
+		set_variable = {
+			var = STP_ch_crisis_paused_days
+			value = days_mission_timeout@STP_ch_crisis_deadline
+		}
+		clamp_variable = {
+			var = STP_ch_crisis_paused_days
+			min = 1
+			max = 90
+		}
+	}
+}
+STP_ch_resume_crisis = {
+	if = {
+		limit = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 6
+				compare = equals
+			}
+			has_variable = STP_ch_crisis_paused_days
+		}
+		activate_mission = STP_ch_crisis_deadline
+		set_temp_variable = {
+			var = STP_ch_crisis_days_delta
+			value = STP_ch_crisis_paused_days
+		}
+		subtract_from_temp_variable = {
+			var = STP_ch_crisis_days_delta
+			value = 90
+		}
+		add_days_mission_timeout = {
+			mission = STP_ch_crisis_deadline
+			days = STP_ch_crisis_days_delta
+		}
+		clear_variable = STP_ch_crisis_paused_days
+	}
+}
+
+
+# Read completed-focus markers after the reward transaction, once per mutation batch.
+STP_ch_schedule_refresh = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			NOT = { has_country_flag = STP_ch_refresh_pending }
+		}
+		set_country_flag = STP_ch_refresh_pending
+		country_event = { id = ADISCORD_STP_ch.1 hours = 1 }
+	}
+}
+
+# Choose once from the inherited delegates; later coalition agreements keep this nominee.
+STP_ch_select_ai_nominee = {
+	if = {
+		limit = { is_ai = yes }
+		set_variable = { var = STP_ch_nominee value = 1 }
+		if = {
+			limit = {
+				check_variable = { var = STP_ch_votes_2 value = STP_ch_votes_1 compare = greater_than }
+				check_variable = { var = STP_ch_votes_2 value = STP_ch_votes_3 compare = greater_than_or_equals }
+			}
+			set_variable = { var = STP_ch_nominee value = 2 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = STP_ch_votes_3 value = STP_ch_votes_1 compare = greater_than }
+				check_variable = { var = STP_ch_votes_3 value = STP_ch_votes_2 compare = greater_than }
+			}
+			set_variable = { var = STP_ch_nominee value = 3 }
+		}
 	}
 }

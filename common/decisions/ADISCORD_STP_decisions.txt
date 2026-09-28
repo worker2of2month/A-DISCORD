@@ -6145,6 +6145,7 @@ VAL = {
 		icon = generic_diplomacy
 		allowed = { tag = STP }
 		visible = {
+			NOT = { has_variable = STP_ch_phase }
 			has_country_flag = STP_cw_postwar
 			has_country_flag = STP_pw_party_nod_threat_active
 			NOT = { OR = { has_country_flag = STP_pw_party_nod_compact has_country_flag = STP_pw_party_compact_refused } }
@@ -8070,6 +8071,3032 @@ STP_party_constitution_category = {
 				factor = 5
 				check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
 			}
+		}
+	}
+}
+
+STP_ch_chapters = {
+	STP_ch_train_army = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_current = yes
+			has_capitulated = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_train_army_requirements
+				STP_ch_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_ch_army_institution
+				}
+				NOT = {
+					has_variable = STP_ch_train_army_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_train_army_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 28
+		cancel_trigger = {
+			OR = {
+				STP_ch_current = no
+				has_capitulated = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_ch_train_army_finish = yes
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_train_army_refund = yes
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_current = yes
+						has_capitulated = no
+						NOT = {
+							has_country_flag = STP_ch_army_institution
+						}
+						NOT = {
+							has_variable = STP_ch_train_army_deposit
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_ch_train_army_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_remove_army = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			has_country_flag = STP_ch_army_access
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_remove_army_requirements
+				STP_ch_pressure_current = yes
+				has_country_flag = STP_ch_army_access
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_remove_army_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 40
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_pressure_current = yes
+						has_country_flag = STP_ch_army_access
+						NOT = {
+							has_political_power = < 40
+						}
+					}
+					add_political_power = -40
+					clr_country_flag = STP_ch_army_access
+					set_temp_variable = {
+						var = STP_pf_selected
+						value = 4
+					}
+					STP_pf_shift = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_train_economy = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_current = yes
+			has_capitulated = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_train_economy_requirements
+				STP_ch_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_ch_economy_institution
+				}
+				NOT = {
+					has_variable = STP_ch_train_economy_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_train_economy_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 28
+		cancel_trigger = {
+			OR = {
+				STP_ch_current = no
+				has_capitulated = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_ch_train_economy_finish = yes
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_train_economy_refund = yes
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_current = yes
+						has_capitulated = no
+						NOT = {
+							has_country_flag = STP_ch_economy_institution
+						}
+						NOT = {
+							has_variable = STP_ch_train_economy_deposit
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_ch_train_economy_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_remove_economy = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			has_country_flag = STP_ch_economy_access
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_remove_economy_requirements
+				STP_ch_pressure_current = yes
+				has_country_flag = STP_ch_economy_access
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_remove_economy_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 40
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_pressure_current = yes
+						has_country_flag = STP_ch_economy_access
+						NOT = {
+							has_political_power = < 40
+						}
+					}
+					add_political_power = -40
+					clr_country_flag = STP_ch_economy_access
+					set_temp_variable = {
+						var = STP_pf_selected
+						value = 6
+					}
+					STP_pf_shift = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_train_party = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_current = yes
+			has_capitulated = no
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_train_party_requirements
+				STP_ch_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_ch_party_institution
+				}
+				NOT = {
+					has_variable = STP_ch_train_party_deposit
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_train_party_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		days_remove = 28
+		cancel_trigger = {
+			OR = {
+				STP_ch_current = no
+				has_capitulated = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				STP_ch_train_party_finish = yes
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_train_party_refund = yes
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_current = yes
+						has_capitulated = no
+						NOT = {
+							has_country_flag = STP_ch_party_institution
+						}
+						NOT = {
+							has_variable = STP_ch_train_party_deposit
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_ch_train_party_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_remove_party = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			has_country_flag = STP_ch_party_access
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_remove_party_requirements
+				STP_ch_pressure_current = yes
+				has_country_flag = STP_ch_party_access
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_remove_party_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 40
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_pressure_current = yes
+						has_country_flag = STP_ch_party_access
+						NOT = {
+							has_political_power = < 40
+						}
+					}
+					add_political_power = -40
+					clr_country_flag = STP_ch_party_access
+					set_temp_variable = {
+						var = STP_pf_selected
+						value = 1
+					}
+					STP_pf_shift = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_trade_delay = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_trade_delay_requirements
+				STP_ch_pressure_current = yes
+				NOT = {
+					has_country_flag = STP_ch_trade_delay_used
+				}
+				NOT = {
+					has_equipment = { infantry_equipment < 1000 }
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_trade_delay_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_pressure_current = yes
+						NOT = {
+							has_country_flag = STP_ch_trade_delay_used
+						}
+						NOT = {
+							has_equipment = { infantry_equipment < 1000 }
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_country_flag = STP_ch_trade_delay_used
+					if = {
+						limit = {
+							has_active_mission = STP_pw_party_nod_invasion_countdown
+						}
+						add_days_mission_timeout = {
+							mission = STP_pw_party_nod_invasion_countdown
+							days = 42
+						}
+					}
+
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -1000 }
+					NOD = {
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 1000 producer = STP }
+					}
+					if = {
+						limit = {
+							has_active_mission = STP_ch_pressure_1
+						}
+						add_days_mission_timeout = {
+							mission = STP_ch_pressure_1
+							days = 42
+						}
+					}
+					if = {
+						limit = {
+							has_active_mission = STP_ch_pressure_2
+						}
+						add_days_mission_timeout = {
+							mission = STP_ch_pressure_2
+							days = 42
+						}
+					}
+					if = {
+						limit = {
+							has_active_mission = STP_ch_pressure_3
+						}
+						add_days_mission_timeout = {
+							mission = STP_ch_pressure_3
+							days = 42
+						}
+					}
+					if = {
+						limit = {
+							has_active_mission = STP_ch_pressure_4
+						}
+						add_days_mission_timeout = {
+							mission = STP_ch_pressure_4
+							days = 42
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_accept_protection = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_accept_protection_requirements
+				STP_ch_pressure_current = yes
+				NOT = {
+					has_country_flag = STP_ch_subject_pending
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_pressure_current = yes
+						NOT = {
+							has_country_flag = STP_ch_subject_pending
+						}
+					}
+					STP_ch_prepare_protectorate = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+	STP_ch_northern_guarantees = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			has_completed_focus = STP_pw_party_northern_contacts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_northern_guarantees_requirements
+				STP_pw_party_northern_work_current = yes
+				NOT = {
+					has_country_flag = STP_ch_north_guarantees
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_northern_guarantees_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 50
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pw_party_northern_work_current = yes
+						NOT = {
+							has_country_flag = STP_ch_north_guarantees
+						}
+						NOT = {
+							has_political_power = < 50
+						}
+					}
+					add_political_power = -50
+					set_country_flag = STP_ch_north_guarantees
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_nominate_1 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_nominate_1_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					check_variable = {
+						var = STP_ch_nominee
+						value = 1
+						compare = equals
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							check_variable = {
+								var = STP_ch_nominee
+								value = 1
+								compare = equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_ch_nominee
+						value = 1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	STP_ch_nominate_2 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_nominate_2_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					check_variable = {
+						var = STP_ch_nominee
+						value = 2
+						compare = equals
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							check_variable = {
+								var = STP_ch_nominee
+								value = 2
+								compare = equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_ch_nominee
+						value = 2
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	STP_ch_nominate_3 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_nominate_3_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					check_variable = {
+						var = STP_ch_nominee
+						value = 3
+						compare = equals
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							check_variable = {
+								var = STP_ch_nominee
+								value = 3
+								compare = equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_ch_nominee
+						value = 3
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	STP_ch_pledge_conservatives = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_conservatives
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_conservatives_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_conservatives
+				}
+				check_variable = {
+					var = STP_pf_conservatives_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_conservatives_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_conservatives
+						}
+						check_variable = {
+							var = STP_pf_conservatives_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_conservatives
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_conservatives
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_conservatives = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_conservatives
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_conservatives
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_conservatives_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_conservatives
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_conservatives
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_conservatives_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_conservatives
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_conservatives
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+					}
+					add_political_power = -35
+					set_country_flag = STP_ch_fulfilled_conservatives
+					add_to_variable = {
+						var = STP_pf_conservatives_support
+						value = 8
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_borons = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_borons
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_borons_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_borons
+				}
+				check_variable = {
+					var = STP_pf_borons_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_borons_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_borons
+						}
+						check_variable = {
+							var = STP_pf_borons_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_borons
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_borons
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_borons = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_borons
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_borons
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_borons_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_borons
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_borons
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_borons_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_borons
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_borons
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+					}
+					add_political_power = -35
+					set_country_flag = STP_ch_fulfilled_borons
+					add_to_variable = {
+						var = STP_pf_borons_support
+						value = 8
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_security = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_security
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_security_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_security
+				}
+				check_variable = {
+					var = STP_pf_security_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_security_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_security
+						}
+						check_variable = {
+							var = STP_pf_security_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_security
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_security
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_security = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_security
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_security
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_security_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_security
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_security
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_security_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_security
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_security
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+					}
+					add_political_power = -35
+					set_country_flag = STP_ch_fulfilled_security
+					add_to_variable = {
+						var = STP_pf_security_support
+						value = 8
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_army = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_army
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_army_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_army
+				}
+				check_variable = {
+					var = STP_pf_army_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_army_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_army
+						}
+						check_variable = {
+							var = STP_pf_army_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_army
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_army
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_army = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_army
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_army
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_army_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_army
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_army
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_army_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_army
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_army
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+					}
+					add_political_power = -35
+					set_country_flag = STP_ch_fulfilled_army
+					add_to_variable = {
+						var = STP_pf_army_support
+						value = 8
+					}
+					set_country_flag = STP_ch_emergency_powers
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_advisers = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_advisers
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_advisers_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_advisers
+				}
+				check_variable = {
+					var = STP_pf_advisers_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_advisers_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_advisers
+						}
+						check_variable = {
+							var = STP_pf_advisers_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_advisers
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_advisers
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_advisers = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_advisers
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_advisers
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_advisers_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_advisers
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_advisers
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_advisers_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_advisers
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_advisers
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = STP_ch_fulfilled_advisers
+					add_to_variable = {
+						var = STP_pf_advisers_support
+						value = 8
+					}
+					set_country_flag = STP_ch_economy_access
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_merchants = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_merchants
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_merchants_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_merchants
+				}
+				check_variable = {
+					var = STP_pf_merchants_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_merchants_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_merchants
+						}
+						check_variable = {
+							var = STP_pf_merchants_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_merchants
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_merchants
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_merchants = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_merchants
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_merchants
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_merchants_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_merchants
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_merchants
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_merchants_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_merchants
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_merchants
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = STP_ch_fulfilled_merchants
+					add_to_variable = {
+						var = STP_pf_merchants_support
+						value = 8
+					}
+					set_country_flag = STP_ch_supply_buffer
+					clr_country_flag = STP_ch_trade_crisis
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pledge_radicals = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+			NOT = {
+				has_variable = STP_ch_pledge_radicals
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_pledge_radicals_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					has_variable = STP_ch_pledge_radicals
+				}
+				check_variable = {
+					var = STP_pf_radicals_support
+					value = 40
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_pledge_radicals_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							has_variable = STP_ch_pledge_radicals
+						}
+						check_variable = {
+							var = STP_pf_radicals_support
+							value = 40
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_variable = {
+						var = STP_ch_pledge_radicals
+						value = STP_ch_nominee
+					}
+					set_variable = {
+						var = STP_ch_endorse_radicals
+						value = STP_ch_nominee
+					}
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_fulfil_radicals = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_pledge_radicals
+				value = STP_ch_government
+				compare = equals
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_radicals
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_fulfil_radicals_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_pledge_radicals
+					value = STP_ch_government
+					compare = equals
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_radicals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_fulfil_radicals_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 35
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_pledge_radicals
+							value = STP_ch_government
+							compare = equals
+						}
+						NOT = {
+							has_country_flag = STP_ch_fulfilled_radicals
+						}
+						NOT = {
+							has_political_power = < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = STP_ch_fulfilled_radicals
+					add_to_variable = {
+						var = STP_pf_radicals_support
+						value = 8
+					}
+					add_ideas = ADISCORD_labor_policy_collective_bargaining
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_security_ministry_1 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_security_ministry
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_security_ministry_1_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_security_ministry
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_security_ministry_1_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_security_ministry
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_security_ministry
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pf_army_support
+						value = 5
+					}
+					set_country_flag = STP_ch_emergency_powers
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_security_ministry_2 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_security_ministry
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_security_ministry_2_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_security_ministry
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_security_ministry_2_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_security_ministry
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_security_ministry
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pf_security_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_economy_ministry_1 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_economy_ministry
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_economy_ministry_1_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_economy_ministry
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_economy_ministry_1_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_economy_ministry
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_economy_ministry
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pf_merchants_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_economy_ministry_2 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_economy_ministry
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_economy_ministry_2_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_economy_ministry
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_economy_ministry_2_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_economy_ministry
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_economy_ministry
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pf_conservatives_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_appointments_1 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_appointments
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_appointments_1_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_appointments
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_appointments_1_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_appointments
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_appointments
+						value = 1
+					}
+					add_to_variable = {
+						var = STP_pf_conservatives_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_appoint_appointments_2 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+			has_completed_focus = STP_ch_cabinet
+			NOT = {
+				has_variable = STP_ch_appointments
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appoint_appointments_2_requirements
+				STP_ch_governing = yes
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+				has_completed_focus = STP_ch_cabinet
+				NOT = {
+					has_variable = STP_ch_appointments
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_appoint_appointments_2_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 20
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						check_variable = {
+							var = STP_ch_phase
+							value = 4
+							compare = equals
+						}
+						has_completed_focus = STP_ch_cabinet
+						NOT = {
+							has_variable = STP_ch_appointments
+						}
+						NOT = {
+							has_political_power = < 20
+						}
+					}
+					add_political_power = -20
+					set_variable = {
+						var = STP_ch_appointments
+						value = 2
+					}
+					add_to_variable = {
+						var = STP_pf_borons_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_cooperate = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_protectorate = yes
+			has_completed_focus = STP_ch_model_ally
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_cooperate_requirements
+				STP_ch_protectorate = yes
+				has_completed_focus = STP_ch_model_ally
+				check_variable = {
+					var = STP_ch_cooperation
+					value = 3
+					compare = less_than
+				}
+				NOT = {
+					has_country_flag = STP_ch_cooperation_cooldown
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_cooperate_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_protectorate = yes
+						has_completed_focus = STP_ch_model_ally
+						check_variable = {
+							var = STP_ch_cooperation
+							value = 3
+							compare = less_than
+						}
+						NOT = {
+							has_country_flag = STP_ch_cooperation_cooldown
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -25
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					add_to_variable = {
+						var = STP_ch_cooperation
+						value = 1
+					}
+					set_country_flag = {
+						flag = STP_ch_cooperation_cooldown
+						days = 60
+					}
+					set_temp_variable = {
+						var = STP_pf_selected
+						value = 5
+					}
+					STP_pf_shift = yes
+					army_experience = 10
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_ch_cooperation
+								value = 1
+								compare = equals
+							}
+						}
+						set_country_flag = STP_ch_economy_institution
+					}
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_ch_cooperation
+								value = 2
+								compare = equals
+							}
+						}
+						set_country_flag = STP_ch_party_institution
+					}
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_ch_cooperation
+								value = 3
+								compare = equals
+							}
+						}
+						if = {
+							limit = {
+								capital_scope = {
+									is_owned_by = ROOT
+									is_controlled_by = ROOT
+									free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+								}
+							}
+							capital_scope = {
+								add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+							}
+						}
+						else = {
+							add_tech_bonus = {
+								name = STP_ch_industrial_training
+								bonus = 0.5
+								uses = 2
+								category = industry
+							}
+						}
+					}
+
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_request_release = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_protectorate = yes
+			has_completed_focus = STP_ch_local_apparatus
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_request_release_requirements
+				STP_ch_protectorate = yes
+				has_completed_focus = STP_ch_local_apparatus
+				STP_ch_liberation_window = yes
+				NOT = {
+					has_country_flag = STP_ch_release_pending
+				}
+				NOT = {
+					has_country_flag = STP_ch_release_cooldown
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_request_release_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 50
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_protectorate = yes
+						has_completed_focus = STP_ch_local_apparatus
+						STP_ch_liberation_window = yes
+						NOT = {
+							has_country_flag = STP_ch_release_pending
+						}
+						NOT = {
+							has_country_flag = STP_ch_release_cooldown
+						}
+						NOT = {
+							has_political_power = < 50
+						}
+					}
+					add_political_power = -50
+					set_country_flag = STP_ch_release_pending
+					set_country_flag = {
+						flag = STP_ch_release_cooldown
+						days = 60
+					}
+					NOD = {
+						country_event = {
+							id = ADISCORD_STP_ch.7
+							hours = 1
+						}
+					}
+					country_event = {
+						id = ADISCORD_STP_ch.11
+						days = 22
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_armed_break = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_protectorate = yes
+			has_completed_focus = STP_ch_local_apparatus
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_armed_break_requirements
+				STP_ch_protectorate = yes
+				STP_ch_liberation_window = yes
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_armed_break_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 75
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_protectorate = yes
+						STP_ch_liberation_window = yes
+						NOT = {
+							has_political_power = < 75
+						}
+					}
+					add_political_power = -75
+					STP_ch_begin_liberation_war = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+		}
+	}
+	STP_ch_supply_buffer = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_supply_buffer_requirements
+				STP_ch_governing = yes
+				NOT = {
+					has_country_flag = STP_ch_supply_buffer
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_supply_buffer_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 40
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = greater_than_or_equals
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						NOT = {
+							has_country_flag = STP_ch_supply_buffer
+						}
+						NOT = {
+							has_political_power = < 40
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 900
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -40
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 900
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 900
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_country_flag = STP_ch_supply_buffer
+					clr_country_flag = STP_ch_trade_crisis
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_civilian_control = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_civilian_control_requirements
+				STP_ch_governing = yes
+				NOT = {
+					has_country_flag = STP_ch_civilian_control
+				}
+				check_variable = {
+					var = STP_pf_army_support
+					value = 45
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_civilian_control_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 75
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						NOT = {
+							has_country_flag = STP_ch_civilian_control
+						}
+						check_variable = {
+							var = STP_pf_army_support
+							value = 45
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power = < 75
+						}
+					}
+					add_political_power = -75
+					set_country_flag = STP_ch_civilian_control
+					clr_country_flag = STP_ch_army_crisis
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_break_guarantees = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			has_country_flag = STP_ch_north_guarantees
+			NOD = {
+				is_subject_of = STP
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_break_guarantees_requirements
+				STP_ch_governing = yes
+				NOT = {
+					has_country_flag = STP_ch_north_breach
+				}
+				has_country_flag = STP_ch_north_guarantees
+				NOD = {
+					is_subject_of = STP
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_break_guarantees_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 25
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						NOT = {
+							has_country_flag = STP_ch_north_breach
+						}
+						has_country_flag = STP_ch_north_guarantees
+						NOD = {
+							is_subject_of = STP
+						}
+						NOT = {
+							has_political_power = < 25
+						}
+					}
+					add_political_power = -25
+					set_country_flag = STP_ch_north_breach
+					if = {
+						limit = {
+							check_variable = {
+								var = STP_ch_phase
+								value = 6
+								compare = equals
+							}
+						}
+						set_country_flag = STP_ch_north_crisis
+					}
+					add_to_variable = {
+						var = STP_pf_conservatives_support
+						value = 8
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	STP_ch_restore_guarantees = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			has_country_flag = STP_ch_north_breach
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_restore_guarantees_requirements
+				STP_ch_governing = yes
+				has_country_flag = STP_ch_north_breach
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_restore_guarantees_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power = < 60
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						has_country_flag = STP_ch_north_breach
+						NOT = {
+							has_political_power = < 60
+						}
+					}
+					add_political_power = -60
+					clr_country_flag = STP_ch_north_breach
+					clr_country_flag = STP_ch_north_crisis
+					subtract_from_variable = {
+						var = STP_pf_army_support
+						value = 5
+					}
+					STP_refresh_apparatus_loyalty = yes
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_pressure_1 = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 1
+				compare = equals
+			}
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		days_mission_timeout = 210
+		selectable_mission = no
+		fire_only_once = yes
+		cancel_trigger = {
+			STP_ch_pressure_current = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_reconcile = yes
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_ch_escalate_1 = yes
+			}
+		}
+	}
+	STP_ch_pressure_2 = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 2
+				compare = equals
+			}
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		days_mission_timeout = 120
+		selectable_mission = no
+		fire_only_once = yes
+		cancel_trigger = {
+			STP_ch_pressure_current = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_reconcile = yes
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_ch_escalate_2 = yes
+			}
+		}
+	}
+	STP_ch_pressure_3 = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 3
+				compare = equals
+			}
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		days_mission_timeout = 90
+		selectable_mission = no
+		fire_only_once = yes
+		cancel_trigger = {
+			STP_ch_pressure_current = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_reconcile = yes
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_ch_escalate_3 = yes
+			}
+		}
+	}
+	STP_ch_pressure_4 = {
+		icon = generic_prepare_civil_war
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_escalation
+				value = 4
+				compare = equals
+			}
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		days_mission_timeout = 30
+		selectable_mission = no
+		fire_only_once = yes
+		cancel_trigger = {
+			STP_ch_pressure_current = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				STP_ch_reconcile = yes
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_ch_issue_invasion = yes
+			}
+		}
+	}
+	STP_ch_crisis_deadline = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 6
+				compare = equals
+			}
+		}
+		available = {
+			STP_ch_no_crisis = yes
+		}
+		days_mission_timeout = 90
+		selectable_mission = no
+		fire_only_once = no
+		cancel_trigger = {
+			STP_ch_governing = no
+		}
+		cancel_effect = { hidden_effect = { STP_ch_pause_crisis = yes } }
+		complete_effect = {
+			hidden_effect = {
+				STP_ch_finish_crisis = yes
+			}
+		}
+		timeout_effect = {
+			hidden_effect = {
+				STP_ch_finish_crisis = yes
+			}
+		}
+	}
+	STP_ch_aid = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_current = yes
+			OR = {
+				check_variable = {
+					var = STP_ch_phase
+					value = 1
+					compare = equals
+				}
+				check_variable = {
+					var = STP_ch_phase
+					value = 2
+					compare = equals
+				}
+			}
+			NOT = {
+				has_country_flag = STP_ch_aid_received
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_aid_requirements
+				STP_ch_current = yes
+				OR = {
+					check_variable = {
+						var = STP_ch_phase
+						value = 1
+						compare = equals
+					}
+					check_variable = {
+						var = STP_ch_phase
+						value = 2
+						compare = equals
+					}
+				}
+				NOT = {
+					has_country_flag = STP_ch_aid_received
+				}
+				NOT = {
+					has_country_flag = STP_ch_aid_pending
+				}
+				NOT = { has_country_flag = STP_ch_aid_cooldown }
+				NOD = {
+					exists = yes
+					is_subject = no
+					has_capitulated = no
+				}
+				NOT = {
+					has_war_with = NOD
+				}
+			}
+		}
+		cost = 25
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = STP_ch_aid_cooldown }
+						STP_ch_current = yes
+						OR = {
+							check_variable = {
+								var = STP_ch_phase
+								value = 1
+								compare = equals
+							}
+							check_variable = {
+								var = STP_ch_phase
+								value = 2
+								compare = equals
+							}
+						}
+						NOT = {
+							has_country_flag = STP_ch_aid_received
+						}
+						NOT = {
+							has_country_flag = STP_ch_aid_pending
+						}
+						NOD = {
+							exists = yes
+							is_subject = no
+							has_capitulated = no
+						}
+						NOT = {
+							has_war_with = NOD
+						}
+					}
+					set_country_flag = STP_ch_aid_pending
+					set_country_flag = { flag = STP_ch_aid_cooldown days = 23 }
+					NOD = {
+						country_event = {
+							id = ADISCORD_STP_ch.13
+							hours = 1
+						}
+					}
+					country_event = {
+						id = ADISCORD_STP_ch.14
+						days = 22
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
 		}
 	}
 }

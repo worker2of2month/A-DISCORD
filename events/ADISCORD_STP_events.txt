@@ -2407,7 +2407,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pc.40.refuse
 		trigger = { STP_pw_party_nod_congress_current = yes }
-		ai_chance = { base = 85 }
+		ai_chance = { base = 85 modifier = { factor = 0 STP = { STP_ch_current = yes STP_ch_northern_alternative = yes } } }
 		custom_effect_tooltip = STP_pw_party_nod_congress_refusal_tt
 		hidden_effect = { if = { limit = { STP_pw_party_nod_congress_current = yes } STP = { STP_pw_party_refuse_nod_congress = yes } } }
 	}
@@ -2564,4 +2564,295 @@ country_event = {
 		NOT = { has_country_flag = STP_ambient_life_seen }
 	}
 	option = { name = ADISCORD_STP_preparation.30.a }
+}
+
+add_namespace = ADISCORD_STP_ch
+
+country_event = {
+	id = ADISCORD_STP_ch.1
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		mark_focus_tree_layout_dirty = yes
+		clr_country_flag = STP_ch_refresh_pending
+		STP_ch_refresh = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.2
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.2.t
+	desc = ADISCORD_STP_ch.2.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.2.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.3
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.3.t
+	desc = ADISCORD_STP_ch.3.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.3.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.4
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.4.t
+	desc = ADISCORD_STP_ch.4.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.4.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.5
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		STP_ch_finalize_protectorate = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.6
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.6.t
+	desc = ADISCORD_STP_ch.6.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.6.1
+		trigger = {
+			STP_ch_candidate_1_wins = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+		hidden_effect = {
+			STP_ch_elect_1 = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.6.2
+		trigger = {
+			STP_ch_candidate_2_wins = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+		hidden_effect = {
+			STP_ch_elect_2 = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.6.3
+		trigger = {
+			STP_ch_candidate_3_wins = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+		hidden_effect = {
+			STP_ch_elect_3 = yes
+		}
+	}
+	option = {
+		name = STP_ch_offer_closed
+		trigger = {
+			NOT = {
+				OR = {
+					STP_ch_candidate_1_wins = yes
+					STP_ch_candidate_2_wins = yes
+					STP_ch_candidate_3_wins = yes
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.7
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.7.t
+	desc = ADISCORD_STP_ch.7.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		tag = NOD
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.7.refuse
+		trigger = {
+			STP_ch_release_offer_current = yes
+		}
+		ai_chance = {
+			base = 20
+		}
+		hidden_effect = {
+			STP = {
+				STP_ch_refuse_release = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.7.accept
+		trigger = {
+			STP_ch_release_offer_current = yes
+		}
+		ai_chance = {
+			base = 80
+		}
+		hidden_effect = {
+			STP_ch_accept_release = yes
+		}
+	}
+	option = {
+		name = STP_ch_offer_closed
+		trigger = {
+			STP_ch_release_offer_current = no
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.8
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.8.t
+	desc = ADISCORD_STP_ch.8.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.8.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.9
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.9.t
+	desc = ADISCORD_STP_ch.9.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.9.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.10
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.10.t
+	desc = ADISCORD_STP_ch.10.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_ch_current = yes
+	}
+	timeout_days = 21
+	option = {
+		name = ADISCORD_STP_ch.10.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.11
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		STP = {
+			STP_ch_refuse_release = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.12
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		STP_ch_launch_liberation_war = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.13
+	is_triggered_only = yes
+	title = ADISCORD_STP_ch.13.t
+	desc = ADISCORD_STP_ch.13.d
+	picture = GFX_event_adiscord_negotiation_table
+	timeout_days = 21
+	trigger = {
+		tag = NOD
+	}
+	option = {
+		name = ADISCORD_STP_ch.13.refuse
+		trigger = {
+			STP_ch_aid_offer_current = yes
+		}
+		ai_chance = {
+			base = 20
+		}
+		hidden_effect = {
+			STP = {
+				clr_country_flag = STP_ch_aid_pending
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.13.accept
+		trigger = {
+			STP_ch_aid_offer_current = yes
+			STP_ch_aid_affordable = yes
+		}
+		ai_chance = {
+			base = 80
+		}
+		custom_effect_tooltip = STP_ch_aid_price_tt
+		hidden_effect = {
+			STP_ch_accept_aid = yes
+		}
+	}
+	option = {
+		name = STP_ch_offer_closed
+		trigger = {
+			STP_ch_aid_offer_current = no
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.14
+	is_triggered_only = yes
+	hidden = yes
+	immediate = {
+		clr_country_flag = STP_ch_aid_pending
+	}
 }

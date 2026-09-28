@@ -44,7 +44,7 @@ on_actions = {
         effect = {
 			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
 			STP = { STP_pf_refresh_on_load = yes }
-			STP = { STP_pw_party_reconcile_nod_invasion = yes }
+			STP = { STP_pw_party_reconcile_nod_invasion = yes STP_ch_reconcile = yes STP_ch_refresh = yes }
 			STS = { STP_qol_initialize_staff = yes }
 
             STP = {
@@ -295,6 +295,7 @@ on_actions = {
 	}
 	on_weekly_STP = {
 		effect = {
+			STP_ch_reconcile = yes
 			# Foreign conquest can temporarily invalidate the split's anchor guards.
 			# Preserve the declared result and retry only this country, without resets.
 			if = {

@@ -1,5 +1,20 @@
 ideas = {
 	country = {
+		STP_ch_supply_crisis = {
+			picture = ADISCORD_economic_system_industrializing
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = -0.1
+				ADISCORD_economy_trade_income_factor = -0.2
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
 		STP_pw_party_high_houses_government = {
 			picture = STP_law_private_societies
 			allowed = { always = no }

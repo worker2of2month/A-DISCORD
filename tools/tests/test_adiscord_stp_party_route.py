@@ -1145,7 +1145,7 @@ class PartyNorthernRevolutionContracts(unittest.TestCase):
         for fid in chain:
             self.assertFalse(any(e.key == 'has_war' and e.value == 'no' for e in walk(one(self.focus[fid], 'available'))))
         final = self.focus['STP_pw_party_former_patron']
-        self.assertEqual(children(one(final, 'prerequisite'), 'focus'), ['STP_pw_party_nod_congress'])
+        self.assertEqual(children(one(final, 'prerequisite'), 'focus'), ['STP_pw_party_new_republic'])
         self.assertTrue(any(e.key == 'is_subject_of' and e.value == 'STP' for e in walk(one(final, 'available'))))
 
     def test_conquest_dispatch_precedes_defensive_white_peace(self):
@@ -1271,7 +1271,7 @@ class PartyConstitutionContracts(unittest.TestCase):
                          ["STP_law_drug_prohibition", "ADISCORD_drugs_medical_distribution"])
         self.assertEqual(one(event, "timeout_days"), "30")
 
-    def test_independent_constitution_survives_compact_and_absent_nodrul(self):
+    def test_independent_route_survives_compact_without_starting_obsolete_balance(self):
         focus = self.focuses["STP_pw_party_revolution_capital"]
         gate = one(focus, "available")
         for compact in (False, True):
@@ -1280,7 +1280,7 @@ class PartyConstitutionContracts(unittest.TestCase):
                      ("STP", "has_country_flag", "STP_pw_party_nod_compact"): compact}
             self.assertTrue(matches_conditions(gate, facts))
         reward = list(walk(one(focus, "completion_reward")))
-        self.assertIn("STP_pw_party_initialize_constitution", [e.key for e in reward])
+        self.assertNotIn("STP_pw_party_initialize_constitution", [e.key for e in reward])
         self.assertNotIn("STP_pf_shift", [e.key for e in reward])
 
     def test_balance_initialization_is_one_time_and_removes_election_balance(self):
@@ -1295,24 +1295,24 @@ class PartyConstitutionContracts(unittest.TestCase):
         self.assertEqual(children(one(branch, "set_power_balance"), "set_value"), ["0"])
         self.assertIn("remove_power_balance", [e.key for e in walk(branch)])
 
-    def test_final_branches_are_exclusive_and_recheck_their_political_program(self):
-        for side, other, law in (("high_houses", "unbound_revolution", "private_societies"),
-                                 ("unbound_revolution", "high_houses", "public_orgies")):
-            name = "STP_pw_party_" + side
-            self.assertIn(name, self.focuses)
-            focus = self.focuses[name]
-            self.assertEqual(one(one(focus, "prerequisite"), "focus"), "STP_pw_party_revolution_capital")
-            self.assertIn("STP_pw_party_" + other, children(one(focus, "mutually_exclusive"), "focus"))
+    def test_program_branches_recheck_the_elected_mandate_without_a_second_vote(self):
+        for suffix, winner in (("high_houses", 1), ("unbound_revolution", 2)):
+            focus = self.focuses["STP_pw_party_" + suffix]
+            self.assertEqual(one(one(focus, "prerequisite"), "focus"), "STP_ch_rules")
             self.assertEqual(one(focus, "cancel_if_invalid"), "yes")
             gate = one(focus, "available")
-            self.assertNotIn("STP_law_" + law, [e.value for e in walk(gate) if e.key == "has_idea"])
-            self.assertIn("STP_law_" + law, children(one(focus, "completion_reward"), "add_ideas"))
-            self.assertIn("power_balance_value", [e.key for e in walk(gate)])
+            self.assertNotIn("power_balance_value", [e.key for e in walk(gate)])
+            for elected in (1, 2, 3):
+                facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                         ("STP", "variable", "STP_ch_phase"): 5,
+                         ("STP", "variable", "STP_ch_government"): elected}
+                self.assertEqual(matches_conditions(gate, facts), elected == winner)
 
-    def test_reconstruction_capstone_requires_one_of_three_political_endings(self):
-        alternatives = {"STP_pw_party_protectorate", "STP_pw_party_high_houses", "STP_pw_party_unbound_revolution"}
+    def test_reconstruction_capstone_accepts_the_elected_military_program(self):
+        alternatives = {"STP_pw_party_protectorate", "STP_pw_party_high_houses",
+                        "STP_pw_party_unbound_revolution", "STP_ch_program_settlement"}
         focus = self.focuses["STP_pw_party_settled_state"]
-        self.assertTrue(any(set(children(group, "focus")) == alternatives
+        self.assertTrue(any(alternatives.issubset(set(children(group, "focus")))
                             for group in children(focus, "prerequisite")))
 
     def test_special_laws_have_distinct_slots_and_a_real_victory_gate(self):
@@ -1344,18 +1344,17 @@ class PartyConstitutionContracts(unittest.TestCase):
                 self.assertEqual(one(lock, "tooltip"), "STP_law_scripted_only_tt")
         self.assertIn("slot = STP_drug_policy_laws", read("common/idea_tags/00_idea.txt"))
 
-    def test_losing_party_removes_constitution_and_special_policies(self):
-        self.assertIn("STP_pw_party_clear_constitution", self.effects.keys())
-        self.assertIn("STP_pw_party_clear_constitution", [e.key for e in walk(self.effects["STP_pf_clear"])])
+    def test_party_elimination_cleans_policies_but_chapter_defeat_preserves_the_state(self):
         cleanup = str(signature(self.effects["STP_pw_party_clear_constitution"]))
         for suffix in ("slavery", "public_orgies", "private_societies", "hard_drugs", "light_drugs"):
             self.assertIn("STP_law_" + suffix, cleanup)
         self.assertIn("remove_power_balance", cleanup)
+        self.assertIn("STP_pw_party_clear_constitution", [e.key for e in walk(self.effects["STP_pf_clear"])])
         defeat = self.effects["STP_pw_party_settle_nod_invasion_victory"]
         branch = one(defeat, "if")
-        countries = children(branch, "STP")
-        self.assertTrue(any(e.key == "STP_pw_party_clear_constitution"
-                            for country in countries for e in country))
+        self.assertIn("STP_ch_prepare_protectorate", [e.key for e in walk(branch)])
+        self.assertNotIn("annex_country", [e.key for e in walk(branch)])
+        self.assertIn("STP_pw_party_clear_constitution", [e.key for e in walk(one(defeat, "else"))])
 
     def test_constitution_passes_a_numeric_literal_to_native_balance_effect(self):
         body = self.effects["STP_pw_party_refresh_constitution"]
@@ -1436,42 +1435,18 @@ class PartyConstitutionContracts(unittest.TestCase):
         self.assertAlmostEqual(self.constitution_value(0.7, 100, 0, conservative), -0.6)
         self.assertAlmostEqual(self.constitution_value(-0.6, 0, 100, radical, active=False), -0.6)
 
-    def test_final_focus_has_exact_halfway_boundary_and_grants_program_laws(self):
-        from dataclasses import replace
-
-        def evaluate(items, balance):
-            result = []
-            for e in items:
-                if e.key == "power_balance_value":
-                    operands = [v.value for v in e.value if not v.key]
-                    self.assertEqual(operands[0], "value")
-                    right = float(operands[2])
-                    passed = balance > right if operands[1] == ">" else balance < right
-                    result.append(replace(e, key="always", value="yes" if passed else "no"))
-                elif isinstance(e.value, list):
-                    result.append(replace(e, value=evaluate(e.value, balance)))
-                else:
-                    result.append(e)
-            return result
-
-        for name, side, culture, drug, target in (
-            ("high_houses", "conservatives", "private_societies", "light_drugs", -0.5),
-            ("unbound_revolution", "radicals", "public_orgies", "hard_drugs", 0.5),
-        ):
-            gate = one(self.focuses["STP_pw_party_" + name], "available")
-            facts = {("STP", "STP_pw_party_constitution_open", "yes"): True,
-                     ("STP", "has_idea", "STP_law_" + culture): False,
-                     ("STP", "has_idea", "STP_law_" + drug): False,
-                     ("STP", "variable", "STP_pf_" + side + "_support"): 60}
-            self.assertTrue(matches_conditions(evaluate(gate, target), facts))
-            self.assertFalse(matches_conditions(evaluate(gate, target * 0.999), facts))
-            reward = one(self.focuses["STP_pw_party_" + name], "completion_reward")
-            self.assertIn("STP_law_" + culture, children(reward, "add_ideas"))
-            self.assertIn("STP_law_" + drug, children(reward, "add_ideas"))
-            self.assertFalse(matches_conditions(evaluate(gate, target), {
-                **facts, ("STP", "variable", "STP_pf_" + side + "_support"): 59}))
-        reward = one(self.focuses["STP_pw_party_new_republic"], "completion_reward")
-        self.assertIn("STP_law_slavery", children(reward, "add_ideas"))
+    def test_programs_require_the_government_phase_and_grant_substantive_laws(self):
+        for suffix, winner in (("high_houses", 1), ("unbound_revolution", 2)):
+            gate = one(self.focuses["STP_pw_party_" + suffix], "available")
+            for chapter in (1, 2, 3, 4, 5, 6, 7):
+                facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                         ("STP", "variable", "STP_ch_phase"): chapter,
+                         ("STP", "variable", "STP_ch_government"): winner}
+                self.assertEqual(matches_conditions(gate, facts), chapter == 5)
+        conservative = one(self.focuses["STP_pw_party_high_houses"], "completion_reward")
+        self.assertIn("STP_law_private_societies", children(conservative, "add_ideas"))
+        radical = one(self.focuses["STP_ch_free_labour"], "completion_reward")
+        self.assertIn("ADISCORD_labor_policy_collective_bargaining", children(radical, "add_ideas"))
 
     def test_law_refresh_is_deferred_and_coalesced_after_both_swap_callbacks(self):
         self.assertIn("STP_pw_party_queue_constitution_refresh", self.effects.keys())
@@ -1533,6 +1508,332 @@ class PartyPeaceContracts(unittest.TestCase):
         foreign = self.effects["STP_pw_party_close_nod_invasion_after_foreign_defeat"]
         keys = {e.key for e in walk(foreign)}
         self.assertFalse(keys & {"add_political_power", "add_stability", "set_global_flag"})
+
+
+class PoliticalChapterContracts(unittest.TestCase):
+    """Authored-script contracts; these do not substitute for a native campaign."""
+
+    GROUPS = ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {e.key: e.value for e in parse_clausewitz(read(
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"))}
+        cls.decisions = {e.key: e.value for e in one(parse_clausewitz(read(DECISIONS)), "STP_ch_chapters")}
+        cls.events = {one(e.value, "id"): e.value for e in parse_clausewitz(read(EVENTS))
+                      if e.key == "country_event"}
+        cls.focuses = {one(f, "id"): f for t in children(parse_clausewitz(read(FOCUS)), "focus_tree")
+                       for f in children(t, "focus")}
+        cls.loc = dict(re.findall(r'^\s*([^#\s:]+):(?:\d+)?\s*"(.*)"\s*$', read(LOC), re.M))
+
+    def apply_ledger(self, name, facts):
+        """Evaluate only explicit ledger effects; reject unsupported native work."""
+        for scope, effect in selected_effects(self.effects[name], facts):
+            key, value = effect.key, effect.value
+            if key in ("set_variable", "add_to_variable", "subtract_from_variable", "set_temp_variable"):
+                var, raw = one(value, "var"), one(value, "value")
+                try:
+                    amount = float(raw)
+                except ValueError:
+                    amount = facts.get((scope, "variable", raw), 0)
+                index = (scope, "variable", var)
+                previous = facts.get(index, 0)
+                facts[index] = amount if key in ("set_variable", "set_temp_variable") else previous + (
+                    amount if key == "add_to_variable" else -amount)
+                facts[(scope, "has_variable", var)] = True
+            elif key == "clear_variable":
+                facts.pop((scope, "variable", value), None)
+                facts[(scope, "has_variable", value)] = False
+            elif key == "set_country_flag":
+                facts[(scope, "has_country_flag", value)] = True
+            elif key not in ("ADISCORD_economy_mark_dirty", "STP_pf_shift", "STP_ch_refresh"):
+                raise AssertionError(f"Unsupported ledger-fixture effect: {key}")
+
+    def test_initialization_preserves_existing_chapter_state(self):
+        gate = one(one(self.effects["STP_ch_initialize"], "if"), "limit")
+        facts = {("STP", "STP_pf_active", "yes"): True,
+                 ("STP", "STP_pw_can_reconstruct", "yes"): True}
+        self.assertTrue(matches_conditions(gate, facts))
+        self.assertFalse(matches_conditions(gate, {**facts, ("STP", "has_variable", "STP_ch_phase"): True}))
+
+    def test_initialization_never_infers_a_finished_campaign_from_old_focuses(self):
+        for old_focus in ("STP_pw_party_high_houses", "STP_pw_party_unbound_revolution"):
+            facts = {("STP", "STP_pf_active", "yes"): True,
+                     ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                     ("STP", "has_completed_focus", old_focus): True,
+                     ("NOD", "exists", "yes"): True,
+                     ("NOD", "is_subject", "no"): True,
+                     ("NOD", "has_capitulated", "no"): True}
+            payload = [e for _, e in selected_effects(self.effects["STP_ch_initialize"], facts)]
+            phases = [one(e.value, "value") for e in payload
+                      if e.key == "set_variable" and one(e.value, "var") == "STP_ch_phase"]
+            self.assertEqual(phases, ["1"])
+            self.assertIn("STP_pw_party_start_nod_invasion_threat", [e.key for e in payload])
+
+    def test_foreign_defeat_releases_the_liberation_transition(self):
+        facts = {("STP", "has_war_with", "NOD"): True,
+                 ("STP", "has_country_flag", "STP_ch_liberation_war"): True}
+        payload = [e for _, e in selected_effects(
+            self.effects["STP_pw_party_close_nod_invasion_after_foreign_defeat"], facts)]
+        self.assertIn("STP_ch_liberation_war", children(payload, "clr_country_flag"))
+        self.assertIn("STP_ch_liberated", children(payload, "set_country_flag"))
+        cleared = next(i for i, e in enumerate(payload)
+                       if e.key == "clr_country_flag" and e.value == "STP_ch_liberation_war")
+        self.assertLess(cleared, next(i for i, e in enumerate(payload) if e.key == "STP_ch_reconcile"))
+
+    def test_teardown_invalidates_chapter_before_mission_callbacks(self):
+        facts = {("STP", "has_variable", "STP_ch_phase"): True}
+        payload = [e for _, e in selected_effects(self.effects["STP_ch_clear"], facts)]
+        self.assertIn("STP_ch_phase", children(payload, "clear_variable"))
+        cleared = next(i for i, e in enumerate(payload)
+                       if e.key == "clear_variable" and e.value == "STP_ch_phase")
+        self.assertLess(cleared, next(i for i, e in enumerate(payload) if e.key == "STP_ch_close_pressure"))
+
+    def test_permanent_branches_do_not_require_an_unfinished_hidden_chapter(self):
+        cases = (("STP_pw_party_domestic_pattern", 3, {"STP_pw_party_new_republic"}),
+                 ("STP_pw_party_former_patron", 3, {"STP_pw_party_new_republic"}),
+                 ("STP_pw_party_nod_military_mission", 2, {"STP_pw_party_new_republic"}),
+                 ("STP_pw_party_settled_state", 2,
+                  {"STP_ch_model_ally", "STP_pw_party_civil_charter", "STP_pw_party_industrial_settlement",
+                   "STP_pw_party_southern_defence", "STP_pw_party_foreign_settlement"}))
+        for focus_id, phase, completed in cases:
+            with self.subTest(focus=focus_id):
+                facts = {("STP", "variable", "STP_ch_phase"): phase,
+                         ("STP", "has_country_flag", "STP_cw_postwar"): True}
+                for group in children(self.focuses[focus_id], "prerequisite"):
+                    alternatives = children(group, "focus")
+                    self.assertTrue(any(parent in completed or matches_conditions(
+                        one(self.focuses[parent], "allow_branch"), facts) for parent in alternatives),
+                        (focus_id, phase, alternatives))
+
+    def test_chapter_warning_does_not_announce_the_obsolete_ninety_day_clock(self):
+        facts = {("STP", "has_country_flag", "STP_cw_postwar"): True,
+                 ("STP", "has_variable", "STP_ch_phase"): True,
+                 ("NOD", "exists", "yes"): True,
+                 ("NOD", "is_subject", "no"): True,
+                 ("NOD", "has_capitulated", "no"): True}
+        payload = [e for _, e in selected_effects(self.effects["STP_pw_party_start_nod_invasion_threat"], facts)]
+        self.assertIn("STP_ch_start_pressure", [e.key for e in payload])
+        self.assertNotIn("ADISCORD_STP_pc.28", [one(e.value, "id") for e in payload if e.key == "country_event"])
+
+    def test_peaceful_liberation_finishes_the_permanent_foreign_policy_branch(self):
+        facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                 ("STP", "has_country_flag", "STP_ch_liberated"): True}
+        self.assertTrue(matches_conditions(one(self.focuses["STP_pw_party_foreign_settlement"], "available"), facts))
+        self.assertTrue(matches_conditions(self.triggers["STP_pw_party_northern_patron_lost"], {
+            **facts, ("STP", "is_subject_of", "NOD"): False}))
+        self.assertFalse(matches_conditions(self.triggers["STP_pw_party_northern_patron_lost"], {
+            **facts, ("STP", "is_subject_of", "NOD"): True}))
+
+    def test_refresh_requests_are_coalesced_and_disabled_outside_the_campaign(self):
+        self.assertIn("STP_ch_schedule_refresh", self.effects)
+        for current, pending, count in ((True, False, 1), (True, True, 0), (False, False, 0)):
+            facts = {("STP", "STP_ch_current", "yes"): current,
+                     ("STP", "has_country_flag", "STP_ch_refresh_pending"): pending}
+            payload = [e for _, e in selected_effects(self.effects["STP_ch_schedule_refresh"], facts)]
+            self.assertEqual(len(children(payload, "country_event")), count)
+
+    def test_ai_initial_nominee_follows_the_existing_delegate_coalition(self):
+        self.assertIn("STP_ch_select_ai_nominee", self.effects)
+        for votes, expected in (((40, 20, 15), 1), ((20, 45, 15), 2), ((20, 15, 45), 3), ((30, 30, 30), 1)):
+            facts = {("STP", "is_ai", "yes"): True}
+            for i, vote in enumerate(votes, 1):
+                facts[("STP", "variable", f"STP_ch_votes_{i}")] = vote
+            self.apply_ledger("STP_ch_select_ai_nominee", facts)
+            self.assertEqual(facts[("STP", "variable", "STP_ch_nominee")], expected)
+
+    def test_recovery_and_focus_rewards_schedule_a_post_completion_refresh(self):
+        for entrypoint in ("STP_pw_refresh_modifier", "STP_pw_update_recovery", "STP_pf_apply_focus_program"):
+            self.assertIn("STP_ch_schedule_refresh", [e.key for e in walk(self.effects[entrypoint])], entrypoint)
+        self.assertIn("STP_ch_refresh", [e.key for e in walk(one(self.events["ADISCORD_STP_ch.1"], "immediate"))])
+
+    def test_campaigning_stops_after_ballot_is_closed(self):
+        for phase in range(1, 8):
+            for closed in (False, True):
+                facts = {("STP", "STP_ch_current", "yes"): True,
+                         ("STP", "variable", "STP_ch_phase"): phase,
+                         ("STP", "has_country_flag", "STP_ch_ballot_closed"): closed,
+                         ("STP", "has_capitulated", "no"): True}
+                self.assertEqual(matches_conditions(self.triggers["STP_ch_campaigning"], facts),
+                                 phase in (1, 2, 3) and not closed)
+
+    def test_votes_follow_endorsements_and_influence_not_government_approval(self):
+        facts = {("STP", "STP_ch_campaigning", "yes"): True}
+        expected = [0, 0, 0]
+        for i, group in enumerate(self.GROUPS):
+            candidate, influence = i % 3 + 1, 7 + i * 2
+            facts[("STP", "variable", "STP_ch_endorse_" + group)] = candidate
+            facts[("STP", "variable", "STP_pf_" + group + "_influence")] = influence
+            facts[("STP", "variable", "STP_pf_" + group + "_support")] = 100 - i * 9
+            expected[candidate - 1] += influence
+        self.apply_ledger("STP_ch_recount", facts)
+        self.assertEqual([facts[("STP", "variable", f"STP_ch_votes_{i}")] for i in (1, 2, 3)], expected)
+        frozen = dict(facts)
+        facts[("STP", "STP_ch_campaigning", "yes")] = False
+        facts[("STP", "variable", "STP_pf_army_influence")] = 99
+        self.apply_ledger("STP_ch_recount", facts)
+        for i in (1, 2, 3):
+            self.assertEqual(facts[("STP", "variable", f"STP_ch_votes_{i}")],
+                             frozen[("STP", "variable", f"STP_ch_votes_{i}")])
+
+    def test_ballot_offers_only_the_leader_or_tied_leaders(self):
+        for votes in ((50, 30, 20), (20, 60, 20), (10, 20, 70), (40, 40, 20), (30, 30, 30)):
+            facts = {("STP", "STP_ch_current", "yes"): True,
+                     ("STP", "variable", "STP_ch_phase"): 3,
+                     ("STP", "has_country_flag", "STP_ch_ballot_closed"): True,
+                     ("STP", "is_subject", "no"): True}
+            facts.update({("STP", "variable", f"STP_ch_votes_{i}"): vote
+                          for i, vote in enumerate(votes, 1)})
+            for i, vote in enumerate(votes, 1):
+                self.assertEqual(matches_conditions(self.triggers[f"STP_ch_candidate_{i}_wins"], facts),
+                                 vote == max(votes))
+
+    def test_every_group_has_a_separate_promise_and_fulfilment(self):
+        for group in self.GROUPS:
+            pledge = str(signature(self.decisions["STP_ch_pledge_" + group]))
+            fulfilment = str(signature(self.decisions["STP_ch_fulfil_" + group]))
+            self.assertIn("STP_ch_pledge_" + group, pledge)
+            self.assertIn("STP_ch_nominee", pledge)
+            self.assertIn("STP_ch_government", fulfilment)
+            self.assertIn("STP_ch_fulfilled_" + group, fulfilment)
+        self.assertNotEqual(signature(self.decisions["STP_ch_fulfil_conservatives"]),
+                            signature(self.decisions["STP_ch_fulfil_borons"]))
+
+    def test_pressure_missions_cannot_succeed_before_timeout(self):
+        for stage, days in enumerate((210, 120, 90, 30), 1):
+            mission = self.decisions[f"STP_ch_pressure_{stage}"]
+            self.assertFalse(matches_conditions(one(mission, "available"), {}))
+            self.assertEqual(one(mission, "days_mission_timeout"), str(days))
+            self.assertEqual(one(mission, "fire_only_once"), "yes")
+            payload = str(signature(one(mission, "timeout_effect")))
+            self.assertIn(f"STP_ch_escalate_{stage}" if stage < 4 else "STP_ch_issue_invasion", payload)
+
+    def test_only_one_trade_extension_can_be_purchased(self):
+        decision = self.decisions["STP_ch_trade_delay"]
+        facts = {("STP", "STP_ch_pressure_current", "yes"): True,
+                 ("STP", "equipment", "infantry_equipment"): 1000}
+        gate = one(decision, "available")
+        self.assertTrue(matches_conditions(gate, facts))
+        self.assertFalse(matches_conditions(gate, {**facts,
+                         ("STP", "has_country_flag", "STP_ch_trade_delay_used"): True}))
+        self.assertFalse(matches_conditions(gate, {**facts,
+                         ("STP", "equipment", "infantry_equipment"): 999.999}))
+        payload = list(walk(one(decision, "complete_effect")))
+        self.assertEqual(sum(e.key == "add_equipment_to_stockpile" and one(e.value, "amount") == "-1000"
+                             for e in payload), 1)
+
+    def test_all_foundations_are_needed_for_a_political_northern_settlement(self):
+        required = self.triggers["STP_ch_foundations"]
+        for mask in range(8):
+            facts = {("STP", "STP_ch_" + domain + "_ready", "yes"): bool(mask & (1 << i))
+                     for i, domain in enumerate(("army", "economy", "party"))}
+            self.assertEqual(matches_conditions(required, facts), mask == 7)
+        north = str(signature(self.triggers["STP_ch_northern_alternative"]))
+        for key in ("STP_ch_foundations", "STP_pw_party_northern_network", "STP_ch_north_guarantees",
+                    "STP_pw_recovery_industry", "STP_pw_recovery_services", "strength_ratio"):
+            self.assertIn(key, north)
+
+    def test_training_delivers_only_once_and_survives_a_chapter_change(self):
+        for domain in ("army", "economy", "party"):
+            deposit = f"STP_ch_train_{domain}_deposit"
+            facts = {("STP", "has_variable", deposit): True,
+                     ("STP", "variable", deposit): 450,
+                     ("STP", "STP_ch_current", "yes"): True,
+                     ("STP", "has_capitulated", "no"): True}
+            self.apply_ledger(f"STP_ch_train_{domain}_finish", facts)
+            self.assertTrue(facts[("STP", "has_country_flag", f"STP_ch_{domain}_institution")])
+            self.assertFalse(facts[("STP", "has_variable", deposit)])
+            before = dict(facts)
+            self.apply_ledger(f"STP_ch_train_{domain}_finish", facts)
+            self.assertEqual(facts, before)
+            cancellation = str(signature(one(self.decisions[f"STP_ch_train_{domain}"], "cancel_trigger")))
+            self.assertNotIn("STP_ch_phase", cancellation)
+
+    def test_training_refund_and_stale_completion_do_not_multiply_money(self):
+        for domain in ("army", "economy", "party"):
+            deposit = f"STP_ch_train_{domain}_deposit"
+            facts = {("STP", "has_variable", deposit): True,
+                     ("STP", "variable", deposit): 450,
+                     ("STP", "variable", "ADISCORD_economy_treasury"): 100}
+            self.apply_ledger(f"STP_ch_train_{domain}_refund", facts)
+            self.apply_ledger(f"STP_ch_train_{domain}_finish", facts)
+            self.apply_ledger(f"STP_ch_train_{domain}_refund", facts)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 550)
+            self.assertNotIn(("STP", "has_country_flag", f"STP_ch_{domain}_institution"), facts)
+
+    def test_protectorate_keeps_the_election_and_economic_history(self):
+        for name in ("STP_ch_enter_protectorate", "STP_ch_open_congress"):
+            cleared = children(list(walk(self.effects[name])), "clear_variable")
+            for key in ("STP_ch_government", "STP_ch_votes_1", "STP_pw_recovery_industry",
+                        "STP_pw_recovery_services", "STP_ch_pledge_army"):
+                self.assertNotIn(key, cleared)
+            self.assertNotIn("load_focus_tree", [e.key for e in walk(self.effects[name])])
+        for domain in ("army", "economy", "party"):
+            self.assertNotIn(f"STP_ch_{domain}_institution",
+                             children(list(walk(self.effects["STP_ch_enter_protectorate"])), "clr_country_flag"))
+
+    def test_protectorate_paths_can_be_combined(self):
+        for focus in ("STP_ch_model_ally", "STP_ch_local_apparatus"):
+            self.assertEqual(children(self.focuses[focus], "mutually_exclusive"), [])
+        self.assertIn("STP_ch_liberation_window", str(signature(self.decisions["STP_ch_armed_break"])))
+        release = str(signature(self.effects["STP_ch_accept_release"]))
+        self.assertIn("autonomy_free", release)
+        self.assertIn("STP_ch_open_congress", release)
+        self.assertNotIn("declare_war_on", release)
+
+    def test_liberation_does_not_hold_an_election_before_the_scheduled_war(self):
+        reconcile = self.effects["STP_ch_reconcile"]
+        checks = [one(e.value, "limit") for e in walk(reconcile) if e.key == "if"
+                  and any(x.key == "STP_ch_open_congress" for x in e.value)]
+        self.assertTrue(checks)
+        self.assertTrue(all("STP_ch_liberation_war" in str(signature(gate)) for gate in checks))
+
+    def test_crisis_pause_restores_the_remaining_deadline(self):
+        pause = str(signature(self.effects["STP_ch_pause_crisis"]))
+        resume = str(signature(self.effects["STP_ch_resume_crisis"]))
+        self.assertIn("days_mission_timeout@STP_ch_crisis_deadline", pause)
+        self.assertIn("subtract_from_temp_variable", resume)
+        self.assertIn("add_days_mission_timeout", resume)
+        self.assertEqual(one(self.decisions["STP_ch_crisis_deadline"], "fire_only_once"), "no")
+        tokens = read("common/synchronized_dynamic_tokens/ADISCORD_tokens.txt").split()
+        self.assertEqual(tokens.count("STP_ch_crisis_deadline"), 1)
+
+    def test_threat_is_invalidated_before_cancellation_callbacks(self):
+        effects = self.effects["STP_ch_close_pressure"]
+        clear = next(i for i, e in enumerate(effects)
+                     if e.key == "clr_country_flag" and e.value == "STP_pw_party_nod_threat_active")
+        removal = next(i for i, e in enumerate(effects) if e.key == "remove_mission")
+        self.assertLess(clear, removal)
+
+    def test_new_events_have_safe_close_options_and_native_gates(self):
+        for number in (6, 7, 13):
+            options = children(self.events[f"ADISCORD_STP_ch.{number}"], "option")
+            self.assertEqual(one(options[-1], "name"), "STP_ch_offer_closed")
+            self.assertTrue(children(options[-1], "trigger"))
+            self.assertEqual(children(options[-1], "hidden_effect"), [])
+        for number in range(1, 15):
+            self.assertIn(f"ADISCORD_STP_ch.{number}", self.events)
+
+    def test_presentation_uses_existing_encoding_and_complete_custom_prices(self):
+        russian = (ROOT / LOC).read_bytes()
+        self.assertTrue(russian.startswith(b"\xef\xbb\xbf"))
+        english = read("localisation/english/ADISCORD_STP_l_english.yml")
+        for name, decision in self.decisions.items():
+            if children(decision, "custom_cost_text"):
+                self.assertEqual(one(decision, "cost"), "0")
+                cost = one(decision, "custom_cost_text")
+                for key in (cost, cost + "_blocked", cost + "_tooltip"):
+                    self.assertIn(key, self.loc)
+                    self.assertRegex(english, r"(?m)^ " + re.escape(key) + r":")
+        for path in (DECISIONS, EFFECTS, EVENTS):
+            self.assertFalse((ROOT / path).read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_no_scripted_trigger_uses_effect_macro_arguments(self):
+        for source in (EFFECTS, DECISIONS, EVENTS, FOCUS):
+            for entry in walk(parse_clausewitz(read(source))):
+                if entry.key.startswith("STP_ch_") and entry.key in self.triggers:
+                    self.assertIn(entry.value, ("yes", "no"), (source, entry.key))
 
 
 if __name__ == "__main__":

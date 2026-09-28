@@ -808,3 +808,499 @@ defined_text = {
 	}
 	text = { localization_key = STP_pw_party_constitution_open_status }
 }
+
+defined_text = {
+	name = STPGetPoliticalChapter
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_1
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_2
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_3
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_5
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 6
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_6
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_phase
+				value = 7
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_phase_7
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterNominee
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_nominee
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_nominee
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_nominee
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterFoundations
+	text = {
+		localization_key = STP_ch_foundations_loc
+	}
+}
+
+defined_text = {
+	name = STPGetChapterArmyRisk
+	text = {
+		trigger = {
+			has_country_flag = STP_ch_emergency_powers
+			NOT = {
+				has_country_flag = STP_ch_civilian_control
+			}
+		}
+		localization_key = STP_ch_risks_army
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterNorthRisk
+	text = {
+		trigger = {
+			has_country_flag = STP_ch_north_breach
+			NOD = {
+				is_subject_of = STP
+			}
+		}
+		localization_key = STP_ch_risks_north
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterTradeRisk
+	text = {
+		trigger = {
+			has_country_flag = STP_ch_supply_strain
+			NOT = {
+				has_country_flag = STP_ch_supply_buffer
+			}
+		}
+		localization_key = STP_ch_risks_trade
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterRisks
+	text = {
+		localization_key = STP_ch_risks_summary
+	}
+}
+
+defined_text = {
+	name = STPGetChapterConservativesEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_conservatives
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_conservatives
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_conservatives
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterBoronsEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_borons
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_borons
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_borons
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterSecurityEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_security
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_security
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_security
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterArmyEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_army
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_army
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_army
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterAdvisersEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_advisers
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_advisers
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_advisers
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterMerchantsEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_merchants
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_merchants
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_merchants
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterRadicalsEndorsement
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_radicals
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_1
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_radicals
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_2
+	}
+	text = {
+		trigger = {
+			STP_ch_current = yes
+			check_variable = {
+				var = STP_ch_endorse_radicals
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		localization_key = STP_ch_abstention
+	}
+}
+
+defined_text = {
+	name = STPGetChapterPressureTarget
+	text = {
+		trigger = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_pressure_target
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_target_army
+	}
+	text = {
+		trigger = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_pressure_target
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_target_economy
+	}
+	text = {
+		trigger = {
+			STP_ch_cold = yes
+			check_variable = {
+				var = STP_ch_pressure_target
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_target_party
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}

@@ -167,3 +167,14 @@ STP_party_constitution_category = {
 	allowed = { tag = STP }
 	visible = { has_power_balance = { id = STP_party_constitution } }
 }
+
+STP_ch_chapters = {
+	icon = generic_political_discourse
+	allowed = {
+		tag = STP
+	}
+	visible = {
+		STP_ch_current = yes
+	}
+	priority = 100
+}
