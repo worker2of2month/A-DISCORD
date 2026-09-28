@@ -204,6 +204,9 @@ characters = {
 	STP_August_Veil = {
 		name = STP_August_Veil
 		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_August_Veil
+			}
 			army = {
 				large = GFX_portrait_STP_August_Veil
 			}

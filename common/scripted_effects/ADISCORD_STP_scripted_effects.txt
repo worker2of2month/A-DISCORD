@@ -9852,6 +9852,10 @@ STP_ch_elect_1 = {
 				ideology = aristocratic_hedonism
 				expire = "2300.1.1"
 			}
+			set_country_leader_portrait = {
+				ideology = hedonism
+				portrait = GFX_portrait_STP_Conservative_Presidium_placeholder
+			}
 		}
 		set_variable = {
 			var = STP_ch_phase
@@ -9884,6 +9888,10 @@ STP_ch_elect_2 = {
 			desc = STP_ch_leader_2_desc
 			ideology = hedonism_ideology
 			expire = "2300.1.1"
+		}
+		set_country_leader_portrait = {
+			ideology = hedonism
+			portrait = GFX_portrait_STP_Alexandra_Severina_placeholder
 		}
 		set_variable = {
 			var = STP_ch_phase
@@ -9934,6 +9942,10 @@ STP_ch_elect_3 = {
 				desc = STP_ch_leader_3_desc
 				ideology = hedonism_ideology
 				expire = "2300.1.1"
+			}
+			set_country_leader_portrait = {
+				ideology = hedonism
+				portrait = GFX_portrait_STP_Military_Collegium_placeholder
 			}
 		}
 		set_variable = {
