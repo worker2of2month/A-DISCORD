@@ -145,18 +145,25 @@ spriteTypes = {
 		name = "GFX_portrait_STP_August_Veil"
 		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
 	}
-	# Temporary chapter portraits; replace these texture bindings when final art is ready.
 	spriteType = {
-		name = "GFX_portrait_STP_Alexandra_Severina_placeholder"
-		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
+		name = "GFX_portrait_STP_Pavel_Lanskoy"
+		texturefile = "gfx/leaders/STP/portrait_STP_Pavel_Lanskoy.png"
 	}
 	spriteType = {
-		name = "GFX_portrait_STP_Conservative_Presidium_placeholder"
-		texturefile = "gfx/leaders/WRK/temp_government.png"
+		name = "GFX_portrait_STP_Vera_Korvina"
+		texturefile = "gfx/leaders/STP/portrait_STP_Vera_Korvina.png"
 	}
 	spriteType = {
-		name = "GFX_portrait_STP_Military_Collegium_placeholder"
-		texturefile = "gfx/leaders/WRK/temp_government.png"
+		name = "GFX_portrait_STP_Edgar_Renner"
+		texturefile = "gfx/leaders/STP/portrait_STP_Edgar_Renner.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Conservative_Presidium"
+		texturefile = "gfx/leaders/STP/portrait_STP_Conservative_Presidium.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Military_Collegium"
+		texturefile = "gfx/leaders/STP/portrait_STP_Military_Collegium.png"
 	}
 ###SRP
 	spriteType = {

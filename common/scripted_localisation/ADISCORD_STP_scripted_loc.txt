@@ -919,6 +919,26 @@ defined_text = {
 		localization_key = STP_ch_nominee_3
 	}
 	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_nominee
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_nominee
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
+	}
+	text = {
 		localization_key = STP_ch_empty
 	}
 }
@@ -969,6 +989,9 @@ defined_text = {
 			has_country_flag = STP_ch_supply_strain
 			NOT = {
 				has_country_flag = STP_ch_supply_buffer
+			}
+			NOT = {
+				has_country_flag = STP_ch_fulfilled_merchants
 			}
 		}
 		localization_key = STP_ch_risks_trade
@@ -1021,6 +1044,26 @@ defined_text = {
 		localization_key = STP_ch_nominee_3
 	}
 	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_conservatives
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_conservatives
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -1059,6 +1102,26 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_borons
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_borons
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -1101,6 +1164,26 @@ defined_text = {
 		localization_key = STP_ch_nominee_3
 	}
 	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_security
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_security
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -1139,6 +1222,26 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_army
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_army
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -1181,6 +1284,26 @@ defined_text = {
 		localization_key = STP_ch_nominee_3
 	}
 	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_advisers
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_advisers
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -1219,6 +1342,26 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_nominee_3
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_merchants
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_merchants
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
 	}
 	text = {
 		localization_key = STP_ch_abstention
@@ -1261,6 +1404,26 @@ defined_text = {
 		localization_key = STP_ch_nominee_3
 	}
 	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_radicals
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_4
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_endorse_radicals
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_nominee_5
+	}
+	text = {
 		localization_key = STP_ch_abstention
 	}
 }
@@ -1299,6 +1462,22 @@ defined_text = {
 			}
 		}
 		localization_key = STP_ch_target_party
+	}
+	text = {
+		localization_key = STP_ch_empty
+	}
+}
+
+defined_text = {
+	name = STPGetChapterSecurityRisk
+	text = {
+		trigger = {
+			has_country_flag = STP_ch_security_powers
+			NOT = {
+				has_country_flag = STP_ch_security_reviewed
+			}
+		}
+		localization_key = STP_ch_risks_security
 	}
 	text = {
 		localization_key = STP_ch_empty

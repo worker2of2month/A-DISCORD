@@ -280,4 +280,43 @@ characters = {
 		name = STP_Oleg_Vershin
 		portraits = { army = { large = GFX_Portrait_Forul_Generic_9 } }
 	}
+
+	STP_Pavel_Lanskoy = {
+		name = STP_Pavel_Lanskoy
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Pavel_Lanskoy
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+	}
+
+	STP_Vera_Korvina = {
+		name = STP_Vera_Korvina
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Vera_Korvina
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+	}
+
+	STP_Edgar_Renner = {
+		name = STP_Edgar_Renner
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Edgar_Renner
+			}
+		}
+		country_leader = {
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+	}
 }

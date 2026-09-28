@@ -8103,7 +8103,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_train_army_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -8141,7 +8141,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_train_army_deposit
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -8191,7 +8191,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_remove_army_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 40
+				has_political_power < 40
 			}
 		}
 		complete_effect = {
@@ -8201,7 +8201,7 @@ STP_ch_chapters = {
 						STP_ch_pressure_current = yes
 						has_country_flag = STP_ch_army_access
 						NOT = {
-							has_political_power = < 40
+							has_political_power < 40
 						}
 					}
 					add_political_power = -40
@@ -8246,7 +8246,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_train_economy_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -8284,7 +8284,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_train_economy_deposit
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -8334,7 +8334,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_remove_economy_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 40
+				has_political_power < 40
 			}
 		}
 		complete_effect = {
@@ -8344,7 +8344,7 @@ STP_ch_chapters = {
 						STP_ch_pressure_current = yes
 						has_country_flag = STP_ch_economy_access
 						NOT = {
-							has_political_power = < 40
+							has_political_power < 40
 						}
 					}
 					add_political_power = -40
@@ -8389,7 +8389,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_train_party_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -8427,7 +8427,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_train_party_deposit
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -8477,7 +8477,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_remove_party_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 40
+				has_political_power < 40
 			}
 		}
 		complete_effect = {
@@ -8487,7 +8487,7 @@ STP_ch_chapters = {
 						STP_ch_pressure_current = yes
 						has_country_flag = STP_ch_party_access
 						NOT = {
-							has_political_power = < 40
+							has_political_power < 40
 						}
 					}
 					add_political_power = -40
@@ -8530,7 +8530,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_trade_delay_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -8545,7 +8545,7 @@ STP_ch_chapters = {
 							has_equipment = { infantry_equipment < 1000 }
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -8666,7 +8666,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_northern_guarantees_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 50
+				has_political_power < 50
 			}
 		}
 		complete_effect = {
@@ -8678,7 +8678,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_north_guarantees
 						}
 						NOT = {
-							has_political_power = < 50
+							has_political_power < 50
 						}
 					}
 					add_political_power = -50
@@ -8832,6 +8832,100 @@ STP_ch_chapters = {
 			base = 0
 		}
 	}
+	STP_ch_nominate_4 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_nominate_4_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					check_variable = {
+						var = STP_ch_nominee
+						value = 4
+						compare = equals
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							check_variable = {
+								var = STP_ch_nominee
+								value = 4
+								compare = equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_ch_nominee
+						value = 4
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	STP_ch_nominate_5 = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_campaigning = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_nominate_5_requirements
+				STP_ch_campaigning = yes
+				NOT = {
+					check_variable = {
+						var = STP_ch_nominee
+						value = 5
+						compare = equals
+					}
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_campaigning = yes
+						NOT = {
+							check_variable = {
+								var = STP_ch_nominee
+								value = 5
+								compare = equals
+							}
+						}
+					}
+					set_variable = {
+						var = STP_ch_nominee
+						value = 5
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
 	STP_ch_pledge_conservatives = {
 		icon = generic_political_discourse
 		allowed = {
@@ -8862,7 +8956,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_conservatives_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -8879,7 +8973,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -8934,7 +9028,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_conservatives_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 		}
 		complete_effect = {
@@ -8951,7 +9045,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_conservatives
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 					}
 					add_political_power = -35
@@ -8999,7 +9093,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_borons_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9016,7 +9110,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9071,7 +9165,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_borons_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 		}
 		complete_effect = {
@@ -9088,7 +9182,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_borons
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 					}
 					add_political_power = -35
@@ -9136,7 +9230,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_security_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9153,7 +9247,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9208,7 +9302,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_security_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 		}
 		complete_effect = {
@@ -9225,7 +9319,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_security
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 					}
 					add_political_power = -35
@@ -9273,7 +9367,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_army_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9290,7 +9384,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9345,7 +9439,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_army_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 		}
 		complete_effect = {
@@ -9362,7 +9456,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_army
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 					}
 					add_political_power = -35
@@ -9411,7 +9505,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_advisers_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9428,7 +9522,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9483,7 +9577,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_advisers_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -9505,7 +9599,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_advisers
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -9568,7 +9662,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_merchants_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9585,7 +9679,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9640,7 +9734,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_merchants_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -9662,7 +9756,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_merchants
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -9726,7 +9820,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_pledge_radicals_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -9743,7 +9837,7 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -9798,7 +9892,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_fulfil_radicals_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 35
+				has_political_power < 35
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -9820,7 +9914,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_fulfilled_radicals
 						}
 						NOT = {
-							has_political_power = < 35
+							has_political_power < 35
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -9890,7 +9984,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_security_ministry_1_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -9908,7 +10002,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_security_ministry
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -9967,7 +10061,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_security_ministry_2_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -9985,7 +10079,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_security_ministry
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -10043,7 +10137,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_economy_ministry_1_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -10061,7 +10155,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_economy_ministry
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -10119,7 +10213,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_economy_ministry_2_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -10137,7 +10231,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_economy_ministry
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -10195,7 +10289,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_appointments_1_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -10213,7 +10307,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_appointments
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -10271,7 +10365,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_appoint_appointments_2_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 20
+				has_political_power < 20
 			}
 		}
 		complete_effect = {
@@ -10289,7 +10383,7 @@ STP_ch_chapters = {
 							has_variable = STP_ch_appointments
 						}
 						NOT = {
-							has_political_power = < 20
+							has_political_power < 20
 						}
 					}
 					add_political_power = -20
@@ -10339,7 +10433,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_cooperate_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -10362,7 +10456,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_cooperation_cooldown
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -10480,7 +10574,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_request_release_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 50
+				has_political_power < 50
 			}
 		}
 		complete_effect = {
@@ -10497,7 +10591,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_release_cooldown
 						}
 						NOT = {
-							has_political_power = < 50
+							has_political_power < 50
 						}
 					}
 					add_political_power = -50
@@ -10544,7 +10638,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_armed_break_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 75
+				has_political_power < 75
 			}
 		}
 		complete_effect = {
@@ -10554,7 +10648,7 @@ STP_ch_chapters = {
 						STP_ch_protectorate = yes
 						STP_ch_liberation_window = yes
 						NOT = {
-							has_political_power = < 75
+							has_political_power < 75
 						}
 					}
 					add_political_power = -75
@@ -10588,7 +10682,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_supply_buffer_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 40
+				has_political_power < 40
 			}
 			check_variable = {
 				var = ADISCORD_economy_treasury
@@ -10605,7 +10699,7 @@ STP_ch_chapters = {
 							has_country_flag = STP_ch_supply_buffer
 						}
 						NOT = {
-							has_political_power = < 40
+							has_political_power < 40
 						}
 						check_variable = {
 							var = ADISCORD_economy_treasury
@@ -10660,7 +10754,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_civilian_control_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 75
+				has_political_power < 75
 			}
 		}
 		complete_effect = {
@@ -10677,12 +10771,73 @@ STP_ch_chapters = {
 							compare = greater_than_or_equals
 						}
 						NOT = {
-							has_political_power = < 75
+							has_political_power < 75
 						}
 					}
 					add_political_power = -75
 					set_country_flag = STP_ch_civilian_control
 					clr_country_flag = STP_ch_army_crisis
+					STP_ch_refresh = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+	STP_ch_security_review = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_ch_governing = yes
+			has_country_flag = STP_ch_security_powers
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_security_review_requirements
+				STP_ch_governing = yes
+				has_country_flag = STP_ch_security_powers
+				NOT = {
+					has_country_flag = STP_ch_security_reviewed
+				}
+				check_variable = {
+					var = STP_pf_security_support
+					value = 45
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		custom_cost_text = STP_ch_security_review_cost
+		custom_cost_trigger = {
+			NOT = {
+				has_political_power < 75
+			}
+		}
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_ch_governing = yes
+						has_country_flag = STP_ch_security_powers
+						NOT = {
+							has_country_flag = STP_ch_security_reviewed
+						}
+						check_variable = {
+							var = STP_pf_security_support
+							value = 45
+							compare = greater_than_or_equals
+						}
+						NOT = {
+							has_political_power < 75
+						}
+					}
+					add_political_power = -75
+					set_country_flag = STP_ch_security_reviewed
+					clr_country_flag = STP_ch_security_crisis
 					STP_ch_refresh = yes
 				}
 			}
@@ -10721,7 +10876,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_break_guarantees_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 25
+				has_political_power < 25
 			}
 		}
 		complete_effect = {
@@ -10737,7 +10892,7 @@ STP_ch_chapters = {
 							is_subject_of = STP
 						}
 						NOT = {
-							has_political_power = < 25
+							has_political_power < 25
 						}
 					}
 					add_political_power = -25
@@ -10786,7 +10941,7 @@ STP_ch_chapters = {
 		custom_cost_text = STP_ch_restore_guarantees_cost
 		custom_cost_trigger = {
 			NOT = {
-				has_political_power = < 60
+				has_political_power < 60
 			}
 		}
 		complete_effect = {
@@ -10796,7 +10951,7 @@ STP_ch_chapters = {
 						STP_ch_governing = yes
 						has_country_flag = STP_ch_north_breach
 						NOT = {
-							has_political_power = < 60
+							has_political_power < 60
 						}
 					}
 					add_political_power = -60

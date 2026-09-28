@@ -2138,7 +2138,7 @@ STP_ch_liberation_window = {
 			has_war = yes
 		}
 		NOD = {
-			stability = < 0.45
+			stability < 0.45
 		}
 		check_variable = {
 			var = STP_ch_cooperation
@@ -2178,6 +2178,9 @@ STP_ch_no_crisis = {
 		value = 0
 		compare = equals
 	}
+	NOT = {
+		has_country_flag = STP_ch_security_crisis
+	}
 }
 
 STP_ch_candidate_1_wins = {
@@ -2197,6 +2200,16 @@ STP_ch_candidate_1_wins = {
 	check_variable = {
 		var = STP_ch_votes_1
 		value = STP_ch_votes_3
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_1
+		value = STP_ch_votes_4
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_1
+		value = STP_ch_votes_5
 		compare = greater_than_or_equals
 	}
 }
@@ -2220,6 +2233,16 @@ STP_ch_candidate_2_wins = {
 		value = STP_ch_votes_3
 		compare = greater_than_or_equals
 	}
+	check_variable = {
+		var = STP_ch_votes_2
+		value = STP_ch_votes_4
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_2
+		value = STP_ch_votes_5
+		compare = greater_than_or_equals
+	}
 }
 
 STP_ch_candidate_3_wins = {
@@ -2239,6 +2262,16 @@ STP_ch_candidate_3_wins = {
 	check_variable = {
 		var = STP_ch_votes_3
 		value = STP_ch_votes_2
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_3
+		value = STP_ch_votes_4
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_3
+		value = STP_ch_votes_5
 		compare = greater_than_or_equals
 	}
 }
@@ -2279,6 +2312,68 @@ STP_ch_aid_affordable = {
 	check_variable = {
 		var = ADISCORD_economy_treasury
 		value = 450
+		compare = greater_than_or_equals
+	}
+}
+
+STP_ch_candidate_4_wins = {
+	STP_ch_current = yes
+	check_variable = {
+		var = STP_ch_phase
+		value = 3
+		compare = equals
+	}
+	has_country_flag = STP_ch_ballot_closed
+	is_subject = no
+	check_variable = {
+		var = STP_ch_votes_4
+		value = STP_ch_votes_1
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_4
+		value = STP_ch_votes_2
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_4
+		value = STP_ch_votes_3
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_4
+		value = STP_ch_votes_5
+		compare = greater_than_or_equals
+	}
+}
+
+STP_ch_candidate_5_wins = {
+	STP_ch_current = yes
+	check_variable = {
+		var = STP_ch_phase
+		value = 3
+		compare = equals
+	}
+	has_country_flag = STP_ch_ballot_closed
+	is_subject = no
+	check_variable = {
+		var = STP_ch_votes_5
+		value = STP_ch_votes_1
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_5
+		value = STP_ch_votes_2
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_5
+		value = STP_ch_votes_3
+		compare = greater_than_or_equals
+	}
+	check_variable = {
+		var = STP_ch_votes_5
+		value = STP_ch_votes_4
 		compare = greater_than_or_equals
 	}
 }

@@ -2680,6 +2680,30 @@ country_event = {
 		}
 	}
 	option = {
+		name = ADISCORD_STP_ch.6.4
+		trigger = {
+			STP_ch_candidate_4_wins = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+		hidden_effect = {
+			STP_ch_elect_4 = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.6.5
+		trigger = {
+			STP_ch_candidate_5_wins = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+		hidden_effect = {
+			STP_ch_elect_5 = yes
+		}
+	}
+	option = {
 		name = STP_ch_offer_closed
 		trigger = {
 			NOT = {
@@ -2687,6 +2711,8 @@ country_event = {
 					STP_ch_candidate_1_wins = yes
 					STP_ch_candidate_2_wins = yes
 					STP_ch_candidate_3_wins = yes
+					STP_ch_candidate_4_wins = yes
+					STP_ch_candidate_5_wins = yes
 				}
 			}
 		}

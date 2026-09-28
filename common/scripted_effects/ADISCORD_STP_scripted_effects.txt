@@ -8676,7 +8676,7 @@ STP_ch_initialize = {
 		}
 		set_variable = {
 			var = STP_ch_endorse_security
-			value = 0
+			value = 5
 		}
 		set_variable = {
 			var = STP_ch_endorse_army
@@ -8688,7 +8688,7 @@ STP_ch_initialize = {
 		}
 		set_variable = {
 			var = STP_ch_endorse_merchants
-			value = 0
+			value = 4
 		}
 		set_variable = {
 			var = STP_ch_endorse_radicals
@@ -8738,6 +8738,14 @@ STP_ch_recount = {
 			var = STP_ch_votes_3
 			value = 0
 		}
+		set_variable = {
+			var = STP_ch_votes_4
+			value = 0
+		}
+		set_variable = {
+			var = STP_ch_votes_5
+			value = 0
+		}
 		if = {
 			limit = {
 				check_variable = {
@@ -8780,6 +8788,32 @@ STP_ch_recount = {
 		if = {
 			limit = {
 				check_variable = {
+					var = STP_ch_endorse_conservatives
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_conservatives_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_conservatives
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
+				value = STP_pf_conservatives_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
 					var = STP_ch_endorse_borons
 					value = 1
 					compare = equals
@@ -8813,6 +8847,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_borons_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_borons
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_borons_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_borons
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_borons_influence
 			}
 		}
@@ -8852,6 +8912,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_security_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_security
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_security_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_security
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_security_influence
 			}
 		}
@@ -8891,6 +8977,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_army_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_army
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_army_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_army
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_army_influence
 			}
 		}
@@ -8930,6 +9042,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_advisers_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_advisers
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_advisers_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_advisers
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_advisers_influence
 			}
 		}
@@ -8969,6 +9107,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_merchants_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_merchants
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_merchants_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_merchants
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_merchants_influence
 			}
 		}
@@ -9008,6 +9172,32 @@ STP_ch_recount = {
 			}
 			add_to_variable = {
 				var = STP_ch_votes_3
+				value = STP_pf_radicals_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_radicals
+					value = 4
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_4
+				value = STP_pf_radicals_influence
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_endorse_radicals
+					value = 5
+					compare = equals
+				}
+			}
+			add_to_variable = {
+				var = STP_ch_votes_5
 				value = STP_pf_radicals_influence
 			}
 		}
@@ -9332,6 +9522,55 @@ STP_ch_refresh = {
 				modifier = STP_ch_institutions
 			}
 		}
+		if = {
+			limit = {
+				has_completed_focus = STP_ch_production_agreements
+			}
+			add_to_variable = {
+				var = STP_ch_output
+				value = 0.05
+			}
+		}
+		if = {
+			limit = {
+				has_completed_focus = STP_ch_market_charter
+			}
+			add_to_variable = {
+				var = STP_ch_trade
+				value = 0.05
+			}
+		}
+		if = {
+			limit = {
+				has_completed_focus = STP_ch_security_directorate
+			}
+			add_to_variable = {
+				var = STP_ch_stability
+				value = 0.03
+			}
+			add_to_variable = {
+				var = STP_ch_administration
+				value = 0.05
+			}
+		}
+		if = {
+			limit = {
+				has_completed_focus = STP_ch_register_of_powers
+			}
+			add_to_variable = {
+				var = STP_ch_political_power
+				value = 0.05
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_security_veto
+			}
+			add_to_variable = {
+				var = STP_ch_political_power
+				value = -0.1
+			}
+		}
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
 	}
@@ -9593,6 +9832,13 @@ STP_ch_open_congress = {
 				hours = 1
 			}
 		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_protectorate_leader
+			}
+			clr_country_flag = STP_ch_protectorate_leader
+			STP_ch_restore_independent_leader = yes
+		}
 		STP_ch_close_pressure = yes
 		clr_country_flag = STP_ch_release_pending
 		clr_country_flag = STP_ch_liberation_war
@@ -9648,6 +9894,7 @@ STP_ch_enter_protectorate = {
 			id = ADISCORD_STP_ch.1
 			hours = 1
 		}
+		STP_ch_install_protectorate_leader = yes
 		STP_ch_refresh = yes
 		country_event = {
 			id = ADISCORD_STP_ch.4
@@ -9839,16 +10086,7 @@ STP_ch_elect_1 = {
 			ruling_party = hedonism
 			elections_allowed = no
 		}
-		create_country_leader = {
-			name = STP_ch_leader_1
-			desc = STP_ch_leader_1_desc
-			ideology = aristocratic_hedonism
-			expire = "2300.1.1"
-		}
-		set_country_leader_portrait = {
-			ideology = hedonism
-			portrait = GFX_portrait_STP_Conservative_Presidium_placeholder
-		}
+		STP_ch_leader_1 = yes
 		set_variable = {
 			var = STP_ch_phase
 			value = 4
@@ -9875,33 +10113,7 @@ STP_ch_elect_2 = {
 			ruling_party = hedonism
 			elections_allowed = no
 		}
-		if = {
-			limit = { has_character = STP_rufus_hedersett }
-			add_country_leader_role = {
-				character = STP_rufus_hedersett
-				promote_leader = yes
-				country_leader = {
-					ideology = hedonism_ideology
-					expire = "2300.1.1"
-				}
-			}
-			promote_character = {
-				character = STP_rufus_hedersett
-				ideology = hedonism_ideology
-			}
-		}
-		else = {
-			create_country_leader = {
-				name = STP_ch_leader_2
-				desc = STP_ch_leader_2_desc
-				ideology = hedonism_ideology
-				expire = "2300.1.1"
-			}
-		}
-		set_country_leader_portrait = {
-			ideology = hedonism
-			portrait = GFX_portrait_STP_Rufus_Hedersett
-		}
+		STP_ch_leader_2 = yes
 		set_variable = {
 			var = STP_ch_phase
 			value = 4
@@ -9928,35 +10140,7 @@ STP_ch_elect_3 = {
 			ruling_party = hedonism
 			elections_allowed = no
 		}
-		if = {
-			limit = {
-				has_character = STP_August_Veil
-			}
-			add_country_leader_role = {
-				character = STP_August_Veil
-				promote_leader = yes
-				country_leader = {
-					ideology = hedonism_ideology
-					expire = "2300.1.1"
-				}
-			}
-			promote_character = {
-				character = STP_August_Veil
-				ideology = hedonism_ideology
-			}
-		}
-		else = {
-			create_country_leader = {
-				name = STP_ch_leader_3
-				desc = STP_ch_leader_3_desc
-				ideology = hedonism_ideology
-				expire = "2300.1.1"
-			}
-			set_country_leader_portrait = {
-				ideology = hedonism
-				portrait = GFX_portrait_STP_Military_Collegium_placeholder
-			}
-		}
+		STP_ch_leader_3 = yes
 		set_variable = {
 			var = STP_ch_phase
 			value = 4
@@ -9982,6 +10166,16 @@ STP_ch_begin_crisis = {
 		clr_country_flag = STP_ch_army_crisis
 		clr_country_flag = STP_ch_north_crisis
 		clr_country_flag = STP_ch_trade_crisis
+		clr_country_flag = STP_ch_security_crisis
+		if = {
+			limit = {
+				has_country_flag = STP_ch_security_powers
+				NOT = {
+					has_country_flag = STP_ch_security_reviewed
+				}
+			}
+			set_country_flag = STP_ch_security_crisis
+		}
 		if = {
 			limit = {
 				has_country_flag = STP_ch_emergency_powers
@@ -10005,6 +10199,9 @@ STP_ch_begin_crisis = {
 				has_country_flag = STP_ch_supply_strain
 				NOT = {
 					has_country_flag = STP_ch_supply_buffer
+				}
+				NOT = {
+					has_country_flag = STP_ch_fulfilled_merchants
 				}
 			}
 			set_country_flag = STP_ch_trade_crisis
@@ -10201,6 +10398,13 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_radicals
+		}
+		if = {
+			limit = {
+				has_country_flag = STP_ch_security_crisis
+			}
+			set_country_flag = STP_ch_security_veto
+			add_stability = -0.08
 		}
 		STP_refresh_apparatus_loyalty = yes
 		STP_ch_refresh = yes
@@ -10477,6 +10681,7 @@ STP_ch_clear = {
 		STP_ch_train_economy_refund = yes
 		STP_ch_train_party_refund = yes
 		clear_variable = STP_ch_crisis_paused_days
+		clr_country_flag = STP_ch_protectorate_leader
 		STP_ch_close_pressure = yes
 		remove_mission = STP_ch_crisis_deadline
 		if = {
@@ -10608,21 +10813,392 @@ STP_ch_schedule_refresh = {
 # Choose once from the inherited delegates; later coalition agreements keep this nominee.
 STP_ch_select_ai_nominee = {
 	if = {
-		limit = { is_ai = yes }
-		set_variable = { var = STP_ch_nominee value = 1 }
+		limit = {
+			is_ai = yes
+		}
+		set_variable = {
+			var = STP_ch_nominee
+			value = 1
+		}
 		if = {
 			limit = {
-				check_variable = { var = STP_ch_votes_2 value = STP_ch_votes_1 compare = greater_than }
-				check_variable = { var = STP_ch_votes_2 value = STP_ch_votes_3 compare = greater_than_or_equals }
+				check_variable = {
+					var = STP_ch_votes_2
+					value = STP_ch_votes_1
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_2
+					value = STP_ch_votes_3
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_ch_votes_2
+					value = STP_ch_votes_4
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_ch_votes_2
+					value = STP_ch_votes_5
+					compare = greater_than_or_equals
+				}
 			}
-			set_variable = { var = STP_ch_nominee value = 2 }
+			set_variable = {
+				var = STP_ch_nominee
+				value = 2
+			}
 		}
-		else_if = {
+		if = {
 			limit = {
-				check_variable = { var = STP_ch_votes_3 value = STP_ch_votes_1 compare = greater_than }
-				check_variable = { var = STP_ch_votes_3 value = STP_ch_votes_2 compare = greater_than }
+				check_variable = {
+					var = STP_ch_votes_3
+					value = STP_ch_votes_1
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_3
+					value = STP_ch_votes_2
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_3
+					value = STP_ch_votes_4
+					compare = greater_than_or_equals
+				}
+				check_variable = {
+					var = STP_ch_votes_3
+					value = STP_ch_votes_5
+					compare = greater_than_or_equals
+				}
 			}
-			set_variable = { var = STP_ch_nominee value = 3 }
+			set_variable = {
+				var = STP_ch_nominee
+				value = 3
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_votes_4
+					value = STP_ch_votes_1
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_4
+					value = STP_ch_votes_2
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_4
+					value = STP_ch_votes_3
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_4
+					value = STP_ch_votes_5
+					compare = greater_than_or_equals
+				}
+			}
+			set_variable = {
+				var = STP_ch_nominee
+				value = 4
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_votes_5
+					value = STP_ch_votes_1
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_5
+					value = STP_ch_votes_2
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_5
+					value = STP_ch_votes_3
+					compare = greater_than
+				}
+				check_variable = {
+					var = STP_ch_votes_5
+					value = STP_ch_votes_4
+					compare = greater_than
+				}
+			}
+			set_variable = {
+				var = STP_ch_nominee
+				value = 5
+			}
 		}
 	}
+}
+
+
+STP_ch_leader_1 = {
+	create_country_leader = {
+		name = STP_ch_leader_1
+		desc = STP_ch_leader_1_desc
+		ideology = aristocratic_hedonism
+		expire = "2300.1.1"
+	}
+	set_country_leader_portrait = {
+		ideology = hedonism
+		portrait = GFX_portrait_STP_Conservative_Presidium
+	}
+}
+
+STP_ch_leader_2 = {
+	if = {
+		limit = { has_character = STP_rufus_hedersett }
+		add_country_leader_role = {
+			character = STP_rufus_hedersett
+			promote_leader = yes
+			country_leader = {
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
+			}
+		}
+		promote_character = {
+			character = STP_rufus_hedersett
+			ideology = hedonism_ideology
+		}
+	}
+	else = {
+		create_country_leader = {
+			name = STP_ch_leader_2
+			desc = STP_ch_leader_2_desc
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+	}
+	set_country_leader_portrait = {
+		ideology = hedonism
+		portrait = GFX_portrait_STP_Rufus_Hedersett
+	}
+}
+
+STP_ch_leader_3 = {
+	if = {
+		limit = {
+			has_character = STP_August_Veil
+		}
+		add_country_leader_role = {
+			character = STP_August_Veil
+			promote_leader = yes
+			country_leader = {
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
+			}
+		}
+		promote_character = {
+			character = STP_August_Veil
+			ideology = hedonism_ideology
+		}
+	}
+	else = {
+		create_country_leader = {
+			name = STP_ch_leader_3
+			desc = STP_ch_leader_3_desc
+			ideology = hedonism_ideology
+			expire = "2300.1.1"
+		}
+		set_country_leader_portrait = {
+			ideology = hedonism
+			portrait = GFX_portrait_STP_Military_Collegium
+		}
+	}
+}
+
+STP_ch_leader_4 = {
+	if = {
+		limit = {
+			NOT = {
+				has_character = STP_Pavel_Lanskoy
+			}
+		}
+		recruit_character = STP_Pavel_Lanskoy
+	}
+	promote_character = {
+		character = STP_Pavel_Lanskoy
+		ideology = hedonism_ideology
+	}
+}
+
+STP_ch_elect_4 = {
+	if = {
+		limit = {
+			STP_ch_candidate_4_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 4
+		}
+		remove_ideas = {
+			STP_pw_party_high_houses_government
+			STP_pw_party_unbound_government
+		}
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		STP_ch_leader_4 = yes
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_leader_5 = {
+	if = {
+		limit = {
+			NOT = {
+				has_character = STP_Vera_Korvina
+			}
+		}
+		recruit_character = STP_Vera_Korvina
+	}
+	promote_character = {
+		character = STP_Vera_Korvina
+		ideology = hedonism_ideology
+	}
+}
+
+STP_ch_elect_5 = {
+	if = {
+		limit = {
+			STP_ch_candidate_5_wins = yes
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = 5
+		}
+		remove_ideas = {
+			STP_pw_party_high_houses_government
+			STP_pw_party_unbound_government
+		}
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		STP_ch_leader_5 = yes
+		set_variable = {
+			var = STP_ch_phase
+			value = 4
+		}
+		country_event = {
+			id = ADISCORD_STP_ch.1
+			hours = 1
+		}
+		STP_ch_refresh = yes
+	}
+}
+
+STP_ch_leader_6 = {
+	if = {
+		limit = {
+			NOT = {
+				has_character = STP_Edgar_Renner
+			}
+		}
+		recruit_character = STP_Edgar_Renner
+	}
+	promote_character = {
+		character = STP_Edgar_Renner
+		ideology = hedonism_ideology
+	}
+}
+
+STP_ch_restore_independent_leader = {
+	if = {
+		limit = {
+			check_variable = {
+				var = STP_ch_government
+				value = 1
+				compare = equals
+			}
+		}
+		STP_ch_leader_1 = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_ch_government
+				value = 2
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				has_character = STP_rufus_hedersett
+			}
+			promote_character = {
+				character = STP_rufus_hedersett
+				ideology = hedonism_ideology
+			}
+		}
+		else = {
+			STP_ch_leader_2 = yes
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_ch_government
+				value = 3
+				compare = equals
+			}
+		}
+		if = {
+			limit = {
+				has_character = STP_August_Veil
+			}
+			promote_character = {
+				character = STP_August_Veil
+				ideology = hedonism_ideology
+			}
+		}
+		else = {
+			STP_ch_leader_3 = yes
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		STP_ch_leader_4 = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		STP_ch_leader_5 = yes
+	}
+	else = {
+		STP_ch_leader_1 = yes
+	}
+}
+
+STP_ch_install_protectorate_leader = {
+	set_politics = {
+		ruling_party = hedonism
+		elections_allowed = no
+	}
+	STP_ch_leader_6 = yes
+	set_country_flag = STP_ch_protectorate_leader
 }

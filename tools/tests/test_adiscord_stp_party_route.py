@@ -1636,7 +1636,10 @@ class PoliticalChapterContracts(unittest.TestCase):
 
     def test_ai_initial_nominee_follows_the_existing_delegate_coalition(self):
         self.assertIn("STP_ch_select_ai_nominee", self.effects)
-        for votes, expected in (((40, 20, 15), 1), ((20, 45, 15), 2), ((20, 15, 45), 3), ((30, 30, 30), 1)):
+        for votes, expected in (((40, 20, 15, 0, 0), 1), ((20, 45, 15, 0, 0), 2),
+                                ((20, 15, 45, 0, 0), 3), ((10, 15, 20, 40, 30), 4),
+                                ((10, 15, 20, 30, 40), 5), ((30, 30, 30, 30, 30), 1),
+                                ((10, 15, 20, 40, 40), 4)):
             facts = {("STP", "is_ai", "yes"): True}
             for i, vote in enumerate(votes, 1):
                 facts[("STP", "variable", f"STP_ch_votes_{i}")] = vote
@@ -1828,6 +1831,94 @@ class PoliticalChapterContracts(unittest.TestCase):
                     self.assertRegex(english, r"(?m)^ " + re.escape(key) + r":")
         for path in (DECISIONS, EFFECTS, EVENTS):
             self.assertFalse((ROOT / path).read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_five_candidate_ballot_counts_new_blocs_and_preserves_ties(self):
+        from itertools import product
+        for votes in product((0, 10, 30), repeat=5):
+            facts = {("STP", "STP_ch_current", "yes"): True,
+                     ("STP", "variable", "STP_ch_phase"): 3,
+                     ("STP", "has_country_flag", "STP_ch_ballot_closed"): True,
+                     ("STP", "is_subject", "no"): True}
+            facts.update({("STP", "variable", f"STP_ch_votes_{i}"): v for i, v in enumerate(votes, 1)})
+            for i, votes_i in enumerate(votes, 1):
+                self.assertEqual(matches_conditions(self.triggers[f"STP_ch_candidate_{i}_wins"], facts),
+                                 votes_i == max(votes), (votes, i))
+        facts = {("STP", "STP_ch_campaigning", "yes"): True,
+                 ("STP", "variable", "STP_ch_endorse_merchants"): 4,
+                 ("STP", "variable", "STP_pf_merchants_influence"): 23,
+                 ("STP", "variable", "STP_ch_endorse_security"): 5,
+                 ("STP", "variable", "STP_pf_security_influence"): 17}
+        self.apply_ledger("STP_ch_recount", facts)
+        self.assertEqual([facts[("STP", "variable", f"STP_ch_votes_{i}")] for i in range(1, 6)],
+                         [0, 0, 0, 23, 17])
+
+    def test_new_governments_have_exclusive_programs_and_reach_settlement(self):
+        for candidate, first, last in ((4, "STP_ch_production_agreements", "STP_ch_market_charter"),
+                                        (5, "STP_ch_security_directorate", "STP_ch_register_of_powers")):
+            self.assertIn(f"STP_ch_nominate_{candidate}", self.decisions)
+            self.assertIn(f"ADISCORD_STP_ch.6.{candidate}",
+                          [one(o, "name") for o in children(self.events["ADISCORD_STP_ch.6"], "option")])
+            for focus_id in (first, last):
+                for government in range(1, 6):
+                    facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                             ("STP", "variable", "STP_ch_phase"): 5,
+                             ("STP", "variable", "STP_ch_government"): government}
+                    self.assertEqual(matches_conditions(one(self.focuses[focus_id], "available"), facts),
+                                     government == candidate)
+            self.assertIn(last, children(one(self.focuses["STP_ch_program_settlement"], "prerequisite"), "focus"))
+
+    def test_protectorate_replaces_and_restores_leader_without_reopening_ballot(self):
+        self.assertIn("STP_ch_install_protectorate_leader", [e.key for e in walk(self.effects["STP_ch_enter_protectorate"])])
+        self.assertIn("STP_ch_restore_independent_leader", [e.key for e in walk(self.effects["STP_ch_open_congress"])])
+        for candidate in range(1, 6):
+            facts = {("STP", "variable", "STP_ch_government"): candidate,
+                     ("STP", "has_character", "STP_rufus_hedersett"): True,
+                     ("STP", "has_character", "STP_August_Veil"): True}
+            payload = [e for _, e in selected_effects(self.effects["STP_ch_restore_independent_leader"], facts)]
+            self.assertFalse(any(e.key.startswith("STP_ch_elect_") for e in payload))
+            self.assertFalse(any(e.key in ("set_variable", "add_political_power", "country_event") for e in payload))
+            self.assertTrue(any(e.key in ("promote_character", f"STP_ch_leader_{candidate}") for e in payload))
+
+    def test_security_review_pays_once_and_clears_only_its_own_crisis(self):
+        decision = self.decisions["STP_ch_security_review"]
+        facts = {("STP", "STP_ch_governing", "yes"): True,
+                 ("STP", "has_country_flag", "STP_ch_security_powers"): True,
+                 ("STP", "variable", "STP_pf_security_support"): 45,
+                 ("STP", "numeric", "has_political_power"): 75}
+        payload = [e for _, e in selected_effects(one(decision, "complete_effect"), facts)]
+        self.assertEqual(children(payload, "add_political_power"), ["-75"])
+        self.assertEqual(children(payload, "clr_country_flag"), ["STP_ch_security_crisis"])
+        facts[("STP", "has_country_flag", "STP_ch_security_reviewed")] = True
+        self.assertFalse(matches_conditions(one(decision, "available"), facts))
+        replay = [e for _, e in selected_effects(one(decision, "complete_effect"), facts)]
+        self.assertEqual(children(replay, "add_political_power"), [])
+        self.assertFalse(matches_conditions(self.triggers["STP_ch_no_crisis"], {
+            ("STP", "variable", "STP_ch_unpaid_promises"): 0,
+            ("STP", "has_country_flag", "STP_ch_security_crisis"): True}))
+
+    def test_security_and_supply_crises_follow_unresolved_programme_conditions(self):
+        for powers, reviewed, strain, reserve, merchants in ((True, False, False, False, False),
+                (True, True, False, False, False), (False, False, True, False, False),
+                (False, False, True, True, False), (False, False, True, False, True)):
+            facts = {("STP", "STP_ch_governing", "yes"): True,
+                     ("STP", "variable", "STP_ch_phase"): 5}
+            for flag, value in (("security_powers", powers), ("security_reviewed", reviewed),
+                                ("supply_strain", strain), ("supply_buffer", reserve), ("fulfilled_merchants", merchants)):
+                facts[("STP", "has_country_flag", "STP_ch_" + flag)] = value
+            effects = [e for _, e in selected_effects(self.effects["STP_ch_begin_crisis"], facts)]
+            flags = children(effects, "set_country_flag")
+            self.assertEqual("STP_ch_security_crisis" in flags, powers and not reviewed)
+            self.assertEqual("STP_ch_trade_crisis" in flags, strain and not reserve and not merchants)
+
+    def test_chapter_prices_use_native_comparisons_and_exact_affordability(self):
+        chapter_text = read(DECISIONS).split("STP_ch_chapters = {", 1)[1]
+        self.assertNotRegex(chapter_text, r"=\s*[<>]")
+        self.assertNotRegex(read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
+                            r"stability\s*=\s*[<>]")
+        decision = self.decisions["STP_ch_security_review"]
+        for power, expected in ((74.999, False), (75, True), (76, True)):
+            facts = {("STP", "numeric", "has_political_power"): power}
+            self.assertEqual(matches_conditions(one(decision, "custom_cost_trigger"), facts), expected)
 
     def test_no_scripted_trigger_uses_effect_macro_arguments(self):
         for source in (EFFECTS, DECISIONS, EVENTS, FOCUS):

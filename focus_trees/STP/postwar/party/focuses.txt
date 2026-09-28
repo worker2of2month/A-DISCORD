@@ -2150,6 +2150,8 @@
 			focus = STP_ch_property_charter
 			focus = STP_ch_free_labour
 			focus = STP_ch_regular_service
+			focus = STP_ch_market_charter
+			focus = STP_ch_register_of_powers
 		}
 		available = {
 			STP_pw_can_reconstruct = yes
@@ -2202,5 +2204,206 @@
 		}
 		completion_reward = {
 			add_political_power = 100
+		}
+	}
+
+
+	focus = {
+		id = STP_ch_production_agreements
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		x = -8
+		y = 3
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_rules
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 15
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_ch_production_agreements_tt
+			hidden_effect = {
+				STP_ch_schedule_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_market_charter
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		x = -8
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_production_agreements
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 15
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_ch_market_charter_tt
+			hidden_effect = {
+				set_country_flag = STP_ch_supply_strain
+			}
+			unlock_decision_tooltip = STP_ch_supply_buffer
+			hidden_effect = {
+				STP_ch_schedule_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_security_directorate
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		x = -8
+		y = 3
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_rules
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 15
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_ch_security_directorate_tt
+			hidden_effect = {
+				set_country_flag = STP_ch_security_powers
+			}
+			hidden_effect = {
+				STP_ch_schedule_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_register_of_powers
+		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		x = -8
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_security_directorate
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 15
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_ch_register_of_powers_tt
+			unlock_decision_tooltip = STP_ch_security_review
+			hidden_effect = {
+				STP_ch_schedule_refresh = yes
+			}
 		}
 	}
