@@ -45,8 +45,9 @@ add_ideas = {
 	ADISCORD_industrial_policy_military_prioritization
 	ADISCORD_officer_corps_field_commissions
 	ADISCORD_logistics_regional_warehouses
-	ADISCORD_training_reserve_cycles
+	ADISCORD_training_standardized_program
 	ADISCORD_internal_security_investigative_bureaus
+	ADISCORD_justice_military_immunity
 
 	VAL_harvest_of_ash
 	VAL_big_buyers

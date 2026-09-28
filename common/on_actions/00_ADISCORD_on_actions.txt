@@ -158,9 +158,8 @@ on_actions = {
 					has_war = no
 				}
 				ADISCORD_economy_update_postwar_demobilization = yes
-				# The transition can replace economy and conscription laws. Refresh
-				# their scalar caches once, then reuse the ordinary budget-control
-				# refresh instead of waiting up to a month for the menu to catch up.
+				# Recovery may begin immediately when all policies are already peaceful.
+				# Refresh the idea-backed factors before recomputing the army budget.
 				ADISCORD_economy_recalculate_policy_modifiers = yes
 				ADISCORD_economy_refresh_after_budget_control_change = yes
 			}

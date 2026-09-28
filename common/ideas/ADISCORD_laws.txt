@@ -527,7 +527,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_military_organization_militia_autonomy = {
-			picture = ADISCORD_law_military_militia_autonomy
+			picture = ADISCORD_military_organization_militia_autonomy
 			cost = 150
 			removal_cost = -1
 
@@ -544,7 +544,7 @@ ideas = {
 		}
 
 		ADISCORD_military_organization_cadre_army = {
-			picture = ADISCORD_law_military_cadre_army
+			picture = ADISCORD_military_organization_cadre_army
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -565,7 +565,7 @@ ideas = {
 		}
 
 		ADISCORD_military_organization_contract_brigades = {
-			picture = ADISCORD_law_military_contract_brigades
+			picture = ADISCORD_military_organization_contract_brigades
 			cost = 150
 			removal_cost = -1
 
@@ -586,7 +586,7 @@ ideas = {
 		}
 
 		ADISCORD_military_organization_general_staff = {
-			picture = ADISCORD_law_military_general_staff
+			picture = ADISCORD_military_organization_general_staff
 			cost = 150
 			removal_cost = -1
 
@@ -615,7 +615,7 @@ ideas = {
 		}
 
 		ADISCORD_military_organization_total_defense_grid = {
-			picture = ADISCORD_law_military_total_defense_grid
+			picture = ADISCORD_military_organization_total_defense_grid
 			cost = 150
 			removal_cost = -1
 
@@ -650,7 +650,7 @@ ideas = {
 		}
 
 		ADISCORD_military_organization_territorial_reserves = {
-			picture = ADISCORD_law_military_cadre_army
+			picture = ADISCORD_military_organization_territorial_reserves
 			cost = 150
 			removal_cost = -1
 
@@ -1701,7 +1701,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_infrastructure_patchwork_roads = {
-			picture = ADISCORD_law_infrastructure_patchwork_roads
+			picture = ADISCORD_infrastructure_patchwork_roads
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -1720,7 +1720,7 @@ ideas = {
 		}
 
 		ADISCORD_infrastructure_regional_roadworks = {
-			picture = ADISCORD_law_infrastructure_regional_roadworks
+			picture = ADISCORD_infrastructure_regional_roadworks
 			cost = 150
 			removal_cost = -1
 
@@ -1737,7 +1737,7 @@ ideas = {
 		}
 
 		ADISCORD_infrastructure_rail_corridors = {
-			picture = ADISCORD_law_infrastructure_rail_corridors
+			picture = ADISCORD_infrastructure_rail_corridors
 			cost = 150
 			removal_cost = -1
 
@@ -1763,7 +1763,7 @@ ideas = {
 		}
 
 		ADISCORD_infrastructure_strategic_highways = {
-			picture = ADISCORD_law_infrastructure_strategic_highways
+			picture = ADISCORD_infrastructure_strategic_highways
 			cost = 150
 			removal_cost = -1
 
@@ -1793,7 +1793,7 @@ ideas = {
 		}
 
 		ADISCORD_infrastructure_military_depots = {
-			picture = ADISCORD_law_infrastructure_military_depots
+			picture = ADISCORD_infrastructure_military_depots
 			cost = 150
 			removal_cost = -1
 
@@ -1826,7 +1826,7 @@ ideas = {
 		}
 
 		ADISCORD_infrastructure_port_network = {
-			picture = ADISCORD_law_infrastructure_rail_corridors
+			picture = ADISCORD_infrastructure_port_network
 			cost = 150
 			removal_cost = -1
 
@@ -1848,13 +1848,14 @@ ideas = {
 		law = yes
 
 		ADISCORD_officer_corps_local_seniority = {
-			picture = ADISCORD_law_officer_corps_local_seniority
+			picture = ADISCORD_officer_corps_local_seniority
 			cost = 150
 			removal_cost = -1
 			default = yes
 
 			modifier = {
 				command_power_gain = 0.015
+				planning_speed = -0.05
 			}
 
 			cancel_if_invalid = no
@@ -1867,7 +1868,7 @@ ideas = {
 		}
 
 		ADISCORD_officer_corps_merit_commissions = {
-			picture = ADISCORD_law_officer_corps_merit_commissions
+			picture = ADISCORD_officer_corps_merit_commissions
 			cost = 150
 			removal_cost = -1
 
@@ -1892,7 +1893,7 @@ ideas = {
 		}
 
 		ADISCORD_officer_corps_political_commissars = {
-			picture = ADISCORD_law_officer_corps_political_commissars
+			picture = ADISCORD_officer_corps_political_commissars
 			cost = 150
 			removal_cost = -1
 
@@ -1925,7 +1926,7 @@ ideas = {
 		}
 
 		ADISCORD_officer_corps_general_staff_academy = {
-			picture = ADISCORD_law_officer_corps_general_staff_academy
+			picture = ADISCORD_officer_corps_general_staff_academy
 			cost = 150
 			removal_cost = -1
 
@@ -1955,7 +1956,7 @@ ideas = {
 		}
 
 		ADISCORD_officer_corps_emergency_promotions = {
-			picture = ADISCORD_law_officer_corps_emergency_promotions
+			picture = ADISCORD_officer_corps_emergency_promotions
 			cost = 150
 			removal_cost = -1
 
@@ -1987,7 +1988,7 @@ ideas = {
 		}
 
 		ADISCORD_officer_corps_field_commissions = {
-			picture = ADISCORD_law_officer_corps_merit_commissions
+			picture = ADISCORD_officer_corps_field_commissions
 			cost = 150
 			removal_cost = -1
 
@@ -2009,7 +2010,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_logistics_local_foraging = {
-			picture = ADISCORD_law_logistics_local_foraging
+			picture = ADISCORD_logistics_local_foraging
 			cost = 150
 			removal_cost = -1
 
@@ -2027,7 +2028,7 @@ ideas = {
 		}
 
 		ADISCORD_logistics_civilian_contracts = {
-			picture = ADISCORD_law_logistics_civilian_contracts
+			picture = ADISCORD_logistics_civilian_contracts
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -2046,7 +2047,7 @@ ideas = {
 		}
 
 		ADISCORD_logistics_centralized_depots = {
-			picture = ADISCORD_law_logistics_centralized_depots
+			picture = ADISCORD_logistics_centralized_depots
 			cost = 150
 			removal_cost = -1
 
@@ -2072,7 +2073,7 @@ ideas = {
 		}
 
 		ADISCORD_logistics_motorized_supply = {
-			picture = ADISCORD_law_logistics_motorized_supply
+			picture = ADISCORD_logistics_motorized_supply
 			cost = 150
 			removal_cost = -1
 
@@ -2102,7 +2103,7 @@ ideas = {
 		}
 
 		ADISCORD_logistics_emergency_requisitioning = {
-			picture = ADISCORD_law_logistics_emergency_requisitioning
+			picture = ADISCORD_logistics_emergency_requisitioning
 			cost = 150
 			removal_cost = -1
 
@@ -2135,7 +2136,7 @@ ideas = {
 		}
 
 		ADISCORD_logistics_regional_warehouses = {
-			picture = ADISCORD_law_logistics_centralized_depots
+			picture = ADISCORD_logistics_regional_warehouses
 			cost = 150
 			removal_cost = -1
 
@@ -2156,7 +2157,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_training_irregular_exercises = {
-			picture = ADISCORD_law_training_irregular_exercises
+			picture = ADISCORD_training_irregular_exercises
 			cost = 150
 			removal_cost = -1
 
@@ -2164,7 +2165,6 @@ ideas = {
 				training_time_factor = -0.105
 				army_org_factor = -0.02
 				stability_factor = 0.015
-				conscription = 0.005
 			}
 
 			cancel_if_invalid = no
@@ -2173,7 +2173,7 @@ ideas = {
 		}
 
 		ADISCORD_training_basic_drills = {
-			picture = ADISCORD_law_training_basic_drills
+			picture = ADISCORD_training_basic_drills
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -2193,7 +2193,7 @@ ideas = {
 		}
 
 		ADISCORD_training_standardized_program = {
-			picture = ADISCORD_law_training_standardized_program
+			picture = ADISCORD_training_standardized_program
 			cost = 150
 			removal_cost = -1
 
@@ -2210,7 +2210,7 @@ ideas = {
 		}
 
 		ADISCORD_training_officer_led_wargames = {
-			picture = ADISCORD_law_training_officer_led_wargames
+			picture = ADISCORD_training_officer_led_wargames
 			cost = 150
 			removal_cost = -1
 
@@ -2240,7 +2240,7 @@ ideas = {
 		}
 
 		ADISCORD_training_accelerated_bootcamps = {
-			picture = ADISCORD_law_training_accelerated_bootcamps
+			picture = ADISCORD_training_accelerated_bootcamps
 			cost = 150
 			removal_cost = -1
 
@@ -2274,7 +2274,7 @@ ideas = {
 		}
 
 		ADISCORD_training_reserve_cycles = {
-			picture = ADISCORD_law_training_standardized_program
+			picture = ADISCORD_training_reserve_cycles
 			cost = 150
 			removal_cost = -1
 
@@ -2296,7 +2296,7 @@ ideas = {
 		law = yes
 
 		ADISCORD_internal_security_neighborhood_watch = {
-			picture = ADISCORD_law_internal_security_neighborhood_watch
+			picture = ADISCORD_internal_security_neighborhood_watch
 			cost = 150
 			removal_cost = -1
 
@@ -2313,7 +2313,7 @@ ideas = {
 		}
 
 		ADISCORD_internal_security_local_garrisons = {
-			picture = ADISCORD_law_internal_security_local_garrisons
+			picture = ADISCORD_internal_security_local_garrisons
 			cost = 150
 			removal_cost = -1
 			default = yes
@@ -2333,7 +2333,7 @@ ideas = {
 		}
 
 		ADISCORD_internal_security_investigative_bureaus = {
-			picture = ADISCORD_law_internal_security_investigative_bureaus
+			picture = ADISCORD_internal_security_investigative_bureaus
 			cost = 150
 			removal_cost = -1
 
@@ -2358,7 +2358,7 @@ ideas = {
 		}
 
 		ADISCORD_internal_security_emergency_patrols = {
-			picture = ADISCORD_law_internal_security_emergency_patrols
+			picture = ADISCORD_internal_security_emergency_patrols
 			cost = 150
 			removal_cost = -1
 
@@ -2391,7 +2391,7 @@ ideas = {
 		}
 
 		ADISCORD_internal_security_internal_directorate = {
-			picture = ADISCORD_law_internal_security_internal_directorate
+			picture = ADISCORD_internal_security_internal_directorate
 			cost = 150
 			removal_cost = -1
 
@@ -2430,7 +2430,7 @@ ideas = {
 		}
 
 		ADISCORD_internal_security_civilian_oversight = {
-			picture = ADISCORD_law_internal_security_investigative_bureaus
+			picture = ADISCORD_internal_security_civilian_oversight
 			cost = 150
 			removal_cost = -1
 
@@ -2632,6 +2632,28 @@ ideas = {
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			cancel_if_invalid = no
 			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_justice_military_immunity = {
+			picture = ADISCORD_justice_military_immunity
+			cost = 0
+			removal_cost = -1
+			allowed = { always = yes }
+			available = {
+				custom_trigger_tooltip = {
+					tooltip = ADISCORD_justice_military_immunity_focus_only_tt
+					always = no
+				}
+			}
+			modifier = {
+				planning_speed = 0.10
+				stability_factor = -0.10
+				army_org_regain = -0.05
+			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
 		}
 
 		ADISCORD_justice_military_prosecution = {

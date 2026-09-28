@@ -45,6 +45,36 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_closed_economy.png"
 	}
 
+	# Retained vanilla mobilization-law IDs use their own idea sprites in the politics slot.
+	spriteType = {
+		name = "GFX_idea_disarmed_nation"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_disarmed_nation.png"
+	}
+	spriteType = {
+		name = "GFX_idea_volunteer_only"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_volunteer_only.png"
+	}
+	spriteType = {
+		name = "GFX_idea_limited_conscription"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_limited_conscription.png"
+	}
+	spriteType = {
+		name = "GFX_idea_extensive_conscription"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_extensive_conscription.png"
+	}
+	spriteType = {
+		name = "GFX_idea_service_by_requirement"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_service_by_requirement.png"
+	}
+	spriteType = {
+		name = "GFX_idea_all_adults_serve"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_all_adults_serve.png"
+	}
+	spriteType = {
+		name = "GFX_idea_scraping_the_barrel"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_scraping_the_barrel.png"
+	}
+
 	# Generic advisor aliases load after vanilla ideas.gfx.
 	spriteType = {
 		name = "GFX_idea_generic_political_advisor_europe_1"

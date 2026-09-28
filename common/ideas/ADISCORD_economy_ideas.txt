@@ -283,7 +283,120 @@ ideas = {
 				stability_factor = -0.03
 			}
 		}
+		ADISCORD_economy_demobilization_economy_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_economy_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.05
+				industrial_capacity_factory = -0.10
+			}
+		}
+
+		ADISCORD_economy_demobilization_manpower_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_manpower_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.05
+				production_speed_buildings_factor = -0.10
+			}
+		}
+
+		ADISCORD_economy_demobilization_budget_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_budget_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				political_power_gain = -0.25
+				ADISCORD_economy_army_expense_factor = 0.15
+			}
+		}
+
+		ADISCORD_economy_demobilization_trade_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_trade_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.05
+				ADISCORD_economy_trade_income_factor = -0.10
+			}
+		}
+
+		ADISCORD_economy_demobilization_justice_penalty = {
+			cancel = {
+				OR = {
+					ADISCORD_economy_demobilization_can_proceed = no
+					ADISCORD_economy_demobilize_justice_needed = no
+				}
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.05
+				political_power_gain = -0.25
+			}
+		}
+
 		ADISCORD_economy_postwar_demobilization = {
+			cancel = {
+				OR = {
+					has_war = yes
+					ADISCORD_economy_demobilization_threat = yes
+					ADISCORD_economy_demobilization_needed = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 }
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1

@@ -94,7 +94,7 @@ spriteTypes = {
 ###VAL
 	spriteType = {
 		name = "GFX_idea_VAL_contract_service"
-		texturefile = "gfx/interface/ideas/VAL/idea_VAL_contract_service.png"
+		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_val_contract_service.png"
 	}
  #ideas
  	spriteType = {
@@ -249,23 +249,47 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_militia_autonomy"
-		texturefile = "gfx/interface/ideas/generic_manpower_bonus.dds"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_militia_autonomy.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_cadre_army"
-		texturefile = "gfx/interface/ideas/idea_SWE_wargames.dds"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_cadre_army.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_contract_brigades"
-		texturefile = "gfx/interface/ideas/generic_volunteer_expedition_bonus.dds"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_contract_brigades.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_general_staff"
-		texturefile = "gfx/interface/ideas/idea_chi_wargaming_division.dds"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_general_staff.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_military_total_defense_grid"
-		texturefile = "gfx/interface/ideas/idea_mex_revolutionary_army.dds"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_total_defense_grid.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_militia_autonomy"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_militia_autonomy.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_cadre_army"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_cadre_army.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_contract_brigades"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_contract_brigades.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_general_staff"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_general_staff.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_total_defense_grid"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_total_defense_grid.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_military_organization_territorial_reserves"
+		texturefile = "gfx/interface/ideas/laws/military_organization/ADISCORD_military_organization_territorial_reserves.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_basic_services"
@@ -412,104 +436,208 @@ spriteType = {
 		texturefile = "gfx/interface/ideas/laws/economic_labour_policy/ADISCORD_law_labor_policy_mobilization.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_infrastructure_patchwork_roads"
-		texturefile = "gfx/interface/ideas/change_leader_rule_influence.dds"
+		name = "GFX_idea_ADISCORD_infrastructure_patchwork_roads"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_patchwork_roads.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_infrastructure_regional_roadworks"
-		texturefile = "gfx/interface/ideas/idea_ARG_economic_reactivation.dds"
+		name = "GFX_idea_ADISCORD_infrastructure_regional_roadworks"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_regional_roadworks.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_infrastructure_rail_corridors"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		name = "GFX_idea_ADISCORD_infrastructure_rail_corridors"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_rail_corridors.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_infrastructure_strategic_highways"
-		texturefile = "gfx/interface/ideas/generic_volunteer_expedition_bonus.dds"
+		name = "GFX_idea_ADISCORD_infrastructure_strategic_highways"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_strategic_highways.png"
 	}
 	spriteType = {
-		name = "GFX_idea_ADISCORD_law_infrastructure_military_depots"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		name = "GFX_idea_ADISCORD_infrastructure_military_depots"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_military_depots.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_infrastructure_port_network"
+		texturefile = "gfx/interface/ideas/laws/economic_infrastructure/ADISCORD_infrastructure_port_network.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_officer_corps_local_seniority"
-		texturefile = "gfx/interface/ideas/idea_SWE_wargames.dds"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_local_seniority.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_officer_corps_merit_commissions"
-		texturefile = "gfx/interface/ideas/generic_volunteer_expedition_bonus.dds"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_merit_commissions.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_officer_corps_political_commissars"
-		texturefile = "gfx/interface/ideas/idea_generic_fascism_banned.dds"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_political_commissars.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_officer_corps_general_staff_academy"
-		texturefile = "gfx/interface/ideas/idea_chi_wargaming_division.dds"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_general_staff_academy.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_officer_corps_emergency_promotions"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_emergency_promotions.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_local_seniority"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_local_seniority.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_merit_commissions"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_merit_commissions.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_political_commissars"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_political_commissars.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_general_staff_academy"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_general_staff_academy.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_emergency_promotions"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_emergency_promotions.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_officer_corps_field_commissions"
+		texturefile = "gfx/interface/ideas/laws/military_officers/ADISCORD_officer_corps_field_commissions.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_logistics_civilian_contracts"
-		texturefile = "gfx/interface/ideas/generic_volunteer_expedition_bonus.dds"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_civilian_contracts.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_logistics_local_foraging"
-		texturefile = "gfx/interface/ideas/idea_ARG_anti_british_sentiment.dds"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_local_foraging.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_logistics_centralized_depots"
-		texturefile = "gfx/interface/ideas/idea_RAJ_private_military_complex.dds"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_centralized_depots.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_logistics_motorized_supply"
-		texturefile = "gfx/interface/ideas/change_leader_rule_influence.dds"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_motorized_supply.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_logistics_emergency_requisitioning"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_emergency_requisitioning.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_law_logistics_regional_warehouses"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_regional_warehouses.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_civilian_contracts"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_civilian_contracts.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_local_foraging"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_local_foraging.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_centralized_depots"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_centralized_depots.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_motorized_supply"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_motorized_supply.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_emergency_requisitioning"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_emergency_requisitioning.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_logistics_regional_warehouses"
+		texturefile = "gfx/interface/ideas/laws/military_logistics/ADISCORD_logistics_regional_warehouses.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_training_basic_drills"
-		texturefile = "gfx/interface/ideas/idea_chi_wargaming_division.dds"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_basic_drills.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_training_irregular_exercises"
-		texturefile = "gfx/interface/ideas/generic_manpower_bonus.dds"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_irregular_exercises.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_training_standardized_program"
-		texturefile = "gfx/interface/ideas/idea_SWE_wargames.dds"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_standardized_program.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_training_officer_led_wargames"
-		texturefile = "gfx/interface/ideas/idea_chi_wargaming_division.dds"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_officer_led_wargames.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_training_accelerated_bootcamps"
-		texturefile = "gfx/interface/ideas/idea_mex_revolutionary_army.dds"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_accelerated_bootcamps.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_irregular_exercises"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_irregular_exercises.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_basic_drills"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_basic_drills.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_standardized_program"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_standardized_program.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_officer_led_wargames"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_officer_led_wargames.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_accelerated_bootcamps"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_accelerated_bootcamps.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_training_reserve_cycles"
+		texturefile = "gfx/interface/ideas/laws/military_training/ADISCORD_training_reserve_cycles.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_internal_security_local_garrisons"
-		texturefile = "gfx/interface/ideas/idea_ger_the_great_red_menace.dds"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_local_garrisons.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_internal_security_neighborhood_watch"
-		texturefile = "gfx/interface/ideas/joining_rule_democratic_non_aligned.dds"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_neighborhood_watch.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_internal_security_investigative_bureaus"
-		texturefile = "gfx/interface/ideas/change_leader_rule_influence.dds"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_investigative_bureaus.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_internal_security_emergency_patrols"
-		texturefile = "gfx/interface/ideas/idea_generic_war_preparation.dds"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_emergency_patrols.png"
 	}
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_internal_security_internal_directorate"
-		texturefile = "gfx/interface/ideas/idea_ger_the_great_red_menace.dds"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_internal_directorate.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_neighborhood_watch"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_neighborhood_watch.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_local_garrisons"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_local_garrisons.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_investigative_bureaus"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_investigative_bureaus.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_emergency_patrols"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_emergency_patrols.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_internal_directorate"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_internal_directorate.png"
+	}
+	spriteType = {
+		name = "GFX_idea_ADISCORD_internal_security_civilian_oversight"
+		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_civilian_oversight.png"
 	}
 
 ### A-DISCORD economic system icons
@@ -663,17 +791,22 @@ spriteType = {
 
 	spriteType = {
 		name = "GFX_idea_ADISCORD_justice_regular_tribunals"
-		texturefile = "gfx/interface/ideas/idea_generic_constitutional_guarantee.dds"
+		texturefile = "gfx/interface/ideas/laws/military_control_of_warcrimes/ADISCORD_justice_regular_tribunals.png"
 	}
 
 	spriteType = {
 		name = "GFX_idea_ADISCORD_justice_field_courts"
-		texturefile = "gfx/interface/ideas/idea_PRC_three_rules_of_discipline_idea.dds"
+		texturefile = "gfx/interface/ideas/laws/military_control_of_warcrimes/ADISCORD_justice_field_courts.png"
+	}
+
+	spriteType = {
+		name = "GFX_idea_ADISCORD_justice_military_immunity"
+		texturefile = "gfx/interface/ideas/laws/military_control_of_warcrimes/ADISCORD_justice_military_immunity.png"
 	}
 
 	spriteType = {
 		name = "GFX_idea_ADISCORD_justice_military_prosecution"
-		texturefile = "gfx/interface/ideas/idea_generic_constitutional_guarantee.dds"
+		texturefile = "gfx/interface/ideas/laws/military_control_of_warcrimes/ADISCORD_justice_military_prosecution.png"
 	}
 
 	spriteType = {

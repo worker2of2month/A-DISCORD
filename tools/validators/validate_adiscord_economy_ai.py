@@ -2989,8 +2989,17 @@ def validate(root: Path = ROOT) -> list[str]:
         require(pulse.count("ADISCORD_economy_refresh_open_window = yes") == 1
                 and "ADISCORD_economy_refresh_policy_previews = yes" not in pulse,
                 f"{period} policy previews bypass the open-window gate")
-    require("ADISCORD_economy_refresh_army_policy = yes" in block(effects, "ADISCORD_economy_update_postwar_demobilization"),
-            "postwar army mode 3 does not refresh the army policy idea")
+    demobilization = block(effects, "ADISCORD_economy_update_postwar_demobilization")
+    require("add_ideas = partial_economic_mobilisation" not in demobilization
+            and "add_ideas = limited_conscription" not in demobilization
+            and "ADISCORD_economy_army_spending_mode value = 3" not in demobilization,
+            "postwar transition changes laws or budget without a player decision")
+    demobilization_decisions = read_at_root("common/decisions/ADISCORD_economy_projects.txt")
+    budget_decision = block(demobilization_decisions, "ADISCORD_economy_demobilize_budget")
+    require("ADISCORD_economy_refresh_army_policy = yes" in budget_decision,
+            "postwar budget decision does not refresh the army policy idea")
+    require("ADISCORD_economy_queue_law_refresh = yes" in block(effects, "ADISCORD_economy_reconcile_demobilization"),
+            "postwar idea changes do not refresh cached economic modifiers")
     require("ADISCORD_economy_weekly_source_cache_ready" not in block(effects, "ADISCORD_economy_mark_dirty"),
             "dirty invalidation still clears the weekly readiness watermark")
     require(yearly.rfind("ADISCORD_economy_update_ai_state") > yearly.find("ADISCORD_economy_update_monthly_budget_trend"),

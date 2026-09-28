@@ -752,3 +752,116 @@ ADISCORD_economy_nod_army_at_capacity = {
 	has_variable = ADISCORD_economy_nod_division_capacity
 	check_variable = { var = num_divisions value = ADISCORD_economy_nod_division_capacity compare = greater_than_or_equals }
 }
+
+# Postwar obligations follow current laws, not a receipt for a past decision.
+ADISCORD_economy_demobilize_economy_needed = {
+	OR = {
+		ADISCORD_economy_has_idea_total_economic_mobilisation = yes
+		ADISCORD_economy_has_idea_war_economy = yes
+	}
+}
+
+ADISCORD_economy_demobilize_manpower_needed = {
+	OR = {
+		ADISCORD_economy_has_idea_extensive_conscription = yes
+		ADISCORD_economy_has_idea_service_by_requirement = yes
+		ADISCORD_economy_has_idea_all_adults_serve = yes
+		ADISCORD_economy_has_idea_scraping_the_barrel = yes
+	}
+}
+
+ADISCORD_economy_demobilize_budget_needed = {
+	check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = greater_than }
+}
+
+ADISCORD_economy_demobilize_trade_needed = {
+	ADISCORD_economy_has_idea_closed_economy = yes
+}
+
+ADISCORD_economy_demobilize_justice_needed = {
+	has_idea = ADISCORD_justice_field_courts
+}
+
+ADISCORD_economy_demobilization_needed = {
+	OR = {
+		ADISCORD_economy_demobilize_economy_needed = yes
+		ADISCORD_economy_demobilize_manpower_needed = yes
+		ADISCORD_economy_demobilize_budget_needed = yes
+		ADISCORD_economy_demobilize_trade_needed = yes
+		ADISCORD_economy_demobilize_justice_needed = yes
+	}
+}
+
+# Only live preparation contracts defer the transition; completed focus markers
+# cannot preserve emergency laws indefinitely. Each scope is a named participant.
+ADISCORD_economy_demobilization_threat = {
+	OR = {
+		AND = {
+			tag = NOD
+			NOD_cw_intervention_possible = yes
+			has_country_flag = NOD_cw_intervention_approved
+		}
+		STP_pw_party_nod_threat_current = yes
+		AND = {
+			tag = NOD
+			STP = { STP_pw_party_nod_threat_current = yes }
+		}
+		AND = {
+			tag = STS
+			OR = {
+				STP_pc_ai_preparing_val_war = yes
+				STP_pc_ai_preparing_nod_war = yes
+			}
+		}
+		AND = {
+			tag = VAL
+			OR = {
+				VAL_ai_republics_preparation = yes
+				VAL_ai_frontier_preparation = yes
+				VAL_final_crisis_preparing = yes
+				STS = { STP_pc_ai_preparing_val_war = yes }
+			}
+		}
+		AND = {
+			tag = SRP
+			VAL = { VAL_ai_republics_preparation = yes }
+		}
+		AND = {
+			tag = NOD
+			STS = { STP_pc_ai_preparing_nod_war = yes }
+		}
+		VAL_ai_frontier_guarantor_preparation = yes
+		AND = {
+			VAL_frontier_matches_current_target = yes
+			VAL = { VAL_ai_frontier_preparation = yes }
+		}
+		AND = {
+			OR = {
+				tag = NOD
+				tag = STP
+				tag = STS
+			}
+			VAL = { VAL_final_crisis_preparing = yes }
+			NOT = { is_subject_of = VAL }
+			NOT = { is_in_faction_with = VAL }
+		}
+	}
+}
+
+ADISCORD_economy_demobilization_can_proceed = {
+	check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+	has_war = no
+	ADISCORD_economy_demobilization_threat = no
+}
+
+ADISCORD_economy_has_postwar_recovery = { has_idea = ADISCORD_economy_postwar_demobilization }
+
+ADISCORD_economy_has_demobilization_economy_penalty = { has_idea = ADISCORD_economy_demobilization_economy_penalty }
+
+ADISCORD_economy_has_demobilization_manpower_penalty = { has_idea = ADISCORD_economy_demobilization_manpower_penalty }
+
+ADISCORD_economy_has_demobilization_budget_penalty = { has_idea = ADISCORD_economy_demobilization_budget_penalty }
+
+ADISCORD_economy_has_demobilization_trade_penalty = { has_idea = ADISCORD_economy_demobilization_trade_penalty }
+
+ADISCORD_economy_has_demobilization_justice_penalty = { has_idea = ADISCORD_economy_demobilization_justice_penalty }

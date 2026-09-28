@@ -1218,10 +1218,23 @@ class CivilWarContracts(unittest.TestCase):
             for law in law_names:
                 with self.subTest(tag=tag, law=law):
                     chosen = list(selected_effects(setup, {("STP", "has_idea", law): True}, tag))
-                    applied = [e for scope, e in chosen if scope == tag and e.key == "add_ideas"]
+                    applied = [e for scope, e in chosen if scope == tag and e.key == "add_ideas"
+                               and isinstance(e.value, str) and e.value in law_names]
                     expected = "limited_conscription" if law in {"disarmed_nation", "volunteer_only"} else law
                     self.assertEqual([e.value for e in applied], [expected])
                     self.assertLess(applied[0].line, economy.line)
+                    profiles = [e for scope, e in chosen if scope == tag and e.key == "add_ideas"
+                                and isinstance(e.value, list)]
+                    expected_profile = {
+                        "ADISCORD_military_organization_militia_autonomy",
+                        "ADISCORD_officer_corps_field_commissions",
+                        "ADISCORD_training_basic_drills",
+                        "ADISCORD_logistics_local_foraging",
+                        "ADISCORD_justice_field_courts",
+                    } if tag == "STS" else set()
+                    self.assertEqual({child.value for entry in profiles for child in entry.value}, expected_profile)
+                    for entry in profiles:
+                        self.assertLess(entry.line, economy.line)
 
     def test_handoff_direction_and_successor_technology(self):
         events = read("events/ADISCORD_STP_events.txt")

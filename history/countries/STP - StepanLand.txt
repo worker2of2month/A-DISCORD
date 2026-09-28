@@ -56,6 +56,11 @@ add_ideas = {
 	ADISCORD_industrial_policy_export_contracts
 	ADISCORD_labor_policy_loose_contracts
 	ADISCORD_infrastructure_port_network
+	ADISCORD_military_organization_cadre_army
+	ADISCORD_officer_corps_local_seniority
+	ADISCORD_training_irregular_exercises
+	ADISCORD_logistics_civilian_contracts
+	ADISCORD_justice_regular_tribunals
 
 	STP_hedonism_with_no_bondaries
 	STP_hidden_slaves_trade

@@ -6,3 +6,20 @@ ADISCORD_economy_projects = {
 	priority = 15
 }
 
+ADISCORD_economy_demobilization = {
+	icon = generic_crisis
+	priority = 100
+	visible_when_empty = yes
+	visible = {
+		has_war = no
+		ADISCORD_economy_has_current_schema = yes
+		OR = {
+			check_variable = { var = ADISCORD_economy_was_at_war value = 1 compare = greater_than_or_equals }
+			AND = {
+				check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+				ADISCORD_economy_demobilization_needed = yes
+			}
+			ADISCORD_economy_has_postwar_recovery = yes
+		}
+	}
+}

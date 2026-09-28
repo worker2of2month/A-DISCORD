@@ -276,6 +276,10 @@ ideas = {
 			cancel_if_invalid = no
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
 				factor = 5
 				modifier = { factor = 20 manpower_per_military_factory > 1000 }
 			}
@@ -332,6 +336,10 @@ ideas = {
 			cancel_if_invalid = no
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
 				factor = 1
 				modifier = { factor = 25 manpower_per_military_factory > 10000 }
 				modifier = { factor = 0 manpower_per_military_factory < 3000 }

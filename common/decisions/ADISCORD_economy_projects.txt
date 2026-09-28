@@ -288,3 +288,195 @@ ADISCORD_economy_projects = {
 	}
 }
 
+
+# Postwar transition is available to every economy participant.
+ADISCORD_economy_demobilization = {
+	ADISCORD_economy_demobilization_deadline = {
+		icon = generic_prepare_civil_war
+		is_good = no
+		days_mission_timeout = 120
+		activation = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = equals }
+			ADISCORD_economy_demobilization_needed = yes
+		}
+		available = {
+			hidden_trigger = { ADISCORD_economy_demobilization_can_proceed = yes }
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_economy_done_tt
+				ADISCORD_economy_demobilize_economy_needed = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_manpower_done_tt
+				ADISCORD_economy_demobilize_manpower_needed = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_budget_done_tt
+				ADISCORD_economy_demobilize_budget_needed = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_trade_done_tt
+				ADISCORD_economy_demobilize_trade_needed = no
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_justice_done_tt
+				ADISCORD_economy_demobilize_justice_needed = no
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				has_war = yes
+				ADISCORD_economy_demobilization_threat = yes
+				check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = less_than }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_demobilization_recovery_tt
+			hidden_effect = { ADISCORD_economy_reconcile_demobilization = yes }
+		}
+		cancel_effect = {
+			hidden_effect = { ADISCORD_economy_reconcile_demobilization = yes }
+		}
+		timeout_effect = {
+			custom_effect_tooltip = ADISCORD_economy_demobilization_overdue_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_economy_demobilization_can_proceed = yes
+						check_variable = { var = ADISCORD_economy_demobilization_phase value = 1 compare = equals }
+					}
+					set_variable = { var = ADISCORD_economy_demobilization_phase value = 2 }
+					ADISCORD_economy_reconcile_demobilization = yes
+				}
+			}
+		}
+	}
+
+	ADISCORD_economy_demobilize_economy = {
+		icon = generic_industry
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_economy_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			add_ideas = partial_economic_mobilisation
+			hidden_effect = {
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	ADISCORD_economy_demobilize_manpower = {
+		icon = generic_prepare_civil_war
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_manpower_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			add_ideas = limited_conscription
+			hidden_effect = {
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	ADISCORD_economy_demobilize_budget = {
+		icon = generic_consumer_goods
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_budget_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = ADISCORD_economy_demobilization_budget_result_tt
+			hidden_effect = {
+				set_variable = { var = ADISCORD_economy_army_spending_mode value = 3 }
+				set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 3 }
+				ADISCORD_economy_refresh_army_policy = yes
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	ADISCORD_economy_demobilize_trade = {
+		icon = generic_industry
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_trade_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			add_ideas = export_focus
+			hidden_effect = {
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	ADISCORD_economy_demobilize_justice = {
+		icon = generic_industry
+		visible = {
+			has_war = no
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 0 compare = greater_than }
+			ADISCORD_economy_demobilize_justice_needed = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_demobilization_safe_tt
+				has_war = no
+				ADISCORD_economy_demobilization_threat = no
+			}
+		}
+		cost = 50
+		complete_effect = {
+			add_ideas = ADISCORD_justice_regular_tribunals
+			hidden_effect = {
+				ADISCORD_economy_reconcile_demobilization = yes
+				ADISCORD_economy_queue_law_refresh = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+}

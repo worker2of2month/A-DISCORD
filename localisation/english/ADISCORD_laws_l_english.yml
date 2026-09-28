@@ -244,7 +244,7 @@
  ADISCORD_officer_corps_laws_desc: "How the army selects, promotes, and retains its commanders."
 
  ADISCORD_officer_corps_local_seniority: "Promotion by Seniority"
- ADISCORD_officer_corps_local_seniority_desc: "Commanders advance through established circles and long-standing units. The system is familiar to the army, though not always efficient."
+ ADISCORD_officer_corps_local_seniority_desc: "Officers advance according to seniority and their place in the established hierarchy. The system preserves continuity of command but slows operational planning."
 
  ADISCORD_officer_corps_merit_commissions: "Merit-Based Selection"
  ADISCORD_officer_corps_merit_commissions_desc: "Officers are selected according to service records, examinations, and professional training. The quality of command improves, but reform slows training and meets resistance within the army."
@@ -363,6 +363,10 @@
 
  ADISCORD_justice_field_courts: "Field Courts"
  ADISCORD_justice_field_courts_desc: "Wartime commanders receive an expedited judicial procedure. Faster decisions strengthen discipline, while emergency powers create public tension."
+
+ ADISCORD_justice_military_immunity: "Military Immunity"
+ ADISCORD_justice_military_immunity_desc: "Military personnel are exempt from civilian jurisdiction, and their actions may only be investigated with command approval. Protecting the uniform takes precedence over the law. Freedom of action speeds up planning, but impunity undermines discipline and public trust."
+ ADISCORD_justice_military_immunity_focus_only_tt: "Can only be introduced by a national focus; some countries begin the game with this law."
 
  ADISCORD_justice_military_prosecution: "Military Prosecution Service"
  ADISCORD_justice_military_prosecution_desc: "A dedicated service investigates abuses and enforces military regulations. Inspections take time but help formations restore organisation."

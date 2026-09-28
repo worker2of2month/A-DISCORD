@@ -2760,6 +2760,16 @@ STP_cw_prepare_successor = {
 	if = { limit = { NOT = { tag = STS } } STP_cw_strip_kefreyt_volunteer_template = yes }
 	set_country_flag = STP_cw_templates_loaded
 	STP_cw_apply_wartime_template_locks = yes
+	if = {
+		limit = { tag = STS }
+		add_ideas = {
+			ADISCORD_military_organization_militia_autonomy
+			ADISCORD_officer_corps_field_commissions
+			ADISCORD_training_basic_drills
+			ADISCORD_logistics_local_foraging
+			ADISCORD_justice_field_courts
+		}
+	}
 	set_country_flag = ADISCORD_economy_important_country
 	ADISCORD_economy_initialize_country = yes
 	ADISCORD_economy_set_simulation_tier = yes

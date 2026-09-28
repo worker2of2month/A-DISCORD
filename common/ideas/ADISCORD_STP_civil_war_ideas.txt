@@ -750,9 +750,8 @@ ideas = {
 
 			modifier = {
 				monthly_population = -0.06
-				stability_factor = 0.02
+				stability_factor = -0.02
 				ADISCORD_economy_trade_income_factor = 0.05
-				ADISCORD_economy_population_tax_income_factor = 0.05
 				ADISCORD_economy_social_expense_factor = 0.05
 				ADISCORD_country_development_society_growth_factor = -0.05
 			}

@@ -462,6 +462,7 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_pending_debt_notification_new_state value = 0 }
 	set_variable = { var = ADISCORD_economy_was_at_war value = 0 }
 	if = { limit = { has_war = yes } set_variable = { var = ADISCORD_economy_was_at_war value = 1 } }
+	set_variable = { var = ADISCORD_economy_demobilization_phase value = 0 }
 	set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 }
 	set_variable = { var = ADISCORD_economy_war_fatigue_score value = 0 }
 	set_variable = { var = ADISCORD_economy_war_fatigue_level value = 0 }
@@ -596,59 +597,167 @@ ADISCORD_economy_refresh_war_participation_tier = {
 	ADISCORD_economy_set_simulation_tier = yes
 }
 
-# Keep newly introduced transition effects above their first caller. Full game
-# startup registers the whole database, while a scripted-effect hot reload can
-# otherwise parse a call before it has seen the new effect name.
+# Phase: 0 wartime/unstarted, 1 grace period, 2 overdue, 3 settled.
+# Phase 3 lasts until the next war so rearming cannot restart the peace dividend.
+ADISCORD_economy_reconcile_demobilization = {
+	set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 0 }
+	if = {
+		limit = { ADISCORD_economy_demobilization_can_proceed = yes }
+		if = {
+			limit = {
+				check_variable = { var = ADISCORD_economy_demobilization_phase value = 3 compare = less_than }
+				ADISCORD_economy_demobilization_needed = no
+			}
+			set_variable = { var = ADISCORD_economy_demobilization_phase value = 3 }
+			set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 6 }
+			add_timed_idea = { idea = ADISCORD_economy_postwar_demobilization days = 180 }
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 compare = greater_than }
+				ADISCORD_economy_has_postwar_recovery = yes
+			}
+			OR = {
+				has_war = yes
+				ADISCORD_economy_demobilization_threat = yes
+				ADISCORD_economy_demobilization_needed = yes
+			}
+		}
+		set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 }
+		remove_ideas = ADISCORD_economy_postwar_demobilization
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_economy_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_economy_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_economy_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_economy_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_economy_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_manpower_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_manpower_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_manpower_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_manpower_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_manpower_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_budget_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_budget_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_budget_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_budget_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_budget_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_trade_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_trade_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_trade_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_trade_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_trade_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = {
+			ADISCORD_economy_demobilization_can_proceed = yes
+			check_variable = { var = ADISCORD_economy_demobilization_phase value = 2 compare = greater_than_or_equals }
+			ADISCORD_economy_demobilize_justice_needed = yes
+		}
+		if = {
+			limit = { NOT = { ADISCORD_economy_has_demobilization_justice_penalty = yes } }
+			add_ideas = ADISCORD_economy_demobilization_justice_penalty
+			set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_economy_has_demobilization_justice_penalty = yes }
+		remove_ideas = ADISCORD_economy_demobilization_justice_penalty
+		set_temp_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_demobilization_changed_temp value = 1 compare = equals } }
+		ADISCORD_economy_mark_dirty = yes
+		# Idea modifiers are collected after the engine has finished replacing them.
+		ADISCORD_economy_queue_law_refresh = yes
+	}
+}
+
 ADISCORD_economy_update_postwar_demobilization = {
-	# Event-driven on_war/on_peace handles the normal path. The scheduled economy
-	# pulse remains a save-safe fallback and still operates in country scope.
+	# Peace hooks also run after separate settlements; an ongoing war retains
+	# the mobilization. Scheduled country updates handle the end of preparation.
 	if = {
 		limit = { has_war = yes }
 		set_variable = { var = ADISCORD_economy_was_at_war value = 1 }
+		set_variable = { var = ADISCORD_economy_demobilization_phase value = 0 }
 		if = {
-			limit = { check_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 compare = greater_than } }
+			limit = { has_active_mission = ADISCORD_economy_demobilization_deadline }
+			remove_mission = ADISCORD_economy_demobilization_deadline
+		}
+		if = {
+			limit = {
+				OR = {
+					check_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 compare = greater_than }
+					ADISCORD_economy_has_postwar_recovery = yes
+				}
+			}
 			set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 }
 			remove_ideas = ADISCORD_economy_postwar_demobilization
+			ADISCORD_economy_mark_dirty = yes
+			ADISCORD_economy_queue_law_refresh = yes
 		}
 	}
 	else_if = {
 		limit = {
 			has_war = no
 			check_variable = { var = ADISCORD_economy_was_at_war value = 1 compare = greater_than_or_equals }
-			NOT = {
-				AND = {
-					tag = NOD
-					NOD_cw_intervention_possible = yes
-					has_country_flag = NOD_cw_intervention_approved
-				}
-			}
+			ADISCORD_economy_demobilization_threat = no
 		}
 		set_variable = { var = ADISCORD_economy_was_at_war value = 0 }
-		set_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 6 }
-		if = {
-			limit = { check_variable = { var = ADISCORD_economy_army_spending_mode value = 3 compare = greater_than } }
-			set_variable = { var = ADISCORD_economy_army_spending_mode value = 3 }
-			set_variable = { var = ADISCORD_economy_army_budget_change_cooldown value = 3 }
-			ADISCORD_economy_refresh_army_policy = yes
-		}
-		if = {
-			limit = { OR = { ADISCORD_economy_has_idea_total_economic_mobilisation = yes ADISCORD_economy_has_idea_war_economy = yes } }
-			add_ideas = partial_economic_mobilisation
-		}
-		if = {
-			limit = {
-				OR = {
-					ADISCORD_economy_has_idea_extensive_conscription = yes
-					ADISCORD_economy_has_idea_service_by_requirement = yes
-					ADISCORD_economy_has_idea_all_adults_serve = yes
-					ADISCORD_economy_has_idea_scraping_the_barrel = yes
-				}
-			}
-			add_ideas = limited_conscription
-		}
-		add_timed_idea = { idea = ADISCORD_economy_postwar_demobilization days = 180 }
+		set_variable = { var = ADISCORD_economy_demobilization_phase value = 1 }
 		if = { limit = { is_ai = no } country_event = { id = ADISCORD_economy.2 } }
 	}
+	ADISCORD_economy_reconcile_demobilization = yes
 }
 
 ADISCORD_economy_tick_postwar_demobilization = {
@@ -2529,7 +2638,7 @@ ADISCORD_economy_update_war_fatigue = {
 	if = {
 		limit = {
 			has_war = no
-			check_variable = { var = ADISCORD_economy_postwar_demobilization_months value = 0 compare = greater_than }
+			ADISCORD_economy_has_postwar_recovery = yes
 		}
 		add_to_temp_variable = { var = ADISCORD_economy_war_fatigue_time_temp value = -4 }
 	}
@@ -3408,6 +3517,7 @@ ADISCORD_economy_refresh_after_law_change = {
 	clr_country_flag = ADISCORD_economy_law_refresh_pending
 	if = {
 		limit = { ADISCORD_economy_has_current_schema = yes }
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_recalculate_policy_modifiers = yes
 		ADISCORD_economy_recalculate_treasury_cap = yes
 		ADISCORD_economy_update_model_and_cycle = yes
@@ -4033,6 +4143,7 @@ ADISCORD_economy_set_army_spending_1 = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4054,6 +4165,7 @@ ADISCORD_economy_set_army_spending_2 = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4075,6 +4187,7 @@ ADISCORD_economy_set_army_spending_3 = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4096,6 +4209,7 @@ ADISCORD_economy_set_army_spending_4 = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4117,6 +4231,7 @@ ADISCORD_economy_set_army_spending_5 = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4240,6 +4355,7 @@ ADISCORD_economy_increase_army_spending = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }
@@ -4256,6 +4372,7 @@ ADISCORD_economy_decrease_army_spending = {
 			var = ADISCORD_economy_army_budget_change_cooldown
 			value = 3
 		}
+		ADISCORD_economy_reconcile_demobilization = yes
 		ADISCORD_economy_refresh_army_policy = yes
 	}
 }

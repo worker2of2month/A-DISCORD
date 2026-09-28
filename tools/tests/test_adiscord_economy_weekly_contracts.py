@@ -7315,105 +7315,18 @@ ADISCORD_task10_forbidden_cache_consumer = {
             "ADISCORD_economy_refresh_after_budget_control_change = yes", on_peace
         )
 
-    def test_postwar_transition_is_one_shot_and_automatically_normalizes_war_laws(self):
+    def test_postwar_transition_requests_manual_demobilization_without_changing_laws(self):
         transition = block(EFFECTS, "ADISCORD_economy_update_postwar_demobilization")
         self.assertIn("ADISCORD_economy_was_at_war", transition)
         self.assertIn("has_war = no", transition)
-        self.assertIn("ADISCORD_economy_postwar_demobilization_months value = 6", transition)
-        self.assertIn("ADISCORD_economy_army_spending_mode value = 3", transition)
-        self.assertIn("ADISCORD_economy_refresh_army_policy = yes", transition)
-        self.assertIn("add_ideas = partial_economic_mobilisation", transition)
-        self.assertIn("add_ideas = limited_conscription", transition)
+        self.assertIn("ADISCORD_economy_demobilization_phase value = 1", transition)
+        self.assertNotIn("ADISCORD_economy_army_spending_mode value = 3", transition)
+        self.assertNotIn("add_ideas = partial_economic_mobilisation", transition)
+        self.assertNotIn("add_ideas = limited_conscription", transition)
         self.assertIn("ADISCORD_economy_postwar_demobilization", transition)
         self.assertIn("country_event = { id = ADISCORD_economy.2 }", transition)
         for forbidden in ("every_country", "every_owned_state", "all_owned_state"):
             self.assertNotIn(forbidden, transition)
-
-    def test_nod_keeps_mobilization_only_while_approved_intervention_is_possible(self):
-        transition = _parsed_definition(
-            EFFECTS, "ADISCORD_economy_update_postwar_demobilization"
-        )
-        branches = transition.value
-        self.assertEqual([entry.key for entry in branches], ["if", "else_if"])
-        marker = "ADISCORD_economy_was_at_war"
-        months = "ADISCORD_economy_postwar_demobilization_months"
-
-        def permits(entries, state):
-            results = []
-            for entry in entries:
-                if entry.key in {"AND", "NOT"}:
-                    result = permits(entry.value, state)
-                    results.append(not result if entry.key == "NOT" else result)
-                elif entry.key == "check_variable":
-                    self.assertEqual(
-                        _entry_scalar(entry.value, "compare"), "greater_than_or_equals"
-                    )
-                    results.append(
-                        state[_entry_scalar(entry.value, "var")]
-                        >= float(_entry_scalar(entry.value, "value"))
-                    )
-                elif entry.key == "tag":
-                    results.append(state["tag"] == entry.value)
-                elif entry.key == "has_country_flag":
-                    results.append(entry.value in state["flags"])
-                elif entry.key in {"has_war", "NOD_cw_intervention_possible"}:
-                    results.append(state[entry.key] == (entry.value == "yes"))
-                else:
-                    self.fail(f"Unmodelled demobilization condition: {entry.key}")
-            return all(results)
-
-        def pulse(state):
-            for branch in branches:
-                guards = [entry for entry in branch.value if entry.key == "limit"]
-                self.assertEqual(len(guards), 1)
-                if permits(guards[0].value, state):
-                    for entry in branch.value:
-                        if entry.key == "set_variable":
-                            state[_entry_scalar(entry.value, "var")] = float(
-                                _entry_scalar(entry.value, "value")
-                            )
-                    return branch
-            return None
-
-        for tag, approved, possible, at_war, expected_marker in (
-            ("NOD", True, True, False, 1),
-            ("NOD", False, True, False, 0),
-            ("NOD", True, False, False, 0),
-            ("STP", True, True, False, 0),
-            ("NOD", True, True, True, 1),
-            ("NOD", False, False, True, 1),
-        ):
-            with self.subTest(tag=tag, approved=approved, possible=possible, war=at_war):
-                state = {
-                    "tag": tag,
-                    "flags": {"NOD_cw_intervention_approved"} if approved else set(),
-                    "NOD_cw_intervention_possible": possible,
-                    "has_war": at_war,
-                    marker: 1,
-                    months: 0,
-                }
-                pulse(state)
-                self.assertEqual(state[marker], expected_marker)
-                self.assertEqual(state[months], 6 if expected_marker == 0 else 0)
-                if tag == "NOD" and approved and possible and not at_war:
-                    self.assertIsNone(pulse(state))
-                    self.assertEqual(state[marker], 1)
-                    state["NOD_cw_intervention_possible"] = False
-                    self.assertIs(pulse(state), branches[1])
-                    self.assertEqual((state[marker], state[months]), (0, 6))
-                    state[months] = 5
-                    self.assertIsNone(pulse(state))
-                    self.assertEqual((state[marker], state[months]), (0, 5))
-
-        resetters = [
-            ancestors
-            for ancestors, entry in _walk_parsed(transition.value)
-            if entry.key == "set_variable"
-            and _entry_scalar(entry.value, "var") == marker
-            and _entry_scalar(entry.value, "value") == "0"
-        ]
-        self.assertEqual(len(resetters), 1)
-        self.assertIs(resetters[0][0], branches[1])
 
     def test_demobilization_accelerates_recovery_and_is_cancelled_by_a_new_war(self):
         transition = block(EFFECTS, "ADISCORD_economy_update_postwar_demobilization")
@@ -7421,7 +7334,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
         tick = block(EFFECTS, "ADISCORD_economy_tick_postwar_demobilization")
         self.assertIn("has_war = yes", transition)
         self.assertIn("remove_ideas = ADISCORD_economy_postwar_demobilization", transition)
-        self.assertIn("ADISCORD_economy_postwar_demobilization_months", fatigue)
+        self.assertIn("ADISCORD_economy_has_postwar_recovery = yes", fatigue)
         self.assertIn("value = -4", fatigue)
         self.assertIn("ADISCORD_economy_tick_scale", tick)
         self.assertIn("min = 0 max = 6", tick)
@@ -7586,7 +7499,7 @@ ADISCORD_task10_forbidden_cache_consumer = {
                 f"ADISCORD_military_organization_{suffix}"
             )
 
-        combined_effects = EFFECTS + MODIFIER_EFFECTS
+        combined_effects = EFFECTS + MODIFIER_EFFECTS + TRIGGERS
         for wrapper, idea in wrappers.items():
             self.assertIn(f"{wrapper} = yes", combined_effects, wrapper)
             self.assertIn(f"has_idea = {idea}", block(TRIGGERS, wrapper), wrapper)
@@ -8540,11 +8453,17 @@ class EconomyScriptFixture:
             return {">": left > right, "<": left < right}[operator]
         def one(node):
             key, value = node.key, node.value
+            if key in self.scopes and isinstance(value, list):
+                return self.condition(value, key, scope, root)
+            if key == "hidden_trigger":
+                return self.condition(value, scope, previous, root)
+            if key == "custom_trigger_tooltip":
+                return self.condition([child for child in value if child.key != "tooltip"], scope, previous, root)
             if key in ("AND", "OR", "NOT"):
                 results = [one(child) for child in value]
                 return any(results) if key == "OR" else (not any(results) if key == "NOT" else all(results))
             if key in self.facts:
-                return bool(self.facts[key]) if isinstance(value, list) else self.facts[key] == (value == "yes")
+                return bool(self.facts[key]) if isinstance(value, list) or value not in ("yes", "no") else self.facts[key] == (value == "yes")
             if key == "always":
                 return value == "yes"
             if key in ("tag", "original_tag"):
@@ -8601,6 +8520,8 @@ class EconomyScriptFixture:
                 if not branch_taken and self.condition(limit, scope, previous, root):
                     self.execute([child for child in value if child.key != "limit"], scope, previous, root)
                     branch_taken = True
+            elif key == "hidden_effect":
+                self.execute(value, scope, previous, root)
             elif key in ("ROOT", "PREV"):
                 self.execute(value, root if key == "ROOT" else previous, scope, root)
             elif key in self.scopes and isinstance(value, list):
@@ -8652,6 +8573,296 @@ class EconomyScriptFixture:
                 self.run(key, scope, previous, root)
             else:
                 raise AssertionError(f"unsupported fixture effect {key} = {value}")
+
+
+class PostwarDemobilizationTests(unittest.TestCase):
+    P = "ADISCORD_economy_"
+
+    def fixture(self, *, phase=0, budget=5, war=False, threat=False, laws=True):
+        state = {
+            self.P + "was_at_war": 1,
+            self.P + "demobilization_phase": phase,
+            self.P + "army_spending_mode": budget,
+            self.P + "postwar_demobilization_months": 0,
+            "has_war": war,
+            "idea@war_economy": laws,
+            "idea@extensive_conscription": laws,
+        }
+        fixture = EconomyScriptFixture(
+            countries={"A": state},
+            facts={self.P + "demobilization_threat": threat, "has_active_mission": False},
+            stubs=(self.P + "mark_dirty", self.P + "queue_law_refresh", "country_event", "add_timed_idea", "remove_mission", "custom_effect_tooltip"),
+        )
+        return fixture, state
+
+    def mission(self, section):
+        source = (ROOT / "common/decisions/ADISCORD_economy_projects.txt").read_text(encoding="utf-8")
+        mission = _parsed_definition(block(source, self.P + "demobilization"), self.P + "demobilization_deadline")
+        return next(entry.value for entry in mission.value if entry.key == section)
+
+    def test_war_only_trade_and_courts_block_recovery_until_replaced(self):
+        for law, kind in (
+            ("closed_economy", "trade"),
+            ("ADISCORD_justice_field_courts", "justice"),
+        ):
+            with self.subTest(law=law):
+                fixture, state = self.fixture(phase=1, budget=3, laws=False)
+                state["idea@" + law] = True
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertEqual(state[self.P + "demobilization_phase"], 1)
+                self.assertTrue(fixture.condition(self.mission("activation")))
+                self.assertFalse(fixture.condition(self.mission("available")))
+                fixture.execute(self.mission("timeout_effect"), "A", None, "A")
+                penalty = "idea@" + self.P + "demobilization_" + kind + "_penalty"
+                self.assertTrue(state[penalty])
+                self.assertNotIn("add_timed_idea", fixture.calls)
+                fixture.facts[self.P + "demobilization_threat"] = True
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertFalse(state[penalty])
+                self.assertTrue(state["idea@" + law])
+                fixture.facts[self.P + "demobilization_threat"] = False
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertTrue(state[penalty])
+                state["has_war"] = True
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertFalse(state[penalty])
+                self.assertTrue(state["idea@" + law])
+                state["has_war"] = False
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertTrue(state[penalty])
+                state["idea@" + law] = False
+                fixture.run(self.P + "reconcile_demobilization")
+                self.assertFalse(state[penalty])
+                self.assertEqual(state[self.P + "demobilization_phase"], 3)
+                self.assertEqual(fixture.calls.count("add_timed_idea"), 1)
+
+    def test_new_decisions_replace_only_their_wartime_law_group(self):
+        source = (ROOT / "common/decisions/ADISCORD_economy_projects.txt").read_text(encoding="utf-8")
+        for kind, replacement in (("trade", "export_focus"), ("justice", "ADISCORD_justice_regular_tribunals")):
+            decision = block(source, self.P + "demobilize_" + kind)
+            self.assertIn("add_ideas = " + replacement, decision)
+            self.assertNotIn("remove_ideas", decision)
+            self.assertIn(self.P + "demobilize_" + kind + "_needed = yes", block(decision, "visible"))
+        fixture, state = self.fixture(phase=1, budget=3, laws=False)
+        for law in ("ADISCORD_labor_policy_mobilized_labor", "ADISCORD_justice_military_immunity", "ADISCORD_trade_policy_autarky"):
+            state["idea@" + law] = True
+        self.assertTrue(fixture.condition(self.mission("available")))
+
+    def test_peace_preserves_laws_budget_and_starts_only_one_grace_period(self):
+        fixture, state = self.fixture()
+        fixture.run(self.P + "update_postwar_demobilization")
+        self.assertEqual(state[self.P + "demobilization_phase"], 1)
+        self.assertEqual(state[self.P + "army_spending_mode"], 5)
+        self.assertTrue(state["idea@war_economy"])
+        self.assertTrue(state["idea@extensive_conscription"])
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 0)
+        self.assertTrue(fixture.condition(self.mission("activation")))
+        self.assertFalse(fixture.condition(self.mission("available")))
+        fixture.run(self.P + "update_postwar_demobilization")
+        self.assertEqual(fixture.calls.count("country_event"), 1)
+        for kind in ("economy", "manpower", "budget"):
+            self.assertFalse(state.get("idea@" + self.P + "demobilization_" + kind + "_penalty"))
+
+    def test_deadline_penalizes_only_current_obligations_and_settlement_clears_each(self):
+        fixture, state = self.fixture(phase=1)
+        state["idea@war_economy"] = False
+        fixture.execute(self.mission("timeout_effect"), "A", None, "A")
+        self.assertEqual(state[self.P + "demobilization_phase"], 2)
+        self.assertFalse(state.get("idea@" + self.P + "demobilization_economy_penalty"))
+        self.assertTrue(state["idea@" + self.P + "demobilization_manpower_penalty"])
+        self.assertTrue(state["idea@" + self.P + "demobilization_budget_penalty"])
+        state["idea@extensive_conscription"] = False
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertFalse(state["idea@" + self.P + "demobilization_manpower_penalty"])
+        self.assertTrue(state["idea@" + self.P + "demobilization_budget_penalty"])
+        state[self.P + "army_spending_mode"] = 3
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertEqual(state[self.P + "demobilization_phase"], 3)
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 6)
+        self.assertFalse(state["idea@" + self.P + "demobilization_budget_penalty"])
+        self.assertEqual(fixture.calls.count("add_timed_idea"), 1)
+        state[self.P + "postwar_demobilization_months"] = 4
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 4)
+        self.assertEqual(fixture.calls.count("add_timed_idea"), 1)
+
+    def test_normal_policy_changes_complete_mission_and_rearming_cannot_farm_recovery(self):
+        fixture, state = self.fixture(phase=1, budget=3, laws=False)
+        self.assertTrue(fixture.condition(self.mission("available")))
+        fixture.execute(self.mission("complete_effect"), "A", None, "A")
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 6)
+        state["idea@war_economy"] = True
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertTrue(state["idea@" + self.P + "demobilization_economy_penalty"])
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 0)
+        state["idea@war_economy"] = False
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertFalse(state["idea@" + self.P + "demobilization_economy_penalty"])
+        self.assertEqual(fixture.calls.count("add_timed_idea"), 1)
+
+    def test_new_war_clears_pressure_and_recovery_without_lowering_laws(self):
+        fixture, state = self.fixture(phase=2)
+        fixture.run(self.P + "reconcile_demobilization")
+        state["has_war"] = True
+        state[self.P + "postwar_demobilization_months"] = 4
+        fixture.facts["has_active_mission"] = True
+        fixture.run(self.P + "update_postwar_demobilization")
+        self.assertEqual(state[self.P + "demobilization_phase"], 0)
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 0)
+        self.assertIn("remove_mission", fixture.calls)
+        self.assertEqual(state[self.P + "army_spending_mode"], 5)
+        self.assertTrue(state["idea@war_economy"])
+        for kind in ("economy", "manpower", "budget"):
+            self.assertFalse(state["idea@" + self.P + "demobilization_" + kind + "_penalty"])
+        fixture.execute(self.mission("timeout_effect"), "A", None, "A")
+        self.assertEqual(state[self.P + "demobilization_phase"], 0)
+
+    def test_recovery_fatigue_and_ui_follow_the_timed_idea_not_calendar_pulses(self):
+        categories = (ROOT / "common/decisions/categories/ADISCORD_economy_projects.txt").read_text(encoding="utf-8")
+        category = _parsed_definition(categories, self.P + "demobilization")
+        visibility = next(entry.value for entry in category.value if entry.key == "visible")
+        selector = next(
+            entry for entry in parse_clausewitz(SCRIPTED_LOC)
+            if entry.key == "defined_text"
+            and _entry_scalar(entry.value, "name") == "GetADISCORDDemobilizationStatusLoc"
+        )
+        for active, months, expected_fatigue in ((True, 0, 45), (False, 5, 49)):
+            with self.subTest(active=active, calendar_months=months):
+                fixture, state = self.fixture(phase=3, budget=3, laws=False)
+                fixture.facts[self.P + "has_current_schema"] = True
+                state.update({
+                    self.P + "was_at_war": 0,
+                    self.P + "war_fatigue_score": 50,
+                    self.P + "tick_scale": 1,
+                    self.P + "postwar_demobilization_months": months,
+                    "idea@" + self.P + "postwar_demobilization": active,
+                })
+                fixture.run(self.P + "update_war_fatigue")
+                self.assertEqual(state[self.P + "war_fatigue_score"], expected_fatigue)
+                self.assertEqual(fixture.condition(visibility), active)
+                for text in (entry for entry in selector.value if entry.key == "text"):
+                    trigger = next((entry.value for entry in text.value if entry.key == "trigger"), [])
+                    if fixture.condition(trigger):
+                        selected = _entry_scalar(text.value, "localization_key")
+                        break
+                expected = "active" if active else "inactive"
+                self.assertEqual(selected, self.P + "demobilization_status_" + expected)
+        for source in (ECONOMY_LOC, ECONOMY_LOC_EN):
+            self.assertNotIn("[?" + self.P + "postwar_demobilization_months", localisation_value(source, self.P + "demobilization_status_active"))
+
+    def test_cleanup_uses_active_recovery_idea_when_calendar_counter_has_expired(self):
+        for cause in ("war", "threat", "rearming"):
+            with self.subTest(cause=cause):
+                fixture, state = self.fixture(phase=3, budget=3, laws=False)
+                state["idea@" + self.P + "postwar_demobilization"] = True
+                state["has_war"] = cause == "war"
+                fixture.facts[self.P + "demobilization_threat"] = cause == "threat"
+                state["idea@war_economy"] = cause == "rearming"
+                fixture.run(self.P + "update_postwar_demobilization" if cause == "war" else self.P + "reconcile_demobilization")
+                self.assertFalse(state["idea@" + self.P + "postwar_demobilization"])
+
+    def test_threat_defers_start_and_cancels_mission_without_stale_timeout_penalty(self):
+        fixture, state = self.fixture(threat=True)
+        fixture.run(self.P + "update_postwar_demobilization")
+        self.assertEqual(state[self.P + "was_at_war"], 1)
+        self.assertEqual(state[self.P + "demobilization_phase"], 0)
+        self.assertNotIn("country_event", fixture.calls)
+        fixture.facts[self.P + "demobilization_threat"] = False
+        fixture.run(self.P + "update_postwar_demobilization")
+        self.assertEqual(state[self.P + "demobilization_phase"], 1)
+        fixture.facts[self.P + "demobilization_threat"] = True
+        self.assertTrue(fixture.condition(self.mission("cancel_trigger")))
+        fixture.execute(self.mission("timeout_effect"), "A", None, "A")
+        self.assertEqual(state[self.P + "demobilization_phase"], 1)
+        fixture.facts[self.P + "demobilization_threat"] = False
+        self.assertTrue(fixture.condition(self.mission("activation")))
+
+    def test_threat_suspends_overdue_penalties_but_does_not_forgive_obligations(self):
+        fixture, state = self.fixture(phase=2)
+        fixture.run(self.P + "reconcile_demobilization")
+        fixture.facts[self.P + "demobilization_threat"] = True
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertEqual(state[self.P + "demobilization_phase"], 2)
+        self.assertFalse(state["idea@" + self.P + "demobilization_budget_penalty"])
+        fixture.facts[self.P + "demobilization_threat"] = False
+        fixture.run(self.P + "reconcile_demobilization")
+        self.assertTrue(state["idea@" + self.P + "demobilization_budget_penalty"])
+
+    def test_nod_deferral_requires_both_live_intervention_and_approval(self):
+        facts = {name: False for name in (
+            "STP_pw_party_nod_threat_current", "STP_pc_ai_preparing_val_war",
+            "STP_pc_ai_preparing_nod_war", "VAL_ai_republics_preparation",
+            "VAL_ai_frontier_preparation", "VAL_final_crisis_preparing",
+            "VAL_ai_frontier_guarantor_preparation", "VAL_frontier_matches_current_target", "is_subject_of", "is_in_faction_with",
+        )}
+        for tag, approved, possible, expected in (
+            ("NOD", True, True, True), ("NOD", False, True, False),
+            ("NOD", True, False, False), ("STP", True, True, False),
+        ):
+            with self.subTest(tag=tag, approved=approved, possible=possible):
+                fixture = EconomyScriptFixture(
+                    countries={"A": {"tag": tag, "NOD_cw_intervention_approved": approved}, "STP": {}, "STS": {}, "VAL": {}},
+                    facts={**facts, "NOD_cw_intervention_possible": possible},
+                )
+                self.assertEqual(fixture.condition(fixture.definitions[self.P + "demobilization_threat"]), expected)
+
+    def test_native_idea_cancellation_observes_threats_without_weekly_law_scans(self):
+        fixture, state = self.fixture(phase=2)
+        state["idea@closed_economy"] = True
+        state["idea@ADISCORD_justice_field_courts"] = True
+        for kind in ("economy", "manpower", "budget", "trade", "justice"):
+            idea = block(ECONOMY_IDEAS, self.P + "demobilization_" + kind + "_penalty")
+            cancel = _parsed_definition(idea, "cancel").value
+            self.assertFalse(fixture.condition(cancel))
+            fixture.facts[self.P + "demobilization_threat"] = True
+            self.assertTrue(fixture.condition(cancel))
+            fixture.facts[self.P + "demobilization_threat"] = False
+            self.assertIn(self.P + "queue_law_refresh = yes", block(idea, "on_remove"))
+        recovery = block(ECONOMY_IDEAS, self.P + "postwar_demobilization")
+        state[self.P + "postwar_demobilization_months"] = 1
+        fixture.execute(_parsed_definition(recovery, "on_remove").value, "A", None, "A")
+        self.assertEqual(state[self.P + "postwar_demobilization_months"], 0)
+
+    def test_native_law_ai_does_not_buy_back_demobilized_laws_in_peace(self):
+        sources = {
+            "_economic.txt": ("war_economy", "tot_economic_mobilisation"),
+            "_manpower.txt": ("extensive_conscription", "service_by_requirement", "all_adults_serve", "scraping_the_barrel"),
+        }
+        for filename, laws in sources.items():
+            source = (ROOT / "common/ideas" / filename).read_text(encoding="utf-8-sig")
+            for law in laws:
+                with self.subTest(law=law):
+                    idea = block(source, law)
+                    ai = _parsed_definition(idea, "ai_will_do")
+                    guards = [
+                        entry for entry in ai.value if entry.key == "modifier"
+                        and _entry_scalar(entry.value, "factor") == "0"
+                        and any(child.key == self.P + "demobilization_can_proceed" for child in entry.value)
+                    ]
+                    self.assertEqual(len(guards), 1)
+                    condition = [entry for entry in guards[0].value if entry.key != "factor"]
+                    for phase, war, threat, blocked in (
+                        (0, False, False, False), (1, False, False, True),
+                        (2, False, False, True), (3, False, False, True),
+                        (3, True, False, False), (3, False, True, False),
+                    ):
+                        fixture, _ = self.fixture(phase=phase, war=war, threat=threat)
+                        self.assertEqual(fixture.condition(condition), blocked)
+                    self.assertNotIn(self.P + "demobilization_can_proceed", block(idea, "available"))
+
+    def test_demobilization_decisions_use_native_single_payment_and_mission_has_real_goal(self):
+        source = (ROOT / "common/decisions/ADISCORD_economy_projects.txt").read_text(encoding="utf-8")
+        for kind in ("economy", "manpower", "budget", "trade", "justice"):
+            decision = block(source, self.P + "demobilize_" + kind)
+            self.assertIn("cost = 50", decision)
+            self.assertNotIn("add_political_power", decision)
+            self.assertNotIn("custom_cost_text", decision)
+            self.assertIn(self.P + "reconcile_demobilization = yes", decision)
+            self.assertIn(self.P + "queue_law_refresh = yes", decision)
+        mission = block(source, self.P + "demobilization_deadline")
+        self.assertIn("days_mission_timeout = 120", mission)
+        self.assertIn(self.P + "demobilization_deadline", TOKENS.splitlines())
+        self.assertNotIn("always = yes", block(mission, "available"))
 
 
 class DormantEconomyRegressionTests(unittest.TestCase):

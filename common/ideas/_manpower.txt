@@ -142,6 +142,10 @@ ideas = {
 			}
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
    				factor = 1
 				modifier = {
 					#Prio if low on manpower
@@ -206,6 +210,10 @@ ideas = {
 			}
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
    				factor = 1
 				modifier = {
 					#Prio if low on manpower
@@ -263,6 +271,10 @@ ideas = {
 			}
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
    				factor = 1
 				modifier = {
 					#Prio if low on manpower
@@ -320,6 +332,10 @@ ideas = {
 			}
 
 			ai_will_do = {
+				modifier = {
+					factor = 0
+					ADISCORD_economy_demobilization_can_proceed = yes
+				}
    				factor = 1
 				modifier = {
 					#Prio if low on manpower

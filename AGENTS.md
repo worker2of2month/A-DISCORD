@@ -1,5 +1,14 @@
 # A-Discord repository rules
 
+## New campaigns only
+
+Always assume a new campaign. Do not add or retain old-save compatibility,
+migrations, schema upgrades, legacy-result inference, or periodic recovery
+whose only purpose is to support saves made before the current implementation.
+Initialize systems through the normal new-campaign lifecycle. Preserve state
+across events within that campaign, including subjugation, liberation, country
+handoffs, pending paid operations, and ordinary save/load of the current version.
+
 ## Generated output
 
 Treat the generator that names an output in its header or source as the owner
