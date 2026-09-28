@@ -118,6 +118,15 @@ spriteTypes = {
 	}
 
 	spriteType = {
+		name = "GFX_focus_STP_cw_repair_niansas"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_repair_niansas.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_cw_northern_dossier"
+		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_northern_dossier.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_Steland_Hegemony"
 		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
 	}
