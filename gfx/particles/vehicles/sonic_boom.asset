@@ -1,5 +1,5 @@
-# Hide the expanding flyby clouds for every aircraft using sonic_boom_file.
 particle={
+	# Keep the native particle header; hide flyby clouds in its subsystems.
 	name="sonic_boom_file"
 	subsystem={
 		name="dust_base_right"

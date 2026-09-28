@@ -506,8 +506,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_electrothermal_ignition_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
-		scale = 0.363636
+		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle_card.dds"
 	}
 
 	SpriteType = {
@@ -562,8 +561,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_biometric_trigger_locks_medium"
-		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
-		scale = 0.363636
+		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle_card.dds"
 	}
 
 	SpriteType = {
@@ -1253,7 +1251,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_scrap_at_launchers_medium"
-		textureFile = "gfx/interface/technologies/anti_tank_equipment.dds"
+		textureFile = "gfx/interface/technologies/antitank1.dds"
 	}
 
 	SpriteType = {
@@ -1303,7 +1301,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_point_defense_aa_medium"
-		textureFile = "gfx/interface/technologies/anti_air_equipment.dds"
+		textureFile = "gfx/interface/technologies/antiair1.dds"
 	}
 
 	SpriteType = {
@@ -1418,8 +1416,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_recovered_medium_chassis_medium"
-		textureFile = "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds"
-		scale = 0.35
+		textureFile = "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank_card.dds"
 	}
 
 	SpriteType = {

@@ -19,6 +19,21 @@ STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technol
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_starting_support_weapons_have_producible_equipment(self):
+        for key, equipment in (
+            ("salvaged_at_guns", "ADISCORD_anti_tank_equipment_2163"),
+            ("improvised_air_defense", "ADISCORD_anti_air_equipment_2163"),
+        ):
+            self.assertIn(equipment, generator.ENABLE_EQUIPMENT.get(f"ADISCORD_tech_{key}", ()))
+
+    def test_railway_gun_rewards_use_equipment_bonus_effect(self):
+        branch = generator.BRANCH_BY_KEY["railway_artillery"]
+        for index, tech in enumerate(branch.techs):
+            rendered = generator.render_technology(branch, index)
+            self.assertNotRegex(rendered, r"(?m)^\t\trailway_gun\s*=")
+            self.assertIn("add_equipment_bonus = {", rendered)
+            self.assertIn("railway_gun_equipment = {", rendered)
+
     def test_reconstruction_expands_shared_factory_capacity(self):
         expected = {"drone_construction_cartography": "0.10", "modular_rebuilding": "0.10", "prefabricated_districts": "0.10"}
         found = {}

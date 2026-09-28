@@ -2921,8 +2921,14 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 block,
                 maxsplit=1,
             )[0]
+            # Named equipment bonuses persist after research, unlike one-off
+            # experience or research-discount rewards in the same callback.
+            persistent_effects = effect_prefix
+            for bonus in re.finditer(r"\badd_equipment_bonus\s*=\s*\{", block):
+                if bonus.start() >= len(effect_prefix):
+                    persistent_effects += extract_block(block, bonus.start())
             effect_count = len(
-                re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", effect_prefix)
+                re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", persistent_effects)
             )
             family_upgrade = any(
                 family in subunits and abs(float(value)) >= 0.06

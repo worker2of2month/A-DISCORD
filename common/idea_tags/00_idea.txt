@@ -30,6 +30,7 @@ idea_categories = {
 		slot = political_advisor_minister_of_health
 		slot = political_advisor_minister_of_education
 		slot = political_advisor_chief_of_intelligence
+		slot = political_advisor_minister_of_foreign_affairs
 		
 		ledger = civilian
 		
@@ -44,6 +45,7 @@ idea_categories = {
 		slot = ADISCORD_education_laws
 		slot = ADISCORD_healthcare_laws
 		slot = ADISCORD_cultural_policy_laws
+		slot = STP_drug_policy_laws
 		
 		ledger = civilian
 		
@@ -73,6 +75,7 @@ idea_categories = {
 		slot = ADISCORD_logistics_laws
 		slot = ADISCORD_training_laws
 		slot = ADISCORD_internal_security_laws
+		slot = ADISCORD_military_justice_laws
 		
 		ledger = civilian
 		
@@ -86,7 +89,8 @@ idea_categories = {
 		slot = aircraft_manufacturer
 		slot = materiel_manufacturer
 		slot = industrial_concern
-		character_slot = theorist
+		slot = ADISCORD_electronics_designer
+		slot = ADISCORD_logistics_designer
 
 		ledger = civilian
 		
@@ -101,6 +105,7 @@ idea_categories = {
 		character_slot = high_command
 		character_slot = high_command
 		character_slot = high_command
+		character_slot = theorist
 		
 		ledger = invalid # must be overridden
 		
@@ -228,7 +233,7 @@ slot_ledgers = {
 	naval_manufacturer = navy
 	aircraft_manufacturer = air
 	
-	theorist = invalid # must be overridden
+	theorist = military
 	high_command = invalid # must be overridden
 	
 	
@@ -239,6 +244,7 @@ slot_ledgers = {
 	ADISCORD_education_laws = civilian
 	ADISCORD_healthcare_laws = civilian
 	ADISCORD_cultural_policy_laws = civilian
+	STP_drug_policy_laws = civilian
 	ADISCORD_economic_system_laws = civilian
 	ADISCORD_taxation_laws = civilian
 	ADISCORD_industrial_policy_laws = civilian
@@ -249,4 +255,8 @@ slot_ledgers = {
 	ADISCORD_logistics_laws = civilian
 	ADISCORD_training_laws = civilian
 	ADISCORD_internal_security_laws = civilian
+	ADISCORD_military_justice_laws = civilian
+	political_advisor_minister_of_foreign_affairs = civilian
+	ADISCORD_electronics_designer = civilian
+	ADISCORD_logistics_designer = civilian
 }

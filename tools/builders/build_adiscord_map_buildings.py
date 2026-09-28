@@ -244,12 +244,25 @@ def synchronize_buildings(root: Path = ROOT, *, apply: bool = False) -> list[Bui
             fields[0] = str(mismatch.actual_state)
             lines[mismatch.line - 1] = ";".join(fields)
         lines, _height_changes = mountain_building_heights(root, lines)
+        lines = interior_dam_anchor(lines)
         # Nudge writes this file with CRLF and no final newline. The engine
         # treats a terminal empty row as a malformed building definition, so
         # preserve both details when regenerating the file.
         payload = "\r\n".join(lines).encode("utf-8")
         (root / "map" / "buildings.txt").write_bytes(payload)
     return mismatches
+
+
+def interior_dam_anchor(lines: list[str]) -> list[str]:
+    """Keep the dam inside its state under both native truncation and rounding."""
+    result = []
+    for line in lines:
+        fields = line.split(";")
+        if fields[:2] == ["53", "dam_spawn"]:
+            fields[2], fields[4] = "3751.00", "947.00"
+            line = ";".join(fields)
+        result.append(line)
+    return result
 
 
 def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
@@ -456,6 +469,8 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in mismatches
     ]
     issues.extend(required_spawn_issues(lines, state_ids))
+    if interior_dam_anchor(lines) != lines:
+        issues.append("state 53 dam_spawn must use its interior integer anchor")
     _planned_heights, height_changes = mountain_building_heights(root, lines)
     issues.extend(f"map/buildings.txt:{line}: building height differs from the mountain surface" for line in height_changes)
     try:

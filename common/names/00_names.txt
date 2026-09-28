@@ -19,11 +19,10 @@ default = {
 		surnames = { }
 		callsigns = { }
 	}
-	#female = {
-	#	names = { "Juliette" "Anna" }
-	#	surnames = { }
-	#	callsigns = { "Queen Of The Sky" "The Red Princess" }
-	#}
+	female = {
+		names = { Anna Clara Elena Emma Eva Irene Julia Lena Maria Nora Olga Sofia Vera Victoria }
+	}
+
 	surnames = { "Smith" "Jones" "Taylor" "Brown" "Williams" "Wilson" "Evans" "Walker" "White" "Roberts" }
 	callsigns = { "Easy Kill" "The Lightning" "The Devil" "Grasshopper" "Handsome" "Moose" "Mouse" "Pebbles" "Sunshine" Demon}
 
@@ -93,7 +92,10 @@ STP = {
 			Akhundov Aliyarbekov Apresyan
 		}
 	}
-	# Generated commander portraits are male-only; keep this pool male-only.
+	female = {
+		names = { Aleksandra Anastasiya Anna Darya Ekaterina Elena Irina Kira Larisa Lyudmila Mariya Marina Natalya Nina Olga Polina Sofia Tatyana Valentina Vera Viktoriya Yuliya }
+		surnames = { Alekseyeva Antonova Belova Borisova Ivanova Kuznetsova Makarova Morozova Orlova Petrova Romanova Sokolova Volkova Yegorova }
+	}
 	callsigns = { "The Colonist" "The Bell" Heine Duma Anvil Hammer Fury Arrow Storm Bear "White Lily" Devil Eagle Falcon Fox Snowflake Greasy Guardian Gunman Hawk Hardball Howl Blizzard Husky Ice Killer Steel Iron Skull Striker Thunder Warrior Wardog Vodka }
 
 	prefix = o_operatsiya

@@ -43,6 +43,14 @@ RURAL_SECTORS = tuple(
     for city in SOUTHERN_CITIES for sector in city.get("sectors", ())
 )
 SOUTHERN_GEOMETRY = (*SOUTHERN_CITIES, *RURAL_SECTORS)
+# Break four-province corners without changing state membership or splitting a province.
+# Coordinates use the top-left raster origin.
+PROVINCE_CORNER_REPAIRS = {
+    (3971, 1447): (971, 16746),
+    (3805, 1171): (10375, 16777),
+    (3957, 1149): (16788, 16787),
+    (3959, 1034): (834, 16738),
+}
 ANCHOR_REFERENCES.update({entry["province"]: entry["parent"] for entry in SOUTHERN_CITIES})
 ANCHOR_REFERENCES.update({entry["province"]: entry["parent"] for entry in RURAL_SECTORS})
 DISPLACED_PROVINCES |= frozenset(entry["parent"] for entry in SOUTHERN_CITIES)
@@ -303,9 +311,16 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             for x, selected_pixel in enumerate(row, left):
                 if selected_pixel != "1":
                     continue
-                if tuple(provinces[y, x]) not in (definitions[entry["parent"]], tuple(entry["rgb"])):
+                permitted = {definitions[entry["parent"]], tuple(entry["rgb"])}
+                if (x, y) in PROVINCE_CORNER_REPAIRS:
+                    permitted.add(definitions[PROVINCE_CORNER_REPAIRS[x, y][1]])
+                if tuple(provinces[y, x]) not in permitted:
                     raise ValueError(f"southern city {entry['province']}: geometry changed at {x}, {y}")
                 provinces[y, x] = entry["rgb"]
+    for (x, y), (original, replacement) in PROVINCE_CORNER_REPAIRS.items():
+        if tuple(provinces[y, x]) not in (definitions[original], definitions[replacement]):
+            raise ValueError(f"province corner changed at {x}, {y}")
+        provinces[y, x] = definitions[replacement]
     selected = set(ANCHOR_REFERENCES) | DISPLACED_PROVINCES | CITIES | RELIEF_PROVINCES
     masks = {
         province: np.all(provinces == definitions[province], axis=2)

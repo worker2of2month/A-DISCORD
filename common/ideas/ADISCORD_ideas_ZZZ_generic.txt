@@ -14,6 +14,52 @@ ideas = {
 			traits = {
 			}
 		}
+
+		ADISCORD_general_cabinet_secretary = {
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { political_power_gain = 0.03 }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
+		}
 	}
 
 	political_advisor_minister_of_defense = {
@@ -30,6 +76,52 @@ ideas = {
 			}
 			traits = {
 			}
+		}
+
+		ADISCORD_general_military_administrator = {
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { training_time_army_factor = -0.02 }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
 		}
 	}
 
@@ -48,6 +140,62 @@ ideas = {
 			traits = {
 			}
 		}
+
+		ADISCORD_general_budget_administrator = {
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.025 }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			ai_will_do = { factor = 1 }
+		}
 	}
 
 	political_advisor_minister_of_health = {
@@ -64,6 +212,62 @@ ideas = {
 			}
 			traits = {
 			}
+		}
+
+		ADISCORD_general_public_health_physician = {
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { ADISCORD_economy_social_expense_factor = -0.025 }
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			ai_will_do = { factor = 1 }
 		}
 	}
 
@@ -82,6 +286,52 @@ ideas = {
 			traits = {
 			}
 		}
+
+		ADISCORD_general_education_administrator = {
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { research_speed_factor = 0.02 }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
+		}
 	}
 
 	political_advisor_chief_of_intelligence = {
@@ -98,6 +348,256 @@ ideas = {
 			}
 			traits = {
 			}
+		}
+
+		ADISCORD_general_counterintelligence_officer = {
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			allowed = {
+				NOT = {
+					OR = {
+						tag = BBV
+						tag = BCM
+						tag = BGT
+						tag = BHG
+						tag = BJK
+						tag = BLD
+						tag = BTL
+						tag = COF
+						tag = DAN
+						tag = EFL
+						tag = IVN
+						tag = NAM
+						tag = NOD
+						tag = PIV
+						tag = PWR
+						tag = ROM
+						tag = RUS
+						tag = SOL
+						tag = STP
+						tag = STS
+						tag = TFF
+						tag = TRU
+						tag = VAD
+						tag = VAL
+						tag = VLA
+						tag = WIT
+						tag = WRK
+						tag = YPR
+						tag = ZAO
+					}
+				}
+			}
+			available = { always = yes }
+			allowed_to_remove = { always = yes }
+			modifier = { encryption_factor = 0.05 }
+			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	political_advisor_minister_of_foreign_affairs = {
+		political_advisor_minister_of_foreign_affairs_vacant = {
+			name = vacant
+			default = yes
+			cost = 75
+			allowed = { always = yes }
+			allowed_to_remove = { always = yes }
+		}
+	}
+
+	ADISCORD_electronics_designer = {
+		ADISCORD_electronics_repair_workshops = {
+			picture = ADISCORD_electronics_repair_workshops
+			default = yes
+			cost = 0
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_electronics_radio_bureau = {
+			picture = ADISCORD_electronics_radio_bureau
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			research_bonus = {
+				electronics = 0.08
+			}
+			modifier = {
+				production_speed_radar_station_factor = 0.10
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_electronics_precision_bureau = {
+			picture = ADISCORD_economic_system_mixed
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			research_bonus = {
+				electronics = 0.04
+			}
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_electronics_computing_bureau = {
+			picture = ADISCORD_electronics_computing_bureau
+			cost = 125
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				research_speed_factor = 0.015
+				ADISCORD_economy_research_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_electronics_cryptography_bureau = {
+			picture = ADISCORD_electronics_cryptography_bureau
+			cost = 125
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				encryption_factor = 0.05
+				decryption_power_factor = 0.05
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_electronics_field_communications = {
+			picture = ADISCORD_electronics_field_communications
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				planning_speed = 0.05
+				army_org_regain = 0.02
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_logistics_designer = {
+		ADISCORD_logistics_regular_quartermaster = {
+			picture = ADISCORD_logistics_regular_quartermaster
+			default = yes
+			cost = 0
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 0 }
+		}
+
+		ADISCORD_logistics_railway_bureau = {
+			picture = ADISCORD_logistics_railway_bureau
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				production_speed_rail_way_factor = 0.10
+				production_speed_supply_node_factor = 0.05
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_logistics_field_supply_bureau = {
+			picture = ADISCORD_logistics_field_supply_bureau
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				supply_consumption_factor = -0.03
+				army_fuel_consumption_factor = -0.03
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_logistics_motor_transport = {
+			picture = ADISCORD_logistics_motor_transport
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				army_speed_factor = 0.04
+				army_fuel_consumption_factor = 0.05
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_logistics_warehouse_network = {
+			picture = ADISCORD_logistics_warehouse_network
+			cost = 125
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				supply_consumption_factor = -0.05
+				ADISCORD_economy_army_expense_factor = 0.03
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_logistics_maritime_supply = {
+			picture = ADISCORD_logistics_maritime_supply
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				convoy_escort_efficiency = 0.05
+				production_speed_naval_base_factor = 0.10
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
 		}
 	}
 }

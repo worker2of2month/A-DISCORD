@@ -1,4 +1,44 @@
 on_actions = {
+	on_puppet = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						FROM = { tag = STP }
+						has_cosmetic_tag = NOD_STP_revolution
+						has_cosmetic_tag = VAL_STP_revolution
+						has_cosmetic_tag = BJK_STP_revolution
+					}
+				}
+				STP_pw_party_sync_revolution_subject = yes
+			}
+		}
+	}
+
+	on_release_as_puppet = {
+		effect = {
+			if = {
+				limit = { is_subject_of = STP }
+				STP_pw_party_sync_revolution_subject = yes
+			}
+		}
+	}
+
+	on_subject_free = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						has_cosmetic_tag = NOD_STP_revolution
+						has_cosmetic_tag = VAL_STP_revolution
+						has_cosmetic_tag = BJK_STP_revolution
+					}
+				}
+				STP_pw_party_sync_revolution_subject = yes
+			}
+		}
+	}
+
 
     on_startup = {
         effect = {

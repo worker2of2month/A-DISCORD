@@ -1324,7 +1324,7 @@
  STP_pw_party_launch_bezhaysk_operation_desc: "План утверждён. Решение немедленно начинает войну против Бежайска. После падения столицы весь участвовавший феодальный блок будет включён в Стеландер."
  STP_pw_party_bezhaysk_available_tt: "Послевоенное правительство Партии независимо и находится в мире. Бежайск существует, независим, не капитулировал, владеет и контролирует столичный регион. Страны не должны состоять в одном альянсе."
  STP_pw_party_launch_kefreyt_operation: "Начать кефрейтскую операцию"
- STP_pw_party_launch_kefreyt_operation_desc: "План утверждён. Решение немедленно начинает войну против независимого Кефрейта. Его капитуляция завершит кампанию отдельным послевоенным урегулированием."
+ STP_pw_party_launch_kefreyt_operation_desc: "План утверждён. Решение немедленно начинает войну против независимого Кефрейта. После нашей победы Кефрейт сохранится как зависимое государство, а удерживаемые им и его подчинёнными земли Стеландера вернутся под наше управление."
  STP_pw_party_kefreyt_available_tt: "Послевоенное правительство Партии независимо и находится в мире. Кефрейт существует, независим, не капитулировал и не состоит со Стеландером в одном альянсе."
  STP_pw_party_regional_order_tt: "Бежайская и кефрейтская кампании завершены либо соответствующие независимые государства больше не требуют отдельной войны."
  STP_pw_party_district_congress: "Съезд окружных секретариатов"
@@ -1866,10 +1866,10 @@
  ADISCORD_STP_pc.21.a: "Передать документы правительству."
  STP_pw_party_northern_protocol: "Протокол с Нодрулом"
  STP_pw_party_northern_protocol_desc: "Победа над восстанием не решила вопрос о прежней зависимости. Запросим условия Нодрула, прежде чем выбирать между возвращением под его покровительство и самостоятельным курсом."
- STP_pw_party_protectorate: "Возобновить протекторат"
+ STP_pw_party_protectorate: "Под северным покровительством"
  STP_pw_party_protectorate_desc: "Примем предложенное Нодрулом покровительство. Стеландер снова станет его марионеткой; обмен опытом поможет восстановить регулярную армию."
  STP_pw_party_sovereignty: "Опора на собственные силы"
- STP_pw_party_sovereignty_desc: "Правительство откажется от протектората и расширит собственное военное производство. После завершения фокуса начнётся §R90-дневная подготовка северного вторжения§!. Восстановленное производство, собственная подготовка офицеров и поддержка участников кабинета позволят предложить Нодрулу расчёт по обязательствам. Это требует £ADISCORD_economy_treasury_texticon §Y1350§! и согласия северной стороны. Переговоры не останавливают срок. Внутренние договорённости и восстановление лучше подготовить до открытого разрыва."
+ STP_pw_party_sovereignty_desc: "Правительство откажется от протектората и расширит собственное военное производство. После завершения фокуса начнётся §R90-дневная подготовка северного вторжения§!. Восстановленное производство, собственная подготовка офицеров и поддержка участников кабинета позволят предложить Нодрулу расчёт по обязательствам. Это требует §Y1350§! £ADISCORD_economy_treasury_texticon и согласия северной стороны. Переговоры не останавливают срок. Внутренние договорённости и восстановление лучше подготовить до открытого разрыва."
  STP_pw_party_northern_protocol_tt: "Нодрул получит запрос на возобновление протектората. Его согласие откроет соответствующий фокус, но окончательный выбор остаётся за Стеландером."
  STP_pw_party_protectorate_tt: "Стеландер вновь станет §Yмарионеткой Нодрула§!."
  STP_pw_party_nod_offer_accepted_tt: "Стеландер сможет принять протекторат отдельным фокусом. Сам ответ его статус не меняет."
@@ -2232,11 +2232,11 @@
 
  STP_ps_reorg_1_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
 
- STP_ps_reorg_1_funded_cost: "£ADISCORD_economy_treasury_texticon §Y900§!"
+ STP_ps_reorg_1_funded_cost: "§Y900§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_1_funded_cost_blocked: "£ADISCORD_economy_treasury_texticon §R900§!"
+ STP_ps_reorg_1_funded_cost_blocked: "§R900§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_1_funded_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y900§!"
+ STP_ps_reorg_1_funded_cost_tooltip: "§Y900§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_reorg_1_funded: "Финансировать восстановление: этап 1"
 
@@ -2250,11 +2250,11 @@
 
  STP_ps_reorg_2_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
 
- STP_ps_reorg_2_funded_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_reorg_2_funded_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_2_funded_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_reorg_2_funded_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_2_funded_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_reorg_2_funded_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_reorg_2_funded: "Финансировать восстановление: этап 2"
 
@@ -2268,11 +2268,11 @@
 
  STP_ps_reorg_3_desc: "Этап приостанавливается при потере работающего правительства. Оплата и оставшийся срок сохраняются до возобновления; прекращение войны возвращает незавершённый депозит."
 
- STP_ps_reorg_3_funded_cost: "£ADISCORD_economy_treasury_texticon §Y2500§!"
+ STP_ps_reorg_3_funded_cost: "§Y2500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_3_funded_cost_blocked: "£ADISCORD_economy_treasury_texticon §R2500§!"
+ STP_ps_reorg_3_funded_cost_blocked: "§R2500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reorg_3_funded_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y2500§!"
+ STP_ps_reorg_3_funded_cost_tooltip: "§Y2500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_reorg_3_funded: "Финансировать восстановление: этап 3"
 
@@ -2282,11 +2282,11 @@
 
  STP_ps_reorg_3_administrative_desc: "Без расхода казны. Базовый срок: 42 дн. Мобильный резерв: -7 дней. При поддержке армейского командования ниже 35 добавляется 7 дней. Срок фиксируется при начале заказа; поздние переговоры не пересчитывают его. Потеря правительства ставит работу на паузу; окончание войны возвращает неиспользованный денежный резерв."
 
- STP_ps_emergency_cabinet_cost: "£ADISCORD_economy_treasury_texticon §Y1200§!"
+ STP_ps_emergency_cabinet_cost: "§Y1200§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_emergency_cabinet_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1200§!"
+ STP_ps_emergency_cabinet_cost_blocked: "§R1200§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_emergency_cabinet_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1200§!"
+ STP_ps_emergency_cabinet_cost_tooltip: "§Y1200§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_emergency_cabinet: "Развернуть аварийный кабинет"
 
@@ -2312,11 +2312,11 @@
 
  STP_ps_nodes_dynamic: "Утрата правительственных узлов"
 
- STP_ps_build_radio_cost: "£ADISCORD_economy_treasury_texticon §Y900§!"
+ STP_ps_build_radio_cost: "§Y900§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_build_radio_cost_blocked: "£ADISCORD_economy_treasury_texticon §R900§!"
+ STP_ps_build_radio_cost_blocked: "§R900§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_build_radio_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y900§!"
+ STP_ps_build_radio_cost_tooltip: "§Y900§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_build_radio: "Развернуть сеть правительственной связи"
 
@@ -2326,11 +2326,11 @@
 
  STP_ps_build_radio_work_desc: "Зарезервировано 900 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_build_hq_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_build_hq_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_build_hq_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_build_hq_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_build_hq_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_build_hq_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_build_hq: "Оборудовать резервный штаб"
 
@@ -2340,11 +2340,11 @@
 
  STP_ps_build_hq_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_prepare_evacuation_cost: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_prepare_evacuation_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_prepare_evacuation_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1500§!"
+ STP_ps_prepare_evacuation_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_prepare_evacuation_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_prepare_evacuation_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_prepare_evacuation: "Подготовить вывоз организации"
 
@@ -2354,11 +2354,11 @@
 
  STP_ps_prepare_evacuation_work_desc: "Зарезервировано 1500 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_transport_cost: "£ADISCORD_economy_treasury_texticon §Y2500§!"
+ STP_ps_transport_cost: "§Y2500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_transport_cost_blocked: "£ADISCORD_economy_treasury_texticon §R2500§!"
+ STP_ps_transport_cost_blocked: "§R2500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_transport_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y2500§!"
+ STP_ps_transport_cost_tooltip: "§Y2500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_transport: "Развернуть военный транспорт"
 
@@ -2368,11 +2368,11 @@
 
  STP_ps_transport_work_desc: "Зарезервировано 2500 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_ammunition_cost: "£ADISCORD_economy_treasury_texticon §Y2400§!"
+ STP_ps_ammunition_cost: "§Y2400§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_ammunition_cost_blocked: "£ADISCORD_economy_treasury_texticon §R2400§!"
+ STP_ps_ammunition_cost_blocked: "§R2400§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_ammunition_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y2400§!"
+ STP_ps_ammunition_cost_tooltip: "§Y2400§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_ammunition: "Заказать смешанный боекомплект"
 
@@ -2384,11 +2384,11 @@
 
  STP_ps_ammunition_result_tt: "За 2400 казны и 21 день: 80000 винтовок, 480 артиллерийских орудий, 480 комплектов оружия отделения, 240 поддержки и 160 ПВО. Повторный заказ через 42 дня после доставки."
 
- STP_ps_secure_routes_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_secure_routes_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_secure_routes_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_secure_routes_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_secure_routes_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_secure_routes_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_secure_routes: "Охранять столичное сообщение"
 
@@ -2398,11 +2398,11 @@
 
  STP_ps_secure_routes_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_reserve_training_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_reserve_training_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reserve_training_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_reserve_training_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_reserve_training_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_reserve_training_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_reserve_training: "Подготовить оперативный резерв"
 
@@ -2412,11 +2412,11 @@
 
  STP_ps_reserve_training_work_desc: "Зарезервировано 1800 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_prepared_cabinet_cost: "£ADISCORD_economy_treasury_texticon §Y600§!"
+ STP_ps_prepared_cabinet_cost: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_prepared_cabinet_cost_blocked: "£ADISCORD_economy_treasury_texticon §R600§!"
+ STP_ps_prepared_cabinet_cost_blocked: "§R600§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_prepared_cabinet_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y600§!"
+ STP_ps_prepared_cabinet_cost_tooltip: "§Y600§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_emergency_cabinet_prepared: "Активировать резервный штаб"
 
@@ -2432,41 +2432,41 @@
 
  STP_ps_expedition_idea: "Экспедиционное снабжение"
 
- STP_ps_fund_nod_cost: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_fund_nod_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_fund_nod_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1500§!"
+ STP_ps_fund_nod_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_fund_nod_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_fund_nod_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_fund_nod: "Кредит Нодрулу"
 
  STP_ps_fund_nod_desc: "Подготовка 14 дней и доставка 7 дней после открытия маршрута. Нодрул получает §Y1500§! казны и доступ к закупке оружия. Это помощь его армии, а не гарантированное вступление. Если соглашение утратит силу до доставки, резерв возвращается."
 
- STP_ps_arm_nod_cost: "£ADISCORD_economy_treasury_texticon §Y300§!; £infantry_equipment_texticon §Y12000§!; £artillery_equipment_texticon §Y100§!; £support_equipment_texticon §Y60§!"
+ STP_ps_arm_nod_cost: "§Y300§! £ADISCORD_economy_treasury_texticon; §Y12000§! £infantry_equipment_texticon; §Y100§! £artillery_equipment_texticon; §Y60§! £support_equipment_texticon"
 
- STP_ps_arm_nod_cost_blocked: "£ADISCORD_economy_treasury_texticon §R300§!; £infantry_equipment_texticon §R12000§!; £artillery_equipment_texticon §R100§!; £support_equipment_texticon §R60§!"
+ STP_ps_arm_nod_cost_blocked: "§R300§! £ADISCORD_economy_treasury_texticon; §R12000§! £infantry_equipment_texticon; §R100§! £artillery_equipment_texticon; §R60§! £support_equipment_texticon"
 
- STP_ps_arm_nod_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y300§!; £infantry_equipment_texticon §Y12000§!; £artillery_equipment_texticon §Y100§!; £support_equipment_texticon §Y60§!"
+ STP_ps_arm_nod_cost_tooltip: "§Y300§! £ADISCORD_economy_treasury_texticon; §Y12000§! £infantry_equipment_texticon; §Y100§! £artillery_equipment_texticon; §Y60§! £support_equipment_texticon"
 
  STP_ps_arm_nod: "Оружие северному фронту"
 
  STP_ps_arm_nod_desc: "Передать Нодрулу §Y12000§! винтовок, §Y100§! орудий и §Y60§! оснащения для северного фронта. Цена включает перевозку. Если северная война закончится до доставки или соглашение утратит силу, оплаченный резерв возвращается."
 
- STP_ps_engineers_nod_cost: "£ADISCORD_economy_treasury_texticon §Y3000§!"
+ STP_ps_engineers_nod_cost: "§Y3000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_engineers_nod_cost_blocked: "£ADISCORD_economy_treasury_texticon §R3000§!"
+ STP_ps_engineers_nod_cost_blocked: "§R3000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_engineers_nod_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y3000§!"
+ STP_ps_engineers_nod_cost_tooltip: "§Y3000§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_engineers_nod: "Инженерная миссия"
 
  STP_ps_engineers_nod_desc: "Подготовить инженерную помощь действующему северному фронту Нодрула. После доставки инженерный эффект действует §Y60 дней§!. Если северная война закончится до доставки, денежный резерв возвращается."
 
- STP_ps_expedition_nod_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_expedition_nod_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_expedition_nod_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_expedition_nod_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_expedition_nod_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_expedition_nod_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_expedition_nod: "Подготовить экспедиционное снабжение"
 
@@ -2488,11 +2488,11 @@
 
  STP_ps_agreement_decline: "Не брать этих обязательств."
 
- STP_ps_nod_rifle_purchase_cost: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_nod_rifle_purchase_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_nod_rifle_purchase_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1500§!"
+ STP_ps_nod_rifle_purchase_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_nod_rifle_purchase_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_nod_rifle_purchase_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_nod_rifle_purchase: "Закупить винтовки для северного фронта"
 
@@ -2525,11 +2525,11 @@
 
  STP_ps_return_terms_tt: "Возвращение восстановит Стеландер как зависимое государство Нодрула. Для результата нужна военная победа; оплата подготовки не заменяет её."
 
- STP_ps_evacuate_funds_cost: "£ADISCORD_economy_treasury_texticon §Y3000§!"
+ STP_ps_evacuate_funds_cost: "§Y3000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_evacuate_funds_cost_blocked: "£ADISCORD_economy_treasury_texticon §R3000§!"
+ STP_ps_evacuate_funds_cost_blocked: "§R3000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_evacuate_funds_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y3000§!"
+ STP_ps_evacuate_funds_cost_tooltip: "§Y3000§! £ADISCORD_economy_treasury_texticon"
 
 
 
@@ -2543,11 +2543,11 @@
  STP_ps_launch_return: "Начать кампанию возвращения"
  STP_ps_launch_return_desc: "После принятия условий запускает подготовленную кампанию возвращения против Шабрата. Победа восстановит Стеландер как зависимое государство Нодрула."
 
- STP_ps_exile_training_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_exile_training_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_exile_training_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!"
+ STP_ps_exile_training_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_exile_training_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!"
+ STP_ps_exile_training_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon"
  STP_ps_exile_training: "Подготовить штаб возвращения"
  STP_ps_exile_training_work: "Подготовка штаба возвращения"
  STP_ps_exile_training_desc: "1800 казны и 28 дней. Штаб получает 15 армейского опыта и готовит политико-военный план возвращения. Формирования заказываются отдельно с полным резервированием людей и оружия."
@@ -2657,11 +2657,11 @@
 
  STP_ps_district_result_tt: "Постоянная модель: скорость строительства +8%, административные расходы -5%, -0,05 £political_power_texticon/день. Окружные уступки входят в договор."
 
- STP_ps_institution_payment_cost: "£ADISCORD_economy_treasury_texticon §Y2000§!"
+ STP_ps_institution_payment_cost: "§Y2000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_institution_payment_cost_blocked: "£ADISCORD_economy_treasury_texticon §R2000§!"
+ STP_ps_institution_payment_cost_blocked: "§R2000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_institution_payment_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y2000§!"
+ STP_ps_institution_payment_cost_tooltip: "§Y2000§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_institution_payment: "Оплатить этап реорганизации аппарата"
 
@@ -2671,21 +2671,21 @@
 
  STP_ps_institution_payment_work_desc: "Зарезервировано 2000 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_val_send_supply_cost: "£infantry_equipment_texticon §Y12000§!"
+ STP_ps_val_send_supply_cost: "§Y12000§! £infantry_equipment_texticon"
 
- STP_ps_val_send_supply_cost_blocked: "£infantry_equipment_texticon §R12000§!"
+ STP_ps_val_send_supply_cost_blocked: "§R12000§! £infantry_equipment_texticon"
 
- STP_ps_val_send_supply_cost_tooltip: "£infantry_equipment_texticon §Y12000§!"
+ STP_ps_val_send_supply_cost_tooltip: "§Y12000§! £infantry_equipment_texticon"
 
  STP_ps_val_send_supply: "Отправить оружие стеландерскому подполью"
 
  STP_ps_val_send_supply_desc: "12000 настоящих винтовок. Подготовка 28 дней, первая отправка 35 дней. Без связанного сухопутного пути груз ожидает и не появляется у получателя. До раскола винтовки остаются в окружном тайнике Ниансанса, затем доставляются STS. Перехват передаёт их партии."
 
- STP_ps_val_intelligence_cost: "£ADISCORD_economy_treasury_texticon §Y450§!"
+ STP_ps_val_intelligence_cost: "§Y450§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intelligence_cost_blocked: "£ADISCORD_economy_treasury_texticon §R450§!"
+ STP_ps_val_intelligence_cost_blocked: "§R450§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intelligence_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y450§!"
+ STP_ps_val_intelligence_cost_tooltip: "§Y450§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_intelligence: "Разведать заявку Кефрейта"
 
@@ -2695,11 +2695,11 @@
 
  STP_ps_val_intelligence_work_desc: "Зарезервировано 450 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_val_intercept_cost: "£ADISCORD_economy_treasury_texticon §Y1200§!"
+ STP_ps_val_intercept_cost: "§Y1200§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intercept_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1200§!"
+ STP_ps_val_intercept_cost_blocked: "§R1200§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_intercept_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1200§!"
+ STP_ps_val_intercept_cost_tooltip: "§Y1200§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_intercept: "Перехватить известный сухопутный маршрут"
 
@@ -2709,11 +2709,11 @@
 
  STP_ps_val_intercept_work_desc: "Зарезервировано 1200 казны. Результат выдаётся только при сохранении условий программы; отмена возвращает депозит один раз."
 
- STP_ps_val_pressure_cost: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_val_pressure_cost: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_pressure_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1500§!"
+ STP_ps_val_pressure_cost_blocked: "§R1500§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_val_pressure_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1500§!"
+ STP_ps_val_pressure_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_val_pressure: "Давление на посредников"
 
@@ -2736,18 +2736,18 @@
 
  STP_ps_interrupt_opposition_second_desc: "Ответ относится к отмеченному округу второй операции. Награда - её срыв и местное влияние; повторяющийся прирост верности не выдаётся."
 
- STP_ps_district_rebuild_cost: "£ADISCORD_economy_treasury_texticon §Y4000§!"
+ STP_ps_district_rebuild_cost: "§Y4000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_district_rebuild_cost_blocked: "£ADISCORD_economy_treasury_texticon §R4000§!"
+ STP_ps_district_rebuild_cost_blocked: "§R4000§! £ADISCORD_economy_treasury_texticon"
 
- STP_ps_district_rebuild_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y4000§!"
+ STP_ps_district_rebuild_cost_tooltip: "§Y4000§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_district_rebuild: "Окружная промышленная реконструкция"
 
  STP_ps_district_rebuild_desc: "4000 казны, 56 дней: один гражданский завод в выбранном округе. Требуются контроль и место под строительство. Один оплаченный округ за раз; потеря условий возвращает депозит. Аварийный кабинет остаётся отдельной операцией."
- STP_ps_exile_formation_cost: "£ADISCORD_economy_treasury_texticon §Y1800§!; £manpower_texticon §Y6000§!; £infantry_equipment_texticon §Y5400§!"
- STP_ps_exile_formation_cost_blocked: "£ADISCORD_economy_treasury_texticon §R1800§!; £manpower_texticon §R6000§!; £infantry_equipment_texticon §R5400§!"
- STP_ps_exile_formation_cost_tooltip: "£ADISCORD_economy_treasury_texticon §Y1800§!; £manpower_texticon §Y6000§!; £infantry_equipment_texticon §Y5400§!"
+ STP_ps_exile_formation_cost: "§Y1800§! £ADISCORD_economy_treasury_texticon; §Y6000§! £manpower_texticon; §Y5400§! £infantry_equipment_texticon"
+ STP_ps_exile_formation_cost_blocked: "§R1800§! £ADISCORD_economy_treasury_texticon; §R6000§! £manpower_texticon; §R5400§! £infantry_equipment_texticon"
+ STP_ps_exile_formation_cost_tooltip: "§Y1800§! £ADISCORD_economy_treasury_texticon; §Y6000§! £manpower_texticon; §Y5400§! £infantry_equipment_texticon"
 
  STP_ps_exile_formation: "Сформировать эмигрантскую бригаду"
 
@@ -2891,15 +2891,15 @@
  STP_cw_operation_timeout_tt:0 "Цель не взята за 49 дней. Армия получит временный штраф. Окончание гражданской войны отменяет незавершённую операцию без штрафа."
  STP_cw_operation_cancel_tt:0 "Операция отменяется без штрафа, если гражданская война завершилась или сопротивление капитулировало."
 
- STP_pw_party_nod_emergency_mobilization_cost:0 "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y900§!"
- STP_pw_party_nod_emergency_mobilization_cost_blocked:0 "§R50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R900§!"
- STP_pw_party_nod_emergency_mobilization_cost_tooltip:0 "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y900§!"
- STP_pw_party_nod_fortify_border_cost:0 "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y1080§!"
- STP_pw_party_nod_fortify_border_cost_blocked:0 "§R35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R1080§!"
- STP_pw_party_nod_fortify_border_cost_tooltip:0 "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y1080§!"
- STP_pw_party_nod_staff_readiness_cost:0 "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y720§!"
- STP_pw_party_nod_staff_readiness_cost_blocked:0 "§R35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R720§!"
- STP_pw_party_nod_staff_readiness_cost_tooltip:0 "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y720§!"
+ STP_pw_party_nod_emergency_mobilization_cost:0 "§Y50§! £political_power_texticon §Y900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_emergency_mobilization_cost_blocked:0 "§R50§! £political_power_texticon §R900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_emergency_mobilization_cost_tooltip:0 "§Y50§! £political_power_texticon §Y900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_fortify_border_cost:0 "§Y35§! £political_power_texticon §Y1080§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_fortify_border_cost_blocked:0 "§R35§! £political_power_texticon §R1080§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_fortify_border_cost_tooltip:0 "§Y35§! £political_power_texticon §Y1080§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_staff_readiness_cost:0 "§Y35§! £political_power_texticon §Y720§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_staff_readiness_cost_blocked:0 "§R35§! £political_power_texticon §R720§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_staff_readiness_cost_tooltip:0 "§Y35§! £political_power_texticon §Y720§! £ADISCORD_economy_treasury_texticon"
  STP_party_services_delivered_tt:0 "Восстановлены министерства: завершено решение «Восстановить министерства»."
  STP_party_industry_delivered_tt:0 "Завершено восстановление порта и промышленного снабжения."
  STP_party_district_consent_tt:0 "Поддержка Боронов не ниже 50; при довоенном соглашении с окружными начальниками достаточно 35. Поддержку можно восстановить переговорами с фракцией."
@@ -3051,24 +3051,24 @@
  ADISCORD_STP_pc.35.d: "Налоговые конторы снова открылись, но первая сводка доходов не совпала с обещаниями восстановительного бюджета. Торговые дома готовы вернуть оборот в порты, если правительство оплатит первоначальные контракты и защитит их от чрезвычайных изъятий. На этих условиях они берутся провести расчёты с поставщиками, в том числе северными.\n\nСлужба безопасности принесла другой список: имущество, которое можно изъять немедленно. Это наполнит казну без переговоров с владельцами, однако прежнего торгового оборота после изъятий ждать не стоит. Распределять полученное придётся через восстановленные государственные учреждения.\n\n[STPGetPostwarCabinet]\n\nВыбор определит и будущую делегацию в Нодрул. Частные договоры нуждаются в доверии торговцев. Государственное распределение - в действующих ведомствах и хотя бы ограниченном согласии тех, кто проводит платежи через границу."
  ADISCORD_STP_pc.35.requisition: "Провести чрезвычайное изъятие."
  ADISCORD_STP_pc.35.contracts: "Оплатить договоры торговых домов."
- STP_pw_party_requisition_tt: "Казна: £ADISCORD_economy_treasury_texticon §G+540§!. Поддержка торговцев: §R-12§!. Для северного договора нужны восстановленные гражданские службы и поддержка торговцев не ниже §Y45§!."
- STP_pw_party_contracts_tt: "Цена: £ADISCORD_economy_treasury_texticon §Y360§!. Для северного договора потребуется поддержка торговцев не ниже §Y60§!."
+ STP_pw_party_requisition_tt: "Казна: §G+540§! £ADISCORD_economy_treasury_texticon. Поддержка торговцев: §R-12§!. Для северного договора нужны восстановленные гражданские службы и поддержка торговцев не ниже §Y45§!."
+ STP_pw_party_contracts_tt: "Цена: §Y360§! £ADISCORD_economy_treasury_texticon. Для северного договора потребуется поддержка торговцев не ниже §Y60§!."
  STP_pw_party_offer_compact: "Предложить расчёт по северным обязательствам"
- STP_pw_party_offer_compact_desc: "Кабинет, командование и хозяйственные представители могут предложить Нодрулу выплату £ADISCORD_economy_treasury_texticon §Y1350§! в обмен на отказ от вторжения и признание самостоятельности. Платёж состоится только после согласия Нодрула; он вправе отказать. На ответ отводится §Y21 день§!, и подготовка вторжения продолжает идти. Поддержка подписантов и казна проверяются повторно при ответе. Предложение можно направить один раз."
+ STP_pw_party_offer_compact_desc: "Кабинет, командование и хозяйственные представители могут предложить Нодрулу выплату §Y1350§! £ADISCORD_economy_treasury_texticon в обмен на отказ от вторжения и признание самостоятельности. Платёж состоится только после согласия Нодрула; он вправе отказать. На ответ отводится §Y21 день§!, и подготовка вторжения продолжает идти. Поддержка подписантов и казна проверяются повторно при ответе. Предложение можно направить один раз."
  STP_pw_party_cabinet_backed_tt: "Выбранная опора кабинета - консерваторы, бороны или радикалы-гедонисты - сохраняет поддержку не ниже §Y60§!"
  STP_pw_party_command_backed_tt: "При самостоятельном штабе: поддержка командования не ниже §Y60§!. При контроле службы безопасности: её поддержка не ниже §Y60§!, командования - не ниже §Y45§!"
  STP_pw_party_supply_backed_tt: "Завершены фокусы «Штаб вместо комендатуры» и «Снабжение пограничных частей» либо «Армия за пределами столицы»; выполнен хотя бы §Y1§! проект восстановления промышленности"
  STP_pw_party_credit_backed_tt: "При частных контрактах: поддержка торговцев не ниже §Y60§!. После реквизиций: выполнен хотя бы §Y1§! проект восстановления гражданских служб, поддержка торговцев не ниже §Y45§!"
  STP_pw_party_compact_no_pending_tt: "Нодрул ещё не рассматривает наше предложение"
  STP_pw_party_compact_time_tt: "До северного вторжения осталось не менее §Y22 дней§!"
- STP_pw_party_compact_funds_tt: "В казне есть £ADISCORD_economy_treasury_texticon §Y1350§! для выплаты после согласия Нодрула"
- STP_pw_party_compact_offer_tt: "Нодрул получит предложение: £ADISCORD_economy_treasury_texticon §Y1350§! за прекращение подготовки вторжения. Сейчас деньги не списываются. Отказ или утрата поддержки подписантов оставят угрозу в силе; переговоры не продлевают срок."
+ STP_pw_party_compact_funds_tt: "В казне есть §Y1350§! £ADISCORD_economy_treasury_texticon для выплаты после согласия Нодрула"
+ STP_pw_party_compact_offer_tt: "Нодрул получит предложение: §Y1350§! £ADISCORD_economy_treasury_texticon за прекращение подготовки вторжения. Сейчас деньги не списываются. Отказ или утрата поддержки подписантов оставят угрозу в силе; переговоры не продлевают срок."
  ADISCORD_STP_pc.36.t: "Предложение из Стеландера"
  ADISCORD_STP_pc.36.d: "Стеландерская делегация привезла проект расчёта по северным обязательствам. Под документом стоят подписи кабинета, военного руководства и представителей восстановленного хозяйства. Они предлагают единовременную выплату 1350 из своей казны. Взамен Нодрул должен прекратить подготовку вторжения и отказаться от возвращения протектората.\n\nНаши советники предупреждают: принятие договора закроет возможность вернуть прежнее положение одной угрозой. Но и расчёт на беспомощное правительство уже неточен. За делегацией стоят восстановленное производство, собственная подготовка офицеров и договорённость между несколькими группами партии.\n\nМожно принять деньги и самостоятельность соседа. Можно настаивать на первоначальных требованиях. Решение остаётся за нами; пока ответа нет, военные приготовления продолжаются."
  ADISCORD_STP_pc.36.refuse: "Деньги не заменят северных гарантий."
  ADISCORD_STP_pc.36.accept: "Принять расчёт и отозвать требования."
  STP_pw_party_compact_refused_tt: "Подготовка вторжения продолжится по прежнему сроку. Платежа не будет."
- STP_pw_party_compact_settlement_tt: "Стеландер выплатит Нодрулу £ADISCORD_economy_treasury_texticon §Y1350§!. Северная угроза будет закрыта; Стеландер сохранит независимость. Уже оплаченные меры подготовки останутся у Стеландера. Договор не создаёт альянс."
+ STP_pw_party_compact_settlement_tt: "Стеландер выплатит Нодрулу §Y1350§! £ADISCORD_economy_treasury_texticon. Северная угроза будет закрыта; Стеландер сохранит независимость. Уже оплаченные меры подготовки останутся у Стеландера. Договор не создаёт альянс."
  ADISCORD_STP_pc.37.t: "Ответ северной делегации"
  ADISCORD_STP_pc.37.accepted: "Северная делегация согласилась принять расчёт. Деньги перечислены, распоряжение о подготовке вторжения отозвано. Советники покидают военные кабинеты без права вернуться туда по старым соглашениям.\n\nВ президиуме спорят, кто добился успеха. Штаб говорит о готовности армии, торговцы - о возможности провести платёж, партийные руководители - о единстве кабинета. Каждый прав лишь отчасти: без остальных его подпись ничего бы не стоила.\n\nНезависимость сохранена договором. Цена уже уплачена, но люди, которые помогли собрать большинство, остаются за столом. Следующие решения придётся принимать вместе с ними."
  ADISCORD_STP_pc.37.refused: "Северное соглашение не подписано. Нодрул либо отверг предложенные условия, либо к моменту ответа за ними уже не оказалось прежних денег и поддержки. Казна не выплатила компенсацию.\n\nПереговоры не остановили военные приготовления. Если северная угроза ещё действует, её прежний срок остаётся в силе. Кабинету придётся опираться на то снабжение, командование и внутренние договорённости, которые он успел создать."
@@ -3078,7 +3078,7 @@
  ADISCORD_STP_pc.38.joint: "Создать постоянное совместное бюро."
  ADISCORD_STP_pc.38.domestic: "Миссия обучает, наши штабы назначают."
  ADISCORD_STP_pc.39.t: "После чрезвычайного правления"
- ADISCORD_STP_pc.39.d: "В канцелярии убрали последнюю табличку с пометкой «временное управление». За ней остались те же кабинеты и многие из тех же людей, но теперь их полномочия опираются на принятые после войны решения.\n\n[STPGetPostwarCabinet]\n\n[STPGetPostwarCommand]\n\n[STPGetPostwarCredit]\n\n[STPGetPostwarNorth]\n\n[STPGetPostwarMission]\n\nПартия сохранила государство, распределив власть между теми, кто согласился его поддерживать. Завершение чрезвычайного правления закрепляет эту договорённость. Её участники сохраняют и свои учреждения, и память о сделанных уступках."
+ ADISCORD_STP_pc.39.d: "В канцелярии убрали последнюю табличку с пометкой «временное управление». За ней остались те же кабинеты и многие из тех же людей, но теперь их полномочия опираются на принятые после войны решения.\n\n[STPGetPostwarCabinet]\n\n[STPGetPostwarCommand]\n\n[STPGetPostwarCredit]\n\n[STPGetPostwarNorth]\n\n[STPGetPostwarMission]\n\nПартия сохранила государство, распределив власть между теми, кто согласился его поддерживать. Завершение чрезвычайного правления закрепляет эту договорённость. Её участники сохраняют и свои учреждения, и память о сделанных уступках.\n\n[STPGetPostwarConstitution]"
  ADISCORD_STP_pc.39.a: "Правительство приступает к обычной работе."
  STP_pw_party_cabinet_apparatus_status: "Кабинет опирается на консерваторов и кадровую преемственность."
  STP_pw_party_cabinet_districts_status: "Бороны вошли в кабинет как представители округов; их согласие стало частью управления."
@@ -3115,39 +3115,39 @@
  STP_operations_map_tt: "Стеландер, Кефрейт, Нодрул, Бежайск, Культ Детей Леса, Юбора, Вольный Фронтир и южные земли. Цвет каждого региона соответствует его текущему контролёру. Границы выделены на территории под управлением Стеландера; жёлтая штриховка обозначает разделённый контроль."
 
  STP_pw_party_revolution_capital: "Новая столица революции"
- STP_pw_party_revolution_capital_desc: "Революция пришла с севера, но партию спасли те, кто удержал Стеландер. Теперь Конгресс может говорить от её имени без разрешения прежнего покровителя. Мы поддержим радикалов-гедонистов и поставим под сомнение право нодрульских советников руководить нашим движением. Этот курс закрывает предложение о выкупе независимости; подготовка северного вторжения продолжится по прежнему сроку."
+ STP_pw_party_revolution_capital_desc: "Революция пришла с севера, но партию спасли те, кто удержал Стеландер. Конгресс больше не нуждается в разрешении прежнего покровителя, чтобы говорить от её имени. Теперь предстоит решить, кому принадлежит победа: Высшим Домам, сохранившим учреждения и собственность, или радикалам, требующим продолжения революции.\n\nНодрульские советники утратят прежний политический вес. Уже заключённый договор о независимости сохраняет силу; без него северная угроза продолжится по прежнему сроку. Дальнейшие отношения с Нодрулом и устройство нашего государства - отдельные вопросы."
  STP_pw_party_northern_contacts: "Связи с северными товарищами"
  STP_pw_party_northern_contacts_desc: "Не каждый нодрульский партийный работник считает нынешнее руководство единственным наследником революции. Через старые связи подготовим делегатов, связных и помещения для съезда. Программа требует отдельной оплаты и 21 дня работы; война с Нодрулом сама по себе её не отменяет."
  STP_pw_party_nod_congress: "Нодрульский съезд"
- STP_pw_party_nod_congress_desc: "Наши сторонники готовы предъявить северному руководству общий проект: партийное первенство переходит в Стеландер, а Нодрул сохраняет собственную администрацию под нашим верховенством. На ответ отводится 21 день. Согласие завершит нашу войну и сделает Нодрул марионеткой. Отказ откроет подготовку северной кампании. С этого съезда победа над Нодрулом в текущей войне также устанавливает его зависимость вместо белого мира."
+ STP_pw_party_nod_congress_desc: "Наши сторонники готовы предъявить северному руководству общий проект: партийное первенство переходит в Стеландер, а Нодрул сохраняет собственную администрацию под нашим верховенством. На ответ отводится 21 день. Согласие завершит нашу войну и установит в Нодруле подконтрольное правительство. Отказ откроет подготовку северной кампании. С этого съезда победа над Нодрулом в текущей войне также устанавливает его зависимость вместо белого мира."
  STP_pw_party_northern_campaign: "Северная кампания"
  STP_pw_party_northern_campaign_desc: "Нодрульское руководство отвергло условия съезда. Подготовим снабжение для принуждения к ним: оплачиваемая программа займёт 35 дней, даст Стеландеру 6000 винтовок, 60 единиц дополнительного оснащения и 20 опыта армии. После неё отдельным решением можно начать войну. Если Нодрул уже напал, поставки пойдут действующей армии; повторное объявление войны не требуется."
  STP_pw_party_former_patron: "Бывший покровитель"
  STP_pw_party_former_patron_desc: "Нодрул сохраняет своё государство, но больше не назначает цену нашей самостоятельности. Закрепим новые отношения через подготовку кадров и промышленный заказ. Стеландер оплатит программы из своей казны; оборудование и новое предприятие получит Нодрул."
- STP_pw_party_revolution_capital_tt: "Поддержка нодрульских советников: §R-12§!. Предложение выкупить независимость станет недоступно. Действующий срок северной угрозы не изменится."
+ STP_pw_party_revolution_capital_tt: "Поддержка нодрульских советников: §R-12§!. Откроется баланс сил «Будущее революции» между консерваторами и радикалами-гедонистами. Начальное положение учитывает их нынешнее влияние и принятые законы. Новое предложение выкупить независимость станет недоступно; заключённый договор сохранится. Действующий срок северной угрозы не изменится."
  STP_pw_party_revolution_no_compact_tt: "Соглашение о выкупе независимости не заключено и не находится на рассмотрении"
  STP_pw_party_northern_network_ready_tt: "Завершена оплаченная подготовка северных сторонников"
  STP_pw_party_nod_congress_refused_tt: "Нодрул отверг условия съезда или не ответил в срок"
  STP_pw_party_nod_congress_tt: "Нодрул получит предложение подчиниться Стеландеру и 21 день на ответ. Согласие завершит войну между нами; отказ откроет фокус «Северная кампания». После завершения этого фокуса капитуляция Нодрула перед нашими силами приведёт к его подчинению вместо белого мира. Переговоры не останавливают вторжение."
  STP_pw_party_nod_congress_refusal_tt: "Условия будут отклонены. Стеландер сможет подготовить северную кампанию; отказ сам по себе не объявляет войну."
- STP_pw_party_nod_subject_tt: "Война между Нодрулом и Стеландером завершится. Нодрул выйдет из прежнего альянса; возглавляемый им альянс будет распущен. Через один день Нодрул станет марионеткой Стеландера, если обе страны существуют и не подчинены третьей стороне."
+ STP_pw_party_nod_subject_tt: "Война между Нодрулом и Стеландером завершится. Нодрул выйдет из прежнего альянса; возглавляемый им альянс будет распущен. Через один день в Нодруле будет установлено подконтрольное Стеландеру правительство, если обе страны существуют и не подчинены третьей стороне."
  STP_pw_party_fund_northern_contacts: "Подготовить северных сторонников"
  STP_pw_party_fund_northern_contacts_desc: "За 21 день подготовим делегации и связь с северными партийными организациями. Это откроет фокус «Нодрульский съезд» и даст 20 гражданских разведданных о Нодруле. Цена: £political_power_texticon 35 и £ADISCORD_economy_treasury_texticon 540. При срыве программы казна возвращается, политвласть не возвращается."
- STP_pw_party_fund_northern_contacts_result_tt: "Через §Y21 день§!: подготовлены северные сторонники, открыт доступ к «Нодрульскому съезду»; гражданские разведданные о Нодруле: §G+20§!. При утрате самостоятельности любой из стран или её капитуляции программа отменяется с возвратом £ADISCORD_economy_treasury_texticon §Y540§!; политвласть не возвращается."
+ STP_pw_party_fund_northern_contacts_result_tt: "Через §Y21 день§!: подготовлены северные сторонники, открыт доступ к «Нодрульскому съезду»; гражданские разведданные о Нодруле: §G+20§!. При утрате самостоятельности любой из стран или её капитуляции программа отменяется с возвратом §Y540§! £ADISCORD_economy_treasury_texticon; политвласть не возвращается."
  STP_pw_party_prepare_northern_campaign: "Обеспечить северную кампанию"
  STP_pw_party_prepare_northern_campaign_desc: "За 35 дней Стеландер получит 6000 винтовок, 60 единиц дополнительного оснащения и 20 опыта армии. Подготовка разрешает отдельный приказ о наступлении, если войны ещё нет. Цена: £political_power_texticon 50 и £ADISCORD_economy_treasury_texticon 900. При отмене до доставки казна возвращается, политвласть не возвращается."
- STP_pw_party_prepare_northern_campaign_result_tt: "Через §Y35 дней§! Стеландер получит £infantry_equipment_texticon §G6000§!, дополнительное оснащение §G60§! и §G20§! опыта армии. Откроется приказ о наступлении, если войны ещё нет. При срыве программы возвращается £ADISCORD_economy_treasury_texticon §Y900§!; политвласть не возвращается."
+ STP_pw_party_prepare_northern_campaign_result_tt: "Через §Y35 дней§! Стеландер получит §G6000§! £infantry_equipment_texticon, дополнительное оснащение §G60§! и §G20§! опыта армии. Откроется приказ о наступлении, если войны ещё нет. При срыве программы возвращается §Y900§! £ADISCORD_economy_treasury_texticon; политвласть не возвращается."
  STP_pw_party_northern_work_available_tt: "Нужный фокус завершён; Стеландер и Нодрул существуют, независимы и не капитулировали. Другая северная программа не занимает бюджет, эта подготовка ещё не завершена; передача Нодрула под наше управление не началась"
  STP_pw_party_launch_northern_campaign: "Начать северную кампанию"
- STP_pw_party_launch_northern_campaign_desc: "Объявим Нодрулу войну за подчинение. Его капитуляция перед нашими силами установит марионеточное правительство. Если Нодрул уже начал вторжение, отдельное объявление не нужно: тот же исход действует в текущей войне после «Нодрульского съезда»."
+ STP_pw_party_launch_northern_campaign_desc: "Объявим Нодрулу войну за подчинение. Его капитуляция перед нашими силами установит подконтрольное правительство. Если Нодрул уже начал вторжение, отдельное объявление не нужно: тот же исход действует в текущей войне после «Нодрульского съезда»."
  STP_pw_party_launch_northern_campaign_available_tt: "Завершены фокус «Северная кампания» и оплаченная подготовка снабжения; обе страны независимы и не капитулировали, не воюют между собой и не состоят в одном альянсе"
- STP_pw_party_launch_northern_campaign_tt: "Стеландер объявит Нодрулу войну за подчинение. При победе Нодрул станет нашей марионеткой."
+ STP_pw_party_launch_northern_campaign_tt: "Стеландер объявит Нодрулу войну за подчинение. При победе Нодрул получит подконтрольное нам правительство."
  STP_pw_party_nod_joint_training: "Совместная подготовка командиров"
  STP_pw_party_nod_joint_training_desc: "Однократная программа: Стеландер оплатит £political_power_texticon 35 и £ADISCORD_economy_treasury_texticon 720. Обе страны получат по 15 опыта армии; Нодрул получит 6000 винтовок и 60 единиц дополнительного оснащения. Его казна и запасы не расходуются."
- STP_pw_party_nod_joint_training_available_tt: "Нодрул остаётся нашей марионеткой; обе страны не капитулировали, между ними нет войны"
+ STP_pw_party_nod_joint_training_available_tt: "Нодрул остаётся под нашим управлением; обе страны не капитулировали, между ними нет войны"
  STP_pw_party_nod_industrial_program: "Промышленный заказ Нодрулу"
  STP_pw_party_nod_industrial_program_desc: "Однократная программа: Стеландер оплатит £political_power_texticon 50 и £ADISCORD_economy_treasury_texticon 1350. В принадлежащей Нодрулу и контролируемой им области со свободным местом появится одна гражданская фабрика. Нодрул получит предприятие без списания средств из своей казны."
- STP_pw_party_nod_industrial_program_available_tt: "Нодрул остаётся нашей марионеткой и имеет принадлежащую ему контролируемую область со свободным местом для фабрики; обе страны не капитулировали, между ними нет войны"
+ STP_pw_party_nod_industrial_program_available_tt: "Нодрул остаётся под нашим управлением и имеет принадлежащую ему контролируемую область со свободным местом для фабрики; обе страны не капитулировали, между ними нет войны"
  ADISCORD_STP_pc.40.t: "Нодрульский съезд"
  ADISCORD_STP_pc.40.d: "Делегаты из Стеландера привезли решение своего Конгресса. Партия, пережившая гражданскую войну, больше не признаёт за нашим руководством исключительного права говорить от имени революции. Под требованием стоят и подписи северных товарищей: их связные уже несколько недель готовили этот съезд.\n\nНам предлагают сохранить местную администрацию, но передать политическое и военное первенство Стеландеру. Согласие означает зависимость от бывшего подопечного и выход из прежнего альянса; если мы возглавляем этот альянс, он будет распущен. Война со Стеландером, если она идёт, закончится.\n\nОтказ сохранит нашу самостоятельность сейчас, но даст стеландерскому правительству повод готовить кампанию за подчинение. Если война уже идёт, победители намерены установить эти условия силой. На ответ отведён 21 день; молчание будет сочтено отказом."
  ADISCORD_STP_pc.40.refuse: "Революция не нуждается в новом покровителе."
@@ -3156,22 +3156,22 @@
  ADISCORD_STP_pc.42.accepted: "Нодрул перешёл под верховенство Стеландера. Северная администрация продолжит управлять своей страной, но её внешняя политика и военные обязательства теперь зависят от нашего правительства. Прежняя система покровительства сменила направление.\n\nЗа политическим решением должна последовать работа. После закрепления нового порядка мы сможем оплатить совместную подготовку командиров и промышленный заказ для Нодрула. Эти расходы лягут на нашу казну; обещанные поставки и предприятие получит северный союзник."
  ADISCORD_STP_pc.42.refused: "Условия съезда остались без согласия северного правительства. Нодрул сохраняет самостоятельность, а наша партия теперь должна решить, готова ли добиваться его подчинения силой.\n\nШтаб может подготовить северную кампанию и оплатить снабжение. Если войны ещё нет, приказ о наступлении останется отдельным решением. Если нодрульские войска уже перешли границу, съезд определил наш ответ: добиваться капитуляции противника и зависимого правительства на севере."
  ADISCORD_STP_pc.42.a: "Продолжим."
- STP_pw_party_north_puppet_status: "Нодрул стал марионеткой Стеландера."
+ STP_pw_party_north_puppet_status: "В Нодруле действует подконтрольное Стеландеру правительство."
  STP_pw_party_north_transfer_status: "Оформляется подчинение Нодрула Стеландеру."
  STP_pw_party_north_congress_status: "Нодрул рассматривает условия съезда. Текущая война и срок вторжения не приостанавливаются."
  STP_pw_party_north_campaign_status: "Стеландер ведёт северную кампанию за подчинение Нодрула."
- STP_pw_party_fund_northern_contacts_cost: "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y540§!"
- STP_pw_party_fund_northern_contacts_cost_blocked: "§R35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R540§!"
- STP_pw_party_fund_northern_contacts_cost_tooltip: "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y540§!"
- STP_pw_party_prepare_northern_campaign_cost: "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y900§!"
- STP_pw_party_prepare_northern_campaign_cost_blocked: "§R50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R900§!"
- STP_pw_party_prepare_northern_campaign_cost_tooltip: "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y900§!"
- STP_pw_party_nod_joint_training_cost: "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y720§!"
- STP_pw_party_nod_joint_training_cost_blocked: "§R35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R720§!"
- STP_pw_party_nod_joint_training_cost_tooltip: "§Y35§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y720§!"
- STP_pw_party_nod_industrial_program_cost: "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y1350§!"
- STP_pw_party_nod_industrial_program_cost_blocked: "§R50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §R1350§!"
- STP_pw_party_nod_industrial_program_cost_tooltip: "§Y50§! £political_power_texticon £ADISCORD_economy_treasury_texticon §Y1350§!"
+ STP_pw_party_fund_northern_contacts_cost: "§Y35§! £political_power_texticon §Y540§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_fund_northern_contacts_cost_blocked: "§R35§! £political_power_texticon §R540§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_fund_northern_contacts_cost_tooltip: "§Y35§! £political_power_texticon §Y540§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_prepare_northern_campaign_cost: "§Y50§! £political_power_texticon §Y900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_prepare_northern_campaign_cost_blocked: "§R50§! £political_power_texticon §R900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_prepare_northern_campaign_cost_tooltip: "§Y50§! £political_power_texticon §Y900§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_joint_training_cost: "§Y35§! £political_power_texticon §Y720§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_joint_training_cost_blocked: "§R35§! £political_power_texticon §R720§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_joint_training_cost_tooltip: "§Y35§! £political_power_texticon §Y720§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_industrial_program_cost: "§Y50§! £political_power_texticon §Y1350§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_industrial_program_cost_blocked: "§R50§! £political_power_texticon §R1350§! £ADISCORD_economy_treasury_texticon"
+ STP_pw_party_nod_industrial_program_cost_tooltip: "§Y50§! £political_power_texticon §Y1350§! £ADISCORD_economy_treasury_texticon"
  ADISCORD_STP_preparation.28.t: "Последняя смена"
  ADISCORD_STP_preparation.28.good: "К концу смены мастер впервые за несколько недель не искал детали по соседним цехам. Новый подшипник пришёл со склада вовремя, зарплату перечислили утром, а один из старых прессов снова работал без подпорки из сваренного лома. Рабочие всё равно ругались на нормы и жару, но сегодня завод хотя бы не требовал от них ежедневного чуда."
  ADISCORD_STP_preparation.28.bad: "За полчаса до конца смены снова встал пресс. Нужной детали на складе не было, поэтому мастер отправил ученика искать подходящий узел среди списанного оборудования. Зарплата пришла, но цены у заводской лавки успели вырасти раньше. Никто не называл это катастрофой. В Стеландере плохой месяц выглядел именно так: работа продолжалась, только всё держалось на проволоке, знакомых и ещё одной отсрочке."
@@ -3229,3 +3229,70 @@
  STP_pw_party_veteran_reserve_desc: "Опытные сержанты и младшие командиры станут инструкторами резервных подразделений. Их служба позволит быстрее готовить пополнение для регулярной армии. Выбрав этот порядок, президиум откажется от общей программы переподготовки фронтовиков для гражданских предприятий."
  STP_pw_party_social_guarantees: "Закрепить социальные гарантии"
  STP_pw_party_social_guarantees_desc: "Пенсионные списки составлены, а судьба демобилизованных определена. Закрепим принятые обязательства в обычной работе окружных органов. Победа партии получит для семей конкретное содержание: положенную помощь, понятное место службы или возможность вернуться к мирному труду."
+
+ # Postwar party constitution and special laws
+ STP_pw_party_no_pending_compact_tt: "Предложение о выкупе независимости не находится на рассмотрении"
+ STP_pw_party_laws_unlocked_tt: "Откроются особые законы победившей партии: «Закон о рабстве» в трудовой политике, общественные порядки в культурной политике и отдельное законодательство об обороте наркотиков. Каждый закон принимается за политическую власть и имеет собственные условия."
+ STP_drug_policy_laws: "Оборот наркотиков"
+ STP_drug_policy_laws_desc: "Правила производства, продажи и медицинского применения наркотических веществ. Специальные законы революционной партии открываются после её победы."
+ STP_law_slavery: "Закон о рабстве"
+ STP_law_slavery_desc: "Закон признаёт человека собственностью и передаёт домам и предприятиям право покупать и использовать подневольный труд. Производство и доходы собственников растут ценой общественного недовольства и расходов на поддержание принуждения. Закон требует поддержки боронов и торговцев."
+ STP_law_slavery_support_tt: "Поддержка боронов и торговцев составляет не менее §Y50§! у каждой группы"
+ STP_law_public_orgies: "Публичные оргии"
+ STP_law_public_orgies_desc: "Правительство разрешает публичные оргии и открытые празднества для совершеннолетних. Радикалы объявляют это разрывом с закрытой культурой старых домов; консерваторы видят в решении утрату общественных границ. Организация празднеств увеличивает социальные расходы.\n\nВо время выбора будущего революции этот закон даёт §Y15 п.п.§! в сторону радикалов. Отмена закона убирает его вклад."
+ STP_law_private_societies: "Закрытые увеселительные общества"
+ STP_law_private_societies_desc: "Увеселительная жизнь сосредоточена в частных клубах и обществах, доступ в которые определяют их покровители. Высшие Дома сохраняют привычные привилегии, а государство предоставляет этим учреждениям налоговые послабления.\n\nВо время выбора будущего революции этот закон даёт §Y15 п.п.§! в сторону консерваторов. Отмена закона убирает его вклад."
+ STP_law_light_drugs: "Легализация лёгких наркотиков"
+ STP_law_light_drugs_desc: "Лицензированные продавцы могут торговать лёгкими наркотиками. Тяжёлые вещества остаются под запретом. Легальный рынок приносит умеренный доход, требуя надзора и дополнительных расходов на лечение.\n\nВо время выбора будущего революции этот закон даёт §Y15 п.п.§! в сторону консерваторов. Отмена закона убирает его вклад."
+ STP_law_hard_drugs: "Легализация тяжёлых наркотиков"
+ STP_law_hard_drugs_desc: "Правительство распространяет разрешённый оборот на тяжёлые наркотики. Торговые дома получают более широкий рынок; система здравоохранения принимает новые расходы, а предприятия сталкиваются с потерями производительности. Лёгкие вещества также остаются разрешены.\n\nВо время выбора будущего революции этот закон даёт §Y15 п.п.§! в сторону радикалов. Отмена закона убирает его вклад."
+ STP_law_drug_prohibition: "Запрет свободного оборота"
+ STP_law_drug_prohibition_desc: "Продажа наркотиков вне медицинского применения запрещена. Надзор требует расходов на управление. Этот закон не поддерживает ни одну сторону в споре о будущем революции."
+ STP_pw_party_radical_support_tt: "Поддержка радикалов-гедонистов составляет не менее §Y40§!"
+ STP_party_constitution: "Будущее революции"
+ STP_party_conservatives_side: "Консерваторы"
+ STP_party_radicals_side: "Радикалы-гедонисты"
+ STP_party_constitution_contested: "Спор о наследии революции"
+ STP_party_conservatives_influence: "Преимущество Высших Домов"
+ STP_party_conservatives_mandate: "Мандат консерваторов"
+ STP_party_radicals_influence: "Преимущество радикалов"
+ STP_party_radicals_mandate: "Мандат радикалов"
+ STP_party_constitution_category: "Будущее революции"
+ STP_party_constitution_category_desc: "Баланс учитывает разницу влияния радикалов и консерваторов в партии. Действующие культурный закон и закон об обороте наркотиков добавляют по 15 п.п. своей стороне. Смена закона заменяет его вклад. Переговоры с любой из семи партийных групп могут изменить соотношение влияния.\n\nДля окончательного выбора нужны §Y50%§! перевеса нужной стороны, поддержка этой группы не ниже §Y60§! и оба закона её программы. Завершите фокус «Власть Высших Домов» или «Революция без ограничений». После этого политический итог закреплён."
+ STP_pw_party_back_conservatives: "Заручиться поддержкой Высших Домов"
+ STP_pw_party_back_conservatives_desc: "Провести назначения и согласовать программу с консерваторами. Использует общий для переговоров с партийными группами перерыв в 30 дней. Текущее влияние фракций сразу отразится на балансе сил."
+ STP_pw_party_back_radicals: "Созвать делегатов радикального крыла"
+ STP_pw_party_back_radicals_desc: "Предоставить радикалам места в учреждениях и согласовать программу продолжения революции. Использует общий для переговоров с партийными группами перерыв в 30 дней. Текущее влияние фракций сразу отразится на балансе сил."
+ STP_pw_party_high_houses: "Власть Высших Домов"
+ STP_pw_party_high_houses_desc: "Стеландер станет новым центром революции, сохранив её аристократическое устройство. Высшие Дома закрепят контроль над назначениями, собственностью и общественными учреждениями. Закрытые увеселительные общества останутся привилегией признанного круга; разрешённый оборот наркотиков ограничится лёгкими веществами. Консерваторы считают такой порядок выполнением первоначального обещания революции: благополучие без утраты власти."
+ STP_pw_party_unbound_revolution: "Революция без ограничений"
+ STP_pw_party_unbound_revolution_desc: "Радикалы получили достаточно влияния, чтобы продолжить революцию от имени Стеландера. Открытые празднества и публичные оргии получат государственное признание, а легальный оборот будет распространён на тяжёлые наркотики. Старые Дома сохранят собственность, но утратят исключительное право определять общественные порядки. Конгресс принимает вместе с этой программой её доходы, расходы и противоречия."
+ STP_pw_party_conservatives_mandate_tt: "Поддержка консерваторов составляет не менее §Y60§!"
+ STP_pw_party_radicals_mandate_tt: "Поддержка радикалов-гедонистов составляет не менее §Y60§!"
+ STP_pw_party_constitution_settled_tt: "Этот политический итог станет окончательным. Противоположный завершающий фокус и его особые законы будут закрыты. Партийные группы продолжат участвовать в управлении."
+ STP_pw_party_high_houses_government: "Правительство Высших Домов"
+ STP_pw_party_high_houses_government_desc: "Консервативное большинство закрепило порядок назначений и подчинило послевоенные учреждения Высшим Домам. Нодрульское покровительство сменилось самостоятельной аристократической властью."
+ STP_pw_party_unbound_government: "Правительство продолжения революции"
+ STP_pw_party_unbound_government_desc: "Радикальное большинство открывает новые рынки и отстаивает принятую общественную программу. Стеландер претендует на роль самостоятельного центра гедонистического движения."
+ STP_pw_party_constitution_protectorate_status: "Стеландер принял северное покровительство и остаётся марионеткой Нодрула."
+ STP_pw_party_constitution_conservative_status: "Самостоятельный Стеландер закрепил власть Высших Домов и консервативную программу революции."
+ STP_pw_party_constitution_radical_status: "Самостоятельный Стеландер принял программу радикалов-гедонистов: революция без ограничений."
+ STP_pw_party_constitution_open_status: "Окончательный послевоенный политический курс ещё не закреплён."
+ STP_pw_party_northern_patron_lost: "Северное покровительство прекратилось"
+ ADISCORD_STP_pc.47.t: "Новая родина революции"
+ ADISCORD_STP_pc.47.d: "На торжественном заседании президиума Стеландер провозглашён новой родиной революции. Над правительственными зданиями поднято новое знамя: белое солнце в золотом лавровом венке, синее поле и бордовая диагональ. Партийное руководство объявило, что победа в гражданской войне даёт ему право самостоятельно определять будущее движения.\n\nСеверная традиция сохраняет место в официальной истории, однако её прежние наставники больше не признаются безусловными арбитрами. Для зависимых от Стеландера правительств утверждено старое, более скромное знамя республики. Теперь именно столица Стеландера намерена определять политический курс своих последователей.\n\nВнутри партии единства пока нет. Консерваторы требуют закрепить порядок и привилегии влиятельных домов; радикалы настаивают на продолжении общественного переворота. Спор о том, какой станет новая родина революции, только начинается."
+ ADISCORD_STP_pc.47.stelander: "Теперь будущее движения решается здесь."
+ ADISCORD_STP_pc.47.foreign: "У революции появился новый центр."
+ STP_revolution_capital: "Стеландер"
+ STP_revolution_capital_DEF: "Стеландер"
+ STP_revolution_capital_ADJ: "Стеландерск"
+ NOD_STP_revolution: "Нодрул"
+ NOD_STP_revolution_DEF: "Нодрул"
+ NOD_STP_revolution_ADJ: "Нодрульск"
+ VAL_STP_revolution: "Кефрейт"
+ VAL_STP_revolution_DEF: "Кефрейт"
+ VAL_STP_revolution_ADJ: "Кефрейтск"
+ BJK_STP_revolution: "Бежайск"
+ BJK_STP_revolution_DEF: "Бежайск"
+ BJK_STP_revolution_ADJ: "Бежайск"
+ STP_pc_sotnikov_staff_seat_tt: "Для назначения Сотникова требуется свободное место в высшем командовании. Пока идёт фокус, оставьте одно из трёх мест свободным."

@@ -553,7 +553,6 @@ on_actions = {
 					ROOT = {
 						tag = VAL
 						has_war_with = STP
-						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
 					}
 					STP = {
 						exists = yes
@@ -564,6 +563,7 @@ on_actions = {
 					FROM = { OR = { tag = STP is_subject_of = STP } }
 				}
 				set_global_flag = skip_default_capitulation
+				ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved days = 2 } }
 				STP = { STP_pw_party_settle_kefreyt_victory = yes }
 				clr_global_flag = skip_default_capitulation
 			}
@@ -1067,9 +1067,18 @@ on_actions = {
 				limit = {
 					ROOT = { tag = NOD has_war_with = STP }
 					STP = { has_country_flag = STP_pw_party_nod_invasion_active has_war_with = NOD }
+					FROM = { OR = { tag = STP is_subject_of = STP } }
 				}
 				set_global_flag = skip_default_capitulation
 				STP = { STP_pw_party_settle_nod_invasion_defeat = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = NOD }
+					STP = { has_country_flag = STP_pw_party_nod_invasion_active }
+					FROM = { NOT = { OR = { tag = STP is_subject_of = STP } } }
+				}
+				STP = { STP_pw_party_close_nod_invasion_after_foreign_defeat = yes }
 			}
 			else_if = {
 				limit = { ROOT = { has_country_flag = STP_cw_northern_capitulation_pending } }
@@ -1290,8 +1299,13 @@ on_actions = {
 			# END kefreyt:on_capitulation
 
 			# BEGIN frontier:on_capitulation
-			# The Party's dedicated Kefreyt settlement is fully applied in
-			# on_capitulation_immediate. No mutable relation is reconstructed here.
+			# White peace removes the war relation; consume the immediate callback's
+			# receipt so the generic fallback cannot annex the future subject.
+			if = {
+				limit = { ROOT = { has_country_flag = STP_pw_party_kefreyt_capitulation_reserved } }
+				ROOT = { clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved }
+				set_global_flag = skip_default_capitulation
+			}
 			# END frontier:on_capitulation
 
 			# BEGIN rin:on_capitulation

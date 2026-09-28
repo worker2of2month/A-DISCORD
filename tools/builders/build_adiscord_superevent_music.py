@@ -22,7 +22,7 @@ def build(root: Path, output: Path) -> list[Path]:
         subprocess.run(
             ["ffmpeg", "-v", "error", "-y", *inputs, *filters,
              "-map_metadata", "-1", "-fflags", "+bitexact", "-flags:a", "+bitexact",
-             "-c:a", "libvorbis", "-q:a", "6", str(target)], check=True,
+             "-ar", "44100", "-c:a", "libvorbis", "-q:a", "6", str(target)], check=True,
         )
         results.append(target)
 

@@ -7,6 +7,45 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_small_country_oobs_receive_common_equipment_before_loading(self):
+        for tag in ("IVN", "WIT", "BTL"):
+            path = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))
+            history = path.read_text(encoding="utf-8-sig")
+            grant = "ADISCORD_grant_technology_profile_common = yes"
+            self.assertIn(grant, history, tag)
+            self.assertLess(history.index(grant), history.index("oob ="), tag)
+
+    def test_nam_starting_fleet_uses_a_built_nam_port(self):
+        ports = set()
+        for path in (ROOT / "history/states").glob("*.txt"):
+            text = path.read_text(encoding="utf-8-sig")
+            if re.search(r"\bowner\s*=\s*NAM\b", text):
+                ports.update(re.findall(r"\b(\d+)\s*=\s*\{\s*naval_base\s*=\s*[1-9]", text))
+        oob = (ROOT / "history/units/NAM.txt").read_text(encoding="utf-8")
+        for port in re.findall(r"\bnaval_base\s*=\s*(\d+)", oob):
+            self.assertIn(port, ports)
+
+    def test_main_menu_music_resolves_inside_music_replacement(self):
+        assets = "\n".join(path.read_text(encoding="utf-8-sig") for path in (ROOT / "music").glob("*.asset"))
+        theme = re.search(r'name\s*=\s*"maintheme"\s+file\s*=\s*"([^"]+)"', assets)
+        self.assertIsNotNone(theme, "native main-menu music must have an explicit asset")
+        self.assertTrue((ROOT / "music" / theme[1]).is_file())
+
+    def test_operation_phase_references_resolve_in_effective_database(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, walk
+
+        base = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
+        descriptor = (ROOT / "descriptor.mod").read_text(encoding="utf-8")
+        phases = {}
+        if 'replace_path="common/operation_phases"' not in descriptor:
+            phases.update({path.name: path for path in (base / "common/operation_phases").glob("*.txt")})
+        phases.update({path.name: path for path in (ROOT / "common/operation_phases").glob("*.txt")})
+        defined = {entry.key for path in phases.values() for entry in entries(str(path))}
+        used = {child.key for path in (ROOT / "common/operations").glob("*.txt")
+                for entry in walk(entries(str(path))) if entry.key == "phases"
+                for child in entry.value}
+        self.assertFalse(used - defined, sorted(used - defined))
+
     def test_val_focus_unlocks_and_ultimatum_resolve(self):
         from tools.tests.test_adiscord_stp_preparation import entries
 

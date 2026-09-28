@@ -403,6 +403,9 @@ STP_party_reconstruction_plan = {
 
 		STP_pw_party_northern_protocol
 		STP_pw_party_sovereignty
+		STP_pw_party_revolution_capital
+		STP_pw_party_high_houses
+		STP_pw_party_unbound_revolution
 		STP_pw_party_protectorate
 		STP_pw_party_domestic_pattern
 		STP_pw_party_nod_military_mission

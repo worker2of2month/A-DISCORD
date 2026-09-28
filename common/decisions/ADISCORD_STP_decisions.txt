@@ -2995,12 +2995,12 @@ STP_cw_war_council = {
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_kefreyt_available_tt STP_pw_party_can_attack_kefreyt = yes } }
 		cost = 0
 		complete_effect = {
-			effect_tooltip = { declare_war_on = { target = VAL type = annex_everything } }
+			effect_tooltip = { declare_war_on = { target = VAL type = puppet_wargoal_focus } }
 			hidden_effect = {
 				if = {
 					limit = { has_completed_focus = STP_pw_party_kefreyt_campaign STP_pw_party_can_attack_kefreyt = yes }
 					set_country_flag = STP_pw_party_kefreyt_campaign_active
-					declare_war_on = { target = VAL type = annex_everything }
+					declare_war_on = { target = VAL type = puppet_wargoal_focus }
 				}
 			}
 		}
@@ -7991,5 +7991,85 @@ STP_hegemony_administration = {
 			}
 		}
 		ai_will_do = { base = 4 }
+	}
+}
+
+STP_party_constitution_category = {
+	STP_pw_party_back_conservatives = {
+		icon = generic_political_pressure
+		visible = { STP_pw_party_constitution_open = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pf_conservatives_room_tt
+				OR = {
+					check_variable = {
+						var = STP_pf_conservatives_influence
+						value = 60
+						compare = less_than
+					}
+					check_variable = {
+						var = STP_pf_conservatives_support
+						value = 60
+						compare = less_than
+					}
+				}
+			}
+		}
+		cost = 35
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown days = 30 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 5
+				check_variable = { var = STP_pf_conservatives_influence value = STP_pf_radicals_influence compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	STP_pw_party_back_radicals = {
+		icon = generic_political_pressure
+		visible = { STP_pw_party_constitution_open = yes }
+		available = { STP_pf_can_negotiate = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_pf_radicals_room_tt
+				OR = {
+					check_variable = {
+						var = STP_pf_radicals_influence
+						value = 60
+						compare = less_than
+					}
+					check_variable = {
+						var = STP_pf_radicals_support
+						value = 60
+						compare = less_than
+					}
+				}
+			}
+		}
+		cost = 35
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pf_shift = yes
+				set_country_flag = { flag = STP_pf_negotiation_cooldown days = 30 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 5
+				check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
+			}
+		}
 	}
 }

@@ -162,3 +162,8 @@ STP_hegemony_administration = {
 	}
 	visible_when_empty = no
 }
+
+STP_party_constitution_category = {
+	allowed = { tag = STP }
+	visible = { has_power_balance = { id = STP_party_constitution } }
+}

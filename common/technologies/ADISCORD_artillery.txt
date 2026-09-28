@@ -298,9 +298,6 @@ technologies = {
 	}
 
 	ADISCORD_tech_railway_gun_reactivation = {
-		railway_gun = {
-			reliability = 0.03
-		}
 		path = {
 			leads_to_tech = ADISCORD_tech_recoil_braced_firing_sidings
 			research_cost_coeff = 1
@@ -309,6 +306,17 @@ technologies = {
 			ADISCORD_tech_armored_rail_convoys = 1
 		}
 		enable_equipments = { railway_gun_equipment_1 }
+		on_research_complete = {
+			add_equipment_bonus = {
+				name = ADISCORD_tech_railway_gun_reactivation
+				bonus = {
+					railway_gun_equipment = {
+						reliability = 0.03
+					}
+				}
+			}
+		}
+		show_effect_as_desc = yes
 		research_cost = 2.05
 		start_year = 2161
 		folder = {
@@ -326,14 +334,22 @@ technologies = {
 	}
 
 	ADISCORD_tech_recoil_braced_firing_sidings = {
-		railway_gun = {
-			railway_gun_attack = 0.05
-			reliability = 0.02
-		}
 		path = {
 			leads_to_tech = ADISCORD_tech_active_suspension_gun_carriages
 			research_cost_coeff = 1
 		}
+		on_research_complete = {
+			add_equipment_bonus = {
+				name = ADISCORD_tech_recoil_braced_firing_sidings
+				bonus = {
+					railway_gun_equipment = {
+						railway_gun_attack = 0.05
+						reliability = 0.02
+					}
+				}
+			}
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.383
 		start_year = 2163
 		folder = {
@@ -351,14 +367,22 @@ technologies = {
 	}
 
 	ADISCORD_tech_active_suspension_gun_carriages = {
-		railway_gun = {
-			maximum_speed = 0.05
-			reliability = 0.04
-		}
 		path = {
 			leads_to_tech = ADISCORD_tech_over_the_horizon_fire_control
 			research_cost_coeff = 1
 		}
+		on_research_complete = {
+			add_equipment_bonus = {
+				name = ADISCORD_tech_active_suspension_gun_carriages
+				bonus = {
+					railway_gun_equipment = {
+						maximum_speed = 0.05
+						reliability = 0.04
+					}
+				}
+			}
+		}
+		show_effect_as_desc = yes
 		research_cost = 1.63
 		start_year = 2172
 		folder = {
@@ -376,15 +400,23 @@ technologies = {
 	}
 
 	ADISCORD_tech_over_the_horizon_fire_control = {
-		railway_gun = {
-			railway_gun_attack = 0.08
-			reliability = 0.04
-		}
 		enable_equipments = { ADISCORD_railway_gun_equipment_2200 }
 		enable_building = {
 			building = mega_gun_emplacement
 			level = 1
 		}
+		on_research_complete = {
+			add_equipment_bonus = {
+				name = ADISCORD_tech_over_the_horizon_fire_control
+				bonus = {
+					railway_gun_equipment = {
+						railway_gun_attack = 0.08
+						reliability = 0.04
+					}
+				}
+			}
+		}
+		show_effect_as_desc = yes
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
@@ -410,6 +442,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_shaped_charges
 			research_cost_coeff = 1
 		}
+		enable_equipments = { ADISCORD_anti_tank_equipment_2163 }
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -417,7 +450,7 @@ technologies = {
 			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
-			factor = 25
+			factor = 33.75
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -501,15 +534,14 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_coil_at_systems
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_anti_tank_equipment_2163 }
-		research_cost = 2.05
+		research_cost = 1.378
 		start_year = 2161
 		folder = {
 			name = artillery_folder
 			position = { x = -3 y = 6 }
 		}
 		ai_will_do = {
-			factor = 27
+			factor = 20
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -678,6 +710,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_radar_laying
 			research_cost_coeff = 1
 		}
+		enable_equipments = { ADISCORD_anti_air_equipment_2163 }
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
@@ -685,7 +718,7 @@ technologies = {
 			position = { x = 0 y = 0 }
 		}
 		ai_will_do = {
-			factor = 25
+			factor = 33.75
 			modifier = {
 				factor = 1.25
 				has_war = yes
@@ -803,7 +836,6 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_high_energy_laser_turrets
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_anti_air_equipment_2163 }
 		enable_building = {
 			building = anti_air_building
 			level = 3
@@ -815,7 +847,7 @@ technologies = {
 			position = { x = -3 y = 8 }
 		}
 		ai_will_do = {
-			factor = 32.4
+			factor = 24
 			modifier = {
 				factor = 1.25
 				has_war = yes

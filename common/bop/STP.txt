@@ -75,3 +75,43 @@ STP_shabrat_election_legitimacy = {
 		}
 	}
 }
+
+STP_party_constitution = {
+	initial_value = 0
+	left_side = STP_party_conservatives_side
+	right_side = STP_party_radicals_side
+	decision_category = STP_party_constitution_category
+	range = {
+		id = STP_party_constitution_contested
+		min = -0.10
+		max = 0.10
+	}
+	side = {
+		id = STP_party_conservatives_side
+		icon = GFX_bop_STP_conservatives
+		range = {
+			id = STP_party_conservatives_influence
+			min = -0.50
+			max = -0.10
+		}
+		range = {
+			id = STP_party_conservatives_mandate
+			min = -1.00
+			max = -0.50
+		}
+	}
+	side = {
+		id = STP_party_radicals_side
+		icon = GFX_bop_STP_radicals
+		range = {
+			id = STP_party_radicals_influence
+			min = 0.10
+			max = 0.50
+		}
+		range = {
+			id = STP_party_radicals_mandate
+			min = 0.50
+			max = 1.00
+		}
+	}
+}

@@ -791,3 +791,20 @@ defined_text = {
 	text = { trigger = { has_completed_focus = STP_ROTATE_DISTRICT_COMMAND } localization_key = STP_pw_party_promise_rotation }
 	text = { localization_key = STP_pw_party_promise_emergency }
 }
+
+defined_text = {
+	name = STPGetPostwarConstitution
+	text = {
+		trigger = { is_subject_of = NOD }
+		localization_key = STP_pw_party_constitution_protectorate_status
+	}
+	text = {
+		trigger = { has_completed_focus = STP_pw_party_high_houses }
+		localization_key = STP_pw_party_constitution_conservative_status
+	}
+	text = {
+		trigger = { has_completed_focus = STP_pw_party_unbound_revolution }
+		localization_key = STP_pw_party_constitution_radical_status
+	}
+	text = { localization_key = STP_pw_party_constitution_open_status }
+}

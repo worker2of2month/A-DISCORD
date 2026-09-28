@@ -42,6 +42,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Kirill_Voron
+				small = GFX_portrait_VAL_Kirill_Voron
 			}
 		}
 		corps_commander = {
@@ -53,6 +54,16 @@ characters = {
 			logistics_skill = 1
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = army_chief
+			idea_token = VAL_Voron_army_chief
+			allowed = { original_tag = VAL }
+			available = { has_completed_focus = VAL_Vorons_Companies }
+			traits = { army_chief_maneuver_2 }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	VAL_Erika_Stahl = {
@@ -60,6 +71,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Erika_Stahl
+				small = GFX_portrait_VAL_Erika_Stahl
 			}
 		}
 		field_marshal = {
@@ -71,6 +83,16 @@ characters = {
 			logistics_skill = 2
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = army_chief
+			idea_token = VAL_Stahl_army_chief
+			allowed = { original_tag = VAL }
+			available = { has_completed_focus = VAL_Stahls_Schedules }
+			traits = { army_chief_organizational_2 }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	VAL_Boris_Gromov = {
@@ -78,6 +100,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Boris_Gromov
+				small = GFX_portrait_VAL_Boris_Gromov
 			}
 		}
 		corps_commander = {
@@ -89,6 +112,16 @@ characters = {
 			logistics_skill = 1
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = army_chief
+			idea_token = VAL_Gromov_army_chief
+			allowed = { original_tag = VAL }
+			available = { has_completed_focus = VAL_Gromovs_Assault_Tables }
+			traits = { army_chief_offensive_2 }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	VAL_Renata_Morn = {
@@ -96,6 +129,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Renata_Morn
+				small = GFX_portrait_VAL_Renata_Morn
 			}
 		}
 		corps_commander = {
@@ -107,6 +141,16 @@ characters = {
 			logistics_skill = 3
 			legacy_id = -1
 		}
+
+		advisor = {
+			slot = theorist
+			idea_token = VAL_Morn_theorist
+			allowed = { original_tag = VAL }
+			available = { has_completed_focus = VAL_Morns_Supply_Trains }
+			traits = { ADISCORD_staff_morn_theorist }
+			cost = 150
+			ai_will_do = { factor = 2 }
+		}
 	}
 
 	VAL_Aleksei_Veyr = {
@@ -116,15 +160,6 @@ characters = {
 				large = GFX_portrait_VAL_Aleksei_Veyr
 			}
 		}
-		corps_commander = {
-			traits = { trickster }
-			skill = 4
-			attack_skill = 5
-			defense_skill = 2
-			planning_skill = 4
-			logistics_skill = 1
-			legacy_id = -1
-		}
 	}
 
 	VAL_Maksim_Korvin = {
@@ -133,15 +168,6 @@ characters = {
 			army = {
 				large = GFX_portrait_VAL_Maksim_Korvin
 			}
-		}
-		corps_commander = {
-			traits = { aggressive_assaulter }
-			skill = 4
-			attack_skill = 3
-			defense_skill = 5
-			planning_skill = 2
-			logistics_skill = 4
-			legacy_id = -1
 		}
 	}
 
@@ -166,15 +192,6 @@ characters = {
 				large = GFX_portrait_VAL_Dmitri_Karsov
 			}
 		}
-		field_marshal = {
-			traits = { panzer_leader }
-			skill = 5
-			attack_skill = 6
-			defense_skill = 4
-			planning_skill = 5
-			logistics_skill = 3
-			legacy_id = -1
-		}
 	}
 
 	VAL_Leonid_Vargan = {
@@ -184,15 +201,6 @@ characters = {
 				large = GFX_portrait_VAL_Leonid_Vargan
 			}
 		}
-		field_marshal = {
-			traits = { winter_expert }
-			skill = 6
-			attack_skill = 4
-			defense_skill = 6
-			planning_skill = 5
-			logistics_skill = 4
-			legacy_id = -1
-		}
 	}
 
 	VAL_Sergei_Volkov = {
@@ -201,15 +209,6 @@ characters = {
 			army = {
 				large = GFX_portrait_VAL_Sergei_Volkov
 			}
-		}
-		field_marshal = {
-			traits = { offensive_doctrine logistics_wizard }
-			skill = 6
-			attack_skill = 6
-			defense_skill = 5
-			planning_skill = 6
-			logistics_skill = 5
-			legacy_id = -1
 		}
 	}
     CIN_VAL_commission = { name = CIN_VAL_commission portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } } country_leader = { ideology = contractual_etatism expire = "2200.1.1.1" id = -1 } }

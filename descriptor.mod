@@ -10,6 +10,7 @@ tags={
 name="Abyss of Discord"
 replace_path="gfx/loadingscreens"
 replace_path="events"
+replace_path="music"
 replace_path="history/states"
 replace_path="history/countries"
 replace_path="history/units"

@@ -379,6 +379,7 @@ focus_tree = {
 			base = 1
 		}
 		completion_reward = {
+			activate_advisor = VAL_Voron_army_chief
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_vorons_delta } }
 			add_command_power = 20
 			hidden_effect = {
@@ -405,6 +406,7 @@ focus_tree = {
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 14990 } }
 		}
 		completion_reward = {
+			activate_advisor = VAL_Stahl_army_chief
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_stahls_delta } }
 			army_experience = 15
 			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = VAL }
@@ -432,6 +434,7 @@ focus_tree = {
 			modifier = { factor = 3 NOT = { has_equipment = { infantry_equipment < 20000 } } }
 		}
 		completion_reward = {
+			activate_advisor = VAL_Gromov_army_chief
 			add_manpower = 6000
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 200 producer = VAL }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_gromovs_delta } }
@@ -456,6 +459,7 @@ focus_tree = {
 		}
 		ai_will_do = { base = 1 }
 		completion_reward = {
+			activate_advisor = VAL_Morn_theorist
 			custom_effect_tooltip = VAL_focus_progression_VAL_Morns_Supply_Trains_tt
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_equipment_to_stockpile = { type = support_equipment amount = 400 producer = VAL }
@@ -1114,7 +1118,16 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = VAL_Border_Survey_Corps }
 		completion_reward = {
-			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Aleksei_Veyr } } } recruit_character = VAL_Aleksei_Veyr }
+			add_corps_commander_role = {
+				character = VAL_Aleksei_Veyr
+				traits = { trickster }
+				skill = 4
+				attack_skill = 5
+				defense_skill = 2
+				planning_skill = 4
+				logistics_skill = 1
+				legacy_id = -1
+			}
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_contractor_officers_delta } }
 			VAL_apply_contract_army_2 = yes
 			hidden_effect = {
@@ -1276,7 +1289,16 @@ focus_tree = {
 
 			custom_effect_tooltip = VAL_qol_elite_army_tt
 
-			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Dmitri_Karsov } } } recruit_character = VAL_Dmitri_Karsov }
+			add_field_marshal_role = {
+				character = VAL_Dmitri_Karsov
+				traits = { panzer_leader }
+				skill = 5
+				attack_skill = 6
+				defense_skill = 4
+				planning_skill = 5
+				logistics_skill = 3
+				legacy_id = -1
+			}
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_general_staff_delta } }
 			VAL_apply_contract_army_3 = yes
@@ -1867,7 +1889,16 @@ focus_tree = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Army_Of_The_Ledger_tt
 			unlock_decision_tooltip = VAL_launch_national_recruitment
 			VAL_reform_mercenary_payroll = yes
-			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Maksim_Korvin } } } recruit_character = VAL_Maksim_Korvin }
+			add_corps_commander_role = {
+				character = VAL_Maksim_Korvin
+				traits = { aggressive_assaulter }
+				skill = 4
+				attack_skill = 3
+				defense_skill = 5
+				planning_skill = 2
+				logistics_skill = 4
+				legacy_id = -1
+			}
 			add_power_balance_value = { id = VAL_command_balance value = -0.1 }
 			VAL_apply_contract_army_3 = yes
 			army_experience = 15
@@ -2850,7 +2881,16 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = VAL_supply_base_secured_tt VAL_supply_base_secured = yes } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_New_Supply_Base_tt
-			if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Leonid_Vargan } } } recruit_character = VAL_Leonid_Vargan }
+			add_field_marshal_role = {
+				character = VAL_Leonid_Vargan
+				traits = { winter_expert }
+				skill = 6
+				attack_skill = 4
+				defense_skill = 6
+				planning_skill = 5
+				logistics_skill = 4
+				legacy_id = -1
+			}
 			remove_ideas = VAL_vorkerland_metal_shortage
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
@@ -3141,7 +3181,20 @@ focus_tree = {
 		prerequisite = { focus = VAL_Army_Of_The_Ledger }
 		available = { custom_trigger_tooltip = { tooltip = VAL_campaign_objectives_tt VAL_campaign_objectives_met = yes } }
 		cancel_if_invalid = yes
-		completion_reward = { if = { limit = { hidden_trigger = { NOT = { has_character = VAL_Sergei_Volkov } } } recruit_character = VAL_Sergei_Volkov } army_experience = 25 add_command_power = 25 }
+		completion_reward = {
+			add_field_marshal_role = {
+				character = VAL_Sergei_Volkov
+				traits = { offensive_doctrine logistics_wizard }
+				skill = 6
+				attack_skill = 6
+				defense_skill = 5
+				planning_skill = 6
+				logistics_skill = 5
+				legacy_id = -1
+			}
+			army_experience = 25
+			add_command_power = 25
+		}
 		ai_will_do = { base = 30 }
 	}
 
@@ -3332,7 +3385,10 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			VAL_reform_mercenary_payroll = yes
-			add_ideas = ADISCORD_economy_integrated_economy
+			add_ideas = {
+				ADISCORD_economy_integrated_economy
+				ADISCORD_society_type_post_industrial
+			}
 			hidden_effect = {
 				ADISCORD_economy_mark_dirty = yes
 			}
@@ -3569,6 +3625,7 @@ focus_tree = {
 		cost = 5
 		prerequisite = { focus = VAL_Contract_Landing_Craft }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_VAL_Vladimir_Litvin
 			add_ideas = VAL_marine_contract_corps
 			army_experience = 20
 			add_war_support = 0.03
@@ -3589,7 +3646,7 @@ focus_tree = {
 		available = { has_capitulated = no }
 		completion_reward = {
 			set_technology = { ADISCORD_tech_remote_weapon_tripods = 1 popup = yes }
-			add_army_experience = 20
+			army_experience = 20
 		}
 		ai_will_do = { base = 4 }
 	}

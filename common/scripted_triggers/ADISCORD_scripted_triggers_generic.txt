@@ -161,3 +161,38 @@ ADISCORD_ai_rifle_replacement_emergency = {
 	check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold }
 	stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
 }
+
+ADISCORD_has_national_military_staff = {
+	OR = {
+		tag = STP
+		tag = VAL
+		tag = IVN
+		tag = WIT
+		tag = WRK
+		tag = PIV
+		tag = RUS
+		tag = NAM
+		tag = VAD
+		tag = ROM
+		tag = SOL
+		tag = TRU
+		tag = ZAO
+		tag = VLA
+		tag = PWR
+		tag = DAN
+		tag = NOD
+		tag = EFL
+		tag = COF
+		tag = BJK
+		tag = BLD
+		tag = BHG
+		tag = TFF
+		tag = BGT
+		tag = BBV
+		tag = BCM
+		tag = YPR
+		tag = BTL
+		tag = STS
+		tag = SRP
+	}
+}

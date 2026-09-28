@@ -13,6 +13,7 @@
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_party_recovery_start_tt
 			unlock_decision_tooltip = STP_pw_party_restore_ministries
+			custom_effect_tooltip = STP_pw_party_laws_unlocked_tt
 			add_political_power = 50
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_new_republic_delta } }
 			hidden_effect = {
@@ -374,6 +375,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Erhard_Kleist
 			custom_effect_tooltip = STP_pf_army_program_1_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_finishing_program value = 7 } }
 
@@ -400,6 +402,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Viktor_Korneev
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_supply_service_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_supply_consumption_factor value = -0.06 }
@@ -422,6 +425,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Hermann_Alten
 			custom_effect_tooltip = STP_qol_armor_bureau_tt
 			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
 
@@ -450,6 +454,11 @@
 		prerequisite = { focus = STP_pw_party_industrial_settlement }
 		prerequisite = { focus = STP_pw_party_southern_defence }
 		prerequisite = { focus = STP_pw_party_foreign_settlement }
+		prerequisite = {
+			focus = STP_pw_party_protectorate
+			focus = STP_pw_party_high_houses
+			focus = STP_pw_party_unbound_revolution
+		}
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_party_recovery_complete_tt STP_pw_can_reconstruct = yes check_variable = { var = STP_pw_recovery_progress value = 3 compare = greater_than_or_equals } } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
@@ -985,6 +994,7 @@
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_nod_military_mission }
+		bypass = { STP_pw_party_northern_patron_lost = yes }
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 5 }
@@ -1044,6 +1054,7 @@
 			custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes }
 			OR = {
 				is_subject_of = NOD
+				STP_pw_party_northern_patron_lost = yes
 				has_country_flag = STP_pw_party_nod_invasion_defeated
 				has_country_flag = STP_pw_party_nod_compact
 				NOD = { exists = no }
@@ -1270,7 +1281,7 @@
 
 	focus = {
 		id = STP_pw_party_protectorate
-		icon = GFX_focus_generic_diplomatic_treaty
+		icon = GFX_STP_focus_northern_protection
 		x = -5
 		y = 4
 		cost = 4
@@ -1346,6 +1357,7 @@
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_protectorate }
+		bypass = { STP_pw_party_northern_patron_lost = yes }
 		available = { STP_pw_can_reconstruct = yes is_subject_of = NOD NOD = { exists = yes has_capitulated = no } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
@@ -1374,36 +1386,42 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Alexandr_Veber
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			unlock_decision_tooltip = STP_pw_party_standard_order
 		}
 	}
 	focus = {
 		id = STP_pw_party_revolution_capital
-		icon = GFX_focus_STP_Side_With_The_Party
+		icon = GFX_STP_focus_revolution_capital
 		x = -8
 		y = 5
 		cost = 3
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			tag = STP
+		}
 		prerequisite = { focus = STP_pw_party_sovereignty }
 		available = {
 			STP_pw_can_reconstruct = yes
 			is_subject = no
-			NOD = { exists = yes is_subject = no has_capitulated = no }
-			custom_trigger_tooltip = { tooltip = STP_pw_party_revolution_no_compact_tt NOT = { has_country_flag = STP_pw_party_nod_compact has_country_flag = STP_pw_party_compact_pending } }
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_party_no_pending_compact_tt
+				NOT = { has_country_flag = STP_pw_party_compact_pending }
+			}
 		}
 		cancel_if_invalid = yes
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 8 }
 		completion_reward = {
-			custom_effect_tooltip = STP_pf_radicals_deal_tt
 			custom_effect_tooltip = STP_pw_party_revolution_capital_tt
 			hidden_effect = {
 				subtract_from_variable = { var = STP_pf_advisers_support value = 12 }
-				set_temp_variable = { var = STP_pf_selected value = 7 }
-				STP_pf_shift = yes
+				STP_pf_calculate = yes
+				STP_pw_party_initialize_constitution = yes
 			}
 		}
 	}
+
 	focus = {
 		id = STP_pw_party_northern_contacts
 		icon = GFX_focus_STP_cw_northern_desk
@@ -1491,6 +1509,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Erwin_Noll
 			army_experience = 30
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 200 }
 			add_equipment_to_stockpile = { type = anti_air_equipment amount = 100 }
@@ -1532,7 +1551,10 @@
 			}
 		}
 		cancel_if_invalid = yes
-		completion_reward = { STP_pw_open_marine_school = yes }
+		completion_reward = {
+			add_ideas = ADISCORD_staff_STP_Henrik_Brand
+			STP_pw_open_marine_school = yes
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -1560,3 +1582,65 @@
 	# ============================================================
 	# SHABRAT POSTWAR: ECONOMIC RECOVERY
 	# ============================================================
+
+	focus = {
+		id = STP_pw_party_high_houses
+		icon = GFX_STP_focus_high_houses
+		x = -12
+		y = 6
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = { focus = STP_pw_party_revolution_capital }
+		mutually_exclusive = { focus = STP_pw_party_unbound_revolution }
+		available = {
+			STP_pw_party_constitution_open = yes
+			NOT = { power_balance_value = { id = STP_party_constitution value > -0.5 } }
+			has_idea = STP_law_private_societies
+			has_idea = STP_law_light_drugs
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_party_conservatives_mandate_tt
+				check_variable = { var = STP_pf_conservatives_support value = 60 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 15 }
+		completion_reward = {
+			add_ideas = STP_pw_party_high_houses_government
+			custom_effect_tooltip = STP_pw_party_constitution_settled_tt
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_unbound_revolution
+		icon = GFX_STP_focus_unbound_revolution
+		x = -10
+		y = 6
+		cost = 3
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		prerequisite = { focus = STP_pw_party_revolution_capital }
+		mutually_exclusive = { focus = STP_pw_party_high_houses }
+		available = {
+			STP_pw_party_constitution_open = yes
+			NOT = { power_balance_value = { id = STP_party_constitution value < 0.5 } }
+			has_idea = STP_law_public_orgies
+			has_idea = STP_law_hard_drugs
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_party_radicals_mandate_tt
+				check_variable = { var = STP_pf_radicals_support value = 60 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 15 }
+		completion_reward = {
+			add_ideas = STP_pw_party_unbound_government
+			custom_effect_tooltip = STP_pw_party_constitution_settled_tt
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}

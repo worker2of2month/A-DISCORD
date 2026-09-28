@@ -47,7 +47,7 @@ set_research_slots = 1
 ####### Ideas
 
 add_ideas = {
-	ADISCORD_society_type_industrial
+	ADISCORD_society_type_post_industrial
 	ADISCORD_information_licensed_press
 	ADISCORD_taxation_light_dues
 	ADISCORD_welfare_employer_insurance

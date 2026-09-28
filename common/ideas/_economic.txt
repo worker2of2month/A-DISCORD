@@ -2,7 +2,6 @@ ideas = {
 
 	economy = {
 		law = yes
-		use_list_view = yes
 
 		undisturbed_isolation = {
 			allowed = { always = no }
@@ -351,7 +350,6 @@ ideas = {
 
 	trade_laws = {
 		law = yes
-		use_list_view = yes
 
 		free_trade = {
 			cost = 150
@@ -503,7 +501,6 @@ ideas = {
 
 	ADISCORD_economic_system_laws = {
 		law = yes
-		use_list_view = yes
 
 		ADISCORD_economic_system_agrarian = {
 			picture = ADISCORD_economic_system_agrarian

@@ -183,4 +183,6445 @@ ideas = {
 		minister_YPR_Qadir_Noll = { name = minister_YPR_Qadir_Noll default = no cost = 75 picture = generic_political_advisor_south_america_1 allowed = { tag = YPR } visible = { tag = YPR } allowed_to_remove = { } traits = { minister_trait_YPR_int_council_listeners } }
 		minister_BTL_Soren_Ilt = { name = minister_BTL_Soren_Ilt default = no cost = 75 picture = generic_political_advisor_south_america_2 allowed = { tag = BTL } visible = { tag = BTL } allowed_to_remove = { } traits = { minister_trait_BTL_int_orderly_files } }
 	}
+
+	political_advisor_minister_of_foreign_affairs = {
+		minister_STP_Adrian_Vels = {
+			name = minister_STP_Adrian_Vels
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VAL_Leonhard_Kest = {
+			name = minister_VAL_Leonhard_Kest
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IVN_Konstantin_Arden = {
+			name = minister_IVN_Konstantin_Arden
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WIT_Anton_Riedel = {
+			name = minister_WIT_Anton_Riedel
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_trade }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WRK_Viktor_Lansky = {
+			name = minister_WRK_Viktor_Lansky
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_PIV_Roman_Veletsky = {
+			name = minister_PIV_Roman_Veletsky
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RUS_Timur_Arslan = {
+			name = minister_RUS_Timur_Arslan
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_NAM_Pavel_Ordyntsev = {
+			name = minister_NAM_Pavel_Ordyntsev
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VAD_Sergei_Lobanov = {
+			name = minister_VAD_Sergei_Lobanov
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ROM_Friedrich_Alten = {
+			name = minister_ROM_Friedrich_Alten
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SOL_Matteo_Rossani = {
+			name = minister_SOL_Matteo_Rossani
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_TRU_Andrei_Zorin = {
+			name = minister_TRU_Andrei_Zorin
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ZAO_Rashid_Karim = {
+			name = minister_ZAO_Rashid_Karim
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VLA_Boris_Talanov = {
+			name = minister_VLA_Boris_Talanov
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_PWR_Erik_Holst = {
+			name = minister_PWR_Erik_Holst
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_DAN_Denis_Rudnev = {
+			name = minister_DAN_Denis_Rudnev
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_NOD_Lucian_Ervelt = {
+			name = minister_NOD_Lucian_Ervelt
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EFL_Edgar_Lind = {
+			name = minister_EFL_Edgar_Lind
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_COF_Aren_Veld = {
+			name = minister_COF_Aren_Veld
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BJK_Oskar_Revent = {
+			name = minister_BJK_Oskar_Revent
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BLD_Ludwig_Falken = {
+			name = minister_BLD_Ludwig_Falken
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BHG_Georg_Winter = {
+			name = minister_BHG_Georg_Winter
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_TFF_Martin_Hale = {
+			name = minister_TFF_Martin_Hale
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_delegate }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BGT_Heinrich_Roten = {
+			name = minister_BGT_Heinrich_Roten
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BBV_Ulrich_Kessler = {
+			name = minister_BBV_Ulrich_Kessler
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BCM_Bernhard_Mertens = {
+			name = minister_BCM_Bernhard_Mertens
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_secretary }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_YPR_Ilya_Dobrin = {
+			name = minister_YPR_Ilya_Dobrin
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_delegate }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BTL_Emil_Hartmann = {
+			name = minister_BTL_Emil_Hartmann
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_APH_Marek_Rauk = {
+			name = minister_APH_Marek_Rauk
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = APH }
+			visible = { tag = APH }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_OSF_Sever_Karn = {
+			name = minister_OSF_Sever_Karn
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = OSF }
+			visible = { tag = OSF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_CIN_Orven_Sarr = {
+			name = minister_CIN_Orven_Sarr
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = CIN }
+			visible = { tag = CIN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_envoy }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_NKA_Otto_Berner = {
+			name = minister_NKA_Otto_Berner
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = NKA }
+			visible = { tag = NKA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_OCA_Viktor_Remizov = {
+			name = minister_OCA_Viktor_Remizov
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = OCA }
+			visible = { tag = OCA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ECA_Leonid_Askold = {
+			name = minister_ECA_Leonid_Askold
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ECA }
+			visible = { tag = ECA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_DCA_Adam_Karsen = {
+			name = minister_DCA_Adam_Karsen
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = DCA }
+			visible = { tag = DCA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WCA_Markus_Hecht = {
+			name = minister_WCA_Markus_Hecht
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WCA }
+			visible = { tag = WCA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_contracts }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WKR_Nikolai_Krestov = {
+			name = minister_WKR_Nikolai_Krestov
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WKR }
+			visible = { tag = WKR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_TVA_Alfred_Neumann = {
+			name = minister_TVA_Alfred_Neumann
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = TVA }
+			visible = { tag = TVA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WTD_Wilhelm_Dietz = {
+			name = minister_WTD_Wilhelm_Dietz
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WTD }
+			visible = { tag = WTD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EYR_Petr_Belov = {
+			name = minister_EYR_Petr_Belov
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EYR }
+			visible = { tag = EYR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EGC_Vasily_Rakitsky = {
+			name = minister_EGC_Vasily_Rakitsky
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EGC }
+			visible = { tag = EGC }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RIV_Robert_Heller = {
+			name = minister_RIV_Robert_Heller
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RIV }
+			visible = { tag = RIV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_REV_Mikhail_Vorontsov = {
+			name = minister_REV_Mikhail_Vorontsov
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = REV }
+			visible = { tag = REV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_YOR_Dmitri_Seregin = {
+			name = minister_YOR_Dmitri_Seregin
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = YOR }
+			visible = { tag = YOR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_NDN_Henrik_Dahl = {
+			name = minister_NDN_Henrik_Dahl
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = NDN }
+			visible = { tag = NDN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SWB_Leon_Bruckner = {
+			name = minister_SWB_Leon_Bruckner
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SWB }
+			visible = { tag = SWB }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VHV_Stepan_Golovin = {
+			name = minister_VHV_Stepan_Golovin
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VHV }
+			visible = { tag = VHV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_OSV_Ernst_Keller = {
+			name = minister_OSV_Ernst_Keller
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = OSV }
+			visible = { tag = OSV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WPA_Axel_Berg = {
+			name = minister_WPA_Axel_Berg
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WPA }
+			visible = { tag = WPA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WPS_Armin_Vogt = {
+			name = minister_WPS_Armin_Vogt
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WPS }
+			visible = { tag = WPS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_trade }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_PSD_Felix_Gruber = {
+			name = minister_PSD_Felix_Gruber
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = PSD }
+			visible = { tag = PSD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EBA_Otmar_Seidel = {
+			name = minister_EBA_Otmar_Seidel
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EBA }
+			visible = { tag = EBA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_DVA_Kirill_Ozerov = {
+			name = minister_DVA_Kirill_Ozerov
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = DVA }
+			visible = { tag = DVA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SRA_Sven_Holm = {
+			name = minister_SRA_Sven_Holm
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SRA }
+			visible = { tag = SRA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ZTA_Grigory_Lazarev = {
+			name = minister_ZTA_Grigory_Lazarev
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ZTA }
+			visible = { tag = ZTA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SLA_Aleksei_Leskov = {
+			name = minister_SLA_Aleksei_Leskov
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SLA }
+			visible = { tag = SLA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RZA_Benedikt_Kroll = {
+			name = minister_RZA_Benedikt_Kroll
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RZA }
+			visible = { tag = RZA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_delegate }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_MLR_Artem_Klimov = {
+			name = minister_MLR_Artem_Klimov
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = MLR }
+			visible = { tag = MLR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ERT_Ivan_Drozdov = {
+			name = minister_ERT_Ivan_Drozdov
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ERT }
+			visible = { tag = ERT }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IRT_Semyon_Anisimov = {
+			name = minister_IRT_Semyon_Anisimov
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IRT }
+			visible = { tag = IRT }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SCA_Maksim_Barsov = {
+			name = minister_SCA_Maksim_Barsov
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SCA }
+			visible = { tag = SCA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_TGD_Walter_Stein = {
+			name = minister_TGD_Walter_Stein
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = TGD }
+			visible = { tag = TGD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IBA_Einar_Lund = {
+			name = minister_IBA_Einar_Lund
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IBA }
+			visible = { tag = IBA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IBL_Rudolf_Kern = {
+			name = minister_IBL_Rudolf_Kern
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IBL }
+			visible = { tag = IBL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_CSL_Fedor_Mironov = {
+			name = minister_CSL_Fedor_Mironov
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = CSL }
+			visible = { tag = CSL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_delegate }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_EXZ_Valentin_Sedov = {
+			name = minister_EXZ_Valentin_Sedov
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = EXZ }
+			visible = { tag = EXZ }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_IIA_Gennady_Orlov = {
+			name = minister_IIA_Gennady_Orlov
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = IIA }
+			visible = { tag = IIA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KDR_Yusuf_Haddad = {
+			name = minister_KDR_Yusuf_Haddad
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KDR }
+			visible = { tag = KDR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RHM_Samir_Nasser = {
+			name = minister_RHM_Samir_Nasser
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RHM }
+			visible = { tag = RHM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SDR_Farid_Mansur = {
+			name = minister_SDR_Farid_Mansur
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SDR }
+			visible = { tag = SDR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_MZR_Karim_Saleh = {
+			name = minister_MZR_Karim_Saleh
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = MZR }
+			visible = { tag = MZR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KYZ_Tahir_Usman = {
+			name = minister_KYZ_Tahir_Usman
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KYZ }
+			visible = { tag = KYZ }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SHL_Ramin_Farzan = {
+			name = minister_SHL_Ramin_Farzan
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_GLP_Nadir_Hakim = {
+			name = minister_GLP_Nadir_Hakim
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = GLP }
+			visible = { tag = GLP }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_AZH_Salim_Rafiq = {
+			name = minister_AZH_Salim_Rafiq
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = AZH }
+			visible = { tag = AZH }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WEF_Adil_Kassem = {
+			name = minister_WEF_Adil_Kassem
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WEF }
+			visible = { tag = WEF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SLF_Yegor_Svetlov = {
+			name = minister_SLF_Yegor_Svetlov
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SLF }
+			visible = { tag = SLF }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BRN_Hugo_Brandt = {
+			name = minister_BRN_Hugo_Brandt
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BRN }
+			visible = { tag = BRN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KRL_Karl_Eriksen = {
+			name = minister_KRL_Karl_Eriksen
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KRL }
+			visible = { tag = KRL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VRA_Vladimir_Radich = {
+			name = minister_VRA_Vladimir_Radich
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VRA }
+			visible = { tag = VRA }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_FRS_Nils_Falk = {
+			name = minister_FRS_Nils_Falk
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = FRS }
+			visible = { tag = FRS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KHV_Johan_Krohn = {
+			name = minister_KHV_Johan_Krohn
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KHV }
+			visible = { tag = KHV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SRV_Arvid_Strom = {
+			name = minister_SRV_Arvid_Strom
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SRV }
+			visible = { tag = SRV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ELN_Elmar_Rosen = {
+			name = minister_ELN_Elmar_Rosen
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ELN }
+			visible = { tag = ELN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_AUR_Leif_Sander = {
+			name = minister_AUR_Leif_Sander
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = AUR }
+			visible = { tag = AUR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_HON_Konrad_Adler = {
+			name = minister_HON_Konrad_Adler
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = HON }
+			visible = { tag = HON }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SVL_Soren_Brekke = {
+			name = minister_SVL_Soren_Brekke
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SVL }
+			visible = { tag = SVL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_NVR_Harald_Nord = {
+			name = minister_NVR_Harald_Nord
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = NVR }
+			visible = { tag = NVR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SKN_Klaus_Dorn = {
+			name = minister_SKN_Klaus_Dorn
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SKN }
+			visible = { tag = SKN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_TMR_Anton_Timofeev = {
+			name = minister_TMR_Anton_Timofeev
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = TMR }
+			visible = { tag = TMR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_LYS_Lorenz_Mahl = {
+			name = minister_LYS_Lorenz_Mahl
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = LYS }
+			visible = { tag = LYS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KDL_Viktor_Kaden = {
+			name = minister_KDL_Viktor_Kaden
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KDL }
+			visible = { tag = KDL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VES_Werner_Bach = {
+			name = minister_VES_Werner_Bach
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VES }
+			visible = { tag = VES }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_DRV_Milan_Dragov = {
+			name = minister_DRV_Milan_Dragov
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = DRV }
+			visible = { tag = DRV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ORV_Oleg_Varin = {
+			name = minister_ORV_Oleg_Varin
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ORV }
+			visible = { tag = ORV }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_ARS_Arsen_Melik = {
+			name = minister_ARS_Arsen_Melik
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = ARS }
+			visible = { tag = ARS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_VLD_Volker_Reim = {
+			name = minister_VLD_Volker_Reim
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = VLD }
+			visible = { tag = VLD }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_MON_Marco_Bellini = {
+			name = minister_MON_Marco_Bellini
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = MON }
+			visible = { tag = MON }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_BOR_Torsten_Vik = {
+			name = minister_BOR_Torsten_Vik
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = BOR }
+			visible = { tag = BOR }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_DOL_Daniil_Dolsky = {
+			name = minister_DOL_Daniil_Dolsky
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = DOL }
+			visible = { tag = DOL }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RIN_Renat_Ilyin = {
+			name = minister_RIN_Renat_Ilyin
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RIN }
+			visible = { tag = RIN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_KRM_Saveliy_Korenev = {
+			name = minister_KRM_Saveliy_Korenev
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = KRM }
+			visible = { tag = KRM }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_trade }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_LMN_Lars_Meyer = {
+			name = minister_LMN_Lars_Meyer
+			picture = generic_political_advisor_europe_1
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = LMN }
+			visible = { tag = LMN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_RLY_Rainer_Lenz = {
+			name = minister_RLY_Rainer_Lenz
+			picture = generic_political_advisor_europe_2
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = RLY }
+			visible = { tag = RLY }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_WCG_Gustav_Ried = {
+			name = minister_WCG_Gustav_Ried
+			picture = generic_political_advisor_europe_3
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = WCG }
+			visible = { tag = WCG }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_AIN_Edmund_Hauser = {
+			name = minister_AIN_Edmund_Hauser
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = AIN }
+			visible = { tag = AIN }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_commissioner }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_STS_Andrei_Vershinin = {
+			name = minister_STS_Andrei_Vershinin
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SRP_Vsevolod_Belyaev = {
+			name = minister_SRP_Vsevolod_Belyaev
+			picture = generic_political_advisor_europe_6
+			cost = 75
+			removal_cost = -1
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			traits = { minister_trait_foreign_minister }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_foreign_career_diplomat = {
+			traits = { minister_trait_foreign_minister }
+			picture = generic_political_advisor_europe_4
+			cost = 75
+			removal_cost = -1
+			allowed = {
+				OR = {
+					tag = D01
+					tag = D02
+					tag = D03
+					tag = D04
+					tag = D05
+					tag = D06
+					tag = D07
+					tag = D08
+					tag = D09
+					tag = D10
+					tag = D11
+					tag = D12
+					tag = D13
+					tag = D14
+					tag = D15
+					tag = D16
+					tag = D17
+					tag = D18
+					tag = D19
+					tag = D20
+					tag = D21
+					tag = D22
+					tag = D23
+					tag = D24
+					tag = D25
+					tag = D26
+					tag = D27
+					tag = D28
+					tag = D29
+					tag = D30
+					tag = D31
+					tag = D32
+					tag = D33
+					tag = D34
+					tag = D35
+					tag = D36
+					tag = D37
+					tag = D38
+					tag = D39
+					tag = D40
+					tag = D41
+					tag = D42
+					tag = D43
+					tag = D44
+					tag = D45
+					tag = D46
+					tag = D47
+					tag = D48
+					tag = D49
+					tag = D50
+				}
+			}
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			modifier = {
+				political_power_gain = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_foreign_trade_envoy = {
+			traits = { minister_trait_foreign_trade }
+			picture = generic_political_advisor_europe_5
+			cost = 75
+			removal_cost = -1
+			allowed = {
+				OR = {
+					tag = D01
+					tag = D02
+					tag = D03
+					tag = D04
+					tag = D05
+					tag = D06
+					tag = D07
+					tag = D08
+					tag = D09
+					tag = D10
+					tag = D11
+					tag = D12
+					tag = D13
+					tag = D14
+					tag = D15
+					tag = D16
+					tag = D17
+					tag = D18
+					tag = D19
+					tag = D20
+					tag = D21
+					tag = D22
+					tag = D23
+					tag = D24
+					tag = D25
+					tag = D26
+					tag = D27
+					tag = D28
+					tag = D29
+					tag = D30
+					tag = D31
+					tag = D32
+					tag = D33
+					tag = D34
+					tag = D35
+					tag = D36
+					tag = D37
+					tag = D38
+					tag = D39
+					tag = D40
+					tag = D41
+					tag = D42
+					tag = D43
+					tag = D44
+					tag = D45
+					tag = D46
+					tag = D47
+					tag = D48
+					tag = D49
+					tag = D50
+				}
+			}
+			available = { STP_party_minister_change_allowed = yes }
+			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	army_chief = {
+		ADISCORD_staff_STP_Andrei_Vedenin = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Kirill_Panov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Kirill_Gradov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Sergei_Rogov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Sergei_Kurbatov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Ulrich_Dreyer = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Stanislav_Malinin = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Igor_Nekrasov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Roman_Ostretsov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Gennady_Panov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Ruslan_Rogov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Georg_Meiner = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Karl_Roemer = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Vladimir_Uvarov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Edgar_Treiber = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Viktor_Chernov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Johann_Becker = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Timofei_Gradov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Franz_Garten = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Adrian_Dreyer = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Felix_Ebers = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Oskar_Vogel = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Theodor_Hartwig = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Otto_Kramer = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Emil_Lorenz = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Martin_Meiner = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Stefan_Roemer = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Konrad_Scholz = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Viktor_Frolov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Karl_Wolff = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Fedor_Vedenin = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Konstantin_Panov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_chief_defensive_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Konstantin_Gradov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { army_chief_organizational_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Hermann_Alten = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_professional_service }
+			traits = { army_chief_organizational_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STP_Viktor_Korneev = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_supply_service }
+			traits = { ADISCORD_staff_supply_chief }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Alexei_Barinov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pc_army_hegemony_cadres }
+			traits = { army_chief_offensive_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Nikolai_Vetrov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pc_army_republic_control }
+			traits = { army_chief_defensive_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Sergei_Tretyakov = {
+			picture = generic_army_chief_def_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pc_army_staff_doctrine }
+			traits = { army_chief_organizational_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	navy_chief = {
+		ADISCORD_staff_STP_Boris_Gradov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Leonid_Rogov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { navy_chief_maneuver_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Leonid_Kurbatov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Timofei_Sazonov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { navy_chief_maneuver_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Timofei_Losev = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Franz_Ebers = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Aleksei_Nekrasov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Kirill_Ostretsov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Sergei_Panov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Dmitri_Rogov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Semyon_Sazonov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Dietrich_Roemer = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Leon_Scholz = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Gennady_Frolov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Ernst_Wolff = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Georgy_Vedenin = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Karl_Walter = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Fedor_Kurbatov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Hans_Dreyer = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Bruno_Ebers = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Gustav_Vogel = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Paul_Hartwig = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Ulrich_Kramer = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Wilhelm_Lorenz = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Felix_Meiner = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Niklas_Roemer = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Theodor_Scholz = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Ludwig_Treiber = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Georgy_Chernov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Leon_Becker = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Yuri_Gradov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Maksim_Rogov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { navy_chief_maneuver_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Maksim_Kurbatov = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { navy_chief_decisive_battle_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Henrik_Brand = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_marine_school }
+			traits = { navy_chief_decisive_battle_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Boris_Ostrovsky = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pc_navy_escorts }
+			traits = { navy_chief_maneuver_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_VAL_Vladimir_Litvin = {
+			picture = generic_navy_chief_decisive_bat_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { has_completed_focus = VAL_Marines_Of_The_Ledger }
+			traits = { navy_chief_decisive_battle_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	air_chief = {
+		ADISCORD_staff_STP_Viktor_Kurbatov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Mikhail_Sazonov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { air_chief_all_weather_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Mikhail_Losev = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Fedor_Tumanov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { air_chief_all_weather_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Fedor_Malinin = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Hans_Vogel = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Andrei_Ostretsov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Leonid_Panov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Timofei_Rogov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Dmitri_Sazonov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Stanislav_Tumanov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Emil_Scholz = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Martin_Treiber = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Gennady_Chernov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Konrad_Becker = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Georgy_Gradov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Karl_Garten = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Yuri_Losev = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Edgar_Ebers = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Bruno_Vogel = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Heinrich_Hartwig = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Paul_Kramer = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Franz_Lorenz = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Wilhelm_Meiner = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Felix_Roemer = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Niklas_Scholz = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Theodor_Treiber = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Ludwig_Wolff = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Denis_Vedenin = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Leon_Walter = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Arkady_Kurbatov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Petr_Sazonov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { air_chief_all_weather_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Petr_Losev = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { air_chief_reform_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Alexandr_Veber = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_domestic_pattern }
+			traits = { air_chief_ground_support_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STP_Erwin_Noll = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_border_staff }
+			traits = { air_chief_all_weather_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Pavel_Berezov = {
+			picture = generic_air_air_combat_trainer_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pc_air_shield }
+			traits = { air_chief_all_weather_2 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+	}
+
+	high_command = {
+		ADISCORD_staff_STP_Georgy_Losev = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Denis_Malinin = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Yevgeny_Nekrasov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Nikolai_Tumanov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_armored_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Oleg_Uvarov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { army_commando_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Pavel_Frolov = {
+			ledger = air
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { air_close_air_support_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Nikolai_Malinin = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Oleg_Nekrasov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Pavel_Ostretsov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Yuri_Uvarov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_armored_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Arkady_Frolov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { army_commando_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Vladimir_Chernov = {
+			ledger = air
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { air_close_air_support_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Yuri_Nekrasov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Arkady_Ostretsov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Vladimir_Panov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Edgar_Hartwig = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Ernst_Kramer = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Konrad_Lorenz = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Boris_Panov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Viktor_Rogov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Georgy_Sazonov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Mikhail_Rogov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Nikolai_Sazonov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Oleg_Tumanov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Fedor_Sazonov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Yuri_Tumanov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Arkady_Uvarov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Ilya_Tumanov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Konstantin_Uvarov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Maksim_Frolov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Aleksei_Uvarov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Andrei_Frolov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Boris_Chernov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Felix_Treiber = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Gustav_Wolff = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Heinrich_Becker = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Niklas_Wolff = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Oskar_Becker = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Paul_Walter = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Dmitri_Vedenin = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Dmitri_Gradov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Ilya_Kurbatov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Ludwig_Walter = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Otto_Garten = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Wilhelm_Dreyer = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Denis_Kurbatov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Yevgeny_Losev = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Igor_Malinin = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Leon_Dreyer = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Martin_Ebers = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Niklas_Vogel = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Arkady_Malinin = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Vladimir_Nekrasov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Gennady_Ostretsov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Ernst_Vogel = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Konrad_Hartwig = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Ludwig_Kramer = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Walter_Hartwig = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Georg_Kramer = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Dietrich_Lorenz = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Johann_Kramer = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Karl_Lorenz = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Leon_Meiner = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Richard_Lorenz = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Robert_Meiner = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Rudolf_Roemer = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Hans_Meiner = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Edgar_Roemer = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Ernst_Scholz = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Adrian_Roemer = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Bruno_Scholz = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Walter_Treiber = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Gustav_Scholz = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Heinrich_Treiber = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Johann_Wolff = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Oskar_Treiber = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Paul_Wolff = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Richard_Becker = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Ulrich_Wolff = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Franz_Becker = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Hans_Walter = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Otto_Becker = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Wilhelm_Walter = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Adrian_Garten = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Yevgeny_Gradov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Igor_Kurbatov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Kirill_Losev = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Martin_Garten = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Niklas_Dreyer = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Oskar_Ebers = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Vladimir_Losev = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Gennady_Malinin = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Dmitri_Nekrasov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Ruslan_Tumanov = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_armored_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Semyon_Uvarov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { army_commando_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Stanislav_Frolov = {
+			ledger = air
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { air_close_air_support_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Ruslan_Malinin = {
+			ledger = army
+			picture = generic_army_chief_def_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { army_infantry_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Semyon_Nekrasov = {
+			ledger = army
+			picture = generic_army_log_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { army_logistics_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Stanislav_Ostretsov = {
+			ledger = army
+			picture = generic_army_art_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { army_regrouping_1 }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	theorist = {
+		ADISCORD_staff_STP_Igor_Ostretsov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Roman_Chernov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { always = yes }
+			traits = { ADISCORD_staff_mobile_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Roman_Panov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAL_Gennady_Vedenin = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAL }
+			visible = { tag = VAL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_mobile_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_IVN_Gennady_Rogov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = IVN }
+			visible = { tag = IVN }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WIT_Ludwig_Meiner = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WIT }
+			visible = { tag = WIT }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_WRK_Denis_Tumanov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = WRK }
+			visible = { tag = WRK }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PIV_Pavel_Uvarov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PIV }
+			visible = { tag = PIV }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_RUS_Vladimir_Frolov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = RUS }
+			visible = { tag = RUS }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NAM_Petr_Chernov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NAM }
+			visible = { tag = NAM }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VAD_Viktor_Vedenin = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VAD }
+			visible = { tag = VAD }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ROM_Johann_Walter = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ROM }
+			visible = { tag = ROM }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SOL_Richard_Garten = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SOL }
+			visible = { tag = SOL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TRU_Konstantin_Losev = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TRU }
+			visible = { tag = TRU }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_ZAO_Adrian_Ebers = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = ZAO }
+			visible = { tag = ZAO }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_VLA_Kirill_Nekrasov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = VLA }
+			visible = { tag = VLA }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_PWR_Oskar_Hartwig = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = PWR }
+			visible = { tag = PWR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_DAN_Dmitri_Panov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = DAN }
+			visible = { tag = DAN }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_NOD_Otto_Lorenz = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = NOD }
+			visible = { tag = NOD }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_EFL_Emil_Meiner = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = EFL }
+			visible = { tag = EFL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_COF_Martin_Roemer = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = COF }
+			visible = { tag = COF }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BJK_Stefan_Scholz = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BJK }
+			visible = { tag = BJK }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BLD_Konrad_Treiber = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BLD }
+			visible = { tag = BLD }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BHG_Georg_Wolff = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BHG }
+			visible = { tag = BHG }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_TFF_Karl_Becker = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = TFF }
+			visible = { tag = TFF }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BGT_Robert_Walter = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BGT }
+			visible = { tag = BGT }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BBV_Edgar_Garten = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BBV }
+			visible = { tag = BBV }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BCM_Bruno_Dreyer = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BCM }
+			visible = { tag = BCM }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_YPR_Leonid_Malinin = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = YPR }
+			visible = { tag = YPR }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_BTL_Paul_Vogel = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = BTL }
+			visible = { tag = BTL }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Ilya_Ostretsov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STS_Aleksei_Chernov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { always = yes }
+			traits = { ADISCORD_staff_mobile_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_SRP_Aleksei_Panov = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 100
+			removal_cost = 0
+			allowed = { tag = SRP }
+			visible = { tag = SRP }
+			available = { always = yes }
+			traits = { ADISCORD_staff_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_staff_STP_Erhard_Kleist = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STP }
+			visible = { tag = STP }
+			available = { has_completed_focus = STP_pw_party_officer_school }
+			traits = { ADISCORD_staff_senior_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+
+		ADISCORD_staff_STS_Mikhail_Rakitin = {
+			picture = generic_army_chief_off_western_european_2d
+			cost = 150
+			removal_cost = 0
+			allowed = { tag = STS }
+			visible = { tag = STS }
+			available = { has_completed_focus = STP_pw_republic_officer_school }
+			traits = { ADISCORD_staff_senior_theorist }
+			cancel_if_invalid = yes
+			ai_will_do = { factor = 2 }
+		}
+	}
 }

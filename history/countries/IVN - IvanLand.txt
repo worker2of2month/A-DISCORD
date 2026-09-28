@@ -1,5 +1,7 @@
 capital = 25
 
+# Equipment variants must exist before the starting divisions are filled.
+ADISCORD_grant_technology_profile_common = yes
 oob = "IVN"
 set_major = yes
 ####### Characters
@@ -43,7 +45,6 @@ set_stability = 0.25
 
 add_ideas = {
 	ADISCORD_society_type_municipal_autonomy
-	ADISCORD_information_public_broadcasting
 	ADISCORD_taxation_progressive_brackets
 	ADISCORD_military_organization_territorial_reserves
 	ADISCORD_welfare_social_insurance

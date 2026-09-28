@@ -1,5 +1,7 @@
 capital = 26
 
+# Equipment variants must exist before the starting divisions are filled.
+ADISCORD_grant_technology_profile_common = yes
 oob = "WIT"
 ####### Characters
 

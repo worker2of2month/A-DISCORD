@@ -71,10 +71,10 @@ units = {
 	}
 	fleet = {
 		name = "Svetlogorsk Patrol Flotilla"
-		naval_base = 2038
+		naval_base = 16716
 		task_force = {
 			name = "Northern Basin Patrol"
-			location = 2038
+			location = 16716
 			ship = { name = "Svetlogorsk" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
 			ship = { name = "Northern Basin" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }
 			ship = { name = "Warden" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NAM } } }

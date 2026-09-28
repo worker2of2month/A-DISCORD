@@ -1,6 +1,11 @@
 #background sprite is in frontendmainviewbg.gfx
 
 spriteTypes = {
+	spriteType = {
+		name = "GFX_pdx_int_logo"
+		texturefile = "gfx/interface/pdx_int_logo.dds"
+	}
+
 	textSpriteType = {
 		name = "GFX_main_lobby_button"
 		textureFile = "gfx/interface/main_lobby_button.dds"

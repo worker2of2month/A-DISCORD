@@ -38,6 +38,7 @@
     "island_administration_icon",
     "party_texticons",
     "vorkerland_flags",
+    "stp_flags",
     "focus_trees"
   ],
   "families": [
@@ -1214,6 +1215,27 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_party_texticons", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "stp_flags",
+      "owner_module": "tools.builders.build_adiscord_stp_flags",
+      "source_inputs": [
+        "tools/builders/build_adiscord_stp_flags.py",
+        "tools/assets/source/STP_revolution_capital_flag.png",
+        "gfx/flags/STP.tga",
+        "gfx/flags/medium/STP.tga",
+        "gfx/flags/small/STP.tga"
+      ],
+      "output_globs": [
+        "gfx/flags/**/STP_revolution_capital.tga",
+        "gfx/flags/**/NOD_STP_revolution.tga",
+        "gfx/flags/**/VAL_STP_revolution.tga",
+        "gfx/flags/**/BJK_STP_revolution.tga"
+      ],
+      "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags"],
+      "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },

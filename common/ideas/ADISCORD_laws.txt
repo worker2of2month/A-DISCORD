@@ -1,7 +1,6 @@
 ideas = {
 	ADISCORD_society_type_laws = {
 		law = yes
-		use_list_view = yes
 
 		ADISCORD_society_type_traditional = {
 			picture = ADISCORD_society_type_traditional
@@ -199,7 +198,7 @@ ideas = {
 		}
 
 		ADISCORD_society_type_municipal_autonomy = {
-			picture = ADISCORD_society_type_industrial
+			picture = ADISCORD_society_type_municipal_autonomy
 			cost = 75
 			removal_cost = -1
 			available = {
@@ -363,23 +362,6 @@ ideas = {
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
 
-		ADISCORD_information_public_broadcasting = {
-			picture = ADISCORD_law_information_licensed_press
-			cost = 75
-			removal_cost = -1
-
-			modifier = {
-				stability_factor = 0.04
-				research_speed_factor = 0.03
-				drift_defence_factor = -0.05
-				ADISCORD_economy_admin_expense_factor = 0.08
-			}
-
-			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-		}
 	}
 
 	ADISCORD_taxation_laws = {
@@ -1116,7 +1098,7 @@ ideas = {
 		}
 
 		ADISCORD_healthcare_mutual_insurance = {
-			picture = ADISCORD_law_healthcare_public_hospitals
+			picture = ADISCORD_law_healthcare_mutual_insurance
 			cost = 75
 			removal_cost = -1
 
@@ -1136,6 +1118,88 @@ ideas = {
 
 	ADISCORD_cultural_policy_laws = {
 		law = yes
+
+		STP_law_public_orgies = {
+			picture = STP_law_public_orgies
+			cost = 100
+			removal_cost = -1
+			allowed = { original_tag = STP }
+			allowed_civil_war = { always = no }
+			visible = { STP_pw_party_laws_available = yes }
+			available = {
+				STP_pw_party_laws_available = yes
+				STP_pw_party_radical_laws_available = yes
+			}
+			modifier = {
+				political_power_gain = 0.03
+				ADISCORD_economy_war_fatigue_gain_factor = -0.08
+				ADISCORD_economy_social_expense_factor = 0.06
+				stability_factor = -0.02
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 20
+					check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
+				}
+			}
+		}
+
+		STP_law_private_societies = {
+			picture = STP_law_private_societies
+			cost = 100
+			removal_cost = -1
+			allowed = { original_tag = STP }
+			allowed_civil_war = { always = no }
+			visible = { STP_pw_party_laws_available = yes }
+			available = {
+				STP_pw_party_laws_available = yes
+				STP_pw_party_conservative_laws_available = yes
+			}
+			modifier = {
+				stability_factor = 0.025
+				political_power_gain = 0.03
+				ADISCORD_economy_population_tax_income_factor = -0.025
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 20
+					check_variable = { var = STP_pf_conservatives_influence value = STP_pf_radicals_influence compare = greater_than_or_equals }
+				}
+			}
+		}
+
 
 		ADISCORD_cultural_policy_tolerated_subcultures = {
 			picture = ADISCORD_law_cultural_policy_tolerated_subcultures
@@ -1268,7 +1332,7 @@ ideas = {
 		}
 
 		ADISCORD_cultural_policy_heritage_protection = {
-			picture = ADISCORD_law_cultural_policy_civic_festivals
+			picture = ADISCORD_law_cultural_policy_heritage_protection
 			cost = 75
 			removal_cost = -1
 
@@ -1448,6 +1512,43 @@ ideas = {
 	ADISCORD_labor_policy_laws = {
 		law = yes
 
+		STP_law_slavery = {
+			picture = STP_law_slavery
+			cost = 150
+			removal_cost = -1
+			allowed = { original_tag = STP }
+			allowed_civil_war = { always = no }
+			visible = { always = yes }
+			available = {
+				STP_pw_party_laws_available = yes
+				custom_trigger_tooltip = {
+					tooltip = STP_law_slavery_support_tt
+					check_variable = { var = STP_pf_borons_support value = 50 compare = greater_than_or_equals }
+					check_variable = { var = STP_pf_merchants_support value = 50 compare = greater_than_or_equals }
+				}
+			}
+			modifier = {
+				industrial_capacity_factory = 0.06
+				ADISCORD_economy_civilian_factory_income_factor = 0.08
+				stability_factor = -0.07
+				ADISCORD_economy_admin_expense_factor = 0.08
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+				}
+			}
+			ai_will_do = { factor = 1 }
+		}
+
 		ADISCORD_labor_policy_loose_contracts = {
 			picture = ADISCORD_law_labor_policy_loose_contracts
 			cost = 150
@@ -1516,12 +1617,7 @@ ideas = {
 			cost = 150
 			removal_cost = -1
 
-			available = {
-				OR = {
-					has_government = technocracy
-					ADISCORD_economy_model_allows_technocratic_programs = yes
-				}
-			}
+			available = { always = no }
 
 			modifier = {
 				industrial_capacity_factory = 0.045
@@ -1583,7 +1679,7 @@ ideas = {
 		}
 
 		ADISCORD_labor_policy_collective_bargaining = {
-			picture = ADISCORD_law_labor_policy_guild_protections
+			picture = ADISCORD_law_labor_policy_collective_bargaining
 			cost = 150
 			removal_cost = -1
 
@@ -2349,6 +2445,197 @@ ideas = {
 			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+		}
+	}
+
+	STP_drug_policy_laws = {
+		law = yes
+
+		STP_law_drug_prohibition = {
+			picture = STP_law_drug_prohibition
+			cost = 75
+			removal_cost = -1
+			default = yes
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = 0.025
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			ai_will_do = { factor = 1 }
+		}
+
+		STP_law_light_drugs = {
+			picture = STP_law_light_drugs
+			cost = 100
+			removal_cost = -1
+			allowed = { original_tag = STP }
+			allowed_civil_war = { always = no }
+			visible = { STP_pw_party_laws_available = yes }
+			available = {
+				STP_pw_party_laws_available = yes
+				STP_pw_party_conservative_laws_available = yes
+			}
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.025
+				ADISCORD_economy_social_expense_factor = 0.02
+				industrial_capacity_factory = -0.01
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 20
+					check_variable = { var = STP_pf_conservatives_influence value = STP_pf_radicals_influence compare = greater_than_or_equals }
+				}
+			}
+		}
+
+		STP_law_hard_drugs = {
+			picture = STP_law_hard_drugs
+			cost = 150
+			removal_cost = -1
+			allowed = { original_tag = STP }
+			allowed_civil_war = { always = no }
+			visible = { STP_pw_party_laws_available = yes }
+			available = {
+				STP_pw_party_laws_available = yes
+				STP_pw_party_radical_laws_available = yes
+			}
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.08
+				ADISCORD_economy_social_expense_factor = 0.12
+				industrial_capacity_factory = -0.04
+				monthly_population = -0.02
+			}
+			cancel_if_invalid = no
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 20
+					check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
+				}
+			}
+		}
+
+		ADISCORD_drugs_medical_distribution = {
+			picture = ADISCORD_drugs_medical_distribution
+			cost = 75
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				industrial_capacity_factory = 0.01
+				ADISCORD_economy_social_expense_factor = 0.025
+			}
+			on_add = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			on_remove = {
+				hidden_effect = {
+					ADISCORD_economy_mark_dirty = yes
+					ADISCORD_economy_queue_law_refresh = yes
+					STP_pw_party_queue_constitution_refresh = yes
+				}
+			}
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+	}
+
+	ADISCORD_military_justice_laws = {
+		law = yes
+
+		ADISCORD_justice_regular_tribunals = {
+			picture = ADISCORD_justice_regular_tribunals
+			cost = 75
+			removal_cost = -1
+			default = yes
+			allowed = { always = yes }
+			available = { always = yes }
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_justice_field_courts = {
+			picture = ADISCORD_justice_field_courts
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { has_war = yes }
+			modifier = {
+				planning_speed = 0.05
+				war_support_factor = 0.03
+				stability_factor = -0.025
+			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
+		}
+
+		ADISCORD_justice_military_prosecution = {
+			picture = ADISCORD_justice_military_prosecution
+			cost = 100
+			removal_cost = -1
+			allowed = { always = yes }
+			available = { always = yes }
+			modifier = {
+				army_org_regain = 0.04
+				training_time_army_factor = 0.04
+			}
+			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			cancel_if_invalid = no
+			ai_will_do = { factor = 1 }
 		}
 	}
 }

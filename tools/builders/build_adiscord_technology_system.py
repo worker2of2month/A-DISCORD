@@ -5,6 +5,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 import json
 import re
+from PIL import Image
 
 from tools.lib.paths import repository_root
 from tools.builders.build_adiscord_technology_ui_assets import (
@@ -3007,10 +3008,10 @@ ENABLE_EQUIPMENT = {
     "ADISCORD_tech_multispectral_spotter_drones": ("ADISCORD_artillery_equipment_2183",),
     "ADISCORD_tech_robotic_shell_handling": ("ADISCORD_artillery_equipment_2183",),
     "ADISCORD_tech_drone_spotted_batteries": ("ADISCORD_artillery_equipment_2183",),
-    "ADISCORD_tech_scrap_at_launchers": ("ADISCORD_anti_tank_equipment_2163",),
+    "ADISCORD_tech_salvaged_at_guns": ("ADISCORD_anti_tank_equipment_2163",),
     "ADISCORD_tech_superconducting_coil_barrels": ("ADISCORD_anti_tank_equipment_2183",),
     "ADISCORD_tech_guided_hypervelocity_penetrators": ("ADISCORD_anti_tank_equipment_2183",),
-    "ADISCORD_tech_point_defense_aa": ("ADISCORD_anti_air_equipment_2163",),
+    "ADISCORD_tech_improvised_air_defense": ("ADISCORD_anti_air_equipment_2163",),
     "ADISCORD_tech_high_energy_laser_turrets": ("ADISCORD_anti_air_equipment_2183",),
     "ADISCORD_tech_drone_recon_swarms": ("ADISCORD_light_combat_platform_2163",),
     "ADISCORD_tech_unmanned_recon_vehicles": ("ADISCORD_recon_drone_carrier_2170",),
@@ -3911,19 +3912,6 @@ WEAPON_CATEGORY_ICONS.update({
 })
 
 
-def weapon_category_scale(tech: Tech) -> str:
-    # Category art is 176x72; effect-only cards have a 72x72 viewport.
-    if tech.key == "recovered_medium_chassis":
-        return "\t\tscale = 0.35\n"
-    if tech.id not in ENABLE_EQUIPMENT:
-        branch, index = TECH_POSITION_BY_ID[tech.id]
-        size = technology_icon_size(icon_for_technology(branch, index))
-        if size and max(size) > 72:
-            scale = min(64 / size[0], 64 / size[1])
-            return f"\t\tscale = {scale:.6f}\n"
-    return ""
-
-
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     if tech.key in WEAPON_CATEGORY_ICONS:
@@ -4649,14 +4637,23 @@ def render_research_completion_effects(tech: Tech) -> list[str]:
     building_upgrades = BUILDING_RESOURCE_UPGRADES.get(tech.id, ())
     payoff = RESEARCH_PAYOFFS.get(tech.id)
     branch, index = TECH_POSITION_BY_ID[tech.id]
+    railway_bonuses = [
+        effect.replace("railway_gun =", "railway_gun_equipment =", 1)
+        for effect in effects_for(branch, index)
+        if effect.startswith("railway_gun =")
+    ]
     budget_effect = any(effect.startswith("ADISCORD_economy_") for effect in effects_for(branch, index))
-    if not building_upgrades and payoff is None and not budget_effect:
+    if not building_upgrades and payoff is None and not budget_effect and not railway_bonuses:
         return []
     if LEADER_TRAINING.get(tech.key) is not None:
         raise ValueError(
             f"{tech.id} already spends its on_research_complete on leader training"
         )
     lines = ["\t\ton_research_complete = {"]
+    for bonus in railway_bonuses:
+        lines.extend(render_payload(
+            f"add_equipment_bonus = {{ name = {tech.id} bonus = {{ {bonus} }} }}", 3
+        ))
     if budget_effect:
         lines.append("\t\t\thidden_effect = { ADISCORD_economy_mark_dirty = yes }")
     for building, resource, amount in building_upgrades:
@@ -4721,6 +4718,8 @@ def render_technology(branch: Branch, index: int) -> str:
         lines.extend(f"\t\t\t{entry}" for entry in allow)
         lines.append("\t\t}")
     for effect in effects_for(branch, index):
+        if effect.startswith("railway_gun ="):
+            continue
         lines.extend(render_payload(effect, 2))
     if tech.id == "ADISCORD_tech_restored_dockyards":
         # Native transport permission is separate from the invasion plan and
@@ -5054,11 +5053,18 @@ def write_gfx() -> None:
                     if texture.startswith("gfx/")
                     else f"gfx/interface/technologies/{texture}.dds"
                 )
+                if tech.key in {"electrothermal_ignition", "biometric_trigger_locks", "recovered_medium_chassis"}:
+                    source = ROOT / texture_file
+                    target = source.with_name(source.stem + "_card.dds")
+                    with Image.open(source) as original:
+                        card = original.convert("RGBA")
+                        card.thumbnail((64, 64), Image.Resampling.LANCZOS)
+                        card.save(target, format="DDS")
+                    texture_file = target.relative_to(ROOT).as_posix()
                 entries.append(
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
                     f"\t\ttextureFile = \"{texture_file}\"\n"
-                    f"{weapon_category_scale(tech)}"
                     "\t}\n"
                 )
     content = (
@@ -5085,7 +5091,6 @@ def weapon_category_gfx_output() -> str:
                 "\tSpriteType = {\n"
                 f'\t\tname = "{sprite}"\n'
                 f'\t\ttextureFile = "{texture}"\n'
-                + weapon_category_scale(tech)
                 + "\t}"
             )
             text, count = re.subn(pattern, lambda match: replacement, text)

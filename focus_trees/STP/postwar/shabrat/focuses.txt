@@ -314,6 +314,7 @@
 		available = { custom_trigger_tooltip = { tooltip = STP_pw_reconstruction_available_tt STP_pw_can_reconstruct = yes } }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Mikhail_Rakitin
 			add_tech_bonus = { name = STP_pw_infantry_lessons_bonus bonus = 0.5 uses = 1 category = infantry_weapons }
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pw_republic_officer_school_delta } }
 			hidden_effect = {
@@ -608,6 +609,7 @@
 		mutually_exclusive = { focus = STP_pc_army_staff_doctrine }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Alexei_Barinov
 			add_timed_idea = { idea = STP_pc_heg_cadres days = -1 }
 		}
 	}
@@ -631,6 +633,7 @@
 		mutually_exclusive = { focus = STP_pc_army_staff_doctrine }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Nikolai_Vetrov
 			add_stability = 0.05
 			custom_effect_tooltip = STP_pc_civil_appointment_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_republic_delta } }
@@ -660,6 +663,7 @@
 		mutually_exclusive = { focus = STP_pc_army_republic_control }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Sergei_Tretyakov
 			custom_effect_tooltip = STP_qol_armor_bureau_tt
 			if = { limit = { has_dlc = "Arms Against Tyranny" } unlock_military_industrial_organization_tooltip = mio:STP_qol_armor_bureau }
 
@@ -775,6 +779,7 @@
 		prerequisite = { focus = STP_pc_navy_yards }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Boris_Ostrovsky
 			add_ideas = STP_pc_navy_staff_idea
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
 		}
@@ -876,6 +881,7 @@
 		prerequisite = { focus = STP_pc_air_fields }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_ideas = ADISCORD_staff_STS_Pavel_Berezov
 			random_owned_controlled_state = { add_building_construction = { type = anti_air_building level = 1 instant_build = yes } }
 			add_tech_bonus = { name = STP_pc_fighter_bonus bonus = 0.5 uses = 1 category = air_equipment }
 		}
@@ -1589,8 +1595,21 @@
 				STP_pc_focus_available = yes
 			}
 			hidden_trigger = { STP_pc_freedom_continues = yes }
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_sotnikov_staff_seat_tt
+				OR = {
+					hidden_trigger = { is_ai = yes }
+					STP_cw_sotnikov_available = no
+					has_idea = STP_pc_sotnikov_civil_staff
+					amount_taken_ideas = {
+						amount < 3
+						slots = { high_command }
+					}
+				}
+			}
 		}
 		prerequisite = { focus = STP_pc_lib_institutions }
+		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			custom_effect_tooltip = STP_pc_lib_civil_army_tt
@@ -1598,11 +1617,45 @@
 			hidden_effect = {
 				if = {
 					limit = { STP_cw_sotnikov_available = yes }
+					if = {
+						limit = {
+							is_ai = yes
+							amount_taken_ideas = {
+								amount > 2
+								slots = { high_command }
+							}
+						}
+						if = {
+							limit = { has_idea = ADISCORD_staff_STS_Dmitri_Nekrasov }
+							remove_ideas = ADISCORD_staff_STS_Dmitri_Nekrasov
+						}
+						else_if = {
+							limit = { has_idea = ADISCORD_staff_STS_Gennady_Malinin }
+							remove_ideas = ADISCORD_staff_STS_Gennady_Malinin
+						}
+						else_if = {
+							limit = { has_idea = ADISCORD_staff_STS_Ruslan_Tumanov }
+							remove_ideas = ADISCORD_staff_STS_Ruslan_Tumanov
+						}
+						else_if = {
+							limit = { has_idea = ADISCORD_staff_STS_Semyon_Uvarov }
+							remove_ideas = ADISCORD_staff_STS_Semyon_Uvarov
+						}
+						else_if = {
+							limit = { has_idea = ADISCORD_staff_STS_Stanislav_Frolov }
+							remove_ideas = ADISCORD_staff_STS_Stanislav_Frolov
+						}
+						else_if = {
+							limit = { has_idea = ADISCORD_staff_STS_Vladimir_Losev }
+							remove_ideas = ADISCORD_staff_STS_Vladimir_Losev
+						}
+					}
 					add_advisor_role = {
 						character = STP_grigory_sotnikov
 						activate = yes
 						advisor = {
 							slot = high_command
+							ledger = army
 							idea_token = STP_pc_sotnikov_civil_staff
 							traits = { army_regrouping_1 }
 							cost = 100

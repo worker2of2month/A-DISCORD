@@ -12,12 +12,25 @@ from PIL import Image
 from tools.builders import build_adiscord_strategic_regions as builder
 from tools.builders import build_adiscord_map_buildings as buildings
 from tools.builders import build_adiscord_coastal_geography as geography
+
+
 from tools.builders import build_adiscord_new_states as states
 from tools.lib.localisation import sync_builder_english_localisation
 from tools.validators.validate_adiscord_strategic_regions import parse_regions
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+class ProvinceCornerTests(unittest.TestCase):
+    def test_province_map_has_no_four_colour_crossings(self):
+        with Image.open(ROOT / "map/provinces.bmp") as image:
+            rgb = np.asarray(image.convert("RGB"), dtype=np.uint32)
+        packed = (rgb[:, :, 0] << 16) | (rgb[:, :, 1] << 8) | rgb[:, :, 2]
+        a, b = packed[:-1, :-1], packed[:-1, 1:]
+        c, d = packed[1:, :-1], packed[1:, 1:]
+        crossings = (a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d)
+        self.assertEqual(int(crossings.sum()), 0, np.argwhere(crossings).tolist())
 
 
 class CoastalSeaRegionTests(unittest.TestCase):

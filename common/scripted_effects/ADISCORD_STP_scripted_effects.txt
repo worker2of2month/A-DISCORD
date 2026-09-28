@@ -5747,6 +5747,10 @@ STP_pf_refresh_on_load = {
 
 # Only mutations and load reconciliation recalculate contributions; GUI reads cached values.
 STP_pf_calculate = {
+	if = {
+		limit = { has_country_flag = STP_pw_party_constitution_initialized }
+		STP_pw_party_refresh_constitution = yes
+	}
 	STP_pf_refresh_programs = yes
 	set_variable = { var = STP_apparatus_loyalty value = 0 }
 	clamp_variable = { var = STP_pf_conservatives_support min = 0 max = 100 }
@@ -6100,6 +6104,7 @@ STP_pf_shift = {
 
 STP_pf_clear = {
 	if = { limit = { has_country_flag = STP_pf_initialized }
+		STP_pw_party_clear_constitution = yes
 		clr_country_flag = STP_pf_initialized
 		clr_country_flag = STP_pf_negotiation_cooldown
 		if = { limit = { has_dynamic_modifier = { modifier = STP_pf_balance_dynamic } } remove_dynamic_modifier = { modifier = STP_pf_balance_dynamic } }
@@ -6307,6 +6312,22 @@ STP_pw_party_settle_nod_invasion_defeat = {
 	}
 }
 
+# STP: another victor closes the threat without granting our victory rewards
+# or reserving NOD from that victor's capitulation settlement.
+STP_pw_party_close_nod_invasion_after_foreign_defeat = {
+	clr_country_flag = STP_pw_party_nod_threat_active
+	clr_country_flag = STP_pw_party_compact_pending
+	clr_country_flag = STP_pw_party_nod_invasion_active
+	set_country_flag = STP_pw_party_nod_invasion_defeated
+	remove_decision = STP_pw_party_nod_invasion_countdown
+	NOD = { remove_ideas = STP_pw_nod_invasion_mandate }
+	if = {
+		limit = { has_war_with = NOD }
+		white_peace = NOD
+	}
+	mark_focus_tree_layout_dirty = yes
+}
+
 STP_pw_party_settle_nod_invasion_victory = {
 	if = {
 		limit = {
@@ -6326,6 +6347,7 @@ STP_pw_party_settle_nod_invasion_victory = {
 			clr_country_flag = STP_pw_party_compact_pending
 			clr_country_flag = STP_pw_party_nod_invasion_active
 			set_country_flag = STP_pw_party_nod_invasion_lost
+			STP_pw_party_clear_constitution = yes
 		}
 		annex_country = { target = STP transfer_troops = yes }
 	}
@@ -7747,11 +7769,16 @@ STP_pw_party_finalize_nod_subject = {
 		clr_country_flag = STP_pw_party_nod_subject_pending
 		if = {
 			limit = { STP_pw_party_revolution_current = yes NOD = { exists = yes is_subject = no } NOT = { has_war_with = NOD } }
-			puppet = NOD
+			puppet = {
+				target = NOD
+				end_wars = no
+				end_civil_wars = no
+			}
 			set_autonomy = { target = NOD autonomy_state = autonomy_puppet freedom_level = 0.10 end_wars = no end_civil_wars = no }
 			NOD = { ADISCORD_economy_mark_dirty = yes }
 			ADISCORD_economy_mark_dirty = yes
 			mark_focus_tree_layout_dirty = yes
+			NOD = { STP_pw_party_sync_revolution_subject = yes }
 			country_event = { id = ADISCORD_STP_pc.42 hours = 1 }
 		}
 	}
@@ -8228,14 +8255,75 @@ STP_heg_settle_kefreyt_final = {
 STP_pw_party_settle_kefreyt_victory = {
 	if = {
 		limit = { tag = STP has_country_flag = STP_pw_party_kefreyt_campaign_active VAL = { exists = yes } }
-		VAL = { if = { limit = { is_in_faction = yes is_faction_leader = yes } dismantle_faction = yes } }
-		if = { limit = { has_war_with = VAL } white_peace = VAL }
-		annex_country = { target = VAL transfer_troops = no }
 		clr_country_flag = STP_pw_party_kefreyt_campaign_active
-		set_country_flag = STP_pw_party_kefreyt_victory
-		add_political_power = 75
-		add_war_support = 0.03
+		set_country_flag = STP_pw_party_kefreyt_subject_pending
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = STP
+					is_core_of = STS
+					state = 42
+					state = 52
+					state = 55
+				}
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+			}
+			add_core_of = STP
+			transfer_state_to = STP
+			set_state_controller_to = STP
+		}
+		VAL = {
+			if = {
+				limit = { is_in_faction = yes }
+				if = {
+					limit = { is_faction_leader = yes }
+					dismantle_faction = yes
+				}
+				else = { faction_leader = { remove_from_faction = VAL } }
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = { limit = { has_war_with = VAL } white_peace = VAL }
 		ADISCORD_economy_mark_dirty = yes
+		# Advance the native faction cache before creating the subject.
+		country_event = { id = ADISCORD_STP_pc.46 days = 1 }
+	}
+}
+
+STP_pw_party_finalize_kefreyt_subject = {
+	if = {
+		limit = { has_country_flag = STP_pw_party_kefreyt_subject_pending }
+		clr_country_flag = STP_pw_party_kefreyt_subject_pending
+		if = {
+			limit = {
+				tag = STP
+				STP_pw_can_reconstruct = yes
+				is_subject = no
+				VAL = { exists = yes is_subject = no }
+				NOT = { has_war_with = VAL }
+			}
+			puppet = {
+				target = VAL
+				end_wars = no
+				end_civil_wars = no
+			}
+			set_autonomy = {
+				target = VAL
+				autonomy_state = autonomy_puppet
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+			set_country_flag = STP_pw_party_kefreyt_victory
+			VAL = { STP_pw_party_sync_revolution_subject = yes }
+			add_political_power = 75
+			add_war_support = 0.03
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+			ADISCORD_economy_mark_dirty = yes
+		}
 	}
 }
 
@@ -8359,5 +8447,144 @@ STP_pw_open_marine_school = {
 				}
 			}
 		}
+	}
+}
+
+# The constitution reads existing faction influence and the currently enacted laws.
+# Subject scope: apply only to the independent revolutionary centre's dependants.
+# The autonomy guard prevents a repeated on_puppet callback from reapplying it.
+STP_pw_party_sync_revolution_subject = {
+	if = {
+		limit = {
+			is_subject_of = STP
+			STP = {
+				exists = yes
+				is_subject = no
+				has_country_flag = STP_pw_party_constitution_initialized
+			}
+		}
+		if = {
+			limit = { NOT = { has_autonomy_state = autonomy_shadow_state } }
+			STP = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_shadow_state
+					freedom_level = 0.35
+					end_wars = no
+					end_civil_wars = no
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { tag = NOD }
+			set_cosmetic_tag = NOD_STP_revolution
+		}
+		else_if = {
+			limit = { tag = VAL }
+			set_cosmetic_tag = VAL_STP_revolution
+		}
+		else_if = {
+			limit = { tag = BJK }
+			set_cosmetic_tag = BJK_STP_revolution
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_cosmetic_tag = NOD_STP_revolution
+				has_cosmetic_tag = VAL_STP_revolution
+				has_cosmetic_tag = BJK_STP_revolution
+			}
+		}
+		drop_cosmetic_tag = yes
+	}
+}
+
+STP_pw_party_initialize_constitution = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_pw_party_constitution_initialized } }
+		if = {
+			limit = { has_power_balance = { id = STP_shabrat_election_legitimacy } }
+			remove_power_balance = { id = STP_shabrat_election_legitimacy }
+		}
+		set_power_balance = { id = STP_party_constitution set_value = 0 }
+		set_country_flag = STP_pw_party_constitution_initialized
+		STP_pw_party_refresh_constitution = yes
+		set_cosmetic_tag = STP_revolution_capital
+		every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
+		news_event = { id = ADISCORD_STP_pc.47 hours = 1 }
+	}
+}
+
+STP_pw_party_refresh_constitution = {
+	if = {
+		limit = { STP_pw_party_constitution_open = yes }
+		set_temp_variable = { var = STP_pw_party_constitution_target value = STP_pf_radicals_influence }
+		subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = STP_pf_conservatives_influence }
+		divide_temp_variable = { var = STP_pw_party_constitution_target value = 100 }
+		clamp_temp_variable = { var = STP_pw_party_constitution_target min = -0.60 max = 0.60 }
+		if = {
+			limit = { has_idea = STP_law_public_orgies }
+			add_to_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
+		}
+		else_if = {
+			limit = { has_idea = STP_law_private_societies }
+			subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
+		}
+		if = {
+			limit = { has_idea = STP_law_hard_drugs }
+			add_to_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
+		}
+		else_if = {
+			limit = { has_idea = STP_law_light_drugs }
+			subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = 0.15 }
+		}
+		subtract_from_temp_variable = { var = STP_pw_party_constitution_target value = power_balance_value }
+		add_power_balance_value = { id = STP_party_constitution value = STP_pw_party_constitution_target }
+	}
+}
+
+# Law swaps must finish before reading the new idea group; coalesce both callbacks.
+STP_pw_party_queue_constitution_refresh = {
+	if = {
+		limit = {
+			STP_pw_party_constitution_open = yes
+			NOT = { has_country_flag = STP_pw_party_constitution_refresh_pending }
+		}
+		set_country_flag = STP_pw_party_constitution_refresh_pending
+		country_event = { id = ADISCORD_STP_pc.45 hours = 1 }
+	}
+}
+
+STP_pw_party_clear_constitution = {
+	clr_country_flag = STP_pw_party_constitution_initialized
+	if = {
+		limit = { has_cosmetic_tag = STP_revolution_capital }
+		drop_cosmetic_tag = yes
+	}
+	every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
+	clr_country_flag = STP_pw_party_constitution_refresh_pending
+	if = {
+		limit = { has_power_balance = { id = STP_party_constitution } }
+		remove_power_balance = { id = STP_party_constitution }
+	}
+	if = {
+		limit = { has_idea = STP_law_slavery }
+		swap_ideas = { remove_idea = STP_law_slavery add_idea = ADISCORD_labor_policy_loose_contracts }
+	}
+	if = {
+		limit = { OR = { has_idea = STP_law_public_orgies has_idea = STP_law_private_societies } }
+		remove_ideas = { STP_law_public_orgies STP_law_private_societies }
+		add_ideas = ADISCORD_cultural_policy_public_entertainment
+	}
+	if = {
+		limit = { OR = { has_idea = STP_law_light_drugs has_idea = STP_law_hard_drugs } }
+		add_ideas = STP_law_drug_prohibition
+	}
+	remove_ideas = {
+		STP_pw_party_high_houses_government
+		STP_pw_party_unbound_government
 	}
 }

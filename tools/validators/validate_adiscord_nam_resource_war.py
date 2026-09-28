@@ -760,7 +760,7 @@ def main() -> int:
         check(re.search(rf"(?m)^\s*{part}\s*=\s*\{{", crit_table) is not None,
               f"missing critical part {part}")
     fleet_contracts = (
-        ("NAM", "history/units/NAM.txt", 4, 30, 2038, 689, 1, 688),
+        ("NAM", "history/units/NAM.txt", 4, 30, 16716, 700, 1, 688),
         ("EFL", "history/units/EFL.txt", 3, 20, 6495, 70, 2, 70),
         ("AZH", "history/units/AZH.txt", 2, 15, 493, 692, 1, 692),
     )

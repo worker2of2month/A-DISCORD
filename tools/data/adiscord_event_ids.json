@@ -301,6 +301,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_pc.45",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 45,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
       "id": "val_contract.368",
       "namespace": "val_contract",
       "number": 368,
@@ -3378,6 +3386,22 @@
       "number": 9,
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.46",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 46,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.47",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 47,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
       "status": "active"
     }
   ]

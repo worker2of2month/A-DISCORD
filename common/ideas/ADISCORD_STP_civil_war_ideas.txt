@@ -1,5 +1,23 @@
 ideas = {
 	country = {
+		STP_pw_party_high_houses_government = {
+			picture = STP_law_private_societies
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.08
+				ADISCORD_economy_admin_expense_factor = -0.08
+			}
+		}
+
+		STP_pw_party_unbound_government = {
+			picture = STP_law_public_orgies
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.08
+				ADISCORD_economy_trade_income_factor = 0.08
+			}
+		}
+
 		# Postwar policy previews; these ideas are never installed.
 		STP_pw_party_command_army_delta = {
 			picture = ADISCORD_law_civic_emergency_committees
@@ -1277,4 +1295,5 @@ ideas = {
 			ai_will_do = { factor = 1 }
 		}
 	}
+
 }

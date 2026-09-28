@@ -1618,9 +1618,14 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
                    "Dmitri_Karsov": "VAL_Contract_General_Staff", "Leonid_Vargan": "VAL_New_Supply_Base",
                    "Sergei_Volkov": "VAL_Veterans_Of_The_Campaign"}
         for name, focus_id in unlocks.items():
-            self.assertNotIn("recruit_character = VAL_" + name, history)
+            self.assertIn("recruit_character = VAL_" + name, history)
+            definition = only_named_block(self, characters, "VAL_" + name)
+            self.assertNotIn("corps_commander =", definition)
+            self.assertNotIn("field_marshal =", definition)
             focus = next(f for f in named_blocks(focus_text, "focus") if f"id = {focus_id}" in f)
-            self.assertIn("recruit_character = VAL_" + name, focus)
+            self.assertNotIn("recruit_character =", focus)
+            self.assertIn("character = VAL_" + name, focus)
+            self.assertRegex(focus, r"add_(corps_commander|field_marshal)_role\s*=")
         self.assertNotIn("The_Weaponry_Baron", only_named_block(self, characters, "VAL_Valera_Solgalov"))
         baron = next(f for f in named_blocks(focus_text, "focus") if "id = VAL_The_Weaponry_Baron" in f)
         self.assertIn("VAL_Valera_Solgalov = { add_country_leader_trait", baron)

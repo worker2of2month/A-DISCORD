@@ -1630,9 +1630,16 @@ STP_pw_party_can_attack_kefreyt = {
 	is_subject = no
 	has_war = no
 	NOT = { has_country_flag = STP_pw_party_kefreyt_campaign_active }
+	NOT = { has_country_flag = STP_pw_party_kefreyt_subject_pending }
 	NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
 	NOT = { is_in_faction_with = VAL }
 	VAL = { exists = yes has_capitulated = no is_subject = no }
+}
+
+# A completed protectorate course may outlive the patron's state or treaty.
+STP_pw_party_northern_patron_lost = {
+	has_completed_focus = STP_pw_party_protectorate
+	NOT = { is_subject_of = NOD }
 }
 
 # COUNTRY STP: both late regional campaigns have reached a terminal state.
@@ -1908,6 +1915,38 @@ STP_pw_party_revolution_current = {
 	is_subject = no
 	has_completed_focus = STP_pw_party_revolution_capital
 	NOT = { has_country_flag = STP_pw_party_nod_compact }
+}
+
+STP_pw_party_laws_available = {
+	tag = STP
+	STP_pw_can_reconstruct = yes
+	has_government = hedonism
+	has_completed_focus = STP_pw_party_new_republic
+}
+
+STP_pw_party_constitution_open = {
+	STP_pw_party_laws_available = yes
+	is_subject = no
+	hidden_trigger = {
+		has_country_flag = STP_pw_party_constitution_initialized
+		has_power_balance = { id = STP_party_constitution }
+	}
+	NOT = { has_completed_focus = STP_pw_party_high_houses }
+	NOT = { has_completed_focus = STP_pw_party_unbound_revolution }
+}
+
+STP_pw_party_radical_laws_available = {
+	STP_pw_party_laws_available = yes
+	NOT = { has_completed_focus = STP_pw_party_high_houses }
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_party_radical_support_tt
+		check_variable = { var = STP_pf_radicals_support value = 40 compare = greater_than_or_equals }
+	}
+}
+
+STP_pw_party_conservative_laws_available = {
+	STP_pw_party_laws_available = yes
+	NOT = { has_completed_focus = STP_pw_party_unbound_revolution }
 }
 
 # NOD: consent is valid during the bilateral war, until either government falls.

@@ -8,6 +8,11 @@ recruit_character = VAL_Kirill_Voron
 recruit_character = VAL_Erika_Stahl
 recruit_character = VAL_Boris_Gromov
 recruit_character = VAL_Renata_Morn
+recruit_character = VAL_Aleksei_Veyr
+recruit_character = VAL_Dmitri_Karsov
+recruit_character = VAL_Maksim_Korvin
+recruit_character = VAL_Leonid_Vargan
+recruit_character = VAL_Sergei_Volkov
 recruit_character = VAL_Artem_Rask
 
 ####### Basic shit
