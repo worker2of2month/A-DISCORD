@@ -1,0 +1,62 @@
+name: Repository code style audit
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  audit:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/code-style-audit-20260929'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Export tracked source for isolated formatting review
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import collections
+          import json
+          import subprocess
+          import zipfile
+          root = Path.cwd()
+          paths = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          inventory = []
+          extensions = collections.Counter()
+          selected = 0
+          allowed = {'.txt', '.gui', '.gfx', '.asset', '.mod', '.lua', '.py', '.yml', '.yaml', '.md', '.ps1', '.json', '.ini', '.csv', '.fx', '.fxh', '.shader', '.h', '.sh', '.toml', '.cfg', '.sfx'}
+          with zipfile.ZipFile('/tmp/code-style-source.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in paths:
+                  if not name:
+                      continue
+                  path = root / name
+                  extensions[path.suffix.lower()] += 1
+                  record = {'path': name, 'bytes': path.stat().st_size, 'included': False}
+                  if path.suffix.lower() in allowed or path.name in {'.gitignore', '.gitattributes', '.editorconfig'}:
+                      data = path.read_bytes()
+                      try:
+                          data.decode('utf-8-sig')
+                          if b'\0' not in data:
+                              archive.writestr('source/' + name, data)
+                              record['included'] = True
+                              selected += 1
+                      except UnicodeDecodeError:
+                          record['encoding'] = 'not-utf8'
+                  inventory.append(record)
+              metadata = {
+                  'head': subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip(),
+                  'base': subprocess.check_output(['git', 'rev-parse', 'HEAD^']).decode().strip() if subprocess.run(['git', 'rev-parse', '--verify', 'HEAD^'], capture_output=True).returncode == 0 else None,
+                  'files': inventory,
+                  'extensions': dict(extensions),
+                  'selected': selected,
+              }
+              archive.writestr('inventory.json', json.dumps(metadata, indent=2))
+          print(json.dumps({'selected': selected, 'extensions': dict(extensions)}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-style-source
+          path: /tmp/code-style-source.zip
+          retention-days: 3
