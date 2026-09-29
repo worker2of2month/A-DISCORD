@@ -5213,7 +5213,7 @@ STP_cw_external_intervention = {
 		visible = { has_active_mission = NOD_cw_northern_push }
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
-		days_mission_timeout = 70
+		days_mission_timeout = 85
 		is_good = no
 		cancel_trigger = { OR = { has_capitulated = yes NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } } }
 		cancel_effect = { hidden_effect = { remove_ideas = NOD_cw_northern_offensive remove_ideas = NOD_cw_stalled_army } }

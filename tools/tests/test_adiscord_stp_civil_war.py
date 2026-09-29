@@ -3165,7 +3165,7 @@ class NorthernCampaignContracts(unittest.TestCase):
 
     def test_nod_northern_offensive_is_inherent_and_does_not_wait_for_stelander_help(self):
         start = ast_block(self.effects, "STP_cw_start_northern_war")
-        self.assertIn(("NOD_cw_northern_offensive", "70"), {(scalar(e.value, "idea"), scalar(e.value, "days")) for e in walk(start) if e.key == "add_timed_idea"})
+        self.assertIn(("NOD_cw_northern_offensive", "85"), {(scalar(e.value, "idea"), scalar(e.value, "days")) for e in walk(start) if e.key == "add_timed_idea"})
         ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
         offensive = ast_block(ideas, "NOD_cw_northern_offensive")
         self.assertEqual(scalar(ast_block(offensive, "allowed"), "always"), "no")
@@ -4409,10 +4409,10 @@ class AutomaticFrontOperationContracts(unittest.TestCase):
 
 
 class NorthernOffensiveClockTests(unittest.TestCase):
-    def test_northern_push_has_seventy_days_and_cancels_after_peace(self):
+    def test_northern_push_has_eighty_five_days_and_cancels_after_peace(self):
         council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_external_intervention")
         mission = ast_block(council, "NOD_cw_northern_push")
-        self.assertEqual(scalar(mission, "days_mission_timeout"), "70")
+        self.assertEqual(scalar(mission, "days_mission_timeout"), "85")
         self.assertFalse(matches_conditions(ast_block(mission, "available"), {}, "NOD"))
         for enemies in ((), ("YPR",), ("COF",), ("TFF",), ("YPR", "TFF")):
             facts = {("NOD", "has_war_with", tag): tag in enemies for tag in ("YPR", "COF", "TFF")}
@@ -4421,9 +4421,10 @@ class NorthernOffensiveClockTests(unittest.TestCase):
         self.assertIn("activate_mission = NOD_cw_northern_push", start)
         expired = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "NOD_cw_exhaust_northern_push")
         self.assertIn("remove_ideas = NOD_cw_northern_offensive", expired)
-        self.assertIn("add_ideas = NOD_cw_stalled_army", expired)
-        self.assertIn("has_war_with = YPR", expired)
+        self.assertIn("NOD_cw_apply_northern_exhaustion = yes", expired)
         helper = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "NOD_cw_apply_northern_exhaustion")
+        self.assertIn("add_ideas = NOD_cw_stalled_army", helper)
+        self.assertIn("has_war_with = YPR", helper)
         self.assertIn("add_ideas = YPR_cw_northern_resolve", helper)
         self.assertIn("add_ideas = COF_cw_northern_resolve", helper)
         self.assertIn("add_ideas = TFF_cw_northern_resolve", helper)
