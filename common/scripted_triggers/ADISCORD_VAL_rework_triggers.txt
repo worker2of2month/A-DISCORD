@@ -2468,3 +2468,18 @@ VAL_frontier_workshop_affordable = {
 		AND = { FROM = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
 	}
 }
+
+VAL_island_treaty_available = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = STP_cw_started
+	SLI = {
+		exists = yes
+		is_subject = no
+		is_in_faction = no
+		has_war = no
+		owns_state = 709
+		controls_state = 709
+	}
+}

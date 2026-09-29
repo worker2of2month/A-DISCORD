@@ -41,100 +41,69 @@ def block(text, name):
 
 
 class CivilWarContracts(unittest.TestCase):
-    def test_party_exhaustion_milestones_replace_instead_of_stack(self):
-        decisions = ast_block(
-            entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
-        )
-        ideas = ast_block(
-            ast_block(
-                entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"
-            ),
-            "country",
-        )
-        elapsed = 0
-        installed = set()
-        for stage, duration in ((1, 90), (2, 60), (3, 60)):
-            mission_id = f"STP_cw_exhaustion_deadline_{stage}"
-            idea_id = f"STP_cw_exhaustion_{stage}"
-            mission = ast_block(decisions, mission_id)
-            self.assertTrue(mission, mission_id)
-            elapsed += int(scalar(mission, "days_mission_timeout"))
-            self.assertEqual(elapsed, (90, 150, 210)[stage - 1])
-            self.assertEqual(int(scalar(mission, "days_mission_timeout")), duration)
-            goal = ast_block(ast_block(mission, "available"), "hidden_trigger")
-            self.assertEqual(scalar(goal, "always"), "no")
-            self.assertEqual(scalar(ast_block(mission, "activation"), "always"), "no")
-            timeout = ast_block(mission, "timeout_effect")
-            for active in (False, True):
-                facts = {("STP", "STP_cw_party_exhaustion_active", "yes"): active}
-                effects = list(selected_effects(timeout, facts))
-                changes = [
-                    (e.key, e.value)
-                    for _, e in effects
-                    if e.key in ("add_ideas", "remove_ideas", "activate_mission")
-                ]
-                if not active:
-                    self.assertEqual(changes, [])
-                    continue
-                for key, value in changes:
-                    if key == "remove_ideas":
-                        installed.discard(value)
-                    elif key == "add_ideas":
-                        installed.add(value)
-                self.assertEqual(installed, {idea_id})
-                next_missions = [
-                    value for key, value in changes if key == "activate_mission"
-                ]
-                self.assertEqual(
-                    next_missions,
-                    [f"STP_cw_exhaustion_deadline_{stage + 1}"] if stage < 3 else [],
-                )
-                self.assertNotIn(
-                    ("remove_mission", mission_id),
-                    [(e.key, e.value) for _, e in effects],
-                )
-            modifiers = ast_block(ast_block(ideas, idea_id), "modifier")
-            self.assertAlmostEqual(
-                float(scalar(modifiers, "army_defence_factor")), -0.05 * stage
-            )
-            self.assertAlmostEqual(
-                float(scalar(modifiers, "army_org_regain")), -0.10 * stage
-            )
-            for definition, cancel_key in (
-                (mission, "cancel_trigger"),
-                (ast_block(ideas, idea_id), "cancel"),
-            ):
-                cancel = ast_block(definition, cancel_key)
-                self.assertEqual(scalar(cancel, "STP_cw_party_exhaustion_active"), "no")
-
-    def test_party_exhaustion_stops_with_either_side_and_starts_after_declaration(self):
+    def test_mountain_training_closes_after_rival_war_or_capitulation(self):
         trigger = ast_block(
             entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
-            "STP_cw_party_exhaustion_active",
+            "STP_cw_mountain_war_active",
         )
-        self.assertTrue(trigger)
-        facts = {
-            ("STP", "has_war_with", "STS"): True,
-            ("STP", "has_capitulated", "no"): True,
-            ("STS", "exists", "yes"): True,
-            ("STS", "has_capitulated", "no"): True,
+        for tag, rival in (("STP", "STS"), ("STS", "STP")):
+            facts = {
+                (tag, "tag", tag): True,
+                (tag, "has_war_with", rival): True,
+                (tag, "has_capitulated", "no"): True,
+                (rival, "exists", "yes"): True,
+                (rival, "has_capitulated", "no"): True,
+            }
+            self.assertTrue(matches_conditions(trigger, facts, tag))
+            for key in (
+                (tag, "has_war_with", rival),
+                (tag, "has_capitulated", "no"),
+                (rival, "exists", "yes"),
+                (rival, "has_capitulated", "no"),
+            ):
+                self.assertFalse(matches_conditions(trigger, {**facts, key: False}, tag))
+            facts[tag, "has_country_flag", "STP_cw_postwar"] = True
+            self.assertFalse(matches_conditions(trigger, facts, tag))
+
+        ideas = ast_block(
+            ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"),
+            "country",
+        )
+        cleanup = ast_block(
+            entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            "STP_cw_clear_wartime_modifiers",
+        )
+        removed = {
+            idea.value
+            for effect in walk(cleanup) if effect.key == "remove_ideas"
+            for idea in effect.value
         }
-        self.assertTrue(matches_conditions(trigger, facts))
-        for key in facts:
-            with self.subTest(terminal=key):
-                self.assertFalse(matches_conditions(trigger, {**facts, key: False}))
-        self.assertFalse(matches_conditions(trigger, facts, "STS"))
-        start = block(
-            read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
-            "STP_cw_begin_hostilities",
-        )
-        self.assertEqual(
-            start.count("activate_mission = STP_cw_exhaustion_deadline_1"), 1
-        )
-        self.assertLess(
-            start.index("declare_war_on"),
-            start.index("activate_mission = STP_cw_exhaustion_deadline_1"),
-        )
+        for name in ("STP_cw_mountain_training", "STP_cw_mountain_assault_training"):
+            cancel = ast_block(ast_block(ideas, name), "cancel")
+            for active in (False, True):
+                self.assertEqual(
+                    matches_conditions(cancel, {("STP", "STP_cw_mountain_war_active", "no"): not active}),
+                    not active,
+                )
+            self.assertIn(name, removed)
+
+    def test_mountain_school_supplies_two_complete_brigades(self):
+        tree = ast_block(entries("focus_trees/STP/civil_war/focuses.txt"), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        self.assertIn("STP_cw_mountain_school", list(focuses))
+        reward = ast_block(focuses["STP_cw_mountain_school"], "completion_reward")
+        stocks = {
+            scalar(e.value, "type"): float(scalar(e.value, "amount"))
+            for e in reward if e.key == "add_equipment_to_stockpile"
+        }
+        units = ast_block(entries("common/units/ADISCORD_land_units.txt"), "sub_units")
+        needs = {}
+        for unit, count in (("mountaineers", 12), ("engineer", 2)):
+            for equipment in ast_block(ast_block(units, unit), "need"):
+                needs[equipment.key] = needs.get(equipment.key, 0) + count * float(equipment.value)
+        for equipment, amount in needs.items():
+            self.assertGreaterEqual(stocks.get(equipment, 0), amount, equipment)
+        self.assertEqual(scalar(reward, "STP_pw_open_mountain_school"), "yes")
 
     def test_weekly_civil_war_dispatch_is_country_scoped_and_ordered(self):
         actions = ast_block(

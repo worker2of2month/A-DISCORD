@@ -6,6 +6,165 @@ focus_tree = {
 	country = { factor = 0 modifier = { add = 100 has_country_flag = STP_cw_participant } }
 	continuous_focus_position = { x = 100 y = 555555 }
 
+	# Both civil-war armies can prepare specialists before the mountain front stalls.
+	focus = {
+		id = STP_cw_mountain_school
+		icon = GFX_focus_generic_mountain_fortification
+		x = -14
+		y = 0
+		cost = 1
+		allow_branch = {
+			OR = { tag = STP tag = STS }
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_mountain_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY }
+		completion_reward = {
+			STP_pw_open_mountain_school = yes
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 11340 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 72 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+			add_ideas = STP_cw_mountain_training
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = STP_cw_mountain_assault
+		icon = GFX_focus_generic_mountain_fortification
+		x = 0
+		y = 1
+		relative_position_id = STP_cw_mountain_school
+		prerequisite = { focus = STP_cw_mountain_school }
+		cost = 2
+		allow_branch = {
+			OR = { tag = STP tag = STS }
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_cw_mountain_war_active_tt
+				STP_cw_mountain_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY }
+		completion_reward = { add_ideas = STP_cw_mountain_assault_training }
+		ai_will_do = { base = 25 }
+	}
+
+	# Shared emergency branch, independent of postwar reconstruction.
+	focus = {
+		id = STP_kc_emergency_staff
+		icon = GFX_focus_STP_cw_arm_the_north
+		x = -20
+		y = 0
+		cost = 1
+		allow_branch = { OR = { tag = STP tag = STS } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_threat_current_tt
+				STP_kc_threat_current = yes
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY }
+		completion_reward = {
+			hidden_effect = {
+				if = {
+					limit = { NOT = { has_war_with = VAL } }
+					set_country_flag = { flag = STP_kc_preparing days = 180 }
+				}
+			}
+			add_timed_idea = { idea = STP_kc_defence days = 180 }
+			custom_effect_tooltip = STP_kc_temporary_support_tt
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = STP_kc_war_production
+		icon = GFX_focus_STP_cw_capital_reserve
+		x = -2
+		y = 1
+		relative_position_id = STP_kc_emergency_staff
+		prerequisite = { focus = STP_kc_emergency_staff }
+		cost = 2
+		allow_branch = { OR = { tag = STP tag = STS } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_support_active_tt
+				STP_kc_support_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_ARMY }
+		completion_reward = {
+			add_timed_idea = { idea = STP_kc_production days = 180 }
+			custom_effect_tooltip = STP_kc_temporary_support_tt
+		}
+		ai_will_do = { base = 25 }
+	}
+
+	focus = {
+		id = STP_kc_army_supply
+		icon = GFX_focus_STP_cw_arm_the_north
+		x = 2
+		y = 1
+		relative_position_id = STP_kc_emergency_staff
+		prerequisite = { focus = STP_kc_emergency_staff }
+		cost = 2
+		allow_branch = { OR = { tag = STP tag = STS } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_support_active_tt
+				STP_kc_support_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 240 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 120 }
+			add_equipment_to_stockpile = { type = anti_air_equipment amount = 60 }
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	focus = {
+		id = STP_kc_counterattack_plan
+		icon = GFX_focus_STP_cw_arm_the_north
+		x = 0
+		y = 2
+		relative_position_id = STP_kc_emergency_staff
+		prerequisite = { focus = STP_kc_war_production }
+		prerequisite = { focus = STP_kc_army_supply }
+		cost = 2
+		allow_branch = { OR = { tag = STP tag = STS } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_support_active_tt
+				STP_kc_support_active = yes
+			}
+			has_war_with = VAL
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ARMY }
+		completion_reward = {
+			add_timed_idea = { idea = STP_kc_counteroffensive days = 90 }
+			custom_effect_tooltip = STP_kc_temporary_support_tt
+		}
+		ai_will_do = { base = 25 }
+	}
+
 	focus = {
 		id = STP_cw_unified_headquarters
 		icon = GFX_focus_STP_ps_joint_staff
@@ -3337,7 +3496,10 @@ focus_tree = {
 		prerequisite = { focus = STP_pw_republic_professional_service }
 		available = { STP_pc_focus_available = yes }
 		cancel_if_invalid = yes
-		completion_reward = { STP_pw_open_mountain_school = yes }
+		completion_reward = {
+			STP_pw_open_mountain_school = yes
+			add_ideas = STP_pw_stelander_mountaineers
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -3448,7 +3610,7 @@ focus_tree = {
 			custom_effect_tooltip = STP_pc_civil_appointment_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_republic_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
+				add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3483,9 +3645,9 @@ focus_tree = {
 
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_staff_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
-					add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
-					add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3496,17 +3658,31 @@ focus_tree = {
 		icon = GFX_focus_generic_coastal_fort
 		x = 3
 		y = 6
-		prerequisite = { focus = STP_pw_republic_restore_roads }
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
-		available = {
-			STP_pc_focus_available = yes
-			STP_pc_has_naval_base = yes
+		prerequisite = {
+			focus = STP_pw_republic_restore_roads
+			focus = STP_kc_emergency_staff
 		}
+		cost = 2
+		allow_branch = { tag = STS }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
+			}
+		}
+		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			navy_experience = 30
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
+			set_technology = {
+				ADISCORD_tech_restored_dockyards = 1
+				ADISCORD_tech_coastal_patrols = 1
+				popup = no
+			}
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
+			add_fuel = 10000
 		}
 	}
 
@@ -3515,12 +3691,15 @@ focus_tree = {
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 3
 		y = 7
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 2
+		allow_branch = { tag = STS }
 		available = {
-			STP_pc_focus_available = yes
-			STP_pc_has_naval_base = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
+			}
 		}
+		cancel_if_invalid = yes
 		prerequisite = { focus = STP_pc_navy_coast }
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -3534,17 +3713,13 @@ focus_tree = {
 		icon = GFX_goal_generic_amphibious_assault
 		x = 4
 		y = 9
-		cost = 4
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			tag = STS
-		}
+		cost = 2
+		allow_branch = { tag = STS }
 		prerequisite = { focus = STP_pc_navy_ports }
 		available = {
-			STP_pc_focus_available = yes
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_specialist_naval_base_tt
-				STP_pc_has_naval_base = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -3558,18 +3733,25 @@ focus_tree = {
 		x = 3
 		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 3
+		allow_branch = { tag = STS }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
-			OR = { 46 = { is_owned_by = ROOT is_controlled_by = ROOT } 28 = { is_owned_by = ROOT is_controlled_by = ROOT } }
 		}
+		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			random_owned_controlled_state = { limit = { naval_base > 0 } add_extra_state_shared_building_slots = 2 add_building_construction = { type = dockyard level = 2 instant_build = yes } }
+			random_owned_controlled_state = {
+				limit = { naval_base > 0 }
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = { type = dockyard level = 2 instant_build = yes }
+			}
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
+			add_fuel = 10000
 		}
 	}
 
@@ -3578,20 +3760,27 @@ focus_tree = {
 		icon = GFX_goal_generic_navy_cruiser
 		x = 2
 		y = 9
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 2
+		allow_branch = { tag = STS }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
 		}
+		cancel_if_invalid = yes
 		prerequisite = { focus = STP_pc_navy_yards }
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			add_ideas = ADISCORD_staff_STS_Boris_Ostrovsky
 			add_ideas = STP_pc_navy_staff_idea
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
+			set_technology = {
+				ADISCORD_tech_modular_hull_standards = 1
+				popup = no
+			}
+			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			add_fuel = 10000
 		}
 	}
 
@@ -3888,8 +4077,8 @@ focus_tree = {
 			add_political_power = 30
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_unity_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-					add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3936,7 +4125,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_subordinate_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 			add_timed_idea = { idea = STP_pc_authorized_recruit days = -1 }
@@ -4243,8 +4432,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_burden_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4363,8 +4552,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_lib_assembly_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-					add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4791,7 +4980,7 @@ focus_tree = {
 			army_experience = 10
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_field_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4837,7 +5026,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_state_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -5044,7 +5233,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_gornin_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 			custom_effect_tooltip = STP_pc_gornin_charter_tt
@@ -5070,8 +5259,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_vera_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
-					add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
+				add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -5430,7 +5619,10 @@ focus_tree = {
 		prerequisite = { focus = STP_pw_party_border_staff }
 		available = { STP_pw_can_reconstruct = yes }
 		cancel_if_invalid = yes
-		completion_reward = { STP_pw_open_mountain_school = yes }
+		completion_reward = {
+			STP_pw_open_mountain_school = yes
+			add_ideas = STP_pw_stelander_mountaineers
+		}
 		ai_will_do = { base = 3 }
 	}
 

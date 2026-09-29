@@ -3519,63 +3519,6 @@ STP_cw_war_council = {
 	}
 
 
-	# Each timeout activates a different mission; it never removes its own callback.
-	STP_cw_exhaustion_deadline_1 = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		activation = { always = no }
-		visible = { has_active_mission = STP_cw_exhaustion_deadline_1 }
-		available = { hidden_trigger = { always = no } }
-		selectable_mission = no
-		days_mission_timeout = 90
-		is_good = no
-		cancel_trigger = { STP_cw_party_exhaustion_active = no }
-		timeout_effect = {
-			if = {
-				limit = { STP_cw_party_exhaustion_active = yes }
-				add_ideas = STP_cw_exhaustion_1
-				hidden_effect = { activate_mission = STP_cw_exhaustion_deadline_2 }
-			}
-		}
-	}
-	STP_cw_exhaustion_deadline_2 = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		activation = { always = no }
-		visible = { has_active_mission = STP_cw_exhaustion_deadline_2 }
-		available = { hidden_trigger = { always = no } }
-		selectable_mission = no
-		days_mission_timeout = 60
-		is_good = no
-		cancel_trigger = { STP_cw_party_exhaustion_active = no }
-		timeout_effect = {
-			if = {
-				limit = { STP_cw_party_exhaustion_active = yes }
-				remove_ideas = STP_cw_exhaustion_1
-				add_ideas = STP_cw_exhaustion_2
-				hidden_effect = { activate_mission = STP_cw_exhaustion_deadline_3 }
-			}
-		}
-	}
-	STP_cw_exhaustion_deadline_3 = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = STP }
-		activation = { always = no }
-		visible = { has_active_mission = STP_cw_exhaustion_deadline_3 }
-		available = { hidden_trigger = { always = no } }
-		selectable_mission = no
-		days_mission_timeout = 60
-		is_good = no
-		cancel_trigger = { STP_cw_party_exhaustion_active = no }
-		timeout_effect = {
-			if = {
-				limit = { STP_cw_party_exhaustion_active = yes }
-				remove_ideas = STP_cw_exhaustion_2
-				add_ideas = STP_cw_exhaustion_3
-			}
-		}
-	}
-
 	STP_pw_party_fund_northern_contacts = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
@@ -5200,7 +5143,10 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { has_war_with = STS } }
-		timeout_effect = { hidden_effect = { STP_ps_finish_stage = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_reorg_1_result_tt
+			hidden_effect = { STP_ps_finish_stage = yes }
+		}
 		cancel_effect = { hidden_effect = { if = { limit = { NOT = { has_variable = STP_ps_paused_days } has_variable = STP_ps_reorg_deposit } STP_ps_close_defence = yes } } }
 	}
 
@@ -5212,7 +5158,9 @@ STP_cw_war_council = {
 		cost = 0
 		custom_cost_text = STP_ps_reorg_1_funded_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_1_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 1 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
@@ -5234,7 +5182,9 @@ STP_cw_war_council = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_stage_available_tt STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 1 compare = equals } } }
 		cost = 0
 
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_1_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 1 compare = equals }  }
 
 					set_variable = { var = STP_ps_reorg_deposit value = 0 }
@@ -5256,7 +5206,10 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { has_war_with = STS } }
-		timeout_effect = { hidden_effect = { STP_ps_finish_stage = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_reorg_2_result_tt
+			hidden_effect = { STP_ps_finish_stage = yes }
+		}
 		cancel_effect = { hidden_effect = { if = { limit = { NOT = { has_variable = STP_ps_paused_days } has_variable = STP_ps_reorg_deposit } STP_ps_close_defence = yes } } }
 	}
 
@@ -5268,7 +5221,9 @@ STP_cw_war_council = {
 		cost = 0
 		custom_cost_text = STP_ps_reorg_2_funded_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_2_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 2 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 1800 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1800 }
@@ -5290,7 +5245,9 @@ STP_cw_war_council = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_stage_available_tt STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 2 compare = equals } } }
 		cost = 0
 
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_2_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 2 compare = equals }  }
 
 					set_variable = { var = STP_ps_reorg_deposit value = 0 }
@@ -5312,7 +5269,10 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { has_war_with = STS } }
-		timeout_effect = { hidden_effect = { STP_ps_finish_stage = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_reorg_3_result_tt
+			hidden_effect = { STP_ps_finish_stage = yes }
+		}
 		cancel_effect = { hidden_effect = { if = { limit = { NOT = { has_variable = STP_ps_paused_days } has_variable = STP_ps_reorg_deposit } STP_ps_close_defence = yes } } }
 	}
 
@@ -5324,7 +5284,9 @@ STP_cw_war_council = {
 		cost = 0
 		custom_cost_text = STP_ps_reorg_3_funded_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 2500 compare = greater_than_or_equals } }
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_3_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 3 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 2500 compare = greater_than_or_equals } }
 					subtract_from_variable = { var = ADISCORD_economy_treasury value = 2500 }
 					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 2500 }
@@ -5346,7 +5308,9 @@ STP_cw_war_council = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_stage_available_tt STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 3 compare = equals } } }
 		cost = 0
 
-		complete_effect = { hidden_effect = {
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_reorg_3_result_tt
+			hidden_effect = {
 				if = { limit = { STP_ps_can_start_stage = yes check_variable = { var = STP_ps_stage value = 3 compare = equals }  }
 
 					set_variable = { var = STP_ps_reorg_deposit value = 0 }
@@ -5456,11 +5420,29 @@ STP_cw_war_council = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_party_war_transport STP_ps_war_active = yes  }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes NOT = { has_variable = STP_ps_transport_deposit } NOT = { has_country_flag = STP_ps_transport_cooldown }  } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_war_open_tt
+				STP_ps_war_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_free_tt
+				NOT = { has_variable = STP_ps_transport_deposit }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_cooldown_tt
+				NOT = { has_country_flag = STP_ps_transport_cooldown }
+			}
+		}
 		cost = 0
 		custom_cost_text = STP_ps_transport_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 2500 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_transport_idea days = 60 }
+			}
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -5496,7 +5478,13 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
-		timeout_effect = { hidden_effect = { STP_ps_transport_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_transport_idea days = 60 }
+			}
+			hidden_effect = { STP_ps_transport_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_transport_refund = yes } }
 	}
 
@@ -5505,11 +5493,33 @@ STP_cw_war_council = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_ps_ammunition_board STP_ps_war_active = yes  }
-		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_war_active = yes NOT = { has_variable = STP_ps_ammunition_deposit } NOT = { has_country_flag = STP_ps_ammunition_cooldown }  } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_war_open_tt
+				STP_ps_war_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_free_tt
+				NOT = { has_variable = STP_ps_ammunition_deposit }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_cooldown_tt
+				NOT = { has_country_flag = STP_ps_ammunition_cooldown }
+			}
+		}
 		cost = 0
 		custom_cost_text = STP_ps_ammunition_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 2400 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 80000 }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 480 }
+				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 480 }
+				add_equipment_to_stockpile = { type = support_equipment amount = 240 }
+				add_equipment_to_stockpile = { type = anti_air_equipment amount = 160 }
+			}
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -5545,7 +5555,17 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
-		timeout_effect = { hidden_effect = { STP_ps_ammunition_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 80000 }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 480 }
+				add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment amount = 480 }
+				add_equipment_to_stockpile = { type = support_equipment amount = 240 }
+				add_equipment_to_stockpile = { type = anti_air_equipment amount = 160 }
+			}
+			hidden_effect = { STP_ps_ammunition_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_ammunition_refund = yes } }
 	}
 
@@ -5556,22 +5576,29 @@ STP_cw_war_council = {
 		visible = { has_completed_focus = STP_ps_route_security STP_ps_war_active = yes controls_province = 145 controls_province = 45  }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_ps_program_available_tt
+				tooltip = STP_ps_war_open_tt
 				STP_ps_war_active = yes
-				controls_province = 145
-				controls_province = 45
-				NOT = {
-					has_variable = STP_ps_secure_routes_deposit
-				}
-				NOT = {
-					has_country_flag = STP_ps_secure_routes_cooldown
-				}
+			}
+			controls_province = 145
+			controls_province = 45
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_free_tt
+				NOT = { has_variable = STP_ps_secure_routes_deposit }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_cooldown_tt
+				NOT = { has_country_flag = STP_ps_secure_routes_cooldown }
 			}
 		}
 		cost = 0
 		custom_cost_text = STP_ps_secure_routes_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
+			}
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -5609,7 +5636,13 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { STP_ps_war_active = yes controls_province = 145 controls_province = 45 } }
-		timeout_effect = { hidden_effect = { STP_ps_secure_routes_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
+			}
+			hidden_effect = { STP_ps_secure_routes_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_secure_routes_refund = yes } }
 	}
 
@@ -5620,20 +5653,27 @@ STP_cw_war_council = {
 		visible = { has_completed_focus = STP_ps_operational_reserve STP_ps_war_active = yes  }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_ps_program_available_tt
+				tooltip = STP_ps_war_open_tt
 				STP_ps_war_active = yes
-				NOT = {
-					has_variable = STP_ps_reserve_training_deposit
-				}
-				NOT = {
-					has_country_flag = STP_ps_reserve_training_cooldown
-				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_free_tt
+				NOT = { has_variable = STP_ps_reserve_training_deposit }
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_order_cooldown_tt
+				NOT = { has_country_flag = STP_ps_reserve_training_cooldown }
 			}
 		}
 		cost = 0
 		custom_cost_text = STP_ps_reserve_training_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
+			}
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -5669,7 +5709,13 @@ STP_cw_war_council = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
-		timeout_effect = { hidden_effect = { STP_ps_reserve_training_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
+			}
+			hidden_effect = { STP_ps_reserve_training_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_reserve_training_refund = yes } }
 	}
 
@@ -5758,6 +5804,8 @@ STP_cw_war_council = {
 		custom_cost_text = STP_ps_institution_payment_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 2000 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_institution_payment_result_tt
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -5813,7 +5861,10 @@ STP_cw_war_council = {
 				}
 			}
 		}
-		timeout_effect = { hidden_effect = { STP_ps_institution_payment_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_institution_payment_result_tt
+			hidden_effect = { STP_ps_institution_payment_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_institution_payment_refund = yes } }
 	}
 
@@ -6425,6 +6476,11 @@ STP_cw_external_intervention = {
 		custom_cost_text = STP_ps_nod_rifle_purchase_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
+			}
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -6458,7 +6514,13 @@ STP_cw_external_intervention = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { tag = NOD STP_ps_northern_front_active = yes has_country_flag = STP_ps_nod_procurement_credit } }
-		timeout_effect = { hidden_effect = { STP_ps_nod_rifle_purchase_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_delivery_on_completion_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
+			}
+			hidden_effect = { STP_ps_nod_rifle_purchase_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_nod_rifle_purchase_refund = yes } }
 	}
 
@@ -8542,6 +8604,8 @@ STP_party_factions = {
 		custom_cost_text = STP_ps_build_radio_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_build_radio_result_tt
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8578,7 +8642,10 @@ STP_party_factions = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag } }
-		timeout_effect = { hidden_effect = { STP_ps_build_radio_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_build_radio_result_tt
+			hidden_effect = { STP_ps_build_radio_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_build_radio_refund = yes } }
 	}
 	STP_ps_build_hq = {
@@ -8603,6 +8670,8 @@ STP_party_factions = {
 		custom_cost_text = STP_ps_build_hq_cost
 		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
 		complete_effect = {
+			custom_effect_tooltip = STP_ps_build_hq_result_tt
+
 			hidden_effect = {
 				if = {
 					limit = {
@@ -8639,7 +8708,10 @@ STP_party_factions = {
 		selectable_mission = no
 		fire_only_once = no
 		cancel_trigger = { NOT = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag } }
-		timeout_effect = { hidden_effect = { STP_ps_build_hq_finish = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_ps_build_hq_result_tt
+			hidden_effect = { STP_ps_build_hq_finish = yes }
+		}
 		cancel_effect = { hidden_effect = { STP_ps_build_hq_refund = yes } }
 	}
 	STP_ps_prepare_evacuation = {
@@ -8929,7 +9001,6 @@ STP_postwar_administration = {
 			}
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_integration_slot_tt
-				NOT = { has_variable = STP_pw_integration_deposit }
 				FROM = { NOT = { has_state_flag = STP_pw_regional_integration_pending } }
 			}
 		}
@@ -8943,19 +9014,16 @@ STP_postwar_administration = {
 		cancel_trigger = { STP_pw_regional_integration_target_valid = no }
 		complete_effect = {
 			hidden_effect = {
-				set_variable = { var = STP_pw_integration_deposit value = 50 }
 				FROM = { set_state_flag = STP_pw_regional_integration_pending }
 			}
 		}
 		remove_effect = {
 			if = {
 				limit = {
-					has_variable = STP_pw_integration_deposit
 					FROM = { has_state_flag = STP_pw_regional_integration_pending }
 				}
 				# Consume the receipt before a reward; a stale callback cannot pay twice.
 				hidden_effect = {
-					clear_variable = STP_pw_integration_deposit
 					FROM = { clr_state_flag = STP_pw_regional_integration_pending }
 				}
 				if = {
@@ -8971,11 +9039,9 @@ STP_postwar_administration = {
 		cancel_effect = {
 			if = {
 				limit = {
-					has_variable = STP_pw_integration_deposit
 					FROM = { has_state_flag = STP_pw_regional_integration_pending }
 				}
 				hidden_effect = {
-					clear_variable = STP_pw_integration_deposit
 					FROM = { clr_state_flag = STP_pw_regional_integration_pending }
 				}
 				add_political_power = 50

@@ -8544,7 +8544,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
 
 
 class ValRegionalIntegrationTests(unittest.TestCase):
-    def test_nationalisation_expands_one_adjacent_core_at_a_time(self):
+    def test_nationalisation_expands_adjacent_cores_in_parallel(self):
         from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz
 
         definitions = parse_clausewitz(DECISIONS_PATH.read_text(encoding="utf-8"))
@@ -8573,7 +8573,7 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         self.assertIn("VAL_regional_integration_target_valid = yes", available)
         self.assertIn("VAL_regional_integration_state_valid = yes", available)
         self.assertIn(
-            "NOT = { has_country_flag = VAL_regional_integration_active }", available
+            "NOT = { has_state_flag = VAL_regional_administration_in_progress }", available
         )
         self.assertNotIn("compliance", decision_block)
         self.assertNotIn("resistance", decision_block)
@@ -8582,10 +8582,10 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         self.assertIn("fire_only_once = no", decision_block)
         self.assertIn("add_core_of = ROOT", decision_block)
         self.assertIn(
-            "set_country_flag = VAL_regional_integration_active", decision_block
+            "set_state_flag = VAL_regional_administration_in_progress", decision_block
         )
         self.assertIn(
-            "clr_country_flag = VAL_regional_integration_active", decision_block
+            "clr_state_flag = VAL_regional_administration_in_progress", decision_block
         )
 
         country_trigger = only_named_block(

@@ -15,9 +15,9 @@ from tools.builders.build_adiscord_trade_regions import (
 )
 
 
-EXPECTED_STATE_COUNTS = {1: 59, 2: 62, 3: 83, 4: 8, 5: 99, 6: 37, 7: 360}
+EXPECTED_STATE_COUNTS = {1: 60, 2: 62, 3: 83, 4: 8, 5: 99, 6: 37, 7: 360}
 EXPECTED_PROVINCE_COUNTS = {
-    1: 610,
+    1: 617,
     2: 752,
     3: 1013,
     4: 44,
@@ -43,6 +43,7 @@ GEOGRAPHIC_STATE_ANCHORS = {
     699: (42, 3),
     700: (24, 5),
     701: (24, 1),
+    709: (16, 1),  # Island sovereignty does not change Eastern Forul geography.
     461: (67, 2),  # Deliberately realigned Exclusion Zone fringe.
 }
 

@@ -3636,6 +3636,54 @@ focus_tree = {
 		ai_will_do = { base = 9 }
 	}
 
+	# Island settlement becomes available only after the Nodrul mandate ends.
+	focus = {
+		id = VAL_Island_Treaty
+		icon = GFX_focus_generic_diplomatic_treaty
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
+		x = 38
+		y = 14
+		cost = 5
+		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_island_treaty_available_tt
+				VAL_island_treaty_available = yes
+			}
+		}
+		bypass = { owns_state = 709 }
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = VAL_island_treaty_offer_tt
+			hidden_effect = { SLI = { country_event = { id = ADISCORD_SLI.2 hours = 1 } } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = VAL_Island_Operation
+		icon = GFX_goal_generic_amphibious_assault
+		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY }
+		x = 38
+		y = 15
+		cost = 5
+		prerequisite = { focus = VAL_Island_Treaty }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_island_operation_available_tt
+				has_country_flag = VAL_island_treaty_rejected
+				VAL_island_treaty_available = yes
+			}
+		}
+		bypass = { owns_state = 709 }
+		cancel_if_invalid = yes
+		completion_reward = {
+			declare_war_on = { target = SLI type = annex_everything }
+			hidden_effect = { clr_country_flag = VAL_island_treaty_rejected }
+		}
+		ai_will_do = { base = 3 }
+	}
+
 	# Late-game Kefreyt branch: the expensive assault battalion is a national
 	# capability rather than a universally available line unit.
 	focus = {

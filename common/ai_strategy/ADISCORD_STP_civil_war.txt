@@ -250,6 +250,16 @@ STP_cw_territorial_army = {
 	ai_strategy = { type = role_ratio id = militias value = -80 }
 }
 
+STP_cw_mountain_army = {
+	allowed = { OR = { original_tag = STP original_tag = STS } }
+	enable = {
+		STP_cw_mountain_war_active = yes
+		has_completed_focus = STP_cw_mountain_school
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = mountaineers value = 15 }
+}
+
 STP_cw_border_territorial_armies = {
 	allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
 	enable = { has_war = yes }

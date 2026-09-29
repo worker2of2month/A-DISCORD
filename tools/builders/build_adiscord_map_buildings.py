@@ -29,7 +29,7 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
 COASTAL_ADDITION_PROVINCES = frozenset(
-    {6008, 7739, 2038, 7618, 16707, 16708, 16709, 16710, 16712, 16716}
+    {6008, 7739, 2038, 7618, 16707, 16708, 16709, 16710, 16712, 16716, *range(16802, 16809)}
 )
 for city in json.loads(
     (ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8")
@@ -57,7 +57,7 @@ CITY_SPAWN_COUNTS = {
 
 
 def required_spawns(state_id: int) -> dict[str, int]:
-    if state_id in (241, 253, 260, 275, 283, 294, 300, 699, 700, 701):
+    if state_id in (241, 253, 260, 275, 283, 294, 300, 699, 700, 701, 709):
         return {**REQUIRED_STATE_SPAWN_COUNTS, **CITY_SPAWN_COUNTS}
     return REQUIRED_STATE_SPAWN_COUNTS
 
@@ -122,6 +122,7 @@ EXCLUSION_BOUNDARY_SPAWN_STATES = {
     706,
     707,
     708,
+    709,
     49,
     51,
     153,

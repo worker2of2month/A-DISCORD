@@ -2212,5 +2212,262 @@ class PostwarDiplomacyTransactions(unittest.TestCase):
                 self.assertEqual(matches_conditions(cancel, facts, "STS"), not valid)
 
 
+class KefreytEmergencyContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from tools.builders.build_adiscord_focus_trees import render_source
+
+        tree = block(
+            parse_clausewitz(render_source("STP/civil_war/focuses.txt")),
+            "focus_tree",
+        )
+        cls.focuses = {
+            scalar(item.value, "id"): item.value for item in tree if item.key == "focus"
+        }
+        cls.ideas = block(
+            block(
+                relative_entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"),
+                "ideas",
+            ),
+            "country",
+        )
+
+    def facts(self, tag):
+        return {
+            (tag, "has_capitulated", "no"): True,
+            (tag, "is_subject", "no"): True,
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "is_subject", "no"): True,
+        }
+
+    def test_attack_opens_seven_day_relief_without_postwar_prerequisites(self):
+        self.assertIn("STP_kc_emergency_staff", self.focuses)
+        focus = self.focuses["STP_kc_emergency_staff"]
+        self.assertFalse(any(item.key == "prerequisite" for item in focus))
+        self.assertLessEqual(float(scalar(focus, "cost")) * 7, 7)
+        available = expand(block(focus, "available"))
+        for tag in ("STP", "STS", "SRP"):
+            for at_war in (False, True):
+                facts = self.facts(tag)
+                facts[(tag, "has_war_with", "VAL")] = at_war
+                with self.subTest(tag=tag, at_war=at_war):
+                    self.assertEqual(
+                        matches_conditions(available, facts, tag),
+                        at_war and tag != "SRP",
+                    )
+
+    def test_support_closes_at_kefreyt_peace_even_with_other_wars_and_old_unlocks(self):
+        for idea in (
+            "STP_kc_defence", "STP_kc_production", "STP_kc_counteroffensive"
+        ):
+            self.assertTrue(any(item.key == idea for item in self.ideas), idea)
+            cancel = expand(block(block(self.ideas, idea), "cancel"))
+            for tag in ("STP", "STS"):
+                facts = self.facts(tag)
+                facts[(tag, "has_war_with", "NOD")] = True
+                facts[(tag, "has_completed_focus", "STP_pc_heg_val_force")] = True
+                facts[(tag, "has_completed_focus", "STP_pw_party_kefreyt_campaign")] = True
+                scenarios = ((True, False, False), (False, False, True))
+                for at_war, preparing, want_cancel in scenarios:
+                    facts[(tag, "has_war_with", "VAL")] = at_war
+                    facts[(tag, "has_country_flag", "STP_kc_preparing")] = preparing
+                    with self.subTest(idea=idea, tag=tag, at_war=at_war):
+                        self.assertEqual(
+                            matches_conditions(cancel, facts, tag), want_cancel
+                        )
+
+    def test_prewar_relief_needs_live_preparation_and_closes_when_terms_are_accepted(self):
+        self.assertTrue(any(item.key == "STP_kc_defence" for item in self.ideas))
+        cancel = expand(block(block(self.ideas, "STP_kc_defence"), "cancel"))
+        facts = self.facts("STS")
+        facts[("STS", "has_country_flag", "STP_cw_postwar")] = True
+        facts[("STS", "has_country_flag", "STP_kc_preparing")] = True
+        facts[("STS", "has_completed_focus", "STP_pc_heg_val_force")] = True
+        self.assertFalse(matches_conditions(cancel, facts, "STS"))
+        facts[("STS", "has_country_flag", "STP_pc_val_terms_accepted")] = True
+        self.assertTrue(matches_conditions(cancel, facts, "STS"))
+
+    def test_navy_focuses_supply_eight_compatible_ships_and_invasion_capacity(self):
+        rewards = []
+        for focus_id in (
+            "STP_pc_navy_coast", "STP_pc_navy_yards", "STP_pc_navy_escorts"
+        ):
+            rewards.extend(walk(block(self.focuses[focus_id], "completion_reward")))
+        ships = [entry.value for entry in rewards if entry.key == "create_ship"]
+        self.assertEqual(sum(int(scalar(ship, "amount")) for ship in ships), 8)
+        equipment = block(
+            relative_entries("common/units/equipment/ADISCORD_convoy_equipment.txt"),
+            "equipments",
+        )
+        units = block(
+            relative_entries("common/units/ADISCORD_naval_units.txt"), "sub_units"
+        )
+        needs = {item.key for unit in units for item in block(unit.value, "need")}
+        for ship in ships:
+            model = block(equipment, scalar(ship, "type"))
+            self.assertIn(scalar(model, "archetype"), needs)
+        convoys = [
+            entry.value for entry in rewards
+            if entry.key == "add_equipment_to_stockpile"
+            and scalar(entry.value, "type") == "convoy_1"
+        ]
+        self.assertEqual(sum(int(scalar(item, "amount")) for item in convoys), 60)
+        self.assertTrue(any(
+            entry.key == "ADISCORD_tech_restored_dockyards" and entry.value == "1"
+            for entry in rewards
+        ))
+
+    def test_only_the_kefreyt_declaration_consumes_preparation_in_both_directions(self):
+        hooks = block(entries(ON_ACTIONS), "on_actions")
+        effect = block(block(hooks, "on_war_relation_added"), "effect")
+        for root, sender, recipient in (
+            ("STP", "VAL", "STP"), ("STS", "VAL", "STS"),
+            ("VAL", "STP", "STP"), ("VAL", "STS", "STS"),
+            ("STS", "NOD", None), ("VAL", "SRP", None),
+        ):
+            scoped = expand(effect, {"ROOT": root, "FROM": sender})
+            actions = selected_effects(scoped, {}, root)
+            cleared = [
+                scope for scope, entry in actions
+                if entry.key == "clr_country_flag"
+                and entry.value == "STP_kc_preparing"
+            ]
+            with self.subTest(root=root, sender=sender):
+                self.assertEqual(cleared, [recipient] if recipient else [])
+
+    def test_defeat_and_target_removal_cancel_unused_prewar_bonuses(self):
+        cancel = expand(block(block(self.ideas, "STP_kc_defence"), "cancel"))
+        for invalid in (("STS", "has_capitulated", "no"), ("VAL", "exists", "yes")):
+            facts = self.facts("STS")
+            facts[("STS", "has_country_flag", "STP_cw_postwar")] = True
+            facts[("STS", "has_country_flag", "STP_kc_preparing")] = True
+            facts[("STS", "has_completed_focus", "STP_pc_heg_val_force")] = True
+            facts[invalid] = False
+            with self.subTest(invalid=invalid):
+                self.assertTrue(matches_conditions(cancel, facts, "STS"))
+        removed = list(selected_effects(
+            block(block(self.ideas, "STP_kc_defence"), "on_remove"), {}, "STS"
+        ))
+        self.assertIn(
+            ("STS", "clr_country_flag", "STP_kc_preparing"),
+            [(scope, entry.key, entry.value) for scope, entry in removed],
+        )
+
+
+
+class NodrulBorderTreatyContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.active = expand(block(entries(TRIGGERS), "STP_nod_border_war_active"))
+        cls.ready = expand(block(entries(TRIGGERS), "STP_nod_border_treaty_ready"))
+        cls.effects = entries(EFFECTS)
+
+    def facts(self):
+        return {
+            ("NOD", "exists", "yes"): True,
+            ("NOD", "is_subject", "no"): True,
+            ("NOD", "has_war_with", "STS"): True,
+            ("NOD", "numeric", "surrender_progress"): 0.4,
+            ("STS", "exists", "yes"): True,
+            ("STS", "is_subject", "no"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STS", "has_country_flag", "STP_cw_postwar"): True,
+            ("10", "is_owned_by", "NOD"): True,
+            ("10", "is_controlled_by", "STS"): True,
+        }
+
+    def test_threshold_requires_a_real_border_capture_in_each_first_war_route(self):
+        for tag, flag in (
+            ("STS", "STP_cw_postwar"),
+            ("NOD", "NOD_cw_entered"),
+            ("NOD", "STP_ps_return_campaign"),
+        ):
+            facts = self.facts()
+            facts.pop(("STS", "has_country_flag", "STP_cw_postwar"))
+            facts[(tag, "has_country_flag", flag)] = True
+            for progress, expected in ((0.399999, False), (0.4, True), (0.7, True)):
+                with self.subTest(route=flag, progress=progress):
+                    facts[("NOD", "numeric", "surrender_progress")] = progress
+                    self.assertEqual(matches_conditions(self.ready, facts, "NOD"), expected)
+            facts[("10", "is_controlled_by", "STS")] = False
+            self.assertFalse(matches_conditions(self.ready, facts, "NOD"))
+            facts[("11", "is_owned_by", "NOD")] = True
+            facts[("11", "is_controlled_by", "STS")] = True
+            self.assertTrue(matches_conditions(self.ready, facts, "NOD"))
+            facts[("11", "is_owned_by", "NOD")] = False
+            self.assertFalse(matches_conditions(self.ready, facts, "NOD"))
+
+    def test_treaty_cannot_repeat_or_preempt_other_campaigns(self):
+        for key, value in (
+            (("NOD", "has_country_flag", "STP_pc_defeated_by_sts"), True),
+            (("NOD", "has_country_flag", "VAL_final_war_member"), True),
+            (("NOD", "has_country_flag", "VAL_joint_nod_campaign_target"), True),
+            (("STS", "has_country_flag", "STP_heg_northern_final_started"), True),
+            (("NOD", "has_war_with", "VAL"), True),
+            (("NOD", "has_war_with", "STS"), False),
+            (("STS", "has_capitulated", "no"), False),
+            (("STS", "is_subject", "no"), False),
+            (("NOD", "is_subject", "no"), False),
+        ):
+            with self.subTest(exclusion=key):
+                self.assertFalse(matches_conditions(self.active, {**self.facts(), key: value}, "NOD"))
+
+    def test_border_award_snapshots_ownership_before_peace_and_preserves_foreign_control(self):
+        treaty = block(block(self.effects, "STP_nod_settle_border_treaty"), "if")
+        state_blocks = [e for e in treaty if e.key.isdigit()]
+        self.assertEqual([e.key for e in state_blocks], ["10", "11"])
+        for state in state_blocks:
+            gate = block(block(state.value, "if"), "limit")
+            for owned in (False, True):
+                for controller in ("NOD", "STS", "VAL"):
+                    facts = {
+                        (state.key, "is_owned_by", "NOD"): owned,
+                        (state.key, "is_controlled_by", controller): True,
+                    }
+                    self.assertEqual(matches_conditions(gate, facts, state.key), owned and controller != "VAL")
+        keys = [e.key for e in treaty]
+        peace_index = next(
+            i for i, entry in enumerate(treaty)
+            if entry.key == "STS" and any(e.key == "white_peace" for e in entry.value)
+        )
+        self.assertLess(keys.index("set_country_flag"), peace_index)
+        self.assertLess(keys.index("11"), peace_index)
+        self.assertLess(peace_index, keys.index("for_each_scope_loop"))
+        transfer = block(treaty, "for_each_scope_loop")
+        self.assertEqual(scalar(block(transfer, "STS"), "transfer_state"), "PREV")
+        self.assertEqual(scalar(transfer, "set_state_controller_to"), "STS")
+        self.assertEqual([e.value for e in walk(treaty) if e.key == "white_peace"], ["NOD"])
+        self.assertFalse(any(e.key in ("annex_country", "set_major") for e in walk(treaty)))
+
+    def test_native_capitulation_reserves_late_callback_before_any_white_peace(self):
+        hooks = block(relative_entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
+        immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
+        treaty = next(e.value for e in immediate if e.key == "if" and any(c.key == "STP_nod_border_war_active" for c in walk(e.value)))
+        self.assertEqual(scalar(block(block(treaty, "limit"), "ROOT"), "STP_nod_border_war_active"), "yes")
+        receipt = block(block(treaty, "ROOT"), "set_country_flag")
+        self.assertEqual(scalar(receipt, "flag"), "STP_nod_border_capitulation_reserved")
+        self.assertEqual(scalar(receipt, "days"), "2")
+        keys = [e.key for e in treaty]
+        self.assertLess(keys.index("ROOT"), keys.index("STS"))
+        self.assertEqual(scalar(block(treaty, "STS"), "STP_pc_begin_settlement"), "yes")
+        late = block(block(hooks, "on_capitulation"), "effect")
+        receipt_branch = next(e.value for e in late if e.key == "if" and any(c.key == "clr_country_flag" and c.value == "STP_nod_border_capitulation_reserved" for c in walk(e.value)))
+        self.assertEqual(scalar(receipt_branch, "set_global_flag"), "skip_default_capitulation")
+
+    def test_failed_return_declaration_cannot_send_a_war_notice(self):
+        effect = block(self.effects, "STP_ps_begin_return")
+        for accepted in (False, True):
+            facts = {
+                ("NOD", "STP_ps_can_launch_return", "yes"): True,
+                ("NOD", "has_war_with", "STS"): accepted,
+            }
+            selected = list(selected_effects(effect, facts, "NOD"))
+            notices = [(scope, scalar(e.value, "id")) for scope, e in selected if e.key == "country_event"]
+            self.assertEqual(notices, [("STS", "ADISCORD_STP_pc.49")] if accepted else [])
+        return_gate = expand(block(entries(TRIGGERS), "STP_ps_can_launch_return"))
+        self.assertTrue(any(e.key == "has_country_flag" and e.value == "STP_pc_defeated_by_sts" for e in walk(return_gate)))
+
+
 if __name__ == "__main__":
     unittest.main()

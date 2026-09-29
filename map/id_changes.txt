@@ -1,17 +1,9 @@
-ID Changes 2026-09-26 13:43:24
-- Assigned ID 16721 to new province
-- Assigned ID 16720 to new province
-- Assigned ID 16719 to new province
-- Assigned ID 16718 to new province
-- Assigned ID 16717 to new province
-- Assigned ID 16716 to new province
-- Assigned ID 16715 to new province
-- Assigned ID 16714 to new province
-- Assigned ID 16713 to new province
-- Assigned ID 16712 to new province
-- Assigned ID 16711 to new province
-- Assigned ID 16710 to new province
-- Assigned ID 16709 to new province
-- Assigned ID 16708 to new province
-- Assigned ID 16707 to new province
-- Created IDs 16707 through 16721
+ID Changes 2026-09-30 00:54:10
+- Assigned ID 16808 to new province
+- Assigned ID 16807 to new province
+- Assigned ID 16806 to new province
+- Assigned ID 16805 to new province
+- Assigned ID 16804 to new province
+- Assigned ID 16803 to new province
+- Assigned ID 16802 to new province
+- Created IDs 16802 through 16808

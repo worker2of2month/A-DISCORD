@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 366,
+  "current_count": 383,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",
@@ -57,7 +57,7 @@
     },
     "ADISCORD_tech_adaptive_projectile_fuzing": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_coil_assisted_service_rifles"
+      "replacement": "ADISCORD_tech_buffered_bolt_travel"
     },
     "ADISCORD_tech_adaptive_radiation_shielding": {
       "status": "preserved",
@@ -1553,7 +1553,7 @@
     },
     "ADISCORD_tech_powered_ammunition_carriers": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_programmable_ammunition"
+      "replacement": "ADISCORD_tech_barrel_heat_treatment"
     },
     "ADISCORD_tech_powered_load_bearing_harnesses": {
       "status": "preserved",
@@ -2189,7 +2189,7 @@
     },
     "ADISCORD_tech_squad_fire_control_optics": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_hybrid_kinetic_energy_carbines"
+      "replacement": "ADISCORD_tech_muzzle_compensation_ports"
     },
     "ADISCORD_tech_squad_grenade_launchers": {
       "status": "preserved",

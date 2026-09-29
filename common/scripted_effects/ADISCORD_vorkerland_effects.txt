@@ -1455,16 +1455,16 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
 		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
-		add_manpower = 8000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 6000 producer = VAD }
+		add_manpower = 22000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 10000 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = VAD }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = VAD }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = VAD }
-		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 180 producer = VAD }
-		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 260 producer = VAD }
-		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 24 producer = VAD }
-		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 12 producer = VAD }
-		add_fuel = 7500
+		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 360 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 400 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 30 producer = VAD }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 15 producer = VAD }
+		add_fuel = 10000
 		load_oob = "VAD_vorkerland_collapse_air"
 		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed
 		set_country_flag = ADISCORD_vorkerland_air_mission_contract_v2_applied
@@ -2320,16 +2320,16 @@ ADISCORD_vorkerland_setup_tva = {
 		ADISCORD_vorkerland_prepare_conflict_country = yes
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
-		add_manpower = 28000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 35600 producer = TVA }
+		add_manpower = 22000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = TVA }
 		add_equipment_to_stockpile = { type = support_equipment amount = 180 producer = TVA }
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 96 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 90 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 360 producer = TVA }
 		add_equipment_to_stockpile = { type = ADISCORD_armored_carrier_2163 amount = 400 producer = TVA }
-		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 60 producer = TVA }
-		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = TVA }
-		add_fuel = 12000
+		add_equipment_to_stockpile = { type = ADISCORD_fighter_airframe_2163 amount = 30 producer = TVA }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 15 producer = TVA }
+		add_fuel = 10000
 		load_oob = "TVA_vorkerland_collapse"
 		load_oob = "TVA_vorkerland_collapse_air"
 		set_country_flag = ADISCORD_vorkerland_claimant_air_wings_deployed

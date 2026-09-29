@@ -465,6 +465,21 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_rifling_alignment_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_bolt_head_fitting_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_chamber_polishing_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_refurbished_receivers_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_02_recovered_service_rifle.dds"
 	}
@@ -490,6 +505,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_primer_consistency_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_equipment_ammunition.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_sealed_receiver_assemblies_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -510,6 +530,16 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_magazine_feed_geometry_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_extractor_heat_treatment_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_smart_recoil_compensators_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -522,6 +552,21 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_VAL_ADISCORD_tech_smart_recoil_compensators_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_recoil_spring_tuning_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_bolt_carrier_guides_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_trigger_reset_geometry_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
 	}
 
 	SpriteType = {
@@ -542,6 +587,16 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_networked_weapon_sights_medium"
 		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_rangefinder_zeroing_medium"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_sight_mount_repeatability_medium"
+		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}
 
 	SpriteType = {
@@ -570,6 +625,11 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_gas_regulator_sealing_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_programmable_ammunition_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -585,6 +645,21 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_bore_plating_control_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_chamber_erosion_control_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_barrel_heat_treatment_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_coil_assisted_service_rifles_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_weapon_03_standardized_battle_rifle.dds"
 	}
@@ -597,6 +672,16 @@ spriteTypes = {
 	SpriteType = {
 		name = "GFX_VAL_ADISCORD_tech_coil_assisted_service_rifles_medium"
 		textureFile = "gfx/interface/technologies/ADISCORD_VAL_weapon_03_standardized_battle_rifle.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_buffered_bolt_travel_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_muzzle_compensation_ports_medium"
+		textureFile = "gfx/interface/technologies/infantry_weapons.dds"
 	}
 
 	SpriteType = {

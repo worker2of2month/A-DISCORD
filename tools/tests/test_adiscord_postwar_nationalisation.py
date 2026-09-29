@@ -143,6 +143,8 @@ class PostwarNationalisationTests(unittest.TestCase):
             elif e.key == 'clear_variable':
                 facts[scope, 'has_variable', e.value] = False
                 facts[scope, 'variable', e.value] = 0
+            elif e.key in ('set_country_flag', 'clr_country_flag'):
+                facts[scope, 'has_country_flag', e.value] = e.key == 'set_country_flag'
             elif e.key in ('set_state_flag', 'clr_state_flag'):
                 facts[scope, 'has_state_flag', e.value] = e.key == 'set_state_flag'
             elif e.key == 'add_core_of':
@@ -215,7 +217,7 @@ class PostwarNationalisationTests(unittest.TestCase):
             self.assertFalse(self.eligible(f, country, '2'))
             self.assertTrue(self.eligible(f, country, '3'))
 
-    def test_payment_locks_other_targets_and_success_opens_next_neighbor(self):
+    def test_payment_locks_same_target_and_success_opens_next_neighbor(self):
         for country in ('STP', 'STS'):
             f = self.facts(country)
             self.apply('complete_effect', f, country)
@@ -270,8 +272,45 @@ class PostwarNationalisationTests(unittest.TestCase):
         self.assertEqual(
             self.apply('cancel_effect', f, target='3'), {'power': 0, 'cores': 0}
         )
-        self.assertTrue(f['STS', 'has_variable', 'STP_pw_integration_deposit'])
+        self.assertTrue(f['2', 'has_state_flag', 'STP_pw_regional_integration_pending'])
         self.assertEqual(self.apply('remove_effect', f), {'power': 0, 'cores': 1})
+
+    def test_parallel_projects_settle_independently(self):
+        for country, first_callback in product(
+            ('STP', 'STS', 'VAL'), ('remove_effect', 'cancel_effect')
+        ):
+            with self.subTest(country=country, first_callback=first_callback):
+                self.setUp()
+                self.adjacency['4'] = ['1']
+                f = self.facts(country)
+                if country == 'VAL':
+                    self.triggers = {}
+                    self.decisions['STP_pw_nationalise_region'] = block(
+                        block(entries('common/decisions/ADISCORD_VAL_decisions.txt'),
+                              'VAL_frontier'),
+                        'VAL_nationalise_region',
+                    )
+                    f[country, 'VAL_regional_integration_target_valid', 'yes'] = True
+                    for target in ('2', '4'):
+                        f[target, 'VAL_regional_integration_state_valid', 'yes'] = True
+                self.assertTrue(self.eligible(f, country, '2'))
+                self.apply('complete_effect', f, country, '2')
+                self.assertFalse(self.eligible(f, country, '2'))
+                self.assertTrue(self.eligible(f, country, '4'))
+                self.apply('complete_effect', f, country, '4')
+                self.assertEqual(
+                    self.apply(first_callback, f, country, '2'),
+                    {'power': 0, 'cores': 1} if first_callback == 'remove_effect'
+                    else {'power': 50, 'cores': 0},
+                )
+                self.assertFalse(self.eligible(f, country, '4'))
+                self.assertEqual(self.apply('remove_effect', f, country, '4'),
+                                 {'power': 0, 'cores': 1})
+                for target in ('2', '4'):
+                    self.assertEqual(self.apply('cancel_effect', f, country, target),
+                                     {'power': 0, 'cores': 0})
+                    self.assertEqual(self.apply('remove_effect', f, country, target),
+                                     {'power': 0, 'cores': 0})
 
     def test_unlock_and_category_work_for_both_postwar_paths(self):
         fs = focuses(STP_FOCUS, 'STP_cw_focus')

@@ -13460,13 +13460,13 @@
       "count": 4
     },
     {
-      "key": "vad_oob_armi_guard_xp_0_53_eq_0_75",
+      "key": "vad_oob_armi_guard_xp_0_35_eq_0_85",
       "path": "history/units/VAD.txt",
       "kind": "oob",
       "technical_name": "Armi Guard",
       "legacy_names": [],
-      "start_experience_factor": 0.53,
-      "start_equipment_factor": 0.75,
+      "start_experience_factor": 0.35,
+      "start_equipment_factor": 0.85,
       "count": 1
     },
     {
@@ -13480,23 +13480,23 @@
       "count": 3
     },
     {
-      "key": "vad_oob_armi_security_detachment_xp_0_4_eq_0_63",
+      "key": "vad_oob_armi_security_detachment_xp_0_25_eq_0_75",
       "path": "history/units/VAD.txt",
       "kind": "oob",
       "technical_name": "Armi Security Detachment",
       "legacy_names": [],
-      "start_experience_factor": 0.4,
-      "start_equipment_factor": 0.63,
+      "start_experience_factor": 0.25,
+      "start_equipment_factor": 0.75,
       "count": 2
     },
     {
-      "key": "vad_oob_vadl_mechanized_infantry_xp_0_45_eq_0_7",
+      "key": "vad_oob_vadl_mechanized_infantry_xp_0_28_eq_0_85",
       "path": "history/units/VAD.txt",
       "kind": "oob",
       "technical_name": "Vadl Mechanized Infantry",
       "legacy_names": [],
-      "start_experience_factor": 0.45,
-      "start_equipment_factor": 0.7,
+      "start_experience_factor": 0.28,
+      "start_equipment_factor": 0.85,
       "count": 6
     },
     {
@@ -13668,13 +13668,13 @@
       "count": 2
     },
     {
-      "key": "wrk_oob_division_de_infanteria_xp_0_47_eq_0_7",
+      "key": "wrk_oob_division_de_infanteria_xp_0_47_eq_0_85",
       "path": "history/units/WRK.txt",
       "kind": "oob",
       "technical_name": "Division de Infanteria",
       "legacy_names": [],
       "start_experience_factor": 0.47,
-      "start_equipment_factor": 0.7,
+      "start_equipment_factor": 0.85,
       "count": 6
     },
     {
@@ -13698,13 +13698,13 @@
       "count": 3
     },
     {
-      "key": "wrk_oob_workerland_militia_xp_0_42_eq_0_63",
+      "key": "wrk_oob_workerland_militia_xp_0_42_eq_0_75",
       "path": "history/units/WRK.txt",
       "kind": "oob",
       "technical_name": "Workerland Militia",
       "legacy_names": [],
       "start_experience_factor": 0.42,
-      "start_equipment_factor": 0.63,
+      "start_equipment_factor": 0.75,
       "count": 2
     },
     {

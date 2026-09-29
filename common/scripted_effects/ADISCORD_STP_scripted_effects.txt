@@ -632,6 +632,10 @@ STP_cw_clear_wartime_modifiers = {
 		limit = { OR = { tag = STP tag = STS } }
 		STP_cw_clear_political_modifiers = yes
 		if = {
+			limit = { tag = STS }
+			STP_hw_stall_clear = yes
+		}
+		if = {
 			limit = { has_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic } }
 			remove_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic }
 		}
@@ -647,7 +651,12 @@ STP_cw_clear_wartime_modifiers = {
 		clear_variable = STP_cw_mandate_core_defence
 		clear_variable = STP_cw_mandate_training_time
 		clear_variable = STP_cw_mandate_mobilization
-		remove_ideas = { STP_cw_party_battle_spirit STP_cw_resistance_battle_spirit }
+		remove_ideas = {
+			STP_cw_party_battle_spirit
+			STP_cw_resistance_battle_spirit
+			STP_cw_mountain_training
+			STP_cw_mountain_assault_training
+		}
 		force_update_dynamic_modifier = yes
 	}
 }
@@ -3143,6 +3152,7 @@ STP_cw_begin_hostilities = {
 		if = {
 			limit = { NOT = { has_global_flag = STP_cw_started } }
 			set_global_flag = STP_cw_started
+			SLI = { SLI_declare_independence = yes }
 			# The Party remains STP through the split, so explicitly retire the
 			# prewar hedonist-regime spirits when open hostilities begin.
 			remove_ideas = STP_hedonism_with_no_bondaries
@@ -3193,12 +3203,12 @@ STP_cw_begin_hostilities = {
 		every_owned_state = { set_state_controller_to = PREV }
 		STS = { every_owned_state = { set_state_controller_to = PREV } }
 		SRP = { every_owned_state = { set_state_controller_to = PREV } }
+		STS = { STP_hw_stall_begin = yes }
 		if = {
 			limit = { has_war_with = STS NOT = { has_idea = STP_cw_party_battle_spirit } }
 			STP_cw_poll_nod_intervention = yes
 			STS = { STP_cw_begin_operations = yes }
 			add_ideas = STP_cw_party_battle_spirit
-			activate_mission = STP_cw_exhaustion_deadline_1
 			STS = { add_ideas = STP_cw_resistance_battle_spirit }
 			# Major news is repeatable so every country receives it; this flag is
 			# shared with the war-relation on_action that publishes the same report.
@@ -5018,6 +5028,10 @@ STP_pc_declare_war_nod = {
 	if = {
 		limit = { tag = STS STP_pc_can_confront_nod = yes NOT = { has_war_with = NOD } }
 		declare_war_on = { target = NOD type = annex_everything }
+		if = {
+			limit = { has_war_with = NOD }
+			country_event = { id = ADISCORD_STP_pc.49 hours = 1 }
+		}
 	}
 }
 
@@ -5215,6 +5229,101 @@ STP_close_competing_ultimatum_wars_after_defeat = {
 	}
 }
 
+# COUNTRY NOD: snapshot the border before white peace resets controllers.
+# The persistent defeat result closes this treaty and the exile's return route.
+STP_nod_settle_border_treaty = {
+	if = {
+		limit = { STP_nod_border_war_active = yes }
+		set_country_flag = STP_pc_defeated_by_sts
+		clear_temp_array = STP_nod_treaty_states
+		10 = {
+			if = {
+				limit = {
+					is_owned_by = NOD
+					OR = {
+						is_controlled_by = NOD
+						is_controlled_by = STS
+					}
+				}
+				NOD = {
+					add_to_temp_array = {
+						array = STP_nod_treaty_states
+						value = PREV
+					}
+				}
+			}
+		}
+		11 = {
+			if = {
+				limit = {
+					is_owned_by = NOD
+					OR = {
+						is_controlled_by = NOD
+						is_controlled_by = STS
+					}
+				}
+				NOD = {
+					add_to_temp_array = {
+						array = STP_nod_treaty_states
+						value = PREV
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = NOD_cw_entered
+					has_country_flag = NOD_cw_intervention_approved
+				}
+			}
+			set_country_flag = NOD_cw_defeated
+		}
+		clr_country_flag = NOD_cw_entered
+		clr_country_flag = NOD_cw_intervention_approved
+		clr_country_flag = NOD_cw_intervention_ready
+		clr_country_flag = STP_ps_expedition_ready
+		remove_ideas = STP_ps_expedition_idea
+		remove_mission = NOD_cw_intervention_preparation
+		remove_mission = NOD_cw_northern_redeployment
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = STP_ps_exile_received
+					has_country_flag = STP_ps_return_campaign
+				}
+			}
+			STP_ps_close_exile = yes
+		}
+		STP = {
+			remove_mission = STP_cw_nod_warning
+			remove_mission = STP_cw_nod_redeployment
+			clr_country_flag = STP_cw_nod_warning_active
+		}
+		STS = {
+			remove_mission = STP_cw_nod_warning
+			remove_mission = STP_cw_nod_redeployment
+			clr_country_flag = STP_cw_nod_warning_active
+			clr_country_flag = STP_cw_nod_entered
+		}
+		STS = { white_peace = NOD }
+		for_each_scope_loop = {
+			array = STP_nod_treaty_states
+			STS = { transfer_state = PREV }
+			set_state_controller_to = STS
+		}
+		clear_temp_array = STP_nod_treaty_states
+		ADISCORD_economy_update_postwar_demobilization = yes
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = ADISCORD_STP_pc.48 hours = 1 }
+		STS = {
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.48 hours = 1 }
+		}
+		log = "[STP_NOD] Border treaty concluded with Shabrat"
+	}
+}
+
 # STS: freeze the occupier snapshot. Victories close only the defeated pair;
 # a Stelander defeat also closes a second live VAL/NOD ultimatum through the shared cleanup.
 # Liberation victories are recorded here; later focuses keep optional neighbor terms.
@@ -5243,8 +5352,14 @@ STP_pc_begin_settlement = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 2 compare = equals } }
 			set_variable = { var = STP_pc_this_opponent value = 2 }
 			set_variable = { var = STP_pc_this_result value = 1 }
-			NOD = { set_country_flag = STP_pc_defeated_by_sts }
-			if = { limit = { has_war_with = NOD } white_peace = NOD }
+			if = {
+				limit = { NOD = { STP_nod_border_war_active = yes } }
+				NOD = { STP_nod_settle_border_treaty = yes }
+			}
+			else = {
+				NOD = { set_country_flag = STP_pc_defeated_by_sts }
+				if = { limit = { has_war_with = NOD } white_peace = NOD }
+			}
 		}
 		else_if = {
 			limit = { check_variable = { var = STP_pc_cap_side value = 3 compare = equals } }
@@ -7276,7 +7391,11 @@ STP_ps_begin_return = {
 	if = { limit = { STP_ps_can_launch_return = yes }
 		if = { limit = { NOT = { has_war_with = STS } } declare_war_on = { target = STS type = annex_everything } }
 		# A rejected declaration must leave the decision available for another attempt.
-		if = { limit = { has_war_with = STS } set_country_flag = STP_ps_return_campaign }
+		if = {
+			limit = { has_war_with = STS }
+			set_country_flag = STP_ps_return_campaign
+			STS = { country_event = { id = ADISCORD_STP_pc.49 hours = 1 } }
+		}
 	}
 }
 STP_ps_settle_return = {
@@ -8662,7 +8781,7 @@ STP_pw_party_settle_compact = {
 	}
 }
 
-# Postwar specialist training: templates recruit through the ordinary queue.
+# COUNTRY STP/STS: specialist templates recruit through the ordinary queue.
 STP_pw_open_mountain_school = {
 	custom_effect_tooltip = STP_pw_mountain_template_tt
 	hidden_effect = {
@@ -12493,6 +12612,7 @@ STP_hw_resolve_victory = {
 
 # STP_hw_course stays for the victory report; everything else is wartime state.
 STP_hw_close_war = {
+	STP_hw_stall_clear = yes
 	if = {
 		limit = { has_dynamic_modifier = { modifier = STP_hw_mandate_dynamic } }
 		remove_dynamic_modifier = { modifier = STP_hw_mandate_dynamic }
@@ -12512,4 +12632,177 @@ STP_hw_close_war = {
 	clear_variable = STP_hw_mandate_stability
 	clear_variable = STP_hw_mandate_war_support
 	clear_variable = STP_hw_mandate_conscription
+}
+
+# COUNTRY STS: begin after the split's owner/controller reconciliation.
+# Only districts still held by the party can relieve exhaustion, once each.
+STP_hw_stall_begin = {
+	if = {
+		limit = {
+			tag = STS
+			has_war_with = STP
+			NOT = { has_variable = STP_hw_stall_days }
+			NOT = { has_country_flag = STP_cw_postwar }
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+		}
+		set_variable = { var = STP_hw_stall_days value = 0 }
+		2 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		3 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		28 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		29 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		45 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		46 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		53 = {
+			if = {
+				limit = { is_controlled_by = STP }
+				set_state_flag = STP_hw_stall_objective
+			}
+		}
+		STP_hw_stall_refresh = yes
+	}
+}
+
+# One bounded country pulse; modifier refreshes only at a tier boundary.
+STP_hw_stall_tick = {
+	if = {
+		limit = { STP_hw_stall_active = yes }
+		if = {
+			limit = { check_variable = { var = STP_hw_stall_days value = 210 compare = less_than } }
+			add_to_variable = { var = STP_hw_stall_days value = 1 }
+			subtract_from_variable = { var = STP_hw_stall_remaining value = 1 }
+			if = {
+				limit = { check_variable = { var = STP_hw_stall_remaining value = 0 compare = equals } }
+				STP_hw_stall_refresh = yes
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = STP_hw_stall_days }
+		STP_hw_stall_clear = yes
+	}
+}
+
+STP_hw_stall_refresh = {
+	if = {
+		limit = { STP_hw_stall_active = yes }
+		set_variable = { var = STP_hw_stall_stage value = 0 }
+		set_variable = { var = STP_hw_stall_support value = 0 }
+		set_variable = { var = STP_hw_stall_recovery value = 0 }
+		set_variable = { var = STP_hw_stall_mobilization value = 0 }
+		set_variable = { var = STP_hw_stall_remaining value = 90 }
+		if = {
+			limit = { check_variable = { var = STP_hw_stall_days value = 210 compare = greater_than_or_equals } }
+			set_variable = { var = STP_hw_stall_stage value = 3 }
+			set_variable = { var = STP_hw_stall_support value = -0.15 }
+			set_variable = { var = STP_hw_stall_recovery value = -0.15 }
+			set_variable = { var = STP_hw_stall_mobilization value = -0.30 }
+			set_variable = { var = STP_hw_stall_remaining value = 210 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_hw_stall_days value = 150 compare = greater_than_or_equals } }
+			set_variable = { var = STP_hw_stall_stage value = 2 }
+			set_variable = { var = STP_hw_stall_support value = -0.10 }
+			set_variable = { var = STP_hw_stall_recovery value = -0.10 }
+			set_variable = { var = STP_hw_stall_mobilization value = -0.15 }
+			set_variable = { var = STP_hw_stall_remaining value = 210 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_hw_stall_days value = 90 compare = greater_than_or_equals } }
+			set_variable = { var = STP_hw_stall_stage value = 1 }
+			set_variable = { var = STP_hw_stall_support value = -0.05 }
+			set_variable = { var = STP_hw_stall_recovery value = -0.05 }
+			set_variable = { var = STP_hw_stall_remaining value = 150 }
+		}
+		subtract_from_variable = { var = STP_hw_stall_remaining value = STP_hw_stall_days }
+		if = {
+			limit = {
+				check_variable = { var = STP_hw_stall_stage value = 0 compare = greater_than }
+				NOT = { has_dynamic_modifier = { modifier = STP_hw_stall_dynamic } }
+			}
+			add_dynamic_modifier = { modifier = STP_hw_stall_dynamic }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = STP_hw_stall_stage value = 0 compare = equals }
+				has_dynamic_modifier = { modifier = STP_hw_stall_dynamic }
+			}
+			remove_dynamic_modifier = { modifier = STP_hw_stall_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+	}
+}
+
+# STATE scope from on_state_control_changed. Consuming the objective prevents
+# deliberate surrender/recapture from buying repeated relief.
+STP_hw_stall_capture = {
+	if = {
+		limit = {
+			has_state_flag = STP_hw_stall_objective
+			is_controlled_by = STS
+			STS = { STP_hw_stall_active = yes }
+		}
+		clr_state_flag = STP_hw_stall_objective
+		STS = {
+			if = {
+				limit = { check_variable = { var = STP_hw_stall_days value = 210 compare = greater_than_or_equals } }
+				set_variable = { var = STP_hw_stall_days value = 150 }
+			}
+			else_if = {
+				limit = { check_variable = { var = STP_hw_stall_days value = 150 compare = greater_than_or_equals } }
+				set_variable = { var = STP_hw_stall_days value = 90 }
+			}
+			else = { set_variable = { var = STP_hw_stall_days value = 0 } }
+			STP_hw_stall_refresh = yes
+		}
+	}
+}
+
+STP_hw_stall_clear = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = STP_hw_stall_dynamic } }
+		remove_dynamic_modifier = { modifier = STP_hw_stall_dynamic }
+	}
+	clear_variable = STP_hw_stall_days
+	clear_variable = STP_hw_stall_stage
+	clear_variable = STP_hw_stall_remaining
+	clear_variable = STP_hw_stall_support
+	clear_variable = STP_hw_stall_recovery
+	clear_variable = STP_hw_stall_mobilization
+	2 = { clr_state_flag = STP_hw_stall_objective }
+	3 = { clr_state_flag = STP_hw_stall_objective }
+	28 = { clr_state_flag = STP_hw_stall_objective }
+	29 = { clr_state_flag = STP_hw_stall_objective }
+	45 = { clr_state_flag = STP_hw_stall_objective }
+	46 = { clr_state_flag = STP_hw_stall_objective }
+	53 = { clr_state_flag = STP_hw_stall_objective }
 }

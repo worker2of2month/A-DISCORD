@@ -977,7 +977,7 @@ class TestValContractUi(unittest.TestCase):
         for token in (
             "state_target = yes",
             "VAL_regional_integration_state_valid = yes",
-            "set_country_flag = VAL_regional_integration_active",
+            "set_state_flag = VAL_regional_administration_in_progress",
             "add_core_of = ROOT",
             "fire_only_once = no",
         ):

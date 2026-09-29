@@ -1,5 +1,75 @@
 ideas = {
 	country = {
+		STP_cw_mountain_training = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_cw_mountain_war_active = no }
+			modifier = {
+				special_forces_min = 12
+				special_forces_training_time_factor = -0.50
+			}
+		}
+
+		STP_cw_mountain_assault_training = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_cw_mountain_war_active = no }
+			modifier = {
+				modifier_army_sub_unit_mountaineers_attack_factor = 0.30
+				modifier_army_sub_unit_mountaineers_max_org_factor = 0.15
+			}
+		}
+
+		STP_pw_stelander_mountaineers = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				modifier_army_sub_unit_mountaineers_attack_factor = 0.15
+				modifier_army_sub_unit_mountaineers_defence_factor = 0.15
+				modifier_army_sub_unit_mountaineers_max_org_factor = 0.10
+			}
+		}
+
+		STP_kc_defence = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_kc_support_active = no }
+			on_remove = { clr_country_flag = STP_kc_preparing }
+			modifier = {
+				army_defence_factor = 0.15
+				army_org_regain = 0.15
+				supply_consumption_factor = -0.15
+			}
+		}
+
+		STP_kc_production = {
+			picture = ADISCORD_economic_system_industrializing
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_kc_support_active = no }
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = 0.20
+				training_time_factor = -0.20
+			}
+		}
+
+		STP_kc_counteroffensive = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			cancel = { STP_kc_support_active = no }
+			modifier = {
+				army_attack_factor = 0.10
+				planning_speed = 0.20
+			}
+		}
+
 		STP_ps_radio_network_preparation_delta = {
 			name = STP_cw_military_staff_dynamic
 			allowed = { always = no }
@@ -528,27 +598,6 @@ ideas = {
 			removal_cost = -1
 			cancel = { OR = { has_capitulated = yes NOT = { has_war_with = NOD } } }
 			modifier = { army_attack_factor = 0.08 breakthrough_factor = 0.10 army_org_regain = 0.10 army_speed_factor = 0.05 }
-		}
-		STP_cw_exhaustion_1 = {
-			picture = ADISCORD_law_military_cadre_army
-			allowed = { always = no }
-			removal_cost = -1
-			cancel = { STP_cw_party_exhaustion_active = no }
-			modifier = { army_defence_factor = -0.05 army_org_regain = -0.10 }
-		}
-		STP_cw_exhaustion_2 = {
-			picture = ADISCORD_law_military_cadre_army
-			allowed = { always = no }
-			removal_cost = -1
-			cancel = { STP_cw_party_exhaustion_active = no }
-			modifier = { army_defence_factor = -0.10 army_org_regain = -0.20 }
-		}
-		STP_cw_exhaustion_3 = {
-			picture = ADISCORD_law_military_cadre_army
-			allowed = { always = no }
-			removal_cost = -1
-			cancel = { STP_cw_party_exhaustion_active = no }
-			modifier = { army_defence_factor = -0.15 army_org_regain = -0.30 }
 		}
 		NOD_cw_northern_offensive = {
 			picture = ADISCORD_law_military_cadre_army

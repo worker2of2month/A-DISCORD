@@ -1,0 +1,33 @@
+# COUNTRY (SLI). Called once when the Stelander sides enter open hostilities.
+# Political settlement precedes the news window and never waits for its answer.
+SLI_declare_independence = {
+	if = {
+		limit = {
+			exists = yes
+			has_cosmetic_tag = SLI_mandate
+			OR = {
+				is_subject_of = NOD
+				is_subject = no
+			}
+		}
+		if = {
+			limit = { is_subject_of = NOD }
+			NOD = {
+				set_autonomy = {
+					target = SLI
+					autonomy_state = autonomy_free
+					end_wars = yes
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = { is_in_faction = yes }
+			faction_leader = { remove_from_faction = SLI }
+		}
+		drop_cosmetic_tag = yes
+		ADISCORD_economy_mark_dirty = yes
+		NOD = { ADISCORD_economy_mark_dirty = yes }
+		hidden_effect = { news_event = { id = ADISCORD_SLI.1 hours = 1 } }
+	}
+}

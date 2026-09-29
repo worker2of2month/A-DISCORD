@@ -201,7 +201,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             3000,
             None,
             0,
-            60,
+            90,
         ),
     )
 
@@ -462,7 +462,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             "var = VAL_local_volunteer_pool value = -1",
             "add_manpower = 10000",
             "add_stability = -0.01",
-            "days_re_enable = 90",
+            "days_re_enable = 120",
         ):
             self.assertIn(token, emergency)
 

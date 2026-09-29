@@ -3723,6 +3723,46 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_resistance_war",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.48",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 48,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.49",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 49,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SLI.1",
+      "namespace": "ADISCORD_SLI",
+      "number": 1,
+      "owner": "events/ADISCORD_SLI_events.txt",
+      "subsystem": "stelander_islands",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SLI.2",
+      "namespace": "ADISCORD_SLI",
+      "number": 2,
+      "owner": "events/ADISCORD_SLI_events.txt",
+      "subsystem": "stelander_islands",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SLI.3",
+      "namespace": "ADISCORD_SLI",
+      "number": 3,
+      "owner": "events/ADISCORD_SLI_events.txt",
+      "subsystem": "stelander_islands",
+      "status": "active"
     }
   ]
 }

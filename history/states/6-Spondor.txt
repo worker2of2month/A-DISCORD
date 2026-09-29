@@ -9,6 +9,10 @@ state={
 	state_category=town
 	local_supplies=0.000
 
+	resources = {
+		aluminium = 6
+	}
+
 	history = {
 		owner = BLD
 		add_core_of = BLD

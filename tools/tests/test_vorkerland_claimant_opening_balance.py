@@ -20,18 +20,28 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         )
         cls.wkr = named_block(cls.initial, "WKR")
 
-    def test_wkr_no_longer_has_double_vadl_deployed_air(self):
-        wkr_air = read("history/units/WRK_vorkerland_collapse_air.txt")
-        vad_air = read("history/units/VAD_vorkerland_collapse_air.txt")
-        self.assertEqual(
-            wkr_air.count('owner = "WKR" amount = 100'),
-            vad_air.count('owner = "VAD" amount = 100'),
-        )
-        self.assertEqual(
-            wkr_air.count('owner = "WKR" amount = 50'),
-            vad_air.count('owner = "VAD" amount = 50'),
-        )
-        self.assertNotIn("central-air-command edge", wkr_air)
+    def test_claimants_have_equal_deployed_air_and_replacements(self):
+        packages = {}
+        for tag, oob in (("WKR", "WRK"), ("VAD", "VAD"), ("TVA", "TVA")):
+            air = named_block(read(f"history/units/{oob}_vorkerland_collapse_air.txt"), "air_wings")
+            setup = (
+                named_block(self.effects, "ADISCORD_vorkerland_setup_tva")
+                if tag == "TVA"
+                else named_block(self.initial, tag)
+            )
+            package = {}
+            for equipment in ("ADISCORD_fighter_airframe_2163", "ADISCORD_cas_airframe_2170"):
+                deployed = sum(int(amount) for amount in re.findall(
+                    rf'{equipment}\s*=\s*\{{\s*owner\s*=\s*"{tag}"\s+amount\s*=\s*(\d+)', air
+                ))
+                reserve = sum(int(amount) for amount in re.findall(
+                    rf'type\s*=\s*{equipment}\s+amount\s*=\s*(\d+)\s+producer\s*=\s*{tag}', setup
+                ))
+                self.assertGreater(deployed, 0)
+                package[equipment] = (deployed, reserve)
+            packages[tag] = package
+        self.assertEqual(packages["WKR"], packages["VAD"])
+        self.assertEqual(packages["WKR"], packages["TVA"])
 
     def test_wkr_opening_air_reserve_and_fuel_are_bounded(self):
         self.assertIn(

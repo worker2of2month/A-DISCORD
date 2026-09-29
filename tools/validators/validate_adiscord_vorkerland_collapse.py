@@ -3183,8 +3183,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
         "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-        "add_manpower = 28000",
-        "type = infantry_equipment_0 amount = 3560 producer = TVA",
+        "add_manpower = 22000",
+        "type = infantry_equipment_0 amount = 12000 producer = TVA",
         "type = support_equipment amount = 180 producer = TVA",
         "type = artillery_equipment amount = 96 producer = TVA",
     ):
@@ -3256,8 +3256,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_grant_technology_profile_land = yes",
         "ADISCORD_grant_technology_profile_air = yes",
         "type = ADISCORD_combat_platform_2170 amount = 360 producer = TVA",
-        "type = ADISCORD_fighter_airframe_2163 amount = 60 producer = TVA",
-        "type = ADISCORD_cas_airframe_2170 amount = 30 producer = TVA",
+        "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = TVA",
+        "type = ADISCORD_cas_airframe_2170 amount = 15 producer = TVA",
     ):
         if token not in tva_setup:
             issues.append(f"Doctor Worx advanced starting package is missing {token}")

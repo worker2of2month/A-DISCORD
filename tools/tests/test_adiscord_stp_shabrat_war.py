@@ -186,6 +186,151 @@ class MandateMechanicTests(unittest.TestCase):
                 self.assertTrue(ru.get(key) and en.get(key), key)
 
 
+class StalledWarTests(unittest.TestCase):
+    """Execute authored branches; native timing and UI still need a campaign."""
+
+    def setUp(self):
+        from tools.tests.test_adiscord_stp_preparation import entries
+
+        self.effects = {entry.key: entry.value for entry in entries(EFFECTS)}
+        self.triggers = {entry.key: entry.value for entry in entries(TRIGGERS)}
+        self.facts = {("STS", "has_war_with", "STP"): True}
+        for state in (2, 3, 28, 29, 45, 46, 53):
+            self.facts[(str(state), "is_controlled_by", "STP")] = True
+
+    def value(self, suffix):
+        return self.facts.get(("STS", "variable", "STP_hw_stall_" + suffix), 0)
+
+    def run_effect(self, name, scope="STS"):
+        from tools.tests.test_adiscord_stp_preparation import (
+            matches_conditions,
+            scalar,
+            selected_effects,
+        )
+
+        self.assertTrue(name in self.effects, f"Missing effect: {name}")
+        for country in ("STS", "STP"):
+            for trigger in ("STP_hw_stall_active",):
+                if trigger in self.triggers:
+                    active = matches_conditions(self.triggers[trigger], self.facts, country)
+                    self.facts[(country, trigger, "yes")] = active
+                    self.facts[(country, trigger, "no")] = not active
+        for country, entry in selected_effects(self.effects[name], self.facts, scope):
+            key, value = entry.key, entry.value
+            if key in self.effects:
+                self.run_effect(key, country)
+            elif key in ("set_variable", "add_to_variable", "subtract_from_variable"):
+                variable, amount = scalar(value, "var"), scalar(value, "value")
+                try:
+                    amount = float(amount)
+                except ValueError:
+                    amount = self.facts.get((country, "variable", amount), 0)
+                address = (country, "variable", variable)
+                old = self.facts.get(address, 0)
+                if key == "set_variable":
+                    self.facts[address] = amount
+                elif key == "add_to_variable":
+                    self.facts[address] = old + amount
+                else:
+                    self.facts[address] = old - amount
+                self.facts[(country, "has_variable", variable)] = True
+            elif key == "clear_variable":
+                self.facts.pop((country, "variable", value), None)
+                self.facts.pop((country, "has_variable", value), None)
+            elif key in ("set_state_flag", "clr_state_flag"):
+                self.facts[(country, "has_state_flag", value)] = key == "set_state_flag"
+            elif key in ("add_dynamic_modifier", "remove_dynamic_modifier"):
+                address = (country, "has_dynamic_modifier", scalar(value, "modifier"))
+                self.facts[address] = key == "add_dynamic_modifier"
+            elif key != "force_update_dynamic_modifier":
+                self.fail(f"Unsupported stall effect: {key}")
+
+    def test_thresholds_cap_and_new_war_initialization(self):
+        self.run_effect("STP_hw_stall_begin")
+        expected = {
+            89: (0, 0, 0, 0),
+            90: (1, -0.05, -0.05, 0),
+            149: (1, -0.05, -0.05, 0),
+            150: (2, -0.10, -0.10, -0.15),
+            209: (2, -0.10, -0.10, -0.15),
+            210: (3, -0.15, -0.15, -0.30),
+            240: (3, -0.15, -0.15, -0.30),
+        }
+        for day in range(1, 241):
+            self.run_effect("STP_hw_stall_tick")
+            if day == 100:
+                self.run_effect("STP_hw_stall_begin")
+            if day in expected:
+                actual = tuple(
+                    self.value(key)
+                    for key in ("stage", "support", "recovery", "mobilization")
+                )
+                self.assertEqual(actual, expected[day], day)
+        self.assertEqual(self.value("days"), 210)
+
+    def test_capture_relief_is_one_tier_and_cannot_be_farmed(self):
+        cases = ((80, 0, 0, 90), (120, 0, 0, 90), (190, 90, 1, 60), (210, 150, 2, 60))
+        for days, target, stage, remaining in cases:
+            self.setUp()
+            self.run_effect("STP_hw_stall_begin")
+            self.facts[("STS", "variable", "STP_hw_stall_days")] = days
+            self.run_effect("STP_hw_stall_refresh")
+            self.facts[("28", "is_controlled_by", "STS")] = True
+            self.run_effect("STP_hw_stall_capture", "28")
+            actual = tuple(self.value(key) for key in ("days", "stage", "remaining"))
+            self.assertEqual(actual, (target, stage, remaining))
+            self.run_effect("STP_hw_stall_tick")
+            self.run_effect("STP_hw_stall_capture", "28")
+            self.assertEqual(self.value("days"), target + 1)
+
+    def test_initial_territory_and_foreign_captures_give_no_relief(self):
+        self.facts[("2", "is_controlled_by", "STP")] = False
+        self.run_effect("STP_hw_stall_begin")
+        self.facts[("STS", "variable", "STP_hw_stall_days")] = 160
+        self.facts[("2", "is_controlled_by", "STS")] = True
+        self.run_effect("STP_hw_stall_capture", "2")
+        self.run_effect("STP_hw_stall_capture", "28")
+        self.assertEqual(self.value("days"), 160)
+
+    def test_peace_clears_modifiers_and_stops_late_callbacks(self):
+        self.run_effect("STP_hw_stall_begin")
+        self.facts[("STS", "variable", "STP_hw_stall_days")] = 210
+        self.run_effect("STP_hw_stall_refresh")
+        self.facts[("STS", "has_war_with", "STP")] = False
+        self.run_effect("STP_hw_stall_tick")
+        self.facts[("28", "is_controlled_by", "STS")] = True
+        self.run_effect("STP_hw_stall_capture", "28")
+        self.assertFalse(self.facts.get(("STS", "has_dynamic_modifier", "STP_hw_stall_dynamic")))
+        self.assertFalse(self.facts.get(("STS", "has_variable", "STP_hw_stall_days")))
+        self.assertFalse(any(
+            value for key, value in self.facts.items() if key[1] == "has_state_flag"
+        ))
+
+    def test_postwar_and_other_countries_cannot_start_or_restore_penalties(self):
+        self.run_effect("STP_hw_stall_begin", "STP")
+        self.assertFalse(self.facts.get(("STP", "has_variable", "STP_hw_stall_days")))
+        self.facts[("STS", "has_country_flag", "STP_cw_postwar")] = True
+        self.run_effect("STP_hw_stall_begin")
+        self.run_effect("STP_hw_stall_refresh")
+        self.assertFalse(self.facts.get(("STS", "has_variable", "STP_hw_stall_days")))
+        self.assertFalse(self.facts.get(("STS", "has_dynamic_modifier", "STP_hw_stall_dynamic")))
+
+    def test_native_modifier_and_ui_use_the_authoritative_values(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, scalar
+
+        dynamic = next(entry.value for entry in entries(DYNAMIC) if entry.key == "STP_hw_stall_dynamic")
+        self.assertEqual(scalar(dynamic, "war_support_factor"), "STP_hw_stall_support")
+        self.assertEqual(scalar(dynamic, "army_org_regain"), "STP_hw_stall_recovery")
+        self.assertEqual(scalar(dynamic, "mobilization_speed"), "STP_hw_stall_mobilization")
+        for path in (RU, EN):
+            keys = loc_keys(path)
+            self.assertIn("[STPGetStalledWarReport]", keys["STP_cw_war_council_desc"])
+            self.assertIn("[?STP_hw_stall_stage|0]", keys["STP_hw_stall_report"])
+            self.assertIn("[?STP_hw_stall_remaining|0]", keys["STP_hw_stall_report"])
+            for key in ("STP_hw_stall_rules", "STP_hw_stall_dynamic_desc", "STP_hw_stall_objectives"):
+                self.assertTrue(keys.get(key), key)
+
+
 class CoalitionEventTests(unittest.TestCase):
     def test_events_are_registered_and_localised(self):
         events = text(EVENTS)

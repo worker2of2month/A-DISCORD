@@ -9,6 +9,11 @@ state={
 	state_category=town
 	local_supplies=0.000
 
+	resources = {
+		steel = 6
+		tungsten = 4
+	}
+
 	history = {
 		owner = BGT
 		add_core_of = BGT

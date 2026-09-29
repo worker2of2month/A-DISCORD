@@ -1401,7 +1401,6 @@ VAL_frontier = {
 			modifier = { factor = 10 has_completed_focus = VAL_Trading_Partners }
 			modifier = {
 				factor = 0
-				VAL_ai_frontier_force_ready = yes
 				NOT = { has_completed_focus = VAL_Trading_Partners }
 				OR = {
 					CIN = { VAL_frontier_bloc_target_eligible = yes }
@@ -1529,7 +1528,6 @@ VAL_frontier = {
 		}
 		available = {
 			VAL_regional_integration_target_valid = yes
-			NOT = { has_country_flag = VAL_regional_integration_active }
 			FROM = {
 				VAL_regional_integration_state_valid = yes
 				NOT = { has_state_flag = VAL_regional_administration_in_progress }
@@ -1550,7 +1548,6 @@ VAL_frontier = {
 		}
 		complete_effect = {
 			hidden_effect = {
-				set_country_flag = VAL_regional_integration_active
 				FROM = { set_state_flag = VAL_regional_administration_in_progress }
 			}
 		}
@@ -1558,7 +1555,6 @@ VAL_frontier = {
 			if = {
 				limit = {
 					VAL_regional_integration_target_valid = yes
-					has_country_flag = VAL_regional_integration_active
 					FROM = {
 						VAL_regional_integration_state_valid = yes
 						has_state_flag = VAL_regional_administration_in_progress
@@ -1571,26 +1567,22 @@ VAL_frontier = {
 			}
 			else_if = {
 				limit = {
-					has_country_flag = VAL_regional_integration_active
 					FROM = { has_state_flag = VAL_regional_administration_in_progress }
 				}
 				add_political_power = 50
 			}
 			hidden_effect = {
-				clr_country_flag = VAL_regional_integration_active
 				FROM = { clr_state_flag = VAL_regional_administration_in_progress }
 			}
 		}
 		cancel_effect = {
 			if = {
 				limit = {
-					has_country_flag = VAL_regional_integration_active
 					FROM = { has_state_flag = VAL_regional_administration_in_progress }
 				}
 				add_political_power = 50
 			}
 			hidden_effect = {
-				clr_country_flag = VAL_regional_integration_active
 				FROM = { clr_state_flag = VAL_regional_administration_in_progress }
 			}
 		}

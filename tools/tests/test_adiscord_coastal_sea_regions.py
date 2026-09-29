@@ -23,6 +23,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ProvinceCornerTests(unittest.TestCase):
+    def test_mandate_islands_have_dry_lowland_rasters(self):
+        definitions = {
+            int(fields[0]): tuple(map(int, fields[1:4]))
+            for line in (ROOT / "map/definition.csv").read_text().splitlines()
+            if len(fields := line.split(";")) >= 8
+        }
+        with (
+            Image.open(ROOT / "map/provinces.bmp") as provinces,
+            Image.open(ROOT / "map/heightmap.bmp") as heights,
+            Image.open(ROOT / "map/terrain.bmp") as terrain,
+            Image.open(ROOT / "map/rivers.bmp") as rivers,
+        ):
+            rgb = np.asarray(provinces)
+            for province in range(16802, 16809):
+                mask = np.all(rgb == definitions[province], axis=2)
+                self.assertTrue(mask.any())
+                self.assertGreaterEqual(int(np.asarray(heights)[mask].min()), 97)
+                self.assertLessEqual(int(np.asarray(heights)[mask].max()), 106)
+                self.assertEqual(set(np.unique(np.asarray(terrain)[mask])), {0})
+                self.assertEqual(set(np.unique(np.asarray(rivers)[mask])), {255})
+
     def test_province_map_has_no_four_colour_crossings(self):
         with Image.open(ROOT / "map/provinces.bmp") as image:
             rgb = np.asarray(image.convert("RGB"), dtype=np.uint32)

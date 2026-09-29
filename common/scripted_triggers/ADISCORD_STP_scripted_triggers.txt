@@ -1,11 +1,27 @@
 # Stelander scripted triggers; scopes are marked below.
 
-# STP: exhaustion belongs only to the active party-resistance war.
-STP_cw_party_exhaustion_active = {
-	tag = STP
-	has_war_with = STS
+# COUNTRY: a separate foreign war must not preserve civil-war training bonuses.
+STP_cw_mountain_war_active = {
 	has_capitulated = no
-	STS = { exists = yes has_capitulated = no }
+	NOT = { has_country_flag = STP_cw_postwar }
+	OR = {
+		AND = {
+			tag = STP
+			has_war_with = STS
+			STS = {
+				exists = yes
+				has_capitulated = no
+			}
+		}
+		AND = {
+			tag = STS
+			has_war_with = STP
+			STP = {
+				exists = yes
+				has_capitulated = no
+			}
+		}
+	}
 }
 
 # STS: recognition and aid require the same living, independent counterpart.
@@ -960,6 +976,67 @@ STP_pw_party_has_port_capacity = {
 	}
 }
 
+# COUNTRY: completed war routes also permit preparation before the declaration.
+STP_kc_preparation_current = {
+	has_country_flag = STP_cw_postwar
+	is_subject = no
+	NOT = { is_in_faction_with = VAL }
+	NOT = { has_country_flag = VAL_stelander_truce }
+	NOT = { has_country_flag = STP_pc_val_terms_accepted }
+	NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
+	VAL = { is_subject = no }
+	OR = {
+		AND = {
+			tag = STS
+			OR = {
+				has_completed_focus = STP_pc_heg_val_force
+				has_completed_focus = STP_pc_heg_final_north
+				AND = {
+					has_completed_focus = STP_pc_lib_crisis
+					has_country_flag = STP_pc_val_crisis
+				}
+			}
+		}
+		AND = {
+			tag = STP
+			has_completed_focus = STP_pw_party_kefreyt_campaign
+		}
+	}
+}
+
+STP_kc_threat_current = {
+	OR = { tag = STP tag = STS }
+	has_capitulated = no
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
+	OR = {
+		has_war_with = VAL
+		STP_kc_preparation_current = yes
+	}
+}
+
+# The preparation receipt ends at the declaration. An old war unlock must not
+# preserve emergency bonuses after peace, including while another war continues.
+STP_kc_support_active = {
+	STP_kc_threat_current = yes
+	OR = {
+		has_war_with = VAL
+		has_country_flag = STP_kc_preparing
+	}
+}
+
+STP_kc_naval_program_available = {
+	tag = STS
+	has_capitulated = no
+	OR = {
+		STP_pc_focus_available = yes
+		STP_kc_support_active = yes
+	}
+	STP_pc_has_naval_base = yes
+}
+
 STP_pc_has_naval_base = {
 	any_owned_state = {
 		is_controlled_by = ROOT
@@ -1259,6 +1336,45 @@ STP_pc_nod_government_exists = {
 	}
 }
 
+# COUNTRY NOD: the first limited war excludes the separately owned final campaigns.
+STP_nod_border_war_active = {
+	tag = NOD
+	exists = yes
+	is_subject = no
+	has_war_with = STS
+	NOT = { has_country_flag = STP_pc_defeated_by_sts }
+	NOT = { has_country_flag = VAL_joint_nod_campaign_target }
+	NOT = { has_country_flag = VAL_final_war_member }
+	NOT = { has_war_with = VAL }
+	STS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_country_flag = STP_heg_northern_final_started }
+	}
+	OR = {
+		has_country_flag = NOD_cw_entered
+		has_country_flag = STP_ps_return_campaign
+		STS = { has_country_flag = STP_cw_postwar }
+	}
+}
+
+# Losses on another front alone cannot award Shabrat a border settlement.
+STP_nod_border_treaty_ready = {
+	STP_nod_border_war_active = yes
+	NOT = { surrender_progress < 0.4 }
+	OR = {
+		10 = {
+			is_owned_by = NOD
+			is_controlled_by = STS
+		}
+		11 = {
+			is_owned_by = NOD
+			is_controlled_by = STS
+		}
+	}
+}
+
 STP_pc_can_confront_nod = {
 	tag = STS
 	NOT = { has_country_flag = STP_pc_nod_terms_accepted }
@@ -1477,6 +1593,7 @@ STP_ps_can_start_stage = {
 STP_ps_nod_can_host_exiles = {
 	tag = NOD exists = yes has_capitulated = no is_subject = no
 	NOT = { has_war_with = STP }
+	NOT = { has_country_flag = STP_pc_defeated_by_sts }
 }
 STP_ps_can_aid_nod = {
 	tag = STP exists = yes has_capitulated = no
@@ -2495,6 +2612,14 @@ STP_pv_kefreyt_offer_possible = {
 # ============================================================
 
 # COUNTRY STS: the mandate and the coalition exist only during the war with the party.
+STP_hw_stall_active = {
+	tag = STS
+	has_war_with = STP
+	has_variable = STP_hw_stall_days
+	NOT = { has_country_flag = STP_cw_postwar }
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+}
+
 STP_hw_war_current = {
 	tag = STS
 	has_war_with = STP

@@ -319,6 +319,48 @@ class DebtRepaymentGateTests(unittest.TestCase):
 
 
 class NorthernCampaignRouteTests(unittest.TestCase):
+    def test_military_course_waits_for_readiness_without_abandoning_the_north(self):
+        decision = block(
+            read("common/decisions/ADISCORD_VAL_decisions.txt"),
+            "VAL_defer_northern_expansion",
+        )
+        weights = parse_clausewitz(block(decision, "ai_will_do"))
+
+        def weight(trading, ready, targets):
+            def evaluate(entry, scope="VAL"):
+                key, value = entry.key, entry.value
+                if key in ("AND", "OR", "NOT"):
+                    results = [evaluate(child, scope) for child in value]
+                    if key == "OR":
+                        return any(results)
+                    return not all(results) if key == "NOT" else all(results)
+                if key in ("CIN", "OSF", "APH"):
+                    return all(evaluate(child, key) for child in value)
+                if key == "has_completed_focus":
+                    self.assertEqual(value, "VAL_Trading_Partners")
+                    return trading
+                if key == "VAL_ai_frontier_force_ready":
+                    return ready == (value == "yes")
+                if key == "VAL_frontier_bloc_target_eligible":
+                    return (scope in targets) == (value == "yes")
+                self.fail("Unimplemented AI condition: " + key)
+
+            result = float(next(entry.value for entry in weights if entry.key == "base"))
+            for entry in weights:
+                if entry.key != "modifier":
+                    continue
+                conditions = [child for child in entry.value if child.key != "factor"]
+                if all(evaluate(child) for child in conditions):
+                    result *= float(next(child.value for child in entry.value if child.key == "factor"))
+            return result
+
+        for target in ("CIN", "OSF", "APH"):
+            for ready in (False, True):
+                with self.subTest(target=target, ready=ready):
+                    self.assertEqual(weight(False, ready, {target}), 0)
+                    self.assertGreater(weight(True, ready, {target}), 0)
+        self.assertGreater(weight(False, False, set()), 0)
+
     def test_frontier_does_not_require_participation_in_the_stelander_crisis(self):
         nodes = focus(
             read("common/national_focus/ADISCORD_national_focus_VAL.txt"),

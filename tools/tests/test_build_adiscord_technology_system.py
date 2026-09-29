@@ -5,6 +5,7 @@ import re
 import tempfile
 import unittest
 from dataclasses import replace
+from decimal import Decimal
 from pathlib import Path
 from unittest.mock import patch
 
@@ -21,6 +22,73 @@ STARTING_PROFILE_MANIFEST = (
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_small_arms_requires_three_modifications_between_models(self):
+        branch = generator.BRANCH_BY_KEY["small_arms"]
+        graph = generator.BRANCH_GRAPHS[branch.key]
+        models = [
+            index for index, tech in enumerate(branch.techs)
+            if tech.id in generator.ENABLE_EQUIPMENT
+        ]
+        self.assertEqual(models, list(range(0, 33, 4)))
+        self.assertEqual(len(set(graph.lanes)), 1)
+        for index, tech in enumerate(branch.techs):
+            expected = (index + 1,) if index + 1 < len(branch.techs) else ()
+            self.assertEqual(graph.successors[index], expected)
+            required = set(generator.technology_prerequisite_closure((tech.id,)))
+            self.assertTrue({t.id for t in branch.techs[:index]} <= required)
+            self.assertEqual(generator.xor_siblings(branch, index), ())
+
+    def test_small_arms_preserves_total_rewards_and_research_budget(self):
+        branch = generator.BRANCH_BY_KEY["small_arms"]
+        totals = {}
+        for tech in branch.techs:
+            for effect in tech.effects:
+                for name, value in re.findall(r"(\w+) = (0\.\d+)", effect):
+                    totals[name] = totals.get(name, Decimal(0)) + Decimal(value)
+        self.assertEqual(totals, {
+            "soft_attack": Decimal("0.264"),
+            "defense": Decimal("0.148"),
+            "breakthrough": Decimal("0.128"),
+            "coordination_bonus": Decimal("0.068"),
+            "land_night_attack": Decimal("0.012"),
+        })
+        cost = sum(
+            generator.research_cost_for(branch, index, (), ())
+            for index in range(len(branch.techs))
+        )
+        self.assertGreaterEqual(cost, 25)
+        self.assertLessEqual(cost, 26)
+        self.assertTrue(
+            {tech.id for tech in branch.techs[:4]}
+            <= set(generator.STARTING_TECH_PROFILES["common"])
+        )
+
+    def test_same_year_weapon_modifications_have_separate_dated_cells(self):
+        branch = generator.BRANCH_BY_KEY["small_arms"]
+        slots = generator.horizontal_visual_slots(branch)
+        self.assertTrue(all(a < b for a, b in zip(slots, slots[1:])))
+        rendered = generator.render_folder("infantry_folder")
+        for occurrence, index in enumerate(range(4)):
+            label_id = "2150" if occurrence == 0 else f"2150_{occurrence}"
+            label = self._named_gui_block(
+                rendered, "instantTextBoxType", f"ADISCORD_infantry_folder_year_{label_id}"
+            )
+            self.assertIn('text = "2150"', label)
+            self.assertEqual(slots[index], occurrence * 3)
+
+    def test_shared_squad_weapon_progression_has_no_country_gate(self):
+        for branch in generator.BRANCHES:
+            for index, tech in enumerate(branch.techs):
+                equipment = generator.ENABLE_EQUIPMENT.get(tech.id, ())
+                if not any(
+                    item.startswith("ADISCORD_squad_weapons_equipment_")
+                    for item in equipment
+                ):
+                    continue
+                with self.subTest(technology=tech.id):
+                    rendered = generator.render_technology(branch, index)
+                    self.assertNotRegex(rendered, r"\b(?:tag|original_tag)\s*=")
+
     def test_starting_support_weapons_have_producible_equipment(self):
         for key, equipment in (
             ("salvaged_at_guns", "ADISCORD_anti_tank_equipment_2163"),
@@ -116,7 +184,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 with self.subTest(technology=tech.id):
                     self.assertEqual(
                         generator.technology_time_slot(branch, index),
-                        generator.YEAR_TO_Y[year] * 3,
+                        generator.horizontal_year_columns(branch.folders[0]).index(
+                            (year, branch.years[:index].count(year))
+                        ) * 3,
                     )
 
     def test_year_label_centres_align_with_native_technology_cells(self) -> None:
@@ -129,7 +199,11 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 )
                 origin = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", grid)
                 for index, year in enumerate(branch.years):
-                    label_id = str(year) if horizontal else f"{branch.key}_{year}"
+                    occurrence = branch.years[:index].count(year)
+                    label_id = (
+                        (str(year) if occurrence == 0 else f"{year}_{occurrence}")
+                        if horizontal else f"{branch.key}_{year}"
+                    )
                     label = self._named_gui_block(
                         rendered,
                         "instantTextBoxType",
@@ -1243,7 +1317,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "industry_organization",
                 "advanced_materials",
                 "bomber_maritime",
-                "small_arms",
                 "squad_weapons",
                 "night_combat",
                 "anti_tank_infantry",
@@ -1286,7 +1359,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertNotIn("industry_folder", generator.HORIZONTAL_FOLDERS)
         infantry = {b.key for b in generator.BRANCHES if "infantry_folder" in b.folders}
         self.assertIn("special_forces", infantry)
-        self.assertEqual(len(generator.BRANCH_BY_KEY["small_arms"].techs), 16)
+        self.assertEqual(len(generator.BRANCH_BY_KEY["small_arms"].techs), 33)
         for branch in generator.BRANCHES:
             cells = [
                 generator.technology_grid_position(branch, i)

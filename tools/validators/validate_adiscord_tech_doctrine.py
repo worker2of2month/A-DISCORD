@@ -2309,7 +2309,11 @@ def check_technology_ui_years() -> list[str]:
         for year in sorted(EXPECTED_TECH_UI_YEARS):
             count = len(re.findall(rf'\btext\s*=\s*"{year}"', folder_block))
             expected = (
-                1
+                max(
+                    1,
+                    *(branch.years.count(int(year)) for branch in GENERATED_BRANCHES
+                      if folder in branch.folders),
+                )
                 if folder in GENERATED_HORIZONTAL_FOLDERS
                 else sum(
                     int(year) in branch.years
@@ -3241,7 +3245,10 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                     effect_prefix,
                 )
             )
-            minimum_effects = 0 if tech.id in unlocks else (1 if family_upgrade else 2)
+            weapon_modification = branch.key == "small_arms" and tech.id not in unlocks
+            minimum_effects = (
+                0 if tech.id in unlocks else (1 if family_upgrade or weapon_modification else 2)
+            )
             if year >= 2160 and effect_count < minimum_effects:
                 issues.append(
                     f"post-2160 technology {tech.id} has only {effect_count} numeric gameplay effects"
@@ -3302,6 +3309,11 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                     )
                 continue
             if year < 2160:
+                continue
+            if weapon_modification:
+                # Three mandatory incremental upgrades share a generation's budget.
+                if not 0.30 <= cost <= 0.40:
+                    issues.append(f"weapon modification {tech.id} has invalid cost {cost}")
                 continue
             costs.append(cost)
             if tech.id in unlocks and cost < 2.0:

@@ -1629,6 +1629,31 @@ defined_text = {
 
 # Party war: inheritance of the festival.
 defined_text = {
+	name = STPGetStalledWarReport
+	text = {
+		trigger = {
+			STP_hw_stall_active = yes
+			check_variable = { var = STP_hw_stall_stage value = 3 compare = equals }
+		}
+		localization_key = STP_hw_stall_report_max
+	}
+	text = {
+		trigger = { STP_hw_stall_active = yes }
+		localization_key = STP_hw_stall_report
+	}
+	text = { localization_key = STP_ps_empty }
+}
+
+defined_text = {
+	name = STPGetStallObjective
+	text = {
+		trigger = { has_state_flag = STP_hw_stall_objective }
+		localization_key = STP_hw_stall_objective_name
+	}
+	text = { localization_key = STP_ps_empty }
+}
+
+defined_text = {
 	name = STPGetWarStrainReport
 	text = {
 		trigger = { STP_pv_war_current = yes }

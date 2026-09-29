@@ -233,6 +233,18 @@ ADISCORD_mountaineer_templates = {
 	blocked_for = { EXZ }
 	role = mountaineers
 	upgrade_prio = { base = 2 }
+	STP_cw_mountain_brigade = {
+		enable = {
+			STP_cw_mountain_war_active = yes
+			has_completed_focus = STP_cw_mountain_school
+		}
+		upgrade_prio = { base = 20 }
+		can_upgrade_in_field = { always = no }
+		target_template = {
+			regiments = { mountaineers = 6 }
+			support = { engineer = 1 }
+		}
+	}
 	ADISCORD_mountaineer_brigade = {
 		enable = {
 			NOT = { ADISCORD_economy_ai_is_crisis = yes }

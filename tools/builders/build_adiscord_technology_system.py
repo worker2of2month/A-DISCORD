@@ -2115,7 +2115,39 @@ BRANCHES = (
                 "Precision Rifling of Barrel Bores",
                 "infantry_weapons",
                 2150,
-                ("category_all_infantry = { soft_attack = 0.024 }",),
+                (
+                    "category_all_infantry = { soft_attack = 0.006 }",
+                ),
+            ),
+            (
+                "rifling_alignment",
+                "Соосность нарезов",
+                "Rifling Alignment",
+                "infantry_weapons",
+                2150,
+                (
+                    "category_all_infantry = { soft_attack = 0.006 }",
+                ),
+            ),
+            (
+                "bolt_head_fitting",
+                "Подгонка боевых упоров",
+                "Locking Lug Fitting",
+                "infantry_weapons",
+                2150,
+                (
+                    "category_all_infantry = { soft_attack = 0.006 }",
+                ),
+            ),
+            (
+                "chamber_polishing",
+                "Чистовая обработка патронника",
+                "Chamber Finishing",
+                "infantry_weapons",
+                2150,
+                (
+                    "category_all_infantry = { soft_attack = 0.006 }",
+                ),
             ),
             (
                 "refurbished_receivers",
@@ -2123,7 +2155,9 @@ BRANCHES = (
                 "Breech Obturation",
                 "infantry_weapons",
                 2155,
-                ("category_all_infantry = { defense = 0.024 }",),
+                (
+                    "category_all_infantry = { defense = 0.012 }",
+                ),
             ),
             (
                 "standardized_cartridges",
@@ -2131,7 +2165,9 @@ BRANCHES = (
                 "Metallic Self-contained Cartridge",
                 "ADISCORD_equipment_ammunition",
                 2158,
-                ("category_all_infantry = { soft_attack = 0.028 }",),
+                (
+                    "category_all_infantry = { soft_attack = 0.028 }",
+                ),
             ),
             (
                 "caseless_ammunition_trials",
@@ -2144,13 +2180,23 @@ BRANCHES = (
                 ),
             ),
             (
+                "primer_consistency",
+                "Стабильное воспламенение капсюля",
+                "Consistent Primer Ignition",
+                "ADISCORD_equipment_ammunition",
+                2161,
+                (
+                    "category_all_infantry = { defense = 0.012 }",
+                ),
+            ),
+            (
                 "sealed_receiver_assemblies",
                 "Промежуточные патроны",
                 "Intermediate Cartridges",
                 "infantry_weapons",
                 2162,
                 (
-                    "category_all_infantry = { breakthrough = 0.024 soft_attack = 0.012 }",
+                    "category_all_infantry = { breakthrough = 0.008 soft_attack = 0.004 }",
                 ),
             ),
             (
@@ -2159,7 +2205,29 @@ BRANCHES = (
                 "High-strength Barrel Steels",
                 "ADISCORD_weapon_03_standardized_battle_rifle",
                 2163,
-                ("category_all_infantry = { defense = 0.028 breakthrough = 0.008 }",),
+                (
+                    "category_all_infantry = { defense = 0.028 breakthrough = 0.008 }",
+                ),
+            ),
+            (
+                "magazine_feed_geometry",
+                "Геометрия подачи магазина",
+                "Magazine Feed Geometry",
+                "infantry_weapons",
+                2163,
+                (
+                    "category_all_infantry = { breakthrough = 0.008 soft_attack = 0.004 }",
+                ),
+            ),
+            (
+                "extractor_heat_treatment",
+                "Закалка выбрасывателя",
+                "Extractor Heat Treatment",
+                "infantry_weapons",
+                2163,
+                (
+                    "category_all_infantry = { breakthrough = 0.008 soft_attack = 0.004 }",
+                ),
             ),
             (
                 "smart_recoil_compensators",
@@ -2168,7 +2236,37 @@ BRANCHES = (
                 "infantry_weapons3",
                 2164,
                 (
-                    "category_all_infantry = { soft_attack = 0.032 breakthrough = 0.016 }",
+                    "category_all_infantry = { soft_attack = 0.008 breakthrough = 0.004 }",
+                ),
+            ),
+            (
+                "recoil_spring_tuning",
+                "Настройка возвратной пружины",
+                "Recoil Spring Tuning",
+                "infantry_weapons",
+                2164,
+                (
+                    "category_all_infantry = { soft_attack = 0.008 breakthrough = 0.004 }",
+                ),
+            ),
+            (
+                "bolt_carrier_guides",
+                "Направляющие затворной рамы",
+                "Bolt Carrier Guides",
+                "infantry_weapons",
+                2164,
+                (
+                    "category_all_infantry = { soft_attack = 0.008 breakthrough = 0.004 }",
+                ),
+            ),
+            (
+                "trigger_reset_geometry",
+                "Короткий сброс спуска",
+                "Short Trigger Reset",
+                "infantry_weapons",
+                2164,
+                (
+                    "category_all_infantry = { soft_attack = 0.008 breakthrough = 0.004 }",
                 ),
             ),
             (
@@ -2178,8 +2276,8 @@ BRANCHES = (
                 "night_vision",
                 2165,
                 (
-                    "coordination_bonus = 0.012",
-                    "category_all_infantry = { soft_attack = 0.012 }",
+                    "coordination_bonus = 0.004",
+                    "category_all_infantry = { soft_attack = 0.004 }",
                 ),
             ),
             (
@@ -2194,13 +2292,35 @@ BRANCHES = (
                 ),
             ),
             (
+                "rangefinder_zeroing",
+                "Юстировка дальномера",
+                "Rangefinder Alignment",
+                "night_vision",
+                2166,
+                (
+                    "coordination_bonus = 0.004",
+                    "category_all_infantry = { soft_attack = 0.004 }",
+                ),
+            ),
+            (
+                "sight_mount_repeatability",
+                "Повторяемая установка прицела",
+                "Repeatable Sight Mounting",
+                "night_vision",
+                2166,
+                (
+                    "coordination_bonus = 0.004",
+                    "category_all_infantry = { soft_attack = 0.004 }",
+                ),
+            ),
+            (
                 "modular_rifle_kits",
                 "Газоотводная автоматика",
                 "Gas-operated Action",
                 "infantry_weapons3",
                 2167,
                 (
-                    "category_all_infantry = { soft_attack = 0.036 breakthrough = 0.02 }",
+                    "category_all_infantry = { soft_attack = 0.018 breakthrough = 0.01 }",
                 ),
             ),
             (
@@ -2209,7 +2329,9 @@ BRANCHES = (
                 "Rotating-bolt Locking",
                 "ADISCORD_weapon_03_standardized_battle_rifle",
                 2168,
-                ("category_all_infantry = { defense = 0.028 breakthrough = 0.02 }",),
+                (
+                    "category_all_infantry = { defense = 0.028 breakthrough = 0.02 }",
+                ),
             ),
             (
                 "integrated_target_designation",
@@ -2223,12 +2345,54 @@ BRANCHES = (
                 ),
             ),
             (
+                "gas_regulator_sealing",
+                "Уплотнение газового регулятора",
+                "Gas Regulator Sealing",
+                "infantry_weapons",
+                2169,
+                (
+                    "category_all_infantry = { soft_attack = 0.018 breakthrough = 0.01 }",
+                ),
+            ),
+            (
                 "programmable_ammunition",
                 "Износостойкие покрытия ствола",
                 "Chrome Lining and Wear-resistant Bore Coatings",
                 "infantry_at2",
                 2170,
-                ("category_all_infantry = { defense = 0.032 soft_attack = 0.012 }",),
+                (
+                    "category_all_infantry = { defense = 0.008 soft_attack = 0.003 }",
+                ),
+            ),
+            (
+                "bore_plating_control",
+                "Равномерное покрытие канала ствола",
+                "Uniform Bore Plating",
+                "infantry_weapons",
+                2170,
+                (
+                    "category_all_infantry = { defense = 0.008 soft_attack = 0.003 }",
+                ),
+            ),
+            (
+                "chamber_erosion_control",
+                "Защита патронника от эрозии",
+                "Chamber Erosion Protection",
+                "infantry_weapons",
+                2171,
+                (
+                    "category_all_infantry = { defense = 0.008 soft_attack = 0.003 }",
+                ),
+            ),
+            (
+                "barrel_heat_treatment",
+                "Термообработка ствола",
+                "Barrel Heat Treatment",
+                "infantry_weapons",
+                2171,
+                (
+                    "category_all_infantry = { defense = 0.008 soft_attack = 0.003 }",
+                ),
             ),
             (
                 "coil_assisted_service_rifles",
@@ -2236,7 +2400,29 @@ BRANCHES = (
                 "Recoil Impulse Optimization",
                 "infantry_weapons3",
                 2172,
-                ("category_all_infantry = { breakthrough = 0.032 defense = 0.012 }",),
+                (
+                    "category_all_infantry = { breakthrough = 0.011 defense = 0.004 }",
+                ),
+            ),
+            (
+                "buffered_bolt_travel",
+                "Буфер хода затвора",
+                "Bolt Travel Buffer",
+                "infantry_weapons",
+                2173,
+                (
+                    "category_all_infantry = { breakthrough = 0.011 defense = 0.004 }",
+                ),
+            ),
+            (
+                "muzzle_compensation_ports",
+                "Компенсационные окна ствола",
+                "Muzzle Compensation Ports",
+                "infantry_weapons",
+                2174,
+                (
+                    "category_all_infantry = { breakthrough = 0.01 defense = 0.004 }",
+                ),
             ),
             (
                 "hybrid_kinetic_energy_carbines",
@@ -2244,7 +2430,9 @@ BRANCHES = (
                 "Polymer and Hybrid Cartridge Cases",
                 "ADISCORD_equipment_ammunition",
                 2175,
-                ("category_all_infantry = { defense = 0.024 soft_attack = 0.024 }",),
+                (
+                    "category_all_infantry = { defense = 0.024 soft_attack = 0.024 }",
+                ),
             ),
             (
                 "networked_service_rifles",
@@ -5265,38 +5453,6 @@ XOR_INDEX_GROUPS_BY_BRANCH = {
 
 # Shared entries and endpoints stay centred; each distinct route has its own lane.
 PROGRAMME_ROUTES = {
-    "small_arms": (
-        (
-            "postwar_weapon_standardization",
-            "refurbished_receivers",
-            "standardized_cartridges",
-            "sealed_receiver_assemblies",
-            "smart_recoil_compensators",
-            "modular_rifle_kits",
-            "biometric_trigger_locks",
-            "coil_assisted_service_rifles",
-            "networked_service_rifles",
-        ),
-        (
-            "postwar_weapon_standardization",
-            "refurbished_receivers",
-            "standardized_cartridges",
-            "smart_optics",
-            "networked_weapon_sights",
-            "integrated_target_designation",
-            "networked_service_rifles",
-        ),
-        (
-            "postwar_weapon_standardization",
-            "refurbished_receivers",
-            "standardized_cartridges",
-            "caseless_ammunition_trials",
-            "electrothermal_ignition",
-            "programmable_ammunition",
-            "hybrid_kinetic_energy_carbines",
-            "networked_service_rifles",
-        ),
-    ),
     "squad_weapons": (
         (
             "belt_fed_recovery",
@@ -5661,7 +5817,6 @@ PROGRAMME_ROUTES = {
 }
 
 PROGRAMME_SYNTHESIS = {
-    "small_arms": ('networked_service_rifles',),
     "squad_weapons": ('swarm_fireteams',),
     "anti_tank_infantry": ('distributed_anti_armor_net',),
     "night_combat": ('nocturnal_combat_mesh',),
@@ -5734,7 +5889,7 @@ def graph_for_branch(branch: Branch) -> BranchGraph:
         raise ValueError(f"{branch.key}: graph and research rows differ in length")
     for start, targets in enumerate(graph.successors):
         for end in targets:
-            if branch.years[start] >= branch.years[end]:
+            if branch.years[start] > branch.years[end]:
                 raise ValueError(f"{branch.key}: non-chronological edge {start}->{end}")
     return graph
 
@@ -6053,12 +6208,13 @@ def technology_prerequisite_closure(seed_ids: tuple[str, ...]) -> tuple[str, ...
 
 COMMON_STARTING_ROOTS = tuple(
     sorted(
-        BRANCH_BY_KEY[branch_key].techs[0].id
+        tech.id
         for branch_keys in MAIN_BRANCH_KEYS_BY_FOLDER.values()
         for branch_key in branch_keys
         # These programmes begin with research during the campaign. Making
         # their UI headings prominent must not grant their roots at startup.
         if branch_key not in {"officer_training", "bomber_maritime", "combat_medicine"}
+        for tech in BRANCH_BY_KEY[branch_key].techs[:4 if branch_key == "small_arms" else 1]
     )
 )
 
@@ -6562,7 +6718,6 @@ NAVAL_AIR_WEAPON_EFFECTS = {
 
 
 ALLOW = {
-    "ADISCORD_tech_remote_weapon_tripods": ("tag = VAL",),
     "ADISCORD_tech_old_generator_fragments": (
         "ADISCORD_has_forbidden_legacy_access = yes",
     ),
@@ -7048,6 +7203,74 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "rifling_alignment": (
+        "Точная соосность канала ствола уменьшает рассеивание пуль",
+        "Precise bore alignment reduces bullet dispersion",
+    ),
+    "bolt_head_fitting": (
+        "Равномерное прилегание боевых упоров стабилизирует запирание затвора",
+        "Even contact between locking lugs stabilizes the locked bolt",
+    ),
+    "chamber_polishing": (
+        "Чистовая обработка патронника обеспечивает устойчивую подачу и извлечение гильзы",
+        "Finishing the chamber improves feeding and cartridge extraction",
+    ),
+    "primer_consistency": (
+        "Контроль капсюльного состава сокращает число осечек",
+        "Primer composition control reduces misfires",
+    ),
+    "magazine_feed_geometry": (
+        "Согласованные углы подачи удерживают патрон на линии досылания",
+        "Matched feed angles keep the cartridge aligned with the chamber",
+    ),
+    "extractor_heat_treatment": (
+        "Закалённый зацеп надёжнее извлекает гильзу после интенсивной стрельбы",
+        "A hardened extractor claw removes cases reliably after sustained firing",
+    ),
+    "recoil_spring_tuning": (
+        "Подбор жёсткости возвратной пружины стабилизирует цикл перезаряжания",
+        "Tuning the recoil spring stabilizes the reloading cycle",
+    ),
+    "bolt_carrier_guides": (
+        "Обработанные направляющие уменьшают перекос затворной рамы",
+        "Machined guides reduce bolt carrier misalignment",
+    ),
+    "trigger_reset_geometry": (
+        "Геометрия спускового механизма сокращает ход повторного нажатия",
+        "Trigger geometry shortens the reset travel for follow-up shots",
+    ),
+    "rangefinder_zeroing": (
+        "Юстировка совмещает ось дальномера с линией прицеливания",
+        "Alignment brings the rangefinder axis onto the aiming line",
+    ),
+    "sight_mount_repeatability": (
+        "Жёсткое крепление сохраняет пристрелку после обслуживания оружия",
+        "A rigid mount preserves the sight zero after weapon maintenance",
+    ),
+    "gas_regulator_sealing": (
+        "Уплотнение газового регулятора поддерживает работу автоматики при загрязнении",
+        "Sealing the gas regulator keeps the action cycling under fouling",
+    ),
+    "bore_plating_control": (
+        "Контроль толщины покрытия сохраняет геометрию нарезов по всей длине ствола",
+        "Plating thickness control preserves rifling geometry along the entire bore",
+    ),
+    "chamber_erosion_control": (
+        "Стойкое покрытие замедляет износ патронника горячими пороховыми газами",
+        "A durable coating slows chamber erosion from hot propellant gases",
+    ),
+    "barrel_heat_treatment": (
+        "Термообработка снижает остаточные напряжения и увод ствола при нагреве",
+        "Heat treatment reduces residual stress and thermal barrel distortion",
+    ),
+    "buffered_bolt_travel": (
+        "Буфер смягчает удар затворной группы в крайнем заднем положении",
+        "A buffer softens the bolt group impact at the rear of its travel",
+    ),
+    "muzzle_compensation_ports": (
+        "Отвод газов через компенсационные окна уменьшает подброс оружия",
+        "Venting gas through compensation ports reduces muzzle rise",
+    ),
     "treasury_accounting": (
         "Единые реестры налогов и платежей уменьшают потери при сборе доходов и стоимость работы казначейства",
         "Unified tax and payment registers reduce collection losses and treasury administration costs",
@@ -7345,6 +7568,15 @@ TECHNICAL_TECH_DESCRIPTIONS.update(
 
 def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> list[str]:
     notes: list[str] = []
+    if branch.key == "small_arms" and index % 4:
+        model = branch.techs[index - index % 4]
+        equipment = ENABLE_EQUIPMENT[model.id][0]
+        model_name = LAND_EQUIPMENT_LOCALISATION[equipment][2 if is_ru else 3]
+        notes.append(
+            f"Модификация {index % 4}/3 для {model_name}; обязательная ступень перед следующей моделью."
+            if is_ru
+            else f"Modification {index % 4}/3 for {model_name}; required before the next model."
+        )
     siblings = xor_siblings(branch, index)
     if siblings:
         names_by_id = {
@@ -7481,6 +7713,8 @@ def research_cost_for(
     year = branch.years[index]
     if branch.profile.startswith("forbidden_"):
         return 2.60 + index * (0.18 if len(branch.techs) > 3 else 0.35)
+    if branch.key == "small_arms" and tech.id not in ENABLE_EQUIPMENT:
+        return 0.30 if year <= 2158 else 0.40
     if year <= 2158:
         return 0.55
 
@@ -7659,10 +7893,24 @@ def folder_grid_format(folder: str) -> str:
     return "LEFT" if folder in HORIZONTAL_FOLDERS else "UP"
 
 
-def chronological_grid_slot(year: int, *, horizontal: bool) -> int:
+def horizontal_year_columns(folder: str) -> tuple[tuple[int, int], ...]:
+    """Reserve separate cells for sequential modifications in the same year."""
+    branches = [branch for branch in BRANCHES if folder in branch.folders]
+    return tuple(
+        (year, occurrence)
+        for year in YEARS
+        for occurrence in range(max(1, *(branch.years.count(year) for branch in branches)))
+    )
+
+
+def chronological_grid_slot(
+    year: int, *, horizontal: bool, folder: str | None = None, occurrence: int = 0
+) -> int:
     """Map a research year to the single slot used by nodes and year labels."""
 
     slot = YEAR_TO_Y[year]
+    if horizontal and folder is not None:
+        slot = horizontal_year_columns(folder).index((year, occurrence))
     multiplier = (
         HORIZONTAL_YEAR_SLOT_MULTIPLIER if horizontal else VERTICAL_YEAR_SLOT_MULTIPLIER
     )
@@ -7672,8 +7920,15 @@ def chronological_grid_slot(year: int, *, horizontal: bool) -> int:
 def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
     """Keep every node under its actual research year, including fork arms."""
 
+    folder = next(folder for folder in branch.folders if folder in HORIZONTAL_FOLDERS)
     slots = tuple(
-        chronological_grid_slot(year, horizontal=True) for year in branch.years
+        chronological_grid_slot(
+            year,
+            horizontal=True,
+            folder=folder,
+            occurrence=branch.years[:index].count(year),
+        )
+        for index, year in enumerate(branch.years)
     )
     for source, targets in enumerate(BRANCH_GRAPHS[branch.key].successors):
         for target in targets:
@@ -8761,6 +9016,9 @@ def generated_localisation(language: str) -> list[str]:
             )
         for index, tech in enumerate(branch.techs):
             name = tech.ru if is_ru else tech.en
+            if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
+                equipment = ENABLE_EQUIPMENT[tech.id][0]
+                name = LAND_EQUIPMENT_LOCALISATION[equipment][0 if is_ru else 1]
             year = branch.years[index]
             technical = TECHNICAL_TECH_DESCRIPTIONS.get(tech.key)
             description = (
@@ -8880,8 +9138,7 @@ def render_folder(folder: str) -> str:
     branch_layouts: list[tuple[Branch, int, int, int, int]] = []
     if horizontal:
         grid_width = (
-            max(YEAR_TO_Y.values()) * HORIZONTAL_YEAR_SLOT_MULTIPLIER
-            + HORIZONTAL_YEAR_SLOT_MULTIPLIER
+            len(horizontal_year_columns(folder)) * HORIZONTAL_YEAR_SLOT_MULTIPLIER
         ) * GRID_SLOT
         cursor_y = GRID_Y
         for branch in branches:
@@ -8941,14 +9198,16 @@ def render_folder(folder: str) -> str:
     if horizontal:
         year_labels = [
             (
-                str(year),
+                str(year) if occurrence == 0 else f"{year}_{occurrence}",
                 year,
                 GRID_X
-                + chronological_grid_slot(year, horizontal=True) * GRID_SLOT
+                + chronological_grid_slot(
+                    year, horizontal=True, folder=folder, occurrence=occurrence
+                ) * GRID_SLOT
                 + (GRID_SLOT - YEAR_LABEL_WIDTH) // 2,
                 84,
             )
-            for year in YEARS
+            for year, occurrence in horizontal_year_columns(folder)
         ]
     else:
         year_labels = [

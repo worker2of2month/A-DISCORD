@@ -1558,7 +1558,10 @@
 		prerequisite = { focus = STP_pw_party_border_staff }
 		available = { STP_pw_can_reconstruct = yes }
 		cancel_if_invalid = yes
-		completion_reward = { STP_pw_open_mountain_school = yes }
+		completion_reward = {
+			STP_pw_open_mountain_school = yes
+			add_ideas = STP_pw_stelander_mountaineers
+		}
 		ai_will_do = { base = 3 }
 	}
 

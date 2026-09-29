@@ -268,7 +268,7 @@
         "history/states/330-*.txt",
         "history/states/68[8-9]-*.txt",
         "history/states/69[0-9]-*.txt",
-        "history/states/70[0-8]-*.txt",
+        "history/states/70[0-9]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"
@@ -1224,6 +1224,8 @@
       "source_inputs": [
         "tools/builders/build_adiscord_stp_flags.py",
         "tools/assets/source/STP_revolution_capital_flag.png",
+        "tools/assets/source/SLI_flag.png",
+        "tools/assets/source/SLI_mandate_flag.png",
         "gfx/flags/STP.tga",
         "gfx/flags/medium/STP.tga",
         "gfx/flags/small/STP.tga"
@@ -1232,7 +1234,9 @@
         "gfx/flags/**/STP_revolution_capital.tga",
         "gfx/flags/**/NOD_STP_revolution.tga",
         "gfx/flags/**/VAL_STP_revolution.tga",
-        "gfx/flags/**/BJK_STP_revolution.tga"
+        "gfx/flags/**/BJK_STP_revolution.tga",
+        "gfx/flags/**/SLI.tga",
+        "gfx/flags/**/SLI_mandate.tga"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_stp_flags", "--apply"],
@@ -1366,7 +1370,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_coastal_geography", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710 and 16712, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail. Preserves IVN terrain and compatible snow output."
+      "overlap_explanation": "Owns lowland rasters in provinces 16709, 16710, 16712 and 16802-16808, urban terrain and city/tree masks in provinces 16713-16721 and the compact southern settlement manifest, plus the explicit city and surrounding rural-sector province pixels and necessary local railway crossings, intersecting normal and DXT5 color cells, and unit anchors for the additions and displaced parent anchors. Owns the mainland Svetlogorye mountain relief, graphical and combat terrain, trees, normals and unit heights in the explicit 27-province mainland Svetlogorye relief mask, with province-clipped foothill and mountain textures and elevation-based rock and snow detail. Preserves IVN terrain and compatible snow output."
     },
     {
       "id": "ivn_geography",

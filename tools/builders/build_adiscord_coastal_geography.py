@@ -22,7 +22,8 @@ from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
-ISLANDS = frozenset({16709, 16710, 16712})
+MANDATE_ISLANDS = frozenset(range(16802, 16809))
+ISLANDS = frozenset({16709, 16710, 16712}) | MANDATE_ISLANDS
 RELIEF_PROVINCES = frozenset({
     334, 1710, 2935, 4287, 4321, 4912, 6099, 7324, 8351, 8445,
     8888, 9116, 10909, 11069, 11696, 11942, 12480, 12668,
@@ -35,6 +36,7 @@ RELIEF_TERRAIN = {
 }
 SPLIT_PARENTS = {16707: 6008, 16708: 6008, 16711: 11627}
 ANCHOR_REFERENCES = {**SPLIT_PARENTS, 16709: 65, 16710: 65, 16712: 6261}
+ANCHOR_REFERENCES.update({province: 65 for province in MANDATE_ISLANDS})
 DISPLACED_PROVINCES = frozenset({6008, 7739, 11627})
 CITIES = frozenset(range(16713, 16722)) | frozenset(province for province, _value in SOUTHERN_CITY_POINTS.values())
 ARAB_CITIES = frozenset({16713, 16714, 16715, 16718, 16719, 16720}) | frozenset(entry["province"] for entry in SOUTHERN_CITIES)

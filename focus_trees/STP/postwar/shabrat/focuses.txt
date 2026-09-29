@@ -527,7 +527,10 @@
 		prerequisite = { focus = STP_pw_republic_professional_service }
 		available = { STP_pc_focus_available = yes }
 		cancel_if_invalid = yes
-		completion_reward = { STP_pw_open_mountain_school = yes }
+		completion_reward = {
+			STP_pw_open_mountain_school = yes
+			add_ideas = STP_pw_stelander_mountaineers
+		}
 		ai_will_do = { base = 3 }
 	}
 
@@ -686,17 +689,31 @@
 		icon = GFX_focus_generic_coastal_fort
 		x = 3
 		y = 6
-		prerequisite = { focus = STP_pw_republic_restore_roads }
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
-		available = {
-			STP_pc_focus_available = yes
-			STP_pc_has_naval_base = yes
+		prerequisite = {
+			focus = STP_pw_republic_restore_roads
+			focus = STP_kc_emergency_staff
 		}
+		cost = 2
+		allow_branch = { tag = STS }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
+			}
+		}
+		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			navy_experience = 30
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
+			set_technology = {
+				ADISCORD_tech_restored_dockyards = 1
+				ADISCORD_tech_coastal_patrols = 1
+				popup = no
+			}
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
+			add_fuel = 10000
 		}
 	}
 
@@ -705,12 +722,15 @@
 		icon = GFX_goal_generic_construct_naval_dockyard
 		x = 3
 		y = 7
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 2
+		allow_branch = { tag = STS }
 		available = {
-			STP_pc_focus_available = yes
-			STP_pc_has_naval_base = yes
+			custom_trigger_tooltip = {
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
+			}
 		}
+		cancel_if_invalid = yes
 		prerequisite = { focus = STP_pc_navy_coast }
 		ai_will_do = { base = 2 }
 		completion_reward = {
@@ -724,17 +744,13 @@
 		icon = GFX_goal_generic_amphibious_assault
 		x = 4
 		y = 9
-		cost = 4
-		allow_branch = {
-			has_country_flag = STP_cw_postwar
-			tag = STS
-		}
+		cost = 2
+		allow_branch = { tag = STS }
 		prerequisite = { focus = STP_pc_navy_ports }
 		available = {
-			STP_pc_focus_available = yes
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_specialist_naval_base_tt
-				STP_pc_has_naval_base = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
 		}
 		cancel_if_invalid = yes
@@ -748,18 +764,25 @@
 		x = 3
 		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 3
+		allow_branch = { tag = STS }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
-			OR = { 46 = { is_owned_by = ROOT is_controlled_by = ROOT } 28 = { is_owned_by = ROOT is_controlled_by = ROOT } }
 		}
+		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			random_owned_controlled_state = { limit = { naval_base > 0 } add_extra_state_shared_building_slots = 2 add_building_construction = { type = dockyard level = 2 instant_build = yes } }
+			random_owned_controlled_state = {
+				limit = { naval_base > 0 }
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = { type = dockyard level = 2 instant_build = yes }
+			}
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
+			add_fuel = 10000
 		}
 	}
 
@@ -768,20 +791,27 @@
 		icon = GFX_goal_generic_navy_cruiser
 		x = 2
 		y = 9
-		cost = 5
-		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		cost = 2
+		allow_branch = { tag = STS }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_reconstruction_available_tt
-				STP_pc_focus_available = yes
+				tooltip = STP_kc_naval_program_available_tt
+				STP_kc_naval_program_available = yes
 			}
 		}
+		cancel_if_invalid = yes
 		prerequisite = { focus = STP_pc_navy_yards }
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			add_ideas = ADISCORD_staff_STS_Boris_Ostrovsky
 			add_ideas = STP_pc_navy_staff_idea
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
+			set_technology = {
+				ADISCORD_tech_modular_hull_standards = 1
+				popup = no
+			}
+			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			add_fuel = 10000
 		}
 	}
 

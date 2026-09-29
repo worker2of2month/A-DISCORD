@@ -160,6 +160,14 @@ STP_ch_institutions = {
 	political_power_factor = STP_ch_political_power
 }
 
+STP_hw_stall_dynamic = {
+	icon = GFX_idea_STP_National_Strikes
+	enable = { STP_hw_stall_active = yes }
+	war_support_factor = STP_hw_stall_support
+	army_org_regain = STP_hw_stall_recovery
+	mobilization_speed = STP_hw_stall_mobilization
+}
+
 # Shabrat's popular mandate: 50 is neutral, the refresh effect scales the values.
 STP_hw_mandate_dynamic = {
 	icon = GFX_idea_STP_National_Strikes

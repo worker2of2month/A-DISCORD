@@ -315,7 +315,7 @@ VAL_population_markets = {
 		}
 		custom_cost_text = VAL_refugee_training_cost
 		days_remove = 35
-		days_re_enable = 30
+		days_re_enable = 45
 		complete_effect = {
 			custom_effect_tooltip = VAL_refugee_training_start_tt
 			add_political_power = -75
@@ -575,7 +575,7 @@ VAL_population_markets = {
 		}
 		custom_cost_text = VAL_emergency_service_cost
 		cost = 0
-		days_re_enable = 90
+		days_re_enable = 120
 		complete_effect = {
 			ADISCORD_economy_spend_500 = yes
 			add_command_power = -25
@@ -750,7 +750,7 @@ VAL_population_markets = {
 			check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals }
 		}
 		days_remove = 60
-		days_re_enable = 60
+		days_re_enable = 90
 		cancel_if_not_visible = no
 		fire_only_once = no
 		complete_effect = {

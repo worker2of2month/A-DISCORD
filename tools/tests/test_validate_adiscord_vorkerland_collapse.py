@@ -3705,8 +3705,8 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
             "add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism",
-            "add_manpower = 28000",
-            "type = infantry_equipment_0 amount = 35600 producer = TVA",
+            "add_manpower = 22000",
+            "type = infantry_equipment_0 amount = 12000 producer = TVA",
             "type = support_equipment amount = 180 producer = TVA",
             "type = artillery_equipment amount = 96 producer = TVA",
         ):

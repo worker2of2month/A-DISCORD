@@ -113,7 +113,7 @@
 
  VAL_refugee_wave_limit_tt:0 "Принято менее трёх волн из этого региона."
  VAL_train_refugee_volunteers:0 "Обучить добровольцев из числа беженцев"
- VAL_train_refugee_volunteers_desc:0 "Обучить £population_texticon §Y5 тыс.§! добровольцев из свободных переселенцев. Срок: 35 дней. Цена: £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
+ VAL_train_refugee_volunteers_desc:0 "Обучить §Y10 тыс.§! £population_texticon добровольцев из свободных переселенцев. Срок: 35 дней. Повторный набор доступен через §Y45 дней§! после завершения. Цена: £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. Люди остаются на обеспечении до завершения обучения. При капитуляции или потере независимости обучение отменяется с возвратом людей и затрат."
  VAL_refugee_training_start_tt:0 "£population_texticon §Y10 тыс.§! переселенцев начнут §Y35-дневное§! обучение и затем пополнят армейский резерв. При отмене возвращаются люди, £pol_power §Y75§! политической власти и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения."
  VAL_refugee_window_open_tt: "Для этого направления открыто окно приёма беженцев. Оно действует §Y180 дней§! после появления потока. Если условие не выполнено, поток ещё не открыт, срок приёма истёк или все три волны уже приняты."
  VAL_refugee_war_active_tt:0 "Война этого направления продолжается. Приём доступен раз в §Y90 дней§!."
@@ -130,7 +130,7 @@
  VAL_naturalization_result_tt:0 "£population_texticon §Y20 тыс.§! переселенцев добавлены в £manpower_texticon §Y10 тыс.§! местного служебного резерва и дают §G+1 тыс.§! людских ресурсов сразу. Давление серого рынка: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Заключить экстренные служебные контракты"
- VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! монет, §Y25§! командного ресурса, £infantry_equipment_texticon §Y10 тыс.§! единиц пехотного снаряжения и £population_texticon §Y10 тыс.§! местного резерва, чтобы немедленно получить £manpower_texticon §Y10 тыс.§! людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y90 дней§!."
+ VAL_emergency_service_contracts_desc:0 "Обойти обычный цикл подготовки и сразу мобилизовать крупную группу контрактного резерва. Потратить §Y500§! монет, §Y25§! командного ресурса, £infantry_equipment_texticon §Y10 тыс.§! единиц пехотного снаряжения и £population_texticon §Y10 тыс.§! местного резерва, чтобы немедленно получить £manpower_texticon §Y10 тыс.§! людских ресурсов. Стабильность: §R-1%§!. Доступно раз в §Y120 дней§!."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_result_tt:0 "Немедленно получить £manpower_texticon §Y10 тыс.§! людских ресурсов. Стабильность: §R-1%§!."
 
@@ -178,7 +178,7 @@
  VAL_recall_contract_veterans_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
 
  VAL_launch_national_recruitment: "Общий контрактный набор"
- VAL_launch_national_recruitment_desc:0 "Оплатить общий набор из местного резерва: §Y2§! единицы резерва и §Y3000§! £ADISCORD_economy_treasury_texticon. Через §Y60 дней§! Кефрейт получит §G20000§! £population_texticon. Следующий набор - через §Y60 дней§! после завершения. При капитуляции, подчинении или утрате программы деньги и резерв возвращаются."
+ VAL_launch_national_recruitment_desc:0 "Оплатить общий набор из местного резерва: §Y2§! единицы резерва и §Y3000§! £ADISCORD_economy_treasury_texticon. Через §Y60 дней§! Кефрейт получит §G20000§! £population_texticon. Следующий набор - через §Y90 дней§! после завершения. При капитуляции, подчинении или утрате программы деньги и резерв возвращаются."
  VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon из местного резерва"
  VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon из местного резерва"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon из местного резерва"

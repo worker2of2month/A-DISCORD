@@ -1,4 +1,17 @@
 on_actions = {
+	on_daily_STS = {
+		effect = { STP_hw_stall_tick = yes }
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = { STP_hw_stall_active = yes }
+				FROM.FROM = { STP_hw_stall_capture = yes }
+			}
+		}
+	}
+
 	on_puppet = {
 		effect = {
 			if = {
@@ -98,6 +111,13 @@ on_actions = {
 	}
 	on_daily_NOD = {
 		effect = {
+			if = {
+				limit = { STP_nod_border_treaty_ready = yes }
+				STS = {
+					set_variable = { var = STP_pc_cap_side value = 2 }
+					STP_pc_begin_settlement = yes
+				}
+			}
 			if = { limit = { has_country_flag = STP_ps_expedition_ready }
 				if = {
 					limit = {
@@ -218,6 +238,20 @@ on_actions = {
 	# already exist but the original STP technology state is still authoritative.
 	on_war_relation_added = {
 		effect = {
+			if = {
+				limit = {
+					ROOT = { OR = { tag = STP tag = STS } }
+					FROM = { tag = VAL }
+				}
+				clr_country_flag = STP_kc_preparing
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = VAL }
+					FROM = { OR = { tag = STP tag = STS } }
+				}
+				FROM = { clr_country_flag = STP_kc_preparing }
+			}
 			if = {
 				limit = {
 					OR = {

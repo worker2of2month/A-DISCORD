@@ -113,7 +113,7 @@
 
  VAL_refugee_wave_limit_tt:0 "Fewer than three waves have been admitted from this region."
  VAL_train_refugee_volunteers:0 "Train Refugee Volunteers"
- VAL_train_refugee_volunteers_desc:0 "Train £population_texticon §Y5,000§! available refugees for 35 days using £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
+ VAL_train_refugee_volunteers_desc:0 "Train §Y10,000§! £population_texticon available refugees for 35 days using £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment. Another intake is available §Y45 days§! after completion. Trainees still need housing until completion. Capitulation or subjugation cancels training and refunds the people and costs."
  VAL_refugee_training_start_tt:0 "Reserve £population_texticon §Y10,000§! refugees for §Y35 days§!, then add them to army manpower. Cancellation returns the people, £pol_power §Y75§! political power and £infantry_equipment_texticon §Y5000§! infantry equipment."
  VAL_refugee_window_open_tt: "An admission window is open for this refugee route. It lasts §Y180 days§! from the start of the flow. If this condition is unmet, the flow has not opened yet, its admission window has expired, or all three waves have already been admitted."
  VAL_refugee_war_active_tt:0 "This route's war is ongoing. Admission is available once every §Y90 days§!."
@@ -130,7 +130,7 @@
  VAL_naturalization_result_tt:0 "£population_texticon §Y20,000§! refugees add £manpower_texticon §Y10,000§! to the local service reserve and provide §G+1,000§! manpower immediately. Grey-market pressure: §G-1§!."
 
  VAL_emergency_service_contracts:0 "Issue Emergency Service Contracts"
- VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y90 days§!."
+ VAL_emergency_service_contracts_desc:0 "Bypass the normal training cycle and mobilize a full block of local contract reservists. Spend §Y500§! treasury funds, §Y25§! command power, £infantry_equipment_texticon §Y10,000§! infantry equipment and £population_texticon §Y10,000§! local reserve to gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!. Available once every §Y120 days§!."
  VAL_emergency_service_cost:0 "§Y500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power  §Y10000§! £infantry_equipment_texticon  §Y10000§! £population_texticon"
  VAL_emergency_service_result_tt:0 "Gain £manpower_texticon §Y10,000§! manpower immediately. Stability: §R-1%§!."
 
@@ -178,7 +178,7 @@
  VAL_recall_contract_veterans_cost_tooltip: "§Y1500§! £ADISCORD_economy_treasury_texticon  §Y25§! £command_power_texticon"
 
  VAL_launch_national_recruitment: "Nationwide Contract Recruitment"
- VAL_launch_national_recruitment_desc:0 "Fund a national intake from the local reserve: §Y2§! reserve units and §Y3000§! £ADISCORD_economy_treasury_texticon. Kefreyt receives §G20000§! £population_texticon after §Y60 days§!. Another intake is available §Y60 days§! after completion. Capitulation, subordination or loss of the programme refunds both cash and recruits."
+ VAL_launch_national_recruitment_desc:0 "Fund a national intake from the local reserve: §Y2§! reserve units and §Y3000§! £ADISCORD_economy_treasury_texticon. Kefreyt receives §G20000§! £population_texticon after §Y60 days§!. Another intake is available §Y90 days§! after completion. Capitulation, subordination or loss of the programme refunds both cash and recruits."
  VAL_launch_national_recruitment_cost:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"
  VAL_launch_national_recruitment_cost_blocked:0 "§R3000§! £ADISCORD_economy_treasury_texticon + §R20000§! £population_texticon from the local reserve"
  VAL_launch_national_recruitment_cost_tooltip:0 "§Y3000§! £ADISCORD_economy_treasury_texticon + §Y20000§! £population_texticon from the local reserve"
