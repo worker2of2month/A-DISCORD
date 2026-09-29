@@ -895,6 +895,169 @@ ideas = {
 		}
 
 
+		# Party war: consequences of ignored bloc crises.
+		STP_pv_generals_bargaining = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_law_military_cadre_army
+			modifier = {
+				planning_speed = -0.15
+				army_org_factor = -0.05
+			}
+		}
+
+		STP_pv_silent_service = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_security_pressure
+			modifier = {
+				political_power_gain = -0.20
+				stability_factor = -0.04
+			}
+		}
+
+		STP_pv_festival_riots = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_hedonism_with_no_bondaries
+			modifier = {
+				stability_factor = -0.08
+				war_support_factor = -0.05
+			}
+		}
+
+		STP_pv_chamber_intrigue = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_law_private_societies
+			modifier = {
+				political_power_factor = -0.20
+			}
+		}
+
+		STP_pv_northern_cold = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_apparatus_loyalty
+			modifier = {
+				army_org_regain = -0.05
+				war_support_factor = -0.03
+			}
+		}
+
+		# Party war: who holds the victory. Each outcome lasts into the congress.
+		STP_pv_outcome_houses = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_law_private_societies
+			modifier = {
+				stability_factor = 0.08
+				political_power_gain = 0.15
+				ADISCORD_economy_admin_expense_factor = -0.08
+				research_speed_factor = -0.05
+			}
+		}
+
+		STP_pv_outcome_festival = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_hedonism_with_no_bondaries
+			modifier = {
+				war_support_factor = 0.08
+				stability_factor = 0.05
+				ADISCORD_economy_trade_income_factor = 0.10
+				ADISCORD_economy_admin_expense_factor = 0.05
+			}
+		}
+
+		STP_pv_outcome_staff = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_law_military_cadre_army
+			modifier = {
+				army_org_factor = 0.06
+				training_time_factor = -0.10
+				command_power_gain_mult = 0.15
+				stability_factor = -0.03
+			}
+		}
+
+		STP_pv_outcome_wallets = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_worldwide_famous_tourist_destination
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.12
+				production_speed_buildings_factor = 0.10
+				war_support_factor = -0.05
+			}
+		}
+
+		STP_pv_outcome_silence = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_security_pressure
+			modifier = {
+				stability_factor = 0.10
+				political_power_gain = 0.10
+				research_speed_factor = -0.05
+			}
+		}
+
+		STP_pv_outcome_regent = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_apparatus_loyalty
+			modifier = {
+				industrial_capacity_factory = 0.08
+				army_org_factor = 0.03
+				political_power_factor = -0.15
+			}
+		}
+
+		STP_pv_pyrrhic_victory = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_fading_father
+			modifier = {
+				ADISCORD_economy_overall_income_factor = -0.15
+				stability_factor = -0.05
+			}
+		}
+
+		STP_pv_clean_victory = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_worldwide_famous_tourist_destination
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.10
+			}
+		}
+
+		STP_pv_kefreyt_bill = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = STP_hidden_slaves_trade
+			modifier = {
+				ADISCORD_economy_overall_income_factor = -0.08
+			}
+		}
+
 		STP_pw_party_last_purge = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }

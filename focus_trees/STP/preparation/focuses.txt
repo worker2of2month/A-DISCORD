@@ -1858,6 +1858,248 @@ focus_tree = {
 		}
 	}
 
+	# Heirs of the festival: the court around the dying Ivanov chooses who will claim the victory.
+
+	focus = {
+		id = STP_ph_six_chairs
+		icon = GFX_focus_STP_Prepare_For_The_Upcoming_BOP
+		relative_position_id = STP_Govern_In_His_Name
+		x = -7
+		y = 4
+		cost = 2
+		prerequisite = { focus = STP_party_budget_reserve focus = STP_party_guard_workshops }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_political_power = 25
+			custom_effect_tooltip = STP_ph_loyalty_plus_4_tt
+			custom_effect_tooltip = STP_ph_six_chairs_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_apparatus_loyalty_change value = 4 }
+				STP_change_apparatus_loyalty = yes
+				country_event = { id = ADISCORD_STP_pv.1 hours = 1 }
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ph_pen_of_staff
+		icon = GFX_focus_STP_ps_joint_staff
+		relative_position_id = STP_Govern_In_His_Name
+		x = -9
+		y = 5
+		cost = 3
+		prerequisite = { focus = STP_ph_six_chairs }
+		mutually_exclusive = { focus = STP_ph_pen_of_silence focus = STP_ph_pen_of_houses }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			army_experience = 20
+			add_command_power = 15
+			custom_effect_tooltip = STP_pf_army_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pf_shift = yes
+				set_variable = { var = STP_ph_heir value = 3 }
+			}
+			custom_effect_tooltip = STP_ph_pen_of_staff_tt
+		}
+	}
+
+	focus = {
+		id = STP_ph_pen_of_silence
+		icon = GFX_focus_STP_cw_security_collegium
+		relative_position_id = STP_Govern_In_His_Name
+		x = -5
+		y = 5
+		cost = 3
+		prerequisite = { focus = STP_ph_six_chairs }
+		mutually_exclusive = { focus = STP_ph_pen_of_staff focus = STP_ph_pen_of_houses }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_political_power = 40
+			custom_effect_tooltip = STP_pf_security_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pf_shift = yes
+				set_variable = { var = STP_ph_heir value = 5 }
+			}
+			custom_effect_tooltip = STP_ph_pen_of_silence_tt
+		}
+	}
+
+	focus = {
+		id = STP_ph_pen_of_houses
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		relative_position_id = STP_Govern_In_His_Name
+		x = -7
+		y = 6
+		cost = 3
+		prerequisite = { focus = STP_ph_six_chairs }
+		mutually_exclusive = { focus = STP_ph_pen_of_staff focus = STP_ph_pen_of_silence }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			custom_effect_tooltip = STP_ph_treasury_1500_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pf_shift = yes
+				set_variable = { var = STP_ph_heir value = 1 }
+			}
+			custom_effect_tooltip = STP_ph_pen_of_houses_tt
+		}
+	}
+
+	focus = {
+		id = STP_ph_last_signature
+		icon = GFX_focus_STP_cw_protocol_office
+		relative_position_id = STP_Govern_In_His_Name
+		x = -7
+		y = 7
+		cost = 3
+		prerequisite = { focus = STP_ph_pen_of_staff focus = STP_ph_pen_of_silence focus = STP_ph_pen_of_houses }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			# A living Ivanov signs; after his death the same decree is only a paper seal.
+			if = {
+				limit = { NOT = { has_country_flag = STP_ivanov_dead } }
+				add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.05 }
+				add_stability = 0.02
+			}
+			else = {
+				add_power_balance_value = { id = STP_shabrat_election_legitimacy value = -0.02 }
+				add_stability = -0.02
+			}
+			custom_effect_tooltip = STP_ph_last_signature_tt
+			hidden_effect = {
+				set_country_flag = STP_ph_heir_signed
+				country_event = { id = ADISCORD_STP_pv.2 hours = 1 }
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ph_heirs_pact
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		relative_position_id = STP_Govern_In_His_Name
+		x = -8
+		y = 8
+		cost = 3
+		prerequisite = { focus = STP_ph_last_signature }
+		mutually_exclusive = { focus = STP_ph_empty_chair }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = STP_ph_loyalty_plus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_apparatus_loyalty_change value = 5 }
+				STP_change_apparatus_loyalty = yes
+				set_variable = { var = STP_ph_heir_settlement value = 1 }
+			}
+			custom_effect_tooltip = STP_ph_heirs_pact_tt
+		}
+	}
+
+	focus = {
+		id = STP_ph_empty_chair
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		relative_position_id = STP_Govern_In_His_Name
+		x = -6
+		y = 8
+		cost = 3
+		prerequisite = { focus = STP_ph_last_signature }
+		mutually_exclusive = { focus = STP_ph_heirs_pact }
+		allow_branch = { NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_preparation_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 2 }
+		completion_reward = {
+			add_political_power = 60
+			add_stability = -0.02
+			custom_effect_tooltip = STP_ph_empty_chair_tt
+			hidden_effect = {
+				set_variable = { var = STP_ph_heir_settlement value = 2 }
+				subtract_from_variable = { var = STP_pf_radicals_support value = 15 }
+				if = {
+					limit = { check_variable = { var = STP_ph_heir value = 3 compare = equals } }
+					add_to_variable = { var = STP_pf_army_support value = 10 }
+				}
+				else_if = {
+					limit = { check_variable = { var = STP_ph_heir value = 5 compare = equals } }
+					add_to_variable = { var = STP_pf_security_support value = 10 }
+				}
+				else = {
+					add_to_variable = { var = STP_pf_conservatives_support value = 10 }
+				}
+				STP_refresh_apparatus_loyalty = yes
+			}
+		}
+	}
+
 	focus = {
 		id = STP_ps_radio_network
 		icon = GFX_focus_STP_pw_party_civilian_retraining

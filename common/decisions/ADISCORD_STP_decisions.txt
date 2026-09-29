@@ -2631,6 +2631,309 @@ STP_battle_for_stelander = {
 
 STP_cw_war_council = {
 
+	# Timed front crisis 1: the goal is read once at the deadline.
+	STP_pv_front_1 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_pv_front_1 }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 90
+		days_mission_timeout = 42
+		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_pv_front_1_timeout_tt
+			hidden_effect = { STP_pv_resolve_front = yes }
+		}
+	}
+
+	# Timed front crisis 2: the goal is read once at the deadline.
+	STP_pv_front_2 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_pv_front_2 }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 90
+		days_mission_timeout = 56
+		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_pv_front_2_timeout_tt
+			hidden_effect = { STP_pv_resolve_front = yes }
+		}
+	}
+
+	# Timed front crisis 3: the goal is read once at the deadline.
+	STP_pv_front_3 = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { has_active_mission = STP_pv_front_3 }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 90
+		days_mission_timeout = 70
+		cancel_trigger = { NOT = { STP_ps_war_active = yes } }
+		timeout_effect = {
+			custom_effect_tooltip = STP_pv_front_3_timeout_tt
+			hidden_effect = { STP_pv_resolve_front = yes }
+		}
+	}
+
+	STP_pv_printing_press = {
+		icon = generic_industry
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_war_budget
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_ph_treasury_1500_tt
+			custom_effect_tooltip = STP_pv_strain_plus_10_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+				ADISCORD_economy_mark_dirty = yes
+				set_temp_variable = { var = STP_pv_strain_change value = 10 }
+				STP_pv_change_strain = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = STP_pv_strain value = 60 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	STP_pv_house_bonds = {
+		icon = generic_political_discourse
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_war_budget
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 40
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = STP_ph_treasury_1500_tt
+			custom_effect_tooltip = STP_pv_house_bonds_factions_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
+				subtract_from_variable = { var = STP_pf_merchants_support value = 6 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+		}
+		ai_will_do = { base = 2 }
+	}
+
+	STP_pv_sell_concessions = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_lower_market_ledgers
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 25
+		fire_only_once = yes
+		complete_effect = {
+			add_stability = -0.03
+			custom_effect_tooltip = STP_pv_treasury_2500_tt
+			custom_effect_tooltip = STP_pv_strain_minus_12_tt
+			custom_effect_tooltip = STP_pv_sell_concessions_factions_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 2500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2500 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = STP_pf_radicals_support value = 10 }
+				subtract_from_variable = { var = STP_pf_conservatives_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pv_strain_change value = -12 }
+				STP_pv_change_strain = yes
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	STP_pv_requisition_casinos = {
+		icon = generic_construction
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_lower_market_ledgers
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 15
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = STP_cw_treasury_1200_tt
+			custom_effect_tooltip = STP_pv_strain_minus_6_tt
+			custom_effect_tooltip = STP_pv_requisition_casinos_factions_tt
+			hidden_effect = {
+				STP_receive_1200 = yes
+				subtract_from_variable = { var = STP_pf_merchants_support value = 12 }
+				STP_refresh_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pv_strain_change value = -6 }
+				STP_pv_change_strain = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				check_variable = { var = STP_pf_merchants_support value = 30 compare = less_than }
+			}
+		}
+	}
+
+	STP_pv_northern_loan = {
+		icon = generic_improve_relations
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_lower_market_ledgers
+			STP_pv_war_current = yes
+			STP_pf_nod_contacts = yes
+		}
+		available = {
+			STP_pv_war_current = yes
+			STP_pf_nod_contacts = yes
+		}
+		cost = 20
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = STP_pv_treasury_2500_tt
+			custom_effect_tooltip = STP_pv_strain_minus_15_tt
+			custom_effect_tooltip = STP_pf_advisers_deal_tt
+			custom_effect_tooltip = STP_pv_northern_loan_claim_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 2500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2500 }
+				ADISCORD_economy_mark_dirty = yes
+				set_country_flag = STP_pv_northern_loan_taken
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pf_shift = yes
+				set_temp_variable = { var = STP_pv_strain_change value = -15 }
+				STP_pv_change_strain = yes
+				STP_pv_refresh_claims = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pv_strain value = 60 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	STP_pv_festival_levy = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_loyalty_tribunal
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 30
+		days_re_enable = 60
+		complete_effect = {
+			add_manpower = 6000
+			custom_effect_tooltip = STP_pv_strain_plus_5_tt
+			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pf_shift = yes
+				set_temp_variable = { var = STP_pv_strain_change value = 5 }
+				STP_pv_change_strain = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 3
+				has_manpower < 5000
+			}
+		}
+	}
+
+	STP_pv_loyalty_commission = {
+		icon = GFX_decision_ADISCORD_state_directive
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pv_loyalty_tribunal
+			STP_pv_war_current = yes
+		}
+		available = {
+			STP_pv_war_current = yes
+			has_country_flag = STP_pf_initialized
+		}
+		cost = 35
+		days_re_enable = 30
+		complete_effect = {
+			add_stability = -0.01
+			custom_effect_tooltip = STP_pv_loyalty_commission_tt
+			hidden_effect = {
+				if = {
+					limit = { check_variable = { var = STP_pf_conservatives_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_conservatives_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_borons_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_borons_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_security_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_security_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_army_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_army_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_advisers_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_advisers_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_merchants_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_merchants_support value = 10 }
+				}
+				if = {
+					limit = { check_variable = { var = STP_pf_radicals_support value = 35 compare = less_than } }
+					add_to_variable = { var = STP_pf_radicals_support value = 10 }
+				}
+				add_to_variable = { var = STP_pf_security_support value = 4 }
+				STP_refresh_apparatus_loyalty = yes
+				STP_pv_refresh_claims = yes
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_apparatus_loyalty value = 35 compare = less_than }
+			}
+		}
+	}
+
+
 	STP_ps_plot_1 = {
 		icon = GFX_decision_ADISCORD_covert_operation
 		allowed = { tag = STP }

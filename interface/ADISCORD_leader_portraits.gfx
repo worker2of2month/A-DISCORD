@@ -158,6 +158,18 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_Edgar_Renner.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_STP_Cyan_Crowe"
+		texturefile = "gfx/leaders/STP/portrait_STP_Cyan_Crowe.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Rufus_Hedersett_marshal"
+		texturefile = "gfx/leaders/STP/portrait_STP_Rufus_Hedersett_2.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Rufus_Hedersett_uniform"
+		texturefile = "gfx/leaders/STP/portrait_STP_Rufus_Hedersett_3.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_STP_Conservative_Presidium"
 		texturefile = "gfx/leaders/STP/portrait_STP_Conservative_Presidium.png"
 	}

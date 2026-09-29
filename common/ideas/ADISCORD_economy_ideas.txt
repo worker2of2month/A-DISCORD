@@ -552,26 +552,105 @@ ideas = {
 			}
 		}
 
+		# War fatigue tiers; the monthly score owns the level and the signature swaps one idea.
+		ADISCORD_economy_war_fatigue_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = generic_manpower_bonus
+			modifier = {
+				stability_factor = -0.01
+				war_support_factor = -0.03
+			}
+		}
 		ADISCORD_economy_war_fatigue_2 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = -0.02 war_support_factor = -0.03 industrial_capacity_factory = -0.01 }
+			modifier = {
+				stability_factor = -0.04
+				war_support_factor = -0.06
+				industrial_capacity_factory = -0.02
+				political_power_factor = -0.05
+			}
 		}
 		ADISCORD_economy_war_fatigue_3 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = -0.05 war_support_factor = -0.07 industrial_capacity_factory = -0.03 army_morale_factor = -0.03 }
+			modifier = {
+				stability_factor = -0.08
+				war_support_factor = -0.12
+				industrial_capacity_factory = -0.05
+				army_morale_factor = -0.05
+				conscription_factor = -0.10
+				political_power_factor = -0.08
+			}
 		}
 		ADISCORD_economy_war_fatigue_4 = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
 			removal_cost = -1
 			picture = generic_manpower_bonus
-			modifier = { stability_factor = -0.08 war_support_factor = -0.12 industrial_capacity_factory = -0.06 army_morale_factor = -0.07 }
+			modifier = {
+				stability_factor = -0.15
+				war_support_factor = -0.20
+				industrial_capacity_factory = -0.08
+				army_morale_factor = -0.10
+				conscription_factor = -0.20
+				political_power_factor = -0.15
+			}
+		}
+
+		# Tax burden tiers. Level 3 is neutral; the income multipliers stay in the weekly ledger.
+		ADISCORD_economy_tax_burden_1 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_taxation_balanced_register
+			modifier = {
+				stability_factor = 0.08
+				political_power_factor = -0.10
+				production_speed_buildings_factor = 0.05
+				ADISCORD_economy_war_fatigue_gain_factor = -0.20
+			}
+		}
+		ADISCORD_economy_tax_burden_2 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_taxation_balanced_register
+			modifier = {
+				stability_factor = 0.04
+				production_speed_buildings_factor = 0.02
+				ADISCORD_economy_war_fatigue_gain_factor = -0.10
+			}
+		}
+		ADISCORD_economy_tax_burden_4 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_taxation_corporate_assessment
+			modifier = {
+				stability_factor = -0.05
+				political_power_factor = 0.05
+				ADISCORD_economy_war_fatigue_gain_factor = 0.15
+			}
+		}
+		ADISCORD_economy_tax_burden_5 = {
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			picture = ADISCORD_taxation_extraction_quotas
+			modifier = {
+				stability_factor = -0.12
+				war_support_factor = -0.05
+				political_power_factor = 0.10
+				production_speed_buildings_factor = -0.05
+				ADISCORD_economy_war_fatigue_gain_factor = 0.35
+			}
 		}
 
 		ADISCORD_economy_science_network_1 = { allowed = { always = no } allowed_civil_war = { always = yes } removal_cost = -1 picture = generic_research_bonus modifier = { research_speed_factor = 0.05 } }

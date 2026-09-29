@@ -1626,3 +1626,115 @@ defined_text = {
 		localization_key = STP_ch_cost_treasury_900
 	}
 }
+
+# Party war: inheritance of the festival.
+defined_text = {
+	name = STPGetWarStrainReport
+	text = {
+		trigger = { STP_pv_war_current = yes }
+		localization_key = STP_pv_strain_report
+	}
+	text = { localization_key = STP_ps_empty }
+}
+
+defined_text = {
+	name = STPGetVictoryClaimant
+	text = {
+		trigger = { check_variable = { var = STP_pv_claim_lead value = 1 compare = equals } }
+		localization_key = STP_pv_claimant_1
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_claim_lead value = 3 compare = equals } }
+		localization_key = STP_pv_claimant_3
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_claim_lead value = 4 compare = equals } }
+		localization_key = STP_pv_claimant_4
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_claim_lead value = 5 compare = equals } }
+		localization_key = STP_pv_claimant_5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_claim_lead value = 6 compare = equals } }
+		localization_key = STP_pv_claimant_6
+	}
+	text = { localization_key = STP_pv_claimant_2 }
+}
+
+defined_text = {
+	name = STPGetVictoryAftertaste
+	text = {
+		trigger = { has_idea = STP_pv_pyrrhic_victory }
+		localization_key = STP_pv_aftertaste_pyrrhic
+	}
+	text = {
+		trigger = { has_idea = STP_pv_clean_victory }
+		localization_key = STP_pv_aftertaste_clean
+	}
+	text = { localization_key = STP_pv_aftertaste_plain }
+}
+
+defined_text = {
+	name = STPGetFrontResultTitle
+	text = {
+		trigger = { check_variable = { var = STP_pv_front_result value = 1 compare = equals } }
+		localization_key = ADISCORD_STP_pv.31.t_win
+	}
+	text = { localization_key = ADISCORD_STP_pv.31.t_loss }
+}
+
+defined_text = {
+	name = STPGetVictoryTitle
+	text = {
+		trigger = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		localization_key = ADISCORD_STP_pv.50.t1
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
+		localization_key = ADISCORD_STP_pv.50.t3
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
+		localization_key = ADISCORD_STP_pv.50.t4
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
+		localization_key = ADISCORD_STP_pv.50.t5
+	}
+	text = {
+		trigger = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
+		localization_key = ADISCORD_STP_pv.50.t6
+	}
+	text = { localization_key = ADISCORD_STP_pv.50.t2 }
+}
+
+# Public report; the reader may be any country, so the winner is scoped explicitly.
+defined_text = {
+	name = STPGetVictoryNews
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } } }
+		localization_key = STP_pv_news_1
+	}
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } } }
+		localization_key = STP_pv_news_3
+	}
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } } }
+		localization_key = STP_pv_news_4
+	}
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } } }
+		localization_key = STP_pv_news_5
+	}
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } } }
+		localization_key = STP_pv_news_6
+	}
+	text = {
+		trigger = { STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } } }
+		localization_key = STP_pv_news_2
+	}
+	text = { localization_key = STP_ps_empty }
+}

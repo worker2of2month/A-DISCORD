@@ -4122,37 +4122,13 @@ class WeeklyEconomyContracts(unittest.TestCase):
             "ADISCORD_economy_factory_income",
             "ADISCORD_economy_consumer_goods_income",
         }
+        # Tax level 3 is neutral and has no row.
         expected_tax = {
-            1: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 0.65),
-                ("multiply_variable", "ADISCORD_economy_business_income", 0.85),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 0.90),
-                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.30),
-            ),
-            2: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 0.85),
-                ("multiply_variable", "ADISCORD_economy_business_income", 0.95),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 0.95),
-                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.10),
-            ),
-            3: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.00),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.00),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.00),
-                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", 0.00),
-            ),
-            4: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.40),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.30),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.20),
-                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.10),
-            ),
-            5: (
-                ("multiply_variable", "ADISCORD_economy_personal_income", 1.80),
-                ("multiply_variable", "ADISCORD_economy_business_income", 1.60),
-                ("multiply_variable", "ADISCORD_economy_factory_income", 1.40),
-                ("add_to_variable", "ADISCORD_economy_consumer_goods_income", -0.30),
-            ),
+            level: tuple(
+                ("multiply_variable", f"ADISCORD_economy_{bucket}_income", factor)
+                for bucket in ("personal", "business", "consumer_goods", "factory")
+            )
+            for level, factor in ((1, 0.50), (2, 0.75), (4, 1.40), (5, 1.85))
         }
         tables = {
             "tax": (
@@ -8726,7 +8702,7 @@ class PostwarDemobilizationTests(unittest.TestCase):
             if entry.key == "defined_text"
             and _entry_scalar(entry.value, "name") == "GetADISCORDDemobilizationStatusLoc"
         )
-        for active, months, expected_fatigue in ((True, 0, 45), (False, 5, 49)):
+        for active, months, expected_fatigue in ((True, 0, 44), (False, 5, 48)):
             with self.subTest(active=active, calendar_months=months):
                 fixture, state = self.fixture(phase=3, budget=3, laws=False)
                 fixture.facts[self.P + "has_current_schema"] = True

@@ -141,6 +141,7 @@ on_actions = {
 
 	on_monthly_STP = {
 		effect = {
+			STP_pv_monthly = yes
 			if = {
 				limit = {
 					tag = STP

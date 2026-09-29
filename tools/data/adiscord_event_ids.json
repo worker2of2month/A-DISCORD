@@ -3539,6 +3539,142 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_civil_war",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.1",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 1,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.2",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 2,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.10",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 10,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.11",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 11,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.12",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 12,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.20",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 20,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.21",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 21,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.22",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 22,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.23",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 23,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.24",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 24,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.25",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 25,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.26",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 26,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.30",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 30,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.31",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 31,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.40",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 40,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.41",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 41,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pv.50",
+      "namespace": "ADISCORD_STP_pv",
+      "number": 50,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_war",
+      "status": "active"
     }
   ]
 }

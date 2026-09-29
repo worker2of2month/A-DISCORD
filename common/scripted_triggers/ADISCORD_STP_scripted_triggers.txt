@@ -2429,3 +2429,41 @@ STP_ps_plot_current = {
 	STP_ps_sabotage_war = yes
 	has_variable = STP_ps_plot_kind
 }
+
+# ============================================================
+# PARTY WAR: INHERITANCE OF THE FESTIVAL
+# ============================================================
+
+# COUNTRY STP: the wartime gauge exists only while the party fights its own civil war.
+STP_pv_war_current = {
+	STP_ps_war_active = yes
+	has_variable = STP_pv_strain
+}
+
+STP_pv_front_active = {
+	OR = {
+		has_active_mission = STP_pv_front_1
+		has_active_mission = STP_pv_front_2
+		has_active_mission = STP_pv_front_3
+	}
+}
+
+# The Nodrul advisers keep a voice only while the patron is reachable or won the war for the party.
+STP_pv_advisers_have_voice = {
+	OR = {
+		STP_pf_nod_contacts = yes
+		NOD = { has_country_flag = NOD_cw_victorious }
+	}
+}
+
+STP_pv_kefreyt_offer_possible = {
+	STP_pv_war_current = yes
+	NOT = { has_country_flag = STP_pv_kefreyt_offer_seen }
+	check_variable = { var = STP_pv_war_months value = 2 compare = greater_than_or_equals }
+	VAL = {
+		exists = yes
+		is_ai = yes
+		has_capitulated = no
+		NOT = { has_war_with = STP }
+	}
+}

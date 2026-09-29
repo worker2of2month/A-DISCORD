@@ -67,6 +67,21 @@ characters = {
 		}
 	}
 
+	# Chairman of the High Houses; leads only after their civil-war victory.
+	STP_Cyan_Crowe = {
+		name = STP_Cyan_Crowe
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Cyan_Crowe
+			}
+		}
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2300.1.1"
+			id = -1
+		}
+	}
+
 	STP_Petr_Ivanov = {
 		name = STP_Petr_Ivanov
 		portraits = {

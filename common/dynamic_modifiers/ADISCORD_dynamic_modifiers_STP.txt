@@ -138,6 +138,15 @@ STP_ps_nodes_dynamic = {
 	army_speed_factor = STP_ps_node_redeployment
 }
 
+# Party war strain: the resort economy pays for the war until it breaks.
+STP_pv_strain_dynamic = {
+	icon = GFX_idea_STP_worldwide_famous_tourist_destination
+	enable = { STP_ps_war_active = yes }
+	political_power_factor = STP_pv_strain_political_power
+	stability_factor = STP_pv_strain_stability
+	ADISCORD_economy_overall_income_factor = STP_pv_strain_income
+}
+
 STP_ch_institutions = {
 	icon = GFX_idea_STP_apparatus_loyalty
 	enable = {

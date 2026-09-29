@@ -404,6 +404,7 @@ defined_text = {
 	text = { trigger = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 4 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_war_fatigue_effect_4 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 3 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_war_fatigue_effect_3 }
 	text = { trigger = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 2 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_war_fatigue_effect_2 }
+	text = { trigger = { check_variable = { var = ADISCORD_economy_war_fatigue_level value = 1 compare = greater_than_or_equals } } localization_key = ADISCORD_economy_war_fatigue_effect_1 }
 	text = { localization_key = ADISCORD_economy_war_fatigue_effect_0 }
 }
 

@@ -35,6 +35,30 @@
 # Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
   superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, «1984»"
   superevent_stelander_party_victory_comment: "Партийная власть сохранена"
+  superevent_stelander_party_victory_houses_title: "Высшие Дома правят Стеландером"
+# Quote source: Giuseppe Tomasi di Lampedusa, Il Gattopardo, part 1
+  superevent_stelander_party_victory_houses_quote: "Если мы хотим, чтобы всё осталось как есть, нужно, чтобы всё изменилось.\n\n- Джузеппе Томази ди Лампедуза, «Леопард»"
+  superevent_stelander_party_victory_houses_comment: "Сайан Кроу и Палата получают победу"
+  superevent_stelander_party_victory_festival_title: "Праздник продолжается!"
+# Quote source: Juvenal, Satire X, line 81
+  superevent_stelander_party_victory_festival_quote: "Хлеба и зрелищ.\n\n- Ювенал, «Сатиры»"
+  superevent_stelander_party_victory_festival_comment: "Руфус Хедерсетт празднует победу"
+  superevent_stelander_party_victory_staff_title: "Генералы Стеландера берут власть"
+# Quote source: Vegetius, Epitoma rei militaris, book 3, preface
+  superevent_stelander_party_victory_staff_quote: "Кто желает мира, пусть готовится к войне.\n\n- Флавий Вегеций Ренат, «Краткое изложение военного дела»"
+  superevent_stelander_party_victory_staff_comment: "Август Вейль вводит мир по уставу"
+  superevent_stelander_party_victory_wallets_title: "Стеландская витрина снова открыта"
+# Quote source: Cicero, Philippicae V.5
+  superevent_stelander_party_victory_wallets_quote: "Бесконечные деньги - нерв войны.\n\n- Марк Туллий Цицерон, «Филиппики»"
+  superevent_stelander_party_victory_wallets_comment: "Павел Ланской открывает сезон"
+  superevent_stelander_party_victory_silence_title: "Тишина над Стеландером"
+# Quote source: Tacitus, Agricola 30
+  superevent_stelander_party_victory_silence_quote: "Они создают пустыню и называют это миром.\n\n- Публий Корнелий Тацит, «Агрикола»"
+  superevent_stelander_party_victory_silence_comment: "Вера Корвина хранит тишину"
+  superevent_stelander_party_victory_regent_title: "Нодрул празднует стеландскую победу"
+# Quote source: Thucydides, History of the Peloponnesian War V.89
+  superevent_stelander_party_victory_regent_quote: "Сильные делают то, что могут, а слабые терпят то, что должны.\n\n- Фукидид, «История»"
+  superevent_stelander_party_victory_regent_comment: "Эдгар Реннер подписывает за Стеландер"
 
   superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
 # Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/

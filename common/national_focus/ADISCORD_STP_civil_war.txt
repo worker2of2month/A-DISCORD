@@ -965,6 +965,262 @@ focus_tree = {
 		}
 	}
 
+	# Party war economy, loyalty and the claim on victory.
+
+	focus = {
+		id = STP_pv_war_budget
+		icon = GFX_focus_STP_2160_budget
+		x = 15
+		y = 0
+		cost = 2
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_political_power = 25
+			custom_effect_tooltip = STP_pv_strain_minus_5_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pv_strain_change value = -5 }
+				STP_pv_change_strain = yes
+			}
+			unlock_decision_tooltip = STP_pv_printing_press
+			unlock_decision_tooltip = STP_pv_house_bonds
+		}
+	}
+
+	focus = {
+		id = STP_pv_lower_market_ledgers
+		icon = GFX_focus_STP_cw_buy_silence
+		x = 14
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_pv_war_budget }
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pv_sell_concessions
+			unlock_decision_tooltip = STP_pv_requisition_casinos
+			if = {
+				limit = { STP_pf_nod_contacts = yes }
+				unlock_decision_tooltip = STP_pv_northern_loan
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pv_loyalty_tribunal
+		icon = GFX_focus_STP_PARTY_DISCIPLINE
+		x = 16
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_pv_war_budget }
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_pv_loyalty_commission
+			unlock_decision_tooltip = STP_pv_festival_levy
+		}
+	}
+
+	focus = {
+		id = STP_pv_victory_committee
+		icon = GFX_focus_STP_It_Has_Only_Begun
+		x = 15
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_pv_lower_market_ledgers }
+		prerequisite = { focus = STP_pv_loyalty_tribunal }
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pv_victory_committee_ready_tt
+				OR = {
+					check_variable = { var = STP_pv_front_wins value = 1 compare = greater_than_or_equals }
+					check_variable = { var = STP_pv_war_months value = 4 compare = greater_than_or_equals }
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = STP_pv_victory_committee_tt
+			hidden_effect = {
+				STP_pv_refresh_claims = yes
+				country_event = { id = ADISCORD_STP_pv.41 hours = 1 }
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pv_glory_staff
+		icon = GFX_focus_STP_defense_budget_tank
+		x = 14
+		y = 3
+		cost = 3
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		prerequisite = { focus = STP_pv_victory_committee }
+		mutually_exclusive = { focus = STP_pv_glory_silence focus = STP_pv_glory_festival focus = STP_pv_glory_wallets }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 20
+			custom_effect_tooltip = STP_pv_glory_staff_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pf_army_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			hidden_effect = { STP_pv_refresh_claims = yes }
+		}
+	}
+
+	focus = {
+		id = STP_pv_glory_silence
+		icon = GFX_focus_STP_ps_permanent_security
+		x = 16
+		y = 3
+		cost = 3
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		prerequisite = { focus = STP_pv_victory_committee }
+		mutually_exclusive = { focus = STP_pv_glory_staff focus = STP_pv_glory_festival focus = STP_pv_glory_wallets }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.03
+			custom_effect_tooltip = STP_pv_glory_silence_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pf_security_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			hidden_effect = { STP_pv_refresh_claims = yes }
+		}
+	}
+
+	focus = {
+		id = STP_pv_glory_festival
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 15
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		prerequisite = { focus = STP_pv_victory_committee }
+		mutually_exclusive = { focus = STP_pv_glory_staff focus = STP_pv_glory_silence focus = STP_pv_glory_wallets }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = STP_pv_glory_festival_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pf_radicals_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			hidden_effect = { STP_pv_refresh_claims = yes }
+		}
+	}
+
+	focus = {
+		id = STP_pv_glory_wallets
+		icon = GFX_focus_STP_cw_port_budget
+		x = 17
+		y = 4
+		cost = 3
+		allow_branch = {
+			tag = STP
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		prerequisite = { focus = STP_pv_victory_committee }
+		mutually_exclusive = { focus = STP_pv_glory_staff focus = STP_pv_glory_silence focus = STP_pv_glory_festival }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_party_war_available_tt
+				STP_ps_war_active = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			custom_effect_tooltip = STP_ph_treasury_2000_tt
+			custom_effect_tooltip = STP_pv_strain_minus_8_tt
+			custom_effect_tooltip = STP_pv_glory_wallets_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 2000 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2000 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = STP_pf_merchants_support value = 8 }
+				STP_refresh_apparatus_loyalty = yes
+				set_temp_variable = { var = STP_pv_strain_change value = -8 }
+				STP_pv_change_strain = yes
+			}
+			hidden_effect = { STP_pv_refresh_claims = yes }
+		}
+	}
+
 	# Postwar institutions, reconstruction and professional armed forces.
 
 	focus = {
@@ -5769,6 +6025,324 @@ focus_tree = {
 			custom_effect_tooltip = STP_ch_security_review_unlock_summary_tt
 			hidden_effect = {
 				STP_ch_schedule_refresh = yes
+			}
+		}
+	}
+
+	# Each elected government has one signature programme. A government led by the
+	# faction that also won the civil war receives the continuity bonus.
+
+	focus = {
+		id = STP_ch_houses_black_book
+		icon = GFX_focus_STP_cw_buy_silence
+		x = -10
+		y = 4
+		cost = 5
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 1
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_pw_party_high_houses
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_government
+				value = 1
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			add_political_power = 100
+			add_stability = 0.05
+			custom_effect_tooltip = STP_ch_houses_black_book_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_apparatus_loyalty_change value = 8 }
+				STP_change_apparatus_loyalty = yes
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pv_outcome
+						value = 1
+						compare = equals
+					}
+				}
+				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
+				add_political_power = 50
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_eternal_festival
+		icon = GFX_focus_STP_Nectar_of_the_Gods
+		x = -10
+		y = 4
+		cost = 5
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 2
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_pw_party_unbound_revolution
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_government
+				value = 2
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			add_war_support = 0.08
+			custom_effect_tooltip = STP_ph_treasury_2000_tt
+			custom_effect_tooltip = STP_ch_eternal_festival_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 2000 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 2000 }
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = STP_pf_radicals_support value = 10 }
+				subtract_from_variable = { var = STP_pf_conservatives_support value = 6 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pv_outcome
+						value = 2
+						compare = equals
+					}
+				}
+				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
+				add_political_power = 50
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_staff_state
+		icon = GFX_focus_STP_defense_budget_tank
+		x = -10
+		y = 4
+		cost = 5
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 3
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_service_act
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_government
+				value = 3
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			army_experience = 40
+			add_command_power = 40
+			custom_effect_tooltip = STP_ch_staff_state_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pf_army_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pv_outcome
+						value = 3
+						compare = equals
+					}
+				}
+				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
+				add_political_power = 50
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_season_open
+		icon = GFX_focus_STP_cw_port_budget
+		x = -10
+		y = 4
+		cost = 5
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_production_agreements
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			custom_effect_tooltip = STP_pv_season_treasury_tt
+			custom_effect_tooltip = STP_pw_civil_factory_or_reserve_tt
+			custom_effect_tooltip = STP_ch_season_open_tt
+			hidden_effect = {
+				ADISCORD_economy_initialize_country = yes
+				add_to_variable = { var = ADISCORD_economy_treasury value = 3000 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 3000 }
+				if = {
+					limit = {
+						capital_scope = {
+							is_owned_by = ROOT
+							is_controlled_by = ROOT
+							free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+						}
+					}
+					capital_scope = {
+						add_extra_state_shared_building_slots = 1
+						add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+					}
+				}
+				else = {
+					add_to_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 900 }
+				}
+				ADISCORD_economy_mark_dirty = yes
+				add_to_variable = { var = STP_pf_merchants_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pv_outcome
+						value = 4
+						compare = equals
+					}
+				}
+				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
+				add_political_power = 50
+			}
+		}
+	}
+
+	focus = {
+		id = STP_ch_quiet_order
+		icon = GFX_focus_STP_ps_permanent_security
+		x = -10
+		y = 4
+		cost = 5
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			check_variable = {
+				var = STP_ch_phase
+				value = 5
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		prerequisite = {
+			focus = STP_ch_security_directorate
+		}
+		available = {
+			STP_pw_can_reconstruct = yes
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 10
+		}
+		completion_reward = {
+			add_stability = 0.08
+			add_political_power = 50
+			if = {
+				limit = { has_idea = STP_pw_party_last_purge }
+				remove_ideas = STP_pw_party_last_purge
+			}
+			custom_effect_tooltip = STP_ch_quiet_order_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_pf_security_support value = 10 }
+				STP_refresh_apparatus_loyalty = yes
+			}
+			if = {
+				limit = {
+					check_variable = {
+						var = STP_pv_outcome
+						value = 5
+						compare = equals
+					}
+				}
+				custom_effect_tooltip = STP_ch_war_victor_continuity_tt
+				add_political_power = 50
 			}
 		}
 	}

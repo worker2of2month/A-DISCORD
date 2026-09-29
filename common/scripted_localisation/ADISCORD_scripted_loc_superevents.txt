@@ -37,6 +37,48 @@ defined_text = {
 		localization_key = superevent_stelander_empire_quote
 	}
 	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_houses_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_festival_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_staff_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_wallets_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_silence_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_regent_quote
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_quote
 	}
@@ -100,6 +142,48 @@ defined_text = {
 		localization_key = superevent_stelander_empire_title
 	}
 	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_houses_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_festival_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_staff_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_wallets_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_silence_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_regent_title
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_title
 	}
@@ -161,6 +245,48 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_empire }
 		localization_key = superevent_stelander_empire_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_houses_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_festival_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_staff_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 4 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_wallets_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 5 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_silence_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_party_victory
+			STP = { check_variable = { var = STP_pv_outcome value = 6 compare = equals } }
+		}
+		localization_key = superevent_stelander_party_victory_regent_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }

@@ -39,6 +39,30 @@
 # Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
   superevent_stelander_party_victory_quote: "The object of power is power.\n\n- George Orwell, Nineteen Eighty-Four"
   superevent_stelander_party_victory_comment: "The Party retains power"
+  superevent_stelander_party_victory_houses_title: "The High Houses Rule Stelander"
+# Quote source: Giuseppe Tomasi di Lampedusa, Il Gattopardo, part 1
+  superevent_stelander_party_victory_houses_quote: "If we want things to stay as they are, things will have to change.\n\n- Giuseppe Tomasi di Lampedusa, The Leopard"
+  superevent_stelander_party_victory_houses_comment: "Cyan Crowe and the Chamber take the victory"
+  superevent_stelander_party_victory_festival_title: "The Festival Goes On!"
+# Quote source: Juvenal, Satire X, line 81
+  superevent_stelander_party_victory_festival_quote: "Bread and circuses.\n\n- Juvenal, Satires"
+  superevent_stelander_party_victory_festival_comment: "Rufus Hedersett celebrates the victory"
+  superevent_stelander_party_victory_staff_title: "Stelander's Generals Take Power"
+# Quote source: Vegetius, Epitoma rei militaris, book 3, preface
+  superevent_stelander_party_victory_staff_quote: "Let him who desires peace prepare for war.\n\n- Vegetius, Epitoma rei militaris"
+  superevent_stelander_party_victory_staff_comment: "August Veil imposes peace by regulation"
+  superevent_stelander_party_victory_wallets_title: "The Stelander Showcase Reopens"
+# Quote source: Cicero, Philippicae V.5
+  superevent_stelander_party_victory_wallets_quote: "Endless money forms the sinews of war.\n\n- Cicero, Philippics"
+  superevent_stelander_party_victory_wallets_comment: "Pavel Lanskoy opens the season"
+  superevent_stelander_party_victory_silence_title: "Silence over Stelander"
+# Quote source: Tacitus, Agricola 30
+  superevent_stelander_party_victory_silence_quote: "They make a desert and call it peace.\n\n- Tacitus, Agricola"
+  superevent_stelander_party_victory_silence_comment: "Vera Korvina keeps the silence"
+  superevent_stelander_party_victory_regent_title: "Nodrul Celebrates a Stelander Victory"
+# Quote source: Thucydides, History of the Peloponnesian War V.89
+  superevent_stelander_party_victory_regent_quote: "The strong do what they can and the weak suffer what they must.\n\n- Thucydides, History of the Peloponnesian War"
+  superevent_stelander_party_victory_regent_comment: "Edgar Renner signs for Stelander"
 
   superevent_stelander_shabrat_victory_title: "Shabrat's Victory in Stelander"
 # Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
