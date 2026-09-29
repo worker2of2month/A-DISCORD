@@ -719,6 +719,28 @@ NOD_cw_can_accept_northern_defeat = {
 	has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
 }
 
+# NOD scope. The opening offensive counts as successful once NOD holds at least
+# two northern coalition states; only a failed push turns into a stalled army.
+NOD_cw_northern_push_succeeded = {
+	count_triggers = {
+		amount = 2
+		8 = { is_controlled_by = NOD }
+		15 = { is_controlled_by = NOD }
+		16 = { is_controlled_by = NOD }
+		19 = { is_controlled_by = NOD }
+		20 = { is_controlled_by = NOD }
+		21 = { is_controlled_by = NOD }
+		22 = { is_controlled_by = NOD }
+		14 = { is_controlled_by = NOD }
+		83 = { is_controlled_by = NOD }
+		84 = { is_controlled_by = NOD }
+		85 = { is_controlled_by = NOD }
+		86 = { is_controlled_by = NOD }
+		87 = { is_controlled_by = NOD }
+		303 = { is_controlled_by = NOD }
+	}
+}
+
 # NOD: an AI ceasefire cannot supersede a military settlement or a player campaign.
 NOD_cw_can_accept_northern_status_quo = {
 	tag = NOD

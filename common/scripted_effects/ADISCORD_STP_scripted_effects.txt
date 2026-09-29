@@ -1085,7 +1085,13 @@ NOD_cw_apply_northern_exhaustion = {
 			NOT = { has_country_flag = NOD_cw_northern_exhaustion_applied }
 		}
 		set_country_flag = NOD_cw_northern_exhaustion_applied
-		add_ideas = NOD_cw_stalled_army
+		# The coalition rallies either way; NOD stalls only if the push took no ground.
+		if = {
+			limit = { NOT = { NOD_cw_northern_push_succeeded = yes } }
+			add_ideas = NOD_cw_stalled_army
+			log = "[STP_NORTH] NOD push failed: stalled army"
+		}
+		else = { log = "[STP_NORTH] NOD push held ground: no stall" }
 		YPR = {
 			if = {
 				limit = { exists = yes has_capitulated = no has_war_with = NOD }

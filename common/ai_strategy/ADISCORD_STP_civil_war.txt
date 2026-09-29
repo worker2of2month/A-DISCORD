@@ -325,6 +325,26 @@ NOD_cw_northern_ain_detachment = {
 	}
 }
 
+# COF and TFF reach Cussington (state 30, ~60 of NOD's ~100 VP) only through
+# Esnos (17) -> Treya (13) / Kaclana (12). The northern fronts pull every field
+# division forward, so keep a rear screen on that approach.
+NOD_cw_northern_rear_screen = {
+	allowed = { original_tag = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		OR = { has_war_with = COF has_war_with = TFF }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.10
+		states = { 12 13 }
+		subtract_invasions_from_need = yes
+		subtract_fronts_from_need = yes
+	}
+}
+
 # Front demand is scoped to the enemy that is actually at war. This avoids
 # phantom requests after one coalition member capitulates or leaves the war.
 NOD_cw_northern_front_ypr = {
