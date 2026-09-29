@@ -33,29 +33,27 @@ ROOT = Path(__file__).resolve().parents[2]
 TAG_FILE = Path("common/country_tags/01_ADISCORD_vorkerland_collapse_tags.txt")
 WKR_COUNTRY = Path("common/countries/WKR.txt")
 WKR_HISTORY = Path("history/countries/WKR - Worker Emergency Government.txt")
-COLLAPSE_CHARACTERS = Path("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+COLLAPSE_CHARACTERS = Path(
+    "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+)
 PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-CAMPAIGN_STATE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
-WAR_ECONOMY_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
-DOCTRINE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
+CAMPAIGN_STATE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+WAR_ECONOMY_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+DOCTRINE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 PHASE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
 PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 COLLAPSE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-CAPITULATION_EFFECTS = Path("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt")
+CAPITULATION_EFFECTS = Path(
+    "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+)
 RELEASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 COLLAPSE_TRIGGERS = Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
-COLLAPSE_ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
-FOCUS_TREE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
-FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+COLLAPSE_ON_ACTIONS = Path(
+    "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
 )
+FOCUS_TREE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
+FOCUS_DECISION_FILES = (Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),)
 FOCUS_DECISIONS = FOCUS_DECISION_FILES
 FOCUS_DECISION_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 ENGLISH_LOCALISATION = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
@@ -239,7 +237,9 @@ def event_block(text: str, event_id: str) -> str:
     return ""
 
 
-def _load(relative: Path | tuple[Path, ...], issues: list[str], *, section: str | None = None) -> str:
+def _load(
+    relative: Path | tuple[Path, ...], issues: list[str], *, section: str | None = None
+) -> str:
     if isinstance(relative, tuple):
         return "\n".join(_load(path, issues) for path in relative)
     path = ROOT / relative
@@ -293,7 +293,9 @@ def validate_wkr_semantics() -> list[str]:
 
     expected_tag = re.compile(r'(?m)^\s*WKR\s*=\s*"countries/WKR\.txt"\s*$')
     if len(expected_tag.findall(tag_source)) != 1:
-        issues.append("WKR must be declared exactly once in the existing Vorkerland tag file")
+        issues.append(
+            "WKR must be declared exactly once in the existing Vorkerland tag file"
+        )
 
     tag_definitions: list[str] = []
     tag_root = ROOT / "common/country_tags"
@@ -312,20 +314,35 @@ def validate_wkr_semantics() -> list[str]:
 
     if history_source:
         if not re.search(r"(?m)^\s*capital\s*=\s*32\s*$", history_source):
-            issues.append("WKR runtime history must declare state 32 as its fallback capital")
+            issues.append(
+                "WKR runtime history must declare state 32 as its fallback capital"
+            )
         if not re.search(r"(?m)^\s*ruling_party\s*=\s*pragmatism\s*$", history_source):
-            issues.append("WKR runtime history must use the worker emergency pragmatism fallback")
+            issues.append(
+                "WKR runtime history must use the worker emergency pragmatism fallback"
+            )
         if f"recruit_character = {WKR_DEFAULT_LEADER}" not in history_source:
-            issues.append("WKR runtime history must recruit its generic emergency committee fallback")
-        if re.search(r"WKR_Worker_Emergency_Presidium|GFX_portrait_WRK_Temporary_Government", history_source):
-            issues.append("WKR runtime history must not reuse the joint-government portrait as its fallback")
+            issues.append(
+                "WKR runtime history must recruit its generic emergency committee fallback"
+            )
+        if re.search(
+            r"WKR_Worker_Emergency_Presidium|GFX_portrait_WRK_Temporary_Government",
+            history_source,
+        ):
+            issues.append(
+                "WKR runtime history must not reuse the joint-government portrait as its fallback"
+            )
         if re.search(r"Lucas[_ ]Brown", history_source, flags=re.IGNORECASE):
-            issues.append("WKR runtime history must not use Lucas Brown as a fallback leader")
+            issues.append(
+                "WKR runtime history must not use Lucas Brown as a fallback leader"
+            )
 
     fallback = WKR_ROUTE_LEADERS["fallback"]
     fallback_blocks = named_blocks(character_source, fallback)
     if len(fallback_blocks) != 1:
-        issues.append(f"collapse characters must define exactly one fixed fallback {fallback}")
+        issues.append(
+            f"collapse characters must define exactly one fixed fallback {fallback}"
+        )
     # Anton is an authored character promoted by the collapse effect; keeping
     # his base definition role-free avoids duplicate country-leader roles.
     elif len(named_blocks(fallback_blocks[0], "country_leader")) > 1:
@@ -333,11 +350,15 @@ def validate_wkr_semantics() -> list[str]:
 
     default_blocks = named_blocks(character_source, WKR_DEFAULT_LEADER)
     if len(default_blocks) != 1:
-        issues.append(f"collapse characters must define exactly one {WKR_DEFAULT_LEADER}")
+        issues.append(
+            f"collapse characters must define exactly one {WKR_DEFAULT_LEADER}"
+        )
     else:
         default_block = default_blocks[0]
         if "GFX_Portrait_Forul_Generic_3" not in default_block:
-            issues.append(f"{WKR_DEFAULT_LEADER} must use an existing generic Forul portrait")
+            issues.append(
+                f"{WKR_DEFAULT_LEADER} must use an existing generic Forul portrait"
+            )
         if "ideology = pragmatism_ideology" not in default_block:
             issues.append(f"{WKR_DEFAULT_LEADER} must match WKR's fallback government")
 
@@ -360,10 +381,14 @@ def validate_wkr_semantics() -> list[str]:
         source = _load(relative, issues)
         if source:
             if not source.lstrip().startswith(header):
-                issues.append(f"{relative.as_posix()} must use localisation header {header}")
+                issues.append(
+                    f"{relative.as_posix()} must use localisation header {header}"
+                )
             for key in ("WKR", "WKR_DEF", "WKR_ADJ"):
                 if not re.search(rf"(?m)^\s*{key}:", source):
-                    issues.append(f"{relative.as_posix()} is missing country-name key {key}")
+                    issues.append(
+                        f"{relative.as_posix()} is missing country-name key {key}"
+                    )
 
     claimant_choice_localisation = (
         (
@@ -377,7 +402,11 @@ def validate_wkr_semantics() -> list[str]:
             "совместн",
         ),
     )
-    for relative, required_fragments, forbidden_option_fragment in claimant_choice_localisation:
+    for (
+        relative,
+        required_fragments,
+        forbidden_option_fragment,
+    ) in claimant_choice_localisation:
         source = read(relative)
         for fragment in required_fragments:
             if fragment not in source:
@@ -389,13 +418,17 @@ def validate_wkr_semantics() -> list[str]:
             source,
         )
         if not option:
-            issues.append(f"{relative.as_posix()} is missing phase.1.b claimant-choice text")
+            issues.append(
+                f"{relative.as_posix()} is missing phase.1.b claimant-choice text"
+            )
         elif forbidden_option_fragment in option.group(1).lower():
             issues.append(
                 f"{relative.as_posix()} phase.1.b must name Vlad and Armi, not promise a joint government"
             )
     russian_path = ROOT / RUSSIAN_LOCALISATION
-    if russian_path.is_file() and not russian_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+    if russian_path.is_file() and not russian_path.read_bytes().startswith(
+        b"\xef\xbb\xbf"
+    ):
         issues.append(f"{RUSSIAN_LOCALISATION.as_posix()} must retain a UTF-8 BOM")
 
     return issues
@@ -453,19 +486,25 @@ def validate_new_save_materialization() -> list[str]:
 
     choice = event_block(phase_events, "ADISCORD_vorkerland_phase.1")
     if not choice:
-        issues.append("phase event .1 must expose the pre-collapse player claimant choice")
+        issues.append(
+            "phase event .1 must expose the pre-collapse player claimant choice"
+        )
     else:
         choice_trigger = named_block(choice, "trigger")
         if len(re.findall(r"\btag\s*=\s*WRK\b", choice_trigger)) != 1:
             issues.append("phase event .1 must be scoped exactly to pre-collapse WRK")
         if choice_trigger.count("ADISCORD_vorkerland_collapse_not_started = yes") != 1:
-            issues.append("phase event .1 must expire when the collapse has already started")
+            issues.append(
+                "phase event .1 must expire when the collapse has already started"
+            )
         if choice.count("fire_only_once = yes") != 1:
             issues.append("phase event .1 must be a one-shot claimant choice")
         if "hidden = yes" in choice:
             issues.append("phase event .1 must remain player-facing")
         if "change_tag_from" in choice:
-            issues.append("phase event .1 must select a preference, not change country before the split")
+            issues.append(
+                "phase event .1 must select a preference, not change country before the split"
+            )
 
         options = named_blocks(choice, "option")
         expected_options = (
@@ -474,12 +513,18 @@ def validate_new_save_materialization() -> list[str]:
             ("ADISCORD_vorkerland_phase.1.c", PLAYER_PREFERENCE_FLAGS[2]),
         )
         if len(options) != len(expected_options):
-            issues.append("phase event .1 must expose three freely selectable claimant options")
+            issues.append(
+                "phase event .1 must expose three freely selectable claimant options"
+            )
         else:
-            collapse_dispatch = "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
+            collapse_dispatch = (
+                "country_event = { id = ADISCORD_vorkerland_collapse.1 }"
+            )
             for option, (name, selected_flag) in zip(options, expected_options):
                 if option.count(f"name = {name}") != 1:
-                    issues.append(f"phase event .1 option must use localisation key {name}")
+                    issues.append(
+                        f"phase event .1 option must use localisation key {name}"
+                    )
                 for preference_flag in PLAYER_PREFERENCE_FLAGS:
                     if option.count(f"clr_global_flag = {preference_flag}") != 1:
                         issues.append(
@@ -490,14 +535,22 @@ def validate_new_save_materialization() -> list[str]:
                     option,
                 )
                 if selected != [selected_flag]:
-                    issues.append(f"{name} must set only {selected_flag}, found {selected}")
+                    issues.append(
+                        f"{name} must set only {selected_flag}, found {selected}"
+                    )
                 if option.count(collapse_dispatch) != 1:
-                    issues.append(f"{name} must invoke hidden collapse.1 immediately and exactly once")
+                    issues.append(
+                        f"{name} must invoke hidden collapse.1 immediately and exactly once"
+                    )
         if choice.count("country_event = { id = ADISCORD_vorkerland_collapse.1 }") != 3:
-            issues.append("three choices must each invoke collapse.1 once; timeout follows the first native option")
+            issues.append(
+                "three choices must each invoke collapse.1 once; timeout follows the first native option"
+            )
         for option in options:
             if "ADISCORD_vorkerland_prewar_compact_ratified" in option:
-                issues.append("the confederal compact must not restrict claimant selection")
+                issues.append(
+                    "the confederal compact must not restrict claimant selection"
+                )
         if any(
             fate_token in choice
             for fate_token in (
@@ -508,7 +561,9 @@ def validate_new_save_materialization() -> list[str]:
                 "ADISCORD_vorkerland_form_joint_government",
             )
         ):
-            issues.append("the player claimant choice must not influence Worker's random fate")
+            issues.append(
+                "the player claimant choice must not influence Worker's random fate"
+            )
 
     startup = named_block(on_actions, "on_startup")
     startup_choice_dispatches = [
@@ -517,7 +572,9 @@ def validate_new_save_materialization() -> list[str]:
         if re.search(r"\bid\s*=\s*ADISCORD_vorkerland_phase\.1\b", block)
     ]
     if len(startup_choice_dispatches) != 1:
-        issues.append("startup must produce exactly one delayed phase.1 claimant choice")
+        issues.append(
+            "startup must produce exactly one delayed phase.1 claimant choice"
+        )
     else:
         startup_choice = startup_choice_dispatches[0]
         for token in ("days = 175", "random_days = 21"):
@@ -529,21 +586,36 @@ def validate_new_save_materialization() -> list[str]:
             if "id = ADISCORD_vorkerland_phase.1" in block
         ]
         if len(wrk_producers) != 1:
-            issues.append("startup must schedule phase.1 from the live WRK country scope")
+            issues.append(
+                "startup must schedule phase.1 from the live WRK country scope"
+            )
     if re.search(r"\bid\s*=\s*ADISCORD_vorkerland_collapse\.1\b", startup):
-        issues.append("startup must wait for phase.1 instead of scheduling hidden collapse.1 directly")
+        issues.append(
+            "startup must wait for phase.1 instead of scheduling hidden collapse.1 directly"
+        )
 
     begin_collapse = named_block(effects, "ADISCORD_vorkerland_begin_collapse")
     if "change_tag_from" in begin_collapse:
-        issues.append("begin_collapse must not change tags; event .1 owns the human-only handoff")
+        issues.append(
+            "begin_collapse must not change tags; event .1 owns the human-only handoff"
+        )
     if "annex_country" in begin_collapse:
-        issues.append("begin_collapse must not consume WRK before event .1 finishes the claimant map")
+        issues.append(
+            "begin_collapse must not consume WRK before event .1 finishes the claimant map"
+        )
     if begin_collapse.count("ADISCORD_vorkerland_set_phase_collapse = yes") != 1:
-        issues.append("begin_collapse must enter collapse through the centralized phase setter")
-    if begin_collapse.count("ADISCORD_vorkerland_reset_temporary_claimant_cores = yes") != 1:
+        issues.append(
+            "begin_collapse must enter collapse through the centralized phase setter"
+        )
+    if (
+        begin_collapse.count("ADISCORD_vorkerland_reset_temporary_claimant_cores = yes")
+        != 1
+    ):
         issues.append("begin_collapse must reset temporary claimant cores exactly once")
 
-    compact_resolver = named_block(effects, "ADISCORD_vorkerland_resolve_prewar_compact")
+    compact_resolver = named_block(
+        effects, "ADISCORD_vorkerland_resolve_prewar_compact"
+    )
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified }",
         "WRK = { has_country_flag = ADISCORD_vorkerland_wrk_compact_committed }",
@@ -555,7 +627,10 @@ def validate_new_save_materialization() -> list[str]:
     ):
         if compact_resolver.count(token) != 1:
             issues.append(f"prewar compact resolver must contain exactly one {token}")
-    if any(token in compact_resolver for token in ("country_event", "on_daily", "on_weekly", "on_monthly")):
+    if any(
+        token in compact_resolver
+        for token in ("country_event", "on_daily", "on_weekly", "on_monthly")
+    ):
         issues.append("prewar compact resolver must be immediate and non-polling")
 
     collapse = event_block(collapse_events, "ADISCORD_vorkerland_collapse.1")
@@ -572,17 +647,22 @@ def validate_new_save_materialization() -> list[str]:
         block
         for block in named_blocks(immediate, "if")
         if "change_tag_from" in block
-        and re.findall(r"\bis_ai\s*=\s*(yes|no)\b", named_block(block, "limit")) == ["no"]
+        and re.findall(r"\bis_ai\s*=\s*(yes|no)\b", named_block(block, "limit"))
+        == ["no"]
     ]
     if len(tag_changes) != 3 or len(handoffs) != 1:
-        issues.append("collapse event .1 must contain one human-only three-claimant handoff")
+        issues.append(
+            "collapse event .1 must contain one human-only three-claimant handoff"
+        )
         handoff = ""
     else:
         handoff = handoffs[0]
         handoff_limit = named_block(handoff, "limit")
         ai_values = re.findall(r"\bis_ai\s*=\s*(yes|no)\b", handoff_limit)
         if ai_values != ["no"]:
-            issues.append("collapse event .1 handoff must be guarded only for a human WRK player")
+            issues.append(
+                "collapse event .1 handoff must be guarded only for a human WRK player"
+            )
         for claimant in ("WKR", "VAD", "TVA"):
             handoff_scopes = [
                 block
@@ -590,7 +670,9 @@ def validate_new_save_materialization() -> list[str]:
                 if re.search(r"\bchange_tag_from\s*=\s*WRK\b", block)
             ]
             if len(handoff_scopes) != 1:
-                issues.append(f"collapse event .1 human branch must hand one route to {claimant}")
+                issues.append(
+                    f"collapse event .1 human branch must hand one route to {claimant}"
+                )
 
         worker_branches = [
             block
@@ -599,12 +681,19 @@ def validate_new_save_materialization() -> list[str]:
             and "WKR = { change_tag_from = WRK }" in block
         ]
         if len(worker_branches) != 1:
-            issues.append("human handoff must route the Worker preference and no-preference fallback to WKR")
+            issues.append(
+                "human handoff must route the Worker preference and no-preference fallback to WKR"
+            )
         else:
             worker_limit = named_block(worker_branches[0], "limit")
             for preference_flag in PLAYER_PREFERENCE_FLAGS:
-                if f"NOT = {{ has_global_flag = {preference_flag} }}" not in worker_limit:
-                    issues.append("WKR handoff must explicitly accept the all-preferences-absent old-save fallback")
+                if (
+                    f"NOT = {{ has_global_flag = {preference_flag} }}"
+                    not in worker_limit
+                ):
+                    issues.append(
+                        "WKR handoff must explicitly accept the all-preferences-absent old-save fallback"
+                    )
                     break
 
         expected_preference_handoffs = (
@@ -619,7 +708,9 @@ def validate_new_save_materialization() -> list[str]:
                 and f"{claimant} = {{ change_tag_from = WRK }}" in block
             ]
             if len(branches) != 1:
-                issues.append(f"human handoff must route {preference_flag} exactly to {claimant}")
+                issues.append(
+                    f"human handoff must route {preference_flag} exactly to {claimant}"
+                )
                 continue
             branch_limit = named_block(branches[0], "limit")
             other_flags = tuple(
@@ -636,15 +727,28 @@ def validate_new_save_materialization() -> list[str]:
         annex_after_handoff = immediate.find("annex_country = {", handoff_end)
         for preference_flag in PLAYER_PREFERENCE_FLAGS:
             clear_token = f"clr_global_flag = {preference_flag}"
-            clear_positions = [match.start() for match in re.finditer(re.escape(clear_token), immediate)]
+            clear_positions = [
+                match.start()
+                for match in re.finditer(re.escape(clear_token), immediate)
+            ]
             if len(clear_positions) != 1:
-                issues.append(f"collapse event .1 must clear consumed preference {preference_flag} exactly once")
+                issues.append(
+                    f"collapse event .1 must clear consumed preference {preference_flag} exactly once"
+                )
             elif clear_positions[0] <= handoff_end:
-                issues.append(f"collapse event .1 must clear {preference_flag} after the human handoff")
+                issues.append(
+                    f"collapse event .1 must clear {preference_flag} after the human handoff"
+                )
             elif annex_after_handoff < 0 or clear_positions[0] >= annex_after_handoff:
-                issues.append(f"collapse event .1 must clear {preference_flag} before WRK is annexed")
-        if any(f"set_global_flag = {flag}" in immediate for flag in PLAYER_PREFERENCE_FLAGS):
-            issues.append("collapse event .1 must consume preferences without creating new ones")
+                issues.append(
+                    f"collapse event .1 must clear {preference_flag} before WRK is annexed"
+                )
+        if any(
+            f"set_global_flag = {flag}" in immediate for flag in PLAYER_PREFERENCE_FLAGS
+        ):
+            issues.append(
+                "collapse event .1 must consume preferences without creating new ones"
+            )
 
     fate_lists = [
         block
@@ -652,12 +756,21 @@ def validate_new_save_materialization() -> list[str]:
         if "ADISCORD_vorkerland_worker_safe_with_loyalists" in block
     ]
     if len(fate_lists) != 1:
-        issues.append("collapse event .1 must retain exactly one independent Worker-fate roll")
-    elif any(preference_flag in fate_lists[0] for preference_flag in PLAYER_PREFERENCE_FLAGS):
-        issues.append("Worker's random fate must not read the player's claimant preference")
+        issues.append(
+            "collapse event .1 must retain exactly one independent Worker-fate roll"
+        )
+    elif any(
+        preference_flag in fate_lists[0] for preference_flag in PLAYER_PREFERENCE_FLAGS
+    ):
+        issues.append(
+            "Worker's random fate must not read the player's claimant preference"
+        )
     if "has_global_flag = ADISCORD_vorkerland_prewar_compact_ratified" in immediate:
         issues.append("regional guarantees must not force a claimant or Worker's fate")
-    if immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad") != 1:
+    if (
+        immediate.count("set_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad")
+        != 1
+    ):
         issues.append("the independent fate roll must retain one Worker rescue path")
     if immediate.count("ADISCORD_vorkerland_form_joint_government = yes") != 1:
         issues.append("joint government must retain exactly one bounded wartime roll")
@@ -668,7 +781,9 @@ def validate_new_save_materialization() -> list[str]:
         if re.search(r"\bannex_country\s*=\s*\{", block)
     ]
     if len(materialization_scopes) != 1:
-        issues.append("collapse event .1 must have one WKR materialization scope that consumes WRK")
+        issues.append(
+            "collapse event .1 must have one WKR materialization scope that consumes WRK"
+        )
         materialization = ""
     else:
         materialization = materialization_scopes[0]
@@ -678,14 +793,23 @@ def validate_new_save_materialization() -> list[str]:
         else:
             annex = annex_blocks[0]
             if not re.search(r"\btarget\s*=\s*WRK\b", annex):
-                issues.append("WKR materialization annex must target the dormant WRK country")
+                issues.append(
+                    "WKR materialization annex must target the dormant WRK country"
+                )
             if not re.search(r"\btransfer_troops\s*=\s*yes\b", annex):
-                issues.append("WKR materialization must inherit WRK troops during annexation")
-        if materialization.count("ADISCORD_vorkerland_relocate_legacy_armies = yes") != 1:
-            issues.append("WKR materialization must relocate inherited armies exactly once")
-        elif materialization.find("ADISCORD_vorkerland_relocate_legacy_armies = yes") < materialization.find(
-            "annex_country"
+                issues.append(
+                    "WKR materialization must inherit WRK troops during annexation"
+                )
+        if (
+            materialization.count("ADISCORD_vorkerland_relocate_legacy_armies = yes")
+            != 1
         ):
+            issues.append(
+                "WKR materialization must relocate inherited armies exactly once"
+            )
+        elif materialization.find(
+            "ADISCORD_vorkerland_relocate_legacy_armies = yes"
+        ) < materialization.find("annex_country"):
             issues.append("WKR army relocation must occur after WRK annexation")
         focus_tree = named_block(materialization, "load_focus_tree")
         for token, diagnostic in (
@@ -708,10 +832,14 @@ def validate_new_save_materialization() -> list[str]:
     begin_position = immediate.find("ADISCORD_vorkerland_begin_collapse = yes")
     fate_position = immediate.find("random_list = {")
     split_position = immediate.find("ADISCORD_vorkerland_apply_initial_map = yes")
-    characters_position = immediate.find("ADISCORD_vorkerland_prepare_claimant_characters = yes")
+    characters_position = immediate.find(
+        "ADISCORD_vorkerland_prepare_claimant_characters = yes"
+    )
     handoff_positions = [match.start() for match in tag_changes]
     annex_position = immediate.find("annex_country = {")
-    relocation_position = immediate.find("ADISCORD_vorkerland_relocate_legacy_armies = yes")
+    relocation_position = immediate.find(
+        "ADISCORD_vorkerland_relocate_legacy_armies = yes"
+    )
     verification_position = immediate.find(
         "country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }"
     )
@@ -726,13 +854,20 @@ def validate_new_save_materialization() -> list[str]:
         verification_position,
     )
     if any(offset < 0 for offset in ordered_offsets):
-        issues.append("collapse event .1 is missing a required split/handoff/verification step")
+        issues.append(
+            "collapse event .1 is missing a required split/handoff/verification step"
+        )
     elif list(ordered_offsets) != sorted(ordered_offsets):
         issues.append(
             "collapse event .1 must order phase setup, fate, split, human handoff, annex, relocation, then verification"
         )
-    if immediate.count("country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }") != 1:
-        issues.append("collapse event .1 must schedule exactly one next-day materialization verification")
+    if (
+        immediate.count("country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }")
+        != 1
+    ):
+        issues.append(
+            "collapse event .1 must schedule exactly one next-day materialization verification"
+        )
 
     initial_map = named_block(collapse_effects, "ADISCORD_vorkerland_apply_initial_map")
     initial_wkr = named_block(initial_map, "WKR")
@@ -741,19 +876,27 @@ def validate_new_save_materialization() -> list[str]:
         for state_id in re.findall(r"\btransfer_state\s*=\s*(\d+)\b", initial_wkr)
     )
     if initial_wkr_states != Counter(CLAIMANT_HOME_STATES["WKR"]):
-        issues.append("initial collapse map must transfer all five strict WKR home states exactly once")
+        issues.append(
+            "initial collapse map must transfer all five strict WKR home states exactly once"
+        )
     if initial_map.count("40 = { set_state_controller_to = WKR }") != 1:
-        issues.append("initial collapse map must explicitly hand impassable state 40 control to WKR")
+        issues.append(
+            "initial collapse map must explicitly hand impassable state 40 control to WKR"
+        )
 
     materialized = named_block(triggers, "ADISCORD_vorkerland_collapse_materialized")
-    exists_counts = Counter(re.findall(r"\bcountry_exists\s*=\s*([A-Z]{3})\b", materialized))
+    exists_counts = Counter(
+        re.findall(r"\bcountry_exists\s*=\s*([A-Z]{3})\b", materialized)
+    )
     expected_exists = Counter({"WKR": 1, "WRK": 1, "VAD": 1, "TVA": 1})
     if exists_counts != expected_exists:
         issues.append(
             "collapse_materialized must test exactly WKR/VAD/TVA existence and dormant WRK absence"
         )
     if not re.search(r"NOT\s*=\s*\{\s*country_exists\s*=\s*WRK\s*\}", materialized):
-        issues.append("collapse_materialized must require the old WRK country to be absent")
+        issues.append(
+            "collapse_materialized must require the old WRK country to be absent"
+        )
 
     for tag, expected_states in CLAIMANT_HOME_STATES.items():
         claimant_scopes = [
@@ -764,7 +907,9 @@ def validate_new_save_materialization() -> list[str]:
             and "controls_state" in block
         ]
         if len(claimant_scopes) != 1:
-            issues.append(f"collapse_materialized must define one active/home postcondition for {tag}")
+            issues.append(
+                f"collapse_materialized must define one active/home postcondition for {tag}"
+            )
             continue
         claimant = claimant_scopes[0]
         controlled_states = tuple(
@@ -776,9 +921,16 @@ def validate_new_save_materialization() -> list[str]:
                 f"{tag} materialization homes must be exactly {list(expected_states)}, found {list(controlled_states)}"
             )
         if re.search(r"\bnum_divisions\b", claimant):
-            issues.append(f"{tag} materialization must not depend on a mutable division count")
-        if "is_subject = no" not in claimant or "NOT = { has_capitulated = yes }" not in claimant:
-            issues.append(f"{tag} materialization must require an independent, active claimant")
+            issues.append(
+                f"{tag} materialization must not depend on a mutable division count"
+            )
+        if (
+            "is_subject = no" not in claimant
+            or "NOT = { has_capitulated = yes }" not in claimant
+        ):
+            issues.append(
+                f"{tag} materialization must require an independent, active claimant"
+            )
 
     actual_ownership: dict[int, tuple[str, str]] = {}
     for match in re.finditer(r"(?m)^\s*(\d+)\s*=\s*\{", materialized):
@@ -798,9 +950,13 @@ def validate_new_save_materialization() -> list[str]:
         for state_id in state_ids
     }
     if actual_ownership != expected_ownership:
-        issues.append("collapse_materialized must require exact claimant ownership/control of every home state")
+        issues.append(
+            "collapse_materialized must require exact claimant ownership/control of every home state"
+        )
 
-    identities = named_block(triggers, "ADISCORD_vorkerland_claimant_identities_materialized")
+    identities = named_block(
+        triggers, "ADISCORD_vorkerland_claimant_identities_materialized"
+    )
     leader_blocks = named_blocks(identities, "has_country_leader")
     route_characters = Counter(
         match.group(1)
@@ -821,26 +977,37 @@ def validate_new_save_materialization() -> list[str]:
         )
     for block in leader_blocks:
         if len(re.findall(r"\bruling_only\s*=\s*yes\b", block)) != 1:
-            issues.append("each WKR materialization route leader check must be ruling-only")
+            issues.append(
+                "each WKR materialization route leader check must be ruling-only"
+            )
     route_blocks = [
         block
         for block in named_blocks(identities, "AND")
         if "has_country_leader" in block
     ]
-    safe_blocks = [block for block in route_blocks if WKR_ROUTE_LEADERS["safe"] in block]
-    fallback_blocks = [block for block in route_blocks if WKR_ROUTE_LEADERS["fallback"] in block]
+    safe_blocks = [
+        block for block in route_blocks if WKR_ROUTE_LEADERS["safe"] in block
+    ]
+    fallback_blocks = [
+        block for block in route_blocks if WKR_ROUTE_LEADERS["fallback"] in block
+    ]
     safe_flag = "ADISCORD_vorkerland_worker_safe_with_loyalists"
     if len(safe_blocks) != 1 or not re.search(
-        rf"(?m)^\s*has_global_flag\s*=\s*{safe_flag}\s*$", safe_blocks[0] if safe_blocks else ""
+        rf"(?m)^\s*has_global_flag\s*=\s*{safe_flag}\s*$",
+        safe_blocks[0] if safe_blocks else "",
     ):
-        issues.append("Nikita Worker must rule WKR only on the safe-with-loyalists route")
+        issues.append(
+            "Nikita Worker must rule WKR only on the safe-with-loyalists route"
+        )
     if len(fallback_blocks) != 1 or not re.search(
         rf"NOT\s*=\s*\{{\s*has_global_flag\s*=\s*{safe_flag}\s*\}}",
         fallback_blocks[0] if fallback_blocks else "",
     ):
         issues.append("Anton Bagley must rule every non-safe WKR route")
     if re.search(r"Lucas[_ ]Brown", identities, flags=re.IGNORECASE):
-        issues.append("claimant identities must not use Lucas Brown as a route fallback")
+        issues.append(
+            "claimant identities must not use Lucas Brown as a route fallback"
+        )
 
     for token in (
         "has_government = pragmatism",
@@ -856,8 +1023,12 @@ def validate_new_save_materialization() -> list[str]:
 
     verify = named_block(effects, "ADISCORD_vorkerland_verify_collapse_materialized")
     postcondition = "ADISCORD_vorkerland_collapse_materialized = yes"
-    success_flag = "set_global_flag = ADISCORD_vorkerland_collapse_materialized_verified"
-    identity_postcondition = "ADISCORD_vorkerland_claimant_identities_materialized = yes"
+    success_flag = (
+        "set_global_flag = ADISCORD_vorkerland_collapse_materialized_verified"
+    )
+    identity_postcondition = (
+        "ADISCORD_vorkerland_claimant_identities_materialized = yes"
+    )
     identity_assertion = (
         "has_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2"
     )
@@ -876,28 +1047,45 @@ def validate_new_save_materialization() -> list[str]:
     else:
         success = success_blocks[0]
         if success.find(success_flag) < success.find(postcondition):
-            issues.append("collapse verifier must set materialized_verified only after all postconditions")
+            issues.append(
+                "collapse verifier must set materialized_verified only after all postconditions"
+            )
         focus_tree_load = (
             "load_focus_tree = { tree = ADISCORD_vorkerland_civil_war_focus "
             "keep_completed = yes }"
         )
         if success.count(focus_tree_load) != 3:
-            issues.append("verified materialization must load the lifecycle tree for WKR, VAD, and TVA")
-        if success.count("ADISCORD_vorkerland_set_phase_regional_consolidation = yes") != 1:
-            issues.append("verified materialization must advance to regional consolidation exactly once")
+            issues.append(
+                "verified materialization must load the lifecycle tree for WKR, VAD, and TVA"
+            )
+        if (
+            success.count("ADISCORD_vorkerland_set_phase_regional_consolidation = yes")
+            != 1
+        ):
+            issues.append(
+                "verified materialization must advance to regional consolidation exactly once"
+            )
     if verify.count(success_flag) != 1:
-        issues.append("materialized_verified must be set exactly once in the verified success branch")
+        issues.append(
+            "materialized_verified must be set exactly once in the verified success branch"
+        )
     if identity_postcondition in verify:
-        issues.append("exact leader-cache state must not block structural materialization")
+        issues.append(
+            "exact leader-cache state must not block structural materialization"
+        )
     identity_check = "country_event = { id = ADISCORD_vorkerland_phase.14 days = 1 }"
     if verify.count(identity_check) != 1:
-        issues.append("materialization success must schedule one bounded identity assertion")
+        issues.append(
+            "materialization success must schedule one bounded identity assertion"
+        )
 
     retry_flag = "ADISCORD_vorkerland_collapse_materialization_retry"
     final_retry_flag = "ADISCORD_vorkerland_collapse_materialization_final_retry"
     retry_blocks = named_blocks(verify, "else_if")
     if len(retry_blocks) != 2:
-        issues.append("collapse verifier must expose exactly two bounded repair branches")
+        issues.append(
+            "collapse verifier must expose exactly two bounded repair branches"
+        )
     else:
         retry, final_retry = retry_blocks
         retry_limit = named_block(retry, "limit")
@@ -907,53 +1095,93 @@ def validate_new_save_materialization() -> list[str]:
         ):
             issues.append("collapse repair must be guarded by an unset one-retry flag")
         if retry.count(f"set_global_flag = {retry_flag}") != 1:
-            issues.append("collapse repair must consume its single retry before mutating countries")
+            issues.append(
+                "collapse repair must consume its single retry before mutating countries"
+            )
         for token in (
             "ADISCORD_vorkerland_log_materialization_failure = yes",
             "ADISCORD_vorkerland_repair_collapse_materialization = yes",
         ):
             if retry.count(token) != 1:
-                issues.append(f"first collapse repair pass must call {token} exactly once")
+                issues.append(
+                    f"first collapse repair pass must call {token} exactly once"
+                )
         retry_event = "country_event = { id = ADISCORD_vorkerland_phase.2 days = 1 }"
         if retry.count(retry_event) != 1:
-            issues.append("collapse retry must schedule exactly one next-day postcondition check")
+            issues.append(
+                "collapse retry must schedule exactly one next-day postcondition check"
+            )
         final_limit = named_block(final_retry, "limit")
         if not re.search(
             rf"NOT\s*=\s*\{{\s*has_global_flag\s*=\s*{final_retry_flag}\s*\}}",
             final_limit,
         ):
-            issues.append("final collapse repair must be guarded by its own unset retry flag")
+            issues.append(
+                "final collapse repair must be guarded by its own unset retry flag"
+            )
         if final_retry.count(f"set_global_flag = {final_retry_flag}") != 1:
-            issues.append("final collapse repair must consume its retry before mutating countries")
+            issues.append(
+                "final collapse repair must consume its retry before mutating countries"
+            )
         for token in (
             "ADISCORD_vorkerland_log_materialization_failure = yes",
             "ADISCORD_vorkerland_repair_collapse_materialization = yes",
             retry_event,
         ):
             if final_retry.count(token) != 1:
-                issues.append(f"final collapse repair pass must call {token} exactly once")
+                issues.append(
+                    f"final collapse repair pass must call {token} exactly once"
+                )
     if verify.count(f"set_global_flag = {retry_flag}") != 1:
-        issues.append("collapse verifier must consume its first materialization retry exactly once")
+        issues.append(
+            "collapse verifier must consume its first materialization retry exactly once"
+        )
     if verify.count(f"set_global_flag = {final_retry_flag}") != 1:
-        issues.append("collapse verifier must consume its final materialization retry exactly once")
+        issues.append(
+            "collapse verifier must consume its final materialization retry exactly once"
+        )
 
-    repair_effect = named_block(effects, "ADISCORD_vorkerland_repair_collapse_materialization")
+    repair_effect = named_block(
+        effects, "ADISCORD_vorkerland_repair_collapse_materialization"
+    )
     for tag, states in CLAIMANT_HOME_STATES.items():
         for state in states:
-            if len(re.findall(rf"\btransfer_state\s*=\s*{state}\b", repair_effect)) != 1:
-                issues.append(f"materialization repair must transfer {tag} home state {state} exactly once")
-            if repair_effect.count(f"{state} = {{ set_state_controller_to = {tag} }}") != 1:
-                issues.append(f"materialization repair must restore {tag} control of state {state}")
-    if repair_effect.count("ADISCORD_vorkerland_reset_temporary_claimant_cores = yes") != 1:
-        issues.append("prewar materialization repair must reset the temporary claimant core contract")
+            if (
+                len(re.findall(rf"\btransfer_state\s*=\s*{state}\b", repair_effect))
+                != 1
+            ):
+                issues.append(
+                    f"materialization repair must transfer {tag} home state {state} exactly once"
+                )
+            if (
+                repair_effect.count(f"{state} = {{ set_state_controller_to = {tag} }}")
+                != 1
+            ):
+                issues.append(
+                    f"materialization repair must restore {tag} control of state {state}"
+                )
+    if (
+        repair_effect.count("ADISCORD_vorkerland_reset_temporary_claimant_cores = yes")
+        != 1
+    ):
+        issues.append(
+            "prewar materialization repair must reset the temporary claimant core contract"
+        )
     if repair_effect.count("ADISCORD_vorkerland_ensure_claimant_home_cores = yes") != 1:
         issues.append("materialization repair must safely reassert claimant home cores")
     if repair_effect.count("ADISCORD_vorkerland_repair_claimant_identities = yes") != 1:
-        issues.append("materialization repair must reassert claimant identities exactly once")
-    identity_repair = named_block(effects, "ADISCORD_vorkerland_repair_claimant_identities")
-    if identity_repair.count(
-        "set_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2"
-    ) != 1:
+        issues.append(
+            "materialization repair must reassert claimant identities exactly once"
+        )
+    identity_repair = named_block(
+        effects, "ADISCORD_vorkerland_repair_claimant_identities"
+    )
+    if (
+        identity_repair.count(
+            "set_global_flag = ADISCORD_vorkerland_claimant_identity_assertion_started_v2"
+        )
+        != 1
+    ):
         issues.append("identity repair must certify one deterministic assertion pass")
     certificate_blocks = [
         block
@@ -965,11 +1193,23 @@ def validate_new_save_materialization() -> list[str]:
         issues.append("identity assertion certificate must have one guarded producer")
     else:
         certificate_limit = named_block(certificate_blocks[0], "limit")
-        for token in ("tag = WKR", "country_exists = WKR", "country_exists = VAD", "country_exists = TVA"):
+        for token in (
+            "tag = WKR",
+            "country_exists = WKR",
+            "country_exists = VAD",
+            "country_exists = TVA",
+        ):
             if token not in certificate_limit:
-                issues.append(f"identity assertion certificate guard is missing {token}")
-    if "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }" not in repair_effect:
-        issues.append("territorial materialization repair must be locked after wars begin")
+                issues.append(
+                    f"identity assertion certificate guard is missing {token}"
+                )
+    if (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }"
+        not in repair_effect
+    ):
+        issues.append(
+            "territorial materialization repair must be locked after wars begin"
+        )
 
     outbreak = event_block(collapse_events, "ADISCORD_vorkerland_collapse.2")
     outbreak_trigger = named_block(outbreak, "trigger")
@@ -981,17 +1221,28 @@ def validate_new_save_materialization() -> list[str]:
         if token not in outbreak_trigger:
             issues.append(f"collapse war outbreak must require {token}")
     if "country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }" in immediate:
-        issues.append("collapse event .1 must not schedule wars before materialization verifies")
-    if verify.count("country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }") != 1:
-        issues.append("materialization success must schedule the collapse war outbreak exactly once")
+        issues.append(
+            "collapse event .1 must not schedule wars before materialization verifies"
+        )
+    if (
+        verify.count("country_event = { id = ADISCORD_vorkerland_collapse.2 days = 1 }")
+        != 1
+    ):
+        issues.append(
+            "materialization success must schedule the collapse war outbreak exactly once"
+        )
     terminal_blocks = named_blocks(verify, "else")
     if len(terminal_blocks) != 1 or (
         "set_global_flag = ADISCORD_vorkerland_collapse_materialization_failed"
         not in (terminal_blocks[0] if terminal_blocks else "")
     ):
-        issues.append("collapse verifier must terminate with a diagnostic failure after the one retry")
+        issues.append(
+            "collapse verifier must terminate with a diagnostic failure after the one retry"
+        )
 
-    verify_launch = named_block(effects, "ADISCORD_vorkerland_verify_regional_war_launch")
+    verify_launch = named_block(
+        effects, "ADISCORD_vorkerland_verify_regional_war_launch"
+    )
     graph_success = [
         block
         for block in named_blocks(verify_launch, "if")
@@ -1000,7 +1251,9 @@ def validate_new_save_materialization() -> list[str]:
         and "set_global_flag = ADISCORD_vorkerland_northern_wars_began" in block
     ]
     if len(graph_success) != 1:
-        issues.append("regional launch verifier must expose one verified war-graph success branch")
+        issues.append(
+            "regional launch verifier must expose one verified war-graph success branch"
+        )
     else:
         graph_branch = graph_success[0]
         graph_limit = named_block(graph_branch, "limit")
@@ -1009,11 +1262,20 @@ def validate_new_save_materialization() -> list[str]:
             "ADISCORD_vorkerland_rom_dva_edge_initialized_or_terminal = yes",
         ):
             if token not in graph_limit:
-                issues.append("central preparation must remain inside both regional graph postconditions")
-        if graph_branch.count("ADISCORD_vorkerland_begin_central_preparation = yes") != 1:
-            issues.append("verified regional war-graph launch must begin central preparation exactly once")
+                issues.append(
+                    "central preparation must remain inside both regional graph postconditions"
+                )
+        if (
+            graph_branch.count("ADISCORD_vorkerland_begin_central_preparation = yes")
+            != 1
+        ):
+            issues.append(
+                "verified regional war-graph launch must begin central preparation exactly once"
+            )
         if "ADISCORD_vorkerland_regional_consolidation_complete = yes" in graph_branch:
-            issues.append("central preparation must not wait for every peripheral war to finish")
+            issues.append(
+                "central preparation must not wait for every peripheral war to finish"
+            )
 
     return issues
 
@@ -1023,12 +1285,17 @@ def validate_phase_controller() -> list[str]:
     effects = _load(PHASE_EFFECTS, issues, section="phase_effects")
     triggers = _load(PHASE_TRIGGERS, issues, section="phase_triggers")
     events = _load(PHASE_EVENTS, issues, section="phase_events")
-    if any(not (ROOT / path).is_file() for path in (PHASE_EFFECTS, PHASE_TRIGGERS, PHASE_EVENTS)):
+    if any(
+        not (ROOT / path).is_file()
+        for path in (PHASE_EFFECTS, PHASE_TRIGGERS, PHASE_EVENTS)
+    ):
         return issues
 
     clear = named_block(effects, "ADISCORD_vorkerland_clear_phase_flags")
     if len(named_blocks(effects, "ADISCORD_vorkerland_clear_phase_flags")) != 1:
-        issues.append("phase controller must define exactly one clear_phase_flags effect")
+        issues.append(
+            "phase controller must define exactly one clear_phase_flags effect"
+        )
     for flag in PHASE_FLAGS:
         if clear.count(_clear_flag(flag)) != 1:
             issues.append(f"clear_phase_flags must clear {flag} exactly once")
@@ -1046,14 +1313,19 @@ def validate_phase_controller() -> list[str]:
         if setter.count(_set_flag(flag)) != 1:
             issues.append(f"{setter_name} must set only its owned phase flag {flag}")
         if setter.count("ADISCORD_vorkerland_refresh_focus_lifecycle = yes") != 1:
-            issues.append(f"{setter_name} must refresh the lifecycle focus layout exactly once")
+            issues.append(
+                f"{setter_name} must refresh the lifecycle focus layout exactly once"
+            )
         foreign_mutations = [
             other
             for other in PHASE_FLAGS
-            if other != flag and (_set_flag(other) in setter or _clear_flag(other) in setter)
+            if other != flag
+            and (_set_flag(other) in setter or _clear_flag(other) in setter)
         ]
         if foreign_mutations:
-            issues.append(f"{setter_name} directly mutates foreign phases {foreign_mutations}")
+            issues.append(
+                f"{setter_name} directly mutates foreign phases {foreign_mutations}"
+            )
         if effects.count(_set_flag(flag)) != 1:
             issues.append(f"{flag} must be set only once, inside its phase setter")
         if effects.count(_clear_flag(flag)) != 1:
@@ -1101,23 +1373,38 @@ def validate_phase_controller() -> list[str]:
         if block and _contains_wrk_scope(block):
             issues.append(f"active-war trigger {name} still scopes the dormant WRK tag")
 
-    central_preparation = named_block(effects, "ADISCORD_vorkerland_begin_central_preparation")
+    central_preparation = named_block(
+        effects, "ADISCORD_vorkerland_begin_central_preparation"
+    )
     if central_preparation.count("ADISCORD_vorkerland_phase.4 days = 180") != 3:
-        issues.append("the bounded consolidation deadline must survive loss of any one claimant")
-    if "NOT = { has_global_flag = ADISCORD_vorkerland_consolidation_clock_started }" not in central_preparation:
-        issues.append("repeated regional verification must not reset the consolidation clock")
+        issues.append(
+            "the bounded consolidation deadline must survive loss of any one claimant"
+        )
+    if (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_consolidation_clock_started }"
+        not in central_preparation
+    ):
+        issues.append(
+            "repeated regional verification must not reset the consolidation clock"
+        )
 
     if events.count("add_namespace = ADISCORD_vorkerland_phase") != 1:
-        issues.append("phase events must declare add_namespace = ADISCORD_vorkerland_phase exactly once")
+        issues.append(
+            "phase events must declare add_namespace = ADISCORD_vorkerland_phase exactly once"
+        )
     phase_event_ids = [event_id for event_id, _ in event_blocks(events)]
     expected_event_ids = [
         *(f"ADISCORD_vorkerland_phase.{number}" for number in range(1, 10)),
         "ADISCORD_vorkerland_phase.14",
     ]
     if Counter(phase_event_ids) != Counter(expected_event_ids):
-        issues.append(f"phase event file must own unique IDs .1-.9 and .14, found {phase_event_ids}")
+        issues.append(
+            f"phase event file must own unique IDs .1-.9 and .14, found {phase_event_ids}"
+        )
 
-    definitions: dict[str, list[str]] = {event_id: [] for event_id in expected_event_ids}
+    definitions: dict[str, list[str]] = {
+        event_id: [] for event_id in expected_event_ids
+    }
     event_root = ROOT / "events"
     if event_root.is_dir():
         for path in sorted(event_root.glob("*.txt")):
@@ -1127,7 +1414,9 @@ def validate_phase_controller() -> list[str]:
                     definitions[event_id].append(path.relative_to(ROOT).as_posix())
     for event_id, owners in definitions.items():
         if owners != [PHASE_EVENTS.as_posix()]:
-            issues.append(f"{event_id} must have one definition owned by {PHASE_EVENTS.as_posix()}, found {owners}")
+            issues.append(
+                f"{event_id} must have one definition owned by {PHASE_EVENTS.as_posix()}, found {owners}"
+            )
 
     for event_number, callback in (
         (8, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch = yes"),
@@ -1149,7 +1438,9 @@ def validate_phase_controller() -> list[str]:
     for event_number in range(2, 6):
         block = event_block(events, f"ADISCORD_vorkerland_phase.{event_number}")
         if block and _contains_wrk_scope(block):
-            issues.append(f"active-war phase event .{event_number} still scopes dormant WRK")
+            issues.append(
+                f"active-war phase event .{event_number} still scopes dormant WRK"
+            )
 
     identity_event = event_block(events, "ADISCORD_vorkerland_phase.14")
     for token in (
@@ -1163,30 +1454,54 @@ def validate_phase_controller() -> list[str]:
         if token not in identity_event:
             issues.append(f"bounded claimant identity event is missing {token}")
     if "ADISCORD_vorkerland_collapse_materialization_failed" in identity_event:
-        issues.append("leader-cache degradation must never fail structural materialization")
+        issues.append(
+            "leader-cache degradation must never fail structural materialization"
+        )
 
     # Terminal cleanup is one-shot; keep the recurring phase controller scan-free.
     phase_runtime = effects
-    for terminal_name in ("ADISCORD_vorkerland_retire_civil_war_modifiers", "ADISCORD_vorkerland_restore_reunification_allies"):
-        phase_runtime = phase_runtime.replace(named_block(phase_runtime, terminal_name), "")
-    for label, source in (("effects", phase_runtime), ("triggers", triggers), ("events", events)):
-        for forbidden in ("on_monthly", "every_country", "any_country", "random_country", "every_state"):
+    for terminal_name in (
+        "ADISCORD_vorkerland_retire_civil_war_modifiers",
+        "ADISCORD_vorkerland_restore_reunification_allies",
+    ):
+        phase_runtime = phase_runtime.replace(
+            named_block(phase_runtime, terminal_name), ""
+        )
+    for label, source in (
+        ("effects", phase_runtime),
+        ("triggers", triggers),
+        ("events", events),
+    ):
+        for forbidden in (
+            "on_monthly",
+            "every_country",
+            "any_country",
+            "random_country",
+            "every_state",
+        ):
             if re.search(rf"\b{forbidden}\b", source):
-                issues.append(f"phase {label} contains forbidden recurring/world scan {forbidden}")
+                issues.append(
+                    f"phase {label} contains forbidden recurring/world scan {forbidden}"
+                )
 
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
     for monthly in named_blocks(on_actions, "on_monthly"):
         if "ADISCORD_vorkerland_phase" in monthly:
             issues.append("phase controller is incorrectly driven from on_monthly")
     startup = named_block(on_actions, "on_startup")
-    if "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }" not in startup:
+    if (
+        "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }"
+        not in startup
+    ):
         issues.append("prewar focus lifecycle must stop after the collapse starts")
     wrk_startup_scopes = named_blocks(startup, "WRK")
     if not any(
         "ADISCORD_vorkerland_set_phase_prewar = yes" in scope
         for scope in wrk_startup_scopes
     ):
-        issues.append("startup must initialise the prewar focus phase through its setter in WRK scope")
+        issues.append(
+            "startup must initialise the prewar focus phase through its setter in WRK scope"
+        )
 
     forbidden_startup_materialization_requeues = (
         "ADISCORD_vorkerland_materialization_bridge_v1_scheduled",
@@ -1202,7 +1517,9 @@ def validate_phase_controller() -> list[str]:
     )
     for token in forbidden_startup_materialization_requeues:
         if token in startup:
-            issues.append(f"fresh-only startup must not requeue old materialization state via {token}")
+            issues.append(
+                f"fresh-only startup must not requeue old materialization state via {token}"
+            )
 
     phase_two_event = event_block(events, "ADISCORD_vorkerland_phase.2")
     phase_two_trigger = named_block(phase_two_event, "trigger")
@@ -1222,9 +1539,13 @@ def validate_phase_controller() -> list[str]:
         "ADISCORD_vorkerland_reunification_failed",
     ):
         if failure_flag not in effects + events:
-            issues.append(f"phase controller is missing terminal diagnostic flag {failure_flag}")
+            issues.append(
+                f"phase controller is missing terminal diagnostic flag {failure_flag}"
+            )
     if "[ADISCORD][VORKERLAND][RECOVERY]" not in effects + events:
-        issues.append("phase controller is missing the required recovery diagnostic log prefix")
+        issues.append(
+            "phase controller is missing the required recovery diagnostic log prefix"
+        )
 
     return issues
 
@@ -1244,7 +1565,9 @@ def validate_bounded_retry() -> list[str]:
     collapse_events = _load(COLLAPSE_EVENTS, issues, section="collapse_events")
     on_actions = _load(COLLAPSE_ON_ACTIONS, issues)
     decisions = _load(FOCUS_DECISIONS, issues)
-    decision_effects = _load(FOCUS_DECISION_EFFECTS, issues, section="focus_decision_effects")
+    decision_effects = _load(
+        FOCUS_DECISION_EFFECTS, issues, section="focus_decision_effects"
+    )
     if any(
         not (ROOT / path).is_file()
         for path in (
@@ -1259,7 +1582,9 @@ def validate_bounded_retry() -> list[str]:
     ):
         return issues
 
-    initialize = named_block(effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue")
+    initialize = named_block(
+        effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue"
+    )
     detach_all = named_block(effects, "ADISCORD_vorkerland_detach_showdown_claimants")
     attempt_all = named_block(effects, "ADISCORD_vorkerland_attempt_all_showdown_edges")
     advance = named_block(effects, "ADISCORD_vorkerland_advance_showdown_launch")
@@ -1276,7 +1601,9 @@ def validate_bounded_retry() -> list[str]:
             "ADISCORD_vorkerland_regional_war_launch_scheduled",
         ):
             if degrade.count(_clear_flag(flag)) != 1:
-                issues.append(f"degraded regional launch must clear {flag} exactly once")
+                issues.append(
+                    f"degraded regional launch must clear {flag} exactly once"
+                )
         for flag in (
             "ADISCORD_vorkerland_regional_war_launch_failed",
             "ADISCORD_vorkerland_regional_war_launch_degraded",
@@ -1285,10 +1612,17 @@ def validate_bounded_retry() -> list[str]:
                 issues.append(f"degraded regional launch must set {flag} exactly once")
         if degrade.count("ADISCORD_vorkerland_phase.3 days = 1") != 1:
             issues.append("degraded regional launch must queue existing phase.3 once")
-        if "WKR = { country_event = { id = ADISCORD_vorkerland_phase.3 days = 1 } }" not in degrade:
-            issues.append("degraded regional launch must dispatch phase.3 from WKR scope")
+        if (
+            "WKR = { country_event = { id = ADISCORD_vorkerland_phase.3 days = 1 } }"
+            not in degrade
+        ):
+            issues.append(
+                "degraded regional launch must dispatch phase.3 from WKR scope"
+            )
         if "[ADISCORD][VORKERLAND][RECOVERY]" not in degrade:
-            issues.append("degraded regional launch must retain the recovery log prefix")
+            issues.append(
+                "degraded regional launch must retain the recovery log prefix"
+            )
 
     degrade_call = f"{degrade_name} = yes"
     for owner in (
@@ -1296,9 +1630,13 @@ def validate_bounded_retry() -> list[str]:
         "ADISCORD_vorkerland_verify_regional_consolidation",
     ):
         if named_block(effects, owner).count(degrade_call) != 1:
-            issues.append(f"{owner} must delegate its terminal failure to {degrade_name}")
+            issues.append(
+                f"{owner} must delegate its terminal failure to {degrade_name}"
+            )
     if effects.count(degrade_call) != 2:
-        issues.append("only the two terminal regional failures may call the degraded path")
+        issues.append(
+            "only the two terminal regional failures may call the degraded path"
+        )
 
     regional_verify = named_block(
         effects, "ADISCORD_vorkerland_verify_regional_consolidation"
@@ -1349,11 +1687,21 @@ def validate_bounded_retry() -> list[str]:
             rf"(?s)country_exists\s*=\s*{tag}\b.*?{tag}\s*=\s*\{{.*?ADISCORD_vorkerland_leave_inherited_faction\s*=\s*yes",
             detach_all,
         ):
-            issues.append(f"simultaneous showdown setup must detach {tag} before any declaration")
-    detach_position = initialize.find("ADISCORD_vorkerland_detach_showdown_claimants = yes")
+            issues.append(
+                f"simultaneous showdown setup must detach {tag} before any declaration"
+            )
+    detach_position = initialize.find(
+        "ADISCORD_vorkerland_detach_showdown_claimants = yes"
+    )
     delayed_dispatch_position = initialize.find("ADISCORD_vorkerland_phase.5 days = 1")
-    if detach_position < 0 or delayed_dispatch_position < 0 or detach_position > delayed_dispatch_position:
-        issues.append("showdown initialization must detach all claimants before its one-day cache delay")
+    if (
+        detach_position < 0
+        or delayed_dispatch_position < 0
+        or detach_position > delayed_dispatch_position
+    ):
+        issues.append(
+            "showdown initialization must detach all claimants before its one-day cache delay"
+        )
 
     for slug, left, right, display_name in SHOWDOWN_PAIRS:
         flags = _pair_flags(slug)
@@ -1371,7 +1719,9 @@ def validate_bounded_retry() -> list[str]:
                 pair_branch_found = True
                 break
         if not pair_branch_found:
-            issues.append(f"showdown queue must require {display_name} only while both tags exist")
+            issues.append(
+                f"showdown queue must require {display_name} only while both tags exist"
+            )
         else:
             pair_branch = next(
                 branch
@@ -1385,22 +1735,35 @@ def validate_bounded_retry() -> list[str]:
                     rf"(?s)\b{endpoint}\s*=\s*\{{(.*?)\}}",
                     pair_branch,
                 )
-                if not endpoint_scope or "is_subject = no" not in endpoint_scope.group(1):
-                    issues.append(f"showdown queue must exclude subject endpoint {endpoint} from {display_name}")
-                if not endpoint_scope or "has_capitulated = yes" not in endpoint_scope.group(1):
-                    issues.append(f"showdown queue must exclude capitulated endpoint {endpoint} from {display_name}")
+                if not endpoint_scope or "is_subject = no" not in endpoint_scope.group(
+                    1
+                ):
+                    issues.append(
+                        f"showdown queue must exclude subject endpoint {endpoint} from {display_name}"
+                    )
+                if (
+                    not endpoint_scope
+                    or "has_capitulated = yes" not in endpoint_scope.group(1)
+                ):
+                    issues.append(
+                        f"showdown queue must exclude capitulated endpoint {endpoint} from {display_name}"
+                    )
 
         attempt_name = f"ADISCORD_vorkerland_attempt_showdown_edge_{slug}"
         attempt = named_block(effects, attempt_name)
         if flags["required"] not in attempt:
-            issues.append(f"{attempt_name} must gate its declaration through {flags['required']}")
+            issues.append(
+                f"{attempt_name} must gate its declaration through {flags['required']}"
+            )
         declaration = f"declare_war_on = {{ target = {right} type = annex_everything }}"
         if declaration not in attempt:
             issues.append(f"{attempt_name} must declare the {display_name} edge")
         if attempt.count(_set_flag(flags["attempted"])) != 1:
             issues.append(f"{attempt_name} must record exactly one attempted mutation")
         if "country_event =" in attempt:
-            issues.append(f"{attempt_name} must not serialize the launch through its own delayed event")
+            issues.append(
+                f"{attempt_name} must not serialize the launch through its own delayed event"
+            )
 
         verify_name = f"ADISCORD_vorkerland_verify_showdown_edge_{slug}"
         verify = named_block(effects, verify_name)
@@ -1417,36 +1780,62 @@ def validate_bounded_retry() -> list[str]:
         ]
         verified_position = verify.find(_set_flag(flags["verified"]))
         if not postcondition_positions:
-            issues.append(f"{verify_name} must verify a real {display_name} has_war_with postcondition")
+            issues.append(
+                f"{verify_name} must verify a real {display_name} has_war_with postcondition"
+            )
         if verified_position < 0:
-            issues.append(f"{verify_name} must own the {flags['verified']} success flag")
-        elif postcondition_positions and verified_position < min(postcondition_positions):
-            issues.append(f"{verify_name} sets verified before its has_war_with postcondition")
+            issues.append(
+                f"{verify_name} must own the {flags['verified']} success flag"
+            )
+        elif postcondition_positions and verified_position < min(
+            postcondition_positions
+        ):
+            issues.append(
+                f"{verify_name} sets verified before its has_war_with postcondition"
+            )
         if verify.count(_set_flag(flags["verified"])) != 1:
             issues.append(f"{verify_name} must set {flags['verified']} exactly once")
         if effects.count(_set_flag(flags["verified"])) != 1:
-            issues.append(f"{flags['verified']} is mutated outside its dedicated verifier")
+            issues.append(
+                f"{flags['verified']} is mutated outside its dedicated verifier"
+            )
         verified_owners = _global_set_owners(flags["verified"])
         if verified_owners != [PHASE_EFFECTS.as_posix()]:
             issues.append(
                 f"{flags['verified']} must be set only by its phase verifier, found owners {verified_owners}"
             )
         if verify.count(_set_flag(flags["retry"])) != 1:
-            issues.append(f"{verify_name} must own exactly one explicit retry flag mutation")
+            issues.append(
+                f"{verify_name} must own exactly one explicit retry flag mutation"
+            )
         retry_guard = re.search(
             rf"NOT\s*=\s*\{{\s*has_global_flag\s*=\s*{re.escape(flags['retry'])}\s*\}}",
             verify,
         )
         if not retry_guard:
-            issues.append(f"{verify_name} must guard its one retry with NOT has_global_flag")
+            issues.append(
+                f"{verify_name} must guard its one retry with NOT has_global_flag"
+            )
         if verify.count(_set_flag(flags["failed"])) != 1:
             issues.append(f"{verify_name} must own exactly one terminal edge failure")
-        if _set_flag("ADISCORD_vorkerland_central_showdown_launch_failed") not in verify:
-            issues.append(f"{verify_name} must stop the showdown through the shared terminal failure flag")
+        if (
+            _set_flag("ADISCORD_vorkerland_central_showdown_launch_failed")
+            not in verify
+        ):
+            issues.append(
+                f"{verify_name} must stop the showdown through the shared terminal failure flag"
+            )
         if "ADISCORD_vorkerland_phase.5" in verify:
-            issues.append(f"{verify_name} must not serialize edge verification through a private event")
-        if display_name not in verify or "[ADISCORD][VORKERLAND][RECOVERY]" not in verify:
-            issues.append(f"{verify_name} must log its exact failed pair with the recovery prefix")
+            issues.append(
+                f"{verify_name} must not serialize edge verification through a private event"
+            )
+        if (
+            display_name not in verify
+            or "[ADISCORD][VORKERLAND][RECOVERY]" not in verify
+        ):
+            issues.append(
+                f"{verify_name} must log its exact failed pair with the recovery prefix"
+            )
 
     attempt_calls = [
         f"ADISCORD_vorkerland_attempt_showdown_edge_{slug} = yes"
@@ -1454,14 +1843,24 @@ def validate_bounded_retry() -> list[str]:
     ]
     attempt_positions = [attempt_all.find(call) for call in attempt_calls]
     if any(position < 0 for position in attempt_positions):
-        issues.append("simultaneous showdown launcher must invoke all three edge attempts")
+        issues.append(
+            "simultaneous showdown launcher must invoke all three edge attempts"
+        )
     elif attempt_positions != sorted(attempt_positions):
-        issues.append("simultaneous showdown launcher must keep deterministic WKR-VAD, WKR-TVA, VAD-TVA order")
+        issues.append(
+            "simultaneous showdown launcher must keep deterministic WKR-VAD, WKR-TVA, VAD-TVA order"
+        )
     if "else_if = {" in attempt_all:
-        issues.append("simultaneous showdown launcher must not use mutually exclusive one-edge branches")
+        issues.append(
+            "simultaneous showdown launcher must not use mutually exclusive one-edge branches"
+        )
     attempt_delay = attempt_all.find("ADISCORD_vorkerland_phase.5 days = 1")
-    if attempt_delay < 0 or (attempt_positions and attempt_delay < max(attempt_positions)):
-        issues.append("simultaneous showdown launcher must schedule one shared postcondition check after all attempts")
+    if attempt_delay < 0 or (
+        attempt_positions and attempt_delay < max(attempt_positions)
+    ):
+        issues.append(
+            "simultaneous showdown launcher must schedule one shared postcondition check after all attempts"
+        )
 
     verifier_calls = [
         f"ADISCORD_vorkerland_verify_showdown_edge_{slug} = yes"
@@ -1469,16 +1868,22 @@ def validate_bounded_retry() -> list[str]:
     ]
     verifier_positions = [advance.find(call) for call in verifier_calls]
     if any(position < 0 for position in verifier_positions):
-        issues.append("showdown advance effect must verify all three edges in the same pass")
+        issues.append(
+            "showdown advance effect must verify all three edges in the same pass"
+        )
     if "ADISCORD_vorkerland_attempt_all_showdown_edges = yes" not in advance:
-        issues.append("showdown advance effect must retry all still-missing edges together")
+        issues.append(
+            "showdown advance effect must retry all still-missing edges together"
+        )
     if "ADISCORD_vorkerland_attempt_next_showdown_edge" in effects:
         issues.append("serial one-edge showdown dispatcher must be retired")
 
     unwind_name = "ADISCORD_vorkerland_unwind_failed_showdown_launch"
     unwind_blocks = named_blocks(effects, unwind_name)
     if len(unwind_blocks) != 1:
-        issues.append("showdown recovery must define exactly one failed-launch unwind effect")
+        issues.append(
+            "showdown recovery must define exactly one failed-launch unwind effect"
+        )
         unwind = ""
     else:
         unwind = unwind_blocks[0]
@@ -1511,7 +1916,9 @@ def validate_bounded_retry() -> list[str]:
             if "flag = ADISCORD_vorkerland_showdown_retry_cooldown" in block
         ]
         if len(cooldown_blocks) != 1:
-            issues.append("failed-launch unwind must arm exactly one timed showdown retry cooldown")
+            issues.append(
+                "failed-launch unwind must arm exactly one timed showdown retry cooldown"
+            )
         elif cooldown_blocks[0].count("days = 7") != 1:
             issues.append("showdown retry cooldown must last exactly seven days")
 
@@ -1524,24 +1931,34 @@ def validate_bounded_retry() -> list[str]:
         )
         unwind_position = advance.find(unwind_call)
         if failure_position < 0 or unwind_position < failure_position:
-            issues.append("showdown advance must unwind only after the terminal failure branch")
+            issues.append(
+                "showdown advance must unwind only after the terminal failure branch"
+            )
 
     commit = named_block(decisions, "ADISCORD_vorkerland_commit_to_central_showdown")
     if not commit:
         issues.append("missing visible central-showdown commit decision")
     else:
         if commit.count("fire_only_once = no") != 1:
-            issues.append("central-showdown commit must be repeatable after a failed launch")
+            issues.append(
+                "central-showdown commit must be repeatable after a failed launch"
+            )
         if "fire_only_once = yes" in commit:
-            issues.append("central-showdown commit must not retain its obsolete one-shot contract")
+            issues.append(
+                "central-showdown commit must not retain its obsolete one-shot contract"
+            )
         if commit.count("days_re_enable = 7") != 1:
-            issues.append("central-showdown commit must re-enable on the same seven-day retry cadence")
+            issues.append(
+                "central-showdown commit must re-enable on the same seven-day retry cadence"
+            )
         available = named_block(commit, "available")
         cooldown_guard = (
             "NOT = { has_global_flag = ADISCORD_vorkerland_showdown_retry_cooldown }"
         )
         if "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in available:
-            issues.append("central-showdown commit must remain unavailable during its retry cooldown")
+            issues.append(
+                "central-showdown commit must remain unavailable during its retry cooldown"
+            )
 
         scheduler = named_block(
             decision_effects, "ADISCORD_vorkerland_focus_schedule_final_showdown"
@@ -1549,12 +1966,20 @@ def validate_bounded_retry() -> list[str]:
         scheduler_limits = [
             named_block(branch, "limit")
             for branch in named_blocks(scheduler, "if")
-            if "set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested" in branch
+            if "set_global_flag = ADISCORD_vorkerland_focus_central_showdown_requested"
+            in branch
         ]
         if len(scheduler_limits) != 1:
-            issues.append("central-showdown scheduler must expose one guarded request mutation")
-        elif "ADISCORD_vorkerland_can_commit_to_showdown = yes" not in scheduler_limits[0]:
-            issues.append("central-showdown scheduler must reject requests during retry cooldown")
+            issues.append(
+                "central-showdown scheduler must expose one guarded request mutation"
+            )
+        elif (
+            "ADISCORD_vorkerland_can_commit_to_showdown = yes"
+            not in scheduler_limits[0]
+        ):
+            issues.append(
+                "central-showdown scheduler must reject requests during retry cooldown"
+            )
 
     startup = named_block(on_actions, "on_startup")
     startup_repair_flag = "ADISCORD_vorkerland_showdown_startup_repair_scheduled"
@@ -1564,7 +1989,9 @@ def validate_bounded_retry() -> list[str]:
         "ADISCORD_vorkerland_phase.5",
     ):
         if token in startup:
-            issues.append(f"fresh-only startup must not requeue old showdown state via {token}")
+            issues.append(
+                f"fresh-only startup must not requeue old showdown state via {token}"
+            )
 
     recovery_tokens = (
         startup_repair_flag,
@@ -1574,13 +2001,19 @@ def validate_bounded_retry() -> list[str]:
     for monthly in named_blocks(on_actions, "on_monthly"):
         for token in recovery_tokens:
             if token in monthly:
-                issues.append(f"showdown recovery must not poll {token} from on_monthly")
+                issues.append(
+                    f"showdown recovery must not poll {token} from on_monthly"
+                )
 
-    edge_gate = named_block(triggers, "ADISCORD_vorkerland_central_showdown_edges_verified")
+    edge_gate = named_block(
+        triggers, "ADISCORD_vorkerland_central_showdown_edges_verified"
+    )
     for slug, _, _, _ in SHOWDOWN_PAIRS:
         flags = _pair_flags(slug)
         if flags["required"] not in edge_gate or flags["verified"] not in edge_gate:
-            issues.append(f"central_showdown_edges_verified does not gate required edge {slug}")
+            issues.append(
+                f"central_showdown_edges_verified does not gate required edge {slug}"
+            )
             continue
         skip_branch_found = False
         for branch in named_blocks(edge_gate, "OR"):
@@ -1596,22 +2029,34 @@ def validate_bounded_retry() -> list[str]:
                 f"central_showdown_edges_verified must skip non-required {slug} without marking it verified"
             )
 
-    verify_showdown = named_block(effects, "ADISCORD_vorkerland_verify_central_showdown")
+    verify_showdown = named_block(
+        effects, "ADISCORD_vorkerland_verify_central_showdown"
+    )
     gate_token = "ADISCORD_vorkerland_central_showdown_edges_verified = yes"
     success_token = _set_flag("ADISCORD_vorkerland_central_showdown_started")
     if gate_token not in verify_showdown:
-        issues.append("central showdown verifier must call the all-required-edges postcondition trigger")
+        issues.append(
+            "central showdown verifier must call the all-required-edges postcondition trigger"
+        )
     if success_token not in verify_showdown:
-        issues.append("central showdown verifier must own the showdown_started success flag")
+        issues.append(
+            "central showdown verifier must own the showdown_started success flag"
+        )
     elif verify_showdown.find(success_token) < verify_showdown.find(gate_token):
-        issues.append("central showdown success is set before all required edges verify")
+        issues.append(
+            "central showdown success is set before all required edges verify"
+        )
     phase_transition = "ADISCORD_vorkerland_set_phase_central_showdown = yes"
     if phase_transition not in verify_showdown:
         issues.append("central showdown verifier must enter the central_showdown phase")
     elif verify_showdown.find(phase_transition) < verify_showdown.find(gate_token):
-        issues.append("central showdown phase transition occurs before edge postconditions")
+        issues.append(
+            "central showdown phase transition occurs before edge postconditions"
+        )
     if verify_showdown.count(success_token) != 1 or effects.count(success_token) != 1:
-        issues.append("central_showdown_started must have exactly one mutation in its verifier")
+        issues.append(
+            "central_showdown_started must have exactly one mutation in its verifier"
+        )
     showdown_owners = _global_set_owners("ADISCORD_vorkerland_central_showdown_started")
     if showdown_owners != [PHASE_EFFECTS.as_posix()]:
         issues.append(
@@ -1621,7 +2066,9 @@ def validate_bounded_retry() -> list[str]:
 
     phase_five = event_block(events, "ADISCORD_vorkerland_phase.5")
     if "ADISCORD_vorkerland_advance_showdown_launch = yes" not in phase_five:
-        issues.append("phase event .5 must advance the shared simultaneous attempt/postcondition round")
+        issues.append(
+            "phase event .5 must advance the shared simultaneous attempt/postcondition round"
+        )
     for forbidden_success in (
         "ADISCORD_vorkerland_central_showdown_started",
         "ADISCORD_vorkerland_showdown_edge_wkr_vad_verified",
@@ -1629,7 +2076,9 @@ def validate_bounded_retry() -> list[str]:
         "ADISCORD_vorkerland_showdown_edge_vad_tva_verified",
     ):
         if _set_flag(forbidden_success) in phase_five:
-            issues.append(f"phase event .5 directly sets success flag {forbidden_success}")
+            issues.append(
+                f"phase event .5 directly sets success flag {forbidden_success}"
+            )
 
     phase_four = event_block(events, "ADISCORD_vorkerland_phase.4")
     if "ADISCORD_vorkerland_initialize_showdown_edge_queue = yes" not in phase_four:
@@ -1637,7 +2086,9 @@ def validate_bounded_retry() -> list[str]:
 
     phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
     if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in phase_six:
-        issues.append("formation must recheck the shared coalition victory gate after its one-day delay")
+        issues.append(
+            "formation must recheck the shared coalition victory gate after its one-day delay"
+        )
     victory = named_block(triggers, "ADISCORD_vorkerland_coalition_victory_ready")
     for guard in (
         "ADISCORD_vorkerland_central_showdown_started",
@@ -1647,19 +2098,38 @@ def validate_bounded_retry() -> list[str]:
     ):
         if guard not in victory:
             issues.append(f"coalition victory is missing guarded prerequisite {guard}")
-    if victory.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes") != 3:
-        issues.append("all three winners must respect the capital and surviving enemies")
+    if (
+        victory.count(
+            "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
+        )
+        != 3
+    ):
+        issues.append(
+            "all three winners must respect the capital and surviving enemies"
+        )
     for candidate in (
         "ADISCORD_vorkerland_worker_victory_candidate = yes",
         "ADISCORD_vorkerland_vlad_victory_candidate = yes",
         "ADISCORD_vorkerland_dorian_victory_candidate = yes",
     ):
         if candidate not in victory:
-            issues.append(f"coalition victory no longer accepts a de facto claimant: {candidate}")
+            issues.append(
+                f"coalition victory no longer accepts a de facto claimant: {candidate}"
+            )
     if "is_core_of" in victory or "NOT = { country_exists = EYR }" in victory:
-        issues.append("peace must preserve independent districts and separate integration")
-    capital = named_block(triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled")
-    for token in ("32 = {", "owner = { is_in_faction_with = PREV.PREV }", "controller = { is_in_faction_with = PREV.PREV }", "any_enemy_country", "has_capitulated = yes"):
+        issues.append(
+            "peace must preserve independent districts and separate integration"
+        )
+    capital = named_block(
+        triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled"
+    )
+    for token in (
+        "32 = {",
+        "owner = { is_in_faction_with = PREV.PREV }",
+        "controller = { is_in_faction_with = PREV.PREV }",
+        "any_enemy_country",
+        "has_capitulated = yes",
+    ):
         if token not in capital:
             issues.append(f"coalition victory omits capital/enemy guard {token}")
 
@@ -1667,17 +2137,29 @@ def validate_bounded_retry() -> list[str]:
     reunited_gate = "ADISCORD_vorkerland_reunification_verified = yes"
     postwar_transition = "ADISCORD_vorkerland_set_phase_postwar_integration = yes"
     if reunited_gate not in verify_reunified:
-        issues.append("WRK formation verifier must call the reunification_verified postcondition")
+        issues.append(
+            "WRK formation verifier must call the reunification_verified postcondition"
+        )
     if postwar_transition not in verify_reunified:
-        issues.append("WRK formation verifier must enter postwar integration after success")
-    elif verify_reunified.find(postwar_transition) < verify_reunified.find(reunited_gate):
-        issues.append("postwar integration success is set before WRK formation postconditions")
+        issues.append(
+            "WRK formation verifier must enter postwar integration after success"
+        )
+    elif verify_reunified.find(postwar_transition) < verify_reunified.find(
+        reunited_gate
+    ):
+        issues.append(
+            "postwar integration success is set before WRK formation postconditions"
+        )
     phase_seven = event_block(events, "ADISCORD_vorkerland_phase.7")
     if "ADISCORD_vorkerland_verify_reunified_wrk = yes" not in phase_seven:
-        issues.append("phase event .7 must own WRK formation postcondition verification")
+        issues.append(
+            "phase event .7 must own WRK formation postcondition verification"
+        )
     reunification_retry = "ADISCORD_vorkerland_reunification_retry"
     if phase_seven.count(_set_flag(reunification_retry)) != 1:
-        issues.append("phase event .7 must own exactly one explicit reunification retry flag")
+        issues.append(
+            "phase event .7 must own exactly one explicit reunification retry flag"
+        )
     retry_guard = re.search(
         rf"NOT\s*=\s*\{{\s*has_global_flag\s*=\s*{re.escape(reunification_retry)}\s*\}}",
         phase_seven,
@@ -1685,7 +2167,9 @@ def validate_bounded_retry() -> list[str]:
     if not retry_guard:
         issues.append("phase event .7 must guard its one formation retry")
     if phase_seven.count("ADISCORD_vorkerland_phase.7 days = 1") != 1:
-        issues.append("phase event .7 must schedule exactly one explicit formation retry")
+        issues.append(
+            "phase event .7 must schedule exactly one explicit formation retry"
+        )
 
     return issues
 
@@ -1701,7 +2185,9 @@ def validate_reunification_formation() -> list[str]:
     ):
         return issues
 
-    release = named_block(effects, "ADISCORD_vorkerland_release_losing_claimant_subjects")
+    release = named_block(
+        effects, "ADISCORD_vorkerland_release_losing_claimant_subjects"
+    )
     for token in (
         "every_subject_country = {",
         "overlord = {",
@@ -1747,18 +2233,22 @@ def validate_reunification_formation() -> list[str]:
             issues.append(f"{name} must change the verified winner {winner} into WRK")
             continue
         if f"WRK = {{ change_tag_from = {winner} }}" in block:
-            issues.append(f"{name} must change tag through the live winner scope, not a same-tick WRK lookup")
-        for loser in losers:
-            release_token = (
-                f"{loser} = {{ ADISCORD_vorkerland_release_losing_claimant_subjects = yes }}"
+            issues.append(
+                f"{name} must change tag through the live winner scope, not a same-tick WRK lookup"
             )
+        for loser in losers:
+            release_token = f"{loser} = {{ ADISCORD_vorkerland_release_losing_claimant_subjects = yes }}"
             release_position = block.find(release_token)
             if release_position < 0 or release_position > change_position:
-                issues.append(f"{name} must release {loser} subjects before the winner changes tag")
+                issues.append(
+                    f"{name} must release {loser} subjects before the winner changes tag"
+                )
             annex = f"annex_country = {{ target = {loser} transfer_troops = yes }}"
             annex_position = block.find(annex)
             if annex_position < 0 or annex_position < change_position:
-                issues.append(f"{name} must annex {loser} with troop transfer only after change_tag_from")
+                issues.append(
+                    f"{name} must annex {loser} with troop transfer only after change_tag_from"
+                )
         for token in (
             "ADISCORD_vorkerland_prepare_claimants_for_formation = yes",
             "ADISCORD_vorkerland_finalize_wrk_formation = yes",
@@ -1779,7 +2269,9 @@ def validate_reunification_formation() -> list[str]:
         "ADISCORD_vorkerland_route_utilitarian",
     ):
         if finalize.count(f"clr_country_flag = {route}") != 1:
-            issues.append(f"formation finalizer must clear prior country route {route} exactly once")
+            issues.append(
+                f"formation finalizer must clear prior country route {route} exactly once"
+            )
 
     reunited = named_block(triggers, "ADISCORD_vorkerland_reunification_verified")
     for token in (
@@ -1796,7 +2288,9 @@ def validate_reunification_formation() -> list[str]:
     phase_six = event_block(events, "ADISCORD_vorkerland_phase.6")
     if "ADISCORD_vorkerland_coalition_victory_ready = yes" not in phase_six:
         issues.append("formation event must require one surviving claimant")
-    formation_branches = named_blocks(phase_six, "if") + named_blocks(phase_six, "else_if")
+    formation_branches = named_blocks(phase_six, "if") + named_blocks(
+        phase_six, "else_if"
+    )
     for winner in ("WKR", "VAD", "TVA"):
         winner_branches = [
             block
@@ -1808,7 +2302,9 @@ def validate_reunification_formation() -> list[str]:
         ]
         effect_name = f"ADISCORD_vorkerland_form_wrk_from_{winner.lower()} = yes"
         if len(winner_branches) != 1:
-            issues.append(f"formation event must expose one verified {winner} winner branch")
+            issues.append(
+                f"formation event must expose one verified {winner} winner branch"
+            )
             continue
         destination_scopes = [
             block
@@ -1816,10 +2312,15 @@ def validate_reunification_formation() -> list[str]:
             if effect_name in block
         ]
         if len(destination_scopes) != 1:
-            issues.append(f"formation event must run {effect_name} in the materialized WRK scope")
+            issues.append(
+                f"formation event must run {effect_name} in the materialized WRK scope"
+            )
             continue
         destination = destination_scopes[0]
-        if "country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }" not in destination:
+        if (
+            "country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }"
+            not in destination
+        ):
             issues.append(
                 "formation event must schedule the next-day assertion from WRK "
                 f"after {winner} formation"
@@ -1889,12 +2390,12 @@ def validate_premature_wrk_recovery() -> list[str]:
         "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
     ):
         if token not in interceptor:
-            issues.append(f"premature WRK shared release interceptor is missing {token}")
+            issues.append(
+                f"premature WRK shared release interceptor is missing {token}"
+            )
 
     all_package_states = {
-        state_id
-        for states in CENTRAL_MINOR_PACKAGES.values()
-        for state_id in states
+        state_id for states in CENTRAL_MINOR_PACKAGES.values() for state_id in states
     }
     for claimant in ("WKR", "VAD", "TVA"):
         suffix = claimant.lower()
@@ -1915,7 +2416,9 @@ def validate_premature_wrk_recovery() -> list[str]:
                 f"{router_name} package transfer set drifted: {sorted(actual_transfers)}"
             )
         if "every_state" in router or "every_owned_state" in router:
-            issues.append(f"{router_name} must remain an explicit bounded package router")
+            issues.append(
+                f"{router_name} must remain an explicit bounded package router"
+            )
         for district, states in CENTRAL_MINOR_PACKAGES.items():
             flag = f"ADISCORD_vorkerland_central_minor_winner_{suffix}"
             if not re.search(
@@ -1958,12 +2461,18 @@ def validate_premature_wrk_recovery() -> list[str]:
         "annex_country = { target = WRK transfer_troops = yes }"
     )
     if min(route_positions, default=-1) < 0:
-        issues.append("premature WRK dissolve must invoke all three recorded package routers")
+        issues.append(
+            "premature WRK dissolve must invoke all three recorded package routers"
+        )
     elif not max(route_positions) < handoff_position < annex_position:
         issues.append(
             "premature WRK dissolve must route packages, hand off the human, then annex WRK"
         )
-    if not max(route_positions, default=-1) < subject_release_position < handoff_position:
+    if (
+        not max(route_positions, default=-1)
+        < subject_release_position
+        < handoff_position
+    ):
         issues.append(
             "premature WRK dissolve must release every false-WRK subject before handoff/annex"
         )
@@ -1993,19 +2502,27 @@ def validate_premature_wrk_recovery() -> list[str]:
         )
         for token in (guard, call):
             if token not in dispatcher:
-                issues.append(f"inverse premature WRK dispatcher lacks {claimant} token {token}")
+                issues.append(
+                    f"inverse premature WRK dispatcher lacks {claimant} token {token}"
+                )
         dispatcher_positions.append(dispatcher.find(call))
     if min(dispatcher_positions, default=-1) < 0 or dispatcher_positions != sorted(
         dispatcher_positions
     ):
-        issues.append("inverse premature WRK dispatcher priority must remain WKR -> VAD -> TVA")
+        issues.append(
+            "inverse premature WRK dispatcher priority must remain WKR -> VAD -> TVA"
+        )
 
     for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
         hook = named_block(on_actions, hook_name)
         if hook.count("ADISCORD_vorkerland_release_requires_interception = yes") != 1:
-            issues.append(f"{hook_name} must use the shared premature WRK release guard once")
+            issues.append(
+                f"{hook_name} must use the shared premature WRK release guard once"
+            )
         if hook.count("ADISCORD_vorkerland_intercept_premature_wrk_release = yes") != 1:
-            issues.append(f"{hook_name} must call the shared premature WRK interceptor once")
+            issues.append(
+                f"{hook_name} must call the shared premature WRK interceptor once"
+            )
         for copied_token in (
             "set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1",
             "FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }",
@@ -2038,7 +2555,11 @@ def validate_retired_legacy_events() -> list[str]:
 
     for event_id in RETIRED_LEGACY_EVENT_IDS:
         full_id = f"ADISCORD_vorkerland_collapse.{event_id}"
-        matches = [block for candidate, block in event_blocks(collapse_events) if candidate == full_id]
+        matches = [
+            block
+            for candidate, block in event_blocks(collapse_events)
+            if candidate == full_id
+        ]
         if matches:
             issues.append(f"retired legacy event {full_id} must not remain defined")
 
@@ -2069,7 +2590,9 @@ def validate_campaign_state() -> list[str]:
     if any(not (ROOT / path).is_file() for path in required):
         return issues
 
-    legacy_dynamic = ROOT / "common/scripted_effects/ADISCORD_vorkerland_focus_dynamic_effects.txt"
+    legacy_dynamic = (
+        ROOT / "common/scripted_effects/ADISCORD_vorkerland_focus_dynamic_effects.txt"
+    )
     if legacy_dynamic.exists():
         issues.append("legacy combined focus-dynamic effect owner must be retired")
 
@@ -2105,7 +2628,9 @@ def validate_campaign_state() -> list[str]:
             "every_state",
         ):
             if forbidden in hook:
-                issues.append(f"on_monthly_{tag} contains forbidden producer {forbidden}")
+                issues.append(
+                    f"on_monthly_{tag} contains forbidden producer {forbidden}"
+                )
 
     owned_effects = (
         "ADISCORD_vorkerland_apply_central_attrition",
@@ -2123,9 +2648,14 @@ def validate_campaign_state() -> list[str]:
         if named_block(phase, effect_name):
             issues.append(f"phase owner still defines campaign effect {effect_name}")
 
-    if len(
-        named_blocks(economy, "ADISCORD_vorkerland_refresh_war_economy_dynamic_state")
-    ) != 1:
+    if (
+        len(
+            named_blocks(
+                economy, "ADISCORD_vorkerland_refresh_war_economy_dynamic_state"
+            )
+        )
+        != 1
+    ):
         issues.append("war-economy owner must define one factory refresh")
     for effect_name in (
         "ADISCORD_vorkerland_refresh_doctrine_dynamic_state",
@@ -2135,15 +2665,21 @@ def validate_campaign_state() -> list[str]:
             issues.append(f"doctrine owner must define exactly one {effect_name}")
 
     leader = named_block(campaign, "ADISCORD_vorkerland_refresh_legitimacy_leader")
-    first_clear = leader.find("clr_country_flag = ADISCORD_vorkerland_legitimacy_leader")
+    first_clear = leader.find(
+        "clr_country_flag = ADISCORD_vorkerland_legitimacy_leader"
+    )
     for tag in ("WKR", "VAD", "TVA"):
         incumbent = leader.find(
             f"{tag} = {{ has_country_flag = ADISCORD_vorkerland_legitimacy_leader"
         )
         if incumbent < 0 or first_clear < 0 or incumbent > first_clear:
-            issues.append(f"legitimacy leader does not preserve the live {tag} incumbent")
+            issues.append(
+                f"legitimacy leader does not preserve the live {tag} incumbent"
+            )
     if leader.count("compare = greater_than") < 6:
-        issues.append("legitimacy leader does not compare every incumbent against both rivals")
+        issues.append(
+            "legitimacy leader does not compare every incumbent against both rivals"
+        )
 
     coalition = named_block(campaign, "ADISCORD_vorkerland_refresh_claimant_coalition")
     for token in (
@@ -2170,7 +2706,9 @@ def validate_campaign_state() -> list[str]:
         "ADISCORD_vorkerland_refresh_claimant_coalition",
     ):
         if reconcile.count(f"{effect_name} = yes") != 3:
-            issues.append(f"campaign reconciliation must call {effect_name} for all claimants")
+            issues.append(
+                f"campaign reconciliation must call {effect_name} for all claimants"
+            )
 
     outbreak = event_block(collapse_events, "ADISCORD_vorkerland_collapse.2")
     positions = [
@@ -2179,32 +2717,49 @@ def validate_campaign_state() -> list[str]:
         outbreak.find("ADISCORD_vorkerland_reconcile_campaign_state = yes"),
     ]
     if min(positions) < 0 or positions != sorted(positions):
-        issues.append("collapse outbreak must apply attrition then reconcile immediately")
+        issues.append(
+            "collapse outbreak must apply attrition then reconcile immediately"
+        )
     reconcile_position = positions[-1]
     for tag in ("WKR", "VAD", "TVA"):
         initialize = f"{tag} = {{ ADISCORD_vorkerland_initialize_legitimacy = yes }}"
         initialize_position = outbreak.find(initialize)
-        if outbreak.count(initialize) != 1 or not 0 <= initialize_position < reconcile_position:
+        if (
+            outbreak.count(initialize) != 1
+            or not 0 <= initialize_position < reconcile_position
+        ):
             issues.append(
                 f"collapse outbreak must initialize {tag} legitimacy once before reconciliation"
             )
 
     showdown = named_block(phase, "ADISCORD_vorkerland_set_phase_central_showdown")
     terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
-    for label, block in (("central showdown", showdown), ("terminal settlement", terminal)):
+    for label, block in (
+        ("central showdown", showdown),
+        ("terminal settlement", terminal),
+    ):
         if block.count("ADISCORD_vorkerland_reconcile_campaign_state = yes") != 1:
             issues.append(f"{label} must reconcile campaign state exactly once")
 
     state_hook = named_block(on_actions, "on_state_control_changed")
-    if "FROM.FROM = { has_state_flag = ADISCORD_vorkerland_central_theatre }" not in state_hook:
-        issues.append("state-control reconciliation must use the same theatre as attrition and scoring")
+    if (
+        "FROM.FROM = { has_state_flag = ADISCORD_vorkerland_central_theatre }"
+        not in state_hook
+    ):
+        issues.append(
+            "state-control reconciliation must use the same theatre as attrition and scoring"
+        )
     if state_hook.count("ADISCORD_vorkerland_refresh_claimant_coalition = yes") != 3:
-        issues.append("central state-control edge must refresh all three claimant coalitions")
+        issues.append(
+            "central state-control edge must refresh all three claimant coalitions"
+        )
 
     if focus.count("ADISCORD_vorkerland_refresh_doctrine_dynamic_state = yes") != 6:
         issues.append("the six doctrine forks must refresh doctrine immediately")
     if focus.count(economy_call) != 6:
-        issues.append("the six war-economy forks must refresh factory scaling immediately")
+        issues.append(
+            "the six war-economy forks must refresh factory scaling immediately"
+        )
 
     return issues
 

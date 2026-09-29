@@ -58,23 +58,31 @@ class CanonicalCountryNameTests(unittest.TestCase):
                     if not any(alias in value for alias in FORBIDDEN_ALIASES):
                         continue
                     replacement = replacements.get(key)
-                    if replacement is None or any(alias in replacement for alias in FORBIDDEN_ALIASES):
+                    if replacement is None or any(
+                        alias in replacement for alias in FORBIDDEN_ALIASES
+                    ):
                         failures.append(f"{path.relative_to(ROOT)}: {key}")
 
         for key, value in replacements.items():
             if any(alias in value for alias in FORBIDDEN_ALIASES):
                 failures.append(f"localisation/replace: {key}")
 
-        self.assertEqual(failures, [], "legacy country aliases remain in effective localisation")
+        self.assertEqual(
+            failures, [], "legacy country aliases remain in effective localisation"
+        )
 
     def test_dan_is_explicitly_expeditionary_group_42(self) -> None:
-        tag_map = (ROOT / "common/country_tags/00_countries.txt").read_text(encoding="utf-8-sig")
+        tag_map = (ROOT / "common/country_tags/00_countries.txt").read_text(
+            encoding="utf-8-sig"
+        )
         self.assertIn('DAN = "countries/ExpeditionaryGroup42.txt"', tag_map)
         self.assertNotIn("DaniaLand", tag_map)
 
         self.assertTrue((ROOT / "common/countries/ExpeditionaryGroup42.txt").is_file())
         self.assertFalse((ROOT / "common/countries/DaniaLand.txt").exists())
-        self.assertTrue((ROOT / "history/countries/DAN - Expeditionary Group 42.txt").is_file())
+        self.assertTrue(
+            (ROOT / "history/countries/DAN - Expeditionary Group 42.txt").is_file()
+        )
         self.assertFalse((ROOT / "history/countries/DAN - DaniaLand.txt").exists())
 
         english = localisation_entries(ENGLISH)
@@ -83,8 +91,14 @@ class CanonicalCountryNameTests(unittest.TestCase):
         self.assertEqual(english["DAN_DEF"], "Expeditionary Group #42")
         self.assertEqual(russian["DAN"], "Экспедиционная группа #42")
         self.assertEqual(russian["DAN_DEF"], "Экспедиционная группа #42")
-        self.assertIn("not a civilian state but a military formation", english["DAN_national_spirit_desc"])
-        self.assertIn("не гражданское государство, а военное формирование", russian["DAN_national_spirit_desc"])
+        self.assertIn(
+            "not a civilian state but a military formation",
+            english["DAN_national_spirit_desc"],
+        )
+        self.assertIn(
+            "не гражданское государство, а военное формирование",
+            russian["DAN_national_spirit_desc"],
+        )
 
     def test_svetlogorye_localisation_does_not_show_internal_nam_tag(self) -> None:
         path = RUSSIAN / "ADISCORD_nam_resource_war_l_russian.yml"

@@ -57,9 +57,7 @@ READ_ONLY_BUILDERS = (
     "build_adiscord_trade_regions",
 )
 
-READ_ONLY_VALIDATORS = (
-    "validate_adiscord_event_ids",
-)
+READ_ONLY_VALIDATORS = ("validate_adiscord_event_ids",)
 
 
 class ToolEntrypointCompatibilityTests(unittest.TestCase):
@@ -67,7 +65,12 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
         """Moving a tool must not break package imports or read-only root CLIs."""
         # This catches a missing package marker, an incorrect shared-root calculation,
         # or a root-level facade that is no longer directly executable.
-        for package_name in ("tools.builders", "tools.validators", "tools.tests", "tools.lib"):
+        for package_name in (
+            "tools.builders",
+            "tools.validators",
+            "tools.tests",
+            "tools.lib",
+        ):
             with self.subTest(package=package_name):
                 self.assertIsNotNone(importlib.import_module(package_name))
 
@@ -80,7 +83,11 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
         ):
             with self.subTest(script=script_name):
                 result = subprocess.run(
-                    [sys.executable, str(REPOSITORY_ROOT / "tools" / script_name), "--help"],
+                    [
+                        sys.executable,
+                        str(REPOSITORY_ROOT / "tools" / script_name),
+                        "--help",
+                    ],
                     cwd=REPOSITORY_ROOT,
                     capture_output=True,
                     text=True,
@@ -94,7 +101,9 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
         # from the move, or a changed read-only CLI will fail this contract.
         for builder_name in BUILDER_NAMES:
             with self.subTest(builder=builder_name, contract="main"):
-                implementation = importlib.import_module(f"tools.builders.{builder_name}")
+                implementation = importlib.import_module(
+                    f"tools.builders.{builder_name}"
+                )
                 facade = importlib.import_module(f"tools.{builder_name}")
                 self.assertIs(facade.main, implementation.main)
 
@@ -164,7 +173,9 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
         """Every compatibility validator facade must expose the package main."""
         validator_names = tuple(
             path.stem
-            for path in sorted((REPOSITORY_ROOT / "tools").glob("validate_adiscord_*.py"))
+            for path in sorted(
+                (REPOSITORY_ROOT / "tools").glob("validate_adiscord_*.py")
+            )
         ) + ("validate_tc",)
 
         for validator_name in validator_names:
@@ -208,7 +219,9 @@ class ToolEntrypointCompatibilityTests(unittest.TestCase):
         """Libraries and tests must live in their importable package directories."""
         for library_name in LIBRARY_NAMES:
             with self.subTest(library=library_name):
-                self.assertIsNotNone(importlib.import_module(f"tools.lib.{library_name}"))
+                self.assertIsNotNone(
+                    importlib.import_module(f"tools.lib.{library_name}")
+                )
 
         root_tests = sorted((REPOSITORY_ROOT / "tools").glob("test_*.py"))
         self.assertEqual(root_tests, [], "tests must be discovered from tools/tests")

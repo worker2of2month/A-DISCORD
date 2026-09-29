@@ -63,11 +63,15 @@ NAVAL = (42, 61, 70, 255)
 
 def _source_image() -> Image.Image:
     if not SOURCE.is_file():
-        raise RuntimeError(f"missing production surface source: {SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing production surface source: {SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(SOURCE) as source_image:
         source = source_image.convert("RGBA")
     if source.width < 1024 or source.height < 1024:
-        raise RuntimeError(f"production source must be at least 1024x1024, got {source.size}")
+        raise RuntimeError(
+            f"production source must be at least 1024x1024, got {source.size}"
+        )
     return source
 
 
@@ -79,7 +83,9 @@ def _glyph_source(path: Path, max_size: tuple[int, int]) -> Image.Image:
     alpha = source.getchannel("A")
     bbox = alpha.getbbox()
     if bbox is None:
-        raise RuntimeError(f"production glyph source is fully transparent: {path.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"production glyph source is fully transparent: {path.relative_to(ROOT)}"
+        )
     if any(
         alpha.getpixel(point) != 0
         for point in (
@@ -89,7 +95,9 @@ def _glyph_source(path: Path, max_size: tuple[int, int]) -> Image.Image:
             (source.width - 1, source.height - 1),
         )
     ):
-        raise RuntimeError(f"production glyph source corners must be transparent: {path.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"production glyph source corners must be transparent: {path.relative_to(ROOT)}"
+        )
     glyph = source.crop(bbox)
     glyph.thumbnail(max_size, Image.Resampling.LANCZOS)
     return glyph
@@ -134,16 +142,30 @@ def _rivet(draw: ImageDraw.ImageDraw, x: int, y: int) -> None:
     draw.point((x + 1, y + 1), fill=(9, 11, 11, 255))
 
 
-def _outer_frame(image: Image.Image, box: tuple[int, int, int, int], width: int = 4) -> None:
+def _outer_frame(
+    image: Image.Image, box: tuple[int, int, int, int], width: int = 4
+) -> None:
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
     draw.rectangle(box, outline=INK, width=width)
-    draw.rectangle((left + width, top + width, right - width, bottom - width), outline=EDGE, width=1)
-    draw.line((left + 7, top + 6, right - 7, top + 6), fill=(116, 125, 120, 85), width=1)
-    draw.line((left + 7, bottom - 6, right - 7, bottom - 6), fill=(99, 72, 35, 145), width=1)
+    draw.rectangle(
+        (left + width, top + width, right - width, bottom - width),
+        outline=EDGE,
+        width=1,
+    )
+    draw.line(
+        (left + 7, top + 6, right - 7, top + 6), fill=(116, 125, 120, 85), width=1
+    )
+    draw.line(
+        (left + 7, bottom - 6, right - 7, bottom - 6), fill=(99, 72, 35, 145), width=1
+    )
 
 
-def _recess(image: Image.Image, box: tuple[int, int, int, int], tint: tuple[int, int, int, int] = RECESS) -> None:
+def _recess(
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+    tint: tuple[int, int, int, int] = RECESS,
+) -> None:
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
     draw.rectangle(box, fill=tint, outline=INK, width=2)
@@ -183,7 +205,11 @@ def _lines_overlay() -> Image.Image:
     # Restrained structural rails replace the oversized ornamental machinery.
     for x in (6, 542):
         draw.line((x, 18, x, 581), fill=(8, 11, 12, 205), width=5)
-        draw.line((x + (-3 if x > 200 else 3), 22, x + (-3 if x > 200 else 3), 577), fill=(76, 84, 81, 120), width=1)
+        draw.line(
+            (x + (-3 if x > 200 else 3), 22, x + (-3 if x > 200 else 3), 577),
+            fill=(76, 84, 81, 120),
+            width=1,
+        )
     draw.line((18, 8, 531, 8), fill=(7, 10, 11, 210), width=5)
     draw.line((18, 591, 531, 591), fill=(7, 10, 11, 225), width=6)
     draw.line((24, 586, 525, 586), fill=(112, 80, 37, 100), width=1)
@@ -193,7 +219,11 @@ def _lines_overlay() -> Image.Image:
     # Small stamped gussets anchor the lower corners without filling the empty list.
     for mirror in (False, True):
         xs = (18, 74, 18) if not mirror else (531, 475, 531)
-        draw.polygon(((xs[0], 574), (xs[1], 574), (xs[2], 522)), fill=(19, 25, 26, 145), outline=(61, 70, 69, 135))
+        draw.polygon(
+            ((xs[0], 574), (xs[1], 574), (xs[2], 522)),
+            fill=(19, 25, 26, 145),
+            outline=(61, 70, 69, 135),
+        )
         for offset in (12, 24, 36):
             x1 = 20 + offset if not mirror else 529 - offset
             x2 = 20 if not mirror else 529
@@ -229,7 +259,13 @@ def _top_panel() -> Image.Image:
     output = _surface((550, 253), (0.54, 0.48), 0.84)
     _outer_frame(output, (0, 0, 549, 252), 5)
     # Resource totals, industrial modifiers, available factories, add-line buttons, filters.
-    bands = ((8, 7, 541, 39), (8, 43, 541, 76), (8, 80, 541, 117), (8, 121, 541, 173), (8, 177, 541, 250))
+    bands = (
+        (8, 7, 541, 39),
+        (8, 43, 541, 76),
+        (8, 80, 541, 117),
+        (8, 121, 541, 173),
+        (8, 177, 541, 250),
+    )
     for box in bands:
         _recess(output, box, (10, 14, 15, 235))
     draw = ImageDraw.Draw(output, "RGBA")
@@ -256,10 +292,14 @@ def _item_base(
     output = _surface((511, 108), (0.48, 0.63), 0.82)
     _outer_frame(output, (0, 0, 510, 107), 3)
     draw = ImageDraw.Draw(output, "RGBA")
-    draw.rectangle((4, 5, 506, 30), fill=(14, 18, 19, 225), outline=(57, 65, 64, 255), width=1)
+    draw.rectangle(
+        (4, 5, 506, 30), fill=(14, 18, 19, 225), outline=(57, 65, 64, 255), width=1
+    )
     draw.line((6, 29, 504, 29), fill=BRASS, width=1)
 
-    equipment = _tinted_surface((284, 72), (0.27, 0.52), 0.88, accent_shadow, accent_highlight)
+    equipment = _tinted_surface(
+        (284, 72), (0.27, 0.52), 0.88, accent_shadow, accent_highlight
+    )
     output.alpha_composite(equipment, (4, 33))
     draw.rectangle((4, 33, 287, 104), outline=INK, width=2)
     draw.rectangle((7, 36, 284, 101), outline=(65, 75, 70, 255), width=1)
@@ -292,9 +332,13 @@ def _collapsed_item() -> Image.Image:
     output = _surface((512, 60), (0.68, 0.43), 0.79)
     _outer_frame(output, (0, 0, 511, 59), 3)
     draw = ImageDraw.Draw(output, "RGBA")
-    draw.rectangle((4, 5, 507, 30), fill=(14, 18, 19, 225), outline=(57, 65, 64, 255), width=1)
+    draw.rectangle(
+        (4, 5, 507, 30), fill=(14, 18, 19, 225), outline=(57, 65, 64, 255), width=1
+    )
     draw.line((6, 29, 505, 29), fill=BRASS, width=1)
-    draw.rectangle((4, 33, 507, 56), fill=(9, 12, 13, 225), outline=(41, 49, 49, 255), width=1)
+    draw.rectangle(
+        (4, 33, 507, 56), fill=(9, 12, 13, 225), outline=(41, 49, 49, 255), width=1
+    )
     for point in ((7, 8), (504, 8), (7, 52), (504, 52)):
         _rivet(draw, *point)
     return output
@@ -305,7 +349,9 @@ def _naval_item_strip() -> Image.Image:
     for frame, rows in enumerate((1, 2, 3)):
         item = _item_base((6, 11, 15), (49, 70, 79), rows)
         # A slightly colder accent distinguishes dockyard lines from military lines.
-        ImageDraw.Draw(item, "RGBA").line((8, 38, 283, 38), fill=(*NAVAL[:3], 155), width=1)
+        ImageDraw.Draw(item, "RGBA").line(
+            (8, 38, 283, 38), fill=(*NAVAL[:3], 155), width=1
+        )
         output.alpha_composite(item, (frame * 511, 0))
     return output
 
@@ -411,7 +457,12 @@ def _button_surface(state: int) -> Image.Image:
     draw.line((6, 5, 74, 5), fill=(143, 152, 144, 82), width=1)
     draw.line((6, 35, 74, 35), fill=(126, 88, 40, 135), width=1)
     for point in ((6, 6), (74, 6), (6, 34), (74, 34)):
-        draw.ellipse((point[0] - 2, point[1] - 2, point[0] + 2, point[1] + 2), fill=INK, outline=EDGE, width=1)
+        draw.ellipse(
+            (point[0] - 2, point[1] - 2, point[0] + 2, point[1] + 2),
+            fill=INK,
+            outline=EDGE,
+            width=1,
+        )
     return output
 
 
@@ -431,13 +482,19 @@ def _button_frame(key: str, state: int) -> Image.Image:
     frame = _button_surface(state)
     draw = ImageDraw.Draw(frame, "RGBA")
     if key == "repair":
-        anchor = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES["naval"], (28, 29)), state)
-        wrench = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES["repair"], (29, 27)), state)
+        anchor = _state_glyph(
+            _glyph_source(BUTTON_GLYPH_SOURCES["naval"], (28, 29)), state
+        )
+        wrench = _state_glyph(
+            _glyph_source(BUTTON_GLYPH_SOURCES["repair"], (29, 27)), state
+        )
         frame.alpha_composite(anchor, (7, (41 - anchor.height) // 2))
         frame.alpha_composite(wrench, (43, (41 - wrench.height) // 2))
     else:
         glyph = _state_glyph(_glyph_source(BUTTON_GLYPH_SOURCES[key], (50, 29)), state)
-        frame.alpha_composite(glyph, (5 + (50 - glyph.width) // 2, (41 - glyph.height) // 2))
+        frame.alpha_composite(
+            glyph, (5 + (50 - glyph.width) // 2, (41 - glyph.height) // 2)
+        )
         plus = (193, 151, 67, 255) if state != 2 else (100, 103, 99, 220)
         draw.line((67, 11, 67, 29), fill=(3, 4, 4, 255), width=5)
         draw.line((58, 20, 76, 20), fill=(3, 4, 4, 255), width=5)
@@ -488,9 +545,13 @@ def validate(outputs: dict[Path, bytes]) -> list[str]:
     issues: list[str] = []
     for path, expected in outputs.items():
         if not path.is_file():
-            issues.append(f"missing generated production UI asset: {path.relative_to(ROOT)}")
+            issues.append(
+                f"missing generated production UI asset: {path.relative_to(ROOT)}"
+            )
         elif path.read_bytes() != expected:
-            issues.append(f"generated production UI asset differs: {path.relative_to(ROOT)}")
+            issues.append(
+                f"generated production UI asset differs: {path.relative_to(ROOT)}"
+            )
     return issues
 
 
@@ -503,8 +564,12 @@ def apply(outputs: dict[Path, bytes]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated DDS outputs")
+    actions.add_argument(
+        "--check", action="store_true", help="compare outputs (default)"
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write generated DDS outputs"
+    )
     args = parser.parse_args()
 
     try:
@@ -519,7 +584,9 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print("A-Discord production UI assets are current (gunmetal shell, top controls, and line variants).")
+    print(
+        "A-Discord production UI assets are current (gunmetal shell, top controls, and line variants)."
+    )
     return 0
 
 

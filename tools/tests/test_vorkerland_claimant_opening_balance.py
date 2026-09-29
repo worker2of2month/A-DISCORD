@@ -15,19 +15,31 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        cls.initial = named_block(cls.effects, "ADISCORD_vorkerland_prepare_initial_combatants")
+        cls.initial = named_block(
+            cls.effects, "ADISCORD_vorkerland_prepare_initial_combatants"
+        )
         cls.wkr = named_block(cls.initial, "WKR")
 
     def test_wkr_no_longer_has_double_vadl_deployed_air(self):
         wkr_air = read("history/units/WRK_vorkerland_collapse_air.txt")
         vad_air = read("history/units/VAD_vorkerland_collapse_air.txt")
-        self.assertEqual(wkr_air.count('owner = "WKR" amount = 100'), vad_air.count('owner = "VAD" amount = 100'))
-        self.assertEqual(wkr_air.count('owner = "WKR" amount = 50'), vad_air.count('owner = "VAD" amount = 50'))
+        self.assertEqual(
+            wkr_air.count('owner = "WKR" amount = 100'),
+            vad_air.count('owner = "VAD" amount = 100'),
+        )
+        self.assertEqual(
+            wkr_air.count('owner = "WKR" amount = 50'),
+            vad_air.count('owner = "VAD" amount = 50'),
+        )
         self.assertNotIn("central-air-command edge", wkr_air)
 
     def test_wkr_opening_air_reserve_and_fuel_are_bounded(self):
-        self.assertIn("type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR", self.wkr)
-        self.assertIn("type = ADISCORD_cas_airframe_2170 amount = 15 producer = WKR", self.wkr)
+        self.assertIn(
+            "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR", self.wkr
+        )
+        self.assertIn(
+            "type = ADISCORD_cas_airframe_2170 amount = 15 producer = WKR", self.wkr
+        )
         self.assertIn("add_fuel = 10000", self.wkr)
         self.assertNotIn("add_fuel = 15000", self.wkr)
 

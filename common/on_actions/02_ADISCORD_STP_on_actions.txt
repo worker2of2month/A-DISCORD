@@ -40,29 +40,29 @@ on_actions = {
 	}
 
 
-    on_startup = {
-        effect = {
+	on_startup = {
+		effect = {
 			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
 			STP = { STP_pf_refresh_on_load = yes }
 			STP = { STP_pw_party_reconcile_nod_invasion = yes STP_ch_reconcile = yes STP_ch_refresh = yes }
 			STS = { STP_qol_initialize_staff = yes }
 
-            STP = {
-                if = {
-                    limit = {
-                        exists = yes
-                        NOT = { has_global_flag = STP_cw_started }
-                        OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
-                    }
-                    country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
-                }
-                if = {
-                    limit = { exists = yes STP_ps_war_active = yes has_variable = STP_ps_stage }
-                    STP_ps_refresh_defence = yes
-                }
-            }
-        }
-    }
+			STP = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_global_flag = STP_cw_started }
+						OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
+					}
+					country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
+				}
+				if = {
+					limit = { exists = yes STP_ps_war_active = yes has_variable = STP_ps_stage }
+					STP_ps_refresh_defence = yes
+				}
+			}
+		}
+	}
 
 
 	on_weekly_VAL = {
@@ -339,9 +339,9 @@ on_actions = {
 			if = { limit = { STP_pf_active = yes }
 				STP_pf_initialize = yes
 				if = { limit = { OR = {
-					AND = { STP_pf_nod_contacts = yes check_variable = { var = STP_pf_nod_connected value = 0 compare = equals } }
-					AND = { STP_pf_nod_contacts = no check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } }
-				} } STP_refresh_apparatus_loyalty = yes }
+							AND = { STP_pf_nod_contacts = yes check_variable = { var = STP_pf_nod_connected value = 0 compare = equals } }
+							AND = { STP_pf_nod_contacts = no check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } }
+					} } STP_refresh_apparatus_loyalty = yes }
 			}
 			else = { STP_pf_clear = yes }
 		}

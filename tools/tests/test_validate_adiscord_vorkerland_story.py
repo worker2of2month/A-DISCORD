@@ -40,8 +40,12 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertEqual(collect_issues(ROOT), [])
 
     def test_story_layer_contains_no_map_war_or_peace_ownership(self) -> None:
-        source = "\n".join((source_section(read(STORY_EVENTS), "story_events"),
-                            source_section(read(STORY_EFFECTS), "story_effects")))
+        source = "\n".join(
+            (
+                source_section(read(STORY_EVENTS), "story_events"),
+                source_section(read(STORY_EFFECTS), "story_effects"),
+            )
+        )
         self.assertEqual(forbidden_story_mutations(source), [])
         self.assertNotIn("ADISCORD_superevent_news.2", source)
 
@@ -73,8 +77,13 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         self.assertTrue((ROOT / RUSSIAN_LOC).read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_forbidden_mutation_helper_is_semantic(self) -> None:
-        self.assertEqual(forbidden_story_mutations("effect = { transfer_state = 32 }"), ["transfer_state"])
-        self.assertEqual(forbidden_story_mutations("# transfer_state = 32\nadd_stability = 0.02"), [])
+        self.assertEqual(
+            forbidden_story_mutations("effect = { transfer_state = 32 }"),
+            ["transfer_state"],
+        )
+        self.assertEqual(
+            forbidden_story_mutations("# transfer_state = 32\nadd_stability = 0.02"), []
+        )
 
     def test_each_world_news_event_is_broadcast_safe(self) -> None:
         definitions = event_blocks(source_section(read(STORY_EVENTS), 'story_events'))
@@ -108,7 +117,8 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         )
         issues = dispatch_issues(swapped)
         self.assertTrue(
-            any("expected ADISCORD_vorkerland_story.13" in issue for issue in issues), issues
+            any("expected ADISCORD_vorkerland_story.13" in issue for issue in issues),
+            issues,
         )
 
     def test_variant_dispatch_rejects_a_swapped_event_id(self) -> None:
@@ -133,7 +143,9 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
             issues,
         )
 
-    def test_first_fall_requires_control_of_the_entire_claimant_home_region(self) -> None:
+    def test_first_fall_requires_control_of_the_entire_claimant_home_region(
+        self,
+    ) -> None:
         effects = source_section(read(STORY_EFFECTS), 'story_effects')
         fall = named_block(
             effects, "ADISCORD_vorkerland_story_check_first_claimant_capital_fall"
@@ -157,7 +169,9 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
             "ADISCORD_vorkerland_story_report_claimant_capitulation = yes",
         )
         issues = dispatch_issues(unscoped)
-        self.assertTrue(any("must be scoped to ROOT" in issue for issue in issues), issues)
+        self.assertTrue(
+            any("must be scoped to ROOT" in issue for issue in issues), issues
+        )
 
     def test_story_layer_uses_the_documented_global_array_arguments(self) -> None:
         effects = source_section(read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects')
@@ -165,29 +179,41 @@ class VorkerlandStoryValidationTests(unittest.TestCase):
         for token in UNDEFINED_ARRAY_TOKENS:
             self.assertNotIn(token, effects)
 
-    def test_localisation_quality_catches_copied_and_untranslated_variants(self) -> None:
+    def test_localisation_quality_catches_copied_and_untranslated_variants(
+        self,
+    ) -> None:
         keys = [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)]
         copied = {key: f"body {index}" for index, key in enumerate(keys)}
         copied[keys[2]] = copied[keys[1]]
         self.assertTrue(
-            any("repeat the same text" in issue for issue in
-                localisation_quality_issues("", "", copied, {}, set()))
+            any(
+                "repeat the same text" in issue
+                for issue in localisation_quality_issues("", "", copied, {}, set())
+            )
         )
         untranslated = {keys[0]: "An English sentence."}
         self.assertTrue(
-            any("no Cyrillic" in issue for issue in
-                localisation_quality_issues("", "", {}, untranslated, {keys[0]}))
+            any(
+                "no Cyrillic" in issue
+                for issue in localisation_quality_issues(
+                    "", "", {}, untranslated, {keys[0]}
+                )
+            )
         )
 
     def test_localisation_quality_catches_a_duplicated_key(self) -> None:
         source = ' A.b: "one"\n A.b: "two"\n'
         self.assertTrue(
-            any("duplicate keys" in issue for issue in
-                localisation_quality_issues(source, "", {}, {}, set()))
+            any(
+                "duplicate keys" in issue
+                for issue in localisation_quality_issues(source, "", {}, {}, set())
+            )
         )
 
     def test_upstream_identifiers_are_pinned_to_their_owning_files(self) -> None:
-        campaign_state_effects = source_section(read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects')
+        campaign_state_effects = source_section(
+            read(CAMPAIGN_STATE_EFFECTS), 'campaign_state_effects'
+        )
         self.assertEqual(upstream_contract_issues(ROOT, campaign_state_effects), [])
         self.assertNotIn("ADISCORD_vorkerland_objective_last", campaign_state_effects)
         self.assertEqual(upstream_contract_issues(ROOT, campaign_state_effects), [])

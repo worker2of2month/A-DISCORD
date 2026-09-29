@@ -20,7 +20,9 @@ EXPECTED_PROVINCE_SHA256 = (
 
 
 def province_geometry_issue() -> str | None:
-    province_hash = hashlib.sha256((ROOT / "map/provinces.bmp").read_bytes()).hexdigest().upper()
+    province_hash = (
+        hashlib.sha256((ROOT / "map/provinces.bmp").read_bytes()).hexdigest().upper()
+    )
     if province_hash != EXPECTED_PROVINCE_SHA256:
         return "map/provinces.bmp: reviewed IVN city-split geometry drifted"
     return None
@@ -55,29 +57,50 @@ def collect_issues() -> list[str]:
             actual = _state_provinces(state_id)
             if actual != set(expected):
                 issues.append(f"state {state_id}: Ivanland province partition drifted")
-        for state_id, expected in state_builder.IVANLAND_OVERHAUL_VICTORY_POINTS.items():
+        for (
+            state_id,
+            expected,
+        ) in state_builder.IVANLAND_OVERHAUL_VICTORY_POINTS.items():
             if _state_vps(state_id) != expected:
-                issues.append(f"state {state_id}: Ivanland victory-point manifest drifted")
+                issues.append(
+                    f"state {state_id}: Ivanland victory-point manifest drifted"
+                )
 
         for state_id in (128, 693, 694):
             source = _text(state_builder.state_path(state_id))
-            if not re.search(r"\bowner\s*=\s*IIA\b", source) or not re.search(r"\badd_core_of\s*=\s*IIA\b", source):
-                issues.append(f"state {state_id}: island state must be owned and cored by IIA")
+            if not re.search(r"\bowner\s*=\s*IIA\b", source) or not re.search(
+                r"\badd_core_of\s*=\s*IIA\b", source
+            ):
+                issues.append(
+                    f"state {state_id}: island state must be owned and cored by IIA"
+                )
 
         required_tokens = {
-            ROOT / "common/autonomous_states/ADISCORD_island_administration.txt": (
-                "id = autonomy_island_administration", "use_overlord_color = yes", "default = no"
+            ROOT
+            / "common/autonomous_states/ADISCORD_island_administration.txt": (
+                "id = autonomy_island_administration",
+                "use_overlord_color = yes",
+                "default = no",
             ),
-            ROOT / "history/countries/IVN - IvanLand.txt": (
-                "target = IIA", "autonomy_state = autonomy_island_administration", "freedom_level = 0.00"
+            ROOT
+            / "history/countries/IVN - IvanLand.txt": (
+                "target = IIA",
+                "autonomy_state = autonomy_island_administration",
+                "freedom_level = 0.00",
             ),
-            ROOT / "history/countries/IIA - Itoran Island Administration.txt": (
-                "capital = 693", 'oob = "IIA"', "recruit_character = IIA_Artem_Severin"
+            ROOT
+            / "history/countries/IIA - Itoran Island Administration.txt": (
+                "capital = 693",
+                'oob = "IIA"',
+                "recruit_character = IIA_Artem_Severin",
             ),
-            ROOT / "common/characters/IIA.txt": (
-                "GFX_portrait_IIA_Artem_Severin", "IIA_Artem_Severin"
+            ROOT
+            / "common/characters/IIA.txt": (
+                "GFX_portrait_IIA_Artem_Severin",
+                "IIA_Artem_Severin",
             ),
-            ROOT / "interface/ADISCORD_leader_portraits.gfx": (
+            ROOT
+            / "interface/ADISCORD_leader_portraits.gfx": (
                 'name = "GFX_portrait_IIA_Artem_Severin"',
                 'texturefile = "gfx/leaders/IIA/portrait_IIA_Artem_Severin.png"',
             ),
@@ -89,20 +112,34 @@ def collect_issues() -> list[str]:
             source = _text(path)
             for token in tokens:
                 if token not in source:
-                    issues.append(f"{path.relative_to(ROOT).as_posix()}: missing {token}")
+                    issues.append(
+                        f"{path.relative_to(ROOT).as_posix()}: missing {token}"
+                    )
 
         leader_portrait = ROOT / "gfx/leaders/IIA/portrait_IIA_Artem_Severin.png"
         if not leader_portrait.is_file():
             issues.append("gfx/leaders/IIA/portrait_IIA_Artem_Severin.png: missing")
         elif leader_portrait.read_bytes()[16:24] != bytes.fromhex("0000009c000000d2"):
-            issues.append("gfx/leaders/IIA/portrait_IIA_Artem_Severin.png: expected 156x210 PNG")
+            issues.append(
+                "gfx/leaders/IIA/portrait_IIA_Artem_Severin.png: expected 156x210 PNG"
+            )
 
         ivn_oob = _text(ROOT / "history/units/IVN.txt")
         iia_oob = _text(ROOT / "history/units/IIA.txt")
-        if len(re.findall(r"\bdivision\s*=\s*\{", ivn_oob)) != 16 or "location = 579" in ivn_oob:
-            issues.append("history/units/IVN.txt: IVN must retain 16 divisions outside IIA")
-        if len(re.findall(r"\bdivision\s*=\s*\{", iia_oob)) != 1 or "location = 579" not in iia_oob:
-            issues.append("history/units/IIA.txt: IIA must have one garrison at province 579")
+        if (
+            len(re.findall(r"\bdivision\s*=\s*\{", ivn_oob)) != 16
+            or "location = 579" in ivn_oob
+        ):
+            issues.append(
+                "history/units/IVN.txt: IVN must retain 16 divisions outside IIA"
+            )
+        if (
+            len(re.findall(r"\bdivision\s*=\s*\{", iia_oob)) != 1
+            or "location = 579" not in iia_oob
+        ):
+            issues.append(
+                "history/units/IIA.txt: IIA must have one garrison at province 579"
+            )
 
         issues.extend(f"island asset: {item}" for item in icon_builder.drift())
         geography_outputs = geography_builder.expected()
@@ -112,7 +149,8 @@ def collect_issues() -> list[str]:
         )
         affected_states = {25, 128, 693, 694, 695, 696, 697, 698}
         issues.extend(
-            item for item in map_buildings.validate(ROOT)
+            item
+            for item in map_buildings.validate(ROOT)
             if any(f"state {state_id} " in item for state_id in affected_states)
         )
 

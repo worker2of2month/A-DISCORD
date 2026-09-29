@@ -29,7 +29,9 @@ def named_block(source: str, name: str) -> str:
 
 class VorkerlandRandomPortraitTests(unittest.TestCase):
     def test_worker_claimant_uses_the_wrk_commander_pool(self) -> None:
-        pools = (ROOT / "portraits" / "00_portraits.txt").read_text(encoding="utf-8-sig")
+        pools = (ROOT / "portraits" / "00_portraits.txt").read_text(
+            encoding="utf-8-sig"
+        )
         expected = set(PORTRAIT_IDS)
         for tag in ("WRK", "WKR"):
             block = named_block(pools, tag)

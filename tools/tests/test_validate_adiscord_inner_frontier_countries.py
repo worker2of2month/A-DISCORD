@@ -8,7 +8,10 @@ from tools.builders.build_adiscord_inner_frontier_countries import (
     render_common_country,
     render_country_history,
 )
-from tools.validators.validate_adiscord_inner_frontier_countries import validate, validate_external_gate_cleanup
+from tools.validators.validate_adiscord_inner_frontier_countries import (
+    validate,
+    validate_external_gate_cleanup,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -29,16 +32,25 @@ class InnerFrontierCountryContractsTest(unittest.TestCase):
             with self.subTest(tag=tag):
                 common = render_common_country(tag)
                 history = render_country_history(tag)
-                for field in ("graphical_culture =", "graphical_culture_2d =", "color ="):
+                for field in (
+                    "graphical_culture =",
+                    "graphical_culture_2d =",
+                    "color =",
+                ):
                     self.assertIn(field, common)
                     self.assertNotIn(field, history)
 
     def test_external_gate_units_are_removed_before_the_country_disappears(self):
-        split_effect = (ROOT / "common/scripted_effects/ADISCORD_inner_frontier_effects.txt").read_text(
-            encoding="utf-8-sig"
+        split_effect = (
+            ROOT / "common/scripted_effects/ADISCORD_inner_frontier_effects.txt"
+        ).read_text(encoding="utf-8-sig")
+        collapse_on_actions = read_country_on_actions(
+            ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
         )
-        collapse_on_actions = read_country_on_actions(ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
-        self.assertEqual([], validate_external_gate_cleanup(split_effect, collapse_on_actions))
+        self.assertEqual(
+            [], validate_external_gate_cleanup(split_effect, collapse_on_actions)
+        )
         for forbidden in (
             "ADISCORD_vorkerland_split_external_gate = yes",
             "WCG = { ADISCORD_vorkerland_delete_external_gate_formations = yes }",

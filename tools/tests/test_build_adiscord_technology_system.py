@@ -15,7 +15,9 @@ from tools.validators import validate_adiscord_tech_doctrine as validator
 
 ROOT = Path(__file__).resolve().parents[2]
 LEGACY_MANIFEST = ROOT / "tools" / "data" / "adiscord_technology_legacy_manifest.json"
-STARTING_PROFILE_MANIFEST = ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+STARTING_PROFILE_MANIFEST = (
+    ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+)
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
@@ -24,7 +26,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             ("salvaged_at_guns", "ADISCORD_anti_tank_equipment_2163"),
             ("improvised_air_defense", "ADISCORD_anti_air_equipment_2163"),
         ):
-            self.assertIn(equipment, generator.ENABLE_EQUIPMENT.get(f"ADISCORD_tech_{key}", ()))
+            self.assertIn(
+                equipment, generator.ENABLE_EQUIPMENT.get(f"ADISCORD_tech_{key}", ())
+            )
 
     def test_railway_gun_rewards_use_equipment_bonus_effect(self):
         branch = generator.BRANCH_BY_KEY["railway_artillery"]
@@ -35,18 +39,26 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             self.assertIn("railway_gun_equipment = {", rendered)
 
     def test_reconstruction_expands_shared_factory_capacity(self):
-        expected = {"drone_construction_cartography": "0.10", "modular_rebuilding": "0.10", "prefabricated_districts": "0.10"}
+        expected = {
+            "drone_construction_cartography": "0.10",
+            "modular_rebuilding": "0.10",
+            "prefabricated_districts": "0.10",
+        }
         found = {}
         for branch in generator.BRANCHES:
             for index, tech in enumerate(branch.techs):
                 if tech.key in expected:
                     effects = generator.effects_for(branch, index)
-                    self.assertIn("global_building_slots_factor = " + expected[tech.key], effects)
+                    self.assertIn(
+                        "global_building_slots_factor = " + expected[tech.key], effects
+                    )
                     found[tech.key] = True
         self.assertEqual(set(found), set(expected))
 
     def test_weapon_programmes_target_registered_subunits(self):
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         units = {}
         for filename in ("ADISCORD_air_units.txt", "ADISCORD_naval_units.txt"):
@@ -64,7 +76,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                             with self.subTest(technology=tech.id, target=entry.key):
                                 self.assertIn(entry.key, set(units))
 
-
     @staticmethod
     def _named_gui_block(text: str, kind: str, name: str) -> str:
         for match in re.finditer(rf"\b{kind}\s*=\s*\{{", text):
@@ -78,12 +89,15 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             rendered = generator.render_folder(folder)
             horizontal = folder in generator.HORIZONTAL_FOLDERS
             for branch in (b for b in generator.BRANCHES if folder in b.folders):
-                grid = self._named_gui_block(rendered, "gridboxtype", branch.techs[0].id + "_tree")
+                grid = self._named_gui_block(
+                    rendered, "gridboxtype", branch.techs[0].id + "_tree"
+                )
                 size = re.search(r"size = \{ width = (\d+) height = (\d+) \}", grid)
                 cross_size = int(size[2 if horizontal else 1])
                 # Native cross-axis slot zero lies at the gridbox centre.
                 centers = [
-                    cross_size / 2 + generator.technology_grid_position(branch, i)[0] * 70
+                    cross_size / 2
+                    + generator.technology_grid_position(branch, i)[0] * 70
                     for i in range(len(branch.techs))
                 ]
                 half_card = 42 if horizontal else 102
@@ -110,36 +124,78 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             rendered = generator.render_folder(folder)
             horizontal = folder in generator.HORIZONTAL_FOLDERS
             for branch in (b for b in generator.BRANCHES if folder in b.folders):
-                grid = self._named_gui_block(rendered, "gridboxtype", branch.techs[0].id + "_tree")
+                grid = self._named_gui_block(
+                    rendered, "gridboxtype", branch.techs[0].id + "_tree"
+                )
                 origin = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", grid)
                 for index, year in enumerate(branch.years):
                     label_id = str(year) if horizontal else f"{branch.key}_{year}"
                     label = self._named_gui_block(
-                        rendered, "instantTextBoxType", f"ADISCORD_{folder}_year_{label_id}"
+                        rendered,
+                        "instantTextBoxType",
+                        f"ADISCORD_{folder}_year_{label_id}",
                     )
                     pos = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", label)
-                    extent = int(re.search(
-                        r"maxWidth = (\d+)" if horizontal else r"maxHeight = (\d+)", label
-                    )[1])
+                    extent = int(
+                        re.search(
+                            r"maxWidth = (\d+)" if horizontal else r"maxHeight = (\d+)",
+                            label,
+                        )[1]
+                    )
                     axis = 1 if horizontal else 2
-                    cell_center = int(origin[axis]) + generator.technology_time_slot(branch, index) * 70 + 35
+                    cell_center = (
+                        int(origin[axis])
+                        + generator.technology_time_slot(branch, index) * 70
+                        + 35
+                    )
                     with self.subTest(folder=folder, technology=branch.techs[index].id):
                         self.assertEqual(int(pos[axis]) + extent / 2, cell_center)
                         self.assertIn(f'text = "{year}"', label)
 
-    def test_ui_validator_rejects_swapped_dates_displaced_labels_and_wrong_titles(self) -> None:
-        original = "\n".join(generator.render_folder(folder) for folder in generator.FOLDER_BACKGROUNDS)
-        label_a = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_industry_folder_year_production_2150")
-        label_b = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_industry_folder_year_production_2155")
-        swapped = original.replace(label_a, label_a.replace('text = "2150"', 'text = "2155"'))
-        swapped = swapped.replace(label_b, label_b.replace('text = "2155"', 'text = "2150"'))
-        displaced = original.replace(label_a, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", label_a))
-        title = self._named_gui_block(original, "instantTextBoxType", "ADISCORD_branch_production")
-        wrong_title = original.replace(title, title.replace("ADISCORD_TECH_BRANCH_PRODUCTION", "ADISCORD_TECH_BRANCH_RECONSTRUCTION"))
-        grid = self._named_gui_block(original, "gridboxtype", "ADISCORD_tech_standardized_machine_tools_tree")
-        displaced_grid = original.replace(grid, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", grid))
+    def test_ui_validator_rejects_swapped_dates_displaced_labels_and_wrong_titles(
+        self,
+    ) -> None:
+        original = "\n".join(
+            generator.render_folder(folder) for folder in generator.FOLDER_BACKGROUNDS
+        )
+        label_a = self._named_gui_block(
+            original,
+            "instantTextBoxType",
+            "ADISCORD_industry_folder_year_production_2150",
+        )
+        label_b = self._named_gui_block(
+            original,
+            "instantTextBoxType",
+            "ADISCORD_industry_folder_year_production_2155",
+        )
+        swapped = original.replace(
+            label_a, label_a.replace('text = "2150"', 'text = "2155"')
+        )
+        swapped = swapped.replace(
+            label_b, label_b.replace('text = "2155"', 'text = "2150"')
+        )
+        displaced = original.replace(
+            label_a, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", label_a)
+        )
+        title = self._named_gui_block(
+            original, "instantTextBoxType", "ADISCORD_branch_production"
+        )
+        wrong_title = original.replace(
+            title,
+            title.replace(
+                "ADISCORD_TECH_BRANCH_PRODUCTION", "ADISCORD_TECH_BRANCH_RECONSTRUCTION"
+            ),
+        )
+        grid = self._named_gui_block(
+            original, "gridboxtype", "ADISCORD_tech_standardized_machine_tools_tree"
+        )
+        displaced_grid = original.replace(
+            grid, re.sub(r"position = \{ x = -?\d+", "position = { x = 999", grid)
+        )
         mutations = (
-            ("swapped", swapped), ("displaced", displaced), ("wrong_title", wrong_title),
+            ("swapped", swapped),
+            ("displaced", displaced),
+            ("wrong_title", wrong_title),
             ("displaced_grid", displaced_grid),
             ("missing", original.replace(label_a, "")),
             ("duplicate", original.replace(label_a, label_a + label_a)),
@@ -161,9 +217,12 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             root = Path(directory)
             output = root / "interface/countrytechtreeview.gui"
             output.parent.mkdir()
-            output.write_bytes((ROOT / "interface/countrytechtreeview.gui").read_bytes())
-            with patch.object(generator, "ROOT", root), patch.object(
-                generator, "BASE_GAME", root / "uninstalled_game"
+            output.write_bytes(
+                (ROOT / "interface/countrytechtreeview.gui").read_bytes()
+            )
+            with (
+                patch.object(generator, "ROOT", root),
+                patch.object(generator, "BASE_GAME", root / "uninstalled_game"),
             ):
                 generator.write_gui()
                 first = output.read_bytes()
@@ -176,14 +235,26 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         for branch in generator.BRANCHES:
             if generator.HORIZONTAL_FOLDERS.intersection(branch.folders):
                 continue
-            rows = sorted({generator.technology_time_slot(branch, i) for i in range(len(branch.techs))})
+            rows = sorted(
+                {
+                    generator.technology_time_slot(branch, i)
+                    for i in range(len(branch.techs))
+                }
+            )
             with self.subTest(branch=branch.key):
                 self.assertEqual(rows[0], 0)
-                self.assertTrue(all((b - a) * generator.GRID_SLOT <= 140 for a, b in zip(rows, rows[1:])))
+                self.assertTrue(
+                    all(
+                        (b - a) * generator.GRID_SLOT <= 140
+                        for a, b in zip(rows, rows[1:])
+                    )
+                )
 
     def test_officer_training_delivers_all_four_leader_attributes(self) -> None:
         branch = generator.BRANCH_BY_KEY['officer_training']
-        rendered = '\n'.join(generator.render_technology(branch, i) for i in range(len(branch.techs)))
+        rendered = '\n'.join(
+            generator.render_technology(branch, i) for i in range(len(branch.techs))
+        )
         self.assertEqual(len(branch.techs), 8)
         for attribute in ('attack', 'defense', 'planning', 'logistics'):
             self.assertIn(f'add_{attribute} = 1', rendered)
@@ -193,13 +264,20 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         branch = generator.BRANCH_BY_KEY["public_finance"]
         self.assertEqual(generator.technology_grid_position(branch, 0), (0, 0))
         rendered = generator.render_folder("industry_folder")
-        self.assertRegex(rendered, rf'name = "{branch.techs[0].id}_tree"\s*position = \{{[^}}]+\}}\s*size = \{{ width = 210 ')
+        self.assertRegex(
+            rendered,
+            rf'name = "{branch.techs[0].id}_tree"\s*position = \{{[^}}]+\}}\s*size = \{{ width = 210 ',
+        )
 
     def test_naval_research_unlocks_multiple_producible_generations(self) -> None:
         blocks = validator.collect_equipment_blocks()
         for key in ('naval_support', 'surface_fleet', 'subsurface'):
             branch = generator.BRANCH_BY_KEY[key]
-            unlocked = {equipment for tech in branch.techs for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ())}
+            unlocked = {
+                equipment
+                for tech in branch.techs
+                for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ())
+            }
             with self.subTest(branch=key):
                 self.assertGreaterEqual(len(unlocked), 4)
                 for equipment in unlocked:
@@ -208,20 +286,40 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_aircraft_research_opens_bomber_and_maritime_production(self) -> None:
         blocks = validator.collect_equipment_blocks()
-        for family in ('ADISCORD_bomber_archetype', 'ADISCORD_naval_aircraft_archetype'):
-            variants = {key for key, block in blocks.items() if re.search(rf'archetype\s*=\s*{family}\b', block)}
+        for family in (
+            'ADISCORD_bomber_archetype',
+            'ADISCORD_naval_aircraft_archetype',
+        ):
+            variants = {
+                key
+                for key, block in blocks.items()
+                if re.search(rf'archetype\s*=\s*{family}\b', block)
+            }
             self.assertGreaterEqual(len(variants), 3, family)
-            unlocks = {equipment for items in generator.ENABLE_EQUIPMENT.values() for equipment in items}
+            unlocks = {
+                equipment
+                for items in generator.ENABLE_EQUIPMENT.values()
+                for equipment in items
+            }
             self.assertTrue(variants <= unlocks, variants - unlocks)
 
     def test_new_equipment_has_deployable_units_and_native_missions(self) -> None:
         equipment = validator.collect_equipment_blocks()
-        units = "\n".join(path.read_text(encoding="utf-8") for path in (ROOT / "common/units").glob("*.txt"))
+        units = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (ROOT / "common/units").glob("*.txt")
+        )
         roles = {
             "ADISCORD_cruiser_archetype": ("heavy_cruiser", None),
             "ADISCORD_submarine_archetype": ("submarine", None),
-            "ADISCORD_bomber_archetype": ("ADISCORD_tactical_bomber", {"strategic_bomber", "cas", "attack_logistics"}),
-            "ADISCORD_naval_aircraft_archetype": ("nav_bomber", {"naval_bomber", "port_strike", "naval_patrol"}),
+            "ADISCORD_bomber_archetype": (
+                "ADISCORD_tactical_bomber",
+                {"strategic_bomber", "cas", "attack_logistics"},
+            ),
+            "ADISCORD_naval_aircraft_archetype": (
+                "nav_bomber",
+                {"naval_bomber", "port_strike", "naval_patrol"},
+            ),
         }
         for family, (unit, missions) in roles.items():
             match = re.search(rf"\b{unit}\s*=\s*\{{", units)
@@ -242,30 +340,55 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertRegex(naval, r"\bnaval_strike_attack\s*=\s*[1-9]")
         self.assertNotRegex(naval, r"\bnaval_attack\s*=")
 
-    def test_new_programmes_are_researched_instead_of_granted_to_every_country(self) -> None:
+    def test_new_programmes_are_researched_instead_of_granted_to_every_country(
+        self,
+    ) -> None:
         common = set(generator.STARTING_TECH_PROFILES["common"])
         self.assertNotIn("ADISCORD_tech_reconstituted_staff_academies", common)
         self.assertNotIn("ADISCORD_tech_twin_engine_aircraft", common)
         self.assertNotIn("ADISCORD_tech_casualty_evacuation", common)
-        self.assertIn("ADISCORD_tech_casualty_evacuation", generator.STARTING_TECH_PROFILES["land"])
+        self.assertIn(
+            "ADISCORD_tech_casualty_evacuation",
+            generator.STARTING_TECH_PROFILES["land"],
+        )
 
     def test_cruiser_and_submarine_ai_groups_are_optional_reinforcements(self) -> None:
-        taskforces = (ROOT / "common/ai_navy/taskforce/ADISCORD_taskforce_templates.txt").read_text(encoding="utf-8")
-        fleets = (ROOT / "common/ai_navy/fleet/ADISCORD_fleet_templates.txt").read_text(encoding="utf-8")
-        for taskforce, unit in (("ADISCORD_cruiser_strike", "heavy_cruiser"), ("ADISCORD_submarine_raiding", "submarine")):
+        taskforces = (
+            ROOT / "common/ai_navy/taskforce/ADISCORD_taskforce_templates.txt"
+        ).read_text(encoding="utf-8")
+        fleets = (ROOT / "common/ai_navy/fleet/ADISCORD_fleet_templates.txt").read_text(
+            encoding="utf-8"
+        )
+        for taskforce, unit in (
+            ("ADISCORD_cruiser_strike", "heavy_cruiser"),
+            ("ADISCORD_submarine_raiding", "submarine"),
+        ):
             match = re.search(rf"\b{taskforce}\s*=\s*\{{", taskforces)
             self.assertIsNotNone(match, taskforce)
             block = validator.extract_block(taskforces, match.start())
-            self.assertRegex(block, rf"min_composition\s*=\s*\{{\s*{unit}\s*=\s*\{{\s*amount\s*=\s*1")
+            self.assertRegex(
+                block, rf"min_composition\s*=\s*\{{\s*{unit}\s*=\s*\{{\s*amount\s*=\s*1"
+            )
             self.assertRegex(block, r"NOT\s*=\s*\{\s*has_tech\s*=")
-            self.assertRegex(fleets, rf"optional_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*=\s*1")
-            self.assertNotRegex(fleets, rf"required_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*=")
+            self.assertRegex(
+                fleets, rf"optional_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*=\s*1"
+            )
+            self.assertNotRegex(
+                fleets, rf"required_taskforces\s*=\s*\{{[^}}]*\b{taskforce}\s*="
+            )
 
-    def test_budget_research_has_bounded_consumed_modifiers_and_refreshes_cache(self) -> None:
+    def test_budget_research_has_bounded_consumed_modifiers_and_refreshes_cache(
+        self,
+    ) -> None:
         branch = generator.BRANCH_BY_KEY.get("public_finance")
         self.assertIsNotNone(branch, "Public finance must be a playable research line")
-        definitions = (ROOT / "common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt").read_text(encoding="utf-8-sig")
-        consumers = (ROOT / "common/scripted_effects/ADISCORD_economy_modifier_effects.txt").read_text(encoding="utf-8-sig")
+        definitions = (
+            ROOT
+            / "common/modifier_definitions/00_ADISCORD_economy_modifiers_definition.txt"
+        ).read_text(encoding="utf-8-sig")
+        consumers = (
+            ROOT / "common/scripted_effects/ADISCORD_economy_modifier_effects.txt"
+        ).read_text(encoding="utf-8-sig")
         totals: dict[str, float] = {}
         for index, tech in enumerate(branch.techs):
             rendered = generator.render_technology(branch, index)
@@ -280,12 +403,22 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             self.assertNotIn("add_to_variable", rendered)
         self.assertTrue(all(abs(value) <= 0.20 for value in totals.values()), totals)
 
-    def test_rare_material_supply_precedes_equipment_and_has_research_gates(self) -> None:
+    def test_rare_material_supply_precedes_equipment_and_has_research_gates(
+        self,
+    ) -> None:
         buildings = validator.collect_building_blocks()
         equipment = validator.collect_equipment_blocks()
         for resource, building, unlock in (
-            ("rare_components", "ADISCORD_rare_components_plant", "ADISCORD_tech_rare_components_industry"),
-            ("rare_alloys", "ADISCORD_rare_alloy_foundry", "ADISCORD_tech_rare_alloy_metallurgy"),
+            (
+                "rare_components",
+                "ADISCORD_rare_components_plant",
+                "ADISCORD_tech_rare_components_industry",
+            ),
+            (
+                "rare_alloys",
+                "ADISCORD_rare_alloy_foundry",
+                "ADISCORD_tech_rare_alloy_metallurgy",
+            ),
         ):
             with self.subTest(resource=resource):
                 self.assertIn(unlock, generator.CURRENT_TECH_IDS)
@@ -301,23 +434,38 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                         if "resources =" not in block and archetype:
                             block = equipment[archetype.group(1)]
                         if re.search(rf"\b{resource} = [1-9]", block):
-                            consumer_branch, consumer_index = generator.TECH_POSITION_BY_ID[tech_id]
+                            consumer_branch, consumer_index = (
+                                generator.TECH_POSITION_BY_ID[tech_id]
+                            )
                             consumers.append(item)
-                            self.assertLess(supply_year, consumer_branch.years[consumer_index], item)
+                            self.assertLess(
+                                supply_year, consumer_branch.years[consumer_index], item
+                            )
                 self.assertGreater(len(set(consumers)), 4)
-                upgrades = [amount for entries in generator.BUILDING_RESOURCE_UPGRADES.values()
-                            for target, res, amount in entries if target == building and res == resource]
+                upgrades = [
+                    amount
+                    for entries in generator.BUILDING_RESOURCE_UPGRADES.values()
+                    for target, res, amount in entries
+                    if target == building and res == resource
+                ]
                 self.assertTrue(upgrades)
                 self.assertLessEqual(sum(upgrades), 4)
 
-    def test_inherited_material_plants_and_budget_profile_grants_remain_usable(self) -> None:
-        unlocks = {"ADISCORD_tech_rare_components_industry", "ADISCORD_tech_rare_alloy_metallurgy"}
+    def test_inherited_material_plants_and_budget_profile_grants_remain_usable(
+        self,
+    ) -> None:
+        unlocks = {
+            "ADISCORD_tech_rare_components_industry",
+            "ADISCORD_tech_rare_alloy_metallurgy",
+        }
         for tag in ("WRK", "RIV"):
             starting = set(generator.STARTING_TECH_PROFILES["common"])
             for profile in generator.STARTING_COUNTRY_TECH_PROFILES[tag]:
                 starting.update(generator.STARTING_TECH_PROFILES[profile])
             self.assertTrue(unlocks <= starting, tag)
-        branch, index = generator.TECH_POSITION_BY_ID["ADISCORD_tech_predictive_maintenance"]
+        branch, index = generator.TECH_POSITION_BY_ID[
+            "ADISCORD_tech_predictive_maintenance"
+        ]
         rendered = generator.render_technology(branch, index)
         self.assertEqual(rendered.count("on_research_complete = {"), 1)
         self.assertIn("add_tech_bonus = {", rendered)
@@ -327,8 +475,13 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             (root / "common/scripted_effects").mkdir(parents=True)
             with patch.object(generator, "ROOT", root):
                 generator.write_starting_technology_effect()
-            text = (root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt").read_text(encoding="utf-8")
-        common = validator.extract_block(text, text.index("ADISCORD_grant_technology_profile_common = {"))
+            text = (
+                root
+                / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"
+            ).read_text(encoding="utf-8")
+        common = validator.extract_block(
+            text, text.index("ADISCORD_grant_technology_profile_common = {")
+        )
         self.assertIn("has_variable = ADISCORD_economy_initialized", common)
         self.assertIn("ADISCORD_economy_mark_dirty = yes", common)
 
@@ -346,8 +499,11 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
         sprites = validator.collect_sprite_names()
         for tag in ("STP", "VAL"):
-            regional = {name: texture for name, texture in sprites.items()
-                        if name.startswith(f"GFX_{tag}_ADISCORD_tech_")}
+            regional = {
+                name: texture
+                for name, texture in sprites.items()
+                if name.startswith(f"GFX_{tag}_ADISCORD_tech_")
+            }
             self.assertEqual(len(regional), 9)
             for name, texture in regional.items():
                 self.assertEqual(
@@ -361,19 +517,32 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_art_and_effects_follow_ids_after_reordering(self) -> None:
         for branch in generator.BRANCHES:
-            reordered = replace(branch, techs=branch.techs[::-1], years=branch.years[::-1])
+            reordered = replace(
+                branch, techs=branch.techs[::-1], years=branch.years[::-1]
+            )
             for index, tech in enumerate(branch.techs):
                 other = len(branch.techs) - 1 - index
-                self.assertEqual(generator.effects_for(branch, index),
-                                 generator.effects_for(reordered, other), tech.id)
-                self.assertEqual(generator.icon_for_technology(branch, index),
-                                 generator.icon_for_technology(reordered, other), tech.id)
+                self.assertEqual(
+                    generator.effects_for(branch, index),
+                    generator.effects_for(reordered, other),
+                    tech.id,
+                )
+                self.assertEqual(
+                    generator.icon_for_technology(branch, index),
+                    generator.icon_for_technology(reordered, other),
+                    tech.id,
+                )
 
     def test_equipment_family_localisation_replaces_old_names_once(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for language in ("russian", "english"):
-                path = root / "localisation" / language / f"ADISCORD_technology_doctrine_l_{language}.yml"
+                path = (
+                    root
+                    / "localisation"
+                    / language
+                    / f"ADISCORD_technology_doctrine_l_{language}.yml"
+                )
                 path.parent.mkdir(parents=True)
                 path.write_text(
                     f'l_{language}:\n infantry_equipment: "Old name"\n unrelated_key: "Keep me"\n',
@@ -387,7 +556,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 self.assertEqual(path.read_bytes(), data)
                 self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
                 text = data.decode("utf-8-sig")
-                self.assertEqual(len(re.findall(r"^ infantry_equipment:", text, re.MULTILINE)), 1)
+                self.assertEqual(
+                    len(re.findall(r"^ infantry_equipment:", text, re.MULTILINE)), 1
+                )
                 self.assertIn(' unrelated_key: "Keep me"', text)
                 self.assertNotIn('"Old name"', text)
 
@@ -414,7 +585,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 generator.ensure_technology_state_gfx_current()
                 self.assertEqual(path.read_bytes(), before)
                 path.write_bytes(b"drifted state declaration\n")
-                with self.assertRaisesRegex(RuntimeError, "technology state GFX is stale"):
+                with self.assertRaisesRegex(
+                    RuntimeError, "technology state GFX is stale"
+                ):
                     generator.ensure_technology_state_gfx_current()
                 self.assertEqual(path.read_bytes(), b"drifted state declaration\n")
 
@@ -425,7 +598,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(payload["technology_count"], 625)
         self.assertEqual(len(ids), 625)
         self.assertEqual(len(ids), len(set(ids)))
-
 
     def test_grid_slots_match_the_native_connector_size(self) -> None:
         gui = (generator.BASE_GAME / "interface/countrytechtreeview.gui").read_text(
@@ -450,7 +622,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     self.assertEqual(tuple(map(int, size)), connector_size)
 
     def test_horizontal_rows_leave_space_around_equipment_cards(self) -> None:
-        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
         for folder in generator.HORIZONTAL_FOLDERS:
             item = re.search(
                 rf'name\s*=\s*"techtree_{folder}_item"\s*'
@@ -469,15 +643,18 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     flags=re.DOTALL,
                 )
                 self.assertIsNotNone(grid, branch.key)
-                rows = sorted({
-                    self._folder_positions(generator.render_technology(branch, index))[folder][0]
-                    * int(grid[1])
-                    for index in range(len(branch.techs))
-                })
+                rows = sorted(
+                    {
+                        self._folder_positions(
+                            generator.render_technology(branch, index)
+                        )[folder][0]
+                        * int(grid[1])
+                        for index in range(len(branch.techs))
+                    }
+                )
                 for first, second in zip(rows, rows[1:]):
                     with self.subTest(folder=folder, branch=branch.key):
                         self.assertGreaterEqual(second - first, card_height + 12)
-
 
     def test_validator_accepts_generator_visual_positions(self) -> None:
         for branch in generator.BRANCHES:
@@ -487,7 +664,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                         validator.EXPECTED_TECH_GRID_POSITIONS[tech.id],
                         generator.technology_grid_position(branch, index),
                     )
-
 
     def test_every_node_fits_inside_its_own_declared_gridbox(self) -> None:
         for folder in generator.FOLDER_BACKGROUNDS:
@@ -546,13 +722,18 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 _, y = generator.technology_grid_position(branch, index)
                 node_top = generator.GRID_Y + y * generator.GRID_SLOT
                 with self.subTest(technology=branch.techs[index].id):
-                    self.assertEqual(label_rows[(branch.key, branch.years[index])], node_top + 24)
-
+                    self.assertEqual(
+                        label_rows[(branch.key, branch.years[index])], node_top + 24
+                    )
 
     def test_only_industry_has_exclusive_research(self) -> None:
-        self.assertEqual(generator.XOR_KIND_BY_BRANCH, {
-            "production": "temporary", "industry_organization": "permanent",
-        })
+        self.assertEqual(
+            generator.XOR_KIND_BY_BRANCH,
+            {
+                "production": "temporary",
+                "industry_organization": "permanent",
+            },
+        )
         _, blocks = validator.collect_technologies()
         self.assertEqual(validator.check_technology_graph_quality(blocks), [])
 
@@ -610,14 +791,25 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             for index in range(len(organization.techs))
             for entry in generator.effects_for(organization, index)
         ]
-        self.assertTrue(any("industrial_capacity_factory" in entry for entry in effects))
+        self.assertTrue(
+            any("industrial_capacity_factory" in entry for entry in effects)
+        )
         self.assertTrue(any("factory_energy_consumption" in entry for entry in effects))
         self.assertTrue(any("industry_air_damage_factor" in entry for entry in effects))
 
-        concentrated_notes = generator.technology_description_notes(organization, 1, False)
+        concentrated_notes = generator.technology_description_notes(
+            organization, 1, False
+        )
         self.assertTrue(any("Energy price:" in note for note in concentrated_notes))
-        self.assertTrue(any("Permanent specialization choice:" in note for note in concentrated_notes))
-        self.assertFalse(any("common line continues" in note for note in concentrated_notes))
+        self.assertTrue(
+            any(
+                "Permanent specialization choice:" in note
+                for note in concentrated_notes
+            )
+        )
+        self.assertFalse(
+            any("common line continues" in note for note in concentrated_notes)
+        )
 
     def test_every_legacy_id_has_one_migration_outcome(self) -> None:
         payload = json.loads(LEGACY_MANIFEST.read_text(encoding="utf-8"))
@@ -625,9 +817,14 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         migrations = getattr(generator, "TECHNOLOGY_ID_MIGRATIONS", {})
         self.assertEqual(set(migrations), legacy_ids)
         self.assertTrue(
-            all(entry["status"] in {"preserved", "replaced", "removed"} for entry in migrations.values())
+            all(
+                entry["status"] in {"preserved", "replaced", "removed"}
+                for entry in migrations.values()
+            )
         )
-        current_ids = {tech.id for branch in generator.BRANCHES for tech in branch.techs}
+        current_ids = {
+            tech.id for branch in generator.BRANCHES for tech in branch.techs
+        }
         for old_id, entry in migrations.items():
             if entry["status"] == "preserved":
                 self.assertIn(old_id, current_ids)
@@ -668,18 +865,26 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 branch = generator.BRANCH_BY_KEY[branch_key]
                 for group in generator.XOR_INDEX_GROUPS_BY_BRANCH[branch_key]:
                     choices = {branch.techs[index].id for index in group}
-                    self.assertFalse(choices <= granted, f"{profile}: {sorted(choices)}")
+                    self.assertFalse(
+                        choices <= granted, f"{profile}: {sorted(choices)}"
+                    )
 
     def test_starting_profile_manifest_is_machine_readable_and_bounded(self) -> None:
         payload = json.loads(STARTING_PROFILE_MANIFEST.read_text(encoding="utf-8"))
         self.assertEqual(payload["active_country_count"], len(payload["countries"]))
-        self.assertEqual(set(payload["countries"]), set(generator.STARTING_COUNTRY_TECH_PROFILES))
+        self.assertEqual(
+            set(payload["countries"]), set(generator.STARTING_COUNTRY_TECH_PROFILES)
+        )
         self.assertEqual(
             set(generator.STARTING_COUNTRY_TECH_PROFILE_RATIONALE),
             set(generator.STARTING_COUNTRY_TECH_PROFILES),
         )
         self.assertEqual(
-            {tag for tag, profiles in generator.STARTING_COUNTRY_TECH_PROFILES.items() if not profiles},
+            {
+                tag
+                for tag, profiles in generator.STARTING_COUNTRY_TECH_PROFILES.items()
+                if not profiles
+            },
             {"EXZ", "PWR"},
         )
         for tag, entry in payload["countries"].items():
@@ -687,7 +892,8 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             self.assertGreaterEqual(entry["evidence"]["states"], 1, tag)
         self.assertLess(
             len(generator.STARTING_TECH_PROFILES["late_2183"]),
-            len({tech.id for branch in generator.BRANCHES for tech in branch.techs}) // 4,
+            len({tech.id for branch in generator.BRANCHES for tech in branch.techs})
+            // 4,
         )
 
     def test_starting_profile_manifest_evidence_matches_live_sources(self) -> None:
@@ -704,7 +910,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertEqual(capacity, 42)
         buildings = validator.collect_building_blocks()
         frames = {
-            building: int(re.search(r"\bicon_frame\s*=\s*(\d+)", buildings[building]).group(1))
+            building: int(
+                re.search(r"\bicon_frame\s*=\s*(\d+)", buildings[building]).group(1)
+            )
             for building in (
                 "ADISCORD_metallurgical_complex",
                 "ADISCORD_electrolysis_complex",
@@ -712,12 +920,15 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 "ADISCORD_thermal_power_complex",
             )
         }
-        self.assertEqual(frames, {
-            "ADISCORD_metallurgical_complex": 35,
-            "ADISCORD_electrolysis_complex": 36,
-            "ADISCORD_strategic_mining_complex": 37,
-            "ADISCORD_thermal_power_complex": 38,
-        })
+        self.assertEqual(
+            frames,
+            {
+                "ADISCORD_metallurgical_complex": 35,
+                "ADISCORD_electrolysis_complex": 36,
+                "ADISCORD_strategic_mining_complex": 37,
+                "ADISCORD_thermal_power_complex": 38,
+            },
+        )
         self.assertLessEqual(max(frames.values()), capacity)
 
     def test_land_profile_is_not_an_automatic_armor_package(self) -> None:
@@ -768,12 +979,13 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         self.assertIn("ADISCORD_tech_armored_carrier_program", profile)
         self.assertIn("ADISCORD_tech_semi_autonomous_combat_modules", profile)
 
-    def test_stp_starting_profile_unlocks_its_capital_guard_recon_platform(self) -> None:
+    def test_stp_starting_profile_unlocks_its_capital_guard_recon_platform(
+        self,
+    ) -> None:
         granted = set(generator.STARTING_TECH_PROFILES["common"])
         for profile in generator.STARTING_COUNTRY_TECH_PROFILES["STP"]:
             granted.update(generator.STARTING_TECH_PROFILES[profile])
         self.assertIn("ADISCORD_tech_drone_recon_swarms", granted)
-
 
     def test_weapon_technologies_have_authored_technical_descriptions(self) -> None:
         keys = {
@@ -844,7 +1056,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 f"ADISCORD_weapon_{tier:02d}_{icon_key}",
             )
 
-    def test_infantry_equipment_visual_levels_mark_real_weapon_generations(self) -> None:
+    def test_infantry_equipment_visual_levels_mark_real_weapon_generations(
+        self,
+    ) -> None:
         equipment_ids = (
             "infantry_equipment_0",
             "ADISCORD_infantry_equipment_2156",
@@ -935,7 +1149,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 f"ADISCORD_squad_{tier:02d}_{icon_key}",
             )
 
-    def test_weapon_generation_names_are_concrete_and_generated_in_both_languages(self) -> None:
+    def test_weapon_generation_names_are_concrete_and_generated_in_both_languages(
+        self,
+    ) -> None:
         expected_ids = {
             "infantry_equipment_0",
             "ADISCORD_infantry_equipment_2156",
@@ -993,7 +1209,9 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         }
         for equipment_id, term in expected_terms.items():
             with self.subTest(equipment=equipment_id):
-                description = generator.LAND_EQUIPMENT_LOCALISATION[equipment_id][4].lower()
+                description = generator.LAND_EQUIPMENT_LOCALISATION[equipment_id][
+                    4
+                ].lower()
                 self.assertIn(term, description)
                 self.assertNotRegex(description, r"сетев|распределён|огневой контур")
 
@@ -1010,7 +1228,6 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         )
         self.assertNotIn("боевые модули", rendered.lower())
 
-
     def test_compact_scope_and_explicit_specializations(self) -> None:
         count = sum(len(branch.techs) for branch in generator.BRANCHES)
         self.assertGreaterEqual(count, 300)
@@ -1020,11 +1237,23 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             graph = generator.BRANCH_GRAPHS[branch.key]
             if any(len(targets) > 1 for targets in graph.successors):
                 forks.add(branch.key)
-        self.assertTrue({
-            "production", "industry_organization", "advanced_materials", "bomber_maritime",
-            "small_arms", "squad_weapons", "night_combat", "anti_tank_infantry",
-            "protection", "special_forces", "combat_armor", "artillery",
-        } <= forks)
+        self.assertTrue(
+            {
+                "production",
+                "industry_organization",
+                "advanced_materials",
+                "bomber_maritime",
+                "small_arms",
+                "squad_weapons",
+                "night_combat",
+                "anti_tank_infantry",
+                "protection",
+                "special_forces",
+                "combat_armor",
+                "artillery",
+            }
+            <= forks
+        )
 
     def test_infantry_components_remain_independent_research_programmes(self) -> None:
         for target, unrelated in (
@@ -1034,31 +1263,48 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             ("hard_kill_protection_arrays", "adaptive_fire_control"),
             ("counterbattery_radar_links", "assisted_projectiles"),
         ):
-            required = generator.technology_prerequisite_closure((f"ADISCORD_tech_{target}",))
+            required = generator.technology_prerequisite_closure(
+                (f"ADISCORD_tech_{target}",)
+            )
             self.assertNotIn(f"ADISCORD_tech_{unrelated}", required)
-        integrated = generator.technology_prerequisite_closure(("ADISCORD_tech_networked_service_rifles",))
-        self.assertTrue({
-            "ADISCORD_tech_coil_assisted_service_rifles",
-            "ADISCORD_tech_integrated_target_designation",
-            "ADISCORD_tech_hybrid_kinetic_energy_carbines",
-        } <= set(integrated))
+        integrated = generator.technology_prerequisite_closure(
+            ("ADISCORD_tech_networked_service_rifles",)
+        )
+        self.assertTrue(
+            {
+                "ADISCORD_tech_coil_assisted_service_rifles",
+                "ADISCORD_tech_integrated_target_designation",
+                "ADISCORD_tech_hybrid_kinetic_energy_carbines",
+            }
+            <= set(integrated)
+        )
 
     def test_infantry_and_armor_retain_horizontal_programme_layouts(self) -> None:
-        self.assertTrue({"infantry_folder", "armour_folder"} <= generator.HORIZONTAL_FOLDERS)
+        self.assertTrue(
+            {"infantry_folder", "armour_folder"} <= generator.HORIZONTAL_FOLDERS
+        )
         self.assertNotIn("industry_folder", generator.HORIZONTAL_FOLDERS)
         infantry = {b.key for b in generator.BRANCHES if "infantry_folder" in b.folders}
         self.assertIn("special_forces", infantry)
         self.assertEqual(len(generator.BRANCH_BY_KEY["small_arms"].techs), 16)
         for branch in generator.BRANCHES:
-            cells = [generator.technology_grid_position(branch, i) for i in range(len(branch.techs))]
+            cells = [
+                generator.technology_grid_position(branch, i)
+                for i in range(len(branch.techs))
+            ]
             self.assertEqual(len(cells), len(set(cells)), branch.key)
 
     def test_medicine_and_rail_guns_have_one_semantic_owner(self) -> None:
         medicine = generator.BRANCH_BY_KEY["combat_medicine"]
         self.assertEqual(medicine.folders, ("support_folder",))
         medical_ids = {tech.key for tech in medicine.techs}
-        self.assertTrue({"casualty_evacuation", "battlefield_medical_drones",
-                         "smart_tourniquet_systems"}.issubset(medical_ids))
+        self.assertTrue(
+            {
+                "casualty_evacuation",
+                "battlefield_medical_drones",
+                "smart_tourniquet_systems",
+            }.issubset(medical_ids)
+        )
         for branch_key in ("protection", "field_support"):
             for tech in generator.BRANCH_BY_KEY[branch_key].techs:
                 self.assertNotIn("field_hospital", " ".join(tech.effects))
@@ -1068,23 +1314,40 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         guns = generator.BRANCH_BY_KEY["railway_artillery"]
         self.assertEqual(guns.folders, ("artillery_folder",))
         self.assertEqual(
-            {equipment for tech in guns.techs
-             for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ())},
+            {
+                equipment
+                for tech in guns.techs
+                for equipment in generator.ENABLE_EQUIPMENT.get(tech.id, ())
+            },
             {"railway_gun_equipment_1", "ADISCORD_railway_gun_equipment_2200"},
         )
 
     def test_every_producible_family_and_building_cap_remains_reachable(self) -> None:
         _, blocks = validator.collect_technologies()
-        self.assertEqual(validator.check_equipment_unlocks(
-            blocks, validator.collect_equipment_keys()), [])
-        self.assertEqual(validator.check_generated_capability_unlock_contract(blocks), [])
+        self.assertEqual(
+            validator.check_equipment_unlocks(
+                blocks, validator.collect_equipment_keys()
+            ),
+            [],
+        )
+        self.assertEqual(
+            validator.check_generated_capability_unlock_contract(blocks), []
+        )
         self.assertTrue(set(generator.ENABLE_EQUIPMENT) <= generator.CURRENT_TECH_IDS)
         self.assertTrue(set(generator.ENABLE_SUBUNITS) <= generator.CURRENT_TECH_IDS)
         self.assertTrue(set(generator.ENABLE_BUILDINGS) <= generator.CURRENT_TECH_IDS)
-        for building, minimum in (("radar_station", 6), ("rocket_site", 3),
-                                  ("anti_air_building", 5), ("synthetic_refinery", 3)):
-            caps = [level for entries in generator.ENABLE_BUILDINGS.values()
-                    for name, level in entries if name == building]
+        for building, minimum in (
+            ("radar_station", 6),
+            ("rocket_site", 3),
+            ("anti_air_building", 5),
+            ("synthetic_refinery", 3),
+        ):
+            caps = [
+                level
+                for entries in generator.ENABLE_BUILDINGS.values()
+                for name, level in entries
+                if name == building
+            ]
             self.assertEqual(max(caps), minimum)
 
     def test_all_technology_cards_use_available_artwork(self) -> None:
@@ -1092,19 +1355,29 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
         for branch in generator.BRANCHES:
             for tech in branch.techs:
                 texture = sprites[f"GFX_{tech.id}_medium"]
-                self.assertTrue(validator.texture_has_valid_dimensions(texture), texture)
-                self.assertTrue((ROOT / texture).is_file()
-                                or (generator.BASE_GAME / texture).is_file(), texture)
+                self.assertTrue(
+                    validator.texture_has_valid_dimensions(texture), texture
+                )
+                self.assertTrue(
+                    (ROOT / texture).is_file()
+                    or (generator.BASE_GAME / texture).is_file(),
+                    texture,
+                )
 
     def test_vertical_layout_rejects_wrong_branch_coordinates(self) -> None:
         _, blocks = validator.collect_technologies()
         tech_id = "ADISCORD_tech_postwar_weapon_standardization"
         broken = dict(blocks)
         broken[tech_id] = broken[tech_id].replace(
-            "position = { x = 0 y = 0 }", "position = { x = 2 y = 0 }", 1)
+            "position = { x = 0 y = 0 }", "position = { x = 2 y = 0 }", 1
+        )
         self.assertNotEqual(broken[tech_id], blocks[tech_id])
-        self.assertTrue(any(tech_id in issue and "grid position" in issue
-                            for issue in validator.check_technology_parser_constraints(broken)))
+        self.assertTrue(
+            any(
+                tech_id in issue and "grid position" in issue
+                for issue in validator.check_technology_parser_constraints(broken)
+            )
+        )
 
 
 class RegimentalSupportTests(unittest.TestCase):
@@ -1133,15 +1406,22 @@ class RegimentalSupportTests(unittest.TestCase):
         self.assertEqual(set(self.units), set(self.UNLOCKS))
         for key, block in self.units.items():
             with self.subTest(subunit=key):
-                for field, value in (("active", "no"), ("regimental", "yes"),
-                                     ("divisional", "no"), ("group", "support"),
-                                     ("affects_speed", "no"), ("combat_width", "0")):
+                for field, value in (
+                    ("active", "no"),
+                    ("regimental", "yes"),
+                    ("divisional", "no"),
+                    ("group", "support"),
+                    ("affects_speed", "no"),
+                    ("combat_width", "0"),
+                ):
                     self.assertRegex(block, rf"\b{field}\s*=\s*{value}\b")
                 self.assertIn("category_regimental_support_battalions", block)
                 self.assertNotIn("category_divisional_support_battalions", block)
                 groups = re.search(r"allowed_battalion_groups\s*=\s*\{([^}]+)\}", block)
                 self.assertIsNotNone(groups)
-                self.assertTrue({"infantry", "mobile", "armor"} <= set(groups[1].split()))
+                self.assertTrue(
+                    {"infantry", "mobile", "armor"} <= set(groups[1].split())
+                )
                 manpower = int(re.search(r"\bmanpower\s*=\s*(\d+)", block)[1])
                 self.assertGreater(manpower, 0)
                 self.assertLessEqual(manpower, 240)
@@ -1149,36 +1429,55 @@ class RegimentalSupportTests(unittest.TestCase):
                 requirements = dict(re.findall(r"(\w+)\s*=\s*(\d+)", need))
                 self.assertNotIn("infantry_equipment", requirements)
                 crew_served = int(requirements["ADISCORD_squad_weapons_equipment"])
-                other = sum(int(quantity) for archetype, quantity in requirements.items()
-                            if archetype != "ADISCORD_squad_weapons_equipment")
+                other = sum(
+                    int(quantity)
+                    for archetype, quantity in requirements.items()
+                    if archetype != "ADISCORD_squad_weapons_equipment"
+                )
                 self.assertGreater(crew_served, other)
                 for archetype, quantity in requirements.items():
                     self.assertGreater(int(quantity), 0)
                     self.assertIn(archetype, equipment)
                     self.assertRegex(equipment[archetype], r"\bis_archetype\s*=\s*yes")
-                    self.assertRegex(equipment[archetype], r"\bbuild_cost_ic\s*=\s*[1-9]|\bbuild_cost_ic\s*=\s*0\.[0-9]*[1-9]")
+                    self.assertRegex(
+                        equipment[archetype],
+                        r"\bbuild_cost_ic\s*=\s*[1-9]|\bbuild_cost_ic\s*=\s*0\.[0-9]*[1-9]",
+                    )
 
     def test_unlocks_are_reachable_and_basic_support_is_granted_at_start(self) -> None:
         _, blocks = validator.collect_technologies()
         for key, technology in self.UNLOCKS.items():
             self.assertIn(key, generator.ENABLE_SUBUNITS[technology])
-            self.assertRegex(blocks[technology], rf"enable_subunits\s*=\s*\{{[^}}]*\b{key}\b")
+            self.assertRegex(
+                blocks[technology], rf"enable_subunits\s*=\s*\{{[^}}]*\b{key}\b"
+            )
             required = generator.technology_prerequisite_closure((technology,))
             self.assertTrue(set(required) <= generator.CURRENT_TECH_IDS)
-        self.assertIn(self.UNLOCKS["ADISCORD_regimental_fire_support"],
-                      generator.STARTING_TECH_PROFILES["common"])
-        for key in ("ADISCORD_regimental_anti_air", "ADISCORD_regimental_anti_tank",
-                    "ADISCORD_regimental_pioneers"):
+        self.assertIn(
+            self.UNLOCKS["ADISCORD_regimental_fire_support"],
+            generator.STARTING_TECH_PROFILES["common"],
+        )
+        for key in (
+            "ADISCORD_regimental_anti_air",
+            "ADISCORD_regimental_anti_tank",
+            "ADISCORD_regimental_pioneers",
+        ):
             self.assertIn(self.UNLOCKS[key], generator.STARTING_TECH_PROFILES["land"])
 
-    def test_starting_elite_support_has_eligible_columns_and_unlocked_units(self) -> None:
+    def test_starting_elite_support_has_eligible_columns_and_unlocked_units(
+        self,
+    ) -> None:
         from collections import Counter
         from tools.validators import validate_adiscord_division_templates as divisions
 
         templates, references, issues = divisions.collect_templates_and_references(ROOT)
         self.assertEqual(issues, [])
-        supported = [template for template in templates if template.source_kind == "oob"
-                     and any(slot.kind == "regimental_support" for slot in template.slots)]
+        supported = [
+            template
+            for template in templates
+            if template.source_kind == "oob"
+            and any(slot.kind == "regimental_support" for slot in template.slots)
+        ]
         self.assertEqual(len(supported), 14)
         deployed = 0
         for template in supported:
@@ -1186,7 +1485,9 @@ class RegimentalSupportTests(unittest.TestCase):
                 technologies = set(generator.STARTING_TECH_PROFILES["common"])
                 for profile in generator.STARTING_COUNTRY_TECH_PROFILES[template.owner]:
                     technologies.update(generator.STARTING_TECH_PROFILES[profile])
-                columns = Counter(slot.x for slot in template.slots if slot.kind == "regiments")
+                columns = Counter(
+                    slot.x for slot in template.slots if slot.kind == "regiments"
+                )
                 occupied = set()
                 for slot in template.slots:
                     if slot.kind != "regimental_support":
@@ -1197,10 +1498,16 @@ class RegimentalSupportTests(unittest.TestCase):
                     occupied.add(slot.x)
                     self.assertGreaterEqual(columns[slot.x], 3)
                     self.assertIn(self.UNLOCKS[slot.unit], technologies)
-                    self.assertNotEqual(slot.unit, "ADISCORD_regimental_drone_observers")
-                matching = [reference for reference in references
-                            if reference.kind == "oob" and reference.path == template.path
-                            and reference.name == template.name]
+                    self.assertNotEqual(
+                        slot.unit, "ADISCORD_regimental_drone_observers"
+                    )
+                matching = [
+                    reference
+                    for reference in references
+                    if reference.kind == "oob"
+                    and reference.path == template.path
+                    and reference.name == template.name
+                ]
                 self.assertTrue(matching)
                 deployed += len(matching)
         self.assertEqual(deployed, 25)
@@ -1219,21 +1526,41 @@ class RegimentalSupportTests(unittest.TestCase):
                     self.assertEqual(atlas.width % 2, 0)
                     self.assertGreater(atlas.height, 0)
             for language in ("russian", "english"):
-                path = ROOT / "localisation" / language / f"ADISCORD_technology_doctrine_l_{language}.yml"
+                path = (
+                    ROOT
+                    / "localisation"
+                    / language
+                    / f"ADISCORD_technology_doctrine_l_{language}.yml"
+                )
                 self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
                 text = path.read_text(encoding="utf-8-sig")
                 for suffix in ("", "_desc"):
-                    self.assertEqual(len(re.findall(rf'^ {key}{suffix}:0 "[^"\r\n]+"$', text, re.M)), 1)
+                    self.assertEqual(
+                        len(re.findall(rf'^ {key}{suffix}:0 "[^"\r\n]+"$', text, re.M)),
+                        1,
+                    )
 
     def test_support_roles_receive_their_existing_research_upgrades(self) -> None:
         for branch in ("anti_air", "anti_tank", "special_forces"):
-            target = {"anti_air": "category_anti_air", "anti_tank": "category_anti_tank",
-                      "special_forces": "category_recon"}[branch]
-            self.assertTrue(any(target + " = {" in effect
-                                for tech in generator.BRANCH_BY_KEY[branch].techs
-                                for effect in tech.effects))
-        upgrades = [effect for branch in generator.BRANCHES for tech in branch.techs
-                    for effect in tech.effects if effect.startswith("ADISCORD_regimental_pioneers =")]
+            target = {
+                "anti_air": "category_anti_air",
+                "anti_tank": "category_anti_tank",
+                "special_forces": "category_recon",
+            }[branch]
+            self.assertTrue(
+                any(
+                    target + " = {" in effect
+                    for tech in generator.BRANCH_BY_KEY[branch].techs
+                    for effect in tech.effects
+                )
+            )
+        upgrades = [
+            effect
+            for branch in generator.BRANCHES
+            for tech in branch.techs
+            for effect in tech.effects
+            if effect.startswith("ADISCORD_regimental_pioneers =")
+        ]
         self.assertGreaterEqual(len(upgrades), 3)
 
 

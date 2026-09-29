@@ -111,7 +111,14 @@ def named_block_spans(text: str, name: str, offset: int = 0) -> list[Block]:
     for match in pattern.finditer(masked):
         opening = masked.index("{", match.start(), match.end())
         closing = closing_brace(masked, opening) + 1
-        blocks.append(Block(name, offset + match.start(), offset + closing, text[match.start():closing]))
+        blocks.append(
+            Block(
+                name,
+                offset + match.start(),
+                offset + closing,
+                text[match.start() : closing],
+            )
+        )
     return blocks
 
 
@@ -136,14 +143,18 @@ def top_level_named_blocks(text: str, name: str) -> list[Block]:
 def only_top_level_block(text: str, name: str) -> Block:
     blocks = top_level_named_blocks(text, name)
     if len(blocks) != 1:
-        raise AssertionError(f"expected exactly one top-level {name} block, got {len(blocks)}")
+        raise AssertionError(
+            f"expected exactly one top-level {name} block, got {len(blocks)}"
+        )
     return blocks[0]
 
 
 def only_direct_block(parent: Block, name: str) -> Block:
     blocks = direct_named_blocks(parent.text, name, parent.start)
     if len(blocks) != 1:
-        raise AssertionError(f"{parent.name} needs exactly one direct {name} block, got {len(blocks)}")
+        raise AssertionError(
+            f"{parent.name} needs exactly one direct {name} block, got {len(blocks)}"
+        )
     return blocks[0]
 
 
@@ -164,7 +175,11 @@ def direct_scalar_assignments(block: Block) -> list[tuple[str, str]]:
 
 
 def require_direct_scalar(block: Block, key: str, value: str) -> None:
-    actual = [operand for operand_key, operand in direct_scalar_assignments(block) if operand_key == key]
+    actual = [
+        operand
+        for operand_key, operand in direct_scalar_assignments(block)
+        if operand_key == key
+    ]
     if actual != [value]:
         raise AssertionError(
             f"{block.name} needs exactly one direct {key} = {value}, got {actual}"
@@ -187,21 +202,28 @@ def validate_relationship(
 
     war_guards = direct_named_blocks(enable.text, "NOT", enable.start)
     if len(war_guards) != 1:
-        raise AssertionError(f"{name} needs exactly one direct NOT war guard, got {len(war_guards)}")
+        raise AssertionError(
+            f"{name} needs exactly one direct NOT war guard, got {len(war_guards)}"
+        )
     require_direct_scalar(war_guards[0], "has_war_with", other_tag)
     require_direct_scalar(relationship, "abort_when_not_enabled", "yes")
 
-    direct_strategies = direct_named_blocks(relationship.text, "ai_strategy", relationship.start)
+    direct_strategies = direct_named_blocks(
+        relationship.text, "ai_strategy", relationship.start
+    )
     if len(direct_strategies) != len(strategies):
         raise AssertionError(
             f"{name} needs {len(strategies)} direct ai_strategy blocks, got {len(direct_strategies)}"
         )
     actual = Counter(
-        tuple(sorted(direct_scalar_assignments(strategy))) for strategy in direct_strategies
+        tuple(sorted(direct_scalar_assignments(strategy)))
+        for strategy in direct_strategies
     )
     expected = Counter(tuple(sorted(strategy.items())) for strategy in strategies)
     if actual != expected:
-        raise AssertionError(f"{name} direct ai strategies {actual} do not equal {expected}")
+        raise AssertionError(
+            f"{name} direct ai strategies {actual} do not equal {expected}"
+        )
 
 
 def validate_export_relationships(text: str) -> None:
@@ -265,7 +287,7 @@ class ValExportMarketTests(unittest.TestCase):
 
     def replace_relationship(self, text: str, name: str, replacement: str) -> str:
         relationship = only_top_level_block(text, name)
-        return text[:relationship.start] + replacement + text[relationship.end:]
+        return text[: relationship.start] + replacement + text[relationship.end :]
 
     def test_buyers_prefer_val_market_access(self) -> None:
         for buyer in BUYERS:
@@ -315,17 +337,21 @@ class ValExportMarketTests(unittest.TestCase):
 
     def test_export_block_prefixes_cover_exactly_the_supported_buyers(self) -> None:
         self.assertEqual(
-            top_level_prefixed_tags(self.ai_text, "ADISCORD_VAL_export_buyer_"), set(BUYERS)
+            top_level_prefixed_tags(self.ai_text, "ADISCORD_VAL_export_buyer_"),
+            set(BUYERS),
         )
         self.assertEqual(
-            top_level_prefixed_tags(self.ai_text, "ADISCORD_VAL_export_accept_"), set(BUYERS)
+            top_level_prefixed_tags(self.ai_text, "ADISCORD_VAL_export_accept_"),
+            set(BUYERS),
         )
 
     def test_val_market_layer_only_lists_equipment_for_sale(self) -> None:
         market_layer = only_top_level_block(self.ai_text, "VAL_Wants_To_Sell_Stuff")
         strategy_types = {
             value
-            for strategy in direct_named_blocks(market_layer.text, "ai_strategy", market_layer.start)
+            for strategy in direct_named_blocks(
+                market_layer.text, "ai_strategy", market_layer.start
+            )
             for key, value in direct_scalar_assignments(strategy)
             if key == "type"
         }
@@ -377,7 +403,11 @@ class ValExportMarketTests(unittest.TestCase):
                         "target": "market_access_rights",
                         "value": "150",
                     },
-                    {"type": "equipment_market_trade_desire", "id": "VAL", "value": "100"},
+                    {
+                        "type": "equipment_market_trade_desire",
+                        "id": "VAL",
+                        "value": "100",
+                    },
                 ),
             )
 
@@ -410,7 +440,11 @@ class ValExportMarketTests(unittest.TestCase):
                         "target": "market_access_rights",
                         "value": "150",
                     },
-                    {"type": "equipment_market_trade_desire", "id": "VAL", "value": "100"},
+                    {
+                        "type": "equipment_market_trade_desire",
+                        "id": "VAL",
+                        "value": "100",
+                    },
                 ),
             )
 

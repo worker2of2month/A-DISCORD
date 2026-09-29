@@ -21,7 +21,11 @@ def read(path: Path) -> str:
 
 def block(source: str, marker: str) -> str:
     pos = source.index(marker)
-    start = source.rfind("focus = {", 0, pos) if marker.startswith("id = ") else source.rfind("\n", 0, pos) + 1
+    start = (
+        source.rfind("focus = {", 0, pos)
+        if marker.startswith("id = ")
+        else source.rfind("\n", 0, pos) + 1
+    )
     opening = source.index("{", pos)
     depth = 0
     quoted = False
@@ -43,7 +47,7 @@ def block(source: str, marker: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[start:index + 1]
+                return source[start : index + 1]
     raise AssertionError(f"unterminated block for {marker}")
 
 
@@ -109,7 +113,9 @@ class KefreytMarineBranchTests(unittest.TestCase):
             positions[focus_id] = (x, y)
         self.assertEqual(len(positions), len(set(positions.values())))
 
-    def test_branch_rewards_cover_assault_logistics_landing_and_force_size(self) -> None:
+    def test_branch_rewards_cover_assault_logistics_landing_and_force_size(
+        self,
+    ) -> None:
         self.assertIn("amphibious_invasion = 0.15", self.ideas)
         self.assertIn("invasion_preparation = -0.15", self.ideas)
         self.assertIn("extra_marine_supply_grace = 48", self.ideas)
@@ -120,10 +126,18 @@ class KefreytMarineBranchTests(unittest.TestCase):
 
     def test_template_and_spawn_are_registered_in_division_audit(self) -> None:
         audit = json.loads(read(AUDIT))
-        template = next(row for row in audit["templates"] if row["key"] == "val_focus_marine_contract_group")
+        template = next(
+            row
+            for row in audit["templates"]
+            if row["key"] == "val_focus_marine_contract_group"
+        )
         self.assertEqual(template["technical_name"], "Kefreyt Marine Contract Group")
         self.assertEqual(len(template["regiments"]), 6)
-        ref = next(row for row in audit["references"] if row["key"] == "val_focus_marine_contract_group_spawn")
+        ref = next(
+            row
+            for row in audit["references"]
+            if row["key"] == "val_focus_marine_contract_group_spawn"
+        )
         self.assertEqual(ref["technical_name"], "Kefreyt Marine Contract Group")
         self.assertEqual(ref["start_experience_factor"], 0.3)
 
@@ -138,7 +152,12 @@ class KefreytMarineBranchTests(unittest.TestCase):
             "VAL_marine_contract_corps",
         )
         for language in ("russian", "english"):
-            loc = read(ROOT / "localisation" / language / f"ADISCORD_VAL_decisions_l_{language}.yml")
+            loc = read(
+                ROOT
+                / "localisation"
+                / language
+                / f"ADISCORD_VAL_decisions_l_{language}.yml"
+            )
             for key in keys:
                 self.assertRegex(loc, rf"(?m)^\s*{re.escape(key)}:")
 

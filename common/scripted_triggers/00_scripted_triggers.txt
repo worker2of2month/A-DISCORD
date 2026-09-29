@@ -14,7 +14,7 @@ is_border_conflict_defender_vs_FROM = {
 has_not_initiated_border_incident_with_FROM = {
 	custom_trigger_tooltip = {
 		tooltip = not_initiated_border_incident_with_FROM
-		NOT = {		
+		NOT = {
 			any_state = {
 				check_variable = { FROM.defender_state_vs_@PREV = id }
 			}
@@ -103,7 +103,7 @@ ai_land_doctrine_tier_2_trigger = {
 
 anti_submarine_strategy_required_trigger = {
 	OR = {
-		
+
 		AND = {
 			has_war = yes
 			any_enemy_country = {
@@ -140,7 +140,7 @@ is_available_to_collaboration_government = { # occupied_countries.1 should be up
 has_large_ally_not_pick_closed_economy = {
 	any_of_scopes = {
 		array = faction_members
-		
+
 		NOT = { tag = PREV }
 		num_of_military_factories > 30
 	}

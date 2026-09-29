@@ -2,14 +2,14 @@ state={
 	id=18
 	name="STATE_18"
 	provinces={
-		14 15 36 85 13029 
+		14 15 36 85 13029
 	}
 	buildings_max_level_factor=1.000
 	local_supplies=0.000
-    manpower=285000
-    state_category = town
+	manpower=285000
+	state_category = town
 
-    history={
+	history={
 		owner = NOD
 		buildings = {
 			synthetic_refinery = 1

@@ -371,7 +371,7 @@ diff_very_easy_player = {
 	production_lack_of_resource_penalty_factor = -0.8
 	army_fuel_consumption_factor = -0.5
 	air_fuel_consumption_factor = -0.5
- 	navy_fuel_consumption_factor = -0.5
+	navy_fuel_consumption_factor = -0.5
 	supply_consumption_factor = -0.1
 	no_supply_grace = 72
 }
@@ -383,7 +383,7 @@ diff_easy_player = {
 	production_lack_of_resource_penalty_factor = -0.3
 	army_fuel_consumption_factor = -0.25
 	air_fuel_consumption_factor = -0.25
- 	navy_fuel_consumption_factor = -0.25
+	navy_fuel_consumption_factor = -0.25
 	supply_consumption_factor = -0.05
 	no_supply_grace = 48
 }
@@ -424,14 +424,14 @@ diff_normal_ai = {
 diff_hard_ai = {
 	army_fuel_consumption_factor = -0.25
 	air_fuel_consumption_factor = -0.25
- 	navy_fuel_consumption_factor = -0.25
+	navy_fuel_consumption_factor = -0.25
 	no_supply_grace = 48
 }
 
 diff_very_hard_ai = {
 	army_fuel_consumption_factor = -0.5
 	air_fuel_consumption_factor = -0.5
- 	navy_fuel_consumption_factor = -0.5
+	navy_fuel_consumption_factor = -0.5
 	no_supply_grace = 72
 }
 
@@ -461,7 +461,7 @@ diff_strong_ai_generic = {
 	# fuel
 	army_fuel_consumption_factor = -0.40
 	air_fuel_consumption_factor = -0.40
- 	navy_fuel_consumption_factor = -0.40
+	navy_fuel_consumption_factor = -0.40
 
 	# xp gain
 	experience_gain_air_factor = 0.25
@@ -497,13 +497,13 @@ air_wing_experience_malus_min = {
 }
 
 ship_experience_bonus_max = {
-    naval_damage_factor = 0.3
-    naval_defense_factor = 0.2
+	naval_damage_factor = 0.3
+	naval_defense_factor = 0.2
 }
 
 ship_experience_malus_min = {
-    naval_damage_factor = -0.1
-    naval_defense_factor = -0.1
+	naval_damage_factor = -0.1
+	naval_defense_factor = -0.1
 }
 
 carrier_experience_bonus_max = {
@@ -534,14 +534,14 @@ water_modifier_shark_infested = {
 }
 
 screening_bonus = {
-  naval_retreat_speed = 0.2
-  convoy_retreat_speed = 0.2
-  naval_hit_chance = 0.4
+	naval_retreat_speed = 0.2
+	convoy_retreat_speed = 0.2
+	naval_hit_chance = 0.4
 }
 
 capital_screening_bonus = {
-  naval_retreat_speed = 0.2
-  sortie_efficiency = 0.1
+	naval_retreat_speed = 0.2
+	sortie_efficiency = 0.1
 }
 
 country_is_at_peace = {
@@ -716,7 +716,7 @@ NORDIC_allow_more_volunteers = {
 }
 
 NORDIC_allow_more_planes = {
-		air_volunteer_cap = 2
+	air_volunteer_cap = 2
 }
 
 FIN_organized_support_for_finland = {

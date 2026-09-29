@@ -379,7 +379,7 @@ ADISCORD_tank_templates = {
 		}
 	}
 
-ADISCORD_heavy_tank_battlegroup = {
+	ADISCORD_heavy_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_heavy_platform_cores

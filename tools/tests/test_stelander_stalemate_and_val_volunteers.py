@@ -33,7 +33,7 @@ def block(text, name):
         elif character == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unterminated block: {name}")
 
 
@@ -59,7 +59,9 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
                 self.assertIn("is_ai = yes", profile)
                 self.assertIn(f"has_war_with = {enemy}", profile)
                 self.assertIn("NOT = { num_divisions < 24 }", profile)
-                self.assertIn("type = ai_wanted_divisions_factor value = -1000", profile)
+                self.assertIn(
+                    "type = ai_wanted_divisions_factor value = -1000", profile
+                )
 
     def test_battle_for_stelander_backs_shabrat_only(self):
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
@@ -119,7 +121,9 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         weekly = block(effects, "VAL_stelander_support_weekly")
         self.assertIn("has_volunteers_amount_from = { tag = VAL count > 0 }", weekly)
-        self.assertIn("NOT = { has_country_flag = VAL_stelander_volunteer_contribution }", weekly)
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_stelander_volunteer_contribution }", weekly
+        )
         self.assertIn("set_country_flag = VAL_stelander_volunteer_contribution", weekly)
 
     def test_shabrat_victory_pays_scaled_dividends(self):
@@ -155,7 +159,9 @@ class StelanderStalemateRegressionTests(unittest.TestCase):
 
     def test_custom_costs_and_battle_text_exist_in_both_languages(self):
         for language in ("english", "russian"):
-            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            loc = read(
+                f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            )
             self.assertIn('VAL_stelander_war_aid:0 "', loc)
             for key in (
                 "VAL_stelander_rifle_aid_cost",

@@ -1,4 +1,5 @@
 """Regression coverage for Stelander postwar focus unlocks."""
+
 from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 import re
@@ -41,7 +42,9 @@ class StelanderPostwarUnlockRegressionTests(unittest.TestCase):
         self.assertNotIn("SRP", gate)
 
     def test_deferred_white_peace_gets_one_event_driven_retry(self) -> None:
-        recovery = read(ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        recovery = read(
+            ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        )
         deferred = named_block(recovery, "STP_cw_reconcile_scripted_peace")
         for tag in ("STP", "STS"):
             branch = named_block(deferred, "else_if")
@@ -57,8 +60,9 @@ class StelanderPostwarUnlockRegressionTests(unittest.TestCase):
             self.assertNotIn("SRP", branch)
         self.assertNotIn("country_event", deferred)
 
-
-    def test_budget_tooltip_marks_the_republic_condition_as_a_separate_alternative(self) -> None:
+    def test_budget_tooltip_marks_the_republic_condition_as_a_separate_alternative(
+        self,
+    ) -> None:
         ru = read(RU_LOC)
         en = read(EN_LOC)
         self.assertIn("альтернативные условия для разных стран", ru)

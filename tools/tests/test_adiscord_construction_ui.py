@@ -72,7 +72,9 @@ class ConstructionUiContractTests(unittest.TestCase):
             with Image.open(ASSET_DIR / filename) as image:
                 self.assertEqual(image.size, expected, filename)
                 self.assertEqual(image.mode, "RGBA", filename)
-                self.assertEqual(image.getchannel("A").getextrema(), (255, 255), filename)
+                self.assertEqual(
+                    image.getchannel("A").getextrema(), (255, 255), filename
+                )
 
     def test_construction_source_material_is_kept_with_project_assets(self):
         source = ASSET_DIR / "source" / "construction_surface_source.png"

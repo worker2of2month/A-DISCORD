@@ -15,7 +15,8 @@ def native_sprite_blocks(base_game: Path, names: set[str]) -> dict[str, str]:
     blocks: dict[str, str] = {}
     opener = re.compile(
         r'\b(?:spriteType|textSpriteType|corneredTileSpriteType|frameAnimatedSpriteType)'
-        r'\s*=\s*\{\s*name\s*=\s*"([^"]+)"', re.IGNORECASE,
+        r'\s*=\s*\{\s*name\s*=\s*"([^"]+)"',
+        re.IGNORECASE,
     )
     for path in sorted((base_game / "interface").rglob("*.gfx")):
         text = path.read_text(encoding="utf-8-sig")
@@ -26,7 +27,7 @@ def native_sprite_blocks(base_game: Path, names: set[str]) -> dict[str, str]:
             for end in range(text.index("{", match.start()), len(text)):
                 depth += (text[end] == "{") - (text[end] == "}")
                 if depth == 0:
-                    blocks[match[1]] = text[match.start():end + 1]
+                    blocks[match[1]] = text[match.start() : end + 1]
                     break
     missing = names - blocks.keys()
     if missing:
@@ -42,10 +43,12 @@ def replace_gui_block(
     expected: int = 1,
 ) -> str:
     """Apply bounded property corrections to named widgets, rejecting drift."""
-    matches = list(re.finditer(
-        rf'\b{re.escape(kind)}\s*=\s*\{{\s*name\s*=\s*"{re.escape(name)}"',
-        text,
-    ))
+    matches = list(
+        re.finditer(
+            rf'\b{re.escape(kind)}\s*=\s*\{{\s*name\s*=\s*"{re.escape(name)}"',
+            text,
+        )
+    )
     if len(matches) != expected:
         raise ValueError(f"{name}: expected {expected} widgets, found {len(matches)}")
     for match in reversed(matches):
@@ -57,12 +60,12 @@ def replace_gui_block(
                 break
         else:
             raise ValueError(f"{name}: unclosed GUI widget")
-        block = text[match.start():end + 1]
+        block = text[match.start() : end + 1]
         for pattern, replacement in replacements:
             block, count = re.subn(pattern, lambda _: replacement, block)
             if count != 1:
                 raise ValueError(f"{name}: expected one {pattern!r}, found {count}")
-        text = text[:match.start()] + block + text[end + 1:]
+        text = text[: match.start()] + block + text[end + 1 :]
     return text
 
 

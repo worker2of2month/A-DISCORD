@@ -1,4 +1,5 @@
 """Regression contracts for major A-DISCORD world-news broadcasts."""
+
 from pathlib import Path
 import re
 import unittest
@@ -74,8 +75,12 @@ class WorldNewsContracts(unittest.TestCase):
     def setUp(self):
         self.events = read("events/ADISCORD_world_news.txt")
         self.stp_events = read("events/ADISCORD_STP_events.txt")
-        self.on_actions = read("common/on_actions/06_ADISCORD_world_news_on_actions.txt")
-        self.debug_categories = read("common/decisions/categories/ADISCORD_scenario_debug_categories.txt")
+        self.on_actions = read(
+            "common/on_actions/06_ADISCORD_world_news_on_actions.txt"
+        )
+        self.debug_categories = read(
+            "common/decisions/categories/ADISCORD_scenario_debug_categories.txt"
+        )
         self.ru_path = ROOT / "localisation/russian/ADISCORD_world_news_l_russian.yml"
         self.en_path = ROOT / "localisation/english/ADISCORD_world_news_l_english.yml"
         self.ru = read("localisation/russian/ADISCORD_world_news_l_russian.yml")
@@ -157,7 +162,11 @@ class WorldNewsContracts(unittest.TestCase):
             ("ADISCORD_TFF.10", frontier, "frontier_command"),
         ]:
             event = event_block(source, event_id)
-            for token in ("major = yes", "fire_only_once = no", "is_triggered_only = yes"):
+            for token in (
+                "major = yes",
+                "fire_only_once = no",
+                "is_triggered_only = yes",
+            ):
                 self.assertIn(token, event, event_id)
             callers = source + effects
             self.assertIn("id = " + event_id + " hours = 1", callers)
@@ -166,18 +175,25 @@ class WorldNewsContracts(unittest.TestCase):
             self.assertIn("set_global_flag = " + flag, callers)
             for suffix in ("t", "d", "a"):
                 key = event_id + "." + suffix
-                values = re.findall(r'^ ' + re.escape(key) + r': "([^"\n]+)"$', loc, re.M)
+                values = re.findall(
+                    r'^ ' + re.escape(key) + r': "([^"\n]+)"$', loc, re.M
+                )
                 self.assertEqual(len(values), 1, key)
                 text = values[0].replace(r"\n", "\n")
                 self.assertLessEqual(len(text), 3000)
                 self.assertLessEqual(len(text.encode("utf-8")), 5500)
 
-    def test_frontier_second_war_news_requires_real_joint_war_and_uses_valid_bonus(self):
+    def test_frontier_second_war_news_requires_real_joint_war_and_uses_valid_bonus(
+        self,
+    ):
         source = read("common/scripted_effects/ADISCORD_TFF_effects.txt")
         support = named_block(source, "ADISCORD_TFF_begin_kefreyt_campaign")
         self.assertIn("has_war_with = NOD", support)
         self.assertIn("VAL = { has_war_with = NOD", support)
-        self.assertIn("NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published }", support)
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published }",
+            support,
+        )
         self.assertIn("id = ADISCORD_TFF.11 hours = 1", support)
         event = event_block(read("events/ADISCORD_TFF_events.txt"), "ADISCORD_TFF.11")
         for token in ("major = yes", "fire_only_once = no", "is_triggered_only = yes"):
@@ -188,9 +204,15 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertIn("TFF_kefreyt_northern_campaign", ideas)
         cleanup = named_block(source, "ADISCORD_TFF_reconcile_kefreyt_campaign")
         self.assertIn("ADISCORD_TFF_end_kefreyt_campaign = yes", cleanup)
-        self.assertIn("remove_ideas = TFF_kefreyt_northern_campaign", named_block(source, "ADISCORD_TFF_end_kefreyt_campaign"))
+        self.assertIn(
+            "remove_ideas = TFF_kefreyt_northern_campaign",
+            named_block(source, "ADISCORD_TFF_end_kefreyt_campaign"),
+        )
         peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
-        self.assertIn("ADISCORD_TFF_reconcile_kefreyt_campaign = yes", named_block(peace, "on_peace"))
+        self.assertIn(
+            "ADISCORD_TFF_reconcile_kefreyt_campaign = yes",
+            named_block(peace, "on_peace"),
+        )
 
     def test_world_news_debug_smoke_decisions_are_not_shipped(self):
         self.assertFalse(
@@ -200,7 +222,9 @@ class WorldNewsContracts(unittest.TestCase):
         self.assertNotIn("ADISCORD_debug_world_news_", self.en)
 
     def test_shared_war_debug_category_is_available_to_every_test_country(self):
-        category = named_block(self.debug_categories, "ADISCORD_scenario_debug_category")
+        category = named_block(
+            self.debug_categories, "ADISCORD_scenario_debug_category"
+        )
         self.assertIn("always = yes", named_block(category, "allowed"))
         self.assertIn("is_debug = yes", named_block(category, "visible"))
         self.assertNotIn("tag =", category)

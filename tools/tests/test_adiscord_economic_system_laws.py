@@ -125,9 +125,10 @@ class EconomicSystemLawContracts(unittest.TestCase):
 
         self.assertEqual(EXPECTED_TEXTURES, actual)
         for system_id, relative_path in EXPECTED_TEXTURES.items():
-            with self.subTest(system_id=system_id), Image.open(
-                ROOT / relative_path
-            ) as image:
+            with (
+                self.subTest(system_id=system_id),
+                Image.open(ROOT / relative_path) as image,
+            ):
                 self.assertEqual("PNG", image.format)
                 self.assertEqual((64, 64), image.size)
                 self.assertIn("A", image.getbands())
@@ -164,11 +165,7 @@ class EconomicSystemLawContracts(unittest.TestCase):
         )
         self.assertEqual(
             ["ADISCORD_labor_policy_guild_protections"],
-            [
-                entry.value
-                for entry in availability_entries
-                if entry.key == "has_idea"
-            ],
+            [entry.value for entry in availability_entries if entry.key == "has_idea"],
         )
 
         modifiers = unique_child(syndicalist, "modifier")
@@ -265,19 +262,11 @@ class EconomicSystemLawContracts(unittest.TestCase):
         )
         self.assertNotIn("ADISCORD_economic_system_mobilization:", ru)
         self.assertGreater(
-            len(
-                localisation_value(
-                    ru, "ADISCORD_economic_system_syndicalist_desc"
-                )
-            ),
+            len(localisation_value(ru, "ADISCORD_economic_system_syndicalist_desc")),
             80,
         )
         self.assertGreater(
-            len(
-                localisation_value(
-                    en, "ADISCORD_economic_system_syndicalist_desc"
-                )
-            ),
+            len(localisation_value(en, "ADISCORD_economic_system_syndicalist_desc")),
             80,
         )
 

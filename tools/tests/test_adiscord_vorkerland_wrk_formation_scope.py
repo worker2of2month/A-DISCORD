@@ -26,7 +26,7 @@ def balanced_block(source: str, opening_brace: int) -> str:
         elif source[index] == "}":
             depth -= 1
             if depth == 0:
-                return source[opening_brace + 1:index]
+                return source[opening_brace + 1 : index]
     raise AssertionError("unterminated Clausewitz block")
 
 
@@ -85,10 +85,21 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
                 self.assertIn("focus_unlock = yes", block)
                 self.assertIn("mark_focus_tree_layout_dirty = yes", block)
 
-                self.assertLess(block.index("transfer_state = 32"), block.index(route_character))
-                self.assertLess(block.index(route_character), block.index(f"change_tag_from = {winner}"))
-                self.assertLess(block.index(f"change_tag_from = {winner}"), block.index(winner_annex))
-                self.assertLess(block.index(winner_annex), block.index("ADISCORD_vorkerland_finalize_wrk_formation"))
+                self.assertLess(
+                    block.index("transfer_state = 32"), block.index(route_character)
+                )
+                self.assertLess(
+                    block.index(route_character),
+                    block.index(f"change_tag_from = {winner}"),
+                )
+                self.assertLess(
+                    block.index(f"change_tag_from = {winner}"),
+                    block.index(winner_annex),
+                )
+                self.assertLess(
+                    block.index(winner_annex),
+                    block.index("ADISCORD_vorkerland_finalize_wrk_formation"),
+                )
 
     def test_worker_route_uses_authored_anton_fallback(self) -> None:
         block = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
@@ -202,8 +213,10 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
     def test_worx_formation_preserves_claimant_colour(self) -> None:
         tva = named_block(self.effects, "ADISCORD_vorkerland_form_wrk_from_tva")
         cosmetic = "WRK_vorkerland_technocracy"
-        self.assertGreater(tva.index(f"set_cosmetic_tag = {cosmetic}"),
-                           tva.index("ADISCORD_vorkerland_finalize_wrk_formation = yes"))
+        self.assertGreater(
+            tva.index(f"set_cosmetic_tag = {cosmetic}"),
+            tva.index("ADISCORD_vorkerland_finalize_wrk_formation = yes"),
+        )
         palette = named_block(read(ROOT / "common/countries/cosmetic.txt"), cosmetic)
         original = read(ROOT / "common/countries/TVA.txt")
         colour = re.search(r"color\s*=\s*rgb\s*\{[^}]+\}", original).group()

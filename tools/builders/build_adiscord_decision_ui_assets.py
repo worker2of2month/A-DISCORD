@@ -19,7 +19,9 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 SOURCE = ROOT / "gfx/interface/decisions/source/decisions_surface_source.png"
-APPROVAL_SOURCE = ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+APPROVAL_SOURCE = (
+    ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+)
 OUTPUT_DIR = ROOT / "gfx/interface/decisions/ui"
 
 WINDOW_TILE = OUTPUT_DIR / "ADISCORD_decisions_window_tile.dds"
@@ -50,15 +52,21 @@ OLIVE = (88, 99, 55, 255)
 
 def _source_image() -> Image.Image:
     if not SOURCE.is_file():
-        raise RuntimeError(f"missing decisions surface source: {SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing decisions surface source: {SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(SOURCE) as source_image:
         source = source_image.convert("RGBA")
     if source.width < 1024 or source.height < 1024:
-        raise RuntimeError(f"decisions source must be at least 1024x1024, got {source.size}")
+        raise RuntimeError(
+            f"decisions source must be at least 1024x1024, got {source.size}"
+        )
     return source
 
 
-def _surface(size: tuple[int, int], centering: tuple[float, float], brightness: float) -> Image.Image:
+def _surface(
+    size: tuple[int, int], centering: tuple[float, float], brightness: float
+) -> Image.Image:
     """Crop the source weave without turning it into another metal skin."""
     source = _source_image()
     surface = ImageOps.fit(
@@ -194,9 +202,7 @@ def _category_end_background() -> Image.Image:
 
 
 def _event_item_background() -> Image.Image:
-    output = _tinted_surface(
-        (512, 33), (0.27, 0.74), 1.02, (11, 8, 5), (142, 92, 47)
-    )
+    output = _tinted_surface((512, 33), (0.27, 0.74), 1.02, (11, 8, 5), (142, 92, 47))
     mask = Image.new("L", output.size, 0)
     ImageDraw.Draw(mask).rounded_rectangle((1, 1, 510, 31), radius=2, fill=242)
     output.putalpha(mask)
@@ -211,7 +217,9 @@ def _decision_frame(index: int) -> Image.Image:
     centering = ((0.20, 0.36), (0.51, 0.51), (0.81, 0.68))[index]
     shadows = ((12, 4, 4), (7, 8, 8), (5, 8, 4))
     highlights = ((111, 43, 39), (78, 78, 69), (92, 105, 55))
-    output = _tinted_surface((FRAME_WIDTH, 40), centering, brightness, shadows[index], highlights[index])
+    output = _tinted_surface(
+        (FRAME_WIDTH, 40), centering, brightness, shadows[index], highlights[index]
+    )
     mask = Image.new("L", output.size, 0)
     ImageDraw.Draw(mask).rounded_rectangle((1, 1, 510, 38), radius=2, fill=255)
     output.putalpha(mask)
@@ -252,7 +260,9 @@ def _segmented_progress(colour: tuple[int, int, int, int]) -> Image.Image:
 
 def _approval_seal() -> Image.Image:
     if not APPROVAL_SOURCE.is_file():
-        raise RuntimeError(f"missing decision approval source: {APPROVAL_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing decision approval source: {APPROVAL_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(APPROVAL_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     bbox = source.getchannel("A").getbbox()
@@ -283,7 +293,9 @@ def _approval_frame(state: int) -> Image.Image:
     y = (frame.height - icon.height) // 2
     frame.alpha_composite(icon, (x, y))
     if state == 2:
-        ImageDraw.Draw(frame, "RGBA").ellipse((5, 0, 34, 27), outline=(169, 128, 57, 150), width=1)
+        ImageDraw.Draw(frame, "RGBA").ellipse(
+            (5, 0, 34, 27), outline=(169, 128, 57, 150), width=1
+        )
     elif state == 3:
         draw = ImageDraw.Draw(frame, "RGBA")
         draw.line((8, 22, 31, 5), fill=(157, 47, 39, 255), width=3)
@@ -325,9 +337,13 @@ def validate(outputs: dict[Path, bytes]) -> list[str]:
     issues: list[str] = []
     for path, expected in outputs.items():
         if not path.is_file():
-            issues.append(f"missing generated decisions UI asset: {path.relative_to(ROOT)}")
+            issues.append(
+                f"missing generated decisions UI asset: {path.relative_to(ROOT)}"
+            )
         elif path.read_bytes() != expected:
-            issues.append(f"generated decisions UI asset differs: {path.relative_to(ROOT)}")
+            issues.append(
+                f"generated decisions UI asset differs: {path.relative_to(ROOT)}"
+            )
     return issues
 
 
@@ -340,8 +356,12 @@ def apply(outputs: dict[Path, bytes]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated DDS outputs")
+    actions.add_argument(
+        "--check", action="store_true", help="compare outputs (default)"
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write generated DDS outputs"
+    )
     args = parser.parse_args()
 
     try:
@@ -356,7 +376,9 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print("A-Discord decisions UI assets are current (dossier surfaces, three-state rows, and segmented progress).")
+    print(
+        "A-Discord decisions UI assets are current (dossier surfaces, three-state rows, and segmented progress)."
+    )
     return 0
 
 

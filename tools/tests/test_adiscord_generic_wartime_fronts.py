@@ -88,13 +88,19 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
     """Evaluate the actual shared predicates; this does not simulate engine movement."""
 
     def setUp(self) -> None:
-        self.profiles = {entry.key: entry.value for entry in parse_clausewitz(
-            AI_PATH.read_text(encoding="utf-8"))}
+        self.profiles = {
+            entry.key: entry.value
+            for entry in parse_clausewitz(AI_PATH.read_text(encoding="utf-8"))
+        }
         path = ROOT / "common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt"
-        self.triggers = {entry.key: entry.value for entry in parse_clausewitz(
-            path.read_text(encoding="utf-8"))}
-        self.countries = {tag: {"ai": True, "capitulated": False, "faction": None}
-                          for tag in ("STS", "STP", "NOD", "VAL", "SRP")}
+        self.triggers = {
+            entry.key: entry.value
+            for entry in parse_clausewitz(path.read_text(encoding="utf-8"))
+        }
+        self.countries = {
+            tag: {"ai": True, "capitulated": False, "faction": None}
+            for tag in ("STS", "STP", "NOD", "VAL", "SRP")
+        }
         self.wars = {frozenset(("STS", "STP"))}
         self.goals = set()
         self.justifying = set()
@@ -108,17 +114,27 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
         def matches(entry):
             key, value = entry.key, entry.value
             if key in ("AND", "OR", "NOT"):
-                results = [self.evaluate([child], scope, actor, previous) for child in value]
-                return {"AND": all(results), "OR": any(results), "NOT": not any(results)}[key]
+                results = [
+                    self.evaluate([child], scope, actor, previous) for child in value
+                ]
+                return {
+                    "AND": all(results),
+                    "OR": any(results),
+                    "NOT": not any(results),
+                }[key]
             if key in self.triggers:
-                return self.evaluate(self.triggers[key], scope, actor, previous) == (value == "yes")
+                return self.evaluate(self.triggers[key], scope, actor, previous) == (
+                    value == "yes"
+                )
             if key == "FROM":
                 return self.evaluate(value, actor, actor, scope)
             if key == "PREV":
                 return self.evaluate(value, previous, actor, scope)
             if key == "any_neighbor_country":
-                return any(self.evaluate(value, neighbor, actor, scope)
-                           for neighbor in self.neighbors[scope])
+                return any(
+                    self.evaluate(value, neighbor, actor, scope)
+                    for neighbor in self.neighbors[scope]
+                )
             if key == "has_war_with":
                 return frozenset((scope, target(value))) in self.wars
             if key == "has_wargoal_against":
@@ -127,20 +143,28 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
                 return (scope, target(value)) in self.justifying
             if key == "is_in_faction_with":
                 faction = self.countries[scope]["faction"]
-                return faction is not None and faction == self.countries[target(value)]["faction"]
+                return (
+                    faction is not None
+                    and faction == self.countries[target(value)]["faction"]
+                )
             if key == "check_variable":
                 fields = {child.key: child.value for child in value}
                 variable = fields["var"]
-                owner = (actor if variable.startswith("FROM.") else
-                         previous if variable.startswith("PREV.") else scope)
+                owner = (
+                    actor
+                    if variable.startswith("FROM.")
+                    else previous if variable.startswith("PREV.") else scope
+                )
                 other = target(variable.split("@")[1])
                 self.assertEqual(fields["compare"], "greater_than")
                 return self.preparation.get((owner, other), 0) > float(fields["value"])
             if key in ("is_ai", "has_war", "has_capitulated", "exists"):
-                actual = {"is_ai": self.countries[scope]["ai"],
-                          "has_war": any(scope in pair for pair in self.wars),
-                          "has_capitulated": self.countries[scope]["capitulated"],
-                          "exists": True}[key]
+                actual = {
+                    "is_ai": self.countries[scope]["ai"],
+                    "has_war": any(scope in pair for pair in self.wars),
+                    "has_capitulated": self.countries[scope]["capitulated"],
+                    "exists": True,
+                }[key]
                 return actual == (value == "yes")
             raise AssertionError(f"Unsupported front predicate: {key}")
 
@@ -148,8 +172,11 @@ class FrontAllocationLifecycleTests(unittest.TestCase):
 
     def request(self, actor, target):
         total = 0
-        names = ("ADISCORD_active_enemy_front_concentration",
-                 "ADISCORD_wartime_neutral_borders", "ADISCORD_prewar_front_concentration")
+        names = (
+            "ADISCORD_active_enemy_front_concentration",
+            "ADISCORD_wartime_neutral_borders",
+            "ADISCORD_prewar_front_concentration",
+        )
         for name in names:
             profile = self.profiles[name]
             enable = next(entry.value for entry in profile if entry.key == "enable")
@@ -254,15 +281,37 @@ class PreparationLifecycleTests(unittest.TestCase):
     """
 
     def setUp(self):
-        ai_paths = ("ADISCORD_STP_civil_war", "ADISCORD_vorkerland_ai",
-                    "ADISCORD_nam_resource_war_ai", "VAL")
-        trigger_paths = ("ADISCORD_STP_scripted_triggers", "ADISCORD_vorkerland_triggers",
-                         "ADISCORD_nam_resource_war_triggers", "ADISCORD_VAL_rework_triggers")
-        self.profiles = {e.key: e.value for name in ai_paths for e in parse_clausewitz(
-            (ROOT / f"common/ai_strategy/{name}.txt").read_text(encoding="utf-8"))}
-        self.triggers = {e.key: e.value for name in trigger_paths for e in parse_clausewitz(
-            (ROOT / f"common/scripted_triggers/{name}.txt").read_text(encoding="utf-8"))}
-        self.tags = set("NOD STP STS SRP VAL YPR COF TFF NAM EFL AZH IVN PWR ZAO WPA WPS PSD VAD SRA CSL CIN OSF APH ERT WKR TVA EYR EGC RIV REV YOR NDN SWB VHV OSV SOL".split())
+        ai_paths = (
+            "ADISCORD_STP_civil_war",
+            "ADISCORD_vorkerland_ai",
+            "ADISCORD_nam_resource_war_ai",
+            "VAL",
+        )
+        trigger_paths = (
+            "ADISCORD_STP_scripted_triggers",
+            "ADISCORD_vorkerland_triggers",
+            "ADISCORD_nam_resource_war_triggers",
+            "ADISCORD_VAL_rework_triggers",
+        )
+        self.profiles = {
+            e.key: e.value
+            for name in ai_paths
+            for e in parse_clausewitz(
+                (ROOT / f"common/ai_strategy/{name}.txt").read_text(encoding="utf-8")
+            )
+        }
+        self.triggers = {
+            e.key: e.value
+            for name in trigger_paths
+            for e in parse_clausewitz(
+                (ROOT / f"common/scripted_triggers/{name}.txt").read_text(
+                    encoding="utf-8"
+                )
+            )
+        }
+        self.tags = set(
+            "NOD STP STS SRP VAL YPR COF TFF NAM EFL AZH IVN PWR ZAO WPA WPS PSD VAD SRA CSL CIN OSF APH ERT WKR TVA EYR EGC RIV REV YOR NDN SWB VHV OSV SOL".split()
+        )
         self.flags = {tag: set() for tag in self.tags}
         self.globals = set()
         self.subjects = {}
@@ -274,8 +323,12 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.focuses = {}
         self.completed = set()
         self.variables = {}
-        self.stats = {"num_divisions": 20, "has_manpower": 15000,
-                      "has_stability": 0.5, "has_war_support": 0.6}
+        self.stats = {
+            "num_divisions": 20,
+            "has_manpower": 15000,
+            "has_stability": 0.5,
+            "has_war_support": 0.6,
+        }
         self.facts = {}
 
     def evaluate(self, entries, scope, root):
@@ -288,13 +341,19 @@ class PreparationLifecycleTests(unittest.TestCase):
             key, value = entry.key, entry.value
             if key in ("AND", "OR", "NOT"):
                 outcomes = [self.evaluate([child], scope, root) for child in value]
-                return {"AND": all(outcomes), "OR": any(outcomes), "NOT": not any(outcomes)}[key]
+                return {
+                    "AND": all(outcomes),
+                    "OR": any(outcomes),
+                    "NOT": not any(outcomes),
+                }[key]
             if key in self.tags and isinstance(value, list):
                 return self.evaluate(value, key, root)
             if key in self.facts:
                 return self.facts[key] == (value == "yes")
             if key in self.triggers:
-                return self.evaluate(self.triggers[key], scope, root) == (value == "yes")
+                return self.evaluate(self.triggers[key], scope, root) == (
+                    value == "yes"
+                )
             if key == "tag":
                 return scope == value
             if key == "has_country_flag":
@@ -309,7 +368,9 @@ class PreparationLifecycleTests(unittest.TestCase):
             if key == "is_subject_of":
                 return self.subjects.get(scope) == value
             if key == "is_in_faction_with":
-                return scope in self.factions and self.factions[scope] == self.factions.get(value)
+                return scope in self.factions and self.factions[
+                    scope
+                ] == self.factions.get(value)
             if key == "has_decision":
                 return (scope, value) in self.decisions
             if key == "has_completed_focus":
@@ -321,14 +382,30 @@ class PreparationLifecycleTests(unittest.TestCase):
                 return self.focuses.get(scope) == focus
             if key == "check_variable":
                 fields = {child.key: child.value for child in value}
-                op = {"greater_than": ">", "less_than": "<", "equals": "="}[fields["compare"]]
-                return compare(self.variables.get((scope, fields["var"]), 0), op, float(fields["value"]))
-            if key in ("exists", "is_ai", "has_capitulated", "is_subject", "has_war", "is_in_faction"):
-                actual = {"exists": scope in self.tags, "is_ai": scope not in self.humans,
-                          "has_capitulated": scope in self.capitulated,
-                          "is_subject": scope in self.subjects,
-                          "has_war": any(scope in pair for pair in self.wars),
-                          "is_in_faction": scope in self.factions}[key]
+                op = {"greater_than": ">", "less_than": "<", "equals": "="}[
+                    fields["compare"]
+                ]
+                return compare(
+                    self.variables.get((scope, fields["var"]), 0),
+                    op,
+                    float(fields["value"]),
+                )
+            if key in (
+                "exists",
+                "is_ai",
+                "has_capitulated",
+                "is_subject",
+                "has_war",
+                "is_in_faction",
+            ):
+                actual = {
+                    "exists": scope in self.tags,
+                    "is_ai": scope not in self.humans,
+                    "has_capitulated": scope in self.capitulated,
+                    "is_subject": scope in self.subjects,
+                    "has_war": any(scope in pair for pair in self.wars),
+                    "is_in_faction": scope in self.factions,
+                }[key]
                 return actual == (value == "yes")
             raise AssertionError(f"Unsupported preparation predicate: {key}")
 
@@ -340,14 +417,18 @@ class PreparationLifecycleTests(unittest.TestCase):
                 results.append(one(entry))
                 index += 1
             else:
-                name, op, amount = (item.value for item in entries[index:index + 3])
+                name, op, amount = (item.value for item in entries[index : index + 3])
                 results.append(compare(self.stats[name], op, float(amount)))
                 index += 3
         return all(results)
 
     def active(self, name, actor):
         profile = self.profiles[name]
-        return all(self.evaluate(e.value, actor, actor) for e in profile if e.key in ("allowed", "enable"))
+        return all(
+            self.evaluate(e.value, actor, actor)
+            for e in profile
+            if e.key in ("allowed", "enable")
+        )
 
     def test_human_northern_mobilization_warns_all_defenders_and_cancels(self):
         self.humans.add("NOD")
@@ -399,9 +480,13 @@ class PreparationLifecycleTests(unittest.TestCase):
         self.assertFalse(self.active("ADISCORD_prepare_ZAO_IVN", "ZAO"))
 
     def test_vad_reservation_tracks_winner_and_both_sovereignties(self):
-        self.globals.update(("ADISCORD_vorkerland_vad_solar_intervention_reserved",
-                             "ADISCORD_vorkerland_phase_central_preparation",
-                             "ADISCORD_vorkerland_solar_winner_sra"))
+        self.globals.update(
+            (
+                "ADISCORD_vorkerland_vad_solar_intervention_reserved",
+                "ADISCORD_vorkerland_phase_central_preparation",
+                "ADISCORD_vorkerland_solar_winner_sra",
+            )
+        )
         self.facts["ADISCORD_vorkerland_vad_has_solar_intervention_border"] = True
         self.assertTrue(self.active("ADISCORD_prepare_SRA_VAD", "SRA"))
         self.assertFalse(self.active("ADISCORD_prepare_CSL_VAD", "CSL"))
@@ -449,12 +534,21 @@ class PreparationLifecycleTests(unittest.TestCase):
                     visit(entry.value, seen)
                 else:
                     self.assertNotIn("ai_strategy_prepare_for_war@", entry.value)
+
         for name, entries in self.profiles.items():
-            if not any(e.key == "ai_strategy" and any(c.value == "prepare_for_war" for c in e.value)
-                       for e in entries):
+            if not any(
+                e.key == "ai_strategy"
+                and any(c.value == "prepare_for_war" for c in e.value)
+                for e in entries
+            ):
                 continue
             with self.subTest(profile=name):
-                self.assertTrue(any(e.key == "abort_when_not_enabled" and e.value == "yes" for e in entries))
+                self.assertTrue(
+                    any(
+                        e.key == "abort_when_not_enabled" and e.value == "yes"
+                        for e in entries
+                    )
+                )
                 for entry in entries:
                     if entry.key == "enable":
                         visit(entry.value, set())
@@ -465,13 +559,23 @@ class SubjectWarParticipationTests(unittest.TestCase):
 
     def setUp(self):
         def definitions(path):
-            return {entry.key: entry.value for entry in parse_clausewitz(
-                (ROOT / path).read_text(encoding="utf-8"))}
+            return {
+                entry.key: entry.value
+                for entry in parse_clausewitz((ROOT / path).read_text(encoding="utf-8"))
+            }
 
-        self.effects = definitions("common/scripted_effects/ADISCORD_scripted_effects_generic.txt")
-        self.triggers = definitions("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
-        actions = definitions("common/on_actions/00_ADISCORD_on_actions.txt")["on_actions"]
-        relation = next(entry.value for entry in actions if entry.key == "on_war_relation_added")
+        self.effects = definitions(
+            "common/scripted_effects/ADISCORD_scripted_effects_generic.txt"
+        )
+        self.triggers = definitions(
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        )
+        actions = definitions("common/on_actions/00_ADISCORD_on_actions.txt")[
+            "on_actions"
+        ]
+        relation = next(
+            entry.value for entry in actions if entry.key == "on_war_relation_added"
+        )
         payload = next(entry.value for entry in relation if entry.key == "effect")
         self.dispatch = payload[:2]
         self.assertEqual([entry.key for entry in self.dispatch], ["ROOT", "FROM"])
@@ -483,18 +587,29 @@ class SubjectWarParticipationTests(unittest.TestCase):
 
     @staticmethod
     def target(value, scope, root, enemy, previous):
-        return {"ROOT": root, "FROM": enemy, "PREV": previous, "THIS": scope}.get(value, value)
+        return {"ROOT": root, "FROM": enemy, "PREV": previous, "THIS": scope}.get(
+            value, value
+        )
 
     def matches(self, entries, scope, root, enemy, previous=None):
         def check(entry):
             key, value = entry.key, entry.value
             target = self.target(key, scope, root, enemy, previous)
             if key in ("AND", "OR", "NOT"):
-                results = [self.matches([child], scope, root, enemy, previous) for child in value]
-                return {"AND": all(results), "OR": any(results), "NOT": not any(results)}[key]
+                results = [
+                    self.matches([child], scope, root, enemy, previous)
+                    for child in value
+                ]
+                return {
+                    "AND": all(results),
+                    "OR": any(results),
+                    "NOT": not any(results),
+                }[key]
             if key in self.triggers:
                 self.assertIn(value, ("yes", "no"))
-                return self.matches(self.triggers[key], scope, root, enemy, previous) == (value == "yes")
+                return self.matches(
+                    self.triggers[key], scope, root, enemy, previous
+                ) == (value == "yes")
             if isinstance(value, list):
                 return self.matches(value, target, root, enemy, scope)
             other = self.target(value, scope, root, enemy, previous)
@@ -520,10 +635,17 @@ class SubjectWarParticipationTests(unittest.TestCase):
                 if key == "if":
                     branch_taken = False
                 condition = next(child.value for child in value if child.key == "limit")
-                if not branch_taken and self.matches(condition, scope, root, enemy, previous):
+                if not branch_taken and self.matches(
+                    condition, scope, root, enemy, previous
+                ):
                     branch_taken = True
-                    self.execute([child for child in value if child.key != "limit"],
-                                 scope, root, enemy, previous)
+                    self.execute(
+                        [child for child in value if child.key != "limit"],
+                        scope,
+                        root,
+                        enemy,
+                        previous,
+                    )
             elif key in self.effects:
                 self.assertEqual(value, "yes")
                 self.execute(self.effects[key], scope, root, enemy, previous)
@@ -535,18 +657,30 @@ class SubjectWarParticipationTests(unittest.TestCase):
                 self.execute(value, self.subjects[scope], root, enemy, scope)
             elif key == "add_to_war":
                 fields = {child.key: child.value for child in value}
-                ally = self.target(fields["targeted_alliance"], scope, root, enemy, previous)
+                ally = self.target(
+                    fields["targeted_alliance"], scope, root, enemy, previous
+                )
                 opponent = self.target(fields["enemy"], scope, root, enemy, previous)
                 self.assertEqual(fields["single_target_only"], "yes")
                 self.assertIn(frozenset((ally, opponent)), self.wars)
                 self.assertNotIn(frozenset((scope, ally)), self.wars)
                 pair = frozenset((scope, opponent))
-                self.assertNotIn(pair, self.wars, "duplicate join or recursive dispatch")
+                self.assertNotIn(
+                    pair, self.wars, "duplicate join or recursive dispatch"
+                )
                 self.wars.add(pair)
                 self.joins.append((scope, ally, opponent))
-                self.pending.append((scope, opponent) if ally == root else (opponent, scope))
+                self.pending.append(
+                    (scope, opponent) if ally == root else (opponent, scope)
+                )
             elif key in ("ROOT", "FROM"):
-                self.execute(value, self.target(key, scope, root, enemy, previous), root, enemy, scope)
+                self.execute(
+                    value,
+                    self.target(key, scope, root, enemy, previous),
+                    root,
+                    enemy,
+                    scope,
+                )
             else:
                 raise AssertionError(f"Unsupported subject-war effect: {key}")
 
@@ -563,40 +697,55 @@ class SubjectWarParticipationTests(unittest.TestCase):
     def test_both_sides_join_through_overlords_siblings_and_nested_subjects(self):
         self.subjects = {"A1": "A", "A2": "A", "A3": "A2", "B1": "B", "B2": "B"}
         self.declare("A1", "B1")
-        expected = {frozenset((a, b)) for a in ("A", "A1", "A2", "A3")
-                    for b in ("B", "B1", "B2")}
+        expected = {
+            frozenset((a, b))
+            for a in ("A", "A1", "A2", "A3")
+            for b in ("B", "B1", "B2")
+        }
         self.assertEqual(self.wars, expected)
         joins = len(self.joins)
         self.declare("A1", "B1")
         self.assertEqual(len(self.joins), joins)
 
     def test_val_and_sts_use_both_native_war_scopes(self):
-        for overlord, subject, sibling in (("VAL", "STS", "NKA"), ("STS", "VAL", "SRP")):
+        for overlord, subject, sibling in (
+            ("VAL", "STS", "NKA"),
+            ("STS", "VAL", "SRP"),
+        ):
             for participant in (overlord, subject):
                 for attacking in (False, True):
-                    with self.subTest(overlord=overlord, participant=participant, attacking=attacking):
+                    with self.subTest(
+                        overlord=overlord, participant=participant, attacking=attacking
+                    ):
                         self.setUp()
                         self.subjects = {subject: overlord, sibling: overlord}
                         if attacking:
                             self.declare(participant, "NOD")
                         else:
                             self.declare("NOD", participant)
-                        self.assertEqual(self.wars, {
-                            frozenset((country, "NOD")) for country in (overlord, subject, sibling)
-                        })
+                        self.assertEqual(
+                            self.wars,
+                            {
+                                frozenset((country, "NOD"))
+                                for country in (overlord, subject, sibling)
+                            },
+                        )
                         self.assertEqual(len(self.joins), 2)
 
     def test_sts_subject_joins_val_while_nod_is_fighting_in_the_north(self):
         self.subjects = {"STP": "NOD", "STS": "VAL"}
         self.declare("NOD", "YPR")
         self.declare("NOD", "VAL")
-        self.assertEqual(self.wars, {
-            frozenset(("NOD", "YPR")),
-            frozenset(("NOD", "VAL")),
-            frozenset(("NOD", "STS")),
-            frozenset(("STP", "VAL")),
-            frozenset(("STP", "STS")),
-        })
+        self.assertEqual(
+            self.wars,
+            {
+                frozenset(("NOD", "YPR")),
+                frozenset(("NOD", "VAL")),
+                frozenset(("NOD", "STS")),
+                frozenset(("STP", "VAL")),
+                frozenset(("STP", "STS")),
+            },
+        )
 
     def test_northern_exception_in_both_callback_directions(self):
         for reverse in (False, True):
@@ -604,7 +753,11 @@ class SubjectWarParticipationTests(unittest.TestCase):
                 with self.subTest(reverse=reverse, northern=northern):
                     self.setUp()
                     self.subjects = {"STP": "NOD", "N1": "NOD", "Y1": northern}
-                    self.declare(northern, "NOD") if reverse else self.declare("NOD", northern)
+                    (
+                        self.declare(northern, "NOD")
+                        if reverse
+                        else self.declare("NOD", northern)
+                    )
                     self.assertFalse(any("STP" in pair for pair in self.wars))
                     self.assertIn(frozenset(("N1", "Y1")), self.wars)
                     self.declare("VAL", "NOD")

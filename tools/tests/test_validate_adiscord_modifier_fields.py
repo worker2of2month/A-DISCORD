@@ -54,7 +54,9 @@ class MutationTestCase(unittest.TestCase):
             failures = validator.validate()
         finally:
             self._write(path, original)
-        self.assertTrue(failures, f"validator accepted a defect it must reject: {expected}")
+        self.assertTrue(
+            failures, f"validator accepted a defect it must reject: {expected}"
+        )
         self.assertTrue(
             any(expected in failure for failure in failures),
             f"expected a failure mentioning {expected!r}, got:\n" + "\n".join(failures),

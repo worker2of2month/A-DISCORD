@@ -12,7 +12,9 @@ from tools.validators.validate_adiscord_division_templates import parse_clausewi
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
-DECISION_CATEGORIES = ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+DECISION_CATEGORIES = (
+    ROOT / "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+)
 BOP = ROOT / "common/bop/STP.txt"
 DYNAMIC_MODIFIERS = ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt"
 INLAY = ROOT / "common/focus_inlay_windows/ADISCORD_STP_state_face_inlay_window.txt"
@@ -60,13 +62,22 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertIn("STP_refresh_party_suspicion = yes", change)
 
         history = read(HISTORY)
-        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_party_suspicion\s+value\s*=\s*5\s*\}")
+        self.assertRegex(
+            history,
+            r"set_variable\s*=\s*\{\s*var\s*=\s*STP_party_suspicion\s+value\s*=\s*5\s*\}",
+        )
         self.assertNotIn("var = STP_sus_political_power_factor", history)
 
-        modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_party_suspicion_dynamic_modifier")
-        self.assertIn("political_power_factor = STP_sus_political_power_factor", modifier)
+        modifier = named_block(
+            read(DYNAMIC_MODIFIERS), "STP_party_suspicion_dynamic_modifier"
+        )
+        self.assertIn(
+            "political_power_factor = STP_sus_political_power_factor", modifier
+        )
 
-    def test_apparatus_loyalty_has_one_0_to_100_state_and_linear_pp_mapping(self) -> None:
+    def test_apparatus_loyalty_has_one_0_to_100_state_and_linear_pp_mapping(
+        self,
+    ) -> None:
         effects = read(EFFECTS)
         refresh = named_block(effects, "STP_refresh_apparatus_loyalty")
         change = named_block(effects, "STP_change_apparatus_loyalty")
@@ -87,15 +98,24 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertIn("value = 40", init)
         self.assertIn("STP_party_suspicion_dynamic_modifier", init)
         self.assertIn("STP_apparatus_loyalty_dynamic_modifier", init)
-        self.assertIn("STP_cw_init_apparatus_loyalty = yes", named_block(effects, "STP_cw_open_preparation"))
+        self.assertIn(
+            "STP_cw_init_apparatus_loyalty = yes",
+            named_block(effects, "STP_cw_open_preparation"),
+        )
 
-        modifier = named_block(read(DYNAMIC_MODIFIERS), "STP_apparatus_loyalty_dynamic_modifier")
-        self.assertIn("political_power_factor = STP_loy_political_power_factor", modifier)
+        modifier = named_block(
+            read(DYNAMIC_MODIFIERS), "STP_apparatus_loyalty_dynamic_modifier"
+        )
+        self.assertIn(
+            "political_power_factor = STP_loy_political_power_factor", modifier
+        )
         self.assertIn("stability_factor = STP_loy_stability_factor", modifier)
         display = read(SCRIPTED_LOC)
         self.assertIn("name = STP_display_party_suspicion", display)
-        self.assertLess(display.index("STP_sided_with_the_party_flag"),
-                        display.index("STP_display_apparatus_loyalty_loc"))
+        self.assertLess(
+            display.index("STP_sided_with_the_party_flag"),
+            display.index("STP_display_apparatus_loyalty_loc"),
+        )
         self.assertIn("STP_display_party_suspicion_loc", display)
 
     def test_health_has_one_discrete_five_stage_state_shared_with_inlay(self) -> None:
@@ -115,15 +135,22 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertIn("STP_refresh_leader_health = yes", setter)
 
         history = read(HISTORY)
-        self.assertRegex(history, r"set_variable\s*=\s*\{\s*var\s*=\s*STP_leader_health_stage\s+value\s*=\s*1\s*\}")
+        self.assertRegex(
+            history,
+            r"set_variable\s*=\s*\{\s*var\s*=\s*STP_leader_health_stage\s+value\s*=\s*1\s*\}",
+        )
         self.assertNotIn("var = STP_fading_father_stability_factor", history)
 
         inlay = read(INLAY)
         for stage in range(2, 6):
-            self.assertIn(f"check_variable = {{ STP_leader_health_stage = {stage} }}", inlay)
+            self.assertIn(
+                f"check_variable = {{ STP_leader_health_stage = {stage} }}", inlay
+            )
 
         stability = named_block(read(DYNAMIC_MODIFIERS), "STP_fading_father")
-        self.assertIn("stability_factor = STP_fading_father_stability_factor", stability)
+        self.assertIn(
+            "stability_factor = STP_fading_father_stability_factor", stability
+        )
         self.assertNotIn("political_power", stability)
 
     def test_runtime_has_no_abandoned_mirror_or_rate_variables(self) -> None:
@@ -155,15 +182,23 @@ class STPCoreContractTests(unittest.TestCase):
         refresh = block(effects, "STP_refresh_leader_health")
         for stage in range(1, 6):
             for present in (False, True):
-                facts = {("STP", "variable", "STP_leader_health_stage"): stage,
-                         ("STP", "has_character", "STP_Petr_Ivanov"): present}
-                changes = [e.value for _, e in selected_effects(refresh, facts) if e.key == "set_portraits"]
+                facts = {
+                    ("STP", "variable", "STP_leader_health_stage"): stage,
+                    ("STP", "has_character", "STP_Petr_Ivanov"): present,
+                }
+                changes = [
+                    e.value
+                    for _, e in selected_effects(refresh, facts)
+                    if e.key == "set_portraits"
+                ]
                 self.assertEqual(len(changes), int(present), (stage, present))
                 if present:
                     self.assertEqual(scalar(changes[0], "character"), "STP_Petr_Ivanov")
                     suffix = "_animated" if stage == 5 else ""
-                    self.assertEqual(scalar(block(changes[0], "civilian"), "large"),
-                                     "GFX_portrait_STP_Petr_Ivanov" + suffix)
+                    self.assertEqual(
+                        scalar(block(changes[0], "civilian"), "large"),
+                        "GFX_portrait_STP_Petr_Ivanov" + suffix,
+                    )
 
         election = named_block(read(EFFECTS), "STP_cw_begin_elections")
         self.assertNotIn("retire_character", election)
@@ -177,20 +212,29 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertEqual(portrait[:8], b"\x89PNG\r\n\x1a\n")
         width, height = struct.unpack_from(">II", portrait, 16)
         for path, name in (
-            ("interface/ADISCORD_leader_portraits.gfx", "GFX_portrait_STP_Petr_Ivanov_animated"),
+            (
+                "interface/ADISCORD_leader_portraits.gfx",
+                "GFX_portrait_STP_Petr_Ivanov_animated",
+            ),
             ("interface/ADISCORD_stp_state_face.gfx", "GFX_STP_state_face_dead"),
         ):
             with self.subTest(sprite=name):
                 sprites = block(parse_clausewitz(read(ROOT / path)), "spriteTypes")
-                animation = next(entry.value for entry in sprites
-                                 if entry.key == "frameAnimatedSpriteType"
-                                 and scalar(entry.value, "name") == name)
+                animation = next(
+                    entry.value
+                    for entry in sprites
+                    if entry.key == "frameAnimatedSpriteType"
+                    and scalar(entry.value, "name") == name
+                )
                 texture = (ROOT / scalar(animation, "texturefile")).read_bytes()
                 self.assertEqual(texture[:4], b"DDS ")
                 atlas_height, atlas_width = struct.unpack_from("<II", texture, 12)
                 self.assertEqual(atlas_height, height)
-                self.assertEqual(atlas_width, width * int(scalar(animation, "noOfFrames")),
-                                 "animation must advance by a complete portrait, not a slice of its neighbours")
+                self.assertEqual(
+                    atlas_width,
+                    width * int(scalar(animation, "noOfFrames")),
+                    "animation must advance by a complete portrait, not a slice of its neighbours",
+                )
 
     def test_debug_decisions_replace_disposable_test_decision(self) -> None:
         decisions = read(DECISIONS)
@@ -212,7 +256,9 @@ class STPCoreContractTests(unittest.TestCase):
         ):
             self.assertRegex(localisation, rf"(?m)^\s*{decision}:\s+\"§RDEBUG:§!")
 
-    def test_scenario_debug_skips_the_civil_war_through_production_effects(self) -> None:
+    def test_scenario_debug_skips_the_civil_war_through_production_effects(
+        self,
+    ) -> None:
         categories = named_block(read(DECISION_CATEGORIES), "STP_scenario_debug")
         self.assertIn("visible = { is_debug = yes }", categories)
         self.assertIn("tag = STP", categories)
@@ -242,9 +288,17 @@ class STPCoreContractTests(unittest.TestCase):
         party_effect = named_block(effects, "STP_debug_resolve_party_victory")
         shabrat_effect = named_block(effects, "STP_debug_resolve_shabrat_victory")
         self.assertIn("set_country_flag = STP_cw_party_election_victory", party_effect)
-        self.assertIn("STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }", party_effect)
-        self.assertIn("set_country_flag = STP_cw_shabrat_election_victory", shabrat_effect)
-        self.assertIn("STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }", shabrat_effect)
+        self.assertIn(
+            "STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }",
+            party_effect,
+        )
+        self.assertIn(
+            "set_country_flag = STP_cw_shabrat_election_victory", shabrat_effect
+        )
+        self.assertIn(
+            "STP = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }",
+            shabrat_effect,
+        )
         self.assertIn("change_tag_from = STS", party_effect)
         self.assertIn("change_tag_from = STP", shabrat_effect)
 
@@ -252,12 +306,19 @@ class STPCoreContractTests(unittest.TestCase):
         dispatcher = next(
             candidate
             for match in re.finditer(r"(?m)^country_event\s*=", events)
-            if "id = ADISCORD_STP_cw.93" in (candidate := named_block(events[match.start():], "country_event"))
+            if "id = ADISCORD_STP_cw.93"
+            in (candidate := named_block(events[match.start() :], "country_event"))
         )
         self.assertIn("hidden = yes", dispatcher)
         self.assertIn("STP_cw_settle_union_victory = yes", dispatcher)
-        self.assertIn("if = { limit = { tag = STS } STP = { STP_cw_settle_union_victory = yes } }", dispatcher)
-        self.assertIn("else_if = { limit = { tag = STP } STS = { STP_cw_settle_union_victory = yes } }", dispatcher)
+        self.assertIn(
+            "if = { limit = { tag = STS } STP = { STP_cw_settle_union_victory = yes } }",
+            dispatcher,
+        )
+        self.assertIn(
+            "else_if = { limit = { tag = STP } STS = { STP_cw_settle_union_victory = yes } }",
+            dispatcher,
+        )
 
         localisation = read(LOCALISATION)
         for key in (
@@ -273,9 +334,15 @@ class STPCoreContractTests(unittest.TestCase):
         names = re.findall(r"^\s*(STP_debug_\w+)\s*=\s*\{", decisions, re.MULTILINE)
         self.assertTrue(names)
         for name in names:
-            self.assertIn("is_debug = yes", named_block(named_block(decisions, name), "visible"), name)
+            self.assertIn(
+                "is_debug = yes",
+                named_block(named_block(decisions, name), "visible"),
+                name,
+            )
 
-    def test_bop_debug_decisions_shift_election_legitimacy_in_hidden_bop_category(self) -> None:
+    def test_bop_debug_decisions_shift_election_legitimacy_in_hidden_bop_category(
+        self,
+    ) -> None:
         bop = named_block(read(BOP), "STP_shabrat_election_legitimacy")
         self.assertIn("decision_category = STP_shabrat_election_bop_category", bop)
 
@@ -330,7 +397,9 @@ class STPCoreContractTests(unittest.TestCase):
             )
         self.assertTrue(LOCALISATION.read_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_startup_uses_one_core_initializer_for_mechanics_and_army_lock(self) -> None:
+    def test_startup_uses_one_core_initializer_for_mechanics_and_army_lock(
+        self,
+    ) -> None:
         effects = read(EFFECTS)
         initializer = named_block(effects, "STP_initialize_core_mechanics")
         self.assertIn("STP_refresh_party_suspicion = yes", initializer)
@@ -343,7 +412,9 @@ class STPCoreContractTests(unittest.TestCase):
         self.assertEqual(startup.count("STP_initialize_core_mechanics = yes"), 1)
         self.assertNotIn("ADISCORD_STP_lock_regular_army_templates = yes", startup)
 
-    def test_preparation_starts_with_party_advantage_without_erasing_campaign_progress(self) -> None:
+    def test_preparation_starts_with_party_advantage_without_erasing_campaign_progress(
+        self,
+    ) -> None:
         opening = block(parse_clausewitz(read(EFFECTS)), "STP_cw_open_preparation")
         for guard, current, expected in (
             (None, 0.0, -0.20),
@@ -355,8 +426,12 @@ class STPCoreContractTests(unittest.TestCase):
                 facts = {("STP", *guard): True} if guard else {}
                 result = current
                 for scope, effect in selected_effects(opening, facts):
-                    if (scope == "STP" and effect.key == "set_power_balance"
-                            and scalar(effect.value, "id") == "STP_shabrat_election_legitimacy"):
+                    if (
+                        scope == "STP"
+                        and effect.key == "set_power_balance"
+                        and scalar(effect.value, "id")
+                        == "STP_shabrat_election_legitimacy"
+                    ):
                         # set_power_balance only assigns progress through set_value.
                         for parameter in effect.value:
                             if parameter.key == "set_value":
@@ -366,15 +441,29 @@ class STPCoreContractTests(unittest.TestCase):
     def test_mission_deadline_tokens_are_synchronized_for_multiplayer(self) -> None:
         registered = set()
         for path in (ROOT / "common/synchronized_dynamic_tokens").glob("*.txt"):
-            registered.update(re.findall(r"(?m)^\s*([A-Za-z_][A-Za-z0-9_]*)\s*$", read(path)))
+            registered.update(
+                re.findall(r"(?m)^\s*([A-Za-z_][A-Za-z0-9_]*)\s*$", read(path))
+            )
         references = set()
-        for path in (EFFECTS, DECISIONS,
-                     ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"):
-            references.update(re.findall(r"\bdays_mission_timeout@([A-Za-z_][A-Za-z0-9_]*)", read(path)))
+        for path in (
+            EFFECTS,
+            DECISIONS,
+            ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt",
+        ):
+            references.update(
+                re.findall(
+                    r"\bdays_mission_timeout@([A-Za-z_][A-Za-z0-9_]*)", read(path)
+                )
+            )
         self.assertTrue(references, "The intervention must read the existing deadline")
-        self.assertFalse(references - registered, f"Unsynchronized mission tokens: {references - registered}")
+        self.assertFalse(
+            references - registered,
+            f"Unsynchronized mission tokens: {references - registered}",
+        )
 
-    def test_scripted_localisation_is_limited_to_status_and_inlay_contracts(self) -> None:
+    def test_scripted_localisation_is_limited_to_status_and_inlay_contracts(
+        self,
+    ) -> None:
         scripted_loc = read(SCRIPTED_LOC)
         for retained in (
             "STPGetSuspicionValue",

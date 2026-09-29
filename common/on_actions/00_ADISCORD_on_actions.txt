@@ -24,28 +24,28 @@ on_actions = {
 
 			# Persistent polluted-zone map entities.
 			create_entity = {
-			    entity = ADISCORD_global_entity
-			    id = 1
-			    x = 42
-			    y = 21
-			    z = -100.000
-			    province = 16531
-			    state = 42
-			    rotation = 1.2
-			    scale = 0.03
-			    min_zoom = 5555.0
+				entity = ADISCORD_global_entity
+				id = 1
+				x = 42
+				y = 21
+				z = -100.000
+				province = 16531
+				state = 42
+				rotation = 1.2
+				scale = 0.03
+				min_zoom = 5555.0
 			}
 			create_entity = {
-			    entity = ADISCORD_global_entity
-			    id = 2
-			    x = 42
-			    y = 21
-			    z = -100.000
-			    province = 12863
-			    state = 42
-			    rotation = 1.2
-			    scale = 0.02
-			    min_zoom = 5555.0
+				entity = ADISCORD_global_entity
+				id = 2
+				x = 42
+				y = 21
+				z = -100.000
+				province = 12863
+				state = 42
+				rotation = 1.2
+				scale = 0.02
+				min_zoom = 5555.0
 			}
 			# Scenario history is the sole provenance producer. A pre-contract save
 			# cannot enter this branch, while the completion sentinel prevents a

@@ -43,7 +43,7 @@ def named_block(text: str, name: str) -> str:
         elif character == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"Unclosed block: {name}")
 
 
@@ -59,7 +59,7 @@ def focus_block(text: str, focus_id: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"Unclosed focus: {focus_id}")
 
 
@@ -76,7 +76,9 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
 
     def test_standalone_development_category_is_removed(self) -> None:
         self.assertNotIn("ADISCORD_development_investments = {", self.generic_decisions)
-        self.assertNotIn("ADISCORD_development_investments = {", self.generic_categories)
+        self.assertNotIn(
+            "ADISCORD_development_investments = {", self.generic_categories
+        )
         for legacy in (
             "ADISCORD_invest_army_development",
             "ADISCORD_invest_state_development",
@@ -100,7 +102,9 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
                 self.assertIn("allowed = { always = no }", body)
                 self.assertIn(modifier, body)
 
-    def test_kefreyt_programmes_live_in_reclamation_and_unlock_along_left_branch(self) -> None:
+    def test_kefreyt_programmes_live_in_reclamation_and_unlock_along_left_branch(
+        self,
+    ) -> None:
         category = named_block(self.val_decisions, "VAL_reclamation")
         specs = {
             "VAL_recovery_road_corps_program": (
@@ -120,36 +124,77 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
             with self.subTest(decision=decision_id):
                 body = named_block(category, decision_id)
                 self.assertIn(f"has_completed_focus = {focus_id}", body)
-                self.assertIn("custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }", body)
+                self.assertIn(
+                    "custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }",
+                    body,
+                )
                 self.assertEqual(body.count("ADISCORD_economy_spend_100 = yes"), 1)
                 self.assertIn("days_remove = 120", body)
                 self.assertIn("days_re_enable = 60", body)
-                self.assertIn(f"add_timed_idea = {{ idea = {idea_id} days = 120 }}", body)
+                self.assertIn(
+                    f"add_timed_idea = {{ idea = {idea_id} days = 120 }}", body
+                )
                 self.assertIn(f"remove_ideas = {idea_id}", body)
-                self.assertNotRegex(body, r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth")
+                self.assertNotRegex(
+                    body,
+                    r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth",
+                )
                 focus = focus_block(self.val_focus, focus_id)
                 self.assertIn(f"unlock_decision_tooltip = {decision_id}", focus)
 
-    def test_stelander_programmes_use_existing_route_categories_and_expire_before_split(self) -> None:
+    def test_stelander_programmes_use_existing_route_categories_and_expire_before_split(
+        self,
+    ) -> None:
         party = named_block(self.stp_decisions, "STP_elections_in_the_party")
         shabrat = named_block(self.stp_decisions, "STP_battle_for_stelander")
         specs = (
-            (party, "STP_party_staff_drills_program", "STP_defense_budget", "ADISCORD_development_program_army"),
-            (party, "STP_party_civil_service_program", "STP_party_civil_register", "ADISCORD_development_program_state"),
-            (shabrat, "STP_shabrat_staff_courses_program", "STP_cw_officer_contacts", "ADISCORD_development_program_army"),
-            (shabrat, "STP_shabrat_reconstruction_program", "STP_cw_repair_niansas", "ADISCORD_development_program_economic"),
+            (
+                party,
+                "STP_party_staff_drills_program",
+                "STP_defense_budget",
+                "ADISCORD_development_program_army",
+            ),
+            (
+                party,
+                "STP_party_civil_service_program",
+                "STP_party_civil_register",
+                "ADISCORD_development_program_state",
+            ),
+            (
+                shabrat,
+                "STP_shabrat_staff_courses_program",
+                "STP_cw_officer_contacts",
+                "ADISCORD_development_program_army",
+            ),
+            (
+                shabrat,
+                "STP_shabrat_reconstruction_program",
+                "STP_cw_repair_niansas",
+                "ADISCORD_development_program_economic",
+            ),
         )
         for owner, decision_id, focus_id, idea_id in specs:
             with self.subTest(decision=decision_id):
                 body = named_block(owner, decision_id)
-                self.assertIn("custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }", body)
+                self.assertIn(
+                    "custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }",
+                    body,
+                )
                 self.assertEqual(body.count("ADISCORD_economy_spend_50 = yes"), 1)
                 self.assertIn("days_remove = 42", body)
                 self.assertIn("days_re_enable = 21", body)
-                self.assertIn("days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than", body)
-                self.assertIn(f"add_timed_idea = {{ idea = {idea_id} days = 42 }}", body)
+                self.assertIn(
+                    "days_mission_timeout@STP_cw_election_window value = 43 compare = greater_than",
+                    body,
+                )
+                self.assertIn(
+                    f"add_timed_idea = {{ idea = {idea_id} days = 42 }}", body
+                )
                 self.assertIn(f"remove_ideas = {idea_id}", body)
-                self.assertNotRegex(body, r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth")
+                self.assertNotRegex(
+                    body,
+                    r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth",
+                )
                 focus = focus_block(self.stp_focus, focus_id)
                 self.assertIn(f"unlock_decision_tooltip = {decision_id}", focus)
 

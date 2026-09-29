@@ -21,7 +21,9 @@ TARGET_RGB = (10, 20, 30)
 OTHER_RGB = (40, 50, 60)
 
 
-def write_fixture(root: Path, *, target_type: str = "land", include_mask: bool = True) -> None:
+def write_fixture(
+    root: Path, *, target_type: str = "land", include_mask: bool = True
+) -> None:
     definition = root / "definition.csv"
     definition.write_text(
         "0;0;0;0;sea;false;ocean;0\n"
@@ -62,16 +64,25 @@ class VorkerlandCitiesTests(unittest.TestCase):
                 colours, issues = cities.target_colours(root / "definition.csv")
                 self.assertEqual(issues, [])
                 with Image.open(root / "provinces.bmp") as provinces:
-                    generated, counts, positions = cities.render_bytes(source, provinces, colours)
+                    generated, counts, positions = cities.render_bytes(
+                        source, provinces, colours
+                    )
             self.assertEqual(counts, {TARGET: 2})
-            self.assertEqual(cities.unmanaged_difference_count(source, generated, positions), 0)
+            self.assertEqual(
+                cities.unmanaged_difference_count(source, generated, positions), 0
+            )
             layout = cities.bitmap_layout(generated)
             target_positions = {
                 layout.pixel_position(0, 0),
                 layout.pixel_position(1, 1),
             }
             self.assertEqual(positions, target_positions)
-            self.assertTrue(all(generated[position] == cities.CITY_PALETTE_INDEX for position in positions))
+            self.assertTrue(
+                all(
+                    generated[position] == cities.CITY_PALETTE_INDEX
+                    for position in positions
+                )
+            )
             self.assertTrue(
                 all(
                     source[index] == generated[index]
@@ -139,7 +150,11 @@ class VorkerlandCitiesTests(unittest.TestCase):
             original = (root / "cities.bmp").read_bytes()
             patches = self.fixture_patches(root)
             with (
-                patches[0], patches[1], patches[2], patches[3], patches[4],
+                patches[0],
+                patches[1],
+                patches[2],
+                patches[3],
+                patches[4],
                 patch.object(os, "replace", side_effect=OSError("replace denied")),
             ):
                 with self.assertRaisesRegex(OSError, "replace denied"):

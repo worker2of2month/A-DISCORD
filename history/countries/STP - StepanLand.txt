@@ -1,4 +1,4 @@
-capital = 28 
+capital = 28
 
 ####### Characters
 
@@ -19,7 +19,7 @@ recruit_character = STP_August_Veil
 
 ####### Basic shit
 
-set_politics = {	
+set_politics = {
 	ruling_party = hedonism
 	last_election = "2154.3.18"
 	election_frequency = 120

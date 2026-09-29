@@ -1,7 +1,7 @@
 ideas = {
 	country = {
 # --- collapse_ideas ---
-ADISCORD_vorkerland_erased_nations = {
+		ADISCORD_vorkerland_erased_nations = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -54,7 +54,7 @@ ADISCORD_vorkerland_erased_nations = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_1 = {
+		ADISCORD_vorkerland_erased_nations_relief_1 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -71,7 +71,7 @@ ADISCORD_vorkerland_erased_nations_relief_1 = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_2 = {
+		ADISCORD_vorkerland_erased_nations_relief_2 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }

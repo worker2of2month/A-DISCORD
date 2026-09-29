@@ -99,7 +99,9 @@ def metal_surface(
     return output
 
 
-def surface(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+def surface(
+    image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette
+) -> None:
     """Lay down the neutral working surface inside a semantic region."""
     ImageDraw.Draw(image, "RGBA").rectangle(box, fill=palette.panel)
 
@@ -127,14 +129,18 @@ def _filled_outline(
     draw.line((right, top, right, bottom), fill=outline)
 
 
-def outer_frame(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+def outer_frame(
+    image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette
+) -> None:
     """Draw a complete frame only for a true outer window."""
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
     draw.rectangle(box, outline=palette.deep, width=2)
     inner_left, inner_right = _inset_span(left, right, 2)
     inner_top, inner_bottom = _inset_span(top, bottom, 2)
-    draw.rectangle((inner_left, inner_top, inner_right, inner_bottom), outline=palette.edge)
+    draw.rectangle(
+        (inner_left, inner_top, inner_right, inner_bottom), outline=palette.edge
+    )
     highlight_left, highlight_right = _inset_span(left, right, 4)
     draw.line(
         (highlight_left, min(top + 3, bottom), highlight_right, min(top + 3, bottom)),
@@ -146,17 +152,24 @@ def outer_frame(image: Image.Image, box: tuple[int, int, int, int], palette: UiP
     )
 
 
-def recessed_well(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+def recessed_well(
+    image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette
+) -> None:
     """Draw a dark, bounded recess for icons, counters, or text fields."""
     draw = ImageDraw.Draw(image, "RGBA")
     _filled_outline(draw, box, palette.deep, palette.edge)
     left, top, right, bottom = box
     highlight_left, highlight_right = _inset_span(left, right, 1)
     highlight_top = min(top + 1, bottom)
-    draw.line((highlight_left, highlight_top, highlight_right, highlight_top), fill=palette.panel)
+    draw.line(
+        (highlight_left, highlight_top, highlight_right, highlight_top),
+        fill=palette.panel,
+    )
 
 
-def raised_field(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+def raised_field(
+    image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette
+) -> None:
     """Draw a lighter field for readable active content."""
     draw = ImageDraw.Draw(image, "RGBA")
     _filled_outline(draw, box, palette.panel, palette.edge)
@@ -169,12 +182,16 @@ def raised_field(image: Image.Image, box: tuple[int, int, int, int], palette: Ui
     )
 
 
-def status_band(image: Image.Image, box: tuple[int, int, int, int], color: Color) -> None:
+def status_band(
+    image: Image.Image, box: tuple[int, int, int, int], color: Color
+) -> None:
     """Fill a narrow semantic status region without affecting its surround."""
     ImageDraw.Draw(image, "RGBA").rectangle(box, fill=color)
 
 
-def partial_rails(image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette) -> None:
+def partial_rails(
+    image: Image.Image, box: tuple[int, int, int, int], palette: UiPalette
+) -> None:
     """Add open-ended rails for nested structure without a repeated frame."""
     draw = ImageDraw.Draw(image, "RGBA")
     left, top, right, bottom = box
@@ -216,8 +233,15 @@ def framed_panel(
     draw.rectangle((4, 4, right - 4, bottom - 4), outline=palette.edge, width=2)
     draw.line((8, 7, right - 8, 7), fill=palette.edge_light, width=1)
     draw.line((8, bottom - 7, right - 8, bottom - 7), fill=palette.accent, width=1)
-    for x, y in ((10, 10), (right - 10, 10), (10, bottom - 10), (right - 10, bottom - 10)):
-        draw.ellipse((x - 2, y - 2, x + 2, y + 2), fill=palette.deep, outline=palette.edge)
+    for x, y in (
+        (10, 10),
+        (right - 10, 10),
+        (10, bottom - 10),
+        (right - 10, bottom - 10),
+    ):
+        draw.ellipse(
+            (x - 2, y - 2, x + 2, y + 2), fill=palette.deep, outline=palette.edge
+        )
     return output
 
 

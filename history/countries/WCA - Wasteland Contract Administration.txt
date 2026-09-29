@@ -8,13 +8,13 @@ set_research_slots = 2
 recruit_character = WCA_Contract_Council
 
 add_ideas = {
-    ADISCORD_society_type_traditional
-    ADISCORD_economic_system_agrarian
-    ADISCORD_taxation_light_dues
-    ADISCORD_welfare_charity_relief
-    ADISCORD_education_informal_instruction
-    ADISCORD_industrial_policy_artisan_markets
-    volunteer_only
-    closed_economy
-    civilian_economy
+	ADISCORD_society_type_traditional
+	ADISCORD_economic_system_agrarian
+	ADISCORD_taxation_light_dues
+	ADISCORD_welfare_charity_relief
+	ADISCORD_education_informal_instruction
+	ADISCORD_industrial_policy_artisan_markets
+	volunteer_only
+	closed_economy
+	civilian_economy
 }

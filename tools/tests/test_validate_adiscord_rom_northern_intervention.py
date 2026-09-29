@@ -33,7 +33,7 @@ def named_blocks(source: str, name: str) -> list[str]:
     cursor = 0
     pattern = re.compile(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{")
     while match := pattern.search(source, cursor):
-        block = named_block(source[match.start():], name)
+        block = named_block(source[match.start() :], name)
         if not block:
             break
         blocks.append(block)
@@ -119,18 +119,30 @@ class RomNorthernInterventionRegressionTests(unittest.TestCase):
                 route,
             )
 
-        self.assertLess(self.success.index("rom_northern_intervention_resolved"), self.success.index(cleanup_call))
-        self.assertLess(self.failure.index("rom_northern_intervention_resolved"), self.failure.index(cleanup_call))
+        self.assertLess(
+            self.success.index("rom_northern_intervention_resolved"),
+            self.success.index(cleanup_call),
+        )
+        self.assertLess(
+            self.failure.index("rom_northern_intervention_resolved"),
+            self.failure.index(cleanup_call),
+        )
         self.assertIn(
             "set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_succeeded",
             self.success,
         )
-        self.assertIn("clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_failed", self.success)
+        self.assertIn(
+            "clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_failed",
+            self.success,
+        )
         self.assertIn(
             "set_global_flag = ADISCORD_vorkerland_rom_northern_intervention_failed",
             self.failure,
         )
-        self.assertIn("clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_succeeded", self.failure)
+        self.assertIn(
+            "clr_global_flag = ADISCORD_vorkerland_rom_northern_intervention_succeeded",
+            self.failure,
+        )
         self.assertNotIn("transfer_state", self.failure)
 
     def test_shared_cleanup_ends_every_northern_co_belligerent_war(self) -> None:
@@ -145,17 +157,29 @@ class RomNorthernInterventionRegressionTests(unittest.TestCase):
         self.assertNotIn("declare_war_on", self.cleanup)
         self.assertNotIn("transfer_state", self.cleanup)
 
-    def test_timeout_routes_by_physical_control_and_has_independent_watchdog(self) -> None:
+    def test_timeout_routes_by_physical_control_and_has_independent_watchdog(
+        self,
+    ) -> None:
         timeout = named_block(self.intervention, "timeout_effect")
 
         self.assertIn("days_mission_timeout = 240", self.intervention)
-        self.assertIn("ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes", timeout)
+        self.assertIn(
+            "ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes",
+            timeout,
+        )
         self.assertIn("ADISCORD_vorkerland_collapse.45 days = 240", self.intervention)
         self.assertIn("ADISCORD_vorkerland_collapse.46 days = 1", self.intervention)
         watchdog = self.event(45)
-        self.assertIn("ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes", watchdog)
-        self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_success = yes", self.timeout)
-        self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_failure = yes", self.timeout)
+        self.assertIn(
+            "ADISCORD_vorkerland_resolve_rom_northern_intervention_timeout = yes",
+            watchdog,
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_rom_northern_intervention_success = yes", self.timeout
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_rom_northern_intervention_failure = yes", self.timeout
+        )
         self.assertNotIn("transfer_state", timeout)
 
     def test_resolution_is_driven_by_bounded_edges_without_startup_repair(self) -> None:
@@ -171,11 +195,20 @@ class RomNorthernInterventionRegressionTests(unittest.TestCase):
             "ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes",
         ):
             self.assertNotIn(forbidden, startup)
-        self.assertIn("ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes", on_peace)
+        self.assertIn(
+            "ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes",
+            on_peace,
+        )
         self.assertIn("ROOT = { tag = ROM }", capitulation)
-        self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_failure = yes", capitulation)
-        self.assertIn("ADISCORD_vorkerland_rom_northern_intervention_success = yes", state_control)
-        self.assertEqual(cleanup_event.count("ADISCORD_vorkerland_collapse.46 days = 1"), 1)
+        self.assertIn(
+            "ADISCORD_vorkerland_rom_northern_intervention_failure = yes", capitulation
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_rom_northern_intervention_success = yes", state_control
+        )
+        self.assertEqual(
+            cleanup_event.count("ADISCORD_vorkerland_collapse.46 days = 1"), 1
+        )
         self.assertIn("ADISCORD_vorkerland_rom_northern_cleanup_retry", cleanup_event)
 
     def test_resolution_is_not_run_from_recurring_on_actions(self) -> None:

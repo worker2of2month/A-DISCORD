@@ -9,4 +9,4 @@ sound = {
 	name = "ADISCORD_pol_menu_close_sound"
 	file = "adiscord_ui_return.wav"
 	always_load = yes
-} 
+}

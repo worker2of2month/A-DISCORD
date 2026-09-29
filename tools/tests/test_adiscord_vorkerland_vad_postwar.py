@@ -34,8 +34,13 @@ def named_block(source: str, name: str) -> str:
 
 
 class VadPostwarContractTests(unittest.TestCase):
-    def test_restored_sol_remains_protectorate_but_voluntary_ally_is_sovereign(self) -> None:
-        source = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+    def test_restored_sol_remains_protectorate_but_voluntary_ally_is_sovereign(
+        self,
+    ) -> None:
+        source = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         formation = named_block(source, "ADISCORD_vorkerland_form_wrk_from_vad")
         self.assertTrue(formation)
 
@@ -52,13 +57,20 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("add_to_faction = SOL", restored_block)
 
         voluntary = formation[restored.end() - len("else_if =") :]
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted", voluntary)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted", voluntary
+        )
         self.assertIn("add_to_faction = SOL", voluntary)
         self.assertNotIn("puppet = SOL", voluntary)
         self.assertNotIn("autonomy_state = autonomy_puppet", voluntary)
 
-    def test_vlad_capstone_keeps_empire_while_joint_council_drops_temporary_cosmetic(self) -> None:
-        source = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
+    def test_vlad_capstone_keeps_empire_while_joint_council_drops_temporary_cosmetic(
+        self,
+    ) -> None:
+        source = source_section(
+            read("common/national_focus/ADISCORD_vorkerland_focus.txt"),
+            'civil_war_focus',
+        )
         match = re.search(
             r"(?ms)^\s*focus\s*=\s*\{\s*id\s*=\s*WRK_joint_impose_reunification_settlement\b",
             source,
@@ -67,14 +79,21 @@ class VadPostwarContractTests(unittest.TestCase):
         focus = named_block(source[match.start() :], "focus")
         reward = named_block(focus, "completion_reward")
         self.assertEqual(reward.count("drop_cosmetic_tag = yes"), 1)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_joint_government_formed", reward)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_joint_government_formed", reward
+        )
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", reward)
         self.assertIn("character = WRK_Vlad_Petrichev", reward)
         self.assertIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", reward)
-        self.assertIn("add_ideas = ADISCORD_vorkerland_reunification_settlement", reward)
+        self.assertIn(
+            "add_ideas = ADISCORD_vorkerland_reunification_settlement", reward
+        )
 
     def test_vlad_postwar_route_unlocks_sequential_imperial_reclamation(self) -> None:
-        focuses = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
+        focuses = source_section(
+            read("common/national_focus/ADISCORD_vorkerland_focus.txt"),
+            'civil_war_focus',
+        )
         match = re.search(
             r"(?ms)^\s*focus\s*=\s*\{\s*id\s*=\s*WRK_joint_issue_integration_warrants\b",
             focuses,
@@ -103,13 +122,18 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("has_war = no", reclaim)
         self.assertIn("days_re_enable = 14", reclaim)
         self.assertIn("fire_only_once = no", reclaim)
-        self.assertIn("ADISCORD_vorkerland_continue_imperial_reunification = yes", reclaim)
+        self.assertIn(
+            "ADISCORD_vorkerland_continue_imperial_reunification = yes", reclaim
+        )
         dispatch = named_block(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             "ADISCORD_vorkerland_continue_imperial_reunification",
         )
         for tag in ("EYR", "EGC", "VLA", "ROM", "ZTA", "TGD"):
-            self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", dispatch)
+            self.assertIn(
+                f"declare_war_on = {{ target = {tag} type = annex_everything }}",
+                dispatch,
+            )
 
     def test_reunified_vlad_keeps_empire_unless_the_rare_council_formed(self) -> None:
         source = source_section(
@@ -125,9 +149,15 @@ class VadPostwarContractTests(unittest.TestCase):
             formation,
         )
         self.assertIsNotNone(identity)
-        self.assertIn("ADISCORD_vorkerland_joint_government_formed", identity.group("limit"))
-        self.assertNotIn("ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit"))
-        self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", identity.group("else"))
+        self.assertIn(
+            "ADISCORD_vorkerland_joint_government_formed", identity.group("limit")
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit")
+        )
+        self.assertIn(
+            "set_cosmetic_tag = VAD_vorkerland_restoration", identity.group("else")
+        )
         self.assertIn("character = WRK_Vlad_Petrichev", identity.group("else"))
         self.assertIn(
             "NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }",
@@ -136,8 +166,12 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIn("character = WRK_Vlad_Petrichev", formation)
         self.assertIn("character = WRK_Nikita_Worcker", formation)
 
-    def test_joint_council_gets_specific_victory_text_before_vlad_fallback(self) -> None:
-        scripted = read("common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt")
+    def test_joint_council_gets_specific_victory_text_before_vlad_fallback(
+        self,
+    ) -> None:
+        scripted = read(
+            "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt"
+        )
         for suffix in ("title", "quote", "comment"):
             joint_key = f"superevent_vorkerland_joint_victory_{suffix}"
             vlad_key = f"superevent_vorkerland_vlad_victory_{suffix}"
@@ -150,13 +184,18 @@ class VadPostwarContractTests(unittest.TestCase):
         ):
             localisation = read(path)
             for suffix in ("title", "quote", "comment"):
-                self.assertIn(f"superevent_vorkerland_joint_victory_{suffix}:", localisation)
+                self.assertIn(
+                    f"superevent_vorkerland_joint_victory_{suffix}:", localisation
+                )
 
         russian = ROOT / "localisation/russian/ADISCORD_superevents_l_russian.yml"
         self.assertTrue(russian.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_joint_council_ai_prefers_chancery_over_commandantures(self) -> None:
-        source = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'civil_war_focus')
+        source = source_section(
+            read("common/national_focus/ADISCORD_vorkerland_focus.txt"),
+            'civil_war_focus',
+        )
 
         def focus(focus_id: str) -> str:
             match = re.search(

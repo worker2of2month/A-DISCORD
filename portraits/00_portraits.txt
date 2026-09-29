@@ -1,16 +1,16 @@
 default = {
 	#navy = {
-		#male = {
-		#}
-		#female = {
-		#}
+	#male = {
 	#}
-	
+	#female = {
+	#}
+	#}
+
 	#army = {
-		#male = {
-		#}
-		#female = {
-		#}
+	#male = {
+	#}
+	#female = {
+	#}
 	#}
 
 	operative = {
@@ -39,7 +39,7 @@ continent = {
 			"GFX_Portrait_Forul_Generic_9"
 		}
 	}
-	
+
 	navy = {
 		male = {
 			"GFX_Portrait_Europe_Generic_navy_1"
@@ -47,45 +47,45 @@ continent = {
 			"GFX_Portrait_Europe_Generic_navy_3"
 		}
 	}
-	
+
 	political = {
 		humanism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_6"
 			}
 		}
 		utilitarism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_7"
 			}
 		}
 		chauvinism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_2"
 			}
 		}
 		pragmatism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_5"
 			}
 		}
 		anarchism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_3"
 			}
 		}
 		technocracy = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_4"
 			}
 		}
 		etatism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_1"
 			}
 		}
 		hedonism = {
-			male = { 
+			male = {
 				"GFX_Portrait_Forul_Generic_8"
 			}
 		}

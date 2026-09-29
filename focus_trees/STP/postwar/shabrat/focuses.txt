@@ -638,7 +638,7 @@
 			custom_effect_tooltip = STP_pc_civil_appointment_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_republic_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
+				add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -673,9 +673,9 @@
 
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_staff_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
-					add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
-					add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -1078,8 +1078,8 @@
 			add_political_power = 30
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_unity_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-					add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -1126,7 +1126,7 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_subordinate_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 			add_timed_idea = { idea = STP_pc_authorized_recruit days = -1 }
@@ -1433,8 +1433,8 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_burden_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -1553,8 +1553,8 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_lib_assembly_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-					add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -1981,7 +1981,7 @@
 			army_experience = 10
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_field_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -2027,7 +2027,7 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_state_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -2234,7 +2234,7 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_gornin_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 			custom_effect_tooltip = STP_pc_gornin_charter_tt
@@ -2260,8 +2260,8 @@
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_vera_delta } }
 			hidden_effect = {
-					add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
-					add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
+				add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
 				STP_pw_refresh_modifier = yes
 			}
 		}

@@ -40,11 +40,17 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             for token in retired_tokens:
                 self.assertNotIn(token, source, f"{relative} still uses {token}")
 
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         self.assertEqual(named_block(on_actions, "on_monthly"), "")
 
     def test_only_factory_scaling_remains_monthly(self) -> None:
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         for tag in ("WKR", "VAD", "TVA"):
             hook = named_block(on_actions, f"on_monthly_{tag}")
             self.assertTrue(hook, f"missing on_monthly_{tag}")
@@ -60,17 +66,24 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             self.assertNotIn("every_state", hook)
 
     def test_dynamic_effect_owners_are_split(self) -> None:
-        legacy = ROOT / "common/scripted_effects/ADISCORD_vorkerland_focus_dynamic_effects.txt"
+        legacy = (
+            ROOT
+            / "common/scripted_effects/ADISCORD_vorkerland_focus_dynamic_effects.txt"
+        )
         self.assertFalse(legacy.exists())
 
-        economy = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'war_economy_effects')
-        doctrine = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'doctrine_effects')
+        economy = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'war_economy_effects',
+        )
+        doctrine = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'doctrine_effects',
+        )
         self.assertTrue(
-            named_block(economy, "ADISCORD_vorkerland_refresh_war_economy_dynamic_state")
+            named_block(
+                economy, "ADISCORD_vorkerland_refresh_war_economy_dynamic_state"
+            )
         )
         self.assertTrue(
             named_block(doctrine, "ADISCORD_vorkerland_refresh_doctrine_dynamic_state")
@@ -80,12 +93,11 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         )
 
     def test_legitimacy_leader_preserves_a_live_incumbent_on_ties(self) -> None:
-        campaign = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'campaign_state_effects')
-        leader = named_block(
-            campaign, "ADISCORD_vorkerland_refresh_legitimacy_leader"
+        campaign = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'campaign_state_effects',
         )
+        leader = named_block(campaign, "ADISCORD_vorkerland_refresh_legitimacy_leader")
         first_clear = leader.find(
             "clr_country_flag = ADISCORD_vorkerland_legitimacy_leader"
         )
@@ -99,9 +111,10 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertGreaterEqual(leader.count("compare = greater_than"), 6)
 
     def test_coalition_uses_the_configured_early_lead_threshold(self) -> None:
-        campaign = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'campaign_state_effects')
+        campaign = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'campaign_state_effects',
+        )
         coalition = named_block(
             campaign, "ADISCORD_vorkerland_refresh_claimant_coalition"
         )
@@ -125,7 +138,9 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
         self.assertNotIn("war_month", coalition)
 
     def test_collapse_and_phase_transitions_reconcile_immediately(self) -> None:
-        collapse = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        collapse = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         event = re.search(
             r"(?s)country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\b(.*?)\n\}",
             collapse,
@@ -136,7 +151,9 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             "set_global_flag = ADISCORD_vorkerland_collapse_wars_started"
         )
         attrition = event_text.find("ADISCORD_vorkerland_apply_central_attrition = yes")
-        reconcile = event_text.find("ADISCORD_vorkerland_reconcile_campaign_state = yes")
+        reconcile = event_text.find(
+            "ADISCORD_vorkerland_reconcile_campaign_state = yes"
+        )
         self.assertTrue(0 <= started < attrition < reconcile)
         for tag in ("WKR", "VAD", "TVA"):
             initialize = (
@@ -145,16 +162,40 @@ class VorkerlandCampaignStateTests(unittest.TestCase):
             self.assertEqual(event_text.count(initialize), 1)
             self.assertLess(event_text.find(initialize), reconcile)
 
-        phase = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+        phase = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         showdown = named_block(phase, "ADISCORD_vorkerland_set_phase_central_showdown")
         terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
         self.assertIn("ADISCORD_vorkerland_reconcile_campaign_state = yes", showdown)
         self.assertIn("ADISCORD_vorkerland_reconcile_campaign_state = yes", terminal)
 
     def test_central_state_edges_recount_and_refresh_coalitions(self) -> None:
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         state_hook = named_block(on_actions, "on_state_control_changed")
-        for state in (32, 33, 35, 36, 37, 38, 39, 40, 75, 81, 102, 104, 106, 121, 122, 123, 124):
+        for state in (
+            32,
+            33,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            75,
+            81,
+            102,
+            104,
+            106,
+            121,
+            122,
+            123,
+            124,
+        ):
             self.assertIn(f"state = {state}", state_hook)
         self.assertIn("ADISCORD_vorkerland_recount_central_control = yes", state_hook)
         self.assertIn("ADISCORD_vorkerland_refresh_legitimacy_leader = yes", state_hook)

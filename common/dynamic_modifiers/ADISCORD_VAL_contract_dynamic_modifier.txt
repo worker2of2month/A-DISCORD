@@ -111,11 +111,11 @@ VAL_economic_miracle = {
 }
 
 VAL_arsenal_reputation = {
-    enable = { original_tag = VAL }
-    icon = GFX_idea_VAL_worldwide_famous_weponry
-    ADISCORD_economy_trade_income_factor = VAL_arsenal_trade
-    ADISCORD_economy_creditworthiness_factor = VAL_arsenal_credit
-    production_factory_max_efficiency_factor = VAL_arsenal_quality
+	enable = { original_tag = VAL }
+	icon = GFX_idea_VAL_worldwide_famous_weponry
+	ADISCORD_economy_trade_income_factor = VAL_arsenal_trade
+	ADISCORD_economy_creditworthiness_factor = VAL_arsenal_credit
+	production_factory_max_efficiency_factor = VAL_arsenal_quality
 }
 
 VAL_final_war_preparation = {

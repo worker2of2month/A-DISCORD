@@ -83,7 +83,11 @@ NORTHERN_CAMPAIGN_VPS = {
 
 SETTLEMENT_VP_VALUES = {
     **{province: value for province, value, _name in SETTLEMENT_VPS.values()},
-    **{province: value for points in NORTHERN_CAMPAIGN_VPS.values() for province, value in points},
+    **{
+        province: value
+        for points in NORTHERN_CAMPAIGN_VPS.values()
+        for province, value in points
+    },
 }
 
 NON_URBAN_SETTLEMENT_VPS = frozenset(SETTLEMENT_VP_VALUES)
@@ -115,9 +119,19 @@ EXPECTED_DIRECT_BUILDINGS = {
     2: {"infrastructure": 3, "arms_factory": 2, "industrial_complex": 2},
     3: {"infrastructure": 3, "synthetic_refinery": 2},
     10: {"infrastructure": 2, "industrial_complex": 2, "arms_factory": 2},
-    11: {"infrastructure": 3, "industrial_complex": 3, "arms_factory": 3, "air_base": 2},
+    11: {
+        "infrastructure": 3,
+        "industrial_complex": 3,
+        "arms_factory": 3,
+        "air_base": 2,
+    },
     12: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 2},
-    13: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 1, "synthetic_refinery": 1},
+    13: {
+        "infrastructure": 2,
+        "industrial_complex": 1,
+        "arms_factory": 1,
+        "synthetic_refinery": 1,
+    },
     17: {"infrastructure": 2, "arms_factory": 1},
     18: {"infrastructure": 2, "industrial_complex": 1, "synthetic_refinery": 1},
     24: {"infrastructure": 1, "synthetic_refinery": 2},
@@ -142,7 +156,13 @@ EXPECTED_DIRECT_BUILDINGS = {
     },
     42: {"infrastructure": 2, "hidden_dam": 1},
     43: {"infrastructure": 2, "industrial_complex": 2, "synthetic_refinery": 1},
-    44: {"infrastructure": 2, "arms_factory": 1, "hidden_dam": 1, "industrial_complex": 1, "dockyard": 2},
+    44: {
+        "infrastructure": 2,
+        "arms_factory": 1,
+        "hidden_dam": 1,
+        "industrial_complex": 1,
+        "dockyard": 2,
+    },
     45: {"infrastructure": 3, "industrial_complex": 3},
     46: {"infrastructure": 2, "dockyard": 1, "industrial_complex": 1},
     48: {
@@ -154,9 +174,19 @@ EXPECTED_DIRECT_BUILDINGS = {
         "air_base": 2,
     },
     53: {"infrastructure": 1, "hidden_dam": 1},
-    54: {"infrastructure": 3, "arms_factory": 2, "industrial_complex": 4, "air_base": 2},
+    54: {
+        "infrastructure": 3,
+        "arms_factory": 2,
+        "industrial_complex": 4,
+        "air_base": 2,
+    },
     55: {"infrastructure": 2},
-    56: {"infrastructure": 2, "industrial_complex": 1, "arms_factory": 1, "synthetic_refinery": 2},
+    56: {
+        "infrastructure": 2,
+        "industrial_complex": 1,
+        "arms_factory": 1,
+        "synthetic_refinery": 2,
+    },
     57: {"infrastructure": 3, "industrial_complex": 3, "arms_factory": 1},
     88: {"infrastructure": 4, "industrial_complex": 3},
     168: {"industrial_complex": 1, "infrastructure": 2},

@@ -14,8 +14,7 @@ OPERATIVE_GUI = ROOT / "interface/operative.gui"
 LEADER_GUI = ROOT / "interface/operativeleader.gui"
 GFX = ROOT / "interface/ADISCORD_intelligence_ui.gfx"
 HEADER_SOURCE = (
-    ROOT
-    / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
+    ROOT / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 
@@ -213,7 +212,9 @@ class IntelligenceUiContractTests(unittest.TestCase):
             + [('font = "hoi_18mbs"', 'font = "hoi_16mbs"')],
         )
 
-    def test_light_themed_branch_upgrade_labels_keep_black_typewriter_font(self) -> None:
+    def test_light_themed_branch_upgrade_labels_keep_black_typewriter_font(
+        self,
+    ) -> None:
         gui = AGENCY_GUI.read_text(encoding="utf-8-sig")
         upgrade_button = named_block(gui, "containerWindowType", "upgrade_button")
         self.assertIn(
@@ -226,8 +227,12 @@ class IntelligenceUiContractTests(unittest.TestCase):
                 self.assertIn('font = "hoi4_typewriter16"', block)
                 self.assertNotIn('font = "hoi_18mbs"', block)
 
-    def test_allowlisted_dark_surface_text_has_absolute_pale_font_contrast(self) -> None:
-        self.assertEqual(set(DARK_SURFACE_TEXT_REGIONS), set(DARK_SURFACE_TEXT_ALLOWLIST))
+    def test_allowlisted_dark_surface_text_has_absolute_pale_font_contrast(
+        self,
+    ) -> None:
+        self.assertEqual(
+            set(DARK_SURFACE_TEXT_REGIONS), set(DARK_SURFACE_TEXT_ALLOWLIST)
+        )
         for role, (filename, box) in DARK_SURFACE_TEXT_REGIONS.items():
             path = OUTPUT_DIR / filename
             self.assertTrue(path.is_file(), path)
@@ -254,7 +259,9 @@ class IntelligenceUiContractTests(unittest.TestCase):
         self.assertEqual(gui.count('"GFX_ADISCORD_intelligence_branches_header"'), 1)
         self.assertEqual(gui.count('"GFX_ADISCORD_intelligence_agents_header"'), 1)
 
-    def test_branch_header_is_procedural_and_visibly_distinct_from_agent_art(self) -> None:
+    def test_branch_header_is_procedural_and_visibly_distinct_from_agent_art(
+        self,
+    ) -> None:
         paths = (
             OUTPUT_DIR / "ADISCORD_intelligence_branches_header.dds",
             OUTPUT_DIR / "ADISCORD_intelligence_agents_header.dds",
@@ -330,13 +337,17 @@ class IntelligenceUiContractTests(unittest.TestCase):
             r'name\s*=\s*"GFX_decrypt_active_bg"',
         )
 
-    def test_tab_frames_have_matching_silhouette_and_distinct_selected_edge(self) -> None:
+    def test_tab_frames_have_matching_silhouette_and_distinct_selected_edge(
+        self,
+    ) -> None:
         path = OUTPUT_DIR / "ADISCORD_intelligence_tabs.dds"
         with Image.open(path) as image:
             rgba = image.convert("RGBA")
         first = rgba.crop((0, 0, 262, 53))
         second = rgba.crop((262, 0, 524, 53))
-        self.assertEqual(first.getchannel("A").tobytes(), second.getchannel("A").tobytes())
+        self.assertEqual(
+            first.getchannel("A").tobytes(), second.getchannel("A").tobytes()
+        )
         edge_delta = ImageChops.difference(
             first.convert("RGB").crop((8, 47, 254, 52)),
             second.convert("RGB").crop((8, 47, 254, 52)),
@@ -400,9 +411,7 @@ class IntelligenceUiContractTests(unittest.TestCase):
             path.read_text(encoding="utf-8-sig")
             for path in (AGENCY_GUI, OPERATIVE_GUI, LEADER_GUI)
         )
-        references = set(
-            re.findall(r'"(GFX_ADISCORD_intelligence_[^"]+)"', combined)
-        )
+        references = set(re.findall(r'"(GFX_ADISCORD_intelligence_[^"]+)"', combined))
         declarations = set(
             re.findall(
                 r'name\s*=\s*"(GFX_ADISCORD_intelligence_[^"]+)"',
@@ -425,7 +434,9 @@ class IntelligenceUiContractTests(unittest.TestCase):
 
     def test_custom_gfx_is_additive_and_outputs_are_current(self) -> None:
         self.assertTrue(GFX.is_file())
-        self.assertFalse((ROOT / "interface/countryintelligenceagencyview.gfx").exists())
+        self.assertFalse(
+            (ROOT / "interface/countryintelligenceagencyview.gfx").exists()
+        )
         self.assertFalse((ROOT / "interface/operativeleader.gfx").exists())
         outputs = builder.expected_outputs()
         for path, data in outputs.items():
@@ -440,9 +451,7 @@ class IntelligenceUiContractTests(unittest.TestCase):
                     self.assertEqual(image.mode, "RGBA", path.name)
 
     def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
-        owned = {
-            path for path in builder.expected_outputs() if path.suffix == ".dds"
-        }
+        owned = {path for path in builder.expected_outputs() if path.suffix == ".dds"}
         checked_in = set(OUTPUT_DIR.glob("*.dds"))
         self.assertEqual(checked_in, owned)
 

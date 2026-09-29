@@ -4,8 +4,13 @@ from pathlib import Path
 
 from PIL import Image
 
-from tools.builders.build_adiscord_resource_assets import expected_outputs as expected_asset_outputs
-from tools.validators.validate_adiscord_division_templates import Entry, parse_clausewitz
+from tools.builders.build_adiscord_resource_assets import (
+    expected_outputs as expected_asset_outputs,
+)
+from tools.validators.validate_adiscord_division_templates import (
+    Entry,
+    parse_clausewitz,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -28,18 +33,39 @@ RU_TRADE_REGIONS = ROOT / "localisation/replace/ADISCORD_trade_regions_l_russian
 EN_TRADE_REGIONS = ROOT / "localisation/replace/ADISCORD_trade_regions_l_english.yml"
 RESOURCE_DOC = ROOT / "docs/economy/strategic-resources.md"
 
-RESOURCE_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
-TRADE_ENTRY_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
-TOPBAR_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
-INDICATOR_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
-MARKET_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
-COMMAND_POWER_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
-TOPBAR_BACKGROUND_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
-TREASURY_SOURCE = ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+RESOURCE_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
+)
+TRADE_ENTRY_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
+)
+TOPBAR_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
+)
+INDICATOR_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
+)
+MARKET_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+)
+COMMAND_POWER_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
+)
+TOPBAR_BACKGROUND_SOURCE = (
+    ROOT
+    / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
+)
+TREASURY_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+)
 TOPBAR_GFX = ROOT / "interface/ADISCORD_topbar.gfx"
-TRADE_ENTRY_TEXTURE = ROOT / "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds"
+TRADE_ENTRY_TEXTURE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds"
+)
 WORLD_TENSION_TEXTURE = ROOT / "gfx/interface/world_tension_icon_big_strip.dds"
-WORLD_TENSION_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+WORLD_TENSION_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+)
 
 RIGHT_TOPBAR_ASSETS = {
     "gfx/interface/topbar/armyoverview_buttons_bg.dds": (403, 101),
@@ -59,20 +85,76 @@ RIGHT_TOPBAR_ASSETS = {
 }
 
 VANILLA_TOPBAR_BUTTONS = {
-    "decisions": ("GFX_topbar_decisionview_button", "gfx/interface/topbar/toolbar/topbar_decisionview_button.dds", (110, 41)),
-    "intelligence": ("GFX_topbar_intelligence", "gfx/interface/topbar/toolbar/intelligence_button.dds", (110, 41)),
-    "technology": ("GFX_topbar_technology", "gfx/interface/topbar/toolbar/science_button.dds", (110, 41)),
-    "diplomacy": ("GFX_topbar_diplomacy", "gfx/interface/topbar/toolbar/diplomacy_button.dds", (110, 41)),
-    "trade": ("GFX_topbar_trade_button", "gfx/interface/topbar/toolbar/trade_button.dds", (110, 41)),
-    "international_market": ("GFX_topbar_international_market", "gfx/interface/topbar/toolbar/international_market_button.dds", (110, 41)),
-    "construction": ("GFX_construction_button", "gfx/interface/topbar/toolbar/construction_button.dds", (110, 41)),
-    "production": ("GFX_topbar_production", "gfx/interface/topbar/toolbar/production_button.dds", (110, 41)),
-    "deployment": ("GFX_deployment_button", "gfx/interface/topbar/toolbar/deployment_button.dds", (110, 41)),
-    "logistics": ("GFX_ledger_button", "gfx/interface/topbar/toolbar/ledger_button.dds", (110, 41)),
-    "officer_corp": ("GFX_staff_office_button", "gfx/interface/topbar/toolbar/staff_office_button.dds", (110, 41)),
-    "army": ("GFX_armyoverview_button", "gfx/interface/topbar/armyoverview_button.dds", (76, 38)),
-    "navy": ("GFX_navyoverview_button", "gfx/interface/topbar/navyoverview_button.dds", (76, 38)),
-    "air": ("GFX_airoverview_button", "gfx/interface/topbar/airoverview_button.dds", (76, 38)),
+    "decisions": (
+        "GFX_topbar_decisionview_button",
+        "gfx/interface/topbar/toolbar/topbar_decisionview_button.dds",
+        (110, 41),
+    ),
+    "intelligence": (
+        "GFX_topbar_intelligence",
+        "gfx/interface/topbar/toolbar/intelligence_button.dds",
+        (110, 41),
+    ),
+    "technology": (
+        "GFX_topbar_technology",
+        "gfx/interface/topbar/toolbar/science_button.dds",
+        (110, 41),
+    ),
+    "diplomacy": (
+        "GFX_topbar_diplomacy",
+        "gfx/interface/topbar/toolbar/diplomacy_button.dds",
+        (110, 41),
+    ),
+    "trade": (
+        "GFX_topbar_trade_button",
+        "gfx/interface/topbar/toolbar/trade_button.dds",
+        (110, 41),
+    ),
+    "international_market": (
+        "GFX_topbar_international_market",
+        "gfx/interface/topbar/toolbar/international_market_button.dds",
+        (110, 41),
+    ),
+    "construction": (
+        "GFX_construction_button",
+        "gfx/interface/topbar/toolbar/construction_button.dds",
+        (110, 41),
+    ),
+    "production": (
+        "GFX_topbar_production",
+        "gfx/interface/topbar/toolbar/production_button.dds",
+        (110, 41),
+    ),
+    "deployment": (
+        "GFX_deployment_button",
+        "gfx/interface/topbar/toolbar/deployment_button.dds",
+        (110, 41),
+    ),
+    "logistics": (
+        "GFX_ledger_button",
+        "gfx/interface/topbar/toolbar/ledger_button.dds",
+        (110, 41),
+    ),
+    "officer_corp": (
+        "GFX_staff_office_button",
+        "gfx/interface/topbar/toolbar/staff_office_button.dds",
+        (110, 41),
+    ),
+    "army": (
+        "GFX_armyoverview_button",
+        "gfx/interface/topbar/armyoverview_button.dds",
+        (76, 38),
+    ),
+    "navy": (
+        "GFX_navyoverview_button",
+        "gfx/interface/topbar/navyoverview_button.dds",
+        (76, 38),
+    ),
+    "air": (
+        "GFX_airoverview_button",
+        "gfx/interface/topbar/airoverview_button.dds",
+        (76, 38),
+    ),
 }
 
 TRADE_REGION_NAMES = {
@@ -115,7 +197,9 @@ def direct_scalar(entries: list[Entry], key: str) -> str | None:
 def named_clausewitz_block(text: str, name: str) -> list[Entry]:
     matches = [entry for entry in parse_clausewitz(text) if entry.key == name]
     if len(matches) != 1 or not isinstance(matches[0].value, list):
-        raise AssertionError(f"expected one Clausewitz block {name}, found {len(matches)}")
+        raise AssertionError(
+            f"expected one Clausewitz block {name}, found {len(matches)}"
+        )
     return matches[0].value
 
 
@@ -207,7 +291,9 @@ def building_block(text: str, name: str) -> list[Entry]:
 
 
 class StrategicResourcesUIContracts(unittest.TestCase):
-    def test_rare_resources_are_registered_after_electricity_and_localised(self) -> None:
+    def test_rare_resources_are_registered_after_electricity_and_localised(
+        self,
+    ) -> None:
         root = named_clausewitz_block(read(RESOURCES), "resources")
         self.assertEqual(
             [entry.key for entry in root],
@@ -242,12 +328,23 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             data = path.read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"), language)
             text = data.decode("utf-8-sig")
-            self.assertEqual(len(re.findall(r"(?m)^\s*PRODUCTION_MATERIALS_RARE_COMPONENTS:" , text)), 1)
-            self.assertEqual(len(re.findall(r"(?m)^\s*PRODUCTION_MATERIALS_RARE_ALLOYS:" , text)), 1)
+            self.assertEqual(
+                len(re.findall(r"(?m)^\s*PRODUCTION_MATERIALS_RARE_COMPONENTS:", text)),
+                1,
+            )
+            self.assertEqual(
+                len(re.findall(r"(?m)^\s*PRODUCTION_MATERIALS_RARE_ALLOYS:", text)), 1
+            )
             for resource in ("rare_components", "rare_alloys"):
-                for prefix in ("state_resource_", "temporary_state_resource_", "country_resource_"):
+                for prefix in (
+                    "state_resource_",
+                    "temporary_state_resource_",
+                    "country_resource_",
+                ):
                     self.assertRegex(text, rf"(?m)^\s*{prefix}{resource}:")
-            visible_energy = "Электроэнергия" if language == "russian" else "Electricity"
+            visible_energy = (
+                "Электроэнергия" if language == "russian" else "Electricity"
+            )
             for key in (
                 "PRODUCTION_MATERIALS_COAL",
                 "state_resource_coal",
@@ -262,7 +359,9 @@ class StrategicResourcesUIContracts(unittest.TestCase):
                 for match in re.finditer(r'(?m)^\s*[A-Za-z0-9_]+:\d*\s*"([^"]*)"', text)
             )
             visible_values = re.sub(r"\$[A-Z0-9_]+(?:\|[^$]+)?\$", "", visible_values)
-            retired_pattern = r"(?iu)\bуголь\b" if language == "russian" else r"(?iu)\bcoal\b"
+            retired_pattern = (
+                r"(?iu)\bуголь\b" if language == "russian" else r"(?iu)\bcoal\b"
+            )
             self.assertNotRegex(visible_values, retired_pattern)
 
     def test_resources_have_real_sources_and_late_equipment_consumers(self) -> None:
@@ -273,10 +372,18 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         components_plant = building_block(buildings, "ADISCORD_rare_components_plant")
         alloy_foundry = building_block(buildings, "ADISCORD_rare_alloy_foundry")
         for legacy_source in (synthetic, metallurgy, electrolysis):
-            self.assertIsNone(direct_scalar(legacy_source, "local_resources_rare_components"))
-            self.assertIsNone(direct_scalar(legacy_source, "local_resources_rare_alloys"))
-        self.assertEqual(direct_scalar(components_plant, "local_resources_rare_components"), "4")
-        self.assertEqual(direct_scalar(alloy_foundry, "local_resources_rare_alloys"), "3")
+            self.assertIsNone(
+                direct_scalar(legacy_source, "local_resources_rare_components")
+            )
+            self.assertIsNone(
+                direct_scalar(legacy_source, "local_resources_rare_alloys")
+            )
+        self.assertEqual(
+            direct_scalar(components_plant, "local_resources_rare_components"), "4"
+        )
+        self.assertEqual(
+            direct_scalar(alloy_foundry, "local_resources_rare_alloys"), "3"
+        )
         for factory in (components_plant, alloy_foundry):
             level_cap = direct(factory, "level_cap")
             self.assertEqual(len(level_cap), 1)
@@ -304,20 +411,24 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertIn("ADISCORD_tech_rare_alloy_metallurgy", current_technology)
 
         contracts = {
-            ROOT / "common/units/equipment/ADISCORD_support_equipment.txt": {
+            ROOT
+            / "common/units/equipment/ADISCORD_support_equipment.txt": {
                 "ADISCORD_support_equipment_2170": {"rare_components": "1"},
                 "ADISCORD_support_equipment_2200": {"rare_components": "2"},
             },
-            ROOT / "common/units/equipment/ADISCORD_armor_equipment.txt": {
+            ROOT
+            / "common/units/equipment/ADISCORD_armor_equipment.txt": {
                 "ADISCORD_recon_drone_carrier_2170": {"rare_components": "1"},
                 "ADISCORD_combat_platform_2183": {"rare_alloys": "1"},
                 "ADISCORD_heavy_combat_platform_2200": {"rare_alloys": "2"},
             },
-            ROOT / "common/units/equipment/ADISCORD_artillery_equipment.txt": {
+            ROOT
+            / "common/units/equipment/ADISCORD_artillery_equipment.txt": {
                 "ADISCORD_artillery_equipment_2183": {"rare_alloys": "1"},
                 "ADISCORD_anti_air_equipment_2183": {"rare_components": "1"},
             },
-            ROOT / "common/units/equipment/ADISCORD_train_equipment.txt": {
+            ROOT
+            / "common/units/equipment/ADISCORD_train_equipment.txt": {
                 "ADISCORD_autonomous_train_equipment_2183": {"rare_components": "1"},
                 "ADISCORD_hardened_train_equipment_2183": {"rare_alloys": "1"},
             },
@@ -329,29 +440,45 @@ class StrategicResourcesUIContracts(unittest.TestCase):
                 self.assertEqual(len(resources), 1, equipment)
                 self.assertIsInstance(resources[0].value, list)
                 for resource, amount in expected.items():
-                    self.assertEqual(direct_scalar(resources[0].value, resource), amount, equipment)
+                    self.assertEqual(
+                        direct_scalar(resources[0].value, resource), amount, equipment
+                    )
 
         effects = read(ECONOMY_EFFECTS)
-        recount = named_clausewitz_block(effects, "ADISCORD_economy_recount_economic_buildings")
+        recount = named_clausewitz_block(
+            effects, "ADISCORD_economy_recount_economic_buildings"
+        )
         rendered = " ".join(str(entry) for entry in recount)
         self.assertIn("resource@rare_components", rendered)
         self.assertIn("resource@rare_alloys", rendered)
 
     def test_trade_window_expands_to_nine_resource_columns(self) -> None:
-        self.assertTrue(TRADE_GUI.exists(), "the mod must own the expanded trade layout")
+        self.assertTrue(
+            TRADE_GUI.exists(), "the mod must own the expanded trade layout"
+        )
         trade = read(TRADE_GUI)
         country_view = named_gui_body(trade, "countrytradeview")
         self.assertRegex(country_view, r"size\s*=\s*\{\s*width\s*=\s*847\b")
-        self.assertGreaterEqual(len(re.findall(r"max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1", trade)), 1)
-        self.assertRegex(trade, r"name\s*=\s*\"resources_grid\"[\s\S]*?size\s*=\s*\{\s*width\s*=\s*711\b")
+        self.assertGreaterEqual(
+            len(re.findall(r"max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1", trade)), 1
+        )
+        self.assertRegex(
+            trade,
+            r"name\s*=\s*\"resources_grid\"[\s\S]*?size\s*=\s*\{\s*width\s*=\s*711\b",
+        )
 
         diplomacy = read(DIPLOMACY_GUI)
         trade_info = named_gui_body(diplomacy, "trade_info")
         self.assertRegex(trade_info, r"max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1")
 
         country_entry = named_gui_body(trade, "country_trade_entry")
-        self.assertRegex(country_entry, r"size\s*=\s*\{\s*width\s*=\s*806\s+height\s*=\s*45")
-        self.assertIn('quadTextureSprite ="GFX_ADISCORD_country_trade_entry_bg_wide"', country_entry)
+        self.assertRegex(
+            country_entry, r"size\s*=\s*\{\s*width\s*=\s*806\s+height\s*=\s*45"
+        )
+        self.assertIn(
+            'quadTextureSprite ="GFX_ADISCORD_country_trade_entry_bg_wide"',
+            country_entry,
+        )
 
         sprite_types = named_clausewitz_block(read(RESOURCE_GFX), "spriteTypes")
         trade_sprites = [
@@ -359,7 +486,8 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             for entry in sprite_types
             if entry.key == "spriteType"
             and isinstance(entry.value, list)
-            and direct_scalar(entry.value, "name") == "GFX_ADISCORD_country_trade_entry_bg_wide"
+            and direct_scalar(entry.value, "name")
+            == "GFX_ADISCORD_country_trade_entry_bg_wide"
         ]
         self.assertEqual(len(trade_sprites), 1)
         self.assertEqual(direct_scalar(trade_sprites[0], "noOfFrames"), "3")
@@ -373,7 +501,9 @@ class StrategicResourcesUIContracts(unittest.TestCase):
     def test_economy_button_is_immediately_right_of_trade(self) -> None:
         topbar = read(TOPBAR)
         self.assertEqual(assignment_position(topbar, "trade_button"), (61, 0))
-        self.assertEqual(assignment_position(topbar, "ADISCORD_economy_topbar_anchor"), (116, 0))
+        self.assertEqual(
+            assignment_position(topbar, "ADISCORD_economy_topbar_anchor"), (116, 0)
+        )
         self.assertEqual(assignment_position(topbar, "construction_button"), (171, 0))
         self.assertEqual(assignment_position(topbar, "production_button"), (226, 0))
         self.assertEqual(assignment_position(topbar, "deployment_button"), (281, 0))
@@ -385,13 +515,17 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertEqual(assignment_position(topbar, "cp"), (781, 5))
 
         economy = read(ECONOMY_GUI)
-        self.assertEqual(assignment_position(economy, "ADISCORD_economy_topbar_window"), (405, 36))
+        self.assertEqual(
+            assignment_position(economy, "ADISCORD_economy_topbar_window"), (405, 36)
+        )
         self.assertEqual(
             assignment_position(economy, "ADISCORD_economy_treasury_topbar_window"),
             (708, 5),
         )
         button = named_gui_body(economy, "ADISCORD_economy_topbar_button")
-        self.assertIn('quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"', button)
+        self.assertIn(
+            'quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"', button
+        )
         self.assertRegex(button, r"size\s*=\s*\{\s*x\s*=\s*55\s+y\s*=\s*41\s*\}")
 
         scripted = named_clausewitz_block(read(ECONOMY_GUI_SCRIPT), "scripted_gui")
@@ -404,15 +538,23 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             self.assertIsInstance(owner[0].value, list)
             visible = direct(owner[0].value, "visible")
             self.assertEqual(len(visible), 1, owner_name)
-            self.assertEqual(direct_scalar(visible[0].value, "always"), "yes", owner_name)
+            self.assertEqual(
+                direct_scalar(visible[0].value, "always"), "yes", owner_name
+            )
         economy_owner = direct(scripted, "ADISCORD_economy_topbar_script")[0].value
-        self.assertEqual(direct_scalar(economy_owner, "dirty"), "ADISCORD_economy_gui_update_var")
+        self.assertEqual(
+            direct_scalar(economy_owner, "dirty"), "ADISCORD_economy_gui_update_var"
+        )
         self.assertEqual(
             direct_scalar(economy_owner, "parent_window_token"),
             "top_bar",
         )
-        treasury_owner = direct(scripted, "ADISCORD_economy_treasury_topbar_script")[0].value
-        self.assertEqual(direct_scalar(treasury_owner, "parent_window_token"), "top_bar")
+        treasury_owner = direct(scripted, "ADISCORD_economy_treasury_topbar_script")[
+            0
+        ].value
+        self.assertEqual(
+            direct_scalar(treasury_owner, "parent_window_token"), "top_bar"
+        )
         self.assertIsNone(
             direct_scalar(treasury_owner, "dirty"),
             "Weekly settlements change treasury without invalidating the dashboard; the readout must stay live",
@@ -430,7 +572,9 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         )
 
         dashboard = direct(scripted, "ADISCORD_economy_dashboard_script")[0].value
-        self.assertEqual(direct_scalar(dashboard, "dirty"), "ADISCORD_economy_gui_update_var")
+        self.assertEqual(
+            direct_scalar(dashboard, "dirty"), "ADISCORD_economy_gui_update_var"
+        )
         trigger_blocks = direct(dashboard, "triggers")
         self.assertEqual(len(trigger_blocks), 1)
         mutation_controls = (
@@ -450,10 +594,14 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "action_war_taxes",
         )
         for control in mutation_controls:
-            enabled = direct(trigger_blocks[0].value, f"ADISCORD_economy_{control}_click_enabled")
+            enabled = direct(
+                trigger_blocks[0].value, f"ADISCORD_economy_{control}_click_enabled"
+            )
             self.assertEqual(len(enabled), 1, control)
             self.assertEqual(
-                direct_scalar(enabled[0].value, "ADISCORD_economy_should_show_player_ui"),
+                direct_scalar(
+                    enabled[0].value, "ADISCORD_economy_should_show_player_ui"
+                ),
                 "yes",
                 control,
             )
@@ -483,13 +631,19 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             "ADISCORD_economy_refresh_policy_previews",
             "ADISCORD_economy_calculate_development_multiplier",
         ):
-            self.assertEqual(direct_scalar(refresh_owner[0].value, mutation), "yes", mutation)
+            self.assertEqual(
+                direct_scalar(refresh_owner[0].value, mutation), "yes", mutation
+            )
             self.assertIsNone(direct_scalar(open_effect, mutation), mutation)
 
     def test_alert_strip_and_defcon_topbar_contract(self) -> None:
         alerts = read(ALERTS)
-        self.assertEqual(assignment_position(alerts, "alerticon_startposition"), (717, 35))
-        self.assertEqual(assignment_position(alerts, "alerticon_startposition_extended"), (773, 35))
+        self.assertEqual(
+            assignment_position(alerts, "alerticon_startposition"), (717, 35)
+        )
+        self.assertEqual(
+            assignment_position(alerts, "alerticon_startposition_extended"), (773, 35)
+        )
         self.assertEqual(assignment_position(alerts, "alerticon_offset"), (48, 44))
         self.assertEqual(assignment_position(alerts, "alerticon_endposition"), (370, 0))
 
@@ -498,7 +652,9 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertNotIn("GetADISCORDDefconLevelLoc", topbar)
         self.assertEqual(assignment_position(topbar, "player_flag"), (12, 14))
         self.assertEqual(assignment_position(topbar, "observer_flag_overlay"), (11, 15))
-        self.assertEqual(assignment_position(topbar, "ADISCORD_player_flag_frame"), (9, 11))
+        self.assertEqual(
+            assignment_position(topbar, "ADISCORD_player_flag_frame"), (9, 11)
+        )
         player_flag = named_gui_body(topbar, "player_flag")
         self.assertIn('quadTextureSprite ="GFX_ADISCORD_topbar_flag"', player_flag)
         self.assertNotRegex(player_flag, r"\bscale\s*=")
@@ -522,11 +678,17 @@ class StrategicResourcesUIContracts(unittest.TestCase):
         self.assertEqual(assignment_position(topbar, "threat_value"), (-93, 70))
         self.assertEqual(assignment_position(topbar, "menu_button"), (-32, 7))
         self.assertEqual(assignment_position(topbar, "help_button"), (-32, 34))
-        self.assertEqual(assignment_position(topbar, "dismissed_alerts_button"), (-32, 62))
+        self.assertEqual(
+            assignment_position(topbar, "dismissed_alerts_button"), (-32, 62)
+        )
         self.assertEqual(assignment_position(topbar, "achievements_button"), (-274, 52))
-        self.assertEqual(WORLD_TENSION_TEXTURE.read_bytes(), WORLD_TENSION_SOURCE.read_bytes())
+        self.assertEqual(
+            WORLD_TENSION_TEXTURE.read_bytes(), WORLD_TENSION_SOURCE.read_bytes()
+        )
 
-    def test_topbar_art_replaces_vanilla_texture_paths_and_treasury_has_an_icon(self) -> None:
+    def test_topbar_art_replaces_vanilla_texture_paths_and_treasury_has_an_icon(
+        self,
+    ) -> None:
         topbar = read(TOPBAR)
         for button, (sprite, relative, dimensions) in VANILLA_TOPBAR_BUTTONS.items():
             if button != "international_market":
@@ -536,7 +698,9 @@ class StrategicResourcesUIContracts(unittest.TestCase):
                     f"{button} must keep the engine's original GFX reference",
                 )
             texture = ROOT / relative
-            self.assertTrue(texture.is_file(), f"missing replacement texture: {relative}")
+            self.assertTrue(
+                texture.is_file(), f"missing replacement texture: {relative}"
+            )
             with Image.open(texture) as image:
                 self.assertEqual(image.size, dimensions, button)
         with Image.open(ROOT / "gfx/interface/topbar/background_extended.dds") as image:
@@ -564,7 +728,11 @@ class StrategicResourcesUIContracts(unittest.TestCase):
                     for pixel in icon.get_flattened_data()
                     if pixel[3] >= 96 and pixel[0] > pixel[1] * 1.35
                 ]
-                self.assertGreater(len(coloured), 20, f"{relative} must visibly read as a red telephone")
+                self.assertGreater(
+                    len(coloured),
+                    20,
+                    f"{relative} must visibly read as a red telephone",
+                )
 
         economy_gfx = read(ECONOMY_GFX)
         self.assertRegex(
@@ -581,7 +749,10 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             self.assertEqual(image.size, (22, 22))
 
     def test_trade_filter_labels_use_lore_regions(self) -> None:
-        for path, language in ((RU_TRADE_REGIONS, "russian"), (EN_TRADE_REGIONS, "english")):
+        for path, language in (
+            (RU_TRADE_REGIONS, "russian"),
+            (EN_TRADE_REGIONS, "english"),
+        ):
             data = path.read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"), language)
             text = data.decode("utf-8-sig")
@@ -591,15 +762,36 @@ class StrategicResourcesUIContracts(unittest.TestCase):
 
             values = set(re.findall(r'(?m)^\s*[A-Za-z0-9_]+:\d*\s*"([^"]*)"\s*$', text))
             retired = (
-                {"Европа", "Азия", "Африка", "Северная Америка", "Южная Америка", "Океания", "Ближний Восток"}
+                {
+                    "Европа",
+                    "Азия",
+                    "Африка",
+                    "Северная Америка",
+                    "Южная Америка",
+                    "Океания",
+                    "Ближний Восток",
+                }
                 if language == "russian"
-                else {"Europe", "Asia", "Africa", "North America", "South America", "Oceania", "Middle East"}
+                else {
+                    "Europe",
+                    "Asia",
+                    "Africa",
+                    "North America",
+                    "South America",
+                    "Oceania",
+                    "Middle East",
+                }
             )
-            self.assertTrue(values.isdisjoint(retired), f"{language} keeps vanilla trade-region names")
+            self.assertTrue(
+                values.isdisjoint(retired),
+                f"{language} keeps vanilla trade-region names",
+            )
 
     def test_economy_is_docked_and_treasury_actions_are_not_an_overlay(self) -> None:
         economy = read(ECONOMY_GUI)
-        self.assertEqual(assignment_position(economy, "ADISCORD_economy_dashboard_window"), (6, 78))
+        self.assertEqual(
+            assignment_position(economy, "ADISCORD_economy_dashboard_window"), (6, 78)
+        )
         parents = gui_parent_map(economy)
         actions = (
             "internal_bonds",
@@ -643,17 +835,35 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             self.assertEqual(image.size, (234, 27))
             strip = image.convert("RGBA")
             for frame in range(9):
-                alpha_box = strip.crop((frame * 26, 0, (frame + 1) * 26, 27)).getchannel("A").getbbox()
-                self.assertIsNotNone(alpha_box, f"resource icon frame {frame + 1} is empty")
-                self.assertAlmostEqual((alpha_box[0] + alpha_box[2] - 1) / 2, 12.5, delta=0.5)
+                alpha_box = (
+                    strip.crop((frame * 26, 0, (frame + 1) * 26, 27))
+                    .getchannel("A")
+                    .getbbox()
+                )
+                self.assertIsNotNone(
+                    alpha_box, f"resource icon frame {frame + 1} is empty"
+                )
+                self.assertAlmostEqual(
+                    (alpha_box[0] + alpha_box[2] - 1) / 2, 12.5, delta=0.5
+                )
         with Image.open(ROOT / "gfx/interface/missing_resources_strip.dds") as image:
             self.assertEqual(image.size, (234, 28))
             strip = image.convert("RGBA")
             for frame in range(9):
-                alpha_box = strip.crop((frame * 26, 0, (frame + 1) * 26, 28)).getchannel("A").getbbox()
-                self.assertIsNotNone(alpha_box, f"deficit icon frame {frame + 1} is empty")
-                self.assertAlmostEqual((alpha_box[0] + alpha_box[2] - 1) / 2, 12.5, delta=0.5)
-        with Image.open(ROOT / "gfx/interface/ADISCORD_economy_gui/economy_topbar_button.dds") as image:
+                alpha_box = (
+                    strip.crop((frame * 26, 0, (frame + 1) * 26, 28))
+                    .getchannel("A")
+                    .getbbox()
+                )
+                self.assertIsNotNone(
+                    alpha_box, f"deficit icon frame {frame + 1} is empty"
+                )
+                self.assertAlmostEqual(
+                    (alpha_box[0] + alpha_box[2] - 1) / 2, 12.5, delta=0.5
+                )
+        with Image.open(
+            ROOT / "gfx/interface/ADISCORD_economy_gui/economy_topbar_button.dds"
+        ) as image:
             self.assertEqual(image.size, (110, 41))
 
         for source in (
@@ -666,14 +876,25 @@ class StrategicResourcesUIContracts(unittest.TestCase):
             TOPBAR_BACKGROUND_SOURCE,
             TREASURY_SOURCE,
         ):
-            self.assertTrue(source.is_file(), f"missing approved source art: {source.relative_to(ROOT)}")
+            self.assertTrue(
+                source.is_file(),
+                f"missing approved source art: {source.relative_to(ROOT)}",
+            )
             with Image.open(source) as image:
                 self.assertIn(image.mode, ("RGB", "RGBA"), source.name)
-                self.assertIsNotNone(image.convert("RGBA").getchannel("A").getbbox(), source.name)
+                self.assertIsNotNone(
+                    image.convert("RGBA").getchannel("A").getbbox(), source.name
+                )
 
         for path, expected in expected_asset_outputs().items():
-            self.assertTrue(path.is_file(), f"missing generated asset: {path.relative_to(ROOT)}")
-            self.assertEqual(path.read_bytes(), expected, f"stale generated asset: {path.relative_to(ROOT)}")
+            self.assertTrue(
+                path.is_file(), f"missing generated asset: {path.relative_to(ROOT)}"
+            )
+            self.assertEqual(
+                path.read_bytes(),
+                expected,
+                f"stale generated asset: {path.relative_to(ROOT)}",
+            )
 
 
 if __name__ == "__main__":

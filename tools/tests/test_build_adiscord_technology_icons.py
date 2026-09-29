@@ -45,23 +45,33 @@ class TechnologyIconSourceTests(unittest.TestCase):
     def test_regional_uniform_sets_cover_every_service_weapon(self) -> None:
         icons = json.loads(MANIFEST.read_text(encoding="utf-8"))["icons"]
         default = [
-            entry for entry in icons
+            entry
+            for entry in icons
             if entry["kind"] == "wide" and entry.get("family", "service") == "service"
         ]
         for tag in ("STP", "VAL"):
-            regional = [entry for entry in icons if entry.get("family") == f"service_{tag}"]
+            regional = [
+                entry for entry in icons if entry.get("family") == f"service_{tag}"
+            ]
             with self.subTest(country=tag):
-                self.assertEqual([entry["tier"] for entry in regional], list(range(1, 10)))
+                self.assertEqual(
+                    [entry["tier"] for entry in regional], list(range(1, 10))
+                )
                 self.assertEqual(len({entry["source"] for entry in regional}), 9)
                 self.assertEqual(
                     [entry["output"] for entry in regional],
-                    [entry["output"].replace("ADISCORD_", f"ADISCORD_{tag}_", 1) for entry in default],
+                    [
+                        entry["output"].replace("ADISCORD_", f"ADISCORD_{tag}_", 1)
+                        for entry in default
+                    ],
                 )
                 self.assertTrue(all(entry["kind"] == "wide" for entry in regional))
 
     def test_infantry_equipment_has_twenty_distinct_compact_icons(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        equipment = [entry for entry in manifest["icons"] if entry.get("family") == "equipment"]
+        equipment = [
+            entry for entry in manifest["icons"] if entry.get("family") == "equipment"
+        ]
         self.assertEqual(len(equipment), 20)
         self.assertEqual(len({entry["output"] for entry in equipment}), 20)
         self.assertTrue(all(entry["kind"] == "compact" for entry in equipment))
@@ -74,9 +84,13 @@ class TechnologyIconSourceTests(unittest.TestCase):
             source = SOURCE_DIR / entry["source"]
             self.assertTrue(source.is_file(), source)
             self.assertRegex(entry["source_sha256"], r"^[0-9a-f]{64}$")
-            self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), entry["source_sha256"])
+            self.assertEqual(
+                hashlib.sha256(source.read_bytes()).hexdigest(), entry["source_sha256"]
+            )
             with Image.open(source) as image:
-                self.assertEqual(image.size, tuple(entry.get("source_size", (1893, 831))))
+                self.assertEqual(
+                    image.size, tuple(entry.get("source_size", (1893, 831)))
+                )
                 self.assertEqual(image.mode, "RGBA")
 
     def test_night_icons_use_generated_complete_sprite_cells(self) -> None:
@@ -87,7 +101,10 @@ class TechnologyIconSourceTests(unittest.TestCase):
             if entry["kind"] == "compact" and entry.get("family", "night") == "night"
         ]
 
-        self.assertEqual({entry["source"] for entry in compact}, {"night_operations_generated_sheet.png"})
+        self.assertEqual(
+            {entry["source"] for entry in compact},
+            {"night_operations_generated_sheet.png"},
+        )
         self.assertEqual(
             [entry["crop"] for entry in compact],
             [
@@ -144,8 +161,12 @@ class TechnologyIconSourceTests(unittest.TestCase):
                 12: "personal_antitank_12_multispectral_targeting.png",
             },
         )
-        self.assertEqual(antitank[1]["source"], "personal_antitank_01_incendiary_bottle.dds")
-        self.assertEqual(antitank[2]["source"], "personal_antitank_02_satchel_charge.dds")
+        self.assertEqual(
+            antitank[1]["source"], "personal_antitank_01_incendiary_bottle.dds"
+        )
+        self.assertEqual(
+            antitank[2]["source"], "personal_antitank_02_satchel_charge.dds"
+        )
         self.assertEqual(
             {tier for tier, entry in antitank.items() if entry.get("runtime_master")},
             {1, 2, 3, 4, 8, 9},
@@ -168,11 +189,17 @@ class TechnologyIconBuilderTests(unittest.TestCase):
                 with self.subTest(mode=mode):
                     Image.new(mode, (16, 16), color).save(source)
                     spec = builder.IconSpec(
-                        key="opaque", source=source.name,
+                        key="opaque",
+                        source=source.name,
                         source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-                        tier=1, kind="wide", output="opaque.dds", source_size=(16, 16),
+                        tier=1,
+                        kind="wide",
+                        output="opaque.dds",
+                        source_size=(16, 16),
                     )
-                    with self.assertRaisesRegex(RuntimeError, "alpha channel|transparent background"):
+                    with self.assertRaisesRegex(
+                        RuntimeError, "alpha channel|transparent background"
+                    ):
                         builder.render_icon(spec, root)
 
     def test_rendered_dds_outputs_have_exact_contract_geometry(self) -> None:
@@ -189,7 +216,9 @@ class TechnologyIconBuilderTests(unittest.TestCase):
             with Image.open(BytesIO(payload)) as image:
                 expected = (
                     (72, 72)
-                    if path.name.startswith(("ADISCORD_night_", "ADISCORD_antitank_", "ADISCORD_equipment_"))
+                    if path.name.startswith(
+                        ("ADISCORD_night_", "ADISCORD_antitank_", "ADISCORD_equipment_")
+                    )
                     else (176, 72)
                 )
                 self.assertEqual(image.size, expected, path)
@@ -224,11 +253,18 @@ class TechnologyIconBuilderTests(unittest.TestCase):
                 self.assertGreaterEqual(bbox[1], 3)
                 self.assertLessEqual(bbox[2], icon.width - 3)
                 self.assertLessEqual(bbox[3], icon.height - 3)
-                self.assertGreater(alpha.histogram()[0], icon.width * icon.height * 0.25)
-                self.assertFalse(any(
-                    opacity >= 32 and min(red, blue) > 45 and min(red, blue) - green > 40
-                    for red, green, blue, opacity in icon.get_flattened_data()
-                ), spec.key)
+                self.assertGreater(
+                    alpha.histogram()[0], icon.width * icon.height * 0.25
+                )
+                self.assertFalse(
+                    any(
+                        opacity >= 32
+                        and min(red, blue) > 45
+                        and min(red, blue) - green > 40
+                        for red, green, blue, opacity in icon.get_flattened_data()
+                    ),
+                    spec.key,
+                )
 
     def test_rendered_personal_antitank_icons_are_clean_alpha_cutouts(self) -> None:
         builder = self._builder()
@@ -259,14 +295,18 @@ class TechnologyIconBuilderTests(unittest.TestCase):
                 )
 
             if transparent_ratio < 0.45:
-                issues.append(
-                    f"{path.name}: transparent_ratio={transparent_ratio:.3f}"
-                )
+                issues.append(f"{path.name}: transparent_ratio={transparent_ratio:.3f}")
             if partial_alpha < 16:
                 issues.append(f"{path.name}: partial_alpha={partial_alpha}")
             if magenta_pixels:
                 issues.append(f"{path.name}: magenta_pixels={magenta_pixels}")
-            if bbox is None or bbox[0] < 3 or bbox[1] < 3 or bbox[2] > 69 or bbox[3] > 69:
+            if (
+                bbox is None
+                or bbox[0] < 3
+                or bbox[1] < 3
+                or bbox[2] > 69
+                or bbox[3] > 69
+            ):
                 issues.append(f"{path.name}: unsafe_bbox={bbox}")
 
         self.assertEqual(issues, [])

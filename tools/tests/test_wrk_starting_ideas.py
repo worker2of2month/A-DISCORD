@@ -32,7 +32,9 @@ def named_block(text: str, name: str) -> str:
 
 class WrkStartingIdeaTests(unittest.TestCase):
     def test_ai_reserves_pp_to_raise_conscription(self) -> None:
-        strategy = named_block(read("common/ai_strategy/default.txt"), "ADISCORD_ai_raise_conscription")
+        strategy = named_block(
+            read("common/ai_strategy/default.txt"), "ADISCORD_ai_raise_conscription"
+        )
         self.assertIn("pp_spend_amount id = idea value = 150", strategy)
         self.assertIn("has_idea = volunteer_only", strategy)
         self.assertIn("has_idea = limited_conscription", strategy)
@@ -40,7 +42,9 @@ class WrkStartingIdeaTests(unittest.TestCase):
             self.assertIn(f"tag = {tag}", strategy)
         laws = named_block(read("common/ideas/_manpower.txt"), "limited_conscription")
         self.assertIn("has_idea = volunteer_only", laws)
-        extensive = named_block(read("common/ideas/_manpower.txt"), "extensive_conscription")
+        extensive = named_block(
+            read("common/ideas/_manpower.txt"), "extensive_conscription"
+        )
         self.assertIn("has_idea = limited_conscription", extensive)
         self.assertIn("factor = 30", extensive)
 

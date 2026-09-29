@@ -35,7 +35,9 @@ def _tab_button() -> Image.Image:
         atlas = Image.new("RGBA", (990, 38))
         for state in range(3):
             frame = source.crop((state * 388, 0, (state + 1) * 388, 40))
-            atlas.paste(frame.resize((330, 38), Image.Resampling.LANCZOS), (state * 330, 0))
+            atlas.paste(
+                frame.resize((330, 38), Image.Resampling.LANCZOS), (state * 330, 0)
+            )
     return atlas
 
 
@@ -106,7 +108,11 @@ def main() -> int:
     args = parser.parse_args()
 
     outputs = expected_outputs()
-    stale = [path for path, data in outputs.items() if not path.is_file() or path.read_bytes() != data]
+    stale = [
+        path
+        for path, data in outputs.items()
+        if not path.is_file() or path.read_bytes() != data
+    ]
     if not args.apply:
         if stale:
             for path in stale:

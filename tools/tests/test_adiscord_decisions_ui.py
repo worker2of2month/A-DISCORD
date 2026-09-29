@@ -71,8 +71,14 @@ class DecisionsUiContractTests(unittest.TestCase):
             self.assertTrue((ASSET_DIR / filename).is_file(), filename)
 
         for sprite, fill in (
-            ("GFX_ADISCORD_decisions_item_progress_good", "ADISCORD_decisions_progress_good.dds"),
-            ("GFX_ADISCORD_decisions_item_progress_bad", "ADISCORD_decisions_progress_bad.dds"),
+            (
+                "GFX_ADISCORD_decisions_item_progress_good",
+                "ADISCORD_decisions_progress_good.dds",
+            ),
+            (
+                "GFX_ADISCORD_decisions_item_progress_bad",
+                "ADISCORD_decisions_progress_bad.dds",
+            ),
         ):
             self.assertRegex(
                 self.gfx,
@@ -111,7 +117,9 @@ class DecisionsUiContractTests(unittest.TestCase):
             self.assertGreaterEqual(image.width, 1024)
             self.assertGreaterEqual(image.height, 1024)
 
-        approval = ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+        approval = (
+            ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
+        )
         self.assertTrue(approval.is_file())
         with Image.open(approval) as image:
             rgba = image.convert("RGBA")

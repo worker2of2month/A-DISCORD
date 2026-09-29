@@ -28,17 +28,42 @@ EXPECTED_EXISTING = {
     "tru_independent_party",
     "sts_steland_union",
 }
-EXPECTED_COUNTRIES = {f"{tag.lower()}_primary_party" for tag in {
-    "BBV", "BCM", "BGT", "BHG", "BJK", "BLD", "BTL", "COF",
-    "DAN", "EFL", "NAM", "PIV", "RUS", "TFF", "WIT", "YPR",
-}}
+EXPECTED_COUNTRIES = {
+    f"{tag.lower()}_primary_party"
+    for tag in {
+        "BBV",
+        "BCM",
+        "BGT",
+        "BHG",
+        "BJK",
+        "BLD",
+        "BTL",
+        "COF",
+        "DAN",
+        "EFL",
+        "NAM",
+        "PIV",
+        "RUS",
+        "TFF",
+        "WIT",
+        "YPR",
+    }
+}
 EXPECTED_GENERIC = {
     "humanism": {"civic", "reform", "solidarity"},
     "utilitarism": {"planning", "productive_union", "public_benefit"},
     "chauvinism": {"national_front", "martial_league", "traditional_order"},
-    "pragmatism": {"administrative_coalition", "commercial_bloc", "regional_establishment"},
+    "pragmatism": {
+        "administrative_coalition",
+        "commercial_bloc",
+        "regional_establishment",
+    },
     "anarchism": {"communal_federation", "artel_union", "frontier_movement"},
-    "technocracy": {"scientific_collegium", "engineering_directorate", "systems_bureau"},
+    "technocracy": {
+        "scientific_collegium",
+        "engineering_directorate",
+        "systems_bureau",
+    },
     "etatism": {"state_party", "military_committee", "emergency_administration"},
     "hedonism": {"aristocratic_houses", "guild_elite", "cultural_club"},
 }
@@ -59,14 +84,19 @@ def expected_asset_keys() -> set[str]:
 
 
 class PartyTexticonBuilderTests(unittest.TestCase):
-    def test_catalog_covers_exact_generated_protected_and_assignment_contract(self) -> None:
+    def test_catalog_covers_exact_generated_protected_and_assignment_contract(
+        self,
+    ) -> None:
         catalog_path = builder.ROOT / "tools/data/adiscord_party_texticons.json"
         self.assertTrue(catalog_path.is_file(), catalog_path)
         self.assertEqual({asset.key for asset in builder.ASSETS}, expected_asset_keys())
         self.assertEqual(len(builder.ASSETS), 52)
         self.assertEqual({asset.runtime_size for asset in builder.ASSETS}, {(32, 32)})
         self.assertEqual(
-            {protected.output.as_posix(): protected.sha256 for protected in builder.PROTECTED},
+            {
+                protected.output.as_posix(): protected.sha256
+                for protected in builder.PROTECTED
+            },
             EXPECTED_PROTECTED,
         )
         self.assertEqual(len(builder.ASSIGNMENTS), 16)
@@ -89,7 +119,9 @@ class PartyTexticonBuilderTests(unittest.TestCase):
             with self.subTest(path=relative), Image.open(path) as image:
                 self.assertEqual(image.size, (25, 25))
                 self.assertEqual(image.mode, "RGBA")
-            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), expected_hash)
+            self.assertEqual(
+                hashlib.sha256(path.read_bytes()).hexdigest(), expected_hash
+            )
 
     def test_render_icon_is_deterministic_rgba_with_clear_padding(self) -> None:
         self.assertIn("runtime_size", inspect.signature(builder.render_icon).parameters)
@@ -144,7 +176,11 @@ class PartyTexticonBuilderTests(unittest.TestCase):
                 continue
             with self.subTest(asset=asset.key):
                 rendered = Image.open(
-                    io.BytesIO(builder.render_icon(builder.ROOT / asset.source, asset.runtime_size))
+                    io.BytesIO(
+                        builder.render_icon(
+                            builder.ROOT / asset.source, asset.runtime_size
+                        )
+                    )
                 )
                 self.assertEqual(rendered.size, (32, 32))
                 self.assertEqual(rendered.mode, "RGBA")
@@ -160,9 +196,15 @@ class PartyTexticonBuilderTests(unittest.TestCase):
     def test_registry_has_exact_55_sprite_order_and_eager_entries(self) -> None:
         registry = builder.render_registry().decode("utf-8")
         names = re.findall(r'\bname\s*=\s*"([^"]+)"', registry)
-        existing = [asset.sprite for asset in builder.ASSETS if asset.asset_class == "existing"]
-        countries = [asset.sprite for asset in builder.ASSETS if asset.asset_class == "country"]
-        generic = [asset.sprite for asset in builder.ASSETS if asset.asset_class == "generic"]
+        existing = [
+            asset.sprite for asset in builder.ASSETS if asset.asset_class == "existing"
+        ]
+        countries = [
+            asset.sprite for asset in builder.ASSETS if asset.asset_class == "country"
+        ]
+        generic = [
+            asset.sprite for asset in builder.ASSETS if asset.asset_class == "generic"
+        ]
         expected = [
             "GFX_unknown_party_texticon",
             "GFX_WRK_worker_revolutionary_party_texticon",
@@ -180,50 +222,72 @@ class PartyTexticonBuilderTests(unittest.TestCase):
 
     def test_contact_sheets_have_exact_paths_and_dimensions(self) -> None:
         reports = builder.render_contact_sheets()
-        country = builder.ROOT / "docs/superpowers/reports/2026-08-16-adiscord-party-country-emblems-contact-sheet.png"
-        generic = builder.ROOT / "docs/superpowers/reports/2026-08-16-adiscord-party-generic-emblems-contact-sheet.png"
+        country = (
+            builder.ROOT
+            / "docs/superpowers/reports/2026-08-16-adiscord-party-country-emblems-contact-sheet.png"
+        )
+        generic = (
+            builder.ROOT
+            / "docs/superpowers/reports/2026-08-16-adiscord-party-generic-emblems-contact-sheet.png"
+        )
         self.assertEqual(set(reports), {country, generic})
         with Image.open(io.BytesIO(reports[country])) as image:
             self.assertEqual(image.size, (1024, 1024))
         with Image.open(io.BytesIO(reports[generic])) as image:
             self.assertEqual(image.size, (960, 2048))
 
-    def test_expected_outputs_exclude_protected_and_cover_complete_generated_set(self) -> None:
+    def test_expected_outputs_exclude_protected_and_cover_complete_generated_set(
+        self,
+    ) -> None:
         outputs = builder.expected_outputs()
         expected_runtime = {builder.ROOT / asset.output for asset in builder.ASSETS}
         expected_registry = builder.ROOT / "interface/parties_texticons.gfx"
         expected_reports = {
-            builder.ROOT / "docs/superpowers/reports/2026-08-16-adiscord-party-country-emblems-contact-sheet.png",
-            builder.ROOT / "docs/superpowers/reports/2026-08-16-adiscord-party-generic-emblems-contact-sheet.png",
+            builder.ROOT
+            / "docs/superpowers/reports/2026-08-16-adiscord-party-country-emblems-contact-sheet.png",
+            builder.ROOT
+            / "docs/superpowers/reports/2026-08-16-adiscord-party-generic-emblems-contact-sheet.png",
         }
-        self.assertEqual(set(outputs), expected_runtime | {expected_registry} | expected_reports)
+        self.assertEqual(
+            set(outputs), expected_runtime | {expected_registry} | expected_reports
+        )
         self.assertEqual(len(expected_runtime), 52)
         self.assertEqual(len(outputs), 55)
-        self.assertTrue({builder.ROOT / item.output for item in builder.PROTECTED}.isdisjoint(outputs))
+        self.assertTrue(
+            {builder.ROOT / item.output for item in builder.PROTECTED}.isdisjoint(
+                outputs
+            )
+        )
 
     def test_catalog_loader_rejects_every_invalid_record_class(self) -> None:
         base = {
             "schema": 1,
-            "generated_assets": [{
-                "key": "test_party",
-                "class": "country",
-                "source_kind": "master",
-                "source": "source.png",
-                "output": "output.png",
-                "sprite": "GFX_TEST_party_texticon",
-                "runtime_size": [32, 32],
-            }],
-            "protected_legacy": [{
-                "key": "protected_party",
-                "output": "protected.png",
-                "sprite": "GFX_PROTECTED_party_texticon",
-                "sha256": hashlib.sha256(b"protected").hexdigest(),
-                "runtime_size": [25, 25],
-            }],
-            "country_assignments": [{
-                "party_key": "TEST_humanism_party",
-                "sprite": "GFX_TEST_party_texticon",
-            }],
+            "generated_assets": [
+                {
+                    "key": "test_party",
+                    "class": "country",
+                    "source_kind": "master",
+                    "source": "source.png",
+                    "output": "output.png",
+                    "sprite": "GFX_TEST_party_texticon",
+                    "runtime_size": [32, 32],
+                }
+            ],
+            "protected_legacy": [
+                {
+                    "key": "protected_party",
+                    "output": "protected.png",
+                    "sprite": "GFX_PROTECTED_party_texticon",
+                    "sha256": hashlib.sha256(b"protected").hexdigest(),
+                    "runtime_size": [25, 25],
+                }
+            ],
+            "country_assignments": [
+                {
+                    "party_key": "TEST_humanism_party",
+                    "sprite": "GFX_TEST_party_texticon",
+                }
+            ],
         }
         invalid: list[tuple[str, dict[str, object]]] = []
 
@@ -283,7 +347,9 @@ class PartyTexticonBuilderTests(unittest.TestCase):
                 (root / "source.png").write_bytes(b"source")
                 (root / "other_source.png").write_bytes(b"source")
                 (root / "protected.png").write_bytes(b"protected")
-                (root / builder.CATALOG_PATH).write_text(json.dumps(catalog), encoding="utf-8")
+                (root / builder.CATALOG_PATH).write_text(
+                    json.dumps(catalog), encoding="utf-8"
+                )
                 with self.assertRaises(RuntimeError):
                     builder.load_catalog(root)
 
@@ -298,32 +364,42 @@ class PartyTexticonBuilderTests(unittest.TestCase):
             original_hash = hashlib.sha256(protected.read_bytes()).hexdigest()
             catalog = {
                 "schema": 1,
-                "generated_assets": [{
-                    "key": "test_party",
-                    "class": "country",
-                    "source_kind": "master",
-                    "source": "source.png",
-                    "output": "output.png",
-                    "sprite": "GFX_TEST_party_texticon",
-                    "runtime_size": [32, 32],
-                }],
-                "protected_legacy": [{
-                    "key": "protected_party",
-                    "output": "protected.png",
-                    "sprite": "GFX_PROTECTED_party_texticon",
-                    "sha256": original_hash,
-                    "runtime_size": [25, 25],
-                }],
-                "country_assignments": [{
-                    "party_key": "TEST_humanism_party",
-                    "sprite": "GFX_TEST_party_texticon",
-                }],
+                "generated_assets": [
+                    {
+                        "key": "test_party",
+                        "class": "country",
+                        "source_kind": "master",
+                        "source": "source.png",
+                        "output": "output.png",
+                        "sprite": "GFX_TEST_party_texticon",
+                        "runtime_size": [32, 32],
+                    }
+                ],
+                "protected_legacy": [
+                    {
+                        "key": "protected_party",
+                        "output": "protected.png",
+                        "sprite": "GFX_PROTECTED_party_texticon",
+                        "sha256": original_hash,
+                        "runtime_size": [25, 25],
+                    }
+                ],
+                "country_assignments": [
+                    {
+                        "party_key": "TEST_humanism_party",
+                        "sprite": "GFX_TEST_party_texticon",
+                    }
+                ],
             }
-            (root / builder.CATALOG_PATH).write_text(json.dumps(catalog), encoding="utf-8")
+            (root / builder.CATALOG_PATH).write_text(
+                json.dumps(catalog), encoding="utf-8"
+            )
             protected.write_bytes(b"tampered")
 
             issues = builder.drift(root)
-            self.assertTrue(any("protected party texticon" in issue for issue in issues))
+            self.assertTrue(
+                any("protected party texticon" in issue for issue in issues)
+            )
             with self.assertRaises(RuntimeError):
                 builder.apply(root)
             self.assertFalse((root / "output.png").exists())
@@ -331,7 +407,10 @@ class PartyTexticonBuilderTests(unittest.TestCase):
     def test_runtime_outputs_are_current(self) -> None:
         self.assertEqual(builder.drift(), [])
         for asset in builder.ASSETS:
-            with self.subTest(asset=asset.key), Image.open(builder.ROOT / asset.output) as image:
+            with (
+                self.subTest(asset=asset.key),
+                Image.open(builder.ROOT / asset.output) as image,
+            ):
                 self.assertEqual(image.mode, "RGBA")
                 runtime_size = asset.runtime_size
                 self.assertEqual(image.size, runtime_size)

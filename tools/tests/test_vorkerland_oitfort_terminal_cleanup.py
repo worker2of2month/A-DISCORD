@@ -1,4 +1,5 @@
 """Regression contract: Oitfort is wartime-only and is absorbed by terminal WRK."""
+
 from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 import unittest
@@ -20,14 +21,16 @@ def named_block(text: str, name: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
 class OitfortTerminalCleanupTests(unittest.TestCase):
     def test_terminal_wrk_absorbs_oitfort_in_all_routes(self):
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        absorb = named_block(effects, "ADISCORD_vorkerland_absorb_wtd_after_reunification")
+        absorb = named_block(
+            effects, "ADISCORD_vorkerland_absorb_wtd_after_reunification"
+        )
         for token in (
             "country_exists = WTD",
             "WTD = { is_ai = no }",
@@ -39,10 +42,16 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
             self.assertIn(token, absorb)
 
         for suffix in ("wkr", "vad", "tva"):
-            formation = named_block(effects, f"ADISCORD_vorkerland_form_wrk_from_{suffix}")
-            self.assertIn("ADISCORD_vorkerland_absorb_wtd_after_reunification = yes", formation)
+            formation = named_block(
+                effects, f"ADISCORD_vorkerland_form_wrk_from_{suffix}"
+            )
+            self.assertIn(
+                "ADISCORD_vorkerland_absorb_wtd_after_reunification = yes", formation
+            )
             self.assertLess(
-                formation.index("ADISCORD_vorkerland_absorb_wtd_after_reunification = yes"),
+                formation.index(
+                    "ADISCORD_vorkerland_absorb_wtd_after_reunification = yes"
+                ),
                 formation.index("ADISCORD_vorkerland_finalize_wrk_formation = yes"),
             )
 
@@ -58,7 +67,10 @@ class OitfortTerminalCleanupTests(unittest.TestCase):
         self.assertIn("NOT = { country_exists = WTD }", reunified)
 
     def test_startup_does_not_migrate_old_reunifications(self):
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         startup = named_block(on_actions, "on_startup")
         self.assertNotIn("ADISCORD_vorkerland_absorb_wtd_after_reunification", startup)
         self.assertNotIn("ADISCORD_vorkerland_wtd_terminal_cleanup_v1", startup)

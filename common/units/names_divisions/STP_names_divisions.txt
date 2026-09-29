@@ -12,7 +12,7 @@ STP_INF_01 = {
 
 	fallback_name = "%d Infantry Division"
 
-	# Names with numbers (only one number per entry). 
+	# Names with numbers (only one number per entry).
 	# It's okay to have gaps in numbering.
 	ordered = {
 		1  = { "%dst 'Great Steland' Division" }

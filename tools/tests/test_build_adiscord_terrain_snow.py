@@ -116,9 +116,10 @@ class TerrainSnowTests(unittest.TestCase):
         self.assertEqual(
             set(selected.values()), snow.VORKERLAND_GRAPHICAL_URBAN_PROVINCES
         )
-        with Image.open(snow.TERRAIN_PATH) as terrain, Image.open(
-            snow.PROVINCES_PATH
-        ) as provinces:
+        with (
+            Image.open(snow.TERRAIN_PATH) as terrain,
+            Image.open(snow.PROVINCES_PATH) as provinces,
+        ):
             issues = snow.urban_coverage_issues(
                 list(terrain.get_flattened_data()), provinces, selected
             )
@@ -132,9 +133,7 @@ class TerrainSnowTests(unittest.TestCase):
             provinces_path = root / "provinces.bmp"
             definition_path = root / "00_terrain.txt"
             terrain = Image.new("P", (2, 2), color=4)
-            terrain.putpalette(
-                [value for channel in range(3) for value in range(256)]
-            )
+            terrain.putpalette([value for channel in range(3) for value in range(256)])
             terrain.save(terrain_path, format="BMP")
             cities_path = root / "cities.bmp"
             Image.new("P", (2, 2), color=1).save(cities_path, format="BMP")
@@ -154,7 +153,9 @@ class TerrainSnowTests(unittest.TestCase):
                 patch.object(snow, "TERRAIN_DEFINITION_PATH", definition_path),
                 patch.object(snow, "province_color_contract", return_value={}),
                 patch.object(snow, "generated_pixels", return_value=[4] * 4),
-                patch.object(snow, "coverage_issues", return_value=["coverage rejected"]),
+                patch.object(
+                    snow, "coverage_issues", return_value=["coverage rejected"]
+                ),
             ):
                 with self.assertRaisesRegex(RuntimeError, "coverage rejected"):
                     snow.apply()
@@ -168,9 +169,7 @@ class TerrainSnowTests(unittest.TestCase):
             provinces_path = root / "provinces.bmp"
             definition_path = root / "00_terrain.txt"
             terrain = Image.new("P", (2, 2), color=4)
-            terrain.putpalette(
-                [value for channel in range(3) for value in range(256)]
-            )
+            terrain.putpalette([value for channel in range(3) for value in range(256)])
             terrain.save(terrain_path, format="BMP")
             cities_path = root / "cities.bmp"
             Image.new("P", (2, 2), color=1).save(cities_path, format="BMP")

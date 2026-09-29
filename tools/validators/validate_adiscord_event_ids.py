@@ -28,20 +28,13 @@ EVENT_TYPES = (
     "operative_leader_event",
     "character_event",
 )
-EVENT_BLOCK_RE = re.compile(
-    rf"\b({'|'.join(EVENT_TYPES)})\s*=\s*\{{"
-)
+EVENT_BLOCK_RE = re.compile(rf"\b({'|'.join(EVENT_TYPES)})\s*=\s*\{{")
 EVENT_INLINE_RE = re.compile(
-    rf"\b({'|'.join(EVENT_TYPES)})\s*=\s*"
-    r"([A-Za-z_][A-Za-z0-9_]*\.[0-9]+)\b"
+    rf"\b({'|'.join(EVENT_TYPES)})\s*=\s*" r"([A-Za-z_][A-Za-z0-9_]*\.[0-9]+)\b"
 )
-ID_ASSIGNMENT_RE = re.compile(
-    r"\bid\s*=\s*([A-Za-z_][A-Za-z0-9_]*\.([0-9]+))\b"
-)
+ID_ASSIGNMENT_RE = re.compile(r"\bid\s*=\s*([A-Za-z_][A-Za-z0-9_]*\.([0-9]+))\b")
 FULL_ID_RE = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\.([0-9]+)$")
-NAMESPACE_RE = re.compile(
-    r"(?m)^\s*add_namespace\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*$"
-)
+NAMESPACE_RE = re.compile(r"(?m)^\s*add_namespace\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*$")
 
 SCAN_ROOTS = ("common", "events", "history", "interface")
 VALID_STATUSES = {"active", "compatibility", "reserved"}
@@ -62,13 +55,11 @@ REQUIRED_ACTIVE_COLLAPSE_IDS = {
 }
 PLANNED_RECOVERY_IDS = {
     **{
-        f"ADISCORD_vorkerland_phase.{number}":
-        "events/ADISCORD_vorkerland_events.txt"
+        f"ADISCORD_vorkerland_phase.{number}": "events/ADISCORD_vorkerland_events.txt"
         for number in range(1, 8)
     },
     **{
-        f"ADISCORD_vorkerland_dirty_zone.{number}":
-        "events/ADISCORD_vorkerland_events.txt"
+        f"ADISCORD_vorkerland_dirty_zone.{number}": "events/ADISCORD_vorkerland_events.txt"
         for number in range(1, 4)
     },
 }
@@ -225,9 +216,7 @@ def _inventory_game_files(
             line = source.count("\n", 0, offset) + 1
             namespace = event_id.rsplit(".", 1)[0]
             if path in event_paths and depths[match.start()] == 0:
-                definitions.append(
-                    EventDefinition(event_id, relative, line, namespace)
-                )
+                definitions.append(EventDefinition(event_id, relative, line, namespace))
             else:
                 references.append(EventReference(event_id, relative, line))
 
@@ -248,7 +237,11 @@ def _load_registry(
     except FileNotFoundError:
         return {}, set(), [f"missing event-ID registry: {registry_path.as_posix()}"]
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        return {}, set(), [f"invalid event-ID registry {registry_path.as_posix()}: {exc}"]
+        return (
+            {},
+            set(),
+            [f"invalid event-ID registry {registry_path.as_posix()}: {exc}"],
+        )
 
     if not isinstance(raw, dict):
         return {}, set(), ["event-ID registry root must be a JSON object"]
@@ -298,12 +291,20 @@ def _load_registry(
                 f"namespace drift for {event_id}: id uses {match.group(1)}, registry uses {namespace!r}"
             )
             valid = False
-        if isinstance(number, bool) or not isinstance(number, int) or number != int(match.group(2)):
+        if (
+            isinstance(number, bool)
+            or not isinstance(number, int)
+            or number != int(match.group(2))
+        ):
             issues.append(
                 f"number drift for {event_id}: id uses {match.group(2)}, registry uses {number!r}"
             )
             valid = False
-        if not isinstance(owner, str) or not owner.startswith("events/") or not owner.endswith(".txt"):
+        if (
+            not isinstance(owner, str)
+            or not owner.startswith("events/")
+            or not owner.endswith(".txt")
+        ):
             issues.append(f"{label} has invalid owner path: {owner!r}")
             valid = False
         if not isinstance(subsystem, str) or not subsystem.strip():
@@ -324,7 +325,8 @@ def _load_registry(
     overlap = registered_namespaces & external_namespaces
     if overlap:
         issues.append(
-            "namespaces cannot be both owned and external: " + ", ".join(sorted(overlap))
+            "namespaces cannot be both owned and external: "
+            + ", ".join(sorted(overlap))
         )
     return entries, external_namespaces, issues
 
@@ -336,9 +338,13 @@ def validate(
     enforce_recovery_contract: bool = True,
 ) -> list[str]:
     root = Path(root)
-    selected_registry = registry_path or root / "tools" / "data" / "adiscord_event_ids.json"
+    selected_registry = (
+        registry_path or root / "tools" / "data" / "adiscord_event_ids.json"
+    )
     entries, external_namespaces, issues = _load_registry(selected_registry)
-    definitions, references, namespaces_by_path, scan_issues = _inventory_game_files(root)
+    definitions, references, namespaces_by_path, scan_issues = _inventory_game_files(
+        root
+    )
     issues.extend(scan_issues)
 
     definitions_by_id: dict[str, list[EventDefinition]] = defaultdict(list)
@@ -424,7 +430,9 @@ def validate(
                 issues.append(
                     f"owner drift for planned recovery ID {event_id}: expected {planned_owner}, got {entry.owner}"
                 )
-            expected_status = "active" if definitions_by_id.get(event_id) else "reserved"
+            expected_status = (
+                "active" if definitions_by_id.get(event_id) else "reserved"
+            )
             if entry.status != expected_status:
                 issues.append(
                     f"status drift for planned recovery ID {event_id}: expected {expected_status}, got {entry.status}"

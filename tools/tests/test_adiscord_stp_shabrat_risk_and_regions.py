@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 from tools.lib.focus_sources import read_focus_source
+
 TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"
@@ -110,7 +111,9 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
             r"factor\s*=\s*0[\s\S]*?STP_party_suspicion\s+value\s*=\s*80",
         )
 
-    def test_shabrat_ai_limits_suspicion_without_worldwide_inspection_lock(self) -> None:
+    def test_shabrat_ai_limits_suspicion_without_worldwide_inspection_lock(
+        self,
+    ) -> None:
         triggers = read(TRIGGERS)
         decisions = read(DECISIONS)
         gate = named_block(triggers, "STP_cw_shabrat_ai_risk_allowed")
@@ -148,7 +151,9 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
     def test_ai_prefers_buying_silence_over_exposing_the_cabinet(self) -> None:
         focuses = read(FOCUS)
         silence = named_block(focus_block(focuses, "STP_cw_buy_silence"), "ai_will_do")
-        expose = named_block(focus_block(focuses, "STP_cw_expose_the_cabinet"), "ai_will_do")
+        expose = named_block(
+            focus_block(focuses, "STP_cw_expose_the_cabinet"), "ai_will_do"
+        )
 
         self.assertIn("base = 16", silence)
         self.assertIn("base = 1", expose)
@@ -161,7 +166,16 @@ class ShabratRiskAndRegionalTransferTests(unittest.TestCase):
         )
         self.assertIsNotNone(match)
         text = match.group(1)
-        for token in ("60%", "70%", "90%", "100%", "40 дней", "Шабрат", "вторая комиссия", "арест"):
+        for token in (
+            "60%",
+            "70%",
+            "90%",
+            "100%",
+            "40 дней",
+            "Шабрат",
+            "вторая комиссия",
+            "арест",
+        ):
             with self.subTest(token=token):
                 self.assertIn(token, text)
 

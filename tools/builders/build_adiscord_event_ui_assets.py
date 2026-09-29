@@ -26,7 +26,9 @@ from tools.lib.paths import repository_root
 
 ROOT = repository_root()
 METAL_SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
-TEST_PICTURE_SOURCE = ROOT / "gfx/event_pictures/source/event_adiscord_ui_test_source.png"
+TEST_PICTURE_SOURCE = (
+    ROOT / "gfx/event_pictures/source/event_adiscord_ui_test_source.png"
+)
 
 POPUP_BG = ROOT / "gfx/interface/event_popup_bg.png"
 POPUP_TOP = ROOT / "gfx/interface/event_popup_top.png"
@@ -130,11 +132,21 @@ def _bottom_overlay() -> Image.Image:
     draw = ImageDraw.Draw(output, "RGBA")
     draw.line((54, 0, 560, 0), fill=(32, 55, 56, 255), width=1)
     # The native country-event picture belongs to the adaptive bottom section.
-    draw.rectangle((53, 7, 561, 192), fill=(2, 5, 6, 255), outline=PALETTE.deep, width=2)
+    draw.rectangle(
+        (53, 7, 561, 192), fill=(2, 5, 6, 255), outline=PALETTE.deep, width=2
+    )
     draw.rectangle((55, 9, 559, 190), outline=(113, 139, 140, 230), width=1)
     draw.line((54, 198, 560, 198), fill=(32, 55, 56, 255), width=1)
-    draw.line((0, BOTTOM_SIZE[1] - 2, BOTTOM_SIZE[0] - 1, BOTTOM_SIZE[1] - 2), fill=PALETTE.deep, width=2)
-    draw.line((4, BOTTOM_SIZE[1] - 4, BOTTOM_SIZE[0] - 5, BOTTOM_SIZE[1] - 4), fill=PALETTE.accent, width=1)
+    draw.line(
+        (0, BOTTOM_SIZE[1] - 2, BOTTOM_SIZE[0] - 1, BOTTOM_SIZE[1] - 2),
+        fill=PALETTE.deep,
+        width=2,
+    )
+    draw.line(
+        (4, BOTTOM_SIZE[1] - 4, BOTTOM_SIZE[0] - 5, BOTTOM_SIZE[1] - 4),
+        fill=PALETTE.accent,
+        width=1,
+    )
     return output
 
 
@@ -190,7 +202,9 @@ def _preview() -> Image.Image:
     shell_height = bottom_y + BOTTOM_SIZE[1]
     shell = Image.new("RGBA", (WINDOW_SIZE[0], shell_height), (0, 0, 0, 0))
     top = _top_overlay()
-    middle = _middle_tile().resize((MIDDLE_SIZE[0], middle_height), Image.Resampling.BILINEAR)
+    middle = _middle_tile().resize(
+        (MIDDLE_SIZE[0], middle_height), Image.Resampling.BILINEAR
+    )
     bottom = _bottom_overlay()
     picture = _test_picture().convert("RGBA")
     option = _option_entry()

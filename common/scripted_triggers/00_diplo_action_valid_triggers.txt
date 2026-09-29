@@ -71,11 +71,11 @@ is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplo
 
 # VAL volunteer mandates are restricted to their current contracted fronts.
 is_diplomatic_action_valid_send_volunteers = {
- ADISCORD_diplomacy_not_dirty_zone_pair = yes
- OR = {
-  FROM = { NOT = { tag = VAL } }
-  AND = { FROM = { has_idea = VAL_northern_volunteer_mandate } OR = { tag = VAL VAL_northern_volunteer_host = yes } }
-  AND = { FROM = { has_idea = VAL_stelander_volunteer_mandate } VAL_stelander_volunteer_host = yes }
-  AND = { FROM = { has_idea = VAL_resource_volunteer_mandate } OR = { tag = VAL VAL_resource_aid_recipient = yes } }
- }
+	ADISCORD_diplomacy_not_dirty_zone_pair = yes
+	OR = {
+		FROM = { NOT = { tag = VAL } }
+		AND = { FROM = { has_idea = VAL_northern_volunteer_mandate } OR = { tag = VAL VAL_northern_volunteer_host = yes } }
+		AND = { FROM = { has_idea = VAL_stelander_volunteer_mandate } VAL_stelander_volunteer_host = yes }
+		AND = { FROM = { has_idea = VAL_resource_volunteer_mandate } OR = { tag = VAL VAL_resource_aid_recipient = yes } }
+	}
 }

@@ -6,12 +6,12 @@ STP = {
 }
 
 NKA = {
-    color = rgb { 151 43 29 }
-    color_ui = rgb { 151 43 29 }
+	color = rgb { 151 43 29 }
+	color_ui = rgb { 151 43 29 }
 }
 
 OCA = {
-    color = rgb { 166 58 42 }
-    color_ui = rgb { 166 58 42 }
+	color = rgb { 166 58 42 }
+	color_ui = rgb { 166 58 42 }
 }
 
