@@ -30,7 +30,7 @@ jobs:
           path: /tmp/code-style-cache-evidence
           run-id: 36557685897
           github-token: ${{ github.token }}
-      - name: Preserve latest main and restore verified formatting cache
+      - name: Preserve latest main and restore verified Python formatting cache
         run: |
           python -m pip install black==25.1.0 pillow numpy scipy
           git fetch --depth=1 origin main ca0125941411ef3798b7e4f051b58755f8210ea6
@@ -42,13 +42,28 @@ jobs:
           git -C /tmp/code-style-cache apply /tmp/code-style-cache-evidence/style.patch
           cp -a .superpowers/code-style-audit /tmp/code-style-tools
           mkdir /tmp/code-style-evidence
-      - name: Reapply style without changing current main semantics
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('/tmp/code-style-tools/refresh_style.py')
+          source = path.read_text()
+          old = 'from style_formatter import format_clausewitz, format_localisation, format_lua_defines, token_signature'
+          assert source.count(old) == 1
+          source = source.replace(old, old + '\nfrom conservative_style import format_clausewitz')
+          old = "if name in old_items and hashlib.sha256(before).hexdigest() == old_items[name]['before']:"
+          assert source.count(old) == 1
+          source = source.replace(old, "if kind != 'clausewitz' and name in old_items and hashlib.sha256(before).hexdigest() == old_items[name]['before']:")
+          old = "    if name in focus_outputs:\n        return 'generated-focus'"
+          assert source.count(old) == 1
+          source = source.replace(old, "    if name == 'tools/builders/build_adiscord_new_states.py':\n        return None\n" + old)
+          path.write_text(source)
+          PY
+      - name: Verify line-preserving formatting against current main
         run: |
-          (cd /tmp/code-style-tools && python -B -m unittest tests_audit -v) 2>&1 | tee /tmp/code-style-evidence/formatter-tests.log
+          (cd /tmp/code-style-tools && python -B -m unittest tests_audit test_conservative_style -v) 2>&1 | tee /tmp/code-style-evidence/formatter-tests.log
           python -B /tmp/code-style-tools/refresh_style.py /tmp/code-style-current /tmp/code-style-cache /tmp/code-style-evidence /tmp/code-style-cache-evidence/style-manifest.json
       - uses: actions/upload-artifact@v4
         with:
-          name: code-style-refreshed-source
+          name: code-style-safe-source
           path: |
             /tmp/code-style-evidence/style-manifest.json
             /tmp/code-style-evidence/style.patch
@@ -82,7 +97,7 @@ jobs:
           (output / 'validator-results.json').write_text(json.dumps(results, indent=2))
           print(json.dumps(results, indent=2))
           PY
-      - name: Publish current-main style commits for review
+      - name: Publish conservative current-main style commits for review
         run: python -B /tmp/code-style-tools/deliver_style.py /tmp/code-style-current /tmp/code-style-evidence
       - uses: actions/upload-artifact@v4
         if: always()
