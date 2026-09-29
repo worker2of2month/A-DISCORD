@@ -5,7 +5,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_unified_headquarters
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_joint_staff
 		x = 7
 		y = 0
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -27,7 +27,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_open_local_depots
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_capital_reserve
 		x = 1
 		y = 0
 		cost = 1
@@ -40,7 +40,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_war_fund
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_ps_northern_credit
 		x = 3
 		y = 1
 		cost = 2
@@ -57,7 +57,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_open_conscription
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_public_lists
 		x = 3
 		y = 0
 		cost = 1
@@ -90,7 +90,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_wartime_laboratories
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = 7
 		y = 1
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -114,7 +114,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_mobilization_register
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_personnel_commissions
 		x = 5
 		y = 1
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -129,7 +129,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_wartime_arsenals
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_pw_party_defence_combine
 		x = 5
 		y = 2
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -149,7 +149,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_supply_routes
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_war_transport
 		x = 5
 		y = 3
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -171,7 +171,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_line_formations
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_asylum_protocol
 		x = 5
 		y = 4
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
@@ -220,7 +220,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_guard_the_pier
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_defense_budget
 		x = 11
 		y = 1
 		cost = 1
@@ -239,7 +239,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_capital_counteroffensive
 		prerequisite = { focus = STP_party_war_directorate }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_capital_reserve_armored
 		x = 7
 		y = 4
 		cost = 2
@@ -259,7 +259,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_inner_ring
 		prerequisite = { focus = STP_party_rear_administration focus = STP_cw_guard_the_pier }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_PARTY_DISCIPLINE
 		x = 9
 		y = 3
 		cost = 2
@@ -278,7 +278,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_assault_columns
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_defense_budget_tank
 		x = 7
 		y = 5
 		cost = 1
@@ -292,13 +292,14 @@ focus_tree = {
 			army_experience = 10
 			add_command_power = 10
 			unlock_decision_tooltip = STP_party_form_assault_column
+			custom_effect_tooltip = STP_party_form_assault_column_unlock_summary_tt
 		}
 	}
 
 	focus = {
 		id = STP_cw_harbour_batteries
 		prerequisite = { focus = STP_cw_guard_the_pier }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_port_budget
 		x = 11
 		y = 3
 		cost = 2
@@ -319,7 +320,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_road_to_fada
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_All_In
 		x = 9
 		y = 1
 		cost = 2
@@ -351,7 +352,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_last_banquet
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_Operation_Last_Banquette
 		x = 9
 		y = 2
 		cost = 2
@@ -366,7 +367,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_cut_capital_roads
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_Ruin_Their_Deal
 		x = 8
 		y = 3
 		cost = 3
@@ -387,7 +388,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_district_levies
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_arm_the_north
 		x = 10
 		y = 3
 		cost = 3
@@ -408,7 +409,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_government_quarter_assault
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_All_In
 		x = 8
 		y = 4
 		cost = 3
@@ -425,7 +426,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_hold_resource_belt
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_repair_niansas
 		x = 10
 		y = 4
 		cost = 3
@@ -449,7 +450,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_mountain_staff
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 9
 		y = 1
 		cost = 2
@@ -471,7 +472,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_pass_watch
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_northern_desk
 		x = 9
 		y = 2
 		cost = 3
@@ -487,7 +488,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_hold_the_passes
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_arm_the_north
 		x = 8
 		y = 3
 		cost = 3
@@ -507,7 +508,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_raid_the_approaches
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 10
 		y = 3
 		cost = 3
@@ -525,7 +526,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_front_scouts
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_northern_dossier
 		x = 1
 		y = 1
 		cost = 2
@@ -539,7 +540,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_organize_underground
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_Open_Their_Eyes
 		x = 3
 		y = 2
 		cost = 2
@@ -548,12 +549,13 @@ focus_tree = {
 		available = { has_war_with = STP }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 8 }
-		completion_reward = { unlock_decision_tooltip = STP_cw_raise_rear_cell  }
+		completion_reward = {
+			unlock_decision_tooltip = STP_cw_raise_rear_cell  }
 	}
 
 	focus = {
 		id = STP_cw_mobile_workshops
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_defence_combine
 		x = 1
 		y = 2
 		cost = 2
@@ -588,7 +590,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_frontline_relief
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_family_pensions
 		x = 1
 		y = 3
 		cost = 2
@@ -617,7 +619,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_route_columns
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_war_transport
 		x = 3
 		y = 4
 		cost = 2
@@ -699,7 +701,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_war_transport
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_war_transport
 		x = 3
 		y = 2
 		cost = 1
@@ -711,6 +713,7 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_transport
+			custom_effect_tooltip = STP_ps_transport_unlock_summary_tt
 			custom_effect_tooltip = STP_pf_merchants_deal_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 6 } STP_pf_shift = yes }
 		}
@@ -719,7 +722,7 @@ focus_tree = {
 	focus = {
 		id = STP_party_rear_administration
 		prerequisite = { focus = STP_cw_congress_in_session focus = STP_ps_restore_couriers }
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
 		x = 9
 		y = 2
 		cost = 2
@@ -752,7 +755,7 @@ focus_tree = {
 		id = STP_party_war_directorate
 		prerequisite = { focus = STP_party_rear_administration }
 		prerequisite = { focus = STP_ps_operational_reserve focus = STP_ps_route_security }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		x = 7
 		y = 3
 		cost = 2
@@ -793,7 +796,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_presidium_broadcast
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_party_presidium_broadcast
 		x = 1
 		y = 1
 		cost = 1
@@ -819,7 +822,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_front_correspondents
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_party_front_correspondents
 		x = 1
 		y = 2
 		cost = 2
@@ -854,7 +857,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_family_commissions
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_family_pensions
 		x = -1
 		y = 3
 		cost = 2
@@ -881,7 +884,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_regimental_organizers
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_DISTRICT_GOVERNMENT
 		x = 1
 		y = 3
 		cost = 2
@@ -920,7 +923,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_district_supply
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_capital_reserve
 		x = 1
 		y = 4
 		cost = 2
@@ -969,7 +972,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_ammunition_board
 		prerequisite = { focus = STP_party_war_transport focus = STP_cw_wartime_arsenals }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_northern_arms
 		x = 3
 		y = 3
 		cost = 2
@@ -979,14 +982,17 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_ammunition }
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_ammunition
+			custom_effect_tooltip = STP_ps_ammunition_unlock_summary_tt
+		}
 	}
 
 
 	focus = {
 		id = STP_ps_operational_reserve
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = 3
 		y = 1
 		cost = 2
@@ -996,7 +1002,9 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes }  }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_reserve_training
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_reserve_training
+			custom_effect_tooltip = STP_ps_reserve_training_unlock_summary_tt
 		add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_4_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
@@ -1008,7 +1016,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_route_security
 		prerequisite = { focus = STP_cw_unified_headquarters }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_security_collegium
 		x = 11
 		y = 2
 		cost = 2
@@ -1018,7 +1026,9 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } controls_province = 145 controls_province = 45 }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_secure_routes
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_secure_routes
+			custom_effect_tooltip = STP_ps_secure_routes_unlock_summary_tt
 		add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_3_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 3 } STP_pf_shift = yes }
@@ -1043,13 +1053,15 @@ focus_tree = {
             if = { limit = { has_active_mission = STP_ps_congress_deadline }
                 add_days_mission_timeout = { mission = STP_ps_congress_deadline days = 7 }
             }
-            unlock_decision_tooltip = STP_ps_emergency_cabinet  }
+            unlock_decision_tooltip = STP_ps_emergency_cabinet
+			custom_effect_tooltip = STP_ps_emergency_cabinet_unlock_summary_tt
+		}
 	}
 
 
 	focus = {
 		id = STP_ps_restore_couriers
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_protocol_office
 		x = 13
 		y = 1
 		cost = 2
@@ -1060,14 +1072,15 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 
-		completion_reward = { unlock_decision_tooltip = STP_cw_regroup_the_front add_command_power = 25 }
+		completion_reward = {
+			unlock_decision_tooltip = STP_cw_regroup_the_front add_command_power = 25 }
 	}
 
 
 	focus = {
 		id = STP_ps_counter_supply
 		prerequisite = { focus = STP_party_rear_administration focus = STP_ps_restore_couriers }
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_cw_counter_network
 		x = 13
 		y = 3
 		cost = 2
@@ -1077,7 +1090,13 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_party_war_available_tt STP_ps_war_active = yes } custom_trigger_tooltip = { tooltip = STP_ps_government_operational_tt STP_ps_government_operational = yes } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_val_intelligence  unlock_decision_tooltip = STP_ps_val_intercept  unlock_decision_tooltip = STP_ps_val_pressure
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_val_intelligence
+			custom_effect_tooltip = STP_ps_val_intelligence_unlock_summary_tt
+			unlock_decision_tooltip = STP_ps_val_intercept
+			custom_effect_tooltip = STP_ps_val_intercept_unlock_summary_tt
+			unlock_decision_tooltip = STP_ps_val_pressure
+			custom_effect_tooltip = STP_ps_val_pressure_unlock_summary_tt
 		if = {
                 limit = { VAL = { exists = yes } }
                 add_intel = { target = VAL army_intel = 10 }
@@ -1098,7 +1117,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_retake_congress
 		prerequisite = { focus = STP_ps_restore_couriers focus = STP_cw_congress_in_session }
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS
 		x = 13
 		y = 4
 		cost = 1
@@ -1125,7 +1144,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_permanent_security
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_permanent_security
 		x = 5
 		y = 9
 
@@ -1135,7 +1154,10 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_institution_payment  }
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_institution_payment
+			custom_effect_tooltip = STP_ps_institution_payment_unlock_summary_tt
+		}
 	}
 
 
@@ -1167,7 +1189,12 @@ focus_tree = {
 		available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_pw_can_reconstruct = yes   } }
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
-		completion_reward = { unlock_decision_tooltip = STP_ps_institution_payment  unlock_decision_tooltip = STP_ps_district_rebuild  }
+		completion_reward = {
+			unlock_decision_tooltip = STP_ps_institution_payment
+			custom_effect_tooltip = STP_ps_institution_payment_unlock_summary_tt
+			unlock_decision_tooltip = STP_ps_district_rebuild
+			custom_effect_tooltip = STP_ps_district_rebuild_unlock_summary_tt
+		}
 	}
 
 

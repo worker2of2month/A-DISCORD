@@ -324,6 +324,12 @@ ideas = {
 			modifier = { army_org_regain = 0.15 }
 		}
 		STP_cw_reserve_commanders_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_factor = 0.05 planning_speed = 0.10 } }
+		STP_ps_northern_lessons_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = { planning_speed = 0.10 }
+		}
+
 		STP_cw_casualty_routes_idea = { name = STP_cw_military_staff_dynamic allowed = { always = no } modifier = { army_org_regain = 0.10 } }
 		STP_cw_supply_officers_idea = {
 			name = STP_cw_military_staff_dynamic
@@ -551,8 +557,8 @@ ideas = {
 			cancel = { NOT = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } }
 			on_remove = { NOD_cw_apply_northern_exhaustion = yes }
 			modifier = {
-				army_attack_factor = 0.18
-				breakthrough_factor = 0.12
+				army_attack_factor = 0.21
+				breakthrough_factor = 0.15
 				army_org_factor = 0.10
 				planning_speed = 0.20
 				land_reinforce_rate = 0.10

@@ -30,4 +30,34 @@ spriteTypes = {
 
 	spriteType = { name = "GFX_STP_pf_stability_effect" texturefile = "gfx/interface/stability_icon.dds" legacy_lazy_load = no }
 	spriteType = { name = "GFX_STP_pf_organization_effect" texturefile = "gfx/texticons/organization_gain_texticon.dds" legacy_lazy_load = no }
+
+	spriteType = {
+		name = "GFX_STP_ch_conservatives_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_ch_conservatives.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_ch_radicals_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_ch_radicals.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_ch_army_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_ch_army.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_ch_merchants_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_ch_merchants.png"
+		legacy_lazy_load = no
+	}
+
+	spriteType = {
+		name = "GFX_STP_ch_security_texticon"
+		texturefile = "gfx/texticons/adiscord/custom/STP_ch_security.png"
+		legacy_lazy_load = no
+	}
 }

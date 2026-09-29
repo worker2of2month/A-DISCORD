@@ -6081,10 +6081,10 @@ SpriteType = {
 
 	spriteType = {
 		name = "GFX_focus_STP_ps_evacuation_plan_shine"
-		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_evacuation_plan.png"
+		texturefile = "gfx/interface/ideas/laws/culture_healthcare/ADISCORD_law_healthcare_military_medical_service.png"
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
-			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_ps_evacuation_plan.png"
+			animationmaskfile = "gfx/interface/ideas/laws/culture_healthcare/ADISCORD_law_healthcare_military_medical_service.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no

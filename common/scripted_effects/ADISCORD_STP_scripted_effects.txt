@@ -6842,6 +6842,7 @@ STP_ps_prepare_evacuation_finish = {
 		if = { limit = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
 			clear_variable = STP_ps_prepare_evacuation_deposit
 			set_country_flag = STP_ps_prepare_evacuation_completed
+			STP_ps_request_asylum = yes
 
 
 			ADISCORD_economy_mark_dirty = yes

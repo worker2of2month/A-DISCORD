@@ -1494,3 +1494,78 @@ defined_text = {
 		localization_key = STP_ch_empty
 	}
 }
+
+# Chapter decision resource prices
+
+defined_text = {
+	name = STPGetChapterPoliticalPowerCost25
+	text = {
+		trigger = {
+			has_political_power < 25
+		}
+		localization_key = STP_ch_cost_politicalpower_25_blocked
+	}
+	text = {
+		localization_key = STP_ch_cost_politicalpower_25
+	}
+}
+
+defined_text = {
+	name = STPGetChapterPoliticalPowerCost35
+	text = {
+		trigger = {
+			has_political_power < 35
+		}
+		localization_key = STP_ch_cost_politicalpower_35_blocked
+	}
+	text = {
+		localization_key = STP_ch_cost_politicalpower_35
+	}
+}
+
+defined_text = {
+	name = STPGetChapterPoliticalPowerCost40
+	text = {
+		trigger = {
+			has_political_power < 40
+		}
+		localization_key = STP_ch_cost_politicalpower_40_blocked
+	}
+	text = {
+		localization_key = STP_ch_cost_politicalpower_40
+	}
+}
+
+defined_text = {
+	name = STPGetChapterTreasuryCost450
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = less_than
+			}
+		}
+		localization_key = STP_ch_cost_treasury_450_blocked
+	}
+	text = {
+		localization_key = STP_ch_cost_treasury_450
+	}
+}
+
+defined_text = {
+	name = STPGetChapterTreasuryCost900
+	text = {
+		trigger = {
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 900
+				compare = less_than
+			}
+		}
+		localization_key = STP_ch_cost_treasury_900_blocked
+	}
+	text = {
+		localization_key = STP_ch_cost_treasury_900
+	}
+}

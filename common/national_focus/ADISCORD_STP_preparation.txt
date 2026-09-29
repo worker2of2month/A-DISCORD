@@ -1267,6 +1267,7 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_party_staff_drills_program
+			custom_effect_tooltip = STP_party_staff_drills_program_unlock_summary_tt
 			capital_scope = {
 				add_extra_state_shared_building_slots = 2
 				add_building_construction = { type = arms_factory level = 2 instant_build = yes }
@@ -1298,6 +1299,7 @@ focus_tree = {
 		completion_reward = {
 			add_stability = -0.05
 			unlock_decision_tooltip = STP_cw_check_district_command
+			custom_effect_tooltip = STP_cw_check_district_command_unlock_summary_tt
 			2 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
 			29 = { if = { limit = { is_owned_by = ROOT is_controlled_by = ROOT STP_region_is_operable = yes } STP_cw_secure_party_district = yes } }
 			custom_effect_tooltip = STP_cw_secure_garrisons_tt
@@ -1475,6 +1477,7 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_interrupt_opposition
+			custom_effect_tooltip = STP_cw_interrupt_opposition_unlock_summary_tt
 
 			hidden_effect = {
 
@@ -1525,6 +1528,7 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_cw_seal_protocol
+			custom_effect_tooltip = STP_cw_seal_protocol_unlock_summary_tt
 			custom_effect_tooltip = STP_cw_protocol_office_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_conservatives_support value = 8 }
@@ -1603,6 +1607,7 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 40
 			unlock_decision_tooltip = STP_cw_publish_directive
+			custom_effect_tooltip = STP_cw_publish_directive_unlock_summary_tt
 			custom_effect_tooltip = STP_cw_press_office_strategy_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_radicals_support value = 8 }
@@ -1708,6 +1713,7 @@ focus_tree = {
 				STP_pf_shift = yes
 			}
 			unlock_decision_tooltip = STP_cw_agree_with_commander
+			custom_effect_tooltip = STP_cw_agree_with_commander_unlock_summary_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_party_dummy_idea add_idea = STP_party_district_compact_party_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_cw_party_stability_factor value = 0.04 }
@@ -1804,6 +1810,7 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			unlock_decision_tooltip = STP_party_civil_service_program
+			custom_effect_tooltip = STP_party_civil_service_program_unlock_summary_tt
 			custom_effect_tooltip = STP_party_civil_register_tt
 			hidden_effect = {
 				3 = {
@@ -1875,7 +1882,9 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_build_radio    }
+
+			unlock_decision_tooltip = STP_ps_build_radio
+			custom_effect_tooltip = STP_ps_build_radio_unlock_summary_tt    }
 	}
 
 
@@ -1923,7 +1932,16 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_build_hq    }
+
+			unlock_decision_tooltip = STP_ps_build_hq
+			custom_effect_tooltip = STP_ps_build_hq_unlock_summary_tt
+			unlock_decision_tooltip = STP_ps_prepare_evacuation
+			custom_effect_tooltip = STP_ps_prepare_evacuation_unlock_summary_tt
+			unlock_decision_tooltip = STP_ps_evacuate_funds
+			custom_effect_tooltip = STP_ps_evacuate_funds_unlock_summary_tt
+
+
+		}
 	}
 
 
@@ -1946,8 +1964,14 @@ focus_tree = {
 				add_to_variable = { var = STP_cw_army_org_regain value = 0.05 }
 				STP_cw_refresh_army_modifier = yes
 			}
+
+			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_casualty_routes_idea } }
+			hidden_effect = {
+				add_to_variable = { var = STP_cw_army_org_regain value = 0.10 }
+				STP_cw_refresh_army_modifier = yes
+			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_prepare_evacuation  unlock_decision_tooltip = STP_ps_evacuate_funds  custom_effect_tooltip = STP_ps_asylum_scope_tt }
+		}
 	}
 
 
@@ -1983,7 +2007,10 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			add_political_power = 50
- unlock_decision_tooltip = STP_ps_fund_nod  }
+
+			unlock_decision_tooltip = STP_ps_fund_nod
+			custom_effect_tooltip = STP_ps_fund_nod_unlock_summary_tt
+		}
 	}
 
 
@@ -2007,7 +2034,10 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_arm_nod  }
+
+			unlock_decision_tooltip = STP_ps_arm_nod
+			custom_effect_tooltip = STP_ps_arm_nod_unlock_summary_tt
+		}
 	}
 
 
@@ -2030,7 +2060,10 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_engineers_nod  }
+
+			unlock_decision_tooltip = STP_ps_engineers_nod
+			custom_effect_tooltip = STP_ps_engineers_nod_unlock_summary_tt
+		}
 	}
 
 
@@ -2080,13 +2113,16 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- unlock_decision_tooltip = STP_ps_expedition_nod  }
+
+			unlock_decision_tooltip = STP_ps_expedition_nod
+			custom_effect_tooltip = STP_ps_expedition_nod_unlock_summary_tt
+		}
 	}
 
 
 	focus = {
 		id = STP_ps_asylum_protocol
-		icon = GFX_focus_STP_ps_asylum_protocol
+		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = 20
 		y = 4
 		relative_position_id = STP_Govern_In_His_Name
@@ -2097,15 +2133,22 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			army_experience = 15
+			army_experience = 30
 			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_ps_asylum_protocol_preparation_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_cw_army_planning_speed value = 0.10 }
 				add_to_variable = { var = STP_cw_army_org_regain value = 0.05 }
 				STP_cw_refresh_army_modifier = yes
 			}
+
+			effect_tooltip = { swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_ps_northern_lessons_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_cw_army_planning_speed value = 0.10 }
+				STP_cw_refresh_army_modifier = yes
+			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
- custom_effect_tooltip = STP_ps_asylum_scope_tt hidden_effect = { STP_ps_request_asylum = yes } }
+
+		}
 	}
 
 
@@ -2123,9 +2166,13 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			add_political_power = 50
- unlock_decision_tooltip = STP_ps_val_intelligence
+
+			unlock_decision_tooltip = STP_ps_val_intelligence
+			custom_effect_tooltip = STP_ps_val_intelligence_unlock_summary_tt
 			unlock_decision_tooltip = STP_ps_val_intercept
+			custom_effect_tooltip = STP_ps_val_intercept_unlock_summary_tt
 			unlock_decision_tooltip = STP_ps_val_pressure
+			custom_effect_tooltip = STP_ps_val_pressure_unlock_summary_tt
 }
 	}
 

@@ -65,6 +65,45 @@ class PartyRouteContracts(unittest.TestCase):
         cls.dynamic = {e.key: e.value for e in parse_clausewitz(read(DYNAMIC))}
         cls.ideas = {e.key: e.value for c in children(parse_clausewitz(read(IDEAS)), "ideas") for group in children(c, "country") for e in group}
 
+    def test_prewar_staff_rewards_stay_with_party_and_match_preview(self):
+        for focus_id, expected in (
+            ("STP_ps_evacuation_plan", {"army_org_regain": .15, "army_org_factor": .03}),
+            ("STP_ps_asylum_protocol", {"planning_speed": .20, "army_org_regain": .05}),
+        ):
+            with self.subTest(focus=focus_id):
+                reward = one(self.focus[focus_id], "completion_reward")
+                payload = list(selected_effects(reward, {}))
+                actual = {}
+                shown = {}
+                for scope, entry in payload:
+                    if entry.key == "add_to_variable":
+                        self.assertEqual(scope, "STP")
+                        variable = one(entry.value, "var").removeprefix("STP_cw_army_")
+                        modifier = {"org_factor": "army_org_factor", "org_regain": "army_org_regain"}.get(variable, variable)
+                        actual[modifier] = actual.get(modifier, 0) + float(one(entry.value, "value"))
+                for preview in children(reward, "effect_tooltip"):
+                    idea = self.ideas[one(one(preview, "swap_ideas"), "add_idea")]
+                    for entry in one(idea, "modifier"):
+                        shown[entry.key] = shown.get(entry.key, 0) + float(entry.value)
+                self.assertEqual(set(actual), set(expected))
+                self.assertEqual(set(shown), set(expected))
+                for modifier, value in expected.items():
+                    self.assertAlmostEqual(actual[modifier], value)
+                    self.assertAlmostEqual(shown[modifier], value)
+                self.assertIn(("STP", "STP_cw_refresh_army_modifier", "yes"),
+                              [(scope, e.key, e.value) for scope, e in payload])
+                self.assertFalse(any(e.key in ("add_ideas", "STP_ps_request_asylum")
+                                     for _, e in payload))
+
+    def test_optional_evacuation_is_accessible_from_reserve_hq(self):
+        reward = one(self.focus["STP_ps_reserve_hq"], "completion_reward")
+        self.assertIn("STP_ps_prepare_evacuation", children(reward, "unlock_decision_tooltip"))
+        decision = self.decisions["STP_ps_prepare_evacuation"]
+        gates = [e.value for e in walk(decision) if e.key == "has_completed_focus"]
+        self.assertEqual(set(gates), {"STP_ps_reserve_hq"})
+        finish = self.effects["STP_ps_prepare_evacuation_finish"]
+        self.assertIn("STP_ps_request_asylum", [e.key for e in walk(finish)])
+
     def test_entire_election_briefing_switches_side(self):
         self.assertEqual(self.loc["STP_elections_in_the_party_desc"], "[STPGetElectionBriefing]")
         switch = self.scripted_loc["STPGetElectionBriefing"]
@@ -1791,6 +1830,27 @@ class PoliticalChapterContracts(unittest.TestCase):
                   and any(x.key == "STP_ch_open_congress" for x in e.value)]
         self.assertTrue(checks)
         self.assertTrue(all("STP_ch_liberation_war" in str(signature(gate)) for gate in checks))
+
+    def test_chapter_missions_require_explicit_activation(self):
+        missions = {name: body for name, body in self.decisions.items()
+                    if children(body, "days_mission_timeout")}
+        self.assertEqual(set(missions), {
+            "STP_ch_pressure_1", "STP_ch_pressure_2", "STP_ch_pressure_3",
+            "STP_ch_pressure_4", "STP_ch_crisis_deadline",
+        })
+        activated = {e.value for body in self.effects.values() for e in walk(body)
+                     if e.key == "activate_mission"}
+        for name, body in missions.items():
+            with self.subTest(mission=name):
+                self.assertIn(name, activated)
+                self.assertEqual(signature(one(body, "activation")), [("always", "no")])
+
+    def test_liberation_window_uses_native_stability_trigger(self):
+        source = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        window = source.split("STP_ch_liberation_window = {", 1)[1].split(
+            "STP_ch_release_offer_current = {", 1)[0]
+        self.assertNotRegex(window, r"\bstability\s*[<>=]")
+        self.assertRegex(window, r"\bhas_stability\s*<\s*0\.45\b")
 
     def test_crisis_pause_restores_the_remaining_deadline(self):
         pause = str(signature(self.effects["STP_ch_pause_crisis"]))

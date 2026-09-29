@@ -404,7 +404,12 @@ class FactionProgramContracts(unittest.TestCase):
                 loc=read(ROOT/f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
                 self.assertRegex(loc,rf'(?m)^ {base}_effect_value:.*\[\?{base}_effect\|=')
                 self.assertIn(base+'_program',loc)
-                for fid in self.PROGRAMS[faction]:self.assertIn('$'+fid+'$',loc)
+                entries = dict(re.findall(r'^\s*([^#\s:]+):(?:\d+)?\s*"(.*)"\s*$', loc, re.M))
+                tooltip = entries[base + '_tt']
+                self.assertNotIn('$', tooltip)
+                self.assertIn(entries['STP_pf_program_rules'], tooltip)
+                for fid in self.PROGRAMS[faction]:
+                    self.assertIn(entries[fid], tooltip)
         for language in ('russian','english'):
             loc=read(ROOT/f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
             self.assertIn('STP_pf_advisers_disconnected',loc)

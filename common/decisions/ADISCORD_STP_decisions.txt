@@ -7515,7 +7515,7 @@ STP_party_factions = {
 	STP_ps_prepare_evacuation = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { has_completed_focus = STP_ps_evacuation_plan tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag NOT = { has_country_flag = STP_ps_prepare_evacuation_completed } }
+		visible = { has_completed_focus = STP_ps_reserve_hq tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag NOT = { has_country_flag = STP_ps_prepare_evacuation_completed } }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ps_program_available_tt
@@ -7537,7 +7537,7 @@ STP_party_factions = {
 			hidden_effect = {
 				if = {
 					limit = {
-						has_completed_focus = STP_ps_evacuation_plan
+						has_completed_focus = STP_ps_reserve_hq
 						tag = STP
 						STP_cw_preparation_open = yes
 						has_country_flag = STP_sided_with_the_party_flag
@@ -11153,6 +11153,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_pressure_1 = {
+		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = {
 			tag = STP
@@ -11188,6 +11189,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_pressure_2 = {
+		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = {
 			tag = STP
@@ -11223,6 +11225,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_pressure_3 = {
+		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = {
 			tag = STP
@@ -11258,6 +11261,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_pressure_4 = {
+		activation = { always = no }
 		icon = generic_prepare_civil_war
 		allowed = {
 			tag = STP
@@ -11293,6 +11297,7 @@ STP_ch_chapters = {
 		}
 	}
 	STP_ch_crisis_deadline = {
+		activation = { always = no }
 		icon = generic_political_discourse
 		allowed = {
 			tag = STP

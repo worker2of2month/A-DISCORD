@@ -2176,7 +2176,7 @@ STP_ch_liberation_window = {
 			has_war = yes
 		}
 		NOD = {
-			stability < 0.45
+			has_stability < 0.45
 		}
 		check_variable = {
 			var = STP_ch_cooperation
