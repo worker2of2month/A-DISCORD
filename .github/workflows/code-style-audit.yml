@@ -4,8 +4,9 @@ on:
     branches: [main]
 permissions:
   contents: write
+  actions: read
 concurrency:
-  group: repository-code-style-audit
+  group: repository-code-style-refresh
   cancel-in-progress: true
 jobs:
   audit:
@@ -23,31 +24,42 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Prepare isolated verification workspace
-        run: |
-          python -m pip install black==25.1.0 pillow numpy scipy
-          git fetch --depth=1 origin ca0125941411ef3798b7e4f051b58755f8210ea6
-          git worktree add --detach /tmp/code-style-before ca0125941411ef3798b7e4f051b58755f8210ea6
-          cp -a .superpowers/code-style-audit /tmp/code-style-tools
-          mkdir /tmp/code-style-evidence
-      - name: Verify formatter and apply semantics-preserving changes
-        run: |
-          (cd /tmp/code-style-tools && python -B -m unittest tests_audit -v) 2>&1 | tee /tmp/code-style-evidence/formatter-tests.log
-          python -B /tmp/code-style-tools/replay_style.py "$PWD" /tmp/code-style-evidence
-      - uses: actions/upload-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: code-style-formatted-source
+          path: /tmp/code-style-cache-evidence
+          run-id: 36557685897
+          github-token: ${{ github.token }}
+      - name: Preserve latest main and restore verified formatting cache
+        run: |
+          python -m pip install black==25.1.0 pillow numpy scipy
+          git fetch --depth=1 origin main ca0125941411ef3798b7e4f051b58755f8210ea6
+          latest=$(git rev-parse origin/main)
+          git worktree add --detach /tmp/code-style-before "$latest"
+          git worktree add --detach /tmp/code-style-current "$latest"
+          git worktree add --detach /tmp/code-style-cache ca0125941411ef3798b7e4f051b58755f8210ea6
+          git -C /tmp/code-style-cache apply --check /tmp/code-style-cache-evidence/style.patch
+          git -C /tmp/code-style-cache apply /tmp/code-style-cache-evidence/style.patch
+          cp -a .superpowers/code-style-audit /tmp/code-style-tools
+          mkdir /tmp/code-style-evidence
+      - name: Reapply style without changing current main semantics
+        run: |
+          (cd /tmp/code-style-tools && python -B -m unittest tests_audit -v) 2>&1 | tee /tmp/code-style-evidence/formatter-tests.log
+          python -B /tmp/code-style-tools/refresh_style.py /tmp/code-style-current /tmp/code-style-cache /tmp/code-style-evidence /tmp/code-style-cache-evidence/style-manifest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-style-refreshed-source
           path: |
             /tmp/code-style-evidence/style-manifest.json
             /tmp/code-style-evidence/style.patch
             /tmp/code-style-evidence/focus-generation.log
             /tmp/code-style-evidence/formatter-tests.log
           retention-days: 7
-      - name: Compare baseline and formatted test modules
+      - name: Compare current main and formatted test modules
         run: |
           python -B /tmp/code-style-tools/bounded_suite.py /tmp/code-style-before /tmp/code-style-evidence/before
-          python -B /tmp/code-style-tools/bounded_suite.py "$PWD" /tmp/code-style-evidence/after
-      - name: Run the repository validator on both versions
+          python -B /tmp/code-style-tools/bounded_suite.py /tmp/code-style-current /tmp/code-style-evidence/after
+      - name: Run repository validator on both current versions
         run: |
           python -B - <<'PY'
           from pathlib import Path
@@ -58,7 +70,7 @@ jobs:
           import sys
           output = Path('/tmp/code-style-evidence')
           results = {}
-          for name, root in [('before', Path('/tmp/code-style-before')), ('after', Path.cwd())]:
+          for name, root in [('before', Path('/tmp/code-style-before')), ('after', Path('/tmp/code-style-current'))]:
               with (output / ('validate-tc-' + name + '.log')).open('w') as log:
                   process = subprocess.Popen([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], cwd=root, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
                   try:
@@ -70,8 +82,8 @@ jobs:
           (output / 'validator-results.json').write_text(json.dumps(results, indent=2))
           print(json.dumps(results, indent=2))
           PY
-      - name: Publish clean style-only commits for review
-        run: python -B /tmp/code-style-tools/deliver_style.py "$PWD" /tmp/code-style-evidence
+      - name: Publish current-main style commits for review
+        run: python -B /tmp/code-style-tools/deliver_style.py /tmp/code-style-current /tmp/code-style-evidence
       - uses: actions/upload-artifact@v4
         if: always()
         with:
