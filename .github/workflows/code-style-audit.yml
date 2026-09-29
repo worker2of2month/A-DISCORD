@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main]
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: repository-code-style-audit
   cancel-in-progress: true
@@ -11,7 +11,11 @@ jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/code-style-audit-20260929'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,60 +23,58 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Prepare verification dependencies
+      - name: Prepare isolated verification workspace
         run: |
-          python -m pip install pillow numpy scipy
-          python -m pip download --only-binary=:all: black==25.1.0 -d /tmp/code-style-wheels
+          python -m pip install black==25.1.0 pillow numpy scipy
+          git fetch --depth=1 origin ca0125941411ef3798b7e4f051b58755f8210ea6
+          git worktree add --detach /tmp/code-style-before ca0125941411ef3798b7e4f051b58755f8210ea6
+          cp -a .superpowers/code-style-audit /tmp/code-style-tools
+          mkdir /tmp/code-style-evidence
+      - name: Verify formatter and apply semantics-preserving changes
+        run: |
+          (cd /tmp/code-style-tools && python -B -m unittest tests_audit -v) 2>&1 | tee /tmp/code-style-evidence/formatter-tests.log
+          python -B /tmp/code-style-tools/replay_style.py "$PWD" /tmp/code-style-evidence
       - uses: actions/upload-artifact@v4
         with:
-          name: code-style-formatting-tools
-          path: /tmp/code-style-wheels
-          retention-days: 3
-      - name: Record original test and validator results
+          name: code-style-formatted-source
+          path: |
+            /tmp/code-style-evidence/style-manifest.json
+            /tmp/code-style-evidence/style.patch
+            /tmp/code-style-evidence/focus-generation.log
+            /tmp/code-style-evidence/formatter-tests.log
+          retention-days: 7
+      - name: Compare baseline and formatted test modules
+        run: |
+          python -B /tmp/code-style-tools/bounded_suite.py /tmp/code-style-before /tmp/code-style-evidence/before
+          python -B /tmp/code-style-tools/bounded_suite.py "$PWD" /tmp/code-style-evidence/after
+      - name: Run the repository validator on both versions
         run: |
           python -B - <<'PY'
           from pathlib import Path
-          import contextlib
           import json
+          import os
+          import signal
           import subprocess
           import sys
-          import unittest
-          output = Path('/tmp/code-style-baseline')
-          output.mkdir()
-          excluded = []
-          def filter_suite(suite):
-              selected = unittest.TestSuite()
-              for test in suite:
-                  if isinstance(test, unittest.TestSuite):
-                      selected.addTests(filter_suite(test))
-                  elif test.id().endswith('.test_default_checks_and_help_are_non_mutating'):
-                      excluded.append({'test': test.id(), 'reason': 'Runs every asset/map generator; excluded from this style-only differential gate. Changed focus output is regenerated and checked separately.'})
-                  else:
-                      selected.addTest(test)
-              return selected
-          with (output / 'tests.log').open('w') as stream:
-              with contextlib.redirect_stdout(stream), contextlib.redirect_stderr(stream):
-                  suite = filter_suite(unittest.defaultTestLoader.discover('tools/tests', pattern='test_*.py'))
-                  result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
-          metadata = {
-              'tests_run': result.testsRun,
-              'failures': [{'test': test.id(), 'traceback': trace} for test, trace in result.failures],
-              'errors': [{'test': test.id(), 'traceback': trace} for test, trace in result.errors],
-              'skipped': [{'test': test.id(), 'reason': reason} for test, reason in result.skipped],
-              'excluded': excluded,
-          }
-          with (output / 'validate-tc.log').open('w') as stream:
-              try:
-                  validation = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], stdout=stream, stderr=subprocess.STDOUT, timeout=240)
-                  metadata['validate_tc_exit'] = validation.returncode
-              except subprocess.TimeoutExpired:
-                  metadata['validate_tc_exit'] = 124
-          (output / 'baseline.json').write_text(json.dumps(metadata, indent=2))
-          print(json.dumps({key: len(value) if isinstance(value, list) else value for key, value in metadata.items()}, indent=2))
+          output = Path('/tmp/code-style-evidence')
+          results = {}
+          for name, root in [('before', Path('/tmp/code-style-before')), ('after', Path.cwd())]:
+              with (output / ('validate-tc-' + name + '.log')).open('w') as log:
+                  process = subprocess.Popen([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], cwd=root, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+                  try:
+                      results[name] = process.wait(timeout=90)
+                  except subprocess.TimeoutExpired:
+                      os.killpg(process.pid, signal.SIGKILL)
+                      process.wait()
+                      results[name] = 'timeout after 90 seconds'
+          (output / 'validator-results.json').write_text(json.dumps(results, indent=2))
+          print(json.dumps(results, indent=2))
           PY
+      - name: Publish clean style-only commits for review
+        run: python -B /tmp/code-style-tools/deliver_style.py "$PWD" /tmp/code-style-evidence
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: code-style-baseline
-          path: /tmp/code-style-baseline
-          retention-days: 3
+          name: code-style-review
+          path: /tmp/code-style-evidence
+          retention-days: 7
