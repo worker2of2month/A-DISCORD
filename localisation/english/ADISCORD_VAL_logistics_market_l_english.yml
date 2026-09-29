@@ -165,7 +165,7 @@
  VAL_labor_cost_blocked:0 "§R100,000§! £population_texticon  §R75§! £political_power_texticon"
  VAL_labor_cost_tooltip:0 "Requires §Y100,000§! £population_texticon available refugees and §Y75§! £political_power_texticon."
 
-# Contract reserve recruitment
+ # Contract reserve recruitment
  VAL_recruit_contract_reserves: "Recruit Contract Reserves"
  VAL_recruit_contract_reserves_desc: "Signing bonuses and guaranteed family payments attract new volunteers. Kefreyt immediately receives §G5000§! £population_texticon in its free manpower reserve. Recruitment can be repeated after §Y120 days§!."
  VAL_recruit_contract_reserves_cost: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"

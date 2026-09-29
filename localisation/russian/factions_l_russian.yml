@@ -33,8 +33,7 @@
  faction_vorkerland_confederation: "Конфедерация Воркерланд"
  faction_besjaysk_kingdom: "Королевство Бежайск"
 
-
-  #SEA faction rule names
+ #SEA faction rule names
  joining_rules_applicability: "§gПока действует это правило, вступать внашальянс могут только государства, отвечающие следующим требованиям:§!"
  joining_rule_non_fascist: "Все, кроме фашистов"
  joining_rule_non_democratic: "Все, кроме демократов"
@@ -1096,7 +1095,7 @@
  TRIGGER_HAS_ACTIVE_FACTION_RULE: "$COUNTRY_OR_FACTION|H$ с действующим правилом «$RULE|H$»"
  TRIGGER_HAS_NOT_ACTIVE_FACTION_RULE: "$COUNTRY_OR_FACTION|H$ без действующего правила «$RULE|H$»"
 
-# BEGIN CONSOLIDATED: ADISCORD_factions_l_russian.yml
+ # BEGIN CONSOLIDATED: ADISCORD_factions_l_russian.yml
  ADISCORD_faction_generic_name: "Военно-политический союз"
  ADISCORD_faction_manifest_continuity: "Сохранение союза"
  ADISCORD_faction_manifest_continuity_desc: "Участники обязуются сохранять общее командование и взаимную защиту, пока действует учредительный договор союза."
@@ -1106,4 +1105,4 @@
  ADISCORD_faction_goal_strategic_coordination_desc: "Участники согласуют долгосрочное военное планирование и распределение ответственности."
  ADISCORD_faction_goal_long_term_security: "Общая безопасность"
  ADISCORD_faction_goal_long_term_security_desc: "Учредительный договор остаётся основой взаимной защиты и политической устойчивости союза."
-# END CONSOLIDATED: ADISCORD_factions_l_russian.yml
+ # END CONSOLIDATED: ADISCORD_factions_l_russian.yml

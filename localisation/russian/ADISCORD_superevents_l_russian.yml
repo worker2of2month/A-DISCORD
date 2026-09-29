@@ -1,60 +1,60 @@
 ﻿l_russian:
-  superevent_vorkerland_civilwar_title: "Гражданская война в Воркерланде"
-  superevent_vorkerland_civilwar_quote: "Когда слова перестают соответствовать вещам, рушатся королевства, слабеют и угасают империи.\n\n- Эзра Паунд"
-  superevent_vorkerland_civilwar_comment: "Государство оказалось менее прочным, чем его границы"
+ superevent_vorkerland_civilwar_title: "Гражданская война в Воркерланде"
+ superevent_vorkerland_civilwar_quote: "Когда слова перестают соответствовать вещам, рушатся королевства, слабеют и угасают империи.\n\n- Эзра Паунд"
+ superevent_vorkerland_civilwar_comment: "Государство оказалось менее прочным, чем его границы"
 
-  superevent_vorkerland_dirty_opening_title: "Падение Периметра"
-  superevent_vorkerland_dirty_opening_quote: "Я покажу тебе страх в горсти праха.\n\n- Т. С. Элиот, «Бесплодная земля»"
-  superevent_vorkerland_dirty_opening_comment: "За Периметром снова появились дороги, карты и претенденты"
+ superevent_vorkerland_dirty_opening_title: "Падение Периметра"
+ superevent_vorkerland_dirty_opening_quote: "Я покажу тебе страх в горсти праха.\n\n- Т. С. Элиот, «Бесплодная земля»"
+ superevent_vorkerland_dirty_opening_comment: "За Периметром снова появились дороги, карты и претенденты"
 
-  superevent_vorkerland_worker_victory_title: "Возрождение Конфедерации"
-  superevent_vorkerland_worker_victory_quote: "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, «Югуртинская война»"
-  superevent_vorkerland_worker_victory_comment: "Воркер собрал Конфедерацию заново"
+ superevent_vorkerland_worker_victory_title: "Возрождение Конфедерации"
+ superevent_vorkerland_worker_victory_quote: "Согласием малые государства возвышаются, раздором величайшие рушатся.\n\n- Саллюстий, «Югуртинская война»"
+ superevent_vorkerland_worker_victory_comment: "Воркер собрал Конфедерацию заново"
 
-  superevent_vorkerland_utilitarian_victory_title: "Утилитарная республика"
-  superevent_vorkerland_utilitarian_victory_quote: "Величайшее счастье величайшего числа - мера правильного и неправильного.\n\n- Иеремия Бентам"
-  superevent_vorkerland_utilitarian_victory_comment: "Антон Багли подчинил новый порядок измеримой общественной пользе"
+ superevent_vorkerland_utilitarian_victory_title: "Утилитарная республика"
+ superevent_vorkerland_utilitarian_victory_quote: "Величайшее счастье величайшего числа - мера правильного и неправильного.\n\n- Иеремия Бентам"
+ superevent_vorkerland_utilitarian_victory_comment: "Антон Багли подчинил новый порядок измеримой общественной пользе"
 
-  superevent_vorkerland_vlad_victory_title: "Имперская реставрация"
-  superevent_vorkerland_vlad_victory_quote: "Они создают пустыню и называют её миром.\n\n- Тацит, «Агрикола»"
-  superevent_vorkerland_vlad_victory_comment: "Влад Петричев вернул единство на штыках"
+ superevent_vorkerland_vlad_victory_title: "Имперская реставрация"
+ superevent_vorkerland_vlad_victory_quote: "Они создают пустыню и называют её миром.\n\n- Тацит, «Агрикола»"
+ superevent_vorkerland_vlad_victory_comment: "Влад Петричев вернул единство на штыках"
 
-  superevent_vorkerland_joint_victory_title: "Чрезвычайный совет"
-  superevent_vorkerland_joint_victory_quote: "Одно честолюбие должно сдерживать другое.\n\n- Джеймс Мэдисон, «Федералист № 51»"
-  superevent_vorkerland_joint_victory_comment: "Победители не поделили страну - они поделили власть"
+ superevent_vorkerland_joint_victory_title: "Чрезвычайный совет"
+ superevent_vorkerland_joint_victory_quote: "Одно честолюбие должно сдерживать другое.\n\n- Джеймс Мэдисон, «Федералист № 51»"
+ superevent_vorkerland_joint_victory_comment: "Победители не поделили страну - они поделили власть"
 
-  superevent_vorkerland_dorian_victory_title: "Воркеландское поле экспериментов"
-  superevent_vorkerland_dorian_victory_quote: "Управление людьми заменяется управлением вещами и руководством процессами производства.\n\n- Фридрих Энгельс, «Анти-Дюринг»"
-  superevent_vorkerland_dorian_victory_comment: "Воркерланд передан тем, кто умеет считать, строить и управлять"
+ superevent_vorkerland_dorian_victory_title: "Воркеландское поле экспериментов"
+ superevent_vorkerland_dorian_victory_quote: "Управление людьми заменяется управлением вещами и руководством процессами производства.\n\n- Фридрих Энгельс, «Анти-Дюринг»"
+ superevent_vorkerland_dorian_victory_comment: "Воркерланд передан тем, кто умеет считать, строить и управлять"
 
-  superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
-  superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
-  superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
+ superevent_stelander_empire_title: "Провозглашение стеландского имперского союза!"
+ superevent_stelander_empire_quote: "Когда у человека не остаётся ничего, чем можно гордиться, он начинает гордиться своей этнической принадлежностью. \n\n- Артур Шопенгауэр "
+ superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
 
-  superevent_stelander_party_victory_title: "Победа партии в Стеландере"
-# Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
-  superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, «1984»"
-  superevent_stelander_party_victory_comment: "Партийная власть сохранена"
+ superevent_stelander_party_victory_title: "Победа партии в Стеландере"
+ # Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
+ superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, «1984»"
+ superevent_stelander_party_victory_comment: "Партийная власть сохранена"
 
-  superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
-# Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
-  superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, «Буря»"
-  superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
+ superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
+ # Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
+ superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, «Буря»"
+ superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
 
-# Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
-  superevent_nam_resource_war_title: "Ресурсная война"
-  superevent_nam_resource_war_quote: "Немногие наживаются - многие платят.\n\n- Смедли Батлер, «Война - это рэкет»"
-  superevent_nam_resource_war_comment: "За месторождения платят кровью"
+ # Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
+ superevent_nam_resource_war_title: "Ресурсная война"
+ superevent_nam_resource_war_quote: "Немногие наживаются - многие платят.\n\n- Смедли Батлер, «Война - это рэкет»"
+ superevent_nam_resource_war_comment: "За месторождения платят кровью"
 
-# Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
-  superevent_rus_last_empire_title: "Последняя империя"
-  superevent_rus_last_empire_quote: "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, «Левиафан»"
-  superevent_rus_last_empire_comment: "Хан занял императорский престол"
+ # Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
+ superevent_rus_last_empire_title: "Последняя империя"
+ superevent_rus_last_empire_quote: "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, «Левиафан»"
+ superevent_rus_last_empire_comment: "Хан занял императорский престол"
 
-  superevent_val_commonwealth_title: "Провозглашено Кефрейтское содружество!"
-  superevent_val_commonwealth_quote: "Республика есть дело народа.\n\n- Цицерон, «О государстве»"
-  superevent_val_commonwealth_comment: "Солгалов связал договорные администрации в единый порядок"
+ superevent_val_commonwealth_title: "Провозглашено Кефрейтское содружество!"
+ superevent_val_commonwealth_quote: "Республика есть дело народа.\n\n- Цицерон, «О государстве»"
+ superevent_val_commonwealth_comment: "Солгалов связал договорные администрации в единый порядок"
 
-  superevent_inactive_title: ""
-  superevent_inactive_quote: ""
-  superevent_inactive_comment: ""
+ superevent_inactive_title: ""
+ superevent_inactive_quote: ""
+ superevent_inactive_comment: ""

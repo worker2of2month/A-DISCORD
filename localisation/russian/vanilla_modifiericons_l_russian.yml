@@ -2,14 +2,14 @@
 
  EFFECT_UNLOCK_DECISION:0 "£decision_icon_small Будет открыто решение: $NAME|H$$EFFECT$."
 
-#aat_tooltips_l_braz_por
+ #aat_tooltips_l_braz_por
  DEN_military_advisors_cost_big_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G−15%§!" #Weird indentetion in order to show of the leader traits tt properly
  DEN_military_advisors_cost_small_tt: "£army_advisor_cost_texticon  Стоимость всех военных советников: §G−10%§!"
 
-#abilities_l_russian
+ #abilities_l_russian
  ABILITY_TOOLTIP_COST:0 "£command_power_texticon  Расход командного ресурса: $VALUE|H$"
 
-#combat_l_russian
+ #combat_l_russian
  CURR_COMB_STR:0 "£strenght_texticon  Боеспособность: $VALUE|0%Y$"
  BM_ATTACK_VALUE:0 "£attack_texticon  Атака: $VALUE|+=%$"
  BM_DEFEND_VALUE:0 "£defence_texticon  Защита: $VALUE|+=%$"
@@ -20,7 +20,7 @@
  POSITIONING_VALUE:0 "£ships_contact_texticon  Позиционирование: $NUM|+%$"
  BM_ENEMY_AIR_SUPERIORITY_COUNTER:0 "£enemy_air_superiority_texticon  Снижение вражеского превосходства в воздухе"
 
-#core_l_russian
+ #core_l_russian
  NAVAL_COMBAT_SHIP_STRENGTH:0 "£strenght_texticon  Прочность: $STR|%Y$"
  NAVAL_COMBAT_SHIP_ORGANIZATION_FACTOR:0 " £organization_texticon  Организация: $ORG|%Y$"
  UNIT_ORG:0 "£organization_texticon  Организация: $VALUE|H$"
@@ -33,15 +33,15 @@
  STR_DAMAGE_MULTIPLIER:0 "£strenght_texticon  Полученный урон боеспособности"
  WAR_SUPPORT_REDUCTION_ON_DAMAGE:0 "£war_support_modifiericons_texticon  Снижение поддержки войны при потерях"
 
-#country_l_russian
+ #country_l_russian
  MANPOWER:0 "£manpower_texticon  Людские ресурсы"
 
-#designer_l_russian
+ #designer_l_russian
  DESIGNER_COMBATWIDTH:0 "£combat_width_texticon  Ширина фронта: "
  DESIGNER_MANPOWER:0 "£manpower_texticon  Людские ресурсы: "
  DESIGNER_TRAINING_TIME:0 "£training_speed_texticon  Время на обучение: "
 
-#effects_l_russian
+ #effects_l_russian
  EFFECT_ADD_NATIONAL_UNITY:0 "£national_unity_texticon  Прирост базового национального единства: $VAL|+=%$."
  EFFECT_SET_NATIONAL_UNITY:0 "£national_unity_texticon  Базовое значение национального единства: $VAL|%$."
  EFFECT_ADD_STABILITY:0 "£stability_texticon  Прирост базовой стабильности: $VAL|+=%$."
@@ -87,10 +87,10 @@
  EFFECT_MANPOWER_ADD_COUNTRY:0 "£manpower_texticon  Людские ресурсы: $VAL|+=0$."
  EFFECT_MANPOWER_ADD_STATE:1 "£population_texticon  Местное население: $VAL|+=0$."
 
-#focus_l_russian
+ #focus_l_russian
  anschluss_mefo_bills_double_reduction:0 "Изменить §Yвекселя «МЕФО»§! на £political_power_texticon  §G+0,10§! ежедневного прироста политической власти\n"
 
-#ideas_l_russian
+ #ideas_l_russian
  modifier_tactic_elastic_defense_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Гибкая оборона»§!, если эта тактика - предпочитаемая"
  modifier_tactic_overwhelming_fire_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Огонь на подавление»§!, если эта тактика - предпочитаемая"
  modifier_tactic_seize_bridge_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Захватить мост»§!, если эта тактика - предпочитаемая"
@@ -102,7 +102,7 @@
  modifier_tactic_planned_attack_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Хорошо спланированная атака»§!, если эта тактика - предпочитаемая"
  modifier_tactic_relentless_assault_preferred_weight_factor:1 "£tactics_texticon  Дополнительный шанс тактики §Y«Непрерывная атака»§!, если эта тактика - предпочитаемая"
 
-#modifiers_l_russian
+ #modifiers_l_russian
  MODIFIER_TECH_PREFIX:0 "£tech_mod  "
  MODIFIER_POLITICS_PREFIX:0 "£pol_idea  "
  MODIFIER_DECISION_PREFIX:1 "£decision_icon_small  "
@@ -1533,7 +1533,7 @@
  MODIFIER_FIELD_OFFICER_PROMOTION_PENALTY:0 "£army_leader_cost_texticon  Штраф дивизии полевого офицера"
  MODIFIER_FEMALE_DIVISIONAL_COMMANDER_CHANCE:0 "£officer_texticon  Шанс на женщину - командира дивизии"
 
-# === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
+ # === [LocEditor:OrphanedKeys] Keys that do not exist in English ===
  modifier_unit_fighter_design_cost_factor:0 "£air_design_cost_texticon  Стоимость проекта истребителя"
  modifier_unit_scout_plane_design_cost_factor:0 "£air_design_cost_texticon  Стоимость проекта самолета-разведчика"
  modifier_unit_cv_fighter_design_cost_factor:0 "£air_design_cost_texticon  Стоимость проекта истребителя"
@@ -1569,7 +1569,7 @@
  modifier_army_sub_unit_marines_speed_factor: "£speed_marines_texticon  Скорость морской пехоты"
  modifier_army_sub_unit_marines_max_org_factor: "£organisation_marines_texticon  Организация морской пехоты"
  modifier_army_sub_unit_long_range_patrol_support_attack_factor: "£attack_long_range_patrol_texticon  Атака дальнего патруля"
-modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long_range_patrol_texticon  Оборона дальнего патруля"
+ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long_range_patrol_texticon  Оборона дальнего патруля"
  modifier_army_sub_unit_category_special_forces_max_org_factor: "£organisation_specops_texticon  Организация войск спец. назначения"
  MODIFIER_PARATROOPERS_SPECIAL_FORCES_CONTRIBUTION_FACTOR: "£paratroop_contribution_texticon  Высшее значение вклада десанта спецназначения"
  MODIFIER_MARINES_SPECIAL_FORCES_CONTRIBUTION_FACTOR: "£marines_contribution_texticon  Высшее значение вклада морской пехоты спецназначения"
@@ -1592,7 +1592,7 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  large_plane_airframe_design_cost_factor: "£air_design_cost_texticon  Стоимость проекта большого самолета"
  modifier_army_sub_unit_category_special_forces_max_org_factor: "£organisation_specops_texticon  Организация войск спец. назначения"
 
-  naval_armor_research: "£research_speed_naval_armor_texticon  Темпы исследований схем корабельной брони"
+ naval_armor_research: "£research_speed_naval_armor_texticon  Темпы исследований схем корабельной брони"
  naval_artillery_research: "£research_speed_naval_artillery_texticon  Темпы исследований корабельной артиллерии"
  construction_tech_research: "£research_speed_construction_texticon  Темпы исследований в технологии строительства"
  MODIFIER_PRODUCTION_SPEED_FACILITY_FACTOR: "£construction_speed_facility_texticon  Скорость строительства комплексов"
@@ -1766,16 +1766,15 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
 
  MODIFIER_CONSUMER_GOODS_EXPECTED_VALUE: "£civ_factory_consumer_texticon  Ожидаемое количество заводов, перепрофилированных на товары народного потребления"
 
-
  #plane_designer_l_russian
  small_plane_cas_airframe_design_cost_factor: "£air_design_cost_texticon  Стоимость проекта корпуса малого штурмовика"
  cv_small_plane_cas_airframe_design_cost_factor: "£air_design_cost_texticon  Стоимость проекта корпуса малого палубного штурмовика"
  medium_plane_airframe_design_cost_factor: "£air_design_cost_texticon  Стоимость проекта среднего корпуса"
 
-#politics_l_russian
+ #politics_l_russian
  POLITICS_IDEOLOGY_POPULARITY_CHANGE:0 "£boost_popularity_texticon  $IDEOLOGY$: изменение популярности - $VALUE|+2%$"
 
-#production_l_russian
+ #production_l_russian
  BONUS_PRODUCTION_COST_FACTOR: "£mio_production_cost_texticon  Стоимость объемов производства"
  BONUS_PRODUCTION_CAPACITY_FACTOR: "£mio_production_capacity_texticon  Объемы производства"
  BONUS_PRODUCTION_EFFICIENCY_CAP_FACTOR: "£mio_efficiency_cap_texticon  Макс. эффективность производства"
@@ -1784,12 +1783,12 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  BONUS_PRODUCTION_RESOURCE_PENALTY_FACTOR: "£sabotaged_resource_texticon  Штраф к производственному ресурсу"
  BONUS_PRODUCTION_CONVERSION_SPEED_FACTOR: "£mio_conversion_speed_texticon  Скорость модификации производства"
 
-#research_l_russian
+ #research_l_russian
  air_equipment_research:2 "£research_speed_texticon  Темпы исследований авиации"
  support_tech_research:1 "£research_speed_texticon  Темпы исследований отрядов обеспечения"
  synth_resources_research:2 "£research_speed_texticon  Темпы исследований синтетических ресурсов"
 
-#resistance_and_occupation_l_russian
+ #resistance_and_occupation_l_russian
  RESISTANCE_TARGET_VALUE:0 "£political_violence_texticon  Цель сопротивления: $VALUE|H%0$"
  RESISTANCE_TARGET_VALUE_CAPPED:0 "£political_violence_texticon  Цель сопротивления: $VALUE|H%0$ (предел от $VALUE_NON_CAPPED|H%0$)"
  RESISTANCE_DECAY_VALUE:0 "£political_violence_loss_texticon  Спад сопротивления: §G$VALUE|3$%§!"
@@ -1811,7 +1810,7 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  RESISTANCE_CHANCE_FOR_GARRISON_PENETRATE:0 "£political_violence_texticon  Шанс на проникновение сопротивления в гарнизоны: $CHANCE|%.0H$"
  STABILITY_RESISTANCE_PENALTY:0 "£political_violence_texticon  Цель сопротивления на оккупированных территориях: $PENALTY|%%.0R$"
 
-#stats_l_russian
+ #stats_l_russian
  STAT_COMMON_MAX_ORG:0 "£organization_texticon  Организация: "
  STAT_ARMY_DEFAULT_MORALE:0 "£army_morale_texticon  Скорость восстанов.: "
  STAT_ARMY_COMBAT_WIDTH:0 "£combat_width_texticon  Ширина фронта: "
@@ -1908,13 +1907,13 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  STAT_STRATEGIC_ATTACK: "£strat_bombing_texticon  Стратегические бомбардировки"
  STAT_NAVY_WEATHER_PENALTY: "£strat_bombing_texticon  Штраф за погоду: "
 
-#terrain_l_russian
+ #terrain_l_russian
  MOVEMENT_COST:0 "£movement_texticon  Стоимость движения по местности этого типа x$VALUE|H$"
  TERRAIN_COMBAT_WIDTH_COMB:0 "£combat_width_texticon  Ширина фронта: $VALUE|0Y$ (дополнительные атаки: $ADD|0Y$)"
  TERRAIN_COMBAT_WIDTH:0 "£combat_width_texticon  Ширина фронта: $VALUE|0Y$"
  TERRAIN_ADDITIONAL_WIDTH:0 "£combat_width_texticon  Ширина фронта на каждом дополнительном направлении: $VALUE|=0Y$"
 
-#traits_l_russian
+ #traits_l_russian
  il_duce_laws_cost_tt: "  – £economy_laws_cost_texticon  Затраты на законы об экономике, торговле и призыве: §G−15%§!"
  SKILL_ATTACK:0 "£attack_texticon  §HАтака§!"
  SKILL_DEFENSE:0 "£defence_texticon  §HОборона§!"
@@ -1932,7 +1931,7 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  trait_bonus_coordination:0 "£coordination_texticon  Координация: $VAL|+=0$"
  expert_improviser_movement_bonus_on_land:0 "£movement_texticon  Бонус к скорости перемещения по суше: §G+10%§!"
 
-#unit_l_russian
+ #unit_l_russian
  ATTRITION: "£attrition_texticon  Потери от истощения"
  MODIFIER_NAVAL_INVASION_CAPACITY:0 "£naval_invasion_texticon  Вместимость морского вторжения"
  CURRENT_ORGANIZATION:0 "£organization_texticon  Организация: $CUR|0Y$/$MAX|0Y$"
