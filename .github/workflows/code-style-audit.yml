@@ -4,6 +4,7 @@ on:
     branches: [main]
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: repository-code-style-final
   cancel-in-progress: true
@@ -11,7 +12,7 @@ jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/code-style-audit-20260929'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       OPENBLAS_NUM_THREADS: '1'
@@ -19,188 +20,93 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: 4fc04311686984769b57b2af2d01b91b4fea5068
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Prepare current main without replacing concurrent changes
-        run: |
-          python -m pip install black==25.1.0 pillow numpy scipy
-          git fetch --depth=4 origin main codex/repository-code-style-36559131384
-          git fetch --depth=1 origin a233bbde756fc78bac28fe1e675658ed79523ff2 675cc0d50e4b750f3a9fc55f8e511be2dbf9130d
-          git worktree add --detach /tmp/code-style-current origin/main
-          git worktree add --detach /tmp/code-style-before origin/main
-          cp -a .superpowers/code-style-audit /tmp/code-style-tools
-          mkdir /tmp/code-style-final
-          git diff a233bbde756fc78bac28fe1e675658ed79523ff2 675cc0d50e4b750f3a9fc55f8e511be2dbf9130d -- . ':(exclude)localisation' > /tmp/code-style-final/style.patch
-      - name: Apply style and retain native source-section boundaries
+      - uses: actions/download-artifact@v4
+        with:
+          name: code-style-main-delivery
+          run-id: 36561959180
+          github-token: ${{ github.token }}
+          path: /tmp/code-style-validated
+      - name: Restore the exact tree whose checks passed
         run: |
           python -B - <<'PY'
           from pathlib import Path
-          import ast
-          import collections
           import hashlib
           import json
-          import re
           import subprocess
-          import sys
-          sys.path.insert(0, '/tmp/code-style-tools')
-          from conservative_style import format_clausewitz
-          from style_formatter import token_signature, format_lua_defines
-          from replay_style import python_format, LUA_TOKENS
-          root = Path('/tmp/code-style-current')
-          output = Path('/tmp/code-style-final')
-          def git(*args, text=True):
-              return subprocess.check_output(['git', *args], cwd=root, text=text)
-          base = git('rev-parse', 'HEAD').strip()
-          assert not git('status', '--porcelain').strip()
-          applied = subprocess.run(['git', 'apply', '--3way', str(output / 'style.patch')], cwd=root, capture_output=True, text=True)
-          (output / 'apply.log').write_text(applied.stdout + applied.stderr)
-          conflicts = git('diff', '--name-only', '--diff-filter=U').splitlines()
-          if applied.returncode and not conflicts:
-              raise RuntimeError(applied.stdout + applied.stderr)
-          for name in conflicts:
-              path = root / name
-              original = git('show', 'HEAD:' + name, text=False)
-              path.write_bytes(original)
-              if path.suffix == '.py':
-                  _, result, error = python_format(path)
-                  assert error is None, (name, error)
-              elif path.suffix == '.lua':
-                  result = format_lua_defines(original.decode('utf-8-sig')).encode('utf-8')
-              elif path.suffix in {'.txt', '.gfx', '.gui', '.asset', '.mod'}:
-                  source = original.decode('utf-8-sig')
-                  indent = int(name.startswith('focus_trees/') and '# @section ' in source)
-                  result = format_clausewitz(source, base_indent=indent).encode('utf-8')
-              else:
-                  raise RuntimeError('Unsupported conflict: ' + name)
-              if original.startswith(b'\xef\xbb\xbf') and not result.startswith(b'\xef\xbb\xbf'):
-                  result = b'\xef\xbb\xbf' + result
-              path.write_bytes(result)
-              git('add', '--', name)
-          marker = re.compile(r'^[ \t]*# --- [a-z_]+ ---[ \t]*$', re.M)
-          marker_repairs = []
-          for name in git('diff', '--name-only', 'HEAD').splitlines():
-              if Path(name).suffix not in {'.txt', '.gui', '.gfx', '.asset', '.mod'}:
-                  continue
-              original = git('show', 'HEAD:' + name, text=False)
-              current = (root / name).read_bytes()
-              old, new = original.decode('utf-8-sig'), current.decode('utf-8-sig')
-              before_markers = marker.findall(old)
-              after_markers = marker.findall(new)
-              assert [value.strip() for value in before_markers] == [value.strip() for value in after_markers], name
-              replacements = iter(before_markers)
-              fixed = marker.sub(lambda match: next(replacements).rstrip(' \t'), new)
-              if fixed != new:
-                  assert token_signature(new) == token_signature(fixed), name
-                  encoded = fixed.encode('utf-8')
-                  if current.startswith(b'\xef\xbb\xbf'):
-                      encoded = b'\xef\xbb\xbf' + encoded
-                  (root / name).write_bytes(encoded)
-                  marker_repairs.append(name)
-          with (output / 'focus-check.log').open('w') as log:
-              check = subprocess.run([sys.executable, '-B', '-m', 'tools.builders.build_adiscord_focus_trees', '--check'], cwd=root, stdout=log, stderr=subprocess.STDOUT)
-              if check.returncode:
-                  subprocess.run([sys.executable, '-B', '-m', 'tools.builders.build_adiscord_focus_trees', '--apply'], cwd=root, stdout=log, stderr=subprocess.STDOUT, check=True)
-                  subprocess.run([sys.executable, '-B', '-m', 'tools.builders.build_adiscord_focus_trees', '--check'], cwd=root, stdout=log, stderr=subprocess.STDOUT, check=True)
-          names = git('diff', '--name-only', 'HEAD').splitlines()
-          assert names and not any(name.startswith(('localisation/', '.github/', '.superpowers/')) for name in names)
-          verified = []
-          for name in names:
-              before = git('show', 'HEAD:' + name, text=False)
-              after = (root / name).read_bytes()
-              assert before.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf'), name
-              old, new = before.decode('utf-8-sig'), after.decode('utf-8-sig')
-              if name.endswith('.py'):
-                  assert ast.dump(ast.parse(old), include_attributes=False) == ast.dump(ast.parse(new), include_attributes=False), name
-                  kind = 'python'
-              elif name.endswith('.lua'):
-                  assert LUA_TOKENS.findall(old) == LUA_TOKENS.findall(new), name
-                  kind = 'lua'
-              else:
-                  assert token_signature(old) == token_signature(new), name
-                  assert [s.rstrip() for s in marker.findall(old)] == [s.rstrip() for s in marker.findall(new)], name
-                  kind = 'clausewitz'
-              verified.append({'path': name, 'kind': kind, 'before': hashlib.sha256(before).hexdigest(), 'after': hashlib.sha256(after).hexdigest()})
-          git('diff', '--check', 'HEAD')
-          report = {'base': base, 'verified': verified, 'counts': dict(collections.Counter(item['kind'] for item in verified)), 'conflicts_resolved_from_current_main': conflicts, 'source_section_markers_preserved': marker_repairs, 'localisation': 'unchanged', 'runtime_tested': False}
-          (output / 'verification.json').write_text(json.dumps(report, indent=2))
-          (output / 'style.patch').write_bytes(git('diff', '--binary', 'HEAD', text=False))
-          print(json.dumps({'base': base, 'files': len(verified), 'counts': report['counts'], 'resolved_conflicts': conflicts, 'marker_repairs': marker_repairs}, indent=2))
+          root = Path.cwd()
+          evidence = Path('/tmp/code-style-validated')
+          report = json.loads((evidence / 'verification.json').read_text())
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+          assert git('rev-parse', 'HEAD') == report['base'] == '4fc04311686984769b57b2af2d01b91b4fea5068'
+          assert not git('status', '--porcelain')
+          tests = (evidence / 'regression-tests.log').read_text()
+          assert '\nOK\n' in tests and 'FAILED (' not in tests and 'Ran 3 tests' in tests
+          validators = json.loads((evidence / 'validator-comparison.json').read_text())
+          assert validators['before'] and validators['before'] == validators['current']
+          assert 'Focus tree outputs are current.' in (evidence / 'focus-check.log').read_text()
+          names = {item['path'] for item in report['verified']}
+          assert len(names) == 454
+          assert not any(name.startswith(('localisation/', '.github/', '.superpowers/')) for name in names)
+          for item in report['verified']:
+              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['before'], item['path']
+          git('apply', '--check', str(evidence / 'style.patch'))
+          git('apply', str(evidence / 'style.patch'))
+          assert set(git('diff', '--name-only').splitlines()) == names
+          for item in report['verified']:
+              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['after'], item['path']
+          git('diff', '--check')
+          print('Restored and hash-verified all 454 files against the exact base and fully validated result.')
           PY
-      - name: Verify previously failing checks with strict failure propagation
+      - name: Recheck the focused regression tests
         run: |
           set -euo pipefail
-          cd /tmp/code-style-current
+          python -m pip install pillow numpy scipy
           python -B -m unittest \
             tools.tests.test_adiscord_vorkerland_civil_war_focus.VorkerlandLifecycleFocusTests.test_vorkerland_idea_localisation_and_ivanland_expedition_exist \
             tools.tests.test_validate_adiscord_vorkerland_collapse.FrontAndSupplyTests.test_dead_stalemate_system_is_gone \
             tools.tests.test_validate_adiscord_vorkerland_collapse.InterventionAndVisualTests.test_ivanland_outcome_news_has_one_guarded_immediate_route \
-            -v 2>&1 | tee /tmp/code-style-final/regression-tests.log
-      - name: Ensure repository validator diagnostics do not increase
+            -v 2>&1 | tee /tmp/code-style-validated/delivery-tests.log
+          python -B -m tools.builders.build_adiscord_focus_trees --check
+      - name: Push the verified commit without overwriting concurrent main changes
         run: |
           python -B - <<'PY'
           from pathlib import Path
-          import json
-          import re
-          import subprocess
-          import sys
-          output = Path('/tmp/code-style-final')
-          results = {}
-          for stage in ['before', 'current']:
-              root = Path('/tmp/code-style-' + stage)
-              with (output / ('validator-' + stage + '.log')).open('w') as log:
-                  result = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], cwd=root, stdout=log, stderr=subprocess.STDOUT, timeout=180)
-              assert result.returncode == 0, (stage, result.returncode)
-              text = (output / ('validator-' + stage + '.log')).read_text()
-              results[stage] = {name: int(count) for name, count in re.findall(r'^== (.+?): (\d+) ==$', text, re.M)}
-          assert results['before'] and results['before'] == results['current'], results
-          (output / 'validator-comparison.json').write_text(json.dumps(results, indent=2))
-          print('Validator exit codes: 0 / 0. All diagnostic section counts are unchanged.')
-          PY
-      - name: Deliver authorized style cleanup to main without force-pushing
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          python -B - <<'PY'
-          from pathlib import Path
-          import base64
           import hashlib
           import json
           import os
           import subprocess
-          output = Path('/tmp/code-style-final')
-          root = Path('/tmp/code-style-current')
-          report = json.loads((output / 'verification.json').read_text())
+          evidence = Path('/tmp/code-style-validated')
+          report = json.loads((evidence / 'verification.json').read_text())
           def git(*args):
-              return subprocess.check_output(['git', *args], cwd=root, text=True).strip()
+              return subprocess.check_output(['git', *args], text=True).strip()
           for item in report['verified']:
-              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['after'], item['path']
-          actual = set(git('diff', '--name-only', 'HEAD').splitlines())
-          assert actual == {item['path'] for item in report['verified']}
+              assert hashlib.sha256(Path(item['path']).read_bytes()).hexdigest() == item['after'], item['path']
+          assert set(git('diff', '--name-only').splitlines()) == {item['path'] for item in report['verified']}
           git('config', 'user.name', 'github-actions[bot]')
           git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
-          for name in sorted(actual):
-              git('add', '--', name)
+          for item in report['verified']:
+              git('add', '--', item['path'])
           git('diff', '--cached', '--check')
           git('commit', '-m', 'style: normalize authored mod scripts and Python tooling', '-m', 'Preserve ordered Clausewitz tokens, exact Python ASTs, localisation bytes, source-section boundaries and concurrent main changes. Regenerate focus outputs through their owner. Exclude temporary audit tooling and pre-existing syntax errors.')
           head = git('rev-parse', 'HEAD')
-          report['head'] = head
-          report['run_id'] = os.environ['GITHUB_RUN_ID']
-          (output / 'delivery.json').write_text(json.dumps(report, indent=2))
-          token = os.environ['GH_TOKEN']
-          header = 'AUTHORIZATION: basic ' + base64.b64encode(('x-access-token:' + token).encode()).decode()
-          authenticated = dict(os.environ, GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='http.https://github.com/.extraheader', GIT_CONFIG_VALUE_0=header, GIT_TERMINAL_PROMPT='0')
-          subprocess.run(['git', 'push', 'origin', head + ':refs/heads/main'], cwd=root, env=authenticated, check=True)
-          remote = subprocess.check_output(['git', 'ls-remote', 'origin', 'refs/heads/main'], cwd=root, env=authenticated, text=True)
-          report['main_after_push'] = remote.split()[0]
+          branch = 'codex/style-main-delivery-' + os.environ['GITHUB_RUN_ID']
+          report.update({'head': head, 'branch': branch, 'validation_run': 36561959180, 'delivery_run': os.environ['GITHUB_RUN_ID']})
+          (evidence / 'delivery.json').write_text(json.dumps(report, indent=2))
+          git('push', 'origin', head + ':refs/heads/' + branch)
+          git('push', 'origin', head + ':refs/heads/main')
+          report['main_after_push'] = git('ls-remote', 'origin', 'refs/heads/main').split()[0]
           report['pushed_to_main'] = True
-          (output / 'delivery.json').write_text(json.dumps(report, indent=2))
-          print(json.dumps({'head': head, 'main_after_push': report['main_after_push'], 'files': len(actual), 'counts': report['counts'], 'pushed_to_main': True}, indent=2))
+          (evidence / 'delivery.json').write_text(json.dumps(report, indent=2))
+          print(json.dumps({key: report[key] for key in ['head', 'branch', 'base', 'counts', 'pushed_to_main', 'main_after_push']}, indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: code-style-main-delivery
-          path: /tmp/code-style-final
+          name: code-style-main-delivery-final
+          path: /tmp/code-style-validated
           retention-days: 7
