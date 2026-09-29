@@ -36,7 +36,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_bolt_head_fitting
 			research_cost_coeff = 1
 		}
-		research_cost = 0.3
+		research_cost = 1.2
 		start_year = 2150
 		folder = {
 			name = infantry_folder
@@ -64,7 +64,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_chamber_polishing
 			research_cost_coeff = 1
 		}
-		research_cost = 0.3
+		research_cost = 1.2
 		start_year = 2150
 		folder = {
 			name = infantry_folder
@@ -92,7 +92,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_refurbished_receivers
 			research_cost_coeff = 1
 		}
-		research_cost = 0.3
+		research_cost = 1.2
 		start_year = 2150
 		folder = {
 			name = infantry_folder
@@ -149,7 +149,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_caseless_ammunition_trials
 			research_cost_coeff = 1
 		}
-		research_cost = 0.3
+		research_cost = 1.2
 		start_year = 2158
 		folder = {
 			name = infantry_folder
@@ -178,7 +178,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_primer_consistency
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2160
 		folder = {
 			name = infantry_folder
@@ -206,7 +206,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_sealed_receiver_assemblies
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2161
 		folder = {
 			name = infantry_folder
@@ -265,7 +265,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_magazine_feed_geometry
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2163
 		folder = {
 			name = infantry_folder
@@ -294,7 +294,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_extractor_heat_treatment
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2163
 		folder = {
 			name = infantry_folder
@@ -323,7 +323,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_smart_recoil_compensators
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2163
 		folder = {
 			name = infantry_folder
@@ -382,7 +382,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_bolt_carrier_guides
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2164
 		folder = {
 			name = infantry_folder
@@ -411,7 +411,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_trigger_reset_geometry
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2164
 		folder = {
 			name = infantry_folder
@@ -440,7 +440,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_smart_optics
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2164
 		folder = {
 			name = infantry_folder
@@ -499,7 +499,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_rangefinder_zeroing
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2166
 		folder = {
 			name = infantry_folder
@@ -528,7 +528,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_sight_mount_repeatability
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2166
 		folder = {
 			name = infantry_folder
@@ -557,7 +557,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_modular_rifle_kits
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2166
 		folder = {
 			name = infantry_folder
@@ -616,7 +616,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_integrated_target_designation
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2168
 		folder = {
 			name = infantry_folder
@@ -643,7 +643,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_gas_regulator_sealing
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2169
 		folder = {
 			name = infantry_folder
@@ -672,7 +672,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_programmable_ammunition
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2169
 		folder = {
 			name = infantry_folder
@@ -731,7 +731,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_chamber_erosion_control
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2170
 		folder = {
 			name = infantry_folder
@@ -760,7 +760,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_barrel_heat_treatment
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2171
 		folder = {
 			name = infantry_folder
@@ -789,7 +789,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_coil_assisted_service_rifles
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2171
 		folder = {
 			name = infantry_folder
@@ -848,7 +848,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_muzzle_compensation_ports
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2173
 		folder = {
 			name = infantry_folder
@@ -877,7 +877,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_hybrid_kinetic_energy_carbines
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2174
 		folder = {
 			name = infantry_folder
@@ -906,7 +906,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_networked_service_rifles
 			research_cost_coeff = 1
 		}
-		research_cost = 0.4
+		research_cost = 1.2
 		start_year = 2175
 		folder = {
 			name = infantry_folder

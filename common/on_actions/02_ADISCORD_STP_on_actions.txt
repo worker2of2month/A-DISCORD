@@ -244,13 +244,17 @@ on_actions = {
 					FROM = { tag = VAL }
 				}
 				clr_country_flag = STP_kc_preparing
+				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 			}
 			else_if = {
 				limit = {
 					ROOT = { tag = VAL }
 					FROM = { OR = { tag = STP tag = STS } }
 				}
-				FROM = { clr_country_flag = STP_kc_preparing }
+				FROM = {
+					clr_country_flag = STP_kc_preparing
+					country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+				}
 			}
 			if = {
 				limit = {

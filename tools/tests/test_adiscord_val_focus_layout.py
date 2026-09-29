@@ -185,11 +185,7 @@ class KefreytWarTooltipTests(unittest.TestCase):
                             direct_wars.append(id_match.group(1))
                         break
 
-        native_wars = {"VAL_Island_Operation"}
-        self.assertEqual(set(direct_wars), set(expected) | native_wars)
-        for focus_id in native_wars:
-            block = focus_block(self.focuses, focus_id)
-            self.assertIn("\n\t\t\tdeclare_war_on = { target = SLI type = annex_everything }", block)
+        self.assertEqual(set(direct_wars), set(expected))
         for focus_id, tooltip in expected.items():
             block = focus_block(self.focuses, focus_id)
             self.assertIn(f"custom_effect_tooltip = {tooltip}", block)

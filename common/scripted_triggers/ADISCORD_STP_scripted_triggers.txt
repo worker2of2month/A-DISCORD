@@ -695,7 +695,9 @@ STP_cw_northern_enemy_blocks_subject_entry = {
 # ROOT is the caller and FROM is the recipient; this hook has no selected-war scope.
 STP_cw_northern_call_blocked = {
 	tag = NOD
-	FROM = { tag = STP }
+	FROM = {
+		OR = { tag = STP tag = SLI }
+	}
 	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
 }
 

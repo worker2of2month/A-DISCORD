@@ -3295,7 +3295,7 @@ STP_cw_war_council = {
 		fire_only_once = no
 		days_re_enable = 30
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = STP }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = STP }
 			hidden_effect = { STP_cw_spend_1200 = yes }
 		}
 		ai_will_do = {

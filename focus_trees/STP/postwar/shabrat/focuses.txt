@@ -1343,7 +1343,10 @@
 		mutually_exclusive = { focus = STP_pc_val_ratify }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_intel = { target = VAL army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_val_campaign		}
+			hidden_effect = { country_event = { id = ADISCORD_STP_cw.208 hours = 1 } }
+			add_intel = { target = VAL army_intel = 20 }
+			unlock_decision_tooltip = STP_pw_prepare_val_campaign
+		}
 	}
 
 	focus = {
@@ -1525,7 +1528,10 @@
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			custom_effect_tooltip = STP_heg_northern_war_tt
-			hidden_effect = { STP_heg_start_northern_final_war = yes }
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+				STP_heg_start_northern_final_war = yes
+			}
 		}
 	}
 
@@ -1857,6 +1863,7 @@
 		prerequisite = { focus = STP_pc_lib_local_contacts }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_STP_cw.208 hours = 1 } }
 			add_command_power = 30
 			add_ideas = STP_pc_border_watch
 		}

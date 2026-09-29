@@ -1285,7 +1285,13 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { OR = { tag = STS tag = VAL } STS = { exists = yes STP_pw_can_reconstruct = yes } }
-	immediate = { if = { limit = { tag = STS } set_country_flag = STP_pc_val_crisis } }
+	immediate = {
+		if = {
+			limit = { tag = STS }
+			set_country_flag = STP_pc_val_crisis
+			country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+		}
+	}
 	option = {
 		name = ADISCORD_STP_pc.9.a
 		trigger = { tag = STS }
@@ -1301,6 +1307,7 @@ country_event = {
 			hidden_effect = {
 				STS = {
 					set_country_flag = STP_pc_val_terms_accepted
+					country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
 					if = {
 						limit = { has_country_flag = STP_pc_hegemony_league }
 						STP_pc_form_hegemony_league = yes
@@ -2179,6 +2186,15 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { STP_cw_reconcile_scripted_peace = yes }
+}
+
+# Focus rewards run before has_completed_focus sees the unlocking focus.
+country_event = {
+	id = ADISCORD_STP_cw.208
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { OR = { tag = STP tag = STS } }
+	immediate = { mark_focus_tree_layout_dirty = yes }
 }
 
 # Party postwar settlement: appointments, command and reconstruction contracts.

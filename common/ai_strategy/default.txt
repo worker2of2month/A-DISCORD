@@ -310,8 +310,8 @@ ADISCORD_active_enemy_front_concentration = {
 }
 
 # Against an enemy whose field army is half again as strong, uncontrolled fronts
-# hold and recover instead of attacking. Country profiles with a higher
-# front_control priority keep their scripted campaigns. FROM is our country.
+# use careful planned attacks, retaining native readiness checks. Higher-priority
+# country profiles keep their scripted campaigns. FROM is our country.
 ADISCORD_hold_against_stronger_enemy = {
 	enable = {
 		is_ai = yes
@@ -330,7 +330,7 @@ ADISCORD_hold_against_stronger_enemy = {
 		priority = 900
 		ordertype = front
 		execution_type = careful
-		execute_order = no
+		execute_order = yes
 		manual_attack = no
 	}
 }

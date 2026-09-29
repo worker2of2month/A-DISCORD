@@ -56,12 +56,24 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             generator.research_cost_for(branch, index, (), ())
             for index in range(len(branch.techs))
         )
-        self.assertGreaterEqual(cost, 25)
-        self.assertLessEqual(cost, 26)
+        self.assertGreaterEqual(cost, 44)
+        self.assertLessEqual(cost, 45)
         self.assertTrue(
             {tech.id for tech in branch.techs[:4]}
             <= set(generator.STARTING_TECH_PROFILES["common"])
         )
+
+    def test_weapon_modifications_keep_work_after_bonus_and_saved_research(self):
+        branch = generator.BRANCH_BY_KEY["small_arms"]
+        # Pricing envelope: 110 base points, a 50% discount, +50% speed
+        # and a full 30-day bank must still leave at least two weeks of work.
+        for index, tech in enumerate(branch.techs):
+            if tech.id in generator.ENABLE_EQUIPMENT:
+                continue
+            with self.subTest(technology=tech.id):
+                rendered = generator.render_technology(branch, index)
+                cost = float(re.search(r"research_cost = ([\d.]+)", rendered).group(1))
+                self.assertGreaterEqual(cost * 110 * 0.5 / 1.5 - 30, 14)
 
     def test_same_year_weapon_modifications_have_separate_dated_cells(self):
         branch = generator.BRANCH_BY_KEY["small_arms"]

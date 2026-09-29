@@ -5,6 +5,14 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_STP_cw.208",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 208,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pw.6",
       "namespace": "ADISCORD_STP_pw",
       "number": 6,
@@ -3754,7 +3762,7 @@
       "number": 2,
       "owner": "events/ADISCORD_SLI_events.txt",
       "subsystem": "stelander_islands",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_SLI.3",

@@ -84,30 +84,26 @@ class StelanderIslandsTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertFalse(matches_conditions(trigger, changed, "VAL"))
 
-    def test_changed_treaty_has_only_a_close_option(self):
-        event = next(
-            item.value for item in entries("events/ADISCORD_SLI_events.txt")
-            if item.key == "country_event" and scalar(item.value, "id") == "ADISCORD_SLI.2"
-        )
-        options = [item.value for item in event if item.key == "option"]
-        scenarios = (
-            (True, {"ADISCORD_SLI.2.a", "ADISCORD_SLI.2.b"}),
-            (False, {"ADISCORD_SLI.2.c"}),
-        )
-        for valid, expected in scenarios:
-            facts = {
-                ("VAL", "VAL_island_treaty_available", "yes"): valid,
-                ("VAL", "VAL_island_treaty_available", "no"): not valid,
-            }
-            visible = {
-                scalar(option, "name") for option in options
-                if matches_conditions(block(option, "trigger"), facts, "SLI")
-            }
-            self.assertEqual(visible, expected)
-        accepted = options[0]
-        annexations = [item.value for item in walk(accepted) if item.key == "annex_country"]
-        self.assertEqual(len(annexations), 1)
-        self.assertEqual(scalar(annexations[0], "target"), "SLI")
+    def test_decision_annexes_immediately_without_council_choice(self):
+        category = block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")
+        decision = block(category, "VAL_Island_Treaty")
+        self.assertEqual(scalar(decision, "cost"), "0")
+        self.assertEqual(scalar(block(decision, "visible"), "has_completed_focus"), "VAL_Contracts_Outlive_Kings")
+        self.assertEqual(scalar(block(block(decision, "available"), "custom_trigger_tooltip"), "VAL_island_treaty_available"), "yes")
+        for eligible in (False, True):
+            effects = list(selected_effects(
+                block(decision, "complete_effect"),
+                {("VAL", "VAL_island_treaty_available", "yes"): eligible},
+                "VAL",
+            ))
+            annexations = [item.value for scope, item in effects if scope == "VAL" and item.key == "annex_country"]
+            self.assertEqual(len(annexations), int(eligible))
+            if eligible:
+                self.assertEqual(scalar(annexations[0], "target"), "SLI")
+                self.assertEqual(scalar(annexations[0], "transfer_troops"), "yes")
+            self.assertFalse(any(item.key == "declare_war_on" for _, item in effects))
+        events = entries("events/ADISCORD_SLI_events.txt")
+        self.assertFalse(any(scalar(item.value, "id") == "ADISCORD_SLI.2" for item in events if isinstance(item.value, list)))
 
 
 if __name__ == "__main__":

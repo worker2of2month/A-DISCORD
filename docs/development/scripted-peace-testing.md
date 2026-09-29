@@ -25,6 +25,13 @@ This is an authored bounded treaty, not a reason to annex all ERT for VAL or to
 repaint the exclusion zone. STP/STS versus VAL, the Occidian package (including
 45), the northern 17/18 settlement and NAM's partition keep their existing rules.
 
+Shabrat's final hegemony victories over NOD and VAL impose their existing
+provisional administrations immediately after technical white peace. The
+surviving country must be an STS subject; a defeat receipt alone is insufficient.
+Full integration remains the existing paid 90-day decision. Verify the subject
+relationship after each final victory, including Kefreyt's Last Contract, and
+confirm that an earlier limited war does not impose this final settlement.
+
 ## In-game controls
 
 Launch with `-debug`. Decisions → **DEBUG: A-Discord Scenarios**. The added war

@@ -1093,6 +1093,8 @@ country_event = {
 					flag = VAL_stelander_truce
 					days = 180
 				}
+				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+				country_event = { id = ADISCORD_STP_cw.208 days = 180 hours = 1 }
 				add_timed_idea = {
 					idea = VAL_stelander_trade_terms
 					days = 180

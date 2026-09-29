@@ -549,7 +549,7 @@ class CivilWarContracts(unittest.TestCase):
         self.assertIn("has_country_flag = VAL_campaign_target", release)
         self.assertIn("character = STP_maksim_shabrat", release)
 
-    def test_northern_call_excludes_only_nod_to_stelander_until_peace(self):
+    def test_northern_call_excludes_nod_to_stelander_and_islands_until_peace(self):
         triggers = entries(
             "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
         )
@@ -559,7 +559,7 @@ class CivilWarContracts(unittest.TestCase):
             "DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER",
         )
         for caller in ("NOD", "VAL", "STP"):
-            for recipient in ("STP", "VAL", "NOD"):
+            for recipient in ("STP", "SLI", "VAL", "NOD"):
                 for enemy in (None, "YPR", "COF", "TFF", "VAL"):
                     with self.subTest(caller=caller, recipient=recipient, enemy=enemy):
                         facts = {}
@@ -575,7 +575,7 @@ class CivilWarContracts(unittest.TestCase):
                         )
                         expected = (
                             caller == "NOD"
-                            and recipient == "STP"
+                            and recipient in ("STP", "SLI")
                             and enemy in ("YPR", "COF", "TFF")
                         )
                         self.assertEqual(denied, expected)

@@ -63,10 +63,27 @@ focus_tree = {
 	focus = {
 		id = STP_kc_emergency_staff
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = -20
+		x = -8
 		y = 0
+		# Relative children follow this root across the wartime and postwar layouts.
+		offset = {
+			x = 21
+			y = 13
+			trigger = {
+				tag = STP
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		offset = {
+			x = 15
+			y = 16
+			trigger = {
+				tag = STS
+				has_country_flag = STP_cw_postwar
+			}
+		}
 		cost = 1
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_threat_current_tt
@@ -96,7 +113,7 @@ focus_tree = {
 		relative_position_id = STP_kc_emergency_staff
 		prerequisite = { focus = STP_kc_emergency_staff }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt
@@ -120,7 +137,7 @@ focus_tree = {
 		relative_position_id = STP_kc_emergency_staff
 		prerequisite = { focus = STP_kc_emergency_staff }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt
@@ -148,7 +165,7 @@ focus_tree = {
 		prerequisite = { focus = STP_kc_war_production }
 		prerequisite = { focus = STP_kc_army_supply }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt
@@ -2631,6 +2648,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		search_filters = { FOCUS_FILTER_ANNEXATION }
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_STP_cw.208 hours = 1 } }
 			unlock_decision_tooltip = STP_pw_party_launch_kefreyt_operation
 			custom_effect_tooltip = STP_pw_party_launch_kefreyt_operation_unlock_summary_tt
 
@@ -4312,7 +4330,10 @@ focus_tree = {
 		mutually_exclusive = { focus = STP_pc_val_ratify }
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			add_intel = { target = VAL army_intel = 20 } unlock_decision_tooltip = STP_pw_prepare_val_campaign		}
+			hidden_effect = { country_event = { id = ADISCORD_STP_cw.208 hours = 1 } }
+			add_intel = { target = VAL army_intel = 20 }
+			unlock_decision_tooltip = STP_pw_prepare_val_campaign
+		}
 	}
 
 	focus = {
@@ -4494,7 +4515,10 @@ focus_tree = {
 		ai_will_do = { base = 6 }
 		completion_reward = {
 			custom_effect_tooltip = STP_heg_northern_war_tt
-			hidden_effect = { STP_heg_start_northern_final_war = yes }
+			hidden_effect = {
+				country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+				STP_heg_start_northern_final_war = yes
+			}
 		}
 	}
 
@@ -4826,6 +4850,7 @@ focus_tree = {
 		prerequisite = { focus = STP_pc_lib_local_contacts }
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			hidden_effect = { country_event = { id = ADISCORD_STP_cw.208 hours = 1 } }
 			add_command_power = 30
 			add_ideas = STP_pc_border_watch
 		}

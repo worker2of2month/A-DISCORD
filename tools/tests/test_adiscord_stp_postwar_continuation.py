@@ -2241,6 +2241,72 @@ class KefreytEmergencyContracts(unittest.TestCase):
             ("VAL", "is_subject", "no"): True,
         }
 
+    def test_emergency_branch_visibility_follows_current_threat(self):
+        for focus_id, focus in self.focuses.items():
+            if not focus_id.startswith("STP_kc_"):
+                continue
+            visibility = expand(block(focus, "allow_branch"))
+            for tag in ("STP", "STS", "SRP"):
+                facts = self.facts(tag)
+                for at_war in (False, True):
+                    facts[(tag, "has_war_with", "VAL")] = at_war
+                    with self.subTest(focus=focus_id, tag=tag, war=at_war):
+                        self.assertEqual(
+                            matches_conditions(visibility, facts, tag),
+                            at_war and tag != "SRP",
+                        )
+                facts[(tag, "has_war_with", "VAL")] = False
+                facts[(tag, "has_country_flag", "STP_cw_postwar")] = True
+                unlock = (
+                    "STP_pw_party_kefreyt_campaign" if tag == "STP"
+                    else "STP_pc_heg_val_force"
+                )
+                facts[(tag, "has_completed_focus", unlock)] = True
+                self.assertEqual(matches_conditions(visibility, facts, tag), tag != "SRP")
+                facts[(tag, "has_country_flag", "VAL_stelander_truce")] = True
+                self.assertFalse(matches_conditions(visibility, facts, tag))
+
+    def test_emergency_branch_moves_with_campaign_phase(self):
+        root = self.focuses["STP_kc_emergency_staff"]
+        offsets = [item.value for item in root if item.key == "offset"]
+
+        def position(focus_id):
+            focus = self.focuses[focus_id]
+            anchors = [item.value for item in focus if item.key == "relative_position_id"]
+            base = position(anchors[0]) if anchors else (0, 0)
+            return base[0] + int(scalar(focus, "x")), base[1] + int(scalar(focus, "y"))
+
+        other_positions = {
+            position(focus_id) for focus_id in self.focuses
+            if not focus_id.startswith("STP_kc_")
+        }
+        for tag, postwar, expected in (
+            ("STP", False, (-8, 0)), ("STS", False, (-8, 0)),
+            ("STP", True, (13, 13)), ("STS", True, (7, 16)),
+        ):
+            facts = {(tag, "has_country_flag", "STP_cw_postwar"): postwar}
+            x, y = int(scalar(root, "x")), int(scalar(root, "y"))
+            for offset in offsets:
+                if matches_conditions(expand(block(offset, "trigger")), facts, tag):
+                    x += int(scalar(offset, "x"))
+                    y += int(scalar(offset, "y"))
+            with self.subTest(tag=tag, postwar=postwar):
+                self.assertEqual((x, y), expected)
+                branch_positions = {(x, y), (x - 2, y + 1), (x + 2, y + 1), (x, y + 2)}
+                self.assertFalse(branch_positions & other_positions)
+
+    def test_preparation_unlocks_refresh_after_focus_completion(self):
+        for focus_id in (
+            "STP_pw_party_kefreyt_campaign", "STP_pc_heg_val_force",
+            "STP_pc_heg_final_north", "STP_pc_lib_crisis",
+        ):
+            reward = block(self.focuses[focus_id], "completion_reward")
+            delayed = [item.value for item in walk(block(reward, "hidden_effect"))
+                       if item.key == "country_event"
+                       and scalar(item.value, "id") == "ADISCORD_STP_cw.208"]
+            self.assertEqual(len(delayed), 1, focus_id)
+            self.assertEqual(scalar(delayed[0], "hours"), "1")
+
     def test_attack_opens_seven_day_relief_without_postwar_prerequisites(self):
         self.assertIn("STP_kc_emergency_staff", self.focuses)
         focus = self.focuses["STP_kc_emergency_staff"]
@@ -2327,7 +2393,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
             ("STS", "NOD", None), ("VAL", "SRP", None),
         ):
             scoped = expand(effect, {"ROOT": root, "FROM": sender})
-            actions = selected_effects(scoped, {}, root)
+            actions = list(selected_effects(scoped, {}, root))
             cleared = [
                 scope for scope, entry in actions
                 if entry.key == "clr_country_flag"
@@ -2335,6 +2401,12 @@ class KefreytEmergencyContracts(unittest.TestCase):
             ]
             with self.subTest(root=root, sender=sender):
                 self.assertEqual(cleared, [recipient] if recipient else [])
+                refreshed = [
+                    scope for scope, entry in actions
+                    if entry.key == "country_event"
+                    and scalar(entry.value, "id") == "ADISCORD_STP_cw.208"
+                ]
+                self.assertEqual(refreshed, [recipient] if recipient else [])
 
     def test_defeat_and_target_removal_cancel_unused_prewar_bonuses(self):
         cancel = expand(block(block(self.ideas, "STP_kc_defence"), "cancel"))

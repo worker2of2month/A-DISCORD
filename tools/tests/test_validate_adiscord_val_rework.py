@@ -2176,9 +2176,9 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.variables["VAL_contract_authority"] = 95
         self.facts[("VAL", "has_country_flag", "VAL_mercenary_state")] = True
         self.run_effect("VAL_initialize_contract_authority")
-        self.assertAlmostEqual(self.variables["VAL_contract_org_factor"], 0.15)
+        self.assertAlmostEqual(self.variables["VAL_contract_org_factor"], 0.13)
         self.assertAlmostEqual(self.variables["VAL_contract_pp_gain"], 0)
-        self.assertAlmostEqual(self.variables["VAL_contract_org_regain"], 0.12)
+        self.assertAlmostEqual(self.variables["VAL_contract_org_regain"], 0.10)
         self.modifiers.remove("VAL_contract_state")
         snapshot = dict(self.variables)
         self.run_effect("VAL_initialize_contract_authority")

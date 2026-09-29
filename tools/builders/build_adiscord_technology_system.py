@@ -7714,7 +7714,8 @@ def research_cost_for(
     if branch.profile.startswith("forbidden_"):
         return 2.60 + index * (0.18 if len(branch.techs) > 3 else 0.35)
     if branch.key == "small_arms" and tech.id not in ENABLE_EQUIPMENT:
-        return 0.30 if year <= 2158 else 0.40
+        # Intermediate upgrades need room for saved research and focus bonuses.
+        return 1.20
     if year <= 2158:
         return 0.55
 

@@ -60,10 +60,27 @@ focus_tree = {
 	focus = {
 		id = STP_kc_emergency_staff
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = -20
+		x = -8
 		y = 0
+		# Relative children follow this root across the wartime and postwar layouts.
+		offset = {
+			x = 21
+			y = 13
+			trigger = {
+				tag = STP
+				has_country_flag = STP_cw_postwar
+			}
+		}
+		offset = {
+			x = 15
+			y = 16
+			trigger = {
+				tag = STS
+				has_country_flag = STP_cw_postwar
+			}
+		}
 		cost = 1
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_threat_current_tt
@@ -93,7 +110,7 @@ focus_tree = {
 		relative_position_id = STP_kc_emergency_staff
 		prerequisite = { focus = STP_kc_emergency_staff }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt
@@ -117,7 +134,7 @@ focus_tree = {
 		relative_position_id = STP_kc_emergency_staff
 		prerequisite = { focus = STP_kc_emergency_staff }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt
@@ -145,7 +162,7 @@ focus_tree = {
 		prerequisite = { focus = STP_kc_war_production }
 		prerequisite = { focus = STP_kc_army_supply }
 		cost = 2
-		allow_branch = { OR = { tag = STP tag = STS } }
+		allow_branch = { STP_kc_threat_current = yes }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_support_active_tt

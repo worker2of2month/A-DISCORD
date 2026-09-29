@@ -4168,6 +4168,18 @@ STP_cw_end_nod_intervention = {
 # Each recipient owns its deferred event so ROOT remains the country whose
 # war is being checked. An annexed NOD can only close its abandoned campaign.
 STP_cw_queue_peace_reconciliation = {
+	STP = {
+		if = {
+			limit = { exists = yes has_country_flag = STP_cw_participant }
+			country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+		}
+	}
+	STS = {
+		if = {
+			limit = { exists = yes has_country_flag = STP_cw_participant }
+			country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+		}
+	}
 	NOD = {
 		if = {
 			limit = {
@@ -5211,6 +5223,8 @@ STP_close_competing_ultimatum_wars_after_defeat = {
 			white_peace = VAL
 			# Prevent Kefreyt from immediately reopening the same refused ultimatum.
 			set_country_flag = { flag = VAL_stelander_truce days = 180 }
+			country_event = { id = ADISCORD_STP_cw.208 hours = 1 }
+			country_event = { id = ADISCORD_STP_cw.208 days = 180 hours = 1 }
 			clr_country_flag = VAL_stelander_refused
 		}
 		if = {
@@ -5359,6 +5373,10 @@ STP_pc_begin_settlement = {
 			else = {
 				NOD = { set_country_flag = STP_pc_defeated_by_sts }
 				if = { limit = { has_war_with = NOD } white_peace = NOD }
+				if = {
+					limit = { has_country_flag = STP_heg_northern_final_started }
+					STP_heg_prepare_nod_administration = yes
+				}
 			}
 		}
 		else_if = {
@@ -8653,8 +8671,8 @@ STP_pc_finalize_nod_client_subject = {
 	}
 }
 
-# STS: the second hegemony war has its own settlement. It does not replay the
-# first Kefreyt settlement or replace Kefreyt's government.
+# STS: the final war imposes a provisional administration after the technical
+# peace. Full integration remains a separate paid operation.
 STP_heg_settle_kefreyt_final = {
 	if = {
 		limit = {
@@ -8673,6 +8691,7 @@ STP_heg_settle_kefreyt_final = {
 			white_peace = STS
 		}
 		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		STP_heg_prepare_val_administration = yes
 		clr_country_flag = STP_heg_kefreyt_final_started
 		set_country_flag = STP_heg_kefreyt_final_won
 		ADISCORD_economy_update_postwar_demobilization = yes

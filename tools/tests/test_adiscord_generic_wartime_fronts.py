@@ -51,6 +51,25 @@ def named_blocks(source: str, name: str) -> list[str]:
 
 
 class GenericWartimeFrontTests(unittest.TestCase):
+    def test_stronger_enemy_does_not_permanently_disable_planned_attacks(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_hold_against_stronger_enemy")
+        self.assertTrue(profile)
+        enable = named_block(profile, "enable")
+        for guard in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(guard, enable)
+        self.assertIn("abort_when_not_enabled = yes", profile)
+        control = named_block(profile, "ai_strategy")
+        target = named_block(control, "country_trigger")
+        self.assertIn("has_war_with = FROM", target)
+        self.assertIn("fighting_army_strength_ratio", target)
+        self.assertIn("execution_type = careful", control)
+        self.assertIn("execute_order = yes", control)
+        self.assertIn("manual_attack = no", control)
+        priority = re.search(r"\bpriority\s*=\s*(\d+)", control)
+        self.assertIsNotNone(priority)
+        self.assertLess(int(priority.group(1)), 1100)
+
     def test_every_war_gets_a_dynamic_front_request(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
         profile = named_block(source, "ADISCORD_active_enemy_front_concentration")

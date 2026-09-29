@@ -162,6 +162,62 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
             "set_country_flag = STP_heg_kefreyt_final_member", hegemony_actions
         )
 
+    def test_final_kefreyt_victory_subordinates_the_surviving_government(self):
+        self.assert_final_administration("VAL", "STP_heg_settle_kefreyt_final")
+
+    def test_final_nod_victory_subordinates_the_surviving_government(self):
+        self.assert_final_administration("NOD", "STP_pc_begin_settlement")
+
+    def assert_final_administration(self, opponent, effect_name):
+        from tools.tests.test_adiscord_stp_preparation import (
+            entries,
+            scalar,
+            selected_effects,
+        )
+
+        effects = {
+            e.key: e.value
+            for e in entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        }
+        final_flag = {
+            "VAL": "STP_heg_kefreyt_final_started",
+            "NOD": "STP_heg_northern_final_started",
+        }[opponent]
+        for final_campaign in (False, True):
+            with self.subTest(opponent=opponent, final_campaign=final_campaign):
+                facts = {
+                    ("STS", "has_country_flag", final_flag): final_campaign,
+                    ("STS", "has_war_with", opponent): True,
+                    ("STS", "variable", "STP_pc_cap_side"): 2,
+                    (opponent, "exists", "yes"): True,
+                }
+                outcomes = []
+
+                def run(items, scope="STS"):
+                    for country, entry in selected_effects(items, facts, scope):
+                        if entry.key.startswith("STP_heg_prepare_"):
+                            run(effects[entry.key], country)
+                        elif entry.key == "white_peace":
+                            facts[(country, "has_war_with", entry.value)] = False
+                            facts[(entry.value, "has_war_with", country)] = False
+                        elif entry.key == "set_autonomy":
+                            self.assertFalse(facts[("STS", "has_war_with", opponent)])
+                            outcomes.append(
+                                (
+                                    country,
+                                    scalar(entry.value, "target"),
+                                    scalar(entry.value, "autonomy_state"),
+                                )
+                            )
+
+                run(effects[effect_name])
+                self.assertEqual(
+                    outcomes,
+                    [("STS", opponent, "autonomy_STP_provisional_administration")]
+                    if final_campaign else [],
+                    "A final military victory must change the surviving government's status",
+                )
+
     def test_late_hegemony_focuses_are_shorter(self) -> None:
         focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         expected = {

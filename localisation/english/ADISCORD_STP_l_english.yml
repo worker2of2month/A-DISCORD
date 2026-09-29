@@ -2338,7 +2338,7 @@
  STP_party_district_survey_tt: "In an accessible Niansas: §G+10§! Party influence. Resistance preparations are preserved."
  STP_party_mobile_reserve_tt: "At the split, the Party will also attempt to pay for §Y2 brigades§! from its share of the stockpiles: £manpower_texticon §Y12000§! and £infantry_equipment_texticon §Y10800§! in total. Unpaid units will not appear. The stated offensive preparation lasts §Y35 days from the start of hostilities§!."
  STP_ps_asylum_scope_tt: "The agreement covers asylum for the Party leadership and evacuated funds. Control of Nodrul is not transferred to the player."
- STP_cw_northern_call_blocked_tt: "Nodrul cannot call Stelander into the war while the northern war continues."
+ STP_cw_northern_call_blocked_tt: "Nodrul cannot call Stelander or the Stelander Islands into war while the northern war continues."
  STP_pw_take_bezhaysk: "Take Bezhaysk"
  STP_pw_take_bezhaysk_desc: "The civil war has ended, and the army once again has unified command and supply. We can now prepare a campaign against Bezhaysk. Headquarters will determine the lines of advance; the order to cross the border will be issued through a separate decision."
  STP_pw_launch_bezhaysk_operation: "Launch the Bezhaysk Offensive"
