@@ -120,6 +120,7 @@ on_actions = {
 	}
 	on_daily_STP = {
 		effect = {
+			STP_ps_tick_sabotage = yes
 			if = { limit = { STP_ps_war_active = yes }
 				STP_ps_begin_defence = yes
 				STP_ps_poll_nodes = yes

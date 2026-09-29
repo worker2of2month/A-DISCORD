@@ -2882,3 +2882,15 @@ country_event = {
 		clr_country_flag = STP_ch_aid_pending
 	}
 }
+
+country_event = {
+	id = ADISCORD_STP_cw.207
+	title = ADISCORD_STP_cw.207.t
+	desc = { trigger = { check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } } text = ADISCORD_STP_cw.207.1 }
+	desc = { trigger = { check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } } text = ADISCORD_STP_cw.207.2 }
+	desc = { trigger = { check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } } text = ADISCORD_STP_cw.207.3 }
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { STP_ps_plot_current = yes }
+	option = { name = ADISCORD_STP_cw.207.a }
+}

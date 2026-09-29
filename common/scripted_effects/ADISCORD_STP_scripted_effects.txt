@@ -5475,7 +5475,7 @@ STP_cw_refund_disruption = {
 		clear_variable = STP_cw_disruption_deposit
 		clr_country_flag = STP_cw_disruption_cooldown
 		add_to_variable = { var = ADISCORD_economy_treasury value = STP_cw_cash_refund } add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_cw_cash_refund } ADISCORD_economy_mark_dirty = yes
-		add_political_power = 50
+		add_political_power = 35
 	}
 }
 
@@ -5530,6 +5530,10 @@ STP_debug_resolve_party_victory = {
 	STP_debug_ensure_union_war = yes
 	if = {
 		limit = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } STP = { exists = yes } STS = { exists = yes } }
+		STP = {
+			clr_country_flag = STP_sided_with_Maksim_flag
+			set_country_flag = STP_sided_with_the_party_flag
+		}
 		if = { limit = { is_ai = no tag = STS } STP = { change_tag_from = STS } }
 		STS = { country_event = { id = ADISCORD_STP_cw.93 hours = 1 } }
 	}
@@ -11201,4 +11205,108 @@ STP_ch_install_protectorate_leader = {
 	}
 	STP_ch_leader_6 = yes
 	set_country_flag = STP_ch_protectorate_leader
+}
+
+# COUNTRY STP: one announced plot at a time; the opening delay belongs to this war.
+STP_ps_tick_sabotage = {
+	if = {
+		limit = { STP_ps_sabotage_war = yes }
+		if = {
+			limit = { NOT = { has_variable = STP_ps_plots_started } }
+			set_variable = { var = STP_ps_plots_started value = 0 }
+			set_country_flag = { flag = STP_ps_plot_cooldown value = 1 days = 21 }
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = STP_ps_plot_kind }
+				NOT = { has_country_flag = STP_ps_plot_cooldown }
+				check_variable = { var = STP_ps_plots_started value = 3 compare = less_than }
+			}
+			add_to_variable = { var = STP_ps_plots_started value = 1 }
+			set_variable = { var = STP_ps_plot_kind value = STP_ps_plots_started }
+			if = { limit = { check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } } activate_mission = STP_ps_plot_1 }
+			if = { limit = { check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } } activate_mission = STP_ps_plot_2 }
+			if = { limit = { check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } } activate_mission = STP_ps_plot_3 }
+			country_event = { id = ADISCORD_STP_cw.207 hours = 1 }
+		}
+	}
+	else_if = {
+		limit = { OR = { has_variable = STP_ps_plot_kind has_variable = STP_ps_plot_receipt } }
+		STP_ps_plot_close = yes
+	}
+	if = {
+		limit = { STP_ps_war_active = no }
+		remove_ideas = STP_ps_supply_disrupted
+		remove_ideas = STP_ps_false_orders
+		remove_ideas = STP_ps_factory_strike
+	}
+}
+
+STP_ps_plot_refund = {
+	if = {
+		limit = { has_variable = STP_ps_plot_receipt }
+		set_temp_variable = { var = STP_ps_plot_refund_kind value = STP_ps_plot_receipt }
+		clear_variable = STP_ps_plot_receipt
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_refund_kind value = 1 compare = equals } }
+			add_political_power = 10
+			add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_refund_kind value = 2 compare = equals } }
+			add_political_power = 15
+			add_command_power = 10
+		}
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_refund_kind value = 3 compare = equals } }
+			add_political_power = 10
+			add_to_variable = { var = ADISCORD_economy_treasury value = 450 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 450 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+STP_ps_plot_close = {
+	STP_ps_plot_refund = yes
+	clear_variable = STP_ps_plot_kind
+	set_country_flag = { flag = STP_ps_plot_cooldown value = 1 days = 35 }
+	remove_mission = STP_ps_plot_1
+	remove_mission = STP_ps_plot_2
+	remove_mission = STP_ps_plot_3
+}
+
+STP_ps_plot_counter_finish = {
+	if = {
+		limit = {
+			STP_ps_plot_current = yes
+			has_variable = STP_ps_plot_receipt
+			check_variable = { var = STP_ps_plot_receipt value = STP_ps_plot_kind compare = equals }
+		}
+		clear_variable = STP_ps_plot_receipt
+		STP_ps_plot_close = yes
+	}
+	else = { STP_ps_plot_refund = yes }
+}
+
+STP_ps_plot_timeout = {
+	if = {
+		limit = { STP_ps_plot_current = yes }
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } }
+			add_timed_idea = { idea = STP_ps_supply_disrupted days = 21 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } }
+			add_timed_idea = { idea = STP_ps_false_orders days = 21 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } }
+			add_timed_idea = { idea = STP_ps_factory_strike days = 21 }
+			add_stability = -0.02
+		}
+	}
+	STP_ps_plot_close = yes
 }

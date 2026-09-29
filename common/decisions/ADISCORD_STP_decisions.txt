@@ -122,14 +122,19 @@ STP_elections_in_the_party = {
 	STP_debug_set_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
 		cost = 0
 		days_remove = 1
 		days_re_enable = 0
+
 		complete_effect = {
-			set_power_balance = {
-			    id = STP_shabrat_election_legitimacy
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } NOT = { has_power_balance = { id = STP_shabrat_election_legitimacy } } }
+				set_power_balance = {
+					id = STP_shabrat_election_legitimacy
+					set_value = 0
+				}
 			}
 		}
 		ai_will_do = { base = 0 }
@@ -434,15 +439,19 @@ STP_shabrat_election_bop_category = {
 	STP_debug_increase_party_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
 		cost = 0
 		days_remove = 1
 		days_re_enable = 0
+
 		complete_effect = {
-			add_power_balance_value = {
-				id = STP_shabrat_election_legitimacy
-				value = -0.25
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+				add_power_balance_value = {
+					id = STP_shabrat_election_legitimacy
+					value = -0.25
+				}
 			}
 		}
 		ai_will_do = { base = 0 }
@@ -451,15 +460,19 @@ STP_shabrat_election_bop_category = {
 	STP_debug_increase_shabrat_bop = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = STP }
-		visible = { is_debug = yes is_ai = no }
-		available = { always = yes }
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+		available = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
 		cost = 0
 		days_remove = 1
 		days_re_enable = 0
+
 		complete_effect = {
-			add_power_balance_value = {
-				id = STP_shabrat_election_legitimacy
-				value = 0.25
+			if = {
+				limit = { NOT = { has_global_flag = STP_cw_started } NOT = { has_country_flag = STP_cw_elections_finished } has_power_balance = { id = STP_shabrat_election_legitimacy } }
+				add_power_balance_value = {
+					id = STP_shabrat_election_legitimacy
+					value = 0.25
+				}
 			}
 		}
 		ai_will_do = { base = 0 }
@@ -2617,6 +2630,158 @@ STP_battle_for_stelander = {
 }
 
 STP_cw_war_council = {
+
+	STP_ps_plot_1 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } }
+		available = { always = no }
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } } }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 100
+		days_mission_timeout = 21
+		timeout_effect = {
+			if = {
+				limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } }
+				STP_ps_plot_timeout = yes
+			}
+		}
+	}
+
+	STP_ps_counter_plot_1 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } }
+		available = { NOT = { has_variable = STP_ps_plot_receipt } }
+		cost = 0
+		custom_cost_text = STP_ps_counter_plot_1_price
+		custom_cost_trigger = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 10 } check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+		days_remove = 7
+		fire_only_once = no
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_paid_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 1 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 10 } check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+					set_variable = { var = STP_ps_plot_receipt value = 1 }
+					add_political_power = -10
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_result_tt
+			hidden_effect = { STP_ps_plot_counter_finish = yes }
+		}
+		cancel_effect = { hidden_effect = { STP_ps_plot_refund = yes } }
+		ai_will_do = { base = 0 }
+	}
+
+	STP_ps_plot_2 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } }
+		available = { always = no }
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } } }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 100
+		days_mission_timeout = 21
+		timeout_effect = {
+			if = {
+				limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } }
+				STP_ps_plot_timeout = yes
+			}
+		}
+	}
+
+	STP_ps_counter_plot_2 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } }
+		available = { NOT = { has_variable = STP_ps_plot_receipt } }
+		cost = 0
+		custom_cost_text = STP_ps_counter_plot_2_price
+		custom_cost_trigger = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 15 } NOT = { command_power < 10 } }
+		days_remove = 7
+		fire_only_once = no
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_paid_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 2 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 15 } NOT = { command_power < 10 } }
+					set_variable = { var = STP_ps_plot_receipt value = 2 }
+					add_political_power = -15
+					add_command_power = -10
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_result_tt
+			hidden_effect = { STP_ps_plot_counter_finish = yes }
+		}
+		cancel_effect = { hidden_effect = { STP_ps_plot_refund = yes } }
+		ai_will_do = { base = 0 }
+	}
+
+	STP_ps_plot_3 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		activation = { always = no }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } }
+		available = { always = no }
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } } }
+		selectable_mission = no
+		fire_only_once = no
+		priority = 100
+		days_mission_timeout = 21
+		timeout_effect = {
+			if = {
+				limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } }
+				STP_ps_plot_timeout = yes
+			}
+		}
+	}
+
+	STP_ps_counter_plot_3 = {
+		icon = GFX_decision_ADISCORD_covert_operation
+		allowed = { tag = STP }
+		visible = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } }
+		available = { NOT = { has_variable = STP_ps_plot_receipt } }
+		cost = 0
+		custom_cost_text = STP_ps_counter_plot_3_price
+		custom_cost_trigger = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 10 } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
+		days_remove = 7
+		fire_only_once = no
+		cancel_trigger = { NOT = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } } }
+		complete_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_paid_tt
+			hidden_effect = {
+				if = {
+					limit = { STP_ps_plot_current = yes check_variable = { var = STP_ps_plot_kind value = 3 compare = equals } NOT = { has_variable = STP_ps_plot_receipt } NOT = { has_political_power < 10 } check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals } }
+					set_variable = { var = STP_ps_plot_receipt value = 3 }
+					add_political_power = -10
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_ps_counter_plot_result_tt
+			hidden_effect = { STP_ps_plot_counter_finish = yes }
+		}
+		cancel_effect = { hidden_effect = { STP_ps_plot_refund = yes } }
+		ai_will_do = { base = 0 }
+	}
+
 
 	# Each timeout activates a different mission; it never removes its own callback.
 	STP_cw_exhaustion_deadline_1 = {

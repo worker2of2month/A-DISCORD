@@ -3523,6 +3523,14 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_political_chapters",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_cw.207",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 207,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
     }
   ]
 }

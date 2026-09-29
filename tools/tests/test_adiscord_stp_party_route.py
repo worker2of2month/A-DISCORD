@@ -1929,3 +1929,138 @@ class PoliticalChapterContracts(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PartyPresentationAndDebugContracts(unittest.TestCase):
+    def test_debug_party_victory_repairs_the_side_after_a_shabrat_split(self):
+        effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        facts = {("STS", "has_global_flag", "STP_cw_started"): True,
+                 ("STP", "exists", "yes"): True,
+                 ("STS", "exists", "yes"): True,
+                 ("STS", "is_ai", "no"): True}
+        result = [(scope, e.key, e.value) for scope, e in selected_effects(
+            effects["STP_debug_resolve_party_victory"], facts, "STS")]
+        self.assertIn(("STP", "clr_country_flag", "STP_sided_with_Maksim_flag"), result)
+        self.assertIn(("STP", "set_country_flag", "STP_sided_with_the_party_flag"), result)
+        self.assertNotIn(("STP", "set_country_flag", "STP_cw_party_election_victory"), result)
+        facts[("STS", "has_global_flag", "STP_cw_union_wars_finished")] = True
+        closed = list(selected_effects(effects["STP_debug_resolve_party_victory"], facts, "STS"))
+        self.assertFalse(any(e.key == "set_country_flag" for _, e in closed))
+
+    def test_old_debug_balance_cannot_change_after_war_or_elections(self):
+        decisions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS))
+                     for d in c.value if isinstance(d.value, list)}
+        for name in ("STP_debug_set_bop", "STP_debug_increase_party_bop", "STP_debug_increase_shabrat_bop"):
+            body = decisions[name]
+            gates = [one(body, "visible"), one(body, "available"),
+                     one(one(one(body, "complete_effect"), "if"), "limit")]
+            for gate in gates:
+                self.assertIn("has_power_balance", str(signature(gate)))
+                # Prewar guards precede the balance query, matching native short-circuiting.
+                for kind, flag in (("has_global_flag", "STP_cw_started"),
+                                   ("has_country_flag", "STP_cw_elections_finished")):
+                    facts = {("STP", kind, flag): True, ("STP", "is_debug", "yes"): True,
+                             ("STP", "is_ai", "no"): True}
+                    self.assertFalse(matches_conditions(gate, facts))
+
+    def test_postwar_status_covers_every_government_with_protectorate_precedence(self):
+        blocks = {one(e.value, "name"): e.value for e in parse_clausewitz(read(SCRIPTED_LOC))}
+        variants = children(blocks["STPGetPostwarConstitution"], "text")
+        for government in range(1, 6):
+            for subject in (False, True):
+                facts = {("STP", "variable", "STP_ch_government"): government,
+                         ("STP", "is_subject_of", "NOD"): subject}
+                chosen = next(one(v, "localization_key") for v in variants
+                              if not children(v, "trigger") or matches_conditions(one(v, "trigger"), facts))
+                self.assertNotEqual(chosen, "STP_pw_party_constitution_open_status")
+                self.assertEqual(chosen.endswith("protectorate_status"), subject)
+
+
+class ShabratWartimeSabotageContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.decisions = {d.key: d.value for c in parse_clausewitz(read(DECISIONS))
+                         for d in c.value if isinstance(d.value, list)}
+
+    def test_every_threat_has_time_for_a_counter_without_a_focus(self):
+        for kind in range(1, 4):
+            mission = self.decisions[f"STP_ps_plot_{kind}"]
+            counter = self.decisions[f"STP_ps_counter_plot_{kind}"]
+            self.assertEqual(signature(one(mission, "activation")), [("always", "no")])
+            self.assertGreater(int(one(mission, "days_mission_timeout")), int(one(counter, "days_remove")))
+            self.assertNotIn("has_completed_focus", str(signature(counter)))
+            self.assertIn("STP_ps_plot_current", str(signature(one(counter, "cancel_trigger"))))
+
+    def test_ignored_plot_only_hurts_during_its_current_war(self):
+        body = self.effects["STP_ps_plot_timeout"]
+        for kind in range(1, 4):
+            facts = {("STP", "STP_ps_plot_current", "yes"): True,
+                     ("STP", "variable", "STP_ps_plot_kind"): kind}
+            active = list(selected_effects(body, facts))
+            self.assertEqual(sum(e.key == "add_timed_idea" for _, e in active), 1)
+            self.assertFalse(any(e.key == "destroy_unit" for _, e in active))
+            facts[("STP", "STP_ps_plot_current", "yes")] = False
+            ended = list(selected_effects(body, facts))
+            self.assertFalse(any(e.key in ("add_timed_idea", "add_stability") for _, e in ended))
+
+    def test_counter_payment_receipt_is_required_for_delivery_and_refund(self):
+        for name in ("STP_ps_plot_counter_finish", "STP_ps_plot_refund"):
+            selected = list(selected_effects(self.effects[name], {}))
+            self.assertFalse(any(e.key in ("add_political_power", "add_command_power", "add_to_variable",
+                                           "STP_ps_plot_close") for _, e in selected))
+
+    def test_initial_delay_and_spacing_do_not_stack_plots(self):
+        tick = str(signature(self.effects["STP_ps_tick_sabotage"]))
+        self.assertIn("STP_ps_plot_cooldown", tick)
+        self.assertIn("STP_ps_plots_started", tick)
+        self.assertIn("('value', '3')", tick)
+        close = str(signature(self.effects["STP_ps_plot_close"]))
+        self.assertIn("('days', '35')", close)
+        self.assertIn("STP_ps_plot_refund", close)
+
+
+    def test_counter_receipts_refund_exactly_once_and_success_consumes_payment(self):
+        def run(body, facts):
+            for scope, entry in selected_effects(body, facts):
+                if entry.key in ("set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable"):
+                    name = one(entry.value, "var")
+                    raw = one(entry.value, "value")
+                    try:
+                        value = float(raw)
+                    except ValueError:
+                        value = facts.get((scope, "variable", raw), 0)
+                    key = (scope, "variable", name)
+                    facts[key] = value if entry.key.startswith("set_") else facts.get(key, 0) + value * (-1 if entry.key == "subtract_from_variable" else 1)
+                    facts[(scope, "has_variable", name)] = True
+                elif entry.key == "clear_variable":
+                    facts.pop((scope, "variable", entry.value), None)
+                    facts[(scope, "has_variable", entry.value)] = False
+                elif entry.key in ("add_political_power", "add_command_power"):
+                    name = "has_political_power" if entry.key == "add_political_power" else "command_power"
+                    key = (scope, "numeric", name)
+                    facts[key] = facts.get(key, 0) + float(entry.value)
+                elif entry.key in self.effects:
+                    run(self.effects[entry.key], facts)
+        prices = {1: (10, 300, 0), 2: (15, 0, 10), 3: (10, 450, 0)}
+        for kind, (pp, cash, cp) in prices.items():
+            for outcome in ("cancel", "success", "late"):
+                facts = {("STP", "STP_ps_plot_current", "yes"): True,
+                         ("STP", "variable", "STP_ps_plot_kind"): kind,
+                         ("STP", "has_variable", "STP_ps_plot_kind"): True,
+                         ("STP", "variable", "ADISCORD_economy_treasury"): 1000,
+                         ("STP", "numeric", "has_political_power"): 100,
+                         ("STP", "numeric", "command_power"): 20}
+                run(one(self.decisions[f"STP_ps_counter_plot_{kind}"], "complete_effect"), facts)
+                self.assertEqual(facts[("STP", "numeric", "has_political_power")], 100 - pp)
+                if outcome == "success":
+                    run(self.effects["STP_ps_plot_counter_finish"], facts)
+                else:
+                    if outcome == "late":
+                        facts[("STP", "STP_ps_plot_current", "yes")] = False
+                    run(self.effects["STP_ps_plot_refund"], facts)
+                run(self.effects["STP_ps_plot_refund"], facts)
+                retained = outcome == "success"
+                self.assertEqual(facts[("STP", "numeric", "has_political_power")], 100 - pp * retained)
+                self.assertEqual(facts[("STP", "numeric", "command_power")], 20 - cp * retained)
+                self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 1000 - cash * retained)

@@ -799,16 +799,27 @@ defined_text = {
 		localization_key = STP_pw_party_constitution_protectorate_status
 	}
 	text = {
-		trigger = { has_completed_focus = STP_pw_party_high_houses }
+		trigger = { check_variable = { var = STP_ch_government value = 1 compare = equals } }
 		localization_key = STP_pw_party_constitution_conservative_status
 	}
 	text = {
-		trigger = { has_completed_focus = STP_pw_party_unbound_revolution }
+		trigger = { check_variable = { var = STP_ch_government value = 2 compare = equals } }
 		localization_key = STP_pw_party_constitution_radical_status
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_government value = 3 compare = equals } }
+		localization_key = STP_pw_party_constitution_military_status
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_government value = 4 compare = equals } }
+		localization_key = STP_pw_party_constitution_economic_status
+	}
+	text = {
+		trigger = { check_variable = { var = STP_ch_government value = 5 compare = equals } }
+		localization_key = STP_pw_party_constitution_security_status
 	}
 	text = { localization_key = STP_pw_party_constitution_open_status }
 }
-
 defined_text = {
 	name = STPGetPoliticalChapter
 	text = {

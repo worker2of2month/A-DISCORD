@@ -2377,3 +2377,17 @@ STP_ch_candidate_5_wins = {
 		compare = greater_than_or_equals
 	}
 }
+
+# COUNTRY STP: a bounded AI campaign against the player, separate from paid STS operations.
+STP_ps_sabotage_war = {
+	tag = STP
+	is_ai = no
+	STP_pf_active = yes
+	STP_ps_war_active = yes
+	STS = { exists = yes is_ai = yes has_capitulated = no }
+}
+
+STP_ps_plot_current = {
+	STP_ps_sabotage_war = yes
+	has_variable = STP_ps_plot_kind
+}
