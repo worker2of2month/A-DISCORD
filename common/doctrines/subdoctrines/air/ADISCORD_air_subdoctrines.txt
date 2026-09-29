@@ -6,7 +6,7 @@ ADISCORD_air_doctrine_swarm_recon = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_drone_air_wings
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_attritional_drone_swarms
@@ -54,7 +54,7 @@ ADISCORD_air_doctrine_attritional_drone_swarms = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_loitering_strike_drones
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_swarm_recon
@@ -99,7 +99,7 @@ ADISCORD_air_doctrine_autonomous_air_screen = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_loyal_wingmen
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_swarm_recon
@@ -143,7 +143,7 @@ ADISCORD_air_doctrine_vtol_assault_groups = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_vtol_assault_frames
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_persistent_close_support
@@ -191,7 +191,7 @@ ADISCORD_air_doctrine_persistent_close_support = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_cooperative_close_air_control_links
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_vtol_assault_groups
@@ -236,7 +236,7 @@ ADISCORD_air_doctrine_theater_air_mobility = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_restored_airlift_planning
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_vtol_assault_groups
@@ -282,7 +282,7 @@ ADISCORD_air_doctrine_interceptor_grids = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_high_altitude_interceptors
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_layered_missile_defense
@@ -330,7 +330,7 @@ ADISCORD_air_doctrine_layered_missile_defense = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_integrated_short_range_missile_cells
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_interceptor_grids
@@ -375,7 +375,7 @@ ADISCORD_air_doctrine_electronic_suppression = {
 	xp_cost = 55
 	xp_type = air
 	available = {
-		has_tech = ADISCORD_tech_offensive_jamming_cells
+		always = yes
 	}
 	xor = {
 		ADISCORD_air_doctrine_interceptor_grids

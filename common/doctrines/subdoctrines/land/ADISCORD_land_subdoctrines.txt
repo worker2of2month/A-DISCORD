@@ -6,7 +6,7 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		ADISCORD_has_military_standardization_tech = yes
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_assault_detachments
@@ -52,7 +52,7 @@ ADISCORD_doctrine_assault_detachments = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_assault_breaching_packages has_tech = ADISCORD_tech_remote_weapon_tripods
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
@@ -99,7 +99,7 @@ ADISCORD_doctrine_mobile_line_groups = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_armored_carrier_program
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
@@ -145,7 +145,7 @@ ADISCORD_doctrine_dispersed_militia_system = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_fieldcraft_manuals
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
@@ -193,7 +193,7 @@ ADISCORD_doctrine_platform_battlegroups = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_restored_armored_chassis
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_armored_spearhead_command
@@ -238,7 +238,7 @@ ADISCORD_doctrine_armored_spearhead_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		OR = { has_tech = ADISCORD_tech_heavy_platform_cores has_tech = ADISCORD_tech_active_mass_balancing_suspension }
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
@@ -284,7 +284,7 @@ ADISCORD_doctrine_infantry_tank_integration = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_multispectral_gunner_sights
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
@@ -331,7 +331,7 @@ ADISCORD_doctrine_autonomous_armored_screen = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_armed_recon_drones
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
@@ -377,7 +377,7 @@ ADISCORD_doctrine_mesh_battlefield_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		ADISCORD_has_cyber_command_tech = yes
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mission_command
@@ -425,7 +425,7 @@ ADISCORD_doctrine_mission_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_reconstituted_staff_academies
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mesh_battlefield_command
@@ -472,7 +472,7 @@ ADISCORD_doctrine_deep_operations = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_operational_planning_exercises
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mesh_battlefield_command
@@ -519,7 +519,7 @@ ADISCORD_doctrine_centralized_fire_control = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_smart_fire_control
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_mesh_battlefield_command
@@ -565,7 +565,7 @@ ADISCORD_doctrine_fortress_state_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		ADISCORD_has_civil_resilience_tech = yes
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_artillery_support_network
@@ -612,7 +612,7 @@ ADISCORD_doctrine_artillery_support_network = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_restored_field_artillery
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_fortress_state_command
@@ -658,7 +658,7 @@ ADISCORD_doctrine_combat_engineer_groups = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_battle_damage_survey_teams
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_fortress_state_command
@@ -704,7 +704,7 @@ ADISCORD_doctrine_resilient_logistics_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_operational_planning_exercises
+		always = yes
 	}
 	xor = {
 		ADISCORD_doctrine_fortress_state_command

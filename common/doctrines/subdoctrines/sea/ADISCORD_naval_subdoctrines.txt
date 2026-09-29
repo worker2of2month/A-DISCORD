@@ -6,7 +6,7 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_coastal_patrols
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_convoy_shield_doctrine
@@ -52,7 +52,7 @@ ADISCORD_naval_doctrine_convoy_shield_doctrine = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_convoy_routing
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_littoral_security_network
@@ -97,7 +97,7 @@ ADISCORD_naval_doctrine_mine_warfare_command = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_littoral_security_network
@@ -142,7 +142,7 @@ ADISCORD_naval_doctrine_drone_carrier_groups = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_drone_carrier_deck_systems
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_missile_surface_groups
@@ -187,7 +187,7 @@ ADISCORD_naval_doctrine_missile_surface_groups = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_missile_batteries
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_drone_carrier_groups
@@ -232,7 +232,7 @@ ADISCORD_naval_doctrine_coastal_fire_support = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_modular_landing_causeways
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_drone_carrier_groups
@@ -277,7 +277,7 @@ ADISCORD_naval_doctrine_subsurface_denial = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_homing_torpedoes
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_silent_ambush_groups
@@ -322,7 +322,7 @@ ADISCORD_naval_doctrine_silent_ambush_groups = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_quiet_propulsion
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_subsurface_denial
@@ -368,7 +368,7 @@ ADISCORD_naval_doctrine_seabed_hunter_network = {
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		has_tech = ADISCORD_tech_seabed_sensor_webs
+		always = yes
 	}
 	xor = {
 		ADISCORD_naval_doctrine_subsurface_denial

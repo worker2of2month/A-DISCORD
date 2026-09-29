@@ -6,7 +6,7 @@ ADISCORD_special_forces_mountain_companies = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_fieldcraft_manuals
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_contaminated_zone_teams
@@ -49,7 +49,7 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_radiation_patrols
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_mountain_companies
@@ -94,7 +94,7 @@ ADISCORD_special_forces_urban_assault_groups = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_urban_breaching
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_mountain_companies
@@ -137,7 +137,7 @@ ADISCORD_special_forces_deep_recon_cells = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_deep_recon_cells
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_vertical_insertion
@@ -183,7 +183,7 @@ ADISCORD_special_forces_vertical_insertion = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_vertical_assault_training
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_deep_recon_cells
@@ -228,7 +228,7 @@ ADISCORD_special_forces_autonomous_raiders = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_autonomous_scout_microdrones
+		always = yes
 	}
 	xor = {
 		ADISCORD_special_forces_deep_recon_cells
