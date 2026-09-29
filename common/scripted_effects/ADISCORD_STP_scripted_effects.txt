@@ -853,7 +853,7 @@ STP_cw_assess_search_evidence = {
 STP_cw_refresh_army_report = {
 	set_variable = { var = STP_cw_report_party_brigades value = 16 }
 	set_variable = { var = STP_cw_report_resistance_brigades value = 14 }
-	# Early-uprising baseline; the election result transfers two brigades and 10% of reserves.
+	# Early-uprising baseline; paid preparations are added before the mandate allocation.
 	if = { limit = { has_country_flag = STP_cw_party_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = { limit = { has_country_flag = STP_party_mobile_reserve_ready } add_to_variable = { var = STP_cw_report_party_brigades value = 2 } }
 	if = {
@@ -3213,9 +3213,9 @@ STP_cw_allocate_formation_reserves = {
 	}
 	else_if = {
 		limit = { has_country_flag = STP_cw_party_election_victory }
-		set_temp_variable = { var = STP_cw_party_base_reserve value = 18 }
-		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 12 }
-		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.3 }
+		set_temp_variable = { var = STP_cw_party_base_reserve value = 16 }
+		set_temp_variable = { var = STP_cw_resistance_base_reserve value = 16 }
+		set_temp_variable = { var = STP_cw_resistance_remainder_share value = 0.4 }
 	}
 	multiply_temp_variable = { var = STP_cw_party_base_reserve value = STP_cw_input_light }
 	multiply_temp_variable = { var = STP_cw_resistance_base_reserve value = STP_cw_input_light }
@@ -3250,6 +3250,82 @@ STP_cw_allocate_formation_reserves = {
 	set_temp_variable = { var = STP_cw_allocation_party value = STP_cw_allocation_pool }
 	subtract_from_temp_variable = { var = STP_cw_allocation_party value = STP_cw_allocation_republics }
 	subtract_from_temp_variable = { var = STP_cw_allocation_party value = STP_cw_allocation_resistance }
+}
+
+# COUNTRY STP/SRP: consolidate only aircraft after the general stockpile split.
+# Native transfers retain equipment models and their original producers.
+STP_cw_send_air_reserves_to_resistance = {
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_fighter_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_fighter_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cas_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_cas_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_rocket_strike_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_rocket_strike_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_bomber_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_bomber_archetype amount = STP_cw_air_transfer target = STS }
+	}
+	set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_naval_aircraft_archetype }
+	if = {
+		limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+		send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STS }
+	}
+}
+
+# COUNTRY STP: read the completed focus before replacing the preparation tree.
+STP_cw_divide_air_reserves = {
+	STP_cw_send_air_reserves_to_resistance = yes
+	SRP = { STP_cw_send_air_reserves_to_resistance = yes }
+	if = {
+		limit = { has_completed_focus = STP_ps_loyal_aircrews }
+		STS = {
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_fighter_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_fighter_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_cas_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_cas_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_rocket_strike_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_rocket_strike_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_bomber_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_bomber_archetype amount = STP_cw_air_transfer target = STP }
+			}
+			set_temp_variable = { var = STP_cw_air_transfer value = num_equipment@ADISCORD_naval_aircraft_archetype }
+			multiply_temp_variable = { var = STP_cw_air_transfer value = 0.2 }
+			round_temp_variable = STP_cw_air_transfer
+			if = {
+				limit = { check_variable = { var = STP_cw_air_transfer value = 0 compare = greater_than } }
+				send_equipment = { type = ADISCORD_naval_aircraft_archetype amount = STP_cw_air_transfer target = STP }
+			}
+		}
+	}
 }
 
 STP_cw_start = {
@@ -3416,18 +3492,13 @@ STP_cw_start = {
 		}
 		transfer_units_fraction = { target = SRP size = 0 stockpile_ratio = var:STP_cw_republics_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0 keep_unit_leaders_trigger = { always = yes } }
 		if = {
-			limit = { has_country_flag = STP_cw_limited_party_revolt }
+			limit = { has_completed_focus = STP_ps_loyal_aircrews }
 			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0.8 keep_unit_leaders_trigger = { always = yes } }
 		}
-		else_if = {
-			limit = { has_country_flag = STP_cw_shabrat_election_victory }
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0.5 keep_unit_leaders_trigger = { always = yes } }
+		else = {
+			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 1 keep_unit_leaders_trigger = { always = yes } }
 		}
-		else_if = {
-			limit = { has_country_flag = STP_cw_party_election_victory }
-			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0.3 keep_unit_leaders_trigger = { always = yes } }
-		}
-		else = { transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 0.4 keep_unit_leaders_trigger = { always = yes } } }
+		STP_cw_divide_air_reserves = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		STS = { log = "[STP_CW] STS proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
 		SRP = { log = "[STP_CW] SRP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
@@ -3474,7 +3545,6 @@ STP_cw_start = {
 		if = { limit = { has_country_flag = STP_cw_limited_party_revolt } for_loop_effect = { end = 5 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		else = { for_loop_effect = { end = 14 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		if = { limit = { NOT = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
-		if = { limit = { has_country_flag = STP_cw_party_election_victory } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		STS = {
 			if = {
 				limit = {
@@ -3518,6 +3588,7 @@ STP_cw_start = {
 			for_loop_effect = { end = 12 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }
 			if = { limit = { STP = { NOT = { has_country_flag = STP_cw_party_election_victory } } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 			if = { limit = { STP = { has_country_flag = STP_cw_shabrat_election_victory } } for_loop_effect = { end = 2 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
+			if = { limit = { STP = { has_country_flag = STP_cw_party_election_victory } } for_loop_effect = { end = 4 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes } }
 		}
 		SRP = {
 			for_loop_effect = { end = 10 value = STP_cw_formation_index STP_cw_mobilize_brigade = yes }

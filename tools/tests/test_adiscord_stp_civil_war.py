@@ -884,16 +884,16 @@ class CivilWarContracts(unittest.TestCase):
                   334799.999, 334800, 334800.001, 335199.999, 335200, 335200.001,
                   393240, 399200, 1000000)
         for winner, shares, plan, air_share in (
-            (None, {"STP": .4, "STS": .4, "SRP": .2}, {"STP": 16, "STS": 14, "SRP": 10}, .4),
-            ("shabrat", {"STP": .3, "STS": .5, "SRP": .2}, {"STP": 14, "STS": 16, "SRP": 10}, .5),
-            ("party", {"STP": .5, "STS": .3, "SRP": .2}, {"STP": 18, "STS": 12, "SRP": 10}, .3),
-            ("limited", {"STP": .16, "STS": .64, "SRP": .2}, {"STP": 5, "STS": 16, "SRP": 10}, .8),
+            (None, {"STP": .4, "STS": .4, "SRP": .2}, {"STP": 16, "STS": 14, "SRP": 10}, 1),
+            ("shabrat", {"STP": .3, "STS": .5, "SRP": .2}, {"STP": 14, "STS": 16, "SRP": 10}, 1),
+            ("party", {"STP": .4, "STS": .4, "SRP": .2}, {"STP": 16, "STS": 16, "SRP": 10}, 1),
+            ("limited", {"STP": .16, "STS": .64, "SRP": .2}, {"STP": 5, "STS": 16, "SRP": 10}, 1),
         ):
             heavy_plan = {"STP": 3 if winner == "limited" else 6, "STS": 6, "SRP": 0}
             base_claim = {tag: Fraction(plan[tag] * 6000 + heavy_plan[tag] * 7900) for tag in plan}
             self.assertEqual(tuple(base_claim.values()), {
                 None: (143400, 131400, 60000), "shabrat": (131400, 143400, 60000),
-                "party": (155400, 119400, 60000), "limited": (53700, 143400, 60000),
+                "party": (143400, 143400, 60000), "limited": (53700, 143400, 60000),
             }[winner])
             for party in range(9):
                 for resistance in range(9):
@@ -4464,3 +4464,68 @@ class NorthernOffensiveClockTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CivilWarAirMandateContracts(unittest.TestCase):
+    def test_party_air_wings_require_the_prewar_focus_for_every_election_result(self):
+        start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start"), "if")
+        for winner in (None, "party", "shabrat", "limited"):
+            for prepared in (False, True):
+                facts = {("STP", "has_completed_focus", "STP_ps_loyal_aircrews"): prepared}
+                if winner:
+                    flag = "STP_cw_limited_party_revolt" if winner == "limited" else f"STP_cw_{winner}_election_victory"
+                    facts[("STP", "has_country_flag", flag)] = True
+                transfers = [e for _, e in selected_effects(start, facts) if e.key == "transfer_units_fraction"]
+                self.assertEqual([scalar(e.value, "target") for e in transfers], ["SRP", "STS"])
+                self.assertEqual(float(scalar(transfers[-1].value, "air_ratio")), .8 if prepared else 1)
+
+    def test_air_stockpile_reallocation_precedes_focus_tree_replacement(self):
+        start = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
+        self.assertLess(start.index("STP_cw_divide_air_reserves = yes"), start.index("load_focus_tree"))
+        self.assertGreater(start.index("STP_cw_divide_air_reserves = yes"), start.rindex("transfer_units_fraction"))
+
+
+    def test_air_reserves_are_conserved_and_cannot_hide_in_republic_stockpiles(self):
+        effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")}
+        air = ast_block(entries("common/units/equipment/ADISCORD_air_equipment.txt"), "equipments")
+        types = {e.key for e in air if any(x.key == "is_archetype" and x.value == "yes" for x in e.value)}
+        sent = {scalar(e.value, "type") for e in walk(effects["STP_cw_send_air_reserves_to_resistance"])
+                if e.key == "send_equipment"}
+        self.assertEqual(sent, types)
+        for total in (0, 1, 2, 3, 4, 5, 17, 100, 301):
+            for prepared in (False, True):
+                stocks = {(tag, typ): (total if tag == "SRP" else 0) for tag in ("STP", "STS", "SRP") for typ in types}
+                facts = {("STP", "has_completed_focus", "STP_ps_loyal_aircrews"): prepared}
+                def run(body, scope="STP"):
+                    for who, entry in selected_effects(body, facts, scope):
+                        if entry.key in ("set_temp_variable", "multiply_temp_variable"):
+                            key = (who, "variable", scalar(entry.value, "var"))
+                            raw = scalar(entry.value, "value")
+                            value = stocks[(who, raw.split("@", 1)[1])] if raw.startswith("num_equipment@") else float(raw)
+                            facts[key] = value if entry.key == "set_temp_variable" else facts[key] * value
+                        elif entry.key == "round_temp_variable":
+                            key = (who, "variable", entry.value)
+                            facts[key] = int(facts[key] + .5)
+                        elif entry.key == "send_equipment":
+                            typ = scalar(entry.value, "type")
+                            amount = facts[(who, "variable", scalar(entry.value, "amount"))]
+                            target = scalar(entry.value, "target")
+                            self.assertLessEqual(amount, stocks[(who, typ)])
+                            stocks[(who, typ)] -= amount
+                            stocks[(target, typ)] += amount
+                        elif entry.key in effects:
+                            run(effects[entry.key], who)
+                run(effects["STP_cw_divide_air_reserves"])
+                for typ in types:
+                    self.assertEqual(sum(stocks[(tag, typ)] for tag in ("STP", "STS", "SRP")), total)
+                    self.assertEqual(stocks[("SRP", typ)], 0)
+                    self.assertEqual(stocks[("STP", typ)], int(total * .2 + .5) if prepared else 0)
+                    if total:
+                        self.assertGreater(stocks[("STS", typ)], stocks[("STP", typ)])
+
+    def test_party_victory_baseline_has_equal_paid_line_armies(self):
+        start = ast_block(ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start"), "if")
+        chosen = list(selected_effects(start, {("STP", "has_country_flag", "STP_cw_party_election_victory"): True}))
+        for tag in ("STP", "STS"):
+            self.assertEqual(sum(scope == tag and e.key == "STP_cw_mobilize_brigade" for scope, e in chosen), 16)
+            self.assertEqual(sum(scope == tag and e.key in ("STP_cw_mobilize_assault_division", "STP_cw_deploy_assault_division") for scope, e in chosen), 6)

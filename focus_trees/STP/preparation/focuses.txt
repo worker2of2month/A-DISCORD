@@ -1868,6 +1868,29 @@ focus_tree = {
 
 
 	focus = {
+		id = STP_ps_loyal_aircrews
+		icon = GFX_goal_generic_air_fighter2
+		x = 12
+		y = 2
+		relative_position_id = STP_Govern_In_His_Name
+		cost = 3
+		prerequisite = { focus = STP_ps_radio_network }
+		allow_branch = { tag = STP NOT = { has_country_flag = STP_sided_with_Maksim_flag } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_ps_program_available_tt
+				STP_cw_preparation_open = yes
+				has_country_flag = STP_sided_with_the_party_flag
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			custom_effect_tooltip = STP_ps_loyal_aircrews_tt
+		}
+	}
+
+	focus = {
 		id = STP_ps_reserve_hq
 		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
 		x = 14
