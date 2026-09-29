@@ -955,6 +955,63 @@ defined_text = {
 }
 
 defined_text = {
+	name = STPGetChapterProgramUnlock
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_government
+				value = 1
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_program_1_unlock_tt
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_government
+				value = 2
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_program_2_unlock_tt
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_government
+				value = 3
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_program_3_unlock_tt
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_program_4_unlock_tt
+	}
+	text = {
+		trigger = {
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		localization_key = STP_ch_program_5_unlock_tt
+	}
+	text = {
+		localization_key = STP_ch_program_pending_tt
+	}
+}
+
+defined_text = {
 	name = STPGetChapterFoundations
 	text = {
 		localization_key = STP_ch_foundations_loc

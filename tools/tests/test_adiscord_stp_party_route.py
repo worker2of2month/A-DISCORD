@@ -1589,6 +1589,80 @@ class PoliticalChapterContracts(unittest.TestCase):
             elif key not in ("ADISCORD_economy_mark_dirty", "STP_pf_shift", "STP_ch_refresh"):
                 raise AssertionError(f"Unsupported ledger-fixture effect: {key}")
 
+    def test_cabinet_reaches_each_elected_program_with_every_appointment_combination(self):
+        from itertools import product
+
+        programs = ("STP_pw_party_high_houses", "STP_pw_party_unbound_revolution",
+                    "STP_ch_service_act", "STP_ch_production_agreements", "STP_ch_security_directorate")
+        ministries = ("security_ministry", "economy_ministry", "appointments")
+        for government, appointments in product(range(1, 6), product((1, 2), repeat=3)):
+            with self.subTest(government=government, appointments=appointments):
+                facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                         ("STP", "STP_ch_governing", "yes"): True,
+                         ("STP", "tag", "STP"): True,
+                         ("STP", "has_country_flag", "STP_cw_postwar"): True,
+                         ("STP", "is_subject", "no"): True,
+                         ("STP", "variable", "STP_ch_phase"): 4,
+                         ("STP", "variable", "STP_ch_government"): government,
+                         ("STP", "numeric", "has_political_power"): 60,
+                         ("STP", "has_completed_focus", "STP_ch_congress"): True}
+                cabinet = self.focuses["STP_ch_cabinet"]
+                self.assertTrue(matches_conditions(one(cabinet, "available"), facts))
+                self.assertEqual(one(one(cabinet, "prerequisite"), "focus"), "STP_ch_congress")
+                facts[("STP", "has_completed_focus", "STP_ch_cabinet")] = True
+                for ministry, choice in zip(ministries, appointments):
+                    decision = self.decisions[f"STP_ch_appoint_{ministry}_{choice}"]
+                    self.assertTrue(matches_conditions(one(decision, "visible"), facts))
+                    self.assertTrue(matches_conditions(one(decision, "available"), facts))
+                    self.assertTrue(matches_conditions(one(decision, "custom_cost_trigger"), facts))
+                    effects = list(selected_effects(one(decision, "complete_effect"), facts))
+                    writes = [e for _, e in effects if e.key == "set_variable"]
+                    self.assertEqual([(one(e.value, "var"), one(e.value, "value")) for e in writes],
+                                     [("STP_ch_" + ministry, str(choice))])
+                    facts[("STP", "variable", "STP_ch_" + ministry)] = choice
+                    facts[("STP", "has_variable", "STP_ch_" + ministry)] = True
+                    facts[("STP", "numeric", "has_political_power")] += sum(
+                        float(e.value) for _, e in effects if e.key == "add_political_power")
+                self.assertEqual(facts[("STP", "numeric", "has_political_power")], 0)
+                for name in ("STP_ch_first_promises", "STP_ch_rules"):
+                    focus = self.focuses[name]
+                    predecessor = one(one(focus, "prerequisite"), "focus")
+                    self.assertTrue(facts[("STP", "has_completed_focus", predecessor)])
+                    self.assertTrue(matches_conditions(one(focus, "available"), facts))
+                    for ministry in ministries:
+                        missing = {**facts, ("STP", "has_variable", "STP_ch_" + ministry): False}
+                        self.assertFalse(matches_conditions(one(focus, "available"), missing))
+                    facts[("STP", "has_completed_focus", name)] = True
+                reward = list(selected_effects(one(self.focuses["STP_ch_rules"], "completion_reward"), facts))
+                phase = [one(e.value, "value") for _, e in reward
+                         if e.key == "set_variable" and one(e.value, "var") == "STP_ch_phase"]
+                self.assertEqual(phase, ["5"])
+                facts[("STP", "variable", "STP_ch_phase")] = int(phase[0])
+                for index, name in enumerate(programs, 1):
+                    focus = self.focuses[name]
+                    self.assertEqual(matches_conditions(one(focus, "allow_branch"), facts), index == government)
+                    self.assertEqual(matches_conditions(one(focus, "available"), facts), index == government)
+
+    def test_chapter_transitions_preview_the_real_program_and_name_missing_appointments(self):
+        scripted = {one(entry.value, "name"): entry.value for entry in parse_clausewitz(read(SCRIPTED_LOC))}
+        for government in range(1, 6):
+            facts = {("STP", "variable", "STP_ch_government"): government}
+            key = next(one(option, "localization_key")
+                       for option in children(scripted["STPGetChapterProgramUnlock"], "text")
+                       if not children(option, "trigger") or matches_conditions(one(option, "trigger"), facts))
+            self.assertEqual(key, f"STP_ch_program_{government}_unlock_tt")
+            self.assertTrue(self.loc[key])
+        for name, tooltip in (("STP_ch_congress", "STP_ch_congress_unlock_tt"),
+                              ("STP_ch_rules", "STP_ch_rules_unlock_tt")):
+            self.assertIn(tooltip, children(one(self.focuses[name], "completion_reward"), "custom_effect_tooltip"))
+        for name in ("STP_ch_first_promises", "STP_ch_rules"):
+            requirements = children(one(self.focuses[name], "available"), "custom_trigger_tooltip")
+            for ministry in ("security_ministry", "economy_ministry", "appointments"):
+                tooltip = "STP_ch_" + ministry + "_appointed_tt"
+                self.assertIn(tooltip, [one(item, "tooltip") for item in requirements])
+                for choice in (1, 2):
+                    self.assertIn(f"$STP_ch_appoint_{ministry}_{choice}$", self.loc[tooltip])
+
     def test_initialization_preserves_existing_chapter_state(self):
         gate = one(one(self.effects["STP_ch_initialize"], "if"), "limit")
         facts = {("STP", "STP_pf_active", "yes"): True,

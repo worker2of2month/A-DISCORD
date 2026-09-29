@@ -5126,6 +5126,7 @@ focus_tree = {
 			base = 15
 		}
 		completion_reward = {
+			custom_effect_tooltip = STP_ch_congress_unlock_tt
 			hidden_effect = {
 				STP_ch_close_ballot = yes
 			}
@@ -5151,11 +5152,17 @@ focus_tree = {
 			focus = STP_ch_congress
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 4
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_cabinet_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
 			}
 			is_subject = no
 		}
@@ -5193,15 +5200,30 @@ focus_tree = {
 			focus = STP_ch_cabinet
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 4
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
 			}
-			has_variable = STP_ch_security_ministry
-			has_variable = STP_ch_economy_ministry
-			has_variable = STP_ch_appointments
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_cabinet_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_security_ministry_appointed_tt
+				has_variable = STP_ch_security_ministry
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_economy_ministry_appointed_tt
+				has_variable = STP_ch_economy_ministry
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appointments_appointed_tt
+				has_variable = STP_ch_appointments
+			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
@@ -5234,21 +5256,37 @@ focus_tree = {
 			focus = STP_ch_first_promises
 		}
 		available = {
-			STP_pw_can_reconstruct = yes
-			check_variable = {
-				var = STP_ch_phase
-				value = 4
-				compare = equals
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
 			}
-			has_variable = STP_ch_security_ministry
-			has_variable = STP_ch_economy_ministry
-			has_variable = STP_ch_appointments
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_cabinet_phase_tt
+				check_variable = {
+					var = STP_ch_phase
+					value = 4
+					compare = equals
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_security_ministry_appointed_tt
+				has_variable = STP_ch_security_ministry
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_economy_ministry_appointed_tt
+				has_variable = STP_ch_economy_ministry
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_ch_appointments_appointed_tt
+				has_variable = STP_ch_appointments
+			}
 		}
 		cancel_if_invalid = yes
 		ai_will_do = {
 			base = 15
 		}
 		completion_reward = {
+			custom_effect_tooltip = STP_ch_rules_unlock_tt
 			hidden_effect = {
 				set_variable = {
 					var = STP_ch_phase
