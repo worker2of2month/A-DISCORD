@@ -2052,6 +2052,68 @@ class StelanderPreparationTests(unittest.TestCase):
                     self.assertIn(("STP", "force_update_dynamic_modifier", "yes"),
                                   [(scope, e.key, e.value) for scope, e in executed if isinstance(e.value, str)])
 
+    def test_postwar_mobilization_removes_civil_war_aggregates_without_touching_party_system(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        helpers = {"STP_cw_clear_wartime_modifiers", "STP_cw_clear_political_modifiers",
+                   "STP_cw_clear_resistance_modifiers"}
+        wartime = {"STP_cw_military_staff_dynamic", "STP_cw_party_administration_dynamic",
+                   "STP_cw_resistance_network_dynamic", "STP_cw_election_mandate_dynamic",
+                   "STP_fading_father"}
+        variables = {"STP_cw_army_org_factor", "STP_cw_army_planning_speed", "STP_cw_army_org_regain",
+                     "STP_cw_army_supply_consumption_factor", "STP_cw_party_political_power_gain",
+                     "STP_cw_party_stability_factor", "STP_cw_party_command_power_gain_mult",
+                     "STP_cw_network_political_power_gain", "STP_cw_pending_army_org_factor",
+                     "STP_cw_pending_army_planning_speed", "STP_cw_pending_army_org_regain",
+                     "STP_cw_pending_army_supply_consumption_factor", "STP_cw_mandate_org_regain",
+                     "STP_cw_mandate_core_defence", "STP_cw_mandate_training_time", "STP_cw_mandate_mobilization"}
+        def delivered(items, facts, scope):
+            for current, effect in selected_effects(items, facts, scope):
+                if effect.key in helpers:
+                    yield from delivered(block(effects, effect.key), facts, current)
+                else:
+                    yield current, effect
+        for tag in ("STP", "STS", "SRP"):
+            for present in (set(), wartime, {"STP_cw_military_staff_dynamic"}):
+                facts = {(tag, "has_dynamic_modifier", modifier): True for modifier in present}
+                facts[(tag, "has_dynamic_modifier", "STP_pf_balance_dynamic")] = True
+                with self.subTest(tag=tag, present=present):
+                    result = list(delivered(block(effects, "STP_cw_finish_mobilization"), facts, tag))
+                    removed = {scalar(e.value, "modifier") for scope, e in result
+                               if scope == tag and e.key == "remove_dynamic_modifier"}
+                    self.assertEqual(removed, present if tag in ("STP", "STS") else set())
+                    cleared = {e.value for scope, e in result if scope == tag and e.key == "clear_variable"}
+                    if tag in ("STP", "STS"):
+                        self.assertTrue(variables <= cleared, variables - cleared)
+                    else:
+                        self.assertFalse(variables & cleared, "SRP's separate war must retain its own staff")
+
+    def test_late_wartime_reward_cannot_restore_a_postwar_claimant_modifier(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        for helper in ("STP_cw_refresh_network_modifier", "STP_cw_refresh_party_modifier", "STP_cw_refresh_army_modifier"):
+            for tag in ("STP", "STS"):
+                for postwar in (False, True):
+                    facts = {(tag, "has_country_flag", "STP_cw_postwar"): postwar}
+                    result = list(selected_effects(block(effects, helper), facts, tag))
+                    with self.subTest(helper=helper, tag=tag, postwar=postwar):
+                        self.assertEqual(sum(e.key == "add_dynamic_modifier" for _, e in result), 0 if postwar else 1)
+        result = list(selected_effects(block(effects, "STP_cw_refresh_army_modifier"),
+                                      {("SRP", "has_country_flag", "STP_cw_postwar"): True}, "SRP"))
+        self.assertEqual(sum(e.key == "add_dynamic_modifier" for _, e in result), 1)
+
+    def test_union_settlement_clears_both_claimants_only_after_their_war_ends(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        finish = block(effects, "STP_cw_check_union_wars_finished")
+        for at_war, already_finished, expected in ((True, False, set()), (False, False, {"STP", "STS"}),
+                                                    (False, True, set())):
+            facts = {
+                ("STP", "has_global_flag", "STP_cw_started"): True,
+                ("STP", "has_global_flag", "STP_cw_union_wars_finished"): already_finished,
+                ("STP", "has_war_with", "STS"): at_war,
+            }
+            calls = {scope for scope, e in selected_effects(finish, facts)
+                     if e.key == "STP_cw_clear_wartime_modifiers"}
+            self.assertEqual(calls, expected)
+
     def test_other_cleanup_skips_each_absent_modifier_without_skipping_resets(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         cases = (

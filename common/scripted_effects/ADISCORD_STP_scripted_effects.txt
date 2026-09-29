@@ -538,7 +538,18 @@ STP_cw_initialize_focus_modifiers = {
 
 STP_cw_refresh_network_modifier = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = STP_cw_resistance_network_dynamic } } }
+		limit = {
+			NOT = {
+				AND = {
+					OR = { tag = STP tag = STS }
+					OR = {
+						has_country_flag = STP_cw_postwar
+						has_global_flag = STP_cw_union_wars_finished
+					}
+				}
+			}
+			NOT = { has_dynamic_modifier = { modifier = STP_cw_resistance_network_dynamic } }
+		}
 		add_dynamic_modifier = { modifier = STP_cw_resistance_network_dynamic }
 	}
 	force_update_dynamic_modifier = yes
@@ -546,7 +557,18 @@ STP_cw_refresh_network_modifier = {
 
 STP_cw_refresh_party_modifier = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = STP_cw_party_administration_dynamic } } }
+		limit = {
+			NOT = {
+				AND = {
+					OR = { tag = STP tag = STS }
+					OR = {
+						has_country_flag = STP_cw_postwar
+						has_global_flag = STP_cw_union_wars_finished
+					}
+				}
+			}
+			NOT = { has_dynamic_modifier = { modifier = STP_cw_party_administration_dynamic } }
+		}
 		add_dynamic_modifier = { modifier = STP_cw_party_administration_dynamic }
 	}
 	force_update_dynamic_modifier = yes
@@ -554,7 +576,18 @@ STP_cw_refresh_party_modifier = {
 
 STP_cw_refresh_army_modifier = {
 	if = {
-		limit = { NOT = { has_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic } } }
+		limit = {
+			NOT = {
+				AND = {
+					OR = { tag = STP tag = STS }
+					OR = {
+						has_country_flag = STP_cw_postwar
+						has_global_flag = STP_cw_union_wars_finished
+					}
+				}
+			}
+			NOT = { has_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic } }
+		}
 		add_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic }
 	}
 	force_update_dynamic_modifier = yes
@@ -590,6 +623,33 @@ STP_cw_clear_political_modifiers = {
 	}
 	set_variable = { var = STP_fading_father_stability_factor value = 0 }
 	force_update_dynamic_modifier = yes
+}
+
+# COUNTRY: close the claimants' civil-war bonuses on settlement, including restored STP.
+# SRP has a separate war and keeps its own military administration.
+STP_cw_clear_wartime_modifiers = {
+	if = {
+		limit = { OR = { tag = STP tag = STS } }
+		STP_cw_clear_political_modifiers = yes
+		if = {
+			limit = { has_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic } }
+			remove_dynamic_modifier = { modifier = STP_cw_military_staff_dynamic }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic } }
+			remove_dynamic_modifier = { modifier = STP_cw_election_mandate_dynamic }
+		}
+		clear_variable = STP_cw_army_org_factor
+		clear_variable = STP_cw_army_planning_speed
+		clear_variable = STP_cw_army_org_regain
+		clear_variable = STP_cw_army_supply_consumption_factor
+		clear_variable = STP_cw_mandate_org_regain
+		clear_variable = STP_cw_mandate_core_defence
+		clear_variable = STP_cw_mandate_training_time
+		clear_variable = STP_cw_mandate_mobilization
+		remove_ideas = { STP_cw_party_battle_spirit STP_cw_resistance_battle_spirit }
+		force_update_dynamic_modifier = yes
+	}
 }
 
 STP_cw_advance_health = {
@@ -2616,6 +2676,7 @@ STP_cw_finish_mobilization = {
 	clr_country_flag = STP_cw_disruption_cooldown
 	clear_variable = STP_cw_disruption_completed
 	set_country_flag = STP_cw_postwar
+	STP_cw_clear_wartime_modifiers = yes
 	if = { limit = { tag = STS } VAL_operations_map_refresh_cache = yes }
 	STP_pw_reconcile_postwar_interactivity = yes
 	STP_qol_initialize_staff = yes
@@ -4123,6 +4184,8 @@ STP_cw_check_union_wars_finished = {
 			NOT = { STP = { has_war_with = STS } }
 		}
 		set_global_flag = STP_cw_union_wars_finished
+		STP = { STP_cw_clear_wartime_modifiers = yes }
+		STS = { STP_cw_clear_wartime_modifiers = yes }
 		VAL = { if = { limit = { exists = yes } VAL_cw_stage_livonn_settlement = yes } }
 		STS = { remove_mission = STP_cw_take_fada }
 		STP = {
