@@ -100,22 +100,35 @@ def load_source_pool() -> tuple[set[int], set[int], str, list[Path]]:
             continue
         state_id, provinces, _source = parse_state(path)
         if state_id < FIRST_STATE_ID:
-            raise RuntimeError(f"generated marker is not allowed on legacy state {state_id}")
+            raise RuntimeError(
+                f"generated marker is not allowed on legacy state {state_id}"
+            )
         overlap = generated_provinces & provinces
         if overlap:
-            raise RuntimeError(f"generated states duplicate provinces {sorted(overlap)[:20]}")
+            raise RuntimeError(
+                f"generated states duplicate provinces {sorted(overlap)[:20]}"
+            )
         generated_provinces.update(provinces)
         generated_paths.append(path)
     overlap = outer_provinces & generated_provinces
     if overlap:
-        raise RuntimeError(f"state 23 overlaps generated states at provinces {sorted(overlap)[:20]}")
-    return outer_provinces | generated_provinces, outer_provinces, outer_source, generated_paths
+        raise RuntimeError(
+            f"state 23 overlaps generated states at provinces {sorted(overlap)[:20]}"
+        )
+    return (
+        outer_provinces | generated_provinces,
+        outer_provinces,
+        outer_source,
+        generated_paths,
+    )
 
 
 def load_definition_details() -> tuple[dict[int, str], dict[int, bool]]:
     terrain: dict[int, str] = {}
     coastal: dict[int, bool] = {}
-    for line in (ROOT / "map" / "definition.csv").read_text(encoding="utf-8-sig").splitlines():
+    for line in (
+        (ROOT / "map" / "definition.csv").read_text(encoding="utf-8-sig").splitlines()
+    ):
         fields = line.split(";")
         if len(fields) < 7 or not fields[0].isdigit():
             continue
@@ -136,7 +149,9 @@ def load_pixel_areas(color_to_province: dict[int, int]) -> dict[int, int]:
         color = (red << 16) | (green << 8) | blue
         province_id = color_to_province.get(color)
         if province_id is None:
-            raise RuntimeError(f"provinces.bmp uses undefined colour {red};{green};{blue}")
+            raise RuntimeError(
+                f"provinces.bmp uses undefined colour {red};{green};{blue}"
+            )
         areas[province_id] = count
     return areas
 
@@ -152,7 +167,9 @@ def build_province_data(
         if province_type != "land":
             continue
         if province_id not in positions or province_id not in areas:
-            raise RuntimeError(f"land province {province_id} lacks a map position or pixel area")
+            raise RuntimeError(
+                f"land province {province_id} lacks a map position or pixel area"
+            )
         x, height, z = positions[province_id]
         data[province_id] = ProvinceData(
             province_id=province_id,
@@ -166,11 +183,15 @@ def build_province_data(
     return data
 
 
-def component_center(component: set[int], data: dict[int, ProvinceData]) -> tuple[float, float]:
+def component_center(
+    component: set[int], data: dict[int, ProvinceData]
+) -> tuple[float, float]:
     total = sum(data[province_id].pixels for province_id in component)
     return (
-        sum(data[province_id].x * data[province_id].pixels for province_id in component) / total,
-        sum(data[province_id].y * data[province_id].pixels for province_id in component) / total,
+        sum(data[province_id].x * data[province_id].pixels for province_id in component)
+        / total,
+        sum(data[province_id].y * data[province_id].pixels for province_id in component)
+        / total,
     )
 
 
@@ -186,7 +207,9 @@ def select_landmasses(
         if len(component) >= 5000 and component_center(component, data)[0] < 2900
     ]
     if len(left_candidates) != 1:
-        raise RuntimeError(f"expected one coarse left-continent component, found {len(left_candidates)}")
+        raise RuntimeError(
+            f"expected one coarse left-continent component, found {len(left_candidates)}"
+        )
     left = left_candidates[0]
 
     right_components: list[set[int]] = []
@@ -203,7 +226,9 @@ def select_landmasses(
 
     right = set().union(*right_components) if right_components else set()
     if len(right) < 2500:
-        raise RuntimeError(f"right-continent selection is unexpectedly small: {len(right)} provinces")
+        raise RuntimeError(
+            f"right-continent selection is unexpectedly small: {len(right)} provinces"
+        )
     return left, right, right_components
 
 
@@ -237,7 +262,9 @@ def principal_axis(nodes: set[int], data: dict[int, ProvinceData]) -> str:
     return "x" if max(xs) - min(xs) >= max(ys) - min(ys) else "y"
 
 
-def edge_cost(first: int, second: int, data: dict[int, ProvinceData], scale: float) -> float:
+def edge_cost(
+    first: int, second: int, data: dict[int, ProvinceData], scale: float
+) -> float:
     a, b = data[first], data[second]
     distance = math.hypot(a.x - b.x, a.y - b.y) / max(scale, 1.0)
     terrain_penalty = 0.10 if a.terrain != b.terrain else 0.0
@@ -254,15 +281,21 @@ def bisect_connected(
     data: dict[int, ProvinceData],
 ) -> tuple[set[int], set[int]]:
     axis = principal_axis(nodes, data)
-    key = (lambda province_id: (data[province_id].x, data[province_id].y, province_id)) if axis == "x" else (
-        lambda province_id: (data[province_id].y, data[province_id].x, province_id)
+    key = (
+        (lambda province_id: (data[province_id].x, data[province_id].y, province_id))
+        if axis == "x"
+        else (
+            lambda province_id: (data[province_id].y, data[province_id].x, province_id)
+        )
     )
     seed_a = min(nodes, key=key)
     seed_b = max(nodes, key=key)
     if seed_a == seed_b:
         raise RuntimeError("cannot bisect a one-province component")
 
-    mass = {province_id: province_mass(landmass, data[province_id]) for province_id in nodes}
+    mass = {
+        province_id: province_mass(landmass, data[province_id]) for province_id in nodes
+    }
     total_mass = sum(mass.values())
     target_a = total_mass * left_parts / total_parts
     target_b = total_mass - target_a
@@ -270,8 +303,10 @@ def bisect_connected(
     group_mass = [mass[seed_a], mass[seed_b]]
     assigned = {seed_a: 0, seed_b: 1}
     spans = (
-        max(data[province_id].x for province_id in nodes) - min(data[province_id].x for province_id in nodes),
-        max(data[province_id].y for province_id in nodes) - min(data[province_id].y for province_id in nodes),
+        max(data[province_id].x for province_id in nodes)
+        - min(data[province_id].x for province_id in nodes),
+        max(data[province_id].y for province_id in nodes)
+        - min(data[province_id].y for province_id in nodes),
     )
     scale = max(spans)
     frontiers: list[list[tuple[float, int, int]]] = [[], []]
@@ -282,19 +317,29 @@ def bisect_connected(
                 continue
             heapq.heappush(
                 frontiers[side],
-                (base_cost + edge_cost(province_id, neighbour, data, scale), neighbour, province_id),
+                (
+                    base_cost + edge_cost(province_id, neighbour, data, scale),
+                    neighbour,
+                    province_id,
+                ),
             )
 
     push_neighbours(0, seed_a, 0.0)
     push_neighbours(1, seed_b, 0.0)
     remaining = len(nodes) - 2
     while remaining:
-        ratios = (group_mass[0] / max(target_a, 1e-9), group_mass[1] / max(target_b, 1e-9))
+        ratios = (
+            group_mass[0] / max(target_a, 1e-9),
+            group_mass[1] / max(target_b, 1e-9),
+        )
         preferred = 0 if ratios[0] <= ratios[1] else 1
         chosen: tuple[float, int, int] | None = None
         side = preferred
         for candidate_side in (preferred, 1 - preferred):
-            while frontiers[candidate_side] and frontiers[candidate_side][0][1] in assigned:
+            while (
+                frontiers[candidate_side]
+                and frontiers[candidate_side][0][1] in assigned
+            ):
                 heapq.heappop(frontiers[candidate_side])
             if frontiers[candidate_side]:
                 side = candidate_side
@@ -329,11 +374,12 @@ def partition_connected(
     if parts <= 1:
         return [set(nodes)]
     left_parts = parts // 2
-    first, second = bisect_connected(nodes, left_parts, parts, landmass, adjacency, data)
-    return (
-        partition_connected(first, left_parts, landmass, adjacency, data)
-        + partition_connected(second, parts - left_parts, landmass, adjacency, data)
+    first, second = bisect_connected(
+        nodes, left_parts, parts, landmass, adjacency, data
     )
+    return partition_connected(
+        first, left_parts, landmass, adjacency, data
+    ) + partition_connected(second, parts - left_parts, landmass, adjacency, data)
 
 
 def partition_disconnected(
@@ -344,18 +390,25 @@ def partition_disconnected(
     items = []
     for component in components:
         center_x, center_y = component_center(component, data)
-        mass = sum(province_mass(landmass, data[province_id]) for province_id in component)
+        mass = sum(
+            province_mass(landmass, data[province_id]) for province_id in component
+        )
         items.append((component, center_x, center_y, mass))
     parts = max(1, round(sum(item[3] for item in items)))
     parts = min(parts, len(items))
 
-    def split(group: list[tuple[set[int], float, float, float]], count: int) -> list[list[tuple[set[int], float, float, float]]]:
+    def split(
+        group: list[tuple[set[int], float, float, float]], count: int
+    ) -> list[list[tuple[set[int], float, float, float]]]:
         if count <= 1:
             return [group]
         x_span = max(item[1] for item in group) - min(item[1] for item in group)
         y_span = max(item[2] for item in group) - min(item[2] for item in group)
         axis = 1 if x_span >= y_span else 2
-        ordered = sorted(group, key=lambda item: (item[axis], item[2 if axis == 1 else 1], min(item[0])))
+        ordered = sorted(
+            group,
+            key=lambda item: (item[axis], item[2 if axis == 1 else 1], min(item[0])),
+        )
         left_count = count // 2
         target = sum(item[3] for item in ordered) * left_count / count
         running = 0.0
@@ -364,10 +417,16 @@ def partition_disconnected(
         for index in range(1, len(ordered)):
             running += ordered[index - 1][3]
             difference = abs(running - target)
-            if difference < best and index >= left_count and len(ordered) - index >= count - left_count:
+            if (
+                difference < best
+                and index >= left_count
+                and len(ordered) - index >= count - left_count
+            ):
                 best = difference
                 cut = index
-        return split(ordered[:cut], left_count) + split(ordered[cut:], count - left_count)
+        return split(ordered[:cut], left_count) + split(
+            ordered[cut:], count - left_count
+        )
 
     return [set().union(*(item[0] for item in group)) for group in split(items, parts)]
 
@@ -382,15 +441,23 @@ def plan_clusters(
 
     left_parts = max(1, round(sum(province_mass("left", data[p]) for p in left)))
     left_parts = min(left_parts, max(1, len(left) // 18))
-    clusters.extend(("left", group) for group in partition_connected(left, left_parts, "left", adjacency, data))
+    clusters.extend(
+        ("left", group)
+        for group in partition_connected(left, left_parts, "left", adjacency, data)
+    )
 
     mainland = [component for component in right_components if len(component) >= 100]
     islands = [component for component in right_components if len(component) < 100]
     for component in mainland:
         parts = max(1, round(sum(province_mass("right", data[p]) for p in component)))
         parts = min(parts, max(1, len(component) // 4))
-        clusters.extend(("right", group) for group in partition_connected(component, parts, "right", adjacency, data))
-    clusters.extend(("right", group) for group in partition_disconnected(islands, "right", data))
+        clusters.extend(
+            ("right", group)
+            for group in partition_connected(component, parts, "right", adjacency, data)
+        )
+    clusters.extend(
+        ("right", group) for group in partition_disconnected(islands, "right", data)
+    )
     return merge_small_clusters(clusters, adjacency, data)
 
 
@@ -409,14 +476,21 @@ def merge_small_clusters(
         candidates = [index for index, mass in enumerate(masses) if mass < 0.45]
         if not candidates:
             break
-        source_index = min(candidates, key=lambda index: (masses[index], min(working[index][1])))
+        source_index = min(
+            candidates, key=lambda index: (masses[index], min(working[index][1]))
+        )
         landmass, source = working[source_index]
         source_x, source_y = component_center(source, data)
         choices: list[tuple[int, float, float, int]] = []
         for target_index, (target_landmass, target) in enumerate(working):
             if target_index == source_index or target_landmass != landmass:
                 continue
-            shared_edges = sum(1 for province_id in source for neighbour in adjacency[province_id] if neighbour in target)
+            shared_edges = sum(
+                1
+                for province_id in source
+                for neighbour in adjacency[province_id]
+                if neighbour in target
+            )
             target_x, target_y = component_center(target, data)
             distance = math.hypot(source_x - target_x, source_y - target_y)
             combined_mass = masses[source_index] + masses[target_index]
@@ -429,11 +503,15 @@ def merge_small_clusters(
     return working
 
 
-def cluster_statistics(provinces: set[int], data: dict[int, ProvinceData]) -> dict[str, object]:
+def cluster_statistics(
+    provinces: set[int], data: dict[int, ProvinceData]
+) -> dict[str, object]:
     total_pixels = sum(data[p].pixels for p in provinces)
     x = sum(data[p].x * data[p].pixels for p in provinces) / total_pixels
     y = sum(data[p].y * data[p].pixels for p in provinces) / total_pixels
-    average_height = sum(data[p].height * data[p].pixels for p in provinces) / total_pixels
+    average_height = (
+        sum(data[p].height * data[p].pixels for p in provinces) / total_pixels
+    )
     terrain_pixels: Counter[str] = Counter()
     coastal_pixels = 0
     for province_id in provinces:
@@ -442,7 +520,9 @@ def cluster_statistics(provinces: set[int], data: dict[int, ProvinceData]) -> di
         if province.coastal:
             coastal_pixels += province.pixels
     dominant = terrain_pixels.most_common(1)[0][0]
-    highland_share = sum(terrain_pixels[name] for name in ("hills", "mountain")) / total_pixels
+    highland_share = (
+        sum(terrain_pixels[name] for name in ("hills", "mountain")) / total_pixels
+    )
     wet_share = sum(terrain_pixels[name] for name in ("forest", "marsh")) / total_pixels
     return {
         "pixels": total_pixels,
@@ -468,7 +548,11 @@ def climate_region(landmass: str, stats: dict[str, object]) -> str:
         if y < 520:
             if highland:
                 return "right_cold_highlands"
-            return "right_subarctic_maritime" if maritime else "right_subarctic_continental"
+            return (
+                "right_subarctic_maritime"
+                if maritime
+                else "right_subarctic_continental"
+            )
         if y < 780:
             if highland:
                 return "right_cool_highlands"
@@ -497,9 +581,19 @@ def climate_region(landmass: str, stats: dict[str, object]) -> str:
 
 
 DIRECTION_FORMS = {
-    (0, 0): ("Северо-западный", "Северо-западная", "Северо-западное", "Северо-западные"),
+    (0, 0): (
+        "Северо-западный",
+        "Северо-западная",
+        "Северо-западное",
+        "Северо-западные",
+    ),
     (0, 1): ("Северный", "Северная", "Северное", "Северные"),
-    (0, 2): ("Северо-восточный", "Северо-восточная", "Северо-восточное", "Северо-восточные"),
+    (0, 2): (
+        "Северо-восточный",
+        "Северо-восточная",
+        "Северо-восточное",
+        "Северо-восточные",
+    ),
     (1, 0): ("Западный", "Западная", "Западное", "Западные"),
     (1, 1): ("Центральный", "Центральная", "Центральное", "Центральные"),
     (1, 2): ("Восточный", "Восточная", "Восточное", "Восточные"),
@@ -520,7 +614,9 @@ def state_name_parts(
     row = min(2, max(0, int(3.0 * (y - y_min) / max(1.0, y_max - y_min))))
     column = min(2, max(0, int(3.0 * (x - x_min) / max(1.0, x_max - x_min))))
     direction = DIRECTION_FORMS[(row, column)]
-    _root, topo_masculine, topo_feminine, topo_neuter, topo_plural = outer_macro_toponym(climate_key, x)
+    _root, topo_masculine, topo_feminine, topo_neuter, topo_plural = (
+        outer_macro_toponym(climate_key, x)
+    )
 
     if float(stats["coastal_share"]) >= 0.70:
         gender, feature, base_name = 3, "острова", f"{topo_plural} острова"
@@ -545,16 +641,86 @@ def state_name_parts(
 
 
 LOCAL_TOPONYM_ROOTS = (
-    "Аверн", "Альдор", "Арвек", "Белран", "Борден", "Бревар", "Вельтар", "Гарлен",
-    "Гевран", "Гольден", "Дарвен", "Дельвар", "Дорген", "Эльвар", "Эрден", "Жаврен",
-    "Зеллар", "Зорвен", "Иверан", "Ильден", "Каврен", "Келлан", "Кердор", "Лаврен",
-    "Левард", "Лирвен", "Лорден", "Маверн", "Мейдар", "Мелран", "Невард", "Нелвен",
-    "Нордар", "Ольвен", "Орлан", "Пелдар", "Перван", "Равден", "Рейвен", "Рендар",
-    "Салвен", "Севард", "Селлан", "Таврен", "Таллер", "Тейвар", "Терлан", "Ульвар",
-    "Фаллен", "Фейвар", "Хеллан", "Целвар", "Черден", "Шаврен", "Шелдар", "Эвард",
-    "Эльден", "Ярвен", "Альвер", "Бердан", "Веглар", "Гальвен", "Дейран", "Зейлар",
-    "Кольвен", "Марден", "Найвен", "Пейлар", "Росвен", "Сайдар", "Тейрен", "Фольвар",
-    "Хейден", "Эймар", "Ялден", "Бейвар", "Гельден", "Дальвен", "Кейлар", "Мордан",
+    "Аверн",
+    "Альдор",
+    "Арвек",
+    "Белран",
+    "Борден",
+    "Бревар",
+    "Вельтар",
+    "Гарлен",
+    "Гевран",
+    "Гольден",
+    "Дарвен",
+    "Дельвар",
+    "Дорген",
+    "Эльвар",
+    "Эрден",
+    "Жаврен",
+    "Зеллар",
+    "Зорвен",
+    "Иверан",
+    "Ильден",
+    "Каврен",
+    "Келлан",
+    "Кердор",
+    "Лаврен",
+    "Левард",
+    "Лирвен",
+    "Лорден",
+    "Маверн",
+    "Мейдар",
+    "Мелран",
+    "Невард",
+    "Нелвен",
+    "Нордар",
+    "Ольвен",
+    "Орлан",
+    "Пелдар",
+    "Перван",
+    "Равден",
+    "Рейвен",
+    "Рендар",
+    "Салвен",
+    "Севард",
+    "Селлан",
+    "Таврен",
+    "Таллер",
+    "Тейвар",
+    "Терлан",
+    "Ульвар",
+    "Фаллен",
+    "Фейвар",
+    "Хеллан",
+    "Целвар",
+    "Черден",
+    "Шаврен",
+    "Шелдар",
+    "Эвард",
+    "Эльден",
+    "Ярвен",
+    "Альвер",
+    "Бердан",
+    "Веглар",
+    "Гальвен",
+    "Дейран",
+    "Зейлар",
+    "Кольвен",
+    "Марден",
+    "Найвен",
+    "Пейлар",
+    "Росвен",
+    "Сайдар",
+    "Тейрен",
+    "Фольвар",
+    "Хейден",
+    "Эймар",
+    "Ялден",
+    "Бейвар",
+    "Гельден",
+    "Дальвен",
+    "Кейлар",
+    "Мордан",
 )
 
 
@@ -574,7 +740,9 @@ def assign_ids_and_metadata(
             min(item[1]),
         ),
     )
-    statistics = [cluster_statistics(provinces, data) for _landmass, provinces in ordered]
+    statistics = [
+        cluster_statistics(provinces, data) for _landmass, provinces in ordered
+    ]
     climate_keys = [
         climate_region(landmass, stats)
         for (landmass, _provinces), stats in zip(ordered, statistics)
@@ -596,7 +764,9 @@ def assign_ids_and_metadata(
             name = base_name
         else:
             if local_toponym_index >= len(LOCAL_TOPONYM_ROOTS):
-                raise RuntimeError("not enough local toponyms to disambiguate generated state names")
+                raise RuntimeError(
+                    "not enough local toponyms to disambiguate generated state names"
+                )
             forms = local_toponym_forms(LOCAL_TOPONYM_ROOTS[local_toponym_index])
             local_toponym_index += 1
             name = f"{forms[gender]} {feature}"
@@ -615,14 +785,18 @@ def assign_ids_and_metadata(
 def format_provinces(provinces: set[int], indent: str = "\t\t", width: int = 16) -> str:
     values = sorted(provinces)
     return "\n".join(
-        indent + " ".join(str(value) for value in values[start:start + width])
+        indent + " ".join(str(value) for value in values[start : start + width])
         for start in range(0, len(values), width)
     )
 
 
 def render_state(state: PlannedState, data: dict[int, ProvinceData]) -> str:
     stats = cluster_statistics(state.provinces, data)
-    category = "wasteland" if float(stats["y"]) < 300 or float(stats["highland_share"]) >= 0.70 else "rural"
+    category = (
+        "wasteland"
+        if float(stats["y"]) < 300 or float(stats["highland_share"]) >= 0.70
+        else "rural"
+    )
     return (
         f"{GENERATED_MARKER}\n"
         f"{CLIMATE_MARKER}{state.climate_region}\n"
@@ -644,8 +818,10 @@ def replace_outer_provinces(source: str, provinces: set[int]) -> str:
     match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
     if not match:
         raise RuntimeError("state 23: missing provinces block")
-    replacement = "provinces={\n" + format_provinces(provinces, indent="\t\t", width=24) + "\n\t}"
-    return source[:match.start()] + replacement + source[match.end():]
+    replacement = (
+        "provinces={\n" + format_provinces(provinces, indent="\t\t", width=24) + "\n\t}"
+    )
+    return source[: match.start()] + replacement + source[match.end() :]
 
 
 def validate_plan(
@@ -665,7 +841,9 @@ def validate_plan(
             f"planned coverage mismatch: missing {len(expected-assigned)}, unexpected {len(assigned-expected)}"
         )
     if not assigned <= source_pool:
-        raise RuntimeError("planned states use provinces outside state 23/generated source pool")
+        raise RuntimeError(
+            "planned states use provinces outside state 23/generated source pool"
+        )
 
 
 def print_summary(planned: list[PlannedState], data: dict[int, ProvinceData]) -> None:
@@ -676,7 +854,12 @@ def print_summary(planned: list[PlannedState], data: dict[int, ProvinceData]) ->
     for climate, count in sorted(by_climate.items()):
         print(f"- {climate}: {count}")
     for landmass in ("right", "left"):
-        rows = [cluster_statistics(state.provinces, data) | {"provinces": len(state.provinces)} for state in planned if state.landmass == landmass]
+        rows = [
+            cluster_statistics(state.provinces, data)
+            | {"provinces": len(state.provinces)}
+            for state in planned
+            if state.landmass == landmass
+        ]
         province_counts = sorted(int(row["provinces"]) for row in rows)
         pixel_counts = sorted(int(row["pixels"]) for row in rows)
         if rows:
@@ -695,7 +878,10 @@ def apply_plan(
     generated_paths: list[Path],
 ) -> None:
     generated_provinces = set().union(*(state.provinces for state in planned))
-    remaining_outer = (original_outer | set().union(*(parse_state(path)[1] for path in generated_paths))) - generated_provinces
+    remaining_outer = (
+        original_outer
+        | set().union(*(parse_state(path)[1] for path in generated_paths))
+    ) - generated_provinces
     if not remaining_outer:
         raise RuntimeError("state 23 would become empty")
 
@@ -703,7 +889,11 @@ def apply_plan(
     # state directory; legacy/manual state files are never removed.
     for path in generated_paths:
         path.unlink()
-    state_path(23).write_text(replace_outer_provinces(outer_source, remaining_outer), encoding="utf-8", newline="\n")
+    state_path(23).write_text(
+        replace_outer_provinces(outer_source, remaining_outer),
+        encoding="utf-8",
+        newline="\n",
+    )
     for state in planned:
         path = STATE_DIR / f"{state.state_id}-outer-{state.landmass}.txt"
         path.write_text(render_state(state, data), encoding="utf-8", newline="\n")
@@ -713,24 +903,44 @@ def apply_plan(
         "tools.builders.build_adiscord_outer_states",
         {f"STATE_{state.state_id}": state.name for state in planned},
     )
-    print(f"Applied {len(planned)} generated state shells; state 23 now keeps {len(remaining_outer)} provinces.")
-    print("Run northern countries --apply, exclusion boundaries --apply, then northern countries --apply again.")
+    print(
+        f"Applied {len(planned)} generated state shells; state 23 now keeps {len(remaining_outer)} provinces."
+    )
+    print(
+        "Run northern countries --apply, exclusion boundaries --apply, then northern countries --apply again."
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated state files and localisation")
-    parser.add_argument("--english-localisation", action="store_true", help="check or apply only reviewed English names")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated outputs (default)",
+    )
+    actions.add_argument(
+        "--apply",
+        action="store_true",
+        help="write generated state files and localisation",
+    )
+    parser.add_argument(
+        "--english-localisation",
+        action="store_true",
+        help="check or apply only reviewed English names",
+    )
     args = parser.parse_args()
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 
-        return sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_outer_states", apply=args.apply)
+        return sync_builder_english_localisation(
+            ROOT, "tools.builders.build_adiscord_outer_states", apply=args.apply
+        )
 
     if not args.apply:
-        from tools.validators.validate_adiscord_outer_states import main as validate_main
+        from tools.validators.validate_adiscord_outer_states import (
+            main as validate_main,
+        )
 
         return validate_main()
 

@@ -35,10 +35,52 @@ KHAN_CAMPAIGN_RAIL_UPGRADES = (
     (2, (16639, 16531)),
     (2, (16546, 11010, 2558)),
     (2, (16546, 16545, 7445, 4051, 5637, 10617, 11425, 8664, 5195, 9439, 16518)),
-    (2, (16639, 10563, 12635, 5961, 4899, 3728, 5780, 564, 7706, 876, 12361, 7164, 6196, 4580)),
+    (
+        2,
+        (
+            16639,
+            10563,
+            12635,
+            5961,
+            4899,
+            3728,
+            5780,
+            564,
+            7706,
+            876,
+            12361,
+            7164,
+            6196,
+            4580,
+        ),
+    ),
     (2, (16518, 11398, 2825, 2395, 2952, 9994, 1112, 16525, 16517)),
     (2, (16511, 6519, 11913, 10693, 12878, 16526)),
-    (2, (6495, 6000, 5979, 6870, 9041, 910, 9308, 7567, 12366, 7178, 8981, 691, 7790, 6015, 11334, 7786, 16327, 1907, 16504, 16469)),
+    (
+        2,
+        (
+            6495,
+            6000,
+            5979,
+            6870,
+            9041,
+            910,
+            9308,
+            7567,
+            12366,
+            7178,
+            8981,
+            691,
+            7790,
+            6015,
+            11334,
+            7786,
+            16327,
+            1907,
+            16504,
+            16469,
+        ),
+    ),
     (2, (2741, 7650, 2743, 12231, 8535, 6669, 10977, 8259, 9031, 11334)),
     (2, (2741, 5194, 6220, 6652, 10726, 8655, 11688, 10888, 5210)),
 )
@@ -138,8 +180,7 @@ def update_supply_source(source: str) -> str:
     """Append exact generated hubs while preserving every unmanaged record."""
     lines = source.replace("\r\n", "\n").splitlines()
     managed = {
-        render_supply_node(province_id)
-        for province_id in VORKERLAND_SUPPLY_HUB_STATES
+        render_supply_node(province_id) for province_id in VORKERLAND_SUPPLY_HUB_STATES
     }
     lines = [line for line in lines if line.strip() not in managed]
     lines.extend(
@@ -210,16 +251,30 @@ def validate() -> list[str]:
             include_special_adjacencies=False,
         )
         for first, second in zip(provinces, provinces[1:]):
-            if province_types.get(first) != "land" or province_types.get(second) != "land":
-                issues.append(f"OSV rail segment {first}-{second} is not entirely on land")
+            if (
+                province_types.get(first) != "land"
+                or province_types.get(second) != "land"
+            ):
+                issues.append(
+                    f"OSV rail segment {first}-{second} is not entirely on land"
+                )
             if second not in physical.get(first, set()):
-                issues.append(f"OSV rail segment {first}-{second} is not physically adjacent")
+                issues.append(
+                    f"OSV rail segment {first}-{second} is not physically adjacent"
+                )
         for _, campaign_route in KHAN_CAMPAIGN_RAIL_UPGRADES:
             for first, second in zip(campaign_route, campaign_route[1:]):
-                if province_types.get(first) != "land" or province_types.get(second) != "land":
-                    issues.append(f"RUS campaign rail segment {first}-{second} is not entirely on land")
+                if (
+                    province_types.get(first) != "land"
+                    or province_types.get(second) != "land"
+                ):
+                    issues.append(
+                        f"RUS campaign rail segment {first}-{second} is not entirely on land"
+                    )
                 if second not in physical.get(first, set()):
-                    issues.append(f"RUS campaign rail segment {first}-{second} is not physically adjacent")
+                    issues.append(
+                        f"RUS campaign rail segment {first}-{second} is not physically adjacent"
+                    )
         railway_provinces = {
             int(province_id)
             for line in source.splitlines()
@@ -230,7 +285,9 @@ def validate() -> list[str]:
             if province_types.get(province_id) != "land":
                 issues.append(f"Vorkerland supply hub {province_id} is not on land")
             if province_id not in railway_provinces:
-                issues.append(f"Vorkerland supply hub {province_id} is not on a railway")
+                issues.append(
+                    f"Vorkerland supply hub {province_id} is not on a railway"
+                )
         state_owners = {}
         for path in (ROOT / "history/states").glob("*.txt"):
             history = path.read_text(encoding="utf-8-sig")
@@ -263,39 +320,60 @@ def validate() -> list[str]:
                 if province_types.get(province) != "land":
                     issues.append(f"{tag} supply connection leaves land at {province}")
                 if state_owners.get(state_by_province.get(province)) != tag:
-                    issues.append(f"{tag} supply connection leaves its starting territory at {province}")
+                    issues.append(
+                        f"{tag} supply connection leaves its starting territory at {province}"
+                    )
             for first, second in zip(route, route[1:]):
                 if second not in physical.get(first, set()):
-                    issues.append(f"{tag} rail segment {first}-{second} is not physically adjacent")
+                    issues.append(
+                        f"{tag} rail segment {first}-{second} is not physically adjacent"
+                    )
             pending = [hubs[0]]
             reached = {hubs[0]}
             while pending:
                 province = pending.pop()
                 for neighbour in rail_graph[province]:
-                    if neighbour not in reached and state_owners.get(state_by_province.get(neighbour)) == tag:
+                    if (
+                        neighbour not in reached
+                        and state_owners.get(state_by_province.get(neighbour)) == tag
+                    ):
                         reached.add(neighbour)
                         pending.append(neighbour)
             if hubs[1] not in reached:
-                issues.append(f"{tag} supply hubs {hubs[0]} and {hubs[1]} are disconnected inside its starting territory")
+                issues.append(
+                    f"{tag} supply hubs {hubs[0]} and {hubs[1]} are disconnected inside its starting territory"
+                )
         if source.splitlines().count(render_khan_connection()) != 1:
             issues.append("RUS border supply connection must occur exactly once")
         for province in KHAN_SUPPLY_RAIL[1]:
-            if province_types.get(province) != "land" or state_by_province.get(province) not in KHAN_SUPPLY_STATES:
-                issues.append(f"RUS border supply connection leaves its campaign territory at {province}")
+            if (
+                province_types.get(province) != "land"
+                or state_by_province.get(province) not in KHAN_SUPPLY_STATES
+            ):
+                issues.append(
+                    f"RUS border supply connection leaves its campaign territory at {province}"
+                )
         for first, second in zip(KHAN_SUPPLY_RAIL[1], KHAN_SUPPLY_RAIL[1][1:]):
             if second not in physical.get(first, set()):
-                issues.append(f"RUS rail segment {first}-{second} is not physically adjacent")
+                issues.append(
+                    f"RUS rail segment {first}-{second} is not physically adjacent"
+                )
         pending = [KHAN_SUPPLY_HUBS[0]]
         reached = set(pending)
         while pending:
             province = pending.pop()
             for neighbour in rail_graph[province]:
-                if neighbour not in reached and state_by_province.get(neighbour) in KHAN_SUPPLY_STATES:
+                if (
+                    neighbour not in reached
+                    and state_by_province.get(neighbour) in KHAN_SUPPLY_STATES
+                ):
                     reached.add(neighbour)
                     pending.append(neighbour)
         for hub in KHAN_SUPPLY_HUBS:
             if hub not in reached:
-                issues.append(f"RUS border supply hub {hub} is disconnected from the capital within states 66/49/176")
+                issues.append(
+                    f"RUS border supply hub {hub} is disconnected from the capital within states 66/49/176"
+                )
             if supply_lines.count(render_supply_node(hub)) != 1:
                 issues.append(f"RUS border supply hub {hub} must occur exactly once")
     except (OSError, RuntimeError, ValueError, KeyError) as error:
@@ -315,7 +393,9 @@ def apply() -> None:
     supply_source = supply_raw.decode("utf-8-sig")
     updated_supply = update_supply_source(supply_source)
     if updated_supply != supply_source.replace("\r\n", "\n"):
-        SUPPLY_NODES_PATH.write_bytes(updated_supply.replace("\n", supply_newline).encode("utf-8"))
+        SUPPLY_NODES_PATH.write_bytes(
+            updated_supply.replace("\n", supply_newline).encode("utf-8")
+        )
 
 
 def main() -> int:
@@ -324,9 +404,13 @@ def main() -> int:
     )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument(
-        "--check", action="store_true", help="validate current generated output (default)"
+        "--check",
+        action="store_true",
+        help="validate current generated output (default)",
     )
-    actions.add_argument("--apply", action="store_true", help="write the generated rail block")
+    actions.add_argument(
+        "--apply", action="store_true", help="write the generated rail block"
+    )
     args = parser.parse_args()
 
     if args.apply:

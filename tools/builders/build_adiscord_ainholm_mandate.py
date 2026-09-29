@@ -14,12 +14,22 @@ from tools.lib.paths import repository_root
 ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 UNIT_PATH = ROOT / "history" / "units" / "AIN.txt"
-COUNTRY_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "countries_l_russian.yml"
+COUNTRY_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "countries_l_russian.yml"
+)
 PARTY_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "parties_l_russian.yml"
-CHARACTER_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "nsb_characters_l_russian.yml"
-TRAIT_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_traits_l_russian.yml"
-IDEA_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "ADISCORD_ideas_l_russian.yml"
-VP_LOCALISATION_PATH = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+CHARACTER_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "nsb_characters_l_russian.yml"
+)
+TRAIT_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "ADISCORD_traits_l_russian.yml"
+)
+IDEA_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "ADISCORD_ideas_l_russian.yml"
+)
+VP_LOCALISATION_PATH = (
+    ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+)
 FLAG_DIR = ROOT / "gfx" / "flags"
 DIVISION_TEMPLATE_NAMES = ("Licensed Security Battalion",)
 
@@ -94,7 +104,9 @@ STATE_PROFILES = {
 def state_path(state_id: int) -> Path:
     matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
     if len(matches) != 1:
-        raise RuntimeError(f"state {state_id}: expected one history file, found {len(matches)}")
+        raise RuntimeError(
+            f"state {state_id}: expected one history file, found {len(matches)}"
+        )
     return matches[0]
 
 
@@ -154,7 +166,11 @@ units = {
 \tdivision = { division_name = { is_name_ordered = yes name_order = 1 } location = 147 division_template = "%s" start_experience_factor = 0.10 start_equipment_factor = 0.72 }
 \tdivision = { division_name = { is_name_ordered = yes name_order = 2 } location = 16348 division_template = "%s" start_experience_factor = 0.10 start_equipment_factor = 0.68 }
 }
-""" % (template, template, template)
+""" % (
+        template,
+        template,
+        template,
+    )
 
 
 def render_flag() -> Image.Image:
@@ -175,7 +191,9 @@ def render_flag() -> Image.Image:
 
 def apply() -> None:
     for state_id, profile in STATE_PROFILES.items():
-        state_path(state_id).write_text(render_state(state_id, profile), encoding="utf-8", newline="\n")
+        state_path(state_id).write_text(
+            render_state(state_id, profile), encoding="utf-8", newline="\n"
+        )
     UNIT_PATH.write_text(render_oob(), encoding="utf-8", newline="\n")
     for path, entries in AIN_LOCALISATION.items():
         replace_generated_localisation_block(
@@ -201,22 +219,38 @@ def apply() -> None:
         (FLAG_DIR / "small", (10, 7)),
     ):
         directory.mkdir(parents=True, exist_ok=True)
-        image = base if base.size == size else base.resize(size, Image.Resampling.LANCZOS)
+        image = (
+            base if base.size == size else base.resize(size, Image.Resampling.LANCZOS)
+        )
         image.save(directory / "AIN.tga")
-    print("Applied Ainholm mandate: 3 states, 2 divisions, 3 flags and Russian localisation.")
+    print(
+        "Applied Ainholm mandate: 3 states, 2 divisions, 3 flags and Russian localisation."
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write states, OOB, flags and localisation")
-    parser.add_argument("--english-localisation", action="store_true", help="check or apply only reviewed English names")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated outputs (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write states, OOB, flags and localisation"
+    )
+    parser.add_argument(
+        "--english-localisation",
+        action="store_true",
+        help="check or apply only reviewed English names",
+    )
     args = parser.parse_args()
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 
-        return sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_ainholm_mandate", apply=args.apply)
+        return sync_builder_english_localisation(
+            ROOT, "tools.builders.build_adiscord_ainholm_mandate", apply=args.apply
+        )
     if args.apply:
         apply()
         return 0

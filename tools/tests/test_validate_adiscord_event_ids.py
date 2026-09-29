@@ -73,7 +73,9 @@ def _validate_fixture(
 
 
 class EventIdInventoryTests(unittest.TestCase):
-    def test_live_registry_matches_all_definitions_references_and_recovery_ranges(self) -> None:
+    def test_live_registry_matches_all_definitions_references_and_recovery_ranges(
+        self,
+    ) -> None:
         self.assertEqual(validate(ROOT, REGISTRY_PATH), [])
 
         data = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
@@ -117,7 +119,9 @@ class EventIdInventoryTests(unittest.TestCase):
         )
         self.assertEqual(issues, [])
 
-    def test_duplicate_definition_is_rejected_even_when_nested_calls_exist(self) -> None:
+    def test_duplicate_definition_is_rejected_even_when_nested_calls_exist(
+        self,
+    ) -> None:
         source = """add_namespace = ADISCORD_fixture
 country_event = {
     id = ADISCORD_fixture.1
@@ -157,16 +161,21 @@ country_event = { id = ADISCORD_fixture.2 }
             },
             [_entry("ADISCORD_fixture.1", "events/fixture.txt")],
             gameplay_files={
-                "common/scripted_effects/fixture.txt":
-                "effect = { country_event = { id = ADISCORD_fixture.3 } }\n"
+                "common/scripted_effects/fixture.txt": "effect = { country_event = { id = ADISCORD_fixture.3 } }\n"
             },
         )
         self.assertTrue(
-            any("unregistered event definition ADISCORD_fixture.2" in issue for issue in issues),
+            any(
+                "unregistered event definition ADISCORD_fixture.2" in issue
+                for issue in issues
+            ),
             issues,
         )
         self.assertTrue(
-            any("unregistered event reference ADISCORD_fixture.3" in issue for issue in issues),
+            any(
+                "unregistered event reference ADISCORD_fixture.3" in issue
+                for issue in issues
+            ),
             issues,
         )
 
@@ -188,8 +197,14 @@ country_event = { id = ADISCORD_fixture.2 }
                 _entry("ADISCORD_fixture.3", "events/actual.txt"),
             ],
         )
-        self.assertTrue(any("owner drift for ADISCORD_fixture.1" in issue for issue in issues), issues)
-        self.assertTrue(any("namespace drift for ADISCORD_fixture.1" in issue for issue in issues), issues)
+        self.assertTrue(
+            any("owner drift for ADISCORD_fixture.1" in issue for issue in issues),
+            issues,
+        )
+        self.assertTrue(
+            any("namespace drift for ADISCORD_fixture.1" in issue for issue in issues),
+            issues,
+        )
         self.assertTrue(
             any(
                 "status drift for ADISCORD_fixture.2: reserved entry has a live definition"
@@ -207,7 +222,9 @@ country_event = { id = ADISCORD_fixture.2 }
             issues,
         )
 
-    def test_comments_strings_and_registered_external_namespace_are_not_references(self) -> None:
+    def test_comments_strings_and_registered_external_namespace_are_not_references(
+        self,
+    ) -> None:
         issues = _validate_fixture(
             {
                 "events/fixture.txt": """add_namespace = ADISCORD_fixture
@@ -220,8 +237,7 @@ country_event = {
             },
             [_entry("ADISCORD_fixture.1", "events/fixture.txt")],
             gameplay_files={
-                "common/operations/fixture.txt":
-                "effect = { country_event = { id = vanilla_fixture.1 } }\n"
+                "common/operations/fixture.txt": "effect = { country_event = { id = vanilla_fixture.1 } }\n"
             },
             external_namespaces=["vanilla_fixture"],
         )

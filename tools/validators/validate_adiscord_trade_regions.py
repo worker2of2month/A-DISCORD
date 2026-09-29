@@ -29,10 +29,10 @@ EXPECTED_PROVINCE_COUNTS = {
 # These anchors prove that the mapping follows physical map regions rather
 # than the country currently owning each state.
 GEOGRAPHIC_STATE_ANCHORS = {
-    66: (19, 2),   # Rus enclave lies in the Grey Belt / Exclusion Zone.
-    78: (5, 7),    # The Danian expedition is in the far-west Outer Lands.
+    66: (19, 2),  # Rus enclave lies in the Grey Belt / Exclusion Zone.
+    78: (5, 7),  # The Danian expedition is in the far-west Outer Lands.
     120: (15, 1),  # ORV ownership does not move the Ainholm mandate eastward.
-    141: (7, 6),   # Doln's western state remains in Western Forul.
+    141: (7, 6),  # Doln's western state remains in Western Forul.
     156: (21, 2),
     160: (21, 2),
     218: (23, 1),  # BTL enclave is an explicit Eastern Forul boundary override.
@@ -71,7 +71,10 @@ def validate(root: Path = ROOT) -> list[str]:
             f"expected {EXPECTED_PROVINCE_COUNTS}, found {dict(plan.province_counts)}"
         )
 
-    for state_id, (expected_region, expected_continent) in GEOGRAPHIC_STATE_ANCHORS.items():
+    for state_id, (
+        expected_region,
+        expected_continent,
+    ) in GEOGRAPHIC_STATE_ANCHORS.items():
         actual_region = plan.state_regions.get(state_id)
         actual_continent = plan.state_continents.get(state_id)
         if (actual_region, actual_continent) != (expected_region, expected_continent):
@@ -96,7 +99,9 @@ def validate(root: Path = ROOT) -> list[str]:
                 continent = int(row[7])
                 if province == 0:
                     if continent != 0:
-                        issues.append("map/definition.csv: province 0 sentinel must use continent 0")
+                        issues.append(
+                            "map/definition.csv: province 0 sentinel must use continent 0"
+                        )
                 elif province_type == "land":
                     if continent not in range(1, 8):
                         issues.append(

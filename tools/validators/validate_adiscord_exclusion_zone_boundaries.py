@@ -60,17 +60,27 @@ def validate() -> list[str]:
         if not province_match or not owner_match:
             issues.append(f"state {state_id} lacks provinces or starting owner")
             continue
-        actual_provinces = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
+        actual_provinces = {
+            int(value) for value in re.findall(r"\d+", province_match.group(1))
+        }
         if actual_provinces != expected_provinces:
-            issues.append(f"state {state_id} is not synchronized with the boundary planner")
+            issues.append(
+                f"state {state_id} is not synchronized with the boundary planner"
+            )
         expected_owner = final_owners.get(state_id, owner_match.group(1))
         if owner_match.group(1) != expected_owner:
-            issues.append(f"state {state_id} owner expected {expected_owner}, found {owner_match.group(1)}")
+            issues.append(
+                f"state {state_id} owner expected {expected_owner}, found {owner_match.group(1)}"
+            )
         successor = SUCCESSOR_CORES.get(state_id)
-        if successor and not re.search(rf"(?m)^\s*add_core_of\s*=\s*{successor}\s*$", source):
+        if successor and not re.search(
+            rf"(?m)^\s*add_core_of\s*=\s*{successor}\s*$", source
+        ):
             issues.append(f"state {state_id} lacks successor core {successor}")
         if expected_owner == "EXZ":
-            terrains = {details[province_id]["terrain"] for province_id in actual_provinces}
+            terrains = {
+                details[province_id]["terrain"] for province_id in actual_provinces
+            }
             allowed = {"contaminated", "mountain"}
             if state_id in CITY_EXCEPTION_STATES:
                 allowed.add("urban")
@@ -79,7 +89,9 @@ def validate() -> list[str]:
             if state_id in FOREST_EXCEPTION_STATES:
                 allowed.add("forest")
             if not terrains <= allowed:
-                issues.append(f"EXZ state {state_id} retains non-contaminated terrain {sorted(terrains-allowed)}")
+                issues.append(
+                    f"EXZ state {state_id} retains non-contaminated terrain {sorted(terrains-allowed)}"
+                )
             if (
                 "urban" in terrains
                 and state_id not in CITY_EXCEPTION_STATES
@@ -93,22 +105,38 @@ def validate() -> list[str]:
         if state_id != 156 and owner != "EXZ"
     }
     dirty_successors = set().union(*(set(states) for states in DIRTY_GROUPS.values()))
-    dirty_remainders = set().union(*(set(states) for states in EXZ_REMAINDER_GROUPS.values()))
+    dirty_remainders = set().union(
+        *(set(states) for states in EXZ_REMAINDER_GROUPS.values())
+    )
     for state_id in sorted(reassigned):
-        if state_id in dirty_successors or state_id in dirty_remainders or state_id in CONTAMINATED_STATES:
-            issues.append(f"reassigned state {state_id} remains in the dirty-zone collapse manifest")
+        if (
+            state_id in dirty_successors
+            or state_id in dirty_remainders
+            or state_id in CONTAMINATED_STATES
+        ):
+            issues.append(
+                f"reassigned state {state_id} remains in the dirty-zone collapse manifest"
+            )
     expected_retained = original_exz - reassigned
-    actual_retained = {state_id for state_id in original_exz if final_owners[state_id] == "EXZ"}
+    actual_retained = {
+        state_id for state_id in original_exz if final_owners[state_id] == "EXZ"
+    }
     if actual_retained != expected_retained or len(actual_retained) != 56:
         issues.append("EXZ must retain exactly 56 compact terrain-aligned state ids")
-    planned_exz = {state_id for state_id, owner in final_owners.items() if owner == "EXZ"}
+    planned_exz = {
+        state_id for state_id, owner in final_owners.items() if owner == "EXZ"
+    }
     if len(planned_exz) != 57 or 461 not in planned_exz:
-        issues.append("EXZ must contain its 56 terrain-aligned core states plus state 461")
+        issues.append(
+            "EXZ must contain its 56 terrain-aligned core states plus state 461"
+        )
     unassigned = planned_exz - dirty_successors - dirty_remainders
     if unassigned:
         issues.append(f"EXZ states have no opening successor: {sorted(unassigned)}")
     if set(planned) & set(range(474, 551)):
-        issues.append("western-continent states entered the Exclusion Zone boundary plan")
+        issues.append(
+            "western-continent states entered the Exclusion Zone boundary plan"
+        )
 
     # Country ownership is the player-visible zone mask.  A state containing
     # even one contaminated province must therefore start under EXZ; this also
@@ -122,14 +150,23 @@ def validate() -> list[str]:
         if not state_match or not province_match:
             continue
         state_id = int(state_match.group(1))
-        provinces = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
-        if any(details[province_id]["terrain"] == "contaminated" for province_id in provinces):
+        provinces = {
+            int(value) for value in re.findall(r"\d+", province_match.group(1))
+        }
+        if any(
+            details[province_id]["terrain"] == "contaminated"
+            for province_id in provinces
+        ):
             contaminated_states.add(state_id)
             owner = owner_match.group(1) if owner_match else ""
             if owner != "EXZ":
-                issues.append(f"contaminated state {state_id} starts outside EXZ under {owner or 'no owner'}")
+                issues.append(
+                    f"contaminated state {state_id} starts outside EXZ under {owner or 'no owner'}"
+                )
     if not CONTAMINATED_FRINGE_STATES <= set(planned):
-        issues.append("contaminated fringe states are missing from the boundary source snapshot")
+        issues.append(
+            "contaminated fringe states are missing from the boundary source snapshot"
+        )
     if not contaminated_states:
         issues.append("no contaminated states were found")
 
@@ -151,7 +188,9 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print("Exclusion Zone boundary validation passed: 57 EXZ states, no contaminated state outside EXZ, and a blank EXZ map label.")
+    print(
+        "Exclusion Zone boundary validation passed: 57 EXZ states, no contaminated state outside EXZ, and a blank EXZ map label."
+    )
     return 0
 
 

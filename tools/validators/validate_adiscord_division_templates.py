@@ -76,6 +76,7 @@ def starting_template_role(name: str) -> str:
 def starting_template_counter(name: str) -> int:
     return STARTING_TEMPLATE_COUNTERS[starting_template_role(name)]
 
+
 SCRIPT_GLOBS = (
     "common/on_actions/*.txt",
     "common/scripted_effects/*.txt",
@@ -219,7 +220,9 @@ def parse_clausewitz(text: str) -> list[Entry]:
         while position < len(tokens):
             if tokens[position].value == "}":
                 if not expect_close:
-                    raise ValueError(f"unexpected closing brace at line {tokens[position].line}")
+                    raise ValueError(
+                        f"unexpected closing brace at line {tokens[position].line}"
+                    )
                 position += 1
                 return entries
             if tokens[position].value == "{":
@@ -232,7 +235,9 @@ def parse_clausewitz(text: str) -> list[Entry]:
             if position < len(tokens) and tokens[position].value == "=":
                 position += 1
                 if position >= len(tokens):
-                    raise ValueError(f"missing value for {key.value} at line {key.line}")
+                    raise ValueError(
+                        f"missing value for {key.value} at line {key.line}"
+                    )
                 if tokens[position].value == "{":
                     position += 1
                     entries.append(Entry(key.value, parse_block(True), key.line))
@@ -244,7 +249,9 @@ def parse_clausewitz(text: str) -> list[Entry]:
                     position += 1
                     entries.append(Entry(key.value, parse_block(True), key.line))
                 else:
-                    entries.append(Entry(key.value, value.value, key.line, value.quoted))
+                    entries.append(
+                        Entry(key.value, value.value, key.line, value.quoted)
+                    )
             else:
                 entries.append(Entry("", key.value, key.line, key.quoted))
         if expect_close:
@@ -254,7 +261,9 @@ def parse_clausewitz(text: str) -> list[Entry]:
     return parse_block()
 
 
-def _walk(entries: list[Entry], ancestors: tuple[str, ...] = ()) -> Iterator[tuple[tuple[str, ...], Entry]]:
+def _walk(
+    entries: list[Entry], ancestors: tuple[str, ...] = ()
+) -> Iterator[tuple[tuple[str, ...], Entry]]:
     for entry in entries:
         yield ancestors, entry
         if isinstance(entry.value, list):
@@ -272,7 +281,9 @@ def _scalar(entries: list[Entry], key: str) -> str | None:
     return None
 
 
-def _number(entries: list[Entry], key: str, default: float | None = None) -> float | None:
+def _number(
+    entries: list[Entry], key: str, default: float | None = None
+) -> float | None:
     value = _scalar(entries, key)
     if value is None:
         return default
@@ -342,10 +353,14 @@ def _slots(block: list[Entry]) -> tuple[Slot, ...]:
     return tuple(result)
 
 
-def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], list[ActualReference], list[str]]:
+def collect_templates_and_references(
+    root: Path,
+) -> tuple[list[ActualTemplate], list[ActualReference], list[str]]:
     issues: list[str] = []
     active_oobs: set[str] = set()
-    discovery_paths = sorted((root / "history" / "countries").glob("*.txt")) + _script_paths(root)
+    discovery_paths = sorted(
+        (root / "history" / "countries").glob("*.txt")
+    ) + _script_paths(root)
     parsed_scripts: dict[Path, list[Entry]] = {}
     for path in discovery_paths:
         try:
@@ -379,7 +394,9 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                 continue
             name = _scalar(entry.value, "name")
             if name is None:
-                issues.append(f"{relative}:{entry.line}: division template has no direct name")
+                issues.append(
+                    f"{relative}:{entry.line}: division template has no direct name"
+                )
                 continue
             templates.append(
                 ActualTemplate(
@@ -450,7 +467,14 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                     )
             elif entry.key == "division_template" and isinstance(entry.value, str):
                 references.append(
-                    ActualReference(relative, "technical_reference", entry.value, entry.line, None, None)
+                    ActualReference(
+                        relative,
+                        "technical_reference",
+                        entry.value,
+                        entry.line,
+                        None,
+                        None,
+                    )
                 )
             if entry.key != "create_unit" or not isinstance(entry.value, list):
                 continue
@@ -466,7 +490,9 @@ def collect_templates_and_references(root: Path) -> tuple[list[ActualTemplate], 
                     continue
                 name = _scalar(inline, "division_template")
                 if name is None:
-                    issues.append(f"{relative}:{division.line}: create_unit has no literal division_template")
+                    issues.append(
+                        f"{relative}:{division.line}: create_unit has no literal division_template"
+                    )
                     continue
                 references.append(
                     ActualReference(
@@ -535,7 +561,9 @@ def _collect_subunits(root: Path) -> tuple[dict[str, Subunit], list[str]]:
                     for item in need.value:
                         if item.key and isinstance(item.value, str):
                             try:
-                                equipment[item.key] = equipment.get(item.key, 0.0) + float(item.value)
+                                equipment[item.key] = equipment.get(
+                                    item.key, 0.0
+                                ) + float(item.value)
                             except ValueError:
                                 issues.append(
                                     f"{_relative(root, path)}:{item.line}: non-numeric need for {item.key}"
@@ -581,11 +609,15 @@ def _collect_equipment_archetypes(root: Path) -> tuple[set[str], list[str]]:
 
 def _starting_organization_modifiers(root: Path) -> tuple[dict[str, float], list[str]]:
     issues: list[str] = []
-    effects_path = root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"
+    effects_path = (
+        root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"
+    )
     try:
         effects = _read_ast(effects_path)
     except (OSError, ValueError) as error:
-        return {}, [f"{_relative(root, effects_path)}: cannot derive starting technology: {error}"]
+        return {}, [
+            f"{_relative(root, effects_path)}: cannot derive starting technology: {error}"
+        ]
 
     profile_blocks = {
         entry.key: entry.value
@@ -613,17 +645,31 @@ def _starting_organization_modifiers(root: Path) -> tuple[dict[str, float], list
         None,
     )
     if profile is None:
-        return {}, [f"{_relative(root, effects_path)}: missing common starting technology profile"]
-    if baseline is None or _scalar(baseline, "ADISCORD_grant_technology_profile_common") != "yes":
-        issues.append(f"{_relative(root, effects_path)}: baseline does not grant common technology profile")
-    if starting is None or _scalar(starting, "ADISCORD_grant_2150_technology_baseline") != "yes":
-        issues.append(f"{_relative(root, effects_path)}: starting profile does not grant baseline")
+        return {}, [
+            f"{_relative(root, effects_path)}: missing common starting technology profile"
+        ]
+    if (
+        baseline is None
+        or _scalar(baseline, "ADISCORD_grant_technology_profile_common") != "yes"
+    ):
+        issues.append(
+            f"{_relative(root, effects_path)}: baseline does not grant common technology profile"
+        )
+    if (
+        starting is None
+        or _scalar(starting, "ADISCORD_grant_2150_technology_baseline") != "yes"
+    ):
+        issues.append(
+            f"{_relative(root, effects_path)}: starting profile does not grant baseline"
+        )
 
     on_actions_path = root / "common/on_actions/00_ADISCORD_on_actions.txt"
     try:
         on_actions = _read_ast(on_actions_path)
     except (OSError, ValueError) as error:
-        issues.append(f"{_relative(root, on_actions_path)}: cannot trace starting technology route: {error}")
+        issues.append(
+            f"{_relative(root, on_actions_path)}: cannot trace starting technology route: {error}"
+        )
     else:
         fresh_contract = "ADISCORD_fresh_campaign_contract_v1"
         routed = False
@@ -795,7 +841,9 @@ def _validate_computed_rows(
         for kind in ("regiments", "support", "regimental_support"):
             recorded = row.get(kind, [] if kind == "regimental_support" else None)
             if recorded != expected_slots[kind]:
-                issues.append(f"{row.get('key')}: computed {kind} {expected_slots[kind]} does not match audit")
+                issues.append(
+                    f"{row.get('key')}: computed {kind} {expected_slots[kind]} does not match audit"
+                )
         expected = row.get("computed", {})
         for field, value in (
             ("organization", actual.organization),
@@ -855,7 +903,11 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
             elif key in seen:
                 issues.append(f"duplicate {collection} row key {key}")
             seen.add(key)
-            for field in ("technical_name", "display_name") if collection == "templates" else ("technical_name",):
+            for field in (
+                ("technical_name", "display_name")
+                if collection == "templates"
+                else ("technical_name",)
+            ):
                 value = row.get(field)
                 if not isinstance(value, str) or not value.isascii():
                     issues.append(f"{key}: canonical {field} must be ASCII")
@@ -907,10 +959,15 @@ def _validate_schema(audit: dict[str, object]) -> list[str]:
                         f"{key}: {label} {field} must be a non-empty ASCII string"
                     )
         replacement = row.get("replacement_path")
-        if not isinstance(replacement, dict) or replacement.get("kind") not in {"retain", "replace"}:
+        if not isinstance(replacement, dict) or replacement.get("kind") not in {
+            "retain",
+            "replace",
+        }:
             issues.append(f"{key}: invalid replacement_path")
         elif replacement.get("target") not in keys:
-            issues.append(f"{key}: replacement target {replacement.get('target')} is not audited")
+            issues.append(
+                f"{key}: replacement target {replacement.get('target')} is not audited"
+            )
     return issues
 
 
@@ -935,7 +992,9 @@ def _validate_optional_sources(root: Path, audit: dict[str, object]) -> list[str
         path = entry.get("path")
         owner = entry.get("owner_module")
         if not isinstance(path, str) or not isinstance(owner, str):
-            issues.append(f"optional source entry must declare ASCII path and owner_module: {entry}")
+            issues.append(
+                f"optional source entry must declare ASCII path and owner_module: {entry}"
+            )
             continue
         actual_paths.add(path)
         if owner not in ownership.get(path, set()):
@@ -968,7 +1027,9 @@ def _validate_structural_coverage(
             if not isinstance(source, dict):
                 continue
             path = source.get("path")
-            source_label = "source" if source_index == 0 else f"source alias {source_index}"
+            source_label = (
+                "source" if source_index == 0 else f"source alias {source_index}"
+            )
             if path in optional_paths:
                 if source.get("kind") != "oob":
                     issues.append(
@@ -1037,8 +1098,14 @@ def _validate_structural_coverage(
             and (
                 reference.kind == "technical_reference"
                 or (
-                    _same_factor(reference.start_experience_factor, row.get("start_experience_factor"))
-                    and _same_factor(reference.start_equipment_factor, row.get("start_equipment_factor"))
+                    _same_factor(
+                        reference.start_experience_factor,
+                        row.get("start_experience_factor"),
+                    )
+                    and _same_factor(
+                        reference.start_equipment_factor,
+                        row.get("start_equipment_factor"),
+                    )
                 )
             )
         ]
@@ -1059,7 +1126,11 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
     """Return division-template audit issues without modifying the repository."""
 
     root = Path(root)
-    path = Path(audit_path) if audit_path is not None else root / "tools/data/division_template_audit.json"
+    path = (
+        Path(audit_path)
+        if audit_path is not None
+        else root / "tools/data/division_template_audit.json"
+    )
     try:
         audit = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -1069,19 +1140,29 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
     issues.extend(_validate_optional_sources(root, audit))
     templates, references, collection_issues = collect_templates_and_references(root)
     issues.extend(collection_issues)
-    coverage_issues, row_by_actual = _validate_structural_coverage(root, audit, templates, references)
+    coverage_issues, row_by_actual = _validate_structural_coverage(
+        root, audit, templates, references
+    )
     issues.extend(coverage_issues)
     for template in templates:
         if not template.name.isascii():
-            issues.append(f"{template.path}:{template.line}: non-ASCII technical template name {template.name}")
+            issues.append(
+                f"{template.path}:{template.line}: non-ASCII technical template name {template.name}"
+            )
     for reference in references:
         if not reference.name.isascii():
-            issues.append(f"{reference.path}:{reference.line}: non-ASCII {reference.kind} reference {reference.name}")
+            issues.append(
+                f"{reference.path}:{reference.line}: non-ASCII {reference.kind} reference {reference.name}"
+            )
 
     compositions: dict[tuple[str, str], set[tuple[Slot, ...]]] = defaultdict(set)
     locations: dict[tuple[str, str], list[str]] = defaultdict(list)
     for template in templates:
-        scope = f"owner {template.owner}" if template.source_kind == "oob" else template.namespace
+        scope = (
+            f"owner {template.owner}"
+            if template.source_kind == "oob"
+            else template.namespace
+        )
         identity = (scope, template.name)
         compositions[identity].add(template.slots)
         locations[identity].append(f"{template.path}:{template.line}")
@@ -1110,7 +1191,9 @@ def validate(root: Path = ROOT, audit_path: Path | None = None) -> list[str]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--limit", type=int, default=300, help="maximum issues to print")
+    parser.add_argument(
+        "--limit", type=int, default=300, help="maximum issues to print"
+    )
     args = parser.parse_args(argv)
     issues = validate()
     print(f"A-Discord division-template audit: {len(issues)} issue(s)")

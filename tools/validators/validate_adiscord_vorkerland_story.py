@@ -22,17 +22,34 @@ NEWS_EVENTS = Path("events/ADISCORD_superevents.txt")
 EVENT_PICTURES = Path("interface/ADISCORD_event_art.gfx")
 ON_ACTIONS = Path("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt")
 PHASE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-CAMPAIGN_STATE_EFFECTS = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
+CAMPAIGN_STATE_EFFECTS = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 PHASE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 COLLAPSE_EVENTS = Path("events/ADISCORD_vorkerland_events.txt")
 CIVIL_WAR_FOCUS = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 
 STORY_NUMBERS = (
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-    31, 32, 33, 34, 35, 36,
-    41, 42, 43,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    41,
+    42,
+    43,
 )
 STORY_IDS = tuple(f"ADISCORD_vorkerland_story.{number}" for number in STORY_NUMBERS)
 COUNTRY_EVENT_NUMBERS = frozenset((5, 6))
@@ -228,7 +245,9 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     event_pictures = read(root, EVENT_PICTURES, issues)
     on_actions = read_country_on_actions((root) / (ON_ACTIONS), 'vorkerland_collapse')
     phase_effects = source_section(read(root, PHASE_EFFECTS, issues), 'phase_effects')
-    campaign_state_effects = source_section(read(root, CAMPAIGN_STATE_EFFECTS, issues), 'campaign_state_effects')
+    campaign_state_effects = source_section(
+        read(root, CAMPAIGN_STATE_EFFECTS, issues), 'campaign_state_effects'
+    )
     phase_events = source_section(read(root, PHASE_EVENTS, issues), 'phase_events')
 
     for relative, source in (
@@ -275,13 +294,22 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
 
     forbidden = forbidden_story_mutations(story_events + "\n" + story_effects)
     if forbidden:
-        issues.append("story layer owns forbidden map/war/peace mutations: " + ", ".join(forbidden))
+        issues.append(
+            "story layer owns forbidden map/war/peace mutations: "
+            + ", ".join(forbidden)
+        )
     if "ADISCORD_superevent_news.2" in story_events + story_effects:
-        issues.append("story layer references hazardous legacy ADISCORD_superevent_news.2")
+        issues.append(
+            "story layer references hazardous legacy ADISCORD_superevent_news.2"
+        )
     if "GFX_news_event_adiscord_vorkerland_explosion" in story_events:
-        issues.append("non-explosion story events must not reuse the collapse explosion picture")
+        issues.append(
+            "non-explosion story events must not reuse the collapse explosion picture"
+        )
     if "add_army_experience" in story_events:
-        issues.append("story events use invalid add_army_experience instead of army_experience")
+        issues.append(
+            "story events use invalid add_army_experience instead of army_experience"
+        )
     story_source = strip_comments(story_events + "\n" + story_effects)
     for token in UNDEFINED_ARRAY_TOKENS:
         if token in story_source:
@@ -291,7 +319,9 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
             )
     showdown = definitions.get(SHOWDOWN_ID, ("", ""))[1]
     if "picture = GFX_news_event_adiscord_city_in_civil_war" not in showdown:
-        issues.append("verified showdown news must use the registered neutral civil-war picture")
+        issues.append(
+            "verified showdown news must use the registered neutral civil-war picture"
+        )
     if 'name = "GFX_news_event_adiscord_city_in_civil_war"' not in event_pictures:
         issues.append("neutral civil-war event picture is not registered in A-Discord")
 
@@ -310,9 +340,13 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
         issues.append("story.6 must offer exactly two choices for each of three routes")
     for route in ("route_worker", "route_joint", "route_utilitarian"):
         if event_six.count(f"has_country_flag = ADISCORD_vorkerland_{route}") < 3:
-            issues.append(f"story.6 does not provide a description and two choices for {route}")
+            issues.append(
+                f"story.6 does not provide a description and two choices for {route}"
+            )
     if "ADISCORD_vorkerland_story.6.worx.d" not in event_six:
-        issues.append("story.6 route_utilitarian is missing its Doctor Worx description")
+        issues.append(
+            "story.6 route_utilitarian is missing its Doctor Worx description"
+        )
 
     required_effect_tokens = (
         "ADISCORD_vorkerland_story_showdown_announced",
@@ -377,7 +411,9 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     for language, keys in (("English", english_keys), ("Russian", russian_keys)):
         missing = sorted(required_story_loc - keys)
         if missing:
-            issues.append(f"{language} story localisation is missing: {', '.join(missing)}")
+            issues.append(
+                f"{language} story localisation is missing: {', '.join(missing)}"
+            )
     for number in (1, 2):
         for suffix in ("t", "d", "a"):
             key = f"ADISCORD_vorkerland_news.{number}.{suffix}"
@@ -391,14 +427,20 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     )
 
     russian_path = root / RUSSIAN_LOC
-    if russian_path.is_file() and not russian_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+    if russian_path.is_file() and not russian_path.read_bytes().startswith(
+        b"\xef\xbb\xbf"
+    ):
         issues.append("Russian story localisation must use UTF-8 BOM")
     for token in ("Doctor Dorian Worx", "technocratic", "technocracy"):
         if token not in english:
-            issues.append(f"English route_utilitarian presentation is missing {token!r}")
+            issues.append(
+                f"English route_utilitarian presentation is missing {token!r}"
+            )
     for token in ("доктора Дориана Воркса", "технократи"):
         if token not in russian:
-            issues.append(f"Russian route_utilitarian presentation is missing {token!r}")
+            issues.append(
+                f"Russian route_utilitarian presentation is missing {token!r}"
+            )
 
     news_definitions = event_blocks(news)
     opening = news_definitions.get("ADISCORD_superevent_news.1", ("", ""))[1]
@@ -410,33 +452,65 @@ def collect_issues(root: Path = ROOT, *, require_hooks: bool = True) -> list[str
     ):
         if token not in opening_immediate:
             issues.append(f"opening collapse superevent immediate is missing {token}")
-    if "every_country" in opening_immediate or "limit = { is_ai = no }" in opening_immediate:
-        issues.append("opening collapse audio must stay unscoped for observer/spectator")
+    if (
+        "every_country" in opening_immediate
+        or "limit = { is_ai = no }" in opening_immediate
+    ):
+        issues.append(
+            "opening collapse audio must stay unscoped for observer/spectator"
+        )
     if any(
         token in option
         for option in opening_options
-        for token in ("superevent_vorkerland_civilwar", "ADISCORD_vorkerland_play_superevent_sound")
+        for token in (
+            "superevent_vorkerland_civilwar",
+            "ADISCORD_vorkerland_play_superevent_sound",
+        )
     ):
-        issues.append("opening collapse presentation still depends on clicking its option")
+        issues.append(
+            "opening collapse presentation still depends on clicking its option"
+        )
 
     if require_hooks:
-        showdown_effect = named_block(phase_effects, "ADISCORD_vorkerland_verify_central_showdown")
-        if "ADISCORD_vorkerland_story_announce_verified_showdown = yes" not in showdown_effect:
-            issues.append("verified central-showdown caller is missing the story announcement hook")
+        showdown_effect = named_block(
+            phase_effects, "ADISCORD_vorkerland_verify_central_showdown"
+        )
+        if (
+            "ADISCORD_vorkerland_story_announce_verified_showdown = yes"
+            not in showdown_effect
+        ):
+            issues.append(
+                "verified central-showdown caller is missing the story announcement hook"
+            )
 
         state_control = named_block(on_actions, "on_state_control_changed")
-        if "ADISCORD_vorkerland_story_check_first_claimant_capital_fall = yes" not in state_control:
-            issues.append("on_state_control_changed is missing the first-capital story hook")
+        if (
+            "ADISCORD_vorkerland_story_check_first_claimant_capital_fall = yes"
+            not in state_control
+        ):
+            issues.append(
+                "on_state_control_changed is missing the first-capital story hook"
+            )
         capitulation = named_block(on_actions, "on_capitulation")
-        if "ADISCORD_vorkerland_story_offer_first_claimant_command_choice = yes" not in capitulation:
+        if (
+            "ADISCORD_vorkerland_story_offer_first_claimant_command_choice = yes"
+            not in capitulation
+        ):
             issues.append("central capitulation path is missing the winner story hook")
         monthly = named_block(on_actions, "on_monthly")
         if "ADISCORD_vorkerland_story" in monthly:
             issues.append("story layer must not use monthly polling")
 
-        phase_seven = event_blocks(phase_events).get("ADISCORD_vorkerland_phase.7", ("", ""))[1]
-        if "ADISCORD_vorkerland_story_offer_post_reunification = yes" not in phase_seven:
-            issues.append("phase.7 is missing the verified post-reunification story hook")
+        phase_seven = event_blocks(phase_events).get(
+            "ADISCORD_vorkerland_phase.7", ("", "")
+        )[1]
+        if (
+            "ADISCORD_vorkerland_story_offer_post_reunification = yes"
+            not in phase_seven
+        ):
+            issues.append(
+                "phase.7 is missing the verified post-reunification story hook"
+            )
 
         issues.extend(upstream_contract_issues(root, campaign_state_effects))
 
@@ -460,7 +534,10 @@ def dispatch_issues(story_effects: str) -> list[str]:
                 issues.append(
                     f"{WORKER_FATE_EFFECT} dispatches {target} for {flag}, expected {event_id}"
                 )
-        if "clr_global_flag = ADISCORD_vorkerland_story_worker_fate_reported" not in fate:
+        if (
+            "clr_global_flag = ADISCORD_vorkerland_story_worker_fate_reported"
+            not in fate
+        ):
             issues.append(
                 f"{WORKER_FATE_EFFECT} must release its guard when no fate flag is set, "
                 "or an early call silences the report for the whole campaign"
@@ -471,7 +548,9 @@ def dispatch_issues(story_effects: str) -> list[str]:
         issues.append(f"story effects are missing {VARIANT_EFFECT}")
     else:
         for flag, event_id in VARIANT_DISPATCH:
-            target = dispatch_target(variant, f"has_country_flag = {flag}", news_pattern)
+            target = dispatch_target(
+                variant, f"has_country_flag = {flag}", news_pattern
+            )
             if target is None:
                 issues.append(f"{VARIANT_EFFECT} never reads {flag}")
             elif target != event_id:
@@ -548,14 +627,20 @@ def localisation_quality_issues(
     # bodies is what would have caught the reference mod reusing one city's text
     # for another.
     families: list[tuple[str, list[str]]] = [
-        ("Worker fate", [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)]),
+        (
+            "Worker fate",
+            [f"ADISCORD_vorkerland_story.{number}.d" for number in (10, 11, 12, 13)],
+        ),
         (
             "Claimant capitulation",
             [f"ADISCORD_vorkerland_story.{number}.d" for number in (41, 42, 43)],
         ),
     ]
     for label, keys in families:
-        for language, entries in (("English", english_entries), ("Russian", russian_entries)):
+        for language, entries in (
+            ("English", english_entries),
+            ("Russian", russian_entries),
+        ):
             values = [entries[key] for key in keys if entries.get(key, "").strip()]
             if len(values) != len(set(values)):
                 issues.append(
@@ -568,10 +653,14 @@ def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[st
     """Guard the identifiers the news layer reads out of other efforts' files."""
     issues: list[str] = []
     collapse_path = root / COLLAPSE_EVENTS
-    collapse = collapse_path.read_text(encoding="utf-8-sig") if collapse_path.is_file() else ""
+    collapse = (
+        collapse_path.read_text(encoding="utf-8-sig") if collapse_path.is_file() else ""
+    )
     for flag, _ in WORKER_FATE_DISPATCH:
         if f"set_global_flag = {flag}" not in collapse:
-            issues.append(f"Worker fate news reads {flag}, which the collapse layer no longer sets")
+            issues.append(
+                f"Worker fate news reads {flag}, which the collapse layer no longer sets"
+            )
 
     collapse_defs = event_blocks(collapse)
     outbreak = collapse_defs.get("ADISCORD_vorkerland_collapse.1", ("", ""))[1]
@@ -579,16 +668,25 @@ def upstream_contract_issues(root: Path, campaign_state_effects: str) -> list[st
     fate_report = collapse_defs.get("ADISCORD_vorkerland_collapse.6", ("", ""))[1]
     if f"{WORKER_FATE_EFFECT} = yes" in outbreak:
         issues.append("Worker fate news is published before the Unity Tower detonation")
-    if "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }" not in detonation:
-        issues.append("Unity Tower detonation no longer schedules the one-day-delayed Worker fate report")
+    if (
+        "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }"
+        not in detonation
+    ):
+        issues.append(
+            "Unity Tower detonation no longer schedules the one-day-delayed Worker fate report"
+        )
     if f"{WORKER_FATE_EFFECT} = yes" not in fate_report:
-        issues.append("collapse.6 no longer publishes Worker fate after the Tower detonation")
+        issues.append(
+            "collapse.6 no longer publishes Worker fate after the Tower detonation"
+        )
 
     focus_path = root / CIVIL_WAR_FOCUS
     focus = focus_path.read_text(encoding="utf-8-sig") if focus_path.is_file() else ""
     for flag, _ in VARIANT_DISPATCH:
         if f"set_country_flag = {flag}" not in focus:
-            issues.append(f"variant news reads {flag}, which the focus tree no longer sets")
+            issues.append(
+                f"variant news reads {flag}, which the focus tree no longer sets"
+            )
     return issues
 
 

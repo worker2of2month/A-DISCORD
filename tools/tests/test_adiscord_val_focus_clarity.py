@@ -36,7 +36,7 @@ def block(source: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     raise AssertionError(f"unterminated block: {name}")
 
 
@@ -65,7 +65,7 @@ def focus(source: str, focus_id: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[start:index + 1]
+                return source[start : index + 1]
     raise AssertionError(f"unterminated focus: {focus_id}")
 
 
@@ -131,12 +131,18 @@ class KefreytFocusClarityTests(unittest.TestCase):
                 elif char == "}":
                     depth -= 1
                     if depth == 0:
-                        body = self.focuses[start:index + 1]
+                        body = self.focuses[start : index + 1]
                         id_match = re.search(r"\\bid\\s*=\\s*([A-Za-z0-9_]+)", body)
                         x_match = re.search(r"(?m)^\\s*x\\s*=\\s*(-?\\d+)", body)
                         y_match = re.search(r"(?m)^\\s*y\\s*=\\s*(-?\\d+)", body)
                         if id_match and x_match and y_match:
-                            positions.append((id_match.group(1), int(x_match.group(1)), int(y_match.group(1))))
+                            positions.append(
+                                (
+                                    id_match.group(1),
+                                    int(x_match.group(1)),
+                                    int(y_match.group(1)),
+                                )
+                            )
                         break
 
         rows: dict[int, list[tuple[int, str]]] = {}
@@ -159,7 +165,10 @@ class KefreytFocusClarityTests(unittest.TestCase):
 
         frontier = focus(self.focuses, "VAL_frontier_conference")
         self.assertIn("prerequisite = { focus = VAL_One_Ledger_One_Banner }", frontier)
-        self.assertIn("prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }", frontier)
+        self.assertIn(
+            "prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }",
+            frontier,
+        )
         self.assertNotIn("VAL_Different_Views_On_Freedom", frontier)
         self.assertNotIn("VAL_The_Steel_Contract", frontier)
         self.assertNotIn("VAL_Contracts_Outlive_Kings", frontier)
@@ -167,7 +176,10 @@ class KefreytFocusClarityTests(unittest.TestCase):
     def test_every_direct_war_focus_has_an_explicit_red_tooltip(self) -> None:
         cases = {
             "VAL_Bezhaysk_Operation": ("BJK", "VAL_declares_war_bezhaysk_tt"),
-            "VAL_Return_Southern_Tsaygen": ("ERT", "VAL_return_southern_tsaygen_war_tt"),
+            "VAL_Return_Southern_Tsaygen": (
+                "ERT",
+                "VAL_return_southern_tsaygen_war_tt",
+            ),
             "VAL_frontier_return_irem": ("ERT", "VAL_declares_war_ert_irem_tt"),
             "VAL_Southern_Expansion": ("ERT", "VAL_declares_war_ert_south_tt"),
             "VAL_Eastern_Expansion": ("IRT", "VAL_declares_war_irt_tt"),
@@ -175,14 +187,20 @@ class KefreytFocusClarityTests(unittest.TestCase):
         for focus_id, (target, tooltip) in cases.items():
             body = focus(self.focuses, focus_id)
             self.assertIn(f"custom_effect_tooltip = {tooltip}", body, focus_id)
-            self.assertRegex(body, rf"declare_war_on\s*=\s*\{{\s*target\s*=\s*{target}\b")
+            self.assertRegex(
+                body, rf"declare_war_on\s*=\s*\{{\s*target\s*=\s*{target}\b"
+            )
             for loc in (self.ru, self.en):
-                line = next(row for row in loc.splitlines() if row.startswith(f" {tooltip}:"))
+                line = next(
+                    row for row in loc.splitlines() if row.startswith(f" {tooltip}:")
+                )
                 self.assertIn("§R", line)
 
         for tooltip in cases.values():
             ru_key = tooltip[1]
-            line = next(row for row in self.ru.splitlines() if row.startswith(f" {ru_key}:"))
+            line = next(
+                row for row in self.ru.splitlines() if row.startswith(f" {ru_key}:")
+            )
             self.assertIn("Объявляет войну", line)
 
     def test_indirect_war_routes_state_exactly_where_war_is_declared(self) -> None:
@@ -191,7 +209,9 @@ class KefreytFocusClarityTests(unittest.TestCase):
         self.assertNotIn("declare_war_on", passes)
 
         mobilize = block(self.decisions, "VAL_cw_begin_mobilization")
-        self.assertIn("custom_effect_tooltip = VAL_cw_begin_mobilization_war_tt", mobilize)
+        self.assertIn(
+            "custom_effect_tooltip = VAL_cw_begin_mobilization_war_tt", mobilize
+        )
         self.assertIn("VAL_cw_start_intervention = yes", mobilize)
 
         security = focus(self.focuses, "VAL_frontier_security_plan")
@@ -205,7 +225,9 @@ class KefreytFocusClarityTests(unittest.TestCase):
             "VAL_cannibal_war_route_tt",
             "VAL_frontier_war_tt",
         ):
-            line = next(row for row in self.ru.splitlines() if row.startswith(f" {key}:"))
+            line = next(
+                row for row in self.ru.splitlines() if row.startswith(f" {key}:")
+            )
             self.assertIn("объявляет войну", line.lower(), key)
 
     def test_touched_focus_ui_copy_avoids_old_ai_style_punctuation(self) -> None:
@@ -221,7 +243,9 @@ class KefreytFocusClarityTests(unittest.TestCase):
         )
         for source in (self.ru, self.en):
             for key in keys:
-                line = next(row for row in source.splitlines() if row.startswith(f" {key}:"))
+                line = next(
+                    row for row in source.splitlines() if row.startswith(f" {key}:")
+                )
                 self.assertNotIn("—", line, key)
                 self.assertNotIn(";", line, key)
 

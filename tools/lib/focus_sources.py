@@ -8,7 +8,10 @@ from tools.builders.build_adiscord_focus_trees import SOURCES
 
 FOCUS_SOURCE_GROUPS = {
     "ADISCORD_national_focus_STP.txt": ("STP/",),
-    "ADISCORD_national_focus_VAL_defeated.txt": ("VAL/defeated/", "VAL/administration/"),
+    "ADISCORD_national_focus_VAL_defeated.txt": (
+        "VAL/defeated/",
+        "VAL/administration/",
+    ),
     "ADISCORD_vorkerland_focus.txt": ("Vorkerland/",),
 }
 

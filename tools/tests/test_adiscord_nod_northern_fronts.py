@@ -6,7 +6,10 @@ from itertools import product
 from pathlib import Path
 
 from tools.tests.test_adiscord_stp_preparation import (
-    block as ast_block, entries, matches_conditions, scalar,
+    block as ast_block,
+    entries,
+    matches_conditions,
+    scalar,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,13 +48,17 @@ class NodrulNorthernFrontTests(unittest.TestCase):
 
         self.assertTrue(block)
         party_border = named_block(source, "NOD_cw_northern_party_border")
-        self.assertIn("type = dont_defend_ally_borders id = STP value = 100", party_border)
+        self.assertIn(
+            "type = dont_defend_ally_borders id = STP value = 100", party_border
+        )
         self.assertIn("type = dont_defend_ally_borders id = AIN value = 100", block)
         self.assertNotIn("type = dont_defend_ally_borders value = 1", block)
         for tag in ("STP", "STS", "SRP", "VAL"):
             self.assertNotIn(f"type = ignore id = {tag}", block)
 
-    def test_northern_common_profile_reserves_only_five_percent_and_concentrates(self) -> None:
+    def test_northern_common_profile_reserves_only_five_percent_and_concentrates(
+        self,
+    ) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
         block = named_block(source, "NOD_cw_northern_offensive_army")
 
@@ -68,7 +75,6 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         self.assertNotIn("type = front_control tag = YPR", block)
         self.assertNotIn("type = front_control tag = COF", block)
         self.assertNotIn("type = front_control tag = TFF", block)
-
 
     def test_nodrul_wartime_home_buffer_is_one_five_percent_reserve(self) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
@@ -125,7 +131,9 @@ class NodrulNorthernFrontTests(unittest.TestCase):
                     self.assertNotIn(f"tag = {other}", block)
                     self.assertNotIn(f"id = {other}", block)
 
-    def test_stelander_intervention_uses_same_field_army_concentration_contract(self) -> None:
+    def test_stelander_intervention_uses_same_field_army_concentration_contract(
+        self,
+    ) -> None:
         source = AI_PATH.read_text(encoding="utf-8-sig")
         block = named_block(source, "NOD_cw_stelander_intervention_army")
 
@@ -142,9 +150,14 @@ class NodrulNorthernFrontTests(unittest.TestCase):
         )
 
     def test_party_front_support_does_not_require_a_direct_enemy_border(self) -> None:
-        profiles = [e for e in entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
-                    if e.key.startswith("NOD_cw_")]
-        for border, north, nod_war, party_war, allied, party_alive in product((False, True), repeat=6):
+        profiles = [
+            e
+            for e in entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+            if e.key.startswith("NOD_cw_")
+        ]
+        for border, north, nod_war, party_war, allied, party_alive in product(
+            (False, True), repeat=6
+        ):
             facts = {
                 ("NOD", "original_tag", "NOD"): True,
                 ("NOD", "is_ai", "yes"): True,
@@ -157,16 +170,33 @@ class NodrulNorthernFrontTests(unittest.TestCase):
                 ("STP", "exists", "yes"): party_alive,
                 ("STP", "has_capitulated", "no"): party_alive,
             }
-            active = [e.value for e in profiles
-                      if matches_conditions(ast_block(e.value, "allowed"), facts, "NOD")
-                      and matches_conditions(ast_block(e.value, "enable"), facts, "NOD")]
-            strategies = [e.value for profile in active for e in profile if e.key == "ai_strategy"]
+            active = [
+                e.value
+                for e in profiles
+                if matches_conditions(ast_block(e.value, "allowed"), facts, "NOD")
+                and matches_conditions(ast_block(e.value, "enable"), facts, "NOD")
+            ]
+            strategies = [
+                e.value for profile in active for e in profile if e.key == "ai_strategy"
+            ]
+
             def weight(kind):
-                return sum(int(scalar(s, "value")) for s in strategies
-                           if scalar(s, "type") == kind and scalar(s, "id") in (None, "", "STP"))
+                return sum(
+                    int(scalar(s, "value"))
+                    for s in strategies
+                    if scalar(s, "type") == kind
+                    and scalar(s, "id") in (None, "", "STP")
+                )
+
             support = nod_war and party_war and allied and party_alive
-            with self.subTest(border=border, north=north, nod_war=nod_war,
-                              party_war=party_war, allied=allied, party_alive=party_alive):
+            with self.subTest(
+                border=border,
+                north=north,
+                nod_war=nod_war,
+                party_war=party_war,
+                allied=allied,
+                party_alive=party_alive,
+            ):
                 self.assertEqual(weight("force_defend_ally_borders") > 0, support)
                 if support:
                     self.assertLessEqual(weight("dont_defend_ally_borders"), 0)

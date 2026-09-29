@@ -52,34 +52,241 @@ MUTED_GOLD = (146, 116, 62, 255)
 
 
 DEPLOYMENT_CONTRACTS = (
-    SpriteContract("GFX_tiled_window2_1b_border", "GFX_ADISCORD_deployment_window", "ADISCORD_deployment_window.dds", "corneredTileSpriteType", (192, 192), border_size=(64, 64), effect_file=EFFECT, tiling_center=True),
-    SpriteContract("GFX_tiled_window", "GFX_ADISCORD_deployment_shell", "ADISCORD_deployment_shell.dds", "corneredTileSpriteType", (192, 192), border_size=(64, 64), effect_file=EFFECT, tiling_center=True),
-    SpriteContract("GFX_tiled_window_1b_thin_border", "GFX_ADISCORD_deployment_thin_shell", "ADISCORD_deployment_thin_shell.dds", "corneredTileSpriteType", (192, 192), border_size=(64, 64), effect_file=EFFECT, tiling_center=True),
-    SpriteContract("GFX_tiled_generic_overlay_bg1", "GFX_ADISCORD_deployment_overlay", "ADISCORD_deployment_overlay.dds", "corneredTileSpriteType", (549, 600), border_size=(268, 268), effect_file=EFFECT, always_transparent=True, tiling_center=True),
-    SpriteContract("GFX_tiled_plain_bg_small", "GFX_ADISCORD_deployment_small_panel", "ADISCORD_deployment_small_panel.dds", "corneredTileSpriteType", (48, 48), border_size=(16, 16), effect_file=EFFECT, tiling_center=True),
-    SpriteContract("GFX_tiled_window_transparent", "GFX_ADISCORD_deployment_transparent", "ADISCORD_deployment_transparent.dds", "corneredTileSpriteType", (3, 3), border_size=(1, 1), effect_file=EFFECT),
-    SpriteContract("GFX_subview_header_bg_375x101", "GFX_ADISCORD_deployment_header", "ADISCORD_deployment_header.dds", "spriteType", (375, 101)),
-    SpriteContract("GFX_deploy_icon_tiled_bg", "GFX_ADISCORD_deployment_icon_well", "ADISCORD_deployment_icon_well.dds", "corneredTileSpriteType", (77, 40), border_size=(16, 16), always_transparent=True),
-    SpriteContract("GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_reinforcement_row", "ADISCORD_deployment_reinforcement_row.dds", "spriteType", (493, 57), effect_file=EFFECT),
-    SpriteContract("GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_supply_row", "ADISCORD_deployment_supply_row.dds", "spriteType", (493, 57), effect_file=EFFECT),
-    SpriteContract("GFX_deploy_upgrades_entry", "GFX_ADISCORD_deployment_upgrade_row", "ADISCORD_deployment_upgrade_row.dds", "spriteType", (493, 57), effect_file=EFFECT),
-    SpriteContract("GFX_deploy_garrisons_entry", "GFX_ADISCORD_deployment_garrison_row", "ADISCORD_deployment_garrison_row.dds", "spriteType", (493, 57), effect_file=EFFECT),
-    SpriteContract("GFX_deploy_operations_entry", "GFX_ADISCORD_deployment_operations_row", "ADISCORD_deployment_operations_row.dds", "spriteType", (493, 57), effect_file=EFFECT),
-    SpriteContract("GFX_deployment_named_division_bg", "GFX_ADISCORD_deployment_template", "ADISCORD_deployment_template.dds", "spriteType", (346, 78), effect_file=EFFECT),
-    SpriteContract("GFX_deployment_named_division_obsolete_bg", "GFX_ADISCORD_deployment_template_obsolete", "ADISCORD_deployment_template_obsolete.dds", "spriteType", (348, 79), effect_file=EFFECT),
-    SpriteContract("GFX_military_deployment_conveyor_view_bg", "GFX_ADISCORD_deployment_conveyor", "ADISCORD_deployment_conveyor.dds", "spriteType", (490, 84), effect_file=EFFECT),
-    SpriteContract("GFX_military_deployment_line_view_bg", "GFX_ADISCORD_deployment_line", "ADISCORD_deployment_line.dds", "spriteType", (514, 40), effect_file=EFFECT),
-    SpriteContract("GFX_military_deployment_end_line_view_bg", "GFX_ADISCORD_deployment_end_line", "ADISCORD_deployment_end_line.dds", "spriteType", (518, 40), effect_file=EFFECT),
-    SpriteContract("GFX_deploy_priority_title_bg", "GFX_ADISCORD_deployment_priority_title", "ADISCORD_deployment_priority_title.dds", "spriteType", (159, 26)),
-    SpriteContract("GFX_deploy_priority_equipment_meter_bg", "GFX_ADISCORD_deployment_priority_meter", "ADISCORD_deployment_priority_meter.dds", "spriteType", (108, 33)),
-    SpriteContract("GFX_small_button_71x26", "GFX_ADISCORD_deployment_action_button", "ADISCORD_deployment_action_button.dds", "textSpriteType", (71, 26), effect_file=BUTTON_EFFECT),
-    SpriteContract("GFX_small_button_71x26", "GFX_ADISCORD_deployment_view_button", "ADISCORD_deployment_view_button.dds", "textSpriteType", (87, 26), effect_file=BUTTON_EFFECT),
-    SpriteContract("GFX_button_221x34", "GFX_ADISCORD_deployment_symbol_button", "ADISCORD_deployment_symbol_button.dds", "textSpriteType", (221, 36), effect_file=BUTTON_EFFECT),
-    SpriteContract("GFX_division_designer_button", "GFX_ADISCORD_deployment_designer_button", "ADISCORD_deployment_designer_button.dds", "textSpriteType", (166, 33), effect_file=BUTTON_EFFECT),
-    SpriteContract("GFX_military_deployment_add_line_btn", "GFX_ADISCORD_deployment_add_line_button", "ADISCORD_deployment_add_line_button.dds", "textSpriteType", (210, 23), frames=2, effect_file=BUTTON_EFFECT),
-    SpriteContract("GFX_deploy_priority", "GFX_ADISCORD_deployment_priority_strip", "ADISCORD_deployment_priority_strip.dds", "spriteType", (80, 21), frames=4),
-    SpriteContract("GFX_generic_checkbox", "GFX_ADISCORD_deployment_checkbox", "ADISCORD_deployment_checkbox.dds", "spriteType", (68, 30), frames=2),
-    SpriteContract("GFX_foreign_templates_dropdown_button", "GFX_ADISCORD_deployment_foreign_templates", "ADISCORD_deployment_foreign_templates.dds", "spriteType", (168, 56), frames=3),
+    SpriteContract(
+        "GFX_tiled_window2_1b_border",
+        "GFX_ADISCORD_deployment_window",
+        "ADISCORD_deployment_window.dds",
+        "corneredTileSpriteType",
+        (192, 192),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_window",
+        "GFX_ADISCORD_deployment_shell",
+        "ADISCORD_deployment_shell.dds",
+        "corneredTileSpriteType",
+        (192, 192),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_window_1b_thin_border",
+        "GFX_ADISCORD_deployment_thin_shell",
+        "ADISCORD_deployment_thin_shell.dds",
+        "corneredTileSpriteType",
+        (192, 192),
+        border_size=(64, 64),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_generic_overlay_bg1",
+        "GFX_ADISCORD_deployment_overlay",
+        "ADISCORD_deployment_overlay.dds",
+        "corneredTileSpriteType",
+        (549, 600),
+        border_size=(268, 268),
+        effect_file=EFFECT,
+        always_transparent=True,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_plain_bg_small",
+        "GFX_ADISCORD_deployment_small_panel",
+        "ADISCORD_deployment_small_panel.dds",
+        "corneredTileSpriteType",
+        (48, 48),
+        border_size=(16, 16),
+        effect_file=EFFECT,
+        tiling_center=True,
+    ),
+    SpriteContract(
+        "GFX_tiled_window_transparent",
+        "GFX_ADISCORD_deployment_transparent",
+        "ADISCORD_deployment_transparent.dds",
+        "corneredTileSpriteType",
+        (3, 3),
+        border_size=(1, 1),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_subview_header_bg_375x101",
+        "GFX_ADISCORD_deployment_header",
+        "ADISCORD_deployment_header.dds",
+        "spriteType",
+        (375, 101),
+    ),
+    SpriteContract(
+        "GFX_deploy_icon_tiled_bg",
+        "GFX_ADISCORD_deployment_icon_well",
+        "ADISCORD_deployment_icon_well.dds",
+        "corneredTileSpriteType",
+        (77, 40),
+        border_size=(16, 16),
+        always_transparent=True,
+    ),
+    SpriteContract(
+        "GFX_deploy_reinforcements_entry",
+        "GFX_ADISCORD_deployment_reinforcement_row",
+        "ADISCORD_deployment_reinforcement_row.dds",
+        "spriteType",
+        (493, 57),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_reinforcements_entry",
+        "GFX_ADISCORD_deployment_supply_row",
+        "ADISCORD_deployment_supply_row.dds",
+        "spriteType",
+        (493, 57),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_upgrades_entry",
+        "GFX_ADISCORD_deployment_upgrade_row",
+        "ADISCORD_deployment_upgrade_row.dds",
+        "spriteType",
+        (493, 57),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_garrisons_entry",
+        "GFX_ADISCORD_deployment_garrison_row",
+        "ADISCORD_deployment_garrison_row.dds",
+        "spriteType",
+        (493, 57),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_operations_entry",
+        "GFX_ADISCORD_deployment_operations_row",
+        "ADISCORD_deployment_operations_row.dds",
+        "spriteType",
+        (493, 57),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deployment_named_division_bg",
+        "GFX_ADISCORD_deployment_template",
+        "ADISCORD_deployment_template.dds",
+        "spriteType",
+        (346, 78),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deployment_named_division_obsolete_bg",
+        "GFX_ADISCORD_deployment_template_obsolete",
+        "ADISCORD_deployment_template_obsolete.dds",
+        "spriteType",
+        (348, 79),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_military_deployment_conveyor_view_bg",
+        "GFX_ADISCORD_deployment_conveyor",
+        "ADISCORD_deployment_conveyor.dds",
+        "spriteType",
+        (490, 84),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_military_deployment_line_view_bg",
+        "GFX_ADISCORD_deployment_line",
+        "ADISCORD_deployment_line.dds",
+        "spriteType",
+        (514, 40),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_military_deployment_end_line_view_bg",
+        "GFX_ADISCORD_deployment_end_line",
+        "ADISCORD_deployment_end_line.dds",
+        "spriteType",
+        (518, 40),
+        effect_file=EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_priority_title_bg",
+        "GFX_ADISCORD_deployment_priority_title",
+        "ADISCORD_deployment_priority_title.dds",
+        "spriteType",
+        (159, 26),
+    ),
+    SpriteContract(
+        "GFX_deploy_priority_equipment_meter_bg",
+        "GFX_ADISCORD_deployment_priority_meter",
+        "ADISCORD_deployment_priority_meter.dds",
+        "spriteType",
+        (108, 33),
+    ),
+    SpriteContract(
+        "GFX_small_button_71x26",
+        "GFX_ADISCORD_deployment_action_button",
+        "ADISCORD_deployment_action_button.dds",
+        "textSpriteType",
+        (71, 26),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_small_button_71x26",
+        "GFX_ADISCORD_deployment_view_button",
+        "ADISCORD_deployment_view_button.dds",
+        "textSpriteType",
+        (87, 26),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_button_221x34",
+        "GFX_ADISCORD_deployment_symbol_button",
+        "ADISCORD_deployment_symbol_button.dds",
+        "textSpriteType",
+        (221, 36),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_division_designer_button",
+        "GFX_ADISCORD_deployment_designer_button",
+        "ADISCORD_deployment_designer_button.dds",
+        "textSpriteType",
+        (166, 33),
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_military_deployment_add_line_btn",
+        "GFX_ADISCORD_deployment_add_line_button",
+        "ADISCORD_deployment_add_line_button.dds",
+        "textSpriteType",
+        (210, 23),
+        frames=2,
+        effect_file=BUTTON_EFFECT,
+    ),
+    SpriteContract(
+        "GFX_deploy_priority",
+        "GFX_ADISCORD_deployment_priority_strip",
+        "ADISCORD_deployment_priority_strip.dds",
+        "spriteType",
+        (80, 21),
+        frames=4,
+    ),
+    SpriteContract(
+        "GFX_generic_checkbox",
+        "GFX_ADISCORD_deployment_checkbox",
+        "ADISCORD_deployment_checkbox.dds",
+        "spriteType",
+        (68, 30),
+        frames=2,
+    ),
+    SpriteContract(
+        "GFX_foreign_templates_dropdown_button",
+        "GFX_ADISCORD_deployment_foreign_templates",
+        "ADISCORD_deployment_foreign_templates.dds",
+        "spriteType",
+        (168, 56),
+        frames=3,
+    ),
 )
 
 SPRITE_REPLACEMENTS = {
@@ -91,20 +298,32 @@ SPRITE_REPLACEMENTS = {
     "GFX_tiled_window_transparent": ("GFX_ADISCORD_deployment_transparent", 1),
     "GFX_subview_header_bg_375x101": ("GFX_ADISCORD_deployment_header", 1),
     "GFX_deployment_named_division_bg": ("GFX_ADISCORD_deployment_template", 1),
-    "GFX_deployment_named_division_obsolete_bg": ("GFX_ADISCORD_deployment_template_obsolete", 1),
+    "GFX_deployment_named_division_obsolete_bg": (
+        "GFX_ADISCORD_deployment_template_obsolete",
+        1,
+    ),
     "GFX_military_deployment_conveyor_view_bg": ("GFX_ADISCORD_deployment_conveyor", 1),
     "GFX_military_deployment_line_view_bg": ("GFX_ADISCORD_deployment_line", 1),
     "GFX_military_deployment_end_line_view_bg": ("GFX_ADISCORD_deployment_end_line", 1),
     "GFX_deploy_priority_title_bg": ("GFX_ADISCORD_deployment_priority_title", 2),
-    "GFX_deploy_priority_equipment_meter_bg": ("GFX_ADISCORD_deployment_priority_meter", 2),
+    "GFX_deploy_priority_equipment_meter_bg": (
+        "GFX_ADISCORD_deployment_priority_meter",
+        2,
+    ),
     "GFX_deploy_icon_tiled_bg": ("GFX_ADISCORD_deployment_icon_well", 2),
     "GFX_small_button_71x26": ("GFX_ADISCORD_deployment_action_button", 2),
     "GFX_button_221x34": ("GFX_ADISCORD_deployment_symbol_button", 2),
     "GFX_division_designer_button": ("GFX_ADISCORD_deployment_designer_button", 1),
-    "GFX_military_deployment_add_line_btn": ("GFX_ADISCORD_deployment_add_line_button", 1),
+    "GFX_military_deployment_add_line_btn": (
+        "GFX_ADISCORD_deployment_add_line_button",
+        1,
+    ),
     "GFX_deploy_priority": ("GFX_ADISCORD_deployment_priority_strip", 9),
     "GFX_generic_checkbox": ("GFX_ADISCORD_deployment_checkbox", 1),
-    "GFX_foreign_templates_dropdown_button": ("GFX_ADISCORD_deployment_foreign_templates", 1),
+    "GFX_foreign_templates_dropdown_button": (
+        "GFX_ADISCORD_deployment_foreign_templates",
+        1,
+    ),
 }
 
 
@@ -138,32 +357,62 @@ def render_gui() -> str:
     text = VANILLA_GUI.read_text(encoding="utf-8-sig")
     for old, (new, expected) in SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
-    text = _replace_container_sprite(text, "deploy_entry", "GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_reinforcement_row")
-    text = _replace_container_sprite(text, "supply_deploy_entry", "GFX_deploy_reinforcements_entry", "GFX_ADISCORD_deployment_supply_row")
+    text = _replace_container_sprite(
+        text,
+        "deploy_entry",
+        "GFX_deploy_reinforcements_entry",
+        "GFX_ADISCORD_deployment_reinforcement_row",
+    )
+    text = _replace_container_sprite(
+        text,
+        "supply_deploy_entry",
+        "GFX_deploy_reinforcements_entry",
+        "GFX_ADISCORD_deployment_supply_row",
+    )
     start, end = _container_block(text, "named_division_template_entry")
     entry = text[start:end]
-    entry = replace_gui_block(entry, "buttonType", "edit_button", (
-        (r'"GFX_ADISCORD_deployment_action_button"', '"GFX_ADISCORD_deployment_view_button"'),
-    ))
-    entry = replace_gui_block(entry, "buttonType", "delete_button", (
-        (r'position\s*=\s*\{[^}]+\}', 'position = { x = 316 y = 48 }'),
-    ))
+    entry = replace_gui_block(
+        entry,
+        "buttonType",
+        "edit_button",
+        (
+            (
+                r'"GFX_ADISCORD_deployment_action_button"',
+                '"GFX_ADISCORD_deployment_view_button"',
+            ),
+        ),
+    )
+    entry = replace_gui_block(
+        entry,
+        "buttonType",
+        "delete_button",
+        ((r'position\s*=\s*\{[^}]+\}', 'position = { x = 316 y = 48 }'),),
+    )
     text = text[:start] + entry + text[end:]
     start, end = _container_block(text, "show_decommissioned_templates_window")
-    entry = replace_gui_block(text[start:end], "instantTextboxType", "text", (
-        (r'font\s*=\s*"hoi_20b"', 'font = "hoi_16mbs"'),
-        (r'position\s*=\s*\{[^}]+\}', 'position = { x = 52 y = 11 }'),
-        (r'maxWidth\s*=\s*288', 'maxWidth = 310'),
-    ))
+    entry = replace_gui_block(
+        text[start:end],
+        "instantTextboxType",
+        "text",
+        (
+            (r'font\s*=\s*"hoi_20b"', 'font = "hoi_16mbs"'),
+            (r'position\s*=\s*\{[^}]+\}', 'position = { x = 52 y = 11 }'),
+            (r'maxWidth\s*=\s*288', 'maxWidth = 310'),
+        ),
+    )
     text = text[:start] + entry + text[end:]
     manifest = "\n".join(
         f'# semantic deployment asset: "{item.target_name}"'
         for item in DEPLOYMENT_CONTRACTS
     )
-    return manifest + "\n" + "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
+    return (
+        manifest + "\n" + "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
+    )
 
 
-def _priority_row(source: Image.Image, accent: tuple[int, int, int, int]) -> Image.Image:
+def _priority_row(
+    source: Image.Image, accent: tuple[int, int, int, int]
+) -> Image.Image:
     palette = PALETTES["deployment"]
     output = metal_surface(source, (493, 57), palette, 0.78)
     # The icon, title and equipment meter each have their own GUI background.
@@ -173,7 +422,9 @@ def _priority_row(source: Image.Image, accent: tuple[int, int, int, int]) -> Ima
     return output
 
 
-def _template_row(source: Image.Image, size: tuple[int, int], obsolete: bool) -> Image.Image:
+def _template_row(
+    source: Image.Image, size: tuple[int, int], obsolete: bool
+) -> Image.Image:
     palette = PALETTES["deployment"]
     width, height = size
     output = metal_surface(source, size, palette, 0.68 if obsolete else 0.82)
@@ -198,14 +449,18 @@ def _conveyor_row(source: Image.Image) -> Image.Image:
     return output
 
 
-def _line_row(source: Image.Image, size: tuple[int, int], end_line: bool) -> Image.Image:
+def _line_row(
+    source: Image.Image, size: tuple[int, int], end_line: bool
+) -> Image.Image:
     palette = PALETTES["deployment"]
     width, height = size
     output = metal_surface(source, size, palette, 0.75)
     partial_rails(output, (5, 4, width - 6, height - 5), palette)
     raised_field(output, (8, 7, 177 if not end_line else 196, height - 8), palette)
     recessed_well(output, (width - 90, 7, width - 9, height - 8), palette)
-    status_band(output, (0, height - 3, width - 1, height - 1), RUST if end_line else OLIVE)
+    status_band(
+        output, (0, height - 3, width - 1, height - 1), RUST if end_line else OLIVE
+    )
     return output
 
 
@@ -257,7 +512,9 @@ def _priority_strip() -> Image.Image:
     for index, color in enumerate(colors):
         frame = Image.new("RGBA", (20, 21), (0, 0, 0, 0))
         draw = ImageDraw.Draw(frame, "RGBA")
-        draw.ellipse((2, 2, 18, 18), fill=(8, 12, 10, 255), outline=(33, 40, 34, 255), width=2)
+        draw.ellipse(
+            (2, 2, 18, 18), fill=(8, 12, 10, 255), outline=(33, 40, 34, 255), width=2
+        )
         draw.ellipse((5, 5, 15, 15), fill=color, outline=(194, 199, 187, 255))
         draw.ellipse((8, 7, 11, 10), fill=(226, 230, 218, 165))
         output.alpha_composite(frame, (index * 20, 0))
@@ -270,7 +527,9 @@ def _checkbox_strip(source: Image.Image) -> Image.Image:
     for index in range(2):
         frame = metal_surface(source, (34, 30), palette, 0.74 + index * 0.08)
         draw = ImageDraw.Draw(frame, "RGBA")
-        draw.rectangle((6, 5, 27, 24), fill=(4, 8, 6, 255), outline=palette.edge, width=2)
+        draw.rectangle(
+            (6, 5, 27, 24), fill=(4, 8, 6, 255), outline=palette.edge, width=2
+        )
         if index:
             draw.line((10, 14, 15, 20, 24, 9), fill=palette.accent_light, width=3)
         output.alpha_composite(frame, (index * 34, 0))
@@ -316,14 +575,25 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
         return _priority_title(source)
     if target == "GFX_ADISCORD_deployment_priority_meter":
         return _priority_meter(source)
-    if target in {"GFX_ADISCORD_deployment_action_button", "GFX_ADISCORD_deployment_view_button"}:
-        return _semantic_button_strip(source, contract.total_size, contract.frames, OLIVE)
+    if target in {
+        "GFX_ADISCORD_deployment_action_button",
+        "GFX_ADISCORD_deployment_view_button",
+    }:
+        return _semantic_button_strip(
+            source, contract.total_size, contract.frames, OLIVE
+        )
     if target == "GFX_ADISCORD_deployment_symbol_button":
-        return _semantic_button_strip(source, contract.total_size, contract.frames, SUPPLY_STEEL)
+        return _semantic_button_strip(
+            source, contract.total_size, contract.frames, SUPPLY_STEEL
+        )
     if target == "GFX_ADISCORD_deployment_designer_button":
-        return _semantic_button_strip(source, contract.total_size, contract.frames, MUTED_GOLD)
+        return _semantic_button_strip(
+            source, contract.total_size, contract.frames, MUTED_GOLD
+        )
     if target == "GFX_ADISCORD_deployment_add_line_button":
-        return _semantic_button_strip(source, contract.total_size, contract.frames, OLIVE)
+        return _semantic_button_strip(
+            source, contract.total_size, contract.frames, OLIVE
+        )
     if target == "GFX_ADISCORD_deployment_priority_strip":
         return _priority_strip()
     if target == "GFX_ADISCORD_deployment_checkbox":
@@ -331,11 +601,15 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
     if target == "GFX_ADISCORD_deployment_foreign_templates":
         return _foreign_templates_strip(source)
     if target == "GFX_ADISCORD_deployment_header":
-        output = metal_surface(source, contract.total_size, PALETTES["deployment"], 0.78)
+        output = metal_surface(
+            source, contract.total_size, PALETTES["deployment"], 0.78
+        )
         partial_rails(output, (8, 8, 366, 92), PALETTES["deployment"])
         return output
     if target == "GFX_ADISCORD_deployment_icon_well":
-        output = metal_surface(source, contract.total_size, PALETTES["deployment"], 0.72)
+        output = metal_surface(
+            source, contract.total_size, PALETTES["deployment"], 0.72
+        )
         recessed_well(output, (2, 2, 74, 37), PALETTES["deployment"])
         return output
     if target == "GFX_ADISCORD_deployment_transparent":
@@ -344,7 +618,10 @@ def render_asset(contract: SpriteContract, source: Image.Image) -> Image.Image:
 
 
 def render_gfx() -> str:
-    entries = "".join(render_gfx_entry(item, f"gfx/interface/deployment/ui/{item.filename}") for item in DEPLOYMENT_CONTRACTS)
+    entries = "".join(
+        render_gfx_entry(item, f"gfx/interface/deployment/ui/{item.filename}")
+        for item in DEPLOYMENT_CONTRACTS
+    )
     return f"spriteTypes = {{\n{entries}}}\n"
 
 
@@ -364,9 +641,13 @@ def expected_outputs() -> dict[Path, bytes]:
     outputs = {
         GUI_OUTPUT: render_gui().encode("utf-8"),
         GFX_OUTPUT: render_gfx().encode("utf-8"),
-        PREVIEW: _png_bytes(contact_sheet([(item.target_name, image) for item, image in assets], 640)),
+        PREVIEW: _png_bytes(
+            contact_sheet([(item.target_name, image) for item, image in assets], 640)
+        ),
     }
-    outputs.update({OUTPUT_DIR / item.filename: dds_bytes(image) for item, image in assets})
+    outputs.update(
+        {OUTPUT_DIR / item.filename: dds_bytes(image) for item, image in assets}
+    )
     # HOI4 switches priority-row backgrounds by native sprite name at runtime.
     for native, generated in (
         ("reinforcements", "reinforcement"),
@@ -388,7 +669,9 @@ def _remove_legacy_outputs() -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build A-Discord deployment UI assets.")
+    parser = argparse.ArgumentParser(
+        description="Build A-Discord deployment UI assets."
+    )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")

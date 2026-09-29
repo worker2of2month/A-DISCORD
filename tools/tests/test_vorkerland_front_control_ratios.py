@@ -33,7 +33,10 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
             )
 
     def test_all_fronts_preserve_native_local_attack_checks(self) -> None:
-        from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block, named_blocks
+        from tools.tests.test_adiscord_vorkerland_vad_behavior import (
+            named_block,
+            named_blocks,
+        )
 
         source = AI_FILES[0].read_text(encoding="utf-8-sig")
         checked = 0
@@ -59,7 +62,9 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
 
         source = AI_FILES[0].read_text(encoding="utf-8-sig")
         for target in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
-            front = named_block(source, f"ADISCORD_vorkerland_front_central_against_{target.lower()}")
+            front = named_block(
+                source, f"ADISCORD_vorkerland_front_central_against_{target.lower()}"
+            )
             with self.subTest(target=target):
                 self.assertIn("execution_type = balanced", front)
                 self.assertIn("manual_attack = no", front)
@@ -75,23 +80,42 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
 
         source = AI_FILES[0].read_text(encoding="utf-8-sig")
         for group, targets in (
-            ("central", ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV")),
+            (
+                "central",
+                ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"),
+            ),
             ("solarino", ("SRA", "CSL")),
         ):
             for target in targets:
-                front = named_block(source, f"ADISCORD_vorkerland_{group}_breakthrough_{target.lower()}")
+                front = named_block(
+                    source, f"ADISCORD_vorkerland_{group}_breakthrough_{target.lower()}"
+                )
                 enabled = named_block(front, "enable")
                 with self.subTest(group=group, target=target):
-                    self.assertIn(f"has_country_flag = ADISCORD_vorkerland_{group}_breakthrough_window_active", enabled)
+                    self.assertIn(
+                        f"has_country_flag = ADISCORD_vorkerland_{group}_breakthrough_window_active",
+                        enabled,
+                    )
                     self.assertIn("has_manpower > 1000", enabled)
-                    self.assertIn("stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }", enabled)
-                    self.assertIn(f"fighting_army_strength_ratio = {{ tag = {target} ratio > 1.15 }}", enabled)
+                    self.assertIn(
+                        "stockpile_ratio = { archetype = infantry_equipment ratio > 0.05 }",
+                        enabled,
+                    )
+                    self.assertIn(
+                        f"fighting_army_strength_ratio = {{ tag = {target} ratio > 1.15 }}",
+                        enabled,
+                    )
                     self.assertIn("execution_type = rush_weak", front)
                     self.assertIn("manual_attack = no", front)
                     self.assertIn("abort_when_not_enabled = yes", front)
 
-    def test_collapse_offensives_do_not_use_careful_stare_or_high_coverage(self) -> None:
-        from tools.tests.test_adiscord_vorkerland_vad_behavior import named_block, named_blocks
+    def test_collapse_offensives_do_not_use_careful_stare_or_high_coverage(
+        self,
+    ) -> None:
+        from tools.tests.test_adiscord_vorkerland_vad_behavior import (
+            named_block,
+            named_blocks,
+        )
 
         source = AI_FILES[0].read_text(encoding="utf-8-sig")
         keep_careful = {
@@ -123,7 +147,9 @@ class VorkerlandFrontControlRatioTests(unittest.TestCase):
         self.assertGreater(checked, 100)
 
     def test_observed_mixed_fronts_use_a_low_coverage_threshold(self) -> None:
-        collapse = source_section(AI_FILES[0].read_text(encoding="utf-8-sig"), 'collapse_ai')
+        collapse = source_section(
+            AI_FILES[0].read_text(encoding="utf-8-sig"), 'collapse_ai'
+        )
         nam = AI_FILES[1].read_text(encoding="utf-8-sig")
         for tag in ("WKR", "VAD", "TVA"):
             self.assertRegex(

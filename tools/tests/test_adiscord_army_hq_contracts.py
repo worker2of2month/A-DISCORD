@@ -50,35 +50,68 @@ def division_template_block(text: str, template_name: str) -> str:
 class ArmyHeadquartersContractTests(unittest.TestCase):
     def test_hq_models_preserve_native_states_and_accessory_attachments(self) -> None:
         from tools.tests.test_adiscord_infantry_weapon_progression import entity_blocks
+
         path = ROOT / "gfx/entities/zz_ADISCORD_army_headquarters.asset"
         self.assertTrue(path.is_file(), "HQ visual family has not been registered")
         blocks = entity_blocks(path)
         base = blocks["ADISCORD_army_headquarters_base_entity"]
-        for node, accessory in (("Right_Hand_node_2", "pencil_entity"),
-                                ("Left_Hand_node_2", "clipboard_entity"),
-                                ("Left_Hand_node_3", "binoculars_entity")):
+        for node, accessory in (
+            ("Right_Hand_node_2", "pencil_entity"),
+            ("Left_Hand_node_2", "clipboard_entity"),
+            ("Left_Hand_node_3", "binoculars_entity"),
+        ):
             self.assertIn(f'{node} = "{accessory}"', base)
-        for clip in ("idle", "notes", "scout", "stance", "brush", "move", "retreat",
-                     "death", "charge_pistol", "charge_pistol_shoot", "attack02",
-                     "support_attack", "training", "jumping_jacks", "pushup"):
+        for clip in (
+            "idle",
+            "notes",
+            "scout",
+            "stance",
+            "brush",
+            "move",
+            "retreat",
+            "death",
+            "charge_pistol",
+            "charge_pistol_shoot",
+            "attack02",
+            "support_attack",
+            "training",
+            "jumping_jacks",
+            "pushup",
+        ):
             self.assertRegex(base, rf'animation\s*=\s*"{clip}"')
-        for tag, label in (("STP", "STP_hq"), ("STS", "STS_hq"), ("VAL", "VAL_hq"),
-                           ("NOD", "NOD_hq"), ("", "generic_hq")):
+        for tag, label in (
+            ("STP", "STP_hq"),
+            ("STS", "STS_hq"),
+            ("VAL", "VAL_hq"),
+            ("NOD", "NOD_hq"),
+            ("", "generic_hq"),
+        ):
             name = (tag + "_" if tag else "") + "army_headquarters_entity"
             self.assertIn(f'pdxmesh = "ADISCORD_{label}_mesh"', blocks[name])
-            self.assertIn('clone = "ADISCORD_army_headquarters_base_entity"', blocks[name])
+            self.assertIn(
+                'clone = "ADISCORD_army_headquarters_base_entity"', blocks[name]
+            )
         self.assertRegex(base, r'\bscale\s*=\s*0\.8\b')
 
     def test_hq_model_pool_restores_the_replaced_native_consumer(self) -> None:
-        path = ROOT / 'gfx/interface/equipmentdesigner/graphic_db/ADISCORD_army_headquarters.txt'
-        self.assertTrue(path.is_file(), 'The replaced graphic_db needs an HQ model pool')
+        path = (
+            ROOT
+            / 'gfx/interface/equipmentdesigner/graphic_db/ADISCORD_army_headquarters.txt'
+        )
+        self.assertTrue(
+            path.is_file(), 'The replaced graphic_db needs an HQ model pool'
+        )
         text = path.read_text(encoding='utf-8')
         for scope in ('default', 'STP', 'STS', 'VAL', 'NOD'):
             block = named_block(text, scope)
-            entity = (scope + '_' if scope != 'default' else '') + 'army_headquarters_entity'
+            entity = (
+                scope + '_' if scope != 'default' else ''
+            ) + 'army_headquarters_entity'
             self.assertIn(f'models = {{ {entity} }}', block)
             self.assertIn('sub_units = { hq_support_company }', block)
-            self.assertIn('weight = ' + ('1000' if scope == 'default' else '3000'), block)
+            self.assertIn(
+                'weight = ' + ('1000' if scope == 'default' else '3000'), block
+            )
         self.assertNotIn('icons =', text)
         self.assertNotIn('cultures =', text)
 
@@ -176,9 +209,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
                 self.assertIn("is_locked = yes", template)
                 self.assertIn("force_allow_recruiting = no", template)
 
-        effects = read(
-            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
-        )
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         lock = named_block(effects, "ADISCORD_STP_lock_regular_army_templates")
         self.assertNotIn("Army HQ", lock)
         self.assertNotIn("ARMY_HQ_TEMPLATE_NAME", lock)
@@ -195,22 +226,33 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_grant_technology_profile_land = yes", history)
 
         oob = read("history/units/IVN.txt")
-        self.assertIn("equipment = { type = support_equipment_1 creator = \"IVN\" }", oob)
-        self.assertIn("equipment = { type = artillery_equipment_1 creator = \"IVN\" }", oob)
-        self.assertNotIn("equipment = { type = support_equipment creator = \"IVN\" }", oob)
-        self.assertNotIn("equipment = { type = artillery_equipment creator = \"IVN\" }", oob)
-
-    def test_stp_core_initializer_reasserts_locks_and_idea_removal_unlocks_regulars(self) -> None:
-        effects = read(
-            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+        self.assertIn(
+            "equipment = { type = support_equipment_1 creator = \"IVN\" }", oob
         )
+        self.assertIn(
+            "equipment = { type = artillery_equipment_1 creator = \"IVN\" }", oob
+        )
+        self.assertNotIn(
+            "equipment = { type = support_equipment creator = \"IVN\" }", oob
+        )
+        self.assertNotIn(
+            "equipment = { type = artillery_equipment creator = \"IVN\" }", oob
+        )
+
+    def test_stp_core_initializer_reasserts_locks_and_idea_removal_unlocks_regulars(
+        self,
+    ) -> None:
+        effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         unlock = named_block(effects, "ADISCORD_STP_unlock_regular_army_templates")
         self.assertIn('division_template = "Police division"', unlock)
         self.assertIn('division_template = "Regular army"', unlock)
         self.assertNotIn('division_template = "Capital Guard"', unlock)
         self.assertNotIn("ADISCORD_STP_migrate_army_template_lock", effects)
 
-        idea = named_block(read("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "STP_hedonism_with_no_bondaries")
+        idea = named_block(
+            read("common/ideas/ADISCORD_STP_civil_war_ideas.txt"),
+            "STP_hedonism_with_no_bondaries",
+        )
         self.assertIn("STP_hedonism_army_restriction_tt", idea)
         self.assertIn("ADISCORD_STP_unlock_regular_army_templates = yes", idea)
 

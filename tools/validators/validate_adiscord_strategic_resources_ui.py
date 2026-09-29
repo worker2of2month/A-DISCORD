@@ -8,25 +8,61 @@ from pathlib import Path
 
 from PIL import Image
 
-from tools.builders.build_adiscord_resource_assets import expected_outputs, validate as validate_assets
+from tools.builders.build_adiscord_resource_assets import (
+    expected_outputs,
+    validate as validate_assets,
+)
 from tools.lib.paths import repository_root
 
 
 ROOT = repository_root()
 
 VANILLA_TOPBAR_BUTTONS = {
-    "GFX_topbar_decisionview_button": ("gfx/interface/topbar/toolbar/topbar_decisionview_button.dds", (110, 41)),
-    "GFX_topbar_intelligence": ("gfx/interface/topbar/toolbar/intelligence_button.dds", (110, 41)),
-    "GFX_topbar_technology": ("gfx/interface/topbar/toolbar/science_button.dds", (110, 41)),
-    "GFX_topbar_diplomacy": ("gfx/interface/topbar/toolbar/diplomacy_button.dds", (110, 41)),
-    "GFX_topbar_trade_button": ("gfx/interface/topbar/toolbar/trade_button.dds", (110, 41)),
-    "GFX_construction_button": ("gfx/interface/topbar/toolbar/construction_button.dds", (110, 41)),
-    "GFX_topbar_production": ("gfx/interface/topbar/toolbar/production_button.dds", (110, 41)),
-    "GFX_deployment_button": ("gfx/interface/topbar/toolbar/deployment_button.dds", (110, 41)),
+    "GFX_topbar_decisionview_button": (
+        "gfx/interface/topbar/toolbar/topbar_decisionview_button.dds",
+        (110, 41),
+    ),
+    "GFX_topbar_intelligence": (
+        "gfx/interface/topbar/toolbar/intelligence_button.dds",
+        (110, 41),
+    ),
+    "GFX_topbar_technology": (
+        "gfx/interface/topbar/toolbar/science_button.dds",
+        (110, 41),
+    ),
+    "GFX_topbar_diplomacy": (
+        "gfx/interface/topbar/toolbar/diplomacy_button.dds",
+        (110, 41),
+    ),
+    "GFX_topbar_trade_button": (
+        "gfx/interface/topbar/toolbar/trade_button.dds",
+        (110, 41),
+    ),
+    "GFX_construction_button": (
+        "gfx/interface/topbar/toolbar/construction_button.dds",
+        (110, 41),
+    ),
+    "GFX_topbar_production": (
+        "gfx/interface/topbar/toolbar/production_button.dds",
+        (110, 41),
+    ),
+    "GFX_deployment_button": (
+        "gfx/interface/topbar/toolbar/deployment_button.dds",
+        (110, 41),
+    ),
     "GFX_ledger_button": ("gfx/interface/topbar/toolbar/ledger_button.dds", (110, 41)),
-    "GFX_staff_office_button": ("gfx/interface/topbar/toolbar/staff_office_button.dds", (110, 41)),
-    "GFX_armyoverview_button": ("gfx/interface/topbar/armyoverview_button.dds", (76, 38)),
-    "GFX_navyoverview_button": ("gfx/interface/topbar/navyoverview_button.dds", (76, 38)),
+    "GFX_staff_office_button": (
+        "gfx/interface/topbar/toolbar/staff_office_button.dds",
+        (110, 41),
+    ),
+    "GFX_armyoverview_button": (
+        "gfx/interface/topbar/armyoverview_button.dds",
+        (76, 38),
+    ),
+    "GFX_navyoverview_button": (
+        "gfx/interface/topbar/navyoverview_button.dds",
+        (76, 38),
+    ),
     "GFX_airoverview_button": ("gfx/interface/topbar/airoverview_button.dds", (76, 38)),
 }
 
@@ -76,12 +112,16 @@ def _read(root: Path, relative: str) -> str:
     return path.read_text(encoding="utf-8-sig")
 
 
-def _require(text: str, pattern: str, source: str, message: str, issues: list[str]) -> None:
+def _require(
+    text: str, pattern: str, source: str, message: str, issues: list[str]
+) -> None:
     if not re.search(pattern, text, re.MULTILINE | re.DOTALL):
         issues.append(f"{source}: {message}")
 
 
-def _require_image_size(root: Path, relative: str, expected: tuple[int, int], issues: list[str]) -> None:
+def _require_image_size(
+    root: Path, relative: str, expected: tuple[int, int], issues: list[str]
+) -> None:
     path = root / relative
     if not path.is_file():
         issues.append(f"{relative}: generated texture is missing")
@@ -89,7 +129,9 @@ def _require_image_size(root: Path, relative: str, expected: tuple[int, int], is
     try:
         with Image.open(path) as image:
             if image.size != expected:
-                issues.append(f"{relative}: expected {expected[0]}x{expected[1]}, found {image.width}x{image.height}")
+                issues.append(
+                    f"{relative}: expected {expected[0]}x{expected[1]}, found {image.width}x{image.height}"
+                )
     except OSError as exc:
         issues.append(f"{relative}: cannot read generated texture: {exc}")
 
@@ -97,7 +139,9 @@ def _require_image_size(root: Path, relative: str, expected: tuple[int, int], is
 def validate(root: Path = ROOT) -> list[str]:
     issues: list[str] = []
     resources = _read(root, "common/resources/00_resources.txt")
-    synchronized_tokens = _read(root, "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt")
+    synchronized_tokens = _read(
+        root, "common/synchronized_dynamic_tokens/ADISCORD_tokens.txt"
+    )
     for resource, frame in (("rare_components", 8), ("rare_alloys", 9)):
         _require(
             resources,
@@ -121,14 +165,24 @@ def validate(root: Path = ROOT) -> list[str]:
         "group_by = ADISCORD_advanced_material_plants",
     ):
         if token not in buildings:
-            issues.append(f"common/buildings/00_buildings.txt: missing strategic-resource source {token}")
-    for legacy_name in ("synthetic_refinery", "ADISCORD_metallurgical_complex", "ADISCORD_electrolysis_complex"):
+            issues.append(
+                f"common/buildings/00_buildings.txt: missing strategic-resource source {token}"
+            )
+    for legacy_name in (
+        "synthetic_refinery",
+        "ADISCORD_metallurgical_complex",
+        "ADISCORD_electrolysis_complex",
+    ):
         match = re.search(
             rf"(?ms)^\s*{legacy_name}\s*=\s*\{{(.*?)(?=^\s*[A-Za-z0-9_]+\s*=\s*\{{|^\}})",
             buildings,
         )
-        if match and re.search(r"local_resources_rare_(?:components|alloys)", match.group(1)):
-            issues.append(f"common/buildings/00_buildings.txt: {legacy_name} must not produce advanced materials")
+        if match and re.search(
+            r"local_resources_rare_(?:components|alloys)", match.group(1)
+        ):
+            issues.append(
+                f"common/buildings/00_buildings.txt: {legacy_name} must not produce advanced materials"
+            )
 
     state_history = "\n".join(
         path.read_text(encoding="utf-8-sig")
@@ -138,7 +192,9 @@ def validate(root: Path = ROOT) -> list[str]:
         ("ADISCORD_rare_components_plant", 3),
         ("ADISCORD_rare_alloy_foundry", 3),
     ):
-        actual_count = len(re.findall(rf"(?m)^\s*{building}\s*=\s*1\s*$", state_history))
+        actual_count = len(
+            re.findall(rf"(?m)^\s*{building}\s*=\s*1\s*$", state_history)
+        )
         if actual_count != expected_count:
             issues.append(
                 f"history/states: expected {expected_count} starting {building} buildings, found {actual_count}"
@@ -153,10 +209,16 @@ def validate(root: Path = ROOT) -> list[str]:
     equipment = "\n".join(_read(root, source) for source in equipment_sources)
     for resource in ("rare_components", "rare_alloys"):
         if len(re.findall(rf"\b{resource}\s*=\s*[12]\b", equipment)) < 4:
-            issues.append(f"common/units/equipment: {resource} lacks four bounded late-equipment consumers")
+            issues.append(
+                f"common/units/equipment: {resource} lacks four bounded late-equipment consumers"
+            )
 
     topbar = _read(root, "interface/topbar.gui")
-    for name, x in (("trade_button", 61), ("construction_button", 171), ("production_button", 226)):
+    for name, x in (
+        ("trade_button", 61),
+        ("construction_button", 171),
+        ("production_button", 226),
+    ):
         _require(
             topbar,
             rf'name\s*=\s*"{name}"(?:(?!\n\s*\w+Type\s*=).)*?position\s*=\s*\{{\s*x\s*=\s*{x}\s+y\s*=\s*0',
@@ -236,8 +298,12 @@ def validate(root: Path = ROOT) -> list[str]:
         )
 
     economy_gui = _read(root, "interface/ADISCORD_economy.gui")
-    economy_script = _read(root, "common/scripted_guis/ADISCORD_economy_scripted_gui.txt")
-    economy_effects = _read(root, "common/scripted_effects/ADISCORD_economy_effects.txt")
+    economy_script = _read(
+        root, "common/scripted_guis/ADISCORD_economy_scripted_gui.txt"
+    )
+    economy_effects = _read(
+        root, "common/scripted_effects/ADISCORD_economy_effects.txt"
+    )
     for required in (
         'name = "ADISCORD_economy_topbar_button"',
         'quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"',
@@ -252,9 +318,9 @@ def validate(root: Path = ROOT) -> list[str]:
     _require(
         economy_script,
         r'window_name\s*=\s*"ADISCORD_economy_topbar_window"[\s\S]*?'
-		r'parent_window_token\s*=\s*top_bar',
+        r'parent_window_token\s*=\s*top_bar',
         "common/scripted_guis/ADISCORD_economy_scripted_gui.txt",
-		"economy topbar window must be attached to the top_bar token",
+        "economy topbar window must be attached to the top_bar token",
         issues,
     )
     economy_gfx = _read(root, "interface/ADISCORD_economy.gfx")
@@ -266,7 +332,9 @@ def validate(root: Path = ROOT) -> list[str]:
         "treasury icon sprite is not registered",
         issues,
     )
-    _require_image_size(root, "gfx/texticons/adiscord/custom/treasury.png", (22, 22), issues)
+    _require_image_size(
+        root, "gfx/texticons/adiscord/custom/treasury.png", (22, 22), issues
+    )
     for action in (
         "internal_bonds",
         "external_loan",
@@ -276,20 +344,40 @@ def validate(root: Path = ROOT) -> list[str]:
         "war_taxes",
     ):
         if economy_gui.count(f'name = "ADISCORD_economy_action_{action}"') != 1:
-            issues.append(f"interface/ADISCORD_economy.gui: action {action} must appear exactly once")
+            issues.append(
+                f"interface/ADISCORD_economy.gui: action {action} must appear exactly once"
+            )
     retired = "\n".join((economy_gui, economy_script, economy_effects))
-    for token in ("ADISCORD_economy_operations_panel", "ADISCORD_economy_show_operations"):
+    for token in (
+        "ADISCORD_economy_operations_panel",
+        "ADISCORD_economy_show_operations",
+    ):
         if token in retired:
-            issues.append(f"economy UI: retired treasury overlay token remains live: {token}")
+            issues.append(
+                f"economy UI: retired treasury overlay token remains live: {token}"
+            )
 
     trade = _read(root, "interface/countrytradeview.gui")
     diplomacy = _read(root, "interface/countrydiplomacyview.gui")
     if len(re.findall(r"max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1", trade)) < 2:
-        issues.append("interface/countrytradeview.gui: resource and filter grids must expose nine columns")
-    if not re.search(r'name\s*=\s*"countrytradeview"(?:(?!\n\s*\w+Type\s*=).)*?size\s*=\s*\{\s*width\s*=\s*847\b', trade, re.DOTALL):
-        issues.append("interface/countrytradeview.gui: trade window must be 847 pixels wide")
-    if not re.search(r'name\s*=\s*"trade_info"[\s\S]*?max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1', diplomacy):
-        issues.append("interface/countrydiplomacyview.gui: diplomacy resource row must expose nine columns")
+        issues.append(
+            "interface/countrytradeview.gui: resource and filter grids must expose nine columns"
+        )
+    if not re.search(
+        r'name\s*=\s*"countrytradeview"(?:(?!\n\s*\w+Type\s*=).)*?size\s*=\s*\{\s*width\s*=\s*847\b',
+        trade,
+        re.DOTALL,
+    ):
+        issues.append(
+            "interface/countrytradeview.gui: trade window must be 847 pixels wide"
+        )
+    if not re.search(
+        r'name\s*=\s*"trade_info"[\s\S]*?max_slots\s*=\s*\{\s*x\s*=\s*9\s+y\s*=\s*1',
+        diplomacy,
+    ):
+        issues.append(
+            "interface/countrydiplomacyview.gui: diplomacy resource row must expose nine columns"
+        )
     _require(
         trade,
         r'name\s*=\s*"country_trade_entry"[\s\S]*?size\s*=\s*\{\s*width\s*=\s*806\s+height\s*=\s*45'
@@ -318,8 +406,15 @@ def validate(root: Path = ROOT) -> list[str]:
         issues,
     )
     _require_image_size(root, "gfx/interface/resources_strip.dds", (234, 27), issues)
-    _require_image_size(root, "gfx/interface/missing_resources_strip.dds", (234, 28), issues)
-    _require_image_size(root, "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds", (2418, 45), issues)
+    _require_image_size(
+        root, "gfx/interface/missing_resources_strip.dds", (234, 28), issues
+    )
+    _require_image_size(
+        root,
+        "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds",
+        (2418, 45),
+        issues,
+    )
 
     for language in ("russian", "english"):
         relative = f"localisation/{language}/ADISCORD_resources_l_{language}.yml"
@@ -336,30 +431,47 @@ def validate(root: Path = ROOT) -> list[str]:
             "country_resource_coal",
         ):
             if not re.search(rf'(?m)^\s*{key}:\s*"{visible_energy}"\s*$', localisation):
-                issues.append(f"{relative}: {key} must be displayed as {visible_energy}")
+                issues.append(
+                    f"{relative}: {key} must be displayed as {visible_energy}"
+                )
         visible_values = "\n".join(
             match.group(1)
-            for match in re.finditer(r'(?m)^\s*[A-Za-z0-9_]+:\d*\s*"([^"]*)"', localisation)
+            for match in re.finditer(
+                r'(?m)^\s*[A-Za-z0-9_]+:\d*\s*"([^"]*)"', localisation
+            )
         )
         visible_values = re.sub(r"\$[A-Z0-9_]+(?:\|[^$]+)?\$", "", visible_values)
-        retired_pattern = r"(?iu)\bуголь\b" if language == "russian" else r"(?iu)\bcoal\b"
+        retired_pattern = (
+            r"(?iu)\bуголь\b" if language == "russian" else r"(?iu)\bcoal\b"
+        )
         if re.search(retired_pattern, visible_values):
             retired_name = "Уголь" if language == "russian" else "Coal"
-            issues.append(f"{relative}: retired player-facing resource name {retired_name} remains visible")
-        for key in ("PRODUCTION_MATERIALS_RARE_COMPONENTS", "PRODUCTION_MATERIALS_RARE_ALLOYS"):
+            issues.append(
+                f"{relative}: retired player-facing resource name {retired_name} remains visible"
+            )
+        for key in (
+            "PRODUCTION_MATERIALS_RARE_COMPONENTS",
+            "PRODUCTION_MATERIALS_RARE_ALLOYS",
+        ):
             if len(re.findall(rf"(?m)^\s*{key}:", localisation)) != 1:
                 issues.append(f"{relative}: expected exactly one {key} key")
 
-        regions_relative = f"localisation/replace/ADISCORD_trade_regions_l_{language}.yml"
+        regions_relative = (
+            f"localisation/replace/ADISCORD_trade_regions_l_{language}.yml"
+        )
         regions_path = root / regions_relative
-        if not regions_path.is_file() or not regions_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+        if not regions_path.is_file() or not regions_path.read_bytes().startswith(
+            b"\xef\xbb\xbf"
+        ):
             issues.append(f"{regions_relative}: UTF-8 BOM is missing")
         else:
             regions = regions_path.read_text(encoding="utf-8-sig")
             for key, expected in TRADE_REGION_NAMES[language].items():
                 matches = re.findall(rf'(?m)^\s*{key}:\d*\s*"([^"]*)"\s*$', regions)
                 if matches != [expected]:
-                    issues.append(f"{regions_relative}: {key} must be displayed as {expected}")
+                    issues.append(
+                        f"{regions_relative}: {key} must be displayed as {expected}"
+                    )
 
     if root.resolve() == ROOT.resolve():
         try:

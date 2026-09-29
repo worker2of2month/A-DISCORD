@@ -28,9 +28,17 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
-COASTAL_ADDITION_PROVINCES = frozenset({6008, 7739, 2038, 7618, 16707, 16708, 16709, 16710, 16712, 16716})
-for city in json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))["cities"]:
-    COASTAL_ADDITION_PROVINCES |= {city["parent"], city["province"], *(sector["province"] for sector in city.get("sectors", ()))}
+COASTAL_ADDITION_PROVINCES = frozenset(
+    {6008, 7739, 2038, 7618, 16707, 16708, 16709, 16710, 16712, 16716}
+)
+for city in json.loads(
+    (ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8")
+)["cities"]:
+    COASTAL_ADDITION_PROVINCES |= {
+        city["parent"],
+        city["province"],
+        *(sector["province"] for sector in city.get("sectors", ())),
+    }
 REQUIRED_STATE_SPAWN_COUNTS = {
     "air_base": 1,
     "anti_air_building": 3,
@@ -53,62 +61,41 @@ def required_spawns(state_id: int) -> dict[str, int]:
         return {**REQUIRED_STATE_SPAWN_COUNTS, **CITY_SPAWN_COUNTS}
     return REQUIRED_STATE_SPAWN_COUNTS
 
+
 # The deliberate resource-war split assigns the original state positions to
 # their physical provinces. Every resulting state still needs the complete set
 # of 1.19 spawn anchors even when a building is not present at game start.
 NAM_RESOURCE_WAR_SPAWN_STATES = {67, 68, 69, 70, 688, 689, 690, 691, 692}
 NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
-    (67, "air_base"): (
-        "67;air_base;3701.00;10.25;548.00;0.66;0",
-    ),
+    (67, "air_base"): ("67;air_base;3701.00;10.25;548.00;0.66;0",),
     (67, "anti_air_building"): (
         "67;anti_air_building;3701.00;10.25;548.00;0.66;0",
         "67;anti_air_building;3690.00;10.80;575.00;4.36;0",
     ),
-    (67, "stronghold_network"): (
-        "67;stronghold_network;3724.00;10.60;605.00;5.21;0",
-    ),
-    (67, "synthetic_refinery"): (
-        "67;synthetic_refinery;3700.00;10.80;583.00;4.75;0",
-    ),
-    (688, "anti_air_building"): (
-        "688;anti_air_building;3599.00;10.35;600.00;2.76;0",
-    ),
-    (688, "fuel_silo"): (
-        "688;fuel_silo;3609.00;10.53;605.00;2.82;0",
-    ),
+    (67, "stronghold_network"): ("67;stronghold_network;3724.00;10.60;605.00;5.21;0",),
+    (67, "synthetic_refinery"): ("67;synthetic_refinery;3700.00;10.80;583.00;4.75;0",),
+    (688, "anti_air_building"): ("688;anti_air_building;3599.00;10.35;600.00;2.76;0",),
+    (688, "fuel_silo"): ("688;fuel_silo;3609.00;10.53;605.00;2.82;0",),
     (688, "nuclear_reactor_spawn"): (
         "688;nuclear_reactor_spawn;3611.00;10.65;605.00;6.27;0",
     ),
-    (688, "radar_station"): (
-        "688;radar_station;3641.00;10.60;593.00;1.25;0",
-    ),
-    (688, "rocket_site_spawn"): (
-        "688;rocket_site_spawn;3638.00;11.00;614.00;5.94;0",
-    ),
+    (688, "radar_station"): ("688;radar_station;3641.00;10.60;593.00;1.25;0",),
+    (688, "rocket_site_spawn"): ("688;rocket_site_spawn;3638.00;11.00;614.00;5.94;0",),
     (688, "stronghold_network"): (
         "688;stronghold_network;3616.00;10.50;594.00;4.14;0",
     ),
-    (689, "air_base"): (
-        "689;air_base;3666.00;10.65;540.00;2.65;0",
-    ),
+    (689, "air_base"): ("689;air_base;3666.00;10.65;540.00;2.65;0",),
     (689, "anti_air_building"): (
         "689;anti_air_building;3665.00;10.80;545.00;0.57;0",
         "689;anti_air_building;3699.00;10.50;527.00;5.76;0",
         "689;anti_air_building;3675.00;10.30;535.00;4.14;0",
     ),
-    (689, "fuel_silo"): (
-        "689;fuel_silo;3689.00;11.00;551.00;4.33;0",
-    ),
+    (689, "fuel_silo"): ("689;fuel_silo;3689.00;11.00;551.00;4.33;0",),
     (689, "nuclear_reactor_spawn"): (
         "689;nuclear_reactor_spawn;3669.00;10.65;543.00;3.55;0",
     ),
-    (689, "radar_station"): (
-        "689;radar_station;3653.00;10.45;555.00;2.77;0",
-    ),
-    (689, "rocket_site_spawn"): (
-        "689;rocket_site_spawn;3696.00;10.30;527.00;0.15;0",
-    ),
+    (689, "radar_station"): ("689;radar_station;3653.00;10.45;555.00;2.77;0",),
+    (689, "rocket_site_spawn"): ("689;rocket_site_spawn;3696.00;10.30;527.00;0.15;0",),
     (689, "synthetic_refinery"): (
         "689;synthetic_refinery;3683.00;10.60;540.00;2.69;0",
     ),
@@ -118,12 +105,62 @@ NAM_SPLIT_SPAWN_POSITION_CANDIDATES = {
 # coordinates follow the moved provinces; every resulting state still needs
 # one complete set of HOI4 1.19 construction anchors of its own.
 EXCLUSION_BOUNDARY_SPAWN_STATES = {
-    241, 253, 260, 275, 283, 294, 300,
-    699, 700, 701, 702, 703, 704, 705, 706, 707, 708,
-    49, 51, 153, 154, 155, 165, 166, 169, 173, 180, 184, 185, 187,
-    189, 193, 210, 211, 213, 214, 215, 222, 223, 224, 329, 330,
-    160, 454, 455, 460, 461, 472,
-    25, 128, 693, 694, 695, 696, 697, 698,
+    241,
+    253,
+    260,
+    275,
+    283,
+    294,
+    300,
+    699,
+    700,
+    701,
+    702,
+    703,
+    704,
+    705,
+    706,
+    707,
+    708,
+    49,
+    51,
+    153,
+    154,
+    155,
+    165,
+    166,
+    169,
+    173,
+    180,
+    184,
+    185,
+    187,
+    189,
+    193,
+    210,
+    211,
+    213,
+    214,
+    215,
+    222,
+    223,
+    224,
+    329,
+    330,
+    160,
+    454,
+    455,
+    460,
+    461,
+    472,
+    25,
+    128,
+    693,
+    694,
+    695,
+    696,
+    697,
+    698,
 }
 
 
@@ -156,7 +193,9 @@ def load_state_by_province(root: Path = ROOT) -> dict[int, int]:
 
 def load_province_by_color(root: Path = ROOT) -> dict[tuple[int, int, int], int]:
     province_by_color: dict[tuple[int, int, int], int] = {}
-    with (root / "map" / "definition.csv").open(encoding="utf-8-sig", newline="") as source:
+    with (root / "map" / "definition.csv").open(
+        encoding="utf-8-sig", newline=""
+    ) as source:
         for row in csv.reader(source, delimiter=";"):
             if len(row) < 4 or not row[0].isdigit():
                 continue
@@ -187,14 +226,18 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
         for line_number, line in enumerate(lines, 1):
             fields = line.split(";")
             if len(fields) != 7 or not fields[0].isdigit():
-                raise RuntimeError(f"map/buildings.txt:{line_number}: malformed building row")
+                raise RuntimeError(
+                    f"map/buildings.txt:{line_number}: malformed building row"
+                )
             building_type = fields[1]
             if building_type in SEA_POSITIONED_TYPES:
                 continue
             x = _pixel_coordinate(fields[2], image.width)
             z = _pixel_coordinate(fields[4], image.height)
             province = province_by_color.get(image.getpixel((x, image.height - 1 - z)))
-            actual_state = state_by_province.get(province) if province is not None else None
+            actual_state = (
+                state_by_province.get(province) if province is not None else None
+            )
             if actual_state is None:
                 raise RuntimeError(
                     f"map/buildings.txt:{line_number}: {building_type} is not positioned in a state province"
@@ -213,20 +256,28 @@ def audit_buildings(root: Path = ROOT) -> tuple[list[str], list[BuildingMismatch
     return lines, mismatches
 
 
-def mountain_building_heights(root: Path, lines: list[str]) -> tuple[list[str], list[int]]:
+def mountain_building_heights(
+    root: Path, lines: list[str]
+) -> tuple[list[str], list[int]]:
     from tools.builders.build_adiscord_coastal_geography import RELIEF_PROVINCES
 
     province_by_color = load_province_by_color(root)
     result = list(lines)
     changed = []
-    with Image.open(root / "map/provinces.bmp") as provinces, Image.open(root / "map/heightmap.bmp") as heights:
+    with (
+        Image.open(root / "map/provinces.bmp") as provinces,
+        Image.open(root / "map/heightmap.bmp") as heights,
+    ):
         for index, line in enumerate(lines):
             fields = line.split(";")
             if fields[1] in SEA_POSITIONED_TYPES:
                 continue
             x = _pixel_coordinate(fields[2], provinces.width)
             y = provinces.height - 1 - _pixel_coordinate(fields[4], provinces.height)
-            if province_by_color.get(provinces.getpixel((x, y))) not in RELIEF_PROVINCES:
+            if (
+                province_by_color.get(provinces.getpixel((x, y)))
+                not in RELIEF_PROVINCES
+            ):
                 continue
             expected = heights.getpixel((x, y)) / 10
             if abs(float(fields[3]) - expected) > 0.005:
@@ -236,7 +287,9 @@ def mountain_building_heights(root: Path, lines: list[str]) -> tuple[list[str], 
     return result, changed
 
 
-def synchronize_buildings(root: Path = ROOT, *, apply: bool = False) -> list[BuildingMismatch]:
+def synchronize_buildings(
+    root: Path = ROOT, *, apply: bool = False
+) -> list[BuildingMismatch]:
     lines, mismatches = audit_buildings(root)
     if apply:
         for mismatch in mismatches:
@@ -287,7 +340,9 @@ def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
     for state_id in sorted(NAM_RESOURCE_WAR_SPAWN_STATES):
         candidates = sorted(provinces_by_state.get(state_id, ()))
         if not candidates:
-            raise RuntimeError(f"state {state_id} has no unitstack position for spawn repair")
+            raise RuntimeError(
+                f"state {state_id} has no unitstack position for spawn repair"
+            )
         cursor = 0
         for building_type, minimum in required_spawns(state_id).items():
             key = (state_id, building_type)
@@ -309,9 +364,11 @@ def ensure_nam_split_spawn_positions(root: Path = ROOT) -> int:
 
 def load_unitstack_positions(root: Path = ROOT) -> dict[int, tuple[str, str, str]]:
     positions: dict[int, tuple[str, str, str]] = {}
-    for line in (root / "map" / "unitstacks.txt").read_text(
-        encoding="utf-8-sig", errors="strict"
-    ).splitlines():
+    for line in (
+        (root / "map" / "unitstacks.txt")
+        .read_text(encoding="utf-8-sig", errors="strict")
+        .splitlines()
+    ):
         fields = line.split(";")
         if len(fields) >= 5 and fields[0].isdigit() and fields[1] == "0":
             positions.setdefault(int(fields[0]), (fields[2], fields[3], fields[4]))
@@ -339,7 +396,9 @@ def ensure_exclusion_boundary_spawn_positions(root: Path = ROOT) -> int:
     for state_id in sorted(EXCLUSION_BOUNDARY_SPAWN_STATES):
         candidates = sorted(provinces_by_state.get(state_id, ()))
         if not candidates:
-            raise RuntimeError(f"state {state_id} has no unitstack position for spawn repair")
+            raise RuntimeError(
+                f"state {state_id} has no unitstack position for spawn repair"
+            )
         cursor = 0
         for building_type, minimum in required_spawns(state_id).items():
             key = (state_id, building_type)
@@ -391,20 +450,29 @@ def coastal_port_plan(root: Path = ROOT) -> tuple[list[str], list[int]]:
     colors = load_province_by_color(root)
     sea_ids = set()
     coastal_ids = set()
-    for line in (root / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines():
+    for line in (
+        (root / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+    ):
         fields = line.split(";")
         if len(fields) >= 5 and fields[4] == "sea":
             sea_ids.add(int(fields[0]))
         if len(fields) >= 6 and fields[4] == "land" and fields[5] == "true":
             coastal_ids.add(int(fields[0]))
     present = set()
-    with Image.open(root / "map/provinces.bmp") as provinces, Image.open(root / "map/heightmap.bmp") as heights:
+    with (
+        Image.open(root / "map/provinces.bmp") as provinces,
+        Image.open(root / "map/heightmap.bmp") as heights,
+    ):
         pixels = provinces.load()
         for line in lines:
             fields = line.split(";")
             if len(fields) == 7 and fields[1] == "naval_base_spawn":
                 x = _pixel_coordinate(fields[2], provinces.width)
-                y = provinces.height - 1 - _pixel_coordinate(fields[4], provinces.height)
+                y = (
+                    provinces.height
+                    - 1
+                    - _pixel_coordinate(fields[4], provinces.height)
+                )
                 present.add(colors.get(pixels[x, y]))
         missing = sorted((COASTAL_ADDITION_PROVINCES & coastal_ids) - present)
         if not missing:
@@ -427,16 +495,24 @@ def coastal_port_plan(root: Path = ROOT) -> tuple[list[str], list[int]]:
                     sea = colors.get(pixels[x + dx, y + dy])
                     if sea in sea_ids:
                         center_x, _height, center_z = map(float, positions[province])
-                        distance = (x - center_x) ** 2 + (provinces.height - 1 - y - center_z) ** 2
+                        distance = (x - center_x) ** 2 + (
+                            provinces.height - 1 - y - center_z
+                        ) ** 2
                         shorelines[province].append((distance, x, y, sea, dx, dy))
                         if stable:
                             candidates[province].append((distance, x, y, sea, dx, dy))
         for province in missing:
             if not candidates[province]:
                 if not shorelines[province] or not interior[province]:
-                    raise RuntimeError(f"coastal province {province}: no safe land anchor beside its sea boundary")
+                    raise RuntimeError(
+                        f"coastal province {province}: no safe land anchor beside its sea boundary"
+                    )
                 _distance, shore_x, shore_y, sea, dx, dy = min(shorelines[province])
-                x, y = min(interior[province], key=lambda point: (point[0] - shore_x) ** 2 + (point[1] - shore_y) ** 2)
+                x, y = min(
+                    interior[province],
+                    key=lambda point: (point[0] - shore_x) ** 2
+                    + (point[1] - shore_y) ** 2,
+                )
                 candidates[province].append((0, x, y, sea, dx, dy))
             _distance, x, y, sea, dx, dy = min(candidates[province])
             state = state_by_province[province]
@@ -472,10 +548,16 @@ def validate(root: Path = ROOT) -> list[str]:
     if interior_dam_anchor(lines) != lines:
         issues.append("state 53 dam_spawn must use its interior integer anchor")
     _planned_heights, height_changes = mountain_building_heights(root, lines)
-    issues.extend(f"map/buildings.txt:{line}: building height differs from the mountain surface" for line in height_changes)
+    issues.extend(
+        f"map/buildings.txt:{line}: building height differs from the mountain surface"
+        for line in height_changes
+    )
     try:
         _planned, missing_ports = coastal_port_plan(root)
-        issues.extend(f"coastal province {province} has no naval_base_spawn" for province in missing_ports)
+        issues.extend(
+            f"coastal province {province} has no naval_base_spawn"
+            for province in missing_ports
+        )
     except (OSError, RuntimeError, ValueError) as exc:
         issues.append(str(exc))
     return issues
@@ -484,8 +566,14 @@ def validate(root: Path = ROOT) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated output (default)")
-    actions.add_argument("--apply", action="store_true", help="rewrite mismatched state ids")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated output (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="rewrite mismatched state ids"
+    )
     args = parser.parse_args()
 
     if args.apply:

@@ -42,7 +42,9 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             inner.render_oob(inner.PROTECTORATE_TAG, infantry, principal_provinces),
             inner.render_oob("BOR", infantry, principal_provinces),
             inner.render_oob("DOL", militia, principal_provinces),
-            northern.render_oob("MON", {**infantry, "divisions": 14}, principal_provinces),
+            northern.render_oob(
+                "MON", {**infantry, "divisions": 14}, principal_provinces
+            ),
             northern.render_oob("BRN", infantry, principal_provinces),
             northern.render_oob("VRA", militia, principal_provinces),
         )
@@ -53,7 +55,10 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             getattr(inner, "DIVISION_TEMPLATE_NAMES", ()),
             getattr(northern, "DIVISION_TEMPLATE_NAMES", ()),
         )
-        self.assertTrue(all(constants), "each OOB generator must expose its technical template names")
+        self.assertTrue(
+            all(constants),
+            "each OOB generator must expose its technical template names",
+        )
         names = tuple(name for group in constants for name in group)
         self.assertEqual(
             set(names),
@@ -73,7 +78,9 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assert_printable_ascii(name)
 
-    def test_rendered_template_definitions_and_references_are_printable_ascii(self) -> None:
+    def test_rendered_template_definitions_and_references_are_printable_ascii(
+        self,
+    ) -> None:
         observed: set[str] = set()
         for oob in self.rendered_oobs():
             names = TEMPLATE_DEFINITION.findall(oob) + TEMPLATE_REFERENCE.findall(oob)

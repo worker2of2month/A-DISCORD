@@ -17,7 +17,9 @@ LEGACY_EVENTS = Path("events/ADISCORD_news.txt")
 SCRIPTED_GUI = Path("common/scripted_guis/superevents.txt")
 GUI = Path("interface/superevents.gui")
 GFX = Path("interface/superevents.gfx")
-SCRIPTED_LOC = Path("common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt")
+SCRIPTED_LOC = Path(
+    "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt"
+)
 EN_LOC = Path("localisation/english/ADISCORD_superevents_l_english.yml")
 RU_LOC = Path("localisation/russian/ADISCORD_superevents_l_russian.yml")
 SOUNDS = Path("sound/superevents_sound.asset")
@@ -88,15 +90,28 @@ PRESENTATIONS = (
         "superevent_vorkerland_vlad_victory",
         "superevent_vorkerland_vlad_victory_sound_e",
     ),
-    SupereventPresentation("superevent_vorkerland_dorian_victory", "superevent_vorkerland_dorian_victory_sound_e"),
+    SupereventPresentation(
+        "superevent_vorkerland_dorian_victory",
+        "superevent_vorkerland_dorian_victory_sound_e",
+    ),
     SupereventPresentation(
         "superevent_stelander_empire",
         "superevent_stelander_empire_sound_e",
     ),
-    SupereventPresentation("superevent_stelander_party_victory", "superevent_stelander_party_victory_sound_e"),
-    SupereventPresentation("superevent_stelander_shabrat_victory", "superevent_stelander_shabrat_victory_sound_e"),
-    SupereventPresentation("superevent_nam_resource_war", "superevent_nam_resource_war_sound_e"),
-    SupereventPresentation("superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"),
+    SupereventPresentation(
+        "superevent_stelander_party_victory",
+        "superevent_stelander_party_victory_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_stelander_shabrat_victory",
+        "superevent_stelander_shabrat_victory_sound_e",
+    ),
+    SupereventPresentation(
+        "superevent_nam_resource_war", "superevent_nam_resource_war_sound_e"
+    ),
+    SupereventPresentation(
+        "superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"
+    ),
 )
 
 
@@ -195,7 +210,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             )
         )
         if count != 1:
-            issues.append(f"events: expected one namespace declaration for {namespace}, found {count}")
+            issues.append(
+                f"events: expected one namespace declaration for {namespace}, found {count}"
+            )
 
     for event_id in SUPEREVENT_IDS:
         count = len(
@@ -205,7 +222,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             )
         )
         if count != 1:
-            issues.append(f"events: expected one definition of {event_id}, found {count}")
+            issues.append(
+                f"events: expected one definition of {event_id}, found {count}"
+            )
 
     expected_names = tuple(item.name for item in PRESENTATIONS)
     expected_set = set(expected_names)
@@ -268,9 +287,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             key = f"{name}_{suffix}"
             count = scripted_loc.count(f"localization_key = {key}")
             if count != 1:
-                issues.append(
-                    f"{getter}: expected one route to {key}, found {count}"
-                )
+                issues.append(f"{getter}: expected one route to {key}, found {count}")
             for language, loc in (("English", english), ("Russian", russian)):
                 loc_count = _localisation_count(loc, key)
                 if loc_count != 1:
@@ -291,7 +308,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         joint = f"superevent_vorkerland_joint_victory_{suffix}"
         count = scripted_loc.count(f"localization_key = {joint}")
         if count != 1:
-            issues.append(f"joint-government variant must route once to {joint}, found {count}")
+            issues.append(
+                f"joint-government variant must route once to {joint}, found {count}"
+            )
         for language, loc in (("English", english), ("Russian", russian)):
             loc_count = _localisation_count(loc, joint)
             if loc_count != 1:
@@ -347,10 +366,13 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         )
 
     # Several presentations may reuse the same registered sound.
-    sound_items = tuple({
-        item.dedicated_sound_effect: item
-        for item in PRESENTATIONS if item.dedicated_sound_effect
-    }.values())
+    sound_items = tuple(
+        {
+            item.dedicated_sound_effect: item
+            for item in PRESENTATIONS
+            if item.dedicated_sound_effect
+        }.values()
+    )
     sound_effect_names = tuple(item.dedicated_sound_effect for item in sound_items)
     sound_names = tuple(effect.removesuffix("_e") for effect in sound_effect_names)
 
@@ -359,13 +381,19 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             re.findall(rf"(?m)^\s*name\s*=\s*{re.escape(effect)}\s*$", sound_effects)
         )
         if effect_count != 1:
-            issues.append(f"sound effect {effect}: expected one definition, found {effect_count}")
+            issues.append(
+                f"sound effect {effect}: expected one definition, found {effect_count}"
+            )
         sound_count = len(
             re.findall(rf'(?m)^\s*name\s*=\s*"{re.escape(sound)}"\s*$', sounds)
         )
         if sound_count != 1:
-            issues.append(f"sound asset {sound}: expected one definition, found {sound_count}")
-        category_count = len(re.findall(rf"(?m)^\s*{re.escape(effect)}\s*$", sound_category))
+            issues.append(
+                f"sound asset {sound}: expected one definition, found {sound_count}"
+            )
+        category_count = len(
+            re.findall(rf"(?m)^\s*{re.escape(effect)}\s*$", sound_category)
+        )
         if category_count != 1:
             issues.append(
                 f"SuperEvents category: expected one reference to {effect}, found {category_count}"
@@ -391,7 +419,10 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
         if 'name = "one_minute_of_silence"' in block
     ]
-    if len(silence_assets) != 1 or 'file = "one_minute_of_silence.ogg"' not in silence_assets[0]:
+    if (
+        len(silence_assets) != 1
+        or 'file = "one_minute_of_silence.ogg"' not in silence_assets[0]
+    ):
         issues.append("super-event silence carrier must have exactly one music asset")
 
     silence_registrations = [
@@ -408,18 +439,25 @@ def collect_issues(root: Path = ROOT) -> list[str]:
 
     for effect in sound_effect_names:
         song = effect.removesuffix("_sound_e")
-        assets = [block for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
-                  if f'name = "{song}"' in block]
+        assets = [
+            block
+            for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
+            if f'name = "{song}"' in block
+        ]
         for playlist in (root / "music").glob("*.txt"):
-            if re.search(rf'(?m)^\s*song\s*=\s*"{re.escape(song)}"\s*$',
-                         playlist.read_text(encoding="utf-8-sig")):
+            if re.search(
+                rf'(?m)^\s*song\s*=\s*"{re.escape(song)}"\s*$',
+                playlist.read_text(encoding="utf-8-sig"),
+            ):
                 issues.append(
                     f"presentation music must not be registered in radio playlists: {song}"
                 )
         if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
             issues.append(f"missing or duplicate single-channel music asset {song}")
 
-    if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(b"\xef\xbb\xbf"):
+    if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(
+        b"\xef\xbb\xbf"
+    ):
         issues.append("Russian superevent localisation must use UTF-8 BOM")
 
     empire = _event_block(events, "ADISCORD_superevent_news.2")
@@ -458,10 +496,15 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         issues.append("events: presentation audio must use the shared unscoped helper")
     if "scoped_sound_effect" in events:
         issues.append("events: scoped_sound_effect silences observer/spectator")
-    if re.search(r"every_country\s*=\s*\{[^{}]*limit\s*=\s*\{\s*is_ai\s*=\s*no", events, re.S):
+    if re.search(
+        r"every_country\s*=\s*\{[^{}]*limit\s*=\s*\{\s*is_ai\s*=\s*no", events, re.S
+    ):
         issues.append("events: human-only country dispatch silences observer/spectator")
     for getter in ("GetSupereventTitle", "GetSupereventQuote", "GetSupereventComment"):
-        if f"superevent_inactive_{getter.removeprefix('GetSuperevent').lower()}" not in scripted_loc:
+        if (
+            f"superevent_inactive_{getter.removeprefix('GetSuperevent').lower()}"
+            not in scripted_loc
+        ):
             issues.append(f"{getter}: missing inactive fallback")
     for language, loc in (("English", english), ("Russian", russian)):
         for suffix in ("title", "quote", "comment"):

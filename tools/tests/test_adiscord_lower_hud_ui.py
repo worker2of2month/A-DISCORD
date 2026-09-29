@@ -22,9 +22,13 @@ ROOT = Path(__file__).resolve().parents[2]
 class LowerHudUIContracts(unittest.TestCase):
     def test_generated_output_registry_assigns_every_lower_hud_asset(self) -> None:
         registry = json.loads(
-            (ROOT / "tools/data/generated_output_owners.json").read_text(encoding="utf-8")
+            (ROOT / "tools/data/generated_output_owners.json").read_text(
+                encoding="utf-8"
+            )
         )
-        minimap = next(family for family in registry["families"] if family["id"] == "minimap")
+        minimap = next(
+            family for family in registry["families"] if family["id"] == "minimap"
+        )
         self.assertEqual(
             set(minimap["output_globs"]),
             {path.relative_to(ROOT).as_posix() for path in OUTPUT_SIZES},
@@ -34,8 +38,14 @@ class LowerHudUIContracts(unittest.TestCase):
         outputs = expected_outputs()
         self.assertEqual(set(outputs), set(OUTPUT_SIZES))
         for path, expected in outputs.items():
-            self.assertTrue(path.is_file(), f"missing generated asset: {path.relative_to(ROOT)}")
-            self.assertEqual(path.read_bytes(), expected, f"stale generated asset: {path.relative_to(ROOT)}")
+            self.assertTrue(
+                path.is_file(), f"missing generated asset: {path.relative_to(ROOT)}"
+            )
+            self.assertEqual(
+                path.read_bytes(),
+                expected,
+                f"stale generated asset: {path.relative_to(ROOT)}",
+            )
             with Image.open(path) as image:
                 self.assertEqual(image.size, OUTPUT_SIZES[path], path.name)
 

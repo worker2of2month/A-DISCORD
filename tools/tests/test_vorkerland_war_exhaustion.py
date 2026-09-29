@@ -5,7 +5,11 @@ import re
 import unittest
 from pathlib import Path
 
-from tools.validators.validate_adiscord_vorkerland_collapse import SECTIONS, named_block, validate
+from tools.validators.validate_adiscord_vorkerland_collapse import (
+    SECTIONS,
+    named_block,
+    validate,
+)
 
 
 from tools.lib.paths import source_section
@@ -24,7 +28,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertEqual(validate(ROOT, "exhaustion"), [])
 
     def test_updates_use_claimant_edges_and_bounded_monthly_country_pulse(self) -> None:
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
         for hook_name in ("on_war", "on_peace"):
             hook = named_block(on_actions, hook_name)
@@ -35,14 +42,18 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             )
             self.assertIn(update, hook)
         capitulation = named_block(on_actions, "on_capitulation")
-        self.assertIn("ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }", capitulation)
+        self.assertIn(
+            "ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }", capitulation
+        )
         self.assertIn(
             "ROOT = { ADISCORD_vorkerland_update_civil_war_exhaustion = yes }",
             capitulation,
         )
         self.assertEqual(on_actions.count(update), 3)
         self.assertNotIn("on_daily", on_actions)
-        shared = named_block(read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_monthly")
+        shared = named_block(
+            read("common/on_actions/00_ADISCORD_on_actions.txt"), "on_monthly"
+        )
         for token in (
             "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
             "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
@@ -54,7 +65,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertNotIn("every_country", shared)
 
     def test_each_update_uses_new_casualties_and_one_bounded_increment(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
         self.assertIn("ADISCORD_vorkerland_civil_war_casualties_snapshot_k", update)
         self.assertIn("value = casualties_k", update)
@@ -62,7 +76,9 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             "value = ADISCORD_vorkerland_civil_war_casualties_snapshot_k",
             update,
         )
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_central_war_finished", update)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_central_war_finished", update
+        )
         self.assertIn("has_war = yes", update)
         self.assertNotIn("has_war_with = VAD", update)
         self.assertNotIn("has_war_with = WRK", update)
@@ -78,7 +94,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             )
 
     def test_finished_war_stops_updates_and_all_values_are_clamped(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
         self.assertNotRegex(
             update,
@@ -92,7 +111,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
             update,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_vorkerland_civil_war_casualties_delta_k\s+min\s*=\s*0\s+max\s*=\s*10000\s*\}",
         )
-        maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
+        maps = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_map_effects',
+        )
         finish = named_block(maps, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
         for tag in ("WKR", "WRK", "VAD", "TVA"):
             self.assertIn(
@@ -102,24 +124,38 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         for outcome in ("worker", "vlad", "dorian"):
             outcome_map = named_block(maps, f"ADISCORD_vorkerland_apply_{outcome}_map")
             self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome_map)
-            self.assertNotIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", outcome_map)
-        phase = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+            self.assertNotIn(
+                "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", outcome_map
+            )
+        phase = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         terminal = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_war_finished", terminal)
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_central_war_finished", terminal
+        )
         self.assertIn("ADISCORD_vorkerland_finish_civil_war_exhaustion = yes", terminal)
 
     def test_piv_volunteer_mission_uses_war_edges_not_monthly_polling(self) -> None:
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         monthly = named_block(on_actions, "on_monthly")
         on_war = named_block(on_actions, "on_war")
         on_peace = named_block(on_actions, "on_peace")
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertNotIn("ADISCORD_vorkerland_piv_macri_volunteer_mission", monthly)
         self.assertIn("tag = EBA", on_war)
-        self.assertIn("add_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_war)
+        self.assertIn(
+            "add_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_war
+        )
         self.assertIn("tag = EBA", on_peace)
         self.assertIn("has_war = no", on_peace)
-        self.assertIn("remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_peace)
+        self.assertIn(
+            "remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission", on_peace
+        )
         self.assertIn("ROOT = { tag = EBA }", capitulation)
         self.assertIn(
             "remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission",
@@ -127,9 +163,10 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         )
 
     def test_one_modifier_scales_without_attack_or_organisation_penalties(self) -> None:
-        dynamic = source_section(read(
-            "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
-        ), 'collapse_dynamic_modifiers')
+        dynamic = source_section(
+            read("common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"),
+            'collapse_dynamic_modifiers',
+        )
         modifier = named_block(dynamic, "ADISCORD_vorkerland_civil_war_exhaustion")
         for key in (
             "war_support_factor",
@@ -143,8 +180,13 @@ class VorkerlandWarExhaustionTests(unittest.TestCase):
         self.assertNotIn("army_attack_factor", modifier)
         self.assertNotIn("army_org_factor", modifier)
 
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        refresh = named_block(effects, "ADISCORD_vorkerland_refresh_civil_war_exhaustion")
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        refresh = named_block(
+            effects, "ADISCORD_vorkerland_refresh_civil_war_exhaustion"
+        )
         for coefficient in ("-0.002", "-0.001", "-0.0005"):
             self.assertIn(f"value = {coefficient}", refresh)
         self.assertIn("force_update_dynamic_modifier = yes", refresh)

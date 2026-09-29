@@ -36,7 +36,7 @@ def named_block(source: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     raise AssertionError(f"unterminated block: {name}")
 
 
@@ -63,8 +63,10 @@ def event_block(source: str, event_id: str) -> str:
             elif char == "}":
                 depth -= 1
                 if depth == 0:
-                    candidate = source[match.start():index + 1]
-                    if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", candidate):
+                    candidate = source[match.start() : index + 1]
+                    if re.search(
+                        rf"(?m)^\s*id\s*=\s*{re.escape(event_id)}\s*$", candidate
+                    ):
                         return candidate
                     break
     raise AssertionError(f"missing event: {event_id}")
@@ -82,7 +84,7 @@ def focus_block(source: str, focus_id: str) -> str:
         elif source[index] == "}":
             depth -= 1
             if depth == 0:
-                return source[start:index + 1]
+                return source[start : index + 1]
     raise AssertionError(f"unterminated focus: {focus_id}")
 
 
@@ -94,7 +96,10 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
 
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         setup = named_block(effects, "ADISCORD_vorkerland_setup_ert")
-        self.assertIn("168 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }", setup)
+        self.assertIn(
+            "168 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }",
+            setup,
+        )
 
         events = read("events/ADISCORD_vorkerland_events.txt")
         collapse = event_block(events, "ADISCORD_vorkerland_collapse.13")
@@ -110,7 +115,10 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         self.assertIn("add_war_support = 0.03", block)
 
         for language in ("english", "russian"):
-            path = ROOT / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            path = (
+                ROOT
+                / f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            )
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), language)
             loc = path.read_text(encoding="utf-8-sig")
             self.assertIn("val_rework.120.t:", loc)
@@ -123,15 +131,26 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", revenge)
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", revenge)
         self.assertIn("VAL_southern_tsaygen_revenge_available = yes", revenge)
-        self.assertIn("bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }", revenge)
-        self.assertIn("unlock_decision_tooltip = VAL_operation_return_southern_tsaygen", revenge)
+        self.assertIn(
+            "bypass = { has_global_flag = ADISCORD_vorkerland_dirty_opened owns_state = 168 }",
+            revenge,
+        )
+        self.assertIn(
+            "unlock_decision_tooltip = VAL_operation_return_southern_tsaygen", revenge
+        )
         self.assertNotIn("declare_war_on", revenge)
 
         perimeter = focus_block(focuses, "VAL_frontier_return_irem")
-        self.assertIn("prerequisite = { focus = VAL_Return_Southern_Tsaygen }", perimeter)
-        self.assertNotIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", perimeter)
+        self.assertIn(
+            "prerequisite = { focus = VAL_Return_Southern_Tsaygen }", perimeter
+        )
+        self.assertNotIn(
+            "prerequisite = { focus = VAL_Foreign_Broker_Licences }", perimeter
+        )
         self.assertIn("owns_state = 168", perimeter)
-        self.assertIn("unlock_decision_tooltip = VAL_operation_cross_perimeter", perimeter)
+        self.assertIn(
+            "unlock_decision_tooltip = VAL_operation_cross_perimeter", perimeter
+        )
 
     def test_revenge_war_has_its_own_live_gate_and_limited_settlement(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
@@ -155,11 +174,13 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
 
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         settle = named_block(effects, "VAL_settle_wasteland_capitulation")
-        revenge_result = settle.split("has_completed_focus = VAL_Return_Southern_Tsaygen", 1)[1]
-        self.assertIn("VAL = { transfer_state = 168 }", revenge_result)
-        older_result = settle.split("has_completed_focus = VAL_frontier_return_irem", 1)[1].split(
+        revenge_result = settle.split(
             "has_completed_focus = VAL_Return_Southern_Tsaygen", 1
-        )[0]
+        )[1]
+        self.assertIn("VAL = { transfer_state = 168 }", revenge_result)
+        older_result = settle.split(
+            "has_completed_focus = VAL_frontier_return_irem", 1
+        )[1].split("has_completed_focus = VAL_Return_Southern_Tsaygen", 1)[0]
         self.assertIn("VAL = { transfer_state = 169 }", older_result)
 
     def test_late_ultimatum_is_a_fallback_not_the_primary_claim(self) -> None:
@@ -169,11 +190,12 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         self.assertNotIn("has_completed_focus = VAL_frontier_return_irem", demand)
 
         for language in ("english", "russian"):
-            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            loc = read(
+                f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            )
             self.assertIn("VAL_Return_Southern_Tsaygen:", loc)
             self.assertIn("VAL_Return_Southern_Tsaygen_desc:", loc)
             self.assertIn("VAL_return_southern_tsaygen_war_tt:", loc)
-
 
     def test_southern_wars_are_launched_from_military_operations(self) -> None:
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
@@ -205,6 +227,7 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             "VAL_Eastern_Expansion",
         ):
             self.assertNotIn("declare_war_on", focus_block(focuses, focus_id))
+
 
 if __name__ == "__main__":
     unittest.main()

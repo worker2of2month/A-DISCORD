@@ -30,7 +30,7 @@ def named_gui_block(source: str, widget_type: str, name: str) -> str:
         elif source[index] == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     return ""
 
 
@@ -55,17 +55,32 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
             ("GFX_ADISCORD_production_top_panel", "GFX_production_win_top"),
             ("GFX_ADISCORD_production_military_item", "GFX_production_item"),
             ("GFX_ADISCORD_production_collapsed_item", "GFX_production_item_collapsed"),
-            ("GFX_ADISCORD_production_naval_item_strip", "GFX_naval_production_item_bg_strip"),
+            (
+                "GFX_ADISCORD_production_naval_item_strip",
+                "GFX_naval_production_item_bg_strip",
+            ),
             ("GFX_ADISCORD_production_consumer_item", "GFX_consumer_goods"),
-            ("GFX_ADISCORD_production_equipment_card", "GFX_prod_land_equipment_item_large"),
+            (
+                "GFX_ADISCORD_production_equipment_card",
+                "GFX_prod_land_equipment_item_large",
+            ),
             ("GFX_ADISCORD_production_factory_icon", "GFX_factory_item"),
             ("GFX_ADISCORD_production_factory_half_icon", "GFX_factory_item_half"),
             ("GFX_ADISCORD_production_factory_slot_bg", "GFX_factory_bg"),
-            ("GFX_ADISCORD_production_add_infantry_button", "GFX_add_prod_inf_art_line"),
+            (
+                "GFX_ADISCORD_production_add_infantry_button",
+                "GFX_add_prod_inf_art_line",
+            ),
             ("GFX_ADISCORD_production_add_armour_button", "GFX_add_prod_armour_line"),
-            ("GFX_ADISCORD_production_add_aircraft_button", "GFX_add_prod_aircraft_line"),
+            (
+                "GFX_ADISCORD_production_add_aircraft_button",
+                "GFX_add_prod_aircraft_line",
+            ),
             ("GFX_ADISCORD_production_add_naval_button", "GFX_add_prod_naval_line"),
-            ("GFX_ADISCORD_production_naval_repair_button", "GFX_toggle_naval_repair_window"),
+            (
+                "GFX_ADISCORD_production_naval_repair_button",
+                "GFX_toggle_naval_repair_window",
+            ),
         ):
             vanilla_shape = vanilla_shape.replace(custom, vanilla)
         for widget_type, name in (
@@ -77,7 +92,9 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
             vanilla_shape = remove_named_gui_block(vanilla_shape, widget_type, name)
         # Resource positions are deliberately compacted for nine filters.
         # The remaining production window must retain the native structure.
-        vanilla_shape = remove_named_gui_block(vanilla_shape, "containerWindowType", "resources")
+        vanilla_shape = remove_named_gui_block(
+            vanilla_shape, "containerWindowType", "resources"
+        )
         normalized = re.sub(r"\s+", "", vanilla_shape).encode("utf-8")
         self.assertEqual(
             hashlib.sha256(normalized).hexdigest(),
@@ -85,15 +102,42 @@ class CountryProductionLineResourceUiTests(unittest.TestCase):
         )
 
     def test_resource_background_does_not_cover_equipment_and_filters_fit(self) -> None:
-        military = named_gui_block(self.source, "containerWindowType", "production_equipment_window_military")
+        military = named_gui_block(
+            self.source, "containerWindowType", "production_equipment_window_military"
+        )
         resources = named_gui_block(military, "containerWindowType", "resources")
         equipment = named_gui_block(military, "containerWindowType", "equipments")
+
         def position(widget):
-            return tuple(map(int, re.search(r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', widget).groups()))
-        width, height = map(int, re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)\s*\}', resources).groups())
+            return tuple(
+                map(
+                    int,
+                    re.search(
+                        r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', widget
+                    ).groups(),
+                )
+            )
+
+        width, height = map(
+            int,
+            re.search(
+                r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)\s*\}',
+                resources,
+            ).groups(),
+        )
         self.assertLessEqual(position(resources)[1] + height, position(equipment)[1])
         self.assertLessEqual(position(resources)[0] + width, 495)
-        for name in ("oil", "rubber", "steel", "aluminium", "tungsten", "chromium", "coal", "rare_components", "rare_alloys"):
+        for name in (
+            "oil",
+            "rubber",
+            "steel",
+            "aluminium",
+            "tungsten",
+            "chromium",
+            "coal",
+            "rare_components",
+            "rare_alloys",
+        ):
             checkbox = named_gui_block(resources, "buttonType", name + "_checkbox")
             self.assertLessEqual(position(checkbox)[0] + 27, width, name)
 

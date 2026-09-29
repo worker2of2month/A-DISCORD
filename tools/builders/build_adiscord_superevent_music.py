@@ -20,9 +20,28 @@ def build(root: Path, output: Path) -> list[Path]:
     def encode(name: str, inputs: list[str], filters: list[str]) -> None:
         target = output / f"{name}.ogg"
         subprocess.run(
-            ["ffmpeg", "-v", "error", "-y", *inputs, *filters,
-             "-map_metadata", "-1", "-fflags", "+bitexact", "-flags:a", "+bitexact",
-             "-ar", "44100", "-c:a", "libvorbis", "-q:a", "6", str(target)], check=True,
+            [
+                "ffmpeg",
+                "-v",
+                "error",
+                "-y",
+                *inputs,
+                *filters,
+                "-map_metadata",
+                "-1",
+                "-fflags",
+                "+bitexact",
+                "-flags:a",
+                "+bitexact",
+                "-ar",
+                "44100",
+                "-c:a",
+                "libvorbis",
+                "-q:a",
+                "6",
+                str(target),
+            ],
+            check=True,
         )
         results.append(target)
 

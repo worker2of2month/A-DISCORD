@@ -1,4 +1,5 @@
 """Static front-allocation contracts; native AI movement needs an in-game check."""
+
 from __future__ import annotations
 from tools.lib.on_actions import country_on_actions_entries
 
@@ -39,31 +40,40 @@ class ShabratFrontTests(unittest.TestCase):
 
     def test_reserve_requires_a_live_civil_war_and_control_of_abilia(self) -> None:
         profile = self.profile(RESERVE)
-        self.assertEqual(compact(named_block(profile, "allowed")),
-                         "allowed = { original_tag = STS }")
+        self.assertEqual(
+            compact(named_block(profile, "allowed")), "allowed = { original_tag = STS }"
+        )
         enable = named_block(profile, "enable")
         nod = named_block(enable, "NOD")
         self.assertTrue(nod, "reserve must track the external threat")
-        self.assertEqual(compact(enable.replace(nod, "")),
-                         "enable = { is_ai = yes has_capitulated = no "
-                         "has_global_flag = STP_cw_started "
-                         "NOT = { has_global_flag = STP_cw_union_wars_finished } "
-                         "has_war_with = STP controls_state = 1 }")
+        self.assertEqual(
+            compact(enable.replace(nod, "")),
+            "enable = { is_ai = yes has_capitulated = no "
+            "has_global_flag = STP_cw_started "
+            "NOT = { has_global_flag = STP_cw_union_wars_finished } "
+            "has_war_with = STP controls_state = 1 }",
+        )
 
-    def test_reserve_requires_approved_eligible_intervention_and_peace_with_nod(self) -> None:
+    def test_reserve_requires_approved_eligible_intervention_and_peace_with_nod(
+        self,
+    ) -> None:
         enable = named_block(self.profile(RESERVE), "enable")
-        self.assertEqual(compact(named_block(enable, "NOD")),
-                         "NOD = { NOD_cw_intervention_possible = yes "
-                         "has_country_flag = NOD_cw_intervention_approved "
-                         "NOT = { has_war_with = STS } }")
+        self.assertEqual(
+            compact(named_block(enable, "NOD")),
+            "NOD = { NOD_cw_intervention_possible = yes "
+            "has_country_flag = NOD_cw_intervention_approved "
+            "NOT = { has_war_with = STS } }",
+        )
 
     def test_reserve_is_five_percent_in_abilia(self) -> None:
         strategies = named_blocks(self.profile(RESERVE), "ai_strategy")
         self.assertEqual(len(strategies), 1)
-        self.assertEqual(compact(strategies[0]),
-                         "ai_strategy = { type = put_unit_buffers ratio = 0.05 "
-                         "states = { 1 } subtract_invasions_from_need = yes "
-                         "subtract_fronts_from_need = no }")
+        self.assertEqual(
+            compact(strategies[0]),
+            "ai_strategy = { type = put_unit_buffers ratio = 0.05 "
+            "states = { 1 } subtract_invasions_from_need = yes "
+            "subtract_fronts_from_need = no }",
+        )
 
     def test_shabrat_profiles_cannot_stack_additional_buffers(self) -> None:
         buffers = []
@@ -72,8 +82,11 @@ class ShabratFrontTests(unittest.TestCase):
             allowed = named_block(profile, "allowed")
             if not re.search(r"\boriginal_tag\s*=\s*STS\b", allowed):
                 continue
-            buffers.extend(name for strategy in named_blocks(profile, "ai_strategy")
-                           if re.search(r"\btype\s*=\s*put_unit_buffers\b", strategy))
+            buffers.extend(
+                name
+                for strategy in named_blocks(profile, "ai_strategy")
+                if re.search(r"\btype\s*=\s*put_unit_buffers\b", strategy)
+            )
         self.assertEqual(buffers, [RESERVE])
 
     def test_temporary_profiles_abort_after_peace_or_threat_cancellation(self) -> None:
@@ -83,21 +96,32 @@ class ShabratFrontTests(unittest.TestCase):
 
     def test_actual_external_fronts_do_not_depend_on_the_party_war(self) -> None:
         for name, enemy, enable in (
-                ("STP_cw_front_against_nod", "NOD", "enable = { has_war_with = NOD }"),
-                ("STS_shabrat_val_front", "VAL", "enable = { is_ai = yes has_war_with = VAL }")):
+            ("STP_cw_front_against_nod", "NOD", "enable = { has_war_with = NOD }"),
+            (
+                "STS_shabrat_val_front",
+                "VAL",
+                "enable = { is_ai = yes has_war_with = VAL }",
+            ),
+        ):
             with self.subTest(enemy=enemy):
                 profile = self.profile(name)
                 self.assertEqual(compact(named_block(profile, "enable")), enable)
                 self.assertIn("abort_when_not_enabled = yes", profile)
-                self.assertRegex(profile, rf"type = front_unit_request tag = {enemy} value = [1-9]\d*")
+                self.assertRegex(
+                    profile,
+                    rf"type = front_unit_request tag = {enemy} value = [1-9]\d*",
+                )
                 self.assertIn(f"type = front_control tag = {enemy}", profile)
 
     def test_shabrat_commits_decisively_against_live_nod_front(self) -> None:
         profile = self.profile("STS_shabrat_nod_front")
-        self.assertEqual(compact(named_block(profile, "allowed")),
-                         "allowed = { original_tag = STS }")
-        self.assertEqual(compact(named_block(profile, "enable")),
-                         "enable = { is_ai = yes has_capitulated = no has_war_with = NOD }")
+        self.assertEqual(
+            compact(named_block(profile, "allowed")), "allowed = { original_tag = STS }"
+        )
+        self.assertEqual(
+            compact(named_block(profile, "enable")),
+            "enable = { is_ai = yes has_capitulated = no has_war_with = NOD }",
+        )
         self.assertIn("abort_when_not_enabled = yes", profile)
         self.assertIn("type = consider_weak id = NOD value = 120", profile)
         self.assertIn("type = front_unit_request tag = NOD value = 220", profile)
@@ -107,11 +131,15 @@ class ShabratFrontTests(unittest.TestCase):
         self.assertIn("type = force_concentration_factor value = 80", profile)
 
     def test_party_front_requests_are_not_inflated_to_mask_neutral_demand(self) -> None:
-        for name, demand in (("STS_cw_front_against_stp", 100),
-                             ("STS_shabrat_civil_war_army", 120)):
+        for name, demand in (
+            ("STS_cw_front_against_stp", 100),
+            ("STS_shabrat_civil_war_army", 120),
+        ):
             with self.subTest(profile=name):
                 profile = self.profile(name)
-                self.assertIn(f"type = front_unit_request tag = STP value = {demand}", profile)
+                self.assertIn(
+                    f"type = front_unit_request tag = STP value = {demand}", profile
+                )
                 self.assertIn("execution_type = rush_weak", profile)
 
     def test_gameplay_source_is_utf8_without_bom_and_has_unique_profiles(self) -> None:
@@ -125,17 +153,28 @@ class ShabratFrontTests(unittest.TestCase):
 class CivilWarVictorFallbackTests(unittest.TestCase):
     def setUp(self):
         from tools.tests.test_adiscord_stp_preparation import entries, block, walk
-        hooks = block(country_on_actions_entries("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'), "on_actions")
+
+        hooks = block(
+            country_on_actions_entries(
+                "common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'
+            ),
+            "on_actions",
+        )
         immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
         self.block = block
-        candidates = [e.value for e in walk(immediate) if e.key == "if"
-                      and any(x.key == "else_if" for x in e.value)
-                      and "STP_cw_capitulation_occupier" in str(block(e.value, "limit"))]
+        candidates = [
+            e.value
+            for e in walk(immediate)
+            if e.key == "if"
+            and any(x.key == "else_if" for x in e.value)
+            and "STP_cw_capitulation_occupier" in str(block(e.value, "limit"))
+        ]
         self.assertEqual(len(candidates), 1)
         self.fallback = candidates[0]
 
     def outcome(self, loser, victor, enemies, flags=(), snapshot=0, exists=True):
         from tools.tests.test_adiscord_stp_preparation import scalar
+
         def matches(items, scope):
             def one(e):
                 if e.key == "OR":
@@ -159,24 +198,43 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
                 if e.key == "has_country_flag":
                     return (scope, e.value) in flags
                 if e.key == "check_variable":
-                    self.assertEqual(scalar(e.value, "var"), "STP_cw_capitulation_occupier")
+                    self.assertEqual(
+                        scalar(e.value, "var"), "STP_cw_capitulation_occupier"
+                    )
                     return snapshot == float(scalar(e.value, "value"))
                 raise AssertionError(f"Unsupported test predicate: {e.key}")
+
             return all(one(e) for e in items)
+
         if not matches(self.block(self.fallback, "limit"), loser):
             return snapshot
         for branch in self.fallback:
-            if branch.key in ("if", "else_if") and matches(self.block(branch.value, "limit"), loser):
-                return int(scalar(self.block(self.block(branch.value, "ROOT"), "set_variable"), "value"))
+            if branch.key in ("if", "else_if") and matches(
+                self.block(branch.value, "limit"), loser
+            ):
+                return int(
+                    scalar(
+                        self.block(self.block(branch.value, "ROOT"), "set_variable"),
+                        "value",
+                    )
+                )
         return snapshot
 
     def test_isolated_fronts_settle_without_original_capital_capture(self):
-        cases = (("STS", "STP", 1), ("STP", "STS", 2),
-                 ("SRP", "VAL", 5), ("VAL", "SRP", 3))
+        cases = (
+            ("STS", "STP", 1),
+            ("STP", "STS", 2),
+            ("SRP", "VAL", 5),
+            ("VAL", "SRP", 3),
+        )
         for loser, victor, code in cases:
             with self.subTest(loser=loser):
-                self.assertEqual(self.outcome(loser, victor, [victor],
-                    flags={("VAL", "VAL_cw_entered")}), code)
+                self.assertEqual(
+                    self.outcome(
+                        loser, victor, [victor], flags={("VAL", "VAL_cw_entered")}
+                    ),
+                    code,
+                )
 
     def test_nod_participation_is_required_and_has_distinct_credit(self):
         flags = {("NOD", "NOD_cw_entered")}
@@ -186,8 +244,9 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
 
     def test_conflicting_war_or_snapshot_never_gets_overwritten(self):
         self.assertEqual(self.outcome("STS", "STP", ["STP", "VAL"]), 0)
-        self.assertEqual(self.outcome("SRP", "VAL", ["VAL", "STS"],
-                                    {("VAL", "VAL_cw_entered")}), 0)
+        self.assertEqual(
+            self.outcome("SRP", "VAL", ["VAL", "STS"], {("VAL", "VAL_cw_entered")}), 0
+        )
         self.assertEqual(self.outcome("STS", "STP", ["STP"], snapshot=5), 5)
         self.assertEqual(self.outcome("STS", "STP", [], exists=True), 0)
         self.assertEqual(self.outcome("STS", "STP", ["STP"], exists=False), 0)
@@ -199,26 +258,56 @@ if __name__ == "__main__":
 
 class ShabratCongressPriorityTests(unittest.TestCase):
     def test_capital_priority_tracks_the_actual_congress_and_only_live_ai_war(self):
-        from tools.tests.test_adiscord_stp_preparation import entries, block, matches_conditions, scalar
-        profile = block(entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"), "STS_shabrat_take_congress")
+        from tools.tests.test_adiscord_stp_preparation import (
+            entries,
+            block,
+            matches_conditions,
+            scalar,
+        )
+
+        profile = block(
+            entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"),
+            "STS_shabrat_take_congress",
+        )
         self.assertEqual(scalar(profile, "abort_when_not_enabled"), "yes")
         self.assertEqual(scalar(block(profile, "allowed"), "original_tag"), "STS")
         guard = block(profile, "enable")
-        facts = {("STS", "is_ai", "yes"): True, ("STS", "has_capitulated", "no"): True,
-                 ("STS", "STP_cw_fada_battle_active", "yes"): True,
-                 ("STP", "controls_province", "145"): True}
+        facts = {
+            ("STS", "is_ai", "yes"): True,
+            ("STS", "has_capitulated", "no"): True,
+            ("STS", "STP_cw_fada_battle_active", "yes"): True,
+            ("STP", "controls_province", "145"): True,
+        }
         self.assertTrue(matches_conditions(guard, facts, "STS"))
         for key in facts:
-            self.assertFalse(matches_conditions(guard, {**facts, key: False}, "STS"), key)
+            self.assertFalse(
+                matches_conditions(guard, {**facts, key: False}, "STS"), key
+            )
         self.assertNotIn("has_completed_focus", str(guard))
         self.assertNotIn("controls_state", str(guard))
 
     def test_congress_push_uses_local_native_targets_and_yields_to_recovery(self):
-        from tools.tests.test_adiscord_stp_preparation import entries, block, scalar, matches_conditions
+        from tools.tests.test_adiscord_stp_preparation import (
+            entries,
+            block,
+            scalar,
+            matches_conditions,
+        )
+
         profiles = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
         profile = block(profiles, "STS_shabrat_take_congress")
-        strategies = {scalar(e.value, "type"): e.value for e in profile if e.key == "ai_strategy"}
-        self.assertEqual(set(strategies), {"front_unit_request", "front_control", "force_concentration_front_factor", "force_concentration_target_weight"})
+        strategies = {
+            scalar(e.value, "type"): e.value for e in profile if e.key == "ai_strategy"
+        }
+        self.assertEqual(
+            set(strategies),
+            {
+                "front_unit_request",
+                "front_control",
+                "force_concentration_front_factor",
+                "force_concentration_target_weight",
+            },
+        )
         for strategy in strategies.values():
             target = block(strategy, "state_trigger")
             self.assertEqual(scalar(target, "state"), "28")
@@ -229,6 +318,14 @@ class ShabratCongressPriorityTests(unittest.TestCase):
         self.assertEqual(scalar(control, "manual_attack"), "yes")
         self.assertEqual(scalar(control, "execution_type"), "rush_weak")
         recovery = block(profiles, "STS_shabrat_recover_party_front")
-        recovery_control = next(e.value for e in recovery if e.key == "ai_strategy" and scalar(e.value, "type") == "front_control")
-        self.assertLess(int(scalar(control, "priority")), int(scalar(recovery_control, "priority")))
-        self.assertGreater(int(scalar(strategies["force_concentration_target_weight"], "value")), 100)
+        recovery_control = next(
+            e.value
+            for e in recovery
+            if e.key == "ai_strategy" and scalar(e.value, "type") == "front_control"
+        )
+        self.assertLess(
+            int(scalar(control, "priority")), int(scalar(recovery_control, "priority"))
+        )
+        self.assertGreater(
+            int(scalar(strategies["force_concentration_target_weight"], "value")), 100
+        )

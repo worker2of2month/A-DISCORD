@@ -68,7 +68,9 @@ class StelanderInspectionSchedulerRegressionTests(unittest.TestCase):
         self.assertNotIn(bridge[0], focus_list(war))
         self.assertNotIn(bridge[1], focus_list(war))
         self.assertEqual(focus_list(reconstruction)[:2], bridge)
-        self.assertIn("has_country_flag = STP_cw_postwar", named_block(reconstruction, "enable"))
+        self.assertIn(
+            "has_country_flag = STP_cw_postwar", named_block(reconstruction, "enable")
+        )
         self.assertIn("has_country_flag = STP_cw_postwar", named_block(war, "abort"))
 
 

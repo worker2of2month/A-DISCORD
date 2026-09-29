@@ -1,4 +1,5 @@
 """Export Stelander's revolutionary state and dependent-government flags."""
+
 from __future__ import annotations
 
 import argparse
@@ -17,7 +18,9 @@ def outputs():
     with Image.open(source_path) as source:
         for folder, size in SIZES.items():
             buffer = BytesIO()
-            source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(buffer, format="TGA")
+            source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(
+                buffer, format="TGA"
+            )
             yield ROOT / "gfx/flags" / folder / "STP_revolution_capital.tga", buffer.getvalue()
     for tag in SUBJECTS:
         for folder in SIZES:

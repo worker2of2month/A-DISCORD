@@ -23,17 +23,38 @@ MISSING_STRIP = ROOT / "gfx/interface/missing_resources_strip.dds"
 TOPBAR_BUTTON = ROOT / "gfx/interface/ADISCORD_economy_gui/economy_topbar_button.dds"
 TREASURY_ICON = ROOT / "gfx/interface/ADISCORD_economy_gui/treasury_icon.dds"
 TRADE_ENTRY = ROOT / "gfx/interface/ADISCORD_trade_gui/country_trade_entry_bg.dds"
-RESOURCE_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
-TRADE_ENTRY_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
-TOPBAR_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
-INDICATOR_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
-MARKET_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
-COMMAND_POWER_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
-TOPBAR_BACKGROUND_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
-TREASURY_SOURCE = ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
-INTERNATIONAL_MARKET_BUTTON = ROOT / "gfx/interface/topbar/toolbar/international_market_button.dds"
+RESOURCE_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/strategic_resources_source.png"
+)
+TRADE_ENTRY_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/country_trade_entry_source.png"
+)
+TOPBAR_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_glyphs_source.png"
+)
+INDICATOR_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/topbar_indicators_source.png"
+)
+MARKET_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/international_market_source.png"
+)
+COMMAND_POWER_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/command_power_phone_source.png"
+)
+TOPBAR_BACKGROUND_SOURCE = (
+    ROOT
+    / "gfx/interface/ADISCORD_trade_gui/source/topbar_background_extended_source.png"
+)
+TREASURY_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_economy_gui/source/treasury_topbar_source.png"
+)
+INTERNATIONAL_MARKET_BUTTON = (
+    ROOT / "gfx/interface/topbar/toolbar/international_market_button.dds"
+)
 WORLD_TENSION_ICON = ROOT / "gfx/interface/world_tension_icon_big_strip.dds"
-WORLD_TENSION_SOURCE = ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+WORLD_TENSION_SOURCE = (
+    ROOT / "gfx/interface/ADISCORD_trade_gui/source/world_tension_defcon_tfr.dds"
+)
 COMMAND_POWER_ICON = ROOT / "gfx/interface/command_power_icon.dds"
 COMMAND_POWER_TEXTICON = ROOT / "gfx/texticons/command_power.dds"
 TOPBAR_BACKGROUND = ROOT / "gfx/interface/topbar/background_extended.dds"
@@ -53,7 +74,9 @@ TOPBAR_FLAG_OVERLAY = ROOT / "gfx/interface/topbar/ADISCORD_flag_overlay.dds"
 TOPBAR_FLAG_MASK = ROOT / "gfx/interface/topbar/ADISCORD_flag_alpha_mask.tga"
 STATEVIEW_WW_BACKGROUND = ROOT / "gfx/interface/stateview/ww_stateview_bg.dds"
 STATEVIEW_BACKGROUND = ROOT / "gfx/interface/stateview/stateview_bg.dds"
-STATEVIEW_WW_ENTRY = ROOT / "gfx/interface/stateview/ww_building_standing_entry_stateview.dds"
+STATEVIEW_WW_ENTRY = (
+    ROOT / "gfx/interface/stateview/ww_building_standing_entry_stateview.dds"
+)
 STATEVIEW_ENTRY = ROOT / "gfx/interface/stateview/building_standing_entry_stateview.dds"
 STATEVIEW_BUILDING_ENTRY = ROOT / "gfx/interface/stateview/building_entry_stateview.dds"
 STATEVIEW_LANDMARK_ENTRY = ROOT / "gfx/interface/stateview/province_landmark_bg.dds"
@@ -98,21 +121,21 @@ STATEVIEW_OUTPUT_SIZES = {
 # Explicit content boxes keep the generator deterministic and avoid treating
 # the separate helmet chevrons as another icon.
 TOPBAR_GLYPH_BOXES = (
-    (117, 112, 320, 315),   # faction (reserved for the dynamic faction logo)
-    (407, 99, 568, 319),    # decisions
-    (659, 108, 868, 317),   # intelligence
+    (117, 112, 320, 315),  # faction (reserved for the dynamic faction logo)
+    (407, 99, 568, 319),  # decisions
+    (659, 108, 868, 317),  # intelligence
     (936, 103, 1143, 315),  # technology
-    (1204, 126, 1431, 319), # diplomacy
-    (91, 399, 311, 598),    # trade
-    (392, 405, 589, 591),   # economy
-    (656, 387, 864, 602),   # construction
+    (1204, 126, 1431, 319),  # diplomacy
+    (91, 399, 311, 598),  # trade
+    (392, 405, 589, 591),  # economy
+    (656, 387, 864, 602),  # construction
     (933, 398, 1145, 607),  # production
-    (1235, 406, 1402, 601), # deployment, including chevrons
-    (89, 687, 312, 882),    # logistics
-    (383, 699, 602, 868),   # officer corps
-    (649, 720, 874, 864),   # army
+    (1235, 406, 1402, 601),  # deployment, including chevrons
+    (89, 687, 312, 882),  # logistics
+    (383, 699, 602, 868),  # officer corps
+    (649, 720, 874, 864),  # army
     (939, 668, 1139, 890),  # navy
-    (1211, 678, 1435, 898), # air
+    (1211, 678, 1435, 898),  # air
 )
 
 MAIN_TOPBAR_BUTTONS = {
@@ -153,6 +176,7 @@ INDICATOR_TINTS = {
 INDUSTRY_ICON = ROOT / "gfx/interface/industrial_capacity_icon.dds"
 FUEL_ICON = ROOT / "gfx/interface/topbar/fuel_state_icon.dds"
 
+
 def _fit_icon(source: Image.Image, height: int) -> Image.Image:
     """Fit one source icon into a mathematically centred 26px frame."""
     alpha_box = source.getchannel("A").getbbox()
@@ -179,7 +203,9 @@ def _fit_icon(source: Image.Image, height: int) -> Image.Image:
 
 def _resource_icons(height: int = 27) -> list[Image.Image]:
     if not RESOURCE_SOURCE.is_file():
-        raise RuntimeError(f"missing resource source art: {RESOURCE_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing resource source art: {RESOURCE_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(RESOURCE_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     icons: list[Image.Image] = []
@@ -217,13 +243,17 @@ def _resource_strip() -> Image.Image:
 def _missing_strip() -> Image.Image:
     output = Image.new("RGBA", MISSING_SIZE, (0, 0, 0, 0))
     for index, icon in enumerate(_resource_icons(STRIP_SIZE[1])):
-        output.alpha_composite(_missing(icon, MISSING_SIZE[1]), (index * FRAME_WIDTH, 0))
+        output.alpha_composite(
+            _missing(icon, MISSING_SIZE[1]), (index * FRAME_WIDTH, 0)
+        )
     return output
 
 
 def _trade_entry_background() -> Image.Image:
     if not TRADE_ENTRY_SOURCE.is_file():
-        raise RuntimeError(f"missing trade-entry source art: {TRADE_ENTRY_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing trade-entry source art: {TRADE_ENTRY_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(TRADE_ENTRY_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     output = Image.new("RGBA", TRADE_ENTRY_SIZE, (0, 0, 0, 0))
@@ -235,7 +265,9 @@ def _trade_entry_background() -> Image.Image:
         panel_box = luminance.point(lambda value: 255 if value > 12 else 0).getbbox()
         if panel_box is None:
             raise RuntimeError(f"trade-entry source frame {index + 1} is empty")
-        panel = cell.crop(panel_box).resize(TRADE_ENTRY_FRAME_SIZE, Image.Resampling.LANCZOS)
+        panel = cell.crop(panel_box).resize(
+            TRADE_ENTRY_FRAME_SIZE, Image.Resampling.LANCZOS
+        )
         output.alpha_composite(panel, (index * TRADE_ENTRY_FRAME_SIZE[0], 0))
     return output
 
@@ -247,7 +279,10 @@ def _defcon_strip_bytes() -> bytes:
             f"missing DEFCON source art: {WORLD_TENSION_SOURCE.relative_to(ROOT)}"
         )
     with Image.open(WORLD_TENSION_SOURCE) as source:
-        if source.size != (WORLD_TENSION_FRAME_SIZE[0] * WORLD_TENSION_FRAMES, WORLD_TENSION_FRAME_SIZE[1]):
+        if source.size != (
+            WORLD_TENSION_FRAME_SIZE[0] * WORLD_TENSION_FRAMES,
+            WORLD_TENSION_FRAME_SIZE[1],
+        ):
             raise RuntimeError(
                 f"DEFCON source must remain 490x49, got {source.width}x{source.height}"
             )
@@ -256,7 +291,9 @@ def _defcon_strip_bytes() -> bytes:
 
 def _topbar_source_icon(index: int) -> Image.Image:
     if not TOPBAR_SOURCE.is_file():
-        raise RuntimeError(f"missing topbar source art: {TOPBAR_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing topbar source art: {TOPBAR_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(TOPBAR_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     return source.crop(TOPBAR_GLYPH_BOXES[index])
@@ -264,7 +301,9 @@ def _topbar_source_icon(index: int) -> Image.Image:
 
 def _indicator_source_icon(index: int) -> Image.Image:
     if not INDICATOR_SOURCE.is_file():
-        raise RuntimeError(f"missing topbar indicator source art: {INDICATOR_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing topbar indicator source art: {INDICATOR_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(INDICATOR_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     column = index % 5
@@ -283,7 +322,9 @@ def _tinted_indicator_source(source: Image.Image, index: int) -> Image.Image:
         return source
     alpha = source.getchannel("A")
     luminance = ImageOps.grayscale(source.convert("RGB"))
-    tinted = ImageOps.colorize(luminance, black=palette[0], white=palette[1]).convert("RGBA")
+    tinted = ImageOps.colorize(luminance, black=palette[0], white=palette[1]).convert(
+        "RGBA"
+    )
     tinted.putalpha(alpha)
     return tinted
 
@@ -307,11 +348,19 @@ def _lift_indicator_source(source: Image.Image, index: int) -> Image.Image:
         for y in range(lifted.height):
             for x in range(lifted.width):
                 red, green, blue, pixel_alpha = pixels[x, y]
-                if pixel_alpha < 96 or max(red, green, blue) - min(red, green, blue) > 24:
+                if (
+                    pixel_alpha < 96
+                    or max(red, green, blue) - min(red, green, blue) > 24
+                ):
                     continue
                 luminance = round(0.299 * red + 0.587 * green + 0.114 * blue)
                 steel = max(44, min(220, round(44 + luminance * 0.62)))
-                pixels[x, y] = (max(0, steel - 6), steel, min(255, steel + 6), pixel_alpha)
+                pixels[x, y] = (
+                    max(0, steel - 6),
+                    steel,
+                    min(255, steel + 6),
+                    pixel_alpha,
+                )
         return lifted
     lifted = ImageEnhance.Brightness(lifted).enhance(1.75 if index == 9 else 1.55)
     lifted = ImageEnhance.Contrast(lifted).enhance(1.12)
@@ -321,7 +370,9 @@ def _lift_indicator_source(source: Image.Image, index: int) -> Image.Image:
 def _chroma_source(path: Path, description: str) -> Image.Image:
     """Load approved generated art and remove its green matte."""
     if not path.is_file():
-        raise RuntimeError(f"missing {description} source art: {path.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing {description} source art: {path.relative_to(ROOT)}"
+        )
     with Image.open(path) as source_image:
         source = source_image.convert("RGBA")
     pixels = source.load()
@@ -360,7 +411,9 @@ def _fit_glyph(source: Image.Image, max_size: tuple[int, int]) -> Image.Image:
     # outside the object. Threshold before measuring the bounds, otherwise a
     # 24px treasury icon is fitted against the whole source canvas and shrinks
     # to an unreadable dot.
-    source.putalpha(source.getchannel("A").point(lambda value: 255 if value >= 96 else 0))
+    source.putalpha(
+        source.getchannel("A").point(lambda value: 255 if value >= 96 else 0)
+    )
     alpha_box = source.getchannel("A").getbbox()
     if alpha_box is None:
         raise RuntimeError("topbar source contains an empty glyph")
@@ -426,13 +479,18 @@ def _round_topbar_button(index: int) -> Image.Image:
         panel = (52, 57, 52, 255) if hover else (25, 29, 27, 255)
         inner = (68, 76, 68, 255) if hover else (37, 42, 38, 255)
         draw.ellipse((x0 + 1, 1, x0 + 36, 36), fill=panel, outline=border, width=1)
-        draw.ellipse((x0 + 4, 4, x0 + 33, 33), fill=inner, outline=(12, 15, 13, 255), width=1)
+        draw.ellipse(
+            (x0 + 4, 4, x0 + 33, 33), fill=inner, outline=(12, 15, 13, 255), width=1
+        )
         glyph = _fit_glyph(source, (24, 24))
         if hover:
             glyph = ImageEnhance.Brightness(glyph).enhance(1.18)
         output.alpha_composite(
             glyph,
-            (x0 + (frame_size[0] - glyph.width) // 2, (frame_size[1] - glyph.height) // 2),
+            (
+                x0 + (frame_size[0] - glyph.width) // 2,
+                (frame_size[1] - glyph.height) // 2,
+            ),
         )
     return output
 
@@ -445,7 +503,9 @@ def _indicator_icon(index: int, size: tuple[int, int]) -> Image.Image:
     if index in (9, 11):
         # Army and air source cells have different aspect ratios from navy;
         # normalize their visible XP glyphs to the same 12x12 footprint.
-        glyph.putalpha(glyph.getchannel("A").point(lambda value: 255 if value >= 96 else 0))
+        glyph.putalpha(
+            glyph.getchannel("A").point(lambda value: 255 if value >= 96 else 0)
+        )
         alpha_box = glyph.getchannel("A").getbbox()
         if alpha_box is None:
             raise RuntimeError(f"XP indicator {index} became empty after fitting")
@@ -454,7 +514,9 @@ def _indicator_icon(index: int, size: tuple[int, int]) -> Image.Image:
             Image.Resampling.LANCZOS,
         )
     output = Image.new("RGBA", size, (0, 0, 0, 0))
-    output.alpha_composite(glyph, ((size[0] - glyph.width) // 2, (size[1] - glyph.height) // 2))
+    output.alpha_composite(
+        glyph, ((size[0] - glyph.width) // 2, (size[1] - glyph.height) // 2)
+    )
     return output
 
 
@@ -465,7 +527,9 @@ def _command_power_icon(size: tuple[int, int]) -> Image.Image:
         (max(1, size[0] - 2), max(1, size[1] - 2)),
     )
     output = Image.new("RGBA", size, (0, 0, 0, 0))
-    output.alpha_composite(glyph, ((size[0] - glyph.width) // 2, (size[1] - glyph.height) // 2))
+    output.alpha_composite(
+        glyph, ((size[0] - glyph.width) // 2, (size[1] - glyph.height) // 2)
+    )
     return output
 
 
@@ -498,14 +562,19 @@ def _fuel_icon_strip() -> Image.Image:
 
 def _treasury_icon() -> Image.Image:
     if not TREASURY_SOURCE.is_file():
-        raise RuntimeError(f"missing treasury source art: {TREASURY_SOURCE.relative_to(ROOT)}")
+        raise RuntimeError(
+            f"missing treasury source art: {TREASURY_SOURCE.relative_to(ROOT)}"
+        )
     with Image.open(TREASURY_SOURCE) as source_image:
         source = source_image.convert("RGBA")
     glyph = _fit_glyph(source, (22, 22))
     output = Image.new("RGBA", TREASURY_ICON_SIZE, (0, 0, 0, 0))
     output.alpha_composite(
         glyph,
-        ((TREASURY_ICON_SIZE[0] - glyph.width) // 2, (TREASURY_ICON_SIZE[1] - glyph.height) // 2),
+        (
+            (TREASURY_ICON_SIZE[0] - glyph.width) // 2,
+            (TREASURY_ICON_SIZE[1] - glyph.height) // 2,
+        ),
     )
     return output
 
@@ -542,7 +611,13 @@ def _extended_topbar_background() -> Image.Image:
     # The visible upper rail ends in a small machined chamfer instead of a raw
     # alpha cut.  It then flows directly into the lower shelf's diagonal cap.
     mask_draw.polygon(
-        ((0, 0), (upper_right - 6, 0), (upper_right, 6), (upper_right, upper_bottom), (0, upper_bottom)),
+        (
+            (0, 0),
+            (upper_right - 6, 0),
+            (upper_right, 6),
+            (upper_right, upper_bottom),
+            (0, upper_bottom),
+        ),
         fill=255,
     )
     mask_draw.polygon(
@@ -590,11 +665,15 @@ def _extended_topbar_background() -> Image.Image:
     draw.line((1, 1, upper_right - 2, 1), fill=black, width=2)
     draw.line((2, 3, upper_right - 3, 3), fill=steel, width=1)
     draw.line((2, 4, upper_right - 3, 4), fill=deep, width=1)
-    draw.line((0, upper_bottom - 2, upper_right, upper_bottom - 2), fill=steel_soft, width=1)
+    draw.line(
+        (0, upper_bottom - 2, upper_right, upper_bottom - 2), fill=steel_soft, width=1
+    )
     draw.line((0, upper_bottom - 1, upper_right, upper_bottom - 1), fill=black, width=2)
     for seam_x in (98, 620):
         draw.line((seam_x, 4, seam_x, upper_bottom - 3), fill=black, width=2)
-        draw.line((seam_x + 2, 5, seam_x + 2, upper_bottom - 4), fill=steel_soft, width=1)
+        draw.line(
+            (seam_x + 2, 5, seam_x + 2, upper_bottom - 4), fill=steel_soft, width=1
+        )
 
     # Recessed flag bay, with the same cold-metal and brass vocabulary as the
     # custom toolbar glyphs.
@@ -616,15 +695,31 @@ def _extended_topbar_background() -> Image.Image:
     draw.line((7, 81, 95, 81), fill=cyan_dark, width=1)
 
     # Lower shelf: a long continuous backing for every toolbar and alert icon.
-    draw.line((98, upper_bottom + 1, shelf_right_top - 2, upper_bottom + 1), fill=steel_soft, width=1)
-    draw.line((99, upper_bottom + 2, shelf_right_top - 3, upper_bottom + 2), fill=deep, width=1)
     draw.line(
-        ((0, shelf_bottom), (shelf_right_bottom, shelf_bottom), (shelf_right_top, upper_bottom)),
+        (98, upper_bottom + 1, shelf_right_top - 2, upper_bottom + 1),
+        fill=steel_soft,
+        width=1,
+    )
+    draw.line(
+        (99, upper_bottom + 2, shelf_right_top - 3, upper_bottom + 2),
+        fill=deep,
+        width=1,
+    )
+    draw.line(
+        (
+            (0, shelf_bottom),
+            (shelf_right_bottom, shelf_bottom),
+            (shelf_right_top, upper_bottom),
+        ),
         fill=black,
         width=3,
     )
     draw.line(
-        ((3, shelf_bottom - 3), (shelf_right_bottom - 2, shelf_bottom - 3), (shelf_right_top - 4, upper_bottom + 1)),
+        (
+            (3, shelf_bottom - 3),
+            (shelf_right_bottom - 2, shelf_bottom - 3),
+            (shelf_right_top - 4, upper_bottom + 1),
+        ),
         fill=steel_soft,
         width=1,
     )
@@ -653,14 +748,26 @@ def _extended_topbar_background() -> Image.Image:
         fill=cyan,
         width=1,
     )
-    draw.line((upper_right - 1, 7, upper_right - 1, upper_bottom - 1), fill=black, width=2)
-    draw.line((upper_right - 3, 8, upper_right - 3, upper_bottom - 2), fill=steel_soft, width=1)
+    draw.line(
+        (upper_right - 1, 7, upper_right - 1, upper_bottom - 1), fill=black, width=2
+    )
+    draw.line(
+        (upper_right - 3, 8, upper_right - 3, upper_bottom - 2),
+        fill=steel_soft,
+        width=1,
+    )
 
     # Small recessed separators make the large surface read as manufactured
     # panels while remaining quiet behind the densely packed controls.
     for seam_x in (100, 620):
-        draw.line((seam_x, upper_bottom + 3, seam_x, shelf_bottom - 5), fill=black, width=2)
-        draw.line((seam_x + 2, upper_bottom + 4, seam_x + 2, shelf_bottom - 7), fill=steel_soft, width=1)
+        draw.line(
+            (seam_x, upper_bottom + 3, seam_x, shelf_bottom - 5), fill=black, width=2
+        )
+        draw.line(
+            (seam_x + 2, upper_bottom + 4, seam_x + 2, shelf_bottom - 7),
+            fill=steel_soft,
+            width=1,
+        )
     for rivet_x, rivet_y in ((9, 9), (91, 9), (9, 76), (91, 76), (1105, 48)):
         draw.ellipse((rivet_x - 2, rivet_y - 2, rivet_x + 2, rivet_y + 2), fill=black)
         draw.point((rivet_x - 1, rivet_y - 1), fill=brass)
@@ -759,7 +866,9 @@ def _stateview_background(size: tuple[int, int]) -> Image.Image:
     draw.line((15, height - 5, width - 16, height - 5), fill=cyan, width=1)
 
     # Title rail: a quiet machined header instead of the vanilla antlers.
-    _stateview_panel(draw, (7, 6, width - 8, 35), accent=cyan_dark, fill=(7, 11, 13, 255))
+    _stateview_panel(
+        draw, (7, 6, width - 8, 35), accent=cyan_dark, fill=(7, 11, 13, 255)
+    )
     draw.line((75, 31, width - 52, 31), fill=cyan, width=1)
     draw.line((18, 12, 67, 12), fill=steel_soft, width=1)
     draw.line((width - 75, 12, width - 45, 12), fill=steel_soft, width=1)
@@ -771,7 +880,9 @@ def _stateview_background(size: tuple[int, int]) -> Image.Image:
     _stateview_panel(draw, (8, 37, 144, 116), accent=steel_soft)
     draw.line((11, 83, 141, 83), fill=steel_soft, width=1)
     _stateview_panel(draw, (8, 118, 144, 398), accent=cyan_dark, fill=(11, 18, 19, 250))
-    draw.rounded_rectangle((17, 151, 137, 185), radius=4, fill=deep, outline=steel_soft, width=1)
+    draw.rounded_rectangle(
+        (17, 151, 137, 185), radius=4, fill=deep, outline=steel_soft, width=1
+    )
     draw.line((20, 183, 134, 183), fill=cyan_dark, width=1)
     for y in (205, 263):
         draw.line((13, y, 139, y), fill=(31, 43, 45, 255), width=1)
@@ -788,10 +899,16 @@ def _stateview_background(size: tuple[int, int]) -> Image.Image:
     _stateview_panel(draw, (146, 37, width - 8, 119), accent=cyan_dark)
     for x in range(153, 454, 60):
         draw.line((x, 42, x, 114), fill=(26, 36, 38, 255), width=1)
-    _stateview_panel(draw, (146, 120, width - 8, 151), accent=brass, fill=(8, 13, 15, 255))
-    draw.rounded_rectangle((390, 123, 449, 148), radius=4, fill=deep, outline=steel_soft, width=1)
+    _stateview_panel(
+        draw, (146, 120, width - 8, 151), accent=brass, fill=(8, 13, 15, 255)
+    )
+    draw.rounded_rectangle(
+        (390, 123, 449, 148), radius=4, fill=deep, outline=steel_soft, width=1
+    )
     draw.line((394, 146, 445, 146), fill=cyan_dark, width=1)
-    _stateview_panel(draw, (146, 152, width - 8, 398), accent=cyan_dark, fill=(8, 13, 15, 252))
+    _stateview_panel(
+        draw, (146, 152, width - 8, 398), accent=cyan_dark, fill=(8, 13, 15, 252)
+    )
     for column in range(1, 5):
         x = 149 + column * 61
         draw.line((x, 157, x, 393), fill=(23, 32, 34, 255), width=1)
@@ -806,13 +923,27 @@ def _stateview_background(size: tuple[int, int]) -> Image.Image:
 
     if height >= 600:
         # Expanded province module used by the current game version.
-        _stateview_panel(draw, (8, 449, width - 8, 480), accent=brass, fill=(8, 13, 15, 255))
+        _stateview_panel(
+            draw, (8, 449, width - 8, 480), accent=brass, fill=(8, 13, 15, 255)
+        )
         draw.line((18, 477, width - 18, 477), fill=cyan_dark, width=1)
-        _stateview_panel(draw, (23, 481, width - 13, 555), accent=cyan_dark, fill=(5, 9, 11, 255))
-        _stateview_panel(draw, (8, 557, width - 8, height - 7), accent=cyan_dark, fill=(5, 8, 10, 255))
+        _stateview_panel(
+            draw, (23, 481, width - 13, 555), accent=cyan_dark, fill=(5, 9, 11, 255)
+        )
+        _stateview_panel(
+            draw,
+            (8, 557, width - 8, height - 7),
+            accent=cyan_dark,
+            fill=(5, 8, 10, 255),
+        )
         draw.line((16, 563, width - 16, 563), fill=steel_soft, width=1)
     else:
-        _stateview_panel(draw, (8, 449, width - 8, height - 7), accent=cyan_dark, fill=(6, 10, 12, 255))
+        _stateview_panel(
+            draw,
+            (8, 449, width - 8, height - 7),
+            accent=cyan_dark,
+            fill=(6, 10, 12, 255),
+        )
 
     output.putalpha(mask)
     return output
@@ -860,8 +991,17 @@ def _stateview_standing_entry(size: tuple[int, int]) -> Image.Image:
         (6, 50),
     )
     draw.line(shelf_outline, fill=(4, 6, 7, 255), width=2)
-    draw.rectangle((8, 52, width - 7, visible_bottom - 6), fill=(8, 12, 14, 255), outline=(39, 49, 51, 255), width=1)
-    draw.line((11, visible_bottom - 5, width - 10, visible_bottom - 5), fill=(156, 117, 39, 255), width=1)
+    draw.rectangle(
+        (8, 52, width - 7, visible_bottom - 6),
+        fill=(8, 12, 14, 255),
+        outline=(39, 49, 51, 255),
+        width=1,
+    )
+    draw.line(
+        (11, visible_bottom - 5, width - 10, visible_bottom - 5),
+        fill=(156, 117, 39, 255),
+        width=1,
+    )
     output.putalpha(mask)
     return output
 
@@ -871,7 +1011,13 @@ def _stateview_building_entry() -> Image.Image:
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(output)
     for left, right in ((0, 54), (55, 109)):
-        draw.rounded_rectangle((left + 1, 1, right - 1, 48), radius=4, fill=(6, 10, 12, 255), outline=(48, 61, 63, 255), width=1)
+        draw.rounded_rectangle(
+            (left + 1, 1, right - 1, 48),
+            radius=4,
+            fill=(6, 10, 12, 255),
+            outline=(48, 61, 63, 255),
+            width=1,
+        )
         draw.line((left + 6, 45, right - 6, 45), fill=(18, 67, 71, 255), width=1)
     return output
 
@@ -881,7 +1027,21 @@ def _stateview_slot(size: tuple[int, int], *, brass: bool = False) -> Image.Imag
     mask = _stateview_chamfered_mask(size, 4)
     output = _gunmetal_from_mask(mask)
     draw = ImageDraw.Draw(output)
-    draw.line(((4, 1), (width - 5, 1), (width - 2, 4), (width - 2, height - 5), (width - 5, height - 2), (4, height - 2), (1, height - 5), (1, 4), (4, 1)), fill=(4, 6, 7, 255), width=2)
+    draw.line(
+        (
+            (4, 1),
+            (width - 5, 1),
+            (width - 2, 4),
+            (width - 2, height - 5),
+            (width - 5, height - 2),
+            (4, height - 2),
+            (1, height - 5),
+            (1, 4),
+            (4, 1),
+        ),
+        fill=(4, 6, 7, 255),
+        width=2,
+    )
     # No second inner frame here: occupied slots receive the already framed
     # building-strip art, while empty and locked slots keep this backing.
     draw.line((5, 4, width - 6, 4), fill=(49, 61, 63, 255), width=1)
@@ -895,7 +1055,17 @@ def _stateview_province_header() -> Image.Image:
     width, height = STATEVIEW_OUTPUT_SIZES[STATEVIEW_PROVINCE_HEADER]
     output = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(output)
-    draw.polygon(((5, 0), (width - 6, 0), (width - 1, 5), (width - 1, height - 3), (2, height - 3), (2, 3)), fill=(7, 12, 14, 246))
+    draw.polygon(
+        (
+            (5, 0),
+            (width - 6, 0),
+            (width - 1, 5),
+            (width - 1, height - 3),
+            (2, height - 3),
+            (2, 3),
+        ),
+        fill=(7, 12, 14, 246),
+    )
     draw.line((7, 1, width - 8, 1), fill=(70, 82, 84, 255), width=1)
     draw.line((8, height - 4, width - 8, height - 4), fill=(27, 102, 106, 240), width=1)
     draw.point((8, 8), fill=(164, 123, 42, 255))
@@ -903,10 +1073,16 @@ def _stateview_province_header() -> Image.Image:
 
 
 def _stateview_population_icon() -> Image.Image:
-    output = Image.new("RGBA", STATEVIEW_OUTPUT_SIZES[STATEVIEW_POPULATION_ICON], (0, 0, 0, 0))
+    output = Image.new(
+        "RGBA", STATEVIEW_OUTPUT_SIZES[STATEVIEW_POPULATION_ICON], (0, 0, 0, 0)
+    )
     draw = ImageDraw.Draw(output)
-    draw.ellipse((1, 1, 30, 30), fill=(4, 7, 8, 255), outline=(74, 87, 89, 255), width=1)
-    draw.ellipse((4, 4, 27, 27), fill=(9, 15, 17, 255), outline=(20, 72, 76, 255), width=1)
+    draw.ellipse(
+        (1, 1, 30, 30), fill=(4, 7, 8, 255), outline=(74, 87, 89, 255), width=1
+    )
+    draw.ellipse(
+        (4, 4, 27, 27), fill=(9, 15, 17, 255), outline=(20, 72, 76, 255), width=1
+    )
     pale = (201, 210, 207, 255)
     draw.ellipse((8, 8, 13, 13), fill=pale)
     draw.ellipse((18, 8, 23, 13), fill=pale)
@@ -919,8 +1095,20 @@ def _stateview_population_icon() -> Image.Image:
 def _stateview_value_background() -> Image.Image:
     output = Image.new("RGBA", STATEVIEW_OUTPUT_SIZES[STATEVIEW_VALUE_BG], (0, 0, 0, 0))
     draw = ImageDraw.Draw(output)
-    draw.rounded_rectangle((1, 2, 42, 23), radius=7, fill=(4, 7, 8, 255), outline=(62, 74, 76, 255), width=1)
-    draw.rounded_rectangle((4, 5, 39, 20), radius=5, fill=(9, 14, 16, 255), outline=(26, 56, 59, 255), width=1)
+    draw.rounded_rectangle(
+        (1, 2, 42, 23),
+        radius=7,
+        fill=(4, 7, 8, 255),
+        outline=(62, 74, 76, 255),
+        width=1,
+    )
+    draw.rounded_rectangle(
+        (4, 5, 39, 20),
+        radius=5,
+        fill=(9, 14, 16, 255),
+        outline=(26, 56, 59, 255),
+        width=1,
+    )
     draw.line((8, 21, 35, 21), fill=(39, 124, 128, 230), width=1)
     return output
 
@@ -930,7 +1118,21 @@ def _stateview_resource_background() -> Image.Image:
     mask = _stateview_chamfered_mask(size, 5)
     output = _gunmetal_from_mask(mask)
     draw = ImageDraw.Draw(output)
-    draw.line(((5, 1), (149, 1), (153, 5), (153, 57), (149, 61), (5, 61), (1, 57), (1, 5), (5, 1)), fill=(4, 6, 7, 255), width=2)
+    draw.line(
+        (
+            (5, 1),
+            (149, 1),
+            (153, 5),
+            (153, 57),
+            (149, 61),
+            (5, 61),
+            (1, 57),
+            (1, 5),
+            (5, 1),
+        ),
+        fill=(4, 6, 7, 255),
+        width=2,
+    )
     draw.line((7, 58, 147, 58), fill=(18, 67, 71, 255), width=1)
     return output
 
@@ -940,7 +1142,10 @@ def _right_cluster_background() -> Image.Image:
     mask = Image.new("L", RIGHT_CLUSTER_SIZE, 0)
     mask_draw = ImageDraw.Draw(mask)
     mask_draw.rounded_rectangle((0, 1, 248, 36), radius=12, fill=255)
-    mask_draw.polygon(((27, 37), (250, 37), (267, 51), (267, 82), (250, 94), (56, 94), (27, 73)), fill=255)
+    mask_draw.polygon(
+        ((27, 37), (250, 37), (267, 51), (267, 82), (250, 94), (56, 94), (27, 73)),
+        fill=255,
+    )
     mask_draw.rounded_rectangle((244, 0, 310, 98), radius=11, fill=255)
     mask_draw.rounded_rectangle((307, 0, 341, 100), radius=8, fill=255)
 
@@ -962,20 +1167,38 @@ def _right_cluster_background() -> Image.Image:
 
     # Music/army/navy/air shelf. The controls keep their original names and
     # hitboxes; these circles are only recessed sockets behind them.
-    lower_outline = ((27, 38), (250, 38), (266, 52), (266, 81), (249, 93), (56, 93), (28, 72))
+    lower_outline = (
+        (27, 38),
+        (250, 38),
+        (266, 52),
+        (266, 81),
+        (249, 93),
+        (56, 93),
+        (28, 72),
+    )
     draw.line(lower_outline + (lower_outline[0],), fill=black, width=2)
     draw.line(((57, 90), (247, 90), (262, 79)), fill=cyan_dark, width=2)
     draw.line(((60, 89), (245, 89), (261, 78)), fill=cyan, width=1)
     for center_x, radius in ((49, 18), (82, 12), (125, 20), (174, 20), (220, 20)):
         center_y = 64
         draw.ellipse(
-            (center_x - radius, center_y - radius, center_x + radius, center_y + radius),
+            (
+                center_x - radius,
+                center_y - radius,
+                center_x + radius,
+                center_y + radius,
+            ),
             fill=deep,
             outline=black,
             width=2,
         )
         draw.arc(
-            (center_x - radius + 2, center_y - radius + 2, center_x + radius - 2, center_y + radius - 2),
+            (
+                center_x - radius + 2,
+                center_y - radius + 2,
+                center_x + radius - 2,
+                center_y + radius - 2,
+            ),
             205,
             335,
             fill=cyan_dark,
@@ -984,8 +1207,12 @@ def _right_cluster_background() -> Image.Image:
 
     # DEFCON has its own vertical instrument bay. The source texture supplies
     # the coloured number and label, while the engine supplies the percent.
-    draw.rounded_rectangle((244, 0, 310, 98), radius=11, fill=(18, 29, 33, 255), outline=black, width=2)
-    draw.rounded_rectangle((247, 3, 307, 95), radius=9, fill=(10, 20, 23, 255), outline=cyan_dark, width=2)
+    draw.rounded_rectangle(
+        (244, 0, 310, 98), radius=11, fill=(18, 29, 33, 255), outline=black, width=2
+    )
+    draw.rounded_rectangle(
+        (247, 3, 307, 95), radius=9, fill=(10, 20, 23, 255), outline=cyan_dark, width=2
+    )
     draw.rounded_rectangle((250, 6, 304, 92), radius=7, outline=steel_soft, width=1)
     draw.line((251, 70, 303, 70), fill=cyan_dark, width=1)
     draw.line((253, 92, 301, 92), fill=cyan, width=1)
@@ -994,11 +1221,18 @@ def _right_cluster_background() -> Image.Image:
         draw.point((rivet_x, rivet_y), fill=brass)
 
     # Compact vertical system rail for menu, help and dismissed alerts.
-    draw.rounded_rectangle((307, 0, 341, 100), radius=8, fill=(10, 14, 16, 255), outline=black, width=2)
+    draw.rounded_rectangle(
+        (307, 0, 341, 100), radius=8, fill=(10, 14, 16, 255), outline=black, width=2
+    )
     draw.line((309, 5, 309, 95), fill=steel_soft, width=1)
     draw.line((338, 6, 338, 94), fill=cyan_dark, width=1)
     for center_y in (19, 46, 74):
-        draw.ellipse((310, center_y - 14, 338, center_y + 14), fill=deep, outline=steel_soft, width=1)
+        draw.ellipse(
+            (310, center_y - 14, 338, center_y + 14),
+            fill=deep,
+            outline=steel_soft,
+            width=1,
+        )
     return output
 
 
@@ -1017,10 +1251,19 @@ def _round_control_icon(
     steel_soft = (48, 60, 62, 255)
     pale = (215, 221, 216, 255)
     margin = 1
-    draw.ellipse((margin, margin, size - margin - 1, size - margin - 1), fill=black, outline=steel, width=1)
-    draw.ellipse((3, 3, size - 4, size - 4), fill=(12, 17, 19, 255), outline=steel_soft, width=1)
+    draw.ellipse(
+        (margin, margin, size - margin - 1, size - margin - 1),
+        fill=black,
+        outline=steel,
+        width=1,
+    )
+    draw.ellipse(
+        (3, 3, size - 4, size - 4), fill=(12, 17, 19, 255), outline=steel_soft, width=1
+    )
     if rim_accent:
-        draw.arc((4, 4, size - 5, size - 5), 205, 335, fill=(28, 104, 108, 255), width=2)
+        draw.arc(
+            (4, 4, size - 5, size - 5), 205, 335, fill=(28, 104, 108, 255), width=2
+        )
     cx = size // 2
 
     if glyph == "minus":
@@ -1041,7 +1284,9 @@ def _round_control_icon(
         draw.line((cx, 6, cx, 14), fill=accent, width=3)
         draw.ellipse((cx - 1, 17, cx + 1, 19), fill=pale)
     elif glyph == "trophy":
-        draw.polygon(((7, 6), (size - 8, 6), (size - 10, 13), (cx, 16), (9, 13)), fill=accent)
+        draw.polygon(
+            ((7, 6), (size - 8, 6), (size - 10, 13), (cx, 16), (9, 13)), fill=accent
+        )
         draw.line((cx, 15, cx, 19), fill=pale, width=2)
         draw.line((cx - 4, 20, cx + 4, 20), fill=pale, width=2)
         draw.arc((4, 7, 10, 14), 90, 270, fill=pale, width=1)
@@ -1065,8 +1310,12 @@ def _topbar_flag_frame_overlay() -> Image.Image:
     def points(coords: tuple[tuple[int, int], ...]) -> tuple[tuple[int, int], ...]:
         return tuple((x * scale, y * scale) for x, y in coords)
 
-    outer = points(((3, 0), (84, 0), (87, 3), (87, 54), (84, 57), (3, 57), (0, 54), (0, 3)))
-    inner = points(((6, 3), (81, 3), (84, 6), (84, 51), (81, 54), (6, 54), (3, 51), (3, 6)))
+    outer = points(
+        ((3, 0), (84, 0), (87, 3), (87, 54), (84, 57), (3, 57), (0, 54), (0, 3))
+    )
+    inner = points(
+        ((6, 3), (81, 3), (84, 6), (84, 51), (81, 54), (6, 54), (3, 51), (3, 6))
+    )
     draw.polygon(outer, fill=(4, 7, 8, 246))
     draw.line(outer + (outer[0],), fill=(74, 87, 89, 255), width=scale)
     draw.polygon(inner, fill=(0, 0, 0, 0))
@@ -1086,7 +1335,12 @@ def _topbar_flag_frame_overlay() -> Image.Image:
         draw.line(points(corner), fill=cyan_dark, width=scale)
     for x, y in ((4, 4), (83, 4), (4, 53), (83, 53)):
         draw.ellipse(
-            ((x * scale) - scale, (y * scale) - scale, (x * scale) + scale, (y * scale) + scale),
+            (
+                (x * scale) - scale,
+                (y * scale) - scale,
+                (x * scale) + scale,
+                (y * scale) + scale,
+            ),
             fill=(3, 5, 6, 255),
         )
         draw.point((x * scale, y * scale), fill=brass)
@@ -1144,11 +1398,29 @@ def _topbar_flag_plasma_overlay() -> Image.Image:
 
     # A wide flat-glass reflection above and a restrained cold emitter line
     # below make the flag read as a plasma panel without covering heraldry.
-    draw.rounded_rectangle(box((8, 3, 73, 11)), radius=4 * scale, fill=(180, 215, 211, 13))
-    draw.line((13 * scale, 4 * scale, 68 * scale, 4 * scale), fill=(213, 230, 225, 18), width=scale)
-    draw.line((7 * scale, 46 * scale, 74 * scale, 46 * scale), fill=(22, 89, 94, 18), width=2 * scale)
-    draw.line((7 * scale, 48 * scale, 74 * scale, 48 * scale), fill=(36, 134, 139, 32), width=scale)
-    draw.line((13 * scale, 49 * scale, 68 * scale, 49 * scale), fill=(70, 176, 176, 18), width=scale)
+    draw.rounded_rectangle(
+        box((8, 3, 73, 11)), radius=4 * scale, fill=(180, 215, 211, 13)
+    )
+    draw.line(
+        (13 * scale, 4 * scale, 68 * scale, 4 * scale),
+        fill=(213, 230, 225, 18),
+        width=scale,
+    )
+    draw.line(
+        (7 * scale, 46 * scale, 74 * scale, 46 * scale),
+        fill=(22, 89, 94, 18),
+        width=2 * scale,
+    )
+    draw.line(
+        (7 * scale, 48 * scale, 74 * scale, 48 * scale),
+        fill=(36, 134, 139, 32),
+        width=scale,
+    )
+    draw.line(
+        (13 * scale, 49 * scale, 68 * scale, 49 * scale),
+        fill=(70, 176, 176, 18),
+        width=scale,
+    )
     return glass.resize(TOPBAR_FLAG_OVERLAY_SIZE, Image.Resampling.LANCZOS)
 
 
@@ -1174,9 +1446,13 @@ def _date_control_panel(symbol: str, pulse: bool = False) -> Image.Image:
 
 
 def _paused_date_strip() -> Image.Image:
-    output = Image.new("RGBA", (DATE_CONTROL_SIZE[0] * 2, DATE_CONTROL_SIZE[1]), (0, 0, 0, 0))
+    output = Image.new(
+        "RGBA", (DATE_CONTROL_SIZE[0] * 2, DATE_CONTROL_SIZE[1]), (0, 0, 0, 0)
+    )
     output.alpha_composite(_date_control_panel("pause", pulse=False), (0, 0))
-    output.alpha_composite(_date_control_panel("pause", pulse=True), (DATE_CONTROL_SIZE[0], 0))
+    output.alpha_composite(
+        _date_control_panel("pause", pulse=True), (DATE_CONTROL_SIZE[0], 0)
+    )
     return output
 
 
@@ -1186,7 +1462,12 @@ def _speed_step_strip() -> Image.Image:
     draw = ImageDraw.Draw(output)
     for frame, colour in enumerate(colours):
         left = frame * 28
-        draw.rounded_rectangle((left + 1, 1, left + 26, 8), radius=3, fill=(5, 7, 8, 255), outline=(74, 86, 88, 255))
+        draw.rounded_rectangle(
+            (left + 1, 1, left + 26, 8),
+            radius=3,
+            fill=(5, 7, 8, 255),
+            outline=(74, 86, 88, 255),
+        )
         draw.rounded_rectangle((left + 3, 3, left + 24, 6), radius=2, fill=colour)
     return output
 
@@ -1220,8 +1501,12 @@ def expected_outputs() -> dict[Path, bytes]:
         RIGHT_CLUSTER_BACKGROUND: _dds_bytes(_right_cluster_background()),
         DATE_CONTROL_BACKGROUND: _dds_bytes(_date_control_panel("play")),
         DATE_CONTROL_PAUSED: _dds_bytes(_paused_date_strip()),
-        SPEED_DOWN_BUTTON: _dds_bytes(_round_control_icon(27, "minus", (220, 168, 56, 255))),
-        SPEED_UP_BUTTON: _dds_bytes(_round_control_icon(27, "plus", (65, 188, 163, 255))),
+        SPEED_DOWN_BUTTON: _dds_bytes(
+            _round_control_icon(27, "minus", (220, 168, 56, 255))
+        ),
+        SPEED_UP_BUTTON: _dds_bytes(
+            _round_control_icon(27, "plus", (65, 188, 163, 255))
+        ),
         SPEED_STEP_BUTTON: _dds_bytes(_speed_step_strip()),
         MENU_BUTTON: _dds_bytes(
             _round_control_icon(24, "menu", (65, 188, 163, 255), rim_accent=False)
@@ -1229,8 +1514,12 @@ def expected_outputs() -> dict[Path, bytes]:
         HELP_BUTTON: _dds_bytes(
             _round_control_icon(24, "help", (220, 168, 56, 255), rim_accent=False)
         ),
-        ACHIEVEMENTS_BUTTON: _dds_bytes(_round_control_icon(24, "trophy", (220, 168, 56, 255))),
-        PLAYLIST_BUTTON: _dds_bytes(_round_control_icon(33, "music", (220, 168, 56, 255))),
+        ACHIEVEMENTS_BUTTON: _dds_bytes(
+            _round_control_icon(24, "trophy", (220, 168, 56, 255))
+        ),
+        PLAYLIST_BUTTON: _dds_bytes(
+            _round_control_icon(33, "music", (220, 168, 56, 255))
+        ),
         DISMISSED_ALERTS_BUTTON: _dds_bytes(
             _round_control_icon(24, "alert", (214, 91, 65, 255), rim_accent=False)
         ),
@@ -1283,8 +1572,12 @@ def apply(outputs: dict[Path, bytes]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated DDS outputs")
+    actions.add_argument(
+        "--check", action="store_true", help="compare outputs (default)"
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write generated DDS outputs"
+    )
     args = parser.parse_args()
 
     try:
@@ -1299,7 +1592,9 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print("Strategic resources and core UI assets are current (trade, topbar and state-view skins).")
+    print(
+        "Strategic resources and core UI assets are current (trade, topbar and state-view skins)."
+    )
     return 0
 
 

@@ -29,7 +29,10 @@ ART = {
     "military_headquarters": ("event_adiscord_ui_test.png", ("country",)),
     "nectar_of_the_gods": ("source/nectar_of_the_gods.png", ("country",)),
     "city_in_civil_war": ("source/news/urban_patrol.png", ("news",)),
-    "vorkerland_explosion": ("source/vorkerland_explosion_country.png", ("country", "news")),
+    "vorkerland_explosion": (
+        "source/vorkerland_explosion_country.png",
+        ("country", "news"),
+    ),
     "vorkerland_northern_settlement": ("source/news/northern_patrol.png", ("news",)),
     "army_formation": ("source/news/military_formation.png", ("news",)),
     "treaty_signing": ("source/news/constituent_assembly.png", ("news",)),
@@ -73,8 +76,7 @@ def formatted_art(scene: str, kind: str) -> Image.Image:
     with Image.open(ART_ROOT / source) as image:
         artwork = image.convert("RGB")
         # No stretching, added frames, tint, blur bars, or artificial sharpening.
-        return ImageOps.fit(artwork, SIZES[kind],
-                            method=Image.Resampling.LANCZOS)
+        return ImageOps.fit(artwork, SIZES[kind], method=Image.Resampling.LANCZOS)
 
 
 def _png(image: Image.Image) -> bytes:

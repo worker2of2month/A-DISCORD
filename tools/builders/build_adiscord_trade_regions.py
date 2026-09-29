@@ -72,7 +72,9 @@ def load_continent_keys(root: Path = ROOT) -> tuple[str, ...]:
 
 
 def _parse_definition(source: bytes, path: Path) -> dict[int, str]:
-    payload = source[len(codecs.BOM_UTF8) :] if source.startswith(codecs.BOM_UTF8) else source
+    payload = (
+        source[len(codecs.BOM_UTF8) :] if source.startswith(codecs.BOM_UTF8) else source
+    )
     definitions: dict[int, str] = {}
     for line_number, raw_line in enumerate(payload.splitlines(keepends=True), 1):
         body, _ = _split_line_ending(raw_line)
@@ -138,7 +140,9 @@ def rewrite_continent_column(
         else:
             expected = continent_by_province[province]
             if expected not in range(1, 8):
-                raise RuntimeError(f"{path}: province {province} has invalid continent {expected}")
+                raise RuntimeError(
+                    f"{path}: province {province} has invalid continent {expected}"
+                )
         fields[7] = str(expected).encode("ascii")
         rendered.append(b";".join(fields) + ending)
     return (codecs.BOM_UTF8 if has_bom else b"") + b"".join(rendered)
@@ -148,14 +152,21 @@ def _parse_state_files(root: Path) -> tuple[dict[int, set[int]], dict[int, Path]
     states: dict[int, set[int]] = {}
     paths: dict[int, Path] = {}
     for path in sorted((root / STATE_DIRECTORY).glob("*.txt")):
-        source = _without_comments(path.read_text(encoding="utf-8-sig", errors="strict"))
+        source = _without_comments(
+            path.read_text(encoding="utf-8-sig", errors="strict")
+        )
         id_match = re.search(r"\bid\s*=\s*(\d+)", source)
         if not id_match:
             raise RuntimeError(f"{path}: missing state id")
         state_id = int(id_match.group(1))
         if state_id in states:
-            raise RuntimeError(f"{path}: duplicate state id {state_id} also in {paths[state_id]}")
-        provinces = [int(value) for value in re.findall(r"\d+", _read_block(source, "provinces", path))]
+            raise RuntimeError(
+                f"{path}: duplicate state id {state_id} also in {paths[state_id]}"
+            )
+        provinces = [
+            int(value)
+            for value in re.findall(r"\d+", _read_block(source, "provinces", path))
+        ]
         if not provinces or len(provinces) != len(set(provinces)):
             raise RuntimeError(f"{path}: empty or duplicate province list")
         states[state_id] = set(provinces)
@@ -169,7 +180,9 @@ def _parse_strategic_regions(root: Path) -> tuple[dict[int, set[int]], dict[int,
     regions: dict[int, set[int]] = {}
     region_by_province: dict[int, int] = {}
     for path in sorted((root / STRATEGIC_REGION_DIRECTORY).glob("*.txt")):
-        source = _without_comments(path.read_text(encoding="utf-8-sig", errors="strict"))
+        source = _without_comments(
+            path.read_text(encoding="utf-8-sig", errors="strict")
+        )
         id_match = re.search(r"\bid\s*=\s*(\d+)", source)
         if not id_match:
             raise RuntimeError(f"{path}: missing strategic-region id")
@@ -177,7 +190,8 @@ def _parse_strategic_regions(root: Path) -> tuple[dict[int, set[int]], dict[int,
         if region_id in regions:
             raise RuntimeError(f"{path}: duplicate strategic-region id {region_id}")
         provinces = {
-            int(value) for value in re.findall(r"\d+", _read_block(source, "provinces", path))
+            int(value)
+            for value in re.findall(r"\d+", _read_block(source, "provinces", path))
         }
         if not provinces:
             raise RuntimeError(f"{path}: empty province list")
@@ -191,7 +205,9 @@ def _parse_strategic_regions(root: Path) -> tuple[dict[int, set[int]], dict[int,
             region_by_province[province] = region_id
         regions[region_id] = provinces
     if not regions:
-        raise RuntimeError(f"{root / STRATEGIC_REGION_DIRECTORY}: no region files found")
+        raise RuntimeError(
+            f"{root / STRATEGIC_REGION_DIRECTORY}: no region files found"
+        )
     return regions, region_by_province
 
 
@@ -226,14 +242,18 @@ def build_plan(root: Path = ROOT) -> TradeRegionPlan:
     for state_id, provinces in states.items():
         for province in provinces:
             if province not in definitions:
-                raise RuntimeError(f"{state_paths[state_id]}: unknown province {province}")
+                raise RuntimeError(
+                    f"{state_paths[state_id]}: unknown province {province}"
+                )
             if definitions[province] == "lake":
                 # HOI4 permits a lake province to be listed in its surrounding
                 # state.  Lakes still keep continent 0 and do not define the
                 # state's trade geography.
                 continue
             if definitions[province] != "land":
-                raise RuntimeError(f"{state_paths[state_id]}: non-land province {province}")
+                raise RuntimeError(
+                    f"{state_paths[state_id]}: non-land province {province}"
+                )
             previous = state_by_province.get(province)
             if previous is not None:
                 raise RuntimeError(
@@ -274,21 +294,29 @@ def build_plan(root: Path = ROOT) -> TradeRegionPlan:
     manifest_ids: set[int] = set()
     for entry in manifest["continents"]:
         if not isinstance(entry, dict):
-            raise RuntimeError(f"{root / MANIFEST_RELATIVE}: continent entry must be an object")
+            raise RuntimeError(
+                f"{root / MANIFEST_RELATIVE}: continent entry must be an object"
+            )
         try:
             continent_id = int(entry["id"])
             key = str(entry["key"])
             strategic_region_ids = [int(value) for value in entry["strategic_regions"]]
             state_ids = [int(value) for value in entry["states"]]
         except (KeyError, TypeError, ValueError) as exc:
-            raise RuntimeError(f"{root / MANIFEST_RELATIVE}: malformed continent entry") from exc
+            raise RuntimeError(
+                f"{root / MANIFEST_RELATIVE}: malformed continent entry"
+            ) from exc
         if continent_id in manifest_ids:
-            raise RuntimeError(f"{root / MANIFEST_RELATIVE}: duplicate continent {continent_id}")
+            raise RuntimeError(
+                f"{root / MANIFEST_RELATIVE}: duplicate continent {continent_id}"
+            )
         manifest_ids.add(continent_id)
         manifest_keys.append(key)
         for region_id in strategic_region_ids:
             if region_id not in regions:
-                raise RuntimeError(f"manifest references unknown strategic region {region_id}")
+                raise RuntimeError(
+                    f"manifest references unknown strategic region {region_id}"
+                )
             previous = continent_by_region.get(region_id)
             if previous is not None:
                 raise RuntimeError(
@@ -305,7 +333,9 @@ def build_plan(root: Path = ROOT) -> TradeRegionPlan:
                 )
             continent_by_state[state_id] = continent_id
     if manifest_ids != set(range(1, 8)):
-        raise RuntimeError(f"manifest continent ids must be exactly 1..7, found {manifest_ids}")
+        raise RuntimeError(
+            f"manifest continent ids must be exactly 1..7, found {manifest_ids}"
+        )
     if tuple(manifest_keys) != continent_keys:
         raise RuntimeError(
             f"manifest keys {tuple(manifest_keys)} differ from {CONTINENT_RELATIVE} {continent_keys}"
@@ -333,11 +363,14 @@ def build_plan(root: Path = ROOT) -> TradeRegionPlan:
         for state_id, region_id in state_regions.items()
     }
     province_continents = {
-        province: state_continents[state_by_province[province]] for province in real_land
+        province: state_continents[state_by_province[province]]
+        for province in real_land
     }
     state_counts = Counter(state_continents.values())
     province_counts = Counter(province_continents.values())
-    if set(state_counts) != set(range(1, 8)) or set(province_counts) != set(range(1, 8)):
+    if set(state_counts) != set(range(1, 8)) or set(province_counts) != set(
+        range(1, 8)
+    ):
         raise RuntimeError(
             "every lore continent must contain states and land provinces; "
             f"states={dict(state_counts)}, provinces={dict(province_counts)}"
@@ -405,7 +438,11 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
             print(f"ERROR: {exc}")
             return 1
-        print("Applied lore trade-region mapping." if changed else "Lore trade-region mapping already current.")
+        print(
+            "Applied lore trade-region mapping."
+            if changed
+            else "Lore trade-region mapping already current."
+        )
 
     issues = validate()
     if issues:

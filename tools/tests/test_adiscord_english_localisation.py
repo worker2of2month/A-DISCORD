@@ -36,12 +36,22 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.write(self.root, 'russian', 'KEY: "Казна [?money|0]"')
         self.write(self.root, 'english', 'KEY: "Treasury [?money|0]"')
         self.write(self.root, 'english', 'KEY: "Treasury [?debt|0]"', folder='replace')
-        self.assertTrue(any('token mismatch' in issue for issue in audit(self.root, self.game)['issues']))
+        self.assertTrue(
+            any(
+                'token mismatch' in issue
+                for issue in audit(self.root, self.game)['issues']
+            )
+        )
 
     def test_empty_translation_is_not_coverage(self):
         self.write(self.root, 'russian', 'KEY: "Абилия"')
         self.write(self.root, 'english', 'KEY: ""')
-        self.assertTrue(any('empty English' in issue for issue in audit(self.root, self.game)['issues']))
+        self.assertTrue(
+            any(
+                'empty English' in issue
+                for issue in audit(self.root, self.game)['issues']
+            )
+        )
 
     def test_bom_and_physical_line_syntax_are_checked(self):
         self.write(self.root, 'russian', 'KEY: "Абилия"')
@@ -58,8 +68,14 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.assertFalse(any('token mismatch' in issue for issue in issues), issues)
 
     def test_texticon_frame_is_preserved(self):
-        self.write(self.root, 'russian', 'KEY: "£operative_mission_icons_small|1£ Разведка"')
-        self.write(self.root, 'english', 'KEY: "£operative_mission_icons_small|2£ Intelligence"')
+        self.write(
+            self.root, 'russian', 'KEY: "£operative_mission_icons_small|1£ Разведка"'
+        )
+        self.write(
+            self.root,
+            'english',
+            'KEY: "£operative_mission_icons_small|2£ Intelligence"',
+        )
         issues = audit(self.root, self.game)['issues']
         self.assertTrue(any('token mismatch' in issue for issue in issues), issues)
 
@@ -70,7 +86,12 @@ class EnglishLocalisationTests(unittest.TestCase):
         self.write(self.root, 'english', 'KEY: "$bunker$ construction speed"')
         self.assertFalse(audit(self.root, self.game)['issues'])
         self.write(self.root, 'russian', 'KEY: "Казна [?money|0]"')
-        self.assertTrue(any('token mismatch' in issue for issue in audit(self.root, self.game)['issues']))
+        self.assertTrue(
+            any(
+                'token mismatch' in issue
+                for issue in audit(self.root, self.game)['issues']
+            )
+        )
 
 
 class EnglishCatalogueCompletenessTests(unittest.TestCase):
@@ -78,8 +99,10 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
 
     def test_every_russian_key_has_an_english_entry(self):
         from tools.validators.validate_adiscord_english_localisation import (
-            EXCLUDED_KEYS, read_entries,
+            EXCLUDED_KEYS,
+            read_entries,
         )
+
         root = Path(__file__).resolve().parents[2] / 'localisation'
         russian, _ = read_entries(root, 'russian')
         english, _ = read_entries(root, 'english')
@@ -88,31 +111,43 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
 
     def test_all_english_catalogues_are_well_formed_and_translated(self):
         from tools.validators.validate_adiscord_english_localisation import (
-            CYRILLIC, read_entries,
+            CYRILLIC,
+            read_entries,
         )
+
         root = Path(__file__).resolve().parents[2] / 'localisation'
         english, issues = read_entries(root, 'english')
         self.assertEqual(issues, [])
-        cyrillic = [key for key, entry in english.items() if CYRILLIC.search(entry['value'])]
+        cyrillic = [
+            key for key, entry in english.items() if CYRILLIC.search(entry['value'])
+        ]
         self.assertEqual(cyrillic, [])
 
     def test_nonempty_russian_text_has_nonempty_english_text(self):
         from tools.validators.validate_adiscord_english_localisation import (
-            EXCLUDED_KEYS, read_entries,
+            EXCLUDED_KEYS,
+            read_entries,
         )
+
         root = Path(__file__).resolve().parents[2] / 'localisation'
         russian, _ = read_entries(root, 'russian')
         english, _ = read_entries(root, 'english')
-        empty = [key for key in russian.keys() & english.keys()
-                 if key not in EXCLUDED_KEYS and russian[key]['value'].strip()
-                 and not english[key]['value'].strip()]
+        empty = [
+            key
+            for key in russian.keys() & english.keys()
+            if key not in EXCLUDED_KEYS
+            and russian[key]['value'].strip()
+            and not english[key]['value'].strip()
+        ]
         self.assertEqual(sorted(empty), [])
 
     def test_authored_catalogues_preserve_dynamic_tokens(self):
         from collections import Counter
         from tools.validators.validate_adiscord_english_localisation import (
-            TOKENS, read_entries,
+            TOKENS,
+            read_entries,
         )
+
         root = Path(__file__).resolve().parents[2] / 'localisation'
         russian, _ = read_entries(root, 'russian')
         english, _ = read_entries(root, 'english')
@@ -121,7 +156,9 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
             source = russian[key]
             if not Path(source['file']).name.startswith('ADISCORD_'):
                 continue
-            if Counter(TOKENS.findall(source['value'])) != Counter(TOKENS.findall(english[key]['value'])):
+            if Counter(TOKENS.findall(source['value'])) != Counter(
+                TOKENS.findall(english[key]['value'])
+            ):
                 differences.append(key)
         self.assertEqual(differences, [])
 

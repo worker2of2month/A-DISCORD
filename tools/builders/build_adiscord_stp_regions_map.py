@@ -14,7 +14,15 @@ ROOT = repository_root()
 OUT = ROOT / "gfx" / "interface" / "STP_regions"
 WIDTH, HEIGHT = 420, 260
 STATE_IDS = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
-FACTION_KEYS = ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals")
+FACTION_KEYS = (
+    "conservatives",
+    "borons",
+    "security",
+    "army",
+    "advisers",
+    "merchants",
+    "radicals",
+)
 FACTION_SOURCE = ROOT / "tools" / "assets" / "source" / "STP_party_factions"
 FACTION_ICON_SIZE = 56
 
@@ -56,10 +64,14 @@ def state_provinces(state_id: int) -> set[int]:
     return {int(value) for value in re.findall(r"\d+", match.group(1))}
 
 
-def province_colors() -> tuple[dict[int, tuple[int, int, int]], set[tuple[int, int, int]]]:
+def province_colors() -> (
+    tuple[dict[int, tuple[int, int, int]], set[tuple[int, int, int]]]
+):
     colors: dict[int, tuple[int, int, int]] = {}
     land: set[tuple[int, int, int]] = set()
-    with (ROOT / "map" / "definition.csv").open(encoding="utf-8-sig", errors="replace") as source:
+    with (ROOT / "map" / "definition.csv").open(
+        encoding="utf-8-sig", errors="replace"
+    ) as source:
         for row in csv.reader(source, delimiter=";"):
             if len(row) < 5 or not row[0].isdigit():
                 continue
@@ -87,7 +99,10 @@ def state_overlay(mask: Image.Image, color: tuple[int, int, int]) -> Image.Image
     rim = Image.frombytes(
         "L",
         mask.size,
-        bytes(max(inner - core, 0) for inner, core in zip(mask.tobytes(), contracted.tobytes())),
+        bytes(
+            max(inner - core, 0)
+            for inner, core in zip(mask.tobytes(), contracted.tobytes())
+        ),
     )
     frame.alpha_composite(
         Image.composite(
@@ -106,14 +121,22 @@ def state_overlay(mask: Image.Image, color: tuple[int, int, int]) -> Image.Image
     return frame
 
 
-def contact_sheet(background: Image.Image, masks: dict[int, Image.Image]) -> Image.Image:
+def contact_sheet(
+    background: Image.Image, masks: dict[int, Image.Image]
+) -> Image.Image:
     sheet = Image.new("RGBA", (920, 650), (10, 11, 13, 255))
     draw = ImageDraw.Draw(sheet)
-    draw.text((34, 24), "BATTLE FOR STELANDER - INITIAL REGIONAL MAP", fill=(224, 215, 184, 255))
+    draw.text(
+        (34, 24),
+        "BATTLE FOR STELANDER - INITIAL REGIONAL MAP",
+        fill=(224, 215, 184, 255),
+    )
 
     preview = background.copy()
     for state_id in STATE_IDS:
-        preview.alpha_composite(state_overlay(masks[state_id], FRAME_COLORS[INITIAL_STATUS_FRAME[state_id]]))
+        preview.alpha_composite(
+            state_overlay(masks[state_id], FRAME_COLORS[INITIAL_STATUS_FRAME[state_id]])
+        )
     preview = preview.resize((840, 520), Image.Resampling.NEAREST)
     sheet.alpha_composite(preview, (40, 62))
 
@@ -125,7 +148,9 @@ def contact_sheet(background: Image.Image, masks: dict[int, Image.Image]) -> Ima
     )
     x = 46
     for label, color in legend:
-        draw.rectangle((x, 600, x + 18, 618), fill=(*color, 255), outline=(232, 218, 176, 255))
+        draw.rectangle(
+            (x, 600, x + 18, 618), fill=(*color, 255), outline=(232, 218, 176, 255)
+        )
         draw.text((x + 27, 603), label, fill=(213, 207, 188, 255))
         x += 205
     return sheet
@@ -137,7 +162,9 @@ def faction_cards() -> Image.Image:
     for index, accent in enumerate(((150, 77, 69, 255), (92, 145, 111, 255))):
         x = index * 224
         draw = ImageDraw.Draw(strip)
-        draw.rectangle((x, 0, x + 223, 91), fill=(26, 29, 33, 255), outline=(83, 83, 77, 255))
+        draw.rectangle(
+            (x, 0, x + 223, 91), fill=(26, 29, 33, 255), outline=(83, 83, 77, 255)
+        )
         draw.rectangle((x + 1, 1, x + 3, 90), fill=accent)
         draw.rectangle((x + 7, 7, x + 64, 64), outline=accent)
         draw.line((x + 72, 40, x + 214, 40), fill=(67, 67, 63, 255))
@@ -192,7 +219,9 @@ def render_outputs() -> tuple[dict[str, Image.Image], tuple[int, int, int, int]]
     masks: dict[int, Image.Image] = {}
     cropped_pixels = list(cropped.get_flattened_data())
     for state_id, state_province_ids in state_sets.items():
-        colors = {province_to_color[p] for p in state_province_ids if p in province_to_color}
+        colors = {
+            province_to_color[p] for p in state_province_ids if p in province_to_color
+        }
         raw = Image.new("L", cropped.size, 0)
         raw.putdata([255 if pixel in colors else 0 for pixel in cropped_pixels])
         masks[state_id] = transform(raw, (0, 0, cropped.width, cropped.height))
@@ -259,7 +288,9 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
     for filename, expected in outputs.items():
         path = OUT / filename
         if not path.is_file():
-            issues.append(f"missing generated STP regions-map image: {path.relative_to(ROOT)}")
+            issues.append(
+                f"missing generated STP regions-map image: {path.relative_to(ROOT)}"
+            )
             continue
         try:
             with Image.open(path) as source:
@@ -268,10 +299,14 @@ def validate_outputs(outputs: dict[str, Image.Image]) -> list[str]:
             issues.append(f"cannot read {path.relative_to(ROOT)}: {exc}")
             continue
         if actual.size != expected.size:
-            issues.append(f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected.size}")
+            issues.append(
+                f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected.size}"
+            )
             continue
         if actual.tobytes() != expected.convert("RGBA").tobytes():
-            issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
+            issues.append(
+                f"{path.relative_to(ROOT)} pixels differ from deterministic render"
+            )
     return issues
 
 
@@ -286,10 +321,18 @@ def apply(outputs: dict[str, Image.Image]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate the Battle for Stelander regional decision map.")
+    parser = argparse.ArgumentParser(
+        description="Generate the Battle for Stelander regional decision map."
+    )
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare current PNGs with a deterministic render (default)")
-    actions.add_argument("--apply", action="store_true", help="write deterministic regional-map PNGs")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="compare current PNGs with a deterministic render (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write deterministic regional-map PNGs"
+    )
     args = parser.parse_args()
 
     outputs, box = render_outputs()
