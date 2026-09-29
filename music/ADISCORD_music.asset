@@ -163,3 +163,9 @@ music = {
 	file = "ADISCORD_3teeth_scorpion.ogg"
 	volume = 0.65
 }
+
+music = {
+	name = "ADISCORD_vorkerland_theme"
+	file = "ADISCORD_vorkerland_theme.ogg"
+	volume = 0.65
+}

@@ -150,3 +150,8 @@ music = {
 	song = "ADISCORD_3teeth_scorpion"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_vorkerland_theme"
+	chance = { base = 10 }
+}
