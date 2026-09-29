@@ -5252,6 +5252,23 @@ STP_cw_external_intervention = {
         timeout_effect = { }
     }
 
+	NOD_cw_accept_northern_status_quo = {
+		icon = generic_political_pressure
+		allowed = { tag = NOD }
+		visible = {
+			is_ai = yes
+			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+		}
+		available = { NOD_cw_can_accept_northern_status_quo = yes }
+		cost = 0
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = NOD_cw_accept_northern_status_quo_tt
+			hidden_effect = { STP_cw_settle_northern_status_quo = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
 	NOD_cw_accept_northern_defeat = {
 		icon = generic_political_pressure
 		allowed = { tag = NOD }

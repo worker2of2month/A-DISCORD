@@ -909,6 +909,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_cw.83",
+      "namespace": "ADISCORD_STP_cw",
+      "number": 83,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_civil_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_cw.70",
       "namespace": "ADISCORD_STP_cw",
       "number": 70,

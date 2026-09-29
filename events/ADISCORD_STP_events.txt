@@ -2894,3 +2894,21 @@ country_event = {
 	trigger = { STP_ps_plot_current = yes }
 	option = { name = ADISCORD_STP_cw.207.a }
 }
+
+news_event = {
+	id = ADISCORD_STP_cw.83
+	title = ADISCORD_STP_cw.83.t
+	desc = {
+		trigger = { NOD = { has_country_flag = NOD_cw_northern_status_quo } }
+		text = ADISCORD_STP_cw.83.d
+	}
+	desc = {
+		trigger = { NOD = { NOT = { has_country_flag = NOD_cw_northern_status_quo } } }
+		text = ADISCORD_STP_cw.83.external
+	}
+	picture = GFX_news_event_adiscord_peace_negotiations
+	major = yes
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = { name = ADISCORD_STP_cw.83.a }
+}

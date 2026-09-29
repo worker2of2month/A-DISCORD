@@ -4530,3 +4530,71 @@ class CivilWarAirMandateContracts(unittest.TestCase):
         for tag in ("STP", "STS"):
             self.assertEqual(sum(scope == tag and e.key == "STP_cw_mobilize_brigade" for scope, e in chosen), 16)
             self.assertEqual(sum(scope == tag and e.key in ("STP_cw_mobilize_assault_division", "STP_cw_deploy_assault_division") for scope, e in chosen), 6)
+
+
+class NorthernStatusQuoTests(unittest.TestCase):
+    def test_status_quo_requires_301_days_ai_and_no_priority_outcome(self):
+        guard = ast_block(entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"), "NOD_cw_can_accept_northern_status_quo")
+        self.assertTrue(guard)
+        facts = {("NOD", "is_ai", "yes"): True, ("NOD", "exists", "yes"): True,
+                 ("NOD", "is_subject", "no"): True, ("NOD", "has_capitulated", "no"): True,
+                 ("NOD", "variable", "STP_cw_northern_campaign_status"): 1,
+                 ("NOD", "has_country_flag", "NOD_cw_northern_war_started"): True,
+                 ("NOD", "flag_days", "NOD_cw_northern_war_started"): 301}
+        for tag in ("YPR", "COF", "TFF"):
+            facts[("NOD", "has_war_with", tag)] = True
+            facts[(tag, "is_ai", "yes")] = True
+            facts[(tag, "exists", "yes")] = True
+            facts[(tag, "is_subject", "no")] = True
+        self.assertTrue(matches_conditions(guard, facts, "NOD"))
+        for days, expected in ((0, False), (299, False), (300, False), (301, True), (500, True)):
+            self.assertEqual(matches_conditions(guard, {**facts, ("NOD", "flag_days", "NOD_cw_northern_war_started"): days}, "NOD"), expected)
+        for key in facts:
+            if key[1] not in ("flag_days", "variable"):
+                self.assertFalse(matches_conditions(guard, {**facts, key: False}, "NOD"), key)
+        for terminal in (0, 2, 3, 4):
+            self.assertFalse(matches_conditions(guard, {**facts, ("NOD", "variable", "STP_cw_northern_campaign_status"): terminal}, "NOD"))
+        for result in ("STP_cw_northern_campaign_won", "STP_cw_northern_conference_won", "NOD_cw_can_accept_northern_defeat"):
+            self.assertFalse(matches_conditions(guard, {**facts, ("NOD", result, "yes"): True}, "NOD"))
+        for tag in ("NOD", "YPR", "COF", "TFF"):
+            self.assertFalse(matches_conditions(guard, {**facts, (tag, "has_country_flag", "STP_cw_northern_capitulation_pending"): True}, "NOD"))
+
+    def test_status_quo_closes_only_northern_wars_before_callbacks_and_awards_nothing(self):
+        effect = ast_block(entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_settle_northern_status_quo")
+        self.assertTrue(effect)
+        facts = {("NOD", "NOD_cw_can_accept_northern_status_quo", "yes"): True}
+        for tag in ("YPR", "COF", "TFF", "STS", "VAL"):
+            facts[("NOD", "has_war_with", tag)] = True
+        selected = list(selected_effects(effect, facts, "NOD"))
+        self.assertEqual([e.value for _, e in selected if e.key == "white_peace"], ["YPR", "COF", "TFF"])
+        terminal = next(i for i, (_, e) in enumerate(selected) if e.key == "set_variable" and scalar(e.value, "var") == "STP_cw_northern_campaign_status")
+        self.assertEqual(scalar(selected[terminal][1].value, "value"), "4")
+        self.assertLess(terminal, next(i for i, (_, e) in enumerate(selected) if e.key == "white_peace"))
+        self.assertFalse({e.key for e in walk(effect)} & {"transfer_state", "annex_country", "puppet", "set_autonomy"})
+        self.assertIn("STP_cw_end_northern_colonial_war", {e.key for e in walk(effect)})
+        self.assertIn("VAL_northern_aid_daily", {e.key for e in walk(effect)})
+        self.assertEqual(list(selected_effects(effect, {}, "NOD")), [])
+        council = ast_block(entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_external_intervention")
+        decision = ast_block(council, "NOD_cw_accept_northern_status_quo")
+        self.assertTrue(decision)
+        self.assertIn("NOD_cw_can_accept_northern_status_quo", {e.key for e in walk(ast_block(decision, "available"))})
+        self.assertIn("STP_cw_settle_northern_status_quo", {e.key for e in walk(ast_block(decision, "complete_effect"))})
+        self.assertGreater(float(scalar(ast_block(decision, "ai_will_do"), "base")), 0)
+
+    def test_all_three_outcomes_have_distinct_registered_once_only_news(self):
+        import json
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        events = entries("events/ADISCORD_STP_events.txt")
+        registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
+        for suffix, number in (("victory", 80), ("defeat", 81), ("status_quo", 83)):
+            event_id = f"ADISCORD_STP_cw.{number}"
+            effect = ast_block(effects, "STP_cw_settle_northern_" + suffix)
+            self.assertIn(event_id, [scalar(e.value, "id") for e in walk(effect) if e.key == "news_event"])
+            event = next(e.value for e in events if e.key == "news_event" and scalar(e.value, "id") == event_id)
+            self.assertEqual(scalar(event, "fire_only_once"), "yes")
+            self.assertEqual(scalar(event, "major"), "yes")
+            self.assertEqual(sum(e["id"] == event_id for e in registry), 1)
+            for language in ("russian", "english"):
+                text = read(f"localisation/{language}/ADISCORD_STP_l_{language}.yml")
+                for ending in ("t", "d", "a"):
+                    self.assertIn(event_id + "." + ending + ":", text)

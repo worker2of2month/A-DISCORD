@@ -3996,6 +3996,7 @@ STP_cw_abort_northern_campaign_external_defeat = {
 					VAL_northern_aid_daily = yes
 				}
 			}
+			news_event = { id = ADISCORD_STP_cw.83 }
 			log = "[STP_NORTH] NOD northern campaign closed after external defeat"
 		}
 	}
@@ -4351,6 +4352,31 @@ STP_cw_settle_northern_defeat = {
 	}
 }
 
+# Commit the neutral result before white peace dispatches reconciliation callbacks.
+STP_cw_settle_northern_status_quo = {
+	if = {
+		limit = { NOD_cw_can_accept_northern_status_quo = yes }
+		set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+		set_country_flag = NOD_cw_northern_status_quo
+		if = { limit = { has_war_with = YPR } white_peace = YPR }
+		if = { limit = { has_war_with = COF } white_peace = COF }
+		if = { limit = { has_war_with = TFF } white_peace = TFF }
+		clr_country_flag = NOD_cw_northern_war_started
+		STP_cw_end_northern_colonial_war = yes
+		remove_mission = NOD_cw_northern_push
+		remove_ideas = NOD_cw_northern_offensive
+		remove_ideas = NOD_cw_stalled_army
+		YPR = { set_major = no }
+		COF = { set_major = no }
+		TFF = { set_major = no }
+		activate_mission = NOD_cw_northern_redeployment
+		news_event = { id = ADISCORD_STP_cw.83 }
+		VAL = { if = { limit = { exists = yes } VAL_northern_aid_daily = yes } }
+		STS = { if = { limit = { exists = yes } STP_cw_poll_nod_intervention = yes } }
+		log = "[STP_NORTH] Northern status quo after 300 days; no territorial awards"
+	}
+}
+
 STP_cw_poll_northern_campaign = {
 	if = {
 		limit = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
@@ -4377,6 +4403,7 @@ STP_cw_poll_northern_campaign = {
 			YPR = { set_major = no }
 			COF = { set_major = no }
 			TFF = { set_major = no }
+			news_event = { id = ADISCORD_STP_cw.83 }
 			log = "[STP_NORTH] Northern campaign closed after external peace; no scripted territorial award"
 		}
 	}
