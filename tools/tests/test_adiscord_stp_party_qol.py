@@ -62,6 +62,95 @@ class PartyQualityOfLifeTests(unittest.TestCase):
         self.assertIn('STP_cw_started', str(visible))
         self.assertIn('STP_cw_elections_finished', str(visible))
 
+    def test_chapter_nominee_selection_closes_all_other_choices_and_stale_callbacks(self):
+        for selected in range(6):
+            facts = {('STP', 'STP_ch_campaigning', 'yes'): True,
+                     ('STP', 'variable', 'STP_ch_nominee'): selected}
+            shown = [candidate for candidate in range(1, 6)
+                     if matches_conditions(block(self.decisions[f'STP_ch_nominate_{candidate}'], 'visible'), facts)]
+            self.assertEqual(shown, list(range(1, 6)) if selected == 0 else [])
+            for candidate in range(1, 6):
+                decision = self.decisions[f'STP_ch_nominate_{candidate}']
+                self.assertEqual(matches_conditions(block(decision, 'available'), facts), selected == 0)
+                writes = [entry.value for _, entry in selected_effects(block(decision, 'complete_effect'), facts)
+                          if entry.key == 'set_variable' and scalar(entry.value, 'var') == 'STP_ch_nominee']
+                self.assertEqual([scalar(value, 'value') for value in writes],
+                                 [str(candidate)] if selected == 0 else [])
+
+    def test_chapter_initialization_leaves_the_human_choice_open(self):
+        facts = {('STP', 'STP_pf_active', 'yes'): True,
+                 ('STP', 'STP_pw_can_reconstruct', 'yes'): True}
+        writes = [entry.value for _, entry in selected_effects(self.effects['STP_ch_initialize'], facts)
+                  if entry.key == 'set_variable' and scalar(entry.value, 'var') == 'STP_ch_nominee']
+        self.assertEqual([scalar(value, 'value') for value in writes], ['0'])
+        for candidate in range(1, 6):
+            facts = {('STP', 'is_ai', 'yes'): True,
+                     ('STP', 'variable', 'STP_ch_nominee'): candidate}
+            self.assertFalse(list(selected_effects(self.effects['STP_ch_select_ai_nominee'], facts)))
+
+    def test_chapter_agreements_cannot_record_an_unselected_nominee(self):
+        for group in ('conservatives', 'borons', 'security', 'army', 'advisers', 'merchants', 'radicals'):
+            decision = self.decisions['STP_ch_pledge_' + group]
+            facts = {('STP', 'STP_ch_campaigning', 'yes'): True,
+                     ('STP', 'variable', 'STP_ch_nominee'): 0,
+                     ('STP', 'variable', f'STP_pf_{group}_support'): 100,
+                     ('STP', 'numeric', 'has_political_power'): 100}
+            self.assertFalse(matches_conditions(block(decision, 'visible'), facts))
+            self.assertFalse(matches_conditions(block(decision, 'available'), facts))
+            self.assertFalse(list(selected_effects(block(decision, 'complete_effect'), facts)))
+
+    def test_chapter_agreements_appear_at_the_support_boundary_and_hide_after_signing(self):
+        for group in ('conservatives', 'borons', 'security', 'army', 'advisers', 'merchants', 'radicals'):
+            visible = block(self.decisions['STP_ch_pledge_' + group], 'visible')
+            for support, signed, expected in ((39.999, False, False), (40, False, True),
+                                               (60, False, True), (60, True, False)):
+                with self.subTest(group=group, support=support, signed=signed):
+                    facts = {('STP', 'STP_ch_campaigning', 'yes'): True,
+                             ('STP', 'variable', 'STP_ch_nominee'): 2,
+                             ('STP', 'variable', f'STP_pf_{group}_support'): support,
+                             ('STP', 'has_variable', 'STP_ch_pledge_' + group): signed}
+                    self.assertEqual(matches_conditions(visible, facts), expected)
+
+    def test_chapter_preparation_keeps_paid_countdowns_visible_until_settlement(self):
+        for institution in ('army', 'economy', 'party'):
+            decision = self.decisions['STP_ch_train_' + institution]
+            for completed, paid, expected in ((False, False, True), (False, True, True),
+                                               (True, True, True), (True, False, False)):
+                with self.subTest(institution=institution, completed=completed, paid=paid):
+                    facts = {('STP', 'STP_ch_current', 'yes'): True,
+                             ('STP', 'has_capitulated', 'no'): True,
+                             ('STP', 'has_country_flag', f'STP_ch_{institution}_institution'): completed,
+                             ('STP', 'has_variable', f'STP_ch_train_{institution}_deposit'): paid}
+                    self.assertEqual(matches_conditions(block(decision, 'visible'), facts), expected)
+                    self.assertEqual(matches_conditions(block(decision, 'available'), facts),
+                                     not completed and not paid)
+
+    def test_chapter_pressure_actions_hide_when_the_threat_closes_but_show_resource_shortages(self):
+        decision = self.decisions['STP_ch_trade_delay']
+        for current in (False, True):
+            facts = {('STP', 'STP_ch_cold', 'yes'): True,
+                     ('STP', 'STP_ch_pressure_current', 'yes'): current}
+            self.assertEqual(matches_conditions(block(decision, 'visible'), facts), current)
+            self.assertFalse(matches_conditions(block(decision, 'custom_cost_trigger'), facts))
+            for institution in ('army', 'economy', 'party'):
+                facts[('STP', 'has_country_flag', f'STP_ch_{institution}_access')] = True
+                removal = self.decisions['STP_ch_remove_' + institution]
+                self.assertEqual(matches_conditions(block(removal, 'visible'), facts), current)
+        facts[('STP', 'has_country_flag', 'STP_ch_trade_delay_used')] = True
+        self.assertFalse(matches_conditions(block(decision, 'visible'), facts))
+
+    def test_chapter_summary_uses_three_paragraphs_in_both_languages(self):
+        for language in ('russian', 'english'):
+            path = ROOT / f'localisation/{language}/ADISCORD_STP_l_{language}.yml'
+            self.assertTrue(path.read_bytes().startswith(b'\xef\xbb\xbf'))
+            summary = localization(language)['STP_ch_chapters_desc']
+            paragraphs = summary.split(r'\n\n')
+            self.assertEqual(len(paragraphs), 3)
+            self.assertIn('[STPGetChapterFoundations]', paragraphs[0])
+            self.assertIn('[STPGetChapterNominee]', paragraphs[1])
+            self.assertIn('[?STP_ch_votes_5|1]', paragraphs[1])
+            self.assertIn('[STPGetChapterPressureTarget]', paragraphs[2])
+
     def test_pressure_affects_the_current_shipment_on_purchase(self):
         start = list(walk(block(self.decisions['STP_ps_val_pressure'], 'complete_effect')))
         self.assertIn('STP_ps_val_pressure_finish', [e.key for e in start])

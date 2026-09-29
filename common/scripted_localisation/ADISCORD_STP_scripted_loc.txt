@@ -950,7 +950,7 @@ defined_text = {
 		localization_key = STP_ch_nominee_5
 	}
 	text = {
-		localization_key = STP_ch_empty
+		localization_key = STP_ch_nominee_0
 	}
 }
 

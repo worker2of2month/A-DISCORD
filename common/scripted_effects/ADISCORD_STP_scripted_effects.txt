@@ -8829,7 +8829,7 @@ STP_ch_initialize = {
 		}
 		set_variable = {
 			var = STP_ch_nominee
-			value = 1
+			value = 0
 		}
 		set_variable = {
 			var = STP_ch_cooperation
@@ -10984,6 +10984,11 @@ STP_ch_select_ai_nominee = {
 	if = {
 		limit = {
 			is_ai = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		set_variable = {
 			var = STP_ch_nominee

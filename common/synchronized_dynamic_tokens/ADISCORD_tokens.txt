@@ -91,3 +91,8 @@ VAL_military_deadline
 
 STP_ch_crisis_deadline
 ADISCORD_economy_demobilization_deadline
+ADISCORD_fighter_archetype
+ADISCORD_cas_archetype
+ADISCORD_rocket_strike_archetype
+ADISCORD_bomber_archetype
+ADISCORD_naval_aircraft_archetype

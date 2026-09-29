@@ -8266,6 +8266,10 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_current = yes
 			has_capitulated = no
+			OR = {
+				has_variable = STP_ch_train_army_deposit
+				NOT = { has_country_flag = STP_ch_army_institution }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8358,7 +8362,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_ch_cold = yes
+			STP_ch_pressure_current = yes
 			has_country_flag = STP_ch_army_access
 		}
 		available = {
@@ -8409,6 +8413,10 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_current = yes
 			has_capitulated = no
+			OR = {
+				has_variable = STP_ch_train_economy_deposit
+				NOT = { has_country_flag = STP_ch_economy_institution }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8501,7 +8509,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_ch_cold = yes
+			STP_ch_pressure_current = yes
 			has_country_flag = STP_ch_economy_access
 		}
 		available = {
@@ -8552,6 +8560,10 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_current = yes
 			has_capitulated = no
+			OR = {
+				has_variable = STP_ch_train_party_deposit
+				NOT = { has_country_flag = STP_ch_party_institution }
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8644,7 +8656,7 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_ch_cold = yes
+			STP_ch_pressure_current = yes
 			has_country_flag = STP_ch_party_access
 		}
 		available = {
@@ -8693,7 +8705,10 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_ch_cold = yes
+			STP_ch_pressure_current = yes
+			NOT = {
+				has_country_flag = STP_ch_trade_delay_used
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8795,7 +8810,10 @@ STP_ch_chapters = {
 			tag = STP
 		}
 		visible = {
-			STP_ch_cold = yes
+			STP_ch_pressure_current = yes
+			NOT = {
+				has_country_flag = STP_ch_subject_pending
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8833,6 +8851,10 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_cold = yes
 			has_completed_focus = STP_pw_party_northern_contacts
+			STP_pw_party_northern_work_current = yes
+			NOT = {
+				has_country_flag = STP_ch_north_guarantees
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -8880,17 +8902,20 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_nominate_1_requirements
 				STP_ch_campaigning = yes
-				NOT = {
-					check_variable = {
-						var = STP_ch_nominee
-						value = 1
-						compare = equals
-					}
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = equals
 				}
 			}
 		}
@@ -8901,12 +8926,10 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
-						NOT = {
-							check_variable = {
-								var = STP_ch_nominee
-								value = 1
-								compare = equals
-							}
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = equals
 						}
 					}
 					set_variable = {
@@ -8927,17 +8950,20 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_nominate_2_requirements
 				STP_ch_campaigning = yes
-				NOT = {
-					check_variable = {
-						var = STP_ch_nominee
-						value = 2
-						compare = equals
-					}
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = equals
 				}
 			}
 		}
@@ -8948,12 +8974,10 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
-						NOT = {
-							check_variable = {
-								var = STP_ch_nominee
-								value = 2
-								compare = equals
-							}
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = equals
 						}
 					}
 					set_variable = {
@@ -8974,17 +8998,20 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_nominate_3_requirements
 				STP_ch_campaigning = yes
-				NOT = {
-					check_variable = {
-						var = STP_ch_nominee
-						value = 3
-						compare = equals
-					}
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = equals
 				}
 			}
 		}
@@ -8995,12 +9022,10 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
-						NOT = {
-							check_variable = {
-								var = STP_ch_nominee
-								value = 3
-								compare = equals
-							}
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = equals
 						}
 					}
 					set_variable = {
@@ -9021,17 +9046,20 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_nominate_4_requirements
 				STP_ch_campaigning = yes
-				NOT = {
-					check_variable = {
-						var = STP_ch_nominee
-						value = 4
-						compare = equals
-					}
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = equals
 				}
 			}
 		}
@@ -9042,12 +9070,10 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
-						NOT = {
-							check_variable = {
-								var = STP_ch_nominee
-								value = 4
-								compare = equals
-							}
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = equals
 						}
 					}
 					set_variable = {
@@ -9068,17 +9094,20 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_nominate_5_requirements
 				STP_ch_campaigning = yes
-				NOT = {
-					check_variable = {
-						var = STP_ch_nominee
-						value = 5
-						compare = equals
-					}
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = equals
 				}
 			}
 		}
@@ -9089,12 +9118,10 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
-						NOT = {
-							check_variable = {
-								var = STP_ch_nominee
-								value = 5
-								compare = equals
-							}
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = equals
 						}
 					}
 					set_variable = {
@@ -9115,14 +9142,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_conservatives
+			}
+			check_variable = {
+				var = STP_pf_conservatives_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_conservatives_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_conservatives
 				}
@@ -9146,6 +9188,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_conservatives
 						}
@@ -9252,14 +9299,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_borons
+			}
+			check_variable = {
+				var = STP_pf_borons_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_borons_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_borons
 				}
@@ -9283,6 +9345,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_borons
 						}
@@ -9389,14 +9456,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_security
+			}
+			check_variable = {
+				var = STP_pf_security_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_security_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_security
 				}
@@ -9420,6 +9502,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_security
 						}
@@ -9526,14 +9613,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_army
+			}
+			check_variable = {
+				var = STP_pf_army_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_army_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_army
 				}
@@ -9557,6 +9659,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_army
 						}
@@ -9664,14 +9771,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_advisers
+			}
+			check_variable = {
+				var = STP_pf_advisers_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_advisers_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_advisers
 				}
@@ -9695,6 +9817,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_advisers
 						}
@@ -9821,14 +9948,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_merchants
+			}
+			check_variable = {
+				var = STP_pf_merchants_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_merchants_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_merchants
 				}
@@ -9852,6 +9994,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_merchants
 						}
@@ -9979,14 +10126,29 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_campaigning = yes
+			check_variable = {
+				var = STP_ch_nominee
+				value = 0
+				compare = greater_than
+			}
 			NOT = {
 				has_variable = STP_ch_pledge_radicals
+			}
+			check_variable = {
+				var = STP_pf_radicals_support
+				value = 40
+				compare = greater_than_or_equals
 			}
 		}
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = STP_ch_pledge_radicals_requirements
 				STP_ch_campaigning = yes
+				check_variable = {
+					var = STP_ch_nominee
+					value = 0
+					compare = greater_than
+				}
 				NOT = {
 					has_variable = STP_ch_pledge_radicals
 				}
@@ -10010,6 +10172,11 @@ STP_ch_chapters = {
 				if = {
 					limit = {
 						STP_ch_campaigning = yes
+						check_variable = {
+							var = STP_ch_nominee
+							value = 0
+							compare = greater_than
+						}
 						NOT = {
 							has_variable = STP_ch_pledge_radicals
 						}
@@ -10594,6 +10761,14 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_protectorate = yes
 			has_completed_focus = STP_ch_model_ally
+			check_variable = {
+				var = STP_ch_cooperation
+				value = 3
+				compare = less_than
+			}
+			NOT = {
+				has_country_flag = STP_ch_cooperation_cooldown
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10736,6 +10911,13 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_protectorate = yes
 			has_completed_focus = STP_ch_local_apparatus
+			STP_ch_liberation_window = yes
+			NOT = {
+				has_country_flag = STP_ch_release_pending
+			}
+			NOT = {
+				has_country_flag = STP_ch_release_cooldown
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10806,6 +10988,7 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_protectorate = yes
+			STP_ch_liberation_window = yes
 			has_completed_focus = STP_ch_local_apparatus
 		}
 		available = {
@@ -10849,6 +11032,9 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_governing = yes
+			NOT = {
+				has_country_flag = STP_ch_supply_buffer
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10916,6 +11102,14 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_governing = yes
+			NOT = {
+				has_country_flag = STP_ch_civilian_control
+			}
+			check_variable = {
+				var = STP_pf_army_support
+				value = 45
+				compare = greater_than_or_equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -10975,6 +11169,14 @@ STP_ch_chapters = {
 		visible = {
 			STP_ch_governing = yes
 			has_country_flag = STP_ch_security_powers
+			NOT = {
+				has_country_flag = STP_ch_security_reviewed
+			}
+			check_variable = {
+				var = STP_pf_security_support
+				value = 45
+				compare = greater_than_or_equals
+			}
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -11035,6 +11237,9 @@ STP_ch_chapters = {
 		}
 		visible = {
 			STP_ch_governing = yes
+			NOT = {
+				has_country_flag = STP_ch_north_breach
+			}
 			has_country_flag = STP_ch_north_guarantees
 			NOD = {
 				is_subject_of = STP
@@ -11352,6 +11557,18 @@ STP_ch_chapters = {
 			}
 			NOT = {
 				has_country_flag = STP_ch_aid_received
+			}
+			NOT = {
+				has_country_flag = STP_ch_aid_pending
+			}
+			NOT = { has_country_flag = STP_ch_aid_cooldown }
+			NOD = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+			}
+			NOT = {
+				has_war_with = NOD
 			}
 		}
 		available = {
