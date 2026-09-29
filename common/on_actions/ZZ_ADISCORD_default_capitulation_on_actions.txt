@@ -165,7 +165,7 @@ on_actions = {
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
-						annex_country = { target = ROOT transfer_troops = yes }
+							annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
 					else_if = {
@@ -191,7 +191,7 @@ on_actions = {
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
-						annex_country = { target = ROOT transfer_troops = yes }
+							annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
 					else_if = {
@@ -208,7 +208,7 @@ on_actions = {
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
-						annex_country = { target = ROOT transfer_troops = yes }
+							annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
 					else_if = {
@@ -225,7 +225,7 @@ on_actions = {
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
-						annex_country = { target = ROOT transfer_troops = yes }
+							annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
 					else_if = {
@@ -242,7 +242,7 @@ on_actions = {
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
-						annex_country = { target = ROOT transfer_troops = yes }
+							annex_country = { target = ROOT transfer_troops = yes }
 						}
 					}
 					else_if = {

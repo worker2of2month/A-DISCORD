@@ -709,14 +709,14 @@ STP_cw_northern_opponent_defeated = {
 
 # NOD scope. The clock begins only after all northern opponents enter the war.
 NOD_cw_can_accept_northern_defeat = {
- tag = NOD
- check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
- has_capitulated = no
- has_war_with = YPR
- has_war_with = COF
- has_war_with = TFF
- NOT = { surrender_progress < 0.7 }
- has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
+	tag = NOD
+	check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+	has_capitulated = no
+	has_war_with = YPR
+	has_war_with = COF
+	has_war_with = TFF
+	NOT = { surrender_progress < 0.7 }
+	has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
 }
 
 # NOD: an AI ceasefire cannot supersede a military settlement or a player campaign.
@@ -812,20 +812,20 @@ STP_cw_northern_conference_won = {
 	22 = { STP_cw_northern_state_awarded_to_nod = yes }
 	14 = { STP_cw_northern_state_awarded_to_nod = yes }
 	OR = {
-        AND = {
-            STP_cw_frontier_awarded_to_nod = yes
-            TFF = { OR = { exists = no is_subject = no is_subject_of = NOD } }
-        }
-        AND = {
-            TFF = { exists = yes is_subject = no has_capitulated = no }
-            83 = { is_owned_by = TFF is_controlled_by = TFF }
-            84 = { is_owned_by = TFF is_controlled_by = TFF }
-            85 = { is_owned_by = TFF is_controlled_by = TFF }
-            86 = { is_owned_by = TFF is_controlled_by = TFF }
-            87 = { is_owned_by = TFF is_controlled_by = TFF }
-            303 = { is_owned_by = TFF is_controlled_by = TFF }
-        }
-    }
+		AND = {
+			STP_cw_frontier_awarded_to_nod = yes
+			TFF = { OR = { exists = no is_subject = no is_subject_of = NOD } }
+		}
+		AND = {
+			TFF = { exists = yes is_subject = no has_capitulated = no }
+			83 = { is_owned_by = TFF is_controlled_by = TFF }
+			84 = { is_owned_by = TFF is_controlled_by = TFF }
+			85 = { is_owned_by = TFF is_controlled_by = TFF }
+			86 = { is_owned_by = TFF is_controlled_by = TFF }
+			87 = { is_owned_by = TFF is_controlled_by = TFF }
+			303 = { is_owned_by = TFF is_controlled_by = TFF }
+		}
+	}
 }
 
 # YPR scope. Do not turn unrelated conquered territory into a new NOD dependency.
@@ -1413,20 +1413,20 @@ STP_uses_campaign_currency_scale = { OR = { tag = STP tag = STS tag = SRP } }
 
 # COUNTRY STP: faction politics persist through the party's war and reconstruction.
 STP_pf_active = {
- tag = STP
- exists = yes
- has_country_flag = STP_sided_with_the_party_flag
- NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+	tag = STP
+	exists = yes
+	has_country_flag = STP_sided_with_the_party_flag
+	NOT = { has_country_flag = STP_sided_with_Maksim_flag }
 }
 STP_pf_nod_contacts = {
- NOD = { exists = yes has_capitulated = no }
- NOT = { has_war_with = NOD }
- NOT = { has_completed_focus = STP_pw_party_sovereignty }
+	NOD = { exists = yes has_capitulated = no }
+	NOT = { has_war_with = NOD }
+	NOT = { has_completed_focus = STP_pw_party_sovereignty }
 }
 STP_pf_can_negotiate = {
- hidden_trigger = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
- has_capitulated = no
- custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
+	hidden_trigger = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+	has_capitulated = no
+	custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
 }
 
 # Party survival: country scope unless a province is explicitly named.
@@ -1551,43 +1551,43 @@ STP_ps_exile_formation_context = {
 
 # COUNTRY STP/STS. The victor gets a late route only while Kefreyt has not committed.
 STP_occidia_invasion_available = {
-    OR = { tag = STP tag = STS }
-    exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
-    has_country_flag = STP_cw_won_union_battle
-    has_global_flag = { flag = STP_cw_union_wars_finished days > 89 }
-    NOT = { has_idea = STP_cw_council_guarantees }
-    NOT = { has_idea = STP_cw_republican_charter }
-    NOT = { VAL = { OR = { has_country_flag = VAL_cw_mobilizing has_country_flag = VAL_cw_entered } } }
-    SRP = {
-        exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
-        NOT = { has_idea = STP_cw_council_guarantees }
-        NOT = { has_idea = STP_cw_republican_charter }
-    }
-    is_neighbor_of = SRP
+	OR = { tag = STP tag = STS }
+	exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
+	has_country_flag = STP_cw_won_union_battle
+	has_global_flag = { flag = STP_cw_union_wars_finished days > 89 }
+	NOT = { has_idea = STP_cw_council_guarantees }
+	NOT = { has_idea = STP_cw_republican_charter }
+	NOT = { VAL = { OR = { has_country_flag = VAL_cw_mobilizing has_country_flag = VAL_cw_entered } } }
+	SRP = {
+		exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
+		NOT = { has_idea = STP_cw_council_guarantees }
+		NOT = { has_idea = STP_cw_republican_charter }
+	}
+	is_neighbor_of = SRP
 }
 
 # COUNTRY attacker. Never annex land occupied by another participant or close its war.
 STP_occidia_victory_ready = {
-    has_war_with = SRP
-    has_country_flag = STP_occidia_campaign_active
-    has_capitulated = no is_subject = no
-    SRP = { exists = yes has_capitulated = yes is_subject = no }
-    OR = {
-        AND = {
-            tag = STP
-            SRP = {
-                NOT = { any_enemy_country = { NOT = { tag = STP } } }
-                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STP } } } }
-            }
-        }
-        AND = {
-            tag = STS
-            SRP = {
-                NOT = { any_enemy_country = { NOT = { tag = STS } } }
-                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STS } } } }
-            }
-        }
-    }
+	has_war_with = SRP
+	has_country_flag = STP_occidia_campaign_active
+	has_capitulated = no is_subject = no
+	SRP = { exists = yes has_capitulated = yes is_subject = no }
+	OR = {
+		AND = {
+			tag = STP
+			SRP = {
+				NOT = { any_enemy_country = { NOT = { tag = STP } } }
+				NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STP } } } }
+			}
+		}
+		AND = {
+			tag = STS
+			SRP = {
+				NOT = { any_enemy_country = { NOT = { tag = STS } } }
+				NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STS } } } }
+			}
+		}
+	}
 }
 
 # NOD: the paid preparation and the native war must name the same live opponent.
@@ -1716,26 +1716,26 @@ STP_pw_party_nod_threat_current = {
 
 # COUNTRY STP: reserve a full response chain plus one day before departure.
 STP_ps_val_intelligence_time_available = {
-    VAL = {
-        has_active_mission = STP_ps_val_departure
-        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
-    }
+	VAL = {
+		has_active_mission = STP_ps_val_departure
+		check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
+	}
 }
 STP_ps_val_intercept_time_available = {
-    VAL = {
-        has_active_mission = STP_ps_val_departure
-        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
-    }
+	VAL = {
+		has_active_mission = STP_ps_val_departure
+		check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
+	}
 }
 # COUNTRY STP: funding is not a purchase of automatic military intervention.
 STP_ps_nod_credit_useful = {
-    NOD = {
-        OR = {
-            STP_ps_northern_front_active = yes
-            NOD_cw_intervention_possible = yes
-            AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
-        }
-    }
+	NOD = {
+		OR = {
+			STP_ps_northern_front_active = yes
+			NOD_cw_intervention_possible = yes
+			AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
+		}
+	}
 }
 
 # COUNTRY: the same objective is evaluated for both civil-war participants.
@@ -1753,21 +1753,21 @@ STP_cw_fada_captured = {
 
 # COUNTRY with a state in FROM: integration follows a directly held core frontier.
 STP_pw_regional_integration_target_valid = {
-    OR = { tag = STP tag = STS }
-    STP_pw_can_reconstruct = yes
-    is_subject = no
-    has_war = no
-    has_completed_focus = STP_pw_regional_citizenship
-    FROM = {
-        is_owned_by = ROOT
-        is_controlled_by = ROOT
-        NOT = { is_core_of = ROOT }
-        any_neighbor_state = {
-            is_owned_by = ROOT
-            is_controlled_by = ROOT
-            is_core_of = ROOT
-        }
-    }
+	OR = { tag = STP tag = STS }
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_war = no
+	has_completed_focus = STP_pw_regional_citizenship
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		NOT = { is_core_of = ROOT }
+		any_neighbor_state = {
+			is_owned_by = ROOT
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+		}
+	}
 }
 
 # Playable staffing: original cabinet and civil-war commanders are unchanged.

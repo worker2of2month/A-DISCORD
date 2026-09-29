@@ -1989,7 +1989,7 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 		completion_reward = {
 			add_political_power = 35
- custom_effect_tooltip = STP_ps_northern_agreement_tt hidden_effect = { STP_ps_request_northern_agreement = yes } }
+			custom_effect_tooltip = STP_ps_northern_agreement_tt hidden_effect = { STP_ps_request_northern_agreement = yes } }
 	}
 
 
@@ -2089,7 +2089,7 @@ focus_tree = {
 				STP_cw_refresh_army_modifier = yes
 			}
 			custom_effect_tooltip = STP_party_staff_retained_tt
-   add_war_support = 0.02 }
+			add_war_support = 0.02 }
 	}
 
 
@@ -2173,7 +2173,7 @@ focus_tree = {
 			custom_effect_tooltip = STP_ps_val_intercept_unlock_summary_tt
 			unlock_decision_tooltip = STP_ps_val_pressure
 			custom_effect_tooltip = STP_ps_val_pressure_unlock_summary_tt
-}
+		}
 	}
 
 }

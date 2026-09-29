@@ -213,7 +213,7 @@ ideas = {
 			modifier = { army_org_regain = -0.10 planning_speed = -0.10 }
 		}
 
-# --- civil_war_ideas ---
+		# --- civil_war_ideas ---
 		SRP_council_authority = {
 			picture = ADISCORD_law_civic_local_councils
 			allowed = { tag = SRP }
@@ -786,7 +786,7 @@ ideas = {
 		STP_pc_lib_independent_gov_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { ADISCORD_economy_admin_expense_factor = -0.05 production_speed_buildings_factor = 0.05 } }
 
 
-# --- starting_ideas ---
+		# --- starting_ideas ---
 		STP_hedonism_with_no_bondaries = {
 
 			allowed = {
@@ -941,7 +941,7 @@ ideas = {
 			modifier = { army_attack_factor = 0.20 army_org_factor = 0.15 army_org_regain = 0.10 planning_speed = 0.25 breakthrough_factor = 0.15 supply_consumption_factor = -0.15 war_support_factor = 0.15 }
 		}
 
-# --- end ---
+		# --- end ---
 
 		STP_pw_economy_count_the_cost_delta = {
 			name = STP_pw_republic_dynamic

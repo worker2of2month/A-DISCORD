@@ -2127,15 +2127,15 @@ country_event = {
 
 # The side flags and forced focus completion must settle before recalculating offsets.
 country_event = {
-    id = ADISCORD_STP_preparation.26
-    hidden = yes
-    is_triggered_only = yes
-    trigger = {
-        tag = STP
-        NOT = { has_global_flag = STP_cw_started }
-        OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
-    }
-    immediate = { mark_focus_tree_layout_dirty = yes }
+	id = ADISCORD_STP_preparation.26
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = STP
+		NOT = { has_global_flag = STP_cw_started }
+		OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
+	}
+	immediate = { mark_focus_tree_layout_dirty = yes }
 }
 
 # ROOT must be the losing party for the shared civil-war settlement.
@@ -2168,10 +2168,10 @@ country_event = {
 
 # A single deferred read after a peace, annexation or territorial callback.
 country_event = {
-    id = ADISCORD_STP_cw.206
-    hidden = yes
-    is_triggered_only = yes
-    immediate = { STP_cw_reconcile_scripted_peace = yes }
+	id = ADISCORD_STP_cw.206
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { STP_cw_reconcile_scripted_peace = yes }
 }
 
 # Party postwar settlement: appointments, command and reconstruction contracts.

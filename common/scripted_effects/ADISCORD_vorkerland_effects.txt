@@ -505,68 +505,68 @@ ADISCORD_vorkerland_remove_dirty_state_modifier = {
 }
 
 ADISCORD_vorkerland_apply_dirty_modifiers = {
-    23 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    24 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    49 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    51 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    57 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    125 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    152 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    153 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    154 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    155 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    165 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    166 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    167 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    168 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    169 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    171 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    172 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    173 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    176 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    177 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    178 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    180 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    181 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    182 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    183 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    184 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    185 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    187 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    188 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    189 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    190 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    191 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    192 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    193 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    203 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    204 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    205 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    206 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    207 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    208 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    209 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    210 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    211 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    212 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    213 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    214 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    215 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    216 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    217 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    219 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    220 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    221 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    222 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
-    224 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	23 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	24 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	49 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	51 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	57 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	125 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	152 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	153 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	154 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	155 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	165 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	166 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	167 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	168 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	169 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	171 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	172 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	173 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	176 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	177 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	178 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	180 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	181 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	182 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	183 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	184 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	185 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	187 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	188 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	189 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	190 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	191 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	192 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	193 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	203 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	204 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	205 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	206 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	207 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	208 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	209 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	210 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	211 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	212 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	213 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	214 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	215 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	216 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	217 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	219 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	220 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	221 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	222 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	224 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 }
 
 ADISCORD_vorkerland_apply_dirty_state_modifier = {
-    if = {
-        limit = {
-            NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
-        }
-        add_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state } }
+		}
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
 	}
 }
 
@@ -858,8 +858,8 @@ ADISCORD_vorkerland_sync_unity_tower_visual = {
 	# Shared actor 610040. Create it from the landmark state so a later WRK
 	# annex cannot drop it. Destroy first: same-id replace is not reliable.
 	# min_zoom 2000 is the authored strategic-haze threshold for this actor.
-		40 = {
-			destroy_entity = 610040
+	40 = {
+		destroy_entity = 610040
 		if = {
 			limit = { has_global_flag = ADISCORD_vorkerland_unity_tower_restored }
 			create_entity = {
@@ -4182,18 +4182,18 @@ ADISCORD_superevent_enqueue = {
 		limit = {
 			NOT = { is_in_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request } }
 			NOT = { OR = {
-				AND = { check_variable = { ADISCORD_superevent_request = 1 } has_global_flag = superevent_vorkerland_civilwar }
-				AND = { check_variable = { ADISCORD_superevent_request = 2 } has_global_flag = superevent_vorkerland_dirty_opening }
-				AND = { check_variable = { ADISCORD_superevent_request = 3 } has_global_flag = superevent_vorkerland_worker_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 4 } has_global_flag = superevent_vorkerland_utilitarian_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 5 } has_global_flag = superevent_vorkerland_vlad_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 6 } has_global_flag = superevent_vorkerland_dorian_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 7 } has_global_flag = superevent_stelander_empire }
-				AND = { check_variable = { ADISCORD_superevent_request = 8 } has_global_flag = superevent_stelander_party_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 9 } has_global_flag = superevent_stelander_shabrat_victory }
-				AND = { check_variable = { ADISCORD_superevent_request = 10 } has_global_flag = superevent_nam_resource_war }
-				AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
-				AND = { check_variable = { ADISCORD_superevent_request = 12 } has_global_flag = superevent_val_commonwealth }
+					AND = { check_variable = { ADISCORD_superevent_request = 1 } has_global_flag = superevent_vorkerland_civilwar }
+					AND = { check_variable = { ADISCORD_superevent_request = 2 } has_global_flag = superevent_vorkerland_dirty_opening }
+					AND = { check_variable = { ADISCORD_superevent_request = 3 } has_global_flag = superevent_vorkerland_worker_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 4 } has_global_flag = superevent_vorkerland_utilitarian_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 5 } has_global_flag = superevent_vorkerland_vlad_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 6 } has_global_flag = superevent_vorkerland_dorian_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 7 } has_global_flag = superevent_stelander_empire }
+					AND = { check_variable = { ADISCORD_superevent_request = 8 } has_global_flag = superevent_stelander_party_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 9 } has_global_flag = superevent_stelander_shabrat_victory }
+					AND = { check_variable = { ADISCORD_superevent_request = 10 } has_global_flag = superevent_nam_resource_war }
+					AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
+					AND = { check_variable = { ADISCORD_superevent_request = 12 } has_global_flag = superevent_val_commonwealth }
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4206,18 +4206,18 @@ ADISCORD_superevent_dispatch_next = {
 		limit = {
 			check_variable = { var = global.ADISCORD_superevent_queue^num value = 0 compare = greater_than }
 			NOT = { OR = {
-				has_global_flag = superevent_vorkerland_civilwar
-				has_global_flag = superevent_vorkerland_dirty_opening
-				has_global_flag = superevent_vorkerland_worker_victory
-				has_global_flag = superevent_vorkerland_utilitarian_victory
-				has_global_flag = superevent_vorkerland_vlad_victory
-				has_global_flag = superevent_vorkerland_dorian_victory
-				has_global_flag = superevent_stelander_empire
-				has_global_flag = superevent_stelander_party_victory
-				has_global_flag = superevent_stelander_shabrat_victory
-				has_global_flag = superevent_nam_resource_war
-				has_global_flag = superevent_rus_last_empire
-				has_global_flag = superevent_val_commonwealth
+					has_global_flag = superevent_vorkerland_civilwar
+					has_global_flag = superevent_vorkerland_dirty_opening
+					has_global_flag = superevent_vorkerland_worker_victory
+					has_global_flag = superevent_vorkerland_utilitarian_victory
+					has_global_flag = superevent_vorkerland_vlad_victory
+					has_global_flag = superevent_vorkerland_dorian_victory
+					has_global_flag = superevent_stelander_empire
+					has_global_flag = superevent_stelander_party_victory
+					has_global_flag = superevent_stelander_shabrat_victory
+					has_global_flag = superevent_nam_resource_war
+					has_global_flag = superevent_rus_last_empire
+					has_global_flag = superevent_val_commonwealth
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -10373,45 +10373,45 @@ ADISCORD_vorkerland_show_last_empire_superevent = {
 # scan per day, only while a presentation is overdue. No request-country or
 # client-local state is used, so annexation and mixed human sessions stay safe.
 ADISCORD_superevent_observer_tick = {
-    # on_daily is country-scoped, so claim the once-per-day global guard before
-    # evaluating presentation ages. Without this, every country evaluates the
-    # full timeout OR on quiet days when no superevent is overdue.
-    if = {
-        limit = {
-            NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }
-        }
-        set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }
-        if = {
-            limit = {
-                OR = {
-                    has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }
-                    has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 }
-                    has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 }
-                    has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 }
-                    has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 }
-                    has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 }
-                    has_global_flag = { flag = superevent_stelander_empire days > 6 }
-                    has_global_flag = { flag = superevent_stelander_party_victory days > 6 }
-                    has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 }
-                    has_global_flag = { flag = superevent_nam_resource_war days > 6 }
-                    has_global_flag = { flag = superevent_rus_last_empire days > 6 }
-                    has_global_flag = { flag = superevent_val_commonwealth days > 6 }
-                }
-                NOT = { any_country = { is_ai = no } }
-            }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 } } clr_global_flag = superevent_vorkerland_civilwar }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 } } clr_global_flag = superevent_vorkerland_dirty_opening }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 } } clr_global_flag = superevent_vorkerland_worker_victory }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 } } clr_global_flag = superevent_vorkerland_utilitarian_victory }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 } } clr_global_flag = superevent_vorkerland_vlad_victory }
-            if = { limit = { has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 } } clr_global_flag = superevent_vorkerland_dorian_victory }
-            if = { limit = { has_global_flag = { flag = superevent_stelander_empire days > 6 } } clr_global_flag = superevent_stelander_empire }
-            if = { limit = { has_global_flag = { flag = superevent_stelander_party_victory days > 6 } } clr_global_flag = superevent_stelander_party_victory }
-            if = { limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 } } clr_global_flag = superevent_stelander_shabrat_victory }
-            if = { limit = { has_global_flag = { flag = superevent_nam_resource_war days > 6 } } clr_global_flag = superevent_nam_resource_war }
-            if = { limit = { has_global_flag = { flag = superevent_rus_last_empire days > 6 } } clr_global_flag = superevent_rus_last_empire }
-            if = { limit = { has_global_flag = { flag = superevent_val_commonwealth days > 6 } } clr_global_flag = superevent_val_commonwealth }
-            ADISCORD_superevent_dispatch_next = yes
-        }
-    }
+	# on_daily is country-scoped, so claim the once-per-day global guard before
+	# evaluating presentation ages. Without this, every country evaluates the
+	# full timeout OR on quiet days when no superevent is overdue.
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }
+		}
+		set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }
+		if = {
+			limit = {
+				OR = {
+					has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 }
+					has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 }
+					has_global_flag = { flag = superevent_stelander_empire days > 6 }
+					has_global_flag = { flag = superevent_stelander_party_victory days > 6 }
+					has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 }
+					has_global_flag = { flag = superevent_nam_resource_war days > 6 }
+					has_global_flag = { flag = superevent_rus_last_empire days > 6 }
+					has_global_flag = { flag = superevent_val_commonwealth days > 6 }
+				}
+				NOT = { any_country = { is_ai = no } }
+			}
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 } } clr_global_flag = superevent_vorkerland_civilwar }
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_dirty_opening days > 6 } } clr_global_flag = superevent_vorkerland_dirty_opening }
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_worker_victory days > 6 } } clr_global_flag = superevent_vorkerland_worker_victory }
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_utilitarian_victory days > 6 } } clr_global_flag = superevent_vorkerland_utilitarian_victory }
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_vlad_victory days > 6 } } clr_global_flag = superevent_vorkerland_vlad_victory }
+			if = { limit = { has_global_flag = { flag = superevent_vorkerland_dorian_victory days > 6 } } clr_global_flag = superevent_vorkerland_dorian_victory }
+			if = { limit = { has_global_flag = { flag = superevent_stelander_empire days > 6 } } clr_global_flag = superevent_stelander_empire }
+			if = { limit = { has_global_flag = { flag = superevent_stelander_party_victory days > 6 } } clr_global_flag = superevent_stelander_party_victory }
+			if = { limit = { has_global_flag = { flag = superevent_stelander_shabrat_victory days > 6 } } clr_global_flag = superevent_stelander_shabrat_victory }
+			if = { limit = { has_global_flag = { flag = superevent_nam_resource_war days > 6 } } clr_global_flag = superevent_nam_resource_war }
+			if = { limit = { has_global_flag = { flag = superevent_rus_last_empire days > 6 } } clr_global_flag = superevent_rus_last_empire }
+			if = { limit = { has_global_flag = { flag = superevent_val_commonwealth days > 6 } } clr_global_flag = superevent_val_commonwealth }
+			ADISCORD_superevent_dispatch_next = yes
+		}
+	}
 }

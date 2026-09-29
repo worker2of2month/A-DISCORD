@@ -2266,11 +2266,11 @@ STP_cw_pay_assault_division = {
 		set_temp_variable = { var = STP_cw_payment_anti_air_equipment value = 20 }
 		every_possible_country = {
 			limit = { PREV = { OR = {
-				check_variable = { var = STP_cw_payment_infantry_equipment value = 0 compare = greater_than }
-				check_variable = { var = STP_cw_payment_ADISCORD_squad_weapons_equipment value = 0 compare = greater_than }
-				check_variable = { var = STP_cw_payment_support_equipment value = 0 compare = greater_than }
-				check_variable = { var = STP_cw_payment_artillery_equipment value = 0 compare = greater_than }
-				check_variable = { var = STP_cw_payment_anti_air_equipment value = 0 compare = greater_than }
+						check_variable = { var = STP_cw_payment_infantry_equipment value = 0 compare = greater_than }
+						check_variable = { var = STP_cw_payment_ADISCORD_squad_weapons_equipment value = 0 compare = greater_than }
+						check_variable = { var = STP_cw_payment_support_equipment value = 0 compare = greater_than }
+						check_variable = { var = STP_cw_payment_artillery_equipment value = 0 compare = greater_than }
+						check_variable = { var = STP_cw_payment_anti_air_equipment value = 0 compare = greater_than }
 			} } }
 			PREV = {
 				if = {
@@ -5738,107 +5738,107 @@ STP_pf_refresh_programs = {
 	set_variable = { var = STP_pf_conservatives_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_civil_records
-			check_variable = { var = STP_pf_finishing_program value = 1 compare = equals }
+				has_completed_focus = STP_pw_party_civil_records
+				check_variable = { var = STP_pf_finishing_program value = 1 compare = equals }
 		} }
 		set_variable = { var = STP_pf_conservatives_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_civil_charter
-			check_variable = { var = STP_pf_finishing_program value = 2 compare = equals }
+				has_completed_focus = STP_pw_party_civil_charter
+				check_variable = { var = STP_pf_finishing_program value = 2 compare = equals }
 		} }
 		set_variable = { var = STP_pf_conservatives_program value = 2 }
 	}
 	set_variable = { var = STP_pf_borons_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_party_district_charters
-			check_variable = { var = STP_pf_finishing_program value = 3 compare = equals }
+				has_completed_focus = STP_party_district_charters
+				check_variable = { var = STP_pf_finishing_program value = 3 compare = equals }
 		} }
 		set_variable = { var = STP_pf_borons_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_district_congress
-			check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
+				has_completed_focus = STP_pw_party_district_congress
+				check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
 		} }
 		set_variable = { var = STP_pf_borons_program value = 2 }
 	}
 	set_variable = { var = STP_pf_security_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_party_personnel_commissions
-			check_variable = { var = STP_pf_finishing_program value = 5 compare = equals }
+				has_completed_focus = STP_party_personnel_commissions
+				check_variable = { var = STP_pf_finishing_program value = 5 compare = equals }
 		} }
 		set_variable = { var = STP_pf_security_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_executive_secretariat
-			check_variable = { var = STP_pf_finishing_program value = 6 compare = equals }
+				has_completed_focus = STP_pw_party_executive_secretariat
+				check_variable = { var = STP_pf_finishing_program value = 6 compare = equals }
 		} }
 		set_variable = { var = STP_pf_security_program value = 2 }
 	}
 	set_variable = { var = STP_pf_army_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_officer_school
-			check_variable = { var = STP_pf_finishing_program value = 7 compare = equals }
+				has_completed_focus = STP_pw_party_officer_school
+				check_variable = { var = STP_pf_finishing_program value = 7 compare = equals }
 		} }
 		set_variable = { var = STP_pf_army_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_field_staff
-			check_variable = { var = STP_pf_finishing_program value = 8 compare = equals }
-			has_completed_focus = STP_pw_party_fortress_corps
-			check_variable = { var = STP_pf_finishing_program value = 9 compare = equals }
+				has_completed_focus = STP_pw_party_field_staff
+				check_variable = { var = STP_pf_finishing_program value = 8 compare = equals }
+				has_completed_focus = STP_pw_party_fortress_corps
+				check_variable = { var = STP_pf_finishing_program value = 9 compare = equals }
 		} }
 		set_variable = { var = STP_pf_army_program value = 2 }
 	}
 	set_variable = { var = STP_pf_advisers_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_nod_military_mission
-			check_variable = { var = STP_pf_finishing_program value = 10 compare = equals }
+				has_completed_focus = STP_pw_party_nod_military_mission
+				check_variable = { var = STP_pf_finishing_program value = 10 compare = equals }
 		} }
 		set_variable = { var = STP_pf_advisers_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_joint_defence_board
-			check_variable = { var = STP_pf_finishing_program value = 11 compare = equals }
+				has_completed_focus = STP_pw_party_joint_defence_board
+				check_variable = { var = STP_pf_finishing_program value = 11 compare = equals }
 		} }
 		set_variable = { var = STP_pf_advisers_program value = 2 }
 	}
 	set_variable = { var = STP_pf_merchants_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_party_port_contracts
-			check_variable = { var = STP_pf_finishing_program value = 12 compare = equals }
+				has_completed_focus = STP_party_port_contracts
+				check_variable = { var = STP_pf_finishing_program value = 12 compare = equals }
 		} }
 		set_variable = { var = STP_pf_merchants_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_commercial_recovery
-			check_variable = { var = STP_pf_finishing_program value = 13 compare = equals }
+				has_completed_focus = STP_pw_party_commercial_recovery
+				check_variable = { var = STP_pf_finishing_program value = 13 compare = equals }
 		} }
 		set_variable = { var = STP_pf_merchants_program value = 2 }
 	}
 	set_variable = { var = STP_pf_radicals_program value = 0 }
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_open_settlement
-			check_variable = { var = STP_pf_finishing_program value = 14 compare = equals }
+				has_completed_focus = STP_pw_party_open_settlement
+				check_variable = { var = STP_pf_finishing_program value = 14 compare = equals }
 		} }
 		set_variable = { var = STP_pf_radicals_program value = 1 }
 	}
 	if = {
 		limit = { OR = {
-			has_completed_focus = STP_pw_party_district_congress
-			check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
+				has_completed_focus = STP_pw_party_district_congress
+				check_variable = { var = STP_pf_finishing_program value = 4 compare = equals }
 		} }
 		set_variable = { var = STP_pf_radicals_program value = 2 }
 	}
@@ -6389,7 +6389,7 @@ STP_pw_party_launch_nod_invasion = {
 			}
 			else = {
 				clr_country_flag = STP_pw_party_nod_threat_active
-			clr_country_flag = STP_pw_party_compact_pending
+				clr_country_flag = STP_pw_party_compact_pending
 				set_country_flag = STP_pw_party_nod_invasion_active
 				NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
 				if = {
@@ -6432,25 +6432,25 @@ STP_pw_party_settle_nod_invasion_defeat = {
 	}
 	else = {
 		if = {
-				limit = {
-					tag = STP
-					has_country_flag = STP_pw_party_nod_invasion_active
-					NOD = { exists = yes has_war_with = STP }
-				}
-				NOD = {
-					if = { limit = { has_war_with = STP } white_peace = STP }
-					remove_ideas = STP_pw_nod_invasion_mandate
-					add_war_support = -0.10
-				}
-				clr_country_flag = STP_pw_party_nod_threat_active
-					clr_country_flag = STP_pw_party_compact_pending
-				clr_country_flag = STP_pw_party_nod_invasion_active
-				set_country_flag = STP_pw_party_nod_invasion_defeated
-				add_stability = 0.08
-				add_political_power = 100
-				mark_focus_tree_layout_dirty = yes
-				country_event = { id = ADISCORD_STP_pc.30 hours = 1 }
+			limit = {
+				tag = STP
+				has_country_flag = STP_pw_party_nod_invasion_active
+				NOD = { exists = yes has_war_with = STP }
 			}
+			NOD = {
+				if = { limit = { has_war_with = STP } white_peace = STP }
+				remove_ideas = STP_pw_nod_invasion_mandate
+				add_war_support = -0.10
+			}
+			clr_country_flag = STP_pw_party_nod_threat_active
+			clr_country_flag = STP_pw_party_compact_pending
+			clr_country_flag = STP_pw_party_nod_invasion_active
+			set_country_flag = STP_pw_party_nod_invasion_defeated
+			add_stability = 0.08
+			add_political_power = 100
+			mark_focus_tree_layout_dirty = yes
+			country_event = { id = ADISCORD_STP_pc.30 hours = 1 }
+		}
 	}
 }
 
@@ -6490,27 +6490,27 @@ STP_pw_party_settle_nod_invasion_victory = {
 	}
 	else = {
 		if = {
-				limit = {
-					tag = NOD
-					STP = {
-						exists = yes
-						has_country_flag = STP_pw_party_nod_invasion_active
-						has_war_with = NOD
-					}
-				}
-				remove_ideas = STP_pw_nod_invasion_mandate
-				set_country_flag = STP_pw_party_invasion_victorious
-				STP = { STP_close_competing_ultimatum_wars_after_defeat = yes }
-				if = { limit = { has_war_with = STP } white_peace = STP }
+			limit = {
+				tag = NOD
 				STP = {
-					clr_country_flag = STP_pw_party_nod_threat_active
-					clr_country_flag = STP_pw_party_compact_pending
-					clr_country_flag = STP_pw_party_nod_invasion_active
-					set_country_flag = STP_pw_party_nod_invasion_lost
-					STP_pw_party_clear_constitution = yes
+					exists = yes
+					has_country_flag = STP_pw_party_nod_invasion_active
+					has_war_with = NOD
 				}
-				annex_country = { target = STP transfer_troops = yes }
 			}
+			remove_ideas = STP_pw_nod_invasion_mandate
+			set_country_flag = STP_pw_party_invasion_victorious
+			STP = { STP_close_competing_ultimatum_wars_after_defeat = yes }
+			if = { limit = { has_war_with = STP } white_peace = STP }
+			STP = {
+				clr_country_flag = STP_pw_party_nod_threat_active
+				clr_country_flag = STP_pw_party_compact_pending
+				clr_country_flag = STP_pw_party_nod_invasion_active
+				set_country_flag = STP_pw_party_nod_invasion_lost
+				STP_pw_party_clear_constitution = yes
+			}
+			annex_country = { target = STP transfer_troops = yes }
+		}
 	}
 }
 
@@ -6953,11 +6953,11 @@ STP_ps_clear_nod_receipt = {
 }
 STP_ps_refund_nod = {
 	if = { limit = {
-            OR = {
-                check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals }
-                check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals }
-            }
-        }
+			OR = {
+				check_variable = { var = STP_ps_nod_receipt_stage value = 1 compare = equals }
+				check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals }
+			}
+		}
 		set_temp_variable = { var = STP_ps_refund value = STP_ps_nod_receipt_money }
 		set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type }
 		STP_ps_clear_nod_receipt = yes
@@ -6983,40 +6983,40 @@ STP_ps_dispatch_nod = {
 }
 STP_ps_deliver_nod = {
 	if = {
-        limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals } }
-        if = {
-            limit = { STP_ps_nod_order_current = yes }
-set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type }
-		STP_ps_clear_nod_receipt = yes
-		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } } set_country_flag = { flag = STP_ps_fund_nod_cooldown value = 1 days = 42 } }
-		if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } } set_country_flag = { flag = STP_ps_arm_nod_cooldown value = 1 days = 28 } }
-		if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes } }
-			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } }
-				NOD = {
-					ADISCORD_economy_initialize_country = yes
-					add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
-					add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
-					set_country_flag = STP_ps_nod_procurement_credit
-					ADISCORD_economy_mark_dirty = yes
+		limit = { check_variable = { var = STP_ps_nod_receipt_stage value = 2 compare = equals } }
+		if = {
+			limit = { STP_ps_nod_order_current = yes }
+			set_temp_variable = { var = STP_ps_receipt_type value = STP_ps_nod_receipt_type }
+			STP_ps_clear_nod_receipt = yes
+			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } } set_country_flag = { flag = STP_ps_fund_nod_cooldown value = 1 days = 42 } }
+			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } } set_country_flag = { flag = STP_ps_arm_nod_cooldown value = 1 days = 28 } }
+			if = { limit = { NOD = { STP_ps_nod_can_host_exiles = yes } }
+				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 1 compare = equals } }
+					NOD = {
+						ADISCORD_economy_initialize_country = yes
+						add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
+						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1500 }
+						set_country_flag = STP_ps_nod_procurement_credit
+						ADISCORD_economy_mark_dirty = yes
+					}
 				}
-			}
-			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
-				NOD = {
-					add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
-					add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
-					add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 2 compare = equals } }
+					NOD = {
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 }
+						add_equipment_to_stockpile = { type = artillery_equipment amount = 100 }
+						add_equipment_to_stockpile = { type = support_equipment amount = 60 }
+					}
 				}
-			}
-			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 3 compare = equals } NOD = { STP_ps_northern_front_active = yes } }
-				NOD = { add_timed_idea = { idea = STP_ps_engineers_idea days = 60 } }
-			}
-			if = { limit = { check_variable = { var = STP_ps_receipt_type value = 4 compare = equals } NOD = { OR = { NOD_cw_intervention_possible = yes AND = { has_country_flag = NOD_cw_entered has_war_with = STS } } } }
-				NOD = { set_country_flag = STP_ps_expedition_ready STP_ps_apply_expedition = yes }
+				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 3 compare = equals } NOD = { STP_ps_northern_front_active = yes } }
+					NOD = { add_timed_idea = { idea = STP_ps_engineers_idea days = 60 } }
+				}
+				if = { limit = { check_variable = { var = STP_ps_receipt_type value = 4 compare = equals } NOD = { OR = { NOD_cw_intervention_possible = yes AND = { has_country_flag = NOD_cw_entered has_war_with = STS } } } }
+					NOD = { set_country_flag = STP_ps_expedition_ready STP_ps_apply_expedition = yes }
+				}
 			}
 		}
-        }
-        else = { STP_ps_refund_nod = yes }
-    }
+		else = { STP_ps_refund_nod = yes }
+	}
 }
 STP_ps_apply_expedition = {
 	if = { limit = { has_country_flag = STP_ps_expedition_ready has_country_flag = NOD_cw_entered has_war_with = STS }
@@ -7122,7 +7122,7 @@ STP_ps_accept_exile = {
 		STP = { if = { limit = { STP_ps_hedersett_available = yes }
 				STP_rufus_hedersett = { remove_country_leader_role = { ideology = aristocratic_hedonism } }
 				set_nationality = { character = STP_rufus_hedersett target_country = NOD }
-			} }
+		} }
 		mark_focus_tree_layout_dirty = yes
 		country_event = { id = ADISCORD_STP_cw.202 }
 	}
@@ -7506,12 +7506,12 @@ STP_ps_val_pressure_finish = {
 
 			set_country_flag = { flag = STP_ps_val_pressure_cooldown value = 1 days = 60 }
 			VAL = {
-                set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 }
-                if = {
-                    limit = { has_active_mission = STP_ps_val_departure }
-                    add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 }
-                }
-            }
+				set_country_flag = { flag = STP_ps_val_pressure_active value = 1 days = 60 }
+				if = {
+					limit = { has_active_mission = STP_ps_val_departure }
+					add_days_mission_timeout = { mission = STP_ps_val_departure days = 14 }
+				}
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_val_pressure_refund = yes }
@@ -7673,7 +7673,7 @@ STP_ps_refund_district = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = STP_ps_refund }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = STP_ps_refund }
 				ADISCORD_economy_mark_dirty = yes
-			} }
+		} }
 	}
 }
 
@@ -7982,37 +7982,37 @@ STP_pw_party_reconcile_northern_campaign = {
 
 # --- occidia_reintegration ---
 STP_occidia_start_campaign = {
-    if = {
-        limit = { has_country_flag = STP_occidia_preparing STP_occidia_invasion_available = yes }
-        set_country_flag = STP_occidia_campaign_active
-        clr_country_flag = STP_occidia_preparing
-        SRP = { remove_mission = STP_occidia_invasion_warning }
-        declare_war_on = { target = SRP type = annex_everything }
-    }
-    else = { STP_occidia_cancel_preparation = yes }
+	if = {
+		limit = { has_country_flag = STP_occidia_preparing STP_occidia_invasion_available = yes }
+		set_country_flag = STP_occidia_campaign_active
+		clr_country_flag = STP_occidia_preparing
+		SRP = { remove_mission = STP_occidia_invasion_warning }
+		declare_war_on = { target = SRP type = annex_everything }
+	}
+	else = { STP_occidia_cancel_preparation = yes }
 }
 
 STP_occidia_cancel_preparation = {
-    clr_country_flag = STP_occidia_preparing
-    SRP = { remove_mission = STP_occidia_invasion_warning }
+	clr_country_flag = STP_occidia_preparing
+	SRP = { remove_mission = STP_occidia_invasion_warning }
 }
 
 STP_occidia_settle_victory = {
-    if = {
-        limit = { STP_occidia_victory_ready = yes }
-        clr_country_flag = STP_occidia_campaign_active
-        SRP = { STP_cw_finish_mobilization = yes remove_mission = STP_occidia_invasion_warning }
-        annex_country = { target = SRP transfer_troops = no }
-        ADISCORD_economy_mark_dirty = yes
-    }
+	if = {
+		limit = { STP_occidia_victory_ready = yes }
+		clr_country_flag = STP_occidia_campaign_active
+		SRP = { STP_cw_finish_mobilization = yes remove_mission = STP_occidia_invasion_warning }
+		annex_country = { target = SRP transfer_troops = no }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # A peace imposed elsewhere or the attacker's defeat closes this campaign too.
 STP_occidia_reconcile_peace = {
-    if = {
-        limit = { has_country_flag = STP_occidia_campaign_active NOT = { has_war_with = SRP } }
-        clr_country_flag = STP_occidia_campaign_active
-    }
+	if = {
+		limit = { has_country_flag = STP_occidia_campaign_active NOT = { has_war_with = SRP } }
+		clr_country_flag = STP_occidia_campaign_active
+	}
 }
 
 

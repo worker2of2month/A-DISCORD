@@ -2365,7 +2365,7 @@ ADISCORD_vorkerland_prepare_WKR_SOL = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_sol_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SOL value = 100 }
 }
@@ -2381,7 +2381,7 @@ ADISCORD_vorkerland_prepare_SOL_WKR = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_sol_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
 }
@@ -2397,7 +2397,7 @@ ADISCORD_vorkerland_prepare_WKR_SRA = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_sra_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = SRA value = 100 }
 }
@@ -2413,7 +2413,7 @@ ADISCORD_vorkerland_prepare_SRA_WKR = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_sra_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
 }
@@ -2429,7 +2429,7 @@ ADISCORD_vorkerland_prepare_WKR_CSL = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_csl_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = CSL value = 100 }
 }
@@ -2445,7 +2445,7 @@ ADISCORD_vorkerland_prepare_CSL_WKR = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_sol_restoration_pending }
 			ADISCORD_vorkerland_wkr_has_solyarino_intervention_border = yes
 			ADISCORD_vorkerland_wkr_valid_csl_target = yes
-		} }
+	} }
 	abort_when_not_enabled = yes
 	ai_strategy = { type = prepare_for_war id = WKR value = 100 }
 }

@@ -29,116 +29,116 @@ defined_text = {
 
 
 defined_text = {
-    name = VALGetFrontierPhase
-    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } localization_key = VAL_FRONTIER_AWAITING }
-    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } localization_key = VAL_FRONTIER_PREPARING }
-    text = { trigger = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } } localization_key = VAL_FRONTIER_FIGHTING }
-    text = { localization_key = VAL_FRONTIER_IDLE }
+	name = VALGetFrontierPhase
+	text = { trigger = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } localization_key = VAL_FRONTIER_AWAITING }
+	text = { trigger = { check_variable = { var = VAL_frontier_stage value = 2 compare = equals } } localization_key = VAL_FRONTIER_PREPARING }
+	text = { trigger = { check_variable = { var = VAL_frontier_stage value = 3 compare = equals } } localization_key = VAL_FRONTIER_FIGHTING }
+	text = { localization_key = VAL_FRONTIER_IDLE }
 }
 defined_text = {
-    name = VALGetFrontierTarget
-    text = { trigger = { VAL_frontier_idle = yes } localization_key = VAL_FRONTIER_NO_TARGET }
-    text = { trigger = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } localization_key = VAL_FRONTIER_CIN }
-    text = { trigger = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } localization_key = VAL_FRONTIER_OSF }
-    text = { trigger = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } localization_key = VAL_FRONTIER_APH }
-    text = { trigger = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } localization_key = VAL_FRONTIER_ERT }
-    text = { localization_key = VAL_FRONTIER_NO_TARGET }
+	name = VALGetFrontierTarget
+	text = { trigger = { VAL_frontier_idle = yes } localization_key = VAL_FRONTIER_NO_TARGET }
+	text = { trigger = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } localization_key = VAL_FRONTIER_CIN }
+	text = { trigger = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } localization_key = VAL_FRONTIER_OSF }
+	text = { trigger = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } localization_key = VAL_FRONTIER_APH }
+	text = { trigger = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } localization_key = VAL_FRONTIER_ERT }
+	text = { localization_key = VAL_FRONTIER_NO_TARGET }
 }
 defined_text = {
-    name = VALGetFrontierCINStatus
-    text = { trigger = { CIN = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = {
-    	trigger = {
-    		OR = {
-    			CIN = {
-    				exists = no
-    			}
-    			CIN = {
-    				has_country_flag = VAL_frontier_defeated
-    				capital_scope = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    			AND = {
-    				58 = {
-    					is_controlled_by = VAL
-    				}
-    				59 = {
-    					is_controlled_by = VAL
-    				}
-    				60 = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    		}
-    	}
-    	localization_key = VAL_FRONTIER_DEFEATED
-    }
-    text = { trigger = { CIN = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
-    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+	name = VALGetFrontierCINStatus
+	text = { trigger = { CIN = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+	text = {
+		trigger = {
+			OR = {
+				CIN = {
+					exists = no
+				}
+				CIN = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						is_controlled_by = VAL
+					}
+				}
+				AND = {
+					58 = {
+						is_controlled_by = VAL
+					}
+					59 = {
+						is_controlled_by = VAL
+					}
+					60 = {
+						is_controlled_by = VAL
+					}
+				}
+			}
+		}
+		localization_key = VAL_FRONTIER_DEFEATED
+	}
+	text = { trigger = { CIN = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+	text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
 defined_text = {
-    name = VALGetFrontierOSFStatus
-    text = { trigger = { OSF = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = {
-    	trigger = {
-    		OR = {
-    			OSF = {
-    				exists = no
-    			}
-    			OSF = {
-    				has_country_flag = VAL_frontier_defeated
-    				capital_scope = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    			AND = {
-    				61 = {
-    					is_controlled_by = VAL
-    				}
-    				62 = {
-    					is_controlled_by = VAL
-    				}
-    				63 = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    		}
-    	}
-    	localization_key = VAL_FRONTIER_DEFEATED
-    }
-    text = { trigger = { OSF = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
-    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+	name = VALGetFrontierOSFStatus
+	text = { trigger = { OSF = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+	text = {
+		trigger = {
+			OR = {
+				OSF = {
+					exists = no
+				}
+				OSF = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						is_controlled_by = VAL
+					}
+				}
+				AND = {
+					61 = {
+						is_controlled_by = VAL
+					}
+					62 = {
+						is_controlled_by = VAL
+					}
+					63 = {
+						is_controlled_by = VAL
+					}
+				}
+			}
+		}
+		localization_key = VAL_FRONTIER_DEFEATED
+	}
+	text = { trigger = { OSF = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+	text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
 defined_text = {
-    name = VALGetFrontierAPHStatus
-    text = { trigger = { APH = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
-    text = {
-    	trigger = {
-    		OR = {
-    			APH = {
-    				exists = no
-    			}
-    			APH = {
-    				has_country_flag = VAL_frontier_defeated
-    				capital_scope = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    			AND = {
-    				64 = {
-    					is_controlled_by = VAL
-    				}
-    				65 = {
-    					is_controlled_by = VAL
-    				}
-    			}
-    		}
-    	}
-    	localization_key = VAL_FRONTIER_DEFEATED
-    }
-    text = { trigger = { APH = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
-    text = { localization_key = VAL_FRONTIER_MOBILIZING }
+	name = VALGetFrontierAPHStatus
+	text = { trigger = { APH = { NOT = { has_country_flag = VAL_frontier_member } } } localization_key = VAL_FRONTIER_NOT_MEMBER }
+	text = {
+		trigger = {
+			OR = {
+				APH = {
+					exists = no
+				}
+				APH = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						is_controlled_by = VAL
+					}
+				}
+				AND = {
+					64 = {
+						is_controlled_by = VAL
+					}
+					65 = {
+						is_controlled_by = VAL
+					}
+				}
+			}
+		}
+		localization_key = VAL_FRONTIER_DEFEATED
+	}
+	text = { trigger = { APH = { has_war_with = VAL } } localization_key = VAL_FRONTIER_RESISTING }
+	text = { localization_key = VAL_FRONTIER_MOBILIZING }
 }
 
 defined_text = {
@@ -351,573 +351,573 @@ defined_text = {
 }
 
 defined_text = {
- name = VALMilitaryGoal
- text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 1 compare = equals } } } localization_key = VAL_military_goal_1 }
- text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 2 compare = equals } } } localization_key = VAL_military_goal_2 }
- text = { localization_key = VAL_military_goal_3 }
+	name = VALMilitaryGoal
+	text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 1 compare = equals } } } localization_key = VAL_military_goal_1 }
+	text = { trigger = { VAL = { check_variable = { var = VAL_military_goal value = 2 compare = equals } } } localization_key = VAL_military_goal_2 }
+	text = { localization_key = VAL_military_goal_3 }
 }
 
 defined_text = {
- name = VALTradeOccidiaUpgrade
- text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_upgraded }
- text = { localization_key = VAL_trade_not_upgraded }
+	name = VALTradeOccidiaUpgrade
+	text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_upgraded }
+	text = { localization_key = VAL_trade_not_upgraded }
 }
 defined_text = {
- name = VALTradeWestUpgrade
- text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_upgraded }
- text = { localization_key = VAL_trade_not_upgraded }
+	name = VALTradeWestUpgrade
+	text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_upgraded }
+	text = { localization_key = VAL_trade_not_upgraded }
 }
 defined_text = {
- name = VALTradeStelanderUpgrade
- text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_upgraded }
- text = { localization_key = VAL_trade_not_upgraded }
+	name = VALTradeStelanderUpgrade
+	text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_upgraded }
+	text = { localization_key = VAL_trade_not_upgraded }
 }
 defined_text = {
- name = VALTradeVorkerlandUpgrade
- text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_upgraded }
- text = { localization_key = VAL_trade_not_upgraded }
-}
-
-defined_text = {
- name = VALMenuPartnerName
- text = { trigger = { has_event_target = VAL_contract_partner } localization_key = VAL_menu_partner_named }
- text = { localization_key = VAL_menu_partner_selected }
-}
-
-
-defined_text = {
- name = VALMarketQuoteIncome
- text = { trigger = { event_target:VAL_contract_partner = { tag = CIN } } localization_key = VAL_market_quote_5 }
- text = { trigger = { event_target:VAL_contract_partner = { tag = OSF } } localization_key = VAL_market_quote_8 }
- text = { trigger = { event_target:VAL_contract_partner = { tag = APH } } localization_key = VAL_market_quote_2 }
- text = { trigger = { event_target:VAL_contract_partner = { tag = COF } } localization_key = VAL_market_quote_10 }
- text = { trigger = { event_target:VAL_contract_partner = { tag = TFF } } localization_key = VAL_market_quote_12 }
- text = { trigger = { event_target:VAL_contract_partner = { tag = YPR } } localization_key = VAL_market_quote_15 }
- text = { localization_key = VAL_market_quote_none }
+	name = VALTradeVorkerlandUpgrade
+	text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_upgraded }
+	text = { localization_key = VAL_trade_not_upgraded }
 }
 
 defined_text = {
- name = VALOrderMenuStatus
- text = { trigger = { has_political_power < 100 } localization_key = VAL_quarterly_need_pp }
- text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_quarterly_supply_active } } localization_key = VAL_quarterly_already_signed }
- text = { trigger = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } } localization_key = VAL_orders_locked_focus }
- text = { trigger = { event_target:VAL_contract_partner = { OR = { tag = NAM tag = EFL } } } localization_key = VAL_orders_no_destination }
- text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_valid = yes } } } localization_key = VAL_orders_invalid_partner }
- text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_route_open = yes } } } localization_key = VAL_orders_closed_route }
- text = { trigger = { NOT = { VAL_order_debts_settled = yes } } localization_key = VAL_orders_refund_first }
- text = { trigger = { NOT = { VAL_order_slot_free = yes } } localization_key = VAL_orders_no_slot }
- text = { trigger = { NOT = { VAL_partner_desk_free = yes } } localization_key = VAL_orders_pending_reply }
- text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_partner_contact_cooldown } } localization_key = VAL_orders_cooldown }
- text = { localization_key = VAL_orders_ready }
+	name = VALMenuPartnerName
+	text = { trigger = { has_event_target = VAL_contract_partner } localization_key = VAL_menu_partner_named }
+	text = { localization_key = VAL_menu_partner_selected }
+}
+
+
+defined_text = {
+	name = VALMarketQuoteIncome
+	text = { trigger = { event_target:VAL_contract_partner = { tag = CIN } } localization_key = VAL_market_quote_5 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = OSF } } localization_key = VAL_market_quote_8 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = APH } } localization_key = VAL_market_quote_2 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = COF } } localization_key = VAL_market_quote_10 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = TFF } } localization_key = VAL_market_quote_12 }
+	text = { trigger = { event_target:VAL_contract_partner = { tag = YPR } } localization_key = VAL_market_quote_15 }
+	text = { localization_key = VAL_market_quote_none }
 }
 
 defined_text = {
- name = VALOrder1Cycle
- text = { trigger = { NOT = { has_country_flag = VAL_order_1_quarterly } } localization_key = VAL_order_1_legacy_cycle }
- text = { trigger = { has_country_flag = VAL_order_1_quarter_paid } localization_key = VAL_order_1_paid_cycle }
- text = { trigger = { has_country_flag = VAL_order_1_grace_used } localization_key = VAL_order_1_grace_cycle }
- text = { localization_key = VAL_order_1_active_cycle }
+	name = VALOrderMenuStatus
+	text = { trigger = { has_political_power < 100 } localization_key = VAL_quarterly_need_pp }
+	text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_quarterly_supply_active } } localization_key = VAL_quarterly_already_signed }
+	text = { trigger = { NOT = { has_completed_focus = VAL_Foreign_Broker_Licences } } localization_key = VAL_orders_locked_focus }
+	text = { trigger = { event_target:VAL_contract_partner = { OR = { tag = NAM tag = EFL } } } localization_key = VAL_orders_no_destination }
+	text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_valid = yes } } } localization_key = VAL_orders_invalid_partner }
+	text = { trigger = { event_target:VAL_contract_partner = { NOT = { VAL_order_partner_route_open = yes } } } localization_key = VAL_orders_closed_route }
+	text = { trigger = { NOT = { VAL_order_debts_settled = yes } } localization_key = VAL_orders_refund_first }
+	text = { trigger = { NOT = { VAL_order_slot_free = yes } } localization_key = VAL_orders_no_slot }
+	text = { trigger = { NOT = { VAL_partner_desk_free = yes } } localization_key = VAL_orders_pending_reply }
+	text = { trigger = { event_target:VAL_contract_partner = { has_country_flag = VAL_partner_contact_cooldown } } localization_key = VAL_orders_cooldown }
+	text = { localization_key = VAL_orders_ready }
 }
 
 defined_text = {
- name = VALOrder2Cycle
- text = { trigger = { NOT = { has_country_flag = VAL_order_2_quarterly } } localization_key = VAL_order_2_legacy_cycle }
- text = { trigger = { has_country_flag = VAL_order_2_quarter_paid } localization_key = VAL_order_2_paid_cycle }
- text = { trigger = { has_country_flag = VAL_order_2_grace_used } localization_key = VAL_order_2_grace_cycle }
- text = { localization_key = VAL_order_2_active_cycle }
+	name = VALOrder1Cycle
+	text = { trigger = { NOT = { has_country_flag = VAL_order_1_quarterly } } localization_key = VAL_order_1_legacy_cycle }
+	text = { trigger = { has_country_flag = VAL_order_1_quarter_paid } localization_key = VAL_order_1_paid_cycle }
+	text = { trigger = { has_country_flag = VAL_order_1_grace_used } localization_key = VAL_order_1_grace_cycle }
+	text = { localization_key = VAL_order_1_active_cycle }
 }
 
 defined_text = {
- name = VALOrderOfferArmsTerms
- text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arms_desc }
- text = { localization_key = VAL_order_offer_arms_legacy_desc }
+	name = VALOrder2Cycle
+	text = { trigger = { NOT = { has_country_flag = VAL_order_2_quarterly } } localization_key = VAL_order_2_legacy_cycle }
+	text = { trigger = { has_country_flag = VAL_order_2_quarter_paid } localization_key = VAL_order_2_paid_cycle }
+	text = { trigger = { has_country_flag = VAL_order_2_grace_used } localization_key = VAL_order_2_grace_cycle }
+	text = { localization_key = VAL_order_2_active_cycle }
 }
 
 defined_text = {
- name = VALOrderOfferBulkTerms
- text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_bulk_desc }
- text = { localization_key = VAL_order_offer_bulk_legacy_desc }
+	name = VALOrderOfferArmsTerms
+	text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arms_desc }
+	text = { localization_key = VAL_order_offer_arms_legacy_desc }
 }
 
 defined_text = {
- name = VALOrderOfferArsenalTerms
- text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arsenal_desc }
- text = { localization_key = VAL_order_offer_arsenal_legacy_desc }
+	name = VALOrderOfferBulkTerms
+	text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_bulk_desc }
+	text = { localization_key = VAL_order_offer_bulk_legacy_desc }
 }
 
 defined_text = {
- name = VALOrderOfferStrategicTerms
- text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_strategic_desc }
- text = { localization_key = VAL_order_offer_strategic_legacy_desc }
+	name = VALOrderOfferArsenalTerms
+	text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_arsenal_desc }
+	text = { localization_key = VAL_order_offer_arsenal_legacy_desc }
 }
 
 defined_text = {
- name = VALOfferStatus_VAL_negotiate_efl_metals
- text = {
- 	trigger = {
- 		NOT = {
- 			event_target:VAL_contract_partner = {
- 				tag = EFL
- 			}
- 			has_completed_focus = VAL_Resource_War_Contracts
- 			VAL_efl_concession_negotiable = yes
- 			NOT = {
- 				has_political_power < 50
- 			}
- 			NOT = {
- 				has_country_flag = VAL_efl_concession_offer_pending
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_blocked_concessions
- }
- text = { localization_key = VAL_offer_status_clear }
+	name = VALOrderOfferStrategicTerms
+	text = { trigger = { has_country_flag = VAL_quarterly_offer } localization_key = VAL_order_offer_strategic_desc }
+	text = { localization_key = VAL_order_offer_strategic_legacy_desc }
 }
 
 defined_text = {
- name = VALOfferStatus_VAL_negotiate_nam_metals
- text = {
- 	trigger = {
- 		NOT = {
- 			event_target:VAL_contract_partner = {
- 				tag = NAM
- 			}
- 			has_completed_focus = VAL_Resource_War_Contracts
- 			VAL_nam_concession_negotiable = yes
- 			NOT = {
- 				has_political_power < 50
- 			}
- 			NOT = {
- 				has_country_flag = VAL_nam_concession_offer_pending
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_blocked_concessions
- }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_menu_advisors
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
-  NOT = { has_political_power < 30 } NOT = { command_power < 25 }
-  NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
-  NOT = { has_country_flag = VAL_military_offer_pending }
-  VAL_partner_desk_free = yes
-event_target:VAL_contract_partner = {
-	VAL_export_customer = yes
-	has_war = yes
-	ADISCORD_economy_can_spend_100 = yes
-	NOT = {
-		has_idea = VAL_paid_military_advisors
+	name = VALOfferStatus_VAL_negotiate_efl_metals
+	text = {
+		trigger = {
+			NOT = {
+				event_target:VAL_contract_partner = {
+					tag = EFL
+				}
+				has_completed_focus = VAL_Resource_War_Contracts
+				VAL_efl_concession_negotiable = yes
+				NOT = {
+					has_political_power < 50
+				}
+				NOT = {
+					has_country_flag = VAL_efl_concession_offer_pending
+				}
+			}
+		}
+		localization_key = VAL_offer_blocked_concessions
 	}
-	NOT = {
-		has_country_flag = VAL_export_customer_cooldown
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_negotiate_nam_metals
+	text = {
+		trigger = {
+			NOT = {
+				event_target:VAL_contract_partner = {
+					tag = NAM
+				}
+				has_completed_focus = VAL_Resource_War_Contracts
+				VAL_nam_concession_negotiable = yes
+				NOT = {
+					has_political_power < 50
+				}
+				NOT = {
+					has_country_flag = VAL_nam_concession_offer_pending
+				}
+			}
+		}
+		localization_key = VAL_offer_blocked_concessions
 	}
-}
-}
-}
-localization_key = VAL_offer_blocked_advisors
-}
- text = { localization_key = VAL_offer_status_clear }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferStatus_VAL_military_offer_3
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_offer_order_strategic
- text = { trigger = {  NOT = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_offer_order_arsenal
- text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_partner_strategic
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_partner_arsenal
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_offer_transit_charter
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_blocked_reply }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_partner_hire
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_blocked_hire }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-
-
-defined_text = {
- name = VALOfferStatus_VAL_military_offer_2
- text = {
- 	trigger = {
- 		NOT = {
- 			has_completed_focus = VAL_Contingency_Ledgers
- 			event_target:VAL_contract_partner = {
- 				VAL_military_customer_eligible = yes
- 				any_owned_state = {
- 					NOT = {
- 						is_controlled_by = event_target:VAL_contract_partner
- 					}
- 					controller = {
- 						has_war_with = event_target:VAL_contract_partner
- 					}
- 				}
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_blocked_military
- }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_military_offer_1
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_offer_order_bulk
- text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_offer_order_arms
- text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_partner_bulk
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferStatus_VAL_partner_arms
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
- text = { localization_key = VAL_offer_status_clear }
-}
-
-defined_text = {
- name = VALOfferButton_VAL_negotiate_efl_metals
- text = {
- 	trigger = {
- 		NOT = {
- 			event_target:VAL_contract_partner = {
- 				tag = EFL
- 			}
- 			has_completed_focus = VAL_Resource_War_Contracts
- 			VAL_efl_concession_negotiable = yes
- 			NOT = {
- 				has_political_power < 50
- 			}
- 			NOT = {
- 				has_country_flag = VAL_efl_concession_offer_pending
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_negotiate_efl_metals
- }
- text = { localization_key = VAL_negotiate_efl_metals }
-}
-
-defined_text = {
- name = VALOfferButton_VAL_negotiate_nam_metals
- text = {
- 	trigger = {
- 		NOT = {
- 			event_target:VAL_contract_partner = {
- 				tag = NAM
- 			}
- 			has_completed_focus = VAL_Resource_War_Contracts
- 			VAL_nam_concession_negotiable = yes
- 			NOT = {
- 				has_political_power < 50
- 			}
- 			NOT = {
- 				has_country_flag = VAL_nam_concession_offer_pending
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_negotiate_nam_metals
- }
- text = { localization_key = VAL_negotiate_nam_metals }
-}
-
-defined_text = {
- name = VALOfferButton_VAL_menu_advisors
- text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
-  NOT = { has_political_power < 30 } NOT = { command_power < 25 }
-  NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
-  NOT = { has_country_flag = VAL_military_offer_pending }
-  VAL_partner_desk_free = yes
-event_target:VAL_contract_partner = {
-	VAL_export_customer = yes
-	has_war = yes
-	ADISCORD_economy_can_spend_100 = yes
-	NOT = {
-		has_idea = VAL_paid_military_advisors
+	name = VALOfferStatus_VAL_menu_advisors
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
+				NOT = { has_political_power < 30 } NOT = { command_power < 25 }
+				NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+				NOT = { has_country_flag = VAL_military_offer_pending }
+				VAL_partner_desk_free = yes
+				event_target:VAL_contract_partner = {
+					VAL_export_customer = yes
+					has_war = yes
+					ADISCORD_economy_can_spend_100 = yes
+					NOT = {
+						has_idea = VAL_paid_military_advisors
+					}
+					NOT = {
+						has_country_flag = VAL_export_customer_cooldown
+					}
+				}
+			}
+		}
+		localization_key = VAL_offer_blocked_advisors
 	}
-	NOT = {
-		has_country_flag = VAL_export_customer_cooldown
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_military_offer_3
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_offer_order_strategic
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_offer_order_arsenal
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_partner_strategic
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_partner_arsenal
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_offer_transit_charter
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_blocked_reply }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+defined_text = {
+	name = VALOfferStatus_VAL_partner_hire
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_blocked_hire }
+	text = { localization_key = VAL_offer_status_clear }
+}
+
+
+
+defined_text = {
+	name = VALOfferStatus_VAL_military_offer_2
+	text = {
+		trigger = {
+			NOT = {
+				has_completed_focus = VAL_Contingency_Ledgers
+				event_target:VAL_contract_partner = {
+					VAL_military_customer_eligible = yes
+					any_owned_state = {
+						NOT = {
+							is_controlled_by = event_target:VAL_contract_partner
+						}
+						controller = {
+							has_war_with = event_target:VAL_contract_partner
+						}
+					}
+				}
+			}
+		}
+		localization_key = VAL_offer_blocked_military
 	}
-}
-}
-}
-localization_key = VAL_offer_button_blocked_VAL_menu_advisors
-}
- text = { localization_key = VAL_menu_advisors }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_military_offer_3
- text = {
- 	trigger = {
- 		NOT = {
- 			has_completed_focus = VAL_Contingency_Ledgers
- 			event_target:VAL_contract_partner = {
- 				VAL_military_customer_eligible = yes
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_military_offer_3
- }
- text = { localization_key = VAL_military_offer_3 }
+	name = VALOfferStatus_VAL_military_offer_1
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers event_target:VAL_contract_partner = { VAL_military_customer_eligible = yes  } }  } localization_key = VAL_offer_blocked_military }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_offer_order_strategic
- text = {
- 	trigger = {
- 		NOT = {
- 			has_completed_focus = VAL_Strategic_Arms_Exports
- 			event_target:VAL_contract_partner = {
- 				VAL_order_can_offer = yes
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_offer_order_strategic
- }
- text = { localization_key = VAL_offer_order_strategic }
+	name = VALOfferStatus_VAL_offer_order_bulk
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_offer_order_arsenal
- text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arsenal }
- text = { localization_key = VAL_offer_order_arsenal }
+	name = VALOfferStatus_VAL_offer_order_arms
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_blocked_orders }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_partner_strategic
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_strategic }
- text = { localization_key = VAL_partner_strategic }
+	name = VALOfferStatus_VAL_partner_bulk
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_partner_arsenal
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arsenal }
- text = { localization_key = VAL_partner_arsenal }
+	name = VALOfferStatus_VAL_partner_arms
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_blocked_weapons }
+	text = { localization_key = VAL_offer_status_clear }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_offer_transit_charter
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_transit_charter }
- text = { localization_key = VAL_offer_transit_charter }
+	name = VALOfferButton_VAL_negotiate_efl_metals
+	text = {
+		trigger = {
+			NOT = {
+				event_target:VAL_contract_partner = {
+					tag = EFL
+				}
+				has_completed_focus = VAL_Resource_War_Contracts
+				VAL_efl_concession_negotiable = yes
+				NOT = {
+					has_political_power < 50
+				}
+				NOT = {
+					has_country_flag = VAL_efl_concession_offer_pending
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_negotiate_efl_metals
+	}
+	text = { localization_key = VAL_negotiate_efl_metals }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_partner_hire
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_hire }
- text = { localization_key = VAL_partner_hire }
+	name = VALOfferButton_VAL_negotiate_nam_metals
+	text = {
+		trigger = {
+			NOT = {
+				event_target:VAL_contract_partner = {
+					tag = NAM
+				}
+				has_completed_focus = VAL_Resource_War_Contracts
+				VAL_nam_concession_negotiable = yes
+				NOT = {
+					has_political_power < 50
+				}
+				NOT = {
+					has_country_flag = VAL_nam_concession_offer_pending
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_negotiate_nam_metals
+	}
+	text = { localization_key = VAL_negotiate_nam_metals }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_menu_advisors
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Contingency_Ledgers
+				NOT = { has_political_power < 30 } NOT = { command_power < 25 }
+				NOT = { has_idea = VAL_advisors_income } NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
+				NOT = { has_country_flag = VAL_military_offer_pending }
+				VAL_partner_desk_free = yes
+				event_target:VAL_contract_partner = {
+					VAL_export_customer = yes
+					has_war = yes
+					ADISCORD_economy_can_spend_100 = yes
+					NOT = {
+						has_idea = VAL_paid_military_advisors
+					}
+					NOT = {
+						has_country_flag = VAL_export_customer_cooldown
+					}
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_menu_advisors
+	}
+	text = { localization_key = VAL_menu_advisors }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_military_offer_3
+	text = {
+		trigger = {
+			NOT = {
+				has_completed_focus = VAL_Contingency_Ledgers
+				event_target:VAL_contract_partner = {
+					VAL_military_customer_eligible = yes
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_military_offer_3
+	}
+	text = { localization_key = VAL_military_offer_3 }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_offer_order_strategic
+	text = {
+		trigger = {
+			NOT = {
+				has_completed_focus = VAL_Strategic_Arms_Exports
+				event_target:VAL_contract_partner = {
+					VAL_order_can_offer = yes
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_offer_order_strategic
+	}
+	text = { localization_key = VAL_offer_order_strategic }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_offer_order_arsenal
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arsenal }
+	text = { localization_key = VAL_offer_order_arsenal }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_partner_strategic
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_strategic }
+	text = { localization_key = VAL_partner_strategic }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_partner_arsenal
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arsenal }
+	text = { localization_key = VAL_partner_arsenal }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_offer_transit_charter
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_transit_charter }
+	text = { localization_key = VAL_offer_transit_charter }
+}
+
+defined_text = {
+	name = VALOfferButton_VAL_partner_hire
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_hire }
+	text = { localization_key = VAL_partner_hire }
 }
 
 
 
 defined_text = {
- name = VALOfferButton_VAL_military_offer_2
- text = {
- 	trigger = {
- 		NOT = {
- 			has_completed_focus = VAL_Contingency_Ledgers
- 			event_target:VAL_contract_partner = {
- 				VAL_military_customer_eligible = yes
- 				any_owned_state = {
- 					NOT = {
- 						is_controlled_by = event_target:VAL_contract_partner
- 					}
- 					controller = {
- 						has_war_with = event_target:VAL_contract_partner
- 					}
- 				}
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_military_offer_2
- }
- text = { localization_key = VAL_military_offer_2 }
+	name = VALOfferButton_VAL_military_offer_2
+	text = {
+		trigger = {
+			NOT = {
+				has_completed_focus = VAL_Contingency_Ledgers
+				event_target:VAL_contract_partner = {
+					VAL_military_customer_eligible = yes
+					any_owned_state = {
+						NOT = {
+							is_controlled_by = event_target:VAL_contract_partner
+						}
+						controller = {
+							has_war_with = event_target:VAL_contract_partner
+						}
+					}
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_military_offer_2
+	}
+	text = { localization_key = VAL_military_offer_2 }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_military_offer_1
- text = {
- 	trigger = {
- 		NOT = {
- 			has_completed_focus = VAL_Contingency_Ledgers
- 			event_target:VAL_contract_partner = {
- 				VAL_military_customer_eligible = yes
- 			}
- 		}
- 	}
- 	localization_key = VAL_offer_button_blocked_VAL_military_offer_1
- }
- text = { localization_key = VAL_military_offer_1 }
+	name = VALOfferButton_VAL_military_offer_1
+	text = {
+		trigger = {
+			NOT = {
+				has_completed_focus = VAL_Contingency_Ledgers
+				event_target:VAL_contract_partner = {
+					VAL_military_customer_eligible = yes
+				}
+			}
+		}
+		localization_key = VAL_offer_button_blocked_VAL_military_offer_1
+	}
+	text = { localization_key = VAL_military_offer_1 }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_offer_order_bulk
- text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_bulk }
- text = { localization_key = VAL_offer_order_bulk }
+	name = VALOfferButton_VAL_offer_order_bulk
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_bulk }
+	text = { localization_key = VAL_offer_order_bulk }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_offer_order_arms
- text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arms }
- text = { localization_key = VAL_offer_order_arms }
+	name = VALOfferButton_VAL_offer_order_arms
+	text = { trigger = {  NOT = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_offer_order_arms }
+	text = { localization_key = VAL_offer_order_arms }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_partner_bulk
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_bulk }
- text = { localization_key = VAL_partner_bulk }
+	name = VALOfferButton_VAL_partner_bulk
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_bulk }
+	text = { localization_key = VAL_partner_bulk }
 }
 
 defined_text = {
- name = VALOfferButton_VAL_partner_arms
- text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arms }
- text = { localization_key = VAL_partner_arms }
+	name = VALOfferButton_VAL_partner_arms
+	text = { trigger = {  NOT = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }  } localization_key = VAL_offer_button_blocked_VAL_partner_arms }
+	text = { localization_key = VAL_partner_arms }
 }
 
 defined_text = {
- name = VALTradeDecisionIncome
- text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_market_quote_5 }
- text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_market_quote_8 }
- text = { trigger = { FROM = { tag = APH } } localization_key = VAL_market_quote_2 }
- text = { trigger = { FROM = { tag = COF } } localization_key = VAL_market_quote_10 }
- text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_market_quote_12 }
- text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_market_quote_15 }
- text = { localization_key = VAL_market_quote_none }
+	name = VALTradeDecisionIncome
+	text = { trigger = { FROM = { tag = CIN } } localization_key = VAL_market_quote_5 }
+	text = { trigger = { FROM = { tag = OSF } } localization_key = VAL_market_quote_8 }
+	text = { trigger = { FROM = { tag = APH } } localization_key = VAL_market_quote_2 }
+	text = { trigger = { FROM = { tag = COF } } localization_key = VAL_market_quote_10 }
+	text = { trigger = { FROM = { tag = TFF } } localization_key = VAL_market_quote_12 }
+	text = { trigger = { FROM = { tag = YPR } } localization_key = VAL_market_quote_15 }
+	text = { localization_key = VAL_market_quote_none }
 }
 
 defined_text = {
- name = VALTradeFeeTerms
- text = { trigger = { has_country_flag = VAL_trade_fee_paid } localization_key = VAL_trade_fee_prepaid }
- text = { localization_key = VAL_trade_fee_legacy }
+	name = VALTradeFeeTerms
+	text = { trigger = { has_country_flag = VAL_trade_fee_paid } localization_key = VAL_trade_fee_prepaid }
+	text = { localization_key = VAL_trade_fee_legacy }
 }
 
 defined_text = {
- name = VALHireDecisionPeople
- text = { localization_key = VAL_hire_value_5000 }
+	name = VALHireDecisionPeople
+	text = { localization_key = VAL_hire_value_5000 }
 }
 
 defined_text = {
- name = VALHireDecisionPrice
- text = { localization_key = VAL_hire_value_500 }
+	name = VALHireDecisionPrice
+	text = { localization_key = VAL_hire_value_500 }
 }
 
 defined_text = {
- name = VALTradeOccidiaIncome
- text = { trigger = { VAL_trade_route_occidia_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_income_upgraded }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeOccidiaIncome
+	text = { trigger = { VAL_trade_route_occidia_open = no } localization_key = VAL_trade_income_zero }
+	text = { trigger = { has_country_flag = VAL_route_occidia_upgraded } localization_key = VAL_trade_income_upgraded }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 defined_text = {
- name = VALTradeWestIncome
- text = { trigger = { VAL_trade_route_west_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_income_upgraded }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeWestIncome
+	text = { trigger = { VAL_trade_route_west_open = no } localization_key = VAL_trade_income_zero }
+	text = { trigger = { has_country_flag = VAL_route_west_upgraded } localization_key = VAL_trade_income_upgraded }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 defined_text = {
- name = VALTradeStelanderIncome
- text = { trigger = { VAL_trade_route_stelander_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_income_upgraded }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeStelanderIncome
+	text = { trigger = { VAL_trade_route_stelander_open = no } localization_key = VAL_trade_income_zero }
+	text = { trigger = { has_country_flag = VAL_route_stelander_upgraded } localization_key = VAL_trade_income_upgraded }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 defined_text = {
- name = VALTradeVorkerlandIncome
- text = { trigger = { VAL_trade_route_vorkerland_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_income_upgraded }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeVorkerlandIncome
+	text = { trigger = { VAL_trade_route_vorkerland_open = no } localization_key = VAL_trade_income_zero }
+	text = { trigger = { has_country_flag = VAL_route_vorkerland_upgraded } localization_key = VAL_trade_income_upgraded }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 defined_text = {
- name = VALTradeBaseNetIncome
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_75 }
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_50 }
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_25 }
- text = { localization_key = VAL_trade_net_base_0 }
+	name = VALTradeBaseNetIncome
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_75 }
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_50 }
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_base_25 }
+	text = { localization_key = VAL_trade_net_base_0 }
 }
 
 defined_text = {
- name = VALTradeUpgradedNetIncome
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_75 }
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_50 }
- text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_25 }
- text = { localization_key = VAL_trade_net_upgraded_0 }
+	name = VALTradeUpgradedNetIncome
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 75 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_75 }
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 50 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_50 }
+	text = { trigger = { check_variable = { var = VAL_black_market_pressure value = 25 compare = greater_than_or_equals } } localization_key = VAL_trade_net_upgraded_25 }
+	text = { localization_key = VAL_trade_net_upgraded_0 }
 }
 
 defined_text = {
- name = VALPartnerFailureReason
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 2 compare = equals } } } localization_key = VAL_partner_failure_2 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 3 compare = equals } } } localization_key = VAL_partner_failure_3 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 4 compare = equals } } } localization_key = VAL_partner_failure_4 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 5 compare = equals } } } localization_key = VAL_partner_failure_5 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 6 compare = equals } } } localization_key = VAL_partner_failure_6 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 7 compare = equals } } } localization_key = VAL_partner_failure_7 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 8 compare = equals } } } localization_key = VAL_partner_failure_8 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 9 compare = equals } } } localization_key = VAL_partner_failure_9 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 10 compare = equals } } } localization_key = VAL_partner_failure_10 }
- text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 11 compare = equals } } } localization_key = VAL_partner_failure_11 }
- text = { localization_key = VAL_partner_failure_1 }
+	name = VALPartnerFailureReason
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 2 compare = equals } } } localization_key = VAL_partner_failure_2 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 3 compare = equals } } } localization_key = VAL_partner_failure_3 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 4 compare = equals } } } localization_key = VAL_partner_failure_4 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 5 compare = equals } } } localization_key = VAL_partner_failure_5 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 6 compare = equals } } } localization_key = VAL_partner_failure_6 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 7 compare = equals } } } localization_key = VAL_partner_failure_7 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 8 compare = equals } } } localization_key = VAL_partner_failure_8 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 9 compare = equals } } } localization_key = VAL_partner_failure_9 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 10 compare = equals } } } localization_key = VAL_partner_failure_10 }
+	text = { trigger = { FROM = { check_variable = { var = VAL_partner_failure_reason value = 11 compare = equals } } } localization_key = VAL_partner_failure_11 }
+	text = { localization_key = VAL_partner_failure_1 }
 }
 
 
 defined_text = {
- name = VALTradeSouthIncome
- text = { trigger = { VAL_trade_route_south_open = no } localization_key = VAL_trade_income_zero }
- text = { trigger = { has_country_flag = VAL_route_south_upgraded } localization_key = VAL_trade_income_upgraded }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeSouthIncome
+	text = { trigger = { VAL_trade_route_south_open = no } localization_key = VAL_trade_income_zero }
+	text = { trigger = { has_country_flag = VAL_route_south_upgraded } localization_key = VAL_trade_income_upgraded }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 # The starting northern line has no construction upgrade; its income is the base corridor payment while open.
 defined_text = {
- name = VALTradeNorthIncome
- text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
- text = { localization_key = VAL_trade_income_base }
+	name = VALTradeNorthIncome
+	text = { trigger = { VAL_trade_route_north_open = no } localization_key = VAL_trade_income_zero }
+	text = { localization_key = VAL_trade_income_base }
 }
 
 

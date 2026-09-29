@@ -124,7 +124,7 @@ foreign_civilian_oversight = {
 local_police_force_garrison = {
 	icon = 11
 	sound_effect = "Martial_Law_Interface_Local_Police_Force_Garrison"
-	
+
 	state_modifier = {
 		resistance_target 				= -0.15
 		compliance_gain 				= -0.025
@@ -202,7 +202,7 @@ military_governor_occupation = {
 	sound_effect = "Martial_Law_Interface_Military_Governor_Occupation"
 	default_law = yes
 	starting_law = yes
-	
+
 	state_modifier = {
 		resistance_target 			= -0.35
 		compliance_gain 			= -0.045
@@ -215,11 +215,11 @@ military_governor_occupation = {
 		base = 0
 
 		#modifier = {
-			#set_temp_variable = { num_factory = building_level@arms_factory }
-			#add_to_temp_variable = { num_factory = building_level@industrial_complex }
-			#check_variable = { num_factory < 1 }
+		#set_temp_variable = { num_factory = building_level@arms_factory }
+		#add_to_temp_variable = { num_factory = building_level@industrial_complex }
+		#check_variable = { num_factory < 1 }
 
-			#add = 50
+		#add = 50
 		#}
 		#modifier = {
 		#	is_core_of = FROM
@@ -230,7 +230,7 @@ military_governor_occupation = {
 			check_variable  = { resistance_target_without_law > 0.24}
 			add = 400
 		}
-		
+
 		modifier = {
 			check_variable  = { resistance_target_without_law > 0.34}
 
@@ -243,7 +243,7 @@ military_governor_occupation = {
 
 			add = 400
 		}
-		
+
 	}
 }
 

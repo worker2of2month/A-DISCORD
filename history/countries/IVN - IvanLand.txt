@@ -12,15 +12,15 @@ recruit_character = IVN_Vadim_Ivanchik
 ####### Politics
 
 diplomatic_relation = {
-    country = WIT
-    relation = guarantee
-    active = yes
+	country = WIT
+	relation = guarantee
+	active = yes
 }
 
 diplomatic_relation = {
-    country = WRK
-    relation = embargo
-    active = yes
+	country = WRK
+	relation = embargo
+	active = yes
 }
 
 ####### Basic shit

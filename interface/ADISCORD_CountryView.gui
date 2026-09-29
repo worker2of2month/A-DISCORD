@@ -7,7 +7,7 @@ guiTypes = {
 			position = { x = 88 y = 305 }
 			size = { width = 255 height = 65 }
 			clipping = no
-					
+
 			instantTextboxType = {
 				name = "party"
 				position = { x = 100 y = 152 }
@@ -32,7 +32,7 @@ guiTypes = {
 		position = { x = 100 y = 305 }
 		size = { width = 255 height = 65 }
 		clipping = no
-					
+
 		instantTextboxType = {
 			name = "party_popularity_number"
 			position = { x = 250 y = 200 }
@@ -43,7 +43,7 @@ guiTypes = {
 		}
 	}
 
-####Country Development
+	####Country Development
 
 	containerWindowType = {
 		name = "ADISCORD_development_launcher"

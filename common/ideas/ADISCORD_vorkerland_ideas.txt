@@ -1,7 +1,7 @@
 ideas = {
 	country = {
-# --- collapse_ideas ---
-ADISCORD_vorkerland_erased_nations = {
+		# --- collapse_ideas ---
+		ADISCORD_vorkerland_erased_nations = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -54,7 +54,7 @@ ADISCORD_vorkerland_erased_nations = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_1 = {
+		ADISCORD_vorkerland_erased_nations_relief_1 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -71,7 +71,7 @@ ADISCORD_vorkerland_erased_nations_relief_1 = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_2 = {
+		ADISCORD_vorkerland_erased_nations_relief_2 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -1075,7 +1075,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 
-# --- diplomacy_ideas ---
+		# --- diplomacy_ideas ---
 		ADISCORD_vorkerland_solar_counter_preparation = {
 			allowed = { always = no }
 			removal_cost = -1
@@ -1087,7 +1087,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 
-# --- focus_decision_ideas ---
+		# --- focus_decision_ideas ---
 		ADISCORD_vorkerland_allied_supply_advisers = {
 			picture = generic_volunteer_expedition_bonus
 			allowed = { always = no }
@@ -1102,7 +1102,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 
-# --- focus_expansion_ideas ---
+		# --- focus_expansion_ideas ---
 		# Prewar preparations. Both are timed and exist only to carry a bounded
 		# readiness choice into the opening collapse window.
 		ADISCORD_vorkerland_wrk_loyal_republics_mobilized = {
@@ -2196,7 +2196,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 
 
 
-# --- rom_tru_ideas ---
+		# --- rom_tru_ideas ---
 		ADISCORD_vorkerland_rom_desert_eagle_staff = {
 			picture = generic_war_preparation
 			allowed = { always = no }
@@ -2314,7 +2314,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 
-# --- stalemate_ideas ---
+		# --- stalemate_ideas ---
 		# Granted only by the two AI-gated one-shot deadline effects and always
 		# removed by the engine after seventy-five days.
 		ADISCORD_vorkerland_ai_breakthrough_window = {
@@ -2413,7 +2413,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			}
 		}
 
-# --- starting_ideas ---
+		# --- starting_ideas ---
 		WRK_ashes_of_the_crown = {
 
 			allowed = {
@@ -2630,7 +2630,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 
-# --- end ---
+		# --- end ---
 	}
 
 	# Mechanical civil-war normalization is deliberately invisible in the UI.

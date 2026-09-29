@@ -7,8 +7,8 @@ entity = {
 
 	default_state = "idle"
 	state = { name = "idle"
-		event = { 
-			time = 0.0 node="polution_particle_1"   
+		event = {
+			time = 0.0 node="polution_particle_1"
 			particle = "polution_particle"
 		}
 	}
@@ -31,8 +31,8 @@ entity = {
 
 	default_state = "idle"
 	state = { name = "idle"
-		event = { 
-			time = 0.0 node="world_clouds_particle_1"   
+		event = {
+			time = 0.0 node="world_clouds_particle_1"
 			particle = "world_clouds_particle"
 		}
 	}
@@ -85,8 +85,8 @@ entity = {
 
 	default_state = "idle"
 	state = { name = "idle"
-		event = { 
-			time = 0.0 node="smog_particle_1"   
+		event = {
+			time = 0.0 node="smog_particle_1"
 			particle = "smog_particle"
 		}
 		event = { time = 0 node = "ADISCORD_city_smoke_1" particle = "city_smoke_particle" keep_particle = yes }
@@ -231,10 +231,10 @@ entity = {
 
 # BEGIN ADISCORD Kefreyt arms combine
 entity = {
-    name = "ADISCORD_kefreyt_arms_combine_entity"
-    pdxmesh = "ADISCORD_kefreyt_arms_combine_mesh"
-    default_state = "idle"
-    state = { name = "idle" }
+	name = "ADISCORD_kefreyt_arms_combine_entity"
+	pdxmesh = "ADISCORD_kefreyt_arms_combine_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
 }
 # END ADISCORD Kefreyt arms combine
 

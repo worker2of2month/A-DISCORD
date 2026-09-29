@@ -340,7 +340,7 @@ on_actions = {
 			ADISCORD_vorkerland_check_central_outcome = yes
 		}
 	}
-on_leave_faction = {
+	on_leave_faction = {
 		effect = {
 			if = {
 				limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major }

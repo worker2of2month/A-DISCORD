@@ -2488,7 +2488,7 @@ country_event = {
 	id = ADISCORD_vorkerland_phase.6
 	hidden = yes
 	is_triggered_only = yes
-trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_vorkerland_coalition_victory_ready = yes }
+	trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_vorkerland_coalition_victory_ready = yes }
 
 	immediate = {
 		if = {
