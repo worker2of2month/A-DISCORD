@@ -56,6 +56,7 @@ country_event = {
 
 	option = { name = ADISCORD_event_ui_test.5.a }
 }
+
 # END CONSOLIDATED: ADISCORD_event_ui_test_events.txt
 
 # BEGIN CONSOLIDATED: ADISCORD_test_wars_events.txt
@@ -80,4 +81,5 @@ country_event = {
 		VAL = { VAL_spawn_urban_breacher_trial = yes }
 	}
 }
+
 # END CONSOLIDATED: ADISCORD_test_wars_events.txt

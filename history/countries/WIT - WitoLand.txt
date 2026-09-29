@@ -15,6 +15,7 @@ set_politics = {
 	election_frequency = 120
 	elections_allowed = yes
 }
+
 set_popularities = {
 	etatism = 26
 	hedonism = 54

@@ -11,6 +11,7 @@ create_faction_from_template = {
 	template = faction_template_ADISCORD_standard
 	name = faction_besjaysk_kingdom
 }
+
 add_to_faction = BLD
 add_to_faction = BHG
 add_to_faction = BGT
@@ -24,6 +25,7 @@ set_politics = {
 	last_election = "2110.12.01"
 	elections_allowed = no
 }
+
 set_popularities = {
 	etatism = 21
 	chauvinism = 37
@@ -51,18 +53,22 @@ set_autonomy = {
 	target = BLD
 	autonomous_state = autonomy_feodal_ducatus
 }
+
 set_autonomy = {
 	target = BHG
 	autonomous_state = autonomy_feodal_ducatus
 }
+
 set_autonomy = {
 	target = BGT
 	autonomous_state = autonomy_feodal_ducatus
 }
+
 set_autonomy = {
 	target = BBV
 	autonomous_state = autonomy_feodal_ducatus
 }
+
 set_autonomy = {
 	target = BCM
 	autonomous_state = autonomy_feodal_comitatus

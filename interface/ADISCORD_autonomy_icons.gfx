@@ -1,5 +1,4 @@
 spriteTypes = {
-
 	spriteType = {
 		name = "GFX_autonomy_district_in_Vorkerland_icon"
 		textureFile = "gfx/interface/autonomy/autonomy_district_in_Vorkerland_icon.dds"

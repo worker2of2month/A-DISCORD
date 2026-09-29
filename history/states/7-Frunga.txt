@@ -1,13 +1,13 @@
-state={
-	id=7
-	name="STATE_7"
-	provinces={
-		66 72 87 90 116 129 4518 4687 16365 16554 
+state = {
+	id = 7
+	name = "STATE_7"
+	provinces = {
+		66 72 87 90 116 129 4518 4687 16365 16554
 	}
-	manpower=220000
-	buildings_max_level_factor=1.000
-	state_category=town
-	local_supplies=0.000
+	manpower = 220000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 0.000
 
 	history = {
 		owner = BBV
@@ -15,6 +15,5 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = BBV
-
 	}
 }

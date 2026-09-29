@@ -89,7 +89,13 @@ ADISCORD_release_non_participating_minor_optimization = {
 			ADISCORD_economy_update_gui = yes
 		}
 		else_if = {
-			limit = { OR = { is_ai = no ADISCORD_economy_is_primary_tier_country = yes ADISCORD_economy_is_secondary_tier_country = yes } }
+			limit = {
+				OR = {
+					is_ai = no
+					ADISCORD_economy_is_primary_tier_country = yes
+					ADISCORD_economy_is_secondary_tier_country = yes
+				}
+			}
 			ADISCORD_economy_initialize_country = yes
 		}
 	}
@@ -112,7 +118,10 @@ ADISCORD_economy_refresh_ai_assistance = {
 		set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = 0 }
 		if = {
 			limit = { has_variable = ADISCORD_economy_simulation_tier }
-			set_temp_variable = { var = ADISCORD_economy_ai_assistance_signature_temp value = ADISCORD_economy_simulation_tier }
+			set_temp_variable = {
+				var = ADISCORD_economy_ai_assistance_signature_temp
+				value = ADISCORD_economy_simulation_tier
+			}
 		}
 		if = {
 			limit = { is_ai = yes }

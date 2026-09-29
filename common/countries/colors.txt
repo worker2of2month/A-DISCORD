@@ -1,17 +1,16 @@
 #reload countrycolors
 
 STP = {
-	color = rgb{15 118 124}
-	color_ui = rgb{15 118 124}
+	color = rgb { 15 118 124 }
+	color_ui = rgb { 15 118 124 }
 }
 
 NKA = {
-    color = rgb { 151 43 29 }
-    color_ui = rgb { 151 43 29 }
+	color = rgb { 151 43 29 }
+	color_ui = rgb { 151 43 29 }
 }
 
 OCA = {
-    color = rgb { 166 58 42 }
-    color_ui = rgb { 166 58 42 }
+	color = rgb { 166 58 42 }
+	color_ui = rgb { 166 58 42 }
 }
-

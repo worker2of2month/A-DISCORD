@@ -3,9 +3,18 @@ division_template = {
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -14,15 +23,36 @@ division_template = {
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
+		engineer = {
+			x = 0
+			y = 0
+		}
 	}
 }
 
@@ -31,46 +61,91 @@ division_template = {
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
-		infantry = { x = 2 y = 0 }
-		infantry = { x = 2 y = 1 }
-		infantry = { x = 2 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
+		infantry = {
+			x = 2
+			y = 0
+		}
+		infantry = {
+			x = 2
+			y = 1
+		}
+		infantry = {
+			x = 2
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		artillery = { x = 0 y = 1 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
 	}
 }
 
 units = {
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 259
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 2 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
 		location = 8057
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.17
 		start_equipment_factor = 0.32
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 3 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
 		location = 6495
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.40
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 4 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
 		location = 6331
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.10
@@ -82,9 +157,36 @@ units = {
 		task_force = {
 			name = "Lower Loren Patrol"
 			location = 6495
-			ship = { name = "Upper Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
-			ship = { name = "Lower Loren" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
-			ship = { name = "Restitution" definition = ADISCORD_coastal_patrol_vessel equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = EFL } } }
+			ship = {
+				name = "Upper Loren"
+				definition = ADISCORD_coastal_patrol_vessel
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "Lower Loren"
+				definition = ADISCORD_coastal_patrol_vessel
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
+			ship = {
+				name = "Restitution"
+				definition = ADISCORD_coastal_patrol_vessel
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = EFL
+					}
+				}
+			}
 		}
 	}
 }
@@ -94,7 +196,10 @@ units = {
 instant_effect = {
 	add_equipment_to_stockpile = { type = convoy_1 amount = 20 producer = EFL }
 	add_equipment_production = {
-		equipment = { type = infantry_equipment_0 creator = "EFL" }
+		equipment = {
+			type = infantry_equipment_0
+			creator = "EFL"
+		}
 		requested_factories = 1
 		progress = 0.60
 		efficiency = 70

@@ -3,26 +3,60 @@ division_template = {
 	template_counter = 3
 	division_names_group = IBL_COLLAPSE_INF_01
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 0 y = 2 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 2
+		}
 	}
 }
+
 units = {
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 4007
 		division_template = "IBL Frontier Brigade"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.85
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 2 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
 		location = 4007
 		division_template = "IBL Frontier Brigade"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.85
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 4007 division_template = "IBL Frontier Brigade" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
-	division = { division_name = { is_name_ordered = yes name_order = 4 } location = 4007 division_template = "IBL Frontier Brigade" start_experience_factor = 0.15 start_equipment_factor = 0.80 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
+		location = 4007
+		division_template = "IBL Frontier Brigade"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.80
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
+		location = 4007
+		division_template = "IBL Frontier Brigade"
+		start_experience_factor = 0.15
+		start_equipment_factor = 0.80
+	}
 }

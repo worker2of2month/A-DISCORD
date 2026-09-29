@@ -13,6 +13,7 @@ set_politics = {
 	election_frequency = 36
 	elections_allowed = yes
 }
+
 set_popularities = {
 	etatism = 1
 	chauvinism = 1

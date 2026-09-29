@@ -4,15 +4,28 @@
 ADISCORD_doctrine_general_staff_ai = {
 	enable = { has_doctrine = ADISCORD_doctrine_restoration_general_staff }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = force_concentration_factor value = 10 }
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 10
+	}
 }
 
 ADISCORD_doctrine_mass_restoration_ai = {
 	enable = { has_completed_track = ADISCORD_land_mass_restoration }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 15 }
-	ai_strategy = { type = ai_wanted_divisions_factor value = 10 }
-	ai_strategy = { type = force_concentration_factor value = 5 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 15
+	}
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = 10
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 5
+	}
 }
 
 ADISCORD_doctrine_platform_centric_ai = {
@@ -21,9 +34,20 @@ ADISCORD_doctrine_platform_centric_ai = {
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = armor value = 12 }
-	ai_strategy = { type = equipment_production_factor id = armor value = 15 }
-	ai_strategy = { type = force_concentration_factor value = 15 }
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 12
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = armor
+		value = 15
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 15
+	}
 }
 
 ADISCORD_doctrine_networked_operations_ai = {
@@ -32,15 +56,29 @@ ADISCORD_doctrine_networked_operations_ai = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_factor id = support value = 15 }
-	ai_strategy = { type = force_concentration_factor value = 20 }
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 15
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 20
+	}
 }
 
 ADISCORD_doctrine_fortress_state_ai = {
 	enable = { has_completed_track = ADISCORD_land_fortress_state }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = garrison value = 20 }
-	ai_strategy = { type = force_concentration_factor value = -5 }
+	ai_strategy = {
+		type = role_ratio
+		id = garrison
+		value = 20
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = -5
+	}
 }
 
 ADISCORD_doctrine_drone_swarm_ai = {
@@ -50,8 +88,16 @@ ADISCORD_doctrine_drone_swarm_ai = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = fighter value = 15 }
-	ai_strategy = { type = unit_ratio id = cas value = 20 }
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 15
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 20
+	}
 }
 
 ADISCORD_doctrine_vtol_strike_ai = {
@@ -61,8 +107,16 @@ ADISCORD_doctrine_vtol_strike_ai = {
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = cas value = 25 }
-	ai_strategy = { type = equipment_production_factor id = cas value = 15 }
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 25
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = cas
+		value = 15
+	}
 }
 
 ADISCORD_doctrine_air_denial_ai = {
@@ -72,6 +126,14 @@ ADISCORD_doctrine_air_denial_ai = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = fighter value = 30 }
-	ai_strategy = { type = equipment_production_factor id = fighter value = 15 }
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 30
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = fighter
+		value = 15
+	}
 }

@@ -1,39 +1,38 @@
 spriteTypes = {
+	###General
 
-###General
+	spriteType = {
+		name = "GFX_idea_political_advisor_head_of_state_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+		name = "GFX_idea_political_advisor_minister_of_defense_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+		name = "GFX_idea_political_advisor_minister_of_economy_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+		name = "GFX_idea_political_advisor_minister_of_health_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+		name = "GFX_idea_political_advisor_minister_of_education_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
+	spriteType = {
+		name = "GFX_idea_political_advisor_chief_of_intelligence_vacant"
+		texturefile = "gfx/interface/ideas/general_vacant.png"
+	}
 
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_head_of_state_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_minister_of_defense_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_minister_of_economy_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_minister_of_health_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_minister_of_education_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
-	spriteType = {
-	  	name = "GFX_idea_political_advisor_chief_of_intelligence_vacant"
-	  	texturefile = "gfx/interface/ideas/general_vacant.png"
-	}
- 
 	spriteType = {
 		name = "GFX_idea_political_advisor_minister_of_foreign_affairs_vacant"
 		texturefile = "gfx/interface/ideas/general_vacant.png"
 	}
 
-###STP
- #ideas
+	###STP
+	#ideas
 	spriteType = {
 		name = "GFX_idea_STP_fading_father"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png"
@@ -55,29 +54,29 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/STP/idea_STP_hedonism_with_no_bondaries.dds"
 	}
 	spriteType = {
-	  	name = "GFX_idea_STP_hidden_slaves_trade"
-	  	texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
+		name = "GFX_idea_STP_hidden_slaves_trade"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_hidden_slaves_trade.png"
 	}
 	spriteType = {
 		name = "GFX_idea_VAL_big_buyers"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_deadman_rulling_the_country.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_STP_legalize"
-	  	texturefile = "gfx/interface/ideas/STP/idea_STP_legalize.png"
+		name = "GFX_idea_STP_legalize"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_legalize.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_STP_worldwide_famous_tourist_destination"
-	  	texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
+		name = "GFX_idea_STP_worldwide_famous_tourist_destination"
+		texturefile = "gfx/interface/ideas/STP/idea_STP_worldwide_famous_tourist_destination.png"
 	}
 	spriteType = {
 		name = "GFX_idea_STP_National_Strikes"
 		texturefile = "gfx/interface/ideas/STP/idea_STP_National_Strikes.png"
 	}
- #ministers
+	#ministers
 	spriteType = {
-	  	name = "GFX_idea_minister_STP_Ernest_Derlich"
-	  	texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Ernest_Derlich.png"
+		name = "GFX_idea_minister_STP_Ernest_Derlich"
+		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Ernest_Derlich.png"
 	}
 	spriteType = {
 		name = "GFX_idea_minister_STP_Tarik_Menebhi"
@@ -91,41 +90,41 @@ spriteTypes = {
 		name = "GFX_idea_minister_STP_Cyan_Crowe"
 		texturefile = "gfx/interface/ideas/STP/Ministers/minister_STP_portrait_STP_Cyan_Crowe.png"
 	}
-###VAL
+	###VAL
 	spriteType = {
 		name = "GFX_idea_VAL_contract_service"
 		texturefile = "gfx/interface/ideas/laws/military_mobilization/ADISCORD_military_mobilization_val_contract_service.png"
 	}
- #ideas
- 	spriteType = {
-	  	name = "GFX_idea_VAL_mercenary_state"
-	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
+	#ideas
+	spriteType = {
+		name = "GFX_idea_VAL_mercenary_state"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_VAL_worldwide_famous_weponry"
-	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_worldwide_famous_weponry.png"
+		name = "GFX_idea_VAL_worldwide_famous_weponry"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_worldwide_famous_weponry.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_VAL_harvest_of_ash"
-	  	texturefile = "gfx/interface/ideas/VAL/idea_VAL_harvest_of_ash.png"
+		name = "GFX_idea_VAL_harvest_of_ash"
+		texturefile = "gfx/interface/ideas/VAL/idea_VAL_harvest_of_ash.png"
 	}
 	spriteType = {
 		name = "GFX_idea_VAL_contract_state"
 		texturefile = "gfx/interface/ideas/VAL/idea_VAL_mercenary_state.png"
 	}
-###WRK
- #ideas
- 	spriteType = {
-	  	name = "GFX_idea_WRK_ashes_of_the_crown"
-	  	texturefile = "gfx/interface/ideas/WRK/idea_WRK_ashes_of_the_crown.png"
+	###WRK
+	#ideas
+	spriteType = {
+		name = "GFX_idea_WRK_ashes_of_the_crown"
+		texturefile = "gfx/interface/ideas/WRK/idea_WRK_ashes_of_the_crown.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_WRK_hourglass_of_discord"
-	  	texturefile = "gfx/interface/ideas/WRK/idea_WRK_hourglass_of_discord.png"
+		name = "GFX_idea_WRK_hourglass_of_discord"
+		texturefile = "gfx/interface/ideas/WRK/idea_WRK_hourglass_of_discord.png"
 	}
 	spriteType = {
-	  	name = "GFX_idea_WRK_constitution_of_the_republic"
-	  	texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
+		name = "GFX_idea_WRK_constitution_of_the_republic"
+		texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
 	}
 	spriteType = {
 		name = "GFX_idea_WRK_birthplace_of_the_first_revolution"
@@ -139,13 +138,13 @@ spriteTypes = {
 		name = "GFX_idea_WRK_birthplace_of_the_first_revolution_renewed_mandate"
 		texturefile = "gfx/interface/ideas/WRK/idea_WRK_constitution_of_the_republic.png"
 	}
-###NOD
- #ideas
- 	spriteType = {
-	  	name = "GFX_idea_NOD_home_of_hedonist_revolution"
-	  	texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
+	###NOD
+	#ideas
+	spriteType = {
+		name = "GFX_idea_NOD_home_of_hedonist_revolution"
+		texturefile = "gfx/interface/ideas/NOD/idea_NOD_home_of_hedonist_revolution.png"
 	}
-###Country unique ideas
+	###Country unique ideas
 	spriteType = {
 		name = "GFX_idea_RUS_national_spirit"
 		texturefile = "gfx/interface/ideas/idea_generic_agrarian_society.dds"
@@ -182,7 +181,7 @@ spriteTypes = {
 		name = "GFX_idea_COF_national_spirit"
 		texturefile = "gfx/interface/ideas/COF/idea_COF_national_spirit.png"
 	}
-###Laws
+	###Laws
 	spriteType = {
 		name = "GFX_idea_ADISCORD_law_civic_loose_communes"
 		texturefile = "gfx/interface/ideas/idea_generic_org_of_african_unity.dds"
@@ -299,7 +298,7 @@ spriteTypes = {
 		name = "GFX_idea_ADISCORD_law_welfare_charity_relief"
 		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_charity_relief.png"
 	}
-spriteType = {
+	spriteType = {
 		name = "GFX_idea_ADISCORD_law_welfare_employer_insurance"
 		texturefile = "gfx/interface/ideas/laws/culture_welfare/ADISCORD_law_welfare_employer_insurance.png"
 	}
@@ -640,7 +639,7 @@ spriteType = {
 		texturefile = "gfx/interface/ideas/laws/military_internal_security/ADISCORD_internal_security_civilian_oversight.png"
 	}
 
-### A-DISCORD economic system icons
+	### A-DISCORD economic system icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_system_agrarian"
 		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_agrarian.png"
@@ -678,7 +677,7 @@ spriteType = {
 		texturefile = "gfx/interface/ideas/laws/economic_system/ADISCORD_economic_system_technocratic.png"
 	}
 
-### A-DISCORD trade policy law icons
+	### A-DISCORD trade policy law icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_trade_policy_free_trade"
 		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_free_trade.png"
@@ -700,7 +699,7 @@ spriteType = {
 		texturefile = "gfx/interface/ideas/laws/economic_trade/ADISCORD_trade_policy_autarky.png"
 	}
 
-### A-DISCORD economic mobilization law icons
+	### A-DISCORD economic mobilization law icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_economic_mobilization_1_civilian_oriented"
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_1_civilian_oriented.png"
@@ -726,7 +725,7 @@ spriteType = {
 		texturefile = "gfx/interface/ideas/laws/economic_mobilization/ADISCORD_economic_mobilization_6_total_mobilization.png"
 	}
 
-### A-DISCORD society type icons
+	### A-DISCORD society type icons
 	spriteType = {
 		name = "GFX_idea_ADISCORD_society_type_traditional"
 		texturefile = "gfx/interface/ideas/laws/culture_society_type/ADISCORD_society_type_traditional.png"
@@ -751,8 +750,6 @@ spriteType = {
 		name = "GFX_idea_ADISCORD_society_type_municipal_autonomy"
 		texturefile = "gfx/interface/ideas/laws/culture_society_type/ADISCORD_society_type_municipal_autonomy.png"
 	}
-
-
 
 	spriteType = {
 		name = "GFX_idea_STP_law_slavery"

@@ -12,7 +12,7 @@ VAL_Wants_To_Sell_Stuff = {
 	ai_strategy = {
 		type = equipment_market_for_sale_factor
 		id = infantry
-		value = 50  # retain a strategic rifle reserve
+		value = 50 # retain a strategic rifle reserve
 	}
 }
 
@@ -38,6 +38,7 @@ ADISCORD_VAL_export_buyer_WRK = {
 		value = 100
 	}
 }
+
 ADISCORD_VAL_export_buyer_STP = {
 	allowed = {
 		original_tag = STP
@@ -60,6 +61,7 @@ ADISCORD_VAL_export_buyer_STP = {
 		value = 100
 	}
 }
+
 ADISCORD_VAL_export_buyer_NOD = {
 	allowed = {
 		original_tag = NOD
@@ -82,6 +84,7 @@ ADISCORD_VAL_export_buyer_NOD = {
 		value = 100
 	}
 }
+
 ADISCORD_VAL_export_buyer_IVN = {
 	allowed = {
 		original_tag = IVN
@@ -104,6 +107,7 @@ ADISCORD_VAL_export_buyer_IVN = {
 		value = 100
 	}
 }
+
 ADISCORD_VAL_export_buyer_WIT = {
 	allowed = {
 		original_tag = WIT
@@ -126,6 +130,7 @@ ADISCORD_VAL_export_buyer_WIT = {
 		value = 100
 	}
 }
+
 ADISCORD_VAL_export_buyer_NAM = {
 	allowed = {
 		original_tag = NAM
@@ -171,6 +176,7 @@ ADISCORD_VAL_export_accept_WRK = {
 		value = 200
 	}
 }
+
 ADISCORD_VAL_export_accept_STP = {
 	allowed = {
 		original_tag = VAL
@@ -193,6 +199,7 @@ ADISCORD_VAL_export_accept_STP = {
 		value = 200
 	}
 }
+
 ADISCORD_VAL_export_accept_NOD = {
 	allowed = {
 		original_tag = VAL
@@ -215,6 +222,7 @@ ADISCORD_VAL_export_accept_NOD = {
 		value = 200
 	}
 }
+
 ADISCORD_VAL_export_accept_IVN = {
 	allowed = {
 		original_tag = VAL
@@ -237,6 +245,7 @@ ADISCORD_VAL_export_accept_IVN = {
 		value = 200
 	}
 }
+
 ADISCORD_VAL_export_accept_WIT = {
 	allowed = {
 		original_tag = VAL
@@ -259,6 +268,7 @@ ADISCORD_VAL_export_accept_WIT = {
 		value = 200
 	}
 }
+
 ADISCORD_VAL_export_accept_NAM = {
 	allowed = {
 		original_tag = VAL
@@ -294,7 +304,11 @@ ADISCORD_VAL_volunteer_air_defence = {
 		has_equipment = { anti_air_equipment < 60 }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_air_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_air_equipment
+		value = 1
+	}
 }
 
 VAL_prepare_against_CIN = {
@@ -304,11 +318,24 @@ VAL_prepare_against_CIN = {
 		has_capitulated = no
 		NOT = { has_war_with = CIN }
 		NOT = { is_in_faction_with = CIN }
-		CIN = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } CIN = { has_country_flag = VAL_frontier_member } } }
+		CIN = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+				CIN = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = CIN value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = CIN
+		value = 100
+	}
 }
 
 CIN_prepare_against_VAL = {
@@ -318,11 +345,24 @@ CIN_prepare_against_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } CIN = { has_country_flag = VAL_frontier_member } } }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+				CIN = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_prepare_against_OSF = {
@@ -332,11 +372,24 @@ VAL_prepare_against_OSF = {
 		has_capitulated = no
 		NOT = { has_war_with = OSF }
 		NOT = { is_in_faction_with = OSF }
-		OSF = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } OSF = { has_country_flag = VAL_frontier_member } } }
+		OSF = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+				OSF = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = OSF value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = OSF
+		value = 100
+	}
 }
 
 OSF_prepare_against_VAL = {
@@ -346,11 +399,24 @@ OSF_prepare_against_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } OSF = { has_country_flag = VAL_frontier_member } } }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+				OSF = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_prepare_against_APH = {
@@ -360,11 +426,24 @@ VAL_prepare_against_APH = {
 		has_capitulated = no
 		NOT = { has_war_with = APH }
 		NOT = { is_in_faction_with = APH }
-		APH = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } APH = { has_country_flag = VAL_frontier_member } } }
+		APH = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+				APH = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = APH value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = APH
+		value = 100
+	}
 }
 
 APH_prepare_against_VAL = {
@@ -374,11 +453,24 @@ APH_prepare_against_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes OR = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } APH = { has_country_flag = VAL_frontier_member } } }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			OR = {
+				check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+				APH = { has_country_flag = VAL_frontier_member }
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_prepare_against_ERT = {
@@ -388,11 +480,21 @@ VAL_prepare_against_ERT = {
 		has_capitulated = no
 		NOT = { has_war_with = ERT }
 		NOT = { is_in_faction_with = ERT }
-		ERT = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+		ERT = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = ERT value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = ERT
+		value = 100
+	}
 }
 
 ERT_prepare_against_VAL = {
@@ -402,39 +504,77 @@ ERT_prepare_against_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no }
-		VAL = { VAL_ai_frontier_preparation = yes check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+		}
+		VAL = {
+			VAL_ai_frontier_preparation = yes
+			check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_frontier_prepare_VAL_NOD = {
 	allowed = { tag = VAL }
-	enable = { is_ai = yes NOD = { VAL_ai_frontier_guarantor_preparation = yes } }
+	enable = {
+		is_ai = yes
+		NOD = { VAL_ai_frontier_guarantor_preparation = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 VAL_frontier_prepare_NOD_VAL = {
 	allowed = { tag = NOD }
-	enable = { is_ai = yes NOD = { VAL_ai_frontier_guarantor_preparation = yes } }
+	enable = {
+		is_ai = yes
+		NOD = { VAL_ai_frontier_guarantor_preparation = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_frontier_prepare_VAL_STP = {
 	allowed = { tag = VAL }
-	enable = { is_ai = yes STP = { VAL_ai_frontier_guarantor_preparation = yes } }
+	enable = {
+		is_ai = yes
+		STP = { VAL_ai_frontier_guarantor_preparation = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STP value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STP
+		value = 100
+	}
 }
 
 VAL_frontier_prepare_STP_VAL = {
 	allowed = { tag = STP }
-	enable = { is_ai = yes STP = { VAL_ai_frontier_guarantor_preparation = yes } }
+	enable = {
+		is_ai = yes
+		STP = { VAL_ai_frontier_guarantor_preparation = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 VAL_volunteers_to_YPR = {
@@ -566,23 +706,46 @@ VAL_final_campaign_STS = {
 
 VAL_resource_volunteers_to_NAM = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_resource_volunteer_mandate has_war = no NAM = { VAL_resource_aid_recipient = yes } }
+	enable = {
+		has_idea = VAL_resource_volunteer_mandate
+		has_war = no
+		NAM = { VAL_resource_aid_recipient = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = NAM value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = NAM
+		value = 200
+	}
 }
 
 VAL_resource_volunteers_to_EFL = {
 	allowed = { tag = VAL }
-	enable = { has_idea = VAL_resource_volunteer_mandate has_war = no EFL = { VAL_resource_aid_recipient = yes } }
+	enable = {
+		has_idea = VAL_resource_volunteer_mandate
+		has_war = no
+		EFL = { VAL_resource_aid_recipient = yes }
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = EFL value = 200 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = EFL
+		value = 200
+	}
 }
 
 # Preserve paid recruits for reinforcement while the replacement reserve is low.
 # This reduces formation demand; it does not cancel an existing recruitment queue.
 VAL_preserve_replacement_reserve = {
 	allowed = { tag = VAL }
-	enable = { is_ai = yes has_capitulated = no has_manpower < 15000 }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_manpower < 15000
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -1000
+	}
 }

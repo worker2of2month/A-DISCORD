@@ -8,19 +8,18 @@ set_major = yes
 
 recruit_character = IVN_Vadim_Ivanchik
 
-
 ####### Politics
 
 diplomatic_relation = {
-    country = WIT
-    relation = guarantee
-    active = yes
+	country = WIT
+	relation = guarantee
+	active = yes
 }
 
 diplomatic_relation = {
-    country = WRK
-    relation = embargo
-    active = yes
+	country = WRK
+	relation = embargo
+	active = yes
 }
 
 ####### Basic shit
@@ -30,6 +29,7 @@ set_politics = {
 	last_election = "2154.04.17"
 	elections_allowed = yes
 }
+
 set_popularities = {
 	etatism = 23
 	chauvinism = 17

@@ -3,17 +3,33 @@ on_actions = {
 		effect = {
 			if = {
 				limit = {
-					STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
+					STS = {
+						exists = yes
+						has_country_flag = STP_heg_kefreyt_final_started
+					}
 					ROOT = { tag = STS }
-					FROM = { OR = { tag = VAL is_in_faction_with = VAL } }
+					FROM = {
+						OR = {
+							tag = VAL
+							is_in_faction_with = VAL
+						}
+					}
 				}
 				FROM = { set_country_flag = STP_heg_kefreyt_final_member }
 			}
 			else_if = {
 				limit = {
-					STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
+					STS = {
+						exists = yes
+						has_country_flag = STP_heg_kefreyt_final_started
+					}
 					FROM = { tag = STS }
-					ROOT = { OR = { tag = VAL is_in_faction_with = VAL } }
+					ROOT = {
+						OR = {
+							tag = VAL
+							is_in_faction_with = VAL
+						}
+					}
 				}
 				ROOT = { set_country_flag = STP_heg_kefreyt_final_member }
 			}

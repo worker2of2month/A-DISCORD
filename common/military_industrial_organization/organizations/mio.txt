@@ -1,5 +1,4 @@
 my_custom_mio = {
-
 	equipment_type = { infantry_equipment armor }
 	research_categories = { infantry_weapons }
 
@@ -47,8 +46,10 @@ my_custom_mio = {
 		production_bonus = {
 			production_efficiency_cap_factor = 0.1
 		}
-		position = { x=0 y=0 }
-		available = { owner = { has_political_power > 10 } }
+		position = { x = 0 y = 0 }
+		available = {
+			owner = { has_political_power > 10 }
+		}
 	}
 
 	trait = {
@@ -57,7 +58,7 @@ my_custom_mio = {
 		production_bonus = {
 			production_cost_factor = -0.2
 		}
-		position = { x=4 y=0 }
+		position = { x = 4 y = 0 }
 	}
 
 	trait = {
@@ -69,7 +70,7 @@ my_custom_mio = {
 			hard_attack = 0.3
 		}
 
-		position = { x=8 y=0 }
+		position = { x = 8 y = 0 }
 	}
 
 	trait = {
@@ -78,7 +79,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=7 y=1 }
+		position = { x = 7 y = 1 }
 		any_parent = { custom_3 }
 		mutually_exclusive = { custom_5 }
 	}
@@ -89,7 +90,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=9 y=1 }
+		position = { x = 9 y = 1 }
 		any_parent = { custom_3 }
 		mutually_exclusive = { custom_4 }
 	}
@@ -103,7 +104,7 @@ my_custom_mio = {
 		production_bonus = {
 			production_cost_factor = -0.1
 		}
-		position = { x=0 y=2 }
+		position = { x = 0 y = 2 }
 		any_parent = { custom_1 }
 	}
 
@@ -117,7 +118,7 @@ my_custom_mio = {
 		equipment_bonus = {
 			soft_attack = 0.3
 		}
-		position = { x=4 y=2 }
+		position = { x = 4 y = 2 }
 		any_parent = { custom_2 }
 	}
 
@@ -127,7 +128,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=8 y=2 }
+		position = { x = 8 y = 2 }
 		any_parent = { custom_4 custom_5 }
 	}
 
@@ -137,7 +138,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=2 y=3 }
+		position = { x = 2 y = 3 }
 		parent = {
 			traits = { custom_6 custom_7 }
 			num_parents_needed = 2
@@ -150,7 +151,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=6 y=3 }
+		position = { x = 6 y = 3 }
 		parent = {
 			traits = { custom_7 custom_8 }
 			num_parents_needed = 2
@@ -163,7 +164,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=0 y=4 }
+		position = { x = 0 y = 4 }
 		any_parent = { custom_6 }
 		mutually_exclusive = { custom_12 custom_13 }
 	}
@@ -174,7 +175,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=4 y=4 }
+		position = { x = 4 y = 4 }
 		any_parent = { custom_7 }
 		mutually_exclusive = { custom_11 custom_13 }
 	}
@@ -185,7 +186,7 @@ my_custom_mio = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=8 y=4 }
+		position = { x = 8 y = 4 }
 		any_parent = { custom_8 }
 		mutually_exclusive = { custom_11 custom_12 }
 	}
@@ -203,7 +204,7 @@ my_mio_with_include = {
 		organization_modifier = {
 			military_industrial_organization_funds_gain = 0.5
 		}
-		position = { x=2 y=1 }
+		position = { x = 2 y = 1 }
 	}
 	override_trait = {
 		token = custom_1
@@ -214,7 +215,7 @@ my_mio_with_include = {
 		production_bonus = {
 			production_cost_factor = -0.3
 		}
-		position = { x=-1 y=2 }
+		position = { x = -1 y = 2 }
 		relative_position_id = custom_8
 	}
 }
@@ -228,7 +229,7 @@ my_capital_ship_mio = {
 	initial_trait = {
 		equipment_bonus = {
 			hg_attack = 0.1
-			armor_value  = 0.2
+			armor_value = 0.2
 			lg_attack = 0.3
 		}
 	}
@@ -238,10 +239,10 @@ my_capital_ship_mio = {
 		icon = GFX_industrial_org_trait_placeholder
 		equipment_bonus = {
 			hg_attack = 0.1
-			armor_value  = 0.2
+			armor_value = 0.2
 			lg_attack = 0.3
 		}
-		position = { x=0 y=0 }
+		position = { x = 0 y = 0 }
 	}
 }
 
@@ -263,7 +264,7 @@ my_task_decrease_mio = {
 	trait = {
 		token = set_capacity_to_0
 		icon = GFX_industrial_org_trait_placeholder
-		position = { x=0 y=0 }
+		position = { x = 0 y = 0 }
 		organization_modifier = {
 			military_industrial_organization_task_capacity = -50
 		}
@@ -272,7 +273,7 @@ my_task_decrease_mio = {
 	trait = {
 		token = set_capacity_to_1
 		icon = GFX_industrial_org_trait_placeholder
-		position = { x=1 y=0 }
+		position = { x = 1 y = 0 }
 		organization_modifier = {
 			military_industrial_organization_task_capacity = -49
 		}

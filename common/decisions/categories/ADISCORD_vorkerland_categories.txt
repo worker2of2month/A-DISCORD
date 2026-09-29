@@ -50,7 +50,12 @@ ADISCORD_vorkerland_collapse_category = {
 # --- diplomacy_categories ---
 ADISCORD_vorkerland_regional_diplomacy_category = {
 	icon = ADISCORD_deal
-	allowed = { OR = { tag = WKR tag = VAD } }
+	allowed = {
+		OR = {
+			tag = WKR
+			tag = VAD
+		}
+	}
 	visible = {
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_phase_regional_consolidation
@@ -93,7 +98,12 @@ ADISCORD_vorkerland_focus_operations_category = {
 
 ADISCORD_vorkerland_allied_support_category = {
 	icon = ADISCORD_deal
-	allowed = { OR = { tag = WKR tag = VAD } }
+	allowed = {
+		OR = {
+			tag = WKR
+			tag = VAD
+		}
+	}
 	visible = {
 		OR = {
 			AND = {
@@ -103,7 +113,10 @@ ADISCORD_vorkerland_allied_support_category = {
 					exists = yes
 					NOT = { has_capitulated = yes }
 					has_war = yes
-					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+					OR = {
+						is_in_faction_with = ROOT
+						is_subject_of = ROOT
+					}
 				}
 			}
 			AND = {
@@ -116,7 +129,10 @@ ADISCORD_vorkerland_allied_support_category = {
 					exists = yes
 					NOT = { has_capitulated = yes }
 					has_war = yes
-					OR = { is_in_faction_with = ROOT is_subject_of = ROOT }
+					OR = {
+						is_in_faction_with = ROOT
+						is_subject_of = ROOT
+					}
 				}
 			}
 		}
@@ -125,7 +141,12 @@ ADISCORD_vorkerland_allied_support_category = {
 
 # --- rom_tru_categories ---
 ADISCORD_vorkerland_rom_tru_category = {
-	allowed = { OR = { tag = ROM tag = TRU } }
+	allowed = {
+		OR = {
+			tag = ROM
+			tag = TRU
+		}
+	}
 	visible = {
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }

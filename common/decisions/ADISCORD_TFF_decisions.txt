@@ -16,7 +16,10 @@ TFF_frontier_at_war = {
 		complete_effect = {
 			add_stability = -0.03
 			add_manpower = 8000
-			add_timed_idea = { idea = TFF_free_rifle_levy days = 45 }
+			add_timed_idea = {
+				idea = TFF_free_rifle_levy
+				days = 45
+			}
 		}
 		ai_will_do = {
 			base = 80
@@ -44,7 +47,10 @@ TFF_frontier_at_war = {
 		complete_effect = {
 			add_stability = 0.04
 			add_war_support = 0.03
-			add_timed_idea = { idea = TFF_commune_coordination days = 60 }
+			add_timed_idea = {
+				idea = TFF_commune_coordination
+				days = 60
+			}
 		}
 		ai_will_do = { base = 70 }
 	}
@@ -64,10 +70,15 @@ TFF_frontier_at_war = {
 		cost = 30
 		fire_only_once = yes
 		complete_effect = {
-			add_timed_idea = { idea = TFF_common_supply_network days = 90 }
+			add_timed_idea = {
+				idea = TFF_common_supply_network
+				days = 90
+			}
 			if = {
 				limit = { controls_state = 83 }
-				83 = { add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
+				83 = {
+					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+				}
 			}
 		}
 		ai_will_do = { base = 90 }
@@ -90,7 +101,9 @@ TFF_frontier_at_war = {
 		cost = 40
 		days_remove = 28
 		fire_only_once = yes
-		cancel_trigger = { NOT = { controls_state = 83 } }
+		cancel_trigger = {
+			NOT = { controls_state = 83 }
+		}
 		remove_effect = {
 			if = {
 				limit = { controls_state = 83 }

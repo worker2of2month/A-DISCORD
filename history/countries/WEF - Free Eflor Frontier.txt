@@ -8,12 +8,14 @@ set_politics = {
 	last_election = "2159.6.23"
 	elections_allowed = yes
 }
+
 set_popularities = {
 	utilitarism = 46
 	humanism = 22
 	pragmatism = 20
 	etatism = 12
 }
+
 set_stability = 0.56
 set_war_support = 0.35
 set_research_slots = 2

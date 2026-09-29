@@ -1,5 +1,4 @@
 leader_maneuvering_skills = {
-
 	### NAVY ###
 	1 = {
 		cost = 100

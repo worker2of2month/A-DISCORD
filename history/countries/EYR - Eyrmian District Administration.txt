@@ -6,7 +6,15 @@ set_country_flag = ADISCORD_vorkerland_prewar_garrison_initialized
 set_stability = 0.35
 
 set_politics = { ruling_party = humanism elections_allowed = yes }
-set_popularities = { etatism = 5 chauvinism = 5 humanism = 75 pragmatism = 10 technocracy = 5 }
+
+set_popularities = {
+	etatism = 5
+	chauvinism = 5
+	humanism = 75
+	pragmatism = 10
+	technocracy = 5
+}
+
 recruit_character = EYR_Irina_Koval
 set_research_slots = 2
 

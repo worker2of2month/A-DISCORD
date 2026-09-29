@@ -31,6 +31,7 @@ set_politics = {
 	last_election = "2159.07.06"
 	elections_allowed = no
 }
+
 set_popularities = {
 	pragmatism = 55
 	anarchism = 4

@@ -1,4 +1,13 @@
 set_politics = { ruling_party = hedonism elections_allowed = no }
-set_popularities = { etatism = 0 chauvinism = 0 humanism = 5 pragmatism = 10 technocracy = 5 hedonism = 80 }
+
+set_popularities = {
+	etatism = 0
+	chauvinism = 0
+	humanism = 5
+	pragmatism = 10
+	technocracy = 5
+	hedonism = 80
+}
+
 recruit_character = EBA_Vlad_Mecra
 set_research_slots = 2

@@ -9,10 +9,16 @@ VAL_final_crisis_available = {
 	NOD = {
 		exists = yes
 		has_capitulated = no
-		OR = { is_subject = no is_subject_of = STP }
+		OR = {
+			is_subject = no
+			is_subject_of = STP
+		}
 		OR = {
 			NOT = { is_in_faction_with = VAL }
-			AND = { is_subject_of = STP STP = { is_subject_of = VAL } }
+			AND = {
+				is_subject_of = STP
+				STP = { is_subject_of = VAL }
+			}
 		}
 		NOT = { has_country_flag = VAL_stelander_truce }
 	}
@@ -27,8 +33,25 @@ VAL_final_crisis_preparing = {
 
 VAL_final_crisis_coalition = {
 	OR = {
-		STP = { exists = yes NOT = { is_subject_of = VAL } OR = { has_country_flag = VAL_final_war_member is_in_faction_with = NOD is_subject_of = NOD NOD = { is_subject_of = STP } } }
-		STS = { exists = yes NOT = { is_subject_of = VAL } OR = { has_country_flag = VAL_final_war_member is_in_faction_with = NOD is_subject_of = NOD } }
+		STP = {
+			exists = yes
+			NOT = { is_subject_of = VAL }
+			OR = {
+				has_country_flag = VAL_final_war_member
+				is_in_faction_with = NOD
+				is_subject_of = NOD
+				NOD = { is_subject_of = STP }
+			}
+		}
+		STS = {
+			exists = yes
+			NOT = { is_subject_of = VAL }
+			OR = {
+				has_country_flag = VAL_final_war_member
+				is_in_faction_with = NOD
+				is_subject_of = NOD
+			}
+		}
 	}
 }
 
@@ -48,7 +71,9 @@ VAL_can_pay_quarterly_contract_norm = {
 	NOT = { has_political_power < 10 }
 	has_country_flag = VAL_quarterly_contract_active
 	NOT = { has_country_flag = VAL_quarterly_contract_paid }
-	NOT = { has_equipment = { infantry_equipment < 40000 } }
+	NOT = {
+		has_equipment = { infantry_equipment < 40000 }
+	}
 }
 
 # COUNTRY with the decision's target state in FROM.
@@ -59,13 +84,18 @@ VAL_reclamation_project_target_valid = {
 
 # STATE: settlement also runs without a targeted-decision FROM scope.
 VAL_reclamation_state_project_valid = {
-	VAL = { has_capitulated = no has_completed_focus = VAL_reclamation_survey }
+	VAL = {
+		has_capitulated = no
+		has_completed_focus = VAL_reclamation_survey
+	}
 	is_owned_by = VAL
 	is_controlled_by = VAL
 	OR = {
 		AND = {
 			has_dynamic_modifier = { modifier = ADISCORD_vorkerland_dirty_state }
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 		}
 		AND = {
 			has_dynamic_modifier = { modifier = VAL_reclamation_stage_1_modifier }
@@ -99,7 +129,9 @@ VAL_reclamation_complete = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
 		}
 		NOT = {
@@ -112,7 +144,9 @@ VAL_reclamation_complete = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
 		}
 		NOT = {
@@ -125,7 +159,9 @@ VAL_reclamation_complete = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
 		}
 		NOT = {
@@ -138,7 +174,9 @@ VAL_reclamation_complete = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
 		}
 		NOT = {
@@ -151,7 +189,9 @@ VAL_reclamation_complete = {
 		is_owned_by = VAL
 		is_controlled_by = VAL
 		OR = {
-			NOT = { check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_reclamation_stage value = 1 compare = greater_than_or_equals }
+			}
 			check_variable = { var = VAL_reclamation_stage value = 3 compare = greater_than_or_equals }
 		}
 		NOT = {
@@ -184,327 +224,524 @@ VAL_reclamation_industry_target_valid = {
 }
 
 VAL_frontier_postwar = {
-    has_capitulated = no
-    is_subject = no
-    NOT = { has_country_flag = VAL_stelander_defeated }
+	has_capitulated = no
+	is_subject = no
+	NOT = { has_country_flag = VAL_stelander_defeated }
 }
+
 VAL_frontier_shabrat_buffer = {
-    STS = { exists = yes has_country_flag = STP_cw_won_union_battle is_subject = no has_capitulated = no }
-}
-VAL_frontier_idle = {
-    NOT = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
-}
-VAL_frontier_offer_is_current = {
-    has_capitulated = no
-    NOT = { has_war_with = VAL }
-    is_subject = no
-    VAL = { exists = yes VAL_frontier_prewar_eligible = yes check_variable = { var = VAL_frontier_stage value = 1 compare = equals } }
-    OR = { AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } }
-        AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } }
-        AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } }
-        AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } } }
-}
-VAL_frontier_target_owned = {
-    OR = { AND = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } CIN = { exists = yes } 58 = { is_owned_by = CIN } 59 = { is_owned_by = CIN } 60 = { is_owned_by = CIN } }
-        AND = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } OSF = { exists = yes } 61 = { is_owned_by = OSF } 62 = { is_owned_by = OSF } 63 = { is_owned_by = OSF } }
-        AND = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } APH = { exists = yes } 64 = { is_owned_by = APH } 65 = { is_owned_by = APH } }
-        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } ERT = { exists = yes } 168 = { is_owned_by = ERT } } }
-}
-VAL_frontier_target_occupied = {
-OR = {
-	AND = {
-		check_variable = {
-			var = VAL_frontier_target
-			value = 1
-			compare = equals
-		}
-		OR = {
-			AND = {
-				58 = {
-					VAL_frontier_controlled = yes
-					OR = {
-						is_owned_by = CIN
-						is_owned_by = VAL
-					}
-				}
-				59 = {
-					VAL_frontier_controlled = yes
-					OR = {
-						is_owned_by = CIN
-						is_owned_by = VAL
-					}
-				}
-				60 = {
-					VAL_frontier_controlled = yes
-					OR = {
-						is_owned_by = CIN
-						is_owned_by = VAL
-					}
-				}
-			}
-			CIN = {
-				has_country_flag = VAL_frontier_defeated
-				capital_scope = {
-					VAL_frontier_controlled = yes
-				}
-			}
-		}
+	STS = {
+		exists = yes
+		has_country_flag = STP_cw_won_union_battle
+		is_subject = no
+		has_capitulated = no
 	}
-        AND = {
-        	check_variable = {
-        		var = VAL_frontier_target
-        		value = 2
-        		compare = equals
-        	}
-        	OR = {
-        		AND = {
-        			61 = {
-        				VAL_frontier_controlled = yes
-        				OR = {
-        					is_owned_by = OSF
-        					is_owned_by = VAL
-        				}
-        			}
-        			62 = {
-        				VAL_frontier_controlled = yes
-        				OR = {
-        					is_owned_by = OSF
-        					is_owned_by = VAL
-        				}
-        			}
-        			63 = {
-        				VAL_frontier_controlled = yes
-        				OR = {
-        					is_owned_by = OSF
-        					is_owned_by = VAL
-        				}
-        			}
-        		}
-        		OSF = {
-        			has_country_flag = VAL_frontier_defeated
-        			capital_scope = {
-        				VAL_frontier_controlled = yes
-        			}
-        		}
-        	}
-        }
-        AND = {
-        	check_variable = {
-        		var = VAL_frontier_target
-        		value = 3
-        		compare = equals
-        	}
-        	OR = {
-        		AND = {
-        			64 = {
-        				VAL_frontier_controlled = yes
-        				OR = {
-        					is_owned_by = APH
-        					is_owned_by = VAL
-        				}
-        			}
-        			65 = {
-        				VAL_frontier_controlled = yes
-        				OR = {
-        					is_owned_by = APH
-        					is_owned_by = VAL
-        				}
-        			}
-        		}
-        		APH = {
-        			has_country_flag = VAL_frontier_defeated
-        			capital_scope = {
-        				VAL_frontier_controlled = yes
-        			}
-        		}
-        	}
-        }
-AND = {
-	check_variable = {
-		var = VAL_frontier_target
-		value = 4
-		compare = equals
+}
+
+VAL_frontier_idle = {
+	NOT = {
+		check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than }
+	}
+}
+
+VAL_frontier_offer_is_current = {
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	is_subject = no
+	VAL = {
+		exists = yes
+		VAL_frontier_prewar_eligible = yes
+		check_variable = { var = VAL_frontier_stage value = 1 compare = equals }
 	}
 	OR = {
 		AND = {
-			168 = {
-				VAL_frontier_controlled = yes
-				OR = {
-					is_owned_by = ERT
-					is_owned_by = VAL
+			tag = CIN
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			}
+		}
+		AND = {
+			tag = OSF
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			}
+		}
+		AND = {
+			tag = APH
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			}
+		}
+		AND = {
+			tag = ERT
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+			}
+		}
+	}
+}
+
+VAL_frontier_target_owned = {
+	OR = {
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			CIN = { exists = yes }
+			58 = { is_owned_by = CIN }
+			59 = { is_owned_by = CIN }
+			60 = { is_owned_by = CIN }
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			OSF = { exists = yes }
+			61 = { is_owned_by = OSF }
+			62 = { is_owned_by = OSF }
+			63 = { is_owned_by = OSF }
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			APH = { exists = yes }
+			64 = { is_owned_by = APH }
+			65 = { is_owned_by = APH }
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+			ERT = { exists = yes }
+			168 = { is_owned_by = ERT }
+		}
+	}
+}
+
+VAL_frontier_target_occupied = {
+	OR = {
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 1
+				compare = equals
+			}
+			OR = {
+				AND = {
+					58 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = CIN
+							is_owned_by = VAL
+						}
+					}
+					59 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = CIN
+							is_owned_by = VAL
+						}
+					}
+					60 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = CIN
+							is_owned_by = VAL
+						}
+					}
+				}
+				CIN = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						VAL_frontier_controlled = yes
+					}
 				}
 			}
 		}
 		AND = {
-			ERT = {
-				has_country_flag = VAL_frontier_defeated
-				capital_scope = {
-					VAL_frontier_controlled = yes
+			check_variable = {
+				var = VAL_frontier_target
+				value = 2
+				compare = equals
+			}
+			OR = {
+				AND = {
+					61 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = OSF
+							is_owned_by = VAL
+						}
+					}
+					62 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = OSF
+							is_owned_by = VAL
+						}
+					}
+					63 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = OSF
+							is_owned_by = VAL
+						}
+					}
+				}
+				OSF = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						VAL_frontier_controlled = yes
+					}
 				}
 			}
-			168 = {
-				is_owned_by = ERT
-				OR = {
-					VAL_frontier_controlled = yes
-					is_controlled_by = ERT
+		}
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 3
+				compare = equals
+			}
+			OR = {
+				AND = {
+					64 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = APH
+							is_owned_by = VAL
+						}
+					}
+					65 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = APH
+							is_owned_by = VAL
+						}
+					}
+				}
+				APH = {
+					has_country_flag = VAL_frontier_defeated
+					capital_scope = {
+						VAL_frontier_controlled = yes
+					}
+				}
+			}
+		}
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 4
+				compare = equals
+			}
+			OR = {
+				AND = {
+					168 = {
+						VAL_frontier_controlled = yes
+						OR = {
+							is_owned_by = ERT
+							is_owned_by = VAL
+						}
+					}
+				}
+				AND = {
+					ERT = {
+						has_country_flag = VAL_frontier_defeated
+						capital_scope = {
+							VAL_frontier_controlled = yes
+						}
+					}
+					168 = {
+						is_owned_by = ERT
+						OR = {
+							VAL_frontier_controlled = yes
+							is_controlled_by = ERT
+						}
+					}
 				}
 			}
 		}
 	}
 }
-}
-}
+
 # STATE: subject occupation belongs to VAL's settlement, foreign occupation does not.
 VAL_frontier_controlled = {
-    OR = { is_controlled_by = VAL controller = { is_subject_of = VAL } }
+	OR = {
+		is_controlled_by = VAL
+		controller = { is_subject_of = VAL }
+	}
 }
 
 # VAL: deliver the bounded eastern claim before another victor annexes ERT.
 VAL_frontier_eastern_claim_ready = {
-    exists = yes
-    has_capitulated = no
-    is_subject = no
-    check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
-    check_variable = { var = VAL_frontier_target value = 4 compare = equals }
-    has_war_with = ERT
-    168 = { is_owned_by = ERT VAL_frontier_controlled = yes }
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	check_variable = { var = VAL_frontier_stage value = 3 compare = equals }
+	check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+	has_war_with = ERT
+	168 = {
+		is_owned_by = ERT
+		VAL_frontier_controlled = yes
+	}
 }
 
 # Country scope: a commissariat cannot acquire third-party conquests.
 VAL_frontier_has_only_claimed_states = {
-    OR = {
-        AND = { tag = CIN NOT = { any_owned_state = { NOT = { OR = { state = 58 state = 59 state = 60 } } } } }
-        AND = { tag = OSF NOT = { any_owned_state = { NOT = { OR = { state = 61 state = 62 state = 63 } } } } }
-        AND = { tag = APH NOT = { any_owned_state = { NOT = { OR = { state = 64 state = 65 } } } } }
-    }
+	OR = {
+		AND = {
+			tag = CIN
+			NOT = {
+				any_owned_state = {
+					NOT = {
+						OR = {
+							state = 58
+							state = 59
+							state = 60
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			tag = OSF
+			NOT = {
+				any_owned_state = {
+					NOT = {
+						OR = {
+							state = 61
+							state = 62
+							state = 63
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			tag = APH
+			NOT = {
+				any_owned_state = {
+					NOT = {
+						OR = {
+							state = 64
+							state = 65
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 VAL_frontier_has_campaign_war = {
-    OR = {
-        AND = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } has_war_with = CIN }
-        AND = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } has_war_with = OSF }
-        AND = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } has_war_with = APH }
-        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } has_war_with = ERT }
-        NOD = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL }
-        STP = { has_country_flag = VAL_frontier_guarantor has_war_with = VAL }
-    }
+	OR = {
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			has_war_with = CIN
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			has_war_with = OSF
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			has_war_with = APH
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+			has_war_with = ERT
+		}
+		NOD = {
+			has_country_flag = VAL_frontier_guarantor
+			has_war_with = VAL
+		}
+		STP = {
+			has_country_flag = VAL_frontier_guarantor
+			has_war_with = VAL
+		}
+	}
 }
 
 # VAL: revalidate both sovereignties and the actual addresses at settlement time.
 VAL_frontier_prewar_eligible = {
-    VAL_frontier_postwar = yes
-    VAL_frontier_target_owned = yes
-    OR = {
-        AND = {
-        	check_variable = {
-        		var = VAL_frontier_target
-        		value = 1
-        		compare = equals
-        	}
-        	CIN = {
-        		is_subject = no
-        		has_capitulated = no
-        		NOT = {
-        			is_in_faction_with = VAL
-        		}
-        	}
-        	58 = {
-        		is_controlled_by = CIN
-        	}
-        	59 = {
-        		is_controlled_by = CIN
-        	}
-        	60 = {
-        		is_controlled_by = CIN
-        	}
-        }
-        AND = {
-        	check_variable = {
-        		var = VAL_frontier_target
-        		value = 2
-        		compare = equals
-        	}
-        	OSF = {
-        		is_subject = no
-        		has_capitulated = no
-        		NOT = {
-        			is_in_faction_with = VAL
-        		}
-        	}
-        	61 = {
-        		is_controlled_by = OSF
-        	}
-        	62 = {
-        		is_controlled_by = OSF
-        	}
-        	63 = {
-        		is_controlled_by = OSF
-        	}
-        }
-        AND = {
-        	check_variable = {
-        		var = VAL_frontier_target
-        		value = 3
-        		compare = equals
-        	}
-        	APH = {
-        		is_subject = no
-        		has_capitulated = no
-        		NOT = {
-        			is_in_faction_with = VAL
-        		}
-        	}
-        	64 = {
-        		is_controlled_by = APH
-        	}
-        	65 = {
-        		is_controlled_by = APH
-        	}
-        }
-        AND = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } ERT = { is_subject = no has_capitulated = no NOT = { is_in_faction_with = VAL } } 168 = { is_controlled_by = ERT } }
-    }
+	VAL_frontier_postwar = yes
+	VAL_frontier_target_owned = yes
+	OR = {
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 1
+				compare = equals
+			}
+			CIN = {
+				is_subject = no
+				has_capitulated = no
+				NOT = {
+					is_in_faction_with = VAL
+				}
+			}
+			58 = {
+				is_controlled_by = CIN
+			}
+			59 = {
+				is_controlled_by = CIN
+			}
+			60 = {
+				is_controlled_by = CIN
+			}
+		}
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 2
+				compare = equals
+			}
+			OSF = {
+				is_subject = no
+				has_capitulated = no
+				NOT = {
+					is_in_faction_with = VAL
+				}
+			}
+			61 = {
+				is_controlled_by = OSF
+			}
+			62 = {
+				is_controlled_by = OSF
+			}
+			63 = {
+				is_controlled_by = OSF
+			}
+		}
+		AND = {
+			check_variable = {
+				var = VAL_frontier_target
+				value = 3
+				compare = equals
+			}
+			APH = {
+				is_subject = no
+				has_capitulated = no
+				NOT = {
+					is_in_faction_with = VAL
+				}
+			}
+			64 = {
+				is_controlled_by = APH
+			}
+			65 = {
+				is_controlled_by = APH
+			}
+		}
+		AND = {
+			check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+			ERT = {
+				is_subject = no
+				has_capitulated = no
+				NOT = { is_in_faction_with = VAL }
+			}
+			168 = { is_controlled_by = ERT }
+		}
+	}
 }
 
 VAL_frontier_matches_current_target = {
-    OR = {
-        AND = { tag = CIN VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } }
-        AND = { tag = OSF VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } }
-        AND = { tag = APH VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } }
-        AND = { tag = ERT VAL = { check_variable = { var = VAL_frontier_target value = 4 compare = equals } } }
-    }
+	OR = {
+		AND = {
+			tag = CIN
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			}
+		}
+		AND = {
+			tag = OSF
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			}
+		}
+		AND = {
+			tag = APH
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			}
+		}
+		AND = {
+			tag = ERT
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 4 compare = equals }
+			}
+		}
+	}
 }
 
 VAL_frontier_reply_is_current = {
-    event_target:VAL_frontier_quoted_target = { VAL_frontier_matches_current_target = yes }
+	event_target:VAL_frontier_quoted_target = { VAL_frontier_matches_current_target = yes }
 }
 
 VAL_cin_contract_family_open = {
 	OR = {
-		AND = { NOT = { has_country_flag = VAL_CIN_block_market } NOT = { has_country_flag = VAL_CIN_success_market } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_arms } NOT = { has_country_flag = VAL_CIN_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_infrastructure } NOT = { has_country_flag = VAL_CIN_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_captain } NOT = { has_country_flag = VAL_CIN_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_CIN_block_terms } NOT = { has_country_flag = VAL_CIN_success_terms } }
+		AND = {
+			NOT = { has_country_flag = VAL_CIN_block_market }
+			NOT = { has_country_flag = VAL_CIN_success_market }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_CIN_block_arms }
+			NOT = { has_country_flag = VAL_CIN_success_arms }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_CIN_block_infrastructure }
+			NOT = { has_country_flag = VAL_CIN_success_infrastructure }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_CIN_block_captain }
+			NOT = { has_country_flag = VAL_CIN_success_captain }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_CIN_block_terms }
+			NOT = { has_country_flag = VAL_CIN_success_terms }
+		}
 	}
 }
 
 VAL_osf_contract_family_open = {
 	OR = {
-		AND = { NOT = { has_country_flag = VAL_OSF_block_market } NOT = { has_country_flag = VAL_OSF_success_market } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_arms } NOT = { has_country_flag = VAL_OSF_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_infrastructure } NOT = { has_country_flag = VAL_OSF_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_captain } NOT = { has_country_flag = VAL_OSF_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_OSF_block_terms } NOT = { has_country_flag = VAL_OSF_success_terms } }
+		AND = {
+			NOT = { has_country_flag = VAL_OSF_block_market }
+			NOT = { has_country_flag = VAL_OSF_success_market }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_OSF_block_arms }
+			NOT = { has_country_flag = VAL_OSF_success_arms }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_OSF_block_infrastructure }
+			NOT = { has_country_flag = VAL_OSF_success_infrastructure }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_OSF_block_captain }
+			NOT = { has_country_flag = VAL_OSF_success_captain }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_OSF_block_terms }
+			NOT = { has_country_flag = VAL_OSF_success_terms }
+		}
 	}
 }
 
 VAL_aph_contract_family_open = {
 	OR = {
-		AND = { NOT = { has_country_flag = VAL_APH_block_market } NOT = { has_country_flag = VAL_APH_success_market } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_arms } NOT = { has_country_flag = VAL_APH_success_arms } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_infrastructure } NOT = { has_country_flag = VAL_APH_success_infrastructure } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_captain } NOT = { has_country_flag = VAL_APH_success_captain } }
-		AND = { NOT = { has_country_flag = VAL_APH_block_terms } NOT = { has_country_flag = VAL_APH_success_terms } }
+		AND = {
+			NOT = { has_country_flag = VAL_APH_block_market }
+			NOT = { has_country_flag = VAL_APH_success_market }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_APH_block_arms }
+			NOT = { has_country_flag = VAL_APH_success_arms }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_APH_block_infrastructure }
+			NOT = { has_country_flag = VAL_APH_success_infrastructure }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_APH_block_captain }
+			NOT = { has_country_flag = VAL_APH_success_captain }
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_APH_block_terms }
+			NOT = { has_country_flag = VAL_APH_success_terms }
+		}
 	}
 }
 
@@ -517,8 +754,12 @@ VAL_ai_frontier_force_ready = {
 	has_war = no
 	NOT = { num_divisions < 12 }
 	has_army_manpower = { size > 59999 }
-	NOT = { has_equipment = { infantry_equipment < 15000 } }
-	NOT = { check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals } }
+	NOT = {
+		has_equipment = { infantry_equipment < 15000 }
+	}
+	NOT = {
+		check_variable = { var = ADISCORD_economy_debt_crisis_level value = 3 compare = greater_than_or_equals }
+	}
 	OR = {
 		ADISCORD_economy_can_spend_50 = yes
 		check_variable = { var = ADISCORD_economy_weekly_balance value = 0 compare = greater_than_or_equals }
@@ -542,103 +783,163 @@ VAL_ai_frontier_guarantor_preparation = {
 	NOT = { has_war_with = VAL }
 	NOT = { is_in_faction_with = VAL }
 	OR = {
-		AND = { tag = NOD OR = { is_subject = no is_subject_of = STP } VAL = { VAL_stelander_dominated = yes } }
-		AND = { tag = STP has_country_flag = STP_cw_won_union_battle OR = { is_subject = no is_subject_of = NOD } }
+		AND = {
+			tag = NOD
+			OR = {
+				is_subject = no
+				is_subject_of = STP
+			}
+			VAL = { VAL_stelander_dominated = yes }
+		}
+		AND = {
+			tag = STP
+			has_country_flag = STP_cw_won_union_battle
+			OR = {
+				is_subject = no
+				is_subject_of = NOD
+			}
+		}
 	}
 	VAL = {
 		VAL_ai_frontier_preparation = yes
 	}
 	OR = {
-		AND = { VAL = { check_variable = { var = VAL_frontier_target value = 1 compare = equals } } NOT = { has_war_with = CIN } }
-		AND = { VAL = { check_variable = { var = VAL_frontier_target value = 2 compare = equals } } NOT = { has_war_with = OSF } }
-		AND = { VAL = { check_variable = { var = VAL_frontier_target value = 3 compare = equals } } NOT = { has_war_with = APH } }
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 1 compare = equals }
+			}
+			NOT = { has_war_with = CIN }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 2 compare = equals }
+			}
+			NOT = { has_war_with = OSF }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_frontier_target value = 3 compare = equals }
+			}
+			NOT = { has_war_with = APH }
+		}
 	}
 }
 
-
 # COUNTRY CIN/OSF/APH: do not pull an enemy of the bloc or a VAL subject into it.
 VAL_frontier_member_eligible = {
-    exists = yes
-    is_subject = no
-    has_capitulated = no
-    has_event_target = VAL_frontier_coalition_anchor
-    NOT = {
-        is_in_faction_with = VAL
-        has_war_with = VAL
-        has_war_with = CIN
-        has_war_with = OSF
-        has_war_with = APH
-        has_war_with = event_target:VAL_frontier_coalition_anchor
-    }
-    OR = { is_in_faction = no is_in_faction_with = event_target:VAL_frontier_coalition_anchor }
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_event_target = VAL_frontier_coalition_anchor
+	NOT = {
+		is_in_faction_with = VAL
+		has_war_with = VAL
+		has_war_with = CIN
+		has_war_with = OSF
+		has_war_with = APH
+		has_war_with = event_target:VAL_frontier_coalition_anchor
+	}
+	OR = {
+		is_in_faction = no
+		is_in_faction_with = event_target:VAL_frontier_coalition_anchor
+	}
 }
 
 # VAL: every enrolled tribe must be defeated; liberation reopens its requirement.
 VAL_frontier_members_beaten = {
-    OR = {
-        CIN = { NOT = { has_country_flag = VAL_frontier_member } }
-        CIN = { exists = no }
-        CIN = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
-        AND = {
-        	58 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = CIN
-        			is_owned_by = VAL
-        		}
-        	}
-        	59 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = CIN
-        			is_owned_by = VAL
-        		}
-        	}
-        	60 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = CIN
-        			is_owned_by = VAL
-        		}
-        	}
-        }
-    }
-    OR = {
-        OSF = { NOT = { has_country_flag = VAL_frontier_member } }
-        OSF = { exists = no }
-        OSF = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
-        AND = {
-        	61 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = OSF
-        			is_owned_by = VAL
-        		}
-        	}
-        	62 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = OSF
-        			is_owned_by = VAL
-        		}
-        	}
-        	63 = {
-        		VAL_frontier_controlled = yes
-        		OR = {
-        			is_owned_by = OSF
-        			is_owned_by = VAL
-        		}
-        	}
-        }
-    }
-    OR = {
-        APH = { NOT = { has_country_flag = VAL_frontier_member } }
-        APH = { exists = no }
-        APH = { has_country_flag = VAL_frontier_defeated capital_scope = { VAL_frontier_controlled = yes } }
-        AND = { 64 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } 65 = { VAL_frontier_controlled = yes OR = { is_owned_by = APH is_owned_by = VAL } } }
-    }
+	OR = {
+		CIN = {
+			NOT = { has_country_flag = VAL_frontier_member }
+		}
+		CIN = { exists = no }
+		CIN = {
+			has_country_flag = VAL_frontier_defeated
+			capital_scope = { VAL_frontier_controlled = yes }
+		}
+		AND = {
+			58 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = CIN
+					is_owned_by = VAL
+				}
+			}
+			59 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = CIN
+					is_owned_by = VAL
+				}
+			}
+			60 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = CIN
+					is_owned_by = VAL
+				}
+			}
+		}
+	}
+	OR = {
+		OSF = {
+			NOT = { has_country_flag = VAL_frontier_member }
+		}
+		OSF = { exists = no }
+		OSF = {
+			has_country_flag = VAL_frontier_defeated
+			capital_scope = { VAL_frontier_controlled = yes }
+		}
+		AND = {
+			61 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = OSF
+					is_owned_by = VAL
+				}
+			}
+			62 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = OSF
+					is_owned_by = VAL
+				}
+			}
+			63 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = OSF
+					is_owned_by = VAL
+				}
+			}
+		}
+	}
+	OR = {
+		APH = {
+			NOT = { has_country_flag = VAL_frontier_member }
+		}
+		APH = { exists = no }
+		APH = {
+			has_country_flag = VAL_frontier_defeated
+			capital_scope = { VAL_frontier_controlled = yes }
+		}
+		AND = {
+			64 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = APH
+					is_owned_by = VAL
+				}
+			}
+			65 = {
+				VAL_frontier_controlled = yes
+				OR = {
+					is_owned_by = APH
+					is_owned_by = VAL
+				}
+			}
+		}
+	}
 }
-
 
 # COUNTRY VAL, project state in FROM. Workshops are restricted to territory directly owned and controlled by Kefreyt.
 VAL_frontier_workshop_target_valid = {
@@ -647,14 +948,31 @@ VAL_frontier_workshop_target_valid = {
 	is_subject = no
 	has_completed_focus = VAL_frontier_treaty_offices
 	FROM = {
-		OR = { state = 58 state = 59 state = 60 state = 61 state = 62 state = 63 state = 64 state = 65 }
+		OR = {
+			state = 58
+			state = 59
+			state = 60
+			state = 61
+			state = 62
+			state = 63
+			state = 64
+			state = 65
+		}
 		is_owned_by = ROOT
 		is_controlled_by = ROOT
-		owner = { has_war = no has_capitulated = no controls_state = PREV }
+		owner = {
+			has_war = no
+			has_capitulated = no
+			controls_state = PREV
+		}
 		arms_factory < 20
-		NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals } }
+		NOT = {
+			check_variable = { var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals }
+		}
 		OR = {
-			NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } }
+			NOT = {
+				check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals }
+			}
 			infrastructure > 2
 		}
 	}
@@ -667,7 +985,10 @@ VAL_abstract_arms_buyer = {
 	exists = yes
 	has_capitulated = no
 	NOT = { has_war_with = VAL }
-	NOT = { tag = STS has_war_with = STP }
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
 	OR = {
 		tag = CIN
 		tag = OSF
@@ -687,11 +1008,31 @@ VAL_abstract_arms_buyer = {
 }
 
 VAL_export_customer = {
- NOT = { VAL = { check_variable = { var = VAL_military_state value = 1 compare = equals } } has_war_with = event_target:VAL_military_customer }
+	NOT = {
+		VAL = {
+			check_variable = { var = VAL_military_state value = 1 compare = equals }
+		}
+		has_war_with = event_target:VAL_military_customer
+	}
 	NOT = {
 		OR = {
-			AND = { OR = { tag = EFL tag = AZH } VAL = { check_variable = { var = VAL_resource_aid_side value = 1 compare = equals } } ADISCORD_nam_resource_war_active = yes }
-			AND = { tag = NAM VAL = { check_variable = { var = VAL_resource_aid_side value = 2 compare = equals } } ADISCORD_nam_resource_war_active = yes }
+			AND = {
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+				VAL = {
+					check_variable = { var = VAL_resource_aid_side value = 1 compare = equals }
+				}
+				ADISCORD_nam_resource_war_active = yes
+			}
+			AND = {
+				tag = NAM
+				VAL = {
+					check_variable = { var = VAL_resource_aid_side value = 2 compare = equals }
+				}
+				ADISCORD_nam_resource_war_active = yes
+			}
 		}
 	}
 	NOT = {
@@ -738,7 +1079,9 @@ VAL_export_slot_free = {
 			NOT = { has_idea = VAL_export_income_2 }
 		}
 	}
-	NOT = { check_variable = { var = STP_ps_val_receipt_contract value = 3 compare = equals } }
+	NOT = {
+		check_variable = { var = STP_ps_val_receipt_contract value = 3 compare = equals }
+	}
 }
 
 VAL_export_arms_can_accept = {
@@ -750,23 +1093,32 @@ VAL_export_arms_can_accept = {
 		has_capitulated = no
 		has_country_flag = VAL_export_offer_pending
 		VAL_export_slot_free = yes
-		NOT = { has_equipment = { infantry_equipment < 25000 } }
+		NOT = {
+			has_equipment = { infantry_equipment < 25000 }
+		}
 	}
 	OR = {
-		NOT = { tag = STS has_war_with = STP }
-		VAL = { NOT = { has_variable = STP_ps_val_receipt_rifles } }
+		NOT = {
+			tag = STS
+			has_war_with = STP
+		}
+		VAL = {
+			NOT = { has_variable = STP_ps_val_receipt_rifles }
+		}
 	}
 }
 
 VAL_export_advisors_can_accept = {
 	has_country_flag = VAL_export_offer_advisors
 	VAL_export_customer = yes
- has_war_with = event_target:VAL_advisor_enemy
+	has_war_with = event_target:VAL_advisor_enemy
 	ADISCORD_economy_can_spend_100 = yes
 	NOT = { has_idea = VAL_paid_military_advisors }
 	VAL = {
- NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
- NOT = { has_country_flag = VAL_military_offer_pending }
+		NOT = {
+			check_variable = { var = VAL_military_state value = 1 compare = equals }
+		}
+		NOT = { has_country_flag = VAL_military_offer_pending }
 		exists = yes
 		has_capitulated = no
 		has_country_flag = VAL_export_offer_pending
@@ -774,10 +1126,17 @@ VAL_export_advisors_can_accept = {
 		NOT = { command_power < 25 }
 	}
 	OR = {
-		NOT = { OR = { tag = NAM tag = EFL } }
+		NOT = {
+			OR = {
+				tag = NAM
+				tag = EFL
+			}
+		}
 		AND = {
 			NOT = { has_country_flag = VAL_export_customer_cooldown }
-			VAL = { NOT = { has_manpower < 2000 } }
+			VAL = {
+				NOT = { has_manpower < 2000 }
+			}
 		}
 	}
 }
@@ -842,9 +1201,24 @@ VAL_nod_can_attack_sts_overlord = {
 
 VAL_northern_coalition_resolved = {
 	AND = {
-		OR = { NOT = { YPR = { exists = yes } } YPR = { is_subject_of = VAL } }
-		OR = { NOT = { COF = { exists = yes } } COF = { is_subject_of = VAL } }
-		OR = { NOT = { TFF = { exists = yes } } TFF = { is_subject_of = VAL } }
+		OR = {
+			NOT = {
+				YPR = { exists = yes }
+			}
+			YPR = { is_subject_of = VAL }
+		}
+		OR = {
+			NOT = {
+				COF = { exists = yes }
+			}
+			COF = { is_subject_of = VAL }
+		}
+		OR = {
+			NOT = {
+				TFF = { exists = yes }
+			}
+			TFF = { is_subject_of = VAL }
+		}
 	}
 }
 
@@ -883,7 +1257,10 @@ VAL_can_attack_northern_coalition = {
 			TFF = { is_in_faction = no }
 		}
 		AND = {
-			YPR = { is_in_faction_with = COF is_in_faction_with = TFF }
+			YPR = {
+				is_in_faction_with = COF
+				is_in_faction_with = TFF
+			}
 			COF = { is_in_faction_with = TFF }
 		}
 	}
@@ -896,19 +1273,25 @@ VAL_northern_coalition_campaign_victory_ready = {
 	# Treat its short reservation as an authoritative transient defeat receipt so
 	# the scripted settlement can terminate the war before a native conference.
 	OR = {
-		NOT = { YPR = { exists = yes } }
+		NOT = {
+			YPR = { exists = yes }
+		}
 		YPR = { has_capitulated = yes }
 		YPR = { is_subject_of = VAL }
 		YPR = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
 	}
 	OR = {
-		NOT = { COF = { exists = yes } }
+		NOT = {
+			COF = { exists = yes }
+		}
 		COF = { has_capitulated = yes }
 		COF = { is_subject_of = VAL }
 		COF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
 	}
 	OR = {
-		NOT = { TFF = { exists = yes } }
+		NOT = {
+			TFF = { exists = yes }
+		}
 		TFF = { has_capitulated = yes }
 		TFF = { is_subject_of = VAL }
 		TFF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
@@ -916,174 +1299,471 @@ VAL_northern_coalition_campaign_victory_ready = {
 }
 
 VAL_northern_foothold_secured = {
- OR = {
-  AND = {
-   58 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-   59 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-   60 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-  }
-  AND = {
-   61 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-   62 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-   63 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-  }
-  AND = {
-   64 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-   65 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
-  }
- }
+	OR = {
+		AND = {
+			58 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+			59 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+			60 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+		}
+		AND = {
+			61 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+			62 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+			63 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+		}
+		AND = {
+			64 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+			65 = {
+				OR = {
+					is_owned_by = VAL
+					owner = { is_subject_of = VAL }
+				}
+				VAL_frontier_controlled = yes
+			}
+		}
+	}
 }
 
 VAL_cannibal_sphere_secured = {
- 58 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 59 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 60 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 61 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 62 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 63 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 64 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
- 65 = { OR = { is_owned_by = VAL owner = { is_subject_of = VAL } } VAL_frontier_controlled = yes }
+	58 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	59 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	60 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	61 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	62 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	63 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	64 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
+	65 = {
+		OR = {
+			is_owned_by = VAL
+			owner = { is_subject_of = VAL }
+		}
+		VAL_frontier_controlled = yes
+	}
 }
 
 VAL_northern_resource_belt_owned = {
-    59 = { is_owned_by = VAL is_controlled_by = VAL }
-    60 = { is_owned_by = VAL is_controlled_by = VAL }
-    61 = { is_owned_by = VAL is_controlled_by = VAL }
+	59 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
+	60 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
+	61 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
 }
 
 VAL_supply_base_secured = {
- VAL_cannibal_sphere_secured = yes
- VAL_northern_resource_belt_owned = yes
- 43 = { is_owned_by = VAL is_controlled_by = VAL }
- 44 = { is_owned_by = VAL is_controlled_by = VAL }
- 88 = { is_owned_by = VAL is_controlled_by = VAL }
+	VAL_cannibal_sphere_secured = yes
+	VAL_northern_resource_belt_owned = yes
+	43 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
+	44 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
+	88 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
 }
 
 VAL_nod_dominated = {
- OR = { NOD = { exists = no } NOD = { is_subject_of = VAL } }
- 10 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 11 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 12 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 13 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
- 17 = { VAL_nod_border_settled = yes }
- 18 = { VAL_nod_border_settled = yes }
- 30 = { OR = { AND = { is_owned_by = VAL is_controlled_by = VAL } AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } } } }
+	OR = {
+		NOD = { exists = no }
+		NOD = { is_subject_of = VAL }
+	}
+	10 = {
+		OR = {
+			AND = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			AND = {
+				owner = { is_subject_of = VAL }
+				controller = { is_subject_of = VAL }
+			}
+		}
+	}
+	11 = {
+		OR = {
+			AND = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			AND = {
+				owner = { is_subject_of = VAL }
+				controller = { is_subject_of = VAL }
+			}
+		}
+	}
+	12 = {
+		OR = {
+			AND = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			AND = {
+				owner = { is_subject_of = VAL }
+				controller = { is_subject_of = VAL }
+			}
+		}
+	}
+	13 = {
+		OR = {
+			AND = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			AND = {
+				owner = { is_subject_of = VAL }
+				controller = { is_subject_of = VAL }
+			}
+		}
+	}
+	17 = { VAL_nod_border_settled = yes }
+	18 = { VAL_nod_border_settled = yes }
+	30 = {
+		OR = {
+			AND = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			AND = {
+				owner = { is_subject_of = VAL }
+				controller = { is_subject_of = VAL }
+			}
+		}
+	}
 }
 
 # STATE 17/18. The northern peace is an authored border change, not a VAL conquest.
 VAL_nod_border_settled = {
-    OR = {
-        AND = { is_owned_by = VAL is_controlled_by = VAL }
-        AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } }
-        AND = {
-            is_owned_by = YPR
-            is_controlled_by = YPR
-            YPR = { is_subject = no NOT = { has_war_with = VAL } }
-            NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
-        }
-    }
+	OR = {
+		AND = {
+			is_owned_by = VAL
+			is_controlled_by = VAL
+		}
+		AND = {
+			owner = { is_subject_of = VAL }
+			controller = { is_subject_of = VAL }
+		}
+		AND = {
+			is_owned_by = YPR
+			is_controlled_by = YPR
+			YPR = {
+				is_subject = no
+				NOT = { has_war_with = VAL }
+			}
+			NOD = {
+				check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+			}
+		}
+	}
 }
 
 # A vanished tag alone is not victory: its actual heartland must be in our sphere.
 VAL_stelander_dominated = {
- OR = { STS = { exists = no } STS = { is_subject_of = VAL } }
- OR = { STP = { exists = no } STP = { is_subject_of = VAL } }
- STP = {
-  any_core_state = { always = yes }
-  NOT = { any_core_state = {
-   NOT = { OR = {
-    AND = { is_owned_by = VAL is_controlled_by = VAL }
-    AND = { owner = { is_subject_of = VAL } controller = { is_subject_of = VAL } }
-    AND = {
-     OR = { state = 2 state = 3 state = 29 state = 45 state = 46 state = 53 }
-     is_core_of = SRP
-     is_owned_by = SRP
-     is_controlled_by = SRP
-     SRP = { is_subject = no NOT = { has_war_with = VAL } }
-    }
-   } }
-  } }
- }
+	OR = {
+		STS = { exists = no }
+		STS = { is_subject_of = VAL }
+	}
+	OR = {
+		STP = { exists = no }
+		STP = { is_subject_of = VAL }
+	}
+	STP = {
+		any_core_state = { always = yes }
+		NOT = {
+			any_core_state = {
+				NOT = {
+					OR = {
+						AND = {
+							is_owned_by = VAL
+							is_controlled_by = VAL
+						}
+						AND = {
+							owner = { is_subject_of = VAL }
+							controller = { is_subject_of = VAL }
+						}
+						AND = {
+							OR = {
+								state = 2
+								state = 3
+								state = 29
+								state = 45
+								state = 46
+								state = 53
+							}
+							is_core_of = SRP
+							is_owned_by = SRP
+							is_controlled_by = SRP
+							SRP = {
+								is_subject = no
+								NOT = { has_war_with = VAL }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
+
 VAL_campaign_objectives_met = {
- has_capitulated = no is_subject = no has_war = no
- VAL_cannibal_sphere_secured = yes
- VAL_northern_resource_belt_owned = yes
- VAL_nod_dominated = yes
- VAL_stelander_dominated = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	VAL_cannibal_sphere_secured = yes
+	VAL_northern_resource_belt_owned = yes
+	VAL_nod_dominated = yes
+	VAL_stelander_dominated = yes
 }
+
 # COUNTRY recipient; pending diplomacy is invalidated by a new civil-war phase.
 VAL_stelander_ultimatum_target = {
- OR = { tag = STP tag = STS }
- exists = yes has_capitulated = no is_subject = no
- has_global_flag = STP_cw_union_wars_finished
- NOT = { has_war_with = VAL } NOT = { is_in_faction_with = VAL }
- VAL = { exists = yes has_capitulated = no is_subject = no NOT = { has_country_flag = VAL_stelander_defeated } }
+	OR = {
+		tag = STP
+		tag = STS
+	}
+	exists = yes
+	has_capitulated = no
+	is_subject = no
+	has_global_flag = STP_cw_union_wars_finished
+	NOT = { has_war_with = VAL }
+	NOT = { is_in_faction_with = VAL }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { has_country_flag = VAL_stelander_defeated }
+	}
 }
+
 VAL_stelander_offer_current = {
- has_country_flag = VAL_stelander_offer
- VAL_stelander_ultimatum_target = yes
- VAL = { has_country_flag = VAL_stelander_offer_pending }
+	has_country_flag = VAL_stelander_offer
+	VAL_stelander_ultimatum_target = yes
+	VAL = { has_country_flag = VAL_stelander_offer_pending }
 }
+
 VAL_can_launch_final_campaign = {
-NOT = { has_country_flag = VAL_stelander_defeated }
- OR = {
-  has_war = no
-  AND = {
-   FROM = { OR = { tag = STP tag = STS } }
-   FROM = { has_war_with = ROOT }
-  }
- }
- has_capitulated = no is_subject = no VAL_frontier_idle = yes
- FROM = {
-  exists = yes
-  has_capitulated = no
-  OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } }
-  OR = {
-   NOT = { is_in_faction_with = VAL }
-   AND = { tag = NOD is_subject_of = STP STP = { is_subject_of = VAL } }
-  }
-  NOT = { has_country_flag = VAL_stelander_truce }
- }
+	NOT = { has_country_flag = VAL_stelander_defeated }
+	OR = {
+		has_war = no
+		AND = {
+			FROM = {
+				OR = {
+					tag = STP
+					tag = STS
+				}
+			}
+			FROM = { has_war_with = ROOT }
+		}
+	}
+	has_capitulated = no
+	is_subject = no
+	VAL_frontier_idle = yes
+	FROM = {
+		exists = yes
+		has_capitulated = no
+		OR = {
+			is_subject = no
+			AND = {
+				tag = NOD
+				is_subject_of = STP
+			}
+		}
+		OR = {
+			NOT = { is_in_faction_with = VAL }
+			AND = {
+				tag = NOD
+				is_subject_of = STP
+				STP = { is_subject_of = VAL }
+			}
+		}
+		NOT = { has_country_flag = VAL_stelander_truce }
+	}
 }
 
 VAL_can_form_northern_administration = {
-    VAL_cannibal_sphere_secured = yes
-    has_capitulated = no
-    is_subject = no
-    has_war = no
-    OR = {
-        NKA = { exists = no }
-        AND = {
-            NKA = { exists = yes is_subject_of = VAL has_war = no }
-            OR = {
-                59 = { is_owned_by = NKA }
-                60 = { is_owned_by = NKA }
-                61 = { is_owned_by = NKA }
-            }
-        }
-    }
-    NOT = { CIN = { has_war = yes } }
-    NOT = { OSF = { has_war = yes } }
-    NOT = { APH = { has_war = yes } }
-    OR = {
-        NKA = { exists = yes is_subject_of = VAL }
-        58 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-        62 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-        63 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-        64 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-        65 = { OR = { is_owned_by = VAL owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } } }
-    }
+	VAL_cannibal_sphere_secured = yes
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	OR = {
+		NKA = { exists = no }
+		AND = {
+			NKA = {
+				exists = yes
+				is_subject_of = VAL
+				has_war = no
+			}
+			OR = {
+				59 = { is_owned_by = NKA }
+				60 = { is_owned_by = NKA }
+				61 = { is_owned_by = NKA }
+			}
+		}
+	}
+	NOT = {
+		CIN = { has_war = yes }
+	}
+	NOT = {
+		OSF = { has_war = yes }
+	}
+	NOT = {
+		APH = { has_war = yes }
+	}
+	OR = {
+		NKA = {
+			exists = yes
+			is_subject_of = VAL
+		}
+		58 = {
+			OR = {
+				is_owned_by = VAL
+				owner = {
+					check_variable = { var = num_owned_states value = 1 compare = greater_than }
+				}
+			}
+		}
+		62 = {
+			OR = {
+				is_owned_by = VAL
+				owner = {
+					check_variable = { var = num_owned_states value = 1 compare = greater_than }
+				}
+			}
+		}
+		63 = {
+			OR = {
+				is_owned_by = VAL
+				owner = {
+					check_variable = { var = num_owned_states value = 1 compare = greater_than }
+				}
+			}
+		}
+		64 = {
+			OR = {
+				is_owned_by = VAL
+				owner = {
+					check_variable = { var = num_owned_states value = 1 compare = greater_than }
+				}
+			}
+		}
+		65 = {
+			OR = {
+				is_owned_by = VAL
+				owner = {
+					check_variable = { var = num_owned_states value = 1 compare = greater_than }
+				}
+			}
+		}
+	}
 }
 
 # STATE: independent SRP requires an unsettled territorial award from its defeat.
 VAL_occidian_state_available = {
 	OR = {
-		AND = { is_owned_by = VAL is_controlled_by = VAL }
+		AND = {
+			is_owned_by = VAL
+			is_controlled_by = VAL
+		}
 		AND = {
 			is_owned_by = OCA
 			is_controlled_by = OCA
-			OCA = { is_subject_of = VAL has_war = no }
+			OCA = {
+				is_subject_of = VAL
+				has_war = no
+			}
 		}
 		# A different VAL client is a valid donor only when it survives losing the
 		# district; this prevents one-state subjects from disappearing on transfer.
@@ -1097,8 +1777,14 @@ VAL_occidian_state_available = {
 		}
 		AND = {
 			is_owned_by = SRP
-			OR = { is_controlled_by = SRP is_controlled_by = VAL }
-			SRP = { has_war = no is_subject = no }
+			OR = {
+				is_controlled_by = SRP
+				is_controlled_by = VAL
+			}
+			SRP = {
+				has_war = no
+				is_subject = no
+			}
 			VAL = { has_country_flag = VAL_occidian_settlement_pending }
 		}
 	}
@@ -1106,7 +1792,11 @@ VAL_occidian_state_available = {
 
 # STATE: Livonn is optional and cannot be taken from another country or client.
 VAL_livonn_available_for_administration = {
-	OR = { is_owned_by = VAL is_owned_by = SRP is_owned_by = OCA }
+	OR = {
+		is_owned_by = VAL
+		is_owned_by = SRP
+		is_owned_by = OCA
+	}
 	VAL_occidian_state_available = yes
 }
 
@@ -1115,16 +1805,39 @@ VAL_can_form_occidian_administration = {
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_completed_focus = VAL_Integrate_Occidia }
-	OR = { OCA = { exists = no } OCA = { is_subject_of = VAL has_war = no } }
+	OR = {
+		OCA = { exists = no }
+		OCA = {
+			is_subject_of = VAL
+			has_war = no
+		}
+	}
 	43 = { VAL_occidian_state_available = yes }
 	44 = { VAL_occidian_state_available = yes }
 	88 = { VAL_occidian_state_available = yes }
 	OR = {
 		OCA = { exists = yes }
-		43 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
-		44 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
-		45 = { VAL_livonn_available_for_administration = yes owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
-		88 = { owner = { check_variable = { var = num_owned_states value = 1 compare = greater_than } } }
+		43 = {
+			owner = {
+				check_variable = { var = num_owned_states value = 1 compare = greater_than }
+			}
+		}
+		44 = {
+			owner = {
+				check_variable = { var = num_owned_states value = 1 compare = greater_than }
+			}
+		}
+		45 = {
+			VAL_livonn_available_for_administration = yes
+			owner = {
+				check_variable = { var = num_owned_states value = 1 compare = greater_than }
+			}
+		}
+		88 = {
+			owner = {
+				check_variable = { var = num_owned_states value = 1 compare = greater_than }
+			}
+		}
 	}
 }
 
@@ -1133,9 +1846,18 @@ VAL_can_form_occidian_administration = {
 VAL_occidia_secured = {
 	OR = {
 		AND = {
-			43 = { is_owned_by = VAL is_controlled_by = VAL }
-			44 = { is_owned_by = VAL is_controlled_by = VAL }
-			88 = { is_owned_by = VAL is_controlled_by = VAL }
+			43 = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			44 = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+			88 = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
 		}
 		VAL_occidian_administration_secured = yes
 	}
@@ -1144,17 +1866,41 @@ VAL_occidia_secured = {
 VAL_occidian_administration_secured = {
 	has_capitulated = no
 	is_subject = no
-	OCA = { exists = yes is_subject_of = VAL has_capitulated = no has_war = no }
-	43 = { is_owned_by = OCA is_controlled_by = OCA }
-	44 = { is_owned_by = OCA is_controlled_by = OCA }
-	88 = { is_owned_by = OCA is_controlled_by = OCA }
-	OR = {
-		45 = { NOT = { is_owned_by = OCA } }
-		45 = { is_owned_by = OCA is_controlled_by = OCA }
+	OCA = {
+		exists = yes
+		is_subject_of = VAL
+		has_capitulated = no
+		has_war = no
+	}
+	43 = {
+		is_owned_by = OCA
+		is_controlled_by = OCA
+	}
+	44 = {
+		is_owned_by = OCA
+		is_controlled_by = OCA
+	}
+	88 = {
+		is_owned_by = OCA
+		is_controlled_by = OCA
 	}
 	OR = {
-		46 = { NOT = { is_owned_by = OCA } }
-		46 = { is_owned_by = OCA is_controlled_by = OCA }
+		45 = {
+			NOT = { is_owned_by = OCA }
+		}
+		45 = {
+			is_owned_by = OCA
+			is_controlled_by = OCA
+		}
+	}
+	OR = {
+		46 = {
+			NOT = { is_owned_by = OCA }
+		}
+		46 = {
+			is_owned_by = OCA
+			is_controlled_by = OCA
+		}
 	}
 }
 
@@ -1162,195 +1908,342 @@ VAL_occidian_administration_secured = {
 VAL_only_occidian_states = {
 	NOT = {
 		any_owned_state = {
-			NOT = { OR = { state = 43 state = 44 state = 45 state = 46 state = 88 } }
+			NOT = {
+				OR = {
+					state = 43
+					state = 44
+					state = 45
+					state = 46
+					state = 88
+				}
+			}
 		}
 	}
 }
 
 # COUNTRY: a defeated member remains reserved until its active allies fall.
 VAL_final_faction_ally_still_fighting = {
-    OR = {
-        AND = {
-            tag = STP
-            OR = {
-                NOD = {
-                    exists = yes
-                    OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-                STS = {
-                    exists = yes
-                    OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-            }
-        }
-        AND = {
-            tag = STS
-            OR = {
-                NOD = {
-                    exists = yes
-                    OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-                STP = {
-                    exists = yes
-                    OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-            }
-        }
-        AND = {
-            tag = NOD
-            OR = {
-                STP = {
-                    exists = yes
-                    OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-                STS = {
-                    exists = yes
-                    OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
-                    has_war_with = VAL
-                    has_capitulated = no
-                    NOT = { has_country_flag = VAL_final_capitulation_immediate }
-                }
-            }
-        }
-    }
+	OR = {
+		AND = {
+			tag = STP
+			OR = {
+				NOD = {
+					exists = yes
+					OR = {
+						is_in_faction_with = STP
+						AND = {
+							has_country_flag = VAL_final_war_member
+							STP = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+				STS = {
+					exists = yes
+					OR = {
+						is_in_faction_with = STP
+						AND = {
+							has_country_flag = VAL_final_war_member
+							STP = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+			}
+		}
+		AND = {
+			tag = STS
+			OR = {
+				NOD = {
+					exists = yes
+					OR = {
+						is_in_faction_with = STS
+						AND = {
+							has_country_flag = VAL_final_war_member
+							STS = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+				STP = {
+					exists = yes
+					OR = {
+						is_in_faction_with = STS
+						AND = {
+							has_country_flag = VAL_final_war_member
+							STS = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+			}
+		}
+		AND = {
+			tag = NOD
+			OR = {
+				STP = {
+					exists = yes
+					OR = {
+						is_in_faction_with = NOD
+						AND = {
+							has_country_flag = VAL_final_war_member
+							NOD = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+				STS = {
+					exists = yes
+					OR = {
+						is_in_faction_with = NOD
+						AND = {
+							has_country_flag = VAL_final_war_member
+							NOD = { has_country_flag = VAL_final_war_member }
+						}
+					}
+					has_war_with = VAL
+					has_capitulated = no
+					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+				}
+			}
+		}
+	}
 }
 
 VAL_final_settlement_ready = {
-    has_country_flag = VAL_final_defeat_pending
-    # The current immediate callback counts as defeated even before the engine
-    # flips has_capitulated. Other members are checked only inside this theatre.
-    OR = {
-        has_capitulated = yes
-        has_country_flag = VAL_final_capitulation_immediate
-    }
-    VAL = { exists = yes has_capitulated = no is_subject = no }
-    NOT = { VAL_final_faction_ally_still_fighting = yes }
+	has_country_flag = VAL_final_defeat_pending
+	# The current immediate callback counts as defeated even before the engine
+	# flips has_capitulated. Other members are checked only inside this theatre.
+	OR = {
+		has_capitulated = yes
+		has_country_flag = VAL_final_capitulation_immediate
+	}
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	NOT = { VAL_final_faction_ally_still_fighting = yes }
 }
 
 VAL_is_contract_administration = {
-    OR = {
-        AND = {
-            OR = { is_subject_of = VAL AND = { OR = { tag = YPR tag = DCA } is_subject_of = TFF } }
-            has_autonomy_state = autonomy_VAL_contract_administration
-            has_country_leader_ideology = contractual_etatism
-        }
-        AND = {
-            is_subject_of = VAL
-            has_country_flag = ADISCORD_bezhaysk_val_administration
-            has_autonomy_state = autonomy_VAL_contract_administration
-        }
-    }
+	OR = {
+		AND = {
+			OR = {
+				is_subject_of = VAL
+				AND = {
+					OR = {
+						tag = YPR
+						tag = DCA
+					}
+					is_subject_of = TFF
+				}
+			}
+			has_autonomy_state = autonomy_VAL_contract_administration
+			has_country_leader_ideology = contractual_etatism
+		}
+		AND = {
+			is_subject_of = VAL
+			has_country_flag = ADISCORD_bezhaysk_val_administration
+			has_autonomy_state = autonomy_VAL_contract_administration
+		}
+	}
 }
 
 # A pending ultimatum is not an active frontier war and cannot reserve NOD's
 # separate capitulation after the tribes have already left the battlefield.
 VAL_final_campaign_separate_from_frontier = {
-    OR = {
-        VAL_frontier_idle = yes
-        NOT = { OR = { has_war_with = CIN has_war_with = OSF has_war_with = APH has_war_with = ERT } }
-    }
+	OR = {
+		VAL_frontier_idle = yes
+		NOT = {
+			OR = {
+				has_war_with = CIN
+				has_war_with = OSF
+				has_war_with = APH
+				has_war_with = ERT
+			}
+		}
+	}
 }
 
 # Shared by the offer, its delayed answer and the postwar transfer.
 VAL_frontier_partner_available = {
-    VAL = { exists = yes has_capitulated = no is_subject = no }
-    TFF = { exists = yes has_capitulated = no is_subject = no NOT = { has_war_with = VAL } }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	TFF = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { has_war_with = VAL }
+	}
 }
 
 # Early principles cannot rewrite an issued military offer or a signed partition.
 VAL_tff_principles_context = {
-    VAL_frontier_partner_available = yes
-    VAL = { NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_nod_frontier_agreement } }
-    NOD = { exists = yes has_capitulated = no is_subject = no NOT = { has_country_flag = VAL_nodrul_administration_pending } }
-    DCA = { exists = no }
-    TFF = { NOT = { is_in_faction_with = NOD } }
+	VAL_frontier_partner_available = yes
+	VAL = {
+		NOT = {
+			has_country_flag = VAL_nod_frontier_offer_pending
+			has_country_flag = VAL_nod_frontier_agreement
+		}
+	}
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		NOT = { has_country_flag = VAL_nodrul_administration_pending }
+	}
+	DCA = { exists = no }
+	TFF = {
+		NOT = { is_in_faction_with = NOD }
+	}
 }
 
 VAL_tff_freedom_choice_current = {
-    tag = VAL
-    VAL_tff_principles_context = yes
-    NOT = { has_country_flag = VAL_tff_freedom_policy }
+	tag = VAL
+	VAL_tff_principles_context = yes
+	NOT = { has_country_flag = VAL_tff_freedom_policy }
 }
 
 VAL_tff_principles_offer_current = {
-    tag = TFF
-    VAL_tff_principles_context = yes
-    VAL = { has_country_flag = VAL_tff_freedom_policy has_country_flag = VAL_tff_principles_pending }
+	tag = TFF
+	VAL_tff_principles_context = yes
+	VAL = {
+		has_country_flag = VAL_tff_freedom_policy
+		has_country_flag = VAL_tff_principles_pending
+	}
 }
 
 VAL_nod_limited_offer = {
-    VAL = { has_country_flag = { flag = VAL_nod_frontier_offer_pending value > 1 } }
+	VAL = {
+		has_country_flag = {
+			flag = VAL_nod_frontier_offer_pending
+			value > 1
+		}
+	}
 }
 
 VAL_nod_limited_agreement = {
-    VAL = { has_country_flag = { flag = VAL_nod_frontier_agreement value > 1 } }
+	VAL = {
+		has_country_flag = {
+			flag = VAL_nod_frontier_agreement
+			value > 1
+		}
+	}
 }
 
 VAL_nod_frontier_offer_current = {
-    VAL_frontier_partner_available = yes
-    VAL = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated has_country_flag = VAL_nod_frontier_agreement } }
-    TFF = { NOT = { is_in_faction_with = NOD } }
-    NOD = {
-        exists = yes has_capitulated = no is_subject = no
-        check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
-        NOT = { is_in_faction_with = VAL }
-    }
-    YPR = { OR = { exists = no is_subject_of = NOD } }
-    DCA = { exists = no }
-    20 = { owner = { OR = { tag = NOD is_subject_of = NOD } } }
-    15 = { owner = { OR = { tag = NOD is_subject_of = NOD } } }
+	VAL_frontier_partner_available = yes
+	VAL = {
+		has_completed_focus = VAL_Northern_Settlement
+		NOT = {
+			has_country_flag = VAL_stelander_defeated
+			has_country_flag = VAL_nod_frontier_agreement
+		}
+	}
+	TFF = {
+		NOT = { is_in_faction_with = NOD }
+	}
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+		NOT = { is_in_faction_with = VAL }
+	}
+	YPR = {
+		OR = {
+			exists = no
+			is_subject_of = NOD
+		}
+	}
+	DCA = { exists = no }
+	20 = {
+		owner = {
+			OR = {
+				tag = NOD
+				is_subject_of = NOD
+			}
+		}
+	}
+	15 = {
+		owner = {
+			OR = {
+				tag = NOD
+				is_subject_of = NOD
+			}
+		}
+	}
 }
 
 # COUNTRY: only a consenting partner shares the final campaign settlement.
 VAL_final_campaign_ally = {
-    OR = {
-        tag = VAL
-        is_subject_of = VAL
-        AND = {
-            OR = { tag = TFF is_subject_of = TFF }
-            VAL_frontier_partner_available = yes
-            VAL = { has_country_flag = VAL_nod_frontier_agreement }
-        }
-    }
+	OR = {
+		tag = VAL
+		is_subject_of = VAL
+		AND = {
+			OR = {
+				tag = TFF
+				is_subject_of = TFF
+			}
+			VAL_frontier_partner_available = yes
+			VAL = { has_country_flag = VAL_nod_frontier_agreement }
+		}
+	}
 }
 
 # STATE: never divide an independent third country or a foreign occupation.
 VAL_nod_partition_state_available = {
-    owner = { OR = { tag = NOD is_subject_of = NOD tag = VAL is_subject_of = VAL } }
-    controller = {
-        OR = {
-            tag = NOD
-            is_subject_of = NOD
-            VAL_final_campaign_ally = yes
-            AND = {
-                tag = STS
-                VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
-            }
-        }
-    }
+	owner = {
+		OR = {
+			tag = NOD
+			is_subject_of = NOD
+			tag = VAL
+			is_subject_of = VAL
+		}
+	}
+	controller = {
+		OR = {
+			tag = NOD
+			is_subject_of = NOD
+			VAL_final_campaign_ally = yes
+			AND = {
+				tag = STS
+				VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+			}
+		}
+	}
 }
 
 VAL_frontier_ultimatum_current = {
-    VAL_frontier_partner_available = yes
-    TFF = { NOT = { is_in_faction_with = VAL } }
-    VAL = { has_country_flag = VAL_frontier_yubora_ultimatum }
-    YPR = { exists = yes has_capitulated = no is_subject_of = VAL }
-    DCA = { exists = yes has_capitulated = no is_subject_of = VAL }
+	VAL_frontier_partner_available = yes
+	TFF = {
+		NOT = { is_in_faction_with = VAL }
+	}
+	VAL = { has_country_flag = VAL_frontier_yubora_ultimatum }
+	YPR = {
+		exists = yes
+		has_capitulated = no
+		is_subject_of = VAL
+	}
+	DCA = {
+		exists = yes
+		has_capitulated = no
+		is_subject_of = VAL
+	}
 }
 
 VAL_can_attack_bezhaysk = {
@@ -1378,9 +2271,19 @@ VAL_nam_concession_negotiable = {
 	NOT = { has_war_with = NAM }
 	NOT = { has_country_flag = VAL_nam_concession_agreed }
 	NOT = { has_country_flag = VAL_nam_concession_granted }
-	NAM = { exists = yes has_capitulated = no is_subject = no }
-	230 = { is_owned_by = NAM is_controlled_by = NAM }
-	EFL = { NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } }
+	NAM = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	230 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
+	EFL = {
+		NOT = { has_country_flag = VAL_export_customer_cooldown }
+		NOT = { has_idea = VAL_paid_military_advisors }
+	}
 }
 
 VAL_nam_concession_deliverable = {
@@ -1393,8 +2296,15 @@ VAL_nam_concession_deliverable = {
 	has_global_flag = ADISCORD_nam_resource_war_nam_victory
 	NOT = { has_country_flag = VAL_nam_concession_granted }
 	NOT = { has_war_with = NAM }
-	NAM = { exists = yes has_capitulated = no is_subject = no }
-	230 = { is_owned_by = NAM is_controlled_by = NAM }
+	NAM = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	230 = {
+		is_owned_by = NAM
+		is_controlled_by = NAM
+	}
 }
 
 # COUNTRY: select one diplomatic address for the common northern ultimatum.
@@ -1409,20 +2319,44 @@ VAL_frontier_bloc_target_eligible = {
 	OR = {
 		AND = {
 			tag = CIN
-			58 = { is_owned_by = CIN is_controlled_by = CIN }
-			59 = { is_owned_by = CIN is_controlled_by = CIN }
-			60 = { is_owned_by = CIN is_controlled_by = CIN }
+			58 = {
+				is_owned_by = CIN
+				is_controlled_by = CIN
+			}
+			59 = {
+				is_owned_by = CIN
+				is_controlled_by = CIN
+			}
+			60 = {
+				is_owned_by = CIN
+				is_controlled_by = CIN
+			}
 		}
 		AND = {
 			tag = OSF
-			61 = { is_owned_by = OSF is_controlled_by = OSF }
-			62 = { is_owned_by = OSF is_controlled_by = OSF }
-			63 = { is_owned_by = OSF is_controlled_by = OSF }
+			61 = {
+				is_owned_by = OSF
+				is_controlled_by = OSF
+			}
+			62 = {
+				is_owned_by = OSF
+				is_controlled_by = OSF
+			}
+			63 = {
+				is_owned_by = OSF
+				is_controlled_by = OSF
+			}
 		}
 		AND = {
 			tag = APH
-			64 = { is_owned_by = APH is_controlled_by = APH }
-			65 = { is_owned_by = APH is_controlled_by = APH }
+			64 = {
+				is_owned_by = APH
+				is_controlled_by = APH
+			}
+			65 = {
+				is_owned_by = APH
+				is_controlled_by = APH
+			}
 		}
 	}
 }
@@ -1500,7 +2434,12 @@ VAL_regional_integration_target_valid = {
 		has_war = no
 		AND = {
 			has_war_with = STP
-			STP = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+			STP = {
+				has_country_leader = {
+					character = STP_maksim_shabrat
+					ruling_only = yes
+				}
+			}
 		}
 	}
 }
@@ -1524,7 +2463,10 @@ VAL_regional_administration_needed = {
 	is_controlled_by = VAL
 	NOT = { is_core_of = VAL }
 	NOT = { has_state_flag = VAL_regional_administration_in_progress }
-	OR = { compliance < 60 NOT = { resistance < 20 } }
+	OR = {
+		compliance < 60
+		NOT = { resistance < 20 }
+	}
 }
 
 VAL_can_proclaim_commonwealth = {
@@ -1533,15 +2475,24 @@ VAL_can_proclaim_commonwealth = {
 	VAL_campaign_objectives_met = yes
 	NOT = { has_cosmetic_tag = VAL_commonwealth }
 	NOT = { has_stability < 0.50 }
-	29 = { is_owned_by = VAL is_controlled_by = VAL }
-	46 = { is_owned_by = VAL is_controlled_by = VAL }
+	29 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
+	46 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
 }
 
 # COUNTRY VAL: the actual party-resistance war, not the succession countdown.
 VAL_stelander_civil_war_active = {
-    NOT = { has_global_flag = STP_cw_union_wars_finished }
-    STP = { exists = yes has_war_with = STS }
-    STS = { exists = yes }
+	NOT = { has_global_flag = STP_cw_union_wars_finished }
+	STP = {
+		exists = yes
+		has_war_with = STS
+	}
+	STS = { exists = yes }
 }
 
 # The UI follows the live obligation, not the focus that originally created it.
@@ -1552,14 +2503,20 @@ VAL_contract_obligations_decisions_visible = {
 
 VAL_frontier_decisions_visible = {
 	OR = {
-            has_completed_focus = VAL_frontier_conference
-            AND = {
-                has_completed_focus = VAL_The_Steel_Contract
-                NOT = { has_completed_focus = VAL_Integrate_Occidia }
-                OCA = { exists = no }
-                OR = { has_country_flag = VAL_occidian_settlement_pending owns_state = 43 owns_state = 44 owns_state = 45 owns_state = 88 }
-            }
-        }
+		has_completed_focus = VAL_frontier_conference
+		AND = {
+			has_completed_focus = VAL_The_Steel_Contract
+			NOT = { has_completed_focus = VAL_Integrate_Occidia }
+			OCA = { exists = no }
+			OR = {
+				has_country_flag = VAL_occidian_settlement_pending
+				owns_state = 43
+				owns_state = 44
+				owns_state = 45
+				owns_state = 88
+			}
+		}
+	}
 }
 
 VAL_foreign_sales_decisions_visible = {
@@ -1576,47 +2533,49 @@ VAL_can_spend_750 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
 }
 
-
 # Policy is explicit; merely not researching the military branch is not a choice.
 VAL_can_defer_northern_expansion = {
-    tag = VAL
-    has_completed_focus = VAL_frontier_security_plan
-    VAL_frontier_postwar = yes
-    VAL_frontier_idle = yes
-    has_war = no
-    NOT = { has_country_flag = VAL_frontier_expansion_deferred }
-    NOT = { has_country_flag = VAL_frontier_treaty_signed }
-    NOT = { has_country_flag = VAL_campaign_mobilizing }
+	tag = VAL
+	has_completed_focus = VAL_frontier_security_plan
+	VAL_frontier_postwar = yes
+	VAL_frontier_idle = yes
+	has_war = no
+	NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+	NOT = { has_country_flag = VAL_frontier_treaty_signed }
+	NOT = { has_country_flag = VAL_campaign_mobilizing }
 }
 
 VAL_northern_expansion_deferred = {
-    has_country_flag = VAL_frontier_expansion_deferred
-    has_completed_focus = VAL_frontier_security_plan
-    has_capitulated = no
-    is_subject = no
-    has_war = no
-    VAL_frontier_idle = yes
-    NOT = { has_country_flag = VAL_campaign_mobilizing }
-    NOT = { has_country_flag = VAL_stelander_defeated }
+	has_country_flag = VAL_frontier_expansion_deferred
+	has_completed_focus = VAL_frontier_security_plan
+	has_capitulated = no
+	is_subject = no
+	has_war = no
+	VAL_frontier_idle = yes
+	NOT = { has_country_flag = VAL_campaign_mobilizing }
+	NOT = { has_country_flag = VAL_stelander_defeated }
 }
 
 # Commercial recovery does not certify territorial victory or remove a resource shortage.
 VAL_economic_settlement_ready = {
-    OR = {
-        VAL_campaign_objectives_met = yes
-        AND = {
-            VAL_northern_expansion_deferred = yes
-            has_completed_focus = VAL_Returning_Buyers
-            has_completed_focus = VAL_Contingency_Ledgers
-        }
-    }
+	OR = {
+		VAL_campaign_objectives_met = yes
+		AND = {
+			VAL_northern_expansion_deferred = yes
+			has_completed_focus = VAL_Returning_Buyers
+			has_completed_focus = VAL_Contingency_Ledgers
+		}
+	}
 }
 
 # COUNTRY VAL: the first defeat stays recorded so inherited campaigns stay closed.
 VAL_council_can_prepare_revanche = {
 	tag = VAL
 	has_country_flag = VAL_stelander_defeated
-	has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
+	has_country_leader = {
+		character = VAL_Commanders_Council
+		ruling_only = yes
+	}
 	NOT = { is_subject = yes }
 	NOT = { has_capitulated = yes }
 	STS = {
@@ -1642,11 +2601,14 @@ VAL_council_can_launch_revanche = {
 
 # COUNTRY VAL: domestic recovery does not depend on the foreign leader surviving.
 VAL_council_in_office = {
-    tag = VAL
-    has_country_flag = VAL_stelander_defeated
-    has_country_leader = { character = VAL_Commanders_Council ruling_only = yes }
-    is_subject = no
-    has_capitulated = no
+	tag = VAL
+	has_country_flag = VAL_stelander_defeated
+	has_country_leader = {
+		character = VAL_Commanders_Council
+		ruling_only = yes
+	}
+	is_subject = no
+	has_capitulated = no
 }
 
 # Playable staffing: original cabinet and civil-war commanders are unchanged.
@@ -1676,32 +2638,34 @@ VAL_qol_elite_army_available = {
 	}
 }
 
-
 VAL_stelander_equal_partner_available = {
- tag = VAL
- has_country_flag = VAL_stelander_equal_recognition
- is_subject = no
- has_capitulated = no
- has_war = no
- NOT = { has_country_flag = VAL_stelander_defeated has_country_flag = VAL_stelander_alliance_refused }
- OR = {
-  STS = {
-   exists = yes
-   has_country_flag = VAL_stelander_equal_recognition
-   is_subject = no
-   has_capitulated = no
-   has_war = no
-   NOT = { has_war_with = VAL }
-  }
-  STP = {
-   exists = yes
-   has_country_flag = VAL_stelander_equal_recognition
-   is_subject = no
-   has_capitulated = no
-   has_war = no
-   NOT = { has_war_with = VAL }
-  }
- }
+	tag = VAL
+	has_country_flag = VAL_stelander_equal_recognition
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = {
+		has_country_flag = VAL_stelander_defeated
+		has_country_flag = VAL_stelander_alliance_refused
+	}
+	OR = {
+		STS = {
+			exists = yes
+			has_country_flag = VAL_stelander_equal_recognition
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			NOT = { has_war_with = VAL }
+		}
+		STP = {
+			exists = yes
+			has_country_flag = VAL_stelander_equal_recognition
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			NOT = { has_war_with = VAL }
+		}
+	}
 }
 
 # COUNTRY partner: peacetime contracts are available before northern wars.
@@ -1709,7 +2673,14 @@ VAL_contract_partner = {
 	exists = yes
 	has_capitulated = no
 	NOT = { has_war_with = VAL }
-	OR = { tag = CIN tag = OSF tag = APH tag = COF tag = TFF tag = YPR }
+	OR = {
+		tag = CIN
+		tag = OSF
+		tag = APH
+		tag = COF
+		tag = TFF
+		tag = YPR
+	}
 }
 
 # COUNTRY VAL: the existing export ledger and the legacy escrow share this gate.
@@ -1728,75 +2699,146 @@ VAL_partner_offer_current = {
 	NOT = { has_war_with = VAL }
 	# Each recipient owns its offer flag; VAL_partner_offer_pending is a shared
 	# desk marker and must not invalidate other simultaneous replies.
-	VAL = { exists = yes has_capitulated = no }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
 }
 
 VAL_partner_trade_terms_valid = {
 	VAL_contract_partner = yes
 	NOT = { has_country_flag = VAL_market_term_started }
-	OR = { has_country_flag = VAL_trade_fee_paid VAL = { NOT = { has_political_power < 100 } } }
-	OR = { AND = { tag = CIN VAL = { NOT = { has_country_flag = VAL_market_contract_CIN_active } } }
-		AND = { tag = OSF VAL = { NOT = { has_country_flag = VAL_market_contract_OSF_active } } }
-		AND = { tag = APH VAL = { NOT = { has_country_flag = VAL_market_contract_APH_active } } }
-		AND = { tag = COF VAL = { NOT = { has_country_flag = VAL_market_contract_COF_active } } }
-		AND = { tag = TFF VAL = { NOT = { has_country_flag = VAL_market_contract_TFF_active } } }
-		AND = { tag = YPR VAL = { NOT = { has_country_flag = VAL_market_contract_YPR_active } } } }
+	OR = {
+		has_country_flag = VAL_trade_fee_paid
+		VAL = {
+			NOT = { has_political_power < 100 }
+		}
+	}
+	OR = {
+		AND = {
+			tag = CIN
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_CIN_active }
+			}
+		}
+		AND = {
+			tag = OSF
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_OSF_active }
+			}
+		}
+		AND = {
+			tag = APH
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_APH_active }
+			}
+		}
+		AND = {
+			tag = COF
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_COF_active }
+			}
+		}
+		AND = {
+			tag = TFF
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_TFF_active }
+			}
+		}
+		AND = {
+			tag = YPR
+			VAL = {
+				NOT = { has_country_flag = VAL_market_contract_YPR_active }
+			}
+		}
+	}
 }
+
 VAL_partner_trade_can_offer = {
 	VAL_partner_trade_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
-
 }
+
 VAL_partner_trade_can_accept = {
 	VAL_partner_offer_current = yes
 	# The prepaid receipt survives the dated UI marker and proves the quote was sent.
-	OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_trade_fee_paid }
+	OR = {
+		has_country_flag = VAL_partner_offer_trade
+		has_country_flag = VAL_trade_fee_paid
+	}
 	VAL_partner_trade_terms_valid = yes
 }
-VAL_partner_hire_funds_ready = { VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
-VAL_partner_hire_reserve_ready = { NOT = { has_manpower < 5000 } }
+
+VAL_partner_hire_funds_ready = {
+	VAL = {
+		check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	}
+}
+
+VAL_partner_hire_reserve_ready = {
+	NOT = { has_manpower < 5000 }
+}
 
 VAL_partner_hire_terms_valid = {
- NOT = { has_country_flag = VAL_hire_fee_paid }
- VAL_contract_partner = yes
- has_war = no
- NOT = { has_country_flag = VAL_partner_hire_cooldown }
- OR = { has_country_flag = VAL_hire_fee_500_paid VAL_partner_hire_funds_ready = yes }
- VAL_partner_hire_reserve_ready = yes
+	NOT = { has_country_flag = VAL_hire_fee_paid }
+	VAL_contract_partner = yes
+	has_war = no
+	NOT = { has_country_flag = VAL_partner_hire_cooldown }
+	OR = {
+		has_country_flag = VAL_hire_fee_500_paid
+		VAL_partner_hire_funds_ready = yes
+	}
+	VAL_partner_hire_reserve_ready = yes
 }
 
 VAL_partner_hire_can_offer = {
- NOT = { has_country_flag = VAL_hire_fee_paid }
+	NOT = { has_country_flag = VAL_hire_fee_paid }
 	VAL_partner_hire_terms_valid = yes
 	NOT = { has_country_flag = VAL_hire_fee_500_paid }
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
-
 }
+
 VAL_partner_hire_can_accept = {
 	VAL_partner_offer_current = yes
 	VAL_partner_hire_terms_valid = yes
 	# The reserved receipt is authoritative if the dated offer marker expires
 	# while a valid human response is still open.
-	OR = { has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_hire_fee_500_paid }
+	OR = {
+		has_country_flag = VAL_partner_offer_hire
+		has_country_flag = VAL_hire_fee_500_paid
+	}
 }
 
 VAL_partner_arms_terms_valid = {
- VAL_ready_delivery_route_open = yes
-	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
-	NOT = { tag = STS has_war_with = STP }
+	VAL_ready_delivery_route_open = yes
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
 	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 25000 } } }
+	VAL = {
+		VAL_export_slot_free = yes
+		NOT = {
+			has_equipment = { infantry_equipment < 25000 }
+		}
+	}
 }
+
 VAL_partner_arms_can_offer = {
- VAL = { has_completed_focus = VAL_Foreign_Broker_Licences }
+	VAL = { has_completed_focus = VAL_Foreign_Broker_Licences }
 	VAL_partner_arms_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
 	NOT = { has_country_flag = VAL_export_customer_cooldown }
 	VAL = { has_completed_focus = VAL_Foreign_Broker_Licences }
 }
+
 VAL_partner_arms_can_accept = {
 	VAL_partner_offer_current = yes
 	has_country_flag = VAL_partner_offer_arms
@@ -1804,20 +2846,33 @@ VAL_partner_arms_can_accept = {
 }
 
 VAL_partner_bulk_terms_valid = {
- VAL_ready_delivery_route_open = yes
-	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
-	NOT = { tag = STS has_war_with = STP }
+	VAL_ready_delivery_route_open = yes
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
 	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 50000 } } }
+	VAL = {
+		VAL_export_slot_free = yes
+		NOT = {
+			has_equipment = { infantry_equipment < 50000 }
+		}
+	}
 }
+
 VAL_partner_bulk_can_offer = {
- VAL = { has_completed_focus = VAL_Bulk_Arms_Contracts }
+	VAL = { has_completed_focus = VAL_Bulk_Arms_Contracts }
 	VAL_partner_bulk_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
 	NOT = { has_country_flag = VAL_export_customer_cooldown }
 	VAL = { has_completed_focus = VAL_Bulk_Arms_Contracts }
 }
+
 VAL_partner_bulk_can_accept = {
 	VAL_partner_offer_current = yes
 	has_country_flag = VAL_partner_offer_bulk
@@ -1825,20 +2880,33 @@ VAL_partner_bulk_can_accept = {
 }
 
 VAL_partner_arsenal_terms_valid = {
- VAL_ready_delivery_route_open = yes
-	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
-	NOT = { tag = STS has_war_with = STP }
+	VAL_ready_delivery_route_open = yes
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
 	check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 100000 } } }
+	VAL = {
+		VAL_export_slot_free = yes
+		NOT = {
+			has_equipment = { infantry_equipment < 100000 }
+		}
+	}
 }
+
 VAL_partner_arsenal_can_offer = {
- VAL = { has_completed_focus = VAL_Army_Arsenal_Orders }
+	VAL = { has_completed_focus = VAL_Army_Arsenal_Orders }
 	VAL_partner_arsenal_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
 	NOT = { has_country_flag = VAL_export_customer_cooldown }
 	VAL = { has_completed_focus = VAL_Army_Arsenal_Orders }
 }
+
 VAL_partner_arsenal_can_accept = {
 	VAL_partner_offer_current = yes
 	has_country_flag = VAL_partner_offer_arsenal
@@ -1846,20 +2914,33 @@ VAL_partner_arsenal_can_accept = {
 }
 
 VAL_partner_strategic_terms_valid = {
- VAL_ready_delivery_route_open = yes
-	OR = { VAL_contract_partner = yes VAL_export_customer = yes }
-	NOT = { tag = STS has_war_with = STP }
+	VAL_ready_delivery_route_open = yes
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
 	check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
-	VAL = { VAL_export_slot_free = yes NOT = { has_equipment = { infantry_equipment < 200000 } } }
+	VAL = {
+		VAL_export_slot_free = yes
+		NOT = {
+			has_equipment = { infantry_equipment < 200000 }
+		}
+	}
 }
+
 VAL_partner_strategic_can_offer = {
- VAL = { has_completed_focus = VAL_Strategic_Arms_Exports }
+	VAL = { has_completed_focus = VAL_Strategic_Arms_Exports }
 	VAL_partner_strategic_terms_valid = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
 	NOT = { has_country_flag = VAL_export_customer_cooldown }
 	VAL = { has_completed_focus = VAL_Strategic_Arms_Exports }
 }
+
 VAL_partner_strategic_can_accept = {
 	VAL_partner_offer_current = yes
 	has_country_flag = VAL_partner_offer_strategic
@@ -1867,23 +2948,49 @@ VAL_partner_strategic_can_accept = {
 }
 
 VAL_southern_tsaygen_revenge_available = {
-	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
+	custom_trigger_tooltip = {
+		tooltip = VAL_perimeter_open_tt
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+	}
 	has_capitulated = no
 	is_subject = no
 	has_war = no
-	custom_trigger_tooltip = { tooltip = VAL_frontier_idle_tt VAL_frontier_idle = yes }
-	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
-	168 = { is_core_of = VAL is_owned_by = ERT is_controlled_by = ERT }
+	custom_trigger_tooltip = {
+		tooltip = VAL_frontier_idle_tt
+		VAL_frontier_idle = yes
+	}
+	ERT = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		is_in_faction = no
+	}
+	168 = {
+		is_core_of = VAL
+		is_owned_by = ERT
+		is_controlled_by = ERT
+	}
 }
 
 VAL_wasteland_invasion_available = {
-	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
+	custom_trigger_tooltip = {
+		tooltip = VAL_perimeter_open_tt
+		has_global_flag = ADISCORD_vorkerland_dirty_opened
+	}
 	has_capitulated = no
 	is_subject = no
 	has_war = no
 	owns_state = 168
-	ERT = { exists = yes has_capitulated = no is_subject = no is_in_faction = no }
-	169 = { is_owned_by = ERT is_controlled_by = ERT }
+	ERT = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		is_in_faction = no
+	}
+	169 = {
+		is_owned_by = ERT
+		is_controlled_by = ERT
+	}
 	NOT = { has_war_with = ERT }
 }
 
@@ -1936,14 +3043,37 @@ VAL_wasteland_administration_ready = {
 	has_global_flag = ADISCORD_vorkerland_dirty_opened
 	has_capitulated = no
 	is_subject = no
-	WCA = { exists = yes is_subject_of = VAL has_capitulated = no owns_state = 169 controls_state = 169 }
+	WCA = {
+		exists = yes
+		is_subject_of = VAL
+		has_capitulated = no
+		owns_state = 169
+		controls_state = 169
+	}
 }
+
 # COUNTRY capitulating opponent. Do not claim an unrelated victor's result.
 VAL_wasteland_capitulation_managed = {
 	has_war_with = VAL
-	VAL = { exists = yes has_capitulated = no is_subject = no }
-	FROM = { OR = { tag = VAL is_subject_of = VAL } }
-	capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	FROM = {
+		OR = {
+			tag = VAL
+			is_subject_of = VAL
+		}
+	}
+	capital_scope = {
+		controller = {
+			OR = {
+				tag = VAL
+				is_subject_of = VAL
+			}
+		}
+	}
 	OR = {
 		AND = {
 			tag = ERT
@@ -1955,7 +3085,13 @@ VAL_wasteland_capitulation_managed = {
 				}
 			}
 		}
-		AND = { tag = IRT VAL = { has_completed_focus = VAL_Eastern_Expansion VAL_wasteland_administration_ready = yes } }
+		AND = {
+			tag = IRT
+			VAL = {
+				has_completed_focus = VAL_Eastern_Expansion
+				VAL_wasteland_administration_ready = yes
+			}
+		}
 	}
 }
 
@@ -1968,8 +3104,15 @@ VAL_efl_concession_negotiable = {
 	is_subject = no
 	ADISCORD_nam_resource_war_active = yes
 	NOT = { has_war_with = EFL }
-	EFL = { exists = yes has_capitulated = no is_subject = no }
-	NAM = { NOT = { has_country_flag = VAL_export_customer_cooldown } NOT = { has_idea = VAL_paid_military_advisors } }
+	EFL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
+	NAM = {
+		NOT = { has_country_flag = VAL_export_customer_cooldown }
+		NOT = { has_idea = VAL_paid_military_advisors }
+	}
 }
 
 VAL_resource_aid_sufficient = {
@@ -2000,276 +3143,647 @@ VAL_resource_aid_recipient = {
 	NOT = { has_war_with = VAL }
 	ADISCORD_nam_resource_war_active = yes
 	OR = {
-		AND = { tag = NAM VAL = { check_variable = { var = VAL_resource_aid_side value = 1 compare = equals } } OR = { has_war_with = EFL has_war_with = AZH } }
-		AND = { tag = EFL VAL = { check_variable = { var = VAL_resource_aid_side value = 2 compare = equals } } has_war_with = NAM }
+		AND = {
+			tag = NAM
+			VAL = {
+				check_variable = { var = VAL_resource_aid_side value = 1 compare = equals }
+			}
+			OR = {
+				has_war_with = EFL
+				has_war_with = AZH
+			}
+		}
+		AND = {
+			tag = EFL
+			VAL = {
+				check_variable = { var = VAL_resource_aid_side value = 2 compare = equals }
+			}
+			has_war_with = NAM
+		}
 	}
 }
 
 VAL_northern_aid_recipient = {
-	OR = { tag = YPR tag = COF tag = TFF }
+	OR = {
+		tag = YPR
+		tag = COF
+		tag = TFF
+	}
 	VAL_northern_volunteer_host = yes
 }
 
 VAL_northern_aid_deliveries_open = {
-    NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-    OR = {
-        check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
-        check_variable = { var = VAL_northern_aid_state value = 2 compare = equals }
-    }
+	NOD = {
+		check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+	}
+	OR = {
+		check_variable = { var = VAL_northern_aid_state value = 1 compare = equals }
+		check_variable = { var = VAL_northern_aid_state value = 2 compare = equals }
+	}
 }
 
 # Two divisions may serve together or be split between active northern recipients.
 VAL_northern_aid_volunteers_present = {
-    OR = {
-        YPR = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 1 } }
-        COF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 1 } }
-        TFF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 1 } }
-        AND = {
-            YPR = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-            COF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-        }
-        AND = {
-            YPR = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-            TFF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-        }
-        AND = {
-            COF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-            TFF = { VAL_northern_aid_recipient = yes has_volunteers_amount_from = { tag = VAL count > 0 } }
-        }
-    }
+	OR = {
+		YPR = {
+			VAL_northern_aid_recipient = yes
+			has_volunteers_amount_from = {
+				tag = VAL
+				count > 1
+			}
+		}
+		COF = {
+			VAL_northern_aid_recipient = yes
+			has_volunteers_amount_from = {
+				tag = VAL
+				count > 1
+			}
+		}
+		TFF = {
+			VAL_northern_aid_recipient = yes
+			has_volunteers_amount_from = {
+				tag = VAL
+				count > 1
+			}
+		}
+		AND = {
+			YPR = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+			COF = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+		}
+		AND = {
+			YPR = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+			TFF = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+		}
+		AND = {
+			COF = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+			TFF = {
+				VAL_northern_aid_recipient = yes
+				has_volunteers_amount_from = {
+					tag = VAL
+					count > 0
+				}
+			}
+		}
+	}
 }
 
+VAL_partner_arms_funds_ready = {
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+}
 
-VAL_partner_arms_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+VAL_partner_bulk_funds_ready = {
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+}
 
-VAL_partner_bulk_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+VAL_partner_arsenal_funds_ready = {
+	check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals }
+}
 
-VAL_partner_arsenal_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } }
-
-VAL_partner_strategic_funds_ready = { check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
+VAL_partner_strategic_funds_ready = {
+	check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
+}
 
 # --- external_order_ledger ---
 # COUNTRY partner. Route choice is fixed at acceptance; only authored destinations participate.
 VAL_order_partner_route_open = {
-    OR = {
-        AND = { OR = { tag = CIN tag = OSF tag = APH } VAL = { VAL_trade_route_occidia_open = yes } }
-        AND = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } VAL = { VAL_trade_route_north_open = yes } }
-        AND = { OR = { tag = STP tag = STS tag = SRP } VAL = { VAL_trade_route_stelander_open = yes } }
-        AND = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } VAL = { VAL_trade_route_vorkerland_open = yes } }
-    }
+	OR = {
+		AND = {
+			OR = {
+				tag = CIN
+				tag = OSF
+				tag = APH
+			}
+			VAL = { VAL_trade_route_occidia_open = yes }
+		}
+		AND = {
+			OR = {
+				tag = NOD
+				tag = YPR
+				tag = COF
+				tag = TFF
+			}
+			VAL = { VAL_trade_route_north_open = yes }
+		}
+		AND = {
+			OR = {
+				tag = STP
+				tag = STS
+				tag = SRP
+			}
+			VAL = { VAL_trade_route_stelander_open = yes }
+		}
+		AND = {
+			OR = {
+				tag = WRK
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
+			VAL = { VAL_trade_route_vorkerland_open = yes }
+		}
+	}
 }
+
 VAL_order_partner_valid = {
- NOT = { VAL = { check_variable = { var = VAL_military_state value = 1 compare = equals } } has_war_with = event_target:VAL_military_customer }
-    exists = yes
-    has_capitulated = no
-    NOT = { has_war_with = VAL }
-    NOT = { tag = STS has_war_with = STP }
-    NOT = { check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-    VAL = { exists = yes has_capitulated = no }
+	NOT = {
+		VAL = {
+			check_variable = { var = VAL_military_state value = 1 compare = equals }
+		}
+		has_war_with = event_target:VAL_military_customer
+	}
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
+	NOT = {
+		check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+	}
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
 }
+
 VAL_order_debts_settled = {
-    NOT = { OR = {
-        CIN = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        OSF = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        APH = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        COF = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        TFF = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        YPR = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        WRK = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        WKR = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        VAD = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        TVA = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        STP = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        STS = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        SRP = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        NOD = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        NAM = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-        EFL = { exists = yes check_variable = { var = VAL_refund_due value = 0 compare = greater_than } }
-    } }
+	NOT = {
+		OR = {
+			CIN = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			OSF = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			APH = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			COF = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			TFF = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			YPR = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			WRK = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			WKR = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			VAD = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			TVA = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			STP = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			STS = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			SRP = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			NOD = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			NAM = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+			EFL = {
+				exists = yes
+				check_variable = { var = VAL_refund_due value = 0 compare = greater_than }
+			}
+		}
+	}
 }
+
 VAL_order_slot_free = {
-    VAL_order_debts_settled = yes
-    OR = {
-        AND = { NOT = { check_variable = { var = VAL_order_1_state value = 0 compare = greater_than } } NOT = { has_idea = VAL_export_income_1 } }
-        AND = { has_completed_focus = VAL_Northern_Clearing_House NOT = { check_variable = { var = VAL_order_2_state value = 0 compare = greater_than } } NOT = { has_idea = VAL_export_income_2 } }
-    }
+	VAL_order_debts_settled = yes
+	OR = {
+		AND = {
+			NOT = {
+				check_variable = { var = VAL_order_1_state value = 0 compare = greater_than }
+			}
+			NOT = { has_idea = VAL_export_income_1 }
+		}
+		AND = {
+			has_completed_focus = VAL_Northern_Clearing_House
+			NOT = {
+				check_variable = { var = VAL_order_2_state value = 0 compare = greater_than }
+			}
+			NOT = { has_idea = VAL_export_income_2 }
+		}
+	}
 }
+
 VAL_order_can_offer = {
-    VAL_order_partner_valid = yes
-    NOT = { has_country_flag = VAL_quarterly_supply_active }
-    VAL = { NOT = { has_political_power < 100 } }
-    VAL_order_partner_route_open = yes
-    NOT = { has_country_flag = VAL_partner_contact_cooldown }
-    VAL = { VAL_partner_desk_free = yes VAL_order_slot_free = yes }
+	VAL_order_partner_valid = yes
+	NOT = { has_country_flag = VAL_quarterly_supply_active }
+	VAL = {
+		NOT = { has_political_power < 100 }
+	}
+	VAL_order_partner_route_open = yes
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	VAL = {
+		VAL_partner_desk_free = yes
+		VAL_order_slot_free = yes
+	}
 }
+
 VAL_order_legacy_can_accept = {
-    VAL_order_partner_valid = yes
-    VAL_order_partner_route_open = yes
-    has_country_flag = VAL_order_offer
-    VAL = { VAL_order_slot_free = yes has_country_flag = VAL_partner_offer_pending }
-    OR = {
-        AND = { check_variable = { var = VAL_order_quote_tier value = 1 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 125 compare = greater_than_or_equals } }
-        AND = { check_variable = { var = VAL_order_quote_tier value = 2 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
-        AND = { check_variable = { var = VAL_order_quote_tier value = 3 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 562.5 compare = greater_than_or_equals } }
-        AND = { check_variable = { var = VAL_order_quote_tier value = 4 compare = equals } check_variable = { var = ADISCORD_economy_treasury value = 1250 compare = greater_than_or_equals } }
-    }
+	VAL_order_partner_valid = yes
+	VAL_order_partner_route_open = yes
+	has_country_flag = VAL_order_offer
+	VAL = {
+		VAL_order_slot_free = yes
+		has_country_flag = VAL_partner_offer_pending
+	}
+	OR = {
+		AND = {
+			check_variable = { var = VAL_order_quote_tier value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 125 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = VAL_order_quote_tier value = 2 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = VAL_order_quote_tier value = 3 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 562.5 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = VAL_order_quote_tier value = 4 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 1250 compare = greater_than_or_equals }
+		}
+	}
 }
+
 VAL_order_can_accept = {
- OR = {
- AND = {
-  has_country_flag = VAL_quarterly_offer
-  VAL_order_partner_valid = yes
-  VAL_order_partner_route_open = yes
-  has_country_flag = VAL_order_offer
-  NOT = { has_country_flag = VAL_quarterly_supply_active }
-  VAL = { VAL_order_slot_free = yes has_country_flag = VAL_partner_offer_pending NOT = { has_political_power < 100 } }
-  OR = {
-   check_variable = { var = VAL_order_quote_tier value = 1 compare = equals }
-   check_variable = { var = VAL_order_quote_tier value = 2 compare = equals }
-   check_variable = { var = VAL_order_quote_tier value = 3 compare = equals }
-   check_variable = { var = VAL_order_quote_tier value = 4 compare = equals }
-  }
- }
- AND = { NOT = { has_country_flag = VAL_quarterly_offer } VAL_order_legacy_can_accept = yes }
- }
+	OR = {
+		AND = {
+			has_country_flag = VAL_quarterly_offer
+			VAL_order_partner_valid = yes
+			VAL_order_partner_route_open = yes
+			has_country_flag = VAL_order_offer
+			NOT = { has_country_flag = VAL_quarterly_supply_active }
+			VAL = {
+				VAL_order_slot_free = yes
+				has_country_flag = VAL_partner_offer_pending
+				NOT = { has_political_power < 100 }
+			}
+			OR = {
+				check_variable = { var = VAL_order_quote_tier value = 1 compare = equals }
+				check_variable = { var = VAL_order_quote_tier value = 2 compare = equals }
+				check_variable = { var = VAL_order_quote_tier value = 3 compare = equals }
+				check_variable = { var = VAL_order_quote_tier value = 4 compare = equals }
+			}
+		}
+		AND = {
+			NOT = { has_country_flag = VAL_quarterly_offer }
+			VAL_order_legacy_can_accept = yes
+		}
+	}
 }
 
 VAL_order_1_partner_can_pay = {
 	OR = {
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 375 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 500 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 1000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 1687.5 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 2250 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 3750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_1_remaining value = 5000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 375 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 500 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 750 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 1000 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 1687.5 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 2250 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 3750 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_1_remaining value = 5000 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
+		}
 	}
 }
+
 VAL_order_2_partner_can_pay = {
 	OR = {
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 375 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 500 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 1000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 1687.5 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 2250 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 3750 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals } }
-		AND = { VAL = { check_variable = { var = VAL_order_2_remaining value = 5000 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals } }
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 375 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 375 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 500 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 750 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 750 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 1000 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 1687.5 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 1687.5 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 2250 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 2250 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 3750 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 3750 compare = greater_than_or_equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_order_2_remaining value = 5000 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 5000 compare = greater_than_or_equals }
+		}
 	}
 }
 
 VAL_order_1_can_dispatch = {
-    check_variable = { var = VAL_order_1_state value = 1 compare = equals }
-    NOT = { has_country_flag = VAL_order_1_quarter_paid }
-    NOT = { has_country_flag = VAL_order_1_expired }
-    has_active_mission = VAL_order_1_deadline
-    event_target:VAL_order_1_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes VAL_order_1_partner_can_pay = yes }
-    NOT = { has_equipment = { infantry_equipment < VAL_order_1_quantity } }
+	check_variable = { var = VAL_order_1_state value = 1 compare = equals }
+	NOT = { has_country_flag = VAL_order_1_quarter_paid }
+	NOT = { has_country_flag = VAL_order_1_expired }
+	has_active_mission = VAL_order_1_deadline
+	event_target:VAL_order_1_partner = {
+		VAL_order_partner_valid = yes
+		VAL_order_partner_route_open = yes
+		VAL_order_1_partner_can_pay = yes
+	}
+	NOT = {
+		has_equipment = { infantry_equipment < VAL_order_1_quantity }
+	}
 }
+
 VAL_order_2_can_dispatch = {
-    check_variable = { var = VAL_order_2_state value = 1 compare = equals }
-    NOT = { has_country_flag = VAL_order_2_quarter_paid }
-    NOT = { has_country_flag = VAL_order_2_expired }
-    has_active_mission = VAL_order_2_deadline
-    event_target:VAL_order_2_partner = { VAL_order_partner_valid = yes VAL_order_partner_route_open = yes VAL_order_2_partner_can_pay = yes }
-    NOT = { has_equipment = { infantry_equipment < VAL_order_2_quantity } }
+	check_variable = { var = VAL_order_2_state value = 1 compare = equals }
+	NOT = { has_country_flag = VAL_order_2_quarter_paid }
+	NOT = { has_country_flag = VAL_order_2_expired }
+	has_active_mission = VAL_order_2_deadline
+	event_target:VAL_order_2_partner = {
+		VAL_order_partner_valid = yes
+		VAL_order_partner_route_open = yes
+		VAL_order_2_partner_can_pay = yes
+	}
+	NOT = {
+		has_equipment = { infantry_equipment < VAL_order_2_quantity }
+	}
 }
 
 # --- military_contracts ---
 VAL_military_conflict_open = {
- event_target:VAL_military_customer = { exists = yes has_capitulated = no NOT = { has_war_with = VAL } has_war_with = event_target:VAL_military_enemy }
- event_target:VAL_military_enemy = { exists = yes has_capitulated = no }
+	event_target:VAL_military_customer = {
+		exists = yes
+		has_capitulated = no
+		NOT = { has_war_with = VAL }
+		has_war_with = event_target:VAL_military_enemy
+	}
+	event_target:VAL_military_enemy = {
+		exists = yes
+		has_capitulated = no
+	}
 }
+
 VAL_military_participating = {
- OR = {
-  event_target:VAL_military_customer = { has_volunteers_amount_from = { tag = VAL count > 1 } }
-  AND = { has_war_with = event_target:VAL_military_enemy is_in_faction_with = event_target:VAL_military_customer }
- }
+	OR = {
+		event_target:VAL_military_customer = {
+			has_volunteers_amount_from = {
+				tag = VAL
+				count > 1
+			}
+		}
+		AND = {
+			has_war_with = event_target:VAL_military_enemy
+			is_in_faction_with = event_target:VAL_military_customer
+		}
+	}
 }
+
 # COUNTRY potential customer. Only existing scripted conflicts can issue work.
 VAL_military_customer_eligible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- OR = { VAL_northern_volunteer_host = yes VAL_resource_aid_recipient = yes }
- check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
- VAL = {
- 	has_capitulated = no
- 	NOT = {
- 		command_power < 25
- 	}
- 	NOT = {
- 		has_country_flag = VAL_military_offer_pending
- 	}
- 	NOT = {
- 		check_variable = {
- 			var = VAL_military_state
- 			value = 0
- 			compare = greater_than
- 		}
- 	}
- 	NOT = {
- 		has_idea = VAL_advisors_income
- 	}
- }
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	OR = {
+		VAL_northern_volunteer_host = yes
+		VAL_resource_aid_recipient = yes
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	VAL = {
+		has_capitulated = no
+		NOT = {
+			command_power < 25
+		}
+		NOT = {
+			has_country_flag = VAL_military_offer_pending
+		}
+		NOT = {
+			check_variable = {
+				var = VAL_military_state
+				value = 0
+				compare = greater_than
+			}
+		}
+		NOT = {
+			has_idea = VAL_advisors_income
+		}
+	}
 
- OR = {
-  has_volunteers_amount_from = { tag = VAL count > 1 }
-  AND = { is_in_faction_with = VAL
-   OR = {
-    AND = { VAL_northern_volunteer_host = yes VAL = { has_war_with = NOD } }
-    AND = { tag = EFL has_war_with = NAM VAL = { has_war_with = NAM } }
-    AND = { tag = NAM has_war_with = EFL VAL = { has_war_with = EFL } }
-    AND = { tag = NAM has_war_with = AZH VAL = { has_war_with = AZH } }
-   }
-  }
- }
+	OR = {
+		has_volunteers_amount_from = {
+			tag = VAL
+			count > 1
+		}
+		AND = {
+			is_in_faction_with = VAL
+			OR = {
+				AND = {
+					VAL_northern_volunteer_host = yes
+					VAL = { has_war_with = NOD }
+				}
+				AND = {
+					tag = EFL
+					has_war_with = NAM
+					VAL = { has_war_with = NAM }
+				}
+				AND = {
+					tag = NAM
+					has_war_with = EFL
+					VAL = { has_war_with = EFL }
+				}
+				AND = {
+					tag = NAM
+					has_war_with = AZH
+					VAL = { has_war_with = AZH }
+				}
+			}
+		}
+	}
 }
 
 VAL_military_offer_valid = {
- has_country_flag = VAL_military_offer
- tag = event_target:VAL_military_customer
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
- VAL = {
- 	has_country_flag = VAL_military_offer_pending
- 	has_capitulated = no
- 	NOT = {
- 		command_power < 25
- 	}
- 	NOT = {
- 		check_variable = {
- 			var = VAL_military_state
- 			value = 0
- 			compare = greater_than
- 		}
- 	}
- 	VAL_military_conflict_open = yes
- 	VAL_military_participating = yes
- }
- OR = { VAL = { check_variable = { var = VAL_military_goal value = 3 compare = equals } } has_event_target = VAL_military_target }
- OR = {
-  VAL = { check_variable = { var = VAL_military_goal value = 3 compare = equals } }
-  AND = { VAL = { check_variable = { var = VAL_military_goal value = 1 compare = equals } VAL_military_target_secured = yes } }
-  AND = {
-  	VAL = {
-  		check_variable = {
-  			var = VAL_military_goal
-  			value = 2
-  			compare = equals
-  		}
-  	}
-  	event_target:VAL_military_target = {
-  		is_owned_by = event_target:VAL_military_customer
-  		is_controlled_by = event_target:VAL_military_enemy
-  	}
-  }
- }
+	has_country_flag = VAL_military_offer
+	tag = event_target:VAL_military_customer
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	VAL = {
+		has_country_flag = VAL_military_offer_pending
+		has_capitulated = no
+		NOT = {
+			command_power < 25
+		}
+		NOT = {
+			check_variable = {
+				var = VAL_military_state
+				value = 0
+				compare = greater_than
+			}
+		}
+		VAL_military_conflict_open = yes
+		VAL_military_participating = yes
+	}
+	OR = {
+		VAL = {
+			check_variable = { var = VAL_military_goal value = 3 compare = equals }
+		}
+		has_event_target = VAL_military_target
+	}
+	OR = {
+		VAL = {
+			check_variable = { var = VAL_military_goal value = 3 compare = equals }
+		}
+		AND = {
+			VAL = {
+				check_variable = { var = VAL_military_goal value = 1 compare = equals }
+				VAL_military_target_secured = yes
+			}
+		}
+		AND = {
+			VAL = {
+				check_variable = {
+					var = VAL_military_goal
+					value = 2
+					compare = equals
+				}
+			}
+			event_target:VAL_military_target = {
+				is_owned_by = event_target:VAL_military_customer
+				is_controlled_by = event_target:VAL_military_enemy
+			}
+		}
+	}
 }
 
-
 VAL_military_target_secured = {
- event_target:VAL_military_target = { is_owned_by = event_target:VAL_military_customer is_controlled_by = event_target:VAL_military_customer }
+	event_target:VAL_military_target = {
+		is_owned_by = event_target:VAL_military_customer
+		is_controlled_by = event_target:VAL_military_customer
+	}
 }
 
 VAL_has_transit_corridor_foothold = {
@@ -2287,143 +3801,269 @@ VAL_has_transit_corridor_foothold = {
 }
 
 VAL_transit_charter_offerable = {
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
- NOT = { has_country_flag = VAL_trade_transit_charter }
- VAL_has_transit_corridor_foothold = yes
- VAL = { VAL_partner_desk_free = yes }
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
+	NOT = { has_country_flag = VAL_trade_transit_charter }
+	VAL_has_transit_corridor_foothold = yes
+	VAL = { VAL_partner_desk_free = yes }
 }
 
 # Existing direct shipping can precede a corridor; a commissioned route cannot be bypassed after its loss.
 VAL_ready_delivery_route_open = {
- NOT = { VAL = { check_variable = { var = VAL_military_state value = 1 compare = equals } } has_war_with = event_target:VAL_military_customer }
- NOT = { OR = {
-  AND = { OR = { tag = CIN tag = OSF tag = APH } VAL = { has_country_flag = VAL_route_occidia_commissioned NOT = { VAL_trade_route_occidia_open = yes } } }
-  AND = { OR = { tag = NOD tag = YPR tag = COF tag = TFF } VAL = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } } }
-  AND = { OR = { tag = STP tag = STS tag = SRP } VAL = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } } }
-  AND = { OR = { tag = WRK tag = WKR tag = VAD tag = TVA } VAL = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } } }
- } }
+	NOT = {
+		VAL = {
+			check_variable = { var = VAL_military_state value = 1 compare = equals }
+		}
+		has_war_with = event_target:VAL_military_customer
+	}
+	NOT = {
+		OR = {
+			AND = {
+				OR = {
+					tag = CIN
+					tag = OSF
+					tag = APH
+				}
+				VAL = {
+					has_country_flag = VAL_route_occidia_commissioned
+					NOT = { VAL_trade_route_occidia_open = yes }
+				}
+			}
+			AND = {
+				OR = {
+					tag = NOD
+					tag = YPR
+					tag = COF
+					tag = TFF
+				}
+				VAL = {
+					has_country_flag = VAL_route_north_commissioned
+					NOT = { VAL_trade_route_north_open = yes }
+				}
+			}
+			AND = {
+				OR = {
+					tag = STP
+					tag = STS
+					tag = SRP
+				}
+				VAL = {
+					has_country_flag = VAL_route_stelander_commissioned
+					NOT = { VAL_trade_route_stelander_open = yes }
+				}
+			}
+			AND = {
+				OR = {
+					tag = WRK
+					tag = WKR
+					tag = VAD
+					tag = TVA
+				}
+				VAL = {
+					has_country_flag = VAL_route_vorkerland_commissioned
+					NOT = { VAL_trade_route_vorkerland_open = yes }
+				}
+			}
+		}
+	}
 }
-
 
 # COUNTRY partner. Capability predicates exclude temporary stocks, slots and reply locks.
 VAL_partner_commerce_visible = { VAL_contract_partner = yes }
+
 VAL_partner_weapons_visible = {
- OR = { VAL_contract_partner = yes VAL_export_customer = yes }
- VAL = { OR = {
-  has_completed_focus = VAL_Foreign_Broker_Licences
-  has_completed_focus = VAL_Bulk_Arms_Contracts
-  has_completed_focus = VAL_Army_Arsenal_Orders
-  has_completed_focus = VAL_Strategic_Arms_Exports
- } }
-}
-VAL_partner_orders_visible = {
- VAL_partner_weapons_visible = yes
- NOT = { OR = { tag = NAM tag = EFL } }
-}
-VAL_partner_military_visible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- VAL = { has_completed_focus = VAL_Contingency_Ledgers }
- OR = { VAL_northern_volunteer_host = yes VAL_resource_aid_recipient = yes }
-}
-VAL_partner_advisors_visible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- VAL = { has_completed_focus = VAL_Contingency_Ledgers }
- VAL_export_customer = yes
- has_war = yes
-}
-VAL_partner_transit_visible = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
- NOT = { has_country_flag = VAL_trade_transit_charter }
- VAL_has_transit_corridor_foothold = yes
-}
-VAL_partner_support_visible = {
- OR = { VAL_partner_military_visible = yes VAL_partner_advisors_visible = yes VAL_partner_transit_visible = yes }
-}
-VAL_partner_has_visible_contracts = {
- OR = { VAL_partner_commerce_visible = yes VAL_partner_weapons_visible = yes VAL_partner_support_visible = yes }
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	VAL = {
+		OR = {
+			has_completed_focus = VAL_Foreign_Broker_Licences
+			has_completed_focus = VAL_Bulk_Arms_Contracts
+			has_completed_focus = VAL_Army_Arsenal_Orders
+			has_completed_focus = VAL_Strategic_Arms_Exports
+		}
+	}
 }
 
+VAL_partner_orders_visible = {
+	VAL_partner_weapons_visible = yes
+	NOT = {
+		OR = {
+			tag = NAM
+			tag = EFL
+		}
+	}
+}
+
+VAL_partner_military_visible = {
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	VAL = { has_completed_focus = VAL_Contingency_Ledgers }
+	OR = {
+		VAL_northern_volunteer_host = yes
+		VAL_resource_aid_recipient = yes
+	}
+}
+
+VAL_partner_advisors_visible = {
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	VAL = { has_completed_focus = VAL_Contingency_Ledgers }
+	VAL_export_customer = yes
+	has_war = yes
+}
+
+VAL_partner_transit_visible = {
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
+	NOT = { has_country_flag = VAL_trade_transit_charter }
+	VAL_has_transit_corridor_foothold = yes
+}
+
+VAL_partner_support_visible = {
+	OR = {
+		VAL_partner_military_visible = yes
+		VAL_partner_advisors_visible = yes
+		VAL_partner_transit_visible = yes
+	}
+}
+
+VAL_partner_has_visible_contracts = {
+	OR = {
+		VAL_partner_commerce_visible = yes
+		VAL_partner_weapons_visible = yes
+		VAL_partner_support_visible = yes
+	}
+}
 
 # COUNTRY partner. The special menu is useful only while at least one action is payable.
 VAL_partner_special_offerable = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- OR = {
-  AND = { VAL_partner_military_visible = yes VAL_military_customer_eligible = yes }
-  AND = {
-   VAL_partner_advisors_visible = yes
-   ADISCORD_economy_can_spend_100 = yes
-   NOT = { has_idea = VAL_paid_military_advisors }
-   NOT = { has_country_flag = VAL_export_customer_cooldown }
-   VAL = {
-    NOT = { has_political_power < 30 } NOT = { command_power < 25 }
-    NOT = { has_idea = VAL_advisors_income }
-    NOT = { check_variable = { var = VAL_military_state value = 1 compare = equals } }
-    NOT = { has_country_flag = VAL_military_offer_pending }
-   }
-  }
-  VAL_transit_charter_offerable = yes
- }
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	OR = {
+		AND = {
+			VAL_partner_military_visible = yes
+			VAL_military_customer_eligible = yes
+		}
+		AND = {
+			VAL_partner_advisors_visible = yes
+			ADISCORD_economy_can_spend_100 = yes
+			NOT = { has_idea = VAL_paid_military_advisors }
+			NOT = { has_country_flag = VAL_export_customer_cooldown }
+			VAL = {
+				NOT = { has_political_power < 30 }
+				NOT = { command_power < 25 }
+				NOT = { has_idea = VAL_advisors_income }
+				NOT = {
+					check_variable = { var = VAL_military_state value = 1 compare = equals }
+				}
+				NOT = { has_country_flag = VAL_military_offer_pending }
+			}
+		}
+		VAL_transit_charter_offerable = yes
+	}
 }
-
 
 # COUNTRY partner. Recipient eligibility must not hide shortages on the VAL side.
 VAL_trade_recipient_ready = {
- VAL_contract_partner = yes
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- NOT = { has_country_flag = VAL_market_term_started }
+	VAL_contract_partner = yes
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	NOT = { has_country_flag = VAL_market_term_started }
 }
+
 VAL_hire_recipient_ready = {
- VAL_contract_partner = yes
- has_war = no
- VAL_partner_hire_reserve_ready = yes
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- NOT = { has_country_flag = VAL_partner_hire_cooldown }
- NOT = { has_country_flag = VAL_hire_fee_paid }
- NOT = { has_country_flag = VAL_hire_fee_500_paid }
+	VAL_contract_partner = yes
+	has_war = no
+	VAL_partner_hire_reserve_ready = yes
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	NOT = { has_country_flag = VAL_partner_hire_cooldown }
+	NOT = { has_country_flag = VAL_hire_fee_paid }
+	NOT = { has_country_flag = VAL_hire_fee_500_paid }
 }
+
 VAL_ready_recipient_ready = {
- OR = { VAL_contract_partner = yes VAL_export_customer = yes }
- NOT = { tag = STS has_war_with = STP }
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- NOT = { has_country_flag = VAL_export_customer_cooldown }
+	OR = {
+		VAL_contract_partner = yes
+		VAL_export_customer = yes
+	}
+	NOT = {
+		tag = STS
+		has_war_with = STP
+	}
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	NOT = { has_country_flag = VAL_export_customer_cooldown }
 }
+
 VAL_quarterly_recipient_ready = {
- VAL_order_partner_valid = yes
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- NOT = { has_country_flag = VAL_quarterly_supply_active }
+	VAL_order_partner_valid = yes
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	NOT = { has_country_flag = VAL_quarterly_supply_active }
 }
 
 VAL_military_recipient_ready = {
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- OR = { VAL_northern_volunteer_host = yes VAL_resource_aid_recipient = yes }
- check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	OR = {
+		VAL_northern_volunteer_host = yes
+		VAL_resource_aid_recipient = yes
+	}
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 
-
- OR = {
-  has_volunteers_amount_from = { tag = VAL count > 1 }
-  AND = { is_in_faction_with = VAL
-   OR = {
-    AND = { VAL_northern_volunteer_host = yes VAL = { has_war_with = NOD } }
-    AND = { tag = EFL has_war_with = NAM VAL = { has_war_with = NAM } }
-    AND = { tag = NAM has_war_with = EFL VAL = { has_war_with = EFL } }
-    AND = { tag = NAM has_war_with = AZH VAL = { has_war_with = AZH } }
-   }
-  }
- }
+	OR = {
+		has_volunteers_amount_from = {
+			tag = VAL
+			count > 1
+		}
+		AND = {
+			is_in_faction_with = VAL
+			OR = {
+				AND = {
+					VAL_northern_volunteer_host = yes
+					VAL = { has_war_with = NOD }
+				}
+				AND = {
+					tag = EFL
+					has_war_with = NAM
+					VAL = { has_war_with = NAM }
+				}
+				AND = {
+					tag = NAM
+					has_war_with = EFL
+					VAL = { has_war_with = EFL }
+				}
+				AND = {
+					tag = NAM
+					has_war_with = AZH
+					VAL = { has_war_with = AZH }
+				}
+			}
+		}
+	}
 }
 
 VAL_special_recipient_ready = {
- exists = yes has_capitulated = no NOT = { has_war_with = VAL }
- NOT = { has_country_flag = VAL_partner_contact_cooldown }
- OR = {
-  AND = { VAL_partner_military_visible = yes VAL_military_recipient_ready = yes }
-  AND = { VAL_partner_advisors_visible = yes ADISCORD_economy_can_spend_100 = yes NOT = { has_idea = VAL_paid_military_advisors } NOT = { has_country_flag = VAL_export_customer_cooldown } }
-  VAL_partner_transit_visible = yes
- }
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	NOT = { has_country_flag = VAL_partner_contact_cooldown }
+	OR = {
+		AND = {
+			VAL_partner_military_visible = yes
+			VAL_military_recipient_ready = yes
+		}
+		AND = {
+			VAL_partner_advisors_visible = yes
+			ADISCORD_economy_can_spend_100 = yes
+			NOT = { has_idea = VAL_paid_military_advisors }
+			NOT = { has_country_flag = VAL_export_customer_cooldown }
+		}
+		VAL_partner_transit_visible = yes
+	}
 }
 
 # TARGET COUNTRY: a live side of the STP-STS civil war that may host VAL volunteers.
@@ -2464,7 +4104,19 @@ VAL_stelander_support_active = {
 
 VAL_frontier_workshop_affordable = {
 	OR = {
-		AND = { FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } } } ADISCORD_economy_can_spend_500 = yes }
-		AND = { FROM = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = equals } } check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals } }
+		AND = {
+			FROM = {
+				NOT = {
+					check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals }
+				}
+			}
+			ADISCORD_economy_can_spend_500 = yes
+		}
+		AND = {
+			FROM = {
+				check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+		}
 	}
 }

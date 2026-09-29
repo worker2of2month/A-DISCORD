@@ -37,7 +37,9 @@ country_event = {
 		set_global_flag = ADISCORD_rin_oath_crisis_loyalty_outcome
 		hidden_effect = {
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_rin_loyalty_published } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_rin_loyalty_published }
+				}
 				set_global_flag = ADISCORD_news_rin_loyalty_published
 				news_event = { id = ADISCORD_rin_crisis.14 hours = 1 }
 			}
@@ -78,7 +80,9 @@ country_event = {
 		if = {
 			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_rin_partition_published }
+				}
 				set_global_flag = ADISCORD_news_rin_partition_published
 				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
 			}
@@ -109,14 +113,18 @@ country_event = {
 	}
 	immediate = {
 		if = {
-			limit = { NOT = { ADISCORD_rin_partition_armistice_is_valid = yes } }
+			limit = {
+				NOT = { ADISCORD_rin_partition_armistice_is_valid = yes }
+			}
 			set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
 			log = "[ADISCORD][RIN] Partition verification failed after the single bounded repair."
 		}
 		if = {
 			limit = { ADISCORD_rin_partition_armistice_is_valid = yes }
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_rin_partition_published } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_rin_partition_published }
+				}
 				set_global_flag = ADISCORD_news_rin_partition_published
 				news_event = { id = ADISCORD_rin_crisis.13 hours = 1 }
 			}

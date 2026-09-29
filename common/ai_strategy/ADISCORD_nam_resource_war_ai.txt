@@ -1,65 +1,181 @@
 ADISCORD_nam_resource_war_eflor_offensive = {
 	allowed = { tag = EFL }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = NAM
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_unit_request
+		tag = NAM
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_nam_resource_war_azhar_offensive = {
 	allowed = { tag = AZH }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = NAM
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_unit_request
+		tag = NAM
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 ADISCORD_nam_resource_war_nam_eflor_front = {
 	allowed = { tag = NAM }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = EFL }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = EFL
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
-	ai_strategy = { type = front_control tag = EFL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = EFL
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = EFL
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 ADISCORD_nam_resource_war_nam_azhar_front = {
 	allowed = { tag = NAM }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = AZH }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = AZH
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
-	ai_strategy = { type = front_control tag = AZH ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = AZH
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = AZH
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 ADISCORD_nam_resource_war_nam_rebel_front = {
 	allowed = { tag = NAM }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = SLF }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = SLF
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SLF value = 100 }
-	ai_strategy = { type = front_control tag = SLF ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = SLF
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = SLF
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 ADISCORD_nam_resource_war_rebel_offensive = {
 	allowed = { tag = SLF }
-	enable = { ADISCORD_nam_resource_war_active = yes has_war_with = NAM }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		has_war_with = NAM
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
-	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_unit_request
+		tag = NAM
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NAM
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+	}
 }
 
 # Only two southern states have both a material upside and a political system
 # capable of authorising expeditionary formations.
 ADISCORD_nam_resource_war_rahma_volunteers = {
 	allowed = { tag = RHM }
-	enable = { ADISCORD_nam_resource_war_active = yes EFL = { exists = yes has_war_with = NAM } }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		EFL = {
+			exists = yes
+			has_war_with = NAM
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = EFL value = 1000 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = EFL
+		value = 1000
+	}
 }
 
 ADISCORD_nam_resource_war_mazar_volunteers = {
 	allowed = { tag = MZR }
-	enable = { ADISCORD_nam_resource_war_active = yes AZH = { exists = yes has_war_with = NAM } }
+	enable = {
+		ADISCORD_nam_resource_war_active = yes
+		AZH = {
+			exists = yes
+			has_war_with = NAM
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = send_volunteers_desire id = AZH value = 1000 }
+	ai_strategy = {
+		type = send_volunteers_desire
+		id = AZH
+		value = 1000
+	}
 }
 
 ADISCORD_NAM_prepare_against_EFL = {
@@ -69,11 +185,18 @@ ADISCORD_NAM_prepare_against_EFL = {
 		has_capitulated = no
 		NOT = { has_war_with = EFL }
 		NOT = { is_in_faction_with = EFL }
-		EFL = { exists = yes has_capitulated = no }
+		EFL = {
+			exists = yes
+			has_capitulated = no
+		}
 		ADISCORD_nam_resource_war_preparation = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = EFL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = EFL
+		value = 100
+	}
 }
 
 ADISCORD_EFL_prepare_against_NAM = {
@@ -83,11 +206,18 @@ ADISCORD_EFL_prepare_against_NAM = {
 		has_capitulated = no
 		NOT = { has_war_with = NAM }
 		NOT = { is_in_faction_with = NAM }
-		NAM = { exists = yes has_capitulated = no }
+		NAM = {
+			exists = yes
+			has_capitulated = no
+		}
 		ADISCORD_nam_resource_war_preparation = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NAM
+		value = 100
+	}
 }
 
 ADISCORD_NAM_prepare_against_AZH = {
@@ -97,11 +227,18 @@ ADISCORD_NAM_prepare_against_AZH = {
 		has_capitulated = no
 		NOT = { has_war_with = AZH }
 		NOT = { is_in_faction_with = AZH }
-		AZH = { exists = yes has_capitulated = no }
+		AZH = {
+			exists = yes
+			has_capitulated = no
+		}
 		ADISCORD_nam_resource_war_preparation = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = AZH value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = AZH
+		value = 100
+	}
 }
 
 ADISCORD_AZH_prepare_against_NAM = {
@@ -111,9 +248,16 @@ ADISCORD_AZH_prepare_against_NAM = {
 		has_capitulated = no
 		NOT = { has_war_with = NAM }
 		NOT = { is_in_faction_with = NAM }
-		NAM = { exists = yes has_capitulated = no }
+		NAM = {
+			exists = yes
+			has_capitulated = no
+		}
 		ADISCORD_nam_resource_war_preparation = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NAM value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NAM
+		value = 100
+	}
 }

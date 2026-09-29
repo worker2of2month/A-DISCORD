@@ -4,34 +4,117 @@
 
 ADISCORD_bezhaysk_settle_sts_victory = {
 	if = {
-		limit = { BLD = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BLD } white_peace = BLD }
-		annex_country = { target = BLD transfer_troops = no }
+		limit = {
+			BLD = {
+				exists = yes
+				has_war_with = STS
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BLD }
+			white_peace = BLD
+		}
+		annex_country = {
+			target = BLD
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BHG } white_peace = BHG }
-		annex_country = { target = BHG transfer_troops = no }
+		limit = {
+			BHG = {
+				exists = yes
+				has_war_with = STS
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BHG }
+			white_peace = BHG
+		}
+		annex_country = {
+			target = BHG
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BGT } white_peace = BGT }
-		annex_country = { target = BGT transfer_troops = no }
+		limit = {
+			BGT = {
+				exists = yes
+				has_war_with = STS
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BGT }
+			white_peace = BGT
+		}
+		annex_country = {
+			target = BGT
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BBV } white_peace = BBV }
-		annex_country = { target = BBV transfer_troops = no }
+		limit = {
+			BBV = {
+				exists = yes
+				has_war_with = STS
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BBV }
+			white_peace = BBV
+		}
+		annex_country = {
+			target = BBV
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BCM } white_peace = BCM }
-		annex_country = { target = BCM transfer_troops = no }
+		limit = {
+			BCM = {
+				exists = yes
+				has_war_with = STS
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BCM }
+			white_peace = BCM
+		}
+		annex_country = {
+			target = BCM
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BJK = { exists = yes } }
-		if = { limit = { has_war_with = BJK } white_peace = BJK }
-		annex_country = { target = BJK transfer_troops = no }
+		limit = {
+			BJK = { exists = yes }
+		}
+		if = {
+			limit = { has_war_with = BJK }
+			white_peace = BJK
+		}
+		annex_country = {
+			target = BJK
+			transfer_troops = no
+		}
 	}
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	ADISCORD_economy_mark_dirty = yes
@@ -39,34 +122,117 @@ ADISCORD_bezhaysk_settle_sts_victory = {
 
 ADISCORD_bezhaysk_settle_stp_victory = {
 	if = {
-		limit = { BLD = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BLD } white_peace = BLD }
-		annex_country = { target = BLD transfer_troops = no }
+		limit = {
+			BLD = {
+				exists = yes
+				has_war_with = STP
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BLD }
+			white_peace = BLD
+		}
+		annex_country = {
+			target = BLD
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BHG } white_peace = BHG }
-		annex_country = { target = BHG transfer_troops = no }
+		limit = {
+			BHG = {
+				exists = yes
+				has_war_with = STP
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BHG }
+			white_peace = BHG
+		}
+		annex_country = {
+			target = BHG
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BGT } white_peace = BGT }
-		annex_country = { target = BGT transfer_troops = no }
+		limit = {
+			BGT = {
+				exists = yes
+				has_war_with = STP
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BGT }
+			white_peace = BGT
+		}
+		annex_country = {
+			target = BGT
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BBV } white_peace = BBV }
-		annex_country = { target = BBV transfer_troops = no }
+		limit = {
+			BBV = {
+				exists = yes
+				has_war_with = STP
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BBV }
+			white_peace = BBV
+		}
+		annex_country = {
+			target = BBV
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
-		if = { limit = { has_war_with = BCM } white_peace = BCM }
-		annex_country = { target = BCM transfer_troops = no }
+		limit = {
+			BCM = {
+				exists = yes
+				has_war_with = STP
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+			}
+		}
+		if = {
+			limit = { has_war_with = BCM }
+			white_peace = BCM
+		}
+		annex_country = {
+			target = BCM
+			transfer_troops = no
+		}
 	}
 	if = {
-		limit = { BJK = { exists = yes } }
-		if = { limit = { has_war_with = BJK } white_peace = BJK }
-		annex_country = { target = BJK transfer_troops = no }
+		limit = {
+			BJK = { exists = yes }
+		}
+		if = {
+			limit = { has_war_with = BJK }
+			white_peace = BJK
+		}
+		annex_country = {
+			target = BJK
+			transfer_troops = no
+		}
 	}
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	set_country_flag = ADISCORD_bezhaysk_settlement_completed
@@ -81,18 +247,53 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	# individual overlords so no administration keeps a stale faction relation.
 	BJK = {
 		if = {
-			limit = { exists = yes is_in_faction = yes is_faction_leader = yes }
+			limit = {
+				exists = yes
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
 			dismantle_faction = yes
 		}
 	}
 	if = {
-		limit = { BLD = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BLD = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BLD = { is_subject = yes } }
-			BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
+		limit = {
+			BLD = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BLD = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BLD = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BLD = { is_subject = yes }
+			}
+			BLD = {
+				OVERLORD = {
+					set_autonomy = { target = BLD autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BLD = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BLD
 			autonomy_state = autonomy_VAL_contract_administration
@@ -104,18 +305,52 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 	if = {
-		limit = { BHG = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BHG = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BHG = { is_subject = yes } }
-			BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
+		limit = {
+			BHG = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BHG = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BHG = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BHG = { is_subject = yes }
+			}
+			BHG = {
+				OVERLORD = {
+					set_autonomy = { target = BHG autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BHG = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BHG
 			autonomy_state = autonomy_VAL_contract_administration
@@ -127,18 +362,52 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 	if = {
-		limit = { BGT = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BGT = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BGT = { is_subject = yes } }
-			BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
+		limit = {
+			BGT = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BGT = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BGT = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BGT = { is_subject = yes }
+			}
+			BGT = {
+				OVERLORD = {
+					set_autonomy = { target = BGT autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BGT = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BGT
 			autonomy_state = autonomy_VAL_contract_administration
@@ -150,18 +419,52 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 	if = {
-		limit = { BBV = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BBV = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BBV = { is_subject = yes } }
-			BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
+		limit = {
+			BBV = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BBV = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BBV = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BBV = { is_subject = yes }
+			}
+			BBV = {
+				OVERLORD = {
+					set_autonomy = { target = BBV autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BBV = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BBV
 			autonomy_state = autonomy_VAL_contract_administration
@@ -173,18 +476,52 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 	if = {
-		limit = { BCM = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BCM = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BCM = { is_subject = yes } }
-			BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
+		limit = {
+			BCM = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BCM = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BCM = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BCM = { is_subject = yes }
+			}
+			BCM = {
+				OVERLORD = {
+					set_autonomy = { target = BCM autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BCM = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BCM
 			autonomy_state = autonomy_VAL_contract_administration
@@ -196,18 +533,52 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
 	if = {
-		limit = { BJK = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		BJK = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
-		if = {
-			limit = { BJK = { is_subject = yes } }
-			BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }
+		limit = {
+			BJK = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
+			}
 		}
-		BJK = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		BJK = {
+			every_enemy_country = {
+				limit = {
+					OR = {
+						tag = VAL
+						is_subject_of = VAL
+					}
+				}
+				white_peace = PREV
+			}
+		}
+		if = {
+			limit = {
+				BJK = { is_subject = yes }
+			}
+			BJK = {
+				OVERLORD = {
+					set_autonomy = { target = BJK autonomy_state = autonomy_free }
+				}
+			}
+		}
+		BJK = {
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+		}
 		set_autonomy = {
 			target = BJK
 			autonomy_state = autonomy_VAL_contract_administration
@@ -219,7 +590,10 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			set_country_flag = ADISCORD_bezhaysk_val_administration
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
 			ADISCORD_release_non_participating_minor_optimization = yes
-			set_rule = { can_join_factions = no can_create_factions = no }
+			set_rule = {
+				can_join_factions = no
+				can_create_factions = no
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
@@ -227,8 +601,6 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	ADISCORD_economy_mark_dirty = yes
 }
-
-
 
 # Joint Kefreyt-Nodrul settlement.
 # Each feudal holding remains an indivisible package. The side controlling its
@@ -245,7 +617,11 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 	# individual overlords so no administration keeps a stale faction relation.
 	BJK = {
 		if = {
-			limit = { exists = yes is_in_faction = yes is_faction_leader = yes }
+			limit = {
+				exists = yes
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
 			dismantle_faction = yes
 		}
 	}
@@ -258,16 +634,57 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	}
 	if = {
-		limit = { BLD = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 31 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
-			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
-			if = {
-				limit = { BLD = { is_subject = yes } }
-				BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
+		limit = {
+			BLD = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BLD = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				31 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BLD = { has_war_with = NOD }
+				}
+				BLD = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BLD = { has_war_with = VAL }
+				}
+				BLD = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BLD = { is_subject = yes }
+				}
+				BLD = {
+					OVERLORD = {
+						set_autonomy = { target = BLD autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BLD = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BLD
@@ -280,19 +697,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 31 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
-			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
-			if = {
-				limit = { BLD = { is_subject = yes } }
-				BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
+			limit = {
+				31 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BLD = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BLD = { has_war_with = NOD }
+				}
+				BLD = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BLD = { has_war_with = VAL }
+				}
+				BLD = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BLD = { is_subject = yes }
+				}
+				BLD = {
+					OVERLORD = {
+						set_autonomy = { target = BLD autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BLD = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BLD
@@ -304,21 +754,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
-			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
-			if = {
-				limit = { BLD = { is_subject = yes } }
-				BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BLD = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BLD = { has_war_with = NOD }
+				}
+				BLD = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BLD = { has_war_with = VAL }
+				}
+				BLD = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BLD = { is_subject = yes }
+				}
+				BLD = {
+					OVERLORD = {
+						set_autonomy = { target = BLD autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BLD = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BLD
@@ -331,18 +807,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
-			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
 			if = {
-				limit = { BLD = { is_subject = yes } }
-				BLD = { OVERLORD = { set_autonomy = { target = BLD autonomy_state = autonomy_free } } }
+				limit = {
+					BLD = { has_war_with = NOD }
+				}
+				BLD = { white_peace = NOD }
 			}
-			BLD = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BLD = { has_war_with = VAL }
+				}
+				BLD = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BLD = { is_subject = yes }
+				}
+				BLD = {
+					OVERLORD = {
+						set_autonomy = { target = BLD autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BLD = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BLD
@@ -354,24 +854,68 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BLD = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
 	if = {
-		limit = { BHG = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 5 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
-			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
-			if = {
-				limit = { BHG = { is_subject = yes } }
-				BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
+		limit = {
+			BHG = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BHG = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				5 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BHG = { has_war_with = NOD }
+				}
+				BHG = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BHG = { has_war_with = VAL }
+				}
+				BHG = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BHG = { is_subject = yes }
+				}
+				BHG = {
+					OVERLORD = {
+						set_autonomy = { target = BHG autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BHG = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BHG
@@ -384,19 +928,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 5 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
-			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
-			if = {
-				limit = { BHG = { is_subject = yes } }
-				BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
+			limit = {
+				5 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BHG = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BHG = { has_war_with = NOD }
+				}
+				BHG = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BHG = { has_war_with = VAL }
+				}
+				BHG = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BHG = { is_subject = yes }
+				}
+				BHG = {
+					OVERLORD = {
+						set_autonomy = { target = BHG autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BHG = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BHG
@@ -408,21 +985,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
-			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
-			if = {
-				limit = { BHG = { is_subject = yes } }
-				BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BHG = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BHG = { has_war_with = NOD }
+				}
+				BHG = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BHG = { has_war_with = VAL }
+				}
+				BHG = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BHG = { is_subject = yes }
+				}
+				BHG = {
+					OVERLORD = {
+						set_autonomy = { target = BHG autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BHG = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BHG
@@ -435,18 +1038,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
-			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
 			if = {
-				limit = { BHG = { is_subject = yes } }
-				BHG = { OVERLORD = { set_autonomy = { target = BHG autonomy_state = autonomy_free } } }
+				limit = {
+					BHG = { has_war_with = NOD }
+				}
+				BHG = { white_peace = NOD }
 			}
-			BHG = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BHG = { has_war_with = VAL }
+				}
+				BHG = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BHG = { is_subject = yes }
+				}
+				BHG = {
+					OVERLORD = {
+						set_autonomy = { target = BHG autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BHG = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BHG
@@ -458,24 +1085,68 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BHG = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
 	if = {
-		limit = { BGT = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 4 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
-			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
-			if = {
-				limit = { BGT = { is_subject = yes } }
-				BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
+		limit = {
+			BGT = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BGT = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				4 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BGT = { has_war_with = NOD }
+				}
+				BGT = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BGT = { has_war_with = VAL }
+				}
+				BGT = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BGT = { is_subject = yes }
+				}
+				BGT = {
+					OVERLORD = {
+						set_autonomy = { target = BGT autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BGT = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BGT
@@ -488,19 +1159,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 4 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
-			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
-			if = {
-				limit = { BGT = { is_subject = yes } }
-				BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
+			limit = {
+				4 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BGT = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BGT = { has_war_with = NOD }
+				}
+				BGT = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BGT = { has_war_with = VAL }
+				}
+				BGT = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BGT = { is_subject = yes }
+				}
+				BGT = {
+					OVERLORD = {
+						set_autonomy = { target = BGT autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BGT = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BGT
@@ -512,21 +1216,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
-			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
-			if = {
-				limit = { BGT = { is_subject = yes } }
-				BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BGT = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BGT = { has_war_with = NOD }
+				}
+				BGT = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BGT = { has_war_with = VAL }
+				}
+				BGT = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BGT = { is_subject = yes }
+				}
+				BGT = {
+					OVERLORD = {
+						set_autonomy = { target = BGT autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BGT = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BGT
@@ -539,18 +1269,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
-			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
 			if = {
-				limit = { BGT = { is_subject = yes } }
-				BGT = { OVERLORD = { set_autonomy = { target = BGT autonomy_state = autonomy_free } } }
+				limit = {
+					BGT = { has_war_with = NOD }
+				}
+				BGT = { white_peace = NOD }
 			}
-			BGT = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BGT = { has_war_with = VAL }
+				}
+				BGT = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BGT = { is_subject = yes }
+				}
+				BGT = {
+					OVERLORD = {
+						set_autonomy = { target = BGT autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BGT = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BGT
@@ -562,24 +1316,68 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BGT = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
 	if = {
-		limit = { BBV = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 7 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
-			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
-			if = {
-				limit = { BBV = { is_subject = yes } }
-				BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
+		limit = {
+			BBV = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BBV = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				7 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BBV = { has_war_with = NOD }
+				}
+				BBV = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BBV = { has_war_with = VAL }
+				}
+				BBV = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BBV = { is_subject = yes }
+				}
+				BBV = {
+					OVERLORD = {
+						set_autonomy = { target = BBV autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BBV = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BBV
@@ -592,19 +1390,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 7 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
-			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
-			if = {
-				limit = { BBV = { is_subject = yes } }
-				BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
+			limit = {
+				7 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BBV = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BBV = { has_war_with = NOD }
+				}
+				BBV = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BBV = { has_war_with = VAL }
+				}
+				BBV = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BBV = { is_subject = yes }
+				}
+				BBV = {
+					OVERLORD = {
+						set_autonomy = { target = BBV autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BBV = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BBV
@@ -616,21 +1447,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
-			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
-			if = {
-				limit = { BBV = { is_subject = yes } }
-				BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BBV = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BBV = { has_war_with = NOD }
+				}
+				BBV = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BBV = { has_war_with = VAL }
+				}
+				BBV = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BBV = { is_subject = yes }
+				}
+				BBV = {
+					OVERLORD = {
+						set_autonomy = { target = BBV autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BBV = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BBV
@@ -643,18 +1500,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
-			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
 			if = {
-				limit = { BBV = { is_subject = yes } }
-				BBV = { OVERLORD = { set_autonomy = { target = BBV autonomy_state = autonomy_free } } }
+				limit = {
+					BBV = { has_war_with = NOD }
+				}
+				BBV = { white_peace = NOD }
 			}
-			BBV = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BBV = { has_war_with = VAL }
+				}
+				BBV = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BBV = { is_subject = yes }
+				}
+				BBV = {
+					OVERLORD = {
+						set_autonomy = { target = BBV autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BBV = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BBV
@@ -666,24 +1547,68 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BBV = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
 	if = {
-		limit = { BCM = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 9 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
-			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
-			if = {
-				limit = { BCM = { is_subject = yes } }
-				BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
+		limit = {
+			BCM = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BCM = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				9 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BCM = { has_war_with = NOD }
+				}
+				BCM = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BCM = { has_war_with = VAL }
+				}
+				BCM = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BCM = { is_subject = yes }
+				}
+				BCM = {
+					OVERLORD = {
+						set_autonomy = { target = BCM autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BCM = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BCM
@@ -696,19 +1621,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 9 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
-			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
-			if = {
-				limit = { BCM = { is_subject = yes } }
-				BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
+			limit = {
+				9 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BCM = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BCM = { has_war_with = NOD }
+				}
+				BCM = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BCM = { has_war_with = VAL }
+				}
+				BCM = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BCM = { is_subject = yes }
+				}
+				BCM = {
+					OVERLORD = {
+						set_autonomy = { target = BCM autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BCM = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BCM
@@ -720,21 +1678,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
-			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
-			if = {
-				limit = { BCM = { is_subject = yes } }
-				BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BCM = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BCM = { has_war_with = NOD }
+				}
+				BCM = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BCM = { has_war_with = VAL }
+				}
+				BCM = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BCM = { is_subject = yes }
+				}
+				BCM = {
+					OVERLORD = {
+						set_autonomy = { target = BCM autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BCM = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BCM
@@ -747,18 +1731,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
-			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
 			if = {
-				limit = { BCM = { is_subject = yes } }
-				BCM = { OVERLORD = { set_autonomy = { target = BCM autonomy_state = autonomy_free } } }
+				limit = {
+					BCM = { has_war_with = NOD }
+				}
+				BCM = { white_peace = NOD }
 			}
-			BCM = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BCM = { has_war_with = VAL }
+				}
+				BCM = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BCM = { is_subject = yes }
+				}
+				BCM = {
+					OVERLORD = {
+						set_autonomy = { target = BCM autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BCM = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BCM
@@ -770,24 +1778,68 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BCM = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 	}
 	if = {
-		limit = { BJK = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
-		if = {
-			limit = { 41 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
-			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
-			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
-			if = {
-				limit = { BJK = { is_subject = yes } }
-				BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }
+		limit = {
+			BJK = {
+				exists = yes
+				OR = {
+					has_war_with = VAL
+					has_war_with = NOD
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+					tag = BJK
+				}
 			}
-			BJK = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+		}
+		if = {
+			limit = {
+				41 = {
+					controller = {
+						OR = {
+							tag = NOD
+							is_subject_of = NOD
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BJK = { has_war_with = NOD }
+				}
+				BJK = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BJK = { has_war_with = VAL }
+				}
+				BJK = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BJK = { is_subject = yes }
+				}
+				BJK = {
+					OVERLORD = {
+						set_autonomy = { target = BJK autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BJK = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BJK
@@ -800,19 +1852,52 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { 41 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
-			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
-			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
-			if = {
-				limit = { BJK = { is_subject = yes } }
-				BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }
+			limit = {
+				41 = {
+					controller = {
+						OR = {
+							tag = VAL
+							is_subject_of = VAL
+						}
+					}
+				}
 			}
-			BJK = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BJK = { has_war_with = NOD }
+				}
+				BJK = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BJK = { has_war_with = VAL }
+				}
+				BJK = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BJK = { is_subject = yes }
+				}
+				BJK = {
+					OVERLORD = {
+						set_autonomy = { target = BJK autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BJK = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BJK
@@ -824,21 +1909,47 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else_if = {
-			limit = { BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod } }
-			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
-			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
-			if = {
-				limit = { BJK = { is_subject = yes } }
-				BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }
+			limit = {
+				BJK = { has_country_flag = ADISCORD_bezhaysk_joint_default_nod }
 			}
-			BJK = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BJK = { has_war_with = NOD }
+				}
+				BJK = { white_peace = NOD }
+			}
+			if = {
+				limit = {
+					BJK = { has_war_with = VAL }
+				}
+				BJK = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BJK = { is_subject = yes }
+				}
+				BJK = {
+					OVERLORD = {
+						set_autonomy = { target = BJK autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BJK = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			NOD = {
 				set_autonomy = {
 					target = BJK
@@ -851,18 +1962,42 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_nod_administration
 				ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		else = {
-			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
-			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
 			if = {
-				limit = { BJK = { is_subject = yes } }
-				BJK = { OVERLORD = { set_autonomy = { target = BJK autonomy_state = autonomy_free } } }
+				limit = {
+					BJK = { has_war_with = NOD }
+				}
+				BJK = { white_peace = NOD }
 			}
-			BJK = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+			if = {
+				limit = {
+					BJK = { has_war_with = VAL }
+				}
+				BJK = { white_peace = VAL }
+			}
+			if = {
+				limit = {
+					BJK = { is_subject = yes }
+				}
+				BJK = {
+					OVERLORD = {
+						set_autonomy = { target = BJK autonomy_state = autonomy_free }
+					}
+				}
+			}
+			BJK = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
 			VAL = {
 				set_autonomy = {
 					target = BJK
@@ -874,9 +2009,12 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 			BJK = {
 				set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
-				set_rule = { can_join_factions = no can_create_factions = no }
+				load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+				ADISCORD_release_non_participating_minor_optimization = yes
+				set_rule = {
+					can_join_factions = no
+					can_create_factions = no
+				}
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -888,18 +2026,23 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 	NOD = { ADISCORD_economy_mark_dirty = yes }
 }
 
-
-
-
 # Late forest operation. It is separate from Nodrul's limited northern campaign.
 ADISCORD_bezhaysk_settle_forest_val_victory = {
 	COF = {
-		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		if = {
+			limit = { has_war_with = VAL }
+			white_peace = VAL
+		}
 		if = {
 			limit = { is_subject = yes }
-			OVERLORD = { set_autonomy = { target = COF autonomy_state = autonomy_free } }
+			OVERLORD = {
+				set_autonomy = { target = COF autonomy_state = autonomy_free }
+			}
 		}
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
 	}
 	set_autonomy = {
 		target = COF
@@ -910,10 +2053,13 @@ ADISCORD_bezhaysk_settle_forest_val_victory = {
 	}
 	COF = {
 		set_country_flag = ADISCORD_bezhaysk_val_administration
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
-			ADISCORD_release_non_participating_minor_optimization = yes
+		load_focus_tree = { tree = VAL_administration_focus keep_completed = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
 		set_country_flag = ADISCORD_forest_cult_subjugated
-		set_rule = { can_join_factions = no can_create_factions = no }
+		set_rule = {
+			can_join_factions = no
+			can_create_factions = no
+		}
 		ADISCORD_economy_mark_dirty = yes
 	}
 	clr_country_flag = ADISCORD_bezhaysk_forest_campaign_active
@@ -922,12 +2068,20 @@ ADISCORD_bezhaysk_settle_forest_val_victory = {
 
 ADISCORD_bezhaysk_settle_forest_nod_victory = {
 	COF = {
-		if = { limit = { has_war_with = NOD } white_peace = NOD }
+		if = {
+			limit = { has_war_with = NOD }
+			white_peace = NOD
+		}
 		if = {
 			limit = { is_subject = yes }
-			OVERLORD = { set_autonomy = { target = COF autonomy_state = autonomy_free } }
+			OVERLORD = {
+				set_autonomy = { target = COF autonomy_state = autonomy_free }
+			}
 		}
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
 	}
 	set_autonomy = {
 		target = COF
@@ -939,7 +2093,10 @@ ADISCORD_bezhaysk_settle_forest_nod_victory = {
 	COF = {
 		set_country_flag = ADISCORD_bezhaysk_nod_administration
 		set_country_flag = ADISCORD_forest_cult_subjugated
-		set_rule = { can_join_factions = no can_create_factions = no }
+		set_rule = {
+			can_join_factions = no
+			can_create_factions = no
+		}
 		ADISCORD_economy_mark_dirty = yes
 	}
 	clr_country_flag = ADISCORD_bezhaysk_forest_campaign_active
@@ -948,39 +2105,114 @@ ADISCORD_bezhaysk_settle_forest_nod_victory = {
 
 # COUNTRY VAL, immediately after declaring war on BJK.
 ADISCORD_bezhaysk_join_val_campaign = {
-    BLD = {
-        if = {
-            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
-            ADISCORD_release_non_participating_minor_optimization = yes
-            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
-        }
-    }
-    BHG = {
-        if = {
-            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
-            ADISCORD_release_non_participating_minor_optimization = yes
-            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
-        }
-    }
-    BGT = {
-        if = {
-            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
-            ADISCORD_release_non_participating_minor_optimization = yes
-            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
-        }
-    }
-    BBV = {
-        if = {
-            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
-            ADISCORD_release_non_participating_minor_optimization = yes
-            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
-        }
-    }
-    BCM = {
-        if = {
-            limit = { exists = yes has_capitulated = no OR = { is_subject_of = BJK is_in_faction_with = BJK } NOT = { has_war_with = VAL is_in_faction_with = VAL } }
-            ADISCORD_release_non_participating_minor_optimization = yes
-            add_to_war = { targeted_alliance = BJK enemy = VAL hostility_reason = asked_to_join }
-        }
-    }
+	BLD = {
+		if = {
+			limit = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+				NOT = {
+					has_war_with = VAL
+					is_in_faction_with = VAL
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_to_war = {
+				targeted_alliance = BJK
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	BHG = {
+		if = {
+			limit = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+				NOT = {
+					has_war_with = VAL
+					is_in_faction_with = VAL
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_to_war = {
+				targeted_alliance = BJK
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	BGT = {
+		if = {
+			limit = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+				NOT = {
+					has_war_with = VAL
+					is_in_faction_with = VAL
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_to_war = {
+				targeted_alliance = BJK
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	BBV = {
+		if = {
+			limit = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+				NOT = {
+					has_war_with = VAL
+					is_in_faction_with = VAL
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_to_war = {
+				targeted_alliance = BJK
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	BCM = {
+		if = {
+			limit = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					is_subject_of = BJK
+					is_in_faction_with = BJK
+				}
+				NOT = {
+					has_war_with = VAL
+					is_in_faction_with = VAL
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_to_war = {
+				targeted_alliance = BJK
+				enemy = VAL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
 }

@@ -65,7 +65,8 @@ ADISCORD_join_subject_war = {
 	}
 }
 
-focus_unlock = { ###I've decided to keep the same name as in other mods in order not to get anyone confused
+focus_unlock = {
+	###I've decided to keep the same name as in other mods in order not to get anyone confused
 	custom_effect_tooltip = focus_unlock_tooltip
 	hidden_effect = {
 		mark_focus_tree_layout_dirty = yes

@@ -236,15 +236,29 @@ sub_units = {
 			ADISCORD_squad_weapons_equipment = 8
 			ADISCORD_armored_carrier_archetype = 40
 		}
-		forest = { attack = -0.15 movement = -0.20 }
-		mountain = { attack = -0.10 movement = -0.20 }
-		jungle = { attack = -0.25 movement = -0.25 }
-		marsh = { attack = -0.15 movement = -0.20 }
+		forest = {
+			attack = -0.15
+			movement = -0.20
+		}
+		mountain = {
+			attack = -0.10
+			movement = -0.20
+		}
+		jungle = {
+			attack = -0.25
+			movement = -0.25
+		}
+		marsh = {
+			attack = -0.15
+			movement = -0.20
+		}
 		urban = { attack = -0.10 }
-		river = { attack = -0.20 movement = -0.20 }
+		river = {
+			attack = -0.20
+			movement = -0.20
+		}
 		amphibious = { attack = -0.45 }
 	}
-
 
 	ADISCORD_marine_infantry = {
 		abbreviation = "MAR"
@@ -407,13 +421,28 @@ sub_units = {
 		weight = 0.5
 		supply_consumption = 0.24
 		soft_attack = 0.10
-		forest = { attack = -0.20 movement = -0.20 }
+		forest = {
+			attack = -0.20
+			movement = -0.20
+		}
 		hills = { movement = -0.05 }
-		mountain = { attack = -0.15 movement = -0.20 }
-		jungle = { attack = -0.25 movement = -0.20 }
-		marsh = { attack = -0.20 movement = -0.30 }
+		mountain = {
+			attack = -0.15
+			movement = -0.20
+		}
+		jungle = {
+			attack = -0.25
+			movement = -0.20
+		}
+		marsh = {
+			attack = -0.20
+			movement = -0.30
+		}
 		fort = { attack = 0.10 }
-		river = { attack = -0.20 movement = -0.20 }
+		river = {
+			attack = -0.20
+			movement = -0.20
+		}
 		amphibious = { attack = -0.40 }
 	}
 
@@ -633,13 +662,31 @@ sub_units = {
 		supply_consumption = 0.22
 		breakthrough = 0.10
 		suppression = 1.5
-		forest = { attack = -0.20 movement = -0.25 }
-		hills = { attack = -0.10 movement = -0.10 }
-		mountain = { attack = -0.25 movement = -0.40 }
-		jungle = { attack = -0.35 movement = -0.35 }
-		marsh = { attack = -0.20 movement = -0.20 }
+		forest = {
+			attack = -0.20
+			movement = -0.25
+		}
+		hills = {
+			attack = -0.10
+			movement = -0.10
+		}
+		mountain = {
+			attack = -0.25
+			movement = -0.40
+		}
+		jungle = {
+			attack = -0.35
+			movement = -0.35
+		}
+		marsh = {
+			attack = -0.20
+			movement = -0.20
+		}
 		urban = { attack = -0.15 }
-		river = { attack = -0.25 movement = -0.20 }
+		river = {
+			attack = -0.25
+			movement = -0.20
+		}
 		amphibious = { attack = -0.70 }
 	}
 
@@ -673,13 +720,35 @@ sub_units = {
 		supply_consumption = 0.34
 		breakthrough = 0.12
 		suppression = 2
-		forest = { attack = -0.40 movement = -0.40 }
-		hills = { attack = -0.20 movement = -0.25 }
-		mountain = { attack = -0.35 movement = -0.55 }
-		jungle = { attack = -0.55 movement = -0.45 }
-		marsh = { attack = -0.35 movement = -0.30 }
-		urban = { attack = -0.35 defence = -0.15 movement = -0.25 }
-		river = { attack = -0.40 movement = -0.35 }
+		forest = {
+			attack = -0.40
+			movement = -0.40
+		}
+		hills = {
+			attack = -0.20
+			movement = -0.25
+		}
+		mountain = {
+			attack = -0.35
+			movement = -0.55
+		}
+		jungle = {
+			attack = -0.55
+			movement = -0.45
+		}
+		marsh = {
+			attack = -0.35
+			movement = -0.30
+		}
+		urban = {
+			attack = -0.35
+			defence = -0.15
+			movement = -0.25
+		}
+		river = {
+			attack = -0.40
+			movement = -0.35
+		}
 		amphibious = { attack = -0.85 }
 		fort = { attack = 0.10 }
 	}

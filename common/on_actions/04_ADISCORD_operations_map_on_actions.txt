@@ -7,13 +7,19 @@ on_actions = {
 		effect = {
 			VAL = {
 				if = {
-					limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+					limit = {
+						exists = yes
+						has_country_flag = VAL_operations_map_unlocked
+					}
 					VAL_operations_map_refresh_cache = yes
 				}
 			}
 			STS = {
 				if = {
-					limit = { exists = yes has_country_flag = STP_cw_postwar }
+					limit = {
+						exists = yes
+						has_country_flag = STP_cw_postwar
+					}
 					VAL_operations_map_refresh_cache = yes
 				}
 			}
@@ -27,33 +33,75 @@ on_actions = {
 					OR = {
 						ROOT = {
 							OR = {
-								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
-								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
-								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
-								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
-								tag = BBV tag = BCM tag = WCA
+								tag = VAL
+								tag = STP
+								tag = STS
+								tag = SRP
+								tag = NOD
+								tag = CIN
+								tag = OSF
+								tag = APH
+								tag = ERT
+								tag = NKA
+								tag = OCA
+								tag = YPR
+								tag = COF
+								tag = TFF
+								tag = EXZ
+								tag = IRT
+								tag = BJK
+								tag = BLD
+								tag = BHG
+								tag = BGT
+								tag = BBV
+								tag = BCM
+								tag = WCA
 							}
 						}
 						FROM = {
 							OR = {
-								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
-								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
-								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
-								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
-								tag = BBV tag = BCM tag = WCA
+								tag = VAL
+								tag = STP
+								tag = STS
+								tag = SRP
+								tag = NOD
+								tag = CIN
+								tag = OSF
+								tag = APH
+								tag = ERT
+								tag = NKA
+								tag = OCA
+								tag = YPR
+								tag = COF
+								tag = TFF
+								tag = EXZ
+								tag = IRT
+								tag = BJK
+								tag = BLD
+								tag = BHG
+								tag = BGT
+								tag = BBV
+								tag = BCM
+								tag = WCA
 							}
 						}
 					}
 				}
 				VAL = {
 					if = {
-						limit = { exists = yes has_country_flag = VAL_operations_map_unlocked }
+						limit = {
+							exists = yes
+							has_country_flag = VAL_operations_map_unlocked
+						}
 						VAL_operations_map_refresh_cache = yes
 					}
 				}
 				STS = {
 					if = {
-						limit = { exists = yes has_country_flag = STP_cw_postwar }
+						limit = {
+							exists = yes
+							has_country_flag = STP_cw_postwar
+						}
 						VAL_operations_map_refresh_cache = yes
 					}
 				}

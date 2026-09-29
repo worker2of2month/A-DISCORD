@@ -22,7 +22,10 @@ guiTypes = {
 		origo = CENTER
 		moveable = yes
 		click_to_front = yes
-		background = { name = "background" quadTextureSprite = "GFX_ADISCORD_startup_background" }
+		background = {
+			name = "background"
+			quadTextureSprite = "GFX_ADISCORD_startup_background"
+		}
 		instantTextboxType = {
 			name = "ADISCORD_startup_title"
 			position = { x = 34 y = 20 }

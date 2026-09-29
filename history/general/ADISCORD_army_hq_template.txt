@@ -9,12 +9,21 @@ every_possible_country = {
 		is_army_hq = yes
 
 		regiments = {
-			hq_infantry = { x = 0 y = 0 }
-			hq_infantry = { x = 0 y = 1 }
+			hq_infantry = {
+				x = 0
+				y = 0
+			}
+			hq_infantry = {
+				x = 0
+				y = 1
+			}
 		}
 
 		support = {
-			hq_support_company = { x = 0 y = 0 }
+			hq_support_company = {
+				x = 0
+				y = 0
+			}
 		}
 	}
 }

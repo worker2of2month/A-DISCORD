@@ -1,5 +1,4 @@
 objectTypes = {
-
 	pdxparticle = {
 		name = "polution_particle"
 		type = "polution_file"

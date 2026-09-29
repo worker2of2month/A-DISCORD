@@ -1,11 +1,19 @@
 # One mission per template. Composition keys are subunits, not their map sprites.
 ADISCORD_cruiser_strike = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = {
 		factor = 1
-		modifier = { factor = 0 NOT = { has_tech = ADISCORD_tech_modular_hull_standards } }
+		modifier = {
+			factor = 0
+			NOT = { has_tech = ADISCORD_tech_modular_hull_standards }
+		}
 	}
 	keep_updated = yes
 	mission = { naval_strike }
@@ -21,11 +29,19 @@ ADISCORD_cruiser_strike = {
 
 ADISCORD_submarine_raiding = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = {
 		factor = 1
-		modifier = { factor = 0 NOT = { has_tech = ADISCORD_tech_quiet_propulsion } }
+		modifier = {
+			factor = 0
+			NOT = { has_tech = ADISCORD_tech_quiet_propulsion }
+		}
 	}
 	keep_updated = yes
 	mission = { convoy_raiding }
@@ -39,7 +55,12 @@ ADISCORD_submarine_raiding = {
 
 ADISCORD_coastal_patrol = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { naval_patrol }
@@ -53,7 +74,12 @@ ADISCORD_coastal_patrol = {
 
 ADISCORD_coastal_strike = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = { factor = 1 }
 	keep_updated = yes
@@ -68,7 +94,12 @@ ADISCORD_coastal_strike = {
 
 ADISCORD_coastal_escort = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { convoy_escort }
@@ -82,7 +113,12 @@ ADISCORD_coastal_escort = {
 
 ADISCORD_coastal_raiding = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = { factor = 1 }
 	keep_updated = yes
@@ -97,7 +133,12 @@ ADISCORD_coastal_raiding = {
 
 ADISCORD_coastal_invasion_support = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = NOD
+			original_tag = VAL
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { naval_invasion_support }

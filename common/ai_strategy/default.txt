@@ -5,33 +5,96 @@ ADISCORD_default_land_production = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = role_ratio id = infantry value = 85 }
-	ai_strategy = { type = role_ratio id = mountaineers value = 5 }
-	ai_strategy = { type = role_ratio id = armor value = 2 }
-	ai_strategy = { type = equipment_production_factor id = infantry value = 45 }
-	ai_strategy = { type = equipment_production_factor id = support value = 15 }
-	ai_strategy = { type = equipment_production_factor id = artillery value = 10 }
-	ai_strategy = { type = unit_ratio id = convoy value = 5 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 85
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 5
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 2
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 45
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 10
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = convoy
+		value = 5
+	}
 }
 
 ADISCORD_default_surplus_management = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = equipment_production_surplus_management id = infantry_equipment value = 12 }
-	ai_strategy = { type = equipment_production_surplus_management id = support_equipment value = 6 }
-	ai_strategy = { type = equipment_production_surplus_management id = artillery_equipment value = 6 }
-	ai_strategy = { type = equipment_production_surplus_management id = anti_tank_equipment value = 2 }
-	ai_strategy = { type = equipment_production_surplus_management id = anti_air_equipment value = 2 }
-	ai_strategy = { type = equipment_production_surplus_management id = ADISCORD_squad_weapons_equipment value = 10 }
-	ai_strategy = { type = equipment_stockpile_surplus_ratio value = 15 }
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = infantry_equipment
+		value = 12
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = support_equipment
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = artillery_equipment
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = anti_tank_equipment
+		value = 2
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = anti_air_equipment
+		value = 2
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = ADISCORD_squad_weapons_equipment
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_stockpile_surplus_ratio
+		value = 15
+	}
 }
 
 ADISCORD_default_pp_reserve = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = pp_spend_amount id = idea value = 100 }
-	ai_strategy = { type = pp_spend_amount id = decision value = 100 }
+	ai_strategy = {
+		type = pp_spend_amount
+		id = idea
+		value = 100
+	}
+	ai_strategy = {
+		type = pp_spend_amount
+		id = decision
+		value = 100
+	}
 }
 
 # Laws cost 150 PP. The generic reserve is 100, so an AI at war never
@@ -62,8 +125,16 @@ ADISCORD_ai_raise_conscription = {
 		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = pp_spend_priority id = idea value = 150 }
-	ai_strategy = { type = pp_spend_amount id = idea value = 150 }
+	ai_strategy = {
+		type = pp_spend_priority
+		id = idea
+		value = 150
+	}
+	ai_strategy = {
+		type = pp_spend_amount
+		id = idea
+		value = 150
+	}
 }
 
 # Auxiliary minima start at two, three and four military factories so their
@@ -76,8 +147,16 @@ ADISCORD_produce_squad_weapons_low_stock = {
 		has_equipment = { ADISCORD_squad_weapons_equipment < 600 }
 		OR = {
 			has_war = no
-			NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.10 } }
-			stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio < 0.05 }
+			NOT = {
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.10
+				}
+			}
+			stockpile_ratio = {
+				archetype = ADISCORD_squad_weapons_equipment
+				ratio < 0.05
+			}
 		}
 	}
 	abort = {
@@ -86,13 +165,27 @@ ADISCORD_produce_squad_weapons_low_stock = {
 			has_equipment = { ADISCORD_squad_weapons_equipment > 1200 }
 			AND = {
 				has_war = yes
-				stockpile_ratio = { archetype = infantry_equipment ratio < 0.03 }
-				stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio > 0.10 }
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.03
+				}
+				stockpile_ratio = {
+					archetype = ADISCORD_squad_weapons_equipment
+					ratio > 0.10
+				}
 			}
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_squad_weapons_equipment value = 1 }
-	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_squad_weapons_equipment value = 25 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_squad_weapons_equipment
+		value = 1
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 25
+	}
 }
 
 ADISCORD_produce_support_equipment_low_stock = {
@@ -101,8 +194,16 @@ ADISCORD_produce_support_equipment_low_stock = {
 		has_equipment = { support_equipment < 400 }
 		OR = {
 			has_war = no
-			NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.10 } }
-			stockpile_ratio = { archetype = support_equipment ratio < 0.05 }
+			NOT = {
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.10
+				}
+			}
+			stockpile_ratio = {
+				archetype = support_equipment
+				ratio < 0.05
+			}
 		}
 	}
 	abort = {
@@ -111,12 +212,22 @@ ADISCORD_produce_support_equipment_low_stock = {
 			has_equipment = { support_equipment > 700 }
 			AND = {
 				has_war = yes
-				stockpile_ratio = { archetype = infantry_equipment ratio < 0.03 }
-				stockpile_ratio = { archetype = support_equipment ratio > 0.10 }
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.03
+				}
+				stockpile_ratio = {
+					archetype = support_equipment
+					ratio > 0.10
+				}
 			}
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = support_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = support_equipment
+		value = 1
+	}
 }
 
 ADISCORD_produce_artillery_low_stock = {
@@ -125,8 +236,16 @@ ADISCORD_produce_artillery_low_stock = {
 		has_equipment = { artillery_equipment < 180 }
 		OR = {
 			has_war = no
-			NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.10 } }
-			stockpile_ratio = { archetype = artillery_equipment ratio < 0.05 }
+			NOT = {
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.10
+				}
+			}
+			stockpile_ratio = {
+				archetype = artillery_equipment
+				ratio < 0.05
+			}
 		}
 	}
 	abort = {
@@ -135,12 +254,22 @@ ADISCORD_produce_artillery_low_stock = {
 			has_equipment = { artillery_equipment > 450 }
 			AND = {
 				has_war = yes
-				stockpile_ratio = { archetype = infantry_equipment ratio < 0.03 }
-				stockpile_ratio = { archetype = artillery_equipment ratio > 0.10 }
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.03
+				}
+				stockpile_ratio = {
+					archetype = artillery_equipment
+					ratio > 0.10
+				}
 			}
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = artillery_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = artillery_equipment
+		value = 1
+	}
 }
 
 # Air ratios default to zero in the engine. Keep replacement demand separate
@@ -148,8 +277,16 @@ ADISCORD_produce_artillery_low_stock = {
 ADISCORD_default_fighter_demand = {
 	enable = { has_tech = ADISCORD_tech_reclaimed_jet_platforms }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = fighter value = 70 }
-	ai_strategy = { type = equipment_production_factor id = fighter value = 15 }
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 70
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = fighter
+		value = 15
+	}
 }
 
 ADISCORD_supply_transport_replacement = {
@@ -158,8 +295,16 @@ ADISCORD_supply_transport_replacement = {
 		num_of_supply_nodes > 0
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_variant_production_factor id = motorized_equipment value = 20 }
-	ai_strategy = { type = equipment_variant_production_factor id = train_equipment value = 15 }
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = motorized_equipment
+		value = 20
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = train_equipment
+		value = 15
+	}
 }
 
 ADISCORD_produce_supply_trucks_low_stock = {
@@ -177,14 +322,26 @@ ADISCORD_produce_supply_trucks_low_stock = {
 			has_equipment = { motorized_equipment > 120 }
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = motorized_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = motorized_equipment
+		value = 1
+	}
 }
 
 ADISCORD_default_cas_demand = {
 	enable = { has_tech = ADISCORD_tech_battlefield_attack_aircraft }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = cas value = 30 }
-	ai_strategy = { type = equipment_production_factor id = cas value = 8 }
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 30
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = cas
+		value = 8
+	}
 }
 
 ADISCORD_limited_air_program = {
@@ -194,7 +351,11 @@ ADISCORD_limited_air_program = {
 		has_tech = ADISCORD_tech_reclaimed_jet_platforms
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_min_factories id = fighter value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories
+		id = fighter
+		value = 1
+	}
 }
 
 ADISCORD_expanded_air_program = {
@@ -204,17 +365,40 @@ ADISCORD_expanded_air_program = {
 		has_tech = ADISCORD_tech_battlefield_attack_aircraft
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = fighter value = 80 }
-	ai_strategy = { type = unit_ratio id = cas value = 45 }
-	ai_strategy = { type = equipment_production_factor id = fighter value = 10 }
-	ai_strategy = { type = equipment_production_factor id = cas value = 15 }
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 80
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 45
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = fighter
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = cas
+		value = 15
+	}
 }
 
 ADISCORD_garrison_priority = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = garrison value = 10 }
-	ai_strategy = { type = garrison_reinforcement_priority value = 20 }
+	ai_strategy = {
+		type = role_ratio
+		id = garrison
+		value = 10
+	}
+	ai_strategy = {
+		type = garrison_reinforcement_priority
+		value = 20
+	}
 }
 
 ADISCORD_armor_capability = {
@@ -224,8 +408,16 @@ ADISCORD_armor_capability = {
 		has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = armor value = 8 }
-	ai_strategy = { type = equipment_production_factor id = armor value = 15 }
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 8
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = armor
+		value = 15
+	}
 }
 
 ADISCORD_convoy_buffer = {
@@ -234,33 +426,61 @@ ADISCORD_convoy_buffer = {
 		has_equipment = { convoy_1 < 100 }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_min_factories id = convoy value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories
+		id = convoy
+		value = 1
+	}
 }
 
 # Land-front demand must leave room for coastal operations. The target predicate
 # is evaluated in the enemy country, with FROM referring to the planner.
 ADISCORD_coastal_invasion_planning = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = VAL
+			original_tag = NOD
+			original_tag = STP
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_war = yes
 		has_capitulated = no
 		has_tech = ADISCORD_tech_restored_dockyards
 		num_divisions > 7
-		has_navy_size = { size > 19 type = convoy }
+		has_navy_size = {
+			size > 19
+			type = convoy
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = naval_invasion_focus value = 10 }
-	ai_strategy = { type = naval_invasion_dominance_weight value = 30 }
+	ai_strategy = {
+		type = naval_invasion_focus
+		value = 10
+	}
+	ai_strategy = {
+		type = naval_invasion_dominance_weight
+		value = 30
+	}
 	ai_strategy = {
 		type = invasion_unit_request
-		country_trigger = { has_war_with = FROM has_capitulated = no }
+		country_trigger = {
+			has_war_with = FROM
+			has_capitulated = no
+		}
 		value = 50
 	}
 }
 
 ADISCORD_coastal_dockyard_capacity = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = VAL
+			original_tag = NOD
+			original_tag = STP
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_capitulated = no
@@ -269,25 +489,44 @@ ADISCORD_coastal_dockyard_capacity = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = building_target id = dockyard value = 2 }
+	ai_strategy = {
+		type = building_target
+		id = dockyard
+		value = 2
+	}
 }
 
 # The convoy buffer reserves one dockyard below 100 transports. A country with
 # only one dockyard must finish that reserve before maintaining its patrol fleet.
 ADISCORD_coastal_patrol_replacement = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = VAL
+			original_tag = NOD
+			original_tag = STP
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_capitulated = no
 		num_of_naval_factories > 0
-		has_navy_size = { size < 6 unit = ADISCORD_coastal_patrol_vessel }
+		has_navy_size = {
+			size < 6
+			unit = ADISCORD_coastal_patrol_vessel
+		}
 		OR = {
 			num_of_naval_factories > 1
-			NOT = { has_equipment = { convoy_1 < 100 } }
+			NOT = {
+				has_equipment = { convoy_1 < 100 }
+			}
 		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_coastal_patrol_ship value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_coastal_patrol_ship
+		value = 1
+	}
 }
 
 # Allocation is independent of the number of war participants. Country profiles
@@ -332,7 +571,10 @@ ADISCORD_wartime_neutral_borders = {
 }
 
 ADISCORD_prewar_front_concentration = {
-	enable = { is_ai = yes has_capitulated = no }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = front_unit_request
@@ -362,11 +604,21 @@ ADISCORD_ai_rebuild_field_army = {
 			ADISCORD_ai_army_replacement_pressure_cleared = yes
 		}
 	}
-	ai_strategy = { type = ai_wanted_divisions_factor value = -60 }
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -60
+	}
 }
 
 ADISCORD_ai_rifle_replacements = {
-	enable = { is_ai = yes ADISCORD_ai_rifle_replacement_emergency = yes }
+	enable = {
+		is_ai = yes
+		ADISCORD_ai_rifle_replacement_emergency = yes
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = equipment_production_factor id = infantry value = 100 }
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 100
+	}
 }

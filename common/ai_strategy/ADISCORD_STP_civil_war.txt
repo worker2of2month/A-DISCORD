@@ -1,6 +1,9 @@
 STP_cw_defend_fada = {
 	allowed = { original_tag = STP }
-	enable = { has_global_flag = STP_cw_started has_war_with = STS }
+	enable = {
+		has_global_flag = STP_cw_started
+		has_war_with = STS
+	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = put_unit_buffers
@@ -39,24 +42,63 @@ STS_cw_defend_abilia = {
 	}
 }
 
-
-
 STP_cw_front_against_sts = {
 	allowed = { original_tag = STP }
-	enable = { has_global_flag = STP_cw_started has_war_with = STS STP_ps_can_counterattack = yes }
+	enable = {
+		has_global_flag = STP_cw_started
+		has_war_with = STS
+		STP_ps_can_counterattack = yes
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = STS value = 100 }
-	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STS value = 200 }
+	ai_strategy = {
+		type = front_unit_request
+		tag = STS
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STS
+		ratio = 0.01
+		priority = 1400
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = STS
+		value = 200
+	}
 }
 
 STS_cw_front_against_stp = {
 	allowed = { original_tag = STS }
-	enable = { has_global_flag = STP_cw_started has_war_with = STP }
+	enable = {
+		has_global_flag = STP_cw_started
+		has_war_with = STP
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = STP value = 100 }
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1400 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STP value = 200 }
+	ai_strategy = {
+		type = front_unit_request
+		tag = STP
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1400
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = STP
+		value = 200
+	}
 }
 
 STS_shabrat_civil_war_army = {
@@ -67,37 +109,127 @@ STS_shabrat_civil_war_army = {
 		has_war_with = STP
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 80 }
-	ai_strategy = { type = role_ratio id = mobile value = 20 }
-	ai_strategy = { type = role_ratio id = militias value = -80 }
-	ai_strategy = { type = role_ratio id = garrison value = -40 }
-	ai_strategy = { type = equipment_production_factor id = infantry value = 60 }
-	ai_strategy = { type = equipment_production_factor id = support value = 15 }
-	ai_strategy = { type = force_concentration_factor value = 50 }
-	ai_strategy = { type = consider_weak id = STP value = 20 }
-	ai_strategy = { type = front_unit_request tag = STP value = 120 }
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1500 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STP value = 250 }
-	ai_strategy = { type = dont_defend_ally_borders value = 1 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 80
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 20
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = militias
+		value = -80
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = garrison
+		value = -40
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 60
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 15
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 50
+	}
+	ai_strategy = {
+		type = consider_weak
+		id = STP
+		value = 20
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = STP
+		value = 120
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = STP
+		value = 250
+	}
+	ai_strategy = {
+		type = dont_defend_ally_borders
+		value = 1
+	}
 }
 
 # Operational objectives reinforce the relevant part of the live party front.
 STS_shabrat_operation_front = {
 	allowed = { original_tag = STS }
-	enable = { is_ai = yes has_war_with = STP has_active_mission = STP_cw_front_operation }
+	enable = {
+		is_ai = yes
+		has_war_with = STP
+		has_active_mission = STP_cw_front_operation
+	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
 		type = front_unit_request
 		state_trigger = {
 			is_controlled_by = STP
 			OR = {
-				AND = { state = 2 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 2 compare = equals } } }
-				AND = { state = 29 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 29 compare = equals } } }
-				AND = { state = 53 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 53 compare = equals } } }
-				AND = { state = 3 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 3 compare = equals } } }
-				AND = { state = 46 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 46 compare = equals } } }
-				AND = { state = 45 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 45 compare = equals } } }
-				AND = { state = 28 FROM.FROM = { check_variable = { var = STP_cw_operation_target value = 28 compare = equals } } }
+				AND = {
+					state = 2
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 2 compare = equals }
+					}
+				}
+				AND = {
+					state = 29
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 29 compare = equals }
+					}
+				}
+				AND = {
+					state = 53
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 53 compare = equals }
+					}
+				}
+				AND = {
+					state = 3
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 3 compare = equals }
+					}
+				}
+				AND = {
+					state = 46
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 46 compare = equals }
+					}
+				}
+				AND = {
+					state = 45
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 45 compare = equals }
+					}
+				}
+				AND = {
+					state = 28
+					FROM.FROM = {
+						check_variable = { var = STP_cw_operation_target value = 28 compare = equals }
+					}
+				}
 			}
 		}
 		value = 40
@@ -108,58 +240,158 @@ STS_shabrat_operation_front = {
 STS_shabrat_recover_party_front = {
 	allowed = { original_tag = STS }
 	enable = {
-		is_ai = yes has_war_with = STP
-		stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+		is_ai = yes
+		has_war_with = STP
+		stockpile_ratio = {
+			archetype = infantry_equipment
+			ratio < 0.05
+		}
 		has_idea = STP_cw_operation_disorganization
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1700 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1700
+		ordertype = front
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+	}
 }
 
 STS_shabrat_val_front = {
 	allowed = { original_tag = STS }
-	enable = { is_ai = yes has_war_with = VAL }
+	enable = {
+		is_ai = yes
+		has_war_with = VAL
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = VAL value = 60 }
-	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1200 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = VAL
+		value = 60
+	}
+	ai_strategy = {
+		type = front_control
+		tag = VAL
+		ratio = 0.01
+		priority = 1200
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 SRP_cw_front_against_val = {
 	allowed = { original_tag = SRP }
 	enable = { has_war_with = VAL }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = VAL value = 100 }
-	ai_strategy = { type = front_control tag = VAL ratio = 0.01 priority = 1400 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = VAL value = 200 }
+	ai_strategy = {
+		type = front_unit_request
+		tag = VAL
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = VAL
+		ratio = 0.01
+		priority = 1400
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = VAL
+		value = 200
+	}
 }
 
 VAL_cw_front_against_srp = {
 	allowed = { original_tag = VAL }
 	enable = { has_war_with = SRP }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = SRP value = 80 }
-	ai_strategy = { type = front_control tag = SRP ratio = 0.01 priority = 1200 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = SRP
+		value = 80
+	}
+	ai_strategy = {
+		type = front_control
+		tag = SRP
+		ratio = 0.01
+		priority = 1200
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 STP_cw_front_against_nod = {
 	allowed = { original_tag = STP }
 	enable = { has_war_with = NOD }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = NOD value = 35 }
-	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1100 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = NOD
+		value = 35
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NOD
+		ratio = 0.01
+		priority = 1100
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 # Shabrat must treat a live NOD intervention as a decisive external front.
 # This is AI-only so player balance and the Party route keep their existing tuning.
 STS_shabrat_nod_front = {
 	allowed = { original_tag = STS }
-	enable = { is_ai = yes has_capitulated = no has_war_with = NOD }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		has_war_with = NOD
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = consider_weak id = NOD value = 120 }
-	ai_strategy = { type = front_unit_request tag = NOD value = 220 }
-	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = NOD value = 250 }
-	ai_strategy = { type = force_concentration_factor value = 80 }
+	ai_strategy = {
+		type = consider_weak
+		id = NOD
+		value = 120
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = NOD
+		value = 220
+	}
+	ai_strategy = {
+		type = front_control
+		tag = NOD
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = NOD
+		value = 250
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 80
+	}
 }
 
 NOD_pw_party_invasion_front = {
@@ -170,47 +402,140 @@ NOD_pw_party_invasion_front = {
 		STP = { has_country_flag = STP_pw_party_nod_invasion_active }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = STP value = 140 }
-	ai_strategy = { type = front_control tag = STP ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STP value = 300 }
-	ai_strategy = { type = consider_weak id = STP value = 100 }
-	ai_strategy = { type = force_concentration_factor value = 80 }
+	ai_strategy = {
+		type = front_unit_request
+		tag = STP
+		value = 140
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = STP
+		value = 300
+	}
+	ai_strategy = {
+		type = consider_weak
+		id = STP
+		value = 100
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 80
+	}
 }
 
 STP_cw_territorial_army = {
-	allowed = { OR = { original_tag = STP original_tag = STS original_tag = SRP } }
+	allowed = {
+		OR = {
+			original_tag = STP
+			original_tag = STS
+			original_tag = SRP
+		}
+	}
 	enable = {
 		OR = {
-			AND = { has_global_flag = STP_cw_started NOT = { has_global_flag = STP_cw_union_wars_finished } }
+			AND = {
+				has_global_flag = STP_cw_started
+				NOT = { has_global_flag = STP_cw_union_wars_finished }
+			}
 			has_war = yes
 		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 70 }
-	ai_strategy = { type = role_ratio id = mobile value = 25 }
-	ai_strategy = { type = role_ratio id = militias value = -80 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 70
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 25
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = militias
+		value = -80
+	}
 }
 
 STP_cw_border_territorial_armies = {
-	allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
+	allowed = {
+		OR = {
+			original_tag = YPR
+			original_tag = COF
+			original_tag = TFF
+			original_tag = VAL
+		}
+	}
 	enable = { has_war = yes }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = militias value = 100 }
+	ai_strategy = {
+		type = role_ratio
+		id = militias
+		value = 100
+	}
 }
 
 NOD_cw_northern_offensive_army = {
 	allowed = { original_tag = NOD }
-	enable = { OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } }
+	enable = {
+		OR = {
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+		}
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 80 }
-	ai_strategy = { type = role_ratio id = mobile value = 20 }
-	ai_strategy = { type = role_ratio id = militias value = -100 }
-	ai_strategy = { type = role_ratio id = garrison value = -100 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 80
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 20
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = militias
+		value = -100
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = garrison
+		value = -100
+	}
 	# Keep AIN's colonial reserve separate from the field-army fronts.
-	ai_strategy = { type = dont_defend_ally_borders id = AIN value = 100 }
-	ai_strategy = { type = role_ratio id = armor value = 15 }
-	ai_strategy = { type = role_ratio id = mountaineers value = 12 }
-	ai_strategy = { type = force_concentration_factor value = 80 }
+	ai_strategy = {
+		type = dont_defend_ally_borders
+		id = AIN
+		value = 100
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 15
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 12
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 80
+	}
 }
 
 # The party front must become available when NOD joins the war against STS,
@@ -218,11 +543,19 @@ NOD_cw_northern_offensive_army = {
 NOD_cw_northern_party_border = {
 	allowed = { original_tag = NOD }
 	enable = {
-		OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+		OR = {
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+		}
 		NOT = { has_war_with = STS }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = dont_defend_ally_borders id = STP value = 100 }
+	ai_strategy = {
+		type = dont_defend_ally_borders
+		id = STP
+		value = 100
+	}
 }
 
 # One bounded reserve for every NOD land war in this theatre. Keeping it in a
@@ -253,8 +586,16 @@ NOD_cw_wartime_home_buffer = {
 NOD_cw_northern_ain_detachment = {
 	allowed = { original_tag = NOD }
 	enable = {
-		OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
-		AIN = { exists = yes is_puppet_of = NOD has_capitulated = no }
+		OR = {
+			has_war_with = YPR
+			has_war_with = COF
+			has_war_with = TFF
+		}
+		AIN = {
+			exists = yes
+			is_puppet_of = NOD
+			has_capitulated = no
+		}
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = {
@@ -272,45 +613,148 @@ NOD_cw_northern_front_ypr = {
 	allowed = { original_tag = NOD }
 	enable = { has_war_with = YPR }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = consider_weak id = YPR value = 120 }
-	ai_strategy = { type = front_unit_request tag = YPR value = 220 }
-	ai_strategy = { type = front_control tag = YPR ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = YPR value = 250 }
+	ai_strategy = {
+		type = consider_weak
+		id = YPR
+		value = 120
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = YPR
+		value = 220
+	}
+	ai_strategy = {
+		type = front_control
+		tag = YPR
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = YPR
+		value = 250
+	}
 }
 
 NOD_cw_northern_front_cof = {
 	allowed = { original_tag = NOD }
 	enable = { has_war_with = COF }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = consider_weak id = COF value = 120 }
-	ai_strategy = { type = front_unit_request tag = COF value = 220 }
-	ai_strategy = { type = front_control tag = COF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = COF value = 250 }
+	ai_strategy = {
+		type = consider_weak
+		id = COF
+		value = 120
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = COF
+		value = 220
+	}
+	ai_strategy = {
+		type = front_control
+		tag = COF
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = COF
+		value = 250
+	}
 }
 
 NOD_cw_northern_front_tff = {
 	allowed = { original_tag = NOD }
 	enable = { has_war_with = TFF }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = consider_weak id = TFF value = 120 }
-	ai_strategy = { type = front_unit_request tag = TFF value = 220 }
-	ai_strategy = { type = front_control tag = TFF ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = TFF value = 250 }
+	ai_strategy = {
+		type = consider_weak
+		id = TFF
+		value = 120
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = TFF
+		value = 220
+	}
+	ai_strategy = {
+		type = front_control
+		tag = TFF
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = TFF
+		value = 250
+	}
 }
 
 NOD_cw_stelander_intervention_army = {
 	allowed = { original_tag = NOD }
 	enable = { has_war_with = STS }
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 80 }
-	ai_strategy = { type = role_ratio id = mobile value = 20 }
-	ai_strategy = { type = role_ratio id = militias value = -100 }
-	ai_strategy = { type = role_ratio id = garrison value = -100 }
-	ai_strategy = { type = force_concentration_factor value = 80 }
-	ai_strategy = { type = consider_weak id = STS value = 120 }
-	ai_strategy = { type = front_unit_request tag = STS value = 220 }
-	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1800 ordertype = front execution_type = rush_weak execute_order = yes manual_attack = no }
-	ai_strategy = { type = conquer id = STS value = 250 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 80
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 20
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = militias
+		value = -100
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = garrison
+		value = -100
+	}
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 80
+	}
+	ai_strategy = {
+		type = consider_weak
+		id = STS
+		value = 120
+	}
+	ai_strategy = {
+		type = front_unit_request
+		tag = STS
+		value = 220
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STS
+		ratio = 0.01
+		priority = 1800
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = no
+	}
+	ai_strategy = {
+		type = conquer
+		id = STS
+		value = 250
+	}
 }
 
 # Allied front allocation also works before NOD gains its own border with STS.
@@ -321,10 +765,18 @@ NOD_cw_party_front_support = {
 		has_capitulated = no
 		has_war_with = STS
 		is_in_faction_with = STP
-		STP = { exists = yes has_capitulated = no has_war_with = STS }
+		STP = {
+			exists = yes
+			has_capitulated = no
+			has_war_with = STS
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = force_defend_ally_borders id = STP value = 100 }
+	ai_strategy = {
+		type = force_defend_ally_borders
+		id = STP
+		value = 100
+	}
 }
 
 # --- Prewar deployment ---
@@ -336,11 +788,18 @@ NOD_prepare_against_YPR = {
 		has_capitulated = no
 		NOT = { has_war_with = YPR }
 		NOT = { is_in_faction_with = YPR }
-		YPR = { exists = yes has_capitulated = no }
+		YPR = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = YPR value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = YPR
+		value = 100
+	}
 }
 
 YPR_prepare_against_NOD = {
@@ -350,11 +809,18 @@ YPR_prepare_against_NOD = {
 		has_capitulated = no
 		NOT = { has_war_with = NOD }
 		NOT = { is_in_faction_with = NOD }
-		NOD = { exists = yes has_capitulated = no }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 NOD_prepare_against_COF = {
@@ -364,11 +830,18 @@ NOD_prepare_against_COF = {
 		has_capitulated = no
 		NOT = { has_war_with = COF }
 		NOT = { is_in_faction_with = COF }
-		COF = { exists = yes has_capitulated = no }
+		COF = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = COF value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = COF
+		value = 100
+	}
 }
 
 COF_prepare_against_NOD = {
@@ -378,11 +851,18 @@ COF_prepare_against_NOD = {
 		has_capitulated = no
 		NOT = { has_war_with = NOD }
 		NOT = { is_in_faction_with = NOD }
-		NOD = { exists = yes has_capitulated = no }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 NOD_prepare_against_TFF = {
@@ -392,11 +872,18 @@ NOD_prepare_against_TFF = {
 		has_capitulated = no
 		NOT = { has_war_with = TFF }
 		NOT = { is_in_faction_with = TFF }
-		TFF = { exists = yes has_capitulated = no }
+		TFF = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = TFF value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = TFF
+		value = 100
+	}
 }
 
 TFF_prepare_against_NOD = {
@@ -406,11 +893,18 @@ TFF_prepare_against_NOD = {
 		has_capitulated = no
 		NOT = { has_war_with = NOD }
 		NOT = { is_in_faction_with = NOD }
-		NOD = { exists = yes has_capitulated = no }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_northern_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 NOD_prepare_against_STS = {
@@ -420,11 +914,18 @@ NOD_prepare_against_STS = {
 		has_capitulated = no
 		NOT = { has_war_with = STS }
 		NOT = { is_in_faction_with = STS }
-		STS = { exists = yes has_capitulated = no }
+		STS = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_stelander_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STS
+		value = 100
+	}
 }
 
 STS_prepare_against_NOD = {
@@ -434,11 +935,18 @@ STS_prepare_against_NOD = {
 		has_capitulated = no
 		NOT = { has_war_with = NOD }
 		NOT = { is_in_faction_with = NOD }
-		NOD = { exists = yes has_capitulated = no }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+		}
 		NOD = { NOD_ai_stelander_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 VAL_prepare_against_SRP = {
@@ -448,11 +956,18 @@ VAL_prepare_against_SRP = {
 		has_capitulated = no
 		NOT = { has_war_with = SRP }
 		NOT = { is_in_faction_with = SRP }
-		SRP = { exists = yes has_capitulated = no }
+		SRP = {
+			exists = yes
+			has_capitulated = no
+		}
 		VAL = { VAL_ai_republics_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = SRP value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = SRP
+		value = 100
+	}
 }
 
 SRP_prepare_against_VAL = {
@@ -462,11 +977,18 @@ SRP_prepare_against_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+		}
 		VAL = { VAL_ai_republics_preparation = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 STP_pc_prepare_STS_VAL = {
@@ -477,11 +999,19 @@ STP_pc_prepare_STS_VAL = {
 		has_capitulated = no
 		NOT = { has_war_with = VAL }
 		NOT = { is_in_faction_with = VAL }
-		VAL = { exists = yes has_capitulated = no is_subject = no }
+		VAL = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+		}
 		STS = { STP_pc_ai_preparing_val_war = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = VAL value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = VAL
+		value = 100
+	}
 }
 
 STP_pc_prepare_VAL_STS = {
@@ -492,11 +1022,19 @@ STP_pc_prepare_VAL_STS = {
 		has_capitulated = no
 		NOT = { has_war_with = STS }
 		NOT = { is_in_faction_with = STS }
-		STS = { exists = yes has_capitulated = no is_subject = no }
+		STS = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+		}
 		STS = { STP_pc_ai_preparing_val_war = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STS
+		value = 100
+	}
 }
 
 STP_pc_prepare_STS_NOD = {
@@ -507,11 +1045,19 @@ STP_pc_prepare_STS_NOD = {
 		has_capitulated = no
 		NOT = { has_war_with = NOD }
 		NOT = { is_in_faction_with = NOD }
-		NOD = { exists = yes has_capitulated = no is_subject = no }
+		NOD = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+		}
 		STS = { STP_pc_ai_preparing_nod_war = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = NOD value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOD
+		value = 100
+	}
 }
 
 STP_pc_prepare_NOD_STS = {
@@ -522,19 +1068,43 @@ STP_pc_prepare_NOD_STS = {
 		has_capitulated = no
 		NOT = { has_war_with = STS }
 		NOT = { is_in_faction_with = STS }
-		STS = { exists = yes has_capitulated = no is_subject = no }
+		STS = {
+			exists = yes
+			has_capitulated = no
+			is_subject = no
+		}
 		STS = { STP_pc_ai_preparing_nod_war = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = prepare_for_war id = STS value = 100 }
+	ai_strategy = {
+		type = prepare_for_war
+		id = STS
+		value = 100
+	}
 }
 
 STP_ps_defensive_front = {
 	allowed = { original_tag = STP }
-	enable = { STP_ps_war_active = yes STP_ps_can_counterattack = no }
+	enable = {
+		STP_ps_war_active = yes
+		STP_ps_can_counterattack = no
+	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = STS value = 100 }
-	ai_strategy = { type = front_control tag = STS ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = no manual_attack = no }
+	ai_strategy = {
+		type = front_unit_request
+		tag = STS
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = STS
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+	}
 }
 
 # The split already fields roughly 18-24 formations per side. Once that force
@@ -548,7 +1118,10 @@ STP_cw_ai_force_saturation = {
 		NOT = { num_divisions < 24 }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -1000
+	}
 }
 
 STS_cw_ai_force_saturation = {
@@ -560,5 +1133,8 @@ STS_cw_ai_force_saturation = {
 		NOT = { num_divisions < 24 }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = ai_wanted_divisions_factor value = -1000 }
+	ai_strategy = {
+		type = ai_wanted_divisions_factor
+		value = -1000
+	}
 }

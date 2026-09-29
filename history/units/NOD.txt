@@ -3,9 +3,18 @@ division_template = {
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -14,15 +23,36 @@ division_template = {
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
+		engineer = {
+			x = 0
+			y = 0
+		}
 	}
 }
 
@@ -31,25 +61,70 @@ division_template = {
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
-		infantry = { x = 2 y = 0 }
-		infantry = { x = 2 y = 1 }
-		infantry = { x = 2 y = 2 }
-		ADISCORD_line_artillery = { x = 3 y = 0 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
+		infantry = {
+			x = 2
+			y = 0
+		}
+		infantry = {
+			x = 2
+			y = 1
+		}
+		infantry = {
+			x = 2
+			y = 2
+		}
+		ADISCORD_line_artillery = {
+			x = 3
+			y = 0
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		artillery = { x = 0 y = 1 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
 	}
 	regimental_support = {
-		ADISCORD_regimental_fire_support = { x = 0 y = 0 }
-		ADISCORD_regimental_pioneers = { x = 1 y = 0 }
-		ADISCORD_regimental_anti_tank = { x = 2 y = 0 }
+		ADISCORD_regimental_fire_support = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_regimental_pioneers = {
+			x = 1
+			y = 0
+		}
+		ADISCORD_regimental_anti_tank = {
+			x = 2
+			y = 0
+		}
 	}
 }
 
@@ -59,24 +134,66 @@ division_template = {
 	division_names_group = ADISCORD_INF_01
 	priority = 2
 	regiments = {
-		ADISCORD_combat_platform = { x = 0 y = 0 }
-		ADISCORD_combat_platform = { x = 0 y = 1 }
-		ADISCORD_combat_platform = { x = 0 y = 2 }
-		ADISCORD_combat_platform = { x = 0 y = 3 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
-		infantry = { x = 2 y = 0 }
-		infantry = { x = 2 y = 1 }
-		infantry = { x = 2 y = 2 }
+		ADISCORD_combat_platform = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_combat_platform = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_combat_platform = {
+			x = 0
+			y = 2
+		}
+		ADISCORD_combat_platform = {
+			x = 0
+			y = 3
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
+		infantry = {
+			x = 2
+			y = 0
+		}
+		infantry = {
+			x = 2
+			y = 1
+		}
+		infantry = {
+			x = 2
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		artillery = { x = 0 y = 1 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
 	}
 	regimental_support = {
-		ADISCORD_regimental_anti_air = { x = 0 y = 0 }
-		ADISCORD_regimental_fire_support = { x = 1 y = 0 }
+		ADISCORD_regimental_anti_air = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_regimental_fire_support = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -86,23 +203,62 @@ division_template = {
 	division_names_group = ADISCORD_INF_01
 	priority = 2
 	regiments = {
-		mountaineers = { x = 0 y = 0 }
-		mountaineers = { x = 0 y = 1 }
-		mountaineers = { x = 0 y = 2 }
-		mountaineers = { x = 1 y = 0 }
-		mountaineers = { x = 1 y = 1 }
-		mountaineers = { x = 1 y = 2 }
-		mountaineers = { x = 2 y = 0 }
-		mountaineers = { x = 2 y = 1 }
-		mountaineers = { x = 2 y = 2 }
+		mountaineers = {
+			x = 0
+			y = 0
+		}
+		mountaineers = {
+			x = 0
+			y = 1
+		}
+		mountaineers = {
+			x = 0
+			y = 2
+		}
+		mountaineers = {
+			x = 1
+			y = 0
+		}
+		mountaineers = {
+			x = 1
+			y = 1
+		}
+		mountaineers = {
+			x = 1
+			y = 2
+		}
+		mountaineers = {
+			x = 2
+			y = 0
+		}
+		mountaineers = {
+			x = 2
+			y = 1
+		}
+		mountaineers = {
+			x = 2
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		artillery = { x = 0 y = 1 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
 	}
 	regimental_support = {
-		ADISCORD_regimental_fire_support = { x = 0 y = 0 }
-		ADISCORD_regimental_pioneers = { x = 1 y = 0 }
+		ADISCORD_regimental_fire_support = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_regimental_pioneers = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -113,275 +269,449 @@ units = {
 		task_force = {
 			name = "Охрана торговых путей"
 			location = 12434
-			ship = { name = "СК-101" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-102" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-103" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-104" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-105" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-106" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = {
+				name = "СК-101"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "СК-102"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "СК-103"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "СК-104"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "СК-105"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "СК-106"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
 		}
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 16441
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 2 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
 		location = 42
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 3 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
 		location = 16356
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 4 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
 		location = 14
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 5 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
 		location = 85
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 6 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 6
+		}
 		location = 9395
 		division_template = "Cussington Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 7 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 7
+		}
 		location = 12434
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 8 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 8
+		}
 		location = 16369
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 9 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 9
+		}
 		location = 16363
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 12 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 12
+		}
 		location = 15
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 13 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 13
+		}
 		location = 32
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 14 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 14
+		}
 		location = 54
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 15 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 15
+		}
 		location = 36
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 16 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 16
+		}
 		location = 47
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 17 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 17
+		}
 		location = 7986
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 18 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 18
+		}
 		location = 8357
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 19 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 19
+		}
 		location = 74
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 20 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 20
+		}
 		location = 13029
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 21 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 21
+		}
 		location = 80
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 22 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 22
+		}
 		location = 16644
 		division_template = "Nodral Line Infantry"
 		start_experience_factor = 0.20
 		start_equipment_factor = 0.70
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 23 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 23
+		}
 		location = 16444
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 25 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 25
+		}
 		location = 121
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 30 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 30
+		}
 		location = 8
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 31 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 31
+		}
 		location = 26
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 33 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 33
+		}
 		location = 113
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 34 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 34
+		}
 		location = 122
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 35 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 35
+		}
 		location = 141
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 36 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 36
+		}
 		location = 11467
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 37 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 37
+		}
 		location = 16343
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 38 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 38
+		}
 		location = 16346
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 39 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 39
+		}
 		location = 16353
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 40 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 40
+		}
 		location = 16357
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 41 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 41
+		}
 		location = 16362
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 42 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 42
+		}
 		location = 16375
 		division_template = "Cussington Security"
 		start_experience_factor = 0.15
 		start_equipment_factor = 0.60
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 43 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 43
+		}
 		location = 16356
 		division_template = "Nodral Armored Group"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 44 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 44
+		}
 		location = 14
 		division_template = "Nodral Armored Group"
 		start_experience_factor = 0.30
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 45 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 45
+		}
 		location = 22
 		division_template = "Nodral Mountain Infantry"
 		start_experience_factor = 0.32
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 46 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 46
+		}
 		location = 34
 		division_template = "Nodral Mountain Infantry"
 		start_experience_factor = 0.32
@@ -391,13 +721,28 @@ units = {
 
 air_wings = {
 	30 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "NOD" amount = 100 }
-		ADISCORD_fighter_airframe_2163 = { owner = "NOD" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "NOD"
+			amount = 100
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "NOD"
+			amount = 100
+		}
 	}
 	11 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "NOD" amount = 100 }
-		ADISCORD_fighter_airframe_2163 = { owner = "NOD" amount = 100 }
-		ADISCORD_fighter_airframe_2163 = { owner = "NOD" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "NOD"
+			amount = 100
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "NOD"
+			amount = 100
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "NOD"
+			amount = 100
+		}
 	}
 }
 
@@ -439,31 +784,46 @@ instant_effect = {
 		producer = NOD
 	}
 	add_equipment_production = {
-		equipment = { type = infantry_equipment_0 creator = "NOD" }
+		equipment = {
+			type = infantry_equipment_0
+			creator = "NOD"
+		}
 		requested_factories = 7
 		progress = 0.30
 		efficiency = 70
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "NOD" }
+		equipment = {
+			type = ADISCORD_squad_weapons_equipment_0
+			creator = "NOD"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = support_equipment_1 creator = "NOD" }
+		equipment = {
+			type = support_equipment_1
+			creator = "NOD"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = artillery_equipment_1 creator = "NOD" }
+		equipment = {
+			type = artillery_equipment_1
+			creator = "NOD"
+		}
 		requested_factories = 2
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "NOD" }
+		equipment = {
+			type = ADISCORD_fighter_airframe_2163
+			creator = "NOD"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50

@@ -2,11 +2,30 @@ division_template = {
 	name = "Dry River Patrol"
 	template_counter = 80
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 1
+			y = 0
+		}
 	}
 }
+
 units = {
-	division = { division_name = { is_name_ordered = yes name_order = 1 } location = 197 division_template = "Dry River Patrol" start_experience_factor = 0.20 start_equipment_factor = 0.50 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
+		location = 197
+		division_template = "Dry River Patrol"
+		start_experience_factor = 0.20
+		start_equipment_factor = 0.50
+	}
 }

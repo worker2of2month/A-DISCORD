@@ -1,4 +1,12 @@
 set_politics = { ruling_party = chauvinism elections_allowed = no }
-set_popularities = { etatism = 5 chauvinism = 75 humanism = 0 pragmatism = 15 technocracy = 5 }
+
+set_popularities = {
+	etatism = 5
+	chauvinism = 75
+	humanism = 0
+	pragmatism = 15
+	technocracy = 5
+}
+
 recruit_character = ZTA_Viktor_Holt
 set_research_slots = 2

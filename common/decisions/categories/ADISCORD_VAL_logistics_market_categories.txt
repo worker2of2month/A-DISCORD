@@ -26,10 +26,10 @@ VAL_population_markets = {
 }
 
 VAL_trade_routes = {
-    allowed = { tag = VAL }
-    # The standing northern road is passive early income. The full corridor map,
-    # upgrades and grey-market layer appear only with the second-wave system.
-    visible = { VAL_trade_corridors_unlocked = yes }
-    visible_when_empty = yes
-    scripted_gui = ADISCORD_VAL_trade_routes_panel
+	allowed = { tag = VAL }
+	# The standing northern road is passive early income. The full corridor map,
+	# upgrades and grey-market layer appear only with the second-wave system.
+	visible = { VAL_trade_corridors_unlocked = yes }
+	visible_when_empty = yes
+	scripted_gui = ADISCORD_VAL_trade_routes_panel
 }

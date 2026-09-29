@@ -7,12 +7,14 @@ set_politics = {
 	ruling_party = etatism
 	elections_allowed = no
 }
+
 set_popularities = {
 	etatism = 65
 	chauvinism = 20
 	pragmatism = 10
 	technocracy = 5
 }
+
 set_stability = 0.60
 set_war_support = 0.58
 set_research_slots = 3

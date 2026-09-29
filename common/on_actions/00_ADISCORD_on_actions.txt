@@ -14,7 +14,9 @@ on_actions = {
 			# older saves on their next load, preventing AI fronts from stalling in
 			# zero-infrastructure states.
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_minimum_infrastructure_v1_applied } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_minimum_infrastructure_v1_applied }
+				}
 				every_state = {
 					limit = { infrastructure < 1 }
 					add_building_construction = { type = infrastructure level = 1 instant_build = yes }
@@ -24,28 +26,28 @@ on_actions = {
 
 			# Persistent polluted-zone map entities.
 			create_entity = {
-			    entity = ADISCORD_global_entity
-			    id = 1
-			    x = 42
-			    y = 21
-			    z = -100.000
-			    province = 16531
-			    state = 42
-			    rotation = 1.2
-			    scale = 0.03
-			    min_zoom = 5555.0
+				entity = ADISCORD_global_entity
+				id = 1
+				x = 42
+				y = 21
+				z = -100.000
+				province = 16531
+				state = 42
+				rotation = 1.2
+				scale = 0.03
+				min_zoom = 5555.0
 			}
 			create_entity = {
-			    entity = ADISCORD_global_entity
-			    id = 2
-			    x = 42
-			    y = 21
-			    z = -100.000
-			    province = 12863
-			    state = 42
-			    rotation = 1.2
-			    scale = 0.02
-			    min_zoom = 5555.0
+				entity = ADISCORD_global_entity
+				id = 2
+				x = 42
+				y = 21
+				z = -100.000
+				province = 12863
+				state = 42
+				rotation = 1.2
+				scale = 0.02
+				min_zoom = 5555.0
 			}
 			# Scenario history is the sole provenance producer. A pre-contract save
 			# cannot enter this branch, while the completion sentinel prevents a
@@ -58,7 +60,12 @@ on_actions = {
 				every_country = {
 					ADISCORD_grant_starting_technology_profile = yes
 					if = {
-						limit = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
+						limit = {
+							OR = {
+								ADISCORD_is_playable_development_country = yes
+								is_ai = no
+							}
+						}
 						ADISCORD_initialize_default_country_development = yes
 					}
 				}
@@ -114,7 +121,10 @@ on_actions = {
 				# The fresh-campaign guard also prevents reopening the briefing on reload.
 				STP = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -123,7 +133,10 @@ on_actions = {
 				}
 				VAL = {
 					if = {
-						limit = { is_ai = no date < 2160.1.2 }
+						limit = {
+							is_ai = no
+							date < 2160.1.2
+						}
 						set_variable = { var = ADISCORD_startup_open value = 1 }
 						clear_variable = ADISCORD_startup_tab
 						clear_variable = ADISCORD_startup_page
@@ -185,7 +198,12 @@ on_actions = {
 			}
 			# A new enemy relation also covers allies entering an existing war.
 			if = {
-				limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+				limit = {
+					OR = {
+						has_global_flag = ADISCORD_fresh_campaign_contract_v1
+						ADISCORD_economy_has_current_schema = yes
+					}
+				}
 				ADISCORD_economy_initialize_country = yes
 				if = {
 					limit = { ADISCORD_economy_has_current_schema = yes }
@@ -194,7 +212,12 @@ on_actions = {
 			}
 			FROM = {
 				if = {
-					limit = { OR = { has_global_flag = ADISCORD_fresh_campaign_contract_v1 ADISCORD_economy_has_current_schema = yes } }
+					limit = {
+						OR = {
+							has_global_flag = ADISCORD_fresh_campaign_contract_v1
+							ADISCORD_economy_has_current_schema = yes
+						}
+					}
 					ADISCORD_economy_initialize_country = yes
 					if = {
 						limit = { ADISCORD_economy_has_current_schema = yes }
@@ -241,7 +264,11 @@ on_actions = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-					OR = { tag = WKR tag = VAD tag = TVA }
+					OR = {
+						tag = WKR
+						tag = VAD
+						tag = TVA
+					}
 					has_war = yes
 				}
 				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
@@ -254,9 +281,17 @@ on_actions = {
 			# Reconcile human handoffs, partial peace and changes of major status
 			# before selecting cadence. Only current enemies are inspected.
 			if = {
-				limit = { NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized } ADISCORD_economy_has_current_schema = yes }
+				limit = {
+					NOT = { has_country_flag = ADISCORD_non_participating_minor_optimized }
+					ADISCORD_economy_has_current_schema = yes
+				}
 				if = {
-					limit = { OR = { has_war = yes has_country_flag = ADISCORD_economy_fighting_human } }
+					limit = {
+						OR = {
+							has_war = yes
+							has_country_flag = ADISCORD_economy_fighting_human
+						}
+					}
 					ADISCORD_economy_refresh_war_participation_tier = yes
 				}
 				else = { ADISCORD_economy_set_simulation_tier = yes }
@@ -268,7 +303,10 @@ on_actions = {
 			if = {
 				limit = {
 					has_global_flag = ADISCORD_fresh_campaign_contract_v1
-					OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
+					OR = {
+						ADISCORD_is_playable_development_country = yes
+						is_ai = no
+					}
 				}
 				ADISCORD_tick_all_society_development_monthly = yes
 			}

@@ -3,18 +3,46 @@ division_template = {
 	template_counter = 7
 	division_names_group = CSL_COLLAPSE_INF_01
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
 	}
 }
+
 units = {
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 7778
 		division_template = "CSL Municipal Militia"
 		start_experience_factor = 0.05
 		start_equipment_factor = 0.55
 	}
-	division = { division_name = { is_name_ordered = yes name_order = 2 } location = 7778 division_template = "CSL Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
-	division = { division_name = { is_name_ordered = yes name_order = 3 } location = 7778 division_template = "CSL Municipal Militia" start_experience_factor = 0.05 start_equipment_factor = 0.60 }
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
+		location = 7778
+		division_template = "CSL Municipal Militia"
+		start_experience_factor = 0.05
+		start_equipment_factor = 0.60
+	}
+	division = {
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
+		location = 7778
+		division_template = "CSL Municipal Militia"
+		start_experience_factor = 0.05
+		start_equipment_factor = 0.60
+	}
 }

@@ -28,7 +28,12 @@ STP_apparatus_loyalty_dynamic_modifier = {
 # Fixed-tag successors need their own country variables and an allowed tag here.
 STP_cw_resistance_network_dynamic = {
 	icon = GFX_idea_STP_National_Strikes
-	enable = { OR = { tag = STP tag = STS } }
+	enable = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
 	political_power_gain = STP_cw_network_political_power_gain
 }
 
@@ -42,7 +47,13 @@ STP_cw_party_administration_dynamic = {
 
 STP_cw_military_staff_dynamic = {
 	icon = GFX_idea_ADISCORD_law_military_cadre_army
-	enable = { OR = { tag = STP tag = STS tag = SRP } }
+	enable = {
+		OR = {
+			tag = STP
+			tag = STS
+			tag = SRP
+		}
+	}
 	army_org_factor = STP_cw_army_org_factor
 	planning_speed = STP_cw_army_planning_speed
 	army_org_regain = STP_cw_army_org_regain
@@ -51,7 +62,10 @@ STP_cw_military_staff_dynamic = {
 
 STP_cw_election_mandate_dynamic = {
 	icon = GFX_idea_ADISCORD_law_civic_local_councils
-	enable = { tag = STS has_war = yes }
+	enable = {
+		tag = STS
+		has_war = yes
+	}
 	army_org_regain = STP_cw_mandate_org_regain
 	army_core_defence_factor = STP_cw_mandate_core_defence
 	training_time_factor = STP_cw_mandate_training_time
@@ -60,7 +74,12 @@ STP_cw_election_mandate_dynamic = {
 
 STP_pw_reconstruction_dynamic = {
 	icon = GFX_idea_ADISCORD_law_civic_local_councils
-	enable = { OR = { tag = STP tag = STS } }
+	enable = {
+		OR = {
+			tag = STP
+			tag = STS
+		}
+	}
 	industrial_capacity_factory = STP_pw_recovery_output
 	production_speed_buildings_factor = STP_pw_recovery_construction
 	ADISCORD_economy_admin_expense_factor = STP_pw_recovery_expense
@@ -114,7 +133,11 @@ STP_pw_party_dynamic = {
 
 STP_pf_balance_dynamic = {
 	icon = GFX_idea_ADISCORD_law_civic_local_councils
-	enable = { STP_pf_active = yes has_country_flag = STP_pf_initialized has_capitulated = no }
+	enable = {
+		STP_pf_active = yes
+		has_country_flag = STP_pf_initialized
+		has_capitulated = no
+	}
 	ADISCORD_economy_admin_expense_factor = STP_pf_conservatives_effect
 	production_speed_buildings_factor = STP_pf_borons_effect
 	stability_factor = STP_pf_security_effect
@@ -130,6 +153,7 @@ STP_ps_defence_dynamic = {
 	breakthrough_factor = STP_ps_breakthrough
 	planning_speed = STP_ps_planning
 }
+
 STP_ps_nodes_dynamic = {
 	icon = GFX_idea_ADISCORD_law_military_cadre_army
 	enable = { STP_ps_war_active = yes }

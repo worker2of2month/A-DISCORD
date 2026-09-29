@@ -1,5 +1,4 @@
 buildings = {
-
 	# show_on_map:
 	#    if it is provincial building, then show_on_map = X is amount per each province
 	#    if it is state building, then show_on_map = X is amount per state
@@ -21,12 +20,12 @@ buildings = {
 	#			political_power_factor = 2.0
 	#       }
 	#   }
-	#   
+	#
 	#   state_modifiers = {
 	#       #Here you can add state modifiers
 	#   	local_building_slots_factor = 2
 	#   }
-	# 
+	#
 	#   disable_grow_animation = yes # Disables the grow animation for the building, default = no
 	#   missing_tech_loc = <bindable localization> # See script concept bindable localization
 	#   repair_speed_factor = 0.5 # Optional. Factor for how fast the building is repaired (default = 1.0)
@@ -110,8 +109,8 @@ buildings = {
 			province_max = 1
 		}
 		tags = { supply_building }
-	}	
-	
+	}
+
 	rail_way = {
 		base_cost = 170
 		per_level_extra_cost = 130
@@ -122,7 +121,7 @@ buildings = {
 			province_max = 1
 		}
 	}
-	
+
 	naval_facility = {
 		show_on_map = 1
 		base_cost = 12000
@@ -130,7 +129,7 @@ buildings = {
 		damage_factor = 0 # This building can't be damaged by regular strat bombing
 		icon_frame = 18
 		value = 1
-		spawn_point = naval_base_spawn 
+		spawn_point = naval_base_spawn
 		specialization = { specialization_naval }
 		tags = { facility }
 		disabled_in_dmz = yes
@@ -153,7 +152,7 @@ buildings = {
 		always_shown = yes
 		base_cost = 5000
 		per_level_extra_cost = 1000
-		spawn_point = naval_base_spawn 
+		spawn_point = naval_base_spawn
 		only_costal = yes
 		is_port = yes
 		icon_frame = 6
@@ -178,7 +177,7 @@ buildings = {
 		infrastructure_construction_effect = yes
 		level_cap = {
 			province_max = 10
-		}		
+		}
 	}
 
 	coastal_bunker = {
@@ -219,7 +218,7 @@ buildings = {
 			enemy_attrition = 0.1
 			state_production_speed_bunker_factor = 0.1
 			state_production_speed_coastal_bunker_factor = 0.1
-		}		
+		}
 	}
 
 	dockyard = {
@@ -231,7 +230,7 @@ buildings = {
 		icon_frame = 4
 		only_costal = yes
 		value = 5
-		tags = { naval_buildings_tag } 
+		tags = { naval_buildings_tag }
 		infrastructure_construction_effect = yes
 		level_cap = {
 			shares_slots = yes
@@ -239,7 +238,6 @@ buildings = {
 		}
 	}
 
-	
 	anti_air_building = {
 		show_on_map = 3
 		base_cost = 2500
@@ -264,12 +262,12 @@ buildings = {
 		refinery = yes
 		value = 5
 		infrastructure_construction_effect = yes
-		
+
 		show_modifier = yes
 
 		country_modifiers = {
 			modifiers = {
-			fuel_gain_from_states = 2.0 #per hour
+				fuel_gain_from_states = 2.0 #per hour
 			}
 		}
 
@@ -286,14 +284,14 @@ buildings = {
 		value = 5
 		infrastructure_construction_effect = yes
 		fuel_silo = yes
-		per_level_extra_cost = -500		
+		per_level_extra_cost = -500
 		show_modifier = yes
 		country_modifiers = {
 			modifiers = {
 				max_fuel_building = 100.0 #k
 			}
 		}
-		
+
 		level_cap = {
 			shares_slots = yes
 		}
@@ -334,7 +332,6 @@ buildings = {
 		#Building utilizes equipment "explosive_ammo_equipment" as ammunition for the air mission barrage
 	}
 
-
 	rocket_site = {
 		show_on_map = 1
 		base_cost = 6400
@@ -342,7 +339,7 @@ buildings = {
 		rocket_production = 0
 		rocket_launch_capacity = 1
 		value = 1
-		tags = {}
+		tags = { }
 		infrastructure_construction_effect = yes
 		disabled_in_dmz = yes
 		spawn_point = rocket_site_spawn
@@ -352,7 +349,7 @@ buildings = {
 			exclusive_with = mega_gun_emplacement
 		}
 	}
-	
+
 	naval_supply_hub = {
 		show_on_map = 1
 		base_cost = 12500
@@ -372,7 +369,7 @@ buildings = {
 			province_max = 1
 		}
 	}
-	
+
 	naval_headquarters = {
 		dlc_allowed = { has_dlc = "No Compromise, No Surrender" }
 		show_on_map = 1
@@ -398,10 +395,10 @@ buildings = {
 			naval_leader_module
 		}
 	}
-	
+
 	nuclear_reactor = {
 		hide_if_missing_tech = yes
-		missing_tech_loc = { 
+		missing_tech_loc = {
 			localization_key = SP_BUILDING_MISSING_PROJECT
 		}
 		spawn_point = nuclear_reactor_spawn
@@ -429,7 +426,7 @@ buildings = {
 
 	nuclear_reactor_heavy_water = {
 		hide_if_missing_tech = yes
-		missing_tech_loc = { 
+		missing_tech_loc = {
 			localization_key = SP_BUILDING_MISSING_PROJECT
 		}
 		spawn_point = nuclear_reactor_spawn
@@ -457,7 +454,7 @@ buildings = {
 	commercial_nuclear_reactor = {
 		dlc_allowed = { has_dlc = Gotterdammerung }
 		hide_if_missing_tech = yes
-		missing_tech_loc = { 
+		missing_tech_loc = {
 			localization_key = SP_BUILDING_MISSING_PROJECT
 		}
 		spawn_point = nuclear_reactor_spawn
@@ -469,7 +466,7 @@ buildings = {
 		affects_energy = yes
 		value = 10
 		infrastructure_construction_effect = yes
-		
+
 		country_modifiers = {
 			modifiers = {
 				nuclear_production_factor = 3
@@ -531,8 +528,8 @@ buildings = {
 		damage_factor = 0 # This building can't be damaged by regular strat bombing
 		icon_frame = 17
 		value = 1
-		spawn_point = special_project_facility_spawn 
-		specialization = { specialization_air}
+		spawn_point = special_project_facility_spawn
+		specialization = { specialization_air }
 		tags = { facility }
 		need_supply = yes
 		need_detection = yes
@@ -554,7 +551,7 @@ buildings = {
 		damage_factor = 0 # This building can't be damaged by regular strat bombing
 		icon_frame = 19
 		value = 1
-		spawn_point = special_project_facility_spawn 
+		spawn_point = special_project_facility_spawn
 		specialization = { specialization_land }
 		tags = { facility }
 		disabled_in_dmz = yes
@@ -608,7 +605,7 @@ buildings = {
 		is_buildable = no
 		affects_energy = yes
 		need_detection = yes
-		detecting_intel_type = civilian 
+		detecting_intel_type = civilian
 		province_damage_modifiers = { flooded }
 		only_display_if_exists = yes
 		special_icon = GFX_dam_icon_small
@@ -631,7 +628,7 @@ buildings = {
 		damage_factor = -1
 		is_buildable = no
 		need_detection = yes
-		detecting_intel_type = civilian 
+		detecting_intel_type = civilian
 		affects_energy = yes
 		icon_frame = 26
 		value = 8
@@ -659,7 +656,6 @@ buildings = {
 		}
 		show_modifier = yes
 		state_modifiers = {
-			
 		}
 	}
 
@@ -682,12 +678,11 @@ buildings = {
 		}
 		show_modifier = yes
 		state_modifiers = {
-			
 		}
 	}
-	
+
 	#### Energy
-	
+
 	energy_infrastructure = {
 		base_cost = 12000
 		icon_frame = 30
@@ -706,14 +701,13 @@ buildings = {
 			local_factory_energy_consumption_per_infrastructure = -0.075
 		}
 	}
-	
+
 	industrial_infrastructure = {
 		base_cost = 12000
 		icon_frame = 31
 		value = 1
 
 		show_modifier = yes
-
 
 		infrastructure_construction_effect = yes
 		level_cap = {

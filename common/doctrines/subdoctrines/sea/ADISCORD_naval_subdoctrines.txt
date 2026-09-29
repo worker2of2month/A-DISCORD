@@ -14,7 +14,10 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.6 has_war = yes }
+		modifier = {
+			factor = 1.6
+			has_war = yes
+		}
 	}
 	screening_efficiency = 0.04
 	mines_sweeping_by_fleets_factor = 0.05
@@ -60,7 +63,10 @@ ADISCORD_naval_doctrine_convoy_shield_doctrine = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_war = yes }
+		modifier = {
+			factor = 1.8
+			has_war = yes
+		}
 	}
 	convoy_escort_efficiency = 0.06
 	convoy_retreat_speed = 0.03
@@ -105,7 +111,10 @@ ADISCORD_naval_doctrine_mine_warfare_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.7 has_war = yes }
+		modifier = {
+			factor = 1.7
+			has_war = yes
+		}
 	}
 	naval_mine_hit_chance = 0.03
 	naval_mines_effect_reduction = 0.03
@@ -150,7 +159,10 @@ ADISCORD_naval_doctrine_drone_carrier_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_drone_carrier_deck_systems }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_drone_carrier_deck_systems
+		}
 	}
 	navy_carrier_air_agility_factor = 0.04
 	naval_strike_attack_factor = 0.03
@@ -195,7 +207,10 @@ ADISCORD_naval_doctrine_missile_surface_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_tech = ADISCORD_tech_networked_task_groups }
+		modifier = {
+			factor = 1.8
+			has_tech = ADISCORD_tech_networked_task_groups
+		}
 	}
 	naval_hit_chance = 0.025
 	naval_coordination = 0.01
@@ -240,7 +255,10 @@ ADISCORD_naval_doctrine_coastal_fire_support = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_modular_landing_causeways }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_modular_landing_causeways
+		}
 	}
 	shore_bombardment_bonus = 0.04
 	naval_invasion_prep_speed = 0.03
@@ -285,7 +303,10 @@ ADISCORD_naval_doctrine_subsurface_denial = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_war = yes }
+		modifier = {
+			factor = 1.8
+			has_war = yes
+		}
 	}
 	convoy_raiding_efficiency_factor = 0.06
 	navy_submarine_attack_factor = 0.03
@@ -330,7 +351,10 @@ ADISCORD_naval_doctrine_silent_ambush_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_autonomous_submarines
+		}
 	}
 	navy_submarine_defence_factor = 0.03
 	convoy_raiding_efficiency_factor = 0.04
@@ -376,7 +400,10 @@ ADISCORD_naval_doctrine_seabed_hunter_network = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_autonomous_submarines
+		}
 	}
 	naval_detection = 0.035
 	navy_submarine_attack_factor = 0.025

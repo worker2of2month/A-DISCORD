@@ -1,10 +1,10 @@
 bitmapfonts = {
 	bitmapfont = {
 		name = "hoi_20bsSVA"
-#		path = "gfx/fonts/hoi_20bsSVA"
-		fontfiles = { 
+		#		path = "gfx/fonts/hoi_20bsSVA"
+		fontfiles = {
 			"gfx/fonts/hoi_20bsSVA"
-		}		
+		}
 		color = 0xffffffff
 
 		textcolors = {
@@ -25,4 +25,3 @@ bitmapfonts = {
 		languages = { "l_russian" "l_polish" }
 	}
 }
-

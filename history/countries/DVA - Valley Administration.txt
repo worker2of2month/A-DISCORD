@@ -1,4 +1,12 @@
 set_politics = { ruling_party = etatism elections_allowed = no }
-set_popularities = { etatism = 75 chauvinism = 10 humanism = 5 pragmatism = 10 technocracy = 0 }
+
+set_popularities = {
+	etatism = 75
+	chauvinism = 10
+	humanism = 5
+	pragmatism = 10
+	technocracy = 0
+}
+
 recruit_character = DVA_Severin_Mark
 set_research_slots = 2

@@ -1,269 +1,286 @@
 scripted_gui = {
-	CountryIdeologyScript = { ##Party name
+	CountryIdeologyScript = {
+		##Party name
 		context_type = player_context
 		parent_window_token = politics_tab
 		window_name = "CountryIdeology"
 	}
 
-    PartyPopularityScript = { ##party popularity
-        context_type = player_context
-        parent_window_token = politics_tab
-        window_name = "CountryLeadingPartyPopularity"
-    }
+	PartyPopularityScript = {
+		##party popularity
+		context_type = player_context
+		parent_window_token = politics_tab
+		window_name = "CountryLeadingPartyPopularity"
+	}
 
-    ideology_icon_countrypoliticsview_gui = { ##Ideology Icon fix
-        context_type = player_context
-        window_name = "ideology_icon_countrypoliticsview_container"
-        parent_window_name = "countrypoliticsview"
-        triggers = {
-            ideology_icon_humanism_visible = {
-                has_government = humanism
-            }
-            ideology_icon_aristocratic_hedonism_visible = {
-                has_country_leader_ideology = aristocratic_hedonism
-            }
-            ideology_icon_hedonism_visible = {
-                has_country_leader_ideology = hedonism_ideology
-            }
-            ideology_icon_utilitarism_visible = {
-                AND = {
-                    has_government = utilitarism
-                    NOT = { has_country_leader_ideology = utilitarian_accelerationism }
-                }
-            }
-            ideology_icon_utilitarian_accelerationism_visible = {
-                has_country_leader_ideology = utilitarian_accelerationism
-            }
-            ideology_icon_technocracy_visible = {
-                has_government = technocracy
-            }
-            ideology_icon_national_legitimism_visible = {
-                has_country_leader_ideology = national_legitimism
-            }
-            ideology_icon_chauvinism_visible = {
-                has_government = chauvinism
-                NOT = { has_country_leader_ideology = national_legitimism }
-            }
-            ideology_icon_contractual_etatism_visible = {
-                has_country_leader_ideology = contractual_etatism
-            }
-            ideology_icon_etatism_visible = {
-                AND = {
-                    has_government = etatism
-                    NOT = { has_country_leader_ideology = contractual_etatism }
-                }
-            }
-            ideology_icon_vorkerism_visible = {
-                has_country_leader_ideology = vorkerism
-            }
-            ideology_icon_neo_vorkerism_visible = {
-                has_country_leader_ideology = neo_vorkerism
-            }
-            ideology_icon_imperial_restorationism_visible = {
-                has_country_leader_ideology = imperial_restorationism
-            }
-            ideology_icon_pragmatism_visible = {
-                AND = {
-                    has_government = pragmatism
-                    NOT = { has_country_leader_ideology = vorkerism }
-                    NOT = { has_country_leader_ideology = neo_vorkerism }
-                    NOT = { has_country_leader_ideology = imperial_restorationism }
-                }
-            }
-            ideology_icon_anarchism_visible = {
-                has_government = anarchism
-            }
-        }
-    }
+	ideology_icon_countrypoliticsview_gui = {
+		##Ideology Icon fix
+		context_type = player_context
+		window_name = "ideology_icon_countrypoliticsview_container"
+		parent_window_name = "countrypoliticsview"
+		triggers = {
+			ideology_icon_humanism_visible = {
+				has_government = humanism
+			}
+			ideology_icon_aristocratic_hedonism_visible = {
+				has_country_leader_ideology = aristocratic_hedonism
+			}
+			ideology_icon_hedonism_visible = {
+				has_country_leader_ideology = hedonism_ideology
+			}
+			ideology_icon_utilitarism_visible = {
+				AND = {
+					has_government = utilitarism
+					NOT = { has_country_leader_ideology = utilitarian_accelerationism }
+				}
+			}
+			ideology_icon_utilitarian_accelerationism_visible = {
+				has_country_leader_ideology = utilitarian_accelerationism
+			}
+			ideology_icon_technocracy_visible = {
+				has_government = technocracy
+			}
+			ideology_icon_national_legitimism_visible = {
+				has_country_leader_ideology = national_legitimism
+			}
+			ideology_icon_chauvinism_visible = {
+				has_government = chauvinism
+				NOT = { has_country_leader_ideology = national_legitimism }
+			}
+			ideology_icon_contractual_etatism_visible = {
+				has_country_leader_ideology = contractual_etatism
+			}
+			ideology_icon_etatism_visible = {
+				AND = {
+					has_government = etatism
+					NOT = { has_country_leader_ideology = contractual_etatism }
+				}
+			}
+			ideology_icon_vorkerism_visible = {
+				has_country_leader_ideology = vorkerism
+			}
+			ideology_icon_neo_vorkerism_visible = {
+				has_country_leader_ideology = neo_vorkerism
+			}
+			ideology_icon_imperial_restorationism_visible = {
+				has_country_leader_ideology = imperial_restorationism
+			}
+			ideology_icon_pragmatism_visible = {
+				AND = {
+					has_government = pragmatism
+					NOT = { has_country_leader_ideology = vorkerism }
+					NOT = { has_country_leader_ideology = neo_vorkerism }
+					NOT = { has_country_leader_ideology = imperial_restorationism }
+				}
+			}
+			ideology_icon_anarchism_visible = {
+				has_government = anarchism
+			}
+		}
+	}
 
-###country development
+	###country development
 
-    CountryDevelopmentLauncherScript = {
-        context_type = player_context
-        parent_window_name = "countrypoliticsview"
-        window_name = "ADISCORD_development_launcher"
-        visible = { OR = { ADISCORD_is_playable_development_country = yes is_ai = no } }
-        effects = {
-            ADISCORD_development_open_click = {
-                if = {
-                    limit = { check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals } }
-                    clear_variable = ADISCORD_development_show_window
-                }
-                else = {
-                    set_variable = { var = ADISCORD_development_show_window value = 1 }
-                }
-            }
-        }
-    }
+	CountryDevelopmentLauncherScript = {
+		context_type = player_context
+		parent_window_name = "countrypoliticsview"
+		window_name = "ADISCORD_development_launcher"
+		visible = {
+			OR = {
+				ADISCORD_is_playable_development_country = yes
+				is_ai = no
+			}
+		}
+		effects = {
+			ADISCORD_development_open_click = {
+				if = {
+					limit = {
+						check_variable = {
+							var = ADISCORD_development_show_window
+							value = 1
+							compare = greater_than_or_equals
+						}
+					}
+					clear_variable = ADISCORD_development_show_window
+				}
+				else = {
+					set_variable = { var = ADISCORD_development_show_window value = 1 }
+				}
+			}
+		}
+	}
 
-    CountryDevelopmentScript = {
-        context_type = player_context
-        parent_window_name = "countrypoliticsview"
-        window_name = "ADISCORD_development_category_society_type"
-        visible = {
-            OR = { ADISCORD_is_playable_development_country = yes is_ai = no }
-            check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals }
-        }
-        effects = {
-            ADISCORD_development_close_click = { clear_variable = ADISCORD_development_show_window }
-        }
+	CountryDevelopmentScript = {
+		context_type = player_context
+		parent_window_name = "countrypoliticsview"
+		window_name = "ADISCORD_development_category_society_type"
+		visible = {
+			OR = {
+				ADISCORD_is_playable_development_country = yes
+				is_ai = no
+			}
+			check_variable = { var = ADISCORD_development_show_window value = 1 compare = greater_than_or_equals }
+		}
+		effects = {
+			ADISCORD_development_close_click = { clear_variable = ADISCORD_development_show_window }
+		}
 
-        triggers = {
-            ADISCORD_development_society_progress_bar_1_visible = { ADISCORD_society_development_progress_bar_1 = yes }
-            ADISCORD_development_society_progress_bar_2_visible = { ADISCORD_society_development_progress_bar_2 = yes }
-            ADISCORD_development_society_progress_bar_3_visible = { ADISCORD_society_development_progress_bar_3 = yes }
-            ADISCORD_development_society_progress_bar_4_visible = { ADISCORD_society_development_progress_bar_4 = yes }
-            ADISCORD_development_society_progress_bar_5_visible = { ADISCORD_society_development_progress_bar_5 = yes }
-            ADISCORD_development_society_progress_bar_6_visible = { ADISCORD_society_development_progress_bar_6 = yes }
-            ADISCORD_development_society_progress_bar_7_visible = { ADISCORD_society_development_progress_bar_7 = yes }
-            ADISCORD_development_society_progress_bar_8_visible = { ADISCORD_society_development_progress_bar_8 = yes }
-            ADISCORD_development_society_progress_bar_9_visible = { ADISCORD_society_development_progress_bar_9 = yes }
-            ADISCORD_development_society_progress_bar_10_visible = { ADISCORD_society_development_progress_bar_10 = yes }
-            ADISCORD_development_society_progress_bar_11_visible = { ADISCORD_society_development_progress_bar_11 = yes }
-            ADISCORD_development_society_progress_bar_12_visible = { ADISCORD_society_development_progress_bar_12 = yes }
-            ADISCORD_development_society_progress_bar_13_visible = { ADISCORD_society_development_progress_bar_13 = yes }
-            ADISCORD_development_society_progress_bar_14_visible = { ADISCORD_society_development_progress_bar_14 = yes }
-            ADISCORD_development_society_progress_bar_15_visible = { ADISCORD_society_development_progress_bar_15 = yes }
-            ADISCORD_development_society_progress_bar_16_visible = { ADISCORD_society_development_progress_bar_16 = yes }
-            ADISCORD_development_society_progress_bar_17_visible = { ADISCORD_society_development_progress_bar_17 = yes }
-            ADISCORD_development_society_progress_bar_18_visible = { ADISCORD_society_development_progress_bar_18 = yes }
-            ADISCORD_development_society_progress_bar_19_visible = { ADISCORD_society_development_progress_bar_19 = yes }
-            ADISCORD_development_society_progress_bar_20_visible = { ADISCORD_society_development_progress_bar_20 = yes }
-            ADISCORD_development_society_icon_1_visible = { ADISCORD_society_development_exact_1 = yes }
-            ADISCORD_development_society_icon_2_visible = { ADISCORD_society_development_exact_2 = yes }
-            ADISCORD_development_society_icon_3_visible = { ADISCORD_society_development_exact_3 = yes }
-            ADISCORD_development_society_icon_4_visible = { ADISCORD_society_development_exact_4 = yes }
-            ADISCORD_development_society_icon_5_visible = { ADISCORD_society_development_exact_5 = yes }
+		triggers = {
+			ADISCORD_development_society_progress_bar_1_visible = { ADISCORD_society_development_progress_bar_1 = yes }
+			ADISCORD_development_society_progress_bar_2_visible = { ADISCORD_society_development_progress_bar_2 = yes }
+			ADISCORD_development_society_progress_bar_3_visible = { ADISCORD_society_development_progress_bar_3 = yes }
+			ADISCORD_development_society_progress_bar_4_visible = { ADISCORD_society_development_progress_bar_4 = yes }
+			ADISCORD_development_society_progress_bar_5_visible = { ADISCORD_society_development_progress_bar_5 = yes }
+			ADISCORD_development_society_progress_bar_6_visible = { ADISCORD_society_development_progress_bar_6 = yes }
+			ADISCORD_development_society_progress_bar_7_visible = { ADISCORD_society_development_progress_bar_7 = yes }
+			ADISCORD_development_society_progress_bar_8_visible = { ADISCORD_society_development_progress_bar_8 = yes }
+			ADISCORD_development_society_progress_bar_9_visible = { ADISCORD_society_development_progress_bar_9 = yes }
+			ADISCORD_development_society_progress_bar_10_visible = { ADISCORD_society_development_progress_bar_10 = yes }
+			ADISCORD_development_society_progress_bar_11_visible = { ADISCORD_society_development_progress_bar_11 = yes }
+			ADISCORD_development_society_progress_bar_12_visible = { ADISCORD_society_development_progress_bar_12 = yes }
+			ADISCORD_development_society_progress_bar_13_visible = { ADISCORD_society_development_progress_bar_13 = yes }
+			ADISCORD_development_society_progress_bar_14_visible = { ADISCORD_society_development_progress_bar_14 = yes }
+			ADISCORD_development_society_progress_bar_15_visible = { ADISCORD_society_development_progress_bar_15 = yes }
+			ADISCORD_development_society_progress_bar_16_visible = { ADISCORD_society_development_progress_bar_16 = yes }
+			ADISCORD_development_society_progress_bar_17_visible = { ADISCORD_society_development_progress_bar_17 = yes }
+			ADISCORD_development_society_progress_bar_18_visible = { ADISCORD_society_development_progress_bar_18 = yes }
+			ADISCORD_development_society_progress_bar_19_visible = { ADISCORD_society_development_progress_bar_19 = yes }
+			ADISCORD_development_society_progress_bar_20_visible = { ADISCORD_society_development_progress_bar_20 = yes }
+			ADISCORD_development_society_icon_1_visible = { ADISCORD_society_development_exact_1 = yes }
+			ADISCORD_development_society_icon_2_visible = { ADISCORD_society_development_exact_2 = yes }
+			ADISCORD_development_society_icon_3_visible = { ADISCORD_society_development_exact_3 = yes }
+			ADISCORD_development_society_icon_4_visible = { ADISCORD_society_development_exact_4 = yes }
+			ADISCORD_development_society_icon_5_visible = { ADISCORD_society_development_exact_5 = yes }
 
-            ADISCORD_development_social_system_progress_bar_1_visible = { ADISCORD_social_system_development_progress_bar_1 = yes }
-            ADISCORD_development_social_system_progress_bar_2_visible = { ADISCORD_social_system_development_progress_bar_2 = yes }
-            ADISCORD_development_social_system_progress_bar_3_visible = { ADISCORD_social_system_development_progress_bar_3 = yes }
-            ADISCORD_development_social_system_progress_bar_4_visible = { ADISCORD_social_system_development_progress_bar_4 = yes }
-            ADISCORD_development_social_system_progress_bar_5_visible = { ADISCORD_social_system_development_progress_bar_5 = yes }
-            ADISCORD_development_social_system_progress_bar_6_visible = { ADISCORD_social_system_development_progress_bar_6 = yes }
-            ADISCORD_development_social_system_progress_bar_7_visible = { ADISCORD_social_system_development_progress_bar_7 = yes }
-            ADISCORD_development_social_system_progress_bar_8_visible = { ADISCORD_social_system_development_progress_bar_8 = yes }
-            ADISCORD_development_social_system_progress_bar_9_visible = { ADISCORD_social_system_development_progress_bar_9 = yes }
-            ADISCORD_development_social_system_progress_bar_10_visible = { ADISCORD_social_system_development_progress_bar_10 = yes }
-            ADISCORD_development_social_system_progress_bar_11_visible = { ADISCORD_social_system_development_progress_bar_11 = yes }
-            ADISCORD_development_social_system_progress_bar_12_visible = { ADISCORD_social_system_development_progress_bar_12 = yes }
-            ADISCORD_development_social_system_progress_bar_13_visible = { ADISCORD_social_system_development_progress_bar_13 = yes }
-            ADISCORD_development_social_system_progress_bar_14_visible = { ADISCORD_social_system_development_progress_bar_14 = yes }
-            ADISCORD_development_social_system_progress_bar_15_visible = { ADISCORD_social_system_development_progress_bar_15 = yes }
-            ADISCORD_development_social_system_progress_bar_16_visible = { ADISCORD_social_system_development_progress_bar_16 = yes }
-            ADISCORD_development_social_system_progress_bar_17_visible = { ADISCORD_social_system_development_progress_bar_17 = yes }
-            ADISCORD_development_social_system_progress_bar_18_visible = { ADISCORD_social_system_development_progress_bar_18 = yes }
-            ADISCORD_development_social_system_progress_bar_19_visible = { ADISCORD_social_system_development_progress_bar_19 = yes }
-            ADISCORD_development_social_system_progress_bar_20_visible = { ADISCORD_social_system_development_progress_bar_20 = yes }
-            ADISCORD_development_social_system_icon_1_visible = { ADISCORD_social_system_development_exact_1 = yes }
-            ADISCORD_development_social_system_icon_2_visible = { ADISCORD_social_system_development_exact_2 = yes }
-            ADISCORD_development_social_system_icon_3_visible = { ADISCORD_social_system_development_exact_3 = yes }
-            ADISCORD_development_social_system_icon_4_visible = { ADISCORD_social_system_development_exact_4 = yes }
-            ADISCORD_development_social_system_icon_5_visible = { ADISCORD_social_system_development_exact_5 = yes }
+			ADISCORD_development_social_system_progress_bar_1_visible = { ADISCORD_social_system_development_progress_bar_1 = yes }
+			ADISCORD_development_social_system_progress_bar_2_visible = { ADISCORD_social_system_development_progress_bar_2 = yes }
+			ADISCORD_development_social_system_progress_bar_3_visible = { ADISCORD_social_system_development_progress_bar_3 = yes }
+			ADISCORD_development_social_system_progress_bar_4_visible = { ADISCORD_social_system_development_progress_bar_4 = yes }
+			ADISCORD_development_social_system_progress_bar_5_visible = { ADISCORD_social_system_development_progress_bar_5 = yes }
+			ADISCORD_development_social_system_progress_bar_6_visible = { ADISCORD_social_system_development_progress_bar_6 = yes }
+			ADISCORD_development_social_system_progress_bar_7_visible = { ADISCORD_social_system_development_progress_bar_7 = yes }
+			ADISCORD_development_social_system_progress_bar_8_visible = { ADISCORD_social_system_development_progress_bar_8 = yes }
+			ADISCORD_development_social_system_progress_bar_9_visible = { ADISCORD_social_system_development_progress_bar_9 = yes }
+			ADISCORD_development_social_system_progress_bar_10_visible = { ADISCORD_social_system_development_progress_bar_10 = yes }
+			ADISCORD_development_social_system_progress_bar_11_visible = { ADISCORD_social_system_development_progress_bar_11 = yes }
+			ADISCORD_development_social_system_progress_bar_12_visible = { ADISCORD_social_system_development_progress_bar_12 = yes }
+			ADISCORD_development_social_system_progress_bar_13_visible = { ADISCORD_social_system_development_progress_bar_13 = yes }
+			ADISCORD_development_social_system_progress_bar_14_visible = { ADISCORD_social_system_development_progress_bar_14 = yes }
+			ADISCORD_development_social_system_progress_bar_15_visible = { ADISCORD_social_system_development_progress_bar_15 = yes }
+			ADISCORD_development_social_system_progress_bar_16_visible = { ADISCORD_social_system_development_progress_bar_16 = yes }
+			ADISCORD_development_social_system_progress_bar_17_visible = { ADISCORD_social_system_development_progress_bar_17 = yes }
+			ADISCORD_development_social_system_progress_bar_18_visible = { ADISCORD_social_system_development_progress_bar_18 = yes }
+			ADISCORD_development_social_system_progress_bar_19_visible = { ADISCORD_social_system_development_progress_bar_19 = yes }
+			ADISCORD_development_social_system_progress_bar_20_visible = { ADISCORD_social_system_development_progress_bar_20 = yes }
+			ADISCORD_development_social_system_icon_1_visible = { ADISCORD_social_system_development_exact_1 = yes }
+			ADISCORD_development_social_system_icon_2_visible = { ADISCORD_social_system_development_exact_2 = yes }
+			ADISCORD_development_social_system_icon_3_visible = { ADISCORD_social_system_development_exact_3 = yes }
+			ADISCORD_development_social_system_icon_4_visible = { ADISCORD_social_system_development_exact_4 = yes }
+			ADISCORD_development_social_system_icon_5_visible = { ADISCORD_social_system_development_exact_5 = yes }
 
-            ADISCORD_development_army_progress_bar_1_visible = { ADISCORD_army_development_progress_bar_1 = yes }
-            ADISCORD_development_army_progress_bar_2_visible = { ADISCORD_army_development_progress_bar_2 = yes }
-            ADISCORD_development_army_progress_bar_3_visible = { ADISCORD_army_development_progress_bar_3 = yes }
-            ADISCORD_development_army_progress_bar_4_visible = { ADISCORD_army_development_progress_bar_4 = yes }
-            ADISCORD_development_army_progress_bar_5_visible = { ADISCORD_army_development_progress_bar_5 = yes }
-            ADISCORD_development_army_progress_bar_6_visible = { ADISCORD_army_development_progress_bar_6 = yes }
-            ADISCORD_development_army_progress_bar_7_visible = { ADISCORD_army_development_progress_bar_7 = yes }
-            ADISCORD_development_army_progress_bar_8_visible = { ADISCORD_army_development_progress_bar_8 = yes }
-            ADISCORD_development_army_progress_bar_9_visible = { ADISCORD_army_development_progress_bar_9 = yes }
-            ADISCORD_development_army_progress_bar_10_visible = { ADISCORD_army_development_progress_bar_10 = yes }
-            ADISCORD_development_army_progress_bar_11_visible = { ADISCORD_army_development_progress_bar_11 = yes }
-            ADISCORD_development_army_progress_bar_12_visible = { ADISCORD_army_development_progress_bar_12 = yes }
-            ADISCORD_development_army_progress_bar_13_visible = { ADISCORD_army_development_progress_bar_13 = yes }
-            ADISCORD_development_army_progress_bar_14_visible = { ADISCORD_army_development_progress_bar_14 = yes }
-            ADISCORD_development_army_progress_bar_15_visible = { ADISCORD_army_development_progress_bar_15 = yes }
-            ADISCORD_development_army_progress_bar_16_visible = { ADISCORD_army_development_progress_bar_16 = yes }
-            ADISCORD_development_army_progress_bar_17_visible = { ADISCORD_army_development_progress_bar_17 = yes }
-            ADISCORD_development_army_progress_bar_18_visible = { ADISCORD_army_development_progress_bar_18 = yes }
-            ADISCORD_development_army_progress_bar_19_visible = { ADISCORD_army_development_progress_bar_19 = yes }
-            ADISCORD_development_army_progress_bar_20_visible = { ADISCORD_army_development_progress_bar_20 = yes }
-            ADISCORD_development_army_icon_1_visible = { ADISCORD_army_development_exact_1 = yes }
-            ADISCORD_development_army_icon_2_visible = { ADISCORD_army_development_exact_2 = yes }
-            ADISCORD_development_army_icon_3_visible = { ADISCORD_army_development_exact_3 = yes }
-            ADISCORD_development_army_icon_4_visible = { ADISCORD_army_development_exact_4 = yes }
-            ADISCORD_development_army_icon_5_visible = { ADISCORD_army_development_exact_5 = yes }
+			ADISCORD_development_army_progress_bar_1_visible = { ADISCORD_army_development_progress_bar_1 = yes }
+			ADISCORD_development_army_progress_bar_2_visible = { ADISCORD_army_development_progress_bar_2 = yes }
+			ADISCORD_development_army_progress_bar_3_visible = { ADISCORD_army_development_progress_bar_3 = yes }
+			ADISCORD_development_army_progress_bar_4_visible = { ADISCORD_army_development_progress_bar_4 = yes }
+			ADISCORD_development_army_progress_bar_5_visible = { ADISCORD_army_development_progress_bar_5 = yes }
+			ADISCORD_development_army_progress_bar_6_visible = { ADISCORD_army_development_progress_bar_6 = yes }
+			ADISCORD_development_army_progress_bar_7_visible = { ADISCORD_army_development_progress_bar_7 = yes }
+			ADISCORD_development_army_progress_bar_8_visible = { ADISCORD_army_development_progress_bar_8 = yes }
+			ADISCORD_development_army_progress_bar_9_visible = { ADISCORD_army_development_progress_bar_9 = yes }
+			ADISCORD_development_army_progress_bar_10_visible = { ADISCORD_army_development_progress_bar_10 = yes }
+			ADISCORD_development_army_progress_bar_11_visible = { ADISCORD_army_development_progress_bar_11 = yes }
+			ADISCORD_development_army_progress_bar_12_visible = { ADISCORD_army_development_progress_bar_12 = yes }
+			ADISCORD_development_army_progress_bar_13_visible = { ADISCORD_army_development_progress_bar_13 = yes }
+			ADISCORD_development_army_progress_bar_14_visible = { ADISCORD_army_development_progress_bar_14 = yes }
+			ADISCORD_development_army_progress_bar_15_visible = { ADISCORD_army_development_progress_bar_15 = yes }
+			ADISCORD_development_army_progress_bar_16_visible = { ADISCORD_army_development_progress_bar_16 = yes }
+			ADISCORD_development_army_progress_bar_17_visible = { ADISCORD_army_development_progress_bar_17 = yes }
+			ADISCORD_development_army_progress_bar_18_visible = { ADISCORD_army_development_progress_bar_18 = yes }
+			ADISCORD_development_army_progress_bar_19_visible = { ADISCORD_army_development_progress_bar_19 = yes }
+			ADISCORD_development_army_progress_bar_20_visible = { ADISCORD_army_development_progress_bar_20 = yes }
+			ADISCORD_development_army_icon_1_visible = { ADISCORD_army_development_exact_1 = yes }
+			ADISCORD_development_army_icon_2_visible = { ADISCORD_army_development_exact_2 = yes }
+			ADISCORD_development_army_icon_3_visible = { ADISCORD_army_development_exact_3 = yes }
+			ADISCORD_development_army_icon_4_visible = { ADISCORD_army_development_exact_4 = yes }
+			ADISCORD_development_army_icon_5_visible = { ADISCORD_army_development_exact_5 = yes }
 
-            ADISCORD_development_cultural_progress_bar_1_visible = { ADISCORD_cultural_development_progress_bar_1 = yes }
-            ADISCORD_development_cultural_progress_bar_2_visible = { ADISCORD_cultural_development_progress_bar_2 = yes }
-            ADISCORD_development_cultural_progress_bar_3_visible = { ADISCORD_cultural_development_progress_bar_3 = yes }
-            ADISCORD_development_cultural_progress_bar_4_visible = { ADISCORD_cultural_development_progress_bar_4 = yes }
-            ADISCORD_development_cultural_progress_bar_5_visible = { ADISCORD_cultural_development_progress_bar_5 = yes }
-            ADISCORD_development_cultural_progress_bar_6_visible = { ADISCORD_cultural_development_progress_bar_6 = yes }
-            ADISCORD_development_cultural_progress_bar_7_visible = { ADISCORD_cultural_development_progress_bar_7 = yes }
-            ADISCORD_development_cultural_progress_bar_8_visible = { ADISCORD_cultural_development_progress_bar_8 = yes }
-            ADISCORD_development_cultural_progress_bar_9_visible = { ADISCORD_cultural_development_progress_bar_9 = yes }
-            ADISCORD_development_cultural_progress_bar_10_visible = { ADISCORD_cultural_development_progress_bar_10 = yes }
-            ADISCORD_development_cultural_progress_bar_11_visible = { ADISCORD_cultural_development_progress_bar_11 = yes }
-            ADISCORD_development_cultural_progress_bar_12_visible = { ADISCORD_cultural_development_progress_bar_12 = yes }
-            ADISCORD_development_cultural_progress_bar_13_visible = { ADISCORD_cultural_development_progress_bar_13 = yes }
-            ADISCORD_development_cultural_progress_bar_14_visible = { ADISCORD_cultural_development_progress_bar_14 = yes }
-            ADISCORD_development_cultural_progress_bar_15_visible = { ADISCORD_cultural_development_progress_bar_15 = yes }
-            ADISCORD_development_cultural_progress_bar_16_visible = { ADISCORD_cultural_development_progress_bar_16 = yes }
-            ADISCORD_development_cultural_progress_bar_17_visible = { ADISCORD_cultural_development_progress_bar_17 = yes }
-            ADISCORD_development_cultural_progress_bar_18_visible = { ADISCORD_cultural_development_progress_bar_18 = yes }
-            ADISCORD_development_cultural_progress_bar_19_visible = { ADISCORD_cultural_development_progress_bar_19 = yes }
-            ADISCORD_development_cultural_progress_bar_20_visible = { ADISCORD_cultural_development_progress_bar_20 = yes }
-            ADISCORD_development_cultural_icon_1_visible = { ADISCORD_cultural_development_exact_1 = yes }
-            ADISCORD_development_cultural_icon_2_visible = { ADISCORD_cultural_development_exact_2 = yes }
-            ADISCORD_development_cultural_icon_3_visible = { ADISCORD_cultural_development_exact_3 = yes }
-            ADISCORD_development_cultural_icon_4_visible = { ADISCORD_cultural_development_exact_4 = yes }
-            ADISCORD_development_cultural_icon_5_visible = { ADISCORD_cultural_development_exact_5 = yes }
+			ADISCORD_development_cultural_progress_bar_1_visible = { ADISCORD_cultural_development_progress_bar_1 = yes }
+			ADISCORD_development_cultural_progress_bar_2_visible = { ADISCORD_cultural_development_progress_bar_2 = yes }
+			ADISCORD_development_cultural_progress_bar_3_visible = { ADISCORD_cultural_development_progress_bar_3 = yes }
+			ADISCORD_development_cultural_progress_bar_4_visible = { ADISCORD_cultural_development_progress_bar_4 = yes }
+			ADISCORD_development_cultural_progress_bar_5_visible = { ADISCORD_cultural_development_progress_bar_5 = yes }
+			ADISCORD_development_cultural_progress_bar_6_visible = { ADISCORD_cultural_development_progress_bar_6 = yes }
+			ADISCORD_development_cultural_progress_bar_7_visible = { ADISCORD_cultural_development_progress_bar_7 = yes }
+			ADISCORD_development_cultural_progress_bar_8_visible = { ADISCORD_cultural_development_progress_bar_8 = yes }
+			ADISCORD_development_cultural_progress_bar_9_visible = { ADISCORD_cultural_development_progress_bar_9 = yes }
+			ADISCORD_development_cultural_progress_bar_10_visible = { ADISCORD_cultural_development_progress_bar_10 = yes }
+			ADISCORD_development_cultural_progress_bar_11_visible = { ADISCORD_cultural_development_progress_bar_11 = yes }
+			ADISCORD_development_cultural_progress_bar_12_visible = { ADISCORD_cultural_development_progress_bar_12 = yes }
+			ADISCORD_development_cultural_progress_bar_13_visible = { ADISCORD_cultural_development_progress_bar_13 = yes }
+			ADISCORD_development_cultural_progress_bar_14_visible = { ADISCORD_cultural_development_progress_bar_14 = yes }
+			ADISCORD_development_cultural_progress_bar_15_visible = { ADISCORD_cultural_development_progress_bar_15 = yes }
+			ADISCORD_development_cultural_progress_bar_16_visible = { ADISCORD_cultural_development_progress_bar_16 = yes }
+			ADISCORD_development_cultural_progress_bar_17_visible = { ADISCORD_cultural_development_progress_bar_17 = yes }
+			ADISCORD_development_cultural_progress_bar_18_visible = { ADISCORD_cultural_development_progress_bar_18 = yes }
+			ADISCORD_development_cultural_progress_bar_19_visible = { ADISCORD_cultural_development_progress_bar_19 = yes }
+			ADISCORD_development_cultural_progress_bar_20_visible = { ADISCORD_cultural_development_progress_bar_20 = yes }
+			ADISCORD_development_cultural_icon_1_visible = { ADISCORD_cultural_development_exact_1 = yes }
+			ADISCORD_development_cultural_icon_2_visible = { ADISCORD_cultural_development_exact_2 = yes }
+			ADISCORD_development_cultural_icon_3_visible = { ADISCORD_cultural_development_exact_3 = yes }
+			ADISCORD_development_cultural_icon_4_visible = { ADISCORD_cultural_development_exact_4 = yes }
+			ADISCORD_development_cultural_icon_5_visible = { ADISCORD_cultural_development_exact_5 = yes }
 
-            ADISCORD_development_state_progress_bar_1_visible = { ADISCORD_state_development_progress_bar_1 = yes }
-            ADISCORD_development_state_progress_bar_2_visible = { ADISCORD_state_development_progress_bar_2 = yes }
-            ADISCORD_development_state_progress_bar_3_visible = { ADISCORD_state_development_progress_bar_3 = yes }
-            ADISCORD_development_state_progress_bar_4_visible = { ADISCORD_state_development_progress_bar_4 = yes }
-            ADISCORD_development_state_progress_bar_5_visible = { ADISCORD_state_development_progress_bar_5 = yes }
-            ADISCORD_development_state_progress_bar_6_visible = { ADISCORD_state_development_progress_bar_6 = yes }
-            ADISCORD_development_state_progress_bar_7_visible = { ADISCORD_state_development_progress_bar_7 = yes }
-            ADISCORD_development_state_progress_bar_8_visible = { ADISCORD_state_development_progress_bar_8 = yes }
-            ADISCORD_development_state_progress_bar_9_visible = { ADISCORD_state_development_progress_bar_9 = yes }
-            ADISCORD_development_state_progress_bar_10_visible = { ADISCORD_state_development_progress_bar_10 = yes }
-            ADISCORD_development_state_progress_bar_11_visible = { ADISCORD_state_development_progress_bar_11 = yes }
-            ADISCORD_development_state_progress_bar_12_visible = { ADISCORD_state_development_progress_bar_12 = yes }
-            ADISCORD_development_state_progress_bar_13_visible = { ADISCORD_state_development_progress_bar_13 = yes }
-            ADISCORD_development_state_progress_bar_14_visible = { ADISCORD_state_development_progress_bar_14 = yes }
-            ADISCORD_development_state_progress_bar_15_visible = { ADISCORD_state_development_progress_bar_15 = yes }
-            ADISCORD_development_state_progress_bar_16_visible = { ADISCORD_state_development_progress_bar_16 = yes }
-            ADISCORD_development_state_progress_bar_17_visible = { ADISCORD_state_development_progress_bar_17 = yes }
-            ADISCORD_development_state_progress_bar_18_visible = { ADISCORD_state_development_progress_bar_18 = yes }
-            ADISCORD_development_state_progress_bar_19_visible = { ADISCORD_state_development_progress_bar_19 = yes }
-            ADISCORD_development_state_progress_bar_20_visible = { ADISCORD_state_development_progress_bar_20 = yes }
-            ADISCORD_development_state_icon_1_visible = { ADISCORD_state_development_exact_1 = yes }
-            ADISCORD_development_state_icon_2_visible = { ADISCORD_state_development_exact_2 = yes }
-            ADISCORD_development_state_icon_3_visible = { ADISCORD_state_development_exact_3 = yes }
-            ADISCORD_development_state_icon_4_visible = { ADISCORD_state_development_exact_4 = yes }
-            ADISCORD_development_state_icon_5_visible = { ADISCORD_state_development_exact_5 = yes }
+			ADISCORD_development_state_progress_bar_1_visible = { ADISCORD_state_development_progress_bar_1 = yes }
+			ADISCORD_development_state_progress_bar_2_visible = { ADISCORD_state_development_progress_bar_2 = yes }
+			ADISCORD_development_state_progress_bar_3_visible = { ADISCORD_state_development_progress_bar_3 = yes }
+			ADISCORD_development_state_progress_bar_4_visible = { ADISCORD_state_development_progress_bar_4 = yes }
+			ADISCORD_development_state_progress_bar_5_visible = { ADISCORD_state_development_progress_bar_5 = yes }
+			ADISCORD_development_state_progress_bar_6_visible = { ADISCORD_state_development_progress_bar_6 = yes }
+			ADISCORD_development_state_progress_bar_7_visible = { ADISCORD_state_development_progress_bar_7 = yes }
+			ADISCORD_development_state_progress_bar_8_visible = { ADISCORD_state_development_progress_bar_8 = yes }
+			ADISCORD_development_state_progress_bar_9_visible = { ADISCORD_state_development_progress_bar_9 = yes }
+			ADISCORD_development_state_progress_bar_10_visible = { ADISCORD_state_development_progress_bar_10 = yes }
+			ADISCORD_development_state_progress_bar_11_visible = { ADISCORD_state_development_progress_bar_11 = yes }
+			ADISCORD_development_state_progress_bar_12_visible = { ADISCORD_state_development_progress_bar_12 = yes }
+			ADISCORD_development_state_progress_bar_13_visible = { ADISCORD_state_development_progress_bar_13 = yes }
+			ADISCORD_development_state_progress_bar_14_visible = { ADISCORD_state_development_progress_bar_14 = yes }
+			ADISCORD_development_state_progress_bar_15_visible = { ADISCORD_state_development_progress_bar_15 = yes }
+			ADISCORD_development_state_progress_bar_16_visible = { ADISCORD_state_development_progress_bar_16 = yes }
+			ADISCORD_development_state_progress_bar_17_visible = { ADISCORD_state_development_progress_bar_17 = yes }
+			ADISCORD_development_state_progress_bar_18_visible = { ADISCORD_state_development_progress_bar_18 = yes }
+			ADISCORD_development_state_progress_bar_19_visible = { ADISCORD_state_development_progress_bar_19 = yes }
+			ADISCORD_development_state_progress_bar_20_visible = { ADISCORD_state_development_progress_bar_20 = yes }
+			ADISCORD_development_state_icon_1_visible = { ADISCORD_state_development_exact_1 = yes }
+			ADISCORD_development_state_icon_2_visible = { ADISCORD_state_development_exact_2 = yes }
+			ADISCORD_development_state_icon_3_visible = { ADISCORD_state_development_exact_3 = yes }
+			ADISCORD_development_state_icon_4_visible = { ADISCORD_state_development_exact_4 = yes }
+			ADISCORD_development_state_icon_5_visible = { ADISCORD_state_development_exact_5 = yes }
 
-            ADISCORD_development_economic_progress_bar_1_visible = { ADISCORD_economic_development_progress_bar_1 = yes }
-            ADISCORD_development_economic_progress_bar_2_visible = { ADISCORD_economic_development_progress_bar_2 = yes }
-            ADISCORD_development_economic_progress_bar_3_visible = { ADISCORD_economic_development_progress_bar_3 = yes }
-            ADISCORD_development_economic_progress_bar_4_visible = { ADISCORD_economic_development_progress_bar_4 = yes }
-            ADISCORD_development_economic_progress_bar_5_visible = { ADISCORD_economic_development_progress_bar_5 = yes }
-            ADISCORD_development_economic_progress_bar_6_visible = { ADISCORD_economic_development_progress_bar_6 = yes }
-            ADISCORD_development_economic_progress_bar_7_visible = { ADISCORD_economic_development_progress_bar_7 = yes }
-            ADISCORD_development_economic_progress_bar_8_visible = { ADISCORD_economic_development_progress_bar_8 = yes }
-            ADISCORD_development_economic_progress_bar_9_visible = { ADISCORD_economic_development_progress_bar_9 = yes }
-            ADISCORD_development_economic_progress_bar_10_visible = { ADISCORD_economic_development_progress_bar_10 = yes }
-            ADISCORD_development_economic_progress_bar_11_visible = { ADISCORD_economic_development_progress_bar_11 = yes }
-            ADISCORD_development_economic_progress_bar_12_visible = { ADISCORD_economic_development_progress_bar_12 = yes }
-            ADISCORD_development_economic_progress_bar_13_visible = { ADISCORD_economic_development_progress_bar_13 = yes }
-            ADISCORD_development_economic_progress_bar_14_visible = { ADISCORD_economic_development_progress_bar_14 = yes }
-            ADISCORD_development_economic_progress_bar_15_visible = { ADISCORD_economic_development_progress_bar_15 = yes }
-            ADISCORD_development_economic_progress_bar_16_visible = { ADISCORD_economic_development_progress_bar_16 = yes }
-            ADISCORD_development_economic_progress_bar_17_visible = { ADISCORD_economic_development_progress_bar_17 = yes }
-            ADISCORD_development_economic_progress_bar_18_visible = { ADISCORD_economic_development_progress_bar_18 = yes }
-            ADISCORD_development_economic_progress_bar_19_visible = { ADISCORD_economic_development_progress_bar_19 = yes }
-            ADISCORD_development_economic_progress_bar_20_visible = { ADISCORD_economic_development_progress_bar_20 = yes }
-            ADISCORD_development_economic_icon_1_visible = { ADISCORD_economic_development_exact_1 = yes }
-            ADISCORD_development_economic_icon_2_visible = { ADISCORD_economic_development_exact_2 = yes }
-            ADISCORD_development_economic_icon_3_visible = { ADISCORD_economic_development_exact_3 = yes }
-            ADISCORD_development_economic_icon_4_visible = { ADISCORD_economic_development_exact_4 = yes }
-            ADISCORD_development_economic_icon_5_visible = { ADISCORD_economic_development_exact_5 = yes }
-        }
-    }
+			ADISCORD_development_economic_progress_bar_1_visible = { ADISCORD_economic_development_progress_bar_1 = yes }
+			ADISCORD_development_economic_progress_bar_2_visible = { ADISCORD_economic_development_progress_bar_2 = yes }
+			ADISCORD_development_economic_progress_bar_3_visible = { ADISCORD_economic_development_progress_bar_3 = yes }
+			ADISCORD_development_economic_progress_bar_4_visible = { ADISCORD_economic_development_progress_bar_4 = yes }
+			ADISCORD_development_economic_progress_bar_5_visible = { ADISCORD_economic_development_progress_bar_5 = yes }
+			ADISCORD_development_economic_progress_bar_6_visible = { ADISCORD_economic_development_progress_bar_6 = yes }
+			ADISCORD_development_economic_progress_bar_7_visible = { ADISCORD_economic_development_progress_bar_7 = yes }
+			ADISCORD_development_economic_progress_bar_8_visible = { ADISCORD_economic_development_progress_bar_8 = yes }
+			ADISCORD_development_economic_progress_bar_9_visible = { ADISCORD_economic_development_progress_bar_9 = yes }
+			ADISCORD_development_economic_progress_bar_10_visible = { ADISCORD_economic_development_progress_bar_10 = yes }
+			ADISCORD_development_economic_progress_bar_11_visible = { ADISCORD_economic_development_progress_bar_11 = yes }
+			ADISCORD_development_economic_progress_bar_12_visible = { ADISCORD_economic_development_progress_bar_12 = yes }
+			ADISCORD_development_economic_progress_bar_13_visible = { ADISCORD_economic_development_progress_bar_13 = yes }
+			ADISCORD_development_economic_progress_bar_14_visible = { ADISCORD_economic_development_progress_bar_14 = yes }
+			ADISCORD_development_economic_progress_bar_15_visible = { ADISCORD_economic_development_progress_bar_15 = yes }
+			ADISCORD_development_economic_progress_bar_16_visible = { ADISCORD_economic_development_progress_bar_16 = yes }
+			ADISCORD_development_economic_progress_bar_17_visible = { ADISCORD_economic_development_progress_bar_17 = yes }
+			ADISCORD_development_economic_progress_bar_18_visible = { ADISCORD_economic_development_progress_bar_18 = yes }
+			ADISCORD_development_economic_progress_bar_19_visible = { ADISCORD_economic_development_progress_bar_19 = yes }
+			ADISCORD_development_economic_progress_bar_20_visible = { ADISCORD_economic_development_progress_bar_20 = yes }
+			ADISCORD_development_economic_icon_1_visible = { ADISCORD_economic_development_exact_1 = yes }
+			ADISCORD_development_economic_icon_2_visible = { ADISCORD_economic_development_exact_2 = yes }
+			ADISCORD_development_economic_icon_3_visible = { ADISCORD_economic_development_exact_3 = yes }
+			ADISCORD_development_economic_icon_4_visible = { ADISCORD_economic_development_exact_4 = yes }
+			ADISCORD_development_economic_icon_5_visible = { ADISCORD_economic_development_exact_5 = yes }
+		}
+	}
 }

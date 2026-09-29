@@ -1,6 +1,4 @@
 on_actions = {
-
-
 	on_puppet = {
 		effect = {
 			# A claimant made subject by an external settlement is no longer a valid

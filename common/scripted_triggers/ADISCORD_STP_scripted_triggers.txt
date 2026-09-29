@@ -5,7 +5,10 @@ STP_cw_party_exhaustion_active = {
 	tag = STP
 	has_war_with = STS
 	has_capitulated = no
-	STS = { exists = yes has_capitulated = no }
+	STS = {
+		exists = yes
+		has_capitulated = no
+	}
 }
 
 # STS: recognition and aid require the same living, independent counterpart.
@@ -15,15 +18,25 @@ STP_cw_republics_partner_available = {
 	is_subject = no
 	has_capitulated = no
 	NOT = { has_war_with = SRP }
-	SRP = { exists = yes is_subject = no has_capitulated = no }
+	SRP = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
 }
 
 STP_cw_republics_aid_available = {
 	STP_cw_republics_partner_available = yes
-	OR = { has_idea = STP_cw_council_guarantees has_idea = STP_cw_republican_charter }
+	OR = {
+		has_idea = STP_cw_council_guarantees
+		has_idea = STP_cw_republican_charter
+	}
 	SRP = {
 		has_war_with = VAL
-		OR = { has_idea = STP_cw_council_guarantees has_idea = STP_cw_republican_charter }
+		OR = {
+			has_idea = STP_cw_council_guarantees
+			has_idea = STP_cw_republican_charter
+		}
 		NOT = { has_idea = SRP_council_supply }
 	}
 }
@@ -69,26 +82,45 @@ STP_has_political_action_slot = {
 }
 
 STP_cw_preparation_open = {
-	hidden_trigger = { NOT = { has_country_flag = STP_cw_participant } }
+	hidden_trigger = {
+		NOT = { has_country_flag = STP_cw_participant }
+	}
 	NOT = { has_global_flag = STP_cw_started }
 	NOT = { has_country_flag = STP_cw_elections_finished }
 	# Focuses display the side requirement; suppress the duplicate tooltip.
-	hidden_trigger = { OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag } }
+	hidden_trigger = {
+		OR = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_country_flag = STP_sided_with_the_party_flag
+		}
+	}
 }
 
 # COUNTRY: recruitment presence excludes retired/dead characters; arrest is character-owned.
 STP_cw_shabrat_available = {
 	has_character = STP_maksim_shabrat
-	STP_maksim_shabrat = { NOT = { has_character_flag = STP_cw_arrested } }
+	STP_maksim_shabrat = {
+		NOT = { has_character_flag = STP_cw_arrested }
+	}
 }
 
 # COUNTRY (STP): a public agreement needs its current commander and garrison.
 STP_cw_public_command_available = {
 	has_character = STP_Edmund_Ravel
-	STP_Edmund_Ravel = { NOT = { has_character_flag = STP_cw_arrested } }
+	STP_Edmund_Ravel = {
+		NOT = { has_character_flag = STP_cw_arrested }
+	}
 	OR = {
-		2 = { is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_garrison_asset }
-		29 = { is_owned_by = STP is_controlled_by = STP has_state_flag = STP_resistance_garrison_asset }
+		2 = {
+			is_owned_by = STP
+			is_controlled_by = STP
+			has_state_flag = STP_resistance_garrison_asset
+		}
+		29 = {
+			is_owned_by = STP
+			is_controlled_by = STP
+			has_state_flag = STP_resistance_garrison_asset
+		}
 	}
 }
 
@@ -99,21 +131,57 @@ STP_cw_public_campaign_basis = {
 		check_variable = { var = STP_cw_completed_public_campaigns value = 1 compare = less_than }
 		AND = {
 			check_variable = { var = STP_cw_completed_public_campaigns value = 1 compare = equals }
-			check_variable = { var = days_mission_timeout@STP_cw_election_window value = 105 compare = less_than_or_equals }
+			check_variable = {
+				var = days_mission_timeout@STP_cw_election_window
+				value = 105
+				compare = less_than_or_equals
+			}
 			OR = {
 				has_country_flag = STP_sided_with_the_party_flag
-				2 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
-				3 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
+				2 = {
+					is_owned_by = STP
+					is_controlled_by = STP
+					has_state_flag = {
+						flag = STP_resistance_administration_asset
+						days > 20
+					}
+				}
+				3 = {
+					is_owned_by = STP
+					is_controlled_by = STP
+					has_state_flag = {
+						flag = STP_resistance_administration_asset
+						days > 20
+					}
+				}
 			}
 		}
 		AND = {
 			check_variable = { var = STP_cw_completed_public_campaigns value = 2 compare = equals }
-			check_variable = { var = days_mission_timeout@STP_cw_election_window value = 70 compare = less_than_or_equals }
+			check_variable = {
+				var = days_mission_timeout@STP_cw_election_window
+				value = 70
+				compare = less_than_or_equals
+			}
 			OR = {
 				has_country_flag = STP_sided_with_the_party_flag
 				AND = {
-					2 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
-					3 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
+					2 = {
+						is_owned_by = STP
+						is_controlled_by = STP
+						has_state_flag = {
+							flag = STP_resistance_administration_asset
+							days > 20
+						}
+					}
+					3 = {
+						is_owned_by = STP
+						is_controlled_by = STP
+						has_state_flag = {
+							flag = STP_resistance_administration_asset
+							days > 20
+						}
+					}
 				}
 			}
 		}
@@ -122,29 +190,66 @@ STP_cw_public_campaign_basis = {
 
 STP_cw_delegate_support_available = {
 	OR = {
-		AND = { has_country_flag = STP_sided_with_Maksim_flag power_balance_value = { id = STP_shabrat_election_legitimacy value < 0.55 } }
-		AND = { has_country_flag = STP_sided_with_the_party_flag power_balance_value = { id = STP_shabrat_election_legitimacy value > -0.55 } }
+		AND = {
+			has_country_flag = STP_sided_with_Maksim_flag
+			power_balance_value = {
+				id = STP_shabrat_election_legitimacy
+				value < 0.55
+			}
+		}
+		AND = {
+			has_country_flag = STP_sided_with_the_party_flag
+			power_balance_value = {
+				id = STP_shabrat_election_legitimacy
+				value > -0.55
+			}
+		}
 	}
 }
 
 STP_cw_limited_party_revolt_ready = {
 	has_country_flag = STP_sided_with_Maksim_flag
 	STP_cw_shabrat_available = yes
-	NOT = { power_balance_value = { id = STP_shabrat_election_legitimacy value < 0.80 } }
+	NOT = {
+		power_balance_value = {
+			id = STP_shabrat_election_legitimacy
+			value < 0.80
+		}
+	}
 	has_country_flag = STP_cw_public_command_agreement
 	STP_cw_public_command_available = yes
-	2 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
-	3 = { is_owned_by = STP is_controlled_by = STP has_state_flag = { flag = STP_resistance_administration_asset days > 20 } }
+	2 = {
+		is_owned_by = STP
+		is_controlled_by = STP
+		has_state_flag = {
+			flag = STP_resistance_administration_asset
+			days > 20
+		}
+	}
+	3 = {
+		is_owned_by = STP
+		is_controlled_by = STP
+		has_state_flag = {
+			flag = STP_resistance_administration_asset
+			days > 20
+		}
+	}
 }
 
 # COUNTRY: the strong Shabrat band claims still-disputed districts without local admin.
 STP_cw_high_shabrat_legitimacy = {
-	power_balance_value = { id = STP_shabrat_election_legitimacy value > 0.55 }
+	power_balance_value = {
+		id = STP_shabrat_election_legitimacy
+		value > 0.55
+	}
 }
 
 # COUNTRY: any positive Shabrat edge is enough to attempt the authored Niansas takeover.
 STP_cw_shabrat_positive_legitimacy = {
-	power_balance_value = { id = STP_shabrat_election_legitimacy value > 0 }
+	power_balance_value = {
+		id = STP_shabrat_election_legitimacy
+		value > 0
+	}
 }
 
 # COUNTRY: the republics can use their promised preparation period before VAL's attack.
@@ -185,8 +290,12 @@ STP_cw_can_start = {
 	owns_state = 43
 	owns_state = 44
 	owns_state = 88
-	NOT = { STS = { exists = yes } }
-	NOT = { SRP = { exists = yes } }
+	NOT = {
+		STS = { exists = yes }
+	}
+	NOT = {
+		SRP = { exists = yes }
+	}
 }
 
 # STATE: regional influence, assets and civil-war territory assignment.
@@ -200,7 +309,11 @@ STP_region_is_operable = {
 STP_region_resistance_strongest = {
 	check_variable = { var = STP_region_margin value = 1 compare = greater_than_or_equals }
 	check_variable = { var = STP_resistance_influence value = STP_party_influence compare = greater_than_or_equals }
-	check_variable = { var = STP_resistance_influence value = STP_local_forces_influence compare = greater_than_or_equals }
+	check_variable = {
+		var = STP_resistance_influence
+		value = STP_local_forces_influence
+		compare = greater_than_or_equals
+	}
 }
 
 STP_region_party_strongest = {
@@ -211,7 +324,11 @@ STP_region_party_strongest = {
 
 STP_region_local_forces_strongest = {
 	check_variable = { var = STP_region_margin value = 1 compare = greater_than_or_equals }
-	check_variable = { var = STP_local_forces_influence value = STP_resistance_influence compare = greater_than_or_equals }
+	check_variable = {
+		var = STP_local_forces_influence
+		value = STP_resistance_influence
+		compare = greater_than_or_equals
+	}
 	check_variable = { var = STP_local_forces_influence value = STP_party_influence compare = greater_than_or_equals }
 }
 
@@ -281,7 +398,10 @@ STP_region_has_administration_asset = {
 }
 
 STP_region_has_ready_administration = {
-	has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
+	has_state_flag = {
+		flag = STP_resistance_administration_asset
+		days > 20
+	}
 }
 
 STP_region_has_garrison_asset = {
@@ -350,9 +470,19 @@ STP_cw_region_goes_to_republics = {
 STP_cw_region_goes_to_resistance = {
 	OR = {
 		state = 1
-		AND = { state = 45 has_state_flag = STP_local_deal_asset }
 		AND = {
-			OR = { state = 2 state = 3 state = 29 state = 45 state = 46 state = 53 }
+			state = 45
+			has_state_flag = STP_local_deal_asset
+		}
+		AND = {
+			OR = {
+				state = 2
+				state = 3
+				state = 29
+				state = 45
+				state = 46
+				state = 53
+			}
 			NOT = { STP_cw_region_goes_to_republics = yes }
 			OR = {
 				STP = { has_country_flag = STP_cw_limited_party_revolt }
@@ -365,7 +495,10 @@ STP_cw_region_goes_to_resistance = {
 				}
 				AND = {
 					STP_region_resistance_entrenched = yes
-					has_state_flag = { flag = STP_resistance_administration_asset days > 20 }
+					has_state_flag = {
+						flag = STP_resistance_administration_asset
+						days > 20
+					}
 					NOT = { has_state_flag = STP_inspection_concession_prepared }
 				}
 			}
@@ -435,21 +568,66 @@ STP_cw_shabrat_ai_risk_allowed = {
 
 STP_cw_two_inspections_active = {
 	OR = {
-		AND = { 2 = { has_state_flag = STP_party_inspection_active } 3 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 2 = { has_state_flag = STP_party_inspection_active } 29 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 2 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 2 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 2 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 3 = { has_state_flag = STP_party_inspection_active } 29 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 3 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 3 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 3 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 29 = { has_state_flag = STP_party_inspection_active } 45 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 29 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 29 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 45 = { has_state_flag = STP_party_inspection_active } 46 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 45 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
-		AND = { 46 = { has_state_flag = STP_party_inspection_active } 53 = { has_state_flag = STP_party_inspection_active } }
+		AND = {
+			2 = { has_state_flag = STP_party_inspection_active }
+			3 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			2 = { has_state_flag = STP_party_inspection_active }
+			29 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			2 = { has_state_flag = STP_party_inspection_active }
+			45 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			2 = { has_state_flag = STP_party_inspection_active }
+			46 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			2 = { has_state_flag = STP_party_inspection_active }
+			53 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			3 = { has_state_flag = STP_party_inspection_active }
+			29 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			3 = { has_state_flag = STP_party_inspection_active }
+			45 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			3 = { has_state_flag = STP_party_inspection_active }
+			46 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			3 = { has_state_flag = STP_party_inspection_active }
+			53 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			29 = { has_state_flag = STP_party_inspection_active }
+			45 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			29 = { has_state_flag = STP_party_inspection_active }
+			46 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			29 = { has_state_flag = STP_party_inspection_active }
+			53 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			45 = { has_state_flag = STP_party_inspection_active }
+			46 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			45 = { has_state_flag = STP_party_inspection_active }
+			53 = { has_state_flag = STP_party_inspection_active }
+		}
+		AND = {
+			46 = { has_state_flag = STP_party_inspection_active }
+			53 = { has_state_flag = STP_party_inspection_active }
+		}
 	}
 }
 
@@ -483,24 +661,72 @@ STP_cw_has_openable_inspection_region = {
 # COUNTRY: previous-district exclusion must not hide the only legal target.
 STP_cw_has_other_openable_inspection = {
 	OR = {
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 2 compare = equals } } 2 = { STP_cw_inspection_region_openable = yes } }
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 3 compare = equals } } 3 = { STP_cw_inspection_region_openable = yes } }
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 29 compare = equals } } 29 = { STP_cw_inspection_region_openable = yes } }
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 45 compare = equals } } 45 = { STP_cw_inspection_region_openable = yes } }
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 46 compare = equals } } 46 = { STP_cw_inspection_region_openable = yes } }
-		AND = { NOT = { check_variable = { var = STP_last_inspection_state value = 53 compare = equals } } 53 = { STP_cw_inspection_region_openable = yes } }
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 2 compare = equals }
+			}
+			2 = { STP_cw_inspection_region_openable = yes }
+		}
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 3 compare = equals }
+			}
+			3 = { STP_cw_inspection_region_openable = yes }
+		}
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 29 compare = equals }
+			}
+			29 = { STP_cw_inspection_region_openable = yes }
+		}
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 45 compare = equals }
+			}
+			45 = { STP_cw_inspection_region_openable = yes }
+		}
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 46 compare = equals }
+			}
+			46 = { STP_cw_inspection_region_openable = yes }
+		}
+		AND = {
+			NOT = {
+				check_variable = { var = STP_last_inspection_state value = 53 compare = equals }
+			}
+			53 = { STP_cw_inspection_region_openable = yes }
+		}
 	}
 }
 
 # COUNTRY with FROM state: the targeted delay reads the live mission, not a cached target list.
 STP_cw_from_inspection_mission_active = {
 	OR = {
-		AND = { FROM = { state = 2 } has_active_mission = STP_party_inspection_state_2 }
-		AND = { FROM = { state = 3 } has_active_mission = STP_party_inspection_state_3 }
-		AND = { FROM = { state = 29 } has_active_mission = STP_party_inspection_state_29 }
-		AND = { FROM = { state = 45 } has_active_mission = STP_party_inspection_state_45 }
-		AND = { FROM = { state = 46 } has_active_mission = STP_party_inspection_state_46 }
-		AND = { FROM = { state = 53 } has_active_mission = STP_party_inspection_state_53 }
+		AND = {
+			FROM = { state = 2 }
+			has_active_mission = STP_party_inspection_state_2
+		}
+		AND = {
+			FROM = { state = 3 }
+			has_active_mission = STP_party_inspection_state_3
+		}
+		AND = {
+			FROM = { state = 29 }
+			has_active_mission = STP_party_inspection_state_29
+		}
+		AND = {
+			FROM = { state = 45 }
+			has_active_mission = STP_party_inspection_state_45
+		}
+		AND = {
+			FROM = { state = 46 }
+			has_active_mission = STP_party_inspection_state_46
+		}
+		AND = {
+			FROM = { state = 53 }
+			has_active_mission = STP_party_inspection_state_53
+		}
 	}
 }
 
@@ -526,8 +752,12 @@ VAL_cw_route_focus_completed = {
 }
 
 VAL_cw_external_course_available = {
-	NOT = { STP = { has_country_flag = STP_occidia_preparing } }
-	NOT = { STS = { has_country_flag = STP_occidia_preparing } }
+	NOT = {
+		STP = { has_country_flag = STP_occidia_preparing }
+	}
+	NOT = {
+		STS = { has_country_flag = STP_occidia_preparing }
+	}
 	tag = VAL
 	exists = yes
 	has_global_flag = STP_cw_started
@@ -556,7 +786,10 @@ VAL_cw_can_intervene = {
 	VAL_cw_external_course_available = yes
 	custom_trigger_tooltip = {
 		tooltip = VAL_cw_republics_grace_elapsed_tt
-		has_global_flag = { flag = STP_cw_started days > 59 }
+		has_global_flag = {
+			flag = STP_cw_started
+			days > 59
+		}
 	}
 }
 
@@ -564,9 +797,27 @@ STP_cw_nod_busy_in_north = {
 	NOD = {
 		exists = yes
 		OR = {
-			AND = { has_war_with = YPR YPR = { exists = yes has_capitulated = no } }
-			AND = { has_war_with = COF COF = { exists = yes has_capitulated = no } }
-			AND = { has_war_with = TFF TFF = { exists = yes has_capitulated = no } }
+			AND = {
+				has_war_with = YPR
+				YPR = {
+					exists = yes
+					has_capitulated = no
+				}
+			}
+			AND = {
+				has_war_with = COF
+				COF = {
+					exists = yes
+					has_capitulated = no
+				}
+			}
+			AND = {
+				has_war_with = TFF
+				TFF = {
+					exists = yes
+					has_capitulated = no
+				}
+			}
 		}
 	}
 }
@@ -583,17 +834,29 @@ STP_cw_nod_can_intervene = {
 	NOT = { has_country_flag = STP_cw_nod_entered }
 	NOT = { has_country_flag = STP_cw_nod_join_failed }
 	NOT = { STP_cw_nod_busy_in_north = yes }
-	STP = { has_capitulated = no is_subject = no has_war_with = STS }
+	STP = {
+		has_capitulated = no
+		is_subject = no
+		has_war_with = STS
+	}
 	NOD = {
 		has_capitulated = no
 		is_subject = no
 		OR = {
 			NOT = { has_active_mission = NOD_cw_northern_redeployment }
-			check_variable = { var = days_mission_timeout@NOD_cw_northern_redeployment value = 0 compare = less_than_or_equals }
+			check_variable = {
+				var = days_mission_timeout@NOD_cw_northern_redeployment
+				value = 0
+				compare = less_than_or_equals
+			}
 		}
 		# External peace must be reconciled before the redeployment countdown can begin.
-		NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-		NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+		NOT = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+		}
+		NOT = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+		}
 		NOT = { has_country_flag = NOD_cw_refused }
 		NOT = { has_country_flag = NOD_cw_withdrew }
 		NOT = { has_country_flag = NOD_cw_defeated }
@@ -611,23 +874,42 @@ NOD_cw_intervention_possible = {
 	has_capitulated = no
 	is_subject = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
-	NOT = { STS = { has_country_flag = STP_cw_last_banquet_success } }
-	NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals } }
+	NOT = {
+		STS = { has_country_flag = STP_cw_last_banquet_success }
+	}
+	NOT = {
+		check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+	}
 	NOT = { has_country_flag = NOD_cw_refused }
 	NOT = { has_country_flag = NOD_cw_withdrew }
 	NOT = { has_country_flag = NOD_cw_defeated }
 	NOT = { has_country_flag = NOD_cw_victorious }
 	NOT = { has_country_flag = NOD_cw_entered }
 	NOT = { has_war_with = STP }
-	STP = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = NOD } }
+	STP = {
+		exists = yes
+		has_capitulated = no
+		OR = {
+			is_subject = no
+			is_subject_of = NOD
+		}
+	}
 	OR = {
 		STP = { STP_cw_preparation_open = yes }
-		AND = { STP = { has_country_flag = STP_cw_elections_finished NOT = { has_country_flag = STP_cw_participant } } NOT = { has_global_flag = STP_cw_started } }
-		AND = { STP = { has_country_flag = STP_cw_participant } NOT = { has_global_flag = STP_cw_started } }
+		AND = {
+			STP = {
+				has_country_flag = STP_cw_elections_finished
+				NOT = { has_country_flag = STP_cw_participant }
+			}
+			NOT = { has_global_flag = STP_cw_started }
+		}
+		AND = {
+			STP = { has_country_flag = STP_cw_participant }
+			NOT = { has_global_flag = STP_cw_started }
+		}
 		STP = { has_war_with = STS }
 	}
 }
-
 
 # Northern campaign (NOD unless noted). Status: 0/unset = unused, 1 = active,
 # 2 = NOD victory, 3 = northern victory, 4 = ended outside this campaign.
@@ -636,7 +918,11 @@ STP_cw_northern_target_valid = {
 	exists = yes
 	has_capitulated = no
 	is_subject = no
-	NOD = { exists = yes has_capitulated = no is_subject = no }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
 	NOT = { is_in_faction_with = NOD }
 }
 
@@ -646,16 +932,26 @@ STP_cw_can_run_northern_aid = {
 	has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
 	OR = {
-		AND = { tag = STP has_country_flag = STP_sided_with_Maksim_flag }
+		AND = {
+			tag = STP
+			has_country_flag = STP_sided_with_Maksim_flag
+		}
 		tag = STS
 	}
-	NOD = { exists = yes has_capitulated = no }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+	}
 }
 
 # STATE: northern front district that still faces NOD.
 STP_cw_northern_fort_state = {
 	NOT = { has_state_flag = STP_cw_northern_fort_built }
-	owner = { STP_cw_northern_target_valid = yes has_war_with = NOD controls_state = PREV }
+	owner = {
+		STP_cw_northern_target_valid = yes
+		has_war_with = NOD
+		controls_state = PREV
+	}
 	any_neighbor_state = {
 		is_owned_by = NOD
 		is_controlled_by = NOD
@@ -680,7 +976,11 @@ STP_cw_northern_enemy_blocks_subject_entry = {
 STP_cw_northern_call_blocked = {
 	tag = NOD
 	FROM = { tag = STP }
-	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+	OR = {
+		has_war_with = YPR
+		has_war_with = COF
+		has_war_with = TFF
+	}
 }
 
 STP_cw_northern_targets_available = {
@@ -703,20 +1003,26 @@ STP_cw_northern_opponent_defeated = {
 	check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals }
 	OR = {
 		has_capitulated = yes
-		AND = { tag = ROOT has_country_flag = STP_cw_northern_capitulation_pending }
+		AND = {
+			tag = ROOT
+			has_country_flag = STP_cw_northern_capitulation_pending
+		}
 	}
 }
 
 # NOD scope. The clock begins only after all northern opponents enter the war.
 NOD_cw_can_accept_northern_defeat = {
- tag = NOD
- check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
- has_capitulated = no
- has_war_with = YPR
- has_war_with = COF
- has_war_with = TFF
- NOT = { surrender_progress < 0.7 }
- has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
+	tag = NOD
+	check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+	has_capitulated = no
+	has_war_with = YPR
+	has_war_with = COF
+	has_war_with = TFF
+	NOT = { surrender_progress < 0.7 }
+	has_country_flag = {
+		flag = NOD_cw_northern_war_started
+		days > 89
+	}
 }
 
 STP_cw_northern_campaign_won = {
@@ -725,7 +1031,10 @@ STP_cw_northern_campaign_won = {
 	has_capitulated = no
 	YPR = { STP_cw_northern_opponent_defeated = yes }
 	COF = { STP_cw_northern_opponent_defeated = yes }
-	TFF = { exists = yes has_war_with = NOD }
+	TFF = {
+		exists = yes
+		has_war_with = NOD
+	}
 }
 
 # STATE: only territory awarded to the northern victor or its campaign subjects.
@@ -733,13 +1042,29 @@ STP_cw_northern_state_awarded_to_nod = {
 	owner = {
 		OR = {
 			tag = NOD
-			AND = { OR = { tag = AIN tag = YPR tag = COF tag = TFF } is_puppet_of = NOD }
+			AND = {
+				OR = {
+					tag = AIN
+					tag = YPR
+					tag = COF
+					tag = TFF
+				}
+				is_puppet_of = NOD
+			}
 		}
 	}
 	controller = {
 		OR = {
 			tag = NOD
-			AND = { OR = { tag = AIN tag = YPR tag = COF tag = TFF } is_puppet_of = NOD }
+			AND = {
+				OR = {
+					tag = AIN
+					tag = YPR
+					tag = COF
+					tag = TFF
+				}
+				is_puppet_of = NOD
+			}
 		}
 	}
 }
@@ -761,10 +1086,20 @@ STP_cw_northern_conference_won = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	NOT = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
-	YPR = { NOT = { has_war = yes } }
-	COF = { NOT = { has_war = yes } }
-	TFF = { NOT = { has_war = yes } }
+	NOT = {
+		has_war_with = YPR
+		has_war_with = COF
+		has_war_with = TFF
+	}
+	YPR = {
+		NOT = { has_war = yes }
+	}
+	COF = {
+		NOT = { has_war = yes }
+	}
+	TFF = {
+		NOT = { has_war = yes }
+	}
 	8 = { STP_cw_northern_state_awarded_to_nod = yes }
 	15 = { STP_cw_northern_state_awarded_to_nod = yes }
 	16 = { STP_cw_northern_state_awarded_to_nod = yes }
@@ -774,51 +1109,113 @@ STP_cw_northern_conference_won = {
 	22 = { STP_cw_northern_state_awarded_to_nod = yes }
 	14 = { STP_cw_northern_state_awarded_to_nod = yes }
 	OR = {
-        AND = {
-            STP_cw_frontier_awarded_to_nod = yes
-            TFF = { OR = { exists = no is_subject = no is_subject_of = NOD } }
-        }
-        AND = {
-            TFF = { exists = yes is_subject = no has_capitulated = no }
-            83 = { is_owned_by = TFF is_controlled_by = TFF }
-            84 = { is_owned_by = TFF is_controlled_by = TFF }
-            85 = { is_owned_by = TFF is_controlled_by = TFF }
-            86 = { is_owned_by = TFF is_controlled_by = TFF }
-            87 = { is_owned_by = TFF is_controlled_by = TFF }
-            303 = { is_owned_by = TFF is_controlled_by = TFF }
-        }
-    }
+		AND = {
+			STP_cw_frontier_awarded_to_nod = yes
+			TFF = {
+				OR = {
+					exists = no
+					is_subject = no
+					is_subject_of = NOD
+				}
+			}
+		}
+		AND = {
+			TFF = {
+				exists = yes
+				is_subject = no
+				has_capitulated = no
+			}
+			83 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+			84 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+			85 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+			86 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+			87 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+			303 = {
+				is_owned_by = TFF
+				is_controlled_by = TFF
+			}
+		}
+	}
 }
 
 # YPR scope. Do not turn unrelated conquered territory into a new NOD dependency.
 STP_cw_ypr_has_only_historical_states = {
 	NOT = {
-		any_owned_state = { NOT = { OR = { state = 8 state = 15 state = 16 state = 19 state = 20 state = 21 state = 22 } } }
+		any_owned_state = {
+			NOT = {
+				OR = {
+					state = 8
+					state = 15
+					state = 16
+					state = 19
+					state = 20
+					state = 21
+					state = 22
+				}
+			}
+		}
 	}
 }
 
 # Immediate capitulation, ROOT = loser: has_capitulated may not have updated yet.
 # Require an active campaign war and accepted military credit.
 STP_cw_northern_capitulation_managed = {
-	NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
+	NOD = {
+		check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+	}
 	OR = {
 		AND = {
 			tag = NOD
-			OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
 			OR = {
-				AND = { has_war_with = YPR check_variable = { var = STP_cw_capitulation_occupier value = 6 compare = equals } }
-				AND = { has_war_with = COF check_variable = { var = STP_cw_capitulation_occupier value = 7 compare = equals } }
-				AND = { has_war_with = TFF check_variable = { var = STP_cw_capitulation_occupier value = 8 compare = equals } }
+				has_war_with = YPR
+				has_war_with = COF
+				has_war_with = TFF
+			}
+			OR = {
+				AND = {
+					has_war_with = YPR
+					check_variable = { var = STP_cw_capitulation_occupier value = 6 compare = equals }
+				}
+				AND = {
+					has_war_with = COF
+					check_variable = { var = STP_cw_capitulation_occupier value = 7 compare = equals }
+				}
+				AND = {
+					has_war_with = TFF
+					check_variable = { var = STP_cw_capitulation_occupier value = 8 compare = equals }
+				}
 			}
 		}
 		AND = {
-			OR = { tag = YPR tag = COF tag = TFF }
+			OR = {
+				tag = YPR
+				tag = COF
+				tag = TFF
+			}
 			NOD = { has_war_with = ROOT }
 			OR = {
 				check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals }
 				AND = {
 					check_variable = { var = STP_cw_capitulation_occupier value = 1 compare = equals }
-					STP = { is_in_faction_with = NOD has_war_with = ROOT }
+					STP = {
+						is_in_faction_with = NOD
+						has_war_with = ROOT
+					}
 				}
 			}
 		}
@@ -828,21 +1225,40 @@ STP_cw_northern_capitulation_managed = {
 # COUNTRY: full equipment and manpower price of one assault division.
 STP_cw_can_pay_assault_division = {
 	NOT = { has_manpower < 7900 }
-	NOT = { has_equipment = { infantry_equipment < 7110 } }
-	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 48 } }
-	NOT = { has_equipment = { support_equipment < 30 } }
-	NOT = { has_equipment = { artillery_equipment < 60 } }
-	NOT = { has_equipment = { anti_air_equipment < 20 } }
+	NOT = {
+		has_equipment = { infantry_equipment < 7110 }
+	}
+	NOT = {
+		has_equipment = { ADISCORD_squad_weapons_equipment < 48 }
+	}
+	NOT = {
+		has_equipment = { support_equipment < 30 }
+	}
+	NOT = {
+		has_equipment = { artillery_equipment < 60 }
+	}
+	NOT = {
+		has_equipment = { anti_air_equipment < 20 }
+	}
 }
-
 
 # COUNTRY: victory in the internal war, independent of later external conflicts.
 STP_pw_can_reconstruct = {
-	OR = { tag = STP tag = STS }
+	OR = {
+		tag = STP
+		tag = STS
+	}
 	has_capitulated = no
 	OR = {
 		has_country_flag = STP_cw_won_union_battle
-		AND = { tag = STP has_country_flag = STP_ps_restored_dependency OR = { is_subject_of = NOD has_country_flag = STP_ch_liberated } }
+		AND = {
+			tag = STP
+			has_country_flag = STP_ps_restored_dependency
+			OR = {
+				is_subject_of = NOD
+				has_country_flag = STP_ch_liberated
+			}
+		}
 	}
 	has_country_flag = STP_cw_postwar
 	has_global_flag = STP_cw_union_wars_finished
@@ -854,18 +1270,33 @@ STP_cw_kefreyt_aid_open = {
 	exists = yes
 	has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
-	NOT = { STP = { has_country_flag = STP_cw_kefreyt_shipment_received } }
-	NOT = { STS = { has_country_flag = STP_cw_kefreyt_shipment_received } }
+	NOT = {
+		STP = { has_country_flag = STP_cw_kefreyt_shipment_received }
+	}
+	NOT = {
+		STS = { has_country_flag = STP_cw_kefreyt_shipment_received }
+	}
 	OR = {
 		AND = {
 			NOT = { has_global_flag = STP_cw_started }
 			NOT = { has_war_with = STP }
-			STP = { exists = yes has_capitulated = no OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag } }
+			STP = {
+				exists = yes
+				has_capitulated = no
+				OR = {
+					has_country_flag = STP_sided_with_Maksim_flag
+					has_country_flag = STP_sided_with_the_party_flag
+				}
+			}
 		}
 		AND = {
 			has_global_flag = STP_cw_started
 			NOT = { has_war_with = STS }
-			STS = { exists = yes has_capitulated = no has_country_flag = STP_cw_participant }
+			STS = {
+				exists = yes
+				has_capitulated = no
+				has_country_flag = STP_cw_participant
+			}
 		}
 	}
 }
@@ -873,13 +1304,22 @@ STP_cw_kefreyt_aid_open = {
 # COUNTRY: stock price of the complete three-division contingent.
 STP_cw_can_fund_kefreyt_volunteers = {
 	NOT = { has_manpower < 23700 }
-	NOT = { has_equipment = { infantry_equipment < 21330 } }
-	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 144 } }
-	NOT = { has_equipment = { support_equipment < 90 } }
-	NOT = { has_equipment = { artillery_equipment < 180 } }
-	NOT = { has_equipment = { anti_air_equipment < 60 } }
+	NOT = {
+		has_equipment = { infantry_equipment < 21330 }
+	}
+	NOT = {
+		has_equipment = { ADISCORD_squad_weapons_equipment < 144 }
+	}
+	NOT = {
+		has_equipment = { support_equipment < 90 }
+	}
+	NOT = {
+		has_equipment = { artillery_equipment < 180 }
+	}
+	NOT = {
+		has_equipment = { anti_air_equipment < 60 }
+	}
 }
-
 
 # COUNTRY: postwar political tree. Same reconstruction gate as the republic branch.
 STP_pc_focus_available = {
@@ -888,7 +1328,9 @@ STP_pc_focus_available = {
 
 STP_pw_kefreyt_terms_current = {
 	STP_pc_val_offer_current = yes
-	STS = { check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals } }
+	STS = {
+		check_variable = { var = STP_pc_val_offer_kind value = 2 compare = equals }
+	}
 }
 
 # COUNTRY: a controlled port is required before coastal work.
@@ -896,7 +1338,11 @@ STP_pw_party_has_port_capacity = {
 	any_owned_state = {
 		is_controlled_by = ROOT
 		naval_base > 0
-		free_building_slots = { building = industrial_complex size > 0 include_locked = yes }
+		free_building_slots = {
+			building = industrial_complex
+			size > 0
+			include_locked = yes
+		}
 	}
 }
 
@@ -910,19 +1356,30 @@ STP_pc_has_naval_base = {
 # COUNTRY: Sotnikov is present and not under arrest.
 STP_cw_sotnikov_available = {
 	has_character = STP_grigory_sotnikov
-	STP_grigory_sotnikov = { NOT = { has_character_flag = STP_cw_arrested } }
+	STP_grigory_sotnikov = {
+		NOT = { has_character_flag = STP_cw_arrested }
+	}
 }
 
 # COUNTRY: personal fork of the founder, not the locked state course.
 STP_pc_founder_rules = {
-	has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+	has_country_leader = {
+		character = STP_maksim_shabrat
+		ruling_only = yes
+	}
 }
 
 # COUNTRY: Gornin or Tikh speaking for the already locked course.
 STP_pc_named_successor_rules = {
 	OR = {
-		has_country_leader = { character = STP_ilya_gornin ruling_only = yes }
-		has_country_leader = { character = STP_vera_tikh ruling_only = yes }
+		has_country_leader = {
+			character = STP_ilya_gornin
+			ruling_only = yes
+		}
+		has_country_leader = {
+			character = STP_vera_tikh
+			ruling_only = yes
+		}
 	}
 }
 
@@ -980,11 +1437,15 @@ STP_pc_liberation_reply_matches_receipt = {
 	OR = {
 		AND = {
 			tag = VAL
-			STS = { check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals } }
+			STS = {
+				check_variable = { var = STP_pc_lib_package_tag value = 1 compare = equals }
+			}
 		}
 		AND = {
 			tag = NOD
-			STS = { check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals } }
+			STS = {
+				check_variable = { var = STP_pc_lib_package_tag value = 2 compare = equals }
+			}
 		}
 	}
 }
@@ -1007,7 +1468,12 @@ NOD_ai_stelander_preparation = {
 	NOT = { STP_cw_nod_busy_in_north = yes }
 	NOT = { has_war_with = STS }
 	NOT = { is_in_faction_with = STS }
-	STS = { exists = yes has_capitulated = no is_subject = no has_war_with = STP }
+	STS = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		has_war_with = STP
+	}
 }
 
 # COUNTRY VAL: a live ultimatum, not a historical choice of foreign policy.
@@ -1020,7 +1486,11 @@ VAL_ai_republics_preparation = {
 	NOT = { has_country_flag = VAL_cw_refused }
 	NOT = { has_war_with = SRP }
 	NOT = { is_in_faction_with = SRP }
-	SRP = { exists = yes has_capitulated = no is_subject = no }
+	SRP = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
 }
 
 # Imperial union
@@ -1030,7 +1500,9 @@ VAL_ai_republics_preparation = {
 
 STP_imperial_union_kefreyt_defeated = {
 	OR = {
-		NOT = { VAL = { exists = yes } }
+		NOT = {
+			VAL = { exists = yes }
+		}
 		VAL = { has_country_flag = VAL_cw_defeated }
 		VAL = { has_capitulated = yes }
 		VAL = { is_subject_of = ROOT }
@@ -1044,7 +1516,9 @@ STP_imperial_union_kefreyt_defeated = {
 
 STP_imperial_union_nodrul_defeated = {
 	OR = {
-		NOT = { NOD = { exists = yes } }
+		NOT = {
+			NOD = { exists = yes }
+		}
 		NOD = { has_country_flag = NOD_cw_defeated }
 		NOD = { has_capitulated = yes }
 		NOD = { is_subject_of = ROOT }
@@ -1140,11 +1614,17 @@ STP_pc_ai_preparing_val_war = {
 		has_variable = STP_pc_val_campaign_deposit
 		has_idea = STP_pc_val_campaign_ready
 		AND = {
-			focus_progress = { focus = STP_pc_heg_val_force progress > 0 }
+			focus_progress = {
+				focus = STP_pc_heg_val_force
+				progress > 0
+			}
 			NOT = { has_completed_focus = STP_pc_heg_val_force }
 		}
 		AND = {
-			focus_progress = { focus = STP_pc_lib_war progress > 0 }
+			focus_progress = {
+				focus = STP_pc_lib_war
+				progress > 0
+			}
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_val_crisis
 		}
@@ -1163,11 +1643,17 @@ STP_pc_ai_preparing_nod_war = {
 		has_variable = STP_pc_nod_campaign_deposit
 		has_idea = STP_pc_nod_campaign_ready
 		AND = {
-			focus_progress = { focus = STP_pc_heg_nod_force progress > 0 }
+			focus_progress = {
+				focus = STP_pc_heg_nod_force
+				progress > 0
+			}
 			NOT = { has_completed_focus = STP_pc_heg_nod_force }
 		}
 		AND = {
-			focus_progress = { focus = STP_pc_lib_war progress > 0 }
+			focus_progress = {
+				focus = STP_pc_lib_war
+				progress > 0
+			}
 			NOT = { has_completed_focus = STP_pc_lib_war }
 			has_country_flag = STP_pc_nod_crisis
 		}
@@ -1178,10 +1664,18 @@ STP_pc_can_confront_val = {
 	tag = STS
 	NOT = { has_country_flag = STP_pc_val_terms_accepted }
 	has_capitulated = no
-	VAL = { exists = yes has_capitulated = no }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+	}
 	OR = {
 		has_war_with = VAL
-		AND = { NOT = { has_country_flag = VAL_stelander_truce } is_subject = no NOT = { is_in_faction_with = VAL } VAL = { is_subject = no } }
+		AND = {
+			NOT = { has_country_flag = VAL_stelander_truce }
+			is_subject = no
+			NOT = { is_in_faction_with = VAL }
+			VAL = { is_subject = no }
+		}
 	}
 }
 
@@ -1206,7 +1700,11 @@ STP_pc_can_confront_nod = {
 	NOD = { STP_pc_nod_government_exists = yes }
 	OR = {
 		has_war_with = NOD
-		AND = { is_subject = no NOT = { is_in_faction_with = NOD } NOD = { is_subject = no } }
+		AND = {
+			is_subject = no
+			NOT = { is_in_faction_with = NOD }
+			NOD = { is_subject = no }
+		}
 	}
 }
 
@@ -1215,22 +1713,37 @@ STP_imperial_union_client_settlement = {
 	has_completed_focus = STP_pc_heg_clients
 	has_completed_focus = STP_pc_heg_burden
 	is_subject = no
-	capital_scope = { is_owned_by = STS is_controlled_by = STS }
+	capital_scope = {
+		is_owned_by = STS
+		is_controlled_by = STS
+	}
 	VAL = {
 		exists = yes
 		has_capitulated = no
 		has_war = no
 		is_in_faction_with = STS
-		OR = { is_subject_of = STS has_idea = STP_pc_val_client }
-		capital_scope = { is_owned_by = VAL is_controlled_by = VAL }
+		OR = {
+			is_subject_of = STS
+			has_idea = STP_pc_val_client
+		}
+		capital_scope = {
+			is_owned_by = VAL
+			is_controlled_by = VAL
+		}
 	}
 	NOD = {
 		exists = yes
 		has_capitulated = no
 		has_war = no
 		is_in_faction_with = STS
-		OR = { is_subject_of = STS has_idea = STP_pc_nod_client }
-		capital_scope = { is_owned_by = NOD is_controlled_by = NOD }
+		OR = {
+			is_subject_of = STS
+			has_idea = STP_pc_nod_client
+		}
+		capital_scope = {
+			is_owned_by = NOD
+			is_controlled_by = NOD
+		}
 	}
 }
 
@@ -1258,12 +1771,18 @@ STP_pc_can_offer_kefreyt_terms = {
 	STP_pw_can_reconstruct = yes
 	is_subject = no
 	check_variable = { var = STP_pc_course value = 1 compare = equals }
-	NOT = { has_country_flag = STP_pc_val_terms_accepted has_country_flag = STP_pc_val_terms_refused }
+	NOT = {
+		has_country_flag = STP_pc_val_terms_accepted
+		has_country_flag = STP_pc_val_terms_refused
+	}
 	VAL = {
 		exists = yes
 		has_capitulated = no
 		is_subject = no
-		NOT = { has_war_with = STS is_in_faction_with = STS }
+		NOT = {
+			has_war_with = STS
+			is_in_faction_with = STS
+		}
 	}
 }
 
@@ -1272,8 +1791,18 @@ STP_pc_can_offer_nod_terms = {
 	STP_pw_can_reconstruct = yes
 	is_subject = no
 	check_variable = { var = STP_pc_course value = 1 compare = equals }
-	NOT = { has_country_flag = STP_pc_nod_terms_accepted has_country_flag = STP_pc_nod_terms_refused has_variable = STP_pc_nod_offer_kind }
-	NOD = { STP_pc_nod_government_exists = yes NOT = { has_war_with = STS is_in_faction_with = STS } }
+	NOT = {
+		has_country_flag = STP_pc_nod_terms_accepted
+		has_country_flag = STP_pc_nod_terms_refused
+		has_variable = STP_pc_nod_offer_kind
+	}
+	NOD = {
+		STP_pc_nod_government_exists = yes
+		NOT = {
+			has_war_with = STS
+			is_in_faction_with = STS
+		}
+	}
 }
 
 # Recipient scope. The outstanding package is the receipt, independent of the focus UI.
@@ -1282,38 +1811,59 @@ STP_pc_val_offer_current = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	NOT = { has_war_with = STS is_in_faction_with = STS }
+	NOT = {
+		has_war_with = STS
+		is_in_faction_with = STS
+	}
 	STS = {
 		exists = yes
 		STP_pw_can_reconstruct = yes
 		is_subject = no
 		check_variable = { var = STP_pc_course value = 1 compare = equals }
 		has_variable = STP_pc_val_offer_kind
-		NOT = { has_country_flag = STP_pc_val_terms_accepted has_country_flag = STP_pc_val_terms_refused }
+		NOT = {
+			has_country_flag = STP_pc_val_terms_accepted
+			has_country_flag = STP_pc_val_terms_refused
+		}
 	}
 }
 
 # Recipient scope. The outstanding package is the receipt, independent of the focus UI.
 STP_pc_nod_offer_current = {
 	STP_pc_nod_government_exists = yes
-	NOT = { has_war_with = STS is_in_faction_with = STS }
+	NOT = {
+		has_war_with = STS
+		is_in_faction_with = STS
+	}
 	STS = {
 		exists = yes
 		STP_pw_can_reconstruct = yes
 		is_subject = no
 		check_variable = { var = STP_pc_course value = 1 compare = equals }
 		has_variable = STP_pc_nod_offer_kind
-		NOT = { has_country_flag = STP_pc_nod_terms_accepted has_country_flag = STP_pc_nod_terms_refused }
+		NOT = {
+			has_country_flag = STP_pc_nod_terms_accepted
+			has_country_flag = STP_pc_nod_terms_refused
+		}
 	}
 }
 
 STP_pc_can_pay_val_compact = {
 	OR = {
-		AND = { has_country_flag = STP_pw_kefreyt_accounts_settled check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
-		AND = { NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled } check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals } }
+		AND = {
+			has_country_flag = STP_pw_kefreyt_accounts_settled
+			check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+		}
+		AND = {
+			NOT = { has_country_flag = STP_pw_kefreyt_accounts_settled }
+			check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals }
+		}
 	}
 }
-STP_pc_can_pay_nod_compact = { check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals } }
+
+STP_pc_can_pay_nod_compact = {
+	check_variable = { var = ADISCORD_economy_treasury value = 1350 compare = greater_than_or_equals }
+}
 
 # COUNTRY NOD: the reply authorises a later STP choice, never a forced handoff.
 STP_pw_party_nod_offer_current = {
@@ -1325,7 +1875,10 @@ STP_pw_party_nod_offer_current = {
 		STP_pw_can_reconstruct = yes
 		is_subject = no
 		has_country_flag = STP_pw_party_nod_offer_pending
-		NOT = { has_war_with = NOD has_completed_focus = STP_pw_party_sovereignty }
+		NOT = {
+			has_war_with = NOD
+			has_completed_focus = STP_pw_party_sovereignty
+		}
 	}
 }
 
@@ -1334,13 +1887,20 @@ STP_pw_party_nod_arms_current = {
 	exists = yes
 	has_capitulated = no
 	is_subject = no
-	NOT = { has_equipment = { infantry_equipment < 10000 } }
-	NOT = { has_equipment = { support_equipment < 100 } }
+	NOT = {
+		has_equipment = { infantry_equipment < 10000 }
+	}
+	NOT = {
+		has_equipment = { support_equipment < 100 }
+	}
 	STP = {
 		exists = yes
 		STP_pw_can_reconstruct = yes
 		is_subject_of = NOD
-		NOT = { has_war_with = NOD has_country_flag = STP_pw_party_nod_arms_delivered }
+		NOT = {
+			has_war_with = NOD
+			has_country_flag = STP_pw_party_nod_arms_delivered
+		}
 		has_country_flag = STP_pw_party_nod_arms_pending
 		check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
 	}
@@ -1352,61 +1912,105 @@ STP_cw_disruption_available = {
 	has_country_flag = STP_cw_disruption_unlocked
 	has_war_with = STP
 	has_capitulated = no
-	STP = { exists = yes has_capitulated = no }
-	NOT = { has_country_flag = STP_cw_postwar has_global_flag = STP_cw_union_wars_finished }
+	STP = {
+		exists = yes
+		has_capitulated = no
+	}
+	NOT = {
+		has_country_flag = STP_cw_postwar
+		has_global_flag = STP_cw_union_wars_finished
+	}
 	check_variable = { var = STP_cw_disruption_completed value = 3 compare = less_than }
 }
 
 # STATE: the same owner/template filter is used by the eventual destruction.
 STP_cw_disruption_target = {
 	is_controlled_by = STP
-	any_state_division = { OWNER = { tag = STP } division_has_battalion_in_template = ADISCORD_territorial }
+	any_state_division = {
+		OWNER = { tag = STP }
+		division_has_battalion_in_template = ADISCORD_territorial
+	}
 }
 
-STP_cw_can_spend_600 = { check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals } }
+STP_cw_can_spend_600 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+}
 
-STP_cw_can_spend_1200 = { check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals } }
+STP_cw_can_spend_1200 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+}
 
-STP_cw_can_spend_2400 = { check_variable = { var = ADISCORD_economy_treasury value = 2400 compare = greater_than_or_equals } }
+STP_cw_can_spend_2400 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 2400 compare = greater_than_or_equals }
+}
 
-STP_cw_can_spend_6000 = { check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals } }
+STP_cw_can_spend_6000 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 6000 compare = greater_than_or_equals }
+}
 
-STP_uses_campaign_currency_scale = { OR = { tag = STP tag = STS tag = SRP } }
+STP_uses_campaign_currency_scale = {
+	OR = {
+		tag = STP
+		tag = STS
+		tag = SRP
+	}
+}
 
 # COUNTRY STP: faction politics persist through the party's war and reconstruction.
 STP_pf_active = {
- tag = STP
- exists = yes
- has_country_flag = STP_sided_with_the_party_flag
- NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+	tag = STP
+	exists = yes
+	has_country_flag = STP_sided_with_the_party_flag
+	NOT = { has_country_flag = STP_sided_with_Maksim_flag }
 }
+
 STP_pf_nod_contacts = {
- NOD = { exists = yes has_capitulated = no }
- NOT = { has_war_with = NOD }
- NOT = { has_completed_focus = STP_pw_party_sovereignty }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+	}
+	NOT = { has_war_with = NOD }
+	NOT = { has_completed_focus = STP_pw_party_sovereignty }
 }
+
 STP_pf_can_negotiate = {
- hidden_trigger = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
- has_capitulated = no
- custom_trigger_tooltip = { tooltip = STP_pf_cooldown_tt NOT = { has_country_flag = STP_pf_negotiation_cooldown } }
+	hidden_trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_pf_initialized
+	}
+	has_capitulated = no
+	custom_trigger_tooltip = {
+		tooltip = STP_pf_cooldown_tt
+		NOT = { has_country_flag = STP_pf_negotiation_cooldown }
+	}
 }
 
 # Party survival: country scope unless a province is explicitly named.
 STP_ps_holds_congress = { controls_province = 145 }
+
 STP_ps_government_operational = {
-	OR = { STP_ps_holds_congress = yes has_country_flag = STP_ps_temporary_government }
+	OR = {
+		STP_ps_holds_congress = yes
+		has_country_flag = STP_ps_temporary_government
+	}
 }
+
 STP_ps_war_active = {
-	tag = STP has_war_with = STS has_capitulated = no
+	tag = STP
+	has_war_with = STS
+	has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
 }
+
 STP_ps_can_counterattack = {
 	STP_ps_war_active = yes
 	STP_ps_government_operational = yes
 	check_variable = { var = STP_ps_stage value = 4 compare = equals }
 }
+
 STP_ps_can_start_stage = {
-	STP_ps_war_active = yes STP_ps_government_operational = yes
+	STP_ps_war_active = yes
+	STP_ps_government_operational = yes
 	NOT = { has_variable = STP_ps_reorg_deposit }
 	NOT = { has_variable = STP_ps_paused_days }
 	NOT = { has_active_mission = STP_ps_reorg_1 }
@@ -1415,17 +2019,33 @@ STP_ps_can_start_stage = {
 }
 
 STP_ps_nod_can_host_exiles = {
-	tag = NOD exists = yes has_capitulated = no is_subject = no
+	tag = NOD
+	exists = yes
+	has_capitulated = no
+	is_subject = no
 	NOT = { has_war_with = STP }
 }
+
 STP_ps_can_aid_nod = {
-	tag = STP exists = yes has_capitulated = no
+	tag = STP
+	exists = yes
+	has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
-	NOD = { STP_ps_nod_can_host_exiles = yes has_country_flag = STP_ps_aid_agreement }
+	NOD = {
+		STP_ps_nod_can_host_exiles = yes
+		has_country_flag = STP_ps_aid_agreement
+	}
 }
+
 STP_ps_northern_front_active = {
-	tag = NOD exists = yes has_capitulated = no
-	OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF }
+	tag = NOD
+	exists = yes
+	has_capitulated = no
+	OR = {
+		has_war_with = YPR
+		has_war_with = COF
+		has_war_with = TFF
+	}
 }
 
 # STP: reserved aid keeps its original purpose until physical departure.
@@ -1445,7 +2065,10 @@ STP_ps_nod_order_current = {
 			NOD = {
 				OR = {
 					NOD_cw_intervention_possible = yes
-					AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
+					AND = {
+						has_country_flag = NOD_cw_entered
+						has_war_with = STS
+					}
 				}
 			}
 		}
@@ -1456,29 +2079,54 @@ STP_ps_nod_order_current = {
 STP_ps_val_land_route = {
 	tag = VAL
 	any_owned_state = {
-		is_controlled_by = VAL is_in_home_area = yes
+		is_controlled_by = VAL
+		is_in_home_area = yes
 		any_neighbor_state = {
 			is_in_home_area = yes
 			OR = {
-				AND = { STP = { STP_cw_preparation_open = yes } is_owned_by = STP is_controlled_by = STP }
-				AND = { STS = { has_war_with = STP } is_owned_by = STS is_controlled_by = STS }
+				AND = {
+					STP = { STP_cw_preparation_open = yes }
+					is_owned_by = STP
+					is_controlled_by = STP
+				}
+				AND = {
+					STS = { has_war_with = STP }
+					is_owned_by = STS
+					is_controlled_by = STS
+				}
 			}
 		}
 	}
 }
+
 STP_ps_val_supply_open = {
-	tag = VAL exists = yes has_capitulated = no
+	tag = VAL
+	exists = yes
+	has_capitulated = no
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
 	NOT = { has_war_with = STS }
 	NOT = { has_country_flag = VAL_cw_refused }
 	OR = {
-		AND = { STP = { STP_cw_preparation_open = yes } NOT = { has_war_with = STP } }
-		STS = { exists = yes has_capitulated = no has_war_with = STP }
+		AND = {
+			STP = { STP_cw_preparation_open = yes }
+			NOT = { has_war_with = STP }
+		}
+		STS = {
+			exists = yes
+			has_capitulated = no
+			has_war_with = STP
+		}
 	}
 }
+
 STP_ps_val_intelligence_available = {
-	tag = STP exists = yes has_capitulated = no
-	OR = { STP_cw_preparation_open = yes STP_ps_war_active = yes }
+	tag = STP
+	exists = yes
+	has_capitulated = no
+	OR = {
+		STP_cw_preparation_open = yes
+		STP_ps_war_active = yes
+	}
 	VAL = { has_variable = STP_ps_val_receipt_rifles }
 }
 
@@ -1486,21 +2134,39 @@ STP_ps_local_program_open = {
 	OR = {
 		NOT = { is_owned_by = STP }
 		AND = {
-			OR = { NOT = { state = 2 } STP = { controls_province = 16445 } }
-			OR = { NOT = { state = 29 } STP = { controls_province = 16345 } }
+			OR = {
+				NOT = { state = 2 }
+				STP = { controls_province = 16445 }
+			}
+			OR = {
+				NOT = { state = 29 }
+				STP = { controls_province = 16345 }
+			}
 		}
 	}
 }
+
 STP_ps_nod_supply_route = {
 	tag = STP
 	OR = {
 		any_owned_state = {
-			is_controlled_by = STP is_in_home_area = yes
-			any_neighbor_state = { is_owned_by = NOD is_controlled_by = NOD is_in_home_area = yes }
+			is_controlled_by = STP
+			is_in_home_area = yes
+			any_neighbor_state = {
+				is_owned_by = NOD
+				is_controlled_by = NOD
+				is_in_home_area = yes
+			}
 		}
 		AND = {
 			controls_province = 16366
-			NOD = { any_owned_state = { is_controlled_by = NOD is_in_home_area = yes naval_base > 0 } }
+			NOD = {
+				any_owned_state = {
+					is_controlled_by = NOD
+					is_in_home_area = yes
+					naval_base > 0
+				}
+			}
 		}
 	}
 }
@@ -1513,43 +2179,95 @@ STP_ps_exile_formation_context = {
 
 # COUNTRY STP/STS. The victor gets a late route only while Kefreyt has not committed.
 STP_occidia_invasion_available = {
-    OR = { tag = STP tag = STS }
-    exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
-    has_country_flag = STP_cw_won_union_battle
-    has_global_flag = { flag = STP_cw_union_wars_finished days > 89 }
-    NOT = { has_idea = STP_cw_council_guarantees }
-    NOT = { has_idea = STP_cw_republican_charter }
-    NOT = { VAL = { OR = { has_country_flag = VAL_cw_mobilizing has_country_flag = VAL_cw_entered } } }
-    SRP = {
-        exists = yes is_subject = no has_capitulated = no has_war = no is_in_faction = no
-        NOT = { has_idea = STP_cw_council_guarantees }
-        NOT = { has_idea = STP_cw_republican_charter }
-    }
-    is_neighbor_of = SRP
+	OR = {
+		tag = STP
+		tag = STS
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	is_in_faction = no
+	has_country_flag = STP_cw_won_union_battle
+	has_global_flag = {
+		flag = STP_cw_union_wars_finished
+		days > 89
+	}
+	NOT = { has_idea = STP_cw_council_guarantees }
+	NOT = { has_idea = STP_cw_republican_charter }
+	NOT = {
+		VAL = {
+			OR = {
+				has_country_flag = VAL_cw_mobilizing
+				has_country_flag = VAL_cw_entered
+			}
+		}
+	}
+	SRP = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		has_war = no
+		is_in_faction = no
+		NOT = { has_idea = STP_cw_council_guarantees }
+		NOT = { has_idea = STP_cw_republican_charter }
+	}
+	is_neighbor_of = SRP
 }
 
 # COUNTRY attacker. Never annex land occupied by another participant or close its war.
 STP_occidia_victory_ready = {
-    has_war_with = SRP
-    has_country_flag = STP_occidia_campaign_active
-    has_capitulated = no is_subject = no
-    SRP = { exists = yes has_capitulated = yes is_subject = no }
-    OR = {
-        AND = {
-            tag = STP
-            SRP = {
-                NOT = { any_enemy_country = { NOT = { tag = STP } } }
-                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STP } } } }
-            }
-        }
-        AND = {
-            tag = STS
-            SRP = {
-                NOT = { any_enemy_country = { NOT = { tag = STS } } }
-                NOT = { any_owned_state = { NOT = { OR = { is_controlled_by = SRP is_controlled_by = STS } } } }
-            }
-        }
-    }
+	has_war_with = SRP
+	has_country_flag = STP_occidia_campaign_active
+	has_capitulated = no
+	is_subject = no
+	SRP = {
+		exists = yes
+		has_capitulated = yes
+		is_subject = no
+	}
+	OR = {
+		AND = {
+			tag = STP
+			SRP = {
+				NOT = {
+					any_enemy_country = {
+						NOT = { tag = STP }
+					}
+				}
+				NOT = {
+					any_owned_state = {
+						NOT = {
+							OR = {
+								is_controlled_by = SRP
+								is_controlled_by = STP
+							}
+						}
+					}
+				}
+			}
+		}
+		AND = {
+			tag = STS
+			SRP = {
+				NOT = {
+					any_enemy_country = {
+						NOT = { tag = STS }
+					}
+				}
+				NOT = {
+					any_owned_state = {
+						NOT = {
+							OR = {
+								is_controlled_by = SRP
+								is_controlled_by = STS
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 # NOD: the paid preparation and the native war must name the same live opponent.
@@ -1563,31 +2281,43 @@ STP_ps_can_launch_return = {
 	NOT = { has_country_flag = STP_ps_return_campaign }
 	NOT = { is_in_faction_with = STS }
 	STP = { exists = no }
-	STS = { exists = yes has_capitulated = no NOT = { is_subject_of = NOD } }
+	STS = {
+		exists = yes
+		has_capitulated = no
+		NOT = { is_subject_of = NOD }
+	}
 }
 
 # Country holding the character: an arrested politician cannot join either transfer.
 STP_ps_hedersett_available = {
 	has_character = STP_rufus_hedersett
-	STP_rufus_hedersett = { NOT = { has_character_flag = STP_cw_arrested } }
+	STP_rufus_hedersett = {
+		NOT = { has_character_flag = STP_cw_arrested }
+	}
 }
 
 # AI sequencing treats an unavailable external target as resolved so Shabrat does not
 # deadlock if another power has already removed it from the independent campaign map.
 STP_shabrat_ai_bezhaysk_resolved = {
 	OR = {
-		NOT = { BJK = { exists = yes } }
+		NOT = {
+			BJK = { exists = yes }
+		}
 		BJK = { has_capitulated = yes }
 		BJK = { is_subject = yes }
 		BJK = { is_in_faction_with = STS }
-		NOT = { BJK = { owns_state = 41 } }
+		NOT = {
+			BJK = { owns_state = 41 }
+		}
 		41 = { is_owned_by = STS }
 	}
 }
 
 STP_shabrat_ai_nodrul_resolved = {
 	OR = {
-		NOT = { NOD = { exists = yes } }
+		NOT = {
+			NOD = { exists = yes }
+		}
 		NOD = { has_capitulated = yes }
 		NOD = { is_subject = yes }
 		NOD = { is_in_faction_with = STS }
@@ -1619,7 +2349,13 @@ STP_pw_party_can_attack_bezhaysk = {
 	is_subject = no
 	has_war = no
 	NOT = { is_in_faction_with = BJK }
-	BJK = { exists = yes has_capitulated = no is_subject = no owns_state = 41 controls_state = 41 }
+	BJK = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		owns_state = 41
+		controls_state = 41
+	}
 }
 
 # COUNTRY STP: postwar Party campaign against an independent Kefreyt.
@@ -1633,7 +2369,11 @@ STP_pw_party_can_attack_kefreyt = {
 	NOT = { has_country_flag = STP_pw_party_kefreyt_subject_pending }
 	NOT = { has_country_flag = STP_pw_party_kefreyt_victory }
 	NOT = { is_in_faction_with = VAL }
-	VAL = { exists = yes has_capitulated = no is_subject = no }
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
 }
 
 # A completed protectorate course may outlive the patron's state or treaty.
@@ -1652,18 +2392,23 @@ STP_pw_party_external_order_resolved = {
 	STP_pw_can_reconstruct = yes
 	OR = {
 		has_country_flag = STP_pw_party_bezhaysk_victory
-		NOT = { BJK = { exists = yes } }
+		NOT = {
+			BJK = { exists = yes }
+		}
 		BJK = { is_subject_of = STP }
-		BJK = { NOT = { owns_state = 41 } }
+		BJK = {
+			NOT = { owns_state = 41 }
+		}
 		41 = { is_owned_by = STP }
 	}
 	OR = {
 		has_country_flag = STP_pw_party_kefreyt_victory
-		NOT = { VAL = { exists = yes } }
+		NOT = {
+			VAL = { exists = yes }
+		}
 		VAL = { is_subject_of = STP }
 	}
 }
-
 
 # The same live threat governs the countdown, payment and delivery.
 STP_pw_party_nod_threat_current = {
@@ -1672,39 +2417,51 @@ STP_pw_party_nod_threat_current = {
 	has_country_flag = STP_pw_party_nod_threat_active
 	is_subject = no
 	has_capitulated = no
-	NOD = { exists = yes has_capitulated = no is_subject = no }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+	}
 	NOT = { has_war_with = NOD }
 }
 
 # COUNTRY STP: reserve a full response chain plus one day before departure.
 STP_ps_val_intelligence_time_available = {
-    VAL = {
-        has_active_mission = STP_ps_val_departure
-        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
-    }
+	VAL = {
+		has_active_mission = STP_ps_val_departure
+		check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 22 compare = greater_than_or_equals }
+	}
 }
+
 STP_ps_val_intercept_time_available = {
-    VAL = {
-        has_active_mission = STP_ps_val_departure
-        check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
-    }
+	VAL = {
+		has_active_mission = STP_ps_val_departure
+		check_variable = { var = days_mission_timeout@STP_ps_val_departure value = 15 compare = greater_than_or_equals }
+	}
 }
+
 # COUNTRY STP: funding is not a purchase of automatic military intervention.
 STP_ps_nod_credit_useful = {
-    NOD = {
-        OR = {
-            STP_ps_northern_front_active = yes
-            NOD_cw_intervention_possible = yes
-            AND = { has_country_flag = NOD_cw_entered has_war_with = STS }
-        }
-    }
+	NOD = {
+		OR = {
+			STP_ps_northern_front_active = yes
+			NOD_cw_intervention_possible = yes
+			AND = {
+				has_country_flag = NOD_cw_entered
+				has_war_with = STS
+			}
+		}
+	}
 }
 
 # COUNTRY: the same objective is evaluated for both civil-war participants.
 STP_cw_fada_battle_active = {
 	has_global_flag = STP_cw_started
 	NOT = { has_global_flag = STP_cw_union_wars_finished }
-	STP = { exists = yes has_war_with = STS }
+	STP = {
+		exists = yes
+		has_war_with = STS
+	}
 	STS = { exists = yes }
 }
 
@@ -1715,26 +2472,32 @@ STP_cw_fada_captured = {
 
 # COUNTRY with a state in FROM: integration follows a directly held core frontier.
 STP_pw_regional_integration_target_valid = {
-    OR = { tag = STP tag = STS }
-    STP_pw_can_reconstruct = yes
-    is_subject = no
-    has_war = no
-    has_completed_focus = STP_pw_regional_citizenship
-    FROM = {
-        is_owned_by = ROOT
-        is_controlled_by = ROOT
-        NOT = { is_core_of = ROOT }
-        any_neighbor_state = {
-            is_owned_by = ROOT
-            is_controlled_by = ROOT
-            is_core_of = ROOT
-        }
-    }
+	OR = {
+		tag = STP
+		tag = STS
+	}
+	STP_pw_can_reconstruct = yes
+	is_subject = no
+	has_war = no
+	has_completed_focus = STP_pw_regional_citizenship
+	FROM = {
+		is_owned_by = ROOT
+		is_controlled_by = ROOT
+		NOT = { is_core_of = ROOT }
+		any_neighbor_state = {
+			is_owned_by = ROOT
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+		}
+	}
 }
 
 # Playable staffing: original cabinet and civil-war commanders are unchanged.
 STP_qol_staff_available = {
-	OR = { tag = STP tag = STS }
+	OR = {
+		tag = STP
+		tag = STS
+	}
 	has_capitulated = no
 	has_country_flag = STP_cw_postwar
 }
@@ -1766,7 +2529,6 @@ STP_qol_elite_army_available = {
 	}
 }
 
-
 # COUNTRY STS: the second hegemony campaign cannot begin while any northern
 # relation created by the first campaign is still at war.
 STP_heg_northern_final_resolved = {
@@ -1786,7 +2548,12 @@ STP_heg_nod_administration_available = {
 		NOD = { is_subject_of = STS }
 		NOD = { has_country_flag = STP_heg_defeated_by_sts }
 		NOD = { has_country_flag = STP_pc_defeated_by_sts }
-		AND = { NOT = { NOD = { exists = yes } } any_owned_state = { is_core_of = NOD } }
+		AND = {
+			NOT = {
+				NOD = { exists = yes }
+			}
+			any_owned_state = { is_core_of = NOD }
+		}
 	}
 }
 
@@ -1797,7 +2564,12 @@ STP_heg_ypr_administration_available = {
 	OR = {
 		YPR = { is_subject_of = STS }
 		YPR = { has_country_flag = STP_heg_defeated_by_sts }
-		AND = { NOT = { YPR = { exists = yes } } any_owned_state = { is_core_of = YPR } }
+		AND = {
+			NOT = {
+				YPR = { exists = yes }
+			}
+			any_owned_state = { is_core_of = YPR }
+		}
 	}
 }
 
@@ -1808,7 +2580,12 @@ STP_heg_tff_administration_available = {
 	OR = {
 		TFF = { is_subject_of = STS }
 		TFF = { has_country_flag = STP_heg_defeated_by_sts }
-		AND = { NOT = { TFF = { exists = yes } } any_owned_state = { is_core_of = TFF } }
+		AND = {
+			NOT = {
+				TFF = { exists = yes }
+			}
+			any_owned_state = { is_core_of = TFF }
+		}
 	}
 }
 
@@ -1820,7 +2597,12 @@ STP_heg_val_administration_available = {
 		VAL = { is_subject_of = STS }
 		VAL = { has_country_flag = STP_heg_defeated_by_sts }
 		VAL = { has_country_flag = VAL_cw_defeated }
-		AND = { NOT = { VAL = { exists = yes } } any_owned_state = { is_core_of = VAL } }
+		AND = {
+			NOT = {
+				VAL = { exists = yes }
+			}
+			any_owned_state = { is_core_of = VAL }
+		}
 	}
 }
 
@@ -1830,19 +2612,36 @@ STP_pw_party_story_current = {
 	has_country_flag = STP_cw_postwar
 	has_capitulated = no
 }
+
 STP_pw_party_cabinet_backed = {
 	OR = {
-		AND = { check_variable = { var = STP_pw_party_cabinet value = 1 compare = equals } check_variable = { var = STP_pf_conservatives_support value = 60 compare = greater_than_or_equals } }
-		AND = { check_variable = { var = STP_pw_party_cabinet value = 2 compare = equals } check_variable = { var = STP_pf_borons_support value = 60 compare = greater_than_or_equals } }
-		AND = { check_variable = { var = STP_pw_party_cabinet value = 3 compare = equals } check_variable = { var = STP_pf_radicals_support value = 60 compare = greater_than_or_equals } }
+		AND = {
+			check_variable = { var = STP_pw_party_cabinet value = 1 compare = equals }
+			check_variable = { var = STP_pf_conservatives_support value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = STP_pw_party_cabinet value = 2 compare = equals }
+			check_variable = { var = STP_pf_borons_support value = 60 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = STP_pw_party_cabinet value = 3 compare = equals }
+			check_variable = { var = STP_pf_radicals_support value = 60 compare = greater_than_or_equals }
+		}
 	}
 }
+
 STP_pw_party_compact_coalition = {
-	custom_trigger_tooltip = { tooltip = STP_pw_party_cabinet_backed_tt STP_pw_party_cabinet_backed = yes }
+	custom_trigger_tooltip = {
+		tooltip = STP_pw_party_cabinet_backed_tt
+		STP_pw_party_cabinet_backed = yes
+	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pw_party_command_backed_tt
 		OR = {
-			AND = { check_variable = { var = STP_pw_party_command value = 1 compare = equals } check_variable = { var = STP_pf_army_support value = 60 compare = greater_than_or_equals } }
+			AND = {
+				check_variable = { var = STP_pw_party_command value = 1 compare = equals }
+				check_variable = { var = STP_pf_army_support value = 60 compare = greater_than_or_equals }
+			}
 			AND = {
 				check_variable = {
 					var = STP_pw_party_command
@@ -1865,13 +2664,19 @@ STP_pw_party_compact_coalition = {
 	custom_trigger_tooltip = {
 		tooltip = STP_pw_party_supply_backed_tt
 		has_completed_focus = STP_pw_party_officer_school
-		OR = { has_completed_focus = STP_pw_party_supply_service has_completed_focus = STP_pw_party_professional_service }
+		OR = {
+			has_completed_focus = STP_pw_party_supply_service
+			has_completed_focus = STP_pw_party_professional_service
+		}
 		check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals }
 	}
 	custom_trigger_tooltip = {
 		tooltip = STP_pw_party_credit_backed_tt
 		OR = {
-			AND = { check_variable = { var = STP_pw_party_credit value = 1 compare = equals } check_variable = { var = STP_pf_merchants_support value = 60 compare = greater_than_or_equals } }
+			AND = {
+				check_variable = { var = STP_pw_party_credit value = 1 compare = equals }
+				check_variable = { var = STP_pf_merchants_support value = 60 compare = greater_than_or_equals }
+			}
 			AND = {
 				check_variable = {
 					var = STP_pw_party_credit
@@ -1892,6 +2697,7 @@ STP_pw_party_compact_coalition = {
 		}
 	}
 }
+
 # COUNTRY NOD: a live reply can settle only this outstanding offer, before hostilities.
 STP_pw_party_compact_current = {
 	tag = NOD
@@ -1916,7 +2722,10 @@ STP_pw_party_revolution_current = {
 	exists = yes
 	STP_pw_can_reconstruct = yes
 	is_subject = no
-	OR = { has_completed_focus = STP_pw_party_revolution_capital has_variable = STP_ch_phase }
+	OR = {
+		has_completed_focus = STP_pw_party_revolution_capital
+		has_variable = STP_ch_phase
+	}
 	NOT = { has_country_flag = STP_pw_party_nod_compact }
 }
 
@@ -1946,14 +2755,21 @@ STP_pw_party_nod_congress_current = {
 	has_capitulated = no
 	STP = {
 		STP_pw_party_revolution_current = yes
-		OR = { NOT = { has_variable = STP_ch_phase } STP_ch_northern_alternative = yes }
+		OR = {
+			NOT = { has_variable = STP_ch_phase }
+			STP_ch_northern_alternative = yes
+		}
 		has_country_flag = STP_pw_party_nod_congress_pending
 	}
 }
 
 STP_pw_party_northern_work_current = {
 	STP_pw_party_revolution_current = yes
-	NOD = { exists = yes is_subject = no has_capitulated = no }
+	NOD = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
 	NOT = { has_country_flag = STP_pw_party_nod_subject_pending }
 }
 
@@ -1961,13 +2777,21 @@ STP_pw_party_can_launch_northern_campaign = {
 	STP_pw_party_northern_work_current = yes
 	has_completed_focus = STP_pw_party_northern_campaign
 	check_variable = { var = STP_pw_party_northern_supply value = 1 compare = greater_than_or_equals }
-	NOT = { has_war_with = NOD is_in_faction_with = NOD has_country_flag = STP_pw_party_nod_campaign_active }
+	NOT = {
+		has_war_with = NOD
+		is_in_faction_with = NOD
+		has_country_flag = STP_pw_party_nod_campaign_active
+	}
 }
 
 STP_pw_party_nod_subject_programs = {
 	STP_pw_party_revolution_current = yes
 	has_completed_focus = STP_pw_party_former_patron
-	NOD = { exists = yes is_subject_of = STP has_capitulated = no }
+	NOD = {
+		exists = yes
+		is_subject_of = STP
+		has_capitulated = no
+	}
 	NOT = { has_war_with = NOD }
 }
 

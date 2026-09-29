@@ -1,5 +1,4 @@
 leader_attack_skills = {
-
 	### NAVY ###
 	1 = {
 		cost = 100
@@ -43,7 +42,7 @@ leader_attack_skills = {
 		modifier = {
 			naval_damage_factor = 0.20
 		}
-		
+
 		building_module_modifier = {
 			spotting_chance = 0.08
 			ships_at_battle_start = 0.08
@@ -104,7 +103,7 @@ leader_attack_skills = {
 		modifier = {
 			naval_damage_factor = 0.45
 		}
-		
+
 		building_module_modifier = {
 			spotting_chance = 0.18
 			ships_at_battle_start = 0.18
@@ -131,7 +130,7 @@ leader_attack_skills = {
 			offence = 0.025
 		}
 	}
-		
+
 	2 = {
 		cost = 200
 		type = corps_commander
@@ -139,8 +138,7 @@ leader_attack_skills = {
 			offence = 0.05
 		}
 	}
-	
-	
+
 	3 = {
 		cost = 400
 		type = corps_commander
@@ -148,7 +146,7 @@ leader_attack_skills = {
 			offence = 0.075
 		}
 	}
-	
+
 	4 = {
 		cost = 800
 		type = corps_commander
@@ -156,7 +154,7 @@ leader_attack_skills = {
 			offence = 0.10
 		}
 	}
-	
+
 	5 = {
 		cost = 1600
 		type = corps_commander
@@ -196,7 +194,7 @@ leader_attack_skills = {
 			offence = 0.225
 		}
 	}
-	
+
 	10 = {
 		cost = 51200
 		type = corps_commander
@@ -204,8 +202,7 @@ leader_attack_skills = {
 			offence = 0.25
 		}
 	}
-	
-	
+
 	### Field Marshal ###
 	1 = {
 		cost = 100
@@ -214,8 +211,7 @@ leader_attack_skills = {
 			offence = 0.025
 		}
 	}
-	
-	
+
 	2 = {
 		cost = 200
 		type = field_marshal
@@ -223,8 +219,7 @@ leader_attack_skills = {
 			offence = 0.05
 		}
 	}
-	
-	
+
 	3 = {
 		cost = 400
 		type = field_marshal
@@ -232,7 +227,7 @@ leader_attack_skills = {
 			offence = 0.075
 		}
 	}
-	
+
 	4 = {
 		cost = 800
 		type = field_marshal
@@ -240,7 +235,7 @@ leader_attack_skills = {
 			offence = 0.10
 		}
 	}
-	
+
 	5 = {
 		cost = 1600
 		type = field_marshal
@@ -255,7 +250,7 @@ leader_attack_skills = {
 		modifier = {
 			offence = 0.15
 		}
-	}	
+	}
 
 	7 = {
 		cost = 6400
@@ -263,7 +258,7 @@ leader_attack_skills = {
 		modifier = {
 			offence = 0.175
 		}
-	}	
+	}
 
 	8 = {
 		cost = 12800
@@ -271,7 +266,7 @@ leader_attack_skills = {
 		modifier = {
 			offence = 0.2
 		}
-	}	
+	}
 
 	9 = {
 		cost = 25600
@@ -279,8 +274,8 @@ leader_attack_skills = {
 		modifier = {
 			offence = 0.225
 		}
-	}	
-	
+	}
+
 	10 = {
 		cost = 51200
 		type = field_marshal

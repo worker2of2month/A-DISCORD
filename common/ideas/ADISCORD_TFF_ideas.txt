@@ -1,17 +1,17 @@
 ideas = {
 	country = {
-        TFF_kefreyt_northern_campaign = {
-            picture = generic_war_preparation
-            allowed = { always = no }
-            allowed_civil_war = { original_tag = TFF }
-            removal_cost = -1
-            modifier = {
-                army_org_factor = 0.10
-                army_core_defence_factor = 0.10
-                supply_consumption_factor = -0.10
-                mobilization_speed = 0.15
-            }
-        }
+		TFF_kefreyt_northern_campaign = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { original_tag = TFF }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.10
+				army_core_defence_factor = 0.10
+				supply_consumption_factor = -0.10
+				mobilization_speed = 0.15
+			}
+		}
 
 		TFF_emergency_frontier_command = {
 			picture = generic_war_preparation

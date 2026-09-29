@@ -15,7 +15,7 @@
 
 default = {
 	male = {
-		names = { "John" "Bob" "Lucas" "Marcus" "Alexander" "Alex" "Peter" "Jonas" "Jim" "Johannes"}
+		names = { "John" "Bob" "Lucas" "Marcus" "Alexander" "Alex" "Peter" "Jonas" "Jim" "Johannes" }
 		surnames = { }
 		callsigns = { }
 	}
@@ -24,8 +24,7 @@ default = {
 	}
 
 	surnames = { "Smith" "Jones" "Taylor" "Brown" "Williams" "Wilson" "Evans" "Walker" "White" "Roberts" }
-	callsigns = { "Easy Kill" "The Lightning" "The Devil" "Grasshopper" "Handsome" "Moose" "Mouse" "Pebbles" "Sunshine" Demon}
-
+	callsigns = { "Easy Kill" "The Lightning" "The Devil" "Grasshopper" "Handsome" "Moose" "Mouse" "Pebbles" "Sunshine" Demon }
 
 	#Operations - treat these as keys, not strings.
 	prefix = o_operation
@@ -38,7 +37,6 @@ default = {
 	offensive_operation_suffix = o_strat_offensive_default
 	defensive_operation_suffix = o_strat_defensive_default
 	naval_operation_suffix = o_strat_naval_default
-
 }
 
 ###############################################################
@@ -54,7 +52,8 @@ STP = {
 			#New
 			Akim Aksel Anastasy Anatoly Andrian Arkady Arseny Aslan Dzhabir Emil Feodosy Filipp Isay Ivar Izot
 			Karl Kazimir Kuzma Lavrenty Lazar Makary Manzakir Marat Markian Martemyan Mstislav
-			Osher Pasha Robert Roman Sidor Slava Stepan Tikhon Timofey Tsyrendashi Vsevolod Vyacheslav Yakov Yefim Zinovy
+			Osher Pasha Robert Roman Sidor Slava Stepan Tikhon Timofey Tsyrendashi Vsevolod Vyacheslav Yakov Yefim
+			Zinovy
 			#Georgian
 			Levan Tamaz Zurab
 			#Armenian
@@ -75,13 +74,16 @@ STP = {
 			Filippov Fyodorov Gabrilov Gagarin Ganyev Gashev Golubev Grachyov Grigorov Grishayev Gusev
 			Ilnitsky Kaminsky Khalikov Kiselyov Klubkov Koldeyev Kondakov Korenev Koshkin Kovshov Kuzma Kuznetsov
 			Larionov Lavrentyev Lev Lidov Lisitsyn Loginov Lukichyov Lyubilkin
-			Makeyev Makhlyagin Makoveyev Malyutin Maresyev Markelov Matveyevich Mazhnov Melikhov Milko Moiseyenko Molchanov Murakhovets
+			Makeyev Makhlyagin Makoveyev Malyutin Maresyev Markelov Matveyevich Mazhnov Melikhov Milko Moiseyenko
+			Molchanov Murakhovets
 			Nakaryakov Nesterov Nikiforov Nikolayev Nikulin Nomokonov Novozhilov Okunev Onilov Orlov
-			Pakhomkin Panchenko Panteleyev Parfyonov Pavlichenko Pchelintsev Pegeshov Petrov Popov Posazhnikov Prokopev Pustobriko
+			Pakhomkin Panchenko Panteleyev Parfyonov Pavlichenko Pchelintsev Pegeshov Petrov Popov Posazhnikov Prokopev
+			Pustobriko
 			Rabichev Radkin Rakityansky Raskov Romanovich Romashov Rudnev Ryasin
 			Sagaidak Saikin Sanfirov Selin Selyanin Serebryakov Seryogin Shalayev Shambarov Shatrov
 			Shevelyov Shilov Shlyakhov Shmurak Shvetsov Simonov Sokolov Solomatin Stepanov Svetlov
-			Tanailov Terekhov Tinigin Tolstoy Ulyanenko Utkin Vashchenko Vasilenko Vinogradov Vladimirsky Volkhov Vorontsov
+			Tanailov Terekhov Tinigin Tolstoy Ulyanenko Utkin Vashchenko Vasilenko Vinogradov Vladimirsky Volkhov
+			Vorontsov
 			Yartsev Yegorov Yekimov Yermakov Yushin Zakharov Zaytsev Zhudin Zhukov
 			#Georgian (some might be shared with other SSRs around) -> Most likely in Russian form
 			Adamiya Aliyev Aslanikashvili Beriya Chiladze Dzhugashvili Gelashvili Giligashvili
@@ -93,10 +95,20 @@ STP = {
 		}
 	}
 	female = {
-		names = { Aleksandra Anastasiya Anna Darya Ekaterina Elena Irina Kira Larisa Lyudmila Mariya Marina Natalya Nina Olga Polina Sofia Tatyana Valentina Vera Viktoriya Yuliya }
-		surnames = { Alekseyeva Antonova Belova Borisova Ivanova Kuznetsova Makarova Morozova Orlova Petrova Romanova Sokolova Volkova Yegorova }
+		names = {
+			Aleksandra Anastasiya Anna Darya Ekaterina Elena Irina Kira Larisa Lyudmila Mariya Marina Natalya Nina Olga
+			Polina Sofia Tatyana Valentina Vera Viktoriya Yuliya
+		}
+		surnames = {
+			Alekseyeva Antonova Belova Borisova Ivanova Kuznetsova Makarova Morozova Orlova Petrova Romanova Sokolova
+			Volkova Yegorova
+		}
 	}
-	callsigns = { "The Colonist" "The Bell" Heine Duma Anvil Hammer Fury Arrow Storm Bear "White Lily" Devil Eagle Falcon Fox Snowflake Greasy Guardian Gunman Hawk Hardball Howl Blizzard Husky Ice Killer Steel Iron Skull Striker Thunder Warrior Wardog Vodka }
+	callsigns = {
+		"The Colonist" "The Bell" Heine Duma Anvil Hammer Fury Arrow Storm Bear "White Lily" Devil Eagle Falcon Fox
+		Snowflake Greasy Guardian Gunman Hawk Hardball Howl Blizzard Husky Ice Killer Steel Iron Skull Striker Thunder
+		Warrior Wardog Vodka
+	}
 
 	prefix = o_operatsiya
 

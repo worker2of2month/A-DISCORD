@@ -5,156 +5,1042 @@ guiTypes = {
 		size = { width = 460 height = 360 }
 		clipping = no
 
-		background = { name = "STP_regions_panel_background" quadTextureSprite = "GFX_tiled_window_transparent" }
-		instantTextBoxType = { name = "STP_regions_title" position = { x = 10 y = 8 } text = "STP_regions_panel_title" font = "hoi_20b" maxWidth = 440 maxHeight = 24 fixedsize = yes format = center pdx_tooltip = "STP_regions_panel_tt" }
-		iconType = { name = "STP_regions_map" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_map_background" pdx_tooltip = "STP_regions_map_tt" }
+		background = {
+			name = "STP_regions_panel_background"
+			quadTextureSprite = "GFX_tiled_window_transparent"
+		}
+		instantTextBoxType = {
+			name = "STP_regions_title"
+			position = { x = 10 y = 8 }
+			text = "STP_regions_panel_title"
+			font = "hoi_20b"
+			maxWidth = 440
+			maxHeight = 24
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_regions_panel_tt"
+		}
+		iconType = {
+			name = "STP_regions_map"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_map_background"
+			pdx_tooltip = "STP_regions_map_tt"
+		}
 
-		iconType = { name = "STP_regions_1_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 1 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 2 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 3 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 4 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 5 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 6 pdx_tooltip = "STP_region_1_map_tt" }
-		iconType = { name = "STP_regions_1_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_1" frame = 7 pdx_tooltip = "STP_region_1_map_tt" }
+		iconType = {
+			name = "STP_regions_1_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 1
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 2
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 3
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 4
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 5
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 6
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_1_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_1"
+			frame = 7
+			pdx_tooltip = "STP_region_1_map_tt"
+		}
 
-		iconType = { name = "STP_regions_2_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 1 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 2 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 3 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 4 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 5 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 6 pdx_tooltip = "STP_region_2_map_tt" }
-		iconType = { name = "STP_regions_2_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_2" frame = 7 pdx_tooltip = "STP_region_2_map_tt" }
+		iconType = {
+			name = "STP_regions_2_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 1
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 2
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 3
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 4
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 5
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 6
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_2_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_2"
+			frame = 7
+			pdx_tooltip = "STP_region_2_map_tt"
+		}
 
-		iconType = { name = "STP_regions_3_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 1 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 2 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 3 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 4 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 5 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 6 pdx_tooltip = "STP_region_3_map_tt" }
-		iconType = { name = "STP_regions_3_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_3" frame = 7 pdx_tooltip = "STP_region_3_map_tt" }
+		iconType = {
+			name = "STP_regions_3_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 1
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 2
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 3
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 4
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 5
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 6
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_3_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_3"
+			frame = 7
+			pdx_tooltip = "STP_region_3_map_tt"
+		}
 
-		iconType = { name = "STP_regions_28_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 1 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 2 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 3 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 4 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 5 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 6 pdx_tooltip = "STP_region_28_map_tt" }
-		iconType = { name = "STP_regions_28_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_28" frame = 7 pdx_tooltip = "STP_region_28_map_tt" }
+		iconType = {
+			name = "STP_regions_28_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 1
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 2
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 3
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 4
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 5
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 6
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_28_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_28"
+			frame = 7
+			pdx_tooltip = "STP_region_28_map_tt"
+		}
 
-		iconType = { name = "STP_regions_29_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 1 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 2 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 3 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 4 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 5 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 6 pdx_tooltip = "STP_region_29_map_tt" }
-		iconType = { name = "STP_regions_29_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_29" frame = 7 pdx_tooltip = "STP_region_29_map_tt" }
+		iconType = {
+			name = "STP_regions_29_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 1
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 2
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 3
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 4
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 5
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 6
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_29_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_29"
+			frame = 7
+			pdx_tooltip = "STP_region_29_map_tt"
+		}
 
-		iconType = { name = "STP_regions_43_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 1 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 2 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 3 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 4 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 5 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 6 pdx_tooltip = "STP_region_43_map_tt" }
-		iconType = { name = "STP_regions_43_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_43" frame = 7 pdx_tooltip = "STP_region_43_map_tt" }
+		iconType = {
+			name = "STP_regions_43_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 1
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 2
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 3
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 4
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 5
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 6
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_43_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_43"
+			frame = 7
+			pdx_tooltip = "STP_region_43_map_tt"
+		}
 
-		iconType = { name = "STP_regions_44_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 1 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 2 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 3 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 4 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 5 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 6 pdx_tooltip = "STP_region_44_map_tt" }
-		iconType = { name = "STP_regions_44_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_44" frame = 7 pdx_tooltip = "STP_region_44_map_tt" }
+		iconType = {
+			name = "STP_regions_44_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 1
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 2
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 3
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 4
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 5
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 6
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_44_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_44"
+			frame = 7
+			pdx_tooltip = "STP_region_44_map_tt"
+		}
 
-		iconType = { name = "STP_regions_45_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 1 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 2 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 3 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 4 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 5 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 6 pdx_tooltip = "STP_region_45_map_tt" }
-		iconType = { name = "STP_regions_45_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_45" frame = 7 pdx_tooltip = "STP_region_45_map_tt" }
+		iconType = {
+			name = "STP_regions_45_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 1
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 2
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 3
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 4
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 5
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 6
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_45_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_45"
+			frame = 7
+			pdx_tooltip = "STP_region_45_map_tt"
+		}
 
-		iconType = { name = "STP_regions_46_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 1 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 2 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 3 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 4 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 5 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 6 pdx_tooltip = "STP_region_46_map_tt" }
-		iconType = { name = "STP_regions_46_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_46" frame = 7 pdx_tooltip = "STP_region_46_map_tt" }
+		iconType = {
+			name = "STP_regions_46_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 1
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 2
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 3
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 4
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 5
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 6
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_46_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_46"
+			frame = 7
+			pdx_tooltip = "STP_region_46_map_tt"
+		}
 
-		iconType = { name = "STP_regions_53_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 1 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 2 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 3 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 4 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 5 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 6 pdx_tooltip = "STP_region_53_map_tt" }
-		iconType = { name = "STP_regions_53_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_53" frame = 7 pdx_tooltip = "STP_region_53_map_tt" }
+		iconType = {
+			name = "STP_regions_53_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 1
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 2
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 3
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 4
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 5
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 6
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_53_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_53"
+			frame = 7
+			pdx_tooltip = "STP_region_53_map_tt"
+		}
 
-		iconType = { name = "STP_regions_88_contested" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 1 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_resistance_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 2 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_resistance_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 3 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_party_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 4 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_party_entrenched" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 5 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_local_leaning" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 6 pdx_tooltip = "STP_region_88_map_tt" }
-		iconType = { name = "STP_regions_88_local_dominant" position = { x = 20 y = 38 } quadTextureSprite = "GFX_STP_regions_state_88" frame = 7 pdx_tooltip = "STP_region_88_map_tt" }
+		iconType = {
+			name = "STP_regions_88_contested"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 1
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_resistance_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 2
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_resistance_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 3
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_party_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 4
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_party_entrenched"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 5
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_local_leaning"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 6
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
+		iconType = {
+			name = "STP_regions_88_local_dominant"
+			position = { x = 20 y = 38 }
+			quadTextureSprite = "GFX_STP_regions_state_88"
+			frame = 7
+			pdx_tooltip = "STP_region_88_map_tt"
+		}
 
-		instantTextBoxType = { name = "STP_regions_legend" position = { x = 16 y = 306 } text = "STP_regions_legend" font = "hoi_16mbs" maxWidth = 428 maxHeight = 44 fixedsize = yes format = center pdx_tooltip = "STP_regions_map_tt" }
+		instantTextBoxType = {
+			name = "STP_regions_legend"
+			position = { x = 16 y = 306 }
+			text = "STP_regions_legend"
+			font = "hoi_16mbs"
+			maxWidth = 428
+			maxHeight = 44
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_regions_map_tt"
+		}
 	}
 	containerWindowType = {
 		name = "ADISCORD_STP_party_factions_window"
 		position = { x = 0 y = 0 }
 		size = { width = 460 height = 472 }
-		instantTextBoxType = { name = "STP_pf_title" position = { x = 8 y = 4 } text = "STP_pf_title" font = "hoi_20b" maxWidth = 444 maxHeight = 26 format = center }
-		instantTextBoxType = { name = "STP_pf_total" position = { x = 8 y = 33 } text = "STP_pf_total" font = "hoi_16mbs" maxWidth = 444 maxHeight = 24 format = center pdx_tooltip = "STP_pf_formula_tt" }
-		iconType = { name = "STP_pf_conservatives_card" position = { x = 4 y = 64 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_conservatives_tt" }
-		iconType = { name = "STP_pf_conservatives_emblem" position = { x = 12 y = 72 } spriteType = "GFX_STP_pf_conservatives" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_conservatives_name" position = { x = 76 y = 72 } text = "STP_pf_conservatives_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_conservatives_influence" position = { x = 76 y = 110 } text = "STP_pf_conservatives_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_conservatives_support" position = { x = 76 y = 130 } text = "STP_pf_conservatives_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_conservatives_effect_icon" position = { x = 12 y = 132 } spriteType = "GFX_ADISCORD_economy_tax_texticon" scale = 0.7 pdx_tooltip = "STP_pf_conservatives_tt" }
-		instantTextBoxType = { name = "STP_pf_conservatives_effect_value" position = { x = 31 y = 130 } text = "STP_pf_conservatives_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_conservatives_tt" }
-		iconType = { name = "STP_pf_borons_card" position = { x = 234 y = 64 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_borons_tt" }
-		iconType = { name = "STP_pf_borons_emblem" position = { x = 242 y = 72 } spriteType = "GFX_STP_pf_borons" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_borons_name" position = { x = 306 y = 72 } text = "STP_pf_borons_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_borons_influence" position = { x = 306 y = 110 } text = "STP_pf_borons_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_borons_support" position = { x = 306 y = 130 } text = "STP_pf_borons_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_borons_effect_icon" position = { x = 242 y = 132 } spriteType = "GFX_construction_speed_texticon" scale = 0.7 pdx_tooltip = "STP_pf_borons_tt" }
-		instantTextBoxType = { name = "STP_pf_borons_effect_value" position = { x = 261 y = 130 } text = "STP_pf_borons_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_borons_tt" }
-		iconType = { name = "STP_pf_security_card" position = { x = 4 y = 162 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_security_tt" }
-		iconType = { name = "STP_pf_security_emblem" position = { x = 12 y = 170 } spriteType = "GFX_STP_pf_security" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_security_name" position = { x = 76 y = 170 } text = "STP_pf_security_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_security_influence" position = { x = 76 y = 208 } text = "STP_pf_security_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_security_support" position = { x = 76 y = 228 } text = "STP_pf_security_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_security_effect_icon" position = { x = 12 y = 230 } spriteType = "GFX_STP_pf_stability_effect" scale = 0.7 pdx_tooltip = "STP_pf_security_tt" }
-		instantTextBoxType = { name = "STP_pf_security_effect_value" position = { x = 31 y = 228 } text = "STP_pf_security_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_security_tt" }
-		iconType = { name = "STP_pf_army_card" position = { x = 234 y = 162 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_army_tt" }
-		iconType = { name = "STP_pf_army_emblem" position = { x = 242 y = 170 } spriteType = "GFX_STP_pf_army" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_army_name" position = { x = 306 y = 170 } text = "STP_pf_army_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_army_influence" position = { x = 306 y = 208 } text = "STP_pf_army_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_army_support" position = { x = 306 y = 228 } text = "STP_pf_army_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_army_effect_icon" position = { x = 242 y = 230 } spriteType = "GFX_STP_pf_organization_effect" scale = 0.7 pdx_tooltip = "STP_pf_army_tt" }
-		instantTextBoxType = { name = "STP_pf_army_effect_value" position = { x = 261 y = 228 } text = "STP_pf_army_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_army_tt" }
-		iconType = { name = "STP_pf_advisers_card" position = { x = 4 y = 260 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_advisers_tt" }
-		iconType = { name = "STP_pf_advisers_emblem" position = { x = 12 y = 268 } spriteType = "GFX_STP_pf_advisers" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_advisers_name" position = { x = 76 y = 268 } text = "STP_pf_advisers_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_advisers_influence" position = { x = 76 y = 306 } text = "STP_pf_advisers_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_advisers_support" position = { x = 76 y = 326 } text = "STP_pf_advisers_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_advisers_effect_icon" position = { x = 12 y = 328 } spriteType = "GFX_planning_speed_texticon" scale = 0.7 pdx_tooltip = "STP_pf_advisers_tt" }
-		instantTextBoxType = { name = "STP_pf_advisers_effect_value" position = { x = 31 y = 326 } text = "STP_pf_advisers_effect_display" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_advisers_tt" }
-		iconType = { name = "STP_pf_merchants_card" position = { x = 234 y = 260 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_merchants_tt" }
-		iconType = { name = "STP_pf_merchants_emblem" position = { x = 242 y = 268 } spriteType = "GFX_STP_pf_merchants" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_merchants_name" position = { x = 306 y = 268 } text = "STP_pf_merchants_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_merchants_influence" position = { x = 306 y = 306 } text = "STP_pf_merchants_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_merchants_support" position = { x = 306 y = 326 } text = "STP_pf_merchants_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_merchants_effect_icon" position = { x = 242 y = 328 } spriteType = "GFX_ADISCORD_economy_trade_texticon" scale = 0.7 pdx_tooltip = "STP_pf_merchants_tt" }
-		instantTextBoxType = { name = "STP_pf_merchants_effect_value" position = { x = 261 y = 326 } text = "STP_pf_merchants_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_merchants_tt" }
-		iconType = { name = "STP_pf_radicals_card" position = { x = 4 y = 358 } spriteType = "GFX_STP_pf_card" pdx_tooltip = "STP_pf_radicals_tt" }
-		iconType = { name = "STP_pf_radicals_emblem" position = { x = 12 y = 366 } spriteType = "GFX_STP_pf_radicals" alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_radicals_name" position = { x = 76 y = 366 } text = "STP_pf_radicals_name" font = "hoi_16mbs" maxWidth = 144 maxHeight = 36 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_radicals_influence" position = { x = 76 y = 404 } text = "STP_pf_radicals_influence_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		instantTextBoxType = { name = "STP_pf_radicals_support" position = { x = 76 y = 424 } text = "STP_pf_radicals_support_loc" font = "hoi_16mbs" maxWidth = 144 maxHeight = 20 fixedsize = yes alwaystransparent = yes }
-		iconType = { name = "STP_pf_radicals_effect_icon" position = { x = 12 y = 426 } spriteType = "GFX_ADISCORD_economy_burden_texticon" scale = 0.7 pdx_tooltip = "STP_pf_radicals_tt" }
-		instantTextBoxType = { name = "STP_pf_radicals_effect_value" position = { x = 31 y = 424 } text = "STP_pf_radicals_effect_value" font = "hoi_16mbs" maxWidth = 43 maxHeight = 20 fixedsize = yes format = center pdx_tooltip = "STP_pf_radicals_tt" }
-		instantTextBoxType = { name = "STP_pf_help" position = { x = 244 y = 368 } text = "STP_pf_help" font = "hoi_16mbs" maxWidth = 204 maxHeight = 84 fixedsize = yes pdx_tooltip = "STP_pf_formula_tt" }
+		instantTextBoxType = {
+			name = "STP_pf_title"
+			position = { x = 8 y = 4 }
+			text = "STP_pf_title"
+			font = "hoi_20b"
+			maxWidth = 444
+			maxHeight = 26
+			format = center
+		}
+		instantTextBoxType = {
+			name = "STP_pf_total"
+			position = { x = 8 y = 33 }
+			text = "STP_pf_total"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+			pdx_tooltip = "STP_pf_formula_tt"
+		}
+		iconType = {
+			name = "STP_pf_conservatives_card"
+			position = { x = 4 y = 64 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_conservatives_tt"
+		}
+		iconType = {
+			name = "STP_pf_conservatives_emblem"
+			position = { x = 12 y = 72 }
+			spriteType = "GFX_STP_pf_conservatives"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_conservatives_name"
+			position = { x = 76 y = 72 }
+			text = "STP_pf_conservatives_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_conservatives_influence"
+			position = { x = 76 y = 110 }
+			text = "STP_pf_conservatives_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_conservatives_support"
+			position = { x = 76 y = 130 }
+			text = "STP_pf_conservatives_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_conservatives_effect_icon"
+			position = { x = 12 y = 132 }
+			spriteType = "GFX_ADISCORD_economy_tax_texticon"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_conservatives_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_conservatives_effect_value"
+			position = { x = 31 y = 130 }
+			text = "STP_pf_conservatives_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_conservatives_tt"
+		}
+		iconType = {
+			name = "STP_pf_borons_card"
+			position = { x = 234 y = 64 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_borons_tt"
+		}
+		iconType = {
+			name = "STP_pf_borons_emblem"
+			position = { x = 242 y = 72 }
+			spriteType = "GFX_STP_pf_borons"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_borons_name"
+			position = { x = 306 y = 72 }
+			text = "STP_pf_borons_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_borons_influence"
+			position = { x = 306 y = 110 }
+			text = "STP_pf_borons_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_borons_support"
+			position = { x = 306 y = 130 }
+			text = "STP_pf_borons_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_borons_effect_icon"
+			position = { x = 242 y = 132 }
+			spriteType = "GFX_construction_speed_texticon"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_borons_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_borons_effect_value"
+			position = { x = 261 y = 130 }
+			text = "STP_pf_borons_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_borons_tt"
+		}
+		iconType = {
+			name = "STP_pf_security_card"
+			position = { x = 4 y = 162 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_security_tt"
+		}
+		iconType = {
+			name = "STP_pf_security_emblem"
+			position = { x = 12 y = 170 }
+			spriteType = "GFX_STP_pf_security"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_security_name"
+			position = { x = 76 y = 170 }
+			text = "STP_pf_security_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_security_influence"
+			position = { x = 76 y = 208 }
+			text = "STP_pf_security_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_security_support"
+			position = { x = 76 y = 228 }
+			text = "STP_pf_security_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_security_effect_icon"
+			position = { x = 12 y = 230 }
+			spriteType = "GFX_STP_pf_stability_effect"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_security_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_security_effect_value"
+			position = { x = 31 y = 228 }
+			text = "STP_pf_security_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_security_tt"
+		}
+		iconType = {
+			name = "STP_pf_army_card"
+			position = { x = 234 y = 162 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_army_tt"
+		}
+		iconType = {
+			name = "STP_pf_army_emblem"
+			position = { x = 242 y = 170 }
+			spriteType = "GFX_STP_pf_army"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_army_name"
+			position = { x = 306 y = 170 }
+			text = "STP_pf_army_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_army_influence"
+			position = { x = 306 y = 208 }
+			text = "STP_pf_army_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_army_support"
+			position = { x = 306 y = 228 }
+			text = "STP_pf_army_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_army_effect_icon"
+			position = { x = 242 y = 230 }
+			spriteType = "GFX_STP_pf_organization_effect"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_army_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_army_effect_value"
+			position = { x = 261 y = 228 }
+			text = "STP_pf_army_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_army_tt"
+		}
+		iconType = {
+			name = "STP_pf_advisers_card"
+			position = { x = 4 y = 260 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_advisers_tt"
+		}
+		iconType = {
+			name = "STP_pf_advisers_emblem"
+			position = { x = 12 y = 268 }
+			spriteType = "GFX_STP_pf_advisers"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_advisers_name"
+			position = { x = 76 y = 268 }
+			text = "STP_pf_advisers_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_advisers_influence"
+			position = { x = 76 y = 306 }
+			text = "STP_pf_advisers_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_advisers_support"
+			position = { x = 76 y = 326 }
+			text = "STP_pf_advisers_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_advisers_effect_icon"
+			position = { x = 12 y = 328 }
+			spriteType = "GFX_planning_speed_texticon"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_advisers_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_advisers_effect_value"
+			position = { x = 31 y = 326 }
+			text = "STP_pf_advisers_effect_display"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_advisers_tt"
+		}
+		iconType = {
+			name = "STP_pf_merchants_card"
+			position = { x = 234 y = 260 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_merchants_tt"
+		}
+		iconType = {
+			name = "STP_pf_merchants_emblem"
+			position = { x = 242 y = 268 }
+			spriteType = "GFX_STP_pf_merchants"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_merchants_name"
+			position = { x = 306 y = 268 }
+			text = "STP_pf_merchants_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_merchants_influence"
+			position = { x = 306 y = 306 }
+			text = "STP_pf_merchants_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_merchants_support"
+			position = { x = 306 y = 326 }
+			text = "STP_pf_merchants_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_merchants_effect_icon"
+			position = { x = 242 y = 328 }
+			spriteType = "GFX_ADISCORD_economy_trade_texticon"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_merchants_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_merchants_effect_value"
+			position = { x = 261 y = 326 }
+			text = "STP_pf_merchants_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_merchants_tt"
+		}
+		iconType = {
+			name = "STP_pf_radicals_card"
+			position = { x = 4 y = 358 }
+			spriteType = "GFX_STP_pf_card"
+			pdx_tooltip = "STP_pf_radicals_tt"
+		}
+		iconType = {
+			name = "STP_pf_radicals_emblem"
+			position = { x = 12 y = 366 }
+			spriteType = "GFX_STP_pf_radicals"
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_radicals_name"
+			position = { x = 76 y = 366 }
+			text = "STP_pf_radicals_name"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 36
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_radicals_influence"
+			position = { x = 76 y = 404 }
+			text = "STP_pf_radicals_influence_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "STP_pf_radicals_support"
+			position = { x = 76 y = 424 }
+			text = "STP_pf_radicals_support_loc"
+			font = "hoi_16mbs"
+			maxWidth = 144
+			maxHeight = 20
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "STP_pf_radicals_effect_icon"
+			position = { x = 12 y = 426 }
+			spriteType = "GFX_ADISCORD_economy_burden_texticon"
+			scale = 0.7
+			pdx_tooltip = "STP_pf_radicals_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_radicals_effect_value"
+			position = { x = 31 y = 424 }
+			text = "STP_pf_radicals_effect_value"
+			font = "hoi_16mbs"
+			maxWidth = 43
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			pdx_tooltip = "STP_pf_radicals_tt"
+		}
+		instantTextBoxType = {
+			name = "STP_pf_help"
+			position = { x = 244 y = 368 }
+			text = "STP_pf_help"
+			font = "hoi_16mbs"
+			maxWidth = 204
+			maxHeight = 84
+			fixedsize = yes
+			pdx_tooltip = "STP_pf_formula_tt"
+		}
 	}
-
 }

@@ -1,4 +1,5 @@
-ability = { #improved extra supplies. Need to change RAJ_quinine_tt loc if changing this
+ability = {
+	#improved extra supplies. Need to change RAJ_quinine_tt loc if changing this
 	quinine = {
 		name = ABILITY_QUININE
 		desc = ABILITY_QUININE_DESC
@@ -10,22 +11,20 @@ ability = { #improved extra supplies. Need to change RAJ_quinine_tt loc if chang
 				has_country_flag = has_quinine
 			}
 		}
-		
+
 		unit_modifiers = {
 			no_supply_grace = 240
 			attrition = -0.12
 			sickness_chance = -1
 			heat_attrition_factor = -0.35
 		}
-		
+
 		one_time_effect = {
 			supply_units = 240
 		}
-		
+
 		cost = 0.15
 		duration = 240
 		cooldown = 504
 	}
 }
-
-

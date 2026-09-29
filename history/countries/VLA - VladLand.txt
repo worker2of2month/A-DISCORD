@@ -25,6 +25,7 @@ set_politics = {
 	last_election = "2151.01.27"
 	elections_allowed = no
 }
+
 set_popularities = {
 	etatism = 23
 	chauvinism = 1

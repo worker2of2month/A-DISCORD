@@ -13,11 +13,15 @@ on_actions = {
 			if = {
 				limit = {
 					ROOT = { tag = SOL }
-					FROM = { OR = { tag = SRA tag = CSL } }
+					FROM = {
+						OR = {
+							tag = SRA
+							tag = CSL
+						}
+					}
 				}
 				ROOT = { ADISCORD_vorkerland_schedule_solarino_stalemate_deadline = yes }
 			}
-
 		}
 	}
 }

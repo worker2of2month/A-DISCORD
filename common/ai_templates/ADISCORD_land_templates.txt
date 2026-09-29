@@ -9,7 +9,10 @@ ADISCORD_garrison_templates = {
 	role = garrison
 	upgrade_prio = {
 		base = 1
-		modifier = { factor = 15 NOT = { ai_has_role_template = garrison } }
+		modifier = {
+			factor = 15
+			NOT = { ai_has_role_template = garrison }
+		}
 	}
 	ADISCORD_garrison_levy = {
 		enable = {
@@ -23,12 +26,29 @@ ADISCORD_garrison_templates = {
 					AND = {
 						has_global_flag = STP_cw_started
 						NOT = { has_global_flag = STP_cw_union_wars_finished }
-						OR = { tag = STP tag = STS tag = SRP }
+						OR = {
+							tag = STP
+							tag = STS
+							tag = SRP
+						}
 					}
-					AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+					AND = {
+						OR = {
+							tag = STP
+							tag = STS
+							tag = SRP
+						}
+						has_war = yes
+					}
 					AND = {
 						has_war = yes
-						OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+						OR = {
+							tag = NOD
+							tag = YPR
+							tag = COF
+							tag = TFF
+							tag = VAL
+						}
 					}
 				}
 			}
@@ -37,7 +57,9 @@ ADISCORD_garrison_templates = {
 		custom_icon = 7
 		upgrade_prio = { base = 2 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_militia = 4 } }
+		target_template = {
+			regiments = { ADISCORD_militia = 4 }
+		}
 	}
 }
 
@@ -51,12 +73,20 @@ ADISCORD_territorial_templates = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+			OR = {
+				tag = ZAO
+				tag = WPA
+				tag = WPS
+				tag = PWR
+				tag = PSD
+			}
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_militia = 4 } }
+		target_template = {
+			regiments = { ADISCORD_militia = 4 }
+		}
 	}
 	ADISCORD_stelander_line_brigade = {
 		enable = {
@@ -65,25 +95,46 @@ ADISCORD_territorial_templates = {
 				AND = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
-					OR = { tag = STP tag = STS tag = SRP }
+					OR = {
+						tag = STP
+						tag = STS
+						tag = SRP
+					}
 				}
-				AND = { OR = { tag = STP tag = STS tag = SRP } has_war = yes }
+				AND = {
+					OR = {
+						tag = STP
+						tag = STS
+						tag = SRP
+					}
+					has_war = yes
+				}
 			}
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_territorial = 6 } }
+		target_template = {
+			regiments = { ADISCORD_territorial = 6 }
+		}
 	}
 	ADISCORD_border_territorial_militia = {
 		enable = {
 			has_war = yes
-			OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = VAL }
+			OR = {
+				tag = NOD
+				tag = YPR
+				tag = COF
+				tag = TFF
+				tag = VAL
+			}
 		}
 		reinforce_prio = 1
 		upgrade_prio = { base = 14 }
 		can_upgrade_in_field = { always = yes }
-		target_template = { regiments = { ADISCORD_militia = 3 } }
+		target_template = {
+			regiments = { ADISCORD_militia = 3 }
+		}
 	}
 }
 
@@ -98,10 +149,14 @@ ADISCORD_infantry_templates = {
 		upgrade_prio = { base = 12 }
 		can_upgrade_in_field = {
 			ADISCORD_ai_can_refit_field_army = yes
-			NOT = { has_equipment = { artillery_equipment < 140 } }
+			NOT = {
+				has_equipment = { artillery_equipment < 140 }
+			}
 		}
 		target_min_match = 0.65
-		target_template = { regiments = { infantry = 6 } }
+		target_template = {
+			regiments = { infantry = 6 }
+		}
 		replace_at_match = 0.95
 		replace_with = ADISCORD_line_brigade
 	}
@@ -121,7 +176,10 @@ ADISCORD_infantry_templates = {
 		}
 		target_min_match = 0.75
 		target_template = {
-			regiments = { infantry = 8 ADISCORD_line_artillery = 1 }
+			regiments = {
+				infantry = 8
+				ADISCORD_line_artillery = 1
+			}
 		}
 		replace_at_match = 0.98
 		replace_with = ADISCORD_defensive_line_brigade
@@ -155,10 +213,14 @@ ADISCORD_infantry_templates = {
 				anti_air = 1
 				logistics_company = 1
 			}
-			regiments = { infantry = 7 ADISCORD_line_artillery = 1 }
+			regiments = {
+				infantry = 7
+				ADISCORD_line_artillery = 1
+			}
 		}
 	}
 }
+
 # Assault formations use the mobile role.  This keeps them as a limited
 # offensive reserve rather than replacing every ordinary infantry division.
 ADISCORD_assault_templates = {
@@ -223,7 +285,12 @@ ADISCORD_assault_templates = {
 		}
 		target_min_match = 0.75
 		target_template = {
-			support = { engineer = 1 artillery = 1 maintenance_company = 1 signal_company = 1 }
+			support = {
+				engineer = 1
+				artillery = 1
+				maintenance_company = 1
+				signal_company = 1
+			}
 			regiments = { ADISCORD_mechanized_infantry = 8 }
 		}
 	}
@@ -245,7 +312,10 @@ ADISCORD_mountaineer_templates = {
 			has_equipment = { artillery_equipment > 600 }
 		}
 		target_template = {
-			support = { engineer = 1 artillery = 1 }
+			support = {
+				engineer = 1
+				artillery = 1
+			}
 			regiments = { mountaineers = 6 }
 		}
 		replace_at_match = 0.98
@@ -298,7 +368,11 @@ ADISCORD_tank_templates = {
 			is_ai = yes
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-			OR = { tag = WKR tag = VAD tag = TVA }
+			OR = {
+				tag = WKR
+				tag = VAD
+				tag = TVA
+			}
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
 			num_of_military_factories > 2
@@ -318,7 +392,10 @@ ADISCORD_tank_templates = {
 				maintenance_company = 1
 				signal_company = 1
 			}
-			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
+			regiments = {
+				ADISCORD_mechanized_infantry = 6
+				ADISCORD_combat_platform = 4
+			}
 		}
 	}
 
@@ -342,8 +419,15 @@ ADISCORD_tank_templates = {
 			has_equipment = { support_equipment > 600 }
 		}
 		target_template = {
-			support = { engineer = 1 ADISCORD_recon_platform = 1 maintenance_company = 1 }
-			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
+			support = {
+				engineer = 1
+				ADISCORD_recon_platform = 1
+				maintenance_company = 1
+			}
+			regiments = {
+				ADISCORD_mechanized_infantry = 6
+				ADISCORD_combat_platform = 4
+			}
 		}
 		replace_at_match = 0.98
 		replace_with = ADISCORD_networked_tank_battlegroup
@@ -375,11 +459,14 @@ ADISCORD_tank_templates = {
 				ADISCORD_recovery_platform = 1
 				signal_company = 1
 			}
-			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_combat_platform = 4 }
+			regiments = {
+				ADISCORD_mechanized_infantry = 6
+				ADISCORD_combat_platform = 4
+			}
 		}
 	}
 
-ADISCORD_heavy_tank_battlegroup = {
+	ADISCORD_heavy_tank_battlegroup = {
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_heavy_platform_cores
@@ -396,8 +483,15 @@ ADISCORD_heavy_tank_battlegroup = {
 			has_equipment = { ADISCORD_armored_carrier_archetype > 400 }
 		}
 		target_template = {
-			support = { engineer = 1 maintenance_company = 1 logistics_company = 1 }
-			regiments = { ADISCORD_mechanized_infantry = 6 ADISCORD_heavy_platform = 4 }
+			support = {
+				engineer = 1
+				maintenance_company = 1
+				logistics_company = 1
+			}
+			regiments = {
+				ADISCORD_mechanized_infantry = 6
+				ADISCORD_heavy_platform = 4
+			}
 		}
 	}
 }

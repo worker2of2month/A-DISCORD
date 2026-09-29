@@ -1,13 +1,13 @@
-state={
-	id=14
-	name="STATE_14"
-	provinces={
-		2 75 5421 8540 16359 16373 16381 
+state = {
+	id = 14
+	name = "STATE_14"
+	provinces = {
+		2 75 5421 8540 16359 16373 16381
 	}
-	manpower=220000
-	buildings_max_level_factor=1.000
-	state_category=town
-	local_supplies=0.000
+	manpower = 220000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 0.000
 
 	history = {
 		owner = COF
@@ -20,7 +20,7 @@ state={
 			arms_factory = 2
 
 			75 = {
-			bunker = 2
+				bunker = 2
 			}
 		}
 		victory_points = { 75 5 }

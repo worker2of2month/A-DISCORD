@@ -39,31 +39,43 @@ on_actions = {
 		}
 	}
 
-
-    on_startup = {
-        effect = {
-			STP = { STP_qol_initialize_staff = yes STP_qol_initialize_party_leaders = yes }
+	on_startup = {
+		effect = {
+			STP = {
+				STP_qol_initialize_staff = yes
+				STP_qol_initialize_party_leaders = yes
+			}
 			STP = { STP_pf_refresh_on_load = yes }
-			STP = { STP_pw_party_reconcile_nod_invasion = yes STP_ch_reconcile = yes STP_ch_refresh = yes }
+			STP = {
+				STP_pw_party_reconcile_nod_invasion = yes
+				STP_ch_reconcile = yes
+				STP_ch_refresh = yes
+			}
 			STS = { STP_qol_initialize_staff = yes }
 
-            STP = {
-                if = {
-                    limit = {
-                        exists = yes
-                        NOT = { has_global_flag = STP_cw_started }
-                        OR = { has_country_flag = STP_sided_with_Maksim_flag has_country_flag = STP_sided_with_the_party_flag }
-                    }
-                    country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
-                }
-                if = {
-                    limit = { exists = yes STP_ps_war_active = yes has_variable = STP_ps_stage }
-                    STP_ps_refresh_defence = yes
-                }
-            }
-        }
-    }
-
+			STP = {
+				if = {
+					limit = {
+						exists = yes
+						NOT = { has_global_flag = STP_cw_started }
+						OR = {
+							has_country_flag = STP_sided_with_Maksim_flag
+							has_country_flag = STP_sided_with_the_party_flag
+						}
+					}
+					country_event = { id = ADISCORD_STP_preparation.26 hours = 1 }
+				}
+				if = {
+					limit = {
+						exists = yes
+						STP_ps_war_active = yes
+						has_variable = STP_ps_stage
+					}
+					STP_ps_refresh_defence = yes
+				}
+			}
+		}
+	}
 
 	on_weekly_VAL = {
 		effect = {
@@ -98,7 +110,8 @@ on_actions = {
 	}
 	on_daily_NOD = {
 		effect = {
-			if = { limit = { has_country_flag = STP_ps_expedition_ready }
+			if = {
+				limit = { has_country_flag = STP_ps_expedition_ready }
 				if = {
 					limit = {
 						OR = {
@@ -113,14 +126,33 @@ on_actions = {
 				}
 				else = { clr_country_flag = STP_ps_expedition_ready }
 			}
-			if = { limit = { has_country_flag = STP_ps_exile_received STP_ps_nod_can_host_exiles = no } STP_ps_close_exile = yes }
-			if = { limit = { has_idea = STP_ps_engineers_idea STP_ps_northern_front_active = no } remove_ideas = STP_ps_engineers_idea }
-			if = { limit = { has_idea = STP_ps_expedition_idea NOT = { has_war_with = STS } } remove_ideas = STP_ps_expedition_idea }
+			if = {
+				limit = {
+					has_country_flag = STP_ps_exile_received
+					STP_ps_nod_can_host_exiles = no
+				}
+				STP_ps_close_exile = yes
+			}
+			if = {
+				limit = {
+					has_idea = STP_ps_engineers_idea
+					STP_ps_northern_front_active = no
+				}
+				remove_ideas = STP_ps_engineers_idea
+			}
+			if = {
+				limit = {
+					has_idea = STP_ps_expedition_idea
+					NOT = { has_war_with = STS }
+				}
+				remove_ideas = STP_ps_expedition_idea
+			}
 		}
 	}
 	on_daily_STP = {
 		effect = {
-			if = { limit = { STP_ps_war_active = yes }
+			if = {
+				limit = { STP_ps_war_active = yes }
 				STP_ps_begin_defence = yes
 				STP_ps_poll_nodes = yes
 			}
@@ -152,9 +184,15 @@ on_actions = {
 					75 = { }
 					25 = {
 						random_list = {
-							45 = { country_event = { id = ADISCORD_STP_preparation.28 days = 1 } }
-							35 = { country_event = { id = ADISCORD_STP_preparation.29 days = 1 } }
-							20 = { country_event = { id = ADISCORD_STP_preparation.30 days = 1 } }
+							45 = {
+								country_event = { id = ADISCORD_STP_preparation.28 days = 1 }
+							}
+							35 = {
+								country_event = { id = ADISCORD_STP_preparation.29 days = 1 }
+							}
+							20 = {
+								country_event = { id = ADISCORD_STP_preparation.30 days = 1 }
+							}
 						}
 					}
 				}
@@ -165,9 +203,18 @@ on_actions = {
 	# Country removal has no shared callback here; reconcile only an open offer.
 	on_weekly_STS = {
 		effect = {
-			if = { limit = { STP_pw_can_reconstruct = yes NOT = { has_variable = STP_pw_recovery_progress } } STP_pw_begin_recovery = yes }
 			if = {
-				limit = { exists = yes has_country_flag = STP_pc_lib_package_pending }
+				limit = {
+					STP_pw_can_reconstruct = yes
+					NOT = { has_variable = STP_pw_recovery_progress }
+				}
+				STP_pw_begin_recovery = yes
+			}
+			if = {
+				limit = {
+					exists = yes
+					has_country_flag = STP_pc_lib_package_pending
+				}
 				STP_pc_offer_liberation_package = yes
 			}
 			if = {
@@ -186,7 +233,6 @@ on_actions = {
 				}
 				STP_cw_begin_hostilities = yes
 			}
-
 		}
 	}
 	# The split creates STS before the actual STP-STS war relation. Reconcile the
@@ -224,8 +270,14 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
 					OR = {
-						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
-						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+						AND = {
+							ROOT = { tag = STP }
+							FROM = { tag = STS }
+						}
+						AND = {
+							ROOT = { tag = STS }
+							FROM = { tag = STP }
+						}
 					}
 					STS = {
 						exists = yes
@@ -239,13 +291,19 @@ on_actions = {
 					# Production lines are country state and do not follow inherit_technology.
 					# Keep the newborn two-factory queue bounded and immediately useful.
 					add_equipment_production = {
-						equipment = { type = infantry_equipment_0 creator = "STS" }
+						equipment = {
+							type = infantry_equipment_0
+							creator = "STS"
+						}
 						requested_factories = 1
 						progress = 0.30
 						efficiency = 50
 					}
 					add_equipment_production = {
-						equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "STS" }
+						equipment = {
+							type = ADISCORD_squad_weapons_equipment_0
+							creator = "STS"
+						}
 						requested_factories = 1
 						progress = 0.30
 						efficiency = 50
@@ -258,8 +316,14 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
 					OR = {
-						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
-						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+						AND = {
+							ROOT = { tag = STP }
+							FROM = { tag = STS }
+						}
+						AND = {
+							ROOT = { tag = STS }
+							FROM = { tag = STP }
+						}
 					}
 					STS = {
 						exists = yes
@@ -277,14 +341,22 @@ on_actions = {
 				# of creating additional manpower or equipment for the resistance.
 				# destroy_unit/create_unit during declare_war_on corrupts the heap
 				# on the observer client; wait until the war relation exists.
-				STS = { country_event = { id = ADISCORD_STP_cw.31 hours = 1 } }
+				STS = {
+					country_event = { id = ADISCORD_STP_cw.31 hours = 1 }
+				}
 			}
 		}
 	}
 	on_weekly_NOD = {
 		effect = {
 			if = {
-				limit = { tag = NOD OR = { NOD_cw_intervention_possible = yes has_country_flag = NOD_cw_intervention_approved } }
+				limit = {
+					tag = NOD
+					OR = {
+						NOD_cw_intervention_possible = yes
+						has_country_flag = NOD_cw_intervention_approved
+					}
+				}
 				STP_cw_poll_nod_intervention = yes
 			}
 			if = {
@@ -327,22 +399,36 @@ on_actions = {
 			# Recover a lost native mission from the original election date.
 			if = {
 				limit = {
-					has_country_flag = { flag = STP_cw_elections_started days > 139 }
+					has_country_flag = {
+						flag = STP_cw_elections_started
+						days > 139
+					}
 					NOT = { has_active_mission = STP_cw_election_window }
 					NOT = { has_country_flag = STP_cw_elections_finished }
 					NOT = { has_global_flag = STP_cw_started }
 				}
 				STP_cw_finish_elections = yes
 			}
-			if = { limit = { STP_pf_active = yes }
+			if = {
+				limit = { STP_pf_active = yes }
 				STP_pf_initialize = yes
-				if = { limit = { OR = {
-					AND = { STP_pf_nod_contacts = yes check_variable = { var = STP_pf_nod_connected value = 0 compare = equals } }
-					AND = { STP_pf_nod_contacts = no check_variable = { var = STP_pf_nod_connected value = 1 compare = equals } }
-				} } STP_refresh_apparatus_loyalty = yes }
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								STP_pf_nod_contacts = yes
+								check_variable = { var = STP_pf_nod_connected value = 0 compare = equals }
+							}
+							AND = {
+								STP_pf_nod_contacts = no
+								check_variable = { var = STP_pf_nod_connected value = 1 compare = equals }
+							}
+						}
+					}
+					STP_refresh_apparatus_loyalty = yes
+				}
 			}
 			else = { STP_pf_clear = yes }
 		}
 	}
-
 }

@@ -1,5 +1,4 @@
 spriteTypes = {
-
 	spriteType = {
 		name = "GFX_supereventframe"
 		textureFile = "gfx/interface/superevents/supereventframe.png"

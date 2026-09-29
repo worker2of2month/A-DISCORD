@@ -280,8 +280,18 @@ STP_party_preparation_plan = {
 	name = "STP party preparation"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
-	abort = { OR = { NOT = { tag = STP } NOT = { STP_cw_preparation_open = yes } } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		STP_cw_preparation_open = yes
+		has_country_flag = STP_sided_with_the_party_flag
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			NOT = { STP_cw_preparation_open = yes }
+		}
+	}
 	ai_national_focuses = {
 		STP_cw_security_collegium
 		STP_PRESIDENT_REMAINS_IN_OFFICE
@@ -324,8 +334,19 @@ STP_party_civil_war_plan = {
 	name = "STP party civil war"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes has_war_with = STS NOT = { has_country_flag = STP_cw_postwar } }
-	abort = { OR = { NOT = { tag = STP } NOT = { has_war_with = STS } has_country_flag = STP_cw_postwar } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		has_war_with = STS
+		NOT = { has_country_flag = STP_cw_postwar }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			NOT = { has_war_with = STS }
+			has_country_flag = STP_cw_postwar
+		}
+	}
 
 	ai_national_focuses = {
 		STP_ps_temporary_presidium
@@ -358,8 +379,17 @@ STP_party_reconstruction_plan = {
 	name = "STP party reconstruction"
 	desc = ""
 	allowed = { original_tag = STP }
-	enable = { tag = STP is_ai = yes STP_pw_can_reconstruct = yes }
-	abort = { OR = { NOT = { tag = STP } NOT = { STP_pw_can_reconstruct = yes } } }
+	enable = {
+		tag = STP
+		is_ai = yes
+		STP_pw_can_reconstruct = yes
+	}
+	abort = {
+		OR = {
+			NOT = { tag = STP }
+			NOT = { STP_pw_can_reconstruct = yes }
+		}
+	}
 	ai_national_focuses = {
 		STP_cw_first_postwar_budget
 		STP_cw_restore_civil_authority
@@ -428,8 +458,17 @@ STP_ps_exile_plan = {
 	name = "Party exile"
 	desc = ""
 	allowed = { original_tag = NOD }
-	enable = { tag = NOD is_ai = yes has_country_flag = STP_ps_exile_received }
-	abort = { OR = { has_capitulated = yes has_country_flag = STP_ps_return_closed } }
+	enable = {
+		tag = NOD
+		is_ai = yes
+		has_country_flag = STP_ps_exile_received
+	}
+	abort = {
+		OR = {
+			has_capitulated = yes
+			has_country_flag = STP_ps_return_closed
+		}
+	}
 	ai_national_focuses = {
 		STP_ps_exile_office STP_ps_exile_survivors STP_ps_host_agreement
 		STP_ps_exile_formations STP_ps_return_terms STP_ps_return_campaign_focus

@@ -6,7 +6,10 @@ focus_tree = {
 	id = ADISCORD_iba_norvane_focus
 	country = {
 		factor = 0
-		modifier = { add = 100 tag = IBA }
+		modifier = {
+			add = 100
+			tag = IBA
+		}
 	}
 	default = no
 	continuous_focus_position = { x = 100 y = 555555 }

@@ -39,12 +39,12 @@
 @air_command_factor_3 = 0.80
 
 leader_traits = {
-
 	### Military Minister Traits
 
 	# 1 is worst, 3 is best
 
-	army_chief_defensive_1 = { # +5 Defensive efficiency
+	army_chief_defensive_1 = {
+		# +5 Defensive efficiency
 		sprite = 9
 		army_defence_factor = 0.05
 		experience_gain_army = @chief_experience_gain_low
@@ -61,7 +61,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_defensive_2 = { # +10 Defensive efficiency
+	army_chief_defensive_2 = {
+		# +10 Defensive efficiency
 		sprite = 9
 		army_defence_factor = 0.1
 		experience_gain_army = @chief_experience_gain_medium
@@ -78,7 +79,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_defensive_3 = { # +15 Defensive efficiency
+	army_chief_defensive_3 = {
+		# +15 Defensive efficiency
 		sprite = 9
 		army_defence_factor = 0.15
 		experience_gain_army = @chief_experience_gain_high
@@ -95,8 +97,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_chief_offensive_1 = { # +5 Offensive efficiency
+	army_chief_offensive_1 = {
+		# +5 Offensive efficiency
 		sprite = 7
 		army_attack_factor = 0.05
 		experience_gain_army = @chief_experience_gain_low
@@ -113,7 +115,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_offensive_2 = { # +10 Offensive efficiency
+	army_chief_offensive_2 = {
+		# +10 Offensive efficiency
 		sprite = 7
 		army_attack_factor = 0.1
 		experience_gain_army = @chief_experience_gain_medium
@@ -130,7 +133,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_offensive_3 = { # +15 Offensive efficiency
+	army_chief_offensive_3 = {
+		# +15 Offensive efficiency
 		sprite = 7
 		army_attack_factor = 0.15
 		experience_gain_army = @chief_experience_gain_high
@@ -147,7 +151,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_old_guard = { # Rate at which field experience is gained decreases by 10%
+	army_chief_old_guard = {
+		# Rate at which field experience is gained decreases by 10%
 		sprite = 5 # Should not need sprite, should mostly be secondary
 		experience_gain_army = @chief_experience_gain_low
 		max_command_power = 10
@@ -161,7 +166,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_drill_1 = { # Decreases training time for ground units
+	army_chief_drill_1 = {
+		# Decreases training time for ground units
 		sprite = 5
 		training_time_army_factor = -0.05
 		experience_gain_army = @chief_experience_gain_low
@@ -178,7 +184,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_drill_2 = { # Decreases training time for ground units
+	army_chief_drill_2 = {
+		# Decreases training time for ground units
 		sprite = 5
 		training_time_army_factor = -0.1
 		experience_gain_army = @chief_experience_gain_medium
@@ -195,7 +202,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_drill_3 = { # Decreases training time for ground units
+	army_chief_drill_3 = {
+		# Decreases training time for ground units
 		sprite = 5
 		training_time_army_factor = -0.15
 		experience_gain_army = @chief_experience_gain_high
@@ -211,7 +219,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	army_chief_reform_1 = {
 		sprite = 5
@@ -264,8 +271,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_chief_organizational_1 = { # Ground units get 4 more Organization
+	army_chief_organizational_1 = {
+		# Ground units get 4 more Organization
 		sprite = 5
 		army_org_factor = 0.04
 		experience_gain_army = @chief_experience_gain_low
@@ -282,7 +289,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_organizational_2 = { # Ground units get 8 more Organization
+	army_chief_organizational_2 = {
+		# Ground units get 8 more Organization
 		sprite = 5
 		army_org_factor = 0.08
 		experience_gain_army = @chief_experience_gain_medium
@@ -299,7 +307,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_organizational_3 = { # Ground units get 12 more Organization
+	army_chief_organizational_3 = {
+		# Ground units get 12 more Organization
 		sprite = 5
 		army_org_factor = 0.12
 		experience_gain_army = @chief_experience_gain_high
@@ -316,7 +325,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_planning_1 = { #
+	army_chief_planning_1 = {
+		#
 		sprite = 5
 		planning_speed = 0.05
 		experience_gain_army = @chief_experience_gain_low
@@ -333,7 +343,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_planning_2 = { #
+	army_chief_planning_2 = {
+		#
 		sprite = 5
 		planning_speed = 0.10
 		experience_gain_army = @chief_experience_gain_medium
@@ -350,7 +361,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_planning_3 = { #
+	army_chief_planning_3 = {
+		#
 		sprite = 5
 		planning_speed = 0.15
 		experience_gain_army = @chief_experience_gain_high
@@ -367,7 +379,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_morale_1 = { # Ground units get 4 more Morale
+	army_chief_morale_1 = {
+		# Ground units get 4 more Morale
 		sprite = 5
 		out_of_supply_factor = -0.03
 		experience_gain_army = @chief_experience_gain_low
@@ -384,7 +397,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_morale_2 = { # Ground units get 8 more Morale
+	army_chief_morale_2 = {
+		# Ground units get 8 more Morale
 		sprite = 5
 		out_of_supply_factor = -0.06
 		experience_gain_army = @chief_experience_gain_medium
@@ -401,7 +415,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_morale_3 = { # Ground units get 12 more Morale
+	army_chief_morale_3 = {
+		# Ground units get 12 more Morale
 		sprite = 5
 		out_of_supply_factor = -0.09
 		experience_gain_army = @chief_experience_gain_high
@@ -418,8 +433,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_chief_maneuver_1 = { # Ground units move 5% faster
+	army_chief_maneuver_1 = {
+		# Ground units move 5% faster
 		sprite = 5
 		army_speed_factor = 0.05
 		experience_gain_army = @chief_experience_gain_low
@@ -436,7 +451,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_maneuver_2 = { # Ground units move 10% faster
+	army_chief_maneuver_2 = {
+		# Ground units move 10% faster
 		sprite = 5
 		army_speed_factor = 0.1
 		experience_gain_army = @chief_experience_gain_medium
@@ -453,7 +469,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_maneuver_3 = { # Ground units move 15% faster
+	army_chief_maneuver_3 = {
+		# Ground units move 15% faster
 		sprite = 5
 		army_speed_factor = 0.15
 		experience_gain_army = @chief_experience_gain_high
@@ -524,8 +541,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_entrenchment_1 = { # Ground units entrench n% faster
+	army_entrenchment_1 = {
+		# Ground units entrench n% faster
 		sprite = 9
 		dig_in_speed_factor = 0.08
 		#experience_gain_army = @experience_gain_low
@@ -542,7 +559,8 @@ leader_traits = {
 		}
 	}
 
-	army_entrenchment_2 = { # Ground units entrench 8% faster
+	army_entrenchment_2 = {
+		# Ground units entrench 8% faster
 		sprite = 9
 		dig_in_speed_factor = 0.16
 		#experience_gain_army = @experience_gain_medium
@@ -559,7 +577,8 @@ leader_traits = {
 		}
 	}
 
-	army_entrenchment_3 = { # Ground units entrench 12% faster
+	army_entrenchment_3 = {
+		# Ground units entrench 12% faster
 		sprite = 9
 		dig_in_speed_factor = 0.24
 		#experience_gain_army = @experience_gain_high
@@ -576,11 +595,11 @@ leader_traits = {
 		}
 	}
 
-
-	army_armored_1 = { # +4 armor efficiency
+	army_armored_1 = {
+		# +4 armor efficiency
 		sprite = 8
 		army_armor_attack_factor = 0.05
-	    army_armor_defence_factor = 0.05
+		army_armor_defence_factor = 0.05
 		#experience_gain_army = @experience_gain_low
 
 		command_cap_increase = @tier1_cp_cap_increase
@@ -595,10 +614,11 @@ leader_traits = {
 		}
 	}
 
-	army_armored_2 = { # +8 armor efficiency
+	army_armored_2 = {
+		# +8 armor efficiency
 		sprite = 8
 		army_armor_attack_factor = 0.1
-	    army_armor_defence_factor = 0.1
+		army_armor_defence_factor = 0.1
 		#experience_gain_army = @experience_gain_medium
 
 		command_cap_increase = @tier2_cp_cap_increase
@@ -613,10 +633,11 @@ leader_traits = {
 		}
 	}
 
-	army_armored_3 = { # +12 armor efficiency
+	army_armored_3 = {
+		# +12 armor efficiency
 		sprite = 8
 		army_armor_attack_factor = 0.15
-	    army_armor_defence_factor = 0.15
+		army_armor_defence_factor = 0.15
 		#experience_gain_army = @experience_gain_high
 
 		command_cap_increase = @tier3_cp_cap_increase
@@ -631,8 +652,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_artillery_1 = { # +4 artillery efficiency
+	army_artillery_1 = {
+		# +4 artillery efficiency
 		sprite = 16
 		army_artillery_attack_factor = 0.1
 		army_artillery_defence_factor = 0.05
@@ -650,7 +671,8 @@ leader_traits = {
 		}
 	}
 
-	army_artillery_2 = { # +8 artillery efficiency
+	army_artillery_2 = {
+		# +8 artillery efficiency
 		sprite = 16
 		army_artillery_attack_factor = 0.15
 		army_artillery_defence_factor = 0.1
@@ -668,7 +690,8 @@ leader_traits = {
 		}
 	}
 
-	army_artillery_3 = { # +12 artillery efficiency
+	army_artillery_3 = {
+		# +12 artillery efficiency
 		sprite = 16
 		army_artillery_attack_factor = 0.2
 		army_artillery_defence_factor = 0.15
@@ -686,8 +709,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_infantry_1 = { # +4 infantry efficiency
+	army_infantry_1 = {
+		# +4 infantry efficiency
 		sprite = 5
 		army_infantry_attack_factor = 0.05
 		army_infantry_defence_factor = 0.1
@@ -705,7 +728,8 @@ leader_traits = {
 		}
 	}
 
-	army_infantry_2 = { # +8 infantry efficiency
+	army_infantry_2 = {
+		# +8 infantry efficiency
 		sprite = 5
 		army_infantry_attack_factor = 0.1
 		army_infantry_defence_factor = 0.15
@@ -723,7 +747,8 @@ leader_traits = {
 		}
 	}
 
-	army_infantry_3 = { # +12 infantry efficiency
+	army_infantry_3 = {
+		# +12 infantry efficiency
 		sprite = 5
 		army_infantry_attack_factor = 0.15
 		army_infantry_defence_factor = 0.2
@@ -741,8 +766,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_commando_1 = { # +4 paratrooper/marine/mountain efficiency
+	army_commando_1 = {
+		# +4 paratrooper/marine/mountain efficiency
 		sprite = 5
 		special_forces_attack_factor = 0.05
 		special_forces_cap_flat = 3
@@ -760,7 +785,8 @@ leader_traits = {
 		}
 	}
 
-	army_commando_2 = { # +8 paratrooper/marine/mountain efficiency
+	army_commando_2 = {
+		# +8 paratrooper/marine/mountain efficiency
 		sprite = 5
 		special_forces_attack_factor = 0.10
 		special_forces_cap_flat = 6
@@ -778,7 +804,8 @@ leader_traits = {
 		}
 	}
 
-	army_commando_3 = { # +12 paratrooper/marine/mountain efficiency
+	army_commando_3 = {
+		# +12 paratrooper/marine/mountain efficiency
 		sprite = 5
 		special_forces_attack_factor = 0.15
 		special_forces_cap_flat = 10
@@ -796,8 +823,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_cavalry_1 = { # +4 cavalry/motorized efficiency
+	army_cavalry_1 = {
+		# +4 cavalry/motorized efficiency
 		sprite = 17
 		cavalry_attack_factor = 0.05
 		cavalry_defence_factor = 0.05
@@ -815,7 +842,8 @@ leader_traits = {
 		}
 	}
 
-	army_cavalry_2 = { # +8 cavalry/motorized efficiency
+	army_cavalry_2 = {
+		# +8 cavalry/motorized efficiency
 		sprite = 17
 		cavalry_attack_factor = 0.1
 		cavalry_defence_factor = 0.1
@@ -833,7 +861,8 @@ leader_traits = {
 		}
 	}
 
-	army_cavalry_3 = { # +12 cavalry/motorized efficiency
+	army_cavalry_3 = {
+		# +12 cavalry/motorized efficiency
 		sprite = 17
 		cavalry_attack_factor = 0.15
 		cavalry_defence_factor = 0.15
@@ -851,7 +880,8 @@ leader_traits = {
 		}
 	}
 
-	army_CombinedArms_1 = { # +4 cavalry/motorized efficiency
+	army_CombinedArms_1 = {
+		# +4 cavalry/motorized efficiency
 		sprite = 8
 		motorized_attack_factor = 0.05
 		motorized_defence_factor = 0.05
@@ -871,7 +901,8 @@ leader_traits = {
 		}
 	}
 
-	army_CombinedArms_2 = { # +8 cavalry/motorized efficiency
+	army_CombinedArms_2 = {
+		# +8 cavalry/motorized efficiency
 		sprite = 8
 		motorized_attack_factor = 0.1
 		motorized_defence_factor = 0.1
@@ -891,7 +922,8 @@ leader_traits = {
 		}
 	}
 
-	army_CombinedArms_3 = { # +12 cavalry/motorized efficiency
+	army_CombinedArms_3 = {
+		# +12 cavalry/motorized efficiency
 		sprite = 8
 		motorized_attack_factor = 0.15
 		motorized_defence_factor = 0.15
@@ -911,8 +943,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_regrouping_1 = { # Org regenerates 4% faster
+	army_regrouping_1 = {
+		# Org regenerates 4% faster
 		sprite = 5
 		army_morale_factor = 0.04
 		#experience_gain_army = @experience_gain_low
@@ -929,7 +961,8 @@ leader_traits = {
 		}
 	}
 
-	army_regrouping_2 = { # Org regenerates 8% faster
+	army_regrouping_2 = {
+		# Org regenerates 8% faster
 		sprite = 5
 		army_morale_factor = 0.08
 		#experience_gain_army = @experience_gain_medium
@@ -946,7 +979,8 @@ leader_traits = {
 		}
 	}
 
-	army_regrouping_3 = { # Org regenerates 12% faster
+	army_regrouping_3 = {
+		# Org regenerates 12% faster
 		sprite = 5
 		army_morale_factor = 0.12
 		#experience_gain_army = @experience_gain_high
@@ -963,8 +997,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_concealment_1 = { # Ground units take less damage from air attacks
+	army_concealment_1 = {
+		# Ground units take less damage from air attacks
 		sprite = 9
 		enemy_army_bonus_air_superiority_factor = -0.05
 		#experience_gain_army = @experience_gain_low
@@ -981,7 +1015,8 @@ leader_traits = {
 		}
 	}
 
-	army_concealment_2 = { # Ground units take less damage from air attacks
+	army_concealment_2 = {
+		# Ground units take less damage from air attacks
 		sprite = 9
 		enemy_army_bonus_air_superiority_factor = -0.10
 		#experience_gain_army = @experience_gain_medium
@@ -998,7 +1033,8 @@ leader_traits = {
 		}
 	}
 
-	army_concealment_3 = { # Ground units take less damage from air attacks
+	army_concealment_3 = {
+		# Ground units take less damage from air attacks
 		sprite = 9
 		enemy_army_bonus_air_superiority_factor = -0.15
 		#experience_gain_army = @experience_gain_high
@@ -1015,8 +1051,8 @@ leader_traits = {
 		}
 	}
 
-
-	army_logistics_1 = {  # Ground units suffer 4% less attrition
+	army_logistics_1 = {
+		# Ground units suffer 4% less attrition
 		sprite = 6
 		attrition = -0.04
 		#experience_gain_army = @experience_gain_low
@@ -1033,7 +1069,8 @@ leader_traits = {
 		}
 	}
 
-	army_logistics_2 = {  # Ground units suffer 8% less attrition
+	army_logistics_2 = {
+		# Ground units suffer 8% less attrition
 		sprite = 6
 		attrition = -0.08
 		#experience_gain_army = @experience_gain_medium
@@ -1050,7 +1087,8 @@ leader_traits = {
 		}
 	}
 
-	army_logistics_3 = {  # Ground units suffer 12% less attrition
+	army_logistics_3 = {
+		# Ground units suffer 12% less attrition
 		sprite = 6
 		attrition = -0.12
 		#experience_gain_army = @experience_gain_high
@@ -1067,14 +1105,13 @@ leader_traits = {
 		}
 	}
 
-
 	army_radio_intelligence_1 = {
 		random = no
 		sprite = 15
 		civilian_intel_factor = 0.03
 		army_intel_factor = 0.03
 		navy_intel_factor = 0.03
-		airforce_intel_factor = 0.03		
+		airforce_intel_factor = 0.03
 		initiative_factor = 0.02
 
 		#experience_gain_army = @experience_gain_low
@@ -1097,7 +1134,7 @@ leader_traits = {
 		civilian_intel_factor = 0.06
 		army_intel_factor = 0.06
 		navy_intel_factor = 0.06
-		airforce_intel_factor = 0.06		
+		airforce_intel_factor = 0.06
 		initiative_factor = 0.04
 
 		#experience_gain_army = @experience_gain_medium
@@ -1120,7 +1157,7 @@ leader_traits = {
 		civilian_intel_factor = 0.09
 		army_intel_factor = 0.09
 		navy_intel_factor = 0.09
-		airforce_intel_factor = 0.09		
+		airforce_intel_factor = 0.09
 		initiative_factor = 0.06
 
 		#experience_gain_army = @experience_gain_high
@@ -1137,7 +1174,8 @@ leader_traits = {
 		}
 	}
 
-	army_german_ground_commander = { #FIN-specific, considered Genius (tier 3)
+	army_german_ground_commander = {
+		#FIN-specific, considered Genius (tier 3)
 		sprite = 5
 		amphibious_invasion = 0.1
 		paradrop_organization_factor = 0.1
@@ -1158,8 +1196,8 @@ leader_traits = {
 		}
 	}
 
-
-	air_chief_reform_1 = {  # Rate at which air experience is gained increases by 5%
+	air_chief_reform_1 = {
+		# Rate at which air experience is gained increases by 5%
 		sprite = 1
 		experience_gain_air = @chief_experience_gain_low
 		experience_gain_air_factor = 0.05
@@ -1176,7 +1214,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_reform_2 = {  # Rate at which air experience is gained increases by 10%
+	air_chief_reform_2 = {
+		# Rate at which air experience is gained increases by 10%
 		sprite = 1
 		experience_gain_air = @chief_experience_gain_medium
 		experience_gain_air_factor = 0.10
@@ -1193,7 +1232,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_reform_3 = {  # Rate at which air experience is gained increases by 15%
+	air_chief_reform_3 = {
+		# Rate at which air experience is gained increases by 15%
 		sprite = 1
 		experience_gain_air = @chief_experience_gain_high
 		experience_gain_air_factor = 0.15
@@ -1210,8 +1250,8 @@ leader_traits = {
 		}
 	}
 
-
-	air_chief_safety_1 = {  # Rate of air accidents reduced by 5%
+	air_chief_safety_1 = {
+		# Rate of air accidents reduced by 5%
 		sprite = 1
 		air_accidents_factor = -0.05
 		experience_gain_air = @chief_experience_gain_low
@@ -1228,7 +1268,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_safety_2 = {  # Rate of air accidents reduced by 10%
+	air_chief_safety_2 = {
+		# Rate of air accidents reduced by 10%
 		sprite = 1
 		air_accidents_factor = -0.1
 		experience_gain_air = @chief_experience_gain_medium
@@ -1245,7 +1286,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_safety_3 = {  # Rate of air accidents reduced by 15%
+	air_chief_safety_3 = {
+		# Rate of air accidents reduced by 15%
 		sprite = 1
 		air_accidents_factor = -0.15
 		experience_gain_air = @chief_experience_gain_high
@@ -1327,8 +1369,8 @@ leader_traits = {
 		}
 	}
 
-
-	air_chief_ground_support_1 = {  # Air superiority impact on land units improved by 5%
+	air_chief_ground_support_1 = {
+		# Air superiority impact on land units improved by 5%
 		sprite = 2
 		army_bonus_air_superiority_factor = 0.05
 		experience_gain_air = @chief_experience_gain_low
@@ -1345,7 +1387,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_ground_support_2 = {  # Air superiority impact on land units improved by 10%
+	air_chief_ground_support_2 = {
+		# Air superiority impact on land units improved by 10%
 		sprite = 2
 		army_bonus_air_superiority_factor = 0.1
 		experience_gain_air = @chief_experience_gain_medium
@@ -1362,7 +1405,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_ground_support_3 = {  # Air superiority impact on land units improved by 15%
+	air_chief_ground_support_3 = {
+		# Air superiority impact on land units improved by 15%
 		sprite = 2
 		army_bonus_air_superiority_factor = 0.15
 		experience_gain_air = @chief_experience_gain_high
@@ -1379,9 +1423,9 @@ leader_traits = {
 		}
 	}
 
-
 	# using factor in stead of values because it is applied in ALL weathers (means bonus in good weather)
-	air_chief_all_weather_1 = {  # +5 bad weather air efficiency
+	air_chief_all_weather_1 = {
+		# +5 bad weather air efficiency
 		sprite = 1
 		air_weather_penalty = -0.1
 		experience_gain_air = @chief_experience_gain_low
@@ -1398,7 +1442,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_all_weather_2 = {  # +10 bad weather air efficiency
+	air_chief_all_weather_2 = {
+		# +10 bad weather air efficiency
 		sprite = 1
 		air_weather_penalty = -0.2
 		experience_gain_air = @chief_experience_gain_medium
@@ -1415,7 +1460,8 @@ leader_traits = {
 		}
 	}
 
-	air_chief_all_weather_3 = {  # +15 bad weather air efficiency
+	air_chief_all_weather_3 = {
+		# +15 bad weather air efficiency
 		sprite = 1
 		air_weather_penalty = -0.3
 		experience_gain_air = @chief_experience_gain_high
@@ -1432,8 +1478,8 @@ leader_traits = {
 		}
 	}
 
-
-	air_air_combat_training_1 = {  # Chance of ace generating is increased by 5%
+	air_air_combat_training_1 = {
+		# Chance of ace generating is increased by 5%
 		sprite = 1
 		air_ace_generation_chance_factor = 0.05
 		#experience_gain_air = @experience_gain_low
@@ -1450,7 +1496,8 @@ leader_traits = {
 		}
 	}
 
-	air_air_combat_training_2 = {  # Chance of ace generating is increased by 10%
+	air_air_combat_training_2 = {
+		# Chance of ace generating is increased by 10%
 		sprite = 1
 		air_ace_generation_chance_factor = 0.1
 		#experience_gain_air = @experience_gain_medium
@@ -1467,7 +1514,8 @@ leader_traits = {
 		}
 	}
 
-	air_air_combat_training_3 = {  # Chance of ace generating is increased by 15%
+	air_air_combat_training_3 = {
+		# Chance of ace generating is increased by 15%
 		sprite = 1
 		air_ace_generation_chance_factor = 0.15
 		#experience_gain_air = @experience_gain_high
@@ -1541,7 +1589,6 @@ leader_traits = {
 		}
 	}
 
-
 	air_bomber_interception_1 = {
 		sprite = 1
 		air_intercept_efficiency = 0.05
@@ -1593,7 +1640,6 @@ leader_traits = {
 		}
 	}
 
-
 	air_air_superiority_1 = {
 		sprite = 1
 		air_superiority_efficiency = 0.05
@@ -1644,7 +1690,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	air_close_air_support_1 = {
 		sprite = 1
@@ -1699,7 +1744,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	air_strategic_bombing_1 = {
 		sprite = 2
@@ -1806,7 +1850,6 @@ leader_traits = {
 		}
 	}
 
-
 	air_airborne_1 = {
 		sprite = 1
 		paradrop_organization_factor = 1.20
@@ -1910,7 +1953,6 @@ leader_traits = {
 		}
 	}
 
-
 	navy_chief_naval_aviation_1 = {
 		sprite = 1
 		navy_carrier_air_attack_factor = 0.03
@@ -1967,7 +2009,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_chief_decisive_battle_1 = {
 		sprite = 3
@@ -2028,7 +2069,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_chief_commerce_raiding_1 = {
 		sprite = 3
@@ -2147,7 +2187,8 @@ leader_traits = {
 		}
 	}
 
-	navy_chief_maneuver_1 = { # Naval units move 5% faster
+	navy_chief_maneuver_1 = {
+		# Naval units move 5% faster
 		sprite = 3
 		naval_speed_factor = 0.05
 		experience_gain_navy = @chief_experience_gain_low
@@ -2164,7 +2205,8 @@ leader_traits = {
 		}
 	}
 
-	navy_chief_maneuver_2 = { # Naval units move 10% faster
+	navy_chief_maneuver_2 = {
+		# Naval units move 10% faster
 		sprite = 3
 		naval_speed_factor = 0.1
 		experience_gain_navy = @chief_experience_gain_medium
@@ -2181,7 +2223,8 @@ leader_traits = {
 		}
 	}
 
-	navy_chief_maneuver_3 = { # Naval units move 15% faster
+	navy_chief_maneuver_3 = {
+		# Naval units move 15% faster
 		sprite = 3
 		naval_speed_factor = 0.15
 		experience_gain_navy = @chief_experience_gain_high
@@ -2197,7 +2240,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_anti_submarine_1 = {
 		sprite = 4
@@ -2250,7 +2292,6 @@ leader_traits = {
 		}
 	}
 
-
 	navy_naval_air_defense_1 = {
 		sprite = 3
 		navy_anti_air_attack_factor = 0.08
@@ -2301,7 +2342,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_fleet_logistics_1 = {
 		sprite = 6
@@ -2354,7 +2394,6 @@ leader_traits = {
 		}
 	}
 
-
 	navy_amphibious_assault_1 = {
 		sprite = 3
 		amphibious_invasion = 0.05
@@ -2405,7 +2444,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_submarine_1 = {
 		sprite = 4
@@ -2461,7 +2499,6 @@ leader_traits = {
 		}
 	}
 
-
 	navy_capital_ship_1 = {
 		sprite = 3
 		navy_capital_ship_attack_factor = 0.05
@@ -2515,7 +2552,6 @@ leader_traits = {
 			}
 		}
 	}
-
 
 	navy_screen_1 = {
 		sprite = 3
@@ -2617,7 +2653,7 @@ leader_traits = {
 			factor = @navy_command_factor_3
 			modifier = {
 				factor = 0
-					always = no
+				always = no
 			}
 			modifier = {
 				factor = 0
@@ -2626,7 +2662,8 @@ leader_traits = {
 		}
 	}
 
-	evans_deakin_trait = { #at end for save compat
+	evans_deakin_trait = {
+		#at end for save compat
 		random = no
 		equipment_bonus = {
 			carrier = {
@@ -2651,18 +2688,19 @@ leader_traits = {
 			factor = 1
 		}
 	}
-	
-	cockatoo_trait = { #at end for save compat
+
+	cockatoo_trait = {
+		#at end for save compat
 		random = no
 		equipment_bonus = {
 			capital_ship = {
-				naval_range = 0.3 
-				sub_detection = 0.1 
+				naval_range = 0.3
+				sub_detection = 0.1
 				naval_speed = 0.1
 			}
 			screen_ship = {
-				naval_range = 0.3 
-				sub_detection = 0.1 
+				naval_range = 0.3
+				sub_detection = 0.1
 				naval_speed = 0.1
 			}
 		}
@@ -2671,28 +2709,28 @@ leader_traits = {
 			factor = 1
 		}
 	}
-	
+
 	cautious_arbiter = {
 		random = no
 		political_power_factor = 0.10
 		war_support_factor = -0.05
 		utilitarism_acceptance = 30
-		
-		ai_will_do = {
-			factor = 1
-		}
-	}
-	
-	viceroy_emeritus = {
-		random = no
-		generate_wargoal_tension = 0.1
-		
+
 		ai_will_do = {
 			factor = 1
 		}
 	}
 
-	surveyor = { 
+	viceroy_emeritus = {
+		random = no
+		generate_wargoal_tension = 0.1
+
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	surveyor = {
 		sprite = 5
 		army_speed_factor = 0.1
 		initiative_factor = 0.08
@@ -2711,7 +2749,8 @@ leader_traits = {
 		}
 	}
 
-	army_chief_army_high_command = { # Werner von Fritsch (Oberkommando des Heeres)
+	army_chief_army_high_command = {
+		# Werner von Fritsch (Oberkommando des Heeres)
 		sprite = 5
 		army_artillery_attack_factor = 0.15
 		army_artillery_defence_factor = 0.1

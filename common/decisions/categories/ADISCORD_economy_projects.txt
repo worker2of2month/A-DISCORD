@@ -1,6 +1,11 @@
 ADISCORD_economy_projects = {
 	icon = ADISCORD_science
-	allowed = { OR = { tag = VAL tag = STS } }
+	allowed = {
+		OR = {
+			tag = VAL
+			tag = STS
+		}
+	}
 	visible = { ADISCORD_economy_projects_unlocked = yes }
 	visible_when_empty = yes
 	priority = 15

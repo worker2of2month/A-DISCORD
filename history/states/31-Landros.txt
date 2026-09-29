@@ -1,11 +1,11 @@
-state={
-	id=31
-	name="STATE_31"
-	provinces={
-		5736 16354 16378 16452 
+state = {
+	id = 31
+	name = "STATE_31"
+	provinces = {
+		5736 16354 16378 16452
 	}
-	manpower=180000
-	buildings_max_level_factor=1.000
+	manpower = 180000
+	buildings_max_level_factor = 1.000
 
 	history = {
 		owner = BLD
@@ -15,5 +15,5 @@ state={
 	}
 
 	state_category = city
-	local_supplies=0.0 
+	local_supplies = 0.0
 }

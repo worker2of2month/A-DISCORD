@@ -13,7 +13,10 @@ equipments = {
 		fuel_consumption = 1.2
 		lend_lease_cost = 5
 		build_cost_ic = 2.5
-		resources = { steel = 1 rubber = 1 }
+		resources = {
+			steel = 1
+			rubber = 1
+		}
 	}
 
 	motorized_equipment_1 = {
@@ -34,7 +37,10 @@ equipments = {
 		reliability = 0.8
 		lend_lease_cost = 1
 		build_cost_ic = 4
-		resources = { aluminium = 1 steel = 2 }
+		resources = {
+			aluminium = 1
+			steel = 2
+		}
 	}
 
 	support_equipment_1 = {
@@ -53,7 +59,11 @@ equipments = {
 		visual_level = 1
 		reliability = 0.86
 		build_cost_ic = 4.8
-		resources = { aluminium = 2 steel = 2 rare_components = 1 }
+		resources = {
+			aluminium = 2
+			steel = 2
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_support_equipment_2183 = {
@@ -64,7 +74,11 @@ equipments = {
 		visual_level = 2
 		reliability = 0.9
 		build_cost_ic = 5.6
-		resources = { aluminium = 2 steel = 2 tungsten = 1 }
+		resources = {
+			aluminium = 2
+			steel = 2
+			tungsten = 1
+		}
 	}
 
 	ADISCORD_support_equipment_2200 = {
@@ -75,6 +89,11 @@ equipments = {
 		visual_level = 3
 		reliability = 0.82
 		build_cost_ic = 6.4
-		resources = { aluminium = 3 steel = 2 tungsten = 1 rare_components = 2 }
+		resources = {
+			aluminium = 3
+			steel = 2
+			tungsten = 1
+			rare_components = 2
+		}
 	}
 }

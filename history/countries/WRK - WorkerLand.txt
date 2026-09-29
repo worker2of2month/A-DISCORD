@@ -21,6 +21,7 @@ create_faction_from_template = {
 	template = faction_template_ADISCORD_standard
 	name = faction_vorkerland_confederation
 }
+
 add_to_faction = NAM
 add_to_faction = DAN
 add_to_faction = EYR
@@ -68,6 +69,7 @@ set_politics = {
 	last_election = "2135.10.27"
 	elections_allowed = no
 }
+
 set_popularities = {
 	etatism = 1
 	chauvinism = 26
@@ -86,50 +88,62 @@ set_autonomy = {
 	target = NAM
 	autonomous_state = autonomy_colony
 }
+
 set_autonomy = {
 	target = DAN
 	autonomous_state = autonomy_colony
 }
+
 set_autonomy = {
 	target = EYR
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = EGC
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = RIV
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = YOR
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = ZAO
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = PWR
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = VLA
 	autonomous_state = autonomy_district_in_Vorkerland
 }
+
 set_autonomy = {
 	target = ROM
 	autonomous_state = autonomy_republic_in_Vorkerland
 }
+
 set_autonomy = {
 	target = SOL
 	autonomous_state = autonomy_republic_in_Vorkerland
 }
+
 set_autonomy = {
 	target = TRU
 	autonomous_state = autonomy_republic_in_Vorkerland
 }
+
 set_autonomy = {
 	target = WCG
 	autonomous_state = autonomy_vorkerland_sanitary_gate

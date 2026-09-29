@@ -1,7 +1,9 @@
 characters = {
 	BRN_Emilia_Brandt = {
 		name = BRN_Emilia_Brandt
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_1 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_1 }
+		}
 		country_leader = {
 			ideology = etatism_ideology
 			expire = "2200.1.1.1"
@@ -11,7 +13,9 @@ characters = {
 	}
 	KRL_Edvard_Karel = {
 		name = KRL_Edvard_Karel
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_8 }
+		}
 		country_leader = {
 			ideology = aristocratic_hedonism
 			expire = "2200.1.1.1"
@@ -22,7 +26,9 @@ characters = {
 	}
 	VRA_Alrik_Varn = {
 		name = VRA_Alrik_Varn
-		portraits = { civilian = { large = GFX_portrait_VRA_Alrik_Varn } }
+		portraits = {
+			civilian = { large = GFX_portrait_VRA_Alrik_Varn }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -32,7 +38,9 @@ characters = {
 	}
 	FRS_Mikael_Frost = {
 		name = FRS_Mikael_Frost
-		portraits = { civilian = { large = GFX_portrait_FRS_Mikael_Frost } }
+		portraits = {
+			civilian = { large = GFX_portrait_FRS_Mikael_Frost }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -42,7 +50,9 @@ characters = {
 	}
 	KHV_Ilva_Havren = {
 		name = KHV_Ilva_Havren
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_4 }
+		}
 		country_leader = {
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"
@@ -52,7 +62,9 @@ characters = {
 	}
 	SRV_Eira_Sarven = {
 		name = SRV_Eira_Sarven
-		portraits = { civilian = { large = GFX_portrait_SRV_Eira_Sarven } }
+		portraits = {
+			civilian = { large = GFX_portrait_SRV_Eira_Sarven }
+		}
 		country_leader = {
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"
@@ -62,7 +74,9 @@ characters = {
 	}
 	ELN_Taal_Elander = {
 		name = ELN_Taal_Elander
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_7 }
+		}
 		country_leader = {
 			ideology = technocracy_ideology
 			expire = "2200.1.1.1"
@@ -72,7 +86,9 @@ characters = {
 	}
 	AUR_Sofia_Aurell = {
 		name = AUR_Sofia_Aurell
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_6 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_6 }
+		}
 		country_leader = {
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
@@ -82,7 +98,9 @@ characters = {
 	}
 	HON_Honter_Woke = {
 		name = HON_Honter_Woke
-		portraits = { civilian = { large = GFX_portrait_HON_Honter_Woke } }
+		portraits = {
+			civilian = { large = GFX_portrait_HON_Honter_Woke }
+		}
 		country_leader = {
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
@@ -93,7 +111,9 @@ characters = {
 	}
 	SVL_Marta_Seval = {
 		name = SVL_Marta_Seval
-		portraits = { civilian = { large = GFX_portrait_SVL_Marta_Seval } }
+		portraits = {
+			civilian = { large = GFX_portrait_SVL_Marta_Seval }
+		}
 		country_leader = {
 			ideology = humanism_ideology
 			expire = "2200.1.1.1"
@@ -103,7 +123,9 @@ characters = {
 	}
 	NVR_Leif_Norven = {
 		name = NVR_Leif_Norven
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_5 }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -113,7 +135,9 @@ characters = {
 	}
 	SKN_Ren_Skad = {
 		name = SKN_Ren_Skad
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_9 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_9 }
+		}
 		country_leader = {
 			ideology = etatism_ideology
 			expire = "2200.1.1.1"
@@ -124,7 +148,9 @@ characters = {
 	}
 	TMR_Mira_Timer = {
 		name = TMR_Mira_Timer
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_7 }
+		}
 		country_leader = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
@@ -134,7 +160,9 @@ characters = {
 	}
 	LYS_Cassian_Lys = {
 		name = LYS_Cassian_Lys
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_8 }
+		}
 		country_leader = {
 			ideology = hedonism_ideology
 			expire = "2200.1.1.1"
@@ -144,7 +172,9 @@ characters = {
 	}
 	KDL_Oren_Kadel = {
 		name = KDL_Oren_Kadel
-		portraits = { civilian = { large = GFX_portrait_KDL_Oren_Kadel } }
+		portraits = {
+			civilian = { large = GFX_portrait_KDL_Oren_Kadel }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -154,7 +184,9 @@ characters = {
 	}
 	VES_Oskar_Vest = {
 		name = VES_Oskar_Vest
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_2 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_2 }
+		}
 		country_leader = {
 			ideology = etatism_ideology
 			expire = "2200.1.1.1"
@@ -165,7 +197,9 @@ characters = {
 	}
 	DRV_Council_of_Free_Valleys = {
 		name = DRV_Council_of_Free_Valleys
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_3 }
+		}
 		country_leader = {
 			ideology = anarchism_ideology
 			expire = "2200.1.1.1"
@@ -175,7 +209,9 @@ characters = {
 	}
 	ORV_Anton_Orval = {
 		name = ORV_Anton_Orval
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_5 }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -185,7 +221,9 @@ characters = {
 	}
 	ARS_Lina_Arsal = {
 		name = ARS_Lina_Arsal
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_7 }
+		}
 		country_leader = {
 			ideology = utilitarism_ideology
 			expire = "2200.1.1.1"
@@ -195,7 +233,9 @@ characters = {
 	}
 	VLD_Irma_Vald = {
 		name = VLD_Irma_Vald
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_3 } }
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_3 }
+		}
 		country_leader = {
 			ideology = pragmatism_ideology
 			expire = "2200.1.1.1"
@@ -205,7 +245,9 @@ characters = {
 	}
 	MON_Marius_II_Arken = {
 		name = MON_Marius_II_Arken
-		portraits = { civilian = { large = GFX_portrait_MON_Marius_II_Arken } }
+		portraits = {
+			civilian = { large = GFX_portrait_MON_Marius_II_Arken }
+		}
 		country_leader = {
 			ideology = chauvinism_ideology
 			expire = "2200.1.1.1"

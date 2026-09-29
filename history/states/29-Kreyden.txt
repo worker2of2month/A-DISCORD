@@ -1,25 +1,25 @@
-state={
-	id=29
-	name="STATE_29"
-	provinces={
-		16345 
+state = {
+	id = 29
+	name = "STATE_29"
+	provinces = {
+		16345
 	}
-	manpower=1800000
-	buildings_max_level_factor=1.000
-	state_category=city
-	local_supplies=0.000
+	manpower = 1800000
+	buildings_max_level_factor = 1.000
+	state_category = city
+	local_supplies = 0.000
 
-	history={
+	history = {
 		owner = STP
 		buildings = {
 			infrastructure = 4
-			industrial_complex  = 4
+			industrial_complex = 4
 		}
 		add_core_of = STP
 		victory_points = { 16345 10 }
 	}
 	resources = {
-        chromium = 28
-        aluminium = 12
-    }
+		chromium = 28
+		aluminium = 12
+	}
 }

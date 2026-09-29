@@ -1,4 +1,3 @@
-
 objectTypes = {
 	pdxmesh = {
 		name = "ADISCORD_global_mesh"
@@ -7,8 +6,8 @@ objectTypes = {
 		cull_distance = 5555.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
 
@@ -20,8 +19,8 @@ objectTypes = {
 		cull_distance = 400.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
 
@@ -33,8 +32,8 @@ objectTypes = {
 		cull_distance = 2000.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
 
@@ -46,11 +45,10 @@ objectTypes = {
 		cull_distance = 2000.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
-
 
 objectTypes = {
 	pdxmesh = {
@@ -60,8 +58,8 @@ objectTypes = {
 		cull_distance = 8000.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
 
@@ -73,42 +71,39 @@ objectTypes = {
 		cull_distance = 400.0
 
 		meshsettings = {
-            shader = "PdxMeshAdvanced"
-        }
+			shader = "PdxMeshAdvanced"
+		}
 	}
 }
 
 objectTypes = {
-
-
-
 	pdxmesh = {
 		name = "cityblock_mesh"
-		file = "gfx/models/buildings/city_4_04.mesh"		
+		file = "gfx/models/buildings/city_4_04.mesh"
 		scale = 1.0
 		cull_distance = 400
 	}
 	pdxmesh = {
 		name = "cityblock2_mesh"
-		file = "gfx/models/buildings/city_4_03.mesh"		
+		file = "gfx/models/buildings/city_4_03.mesh"
 		scale = 1.0
 		cull_distance = 400
 	}
 	pdxmesh = {
 		name = "cityblock3_mesh"
-		file = "gfx/models/buildings/western_buildings_4_02.mesh"		
+		file = "gfx/models/buildings/western_buildings_4_02.mesh"
 		scale = 1.0
 		cull_distance = 400
 	}
 	pdxmesh = {
 		name = "french_city1_mesh"
-		file = "gfx/models/buildings/french_city_4_01.mesh"		
+		file = "gfx/models/buildings/french_city_4_01.mesh"
 		scale = 1.0
 		cull_distance = 400
 	}
 	pdxmesh = {
 		name = "french_city2_mesh"
-		file = "gfx/models/buildings/french_city_4_02.mesh"		
+		file = "gfx/models/buildings/french_city_4_02.mesh"
 		scale = 1.0
 		cull_distance = 400
 	}
@@ -120,8 +115,14 @@ objectTypes = {
 		file = "gfx/models/buildings/ADISCORD_unity_tower/ADISCORD_unity_tower_destruction.mesh"
 		scale = 1
 		cull_distance = 8000.0
-		animation = { id = "collapse" type = "ADISCORD_unity_tower_collapse_animation" }
-		animation = { id = "ruins" type = "ADISCORD_unity_tower_ruins_animation" }
+		animation = {
+			id = "collapse"
+			type = "ADISCORD_unity_tower_collapse_animation"
+		}
+		animation = {
+			id = "ruins"
+			type = "ADISCORD_unity_tower_ruins_animation"
+		}
 	}
 }
 
@@ -182,17 +183,19 @@ objectTypes = {
 		cull_distance = 600
 	}
 }
+
 # END ADISCORD Vorkensberg city
 
 # BEGIN ADISCORD Kefreyt arms combine
 objectTypes = {
-    pdxmesh = {
-        name = "ADISCORD_kefreyt_arms_combine_mesh"
-        file = "gfx/models/buildings/VAL_arms_combine/ADISCORD_kefreyt_arms_combine.mesh"
-        scale = 1.0
-        cull_distance = 1800.0
-    }
+	pdxmesh = {
+		name = "ADISCORD_kefreyt_arms_combine_mesh"
+		file = "gfx/models/buildings/VAL_arms_combine/ADISCORD_kefreyt_arms_combine.mesh"
+		scale = 1.0
+		cull_distance = 1800.0
+	}
 }
+
 # END ADISCORD Kefreyt arms combine
 
 # BEGIN ADISCORD SHL palace
@@ -205,4 +208,5 @@ objectTypes = {
 		cull_distance = 1800
 	}
 }
+
 # END ADISCORD SHL palace

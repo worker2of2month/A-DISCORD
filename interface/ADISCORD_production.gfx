@@ -1,5 +1,4 @@
 spriteTypes = {
-
 	corneredTileSpriteType = {
 		name = "GFX_ADISCORD_production_window_bg"
 		size = { x = 192 y = 192 }

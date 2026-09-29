@@ -6,12 +6,21 @@ shared_focus = {
 
 	cost = 3
 
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
 	completion_reward = { add_political_power = 35 }
 }
+
 shared_focus = {
 	id = STP_ps_exile_survivors
 	icon = GFX_goal_generic_army_doctrines
@@ -20,12 +29,21 @@ shared_focus = {
 
 	cost = 3
 	prerequisite = { focus = STP_ps_exile_office }
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
 	completion_reward = { army_experience = 15 }
 }
+
 shared_focus = {
 	id = STP_ps_host_agreement
 	icon = GFX_focus_generic_treaty
@@ -34,12 +52,21 @@ shared_focus = {
 
 	cost = 3
 	prerequisite = { focus = STP_ps_exile_survivors }
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
 	completion_reward = { add_command_power = 15 }
 }
+
 shared_focus = {
 	id = STP_ps_exile_formations
 	icon = GFX_goal_generic_army_doctrines
@@ -48,12 +75,24 @@ shared_focus = {
 
 	cost = 3
 	prerequisite = { focus = STP_ps_host_agreement }
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
-	completion_reward = { unlock_decision_tooltip = STP_ps_exile_training  unlock_decision_tooltip = STP_ps_exile_formation }
+	completion_reward = {
+		unlock_decision_tooltip = STP_ps_exile_training
+		unlock_decision_tooltip = STP_ps_exile_formation
+	}
 }
+
 shared_focus = {
 	id = STP_ps_return_terms
 	icon = GFX_focus_generic_treaty
@@ -62,12 +101,21 @@ shared_focus = {
 
 	cost = 3
 	prerequisite = { focus = STP_ps_exile_formations }
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
 	completion_reward = { unlock_decision_tooltip = STP_ps_accept_return_terms }
 }
+
 shared_focus = {
 	id = STP_ps_return_campaign_focus
 	icon = GFX_goal_generic_army_doctrines
@@ -76,9 +124,17 @@ shared_focus = {
 
 	cost = 3
 	prerequisite = { focus = STP_ps_return_terms }
-	allow_branch = { tag = NOD has_country_flag = STP_ps_exile_received }
-	available = { custom_trigger_tooltip = { tooltip = STP_ps_program_available_tt  STP_ps_nod_can_host_exiles = yes   } }
+	allow_branch = {
+		tag = NOD
+		has_country_flag = STP_ps_exile_received
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = STP_ps_program_available_tt
+			STP_ps_nod_can_host_exiles = yes
+		}
+	}
 	cancel_if_invalid = yes
 	ai_will_do = { base = 4 }
-	completion_reward = { unlock_decision_tooltip = STP_ps_launch_return  }
+	completion_reward = { unlock_decision_tooltip = STP_ps_launch_return }
 }

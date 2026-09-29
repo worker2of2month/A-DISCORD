@@ -39,8 +39,12 @@ ideas = {
 					has_war = no
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_society_type_agrarian = {
@@ -71,8 +75,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_society_type_industrial = {
@@ -105,8 +113,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_society_type_post_industrial = {
@@ -119,7 +131,6 @@ ideas = {
 					always = no
 				}
 			}
-
 
 			modifier = {
 				research_speed_factor = 0.0525
@@ -148,8 +159,12 @@ ideas = {
 					}
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_society_type_information = {
@@ -162,7 +177,6 @@ ideas = {
 					always = no
 				}
 			}
-
 
 			modifier = {
 				research_speed_factor = 0.09
@@ -193,8 +207,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_society_type_municipal_autonomy = {
@@ -217,13 +235,21 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = humanism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
-
-
 
 	ADISCORD_information_laws = {
 		law = yes
@@ -248,8 +274,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_information_licensed_press = {
@@ -268,8 +298,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_information_state_bulletins = {
@@ -292,8 +326,12 @@ ideas = {
 					has_government = etatism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_information_wartime_censorship = {
@@ -323,8 +361,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_information_sealed_networks = {
@@ -358,10 +400,13 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
-
 	}
 
 	ADISCORD_taxation_laws = {
@@ -381,8 +426,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_taxation_balanced_register = {
@@ -403,8 +452,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_taxation_progressive_brackets = {
@@ -430,8 +483,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_taxation_industrial_tariffs = {
@@ -459,8 +516,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_taxation_extraction_quotas = {
@@ -500,8 +561,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_taxation_corporate_assessment = {
@@ -517,9 +582,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = pragmatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -539,8 +614,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_military_organization_cadre_army = {
@@ -560,8 +639,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_military_organization_contract_brigades = {
@@ -581,8 +664,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_military_organization_general_staff = {
@@ -610,8 +697,12 @@ ideas = {
 					is_major = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_military_organization_total_defense_grid = {
@@ -645,8 +736,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_military_organization_territorial_reserves = {
@@ -662,9 +757,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = pragmatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -692,8 +797,12 @@ ideas = {
 					has_government = utilitarism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_welfare_basic_services = {
@@ -712,8 +821,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_welfare_social_insurance = {
@@ -737,8 +850,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_welfare_universal_provision = {
@@ -771,8 +888,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_welfare_rationed_support = {
@@ -805,8 +926,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_welfare_employer_insurance = {
@@ -822,9 +947,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = hedonism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -844,8 +979,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_education_basic_schools = {
@@ -863,8 +1002,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_education_civic_curriculum = {
@@ -888,8 +1031,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_education_technical_institutes = {
@@ -916,8 +1063,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_education_elite_academies = {
@@ -950,8 +1101,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_education_apprenticeship = {
@@ -967,9 +1122,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = pragmatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -989,8 +1154,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_healthcare_basic_clinics = {
@@ -1009,8 +1178,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_healthcare_public_hospitals = {
@@ -1034,8 +1207,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_healthcare_preventive_medicine = {
@@ -1060,8 +1237,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_healthcare_military_medical_service = {
@@ -1093,8 +1274,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_healthcare_mutual_insurance = {
@@ -1110,9 +1295,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = humanism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -1156,7 +1351,11 @@ ideas = {
 				factor = 1
 				modifier = {
 					factor = 20
-					check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
+					check_variable = {
+						var = STP_pf_radicals_influence
+						value = STP_pf_conservatives_influence
+						compare = greater_than_or_equals
+					}
 				}
 			}
 		}
@@ -1197,11 +1396,14 @@ ideas = {
 				factor = 1
 				modifier = {
 					factor = 20
-					check_variable = { var = STP_pf_conservatives_influence value = STP_pf_radicals_influence compare = greater_than_or_equals }
+					check_variable = {
+						var = STP_pf_conservatives_influence
+						value = STP_pf_radicals_influence
+						compare = greater_than_or_equals
+					}
 				}
 			}
 		}
-
 
 		ADISCORD_cultural_policy_tolerated_subcultures = {
 			picture = ADISCORD_law_cultural_policy_tolerated_subcultures
@@ -1224,8 +1426,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_cultural_policy_public_entertainment = {
@@ -1244,8 +1450,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_cultural_policy_civic_festivals = {
@@ -1261,8 +1471,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_cultural_policy_avant_garde_patronage = {
@@ -1294,8 +1508,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_cultural_policy_national_mythmaking = {
@@ -1329,8 +1547,12 @@ ideas = {
 					}
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_cultural_policy_heritage_protection = {
@@ -1346,9 +1568,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = pragmatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -1368,8 +1600,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_industrial_policy_balanced_workshops = {
@@ -1388,8 +1624,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_industrial_policy_civilian_expansion = {
@@ -1414,8 +1654,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_industrial_policy_military_prioritization = {
@@ -1449,8 +1693,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_industrial_policy_state_planning_boards = {
@@ -1488,8 +1736,12 @@ ideas = {
 					}
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_industrial_policy_export_contracts = {
@@ -1505,9 +1757,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = hedonism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -1565,8 +1827,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_labor_policy_guild_protections = {
@@ -1590,8 +1856,12 @@ ideas = {
 					has_government = humanism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_labor_policy_regulated_shifts = {
@@ -1608,8 +1878,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_labor_policy_technocratic_work_norms = {
@@ -1640,8 +1914,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_labor_policy_mobilized_labor = {
@@ -1674,8 +1952,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_labor_policy_collective_bargaining = {
@@ -1691,9 +1973,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = humanism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -1715,8 +2007,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_infrastructure_regional_roadworks = {
@@ -1732,8 +2028,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_infrastructure_rail_corridors = {
@@ -1758,8 +2058,12 @@ ideas = {
 					is_major = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_infrastructure_strategic_highways = {
@@ -1788,8 +2092,12 @@ ideas = {
 					has_war_support > 0.35
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_infrastructure_military_depots = {
@@ -1821,8 +2129,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_infrastructure_port_network = {
@@ -1838,9 +2150,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = hedonism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = hedonism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -1863,8 +2185,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_officer_corps_merit_commissions = {
@@ -1888,8 +2214,12 @@ ideas = {
 					has_government = technocracy
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_officer_corps_political_commissars = {
@@ -1921,8 +2251,12 @@ ideas = {
 					has_government = etatism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_officer_corps_general_staff_academy = {
@@ -1951,8 +2285,12 @@ ideas = {
 					is_major = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_officer_corps_emergency_promotions = {
@@ -1983,8 +2321,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_officer_corps_field_commissions = {
@@ -2000,9 +2342,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = pragmatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = pragmatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -2023,8 +2375,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_logistics_civilian_contracts = {
@@ -2042,8 +2398,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_logistics_centralized_depots = {
@@ -2068,8 +2428,12 @@ ideas = {
 					is_major = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_logistics_motorized_supply = {
@@ -2098,8 +2462,12 @@ ideas = {
 					has_war_support > 0.35
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_logistics_emergency_requisitioning = {
@@ -2131,8 +2499,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_logistics_regional_warehouses = {
@@ -2147,9 +2519,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = etatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = etatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -2168,8 +2550,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_training_basic_drills = {
@@ -2188,8 +2574,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_training_standardized_program = {
@@ -2205,8 +2595,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_training_officer_led_wargames = {
@@ -2235,8 +2629,12 @@ ideas = {
 					is_major = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_training_accelerated_bootcamps = {
@@ -2269,8 +2667,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_training_reserve_cycles = {
@@ -2286,9 +2688,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = etatism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = etatism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -2308,8 +2720,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_internal_security_local_garrisons = {
@@ -2328,8 +2744,12 @@ ideas = {
 			ai_will_do = {
 				factor = 3
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_internal_security_investigative_bureaus = {
@@ -2353,8 +2773,12 @@ ideas = {
 					has_government = etatism
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_internal_security_emergency_patrols = {
@@ -2386,8 +2810,12 @@ ideas = {
 					has_war = yes
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_internal_security_internal_directorate = {
@@ -2425,8 +2853,12 @@ ideas = {
 					}
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_internal_security_civilian_oversight = {
@@ -2442,9 +2874,19 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			ai_will_do = { factor = 1 modifier = { factor = 3 has_government = humanism } }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			ai_will_do = {
+				factor = 1
+				modifier = {
+					factor = 3
+					has_government = humanism
+				}
+			}
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -2520,7 +2962,11 @@ ideas = {
 				factor = 1
 				modifier = {
 					factor = 20
-					check_variable = { var = STP_pf_conservatives_influence value = STP_pf_radicals_influence compare = greater_than_or_equals }
+					check_variable = {
+						var = STP_pf_conservatives_influence
+						value = STP_pf_radicals_influence
+						compare = greater_than_or_equals
+					}
 				}
 			}
 		}
@@ -2562,7 +3008,11 @@ ideas = {
 				factor = 1
 				modifier = {
 					factor = 20
-					check_variable = { var = STP_pf_radicals_influence value = STP_pf_conservatives_influence compare = greater_than_or_equals }
+					check_variable = {
+						var = STP_pf_radicals_influence
+						value = STP_pf_conservatives_influence
+						compare = greater_than_or_equals
+					}
 				}
 			}
 		}
@@ -2611,8 +3061,12 @@ ideas = {
 			default = yes
 			allowed = { always = yes }
 			available = { always = yes }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 1 }
 		}
@@ -2628,8 +3082,12 @@ ideas = {
 				war_support_factor = 0.03
 				stability_factor = -0.025
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 1 }
 		}
@@ -2650,8 +3108,12 @@ ideas = {
 				stability_factor = -0.10
 				army_org_regain = -0.05
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 0 }
 		}
@@ -2666,8 +3128,12 @@ ideas = {
 				army_org_regain = 0.04
 				training_time_army_factor = 0.04
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 			cancel_if_invalid = no
 			ai_will_do = { factor = 1 }
 		}

@@ -1,16 +1,16 @@
-state={
-	id=26
-	name="STATE_26"
-	provinces={
+state = {
+	id = 26
+	name = "STATE_26"
+	provinces = {
 		7239 16355 16361 16367 16370 16376 16379 16385
 	}
-	manpower=22220000
+	manpower = 22220000
 
 	state_category = town
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	buildings_max_level_factor = 1.000
+	local_supplies = 0.000
 
-	history={
+	history = {
 		owner = WIT
 		buildings = {
 			infrastructure = 2

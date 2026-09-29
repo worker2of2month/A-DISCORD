@@ -1,10 +1,10 @@
 #	Example:
-# 
+#
 #	example_dynamic_modifier = {
 #		icon = "GFX_idea_unknown" # optional, will show up in guis if icon is specified
 #		enable = { always = yes } #optional, the modifier won't apply if not enabled
 #		remove_trigger = { always = no } #optional, will remove the modifier if true
-#       attacker_modifier = no  # if yes this modifier will also be read in combat for 
+#       attacker_modifier = no  # if yes this modifier will also be read in combat for
 #                               # people engaging in the combat even if not in the state
 #
 #		# list of modifiers
@@ -27,14 +27,14 @@
 #	will only updated daily, unless forced by force_update_dynamic_modifier effect
 
 sabotaged_resources = {
-	remove_trigger = { 
+	remove_trigger = {
 		ROOT = {
 			has_resistance = no
 		}
 	}
-	
+
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	temporary_state_resource_oil = sabotaged_oil
 	temporary_state_resource_aluminium = sabotaged_aluminium
 	temporary_state_resource_rubber = sabotaged_rubber
@@ -47,17 +47,17 @@ autonomous_state = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	recruitable_population_factor = -0.5
 	local_building_slots_factor = -0.25
 	state_resources_factor = -0.25
 	state_production_speed_buildings_factor = -0.25
 	remove_trigger = {
-		OWNER = { 
+		OWNER = {
 			OR = {
-				original_tag = CAT 
-				original_tag = GLC 
-				original_tag = BAS 
+				original_tag = CAT
+				original_tag = GLC
+				original_tag = BAS
 			}
 		}
 	}
@@ -67,16 +67,16 @@ semi_autonomous_state = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	local_building_slots_factor = -0.25
 	state_resources_factor = -0.25
 	state_production_speed_buildings_factor = -0.25
 	remove_trigger = {
-		OWNER = { 
+		OWNER = {
 			OR = {
-				original_tag = CAT 
-				original_tag = GLC 
-				original_tag = BAS 
+				original_tag = CAT
+				original_tag = GLC
+				original_tag = BAS
 			}
 		}
 	}
@@ -86,7 +86,7 @@ kurdish_agitation = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kurdish_agitation
-	
+
 	resistance_growth = 0.03
 	resistance_target = 0.1
 	resistance_decay = -0.1
@@ -97,7 +97,7 @@ kurdish_separatism = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kurdish_separatism
-	
+
 	compliance_growth = -0.05
 	resistance_growth = 0.05
 	resistance_target = 0.20
@@ -106,7 +106,8 @@ kurdish_separatism = {
 	disable_strategic_redeployment = 1
 }
 
-dense_rural_infrastructure = { #State Modifier
+dense_rural_infrastructure = {
+	#State Modifier
 	enable = { always = yes }
 	remove_trigger = {
 		ROOT = {
@@ -115,15 +116,16 @@ dense_rural_infrastructure = { #State Modifier
 	}
 
 	icon = GFX_modifiers_SOV_civilian_labor_in_defense
-	
+
 	local_non_core_supply_impact_factor = 0.35
 }
 
-yellow_river_blown = { #State Modifier
+yellow_river_blown = {
+	#State Modifier
 	enable = { always = yes }
 
 	icon = GFX_decision_hol_inundate_water_lines
-	
+
 	local_supply_impact_factor = 0.5
 	disable_strategic_redeployment = 1
 	state_resources_factor = -0.25
@@ -135,7 +137,7 @@ kurdish_rebellion = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kurdish_rebellion
-	
+
 	compliance_growth = -0.1
 	resistance_growth = 0.07
 	resistance_target = 0.35
@@ -148,7 +150,7 @@ separatist_fatigue = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kurdish_fatigue
-	
+
 	compliance_growth = 0.05
 	resistance_decay = 0.15
 	state_resources_factor = -0.33
@@ -158,7 +160,7 @@ turanist_assimilation = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_pan_turkic_propaganda
-	
+
 	local_non_core_manpower = 0.25
 	compliance_growth = 0.05
 	resistance_growth = -0.1
@@ -168,7 +170,7 @@ conscription_exemptions_granted = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_conscription_exemptions_granted
-	
+
 	recruitable_population_factor = -0.85
 }
 
@@ -176,7 +178,7 @@ islamist_opposition = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_traditionalist_unrest
-	
+
 	recruitable_population_factor = -0.05
 	local_building_slots_factor = -0.1
 	state_resources_factor = -0.1
@@ -187,7 +189,7 @@ islamist_sedition = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_traditionalist_sedition
-	
+
 	recruitable_population_factor = -0.25
 	local_building_slots_factor = -0.25
 	state_resources_factor = -0.25
@@ -199,7 +201,7 @@ islamist_insurgency = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_traditionalist_insurgency
-	
+
 	recruitable_population_factor = -0.5
 	local_building_slots_factor = -0.33
 	state_resources_factor = -0.5
@@ -211,7 +213,7 @@ islamists_placated = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_traditionalist_placated
-	
+
 	state_production_speed_buildings_factor = 0.05
 }
 
@@ -219,7 +221,7 @@ devout_islamists = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_traditionalist_placated
-	
+
 	recruitable_population_factor = 0.15
 	state_production_speed_buildings_factor = 0.1
 }
@@ -228,7 +230,7 @@ kemalist_loyalties = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kemalist_loyalties
-	
+
 	recruitable_population_factor = 0.15
 	state_production_speed_buildings_factor = 0.1
 }
@@ -237,13 +239,14 @@ kemalist_schemers = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_tur_kemalist_unrest
-	
+
 	recruitable_population_factor = -0.33
 	state_production_speed_buildings_factor = -0.25
 	army_speed_factor_for_controller = -0.5
 }
 
-BUL_foreign_industry_dynamic_modifier = { #Used as National Spirit
+BUL_foreign_industry_dynamic_modifier = {
+	#Used as National Spirit
 	enable = { always = yes }
 
 	icon = GFX_idea_man_five_year_plan_industry
@@ -260,7 +263,7 @@ skirmishes_against_imro = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_bul_macedonian_revolutionaries
-	
+
 	state_resources_factor = -0.75
 	state_production_speed_buildings_factor = -0.75
 	army_speed_factor_for_controller = -0.25
@@ -273,7 +276,7 @@ widespread_bulgarian_sentiment_01 = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_bul_arranged_bulgarian_occupation
-	
+
 	compliance_growth = -0.1
 	resistance_growth = 0.1
 	resistance_target = 0.1
@@ -286,7 +289,7 @@ widespread_bulgarian_sentiment_02 = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_bul_arranged_bulgarian_occupation
-	
+
 	compliance_growth = 0.1
 	resistance_growth = -0.1
 	resistance_target = -0.1
@@ -299,11 +302,12 @@ bulgarian_territorial_expansion_arranged = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_bul_arranged_territorial_expansion
-	
+
 	custom_modifier_tooltip = BUL_bulgarian_territorial_expansion_arranged_tt
 }
 
-BUL_our_duty_in_the_balkans_dynamic_modifier = { #Used as National Spirit
+BUL_our_duty_in_the_balkans_dynamic_modifier = {
+	#Used as National Spirit
 	enable = { always = yes }
 
 	icon = GFX_idea_generic_fortify_the_borders
@@ -317,7 +321,7 @@ international_city = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	state_resources_factor = -1
 	recruitable_population_factor = -1
 	local_factories = -1
@@ -328,7 +332,7 @@ international_city_2 = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	state_resources_factor = -0.75
 	recruitable_population_factor = -0.75
 	local_factories = -0.75
@@ -340,7 +344,7 @@ international_city_3 = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	state_resources_factor = -0.5
 	recruitable_population_factor = -0.5
 	local_factories = -0.5
@@ -353,7 +357,7 @@ international_city_4 = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	state_resources_factor = -0.25
 	recruitable_population_factor = -0.25
 	local_factories = -0.25
@@ -366,7 +370,7 @@ unity_propaganda = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	compliance_gain = 0.7
 }
 
@@ -374,7 +378,7 @@ military_appeasement = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_sabotaged_resource
-	
+
 	resistance_growth = -0.5
 }
 
@@ -382,7 +386,7 @@ POL_plan_modifier = {
 	enable = { always = yes }
 
 	icon = GFX_modifiers_generic_military_plans
-	
+
 	state_production_speed_bunker_factor = 0.3
 }
 
@@ -393,7 +397,7 @@ POL_anti_soviet_offensive = {
 
 	army_attack_factor = 0.1
 	army_defence_factor = 0.2
-    breakthrough_factor = 0.15
+	breakthrough_factor = 0.15
 }
 
 POL_anti_german_offensive = {
@@ -403,7 +407,7 @@ POL_anti_german_offensive = {
 
 	army_attack_factor = 0.1
 	army_defence_factor = 0.2
-    breakthrough_factor = 0.15
+	breakthrough_factor = 0.15
 }
 
 POL_peasant_communities = {
@@ -433,23 +437,24 @@ unplanned_offensive = {
 	local_org_regain = -0.5
 }
 
-
 ####
 #### SOVIET STATE MODIFIERS ####
 ####
 
-SOV_defend_moscow = { #STATE MODIFIER
+SOV_defend_moscow = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_defend_moscow
-	
+
 	recruitable_population_factor = 0.25
 	army_core_defence_factor = 0.1
 	local_factories = -1
 	supply_factor = 0.15
 }
 
-SOV_increased_metals_production = { #STATE MODIFIER
+SOV_increased_metals_production = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_increased_metal_production
@@ -460,11 +465,12 @@ SOV_increased_metals_production = { #STATE MODIFIER
 	state_resource_chromium = SOV_chromium_bonus
 }
 
-SOV_invaders_must_die = { #STATE MODIFIER
+SOV_invaders_must_die = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_invaders_must_die
-	
+
 	compliance_growth = -0.05
 	resistance_growth = 0.05
 	resistance_target = 0.15
@@ -473,11 +479,12 @@ SOV_invaders_must_die = { #STATE MODIFIER
 	disable_strategic_redeployment = 1
 }
 
-SOV_seraya_loshad_battery = { #STATE MODIFIER
+SOV_seraya_loshad_battery = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_armored_battery
-	
+
 	army_defence_factor = 0.1
 	cas_damage_reduction = 0.1
 	dig_in_speed_factor = 0.25
@@ -485,11 +492,12 @@ SOV_seraya_loshad_battery = { #STATE MODIFIER
 	pocket_penalty = -0.15
 }
 
-SOV_krasnaya_gorka_battery = { #STATE MODIFIER
+SOV_krasnaya_gorka_battery = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_armored_battery
-	
+
 	army_defence_factor = 0.1
 	cas_damage_reduction = 0.1
 	dig_in_speed_factor = 0.25
@@ -497,11 +505,12 @@ SOV_krasnaya_gorka_battery = { #STATE MODIFIER
 	pocket_penalty = -0.15
 }
 
-SOV_armored_battery_35 = { #STATE MODIFIER #German designation Maksim Gorky
+SOV_armored_battery_35 = {
+	#STATE MODIFIER #German designation Maksim Gorky
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_armored_battery
-	
+
 	army_defence_factor = 0.1
 	cas_damage_reduction = 0.1
 	dig_in_speed_factor = 0.25
@@ -509,22 +518,24 @@ SOV_armored_battery_35 = { #STATE MODIFIER #German designation Maksim Gorky
 	pocket_penalty = -0.15
 }
 
-SOV_factory_worker_militias_raised = { #STATE MODIFIER
+SOV_factory_worker_militias_raised = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_factory_worker_militias
-	
+
 	army_core_defence_factor = 0.05
 	local_org_regain = 0.1
 	local_factories = -1
 	state_resources_factor = -0.5
 }
 
-SOV_civilian_labor_in_defense_mod = { #STATE MODIFIER
+SOV_civilian_labor_in_defense_mod = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_SOV_civilian_labor_in_defense
-	
+
 	army_core_defence_factor = 0.05
 	state_production_speed_bunker_factor = 0.6
 	state_production_speed_coastal_bunker_factor = 0.6
@@ -533,7 +544,8 @@ SOV_civilian_labor_in_defense_mod = { #STATE MODIFIER
 	state_resources_factor = -0.5
 }
 
-SOV_soviet_military_offensive = { #STATE MODIFIER
+SOV_soviet_military_offensive = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_generic_military_plans
@@ -542,7 +554,8 @@ SOV_soviet_military_offensive = { #STATE MODIFIER
 	army_attack_factor = 0.1
 }
 
-SOV_soviet_imports = { #STATE MODIFIER
+SOV_soviet_imports = {
+	#STATE MODIFIER
 	enable = { always = yes }
 
 	icon = GFX_modifiers_increased_metal_production
@@ -556,7 +569,8 @@ SOV_soviet_imports = { #STATE MODIFIER
 ####
 #### SOVIET NATIONAL SPIRITS ####
 ####
-SOV_second_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_second_five_year_plan_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_second_five_year_plan_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -568,7 +582,8 @@ SOV_second_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT
 	production_speed_industrial_complex_factor = SOV_fyp_production_speed_industrial_complex_factor #0.05
 }
 
-SOV_third_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT - Basic
+SOV_third_five_year_plan_dynamic_modifier = {
+	#NATIONAL SPIRIT - Basic
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -581,12 +596,13 @@ SOV_third_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT - Basic
 
 	#INITIAL
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#EXTRA IMPROVEMENTS
 	local_resources_factor = SOV_fyp_local_resources_factor #0.10 -> Increase State Reserves
 }
 
-SOV_third_five_year_plan_civilian_dynamic_modifier = { #NATIONAL SPIRIT - Civilian
+SOV_third_five_year_plan_civilian_dynamic_modifier = {
+	#NATIONAL SPIRIT - Civilian
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_civilian_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -597,7 +613,7 @@ SOV_third_five_year_plan_civilian_dynamic_modifier = { #NATIONAL SPIRIT - Civili
 	consumer_goods_factor = SOV_fyp_consumer_goods_factor #0.08
 	production_speed_industrial_complex_factor = SOV_fyp_production_speed_industrial_complex_factor #0.1
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#EXTRA IMPROVEMENTS
 	local_resources_factor = SOV_fyp_local_resources_factor #0.10 -> Increase State Reserves
 	line_change_production_efficiency_factor = SOV_fyp_line_change_production_efficiency_factor #0.1 -> Industrial Modernization
@@ -607,7 +623,8 @@ SOV_third_five_year_plan_civilian_dynamic_modifier = { #NATIONAL SPIRIT - Civili
 	production_oil_factor = SOV_fyp_production_oil_factor #0.05 -> Oil Production
 }
 
-SOV_third_five_year_plan_military_dynamic_modifier = { #NATIONAL SPIRIT - Military
+SOV_third_five_year_plan_military_dynamic_modifier = {
+	#NATIONAL SPIRIT - Military
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_military_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -618,7 +635,7 @@ SOV_third_five_year_plan_military_dynamic_modifier = { #NATIONAL SPIRIT - Milita
 	consumer_goods_factor = SOV_fyp_consumer_goods_factor #0.1
 	production_speed_industrial_complex_factor = SOV_fyp_production_speed_industrial_complex_factor #0
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#INITIAL -> Shift to Armaments Production
 	production_speed_arms_factory_factor = SOV_fyp_production_speed_arms_factory_factor #0.10
 
@@ -631,7 +648,8 @@ SOV_third_five_year_plan_military_dynamic_modifier = { #NATIONAL SPIRIT - Milita
 	production_oil_factor = SOV_fyp_production_oil_factor #0.05 -> Oil Production
 }
 
-SOV_fourth_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_fourth_five_year_plan_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_fourth_five_year_plan
@@ -658,7 +676,8 @@ SOV_fourth_five_year_plan_dynamic_modifier = { #NATIONAL SPIRIT
 
 #Second Five Year Plan does not need an alternative
 
-SOV_third_five_year_plan_dynamic_modifier_alt = { #NATIONAL SPIRIT - Basic
+SOV_third_five_year_plan_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT - Basic
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -671,12 +690,13 @@ SOV_third_five_year_plan_dynamic_modifier_alt = { #NATIONAL SPIRIT - Basic
 
 	#INITIAL
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#EXTRA IMPROVEMENTS
 	local_resources_factor = SOV_fyp_local_resources_factor #0.10 -> Increase State Reserves
 }
 
-SOV_third_five_year_plan_civilian_dynamic_modifier_alt = { #NATIONAL SPIRIT - Civilian
+SOV_third_five_year_plan_civilian_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT - Civilian
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_civilian_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -687,7 +707,7 @@ SOV_third_five_year_plan_civilian_dynamic_modifier_alt = { #NATIONAL SPIRIT - Ci
 	consumer_goods_factor = SOV_fyp_consumer_goods_factor #0.008
 	production_speed_industrial_complex_factor = SOV_fyp_production_speed_industrial_complex_factor #0.1
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#EXTRA IMPROVEMENTS
 	local_resources_factor = SOV_fyp_local_resources_factor #0.10 -> Increase State Reserves
 	line_change_production_efficiency_factor = SOV_fyp_line_change_production_efficiency_factor #0.1 -> Industrial Modernization
@@ -697,7 +717,8 @@ SOV_third_five_year_plan_civilian_dynamic_modifier_alt = { #NATIONAL SPIRIT - Ci
 	production_oil_factor = SOV_fyp_production_oil_factor #0.05 -> Oil Production
 }
 
-SOV_third_five_year_plan_military_dynamic_modifier_alt = { #NATIONAL SPIRIT - Military
+SOV_third_five_year_plan_military_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT - Military
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_third_five_year_plan_military_ccp_2d_sov_compatibility # New GFX entry pointing to the original icon, so it can be safely overwritten by CCP 2D Sov Art without impacting other content using the same icon
@@ -708,7 +729,7 @@ SOV_third_five_year_plan_military_dynamic_modifier_alt = { #NATIONAL SPIRIT - Mi
 	consumer_goods_factor = SOV_fyp_consumer_goods_factor #0.1
 	production_speed_industrial_complex_factor = SOV_fyp_production_speed_industrial_complex_factor #0
 	industrial_concern_cost_factor = SOV_fyp_industrial_concern_cost_factor #-0.15
-	
+
 	#INITIAL -> Shift to Armaments Production
 	production_speed_arms_factory_factor = SOV_fyp_production_speed_arms_factory_factor #0.10
 
@@ -721,7 +742,8 @@ SOV_third_five_year_plan_military_dynamic_modifier_alt = { #NATIONAL SPIRIT - Mi
 	production_oil_factor = SOV_fyp_production_oil_factor #0.05 -> Oil Production
 }
 
-SOV_fourth_five_year_plan_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_fourth_five_year_plan_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_fourth_five_year_plan
@@ -746,8 +768,8 @@ SOV_fourth_five_year_plan_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	industry_repair_factor = SOV_fyp_industry_repair_factor #0.1
 }
 
-
-SOV_ussr_academy_of_sciences_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_ussr_academy_of_sciences_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_ussr_academy_of_sciences_ccp_2d_sov_compatibility
@@ -755,7 +777,8 @@ SOV_ussr_academy_of_sciences_dynamic_modifier = { #NATIONAL SPIRIT
 	research_speed_factor = SOV_academy_of_sciences_research_speed_factor #0.01
 }
 
-SOV_ussr_academy_of_sciences_dynamic_modifier_alt = { #Alternative for non-commies (need this due to scripted loc not working here)
+SOV_ussr_academy_of_sciences_dynamic_modifier_alt = {
+	#Alternative for non-commies (need this due to scripted loc not working here)
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_ussr_academy_of_sciences_ccp_2d_sov_compatibility
@@ -763,7 +786,8 @@ SOV_ussr_academy_of_sciences_dynamic_modifier_alt = { #Alternative for non-commi
 	research_speed_factor = SOV_academy_of_sciences_research_speed_factor #0.01
 }
 
-SOV_soviet_airforce_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_soviet_airforce_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_airforce_ccp_2d_sov_compatibility
@@ -789,7 +813,8 @@ SOV_soviet_airforce_dynamic_modifier = { #NATIONAL SPIRIT
 	air_nav_efficiency = SOV_soviet_airforce_air_nav_efficiency #0.1 -> Expand the Morskaya Aviatsiya
 }
 
-SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier = { #NATIONAL SPIRIT - Same version as the previous one, but with a custom tooltip to communicate aircraft production bonuses
+SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier = {
+	#NATIONAL SPIRIT - Same version as the previous one, but with a custom tooltip to communicate aircraft production bonuses
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_airforce_ccp_2d_sov_compatibility
@@ -816,7 +841,8 @@ SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier = { #NATIONAL SPI
 	air_nav_efficiency = SOV_soviet_airforce_air_nav_efficiency #0.1 -> Expand the Morskaya Aviatsiya
 }
 
-SOV_soviet_airforce_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_soviet_airforce_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_airforce_alt_ccp_2d_sov_compatibility
@@ -842,7 +868,8 @@ SOV_soviet_airforce_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	air_nav_efficiency = SOV_soviet_airforce_air_nav_efficiency #0.1 -> Expand the Morskaya Aviatsiya
 }
 
-SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier_alt = { #NATIONAL SPIRIT - Same version as the previous one, but with a custom tooltip to communicate aircraft production bonuses
+SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT - Same version as the previous one, but with a custom tooltip to communicate aircraft production bonuses
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_airforce_alt_ccp_2d_sov_compatibility
@@ -869,7 +896,8 @@ SOV_soviet_airforce_aircraft_production_focus_dynamic_modifier_alt = { #NATIONAL
 	air_nav_efficiency = SOV_soviet_airforce_air_nav_efficiency #0.1 -> Expand the Morskaya Aviatsiya
 }
 
-SOV_the_red_fleet_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_fleet_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_ccp_2d_sov_compatibility
@@ -888,7 +916,8 @@ SOV_the_red_fleet_dynamic_modifier = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_surface_1_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_fleet_surface_1_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_ccp_2d_sov_compatibility
@@ -909,7 +938,8 @@ SOV_the_red_fleet_surface_1_dynamic_modifier = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_surface_2_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_fleet_surface_2_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_ccp_2d_sov_compatibility
@@ -930,7 +960,8 @@ SOV_the_red_fleet_surface_2_dynamic_modifier = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_submarine_1_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_fleet_submarine_1_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_ccp_2d_sov_compatibility
@@ -951,7 +982,8 @@ SOV_the_red_fleet_submarine_1_dynamic_modifier = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_submarine_2_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_fleet_submarine_2_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_ccp_2d_sov_compatibility
@@ -972,7 +1004,8 @@ SOV_the_red_fleet_submarine_2_dynamic_modifier = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_fleet_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_alt_ccp_2d_sov_compatibility
@@ -991,7 +1024,8 @@ SOV_the_red_fleet_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_surface_1_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_fleet_surface_1_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_alt_ccp_2d_sov_compatibility
@@ -1012,7 +1046,8 @@ SOV_the_red_fleet_surface_1_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_surface_2_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_fleet_surface_2_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_alt_ccp_2d_sov_compatibility
@@ -1033,7 +1068,8 @@ SOV_the_red_fleet_surface_2_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_submarine_1_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_fleet_submarine_1_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_alt_ccp_2d_sov_compatibility
@@ -1054,7 +1090,8 @@ SOV_the_red_fleet_submarine_1_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_the_red_fleet_submarine_2_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_fleet_submarine_2_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_navy_alt_ccp_2d_sov_compatibility
@@ -1075,7 +1112,8 @@ SOV_the_red_fleet_submarine_2_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	special_forces_cap = SOV_red_fleet_special_forces_cap #0.1 -> Marines
 }
 
-SOV_defense_industry_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_defense_industry_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_defense_industry_ccp_2d_sov_compatibility
@@ -1098,7 +1136,8 @@ SOV_defense_industry_dynamic_modifier = { #NATIONAL SPIRIT
 	max_dig_in_factor = SOV_defense_industry_max_dig_in_factor #0.05 -> Military Engineering University
 }
 
-SOV_the_red_army_dynamic_modifier = { #NATIONAL SPIRIT
+SOV_the_red_army_dynamic_modifier = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_army_ccp_2d_sov_compatibility
@@ -1109,7 +1148,6 @@ SOV_the_red_army_dynamic_modifier = { #NATIONAL SPIRIT
 	experience_gain_army_factor = SOV_the_red_army_experience_gain_army_factor #-0.1
 	experience_loss_factor = SOV_the_red_army_experience_loss_factor #0.25
 
-
 	#FUTURE
 	mobilization_speed = SOV_the_red_army_mobilization_speed #0.05 -> Strengthen the Mobilization Plan
 	conscription_factor = SOV_the_red_army_conscription_factor #0.03 -> Strengthen the Mobilization Plan
@@ -1128,11 +1166,12 @@ SOV_the_red_army_dynamic_modifier = { #NATIONAL SPIRIT
 	cas_damage_reduction = SOV_the_red_army_cas_damage_reduction #0.05 -> Experts in Camouflage
 	max_dig_in = SOV_the_red_army_max_dig_in #5 -> Experts in Camouflage
 	dig_in_speed_factor = SOV_the_red_army_dig_in_speed_factor #0.05 -> Experts in Camouflage
-	operative_slot  = SOV_the_red_army_operative_slot  #1 -> Organization of the Partisans
+	operative_slot = SOV_the_red_army_operative_slot #1 -> Organization of the Partisans
 	max_command_power_mult = SOV_the_red_army_max_command_power_mult #0.1 -> Depoliticize the Military
 }
 
-SOV_the_red_army_dynamic_modifier_alt = { #NATIONAL SPIRIT
+SOV_the_red_army_dynamic_modifier_alt = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_red_army_alt_ccp_2d_sov_compatibility
@@ -1143,7 +1182,6 @@ SOV_the_red_army_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	experience_gain_army_factor = SOV_the_red_army_experience_gain_army_factor #-0.1
 	experience_loss_factor = SOV_the_red_army_experience_loss_factor #0.25
 
-
 	#FUTURE
 	mobilization_speed = SOV_the_red_army_mobilization_speed #0.05 -> Strengthen the Mobilization Plan
 	conscription_factor = SOV_the_red_army_conscription_factor #0.03 -> Strengthen the Mobilization Plan
@@ -1162,7 +1200,7 @@ SOV_the_red_army_dynamic_modifier_alt = { #NATIONAL SPIRIT
 	cas_damage_reduction = SOV_the_red_army_cas_damage_reduction #0.05 -> Experts in Camouflage
 	max_dig_in = SOV_the_red_army_max_dig_in #5 -> Experts in Camouflage
 	dig_in_speed_factor = SOV_the_red_army_dig_in_speed_factor #0.05 -> Experts in Camouflage
-	operative_slot  = SOV_the_red_army_operative_slot  #1 -> Organization of the Partisans
+	operative_slot = SOV_the_red_army_operative_slot #1 -> Organization of the Partisans
 	max_command_power_mult = SOV_the_red_army_max_command_power_mult #0.1 -> Depoliticize the Military
 }
 
@@ -1170,7 +1208,7 @@ SOV_the_politburo_good_dynamic_modifier = {
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_the_politburo_ccp_2d_sov_compatibility
-	
+
 	#INITIAL
 	drift_defence_factor = SOV_the_politburo_drift_defence_factor #0.05
 
@@ -1191,34 +1229,32 @@ SOV_the_politburo_good_dynamic_modifier = {
 	opinion_gain_monthly_same_ideology_factor = SOV_the_politburo_opinion_gain_monthly_same_ideology_factor #0.25 -> The Construction of Communism
 }
 
-SOV_factionalism_modifier = { 
+SOV_factionalism_modifier = {
 	enable = { always = yes }
 
 	icon = GFX_idea_SOV_factionalism_modifier
-	
-	
+
 	political_power_factor = SOV_factionalism_political_power_factor # -0.1 The Left Opposition, the Right opposition
-	
 
 	party_popularity_stability_factor = SOV_factionalism_popularity_stability_cost_factor # -0.15 -> Cooperation Against stalin
 	overlord_trade_cost_factor = SOV_factionalism_overlord_trade_cost_factor
-	global_building_slots_factor =  SOV_factionalism_building_slots_factor
+	global_building_slots_factor = SOV_factionalism_building_slots_factor
 
 	custom_modifier_tooltip = SOV_factionalism_modifier_tt
 }
 
-SOV_opposition_popular_support = { 
+SOV_opposition_popular_support = {
 	enable = { has_civil_war = yes }
 	icon = GFX_idea_FRA_scw_intervention_republicans_focus
-	
+
 	surrender_limit = SOV_surrender_modifier
-	custom_modifier_tooltip = SOV_opposition_popular_support_tt 
+	custom_modifier_tooltip = SOV_opposition_popular_support_tt
 }
 
-SOV_planned_economy_dynamic_modifier = { 
+SOV_planned_economy_dynamic_modifier = {
 	enable = { always = yes }
 	icon = GFX_idea_eng_for_the_good_of_the_revolution
-	
+
 	industrial_capacity_factory = SOV_planned_economy_industrial_capacity_factory_initial #+0.01% (extra +0.01% per puppet - max +0.1%)
 	production_lack_of_resource_penalty_factor = SOV_planned_economy_production_lack_of_resource_penalty_factor_initial #-0.01% (extra -0.01% per puppet - max -0.1%)
 
@@ -1235,11 +1271,12 @@ SOV_capital_of_the_tsars = {
 	state_production_speed_buildings_factor = 0.25
 }
 
-RAJ_agrarian_society_dynamic = { #NATIONAL SPIRIT
+RAJ_agrarian_society_dynamic = {
+	#NATIONAL SPIRIT
 	enable = { always = yes }
 
 	icon = GFX_idea_generic_agrarian_society
-	
+
 	conscription_factor = RAJ_agrarian_society_value
 }
 
@@ -1249,7 +1286,6 @@ RAJ_industrialized_personnel = {
 	state_resources_factor = 0.15
 	state_production_speed_buildings_factor = 0.15
 }
-
 
 PAR_protected_by_humaita = {
 	enable = {
@@ -1264,5 +1300,4 @@ PAR_protected_by_humaita = {
 
 malaria = {
 	icon = GFX_modifiers_SOV_defend_moscow
-	
 }

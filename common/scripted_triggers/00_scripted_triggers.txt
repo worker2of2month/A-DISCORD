@@ -6,7 +6,6 @@ can_ROOT_get_wargoal_on_THIS = {
 
 #Country scope
 
-
 is_border_conflict_defender_vs_FROM = {
 	has_variable = ROOT.defender_state_vs_@FROM
 }
@@ -14,7 +13,7 @@ is_border_conflict_defender_vs_FROM = {
 has_not_initiated_border_incident_with_FROM = {
 	custom_trigger_tooltip = {
 		tooltip = not_initiated_border_incident_with_FROM
-		NOT = {		
+		NOT = {
 			any_state = {
 				check_variable = { FROM.defender_state_vs_@PREV = id }
 			}
@@ -37,13 +36,14 @@ has_not_initiated_border_incident_with_ROOT = {
 has_ROOT_at_least_1_div_in_current_state_scope = {
 	custom_trigger_tooltip = {
 		tooltip = at_least_one_division_in_state
-		ROOT = { divisions_in_state = { state = PREV size > 0 } }
+		ROOT = {
+			divisions_in_state = {
+				state = PREV
+				size > 0
+			}
+		}
 	}
 }
-
-
-
-
 
 #State scope
 is_controlled_by_ROOT_or_subject = {
@@ -80,8 +80,6 @@ is_controlled_by_ROOT_or_ally = {
 	}
 }
 
-
-
 ai_air_doctrine_tier_1_trigger = {
 	always = no
 }
@@ -89,6 +87,7 @@ ai_air_doctrine_tier_1_trigger = {
 ai_air_doctrine_tier_2_trigger = {
 	always = no
 }
+
 ai_air_doctrine_tier_3_trigger = {
 	always = no
 }
@@ -103,7 +102,6 @@ ai_land_doctrine_tier_2_trigger = {
 
 anti_submarine_strategy_required_trigger = {
 	OR = {
-		
 		AND = {
 			has_war = yes
 			any_enemy_country = {
@@ -117,17 +115,12 @@ anti_submarine_strategy_required_trigger = {
 	}
 }
 
-
-
-
-
-
-
 enemy_has_equal_or_better_radar_tech_trigger = {
 	always = no
 }
 
-is_available_to_collaboration_government = { # occupied_countries.1 should be updated along with this
+is_available_to_collaboration_government = {
+	# occupied_countries.1 should be updated along with this
 	NOT = {
 		any_country_with_original_tag = {
 			original_tag_to_check = FROM
@@ -140,7 +133,7 @@ is_available_to_collaboration_government = { # occupied_countries.1 should be up
 has_large_ally_not_pick_closed_economy = {
 	any_of_scopes = {
 		array = faction_members
-		
+
 		NOT = { tag = PREV }
 		num_of_military_factories > 30
 	}

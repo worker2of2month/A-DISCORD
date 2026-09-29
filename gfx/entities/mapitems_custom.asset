@@ -1,14 +1,18 @@
-
 entity = {
 	name = "ADISCORD_global_entity"
 	pdxmesh = "ADISCORD_global_mesh"
 
-	locator = { name = "polution_particle_1"	position = { 1.0 155.0 -0.1 }}
+	locator = {
+		name = "polution_particle_1"
+		position = { 1.0 155.0 -0.1 }
+	}
 
 	default_state = "idle"
-	state = { name = "idle"
-		event = { 
-			time = 0.0 node="polution_particle_1"   
+	state = {
+		name = "idle"
+		event = {
+			time = 0.0
+			node = "polution_particle_1"
 			particle = "polution_particle"
 		}
 	}
@@ -27,12 +31,17 @@ entity = {
 	name = "ADISCORD_global_entity_2"
 	pdxmesh = "ADISCORD_global_mesh"
 
-	locator = { name = "world_clouds_particle_1"	position = { 1.0 155.0 -0.1 }}
+	locator = {
+		name = "world_clouds_particle_1"
+		position = { 1.0 155.0 -0.1 }
+	}
 
 	default_state = "idle"
-	state = { name = "idle"
-		event = { 
-			time = 0.0 node="world_clouds_particle_1"   
+	state = {
+		name = "idle"
+		event = {
+			time = 0.0
+			node = "world_clouds_particle_1"
 			particle = "world_clouds_particle"
 		}
 	}
@@ -43,8 +52,8 @@ entity = {
 	pdxmesh = "ADISCORD_reactor_mesh"
 
 	default_state = "idle"
-	state = { name = "idle"
-
+	state = {
+		name = "idle"
 	}
 }
 
@@ -53,8 +62,8 @@ entity = {
 	pdxmesh = "ADISCORD_reactor_2_mesh"
 
 	default_state = "idle"
-	state = { name = "idle"
-
+	state = {
+		name = "idle"
 	}
 }
 
@@ -63,8 +72,8 @@ entity = {
 	pdxmesh = "ADISCORD_factory_mesh"
 
 	default_state = "idle"
-	state = { name = "idle"
-
+	state = {
+		name = "idle"
 	}
 }
 
@@ -72,30 +81,91 @@ entity = {
 	name = "ADISCORD_vorkerland_pyramid_entity"
 	pdxmesh = "ADISCORD_vorkerland_pyramid_mesh"
 
-	locator = { name = "smog_particle_1" position = { 0.0 5.0 0.0 } }
+	locator = {
+		name = "smog_particle_1"
+		position = { 0.0 5.0 0.0 }
+	}
 	# Preserve A-Discord's denser seven-point city-smoke composition on the
 	# Vorkerland pyramid only instead of overriding vanilla city_smoke_entity.
-	locator = { name = "ADISCORD_city_smoke_1" position = { 1.0 0.1 -1.8 } }
-	locator = { name = "ADISCORD_city_smoke_2" position = { 0.1 0.0 0.0 } }
-	locator = { name = "ADISCORD_city_smoke_3" position = { -2.0 0.0 1.5 } }
-	locator = { name = "ADISCORD_city_smoke_4" position = { 3.0 0.0 1.0 } }
-	locator = { name = "ADISCORD_city_smoke_5" position = { -1.5 0.0 0.5 } }
-	locator = { name = "ADISCORD_city_smoke_6" position = { 2.0 0.0 -0.5 } }
-	locator = { name = "ADISCORD_city_smoke_7" position = { 0.0 0.0 1.0 } }
+	locator = {
+		name = "ADISCORD_city_smoke_1"
+		position = { 1.0 0.1 -1.8 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_2"
+		position = { 0.1 0.0 0.0 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_3"
+		position = { -2.0 0.0 1.5 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_4"
+		position = { 3.0 0.0 1.0 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_5"
+		position = { -1.5 0.0 0.5 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_6"
+		position = { 2.0 0.0 -0.5 }
+	}
+	locator = {
+		name = "ADISCORD_city_smoke_7"
+		position = { 0.0 0.0 1.0 }
+	}
 
 	default_state = "idle"
-	state = { name = "idle"
-		event = { 
-			time = 0.0 node="smog_particle_1"   
+	state = {
+		name = "idle"
+		event = {
+			time = 0.0
+			node = "smog_particle_1"
 			particle = "smog_particle"
 		}
-		event = { time = 0 node = "ADISCORD_city_smoke_1" particle = "city_smoke_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_2" particle = "city_smoke_l_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_3" particle = "city_smoke_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_4" particle = "city_smoke_s_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_5" particle = "city_smoke_l_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_6" particle = "city_smoke_s_particle" keep_particle = yes }
-		event = { time = 0 node = "ADISCORD_city_smoke_7" particle = "city_smoke_particle" keep_particle = yes }
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_1"
+			particle = "city_smoke_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_2"
+			particle = "city_smoke_l_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_3"
+			particle = "city_smoke_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_4"
+			particle = "city_smoke_s_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_5"
+			particle = "city_smoke_l_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_6"
+			particle = "city_smoke_s_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0
+			node = "ADISCORD_city_smoke_7"
+			particle = "city_smoke_particle"
+			keep_particle = yes
+		}
 	}
 }
 
@@ -111,12 +181,30 @@ entity = {
 entity = {
 	name = "ADISCORD_unity_tower_collapse_entity"
 	pdxmesh = "ADISCORD_unity_tower_destruction_mesh"
-	locator = { name = "core_blast" position = { 7 13 -5 } }
-	locator = { name = "west_blast" position = { 2 10 -8 } }
-	locator = { name = "east_blast" position = { 13 10 -5 } }
-	locator = { name = "front_impact" position = { 8 7 -13 } }
-	locator = { name = "rear_impact" position = { 10 8 0 } }
-	locator = { name = "ruin_smoke" position = { 8 8 -5 } }
+	locator = {
+		name = "core_blast"
+		position = { 7 13 -5 }
+	}
+	locator = {
+		name = "west_blast"
+		position = { 2 10 -8 }
+	}
+	locator = {
+		name = "east_blast"
+		position = { 13 10 -5 }
+	}
+	locator = {
+		name = "front_impact"
+		position = { 8 7 -13 }
+	}
+	locator = {
+		name = "rear_impact"
+		position = { 10 8 0 }
+	}
+	locator = {
+		name = "ruin_smoke"
+		position = { 8 8 -5 }
+	}
 	default_state = "collapse"
 	state = {
 		name = "collapse"
@@ -125,15 +213,67 @@ entity = {
 		animation_speed = 0.5
 		looping = no
 		next_state = "ruins"
-		event = { time = 0 node = "core_blast" particle = "explosion_particle" keep_particle = yes trigger_once = yes }
-		event = { time = 0.55 node = "core_blast" particle = "building_explode_effect" keep_particle = yes trigger_once = yes }
-		event = { time = 1.1 node = "west_blast" particle = "explosion_particle" keep_particle = yes trigger_once = yes }
-		event = { time = 1.6 node = "east_blast" particle = "explosion_particle" keep_particle = yes trigger_once = yes }
-		event = { time = 2 node = "west_blast" particle = "city_fire_particle" trigger_once = yes }
-		event = { time = 2.7 node = "east_blast" particle = "city_fire_particle" trigger_once = yes }
-		event = { time = 3.2 node = "front_impact" particle = "building_explode_effect" keep_particle = yes trigger_once = yes }
-		event = { time = 3.8 node = "rear_impact" particle = "building_explode_effect" keep_particle = yes trigger_once = yes }
-		event = { time = 5 node = "ruin_smoke" particle = "bunker_smoke_effect" keep_particle = yes trigger_once = yes }
+		event = {
+			time = 0
+			node = "core_blast"
+			particle = "explosion_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 0.55
+			node = "core_blast"
+			particle = "building_explode_effect"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 1.1
+			node = "west_blast"
+			particle = "explosion_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 1.6
+			node = "east_blast"
+			particle = "explosion_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 2
+			node = "west_blast"
+			particle = "city_fire_particle"
+			trigger_once = yes
+		}
+		event = {
+			time = 2.7
+			node = "east_blast"
+			particle = "city_fire_particle"
+			trigger_once = yes
+		}
+		event = {
+			time = 3.2
+			node = "front_impact"
+			particle = "building_explode_effect"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 3.8
+			node = "rear_impact"
+			particle = "building_explode_effect"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		event = {
+			time = 5
+			node = "ruin_smoke"
+			particle = "bunker_smoke_effect"
+			keep_particle = yes
+			trigger_once = yes
+		}
 	}
 	state = {
 		name = "ruins"
@@ -154,37 +294,31 @@ entity = {
 	pdxmesh = "ADISCORD_congress_mesh"
 
 	default_state = "idle"
-	state = { name = "idle"
+	state = {
+		name = "idle"
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
 
 entity = {
 	name = "cityblock_entity"
 	pdxmesh = "cityblock_mesh"
 }
+
 entity = {
 	name = "cityblock2_entity"
 	pdxmesh = "cityblock2_mesh"
 }
+
 entity = {
 	name = "cityblock3_entity"
 	pdxmesh = "cityblock3_mesh"
 }
+
 entity = {
 	name = "french_city1_entity"
 	pdxmesh = "french_city1_mesh"
 }
+
 entity = {
 	name = "french_city2_entity"
 	pdxmesh = "french_city2_mesh"
@@ -195,47 +329,57 @@ entity = {
 	name = "ADISCORD_city_tower_admin_entity"
 	pdxmesh = "ADISCORD_city_tower_admin_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_tower_business_entity"
 	pdxmesh = "ADISCORD_city_tower_business_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_tower_residential_entity"
 	pdxmesh = "ADISCORD_city_tower_residential_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_quarter_business_entity"
 	pdxmesh = "ADISCORD_city_quarter_business_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_quarter_mixed_entity"
 	pdxmesh = "ADISCORD_city_quarter_mixed_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_quarter_residential_entity"
 	pdxmesh = "ADISCORD_city_quarter_residential_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_stelander_spire_entity"
 	pdxmesh = "ADISCORD_city_stelander_spire_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_stelander_twin_entity"
 	pdxmesh = "ADISCORD_city_stelander_twin_mesh"
 }
+
 entity = {
 	name = "ADISCORD_city_stelander_arcology_entity"
 	pdxmesh = "ADISCORD_city_stelander_arcology_mesh"
 }
+
 # END ADISCORD Vorkensberg city
 
 # BEGIN ADISCORD Kefreyt arms combine
 entity = {
-    name = "ADISCORD_kefreyt_arms_combine_entity"
-    pdxmesh = "ADISCORD_kefreyt_arms_combine_mesh"
-    default_state = "idle"
-    state = { name = "idle" }
+	name = "ADISCORD_kefreyt_arms_combine_entity"
+	pdxmesh = "ADISCORD_kefreyt_arms_combine_mesh"
+	default_state = "idle"
+	state = { name = "idle" }
 }
+
 # END ADISCORD Kefreyt arms combine
 
 # BEGIN ADISCORD SHL palace
@@ -244,4 +388,5 @@ entity = {
 	name = "ADISCORD_SHL_palace_entity"
 	pdxmesh = "ADISCORD_SHL_palace_mesh"
 }
+
 # END ADISCORD SHL palace

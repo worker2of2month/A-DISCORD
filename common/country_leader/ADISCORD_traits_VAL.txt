@@ -1,23 +1,21 @@
 leader_traits = {
+	The_Weaponry_Baron = {
+		random = no
+		sprite = 1
+		war_support_factor = 0.3
+		army_advisor_cost_factor = -0.25
+		equipment_capture_factor = 0.1
+		command_power_gain = 0.2
+		army_org_factor = 0.05
+	}
 
-    The_Weaponry_Baron = {
-        random = no
-        sprite = 1
-        war_support_factor = 0.3
-        army_advisor_cost_factor = -0.25
-        equipment_capture_factor = 0.1
-        command_power_gain = 0.2
-        army_org_factor = 0.05
-    }
-
-    VAL_contract_warlord = {
-        random = no
-        sprite = 1
-        army_attack_factor = 0.05
-        army_org_factor = 0.05
-        planning_speed = 0.10
-        supply_consumption_factor = -0.05
-        command_power_gain = 0.10
-    }
-
+	VAL_contract_warlord = {
+		random = no
+		sprite = 1
+		army_attack_factor = 0.05
+		army_org_factor = 0.05
+		planning_speed = 0.10
+		supply_consumption_factor = -0.05
+		command_power_gain = 0.10
+	}
 }

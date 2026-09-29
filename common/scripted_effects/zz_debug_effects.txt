@@ -40,7 +40,10 @@ d_add_tech = {
 # COUNTRY: invoked only by a human's debug decision. Never placed on a pulse.
 ADISCORD_debug_war_snapshot = {
 	if = {
-		limit = { is_debug = yes is_ai = no }
+		limit = {
+			is_debug = yes
+			is_ai = no
+		}
 		log = "[ADISCORD_PEACE] SNAPSHOT BEGIN country=[THIS.GetTag]"
 		ADISCORD_debug_war_country_dump = yes
 		every_enemy_country = {
@@ -92,7 +95,14 @@ ADISCORD_debug_war_country_dump = {
 		log = "[ADISCORD_PEACE] final_ally_still_fighting=yes"
 	}
 	if = {
-		limit = { OR = { tag = NOD tag = STP tag = STS tag = VAL } }
+		limit = {
+			OR = {
+				tag = NOD
+				tag = STP
+				tag = STS
+				tag = VAL
+			}
+		}
 		VAL = {
 			log = "[ADISCORD_PEACE] VAL frontier_stage=[?VAL_frontier_stage]"
 			if = {

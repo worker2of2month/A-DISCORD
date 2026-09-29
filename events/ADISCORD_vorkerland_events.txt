@@ -33,13 +33,25 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.1.a
-		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 55
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_political_power = 5
 		add_stability = 0.01
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.1.b
-		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 45
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		army_experience = 5
 		add_command_power = 5
 	}
@@ -61,7 +73,13 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.2.b
-		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 45
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_political_power = 5
 		add_command_power = 5
 	}
@@ -78,7 +96,13 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.3.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		ai_chance = {
+			base = 65
+			modifier = {
+				factor = 2
+				has_equipment = { infantry_equipment < 5000 }
+			}
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = WKR }
 	}
 	option = {
@@ -97,7 +121,9 @@ country_event = {
 		text = ADISCORD_vorkerland_claimant.4.nikita.d
 	}
 	desc = {
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists } }
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
+		}
 		text = ADISCORD_vorkerland_claimant.4.anton.d
 	}
 	picture = GFX_event_adiscord_parliament_chamber
@@ -111,9 +137,18 @@ country_event = {
 			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			has_government = pragmatism
 			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Nikita_Worcker
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_stability = 0.01
 		add_political_power = 10
 		set_country_flag = ADISCORD_vorkerland_wkr_public_mandate
@@ -124,9 +159,18 @@ country_event = {
 			has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
 			has_government = pragmatism
 			has_country_leader_ideology = neo_vorkerism
-			has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Nikita_Worcker
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_command_power = 5
 		army_experience = 5
 		set_country_flag = ADISCORD_vorkerland_wkr_delegate_review
@@ -136,9 +180,18 @@ country_event = {
 		trigger = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Anton_Bagley
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 60 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_command_power = 5
 		add_political_power = 5
 		set_country_flag = ADISCORD_vorkerland_wkr_directive_council
@@ -148,9 +201,18 @@ country_event = {
 		trigger = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists }
 			has_government = utilitarism
-			has_country_leader = { character = WRK_Anton_Bagley ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Anton_Bagley
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_equipment = { infantry_equipment < 5000 } } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_equipment = { infantry_equipment < 5000 }
+			}
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = WKR }
 		set_country_flag = ADISCORD_vorkerland_wkr_reserve_authority
 	}
@@ -171,13 +233,25 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.10.a
-		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 55
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_political_power = 5
 		add_stability = 0.01
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.10.b
-		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 45
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_command_power = 5
 		army_experience = 5
 	}
@@ -199,7 +273,13 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.11.b
-		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 45
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		army_experience = 5
 		add_command_power = 5
 	}
@@ -216,7 +296,13 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.12.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		ai_chance = {
+			base = 65
+			modifier = {
+				factor = 2
+				has_equipment = { infantry_equipment < 5000 }
+			}
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = VAD }
 	}
 	option = {
@@ -235,7 +321,9 @@ country_event = {
 		text = ADISCORD_vorkerland_claimant.13.joint.d
 	}
 	desc = {
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		}
 		text = ADISCORD_vorkerland_claimant.13.vlad.d
 	}
 	picture = GFX_event_adiscord_parliament_chamber
@@ -248,9 +336,18 @@ country_event = {
 		trigger = {
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			has_country_leader = {
+				character = WRK_VAD_Joint_Council
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_stability = 0.01
 		add_political_power = 10
 		set_country_flag = ADISCORD_vorkerland_vad_joint_civil_guarantees
@@ -260,9 +357,18 @@ country_event = {
 		trigger = {
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			has_country_leader = {
+				character = WRK_VAD_Joint_Council
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_command_power = 5
 		army_experience = 5
 		set_country_flag = ADISCORD_vorkerland_vad_joint_staff_primacy
@@ -271,9 +377,18 @@ country_event = {
 		name = ADISCORD_vorkerland_claimant.13.vlad.a
 		trigger = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Vlad_Petrichev
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 60 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 60
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_stability = 0.01
 		add_political_power = 5
 		set_country_flag = ADISCORD_vorkerland_vad_crown_warrants
@@ -282,9 +397,18 @@ country_event = {
 		name = ADISCORD_vorkerland_claimant.13.vlad.b
 		trigger = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Vlad_Petrichev
+				ruling_only = yes
+			}
 		}
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_command_power = 5
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 500 producer = VAD }
 		set_country_flag = ADISCORD_vorkerland_vad_chancery_command
@@ -299,7 +423,9 @@ country_event = {
 		text = ADISCORD_vorkerland_claimant.14.joint.d
 	}
 	desc = {
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed } }
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
+		}
 		text = ADISCORD_vorkerland_claimant.14.vlad.d
 	}
 	picture = GFX_event_adiscord_negotiation_table
@@ -314,7 +440,10 @@ country_event = {
 		name = ADISCORD_vorkerland_claimant.14.vlad.a
 		trigger = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
-			has_country_leader = { character = WRK_Vlad_Petrichev ruling_only = yes }
+			has_country_leader = {
+				character = WRK_Vlad_Petrichev
+				ruling_only = yes
+			}
 		}
 		ai_chance = { base = 100 }
 		add_political_power = 20
@@ -347,7 +476,10 @@ country_event = {
 		trigger = {
 			has_global_flag = ADISCORD_vorkerland_joint_government_formed
 			has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad
-			has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }
+			has_country_leader = {
+				character = WRK_VAD_Joint_Council
+				ruling_only = yes
+			}
 		}
 		ai_chance = { base = 100 }
 		add_political_power = 15
@@ -392,12 +524,24 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.20.a
-		ai_chance = { base = 55 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 55
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_stability = 0.01
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.20.b
-		ai_chance = { base = 45 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 45
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_political_power = 5
 		add_command_power = 5
 	}
@@ -419,7 +563,13 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.21.b
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		army_experience = 5
 		add_command_power = 5
 	}
@@ -436,7 +586,13 @@ country_event = {
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.22.a
-		ai_chance = { base = 65 modifier = { factor = 2 has_equipment = { infantry_equipment < 5000 } } }
+		ai_chance = {
+			base = 65
+			modifier = {
+				factor = 2
+				has_equipment = { infantry_equipment < 5000 }
+			}
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 750 producer = TVA }
 	}
 	option = {
@@ -457,24 +613,45 @@ country_event = {
 	trigger = {
 		tag = TVA
 		has_government = technocracy
-		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		has_country_leader = {
+			character = TVA_Dorian_Worx
+			ruling_only = yes
+		}
 	}
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.23.a
-		ai_chance = { base = 40 modifier = { factor = 1.5 has_war = yes } }
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 1.5
+				has_war = yes
+			}
+		}
 		add_manpower = 150
 		set_country_flag = ADISCORD_vorkerland_tva_trial_technical_battalions
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.23.b
-		ai_chance = { base = 30 modifier = { factor = 1.5 command_power < 20 } }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 1.5
+				command_power < 20
+			}
+		}
 		add_command_power = 5
 		set_country_flag = ADISCORD_vorkerland_tva_trial_remote_fire_control
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.23.c
-		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 1.5
+				has_equipment = { support_equipment < 150 }
+			}
+		}
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 25 producer = TVA }
 		set_country_flag = ADISCORD_vorkerland_tva_trial_adaptive_logistics
 	}
@@ -490,26 +667,47 @@ country_event = {
 	trigger = {
 		tag = TVA
 		has_government = technocracy
-		has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+		has_country_leader = {
+			character = TVA_Dorian_Worx
+			ruling_only = yes
+		}
 	}
 
 	option = {
 		name = ADISCORD_vorkerland_claimant.24.a
-		ai_chance = { base = 35 modifier = { factor = 1.5 has_stability < 0.50 } }
+		ai_chance = {
+			base = 35
+			modifier = {
+				factor = 1.5
+				has_stability < 0.50
+			}
+		}
 		add_political_power = 10
 		add_stability = 0.01
 		set_country_flag = ADISCORD_vorkerland_tva_iteration_audit_precision
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.24.b
-		ai_chance = { base = 35 modifier = { factor = 1.5 command_power < 20 } }
+		ai_chance = {
+			base = 35
+			modifier = {
+				factor = 1.5
+				command_power < 20
+			}
+		}
 		army_experience = 5
 		add_command_power = 5
 		set_country_flag = ADISCORD_vorkerland_tva_iteration_field_variance
 	}
 	option = {
 		name = ADISCORD_vorkerland_claimant.24.c
-		ai_chance = { base = 30 modifier = { factor = 1.5 has_equipment = { support_equipment < 150 } } }
+		ai_chance = {
+			base = 30
+			modifier = {
+				factor = 1.5
+				has_equipment = { support_equipment < 150 }
+			}
+		}
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 50 producer = TVA }
 		add_war_support = 0.01
 		set_country_flag = ADISCORD_vorkerland_tva_iteration_production_variance
@@ -528,7 +726,9 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = WKR }
-	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 } }
+	immediate = {
+		country_event = { id = ADISCORD_vorkerland_claimant.100 hours = 1 }
+	}
 	option = { name = ADISCORD_vorkerland_claimant.30.a }
 }
 
@@ -540,7 +740,9 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = VAD }
-	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 } }
+	immediate = {
+		country_event = { id = ADISCORD_vorkerland_claimant.101 hours = 1 }
+	}
 	option = { name = ADISCORD_vorkerland_claimant.31.a }
 }
 
@@ -552,7 +754,9 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = { tag = TVA }
-	immediate = { country_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 } }
+	immediate = {
+		country_event = { id = ADISCORD_vorkerland_claimant.102 hours = 1 }
+	}
 	option = { name = ADISCORD_vorkerland_claimant.32.a }
 }
 
@@ -674,7 +878,10 @@ country_event = {
 				keep_completed = yes
 				copy_completed_from = WRK
 			}
-			annex_country = { target = WRK transfer_troops = yes }
+			annex_country = {
+				target = WRK
+				transfer_troops = yes
+			}
 			ADISCORD_vorkerland_relocate_legacy_armies = yes
 			ADISCORD_vorkerland_teardown_confederation = yes
 			ADISCORD_vorkerland_align_wtd_with_worx = yes
@@ -745,7 +952,9 @@ country_event = {
 		# Worker's fate is already fixed by the collapse roll, but the public
 		# report belongs to the aftermath. Publish it one day after the actual
 		# detonation so the story can never announce a rescue before the blast.
-		WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }
+		WKR = {
+			country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 }
+		}
 
 		# The half-speed tower clip runs for about 24 seconds; leave the
 		# temporary actor alive long enough for it to reach its ruins state.
@@ -803,7 +1012,12 @@ country_event = {
 		# day later, after released-country faction membership has entered the cache.
 		ADISCORD_vorkerland_teardown_confederation = yes
 		set_global_flag = ADISCORD_vorkerland_collapse_wars_started
-		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
+		if = {
+			limit = {
+				VAL = { exists = yes }
+			}
+			VAL = { VAL_open_refugee_waves = yes }
+		}
 		ADISCORD_vorkerland_apply_central_attrition = yes
 		WKR = { ADISCORD_vorkerland_initialize_legitimacy = yes }
 		VAD = { ADISCORD_vorkerland_initialize_legitimacy = yes }
@@ -817,24 +1031,34 @@ country_event = {
 		# after the initial partition and political cache rebuild. This prevents
 		# WRK's three obsolete starting spirits from resurfacing in live play.
 		if = {
-			limit = { WKR = { exists = yes } }
+			limit = {
+				WKR = { exists = yes }
+			}
 			WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
 		if = {
-			limit = { VAD = { exists = yes } }
+			limit = {
+				VAD = { exists = yes }
+			}
 			VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
 		if = {
-			limit = { TVA = { exists = yes } }
+			limit = {
+				TVA = { exists = yes }
+			}
 			TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }
 		}
 		set_global_flag = ADISCORD_vorkerland_claimant_spirit_progression_v3
 		if = {
-			limit = { VAL = { exists = yes } }
+			limit = {
+				VAL = { exists = yes }
+			}
 			VAL = { VAL_handle_vorkerland_war_outbreak = yes }
 		}
 		if = {
-			limit = { WKR = { exists = yes } }
+			limit = {
+				WKR = { exists = yes }
+			}
 			WKR = {
 				country_event = {
 					id = ADISCORD_vorkerland_collapse.31
@@ -874,7 +1098,10 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = {
+			tag = WRK
+			tag = WKR
+		}
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_claim_wars_authorized }
 	}
@@ -899,7 +1126,10 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = {
+			tag = WRK
+			tag = WKR
+		}
 		has_global_flag = ADISCORD_vorkerland_claim_wars_authorized
 		NOT = { has_global_flag = ADISCORD_vorkerland_local_bracket_stage_central }
 	}
@@ -934,7 +1164,11 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR tag = RUS }
+		OR = {
+			tag = WRK
+			tag = WKR
+			tag = RUS
+		}
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
 	}
 	immediate = { ADISCORD_vorkerland_verify_local_bracket_wars = yes }
@@ -952,8 +1186,10 @@ country_event = {
 			has_country_flag = ADISCORD_vorkerland_coalition_join_paid
 		}
 	}
-	immediate = { ADISCORD_vorkerland_splice_into_coalition_host_war = yes
-		ADISCORD_vorkerland_verify_coalition_membership = yes }
+	immediate = {
+		ADISCORD_vorkerland_splice_into_coalition_host_war = yes
+		ADISCORD_vorkerland_verify_coalition_membership = yes
+	}
 }
 
 country_event = {
@@ -969,7 +1205,12 @@ country_event = {
 	}
 	immediate = {
 		set_global_flag = ADISCORD_vorkerland_dirty_opened
-		if = { limit = { VAL = { exists = yes } } VAL = { VAL_open_refugee_waves = yes } }
+		if = {
+			limit = {
+				VAL = { exists = yes }
+			}
+			VAL = { VAL_open_refugee_waves = yes }
+		}
 		ADISCORD_vorkerland_show_dirty_opening_superevent = yes
 		# One successor per date gives the engine time to rebuild ownership,
 		# supply and front data while keeping the whole reveal under two weeks.
@@ -1030,7 +1271,13 @@ country_event = {
 		# tell Kefreyt immediately instead of leaving the loss as a silent map change.
 		VAL = {
 			if = {
-				limit = { exists = yes 168 = { is_core_of = VAL is_owned_by = ERT } }
+				limit = {
+					exists = yes
+					168 = {
+						is_core_of = VAL
+						is_owned_by = ERT
+					}
+				}
 				country_event = { id = val_rework.120 hours = 6 }
 			}
 		}
@@ -1218,7 +1465,10 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = WRK tag = WKR }
+		OR = {
+			tag = WRK
+			tag = WKR
+		}
 		has_global_flag = ADISCORD_vorkerland_collapse_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized }
 	}
@@ -1324,7 +1574,9 @@ country_event = {
 					}
 				}
 				if = {
-					limit = { NOT = { has_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry } }
+					limit = {
+						NOT = { has_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry }
+					}
 					set_country_flag = ADISCORD_vorkerland_rom_northern_cleanup_retry
 					country_event = { id = ADISCORD_vorkerland_collapse.46 days = 1 }
 				}
@@ -1390,7 +1642,14 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
+		OR = {
+			tag = IVN
+			tag = PWR
+			tag = PSD
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+		}
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1407,7 +1666,14 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
+		OR = {
+			tag = IVN
+			tag = PWR
+			tag = PSD
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+		}
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1432,7 +1698,10 @@ country_event = {
 		if = {
 			limit = {
 				country_exists = PWR
-				PWR = { is_subject = no NOT = { has_capitulated = yes } }
+				PWR = {
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
 			}
 			clr_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry
 			ADISCORD_vorkerland_open_ivanland_intervention_front = yes
@@ -1440,7 +1709,10 @@ country_event = {
 		else_if = {
 			limit = {
 				country_exists = PWR
-				PWR = { is_subject = no has_capitulated = yes }
+				PWR = {
+					is_subject = no
+					has_capitulated = yes
+				}
 				NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry }
 			}
 			set_country_flag = ADISCORD_vorkerland_ivanland_front_cache_retry
@@ -1488,18 +1760,31 @@ country_event = {
 			ADISCORD_vorkerland_ivanland_intervention_failure = yes
 		}
 		else_if = {
-			limit = { NOT = { has_war_with = PWR } }
+			limit = {
+				NOT = { has_war_with = PWR }
+			}
 			if = {
-				limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry } }
+				limit = {
+					NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry }
+				}
 				set_country_flag = ADISCORD_vorkerland_ivanland_front_war_retry
-				declare_war_on = { target = PWR type = take_state_focus generator = { 90 91 } }
-				set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
+				declare_war_on = {
+					target = PWR
+					type = take_state_focus
+					generator = { 90 91 }
+				}
+				set_country_flag = {
+					flag = ADISCORD_vorkerland_ivanland_front_verification_pending
+					days = 3
+				}
 				country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
 			}
 			else = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
 		}
 		else_if = {
-			limit = { NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry } }
+			limit = {
+				NOT = { has_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry }
+			}
 			set_country_flag = ADISCORD_vorkerland_ivanland_front_join_retry
 			ZAO = {
 				if = {
@@ -1561,7 +1846,10 @@ country_event = {
 					}
 				}
 			}
-			set_country_flag = { flag = ADISCORD_vorkerland_ivanland_front_verification_pending days = 3 }
+			set_country_flag = {
+				flag = ADISCORD_vorkerland_ivanland_front_verification_pending
+				days = 3
+			}
 			country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }
 		}
 		else = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
@@ -1574,7 +1862,14 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = IVN tag = PWR tag = PSD tag = ZAO tag = WPA tag = WPS }
+		OR = {
+			tag = IVN
+			tag = PWR
+			tag = PSD
+			tag = ZAO
+			tag = WPA
+			tag = WPS
+		}
 		has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved
 		NOT = { has_global_flag = ADISCORD_vorkerland_northern_wars_restored }
 	}
@@ -1607,7 +1902,16 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.63
 	hidden = yes
 	is_triggered_only = yes
-	trigger = { OR = { tag = WKR tag = ZAO tag = VLA tag = ROM tag = SOL tag = TRU } }
+	trigger = {
+		OR = {
+			tag = WKR
+			tag = ZAO
+			tag = VLA
+			tag = ROM
+			tag = SOL
+			tag = TRU
+		}
+	}
 	immediate = {
 		if = {
 			limit = {
@@ -1627,7 +1931,12 @@ country_event = {
 	id = ADISCORD_vorkerland_collapse.64
 	hidden = yes
 	is_triggered_only = yes
-	trigger = { OR = { tag = RUS tag = IVN } }
+	trigger = {
+		OR = {
+			tag = RUS
+			tag = IVN
+		}
+	}
 	immediate = {
 		if = {
 			limit = {
@@ -1658,7 +1967,17 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
-		OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV }
+		OR = {
+			tag = EYR
+			tag = EGC
+			tag = RIV
+			tag = REV
+			tag = YOR
+			tag = NDN
+			tag = SWB
+			tag = VHV
+			tag = OSV
+		}
 	}
 	immediate = {
 		country_event = { id = ADISCORD_vorkerland_collapse.66 days = 1 }
@@ -1672,7 +1991,17 @@ country_event = {
 	is_triggered_only = yes
 	trigger = {
 		has_country_flag = ADISCORD_vorkerland_central_minor_settlement_pending
-		OR = { tag = EYR tag = EGC tag = RIV tag = REV tag = YOR tag = NDN tag = SWB tag = VHV tag = OSV }
+		OR = {
+			tag = EYR
+			tag = EGC
+			tag = RIV
+			tag = REV
+			tag = YOR
+			tag = NDN
+			tag = SWB
+			tag = VHV
+			tag = OSV
+		}
 	}
 	immediate = {
 		# The second pass is also the terminal recovery pass. Move the shell's
@@ -1700,7 +2029,12 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = WRK
+		}
 		is_subject = no
 		NOT = { has_capitulated = yes }
 	}
@@ -1721,7 +2055,12 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = WRK
+		}
 		is_subject = no
 		NOT = { has_capitulated = yes }
 	}
@@ -1747,7 +2086,10 @@ country_event = {
 		tag = WTD
 		is_subject_of = TVA
 		NOT = { has_capitulated = yes }
-		TVA = { exists = yes has_war_with = WKR }
+		TVA = {
+			exists = yes
+			has_war_with = WKR
+		}
 		NOT = { has_war_with = WKR }
 	}
 
@@ -1781,7 +2123,10 @@ country_event = {
 		}
 		else_if = {
 			limit = {
-				TVA = { exists = yes has_war_with = WKR }
+				TVA = {
+					exists = yes
+					has_war_with = WKR
+				}
 				NOT = { has_country_flag = ADISCORD_vorkerland_wtd_join_retry }
 			}
 			set_country_flag = ADISCORD_vorkerland_wtd_join_retry
@@ -1853,7 +2198,10 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = RUS tag = IVN }
+		OR = {
+			tag = RUS
+			tag = IVN
+		}
 		has_global_flag = ADISCORD_vorkerland_northern_escalation_scheduled
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
@@ -1870,7 +2218,10 @@ country_event = {
 	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		OR = { tag = RUS tag = IVN }
+		OR = {
+			tag = RUS
+			tag = IVN
+		}
 		has_global_flag = ADISCORD_vorkerland_northern_escalation_scheduled
 		has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 		NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
@@ -1894,7 +2245,10 @@ country_event = {
 		tag = WRK
 		has_country_flag = ADISCORD_vorkerland_route_worker
 		has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists
-		has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }
+		has_country_leader = {
+			character = WRK_Nikita_Worcker
+			ruling_only = yes
+		}
 		NOT = { has_country_flag = ADISCORD_vorkerland_worker_mandate_resolved }
 	}
 
@@ -1909,7 +2263,6 @@ country_event = {
 		ADISCORD_vorkerland_wrk_usurp_mandate = yes
 		ai_chance = { factor = 50 }
 	}
-
 }
 
 country_event = {
@@ -1965,7 +2318,9 @@ news_event = {
 	}
 	desc = {
 		text = ADISCORD_vorkerland_news.2.d
-		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention } }
+		trigger = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention }
+		}
 	}
 	picture = GFX_news_event_adiscord_vorkerland_northern_settlement
 	major = yes
@@ -1978,15 +2333,21 @@ news_event = {
 	id = ADISCORD_vorkerland_news.3
 	title = ADISCORD_vorkerland_news.3.t
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_worker_elected } }
+		trigger = {
+			WRK = { has_country_flag = ADISCORD_vorkerland_worker_elected }
+		}
 		text = ADISCORD_vorkerland_news.3.worker.d
 	}
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_yastrebtsev_elected } }
+		trigger = {
+			WRK = { has_country_flag = ADISCORD_vorkerland_yastrebtsev_elected }
+		}
 		text = ADISCORD_vorkerland_news.3.yastrebtsev.d
 	}
 	desc = {
-		trigger = { WRK = { has_country_flag = ADISCORD_vorkerland_filopo_elected } }
+		trigger = {
+			WRK = { has_country_flag = ADISCORD_vorkerland_filopo_elected }
+		}
 		text = ADISCORD_vorkerland_news.3.filopo.d
 	}
 	picture = GFX_news_event_adiscord_parliament_chamber
@@ -2026,7 +2387,10 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		VAD = { exists = yes has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending }
+		VAD = {
+			exists = yes
+			has_country_flag = ADISCORD_vorkerland_vad_sol_invitation_pending
+		}
 	}
 
 	option = {
@@ -2041,7 +2405,10 @@ country_event = {
 					has_country_flag = ADISCORD_vorkerland_regional_auxiliary
 					is_in_faction = yes
 					NOT = { is_in_faction_with = VAD }
-					faction_leader = { exists = yes ADISCORD_vorkerland_is_main_claimant = yes }
+					faction_leader = {
+						exists = yes
+						ADISCORD_vorkerland_is_main_claimant = yes
+					}
 				}
 			}
 			VAD = {
@@ -2096,7 +2463,10 @@ country_event = {
 	is_triggered_only = yes
 
 	trigger = {
-		WKR = { exists = yes has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending }
+		WKR = {
+			exists = yes
+			has_country_flag = ADISCORD_vorkerland_wkr_vla_invitation_pending
+		}
 	}
 
 	option = {
@@ -2111,7 +2481,10 @@ country_event = {
 					has_country_flag = ADISCORD_vorkerland_regional_auxiliary
 					is_in_faction = yes
 					NOT = { is_in_faction_with = WKR }
-					faction_leader = { exists = yes ADISCORD_vorkerland_is_main_claimant = yes }
+					faction_leader = {
+						exists = yes
+						ADISCORD_vorkerland_is_main_claimant = yes
+					}
 				}
 			}
 			WKR = {
@@ -2360,7 +2733,6 @@ country_event = {
 	fire_only_once = yes
 	timeout_days = 14
 
-
 	trigger = {
 		tag = WRK
 		ADISCORD_vorkerland_collapse_not_started = yes
@@ -2444,7 +2816,9 @@ country_event = {
 			clr_global_flag = ADISCORD_vorkerland_claimant_identity_degraded_v2
 		}
 		else_if = {
-			limit = { NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2 } }
+			limit = {
+				NOT = { has_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2 }
+			}
 			set_global_flag = ADISCORD_vorkerland_claimant_identity_retry_v2
 			set_global_flag = ADISCORD_vorkerland_claimant_identity_check_pending_v2
 			country_event = { id = ADISCORD_vorkerland_phase.14 days = 2 }
@@ -2488,12 +2862,19 @@ country_event = {
 	id = ADISCORD_vorkerland_phase.6
 	hidden = yes
 	is_triggered_only = yes
-trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_vorkerland_coalition_victory_ready = yes }
+	trigger = {
+		has_global_flag = ADISCORD_vorkerland_phase_reunification
+		ADISCORD_vorkerland_coalition_victory_ready = yes
+	}
 
 	immediate = {
 		if = {
 			limit = {
-				WKR = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				WKR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
 				OR = {
 					WKR = { has_country_flag = ADISCORD_vorkerland_central_unifier }
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
@@ -2506,7 +2887,11 @@ trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_v
 		}
 		else_if = {
 			limit = {
-				VAD = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				VAD = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
 				OR = {
 					VAD = { has_country_flag = ADISCORD_vorkerland_central_unifier }
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
@@ -2519,7 +2904,11 @@ trigger = { has_global_flag = ADISCORD_vorkerland_phase_reunification ADISCORD_v
 		}
 		else_if = {
 			limit = {
-				TVA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+				TVA = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
 				OR = {
 					TVA = { has_country_flag = ADISCORD_vorkerland_central_unifier }
 					ADISCORD_vorkerland_has_live_marked_central_unifier = no
@@ -2551,7 +2940,9 @@ country_event = {
 			country_event = { id = ADISCORD_vorkerland_phase.7 days = 1 }
 		}
 		else_if = {
-			limit = { NOT = { ADISCORD_vorkerland_reunification_verified = yes } }
+			limit = {
+				NOT = { ADISCORD_vorkerland_reunification_verified = yes }
+			}
 			set_global_flag = ADISCORD_vorkerland_reunification_failed
 			log = "[ADISCORD][VORKERLAND][RECOVERY] Reunified WRK failed formation postconditions after one retry."
 		}
@@ -2626,7 +3017,12 @@ country_event = {
 	id = ADISCORD_vorkerland_rom_tru.3
 	hidden = yes
 	is_triggered_only = yes
-	trigger = { OR = { tag = ROM tag = TRU } }
+	trigger = {
+		OR = {
+			tag = ROM
+			tag = TRU
+		}
+	}
 	immediate = { ADISCORD_vorkerland_form_free_republics_league = yes }
 }
 
@@ -2716,7 +3112,12 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		OR = { tag = WKR tag = VAD tag = TVA tag = WRK }
+		OR = {
+			tag = WKR
+			tag = VAD
+			tag = TVA
+			tag = WRK
+		}
 		has_global_flag = ADISCORD_vorkerland_story_first_claimant_capitulated
 		NOT = { has_country_flag = ADISCORD_vorkerland_story_command_choice_resolved }
 	}

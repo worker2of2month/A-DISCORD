@@ -75,7 +75,10 @@ guiTypes = {
 			name = "volume_slider"
 			position = { x = 100 y = 45 }
 			size = { width = 75 height = 18 }
-			tileSize = { width = 12 height = 12 }
+			tileSize = {
+				width = 12
+				height = 12
+			}
 			maxValue = 100
 			minValue = 0
 			stepSize = 1

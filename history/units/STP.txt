@@ -5,9 +5,18 @@ division_template = {
 	is_locked = yes
 	force_allow_recruiting = no
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -18,15 +27,36 @@ division_template = {
 	is_locked = yes
 	force_allow_recruiting = no
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
+		engineer = {
+			x = 0
+			y = 0
+		}
 	}
 }
 
@@ -38,27 +68,78 @@ division_template = {
 	force_allow_recruiting = no
 	division_cap = 1
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
-		infantry = { x = 2 y = 0 }
-		infantry = { x = 2 y = 1 }
-		infantry = { x = 2 y = 2 }
-		ADISCORD_line_artillery = { x = 3 y = 0 }
-		ADISCORD_line_artillery = { x = 3 y = 1 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
+		infantry = {
+			x = 2
+			y = 0
+		}
+		infantry = {
+			x = 2
+			y = 1
+		}
+		infantry = {
+			x = 2
+			y = 2
+		}
+		ADISCORD_line_artillery = {
+			x = 3
+			y = 0
+		}
+		ADISCORD_line_artillery = {
+			x = 3
+			y = 1
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		artillery = { x = 0 y = 1 }
-		ADISCORD_recon_platform = { x = 0 y = 2 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_recon_platform = {
+			x = 0
+			y = 2
+		}
 	}
 	regimental_support = {
-		ADISCORD_regimental_fire_support = { x = 0 y = 0 }
-		ADISCORD_regimental_pioneers = { x = 1 y = 0 }
-		ADISCORD_regimental_anti_air = { x = 2 y = 0 }
+		ADISCORD_regimental_fire_support = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_regimental_pioneers = {
+			x = 1
+			y = 0
+		}
+		ADISCORD_regimental_anti_air = {
+			x = 2
+			y = 0
+		}
 	}
 }
 
@@ -69,217 +150,347 @@ units = {
 		task_force = {
 			name = "Охрана побережья"
 			location = 16366
-			ship = { name = "СК-201" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-202" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-203" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
-			ship = { name = "СК-204" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.15 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = STP } } }
+			ship = {
+				name = "СК-201"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = STP
+					}
+				}
+			}
+			ship = {
+				name = "СК-202"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = STP
+					}
+				}
+			}
+			ship = {
+				name = "СК-203"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = STP
+					}
+				}
+			}
+			ship = {
+				name = "СК-204"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.15
+				equipment = {
+					ADISCORD_coastal_patrol_ship_1 = {
+						amount = 1
+						owner = STP
+					}
+				}
+			}
 		}
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 16351
 		division_template = "Capital Guard"
 		start_experience_factor = 0.41
 		start_equipment_factor = 0.75
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 2 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
 		location = 16366
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 3 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
 		location = 145
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 4 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
 		location = 16374
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 5 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
 		location = 16377
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 6 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 6
+		}
 		location = 16386
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 7 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 7
+		}
 		location = 16445
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 8 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 8
+		}
 		location = 16547
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 9 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 9
+		}
 		location = 16345
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 10 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 10
+		}
 		location = 16440
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 11 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 11
+		}
 		location = 110
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 12 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 12
+		}
 		location = 16529
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 13 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 13
+		}
 		location = 16448
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 14 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 14
+		}
 		location = 16450
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 15 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 15
+		}
 		location = 16460
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 16 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 16
+		}
 		location = 16350
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 17 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 17
+		}
 		location = 55
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 18 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 18
+		}
 		location = 45
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 19 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 19
+		}
 		location = 16349
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 20 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 20
+		}
 		location = 95
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 21 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 21
+		}
 		location = 16455
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 22 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 22
+		}
 		location = 16459
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 23 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 23
+		}
 		location = 16539
 		division_template = "Regular army"
 		start_experience_factor = 0.33
 		start_equipment_factor = 0.69
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 24 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 24
+		}
 		location = 16344
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 25 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 25
+		}
 		location = 16457
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 26 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 26
+		}
 		location = 93
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 27 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 27
+		}
 		location = 111
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 28 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 28
+		}
 		location = 148
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 29 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 29
+		}
 		location = 16458
 		division_template = "Police division"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.61
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 30 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 30
+		}
 		location = 70
 		division_template = "Police division"
 		start_experience_factor = 0.28
@@ -289,14 +500,32 @@ units = {
 
 air_wings = {
 	28 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
 	}
 	1 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
-		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "STP"
+			amount = 50
+		}
 	}
 }
 
@@ -343,31 +572,46 @@ instant_effect = {
 		producer = STP
 	}
 	add_equipment_production = {
-		equipment = { type = infantry_equipment_0 creator = "STP" }
+		equipment = {
+			type = infantry_equipment_0
+			creator = "STP"
+		}
 		requested_factories = 3
 		progress = 0.30
 		efficiency = 70
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "STP" }
+		equipment = {
+			type = ADISCORD_squad_weapons_equipment_0
+			creator = "STP"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = support_equipment_1 creator = "STP" }
+		equipment = {
+			type = support_equipment_1
+			creator = "STP"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = artillery_equipment_1 creator = "STP" }
+		equipment = {
+			type = artillery_equipment_1
+			creator = "STP"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "STP" }
+		equipment = {
+			type = ADISCORD_fighter_airframe_2163
+			creator = "STP"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50

@@ -1,11 +1,11 @@
-state={
-	id=9
-	name="STATE_9"
-	provinces={
+state = {
+	id = 9
+	name = "STATE_9"
+	provinces = {
 		5 19 20 65 115 11534 16447 16506 16549 16651 16709 16710
 	}
-	manpower=300000
-	buildings_max_level_factor=1.000
+	manpower = 300000
+	buildings_max_level_factor = 1.000
 
 	history = {
 		owner = BCM
@@ -19,6 +19,6 @@ state={
 		victory_points = { 16651 1 }
 	}
 
-	state_category=town
-	local_supplies=0.000
+	state_category = town
+	local_supplies = 0.000
 }

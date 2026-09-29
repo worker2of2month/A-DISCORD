@@ -10,11 +10,25 @@ on_actions = {
 				limit = {
 					has_global_flag = ADISCORD_vorkerland_collapse_started
 					NOT = { has_global_flag = ADISCORD_news_vorkerland_fighting_published }
-					ROOT = { OR = { tag = WKR tag = VAD tag = TVA } }
-					FROM = { OR = { tag = WKR tag = VAD tag = TVA } }
+					ROOT = {
+						OR = {
+							tag = WKR
+							tag = VAD
+							tag = TVA
+						}
+					}
+					FROM = {
+						OR = {
+							tag = WKR
+							tag = VAD
+							tag = TVA
+						}
+					}
 				}
 				set_global_flag = ADISCORD_news_vorkerland_fighting_published
-				ROOT = { news_event = { id = ADISCORD_world_news.1 hours = 1 } }
+				ROOT = {
+					news_event = { id = ADISCORD_world_news.1 hours = 1 }
+				}
 			}
 
 			# Nodrul's northern campaign starts with the first real NOD relation
@@ -25,16 +39,30 @@ on_actions = {
 					OR = {
 						AND = {
 							ROOT = { tag = NOD }
-							FROM = { OR = { tag = YPR tag = COF tag = TFF } }
+							FROM = {
+								OR = {
+									tag = YPR
+									tag = COF
+									tag = TFF
+								}
+							}
 						}
 						AND = {
 							FROM = { tag = NOD }
-							ROOT = { OR = { tag = YPR tag = COF tag = TFF } }
+							ROOT = {
+								OR = {
+									tag = YPR
+									tag = COF
+									tag = TFF
+								}
+							}
 						}
 					}
 				}
 				set_global_flag = ADISCORD_news_nodrul_northern_war_published
-				ROOT = { news_event = { id = ADISCORD_world_news.2 hours = 1 } }
+				ROOT = {
+					news_event = { id = ADISCORD_world_news.2 hours = 1 }
+				}
 			}
 
 			# Stelander already has a richer public outbreak report (.70) with
@@ -47,12 +75,20 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_published }
 					OR = {
-						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
-						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+						AND = {
+							ROOT = { tag = STP }
+							FROM = { tag = STS }
+						}
+						AND = {
+							ROOT = { tag = STS }
+							FROM = { tag = STP }
+						}
 					}
 				}
 				set_global_flag = ADISCORD_news_stelander_civil_war_published
-				ROOT = { news_event = { id = ADISCORD_STP_cw.70 hours = 1 } }
+				ROOT = {
+					news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+				}
 			}
 
 			# The military-course intervention currently becomes a real VAL-SRP war.
@@ -64,12 +100,20 @@ on_actions = {
 					has_global_flag = STP_cw_started
 					NOT = { has_global_flag = ADISCORD_news_kefreyt_intervention_published }
 					OR = {
-						AND = { ROOT = { tag = VAL } FROM = { tag = SRP } }
-						AND = { FROM = { tag = VAL } ROOT = { tag = SRP } }
+						AND = {
+							ROOT = { tag = VAL }
+							FROM = { tag = SRP }
+						}
+						AND = {
+							FROM = { tag = VAL }
+							ROOT = { tag = SRP }
+						}
 					}
 				}
 				set_global_flag = ADISCORD_news_kefreyt_intervention_published
-				ROOT = { news_event = { id = ADISCORD_world_news.4 hours = 1 } }
+				ROOT = {
+					news_event = { id = ADISCORD_world_news.4 hours = 1 }
+				}
 			}
 
 			# Itora's intervention is only news once troops actually enter a war
@@ -81,16 +125,34 @@ on_actions = {
 					OR = {
 						AND = {
 							ROOT = { tag = IVN }
-							FROM = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+							FROM = {
+								OR = {
+									tag = ZAO
+									tag = WPA
+									tag = WPS
+									tag = PWR
+									tag = PSD
+								}
+							}
 						}
 						AND = {
 							FROM = { tag = IVN }
-							ROOT = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+							ROOT = {
+								OR = {
+									tag = ZAO
+									tag = WPA
+									tag = WPS
+									tag = PWR
+									tag = PSD
+								}
+							}
 						}
 					}
 				}
 				set_global_flag = ADISCORD_news_itora_intervention_published
-				ROOT = { news_event = { id = ADISCORD_world_news.5 hours = 1 } }
+				ROOT = {
+					news_event = { id = ADISCORD_world_news.5 hours = 1 }
+				}
 			}
 		}
 	}

@@ -15,7 +15,10 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.6 has_manpower > 50000 }
+		modifier = {
+			factor = 1.6
+			has_manpower > 50000
+		}
 	}
 	category_all_infantry = { max_organisation = 2 }
 	land_reinforce_rate = 0.005
@@ -38,7 +41,10 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 		}
 		ADISCORD_doctrine_people_and_scrap = {
 			mastery = 70
-			category_all_infantry = { defense = 0.05 max_organisation = 3 }
+			category_all_infantry = {
+				defense = 0.05
+				max_organisation = 3
+			}
 			planning_speed = 0.03
 		}
 	}
@@ -52,7 +58,8 @@ ADISCORD_doctrine_assault_detachments = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_assault_breaching_packages has_tech = ADISCORD_tech_remote_weapon_tripods
+		has_tech = ADISCORD_tech_assault_breaching_packages
+		has_tech = ADISCORD_tech_remote_weapon_tripods
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
@@ -61,7 +68,10 @@ ADISCORD_doctrine_assault_detachments = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_war = yes }
+		modifier = {
+			factor = 1.8
+			has_war = yes
+		}
 	}
 	ADISCORD_assault_infantry = { breakthrough = 0.03 }
 	planning_speed = 0.02
@@ -85,7 +95,10 @@ ADISCORD_doctrine_assault_detachments = {
 		}
 		ADISCORD_doctrine_assault_detachments_continuous_assault = {
 			mastery = 70
-			ADISCORD_assault_infantry = { breakthrough = 0.10 soft_attack = 0.06 }
+			ADISCORD_assault_infantry = {
+				breakthrough = 0.10
+				soft_attack = 0.06
+			}
 			enable_tactic = tactic_overwhelming_fire
 		}
 	}
@@ -108,7 +121,10 @@ ADISCORD_doctrine_mobile_line_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 has_tech = ADISCORD_tech_forward_supply_hubs }
+		modifier = {
+			factor = 1.5
+			has_tech = ADISCORD_tech_forward_supply_hubs
+		}
 	}
 	ADISCORD_mechanized_infantry = { maximum_speed = 0.02 }
 	org_loss_when_moving = -0.01
@@ -131,7 +147,10 @@ ADISCORD_doctrine_mobile_line_groups = {
 		}
 		ADISCORD_doctrine_mobile_line_groups_operational_mobility = {
 			mastery = 70
-			ADISCORD_mechanized_infantry = { maximum_speed = 0.04 max_organisation = 3 }
+			ADISCORD_mechanized_infantry = {
+				maximum_speed = 0.04
+				max_organisation = 3
+			}
 			org_loss_when_moving = -0.02
 		}
 	}
@@ -154,7 +173,10 @@ ADISCORD_doctrine_dispersed_militia_system = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 num_of_military_factories < 8 }
+		modifier = {
+			factor = 1.5
+			num_of_military_factories < 8
+		}
 	}
 	category_all_infantry = { defense = 0.04 }
 	dig_in_speed_factor = 0.02
@@ -178,8 +200,14 @@ ADISCORD_doctrine_dispersed_militia_system = {
 		}
 		ADISCORD_doctrine_dispersed_militia_system_defense_in_depth = {
 			mastery = 70
-			ADISCORD_militia = { defense = 0.08 max_organisation = 4 }
-			ADISCORD_territorial = { defense = 0.06 max_organisation = 3 }
+			ADISCORD_militia = {
+				defense = 0.08
+				max_organisation = 4
+			}
+			ADISCORD_territorial = {
+				defense = 0.06
+				max_organisation = 3
+			}
 			enable_tactic = tactic_elastic_defense
 		}
 	}
@@ -202,9 +230,15 @@ ADISCORD_doctrine_platform_battlegroups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_remote_weapon_stations }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_remote_weapon_stations
+		}
 	}
-	category_all_armor = { max_organisation = 2 breakthrough = 0.03 }
+	category_all_armor = {
+		max_organisation = 2
+		breakthrough = 0.03
+	}
 	rewards = {
 		ADISCORD_doctrine_remote_weapon_coordination = {
 			mastery = 30
@@ -221,11 +255,17 @@ ADISCORD_doctrine_platform_battlegroups = {
 		}
 		ADISCORD_doctrine_autonomous_repair_cycles = {
 			mastery = 60
-			category_all_armor = { reliability = 0.04 default_morale = 0.03 }
+			category_all_armor = {
+				reliability = 0.04
+				default_morale = 0.03
+			}
 		}
 		ADISCORD_doctrine_armored_decision_warfare = {
 			mastery = 70
-			category_all_armor = { breakthrough = 0.08 max_organisation = 2 }
+			category_all_armor = {
+				breakthrough = 0.08
+				max_organisation = 2
+			}
 		}
 	}
 }
@@ -238,7 +278,10 @@ ADISCORD_doctrine_armored_spearhead_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		OR = { has_tech = ADISCORD_tech_heavy_platform_cores has_tech = ADISCORD_tech_active_mass_balancing_suspension }
+		OR = {
+			has_tech = ADISCORD_tech_heavy_platform_cores
+			has_tech = ADISCORD_tech_active_mass_balancing_suspension
+		}
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
@@ -247,7 +290,10 @@ ADISCORD_doctrine_armored_spearhead_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 num_of_military_factories > 12 }
+		modifier = {
+			factor = 1.5
+			num_of_military_factories > 12
+		}
 	}
 	ADISCORD_heavy_platform = { breakthrough = 0.06 }
 	max_planning = 0.01
@@ -266,11 +312,17 @@ ADISCORD_doctrine_armored_spearhead_command = {
 		}
 		ADISCORD_doctrine_armored_spearhead_command_repair_cycles = {
 			mastery = 60
-			ADISCORD_heavy_platform = { reliability = 0.08 default_morale = 0.05 }
+			ADISCORD_heavy_platform = {
+				reliability = 0.08
+				default_morale = 0.05
+			}
 		}
 		ADISCORD_doctrine_armored_spearhead_command_armored_decision = {
 			mastery = 70
-			ADISCORD_heavy_platform = { breakthrough = 0.12 max_organisation = 4 }
+			ADISCORD_heavy_platform = {
+				breakthrough = 0.12
+				max_organisation = 4
+			}
 			enable_tactic = tactic_breakthrough
 		}
 	}
@@ -293,7 +345,10 @@ ADISCORD_doctrine_infantry_tank_integration = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 has_tech = ADISCORD_tech_combat_engineering_sections }
+		modifier = {
+			factor = 1.5
+			has_tech = ADISCORD_tech_combat_engineering_sections
+		}
 	}
 	category_all_armor = { defense = 0.03 }
 	category_all_infantry = { breakthrough = 0.02 }
@@ -317,7 +372,10 @@ ADISCORD_doctrine_infantry_tank_integration = {
 		}
 		ADISCORD_doctrine_infantry_tank_integration_integrated_battlegroup = {
 			mastery = 70
-			category_all_armor = { max_organisation = 3 breakthrough = 0.05 }
+			category_all_armor = {
+				max_organisation = 3
+				breakthrough = 0.05
+			}
 			category_all_infantry = { breakthrough = 0.03 }
 		}
 	}
@@ -340,7 +398,10 @@ ADISCORD_doctrine_autonomous_armored_screen = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_distributed_ground_swarm_control }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_distributed_ground_swarm_control
+		}
 	}
 	ADISCORD_combat_platform = { reliability = 0.03 }
 	category_recon = { recon = 0.5 }
@@ -359,11 +420,17 @@ ADISCORD_doctrine_autonomous_armored_screen = {
 		}
 		ADISCORD_doctrine_autonomous_armored_screen_self_recovery = {
 			mastery = 60
-			ADISCORD_combat_platform = { reliability = 0.05 default_morale = 0.03 }
+			ADISCORD_combat_platform = {
+				reliability = 0.05
+				default_morale = 0.03
+			}
 		}
 		ADISCORD_doctrine_autonomous_armored_screen_autonomous_battlefield = {
 			mastery = 70
-			ADISCORD_combat_platform = { breakthrough = 0.06 reliability = 0.04 }
+			ADISCORD_combat_platform = {
+				breakthrough = 0.06
+				reliability = 0.04
+			}
 			coordination_bonus = 0.02
 		}
 	}
@@ -386,7 +453,10 @@ ADISCORD_doctrine_mesh_battlefield_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_mesh_command_networks }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_mesh_command_networks
+		}
 	}
 	coordination_bonus = 0.015
 	planning_speed = 0.02
@@ -434,7 +504,10 @@ ADISCORD_doctrine_mission_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 has_war = yes }
+		modifier = {
+			factor = 1.5
+			has_war = yes
+		}
 	}
 	land_reinforce_rate = 0.005
 	category_all_infantry = { default_morale = 0.02 }
@@ -481,7 +554,10 @@ ADISCORD_doctrine_deep_operations = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 num_of_military_factories > 10 }
+		modifier = {
+			factor = 1.5
+			num_of_military_factories > 10
+		}
 	}
 	max_planning = 0.02
 	category_all_armor = { breakthrough = 0.03 }
@@ -528,7 +604,10 @@ ADISCORD_doctrine_centralized_fire_control = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.5 has_tech = ADISCORD_tech_counterbattery_radar_links }
+		modifier = {
+			factor = 1.5
+			has_tech = ADISCORD_tech_counterbattery_radar_links
+		}
 	}
 	category_line_artillery = { soft_attack = 0.03 }
 	coordination_bonus = 0.01
@@ -552,7 +631,10 @@ ADISCORD_doctrine_centralized_fire_control = {
 		ADISCORD_doctrine_centralized_fire_control_theater_fire_network = {
 			mastery = 70
 			coordination_bonus = 0.025
-			category_line_artillery = { soft_attack = 0.06 breakthrough = 0.03 }
+			category_line_artillery = {
+				soft_attack = 0.06
+				breakthrough = 0.03
+			}
 		}
 	}
 }
@@ -574,7 +656,10 @@ ADISCORD_doctrine_fortress_state_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_war = yes }
+		modifier = {
+			factor = 1.8
+			has_war = yes
+		}
 	}
 	dig_in_speed_factor = 0.04
 	category_all_infantry = { defense = 0.04 }
@@ -598,7 +683,10 @@ ADISCORD_doctrine_fortress_state_command = {
 		}
 		ADISCORD_doctrine_national_redoubt_protocols = {
 			mastery = 70
-			category_all_infantry = { defense = 0.07 max_organisation = 3 }
+			category_all_infantry = {
+				defense = 0.07
+				max_organisation = 3
+			}
 			dig_in_speed_factor = 0.06
 		}
 	}
@@ -621,7 +709,10 @@ ADISCORD_doctrine_artillery_support_network = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.8 has_tech = ADISCORD_tech_drone_spotted_batteries }
+		modifier = {
+			factor = 1.8
+			has_tech = ADISCORD_tech_drone_spotted_batteries
+		}
 	}
 	category_line_artillery = { soft_attack = 0.04 }
 	planning_speed = 0.015
@@ -644,7 +735,10 @@ ADISCORD_doctrine_artillery_support_network = {
 		}
 		ADISCORD_doctrine_artillery_support_network_artillery_web = {
 			mastery = 70
-			category_line_artillery = { soft_attack = 0.06 breakthrough = 0.04 }
+			category_line_artillery = {
+				soft_attack = 0.06
+				breakthrough = 0.04
+			}
 			coordination_bonus = 0.015
 		}
 	}
@@ -667,9 +761,15 @@ ADISCORD_doctrine_combat_engineer_groups = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_assault_breaching_packages }
+		modifier = {
+			factor = 2
+			has_tech = ADISCORD_tech_assault_breaching_packages
+		}
 	}
-	engineer = { breakthrough = 0.04 defense = 0.03 }
+	engineer = {
+		breakthrough = 0.04
+		defense = 0.03
+	}
 	industry_repair_factor = 0.02
 	rewards = {
 		ADISCORD_doctrine_combat_engineer_groups_damage_surveys = {
@@ -686,11 +786,17 @@ ADISCORD_doctrine_combat_engineer_groups = {
 		}
 		ADISCORD_doctrine_combat_engineer_groups_robotic_clearance = {
 			mastery = 60
-			engineer = { defense = 0.04 breakthrough = 0.04 }
+			engineer = {
+				defense = 0.04
+				breakthrough = 0.04
+			}
 		}
 		ADISCORD_doctrine_combat_engineer_groups_engineer_command = {
 			mastery = 70
-			engineer = { defense = 0.06 breakthrough = 0.06 }
+			engineer = {
+				defense = 0.06
+				breakthrough = 0.06
+			}
 			category_support_battalions = { max_organisation = 2 }
 		}
 	}
@@ -713,7 +819,10 @@ ADISCORD_doctrine_resilient_logistics_command = {
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 1.7 has_tech = ADISCORD_tech_hardened_logistics_nodes }
+		modifier = {
+			factor = 1.7
+			has_tech = ADISCORD_tech_hardened_logistics_nodes
+		}
 	}
 	supply_consumption_factor = -0.015
 	category_support_battalions = { defense = 0.02 }

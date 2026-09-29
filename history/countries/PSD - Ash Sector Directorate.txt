@@ -1,4 +1,12 @@
 set_politics = { ruling_party = etatism elections_allowed = no }
-set_popularities = { etatism = 70 chauvinism = 10 humanism = 5 pragmatism = 15 technocracy = 0 }
+
+set_popularities = {
+	etatism = 70
+	chauvinism = 10
+	humanism = 5
+	pragmatism = 15
+	technocracy = 0
+}
+
 recruit_character = PSD_Marta_Cinder
 set_research_slots = 2

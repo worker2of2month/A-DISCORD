@@ -3,8 +3,14 @@ air_wings = {
 	# group. WKR keeps a usable air arm without a unique 2:1 opening advantage
 	# over the Vadl claimant; additional aircraft remain finite replacements.
 	32 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "WKR" amount = 100 }
-		ADISCORD_cas_airframe_2170 = { owner = "WKR" amount = 50 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "WKR"
+			amount = 100
+		}
+		ADISCORD_cas_airframe_2170 = {
+			owner = "WKR"
+			amount = 50
+		}
 	}
 }
 

@@ -80,5 +80,4 @@ focus_tree = {
 		available = { is_completed_by_event = yes }
 		completion_reward = { }
 	}
-
 }

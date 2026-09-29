@@ -8,7 +8,9 @@ scripted_diplomatic_actions = {
 		# action out of both sides of a dirty-zone country pair.
 		visible = {
 			NOT = { original_tag = EXZ }
-			ROOT = { NOT = { original_tag = EXZ } }
+			ROOT = {
+				NOT = { original_tag = EXZ }
+			}
 		}
 
 		selectable = {

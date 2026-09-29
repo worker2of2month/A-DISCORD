@@ -1,7 +1,7 @@
 ideas = {
 	country = {
-# --- collapse_ideas ---
-ADISCORD_vorkerland_erased_nations = {
+		# --- collapse_ideas ---
+		ADISCORD_vorkerland_erased_nations = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -37,7 +37,6 @@ ADISCORD_vorkerland_erased_nations = {
 			ai_will_do = { factor = 0 }
 		}
 
-
 		# Granted automatically to any claimant close to collapse and removed again
 		# when it recovers. The two thresholds differ on purpose: a single value
 		# makes the idea flicker on and off as the front oscillates, which forces a
@@ -54,7 +53,7 @@ ADISCORD_vorkerland_erased_nations = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_1 = {
+		ADISCORD_vorkerland_erased_nations_relief_1 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -71,7 +70,7 @@ ADISCORD_vorkerland_erased_nations_relief_1 = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-ADISCORD_vorkerland_erased_nations_relief_2 = {
+		ADISCORD_vorkerland_erased_nations_relief_2 = {
 			picture = generic_oppression
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }
@@ -1074,8 +1073,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-# --- diplomacy_ideas ---
+		# --- diplomacy_ideas ---
 		ADISCORD_vorkerland_solar_counter_preparation = {
 			allowed = { always = no }
 			removal_cost = -1
@@ -1086,8 +1084,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			}
 		}
 
-
-# --- focus_decision_ideas ---
+		# --- focus_decision_ideas ---
 		ADISCORD_vorkerland_allied_supply_advisers = {
 			picture = generic_volunteer_expedition_bonus
 			allowed = { always = no }
@@ -1101,8 +1098,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-# --- focus_expansion_ideas ---
+		# --- focus_expansion_ideas ---
 		# Prewar preparations. Both are timed and exist only to carry a bounded
 		# readiness choice into the opening collapse window.
 		ADISCORD_vorkerland_wrk_loyal_republics_mobilized = {
@@ -2194,9 +2190,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-
-# --- rom_tru_ideas ---
+		# --- rom_tru_ideas ---
 		ADISCORD_vorkerland_rom_desert_eagle_staff = {
 			picture = generic_war_preparation
 			allowed = { always = no }
@@ -2313,8 +2307,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-# --- stalemate_ideas ---
+		# --- stalemate_ideas ---
 		# Granted only by the two AI-gated one-shot deadline effects and always
 		# removed by the engine after seventy-five days.
 		ADISCORD_vorkerland_ai_breakthrough_window = {
@@ -2413,9 +2406,8 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			}
 		}
 
-# --- starting_ideas ---
+		# --- starting_ideas ---
 		WRK_ashes_of_the_crown = {
-
 			allowed = {
 				always = no
 			}
@@ -2454,7 +2446,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_hourglass_of_discord = {
-
 			allowed = {
 				always = no
 			}
@@ -2481,7 +2472,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_constitution_of_the_republic = {
-
 			allowed = {
 				always = no
 			}
@@ -2504,7 +2494,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_birthplace_of_the_first_revolution = {
-
 			allowed = {
 				always = no
 			}
@@ -2541,7 +2530,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_birthplace_of_the_first_revolution_front_republic = {
-
 			allowed = {
 				always = no
 			}
@@ -2576,7 +2564,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_birthplace_of_the_first_revolution_renewed_mandate = {
-
 			allowed = {
 				always = no
 			}
@@ -2610,7 +2597,6 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 		}
 
 		WRK_separatism = {
-
 			allowed = {
 				always = no
 			}
@@ -2629,8 +2615,7 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			}
 		}
 
-
-# --- end ---
+		# --- end ---
 	}
 
 	# Mechanical civil-war normalization is deliberately invisible in the UI.
@@ -2644,15 +2629,60 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 			available = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			}
-			targeted_modifier = { tag = EYR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = EGC attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = RIV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = REV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = YOR attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = NDN attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = SWB attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = VHV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
-			targeted_modifier = { tag = OSV attack_bonus_against = 0.40 defense_bonus_against = 0.40 breakthrough_bonus_against = 0.40 }
+			targeted_modifier = {
+				tag = EYR
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = EGC
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = RIV
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = REV
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = YOR
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = NDN
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = SWB
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = VHV
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
+			targeted_modifier = {
+				tag = OSV
+				attack_bonus_against = 0.40
+				defense_bonus_against = 0.40
+				breakthrough_bonus_against = 0.40
+			}
 		}
 
 		ADISCORD_vorkerland_coalition_against_wkr = {
@@ -2664,7 +2694,11 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 				WKR = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
-			targeted_modifier = { tag = WKR attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			targeted_modifier = {
+				tag = WKR
+				attack_bonus_against = 0.20
+				defense_bonus_against = 0.20
+			}
 		}
 
 		ADISCORD_vorkerland_coalition_against_vad = {
@@ -2676,7 +2710,11 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 				VAD = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
-			targeted_modifier = { tag = VAD attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			targeted_modifier = {
+				tag = VAD
+				attack_bonus_against = 0.20
+				defense_bonus_against = 0.20
+			}
 		}
 
 		ADISCORD_vorkerland_coalition_against_tva = {
@@ -2688,7 +2726,11 @@ ADISCORD_vorkerland_erased_nations_relief_2 = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 				TVA = { has_country_flag = ADISCORD_vorkerland_legitimacy_leader }
 			}
-			targeted_modifier = { tag = TVA attack_bonus_against = 0.20 defense_bonus_against = 0.20 }
+			targeted_modifier = {
+				tag = TVA
+				attack_bonus_against = 0.20
+				defense_bonus_against = 0.20
+			}
 		}
 	}
 }

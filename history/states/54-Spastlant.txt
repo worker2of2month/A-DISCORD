@@ -1,18 +1,18 @@
-state={
-	id=54
-	name="STATE_54"
-	provinces={
+state = {
+	id = 54
+	name = "STATE_54"
+	provinces = {
 		728 4369 4827 16296 16297 16298 16478 16501 16510 16555 16653
 	}
-	manpower=1300000
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	manpower = 1300000
+	buildings_max_level_factor = 1.000
+	local_supplies = 0.000
 	state_category = city
 	resources = {
 		aluminium = 4
 	}
 
-	history={
+	history = {
 		owner = VAL
 		buildings = {
 			air_base = 2
@@ -25,5 +25,4 @@ state={
 		victory_points = { 16510 15 }
 		victory_points = { 16653 5 }
 	}
-
 }

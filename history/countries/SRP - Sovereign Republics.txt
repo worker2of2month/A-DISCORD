@@ -4,11 +4,13 @@ set_politics = {
 	ruling_party = pragmatism
 	elections_allowed = no
 }
+
 set_popularities = {
 	pragmatism = 60
 	humanism = 25
 	etatism = 15
 }
+
 set_stability = 0.45
 set_war_support = 0.55
 recruit_character = SRP_Federal_Council

@@ -1,18 +1,18 @@
-state={
-	id=59
-	name="STATE_59"
-	resources={
-		tungsten=1
-		aluminium=4
-		steel=8
+state = {
+	id = 59
+	name = "STATE_59"
+	resources = {
+		tungsten = 1
+		aluminium = 4
+		steel = 8
 	}
-	provinces={
+	provinces = {
 		3595 6206 6885 10404
 	}
-	manpower=32000
-	buildings_max_level_factor=1
-	state_category=rural
-	local_supplies=0
+	manpower = 32000
+	buildings_max_level_factor = 1
+	state_category = rural
+	local_supplies = 0
 
 	history = {
 		owner = CIN

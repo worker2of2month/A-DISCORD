@@ -1,5 +1,4 @@
 ideas = {
-
 	economy = {
 		law = yes
 
@@ -101,8 +100,12 @@ ideas = {
 
 			default = yes
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		civilian_economy = {
@@ -135,8 +138,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		low_economic_mobilisation = {
@@ -173,10 +180,17 @@ ideas = {
 
 			ai_will_do = {
 				factor = 2
-				modifier = { factor = 20 is_major = yes }
+				modifier = {
+					factor = 20
+					is_major = yes
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		partial_economic_mobilisation = {
@@ -218,10 +232,17 @@ ideas = {
 
 			ai_will_do = {
 				factor = 2
-				modifier = { factor = 20 is_major = yes }
+				modifier = {
+					factor = 20
+					is_major = yes
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		war_economy = {
@@ -232,11 +253,17 @@ ideas = {
 					has_government = chauvinism
 					has_government = utilitarism
 					has_government = etatism
-					custom_trigger_tooltip = { tooltip = or_clarification_tooltip always = no }
+					custom_trigger_tooltip = {
+						tooltip = or_clarification_tooltip
+						always = no
+					}
 					AND = {
 						has_war = yes
 						any_enemy_country = {
-							ic_ratio = { tag = ROOT ratio > 0.40 }
+							ic_ratio = {
+								tag = ROOT
+								ratio > 0.40
+							}
 						}
 					}
 				}
@@ -281,10 +308,17 @@ ideas = {
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
 				factor = 5
-				modifier = { factor = 20 manpower_per_military_factory > 1000 }
+				modifier = {
+					factor = 20
+					manpower_per_military_factory > 1000
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		tot_economic_mobilisation = {
@@ -293,7 +327,10 @@ ideas = {
 				has_war = yes
 				has_war_support > 0.75
 				any_enemy_country = {
-					ic_ratio = { tag = ROOT ratio > 0.50 }
+					ic_ratio = {
+						tag = ROOT
+						ratio > 0.50
+					}
 				}
 			}
 
@@ -341,8 +378,14 @@ ideas = {
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
 				factor = 1
-				modifier = { factor = 25 manpower_per_military_factory > 10000 }
-				modifier = { factor = 0 manpower_per_military_factory < 3000 }
+				modifier = {
+					factor = 25
+					manpower_per_military_factory > 10000
+				}
+				modifier = {
+					factor = 0
+					manpower_per_military_factory < 3000
+				}
 				modifier = {
 					factor = 0
 					OR = {
@@ -351,8 +394,12 @@ ideas = {
 					}
 				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -382,12 +429,25 @@ ideas = {
 
 			ai_will_do = {
 				factor = 1
-				modifier = { factor = 2 has_war = no }
-				modifier = { factor = 0 has_government = chauvinism }
-				modifier = { factor = 0 has_government = utilitarism }
+				modifier = {
+					factor = 2
+					has_war = no
+				}
+				modifier = {
+					factor = 0
+					has_government = chauvinism
+				}
+				modifier = {
+					factor = 0
+					has_government = utilitarism
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		export_focus = {
@@ -411,8 +471,12 @@ ideas = {
 			cancel_if_invalid = no
 
 			ai_will_do = { factor = 1 }
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		limited_exports = {
@@ -422,7 +486,12 @@ ideas = {
 					AND = {
 						has_government = humanism
 						has_war = yes
-						any_enemy_country = { ic_ratio = { tag = ROOT ratio > 0.20 } }
+						any_enemy_country = {
+							ic_ratio = {
+								tag = ROOT
+								ratio > 0.20
+							}
+						}
 					}
 					AND = {
 						NOT = { has_government = humanism }
@@ -456,11 +525,24 @@ ideas = {
 
 			ai_will_do = {
 				factor = 1
-				modifier = { factor = 0 is_major = no is_in_faction = yes has_war = yes }
-				modifier = { factor = 0 is_major = no has_war = no }
+				modifier = {
+					factor = 0
+					is_major = no
+					is_in_faction = yes
+					has_war = yes
+				}
+				modifier = {
+					factor = 0
+					is_major = no
+					has_war = no
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		closed_economy = {
@@ -498,16 +580,30 @@ ideas = {
 				production_factory_efficiency_gain_factor = 0.05
 			}
 
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } custom_effect_tooltip = closed_economy_TT }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+				custom_effect_tooltip = closed_economy_TT
+			}
 
 			cancel_if_invalid = no
 
 			ai_will_do = {
 				factor = 1
-				modifier = { factor = 0 is_major = no is_in_faction = yes has_war = yes }
-				modifier = { factor = 0 is_major = no has_war = no }
+				modifier = {
+					factor = 0
+					is_major = no
+					is_in_faction = yes
+					has_war = yes
+				}
+				modifier = {
+					factor = 0
+					is_major = no
+					has_war = no
+				}
 			}
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_trade_policy_autarky = {
@@ -547,11 +643,24 @@ ideas = {
 
 			ai_will_do = {
 				factor = 1
-				modifier = { factor = 0 is_major = no is_in_faction = yes has_war = yes }
-				modifier = { factor = 0 is_major = no has_war = no }
+				modifier = {
+					factor = 0
+					is_major = no
+					is_in_faction = yes
+					has_war = yes
+				}
+				modifier = {
+					factor = 0
+					is_major = no
+					has_war = no
+				}
 			}
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 
@@ -585,8 +694,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_industrializing = {
@@ -616,8 +729,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_free_market = {
@@ -660,8 +777,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_mixed = {
@@ -693,8 +814,12 @@ ideas = {
 
 			default = yes
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_state_coordinated = {
@@ -731,8 +856,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_planned_bureaucratic = {
@@ -776,8 +905,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_syndicalist = {
@@ -816,8 +949,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_oligarchic_clan = {
@@ -859,8 +996,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 
 		ADISCORD_economic_system_technocratic = {
@@ -902,8 +1043,12 @@ ideas = {
 			}
 
 			cancel_if_invalid = no
-			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_queue_law_refresh = yes }
+			}
 		}
 	}
 }

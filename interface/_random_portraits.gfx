@@ -1,5 +1,4 @@
 spriteTypes = {
-
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_1"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
@@ -36,7 +35,7 @@ spriteTypes = {
 		name = "GFX_Portrait_Forul_Generic_9"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
 	}
-	
+
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_1"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_1.dds"
@@ -45,7 +44,6 @@ spriteTypes = {
 		name = "GFX_Portrait_Europe_Generic_1_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_1.dds"
 	}
-
 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_2"
@@ -56,7 +54,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_2.dds"
 	}
 
- 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_3"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_3.dds"
@@ -66,7 +63,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_3.dds"
 	}
 
- 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_land_1"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_land_1.dds"
@@ -75,7 +71,6 @@ spriteTypes = {
 		name = "GFX_Portrait_Europe_Generic_land_1_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_1.dds"
 	}
-
 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_land_2"
@@ -86,7 +81,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_2.dds"
 	}
 
-
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_land_3"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_land_3.dds"
@@ -95,7 +89,6 @@ spriteTypes = {
 		name = "GFX_Portrait_Europe_Generic_land_3_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_3.dds"
 	}
-
 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_land_4"
@@ -106,7 +99,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_4.dds"
 	}
 
-
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_land_5"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_land_5.dds"
@@ -115,7 +107,6 @@ spriteTypes = {
 		name = "GFX_Portrait_Europe_Generic_land_5_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_5.dds"
 	}
-
 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_navy_1"
@@ -126,7 +117,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_navy_1.dds"
 	}
 
-
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_navy_2"
 		texturefile = "gfx/leaders/Europe/Portrait_Europe_Generic_navy_2.dds"
@@ -135,7 +125,6 @@ spriteTypes = {
 		name = "GFX_Portrait_Europe_Generic_navy_2_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_navy_2.dds"
 	}
-
 
 	spriteType = {
 		name = "GFX_Portrait_Europe_Generic_navy_3"
@@ -146,7 +135,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/ideas/idea_europe_generic_navy_3.dds"
 	}
 
-
 	spriteType = {
 		name = "GFX_portrait_europe_generic_land_13"
 		texturefile = "gfx/leaders/Europe/portrait_europe_generic_land_13.dds"
@@ -155,7 +143,6 @@ spriteTypes = {
 		name = "GFX_portrait_europe_generic_land_13_small"
 		texturefile = "gfx/interface/ideas/idea_europe_generic_land_13.dds"
 	}
-
 
 	### VORKERLAND
 

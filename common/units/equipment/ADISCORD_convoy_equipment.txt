@@ -90,7 +90,10 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 13
 		build_cost_ic = 850
-		resources = { steel = 2 chromium = 1 }
+		resources = {
+			steel = 2
+			chromium = 1
+		}
 	}
 
 	ADISCORD_escort_ship_2163 = {
@@ -111,7 +114,10 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 14
 		build_cost_ic = 1150
-		resources = { steel = 2 chromium = 1 }
+		resources = {
+			steel = 2
+			chromium = 1
+		}
 	}
 
 	ADISCORD_escort_ship_2170 = {
@@ -132,7 +138,11 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 15
 		build_cost_ic = 1500
-		resources = { steel = 3 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_escort_ship_2175 = {
@@ -153,7 +163,11 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 16
 		build_cost_ic = 1900
-		resources = { steel = 3 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_cruiser_archetype = {
@@ -185,7 +199,10 @@ equipments = {
 		fuel_consumption = 32
 		offensive_weapons = yes
 		build_cost_ic = 3400
-		resources = { steel = 4 chromium = 2 }
+		resources = {
+			steel = 4
+			chromium = 2
+		}
 	}
 
 	ADISCORD_submarine_archetype = {
@@ -236,7 +253,10 @@ equipments = {
 		armor_value = 12
 		build_cost_ic = 3400
 		fuel_consumption = 32
-		resources = { steel = 4 chromium = 2 }
+		resources = {
+			steel = 4
+			chromium = 2
+		}
 	}
 
 	ADISCORD_cruiser_2163 = {
@@ -257,7 +277,10 @@ equipments = {
 		armor_value = 15
 		build_cost_ic = 4300
 		fuel_consumption = 36
-		resources = { steel = 4 chromium = 2 }
+		resources = {
+			steel = 4
+			chromium = 2
+		}
 	}
 
 	ADISCORD_cruiser_2170 = {
@@ -278,7 +301,12 @@ equipments = {
 		armor_value = 18
 		build_cost_ic = 5200
 		fuel_consumption = 40
-		resources = { steel = 5 chromium = 2 rare_alloys = 1 rare_components = 1 }
+		resources = {
+			steel = 5
+			chromium = 2
+			rare_alloys = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_cruiser_2175 = {
@@ -299,7 +327,12 @@ equipments = {
 		armor_value = 21
 		build_cost_ic = 6100
 		fuel_consumption = 44
-		resources = { steel = 5 chromium = 2 rare_alloys = 1 rare_components = 1 }
+		resources = {
+			steel = 5
+			chromium = 2
+			rare_alloys = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_submarine_2155 = {
@@ -349,7 +382,11 @@ equipments = {
 		naval_speed = 21
 		max_strength = 40
 		build_cost_ic = 1350
-		resources = { steel = 2 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 2
+			chromium = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_submarine_2175 = {
@@ -366,6 +403,10 @@ equipments = {
 		naval_speed = 23
 		max_strength = 45
 		build_cost_ic = 1700
-		resources = { steel = 2 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 2
+			chromium = 1
+			rare_components = 1
+		}
 	}
 }

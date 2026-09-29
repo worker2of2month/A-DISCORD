@@ -24,7 +24,9 @@ country_event = {
 				NOT = { has_global_flag = ADISCORD_vorkerland_collapse_started }
 				WRK = { exists = yes }
 			}
-			WRK = { country_event = { id = ADISCORD_vorkerland_collapse.1 } }
+			WRK = {
+				country_event = { id = ADISCORD_vorkerland_collapse.1 }
+			}
 		}
 		else = {
 			# superevent_vorkerland_civilwar
@@ -33,6 +35,7 @@ country_event = {
 		}
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent.2
 	hidden = yes
@@ -44,6 +47,7 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent.3
 	hidden = yes
@@ -55,6 +59,7 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent.4
 	hidden = yes
@@ -66,6 +71,7 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent.5
 	hidden = yes
@@ -77,6 +83,7 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent.6
 	hidden = yes
@@ -100,6 +107,7 @@ country_event = {
 		play_song = "superevent_vorkerland_civilwar"
 	}
 }
+
 country_event = {
 	id = ADISCORD_superevent_audio.2
 	hidden = yes
@@ -110,7 +118,8 @@ country_event = {
 	}
 }
 
-news_event = { #vorkerland civilwar
+news_event = {
+	#vorkerland civilwar
 	id = ADISCORD_superevent_news.1
 	title = news.0.t
 	desc = news.0.d
@@ -151,7 +160,8 @@ news_event = { #vorkerland civilwar
 	}
 }
 
-news_event = { #stelander empire
+news_event = {
+	#stelander empire
 	id = ADISCORD_superevent_news.2
 	title = news.1.t
 	desc = news.1.d

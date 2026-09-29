@@ -16,7 +16,12 @@ set_politics = {
 	last_election = "2110.12.01"
 	elections_allowed = no
 }
-promote_character = { character = The_Absent_Government ideology = anarchism_ideology }
+
+promote_character = {
+	character = The_Absent_Government
+	ideology = anarchism_ideology
+}
+
 set_popularities = {
 	anarchism = 100
 }

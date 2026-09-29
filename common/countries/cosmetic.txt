@@ -60,26 +60,65 @@ SLF_svetlogorsk_republic = {
 	color_ui = rgb { 77 173 153 }
 }
 
-CIN_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+CIN_VAL_commissariat = {
+	color = rgb { 93 103 82 }
+	color_ui = rgb { 156 160 139 }
+}
 
-OSF_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+OSF_VAL_commissariat = {
+	color = rgb { 93 103 82 }
+	color_ui = rgb { 156 160 139 }
+}
 
-APH_VAL_commissariat = { color = rgb { 93 103 82 } color_ui = rgb { 156 160 139 } }
+APH_VAL_commissariat = {
+	color = rgb { 93 103 82 }
+	color_ui = rgb { 156 160 139 }
+}
 
-VAL_dopotroydsk = { color = rgb { 86 55 38 } color_ui = rgb { 180 126 76 } }
+VAL_dopotroydsk = {
+	color = rgb { 86 55 38 }
+	color_ui = rgb { 180 126 76 }
+}
 
 RUS_last_empire = {
 	color = rgb { 96 16 20 }
 	color_ui = rgb { 196 92 48 }
 }
-STS_steland = { color = rgb { 72 88 104 } color_ui = rgb { 140 168 188 } }
-VAL_liberated = { color = rgb { 70 92 74 } color_ui = rgb { 156 176 148 } }
-NOD_mandate_broken = { color = rgb { 88 70 78 } color_ui = rgb { 176 148 156 } }
-TFF_frontier_defense_confederation = { color = rgb { 168 70 18 } color_ui = rgb { 214 112 48 } }
 
-VAL_commonwealth = { color = rgb { 127 15 2 } color_ui = rgb { 127 15 2 } }
-STL_VAL_administration = { color = rgb { 15 118 124 } color_ui = rgb { 15 118 124 } }
-NOD_VAL_administration = { color = rgb { 63 56 96 } color_ui = rgb { 63 56 96 } }
+STS_steland = {
+	color = rgb { 72 88 104 }
+	color_ui = rgb { 140 168 188 }
+}
+
+VAL_liberated = {
+	color = rgb { 70 92 74 }
+	color_ui = rgb { 156 176 148 }
+}
+
+NOD_mandate_broken = {
+	color = rgb { 88 70 78 }
+	color_ui = rgb { 176 148 156 }
+}
+
+TFF_frontier_defense_confederation = {
+	color = rgb { 168 70 18 }
+	color_ui = rgb { 214 112 48 }
+}
+
+VAL_commonwealth = {
+	color = rgb { 127 15 2 }
+	color_ui = rgb { 127 15 2 }
+}
+
+STL_VAL_administration = {
+	color = rgb { 15 118 124 }
+	color_ui = rgb { 15 118 124 }
+}
+
+NOD_VAL_administration = {
+	color = rgb { 63 56 96 }
+	color_ui = rgb { 63 56 96 }
+}
 
 WRK_vorkerland_technocracy = {
 	color = rgb { 52 118 124 }

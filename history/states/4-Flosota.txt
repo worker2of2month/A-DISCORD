@@ -1,13 +1,13 @@
-state={
-	id=4
-	name="STATE_4"
-	provinces={
-		49 82 7111 16371 16470 16491 16496 16505 
+state = {
+	id = 4
+	name = "STATE_4"
+	provinces = {
+		49 82 7111 16371 16470 16491 16496 16505
 	}
-	manpower=600000
-	buildings_max_level_factor=1.000
-	state_category=town
-	local_supplies=0.000
+	manpower = 600000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 0.000
 
 	history = {
 		owner = BGT
@@ -15,5 +15,4 @@ state={
 
 		victory_points = { 16496 15 }
 	}
-	
 }

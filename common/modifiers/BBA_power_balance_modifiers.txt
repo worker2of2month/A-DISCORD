@@ -23,11 +23,11 @@ SWI_romansh = {
 }
 
 SWI_DEBUG_all_cantons = {
-	power_balance_daily = -0.99	
+	power_balance_daily = -0.99
 }
 
 SWI_DEBUG_all_council = {
-	power_balance_daily = -0.99	
+	power_balance_daily = -0.99
 }
 
 #########################################
@@ -37,6 +37,7 @@ SWI_DEBUG_all_council = {
 ETH_withdraw_priviliges_power_balance = {
 	power_balance_daily = 0.002
 }
+
 ETH_increase_priviliges_power_balance = {
 	power_balance_daily = -0.002
 }
@@ -44,6 +45,7 @@ ETH_increase_priviliges_power_balance = {
 ETH_increase_communist_power_balance = {
 	power_balance_daily = 0.002
 }
+
 ETH_increase_anarchist_power_balance = {
 	power_balance_daily = -0.002
 }
@@ -52,12 +54,11 @@ ETH_BoP_spanish_exiles_modifier = {
 	power_balance_daily = -0.003
 }
 
-
 #########################################
 ########### ITA BOP MODIFIERS ###########
 #########################################
 #LOST CORES - Max 2.5 weekly
-ITA_power_balance_lost_core_1 = { 
+ITA_power_balance_lost_core_1 = {
 	power_balance_weekly = -0.005
 }
 
@@ -76,4 +77,3 @@ ITA_power_balance_lost_core_4 = {
 ITA_power_balance_lost_core_5 = {
 	power_balance_weekly = -0.005
 }
-

@@ -1,33 +1,148 @@
 spriteTypes = {
-	spriteType = { name = "GFX_STP_regions_map_background" texturefile = "gfx/interface/STP_regions/STP_regions_map_background.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_1" texturefile = "gfx/interface/STP_regions/STP_regions_state_1.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_2" texturefile = "gfx/interface/STP_regions/STP_regions_state_2.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_3" texturefile = "gfx/interface/STP_regions/STP_regions_state_3.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_28" texturefile = "gfx/interface/STP_regions/STP_regions_state_28.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_29" texturefile = "gfx/interface/STP_regions/STP_regions_state_29.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_43" texturefile = "gfx/interface/STP_regions/STP_regions_state_43.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_44" texturefile = "gfx/interface/STP_regions/STP_regions_state_44.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_45" texturefile = "gfx/interface/STP_regions/STP_regions_state_45.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_46" texturefile = "gfx/interface/STP_regions/STP_regions_state_46.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_53" texturefile = "gfx/interface/STP_regions/STP_regions_state_53.png" noOfFrames = 7 transparencecheck = yes }
-	spriteType = { name = "GFX_STP_regions_state_88" texturefile = "gfx/interface/STP_regions/STP_regions_state_88.png" noOfFrames = 7 transparencecheck = yes }
+	spriteType = {
+		name = "GFX_STP_regions_map_background"
+		texturefile = "gfx/interface/STP_regions/STP_regions_map_background.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_1"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_1.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_2"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_2.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_3"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_3.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_28"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_28.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_29"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_29.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_43"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_43.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_44"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_44.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_45"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_45.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_46"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_46.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_53"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_53.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_regions_state_88"
+		texturefile = "gfx/interface/STP_regions/STP_regions_state_88.png"
+		noOfFrames = 7
+		transparencecheck = yes
+	}
 
 	# Commander allegiance: neutral existing badges; traits do not grant stats.
-	spriteType = { name = "GFX_trait_STP_party_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
-	spriteType = { name = "GFX_trait_STP_shabrat_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
-	spriteType = { name = "GFX_trait_STP_local_councils_loyalist" texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds" }
-	spriteType = { name = "GFX_trait_STP_ravel_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
-	spriteType = { name = "GFX_trait_STP_drake_undecided" texturefile = "gfx/interface/traits/personal/trait_cautious.dds" }
-	spriteType = { name = "GFX_STP_pf_card" texturefile = "gfx/interface/STP_regions/STP_regions_faction_card.png" noOfFrames = 2 transparencecheck = yes }
+	spriteType = {
+		name = "GFX_trait_STP_party_loyalist"
+		texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds"
+	}
+	spriteType = {
+		name = "GFX_trait_STP_shabrat_loyalist"
+		texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds"
+	}
+	spriteType = {
+		name = "GFX_trait_STP_local_councils_loyalist"
+		texturefile = "gfx/interface/traits/personal/trait_politically_connected.dds"
+	}
+	spriteType = {
+		name = "GFX_trait_STP_ravel_undecided"
+		texturefile = "gfx/interface/traits/personal/trait_cautious.dds"
+	}
+	spriteType = {
+		name = "GFX_trait_STP_drake_undecided"
+		texturefile = "gfx/interface/traits/personal/trait_cautious.dds"
+	}
+	spriteType = {
+		name = "GFX_STP_pf_card"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_card.png"
+		noOfFrames = 2
+		transparencecheck = yes
+	}
 
-	spriteType = { name = "GFX_STP_pf_conservatives" texturefile = "gfx/interface/STP_regions/STP_regions_faction_conservatives.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_borons" texturefile = "gfx/interface/STP_regions/STP_regions_faction_borons.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_security" texturefile = "gfx/interface/STP_regions/STP_regions_faction_security.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_army" texturefile = "gfx/interface/STP_regions/STP_regions_faction_army.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_advisers" texturefile = "gfx/interface/STP_regions/STP_regions_faction_advisers.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_merchants" texturefile = "gfx/interface/STP_regions/STP_regions_faction_merchants.png" transparencecheck = yes }
-	spriteType = { name = "GFX_STP_pf_radicals" texturefile = "gfx/interface/STP_regions/STP_regions_faction_radicals.png" transparencecheck = yes }
+	spriteType = {
+		name = "GFX_STP_pf_conservatives"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_conservatives.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_borons"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_borons.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_security"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_security.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_army"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_army.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_advisers"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_advisers.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_merchants"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_merchants.png"
+		transparencecheck = yes
+	}
+	spriteType = {
+		name = "GFX_STP_pf_radicals"
+		texturefile = "gfx/interface/STP_regions/STP_regions_faction_radicals.png"
+		transparencecheck = yes
+	}
 
-	spriteType = { name = "GFX_STP_pf_stability_effect" texturefile = "gfx/interface/stability_icon.dds" legacy_lazy_load = no }
-	spriteType = { name = "GFX_STP_pf_organization_effect" texturefile = "gfx/texticons/organization_gain_texticon.dds" legacy_lazy_load = no }
+	spriteType = {
+		name = "GFX_STP_pf_stability_effect"
+		texturefile = "gfx/interface/stability_icon.dds"
+		legacy_lazy_load = no
+	}
+	spriteType = {
+		name = "GFX_STP_pf_organization_effect"
+		texturefile = "gfx/texticons/organization_gain_texticon.dds"
+		legacy_lazy_load = no
+	}
 }

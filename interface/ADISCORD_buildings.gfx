@@ -64,5 +64,4 @@ spriteTypes = {
 		textureFile = "gfx/interface/buildings/ADISCORD_construction_special_entry_bg.dds"
 		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
 	}
-
 }

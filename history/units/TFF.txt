@@ -3,9 +3,18 @@ division_template = {
 	template_counter = 80
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		ADISCORD_militia = { x = 0 y = 0 }
-		ADISCORD_militia = { x = 0 y = 1 }
-		ADISCORD_militia = { x = 1 y = 0 }
+		ADISCORD_militia = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_militia = {
+			x = 0
+			y = 1
+		}
+		ADISCORD_militia = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
@@ -14,16 +23,40 @@ division_template = {
 	template_counter = 3
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		anti_air = { x = 0 y = 2 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		anti_air = {
+			x = 0
+			y = 2
+		}
 	}
 }
 
@@ -32,135 +65,225 @@ division_template = {
 	template_counter = 78
 	division_names_group = ADISCORD_INF_01
 	regiments = {
-		infantry = { x = 0 y = 0 }
-		infantry = { x = 0 y = 1 }
-		infantry = { x = 0 y = 2 }
-		infantry = { x = 1 y = 0 }
-		infantry = { x = 1 y = 1 }
-		infantry = { x = 1 y = 2 }
-		infantry = { x = 2 y = 0 }
-		infantry = { x = 2 y = 1 }
-		infantry = { x = 2 y = 2 }
+		infantry = {
+			x = 0
+			y = 0
+		}
+		infantry = {
+			x = 0
+			y = 1
+		}
+		infantry = {
+			x = 0
+			y = 2
+		}
+		infantry = {
+			x = 1
+			y = 0
+		}
+		infantry = {
+			x = 1
+			y = 1
+		}
+		infantry = {
+			x = 1
+			y = 2
+		}
+		infantry = {
+			x = 2
+			y = 0
+		}
+		infantry = {
+			x = 2
+			y = 1
+		}
+		infantry = {
+			x = 2
+			y = 2
+		}
 	}
 	support = {
-		engineer = { x = 0 y = 0 }
-		anti_air = { x = 0 y = 2 }
-		artillery = { x = 0 y = 1 }
+		engineer = {
+			x = 0
+			y = 0
+		}
+		anti_air = {
+			x = 0
+			y = 2
+		}
+		artillery = {
+			x = 0
+			y = 1
+		}
 	}
 	regimental_support = {
-		ADISCORD_regimental_fire_support = { x = 0 y = 0 }
-		ADISCORD_regimental_anti_air = { x = 1 y = 0 }
+		ADISCORD_regimental_fire_support = {
+			x = 0
+			y = 0
+		}
+		ADISCORD_regimental_anti_air = {
+			x = 1
+			y = 0
+		}
 	}
 }
 
 units = {
 	division = {
-		division_name = { is_name_ordered = yes name_order = 1 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 1
+		}
 		location = 16533
 		division_template = "Capital Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 2 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 2
+		}
 		location = 61
 		division_template = "Capital Guard"
 		start_experience_factor = 0.28
 		start_equipment_factor = 0.80
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 3 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 3
+		}
 		location = 7
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.75
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 4 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 4
+		}
 		location = 16384
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.75
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 5 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 5
+		}
 		location = 30
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.75
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 6 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 6
+		}
 		location = 16498
 		division_template = "Line Infantry Brigade"
 		start_experience_factor = 0.22
 		start_equipment_factor = 0.75
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 7 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 7
+		}
 		location = 3
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 8 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 8
+		}
 		location = 18
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 9 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 9
+		}
 		location = 24
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 10 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 10
+		}
 		location = 31
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 11 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 11
+		}
 		location = 35
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 12 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 12
+		}
 		location = 40
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 13 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 13
+		}
 		location = 46
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 14 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 14
+		}
 		location = 50
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 15 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 15
+		}
 		location = 52
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
 		start_equipment_factor = 0.65
 	}
 	division = {
-		division_name = { is_name_ordered = yes name_order = 16 }
+		division_name = {
+			is_name_ordered = yes
+			name_order = 16
+		}
 		location = 64
 		division_template = "Local Security Detachment"
 		start_experience_factor = 0.16
@@ -170,10 +293,12 @@ units = {
 
 air_wings = {
 	84 = {
-		ADISCORD_fighter_airframe_2163 = { owner = "TFF" amount = 100 }
+		ADISCORD_fighter_airframe_2163 = {
+			owner = "TFF"
+			amount = 100
+		}
 	}
 }
-
 
 instant_effect = {
 	add_fuel = 10000
@@ -213,19 +338,28 @@ instant_effect = {
 		producer = TFF
 	}
 	add_equipment_production = {
-		equipment = { type = infantry_equipment_0 creator = "TFF" }
+		equipment = {
+			type = infantry_equipment_0
+			creator = "TFF"
+		}
 		requested_factories = 2
 		progress = 0.30
 		efficiency = 70
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "TFF" }
+		equipment = {
+			type = ADISCORD_squad_weapons_equipment_0
+			creator = "TFF"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50
 	}
 	add_equipment_production = {
-		equipment = { type = ADISCORD_anti_air_equipment_2163 creator = "TFF" }
+		equipment = {
+			type = ADISCORD_anti_air_equipment_2163
+			creator = "TFF"
+		}
 		requested_factories = 1
 		progress = 0.30
 		efficiency = 50

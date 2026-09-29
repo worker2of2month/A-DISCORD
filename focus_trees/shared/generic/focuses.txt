@@ -8,16 +8,14 @@ search_filter_prios = {
 }
 
 focus_tree = {
-
 	id = generic_focus
-	
+
 	country = {
 		factor = 1
 	}
-	
+
 	default = yes
 	continuous_focus_position = { x = 100 y = 555555 }
 
 	shared_focus = STP_ps_exile_office
-
 }

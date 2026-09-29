@@ -12,6 +12,7 @@ set_politics = {
 	last_election = "2110.10.27"
 	elections_allowed = no
 }
+
 set_popularities = {
 	etatism = 100
 }

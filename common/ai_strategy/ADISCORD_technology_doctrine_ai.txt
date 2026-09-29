@@ -42,13 +42,41 @@ ADISCORD_ai_ground_research_priorities = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_modular_rifle_kits value = 60 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_remote_weapon_tripods value = 60 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_standardized_field_tool_chests value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_frequency_hopping_field_sets value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_forward_supply_hubs value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_scrap_at_launchers value = 35 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_point_defense_aa value = 35 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_modular_rifle_kits
+		value = 60
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_remote_weapon_tripods
+		value = 60
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_standardized_field_tool_chests
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_frequency_hopping_field_sets
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_forward_supply_hubs
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_scrap_at_launchers
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_point_defense_aa
+		value = 35
+	}
 }
 
 # Applied programmes are optional side branches.  These weights make the AI
@@ -58,10 +86,26 @@ ADISCORD_ai_applied_programme_baseline = {
 	enable = { always = yes }
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_trauma_registry_networks value = 30 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_battle_damage_survey_teams value = 30 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_spectrum_threat_libraries value = 25 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_reconstituted_staff_academies value = 35 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_trauma_registry_networks
+		value = 30
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_battle_damage_survey_teams
+		value = 30
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_spectrum_threat_libraries
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_reconstituted_staff_academies
+		value = 35
+	}
 }
 
 ADISCORD_ai_wartime_resilience_programmes = {
@@ -73,11 +117,31 @@ ADISCORD_ai_wartime_resilience_programmes = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_forward_surgical_cells value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_battle_damage_survey_teams value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_spectrum_threat_libraries value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_reconstituted_staff_academies value = 40 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_operational_planning_exercises value = 45 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_forward_surgical_cells
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_battle_damage_survey_teams
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_spectrum_threat_libraries
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_reconstituted_staff_academies
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_operational_planning_exercises
+		value = 45
+	}
 }
 
 ADISCORD_ai_offensive_staff_programmes = {
@@ -88,10 +152,26 @@ ADISCORD_ai_offensive_staff_programmes = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_assault_breaching_packages value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_reconstituted_staff_academies value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_operational_planning_exercises value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_adaptive_general_staff value = 35 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_assault_breaching_packages
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_reconstituted_staff_academies
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_operational_planning_exercises
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_adaptive_general_staff
+		value = 35
+	}
 }
 
 ADISCORD_ai_air_mobility_programme = {
@@ -102,9 +182,21 @@ ADISCORD_ai_air_mobility_programme = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_restored_airlift_planning value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_vertical_envelopment_control value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_precision_aerial_resupply value = 40 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_restored_airlift_planning
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_vertical_envelopment_control
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_precision_aerial_resupply
+		value = 40
+	}
 }
 
 ADISCORD_ai_riverine_programme = {
@@ -114,9 +206,21 @@ ADISCORD_ai_riverine_programme = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_shallow_water_navigation_tables value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_modular_landing_causeways value = 35 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_rapid_beachhead_logistics value = 35 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_shallow_water_navigation_tables
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_modular_landing_causeways
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_rapid_beachhead_logistics
+		value = 35
+	}
 }
 
 ADISCORD_ai_unmanned_ground_programme = {
@@ -127,9 +231,21 @@ ADISCORD_ai_unmanned_ground_programme = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_teleoperated_scout_carts value = 50 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_armed_recon_drones value = 45 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_distributed_ground_swarm_control value = 35 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_teleoperated_scout_carts
+		value = 50
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_armed_recon_drones
+		value = 45
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_distributed_ground_swarm_control
+		value = 35
+	}
 }
 
 ADISCORD_ai_tank_research_priorities = {
@@ -139,10 +255,26 @@ ADISCORD_ai_tank_research_priorities = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_semi_autonomous_combat_modules value = 100 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_drone_recon_swarms value = 55 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_remote_repair_sections value = 50 }
-	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_heavy_platform_cores value = 25 }
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_semi_autonomous_combat_modules
+		value = 100
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_drone_recon_swarms
+		value = 55
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_remote_repair_sections
+		value = 50
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = ADISCORD_tech_heavy_platform_cores
+		value = 25
+	}
 }
 
 ADISCORD_ai_standardized_ground_forces = {
@@ -192,8 +324,16 @@ ADISCORD_ai_line_support_production = {
 		id = artillery_equipment
 		value = 12
 	}
-	ai_strategy = { type = equipment_production_factor id = artillery value = 12 }
-	ai_strategy = { type = equipment_production_factor id = support value = 8 }
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 12
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 8
+	}
 }
 
 ADISCORD_ai_anti_tank_buffer = {
@@ -210,7 +350,11 @@ ADISCORD_ai_anti_tank_buffer = {
 			has_equipment = { anti_tank_equipment > 650 }
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_tank_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_tank_equipment
+		value = 1
+	}
 }
 
 ADISCORD_ai_anti_air_buffer = {
@@ -227,7 +371,11 @@ ADISCORD_ai_anti_air_buffer = {
 			has_equipment = { anti_air_equipment > 650 }
 		}
 	}
-	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_air_equipment value = 1 }
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_air_equipment
+		value = 1
+	}
 }
 
 ADISCORD_ai_assault_reserve = {
@@ -238,10 +386,26 @@ ADISCORD_ai_assault_reserve = {
 	}
 	abort_when_not_enabled = yes
 
-	ai_strategy = { type = role_ratio id = mobile value = 7 }
-	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_squad_weapons_equipment value = 18 }
-	ai_strategy = { type = equipment_production_factor id = artillery value = 8 }
-	ai_strategy = { type = equipment_production_factor id = support value = 8 }
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 7
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 18
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 8
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 8
+	}
 }
 
 ADISCORD_ai_platform_battlegroups = {
@@ -301,9 +465,21 @@ ADISCORD_produce_armored_carriers = {
 			has_equipment = { ADISCORD_armored_carrier_archetype > 1500 }
 		}
 	}
-	ai_strategy = { type = role_ratio id = mobile value = 8 }
-	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_armored_carrier_archetype value = 24 }
-	ai_strategy = { type = equipment_production_min_factories_archetype id = ADISCORD_armored_carrier_archetype value = 1 }
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 8
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_armored_carrier_archetype
+		value = 24
+	}
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_armored_carrier_archetype
+		value = 1
+	}
 }
 
 ADISCORD_ai_heavy_platforms = {
@@ -419,8 +595,16 @@ ADISCORD_ai_mass_school_force_mix = {
 		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = infantry value = 12 }
-	ai_strategy = { type = equipment_production_factor id = infantry value = 8 }
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 12
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 8
+	}
 }
 
 ADISCORD_ai_assault_school_force_mix = {
@@ -432,9 +616,21 @@ ADISCORD_ai_assault_school_force_mix = {
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = mobile value = 5 }
-	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_squad_weapons_equipment value = 10 }
-	ai_strategy = { type = equipment_production_factor id = artillery value = 6 }
+	ai_strategy = {
+		type = role_ratio
+		id = mobile
+		value = 5
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_squad_weapons_equipment
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 6
+	}
 }
 
 ADISCORD_ai_tank_school_force_mix = {
@@ -449,9 +645,21 @@ ADISCORD_ai_tank_school_force_mix = {
 		ADISCORD_economy_ai_can_fund_advanced_forces = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = armor value = 5 }
-	ai_strategy = { type = equipment_production_factor id = armor value = 8 }
-	ai_strategy = { type = equipment_variant_production_factor id = ADISCORD_combat_platform_archetype value = 10 }
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 5
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = armor
+		value = 8
+	}
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_combat_platform_archetype
+		value = 10
+	}
 }
 
 ADISCORD_ai_special_forces_school_mix = {
@@ -467,8 +675,16 @@ ADISCORD_ai_special_forces_school_mix = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = role_ratio id = mountaineers value = 6 }
-	ai_strategy = { type = equipment_production_factor id = support value = 6 }
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 6
+	}
 }
 
 ADISCORD_ai_drone_school_force_mix = {
@@ -482,8 +698,24 @@ ADISCORD_ai_drone_school_force_mix = {
 		NOT = { ADISCORD_economy_ai_is_crisis = yes }
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = unit_ratio id = fighter value = 12 }
-	ai_strategy = { type = unit_ratio id = cas value = 10 }
-	ai_strategy = { type = equipment_production_factor id = fighter value = 6 }
-	ai_strategy = { type = equipment_production_factor id = cas value = 6 }
+	ai_strategy = {
+		type = unit_ratio
+		id = fighter
+		value = 12
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = cas
+		value = 10
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = fighter
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = cas
+		value = 6
+	}
 }

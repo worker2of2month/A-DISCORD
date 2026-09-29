@@ -118,7 +118,7 @@ defined_text = {
 defined_text = {
 	name = GetSubIdeologyHedonism
 	text = {
-		trigger = { has_country_leader_ideology = aristocratic_hedonism }  ### сюда добавляй другие сабтипы гедонизма
+		trigger = { has_country_leader_ideology = aristocratic_hedonism } ### сюда добавляй другие сабтипы гедонизма
 		localization_key = aristocratic_hedonism
 	}
 	# text = {
@@ -183,30 +183,37 @@ defined_text = {
 	name = GetPartyLocHumanism
 	text = { localization_key = "[ROOT.GetTag]_humanism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocUtilitarism
 	text = { localization_key = "[ROOT.GetTag]_utilitarism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocChauvinism
 	text = { localization_key = "[ROOT.GetTag]_chauvinism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocPragmatism
 	text = { localization_key = "[ROOT.GetTag]_pragmatism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocAnarchism
 	text = { localization_key = "[ROOT.GetTag]_anarchism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocTechnocracy
 	text = { localization_key = "[ROOT.GetTag]_technocracy_party" }
 }
+
 defined_text = {
 	name = GetPartyLocEtatism
 	text = { localization_key = "[ROOT.GetTag]_etatism_party" }
 }
+
 defined_text = {
 	name = GetPartyLocHedonism
 	text = { localization_key = "[ROOT.GetTag]_hedonism_party" }

@@ -1,20 +1,19 @@
-state={
-	id=55
-	name="STATE_55"
-	provinces={
-		114 9617 16435 
+state = {
+	id = 55
+	name = "STATE_55"
+	provinces = {
+		114 9617 16435
 	}
-	manpower=90000
-	buildings_max_level_factor=1.000
-	state_category=pastoral
-	local_supplies=0.000
+	manpower = 90000
+	buildings_max_level_factor = 1.000
+	state_category = pastoral
+	local_supplies = 0.000
 	resources = {
 		oil = 12
 		tungsten = 2
 	}
 
-
-	history={
+	history = {
 		owner = VAL
 		buildings = {
 			infrastructure = 2
@@ -23,5 +22,4 @@ state={
 		add_claim_by = STP
 		victory_points = { 9617 1 }
 	}
-
 }

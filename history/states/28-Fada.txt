@@ -1,32 +1,32 @@
-state={
-	id=28
-	name="STATE_28"
-	provinces={
-		145 16351 16366 16368 16374 16377 16386 
+state = {
+	id = 28
+	name = "STATE_28"
+	provinces = {
+		145 16351 16366 16368 16374 16377 16386
 	}
-	manpower=6300000
-	buildings_max_level_factor=1.000
+	manpower = 6300000
+	buildings_max_level_factor = 1.000
 
-	history={
+	history = {
 		owner = STP
 		buildings = {
 			air_base = 2
 			infrastructure = 4
 			arms_factory = 3
 			hidden_dam = 1
-			industrial_complex  = 2
+			industrial_complex = 2
 			ADISCORD_industrial_cluster = 1
 			ADISCORD_business_center = 1
 
 			16368 = {
-        		bunker = 3
-        		coastal_bunker = 5
-   			}
-   			16366 = {
-        		coastal_bunker = 1
-        		naval_base = 5
-   			}
-   			145 = { dam = 1 }
+				bunker = 3
+				coastal_bunker = 5
+			}
+			16366 = {
+				coastal_bunker = 1
+				naval_base = 5
+			}
+			145 = { dam = 1 }
 		}
 		add_core_of = STP
 
@@ -36,10 +36,9 @@ state={
 		victory_points = { 16374 10 }
 		victory_points = { 16377 20 }
 		victory_points = { 16386 10 }
-
 	}
 	resources = {
-    }
+	}
 	state_category = large_city
-	local_supplies=12.0 
+	local_supplies = 12.0
 }

@@ -1,4 +1,3 @@
-
 # is_diplomatic_action_valid_TOKEN can be used for diplo action validity checks. if not valid it won't appear
 # scope is target country
 # from is action initatior country
@@ -19,17 +18,29 @@ is_diplomatic_action_valid_boost_party_popularity = {
 # only when a diplomatic action is opened, so the quarantine has no periodic
 # performance cost.
 is_diplomatic_action_valid_generate_wargoal = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_revoke_guarantee = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_guarantee = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_milacc = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_offer_milacc = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_nonaggressionpact = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_improverelation = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_release_nation = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_air_base_access = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_offer_air_base_access = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_docking_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_offer_docking_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_lend_lease = {
 	ADISCORD_diplomacy_not_dirty_zone_pair = yes
 	OR = {
@@ -38,7 +49,10 @@ is_diplomatic_action_valid_lend_lease = {
 				AND = {
 					tag = TVA
 					is_ai = yes
-					has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+					has_country_leader = {
+						character = TVA_Dorian_Worx
+						ruling_only = yes
+					}
 				}
 			}
 		}
@@ -46,7 +60,10 @@ is_diplomatic_action_valid_lend_lease = {
 			FROM = {
 				tag = TVA
 				is_ai = yes
-				has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }
+				has_country_leader = {
+					character = TVA_Dorian_Worx
+					ruling_only = yes
+				}
 			}
 			OR = {
 				is_in_faction_with = FROM
@@ -55,27 +72,56 @@ is_diplomatic_action_valid_lend_lease = {
 		}
 	}
 }
+
 is_diplomatic_action_valid_incoming_lend_lease = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_request_licensed_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_leave_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_assume_faction_leadership = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_kick_from_faction = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_send_attache = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 # Faction membership is scripted; ordinary requests and invitations are disabled for all countries.
 is_diplomatic_action_valid_join_faction = { always = no }
+
 is_diplomatic_action_valid_create_faction = { always = no }
+
 is_diplomatic_action_valid_offer_join_faction = { always = no }
+
 is_diplomatic_action_valid_request_access_to_licence_production = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_request_foreign_manpower = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
+
 is_diplomatic_action_valid_international_market_access_rights = { ADISCORD_diplomacy_not_dirty_zone_pair = yes }
 
 # VAL volunteer mandates are restricted to their current contracted fronts.
 is_diplomatic_action_valid_send_volunteers = {
- ADISCORD_diplomacy_not_dirty_zone_pair = yes
- OR = {
-  FROM = { NOT = { tag = VAL } }
-  AND = { FROM = { has_idea = VAL_northern_volunteer_mandate } OR = { tag = VAL VAL_northern_volunteer_host = yes } }
-  AND = { FROM = { has_idea = VAL_stelander_volunteer_mandate } VAL_stelander_volunteer_host = yes }
-  AND = { FROM = { has_idea = VAL_resource_volunteer_mandate } OR = { tag = VAL VAL_resource_aid_recipient = yes } }
- }
+	ADISCORD_diplomacy_not_dirty_zone_pair = yes
+	OR = {
+		FROM = {
+			NOT = { tag = VAL }
+		}
+		AND = {
+			FROM = { has_idea = VAL_northern_volunteer_mandate }
+			OR = {
+				tag = VAL
+				VAL_northern_volunteer_host = yes
+			}
+		}
+		AND = {
+			FROM = { has_idea = VAL_stelander_volunteer_mandate }
+			VAL_stelander_volunteer_host = yes
+		}
+		AND = {
+			FROM = { has_idea = VAL_resource_volunteer_mandate }
+			OR = {
+				tag = VAL
+				VAL_resource_aid_recipient = yes
+			}
+		}
+	}
 }

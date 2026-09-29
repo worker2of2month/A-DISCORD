@@ -1,4 +1,3 @@
-
 SocietyDevelopmentPerMonth = {
 	color_type = good
 	value_type = number

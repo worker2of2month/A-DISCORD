@@ -14,6 +14,7 @@ set_politics = {
 	ruling_party = anarchism
 	elections_allowed = no
 }
+
 set_popularities = {
 	anarchism = 66
 	hedonism = 34
@@ -25,7 +26,7 @@ add_ideas = {
 	COF_national_spirit
 
 	extensive_conscription
-	
+
 	# Society and civil institutions
 	ADISCORD_society_type_traditional
 	ADISCORD_information_sealed_networks

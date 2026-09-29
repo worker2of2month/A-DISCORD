@@ -1,7 +1,16 @@
 spriteTypes = {
-	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
-	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
-	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = {
+		name = "GFX_focus_WRK_worker_restore_unity_tower_shine"
+		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_joint_restore_unity_tower_shine"
+		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+	}
+	spriteType = {
+		name = "GFX_focus_WRK_utilitarian_restore_unity_tower_shine"
+		texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds"
+	}
 	SpriteType = {
 		name = "GFX_focus_STP_GUARANTEE_MINISTERS_shine"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS.png"
@@ -15,8 +24,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -33,8 +48,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -51,8 +72,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -62,15 +89,21 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_pc_shabrat_politics.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds" 	# <- the animated file
-			animationrotation = -90.0		# -90 clockwise 90 counterclockwise(by default)
-			animationlooping = no			# yes or no ;)
-			animationtime = 0.75				# in seconds
-			animationdelay = 0			# in seconds
-			animationblendmode = "add"       #add, multiply, overlay
-			animationtype = "scrolling"      #scrolling, rotating, pulsing
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds" # <- the animated file
+			animationrotation = -90.0 # -90 clockwise 90 counterclockwise(by default)
+			animationlooping = no # yes or no ;)
+			animationtime = 0.75 # in seconds
+			animationdelay = 0 # in seconds
+			animationblendmode = "add" #add, multiply, overlay
+			animationtype = "scrolling" #scrolling, rotating, pulsing
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 
 		legacy_lazy_load = no
@@ -88,8 +121,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 
 		legacy_lazy_load = no
@@ -100,15 +139,21 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_Nectar_of_the_Gods.png"
-			animationtexturefile = "gfx/interface/goals/shine_overlay.dds" 	# <- the animated file
-			animationrotation = -90.0		# -90 clockwise 90 counterclockwise(by default)
-			animationlooping = no			# yes or no ;)
-			animationtime = 0.75				# in seconds
-			animationdelay = 0			# in seconds
-			animationblendmode = "add"       #add, multiply, overlay
-			animationtype = "scrolling"      #scrolling, rotating, pulsing
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds" # <- the animated file
+			animationrotation = -90.0 # -90 clockwise 90 counterclockwise(by default)
+			animationlooping = no # yes or no ;)
+			animationtime = 0.75 # in seconds
+			animationdelay = 0 # in seconds
+			animationblendmode = "add" #add, multiply, overlay
+			animationtype = "scrolling" #scrolling, rotating, pulsing
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 
 		legacy_lazy_load = no
@@ -127,8 +172,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -146,8 +197,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -165,8 +222,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -184,8 +247,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -203,8 +272,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -222,8 +297,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -241,8 +322,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -260,8 +347,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -279,8 +372,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -298,8 +397,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -317,8 +422,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -336,8 +447,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -355,8 +472,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -374,8 +497,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -393,8 +522,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -412,8 +547,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -431,8 +572,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -450,8 +597,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -469,8 +622,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -488,8 +647,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -507,8 +672,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -526,8 +697,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -545,8 +722,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -564,8 +747,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -583,13 +772,19 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
 
-		SpriteType = {
+	SpriteType = {
 		name = "GFX_focus_STP_cw_repair_niansas_shine"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_repair_niansas.png"
 		effectFile = "gfx/FX/buttonstate.lua"
@@ -602,8 +797,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -621,13 +822,19 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
 
-SpriteType = {
+	SpriteType = {
 		name = "GFX_focus_STP_Steland_Hegemony_shine"
 		texturefile = "gfx/interface/goals/STP/Empire/GFX_focus_STP_Steland_Hegemony.png"
 		effectFile = "gfx/FX/buttonstate.lua"
@@ -640,8 +847,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -659,8 +872,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -678,8 +897,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -697,8 +922,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -716,8 +947,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -735,8 +972,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -754,8 +997,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -773,8 +1022,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -791,8 +1046,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -809,8 +1070,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -827,8 +1094,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -845,8 +1118,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -863,8 +1142,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -881,8 +1166,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -899,8 +1190,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -917,8 +1214,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -935,8 +1238,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -953,8 +1262,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -972,8 +1287,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -991,8 +1312,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1010,8 +1337,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1029,8 +1362,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1048,8 +1387,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1067,8 +1412,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1086,8 +1437,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1105,8 +1462,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1124,8 +1487,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1143,8 +1512,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1162,8 +1537,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1180,8 +1561,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1199,8 +1586,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1218,8 +1611,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1236,8 +1635,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1254,8 +1659,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1272,8 +1683,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1290,8 +1707,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1308,8 +1731,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1326,8 +1755,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1344,8 +1779,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1362,8 +1803,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1380,8 +1827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1399,8 +1852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1418,8 +1877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1437,8 +1902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1456,8 +1927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1475,8 +1952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1494,8 +1977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1513,8 +2002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1532,8 +2027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1551,8 +2052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1570,8 +2077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1589,8 +2102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1608,8 +2127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1627,8 +2152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1646,8 +2177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1665,8 +2202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1684,8 +2227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1703,8 +2252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1722,8 +2277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1741,8 +2302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1760,8 +2327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1779,8 +2352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1798,8 +2377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1817,8 +2402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1836,8 +2427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1855,8 +2452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1874,8 +2477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1893,8 +2502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1912,8 +2527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1931,8 +2552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1950,8 +2577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1969,8 +2602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -1988,8 +2627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2007,8 +2652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2026,8 +2677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2045,8 +2702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2064,8 +2727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2083,8 +2752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2102,8 +2777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2121,8 +2802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2140,8 +2827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2159,8 +2852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2178,8 +2877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2197,8 +2902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2216,8 +2927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2235,8 +2952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2254,8 +2977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2273,8 +3002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2292,8 +3027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2311,8 +3052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2330,8 +3077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2349,8 +3102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2368,8 +3127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2387,8 +3152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2406,8 +3177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2425,8 +3202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2444,8 +3227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2463,8 +3252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2482,8 +3277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2501,8 +3302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2520,8 +3327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2539,8 +3352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2558,8 +3377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2577,8 +3402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2596,8 +3427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2615,8 +3452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2634,8 +3477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2653,8 +3502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2672,8 +3527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2691,8 +3552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2710,8 +3577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2729,8 +3602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2748,8 +3627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2767,8 +3652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2786,8 +3677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2805,8 +3702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2824,8 +3727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2843,8 +3752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2862,8 +3777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2881,8 +3802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2900,8 +3827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2919,8 +3852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2938,8 +3877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2957,8 +3902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2976,8 +3927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -2995,8 +3952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3014,8 +3977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3033,8 +4002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3052,8 +4027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3071,8 +4052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3090,8 +4077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3109,8 +4102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3128,8 +4127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3147,8 +4152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3166,8 +4177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3185,8 +4202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3204,8 +4227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3223,8 +4252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3242,8 +4277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3261,8 +4302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3280,8 +4327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3299,8 +4352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3318,8 +4377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3337,8 +4402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3356,8 +4427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3375,8 +4452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3394,8 +4477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3413,8 +4502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3432,8 +4527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3451,8 +4552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3470,8 +4577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3489,8 +4602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3508,8 +4627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3527,8 +4652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3546,8 +4677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3565,8 +4702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3584,8 +4727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3603,8 +4752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3622,8 +4777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3641,8 +4802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3660,8 +4827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3679,8 +4852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3698,8 +4877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3717,8 +4902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3736,8 +4927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3755,8 +4952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3774,8 +4977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3793,8 +5002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3812,8 +5027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3831,8 +5052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3850,8 +5077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3869,8 +5102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3888,8 +5127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3907,8 +5152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3926,8 +5177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3945,8 +5202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3964,8 +5227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -3983,8 +5252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4002,8 +5277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4021,8 +5302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4040,8 +5327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4059,8 +5352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4078,8 +5377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4097,8 +5402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4116,8 +5427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4135,8 +5452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4154,8 +5477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4173,8 +5502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4192,8 +5527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4211,8 +5552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4230,8 +5577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4249,8 +5602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4268,8 +5627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4287,8 +5652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4306,8 +5677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4325,8 +5702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4344,8 +5727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4363,8 +5752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4382,8 +5777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4401,8 +5802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4420,8 +5827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4439,8 +5852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4458,8 +5877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4477,8 +5902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4496,8 +5927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4515,8 +5952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4534,8 +5977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4553,8 +6002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4572,8 +6027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4591,8 +6052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4610,8 +6077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4629,8 +6102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4648,8 +6127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4667,8 +6152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4686,8 +6177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4705,8 +6202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4724,8 +6227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4743,8 +6252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4762,8 +6277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4781,8 +6302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4800,8 +6327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4819,8 +6352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4838,8 +6377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4857,8 +6402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4876,8 +6427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4895,8 +6452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4914,8 +6477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4933,8 +6502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4952,8 +6527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4971,8 +6552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -4990,8 +6577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5009,8 +6602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5028,8 +6627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5047,8 +6652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5066,8 +6677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5085,8 +6702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5104,8 +6727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5123,8 +6752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5142,8 +6777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5161,8 +6802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5180,8 +6827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5199,8 +6852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5218,8 +6877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5237,8 +6902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5256,8 +6927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5275,8 +6952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5294,8 +6977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5313,8 +7002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5332,8 +7027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5351,8 +7052,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5370,8 +7077,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5389,8 +7102,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5408,8 +7127,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5427,8 +7152,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5446,8 +7177,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5465,8 +7202,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5484,8 +7227,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5503,8 +7252,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5522,8 +7277,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5541,8 +7302,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5560,8 +7327,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5579,8 +7352,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5598,8 +7377,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5617,8 +7402,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5636,8 +7427,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5655,8 +7452,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5674,8 +7477,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5693,8 +7502,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5712,8 +7527,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5731,8 +7552,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5750,8 +7577,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5769,8 +7602,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5788,8 +7627,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5807,8 +7652,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5826,8 +7677,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5845,8 +7702,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5864,8 +7727,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5883,8 +7752,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5902,8 +7777,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5921,8 +7802,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5940,8 +7827,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5959,8 +7852,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5978,8 +7877,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -5997,8 +7902,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -6016,8 +7927,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -6035,8 +7952,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -6054,8 +7977,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -6073,8 +8002,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}
@@ -6092,8 +8027,14 @@ SpriteType = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}

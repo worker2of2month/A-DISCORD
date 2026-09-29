@@ -4,7 +4,10 @@ ADISCORD_bezhaysk_postwar_operations = {
 		allowed = { tag = VAL }
 		visible = {
 			has_completed_focus = VAL_Bezhaysk_Operation
-			COF = { exists = yes NOT = { is_subject_of = VAL } }
+			COF = {
+				exists = yes
+				NOT = { is_subject_of = VAL }
+			}
 		}
 		available = {
 			has_capitulated = no
@@ -33,7 +36,10 @@ ADISCORD_bezhaysk_postwar_operations = {
 		allowed = { tag = NOD }
 		visible = {
 			has_country_flag = ADISCORD_bezhaysk_joint_settlement
-			COF = { exists = yes NOT = { is_subject_of = NOD } }
+			COF = {
+				exists = yes
+				NOT = { is_subject_of = NOD }
+			}
 		}
 		available = {
 			has_capitulated = no

@@ -1,5 +1,4 @@
 scripted_gui = {
-
 	superevent_vorkerland_civilwar = {
 		window_name = "superevent_vorkerland_civilwar"
 		context_type = player_context
@@ -112,7 +111,6 @@ scripted_gui = {
 		}
 	}
 
-
 	superevent_stelander_party_victory = {
 		window_name = "superevent_stelander_party_victory"
 		context_type = player_context
@@ -125,11 +123,9 @@ scripted_gui = {
 			superevents_button_click = {
 				clr_global_flag = superevent_stelander_party_victory
 				ADISCORD_superevent_dispatch_next = yes
-
 			}
 		}
 	}
-
 
 	superevent_stelander_shabrat_victory = {
 		window_name = "superevent_stelander_shabrat_victory"

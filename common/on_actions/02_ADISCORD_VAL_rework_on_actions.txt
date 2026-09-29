@@ -5,7 +5,11 @@ on_actions = {
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
 			if = {
-				limit = { has_war = yes has_capitulated = no is_subject = no }
+				limit = {
+					has_war = yes
+					has_capitulated = no
+					is_subject = no
+				}
 				VAL_call_subjects_to_wars = yes # daily subject-war reconciliation
 			}
 		}
@@ -13,11 +17,16 @@ on_actions = {
 
 	on_startup = {
 		effect = {
-			VAL = { VAL_qol_initialize_staff = yes VAL_qol_initialize_party_leaders = yes }
+			VAL = {
+				VAL_qol_initialize_staff = yes
+				VAL_qol_initialize_party_leaders = yes
+			}
 
 			OCA = { VAL_initialize_balchansk_administration = yes }
 			if = {
-				limit = { VAL = { exists = yes } }
+				limit = {
+					VAL = { exists = yes }
+				}
 				VAL = {
 					VAL_restore_fulfilled_northern_aid = yes
 					# Rebuild contract income from authoritative annual-contract flags.
@@ -29,9 +38,13 @@ on_actions = {
 					VAL_grant_contract_warlord = yes
 					VAL_sync_solgalov_portrait = yes
 					VAL_reveal_stelander_focus_branch = yes
-					if = { limit = { has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes }
+					if = {
+						limit = { has_focus_tree = VAL_focus }
+						mark_focus_tree_layout_dirty = yes
+					}
 					VAL_call_subjects_to_wars = yes
-					VAL_check_nam_concession = yes VAL_check_efl_concession = yes
+					VAL_check_nam_concession = yes
+					VAL_check_efl_concession = yes
 				}
 			}
 			if = {
@@ -52,7 +65,12 @@ on_actions = {
 		effect = {
 			VAL_queue_frontier_reconciliation = yes
 			if = {
-				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
+				limit = {
+					OR = {
+						ROOT = { tag = VAL }
+						FROM = { tag = VAL }
+					}
+				}
 				VAL = { VAL_reconcile_market_contract_lifecycle = yes }
 			}
 			if = {
@@ -65,18 +83,28 @@ on_actions = {
 				TFF = { VAL_call_frontier_administrations = yes }
 			}
 			if = {
-				limit = { ROOT = { tag = VAL } }
+				limit = {
+					ROOT = { tag = VAL }
+				}
 				FROM = { VAL_frontier_register_war_participant = yes }
 			}
 			else_if = {
-				limit = { FROM = { tag = VAL } }
+				limit = {
+					FROM = { tag = VAL }
+				}
 				ROOT = { VAL_frontier_register_war_participant = yes }
 			}
 			if = {
 				limit = {
 					OR = {
-						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
-						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+						AND = {
+							ROOT = { tag = STP }
+							FROM = { tag = STS }
+						}
+						AND = {
+							ROOT = { tag = STS }
+							FROM = { tag = STP }
+						}
 					}
 				}
 				VAL = { VAL_reveal_stelander_focus_branch = yes }
@@ -88,11 +116,18 @@ on_actions = {
 						FROM = { tag = VAL }
 					}
 				}
-				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
+				VAL = {
+					VAL_check_nam_concession = yes
+					VAL_check_efl_concession = yes
+				}
 			}
 			if = {
 				limit = {
-					VAL = { exists = yes has_capitulated = no is_subject = no }
+					VAL = {
+						exists = yes
+						has_capitulated = no
+						is_subject = no
+					}
 					OR = {
 						ROOT = { is_subject_of = VAL }
 						FROM = { is_subject_of = VAL }
@@ -122,7 +157,9 @@ on_actions = {
 		effect = {
 			VAL_queue_frontier_reconciliation = yes
 			if = {
-				limit = { FROM = { tag = VAL } }
+				limit = {
+					FROM = { tag = VAL }
+				}
 				VAL = { VAL_call_subjects_to_wars = yes }
 				OCA = { VAL_reconcile_balchansk_income = yes }
 			}
@@ -132,7 +169,9 @@ on_actions = {
 	on_release_as_puppet = {
 		effect = {
 			if = {
-				limit = { FROM = { tag = VAL } }
+				limit = {
+					FROM = { tag = VAL }
+				}
 				VAL = { VAL_call_subjects_to_wars = yes }
 			}
 		}
@@ -148,7 +187,11 @@ on_actions = {
 				if = {
 					limit = {
 						is_ai = yes
-						check_variable = { var = VAL_quarterly_contract_months_elapsed value = 2 compare = greater_than_or_equals }
+						check_variable = {
+							var = VAL_quarterly_contract_months_elapsed
+							value = 2
+							compare = greater_than_or_equals
+						}
 						NOT = { has_country_flag = VAL_quarterly_contract_paid }
 						NOT = { ADISCORD_has_4000_infantry_equipment = yes }
 						NOT = { has_country_flag = VAL_ai_emergency_quartermaster_used }
@@ -165,31 +208,68 @@ on_actions = {
 			# ROOT is the new controller, FROM the previous controller, FROM.FROM the state.
 			if = {
 				limit = {
-					FROM = { tag = VAL has_power_balance = { id = VAL_command_balance } has_war_with = ROOT }
-					FROM.FROM = { is_owned_by = VAL is_core_of = VAL NOT = { has_state_flag = VAL_bop_core_lost } }
+					FROM = {
+						tag = VAL
+						has_power_balance = { id = VAL_command_balance }
+						has_war_with = ROOT
+					}
+					FROM.FROM = {
+						is_owned_by = VAL
+						is_core_of = VAL
+						NOT = { has_state_flag = VAL_bop_core_lost }
+					}
 				}
-				FROM = { add_power_balance_value = { id = VAL_command_balance value = -0.10 } }
+				FROM = {
+					add_power_balance_value = {
+						id = VAL_command_balance
+						value = -0.10
+					}
+				}
 				FROM.FROM = { set_state_flag = VAL_bop_core_lost }
 			}
 			else_if = {
-				limit = { ROOT = { tag = VAL } FROM.FROM = { has_state_flag = VAL_bop_core_lost } }
+				limit = {
+					ROOT = { tag = VAL }
+					FROM.FROM = { has_state_flag = VAL_bop_core_lost }
+				}
 				ROOT = {
 					if = {
-						limit = { has_power_balance = { id = VAL_command_balance } }
-						add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+						limit = {
+							has_power_balance = { id = VAL_command_balance }
+						}
+						add_power_balance_value = {
+							id = VAL_command_balance
+							value = 0.05
+						}
 					}
 				}
 				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
 			}
 
 			if = {
-				limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }
+				limit = {
+					FROM.FROM = {
+						OR = {
+							state = 44
+							state = 88
+						}
+					}
+					OCA = { exists = yes }
+				}
 				OCA = { VAL_reconcile_balchansk_income = yes }
 			}
 
 			if = {
 				limit = {
-					FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 46 state = 88 } }
+					FROM.FROM = {
+						OR = {
+							state = 43
+							state = 44
+							state = 45
+							state = 46
+							state = 88
+						}
+					}
 					VAL = { exists = yes }
 				}
 				VAL = { VAL_reconcile_occidian_resource_rights = yes }
@@ -197,15 +277,33 @@ on_actions = {
 
 			if = {
 				limit = {
-					ROOT = { tag = VAL has_idea = VAL_harvest_of_ash }
-					FROM.FROM = { OR = { state = 24 state = 42 state = 48 state = 54 state = 55 state = 56 state = 57 } }
+					ROOT = {
+						tag = VAL
+						has_idea = VAL_harvest_of_ash
+					}
+					FROM.FROM = {
+						OR = {
+							state = 24
+							state = 42
+							state = 48
+							state = 54
+							state = 55
+							state = 56
+							state = 57
+						}
+					}
 				}
 				ROOT = { VAL_complete_reclamation = yes }
 			}
 
 			if = {
-				limit = { FROM.FROM = { state = 230 } }
-				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
+				limit = {
+					FROM.FROM = { state = 230 }
+				}
+				VAL = {
+					VAL_check_nam_concession = yes
+					VAL_check_efl_concession = yes
+				}
 			}
 			if = {
 				limit = {
@@ -214,7 +312,9 @@ on_actions = {
 						exists = yes
 						has_country_flag = VAL_vorkerland_resource_access_active
 					}
-					33 = { NOT = { is_controlled_by = WRK } }
+					33 = {
+						NOT = { is_controlled_by = WRK }
+					}
 				}
 				VAL = { VAL_end_vorkerland_resource_access = yes }
 			}
@@ -225,13 +325,16 @@ on_actions = {
 						exists = yes
 						has_country_flag = VAL_westerholm_resource_rights_active
 					}
-					38 = { NOT = { controller = { tag = WRK } } }
+					38 = {
+						NOT = {
+							controller = { tag = WRK }
+						}
+					}
 				}
 				VAL = { VAL_handle_westerholm_loss = yes }
 			}
 		}
 	}
-
 
 	on_weekly_VAL = {
 		effect = {
@@ -252,7 +355,11 @@ on_actions = {
 			}
 			# Runtime fallback if another transition dropped the dynamic-modifier consumer.
 			if = {
-				limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
+				limit = {
+					NOT = {
+						has_dynamic_modifier = { modifier = VAL_contract_state }
+					}
+				}
 				VAL_initialize_contract_authority = yes
 			}
 			if = {
@@ -261,7 +368,9 @@ on_actions = {
 			}
 			VAL_stelander_support_weekly = yes
 			if = {
-				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+				limit = {
+					check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than }
+				}
 				VAL_frontier_weekly = yes
 			}
 		}

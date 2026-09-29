@@ -17,7 +17,9 @@ ADISCORD_vorkerland_regional_autonomy = {
 	remove_trigger = {
 		OR = {
 			has_global_flag = ADISCORD_vorkerland_collapse_finished
-			NOT = { owner = { ADISCORD_vorkerland_holds_regional_autonomy = yes } }
+			NOT = {
+				owner = { ADISCORD_vorkerland_holds_regional_autonomy = yes }
+			}
 		}
 	}
 	local_building_slots_factor = -0.25

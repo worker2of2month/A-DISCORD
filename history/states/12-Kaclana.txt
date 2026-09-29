@@ -1,15 +1,15 @@
-state={
-	id=12
-	name="STATE_12"
-	provinces={
+state = {
+	id = 12
+	name = "STATE_12"
+	provinces = {
 		80 121 122 141 7986 11467 16353 16357 16380 16644 16647
 	}
-	manpower=1520000
-	buildings_max_level_factor=1.000
-	state_category=town
-	local_supplies=0.000
+	manpower = 1520000
+	buildings_max_level_factor = 1.000
+	state_category = town
+	local_supplies = 0.000
 
-	history={
+	history = {
 		owner = NOD
 		buildings = {
 			infrastructure = 2

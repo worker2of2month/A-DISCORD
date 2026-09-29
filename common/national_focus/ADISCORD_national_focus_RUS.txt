@@ -60,7 +60,10 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 14
-			modifier = { factor = 2 has_equipment = { infantry_equipment < 8000 } }
+			modifier = {
+				factor = 2
+				has_equipment = { infantry_equipment < 8000 }
+			}
 		}
 	}
 
@@ -106,7 +109,10 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 80
-			modifier = { factor = 0 NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened } }
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_vorkerland_dirty_opened }
+			}
 		}
 	}
 
@@ -143,7 +149,10 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 90
-			modifier = { factor = 2 has_global_flag = ADISCORD_vorkerland_khan_border_war_resolved }
+			modifier = {
+				factor = 2
+				has_global_flag = ADISCORD_vorkerland_khan_border_war_resolved
+			}
 		}
 	}
 
@@ -199,7 +208,10 @@ focus_tree = {
 			add_political_power = 50
 			add_stability = 0.05
 			effect_tooltip = {
-				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
+				swap_ideas = {
+					remove_idea = RUS_national_spirit
+					add_idea = RUS_last_empire_spirit
+				}
 			}
 			unlock_decision_tooltip = RUS_proclaim_the_last_empire
 		}

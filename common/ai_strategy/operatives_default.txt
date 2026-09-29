@@ -8,7 +8,6 @@
 
 # enable some missions for all countries having an agency
 enable_operative_missions = {
-
 	# enabled once the first operative has been recruited
 	enable = {
 		any_operative_leader = { always = yes }
@@ -33,17 +32,17 @@ enable_operative_missions = {
 		value = 100
 	}
 
-#	ai_strategy = {
-#		type = operative_mission
-#		mission = boost_ideology
-#		value = 100
-#	}
+	#	ai_strategy = {
+	#		type = operative_mission
+	#		mission = boost_ideology
+	#		value = 100
+	#	}
 
-#	ai_strategy = {
-#		type = operative_mission
-#		mission = propaganda
-#		value = 100
-#	}
+	#	ai_strategy = {
+	#		type = operative_mission
+	#		mission = propaganda
+	#		value = 100
+	#	}
 
 	ai_strategy = {
 		type = operative_mission
@@ -57,10 +56,9 @@ enable_operative_missions = {
 		value = 100
 	}
 
-#	ai_strategy = {
-#		type = operative_mission
-#		mission = diplomatic_pressure
-#		value = 100
-#	}
-
+	#	ai_strategy = {
+	#		type = operative_mission
+	#		mission = diplomatic_pressure
+	#		value = 100
+	#	}
 }

@@ -9,7 +9,10 @@ ADISCORD_rin_begin_oath_crisis = {
 			}
 		}
 	}
-	if = { limit = { is_in_faction = yes } leave_faction = yes }
+	if = {
+		limit = { is_in_faction = yes }
+		leave_faction = yes
+	}
 	country_event = { id = ADISCORD_rin_crisis.2 days = 1 }
 }
 
@@ -31,7 +34,7 @@ ADISCORD_rin_start_oath_civil_war = {
 				has_government = chauvinism
 			}
 		}
-			random_other_country = {
+		random_other_country = {
 			limit = {
 				original_tag = RIN
 				has_government = chauvinism
@@ -40,31 +43,36 @@ ADISCORD_rin_start_oath_civil_war = {
 			set_country_flag = ADISCORD_rin_northern_crown_side
 			set_cosmetic_tag = RIN_northern_court
 			recruit_character = RIN_Northern_Court_Regency
-			promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }
+			promote_character = {
+				character = RIN_Northern_Court_Regency
+				ideology = chauvinism_ideology
+			}
 			add_ideas = RIN_northern_crown_columns
 			add_manpower = 1000
 			add_equipment_to_stockpile = {
 				type = infantry_equipment_0
 				amount = 4000
 				producer = MON
-				}
 			}
-			# ROOT remains the southern civil-war country. Cache that concrete country
-			# object instead of resolving the original RIN tag after a dynamic D01 exists.
-			save_global_event_target_as = ADISCORD_rin_southern_charter
-			set_country_flag = ADISCORD_rin_southern_charter_side
-			clr_country_flag = ADISCORD_rin_northern_crown_side
-			add_ideas = RIN_southern_charter_mobilization
-			set_global_flag = ADISCORD_rin_oath_crisis_active
-			hidden_effect = {
-				if = {
-					limit = { NOT = { has_global_flag = ADISCORD_news_rin_active_published } }
-					set_global_flag = ADISCORD_news_rin_active_published
-					news_event = { id = ADISCORD_rin_crisis.10 hours = 1 }
-				}
-			}
-			activate_mission = ADISCORD_rin_palatin_breakup_mission
 		}
+		# ROOT remains the southern civil-war country. Cache that concrete country
+		# object instead of resolving the original RIN tag after a dynamic D01 exists.
+		save_global_event_target_as = ADISCORD_rin_southern_charter
+		set_country_flag = ADISCORD_rin_southern_charter_side
+		clr_country_flag = ADISCORD_rin_northern_crown_side
+		add_ideas = RIN_southern_charter_mobilization
+		set_global_flag = ADISCORD_rin_oath_crisis_active
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_rin_active_published }
+				}
+				set_global_flag = ADISCORD_news_rin_active_published
+				news_event = { id = ADISCORD_rin_crisis.10 hours = 1 }
+			}
+		}
+		activate_mission = ADISCORD_rin_palatin_breakup_mission
+	}
 	else = {
 		set_global_flag = ADISCORD_rin_oath_crisis_terminal_failure
 		set_global_flag = ADISCORD_rin_oath_crisis_resolved
@@ -99,7 +107,9 @@ ADISCORD_rin_complete_southern_victory = {
 	set_global_flag = ADISCORD_rin_oath_crisis_southern_victory
 	hidden_effect = {
 		if = {
-			limit = { NOT = { has_global_flag = ADISCORD_news_rin_southern_victory_published } }
+			limit = {
+				NOT = { has_global_flag = ADISCORD_news_rin_southern_victory_published }
+			}
 			set_global_flag = ADISCORD_news_rin_southern_victory_published
 			news_event = { id = ADISCORD_rin_crisis.11 hours = 1 }
 		}
@@ -120,7 +130,9 @@ ADISCORD_rin_complete_northern_victory = {
 	clr_country_flag = ADISCORD_rin_crown_palatin_survived
 	save_global_event_target_as = ADISCORD_rin_northern_court
 	if = {
-		limit = { MON = { exists = yes } }
+		limit = {
+			MON = { exists = yes }
+		}
 		MON = {
 			puppet = event_target:ADISCORD_rin_northern_court
 			set_autonomy = {
@@ -137,7 +149,9 @@ ADISCORD_rin_complete_northern_victory = {
 	set_global_flag = ADISCORD_rin_oath_crisis_northern_victory
 	hidden_effect = {
 		if = {
-			limit = { NOT = { has_global_flag = ADISCORD_news_rin_northern_victory_published } }
+			limit = {
+				NOT = { has_global_flag = ADISCORD_news_rin_northern_victory_published }
+			}
 			set_global_flag = ADISCORD_news_rin_northern_victory_published
 			news_event = { id = ADISCORD_rin_crisis.12 hours = 1 }
 		}

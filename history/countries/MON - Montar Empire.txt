@@ -7,12 +7,14 @@ set_politics = {
 	ruling_party = chauvinism
 	elections_allowed = no
 }
+
 set_popularities = {
 	chauvinism = 75
 	etatism = 15
 	hedonism = 5
 	pragmatism = 5
 }
+
 set_stability = 0.76
 set_war_support = 0.82
 set_research_slots = 4

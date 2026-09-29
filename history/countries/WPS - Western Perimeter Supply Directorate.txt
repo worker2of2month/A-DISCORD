@@ -1,4 +1,12 @@
 set_politics = { ruling_party = technocracy elections_allowed = no }
-set_popularities = { etatism = 5 chauvinism = 0 humanism = 5 pragmatism = 10 technocracy = 80 }
+
+set_popularities = {
+	etatism = 5
+	chauvinism = 0
+	humanism = 5
+	pragmatism = 10
+	technocracy = 80
+}
+
 recruit_character = WPS_Karim_Dol
 set_research_slots = 2

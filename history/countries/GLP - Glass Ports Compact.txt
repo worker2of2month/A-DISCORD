@@ -8,12 +8,14 @@ set_politics = {
 	last_election = "2158.11.19"
 	elections_allowed = yes
 }
+
 set_popularities = {
 	hedonism = 43
 	pragmatism = 27
 	humanism = 18
 	utilitarism = 12
 }
+
 set_stability = 0.49
 set_war_support = 0.30
 set_research_slots = 2

@@ -17,8 +17,14 @@ spriteTypes = {
 			animationdelay = 0
 			animationblendmode = "add"
 			animationtype = "scrolling"
-			animationrotationoffset = { x = 0.0 y = 0.0 }
-			animationtexturescale = { x = 1.0 y = 3.0 }
+			animationrotationoffset = {
+				x = 0.0
+				y = 0.0
+			}
+			animationtexturescale = {
+				x = 1.0
+				y = 3.0
+			}
 		}
 		legacy_lazy_load = no
 	}

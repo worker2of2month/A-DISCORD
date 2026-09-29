@@ -1,13 +1,12 @@
 autonomy_state = {
-	
 	## mp_edit # Search this term to located redacted or changed content
-	
+
 	id = autonomy_dominion
-	
+
 	min_freedom_level = 0.75
 
 	#use_overlord_color = yes
-	
+
 	rule = {
 		can_not_declare_war = yes
 		can_decline_call_to_war = no
@@ -19,17 +18,17 @@ autonomy_state = {
 		autonomy_colony
 		autonomy_dominion
 	}
-	
+
 	modifier = {
 		autonomy_manpower_share = 0.0
 		extra_trade_to_overlord_factor = 0.25
 		overlord_trade_cost_factor = -0.2
 	}
-	
+
 	ai_subject_wants_higher = {
 		factor = 0.0
 	}
-	
+
 	ai_overlord_wants_lower = {
 		factor = 1.0
 	}
@@ -41,7 +40,7 @@ autonomy_state = {
 	allowed = {
 		has_dlc = "Together for Victory"
 	}
-	
+
 	#mp_edit
 	#can_take_level = {
 	#	if = {
@@ -58,7 +57,6 @@ autonomy_state = {
 	can_lose_level = {
 		if = {
 			limit = {
-
 			}
 		}
 	}

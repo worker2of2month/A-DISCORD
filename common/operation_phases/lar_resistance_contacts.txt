@@ -4,7 +4,9 @@ resistance_contacts_radio_circuits = {
 	outcome = resistance_contacts_radio_circuits_outcome
 	picture = "GFX_phase_resistance_contacts_radio_circuits"
 	icon = "GFX_phase_resistance_contacts_radio_circuits_small"
-	requirements = { ROOT = { has_tech = ADISCORD_tech_mesh_command_networks } }
+	requirements = {
+		ROOT = { has_tech = ADISCORD_tech_mesh_command_networks }
+	}
 
 	equipment = {
 		support_equipment = 150
@@ -29,7 +31,5 @@ resistance_contacts_briefings = {
 	picture = "GFX_phase_resistance_contacts_briefings"
 	icon = "GFX_phase_resistance_contacts_briefings_small"
 	equipment = {
-		
 	}
 }
-

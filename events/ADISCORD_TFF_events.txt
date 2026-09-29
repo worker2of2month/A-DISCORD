@@ -13,7 +13,9 @@ country_event = {
 		hidden_effect = {
 			ADISCORD_TFF_form_wartime_confederation = yes
 			if = {
-				limit = { NOT = { has_global_flag = ADISCORD_news_frontier_command_published } }
+				limit = {
+					NOT = { has_global_flag = ADISCORD_news_frontier_command_published }
+				}
 				set_global_flag = ADISCORD_news_frontier_command_published
 				news_event = { id = ADISCORD_TFF.10 hours = 1 }
 			}
@@ -39,14 +41,13 @@ news_event = {
 	option = { name = ADISCORD_TFF.10.a }
 }
 
-
 news_event = {
-    id = ADISCORD_TFF.11
-    title = ADISCORD_TFF.11.t
-    desc = ADISCORD_TFF.11.d
-    picture = GFX_news_event_adiscord_army_formation
-    major = yes
-    fire_only_once = no
-    is_triggered_only = yes
-    option = { name = ADISCORD_TFF.11.a }
+	id = ADISCORD_TFF.11
+	title = ADISCORD_TFF.11.t
+	desc = ADISCORD_TFF.11.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	fire_only_once = no
+	is_triggered_only = yes
+	option = { name = ADISCORD_TFF.11.a }
 }

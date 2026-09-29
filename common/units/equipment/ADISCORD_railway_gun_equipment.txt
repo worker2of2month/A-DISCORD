@@ -24,7 +24,11 @@ equipments = {
 		visual_level = 0
 		active = no
 		build_cost_ic = 760
-		resources = { steel = 4 tungsten = 2 chromium = 2 }
+		resources = {
+			steel = 4
+			tungsten = 2
+			chromium = 2
+		}
 	}
 
 	ADISCORD_railway_gun_equipment_2200 = {
@@ -37,6 +41,11 @@ equipments = {
 		railway_gun_attack = 34
 		railway_gun_attack_range_index_in_define = 1
 		build_cost_ic = 980
-		resources = { steel = 5 tungsten = 3 chromium = 2 aluminium = 1 }
+		resources = {
+			steel = 5
+			tungsten = 3
+			chromium = 2
+			aluminium = 1
+		}
 	}
 }

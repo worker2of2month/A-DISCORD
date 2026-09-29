@@ -1,17 +1,17 @@
-state={
-	id=21
-	name="STATE_21"
-	provinces={
+state = {
+	id = 21
+	name = "STATE_21"
+	provinces = {
 		37 39 67 84 16631
 	}
-	buildings_max_level_factor=1.000
-        manpower=1220000
-        state_category = town
+	buildings_max_level_factor = 1.000
+	manpower = 1220000
+	state_category = town
 
 	resources = {
 		tungsten = 2
 	}
-     history = {
+	history = {
 		owner = YPR
 		add_core_of = YPR
 		buildings = {
@@ -19,5 +19,4 @@ state={
 		}
 		victory_points = { 16631 5 }
 	}
-	
 }

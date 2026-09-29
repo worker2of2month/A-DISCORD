@@ -56,8 +56,12 @@ ideas = {
 			available = { always = yes }
 			allowed_to_remove = { always = yes }
 			modifier = { political_power_gain = 0.03 }
-			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -119,8 +123,12 @@ ideas = {
 			available = { always = yes }
 			allowed_to_remove = { always = yes }
 			modifier = { training_time_army_factor = -0.02 }
-			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -328,8 +336,12 @@ ideas = {
 			available = { always = yes }
 			allowed_to_remove = { always = yes }
 			modifier = { research_speed_factor = 0.02 }
-			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			ai_will_do = { factor = 1 }
 		}
 	}
@@ -391,8 +403,12 @@ ideas = {
 			available = { always = yes }
 			allowed_to_remove = { always = yes }
 			modifier = { encryption_factor = 0.05 }
-			on_add = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
-			on_remove = { hidden_effect = { ADISCORD_economy_mark_dirty = yes } }
+			on_add = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
+			on_remove = {
+				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			}
 			ai_will_do = { factor = 1 }
 		}
 	}

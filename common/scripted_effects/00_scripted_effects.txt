@@ -23,7 +23,6 @@
 #This is going to give misleading and ugly tooltips. Making it nice will take effort. TODO_WTT_CD make nice or ignore and remove comment. Easiest solution is just making a custom tooltip that says "5 civilian factories will be converted to military factories" and ignore telling the player the states where it will happen.
 
 replace_civ_with_arms_factories = {
-
 	random_owned_controlled_state = {
 		limit = {
 			is_fully_controlled_by = ROOT
@@ -113,7 +112,9 @@ ROOT_inherit_current_scope_wars_effect = {
 			limit = {
 				has_defensive_war_with = PREV
 			}
-			ROOT = { declare_war_on = { target = PREV type = annex_everything } }
+			ROOT = {
+				declare_war_on = { target = PREV type = annex_everything }
+			}
 		}
 		every_country = {
 			limit = {
@@ -136,7 +137,7 @@ civil_war_anti_exploiter_punitive_action = {
 	if = {
 		limit = {
 			has_army_size = {
-			    size < 1
+				size < 1
 			}
 		}
 		division_template = {
@@ -145,21 +146,54 @@ civil_war_anti_exploiter_punitive_action = {
 			division_names_group = ADISCORD_INF_01
 			is_locked = yes
 			regiments = {
-				infantry = { x = 0 y = 0 }
-				infantry = { x = 0 y = 1 }
-				infantry = { x = 0 y = 2 }
+				infantry = {
+					x = 0
+					y = 0
+				}
+				infantry = {
+					x = 0
+					y = 1
+				}
+				infantry = {
+					x = 0
+					y = 2
+				}
 
-		   	   	infantry = { x = 1 y = 0 }
-				infantry = { x = 1 y = 1 }
-				infantry = { x = 1 y = 2 }
+				infantry = {
+					x = 1
+					y = 0
+				}
+				infantry = {
+					x = 1
+					y = 1
+				}
+				infantry = {
+					x = 1
+					y = 2
+				}
 
-		   	   	infantry = { x = 2 y = 0 }
-				infantry = { x = 2 y = 1 }
-				infantry = { x = 2 y = 2 }
+				infantry = {
+					x = 2
+					y = 0
+				}
+				infantry = {
+					x = 2
+					y = 1
+				}
+				infantry = {
+					x = 2
+					y = 2
+				}
 			}
 			support = {
-				engineer = { x = 0 y = 0 }
-				artillery = { x = 0 y = 2 }
+				engineer = {
+					x = 0
+					y = 0
+				}
+				artillery = {
+					x = 0
+					y = 2
+				}
 			}
 		}
 		random_state = {
@@ -342,7 +376,9 @@ instantiate_collaboration_government = {
 					exists = no
 				}
 			}
-			var:country_to_initiate = { set_variable = { collaboration_formed_by = PREV } }
+			var:country_to_initiate = {
+				set_variable = { collaboration_formed_by = PREV }
+			}
 			release_autonomy = {
 				target = country_to_initiate
 				autonomy_state = autonomy_collaboration_government
@@ -417,7 +453,8 @@ upgrade_economy_law = {
 	}
 }
 
-gain_random_agency_upgrade = { #Gives a random agency upgrade or grants a free agency if one has not yet been established
+gain_random_agency_upgrade = {
+	#Gives a random agency upgrade or grants a free agency if one has not yet been established
 	custom_effect_tooltip = free_agency_upgrade_tt
 	hidden_effect = {
 		if = {
@@ -430,10 +467,10 @@ gain_random_agency_upgrade = { #Gives a random agency upgrade or grants a free a
 }
 
 #Adds current ruling popularity to a new ideology - useful to represent ideological shifts within the same party
-add_ruling_to_humanism = { ##TO DO!!!!!!!!!!!!
+add_ruling_to_humanism = {
+	##TO DO!!!!!!!!!!!!
 	custom_effect_tooltip = add_ruling_to_dem_tt
 	hidden_effect = {
-
 		set_variable = {
 			var = humanism_support_var
 			value = party_popularity_100@humanism
@@ -494,14 +531,14 @@ add_ruling_to_humanism = { ##TO DO!!!!!!!!!!!!
 }
 
 on_daily = {
-
 }
 
 ###Game weight variables for faction load balancing.
 ###HOI IV devs store these on germany because ... they have to
 ###But we're better, so we are not gonna use this shit. At least for now
 
-bba_create_cas_license_effect = { #this assumes that the corresponding get_cas_effect has run already to generate a design template if necessary
+bba_create_cas_license_effect = {
+	#this assumes that the corresponding get_cas_effect has run already to generate a design template if necessary
 	if = {
 		limit = {
 			has_tech = ADISCORD_tech_drone_air_wings
@@ -540,7 +577,8 @@ bba_create_cas_license_effect = { #this assumes that the corresponding get_cas_e
 	}
 }
 
-bba_create_fighter_license_effect = { #this assumes that the corresponding get_fighter_effect has run already to generate a design template if necessary
+bba_create_fighter_license_effect = {
+	#this assumes that the corresponding get_fighter_effect has run already to generate a design template if necessary
 	if = {
 		limit = {
 			has_tech = ADISCORD_tech_drone_air_wings
@@ -579,7 +617,8 @@ bba_create_fighter_license_effect = { #this assumes that the corresponding get_f
 	}
 }
 
-bba_create_tac_license_effect = { #this assumes that the corresponding get_tac_effect has run already to generate a design template if necessary
+bba_create_tac_license_effect = {
+	#this assumes that the corresponding get_tac_effect has run already to generate a design template if necessary
 	if = {
 		limit = {
 			has_tech = ADISCORD_tech_deep_strike_targeting
@@ -618,7 +657,8 @@ bba_create_tac_license_effect = { #this assumes that the corresponding get_tac_e
 	}
 }
 
-bba_create_heavy_fighter_license_effect = { #this assumes that the corresponding get_fighter_effect has run already to generate a design template if necessary
+bba_create_heavy_fighter_license_effect = {
+	#this assumes that the corresponding get_fighter_effect has run already to generate a design template if necessary
 	if = {
 		limit = {
 			has_tech = ADISCORD_tech_deep_strike_targeting
@@ -657,7 +697,8 @@ bba_create_heavy_fighter_license_effect = { #this assumes that the corresponding
 	}
 }
 
-remove_any_country_role_from_character = { #Expected to be used inside the character scope
+remove_any_country_role_from_character = {
+	#Expected to be used inside the character scope
 	#log = "I am [THIS.GetName]"
 	if = {
 		limit = {
@@ -698,7 +739,8 @@ remove_any_country_role_from_character = { #Expected to be used inside the chara
 }
 
 ### Paratroopers
-SF_PARA_sabotage_effect = { #When changing this, update the research tooltip
+SF_PARA_sabotage_effect = {
+	#When changing this, update the research tooltip
 	damage_building = {
 		type = infrastructure
 		damage = 2
@@ -717,7 +759,8 @@ SF_PARA_sabotage_effect = { #When changing this, update the research tooltip
 	}
 }
 
-SF_PARA_combat_effect = { #When changing this, update the research tooltip
+SF_PARA_combat_effect = {
+	#When changing this, update the research tooltip
 	every_state_division = {
 		limit = {
 			OWNER = { has_war_with = FROM }
@@ -731,7 +774,8 @@ SF_PARA_combat_effect = { #When changing this, update the research tooltip
 }
 
 ### Muuuurrrriiinnnnneeeeessssss
-SF_marine_demoliton_effect = { #When changing this, update the research tooltip
+SF_marine_demoliton_effect = {
+	#When changing this, update the research tooltip
 	damage_building = {
 		type = radar_station
 		damage = 1
@@ -766,13 +810,13 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 ###########################################################################################
 ###########################################################################################
 
-							########    ###       ###    ########
-							   ##      ## ##     ## ##      ##
-							   ##     ##   ##   ##   ##     ##
-							   ##    ##     ## ##     ##    ##
-							   ##    ######### #########    ##
-							   ##    ##     ## ##     ##    ##
-							   ##    ##     ## ##     ##    ##
+########    ###       ###    ########
+##      ## ##     ## ##      ##
+##     ##   ##   ##   ##     ##
+##    ##     ## ##     ##    ##
+##    ######### #########    ##
+##    ##     ## ##     ##    ##
+##    ##     ## ##     ##    ##
 
 ###########################################################################################
 ###########################################################################################
@@ -786,7 +830,6 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 #		scorer = local_fascist_country
 #	}
 #}
-
 
 # The idea is that you can use these effects to store the party popularities (and, if desired, the ruling party) when puppeting or possibly when starting civil wars, and then use the "restore" effects to reset it after the puppeting has happened, so that you
 #don't have to use the overlord's ideology if you don't want to.
@@ -822,7 +865,6 @@ SF_marine_demoliton_effect = { #When changing this, update the research tooltip
 #		}
 #	}
 #}
-
 
 #Upgrades state cat to the next valid level. Called from state scope
 increase_state_category = {
@@ -913,13 +955,14 @@ increase_state_category = {
 			add_extra_state_shared_building_slots = 2
 		}
 	}
-
 }
 
 add_potential_special_forces_tree = {
 	custom_effect_tooltip = add_potential_special_forces_tree_tt
 	if = {
-		limit = { NOT = { has_variable = sf_trees } }
+		limit = {
+			NOT = { has_variable = sf_trees }
+		}
 		set_variable = { sf_trees = 2 }
 	}
 	else = {
@@ -929,7 +972,9 @@ add_potential_special_forces_tree = {
 
 remove_potential_special_forces_tree = {
 	if = {
-		limit = { NOT = { has_variable = sf_trees } }
+		limit = {
+			NOT = { has_variable = sf_trees }
+		}
 		set_variable = { sf_trees = 0 }
 	}
 	else = {
@@ -937,7 +982,8 @@ remove_potential_special_forces_tree = {
 	}
 }
 
-store_core_states_on_game_start = { #Should be called from history file
+store_core_states_on_game_start = {
+	#Should be called from history file
 	every_core_state = {
 		ROOT = {
 			add_to_array = {

@@ -1,15 +1,15 @@
-state={
-	id=11
-	name="STATE_11"
-	provinces={
-		13 23 62 113 16356 
+state = {
+	id = 11
+	name = "STATE_11"
+	provinces = {
+		13 23 62 113 16356
 	}
-	manpower=2200000
-	buildings_max_level_factor=1.000
-	state_category=city
-	local_supplies=0.000
+	manpower = 2200000
+	buildings_max_level_factor = 1.000
+	state_category = city
+	local_supplies = 0.000
 
-	history={
+	history = {
 		owner = NOD
 		buildings = {
 			air_base = 2

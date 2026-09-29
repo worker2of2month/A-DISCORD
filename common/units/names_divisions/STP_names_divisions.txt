@@ -12,18 +12,18 @@ STP_INF_01 = {
 
 	fallback_name = "%d Infantry Division"
 
-	# Names with numbers (only one number per entry). 
+	# Names with numbers (only one number per entry).
 	# It's okay to have gaps in numbering.
 	ordered = {
-		1  = { "%dst 'Great Steland' Division" }
-		2  = { "%dnd 'Indianhead' Division" }
-		3  = { "%dvl 'Valiant Peaks' Division" }
-		4  = { "%dcr 'Crimson Valley' Division" }
-		5  = { "%dwr 'Warden's Watch' Division" }
-		6  = { "%dsg 'Silvergate' Division" }
-		7  = { "%dpt 'Pinefort' Division" }
-		8  = { "%dhr 'Horizon Ridge' Division" }
-		9  = { "%dfl 'Falcon's Nest' Division" }
+		1 = { "%dst 'Great Steland' Division" }
+		2 = { "%dnd 'Indianhead' Division" }
+		3 = { "%dvl 'Valiant Peaks' Division" }
+		4 = { "%dcr 'Crimson Valley' Division" }
+		5 = { "%dwr 'Warden's Watch' Division" }
+		6 = { "%dsg 'Silvergate' Division" }
+		7 = { "%dpt 'Pinefort' Division" }
+		8 = { "%dhr 'Horizon Ridge' Division" }
+		9 = { "%dfl 'Falcon's Nest' Division" }
 		10 = { "%dcm 'Cobalt Marsh' Division" }
 		11 = { "%dbr 'Bronze Fall' Division" }
 		12 = { "%drl 'Ruby Lake' Division" }

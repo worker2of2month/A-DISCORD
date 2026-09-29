@@ -15,6 +15,7 @@ create_faction_from_template = {
 	template = faction_template_ADISCORD_standard
 	name = faction_stp_nod
 }
+
 add_to_faction = STP
 add_to_faction = AIN
 
@@ -26,6 +27,7 @@ set_politics = {
 	election_frequency = 120
 	elections_allowed = yes
 }
+
 set_popularities = {
 	etatism = 8
 	hedonism = 42
@@ -62,7 +64,6 @@ add_ideas = {
 	minister_NOD_Kain_Voss
 }
 
-
 set_stability = 0.63
 
 set_convoys = 100
@@ -75,6 +76,7 @@ set_autonomy = {
 	target = STP
 	autonomous_state = autonomy_shadow_state
 }
+
 set_autonomy = {
 	target = AIN
 	autonomous_state = autonomy_colony

@@ -1,4 +1,12 @@
 set_politics = { ruling_party = humanism elections_allowed = yes }
-set_popularities = { etatism = 5 chauvinism = 0 humanism = 80 pragmatism = 15 technocracy = 0 }
+
+set_popularities = {
+	etatism = 5
+	chauvinism = 0
+	humanism = 80
+	pragmatism = 15
+	technocracy = 0
+}
+
 recruit_character = WPA_Oliver_Larry_Gates
 set_research_slots = 2

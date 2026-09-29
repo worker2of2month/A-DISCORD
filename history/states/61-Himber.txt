@@ -1,14 +1,14 @@
-state={
-	id=61
-	name="STATE_61"
-	provinces={
+state = {
+	id = 61
+	name = "STATE_61"
+	provinces = {
 		1480 8938 11332 16316
 	}
-	manpower=32000
+	manpower = 32000
 
 	state_category = rural
-	buildings_max_level_factor=1.000
-	local_supplies=0.000
+	buildings_max_level_factor = 1.000
+	local_supplies = 0.000
 
 	history = {
 		owner = OSF
@@ -18,7 +18,7 @@ state={
 		add_core_of = OSF
 	}
 	resources = {
-        tungsten = 4
-        aluminium = 15
-    }
+		tungsten = 4
+		aluminium = 15
+	}
 }

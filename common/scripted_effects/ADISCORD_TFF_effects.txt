@@ -12,10 +12,15 @@ ADISCORD_TFF_form_wartime_confederation = {
 		set_cosmetic_tag = TFF_frontier_defense_confederation
 		if = {
 			limit = { has_character = TFF_Colt_Ardent }
-			promote_character = { character = TFF_Colt_Ardent ideology = tff_emergency_war_coordinator }
+			promote_character = {
+				character = TFF_Colt_Ardent
+				ideology = tff_emergency_war_coordinator
+			}
 		}
 		if = {
-			limit = { NOT = { has_idea = TFF_emergency_frontier_command } }
+			limit = {
+				NOT = { has_idea = TFF_emergency_frontier_command }
+			}
 			add_ideas = TFF_emergency_frontier_command
 		}
 	}
@@ -35,12 +40,16 @@ ADISCORD_TFF_begin_kefreyt_campaign = {
 			}
 		}
 		if = {
-			limit = { NOT = { has_country_flag = TFF_kefreyt_northern_campaign } }
+			limit = {
+				NOT = { has_country_flag = TFF_kefreyt_northern_campaign }
+			}
 			set_country_flag = TFF_kefreyt_northern_campaign
 			add_ideas = TFF_kefreyt_northern_campaign
 		}
 		if = {
-			limit = { NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published } }
+			limit = {
+				NOT = { has_global_flag = ADISCORD_news_frontier_second_war_published }
+			}
 			set_global_flag = ADISCORD_news_frontier_second_war_published
 			news_event = { id = ADISCORD_TFF.11 hours = 1 }
 		}
