@@ -1,5 +1,5 @@
 l_english:
-# --- buildings_l_english ---
+ # --- buildings_l_english ---
  ADISCORD_unity_tower_complex: "Unity Tower Complex"
  ADISCORD_unity_tower_complex_plural: "Unity Tower Complexes"
  ADISCORD_unity_tower_complex_desc: "The confederation's administrative, research, and communications core. The Tower accelerates coordination and construction in the Central District, while its hardened archives and computation systems place a visible burden on the power grid."
@@ -7,7 +7,7 @@ l_english:
  ADISCORD_techlar_metallurgical_combine_plural: "Techlar Energy and Metallurgy Combines"
  ADISCORD_techlar_metallurgical_combine_desc: "An integrated chain for dismantling old machinery, enriching ore, and electric smelting. It is the region's largest steel source, at the cost of construction capacity, power, and usable land across the Firnov agglomeration."
 
-# --- civil_war_focus_l_english ---
+ # --- civil_war_focus_l_english ---
  ADISCORD_vorkerland_wrk_preparations_carry_over_tt: "§GWhen the Confederation collapses,§! the benefits of this preparation will pass to the emergency government."
  ADISCORD_vorkerland_unlock_core_restoration_decisions_tt: "§GUnlocks decisions§! to restore core status in separate regional packages. Every state in a package must be owned and controlled."
  WRK_worker_recognize_free_republics_tt: "§GUnlocks diplomatic decisions§! to recognise surviving independent Vorkerland republics."
@@ -772,7 +772,7 @@ l_english:
  ADISCORD_vorkerland_prewar_district_hardline_course_tt: "The district administration chose independent mobilization."
  ADISCORD_vorkerland_tva_iteration_prerequisite_tt: "A field-trial package must already have been selected."
 
-# --- collapse_l_english ---
+ # --- collapse_l_english ---
  ADISCORD_vorkerland_last_stand:0 "To the Last"
  ADISCORD_vorkerland_last_stand_desc:0 "Each claimant has sworn that no capital, archive, or field command will be surrendered while a final organised position remains. Defeat will come only after the state itself has been broken apart."
  ADISCORD_vorkerland_vad_imperial_registers:0 "Imperial Mobilisation Registers"
@@ -853,7 +853,7 @@ l_english:
  ADISCORD_vorkerland_collapse.101.filopo.d:0 "The commissions have tallied the returns and declared Necro Filopo the winner. Chauvinism becomes the ruling ideology, and Worcker yields the cabinet to the published result."
  ADISCORD_vorkerland_collapse.101.a:0 "Accept the published result."
 
-# --- diplomacy_l_english ---
+ # --- diplomacy_l_english ---
  ADISCORD_vorkerland_regional_diplomacy_category: "Allies Beyond the Central Front"
  ADISCORD_vorkerland_regional_diplomacy_category_desc: "The sovereign victors in Solarino and Volnograd may join a claimant before or during the final war. Their answer never delays the central showdown."
  ADISCORD_vorkerland_vad_invite_victorious_sol: "Invite Solarino into the Restoration Alliance"
@@ -896,7 +896,7 @@ l_english:
  ADISCORD_DIPLOMACY_RELATIONS_HEADER: "TIES AND OBLIGATIONS"
  ADISCORD_DIPLOMACY_ACTIONS_HEADER: "DIPLOMATIC CHANNELS"
 
-# --- focus_decisions_l_english ---
+ # --- focus_decisions_l_english ---
  ADISCORD_vorkerland_focus_operations_category:0 "The Last Vorkerland Campaign"
  ADISCORD_vorkerland_focus_operations_category_desc:0 "Early district campaigns, civil integration of secured territory, and preparations for the final war between the claimants."
  ADISCORD_vorkerland_allied_support_category:0 "Support the Allied Front"
@@ -975,7 +975,7 @@ l_english:
 
  ADISCORD_vorkerland_consolidation_deadline:0 "The common command breaks apart"
  ADISCORD_vorkerland_consolidation_deadline_desc:0 "The claimants have at most 180 days to prepare and negotiate with district governments before the central war begins. Local victors may join a coalition while keeping their independence. A prepared claimant can order an earlier offensive. Conquest and civil integration are separate choices."
-# --- postwar_ideas_l_english ---
+ # --- postwar_ideas_l_english ---
  ADISCORD_vorkerland_worker_constitutional_settlement:0 "Constitutional Settlement"
  ADISCORD_vorkerland_worker_constitutional_settlement_desc:0 "Republican representation, workers' organisations, and the rights of returning communities now rest on permanent law rather than emergency decrees."
  ADISCORD_vorkerland_reunification_settlement:0 "Reunification Settlement"
@@ -1021,7 +1021,7 @@ l_english:
  ADISCORD_vorkerland_ivanland_expeditionary_command:0 "Ivanland Expeditionary Command"
  ADISCORD_vorkerland_ivanland_expeditionary_command_desc:0 "A temporary headquarters coordinates Ivanland's limited northern expedition, concentrating staff work and supply without creating a permanent occupation army."
 
-# --- recovery_l_english ---
+ # --- recovery_l_english ---
  WKR: "Vorkerland Emergency Committee"
  WKR_DEF: "the Vorkerland Emergency Committee"
  WKR_ADJ: "Vorkerland"
@@ -1046,7 +1046,7 @@ l_english:
  ADISCORD_vorkerland_phase.1.c: "Control Dorian Worx's technical administration."
  ADISCORD_vorkerland_phase.1.e: "Honour the Worcker-Vadl emergency compact."
 
-# --- rom_tru_l_english ---
+ # --- rom_tru_l_english ---
  ADISCORD_vorkerland_rom_tru_category:0 "Southern Republics in Flames"
 
  ADISCORD_vorkerland_rom_desert_eagle_staff:0 "Desert Eagle Staff"
@@ -1088,11 +1088,11 @@ l_english:
  ADISCORD_vorkerland_rom_tru.2.d:0 "The provisional administration entrenched itself on the western bank and declared itself the sole lawful authority of Zlatorech. Nikita Truman convened the factory directors, commanders, and representatives of the river guilds. Their emergency council is putting crossings and foundries on a wartime schedule - with a promise to return authority to the citizens after victory."
  ADISCORD_vorkerland_rom_tru.2.a:0 "Launch the river mobilisation plan."
 
-# --- stalemate_l_english ---
+ # --- stalemate_l_english ---
  ADISCORD_vorkerland_ai_breakthrough_window:0 "Emergency Operational Window"
  ADISCORD_vorkerland_ai_breakthrough_window_desc:0 "For seventy-five days, exhausted attacking staffs receive strict rail priorities, mobile repair crews, and authority to force a decision on the surviving front."
 
-# --- story_l_english ---
+ # --- story_l_english ---
  ADISCORD_vorkerland_story.1.t: "The Claimants Go to War"
  ADISCORD_vorkerland_story.1.d: "The last emergency channels between Vorkerland's surviving central governments have gone silent. The remaining claimants now recognize one another as enemies. Verified fighting links every required claimant front; the struggle for the centre has begun."
  ADISCORD_vorkerland_story.1.a: "The centre will decide the republic's fate."
@@ -1174,7 +1174,7 @@ l_english:
  ADISCORD_vorkerland_news.2.d: "Ivanland's operation has failed. Neither Norvein nor the dependent Kraitsk Directorate was created: states [90.GetName] and [91.GetName] returned to Grain, while states [93.GetName] and [94.GetName] returned to Rivendell. The provisional Northern Defence Front has dissolved and the northern administrations have resumed their internecine wars. Vadim Ivanchik's government has declared an emergency course after the defeat."
  ADISCORD_vorkerland_news.2.capitulated: "Itora's northern expedition ended not in a withdrawal but in complete military defeat. Itoran forces capitulated, the provisional Northern Defence Front dissolved, and the disputed districts are returned to the northern administrations.\n\nNo separate postwar Itoran government is restored after capitulation: the victors enforce the result while the northern republics return to their earlier conflicts."
  ADISCORD_vorkerland_news.2.a: "The north is at war with itself again."
-# --- rus_last_empire_l_english ---
+ # --- rus_last_empire_l_english ---
  RUS_summon_the_aimaqs: "Summon the Aimaqs"
  RUS_summon_the_aimaqs_desc: "The free aimaqs accept a common banner only when a foreign army is already on their pastures. The khan's standard is raised so neighbours know who will speak for the steppe."
  RUS_arm_the_border_hosts: "Arm the Border Hosts"
@@ -1232,7 +1232,7 @@ l_english:
  RUS_last_empire_DEF: "the Last Empire"
  RUS_last_empire_ADJ: "Imperial"
 
-# Confederate uniforms
+ # Confederate uniforms
  WRK_confederation_technocracy: "$WRK_technocracy$"
  WRK_confederation_technocracy_ADJ: "$WRK_technocracy_ADJ$"
  WRK_confederation_technocracy_DEF: "$WRK_technocracy_DEF$"

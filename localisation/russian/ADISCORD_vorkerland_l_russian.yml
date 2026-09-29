@@ -1,5 +1,5 @@
 ﻿l_russian:
-# --- dirty_zone_l_russian ---
+ # --- dirty_zone_l_russian ---
  ADISCORD_vorkerland_dirty_zone.1.t: "Завеса над Грязной зоной рассеялась"
  ADISCORD_vorkerland_dirty_zone.1.d: "После долгих лет изоляции из-за периметра Грязной зоны вновь приходят проверяемые сообщения. Старые дороги открываются, на картах возникают границы новых администраций, а линии связи, считавшиеся мёртвыми, снова передают приказы. Территория, которую за пределами зоны привыкли считать бесформенной заражённой пустошью, оказалась раздробленным миром со своими властями, конфликтами и претензиями на выживание. Теперь этот мир снова соприкасается с остальным континентом."
  ADISCORD_vorkerland_dirty_zone.1.a: "Мёртвая земля заговорила."
@@ -7,7 +7,7 @@
  ADISCORD_debug_open_vorkerland_dirty_zone: "§RDEBUG:§! Открыть Грязную зону"
  ADISCORD_debug_open_vorkerland_dirty_zone_desc: "Пропускает трёхлетнее ожидание и запускает штатный сценарий открытия Грязной зоны через событие ADISCORD_vorkerland_collapse.85."
 
-# --- civil_war_focus_l_russian ---
+ # --- civil_war_focus_l_russian ---
  ADISCORD_vorkerland_wrk_preparations_carry_over_tt: "§GПосле распада Конфедерации§! результаты этой подготовки перейдут чрезвычайному правительству."
  ADISCORD_vorkerland_unlock_core_restoration_decisions_tt: "§GОткроет решения§! по восстановлению национальных территорий отдельными региональными пакетами. Для каждого пакета требуется полное владение и контроль."
  WRK_worker_recognize_free_republics_tt: "§GОткроет дипломатические решения§! для признания уцелевших независимых республик Воркерланда."
@@ -772,7 +772,7 @@
  ADISCORD_vorkerland_prewar_district_hardline_course_tt: "Окружная администрация выбрала самостоятельную мобилизацию."
  ADISCORD_vorkerland_tva_iteration_prerequisite_tt: "Нужен уже выбранный пакет полевых испытаний."
 
-# --- collapse_l_russian ---
+ # --- collapse_l_russian ---
  ADISCORD_vorkerland_last_stand: "До последнего"
  ADISCORD_vorkerland_last_stand_desc: "Каждый претендент поклялся не сдавать столицы, архивы и полевые штабы, пока сохраняется хотя бы один организованный рубеж. Поражение наступит только тогда, когда само государство будет сломлено."
  ADISCORD_vorkerland_tva_unattended_shifts: "Приборные безлюдные смены"
@@ -1206,7 +1206,7 @@
  ADISCORD_vorkerland_macri_volunteer_corps_desc: "Афрела решила, что уцелевший Влад Макри стоит большего, чем символический жест. Корпус набирают открыто, отправляют сформированным контингентом, а не струйкой отбившихся, и требование держать армию дома отменено на всё время эбернского кризиса."
  ADISCORD_vorkerland_civil_war_attrition: "Истощение центрального фронта"
 
-# --- diplomacy_l_russian ---
+ # --- diplomacy_l_russian ---
  ADISCORD_vorkerland_regional_diplomacy_category: "Союзники за центральным фронтом"
  ADISCORD_vorkerland_regional_diplomacy_category_desc: "Суверенные победители в Солярино и Вольнограде могут присоединиться к претенденту до или во время решающей войны. Их ответ не задерживает центральную схватку."
  ADISCORD_vorkerland_vad_invite_victorious_sol: "Пригласить Солярино в реставрационный альянс"
@@ -1236,7 +1236,7 @@
  RECALL_VOLUNTEERS_TOOLTIP: "§Y[This.GetNameWithFlag]§!: §Rв этой стране нет наших добровольцев, которых можно отозвать.§!"
  RECALL_VOLUNTEERS_TOOLTIP_G: "§Y[This.GetNameWithFlag]§!: отозвать наш добровольческий контингент."
 
-# --- focus_decisions_l_russian ---
+ # --- focus_decisions_l_russian ---
  ADISCORD_vorkerland_focus_operations_category:0 "Последняя кампания Воркерланда"
  ADISCORD_vorkerland_focus_operations_category_desc:0 "Ранние кампании в центральных округах, гражданское устройство занятых земель и подготовка к решающей войне претендентов."
  ADISCORD_vorkerland_allied_support_category:0 "Поддержка союзного фронта"
@@ -1315,7 +1315,7 @@
 
  ADISCORD_vorkerland_consolidation_deadline:0 "Распад общего командования"
  ADISCORD_vorkerland_consolidation_deadline_desc:0 "На создание собственного командования и договорённости с окружными правительствами остаётся не более 180 дней. После истечения срока три претендента начнут большую войну. Победители местных конфликтов могут вступить в коалицию; присоединение округов не обязательно. Подготовленный претендент может начать войну раньше отдельным решением."
-# --- postwar_ideas_l_russian ---
+ # --- postwar_ideas_l_russian ---
  ADISCORD_vorkerland_worker_constitutional_settlement:0 "Конституционное соглашение"
  ADISCORD_vorkerland_worker_constitutional_settlement_desc:0 "Представительство республик, права рабочих организаций и защита вернувшихся общин теперь опираются на постоянный закон, а не на чрезвычайные указы."
  ADISCORD_vorkerland_reunification_settlement:0 "Соглашение о воссоединении"
@@ -1361,7 +1361,7 @@
  ADISCORD_vorkerland_ivanland_expeditionary_command:0 "Экспедиционное командование Иванланда"
  ADISCORD_vorkerland_ivanland_expeditionary_command_desc:0 "Временный штаб координирует ограниченную северную экспедицию Иванланда, сосредотачивая управление и снабжение без создания постоянной оккупационной армии."
 
-# --- recovery_l_russian ---
+ # --- recovery_l_russian ---
  WKR: "Воркерландский чрезвычайный комитет"
  WKR_DEF: "Воркерландский чрезвычайный комитет"
  WKR_ADJ: "Воркерландск."
@@ -1383,7 +1383,7 @@
  ADISCORD_vorkerland_phase.1.c: "Играть за техническую администрацию Дориана Воркса."
  ADISCORD_vorkerland_phase.1.e: "Соблюсти чрезвычайный пакт Уоркера и Вадла."
 
-# --- rom_tru_l_russian ---
+ # --- rom_tru_l_russian ---
  ADISCORD_vorkerland_rom_tru_category: "Южные республики в огне"
 
  ADISCORD_vorkerland_rom_desert_eagle_staff: "Штаб Пустынного Орла"
@@ -1425,11 +1425,11 @@
  ADISCORD_vorkerland_rom_tru.2.d: "Временная администрация закрепилась на западном берегу и объявила себя единственной законной властью Золоторечья. Никита Трумен созвал директоров заводов, командиров и представителей речных артелей. Их чрезвычайный совет переводит переправы и литейные цеха на военный график - с обещанием вернуть полномочия гражданам после победы."
  ADISCORD_vorkerland_rom_tru.2.a: "Запустить речной мобилизационный план."
 
-# --- stalemate_l_russian ---
+ # --- stalemate_l_russian ---
  ADISCORD_vorkerland_ai_breakthrough_window:0 "Чрезвычайное оперативное окно"
  ADISCORD_vorkerland_ai_breakthrough_window_desc:0 "На семьдесят пять дней измотанные штабы наступающей стороны получают приоритет на железных дорогах, мобильные ремонтные бригады и полномочия добиться развязки на уцелевшем фронте."
 
-# --- story_l_russian ---
+ # --- story_l_russian ---
  ADISCORD_vorkerland_story.1.t: "Претенденты вступают в войну"
  ADISCORD_vorkerland_story.1.d: "Последние аварийные каналы между уцелевшими центральными правительствами Воркерланда замолчали. Оставшиеся претенденты отныне считают друг друга врагами. Боевые действия подтверждены на всех необходимых фронтах - борьба за центр началась."
  ADISCORD_vorkerland_story.1.a: "Судьбу республики решит центр."
@@ -1504,7 +1504,7 @@
  ADISCORD_vorkerland_story.36.t: "Директорат вводит протокол сохранения"
  ADISCORD_vorkerland_story.36.d: "Воркенсбергский директорат опубликовал обратный расчёт: дефицитный ресурс - обученные люди, и тратить их на темп наступления запрещено. Конструкторские бюро вывозят вглубь, специалистов снимают с фронтовых работ, оборону строят так, чтобы она стоила дёшево, а исследования продолжаются во время войны, а не после неё. Доктор Дориан Воркс объявляет, что республику можно проиграть по карте и всё равно выиграть по знанию. Наступать такая армия будет заметно хуже - и это прямо записано в тексте протокола."
  ADISCORD_vorkerland_story.36.a: "Дефицитный ресурс - люди."
-# --- rus_last_empire_l_russian ---
+ # --- rus_last_empire_l_russian ---
  RUS_summon_the_aimaqs: "Собрать аймаки"
  RUS_summon_the_aimaqs_desc: "Вольные аймаки терпят общего представителя только когда чужая армия уже стоит у пастбищ. Ханский стяг поднимают не ради столичной канцелярии, а чтобы соседи поняли, кто будет говорить за степь."
  RUS_arm_the_border_hosts: "Вооружить пограничные сотни"
@@ -1559,7 +1559,7 @@
  RUS_arm_the_border_hosts_tt: "Формирует две стрелковые бригады в столице из выделенных людей и винтовок."
  RUS_proclaim_the_last_empire_peace_tt: "Нужен мир на всех фронтах, не только закрытый поход по Грязной зоне."
 
-# Confederate uniforms
+ # Confederate uniforms
  WRK_confederation: "$WRK$"
  WRK_confederation_ADJ: "$WRK_ADJ$"
  WRK_confederation_DEF: "$WRK_DEF$"

@@ -76,7 +76,7 @@
  autonomy_sea_warlord_subject: "Полевой командир-марионетка"
  autonomy_sea_integrated_warlord_subject: "Интегрированный полевой командир-марионетка"
 
-# BEGIN CONSOLIDATED: ADISCORD_autonomy_l_russian.yml
+ # BEGIN CONSOLIDATED: ADISCORD_autonomy_l_russian.yml
  autonomy_shadow_state: "Подконтрольное правительство"
  autonomy_republic_in_Vorkerland: "Республика в составе Воркерланда"
  autonomy_district_in_Vorkerland: "Дистрикт в составе Воркеланда"
@@ -87,4 +87,4 @@
  autonomy_contract_protectorate: "Договорный протекторат"
  autonomy_contract_client: "Договорное клиентское государство"
  autonomy_island_administration: "Островное управление"
-# END CONSOLIDATED: ADISCORD_autonomy_l_russian.yml
+ # END CONSOLIDATED: ADISCORD_autonomy_l_russian.yml

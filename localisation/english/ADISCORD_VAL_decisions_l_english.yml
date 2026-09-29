@@ -1003,7 +1003,6 @@
  VAL_fund_contract_chancery: "Fund the Contract Chancery"
  VAL_fund_contract_chancery_desc: "Buy administrative capacity instead of waiting for the political apparatus to recover on its own. Spend treasury funds on clerks, provincial offices and contract processing to gain political power. This may be repeated every 90 days."
 
-
  # Stelander crisis focus presentation
  VAL_stelander_title_war: "Civil War in Stelander"
  VAL_stelander_title_aftermath: "After the Stelander Split"
@@ -1094,7 +1093,7 @@
 
  VAL_QUARTERLY_PENDING:0 "§YOrder not yet fulfilled.§!"
 
-VAL_reclamation_industry_available_tt:0 "We own and control the region, all three reclamation stages are complete, and it has at most 18 civilian factories."
+ VAL_reclamation_industry_available_tt:0 "We own and control the region, all three reclamation stages are complete, and it has at most 18 civilian factories."
 
  VAL_negotiate_yubora:0 "Negotiate Yubora's future"
  VAL_negotiate_yubora_desc:0 "The Frontier survived the northern war, but Yuboria remains under Nodrul. Propose a joint campaign and a division of postwar authority: two Yuborian administrations under the Frontier and two Nodrul administrations under Kefreyt. The agreement can also be concluded during the war."
@@ -1182,7 +1181,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_regional_administration_campaign:0 "Establish civil administration across all regions"
  VAL_regional_administration_campaign_desc:0 "A joint programme for all owned and controlled non-core states with compliance below 60 or resistance at least 20. For §Y50§! £political_power_texticon, each eligible state immediately gains 15 compliance and loses 10 resistance. Available again after 90 days. States with an integration programme already in progress are excluded."
 
-# Campaign briefing
+ # Campaign briefing
  VAL_startup_country:0 "§YKefreyt currently has one main story path.§! Northern trade and pressure are options within it.\n\n§YKEFREYT§!\n\nKefreyt lives by contracts, arsenals and the sale of force. Arms factories and mercenary companies give it influence far beyond its borders, but each new commitment needs payment and supply.\n\nBehind industrial power lie a weak social foundation, the consequences of earlier wars and commanders with interests of their own. The state must bind these forces to shared obligations, or yield once more to private arrangements.\n\n§YFirst priorities§!\nStrengthen the contract system, review the budget and check army requirements. In the north, a choice awaits between closer trade and a policy of pressure. Arms production only pays off when routes and customers can be relied upon."
  VAL_startup_guide_budget_title:0 "Treasury and contracts"
  VAL_startup_guide_army_title:0 "People and power"
@@ -1619,7 +1618,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_order_offer_strategic_event_desc:0 "[VALOrderOfferStrategicTerms]"
  VAL_order_offer_strategic_legacy_desc:0 "Previously issued one-off offer: 200000 rifles for 50000 treasury. Advance: 1250; balance on dispatch: 3750. Deadline: 90 days. Route loss grants one 14-day extension; cancellation refunds the advance. No annual signing fee for this legacy order."
 
-
  VAL_offer_blocked_hire:0 "Unavailable now. Check Kefreyt treasury, partner manpower, recruitment cooldown and pending replies."
 
  VAL_offer_blocked_weapons:0 "Unavailable now. Requires full stock, buyer funds, a free export slot, an open route and no active deal cooldown."
@@ -1629,7 +1627,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_offer_blocked_military:0 "Unavailable now. Requires participation in the customer war, 25 command power, 500 customer treasury and a free military contract. Recovery requires enemy-held territory."
 
  VAL_offer_blocked_advisors:0 "Unavailable now. Requires §Y30§! £political_power_texticon, 25 command power, 100 buyer treasury and a free adviser slot. The buyer must be at war."
-
 
  VAL_offer_blocked_concessions:0 "Unavailable now. Check §Y50§! £political_power_texticon, resource-region control, side selection and pending replies."
 
@@ -1654,9 +1651,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_offer_status_VAL_offer_transit_charter:0 "[VALOfferStatus_VAL_offer_transit_charter]"
 
  VAL_offer_status_VAL_partner_hire:0 "[VALOfferStatus_VAL_partner_hire]"
-
-
-
 
  VAL_offer_status_VAL_military_offer_2:0 "[VALOfferStatus_VAL_military_offer_2]"
 
@@ -1692,9 +1686,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_partner_hire_button:0 "[VALOfferButton_VAL_partner_hire]"
 
-
-
-
  VAL_military_offer_2_button:0 "[VALOfferButton_VAL_military_offer_2]"
 
  VAL_military_offer_1_button:0 "[VALOfferButton_VAL_military_offer_1]"
@@ -1706,7 +1697,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_partner_bulk_button:0 "[VALOfferButton_VAL_partner_bulk]"
 
  VAL_partner_arms_button:0 "[VALOfferButton_VAL_partner_arms]"
-
 
  VAL_offer_button_blocked_VAL_negotiate_efl_metals:0 "§RAgreement unavailable§!"
 
@@ -1727,9 +1717,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_offer_button_blocked_VAL_offer_transit_charter:0 "§RTransit unavailable§!"
 
  VAL_offer_button_blocked_VAL_partner_hire:0 "§RRecruitment unavailable§!"
-
-
-
 
  VAL_offer_button_blocked_VAL_military_offer_2:0 "§RRecovery unavailable§!"
 
@@ -1788,7 +1775,6 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_abstract_arms_upgrade_100k_tt:0 "Foreign-market sales can now move up to £infantry_equipment_texticon §Y100000§! rifles for £ADISCORD_economy_treasury_texticon §G2250§!."
  VAL_abstract_arms_upgrade_200k_tt:0 "Foreign-market sales can now move up to £infantry_equipment_texticon §Y200000§! rifles for £ADISCORD_economy_treasury_texticon §G5000§!."
  VAL_contingency_ledgers_reworked_tt:0 "Keeps foreign-contract contingency planning as a direct command benefit without adding per-country special-agreement rows."
-
 
  VAL_ready_decision_ready_tt:0 "At least one unlocked package is available: enough equipment and buyer funds, a free slot, no stopped corridor or pending reply."
 
@@ -1860,7 +1846,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_trade_south_3:0 "§Y5. Southern route: threatened§![VALTradeSouthIncome]"
  VAL_trade_south_4:0 "§R5. Southern route: halted§![VALTradeSouthIncome]"
 
-# --- GENERATED: VAL focus progression tooltips ---
+ # --- GENERATED: VAL focus progression tooltips ---
  VAL_focus_progression_VAL_Army_Of_The_Ledger_tt:0 "§GFOCUS TREE§!\n§YCan reveal when the remaining requirements are met:§! $VAL_Contracts_Outlive_Kings$, $VAL_Veterans_Of_The_Campaign$."
  VAL_focus_progression_VAL_Arsenal_Reserve_tt:0 "§GFOCUS TREE§!\n§YCan reveal when the remaining requirements are met:§! $VAL_Reserve_Accounting$."
  VAL_focus_progression_VAL_Brokered_Steel_tt:0 "§GFOCUS TREE§!\n§YCan reveal when the remaining requirements are met:§! $VAL_Westerholm_Concessions$, $VAL_Industrial_Mobilization_Plan$."

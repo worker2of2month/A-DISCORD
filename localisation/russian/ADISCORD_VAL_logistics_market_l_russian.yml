@@ -165,7 +165,7 @@
  VAL_labor_cost_blocked:0 "§R100 000§! £population_texticon  §R75§! £political_power_texticon"
  VAL_labor_cost_tooltip:0 "Требуется §Y100 тыс.§! £population_texticon свободных переселенцев и §Y75§! £political_power_texticon."
 
-# Contract reserve recruitment
+ # Contract reserve recruitment
  VAL_recruit_contract_reserves: "Набрать контрактный резерв"
  VAL_recruit_contract_reserves_desc: "Повышенные подъёмные и гарантированные выплаты семьям привлекут новых добровольцев. Кефрейт сразу получит §G5000§! £population_texticon в свободный людской резерв. Повторный набор доступен через §Y120 дней§!."
  VAL_recruit_contract_reserves_cost: "§Y1000§! £ADISCORD_economy_treasury_texticon  §Y50§! £political_power_texticon"
