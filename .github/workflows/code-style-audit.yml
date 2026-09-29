@@ -103,6 +103,7 @@ jobs:
           git('diff', '--check', 'HEAD')
           report = {'base': base, 'verified': verified, 'counts': dict(collections.Counter(item['kind'] for item in verified)), 'conflicts_resolved_from_current_main': conflicts, 'localisation': 'unchanged', 'runtime_tested': False}
           (output / 'verification.json').write_text(json.dumps(report, indent=2))
+          (output / 'style.patch').write_bytes(git('diff', '--binary', 'HEAD', text=False))
           print(json.dumps({'base': base, 'files': len(verified), 'counts': report['counts'], 'resolved_conflicts': conflicts}, indent=2))
           PY
       - name: Verify the exact previously failing checks
@@ -130,14 +131,17 @@ jobs:
               assert result.returncode == 0, (stage, result.returncode)
               text = (output / ('validator-' + stage + '.log')).read_text()
               results[stage] = {name: int(count) for name, count in re.findall(r'^== (.+?): (\d+) ==$', text, re.M)}
-          assert results['before'] == results['current'], results
+          assert results['before'] and results['before'] == results['current'], results
           (output / 'validator-comparison.json').write_text(json.dumps(results, indent=2))
           print('Validator exit codes: 0 / 0. All diagnostic section counts are unchanged.')
           PY
       - name: Deliver authorized style cleanup to main without force-pushing
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           python -B - <<'PY'
           from pathlib import Path
+          import base64
           import hashlib
           import json
           import os
@@ -161,8 +165,12 @@ jobs:
           report['head'] = head
           report['run_id'] = os.environ['GITHUB_RUN_ID']
           (output / 'delivery.json').write_text(json.dumps(report, indent=2))
-          git('push', 'origin', head + ':refs/heads/main')
-          report['main_after_push'] = git('ls-remote', 'origin', 'refs/heads/main').split()[0]
+          token = os.environ['GH_TOKEN']
+          header = 'AUTHORIZATION: basic ' + base64.b64encode(('x-access-token:' + token).encode()).decode()
+          authenticated = dict(os.environ, GIT_CONFIG_COUNT='1', GIT_CONFIG_KEY_0='http.https://github.com/.extraheader', GIT_CONFIG_VALUE_0=header, GIT_TERMINAL_PROMPT='0')
+          subprocess.run(['git', 'push', 'origin', head + ':refs/heads/main'], cwd=root, env=authenticated, check=True)
+          remote = subprocess.check_output(['git', 'ls-remote', 'origin', 'refs/heads/main'], cwd=root, env=authenticated, text=True)
+          report['main_after_push'] = remote.split()[0]
           report['pushed_to_main'] = True
           (output / 'delivery.json').write_text(json.dumps(report, indent=2))
           print(json.dumps({'head': head, 'main_after_push': report['main_after_push'], 'files': len(actual), 'counts': report['counts'], 'pushed_to_main': True}, indent=2))
