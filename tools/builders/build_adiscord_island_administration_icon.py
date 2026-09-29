@@ -27,7 +27,9 @@ def render_icon() -> bytes:
             raise RuntimeError("island-administration source is fully transparent")
         cropped = rgba.crop(bbox)
         cropped.thumbnail((33, 34), Image.Resampling.LANCZOS)
-        cropped = cropped.filter(ImageFilter.UnsharpMask(radius=0.7, percent=125, threshold=2))
+        cropped = cropped.filter(
+            ImageFilter.UnsharpMask(radius=0.7, percent=125, threshold=2)
+        )
         canvas = Image.new("RGBA", (35, 36), (0, 0, 0, 0))
         canvas.alpha_composite(
             cropped,
@@ -62,8 +64,14 @@ def apply() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate generated runtime assets (default)")
-    actions.add_argument("--apply", action="store_true", help="write the generated runtime assets")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate generated runtime assets (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write the generated runtime assets"
+    )
     args = parser.parse_args()
     if args.apply:
         apply()

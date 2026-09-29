@@ -31,10 +31,45 @@ NAM_DRYRIVER_STATE_ID = 690
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
 NAM_ORIGINAL_MAINLAND_PROVINCES = {
-    176, 334, 461, 689, 1015, 1710, 2038, 2231, 2299, 2935,
-    3127, 4025, 4287, 4321, 4912, 6099, 6961, 7324, 7618, 7639,
-    8058, 8351, 8358, 8445, 8635, 8888, 9016, 9116, 9211, 9641,
-    10909, 10967, 11069, 11696, 11926, 11942, 12480, 12668, 12982,
+    176,
+    334,
+    461,
+    689,
+    1015,
+    1710,
+    2038,
+    2231,
+    2299,
+    2935,
+    3127,
+    4025,
+    4287,
+    4321,
+    4912,
+    6099,
+    6961,
+    7324,
+    7618,
+    7639,
+    8058,
+    8351,
+    8358,
+    8445,
+    8635,
+    8888,
+    9016,
+    9116,
+    9211,
+    9641,
+    10909,
+    10967,
+    11069,
+    11696,
+    11926,
+    11942,
+    12480,
+    12668,
+    12982,
 }
 
 
@@ -69,7 +104,7 @@ def named_block(source: str, name: str, occurrence: int = 0) -> str:
         elif source[index] == "}":
             depth -= 1
             if depth == 0:
-                return source[opening + 1:index]
+                return source[opening + 1 : index]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -96,7 +131,10 @@ class NamTreatyCityTransferTests(unittest.TestCase):
             selected_effects,
         )
 
-        path = builder.ROOT / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        path = (
+            builder.ROOT
+            / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        )
         effects = parse_clausewitz(path.read_text(encoding="utf-8"))
         facts = {
             ("NAM", "ADISCORD_nam_resource_war_active", "yes"): True,
@@ -109,31 +147,58 @@ class NamTreatyCityTransferTests(unittest.TestCase):
         for outcome, state, recipient, previous_owner in self.OUTCOMES:
             with self.subTest(outcome=outcome):
                 effects = self.outcome_effects(outcome, state)
-                transfers = [(scope, e.value) for scope, e in effects if e.key == "transfer_state"]
+                transfers = [
+                    (scope, e.value)
+                    for scope, e in effects
+                    if e.key == "transfer_state"
+                ]
                 self.assertEqual(transfers.count((recipient, state)), 1)
-                state_effects = [(e.key, e.value) for scope, e in effects if scope == state]
-                self.assertEqual(state_effects, [
-                    ("remove_core_of", previous_owner),
-                    ("add_core_of", recipient),
-                    ("set_state_controller_to", recipient),
-                ])
+                state_effects = [
+                    (e.key, e.value) for scope, e in effects if scope == state
+                ]
+                self.assertEqual(
+                    state_effects,
+                    [
+                        ("remove_core_of", previous_owner),
+                        ("add_core_of", recipient),
+                        ("set_state_controller_to", recipient),
+                    ],
+                )
 
     def test_missing_owner_or_controller_skips_every_city_mutation(self):
         for outcome, state, recipient, _ in self.OUTCOMES:
-            for has_owner, has_controller in ((False, True), (True, False), (False, False)):
-                with self.subTest(outcome=outcome, owner=has_owner, controller=has_controller):
-                    effects = self.outcome_effects(outcome, state, has_owner, has_controller)
-                    self.assertFalse(any(e.key == "transfer_state" and e.value == state for _, e in effects))
+            for has_owner, has_controller in (
+                (False, True),
+                (True, False),
+                (False, False),
+            ):
+                with self.subTest(
+                    outcome=outcome, owner=has_owner, controller=has_controller
+                ):
+                    effects = self.outcome_effects(
+                        outcome, state, has_owner, has_controller
+                    )
+                    self.assertFalse(
+                        any(
+                            e.key == "transfer_state" and e.value == state
+                            for _, e in effects
+                        )
+                    )
                     self.assertFalse(any(scope == state for scope, _ in effects))
                     self.assertTrue(any(e.key == "transfer_state" for _, e in effects))
-                    self.assertTrue(any(
-                        e.key == "ADISCORD_nam_resource_war_clear_temporary_support"
-                        for _, e in effects
-                    ))
-                    self.assertTrue(any(
-                        e.key == "set_global_flag" and e.value == "ADISCORD_nam_resource_war_resolved"
-                        for _, e in effects
-                    ))
+                    self.assertTrue(
+                        any(
+                            e.key == "ADISCORD_nam_resource_war_clear_temporary_support"
+                            for _, e in effects
+                        )
+                    )
+                    self.assertTrue(
+                        any(
+                            e.key == "set_global_flag"
+                            and e.value == "ADISCORD_nam_resource_war_resolved"
+                            for _, e in effects
+                        )
+                    )
 
 
 class VorkerlandNamStateBalanceTests(unittest.TestCase):
@@ -148,17 +213,27 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             province_types, colors, include_special_adjacencies=True
         )
         cls.physical_province_adjacency = physical
-        cls.physical_state_adjacency = regions.build_state_adjacency(cls.states, physical)
-        cls.complete_state_adjacency = regions.build_state_adjacency(cls.states, complete)
+        cls.physical_state_adjacency = regions.build_state_adjacency(
+            cls.states, physical
+        )
+        cls.complete_state_adjacency = regions.build_state_adjacency(
+            cls.states, complete
+        )
 
     def assert_profile_applied(self, state_id: int, profile: dict[str, object]) -> None:
         source = state_source(state_id)
         self.assertEqual(int(scalar(source, "manpower")), profile["population"])
         self.assertEqual(scalar(source, "state_category"), profile["category"])
         self.assertEqual(float(scalar(source, "local_supplies")), profile["supplies"])
-        self.assertGreaterEqual(building_level(source, "infrastructure"), profile["infrastructure"])
-        self.assertGreaterEqual(building_level(source, "industrial_complex"), profile.get("civilian", 0))
-        self.assertGreaterEqual(building_level(source, "arms_factory"), profile.get("military", 0))
+        self.assertGreaterEqual(
+            building_level(source, "infrastructure"), profile["infrastructure"]
+        )
+        self.assertGreaterEqual(
+            building_level(source, "industrial_complex"), profile.get("civilian", 0)
+        )
+        self.assertGreaterEqual(
+            building_level(source, "arms_factory"), profile.get("military", 0)
+        )
 
     def test_unity_tower_is_a_supplied_sealed_complex(self) -> None:
         source = state_source(40)
@@ -208,12 +283,18 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 self.assert_profile_applied(state_id, profile)
         capital = state_source(700)
         self.assertEqual(scalar(capital, "state_category"), "city")
-        self.assertGreaterEqual(float(scalar(capital, "local_supplies")) + float(scalar(state_source(689), "local_supplies")), 3.5)
+        self.assertGreaterEqual(
+            float(scalar(capital, "local_supplies"))
+            + float(scalar(state_source(689), "local_supplies")),
+            3.5,
+        )
         self.assertEqual(
             building_level(state_source(67), "arms_factory"),
             1,
         )
-        self.assertEqual(building_level(state_source(NAM_SVETLOGORSK_STATE_ID), "arms_factory"), 0)
+        self.assertEqual(
+            building_level(state_source(NAM_SVETLOGORSK_STATE_ID), "arms_factory"), 0
+        )
         self.assertEqual(building_level(capital, "arms_factory"), 2)
 
     def test_nam_split_keeps_a_stronghold_spawn_anchor_in_each_state(self) -> None:
@@ -238,16 +319,32 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         dryriver = NAM_DRYRIVER_STATE_ID
         self.assertEqual(self.states[dryriver], set(builder.NAM_DRYRIVER_PROVINCES))
         self.assertEqual(
-            self.states[67] | self.states[svetlogorsk] | self.states[residual] | self.states[dryriver] | self.states[700],
+            self.states[67]
+            | self.states[svetlogorsk]
+            | self.states[residual]
+            | self.states[dryriver]
+            | self.states[700],
             NAM_ORIGINAL_MAINLAND_PROVINCES | {16716, 16721},
         )
-        nam_parts = (self.states[67], self.states[svetlogorsk], self.states[residual], self.states[dryriver], self.states[700])
+        nam_parts = (
+            self.states[67],
+            self.states[svetlogorsk],
+            self.states[residual],
+            self.states[dryriver],
+            self.states[700],
+        )
         for index, provinces in enumerate(nam_parts):
-            for other in nam_parts[index + 1:]:
+            for other in nam_parts[index + 1 :]:
                 self.assertFalse(provinces & other)
-        self.assertEqual(self.states[68] | self.states[EFL_MIDDLE_LOREN_STATE_ID], set(builder.EFL_ORIGINAL_UPPER_LOREN_PROVINCES))
+        self.assertEqual(
+            self.states[68] | self.states[EFL_MIDDLE_LOREN_STATE_ID],
+            set(builder.EFL_ORIGINAL_UPPER_LOREN_PROVINCES),
+        )
         self.assertFalse(self.states[68] & self.states[EFL_MIDDLE_LOREN_STATE_ID])
-        self.assertEqual(self.states[69] | self.states[AZH_BLACK_COAST_STATE_ID], set(builder.AZH_ORIGINAL_PROVINCES))
+        self.assertEqual(
+            self.states[69] | self.states[AZH_BLACK_COAST_STATE_ID],
+            set(builder.AZH_ORIGINAL_PROVINCES),
+        )
         self.assertFalse(self.states[69] & self.states[AZH_BLACK_COAST_STATE_ID])
 
         province_types, colors = regions.load_province_definitions()
@@ -281,7 +378,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         dryriver = state_source(NAM_DRYRIVER_STATE_ID)
         self.assertEqual(int(scalar(mainland, "manpower")), 480_000)
         self.assertEqual(int(scalar(svetlogorsk, "manpower")), 90_000)
-        self.assertEqual(int(scalar(residual, "manpower")) + int(scalar(harbour, "manpower")), 120_000)
+        self.assertEqual(
+            int(scalar(residual, "manpower")) + int(scalar(harbour, "manpower")),
+            120_000,
+        )
         self.assertEqual(int(scalar(dryriver, "manpower")), 270_000)
         self.assertEqual(
             int(scalar(mainland, "manpower"))
@@ -319,33 +419,63 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 with self.subTest(state=state_id, resource=resource):
                     self.assertRegex(source, rf"(?m)^\s*{resource}\s*=\s*{amount}\s*$")
         self.assertEqual(
-            sum(resources["oil"] for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()),
+            sum(
+                resources["oil"]
+                for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()
+            ),
             164,
         )
         self.assertEqual(
-            sum(resources["chromium"] for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()),
+            sum(
+                resources["chromium"]
+                for resources in builder.NAM_MAINLAND_STATE_RESOURCES.values()
+            ),
             15,
         )
         self.assertRegex(harbour, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
 
     def test_nam_victory_uses_connected_eflorian_border_state(self) -> None:
         effects = (
-            builder.ROOT / "common" / "scripted_effects" / "ADISCORD_nam_resource_war_effects.txt"
+            builder.ROOT
+            / "common"
+            / "scripted_effects"
+            / "ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        self.assertRegex(effects, r"NAM\s*=\s*\{\s*transfer_state\s*=\s*691\s+transfer_state\s*=\s*701\s*\}")
+        self.assertRegex(
+            effects,
+            r"NAM\s*=\s*\{\s*transfer_state\s*=\s*691\s+transfer_state\s*=\s*701\s*\}",
+        )
         self.assertIn(
             "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }",
             effects,
         )
         self.assertNotIn("NAM = { transfer_state = 68 }", effects)
 
-        nam_mainland = {67, NAM_SVETLOGORSK_STATE_ID, NAM_RESIDUAL_CITY_STATE_ID, NAM_DRYRIVER_STATE_ID}
-        self.assertIn(691, set().union(*(self.physical_state_adjacency[state] for state in nam_mainland)))
-        self.assertNotIn(68, set().union(*(self.physical_state_adjacency[state] for state in nam_mainland)))
+        nam_mainland = {
+            67,
+            NAM_SVETLOGORSK_STATE_ID,
+            NAM_RESIDUAL_CITY_STATE_ID,
+            NAM_DRYRIVER_STATE_ID,
+        }
+        self.assertIn(
+            691,
+            set().union(
+                *(self.physical_state_adjacency[state] for state in nam_mainland)
+            ),
+        )
+        self.assertNotIn(
+            68,
+            set().union(
+                *(self.physical_state_adjacency[state] for state in nam_mainland)
+            ),
+        )
 
     def test_nam_prewar_forts_cover_real_coalition_border_provinces(self) -> None:
         decisions = (
-            builder.ROOT / "common" / "decisions" / "ADISCORD_nam_resource_war_decisions.txt"
+            builder.ROOT
+            / "common"
+            / "decisions"
+            / "ADISCORD_nam_resource_war_decisions.txt"
         ).read_text(encoding="utf-8-sig")
         expected = {
             "ADISCORD_nam_fortify_extraction_line": {67: {4912}, 690: {1015, 8058}},
@@ -380,12 +510,17 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         oob = (builder.ROOT / "history" / "units" / "NAM_resource_war.txt").read_text(
             encoding="utf-8-sig"
         )
-        locations = [int(value) for value in re.findall(r"(?m)^\s*location\s*=\s*(\d+)\s*$", oob)]
+        locations = [
+            int(value) for value in re.findall(r"(?m)^\s*location\s*=\s*(\d+)\s*$", oob)
+        ]
         self.assertEqual(locations, [4912, 8058, 6961, 2299, 4912, 6961])
         self.assertEqual(len(locations), 6)
 
         effects = (
-            builder.ROOT / "common" / "scripted_effects" / "ADISCORD_nam_resource_war_effects.txt"
+            builder.ROOT
+            / "common"
+            / "scripted_effects"
+            / "ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
         self.assertIn(
             "country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 }",
@@ -400,7 +535,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             ("azhar", "AZH"),
             ("rebel", "SLF"),
         ):
-            strategy = named_block(ai, f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front")
+            strategy = named_block(
+                ai, f"ADISCORD_nam_resource_war_nam_{strategy_suffix}_front"
+            )
             self.assertIn(f"tag = {tag} ratio = 0.01", strategy)
             self.assertIn("execution_type = careful", strategy)
             self.assertIn("manual_attack = no", strategy)
@@ -413,7 +550,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         effects = (
             root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        on_actions = read_country_on_actions(root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
+        on_actions = read_country_on_actions(
+            root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt",
+            'nam',
+        )
 
         defence = named_block(ideas, "ADISCORD_nam_last_line_administration")
         self.assertIn("army_defence_factor = 0.20", defence)
@@ -444,24 +584,32 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             control_change.count("ADISCORD_nam_refresh_emergency_defence = yes"), 1
         )
 
-        cleanup = named_block(effects, "ADISCORD_nam_resource_war_clear_temporary_support")
+        cleanup = named_block(
+            effects, "ADISCORD_nam_resource_war_clear_temporary_support"
+        )
         self.assertIn("remove_ideas = ADISCORD_nam_last_line_administration", cleanup)
 
     def test_nam_resource_war_entry_is_fresh_event_driven_and_bounded(self) -> None:
         root = builder.ROOT
-        on_actions = read_country_on_actions(root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
-        triggers = (root / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt").read_text(
-            encoding="utf-8-sig"
+        on_actions = read_country_on_actions(
+            root / "common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt",
+            'nam',
         )
-        effects = (root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt").read_text(
-            encoding="utf-8-sig"
-        )
+        triggers = (
+            root / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt"
+        ).read_text(encoding="utf-8-sig")
+        effects = (
+            root / "common/scripted_effects/ADISCORD_nam_resource_war_effects.txt"
+        ).read_text(encoding="utf-8-sig")
         events = (root / "events/ADISCORD_nam_resource_war_events.txt").read_text(
             encoding="utf-8-sig"
         )
-        collapse_events = source_section((root / "events/ADISCORD_vorkerland_events.txt").read_text(
-            encoding="utf-8-sig"
-        ), 'collapse_events')
+        collapse_events = source_section(
+            (root / "events/ADISCORD_vorkerland_events.txt").read_text(
+                encoding="utf-8-sig"
+            ),
+            'collapse_events',
+        )
 
         for recurring in (
             "on_startup",
@@ -511,7 +659,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertEqual(collapse_events.count(producer), 1)
         self.assertEqual(collapse_two.count(producer), 1)
         self.assertLess(
-            collapse_two.find("set_global_flag = ADISCORD_vorkerland_collapse_wars_started"),
+            collapse_two.find(
+                "set_global_flag = ADISCORD_vorkerland_collapse_wars_started"
+            ),
             collapse_two.find(producer),
         )
 
@@ -531,7 +681,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             1,
         )
         self.assertEqual(
-            immediate.count("NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }"),
+            immediate.count(
+                "NOT = { has_global_flag = ADISCORD_nam_resource_war_retry_used }"
+            ),
             1,
         )
         self.assertEqual(
@@ -545,12 +697,18 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_nam_resource_war_schedule = yes", immediate)
         runtime_entry = "\n".join((effects, events, on_actions, collapse_events))
         self.assertEqual(
-            runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_retry_used"),
+            runtime_entry.count(
+                "set_global_flag = ADISCORD_nam_resource_war_retry_used"
+            ),
             1,
         )
-        self.assertNotIn("clr_global_flag = ADISCORD_nam_resource_war_retry_used", runtime_entry)
+        self.assertNotIn(
+            "clr_global_flag = ADISCORD_nam_resource_war_retry_used", runtime_entry
+        )
         self.assertEqual(
-            runtime_entry.count("set_global_flag = ADISCORD_nam_resource_war_scheduled"),
+            runtime_entry.count(
+                "set_global_flag = ADISCORD_nam_resource_war_scheduled"
+            ),
             1,
         )
 
@@ -575,7 +733,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             "country_event",
             "news_event",
         ):
-            self.assertEqual(start.count(mutation), outer_guard.count(mutation), mutation)
+            self.assertEqual(
+                start.count(mutation), outer_guard.count(mutation), mutation
+            )
 
     def test_nam_resource_war_has_distributed_named_victory_points(self) -> None:
         expected = {
@@ -592,7 +752,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             701: {16717: 5},
         }
         self.assertEqual(
-            {state_id: dict(points) for state_id, points in builder.NAM_LEGACY_VICTORY_POINTS.items()},
+            {
+                state_id: dict(points)
+                for state_id, points in builder.NAM_LEGACY_VICTORY_POINTS.items()
+            },
             expected,
         )
         for state_id, points in expected.items():
@@ -605,8 +768,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                         rf"victory_points\s*=\s*\{{\s*{province_id}\s+{value}\s*\}}",
                     )
 
-        self.assertEqual(sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700)), 17)
-        self.assertEqual(sum(sum(expected[state].values()) for state in (68, 70, 691, 701)), 21)
+        self.assertEqual(
+            sum(sum(expected[state].values()) for state in (67, 688, 689, 690, 700)), 17
+        )
+        self.assertEqual(
+            sum(sum(expected[state].values()) for state in (68, 70, 691, 701)), 21
+        )
         self.assertEqual(sum(sum(expected[state].values()) for state in (69, 692)), 12)
 
         localisation = (
@@ -617,7 +784,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         for province_id, name in builder.NAM_VICTORY_POINT_NAMES.items():
             with self.subTest(localisation=province_id):
                 self.assertEqual(
-                    len(re.findall(rf'(?m)^\s*VICTORY_POINTS_{province_id}:\s*"{re.escape(name)}"\s*$', source)),
+                    len(
+                        re.findall(
+                            rf'(?m)^\s*VICTORY_POINTS_{province_id}:\s*"{re.escape(name)}"\s*$',
+                            source,
+                        )
+                    ),
                     1,
                 )
         state_localisation = (
@@ -627,10 +799,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         state_names = state_localisation.read_text(encoding="utf-8-sig")
         for state_id in (690, 691, 692):
             self.assertEqual(
-                len(re.findall(
-                    rf'(?m)^\s*STATE_{state_id}:\s*"{re.escape(builder.GENERATED_STATE_NAMES[state_id])}"\s*$',
-                    state_names,
-                )),
+                len(
+                    re.findall(
+                        rf'(?m)^\s*STATE_{state_id}:\s*"{re.escape(builder.GENERATED_STATE_NAMES[state_id])}"\s*$',
+                        state_names,
+                    )
+                ),
                 1,
             )
 
@@ -643,17 +817,28 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16716\s+5\s*\}")
         self.assertRegex(source, r"16716\s*=\s*\{\s*naval_base\s*=\s*1\s*\}")
 
-        country = (builder.ROOT / "history" / "countries" / "NAM - NamestnikLand.txt").read_text(
-            encoding="utf-8-sig"
-        )
+        country = (
+            builder.ROOT / "history" / "countries" / "NAM - NamestnikLand.txt"
+        ).read_text(encoding="utf-8-sig")
         self.assertRegex(country, r"(?m)^\s*capital\s*=\s*700\s*$")
 
-        vp_loc = builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
-        state_loc = builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml"
-        self.assertIn('VICTORY_POINTS_16716: "Южная гавань"', vp_loc.read_text(encoding="utf-8-sig"))
-        self.assertIn('STATE_700: "Южная гавань"', state_loc.read_text(encoding="utf-8-sig"))
+        vp_loc = (
+            builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+        )
+        state_loc = (
+            builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml"
+        )
+        self.assertIn(
+            'VICTORY_POINTS_16716: "Южная гавань"',
+            vp_loc.read_text(encoding="utf-8-sig"),
+        )
+        self.assertIn(
+            'STATE_700: "Южная гавань"', state_loc.read_text(encoding="utf-8-sig")
+        )
 
-        region = next(region for region in regions.BASE_REGIONS if region.region_id == 24)
+        region = next(
+            region for region in regions.BASE_REGIONS if region.region_id == 24
+        )
         self.assertIn(NAM_RESIDUAL_CITY_STATE_ID, region.states)
 
     def test_nam_defeat_uses_total_coalition_partition_and_cleanup(self) -> None:
@@ -663,10 +848,13 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             / "scripted_effects"
             / "ADISCORD_nam_resource_war_effects.txt"
         ).read_text(encoding="utf-8-sig")
-        on_actions = read_country_on_actions(builder.ROOT
+        on_actions = read_country_on_actions(
+            builder.ROOT
             / "common"
             / "on_actions"
-            / "03_ADISCORD_nam_resource_war_on_actions.txt", 'nam')
+            / "03_ADISCORD_nam_resource_war_on_actions.txt",
+            'nam',
+        )
         debug_decisions = (
             builder.ROOT
             / "common"
@@ -739,9 +927,16 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             / "categories"
             / "ADISCORD_scenario_debug_categories.txt"
         ).read_text(encoding="utf-8-sig")
-        debug_category = named_block(debug_categories, "ADISCORD_scenario_debug_category")
+        debug_category = named_block(
+            debug_categories, "ADISCORD_scenario_debug_category"
+        )
         self.assertEqual(
-            set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", named_block(debug_category, "allowed"))),
+            set(
+                re.findall(
+                    r"\btag\s*=\s*([A-Z0-9]{3})\b",
+                    named_block(debug_category, "allowed"),
+                )
+            ),
             {"WRK", "WKR", "VAD", "TVA", "IVN", "NAM", "EFL", "AZH", "SLF"},
         )
         for decision_name in (
@@ -752,7 +947,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             with self.subTest(decision=decision_name):
                 decision = named_block(debug_decisions, decision_name)
                 self.assertEqual(
-                    set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", named_block(decision, "allowed"))),
+                    set(
+                        re.findall(
+                            r"\btag\s*=\s*([A-Z0-9]{3})\b",
+                            named_block(decision, "allowed"),
+                        )
+                    ),
                     {"NAM", "EFL", "AZH", "SLF"},
                 )
         self.assertIn(
@@ -780,22 +980,37 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertGreaterEqual(float(scalar(source, "local_supplies")), 3.0)
         self.assertRegex(source, r"victory_points\s*=\s*\{\s*16721\s+3\s*\}")
         self.assertRegex(source, r"689\s*=\s*\{\s*naval_base\s*=\s*2\s*\}")
-        self.assertIn(3127, {
-            province
-            for line in (builder.ROOT / "map" / "railways.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
-            for province in map(int, line.split()[2:])
-        })
+        self.assertIn(
+            3127,
+            {
+                province
+                for line in (builder.ROOT / "map" / "railways.txt")
+                .read_text(encoding="utf-8-sig")
+                .splitlines()
+                for province in map(int, line.split()[2:])
+            },
+        )
 
-        vp_loc = (builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml")
-        state_loc = (builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml")
+        vp_loc = (
+            builder.ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+        )
+        state_loc = (
+            builder.ROOT / "localisation" / "russian" / "state_names_l_russian.yml"
+        )
         self.assertTrue(vp_loc.read_bytes().startswith(codecs.BOM_UTF8))
         self.assertTrue(state_loc.read_bytes().startswith(codecs.BOM_UTF8))
-        self.assertIn('VICTORY_POINTS_16721: "Светлогорск"', vp_loc.read_text(encoding="utf-8-sig"))
-        self.assertIn('STATE_688: "Светлогорский округ"', state_loc.read_text(encoding="utf-8-sig"))
+        self.assertIn(
+            'VICTORY_POINTS_16721: "Светлогорск"',
+            vp_loc.read_text(encoding="utf-8-sig"),
+        )
+        self.assertIn(
+            'STATE_688: "Светлогорский округ"',
+            state_loc.read_text(encoding="utf-8-sig"),
+        )
 
-        region = next(region for region in regions.BASE_REGIONS if region.region_id == 24)
+        region = next(
+            region for region in regions.BASE_REGIONS if region.region_id == 24
+        )
         self.assertIn(NAM_SVETLOGORSK_STATE_ID, region.states)
 
     def test_nam_island_holdings_are_non_core_colonies(self) -> None:
@@ -807,7 +1022,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         frontier = [67]
         while frontier:
             state_id = frontier.pop()
-            for neighbour in self.physical_state_adjacency[state_id] - mainland_component:
+            for neighbour in (
+                self.physical_state_adjacency[state_id] - mainland_component
+            ):
                 mainland_component.add(neighbour)
                 frontier.append(neighbour)
 
@@ -880,7 +1097,12 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             107: (1, 0, 0, 2.5),
             121: (3, 2, 0, 5.0),
         }
-        for state_id, (civilian, military, air_base, supplies) in expected_support_packages.items():
+        for state_id, (
+            civilian,
+            military,
+            air_base,
+            supplies,
+        ) in expected_support_packages.items():
             with self.subTest(vad_support_state=state_id):
                 source = state_source(state_id)
                 self.assertEqual(building_level(source, "industrial_complex"), civilian)
@@ -894,7 +1116,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             (201, 12443, "Кайрхольм"),
         ):
             with self.subTest(wkr_state=state_id):
-                self.assertEqual(scalar(state_source(state_id), "state_category"), "town")
+                self.assertEqual(
+                    scalar(state_source(state_id), "state_category"), "town"
+                )
                 self.assertEqual(
                     VORKERLAND_THEATRE_VICTORY_POINTS[state_id],
                     ((province_id, 2),),
@@ -903,9 +1127,15 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                     VORKERLAND_THEATRE_VP_NAME_OVERRIDES[province_id],
                     name,
                 )
-                self.assertEqual(building_level(state_source(state_id), "industrial_complex"), 1)
-                self.assertEqual(building_level(state_source(state_id), "arms_factory"), 0)
-                self.assertEqual(float(scalar(state_source(state_id), "local_supplies")), 2.0)
+                self.assertEqual(
+                    building_level(state_source(state_id), "industrial_complex"), 1
+                )
+                self.assertEqual(
+                    building_level(state_source(state_id), "arms_factory"), 0
+                )
+                self.assertEqual(
+                    float(scalar(state_source(state_id), "local_supplies")), 2.0
+                )
 
     def test_central_sloboda_and_techlar_are_real_cities(self) -> None:
         central = state_source(104)
@@ -942,9 +1172,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
     def test_distant_post_approach_is_mountain_terrain(self) -> None:
         terrain_by_province = {
             int(fields[0]): fields[6]
-            for line in (builder.ROOT / "map" / "definition.csv").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "definition.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split(";")) > 6 and fields[0].isdigit()
         }
         self.assertEqual(terrain_by_province.get(10016), "mountain")
@@ -952,9 +1182,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
     def test_theatre_vps_are_exact_land_provinces_with_bom_localisation(self) -> None:
         land_provinces = {
             int(fields[0])
-            for line in (builder.ROOT / "map" / "definition.csv").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "definition.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split(";")) > 4
             and fields[0].isdigit()
             and fields[4] == "land"
@@ -1005,7 +1235,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         )
         self.assertNotIn("central_sloboda_corridor", adjacency_text)
 
-    def test_unity_tower_population_and_conurbation_terrain_are_distributed(self) -> None:
+    def test_unity_tower_population_and_conurbation_terrain_are_distributed(
+        self,
+    ) -> None:
         adjacent_population = {
             33: 10_913_334,
             34: 4_913_334,
@@ -1023,14 +1255,25 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
                 )
 
         expected_conurbation_provinces = {
-            566, 5907, 6300, 7464, 7885, 9259, 9958, 9967, 16398,
-            16414, 16421, 16426, 16428,
+            566,
+            5907,
+            6300,
+            7464,
+            7885,
+            9259,
+            9958,
+            9967,
+            16398,
+            16414,
+            16421,
+            16426,
+            16428,
         }
         terrain = {
             int(fields[0]): fields[6]
-            for line in (builder.ROOT / "map" / "definition.csv").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "definition.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split(";")) > 6 and fields[0].isdigit()
         }
         for province_id in expected_conurbation_provinces:
@@ -1085,21 +1328,28 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
                 self.assertEqual(capacity, expected_capacity[state_id])
                 self.assertEqual(occupied, capacity)
-                self.assertEqual(float(scalar(source, "buildings_max_level_factor")), 1.0)
-
+                self.assertEqual(
+                    float(scalar(source, "buildings_max_level_factor")), 1.0
+                )
 
     def test_macri_has_a_real_capital_and_enough_units_for_two_fronts(self) -> None:
         capital = state_source(197)
         self.assertRegex(capital, r"victory_points\s*=\s*\{\s*16623\s+10\s*\}")
-        eba_oob = (builder.ROOT / "history" / "units" / "EBA_vorkerland_collapse.txt").read_text(
-            encoding="utf-8-sig"
-        )
+        eba_oob = (
+            builder.ROOT / "history" / "units" / "EBA_vorkerland_collapse.txt"
+        ).read_text(encoding="utf-8-sig")
         self.assertEqual(eba_oob.count("division = {"), 4)
         self.assertEqual(eba_oob.count('division_template = "EBA Collapse Militia"'), 4)
 
-        effects = source_section((builder.ROOT / "common" / "scripted_effects" / "ADISCORD_vorkerland_effects.txt").read_text(
-            encoding="utf-8-sig"
-        ), 'collapse_effects')
+        effects = source_section(
+            (
+                builder.ROOT
+                / "common"
+                / "scripted_effects"
+                / "ADISCORD_vorkerland_effects.txt"
+            ).read_text(encoding="utf-8-sig"),
+            'collapse_effects',
+        )
         setup_match = re.search(
             r"(?ms)^ADISCORD_vorkerland_setup_eba\s*=\s*\{(.*?)(?=^ADISCORD_[A-Za-z0-9_]+\s*=\s*\{|\Z)",
             effects,
@@ -1117,25 +1367,27 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
     def test_pwr_psd_front_keeps_its_supply_hub_and_railways(self) -> None:
         supply_nodes = {
             int(fields[1])
-            for line in (builder.ROOT / "map" / "supply_nodes.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "supply_nodes.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split()) >= 2
         }
         self.assertIn(2339, self.states[194])
         self.assertIn(2339, supply_nodes)
         railways = [
             [int(value) for value in line.split()[2:]]
-            for line in (builder.ROOT / "map" / "railways.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "railways.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(line.split()) >= 3
         ]
         connected_lines = [line for line in railways if 2339 in line]
         self.assertGreaterEqual(len(connected_lines), 2)
         self.assertTrue(any(8032 in line or 7129 in line for line in connected_lines))
 
-    def test_all_ivanland_and_iia_owned_core_states_have_logistics_profiles(self) -> None:
+    def test_all_ivanland_and_iia_owned_core_states_have_logistics_profiles(
+        self,
+    ) -> None:
         owned_and_core = {"IVN": set(), "IIA": set()}
         for path in builder.STATE_DIR.glob("*.txt"):
             source = path.read_text(encoding="utf-8-sig", errors="strict")
@@ -1152,7 +1404,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         profile_state_ids = set(builder.IVANLAND_STATE_PROFILES)
         self.assertEqual(owned_and_core["IIA"], iia_state_ids)
         self.assertEqual(owned_and_core["IVN"], profile_state_ids - iia_state_ids)
-        self.assertEqual(profile_state_ids, owned_and_core["IVN"] | owned_and_core["IIA"])
+        self.assertEqual(
+            profile_state_ids, owned_and_core["IVN"] | owned_and_core["IIA"]
+        )
         total_population = sum(
             int(profile["population"])
             for profile in builder.IVANLAND_STATE_PROFILES.values()
@@ -1169,18 +1423,18 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
     def test_ivanland_reserve_hub_and_railway_are_preserved(self) -> None:
         supply_nodes = {
             int(fields[1])
-            for line in (builder.ROOT / "map" / "supply_nodes.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "supply_nodes.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split()) >= 2
         }
         self.assertIn(16568, self.states[25])
         self.assertIn(16568, supply_nodes)
         railways = [
             [int(value) for value in line.split()[2:]]
-            for line in (builder.ROOT / "map" / "railways.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "railways.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(line.split()) >= 3
         ]
         connected_lines = [line for line in railways if 16568 in line]
@@ -1206,11 +1460,17 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertGreaterEqual(total_population, 7_000_000)
         self.assertLessEqual(total_population, 7_300_000)
         self.assertEqual(
-            sum(int(profile.get("civilian", 0)) for profile in builder.AFRELA_STATE_PROFILES.values()),
+            sum(
+                int(profile.get("civilian", 0))
+                for profile in builder.AFRELA_STATE_PROFILES.values()
+            ),
             12,
         )
         self.assertEqual(
-            sum(int(profile.get("military", 0)) for profile in builder.AFRELA_STATE_PROFILES.values()),
+            sum(
+                int(profile.get("military", 0))
+                for profile in builder.AFRELA_STATE_PROFILES.values()
+            ),
             5,
         )
         for state_id, profile in builder.AFRELA_STATE_PROFILES.items():
@@ -1236,9 +1496,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertEqual(builder.AFRELA_LEGACY_VICTORY_POINTS, expected_points)
         definition = {
             int(fields[0]): fields[4]
-            for line in (builder.ROOT / "map" / "definition.csv").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "definition.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split(";")) > 4 and fields[0].isdigit()
         }
         for state_id, points in expected_points.items():
@@ -1263,18 +1523,18 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
     def test_afrela_mainland_hub_and_railway_are_preserved(self) -> None:
         supply_nodes = {
             int(fields[1])
-            for line in (builder.ROOT / "map" / "supply_nodes.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "supply_nodes.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(fields := line.split()) >= 2
         }
         self.assertIn(4218, self.states[52])
         self.assertIn(4218, supply_nodes)
         railways = [
             [int(value) for value in line.split()[2:]]
-            for line in (builder.ROOT / "map" / "railways.txt").read_text(
-                encoding="utf-8-sig"
-            ).splitlines()
+            for line in (builder.ROOT / "map" / "railways.txt")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
             if len(line.split()) >= 3
         ]
         self.assertTrue(any(4218 in line and 16626 in line for line in railways))
@@ -1298,7 +1558,9 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
             encoding="utf-8-sig", errors="strict"
         )
         self.assertNotIn("def build_flags", generator_source)
-        self.assertNotRegex(generator_source, r'ROOT\s*/\s*["\']gfx["\']\s*/\s*["\']flags["\']')
+        self.assertNotRegex(
+            generator_source, r'ROOT\s*/\s*["\']gfx["\']\s*/\s*["\']flags["\']'
+        )
         self.assertNotIn(".tga", generator_source.lower())
 
     def test_special_legacy_map_data_survives_rebalance(self) -> None:

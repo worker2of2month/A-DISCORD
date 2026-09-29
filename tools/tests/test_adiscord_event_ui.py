@@ -169,7 +169,9 @@ class EventWindowUiTests(unittest.TestCase):
         self.assertNotIn('name = "event_picture"', top)
         description = _named_block(middle, "instantTextBoxType", "Description")
         options = _named_block(bottom, "gridBoxType", "options_grid")
-        option_entry = _named_block(self.gui, "containerWindowType", "event_option_entry")
+        option_entry = _named_block(
+            self.gui, "containerWindowType", "event_option_entry"
+        )
         option_name = _named_block(option_entry, "instantTextBoxType", "Name")
 
         self.assertEqual(_xy(title, "position"), (54, 39))
@@ -202,7 +204,9 @@ class EventWindowUiTests(unittest.TestCase):
             24,
         )
         _, options_y = _xy(options, "position")
-        slot_match = re.search(r"slotsize\s*=\s*\{\s*width\s*=\s*300\s+height\s*=\s*(\d+)", options)
+        slot_match = re.search(
+            r"slotsize\s*=\s*\{\s*width\s*=\s*300\s+height\s*=\s*(\d+)", options
+        )
         self.assertIsNotNone(slot_match)
         self.assertLessEqual(options_y + int(slot_match.group(1)) * 4, _size(bottom)[1])
 
@@ -233,12 +237,17 @@ class EventWindowUiTests(unittest.TestCase):
         self.assertRegex(picture, r"\bcenterposition\s*=\s*yes\b")
         self.assertNotRegex(picture, r"\b(?:scale|size)\s*=")
         center_x, center_y = _xy(picture, "position")
-        sprites = native_sprite_blocks(BASE_GAME, {
-            "GFX_report_event_generic_read_write",
-            "GFX_news_event_hol_polderen",
-        })
+        sprites = native_sprite_blocks(
+            BASE_GAME,
+            {
+                "GFX_report_event_generic_read_write",
+                "GFX_news_event_hol_polderen",
+            },
+        )
         sprites["GFX_event_adiscord_ui_test"] = _named_block(
-            self.event_pictures, "spriteType", "GFX_event_adiscord_ui_test",
+            self.event_pictures,
+            "spriteType",
+            "GFX_event_adiscord_ui_test",
         )
         expected = {
             "GFX_report_event_generic_read_write": ((210, 176), (203, 12, 413, 188)),
@@ -247,15 +256,21 @@ class EventWindowUiTests(unittest.TestCase):
         }
         for sprite, (expected_size, expected_bounds) in expected.items():
             with self.subTest(sprite=sprite):
-                texture = re.search(r'texturefile\s*=\s*"([^"]+)"', sprites[sprite]).group(1)
+                texture = re.search(
+                    r'texturefile\s*=\s*"([^"]+)"', sprites[sprite]
+                ).group(1)
                 path = ROOT / texture
                 if not path.is_file():
                     path = BASE_GAME / texture
                 with Image.open(path) as image:
                     width, height = image.size
                 self.assertEqual((width, height), expected_size)
-                bounds = (center_x - width / 2, center_y - height / 2,
-                          center_x + width / 2, center_y + height / 2)
+                bounds = (
+                    center_x - width / 2,
+                    center_y - height / 2,
+                    center_x + width / 2,
+                    center_y + height / 2,
+                )
                 self.assertEqual(bounds, expected_bounds)
                 left, top, right, bottom_y = bounds
                 # The 507px artwork has a half-pixel centre. Integer GUI x=308
@@ -265,7 +280,12 @@ class EventWindowUiTests(unittest.TestCase):
                 self.assertLessEqual(abs(left_gap - right_gap), 1)
                 self.assertGreaterEqual(top, 8)
                 self.assertLessEqual(bottom_y, 192)
-                self.assertLess(bottom_y, _xy(_named_block(bottom, "gridBoxType", "options_grid"), "position")[1])
+                self.assertLess(
+                    bottom_y,
+                    _xy(
+                        _named_block(bottom, "gridBoxType", "options_grid"), "position"
+                    )[1],
+                )
 
     def test_debug_matrix_covers_short_long_and_extreme_overflow_text(self):
         short_text = _localisation_value(
@@ -307,13 +327,18 @@ class EventWindowUiTests(unittest.TestCase):
             "gfx/interface/event_popup_middle.png": (615, 64),
             "gfx/interface/event_popup_bottom.png": (615, 372),
             "gfx/interface/event_option_entry_adiscord.png": (300, 35),
-            "gfx/interface/events/preview/ADISCORD_event_window_preview.png": (1600, 900),
+            "gfx/interface/events/preview/ADISCORD_event_window_preview.png": (
+                1600,
+                900,
+            ),
             "gfx/event_pictures/event_adiscord_ui_test.png": (507, 184),
         }
         for relative_path, expected_size in expected_sizes.items():
             path = ROOT / relative_path
             with self.subTest(path=relative_path):
-                self.assertTrue(path.is_file(), f"missing generated output: {relative_path}")
+                self.assertTrue(
+                    path.is_file(), f"missing generated output: {relative_path}"
+                )
                 with Image.open(path) as image:
                     self.assertEqual(image.size, expected_size)
 
@@ -329,9 +354,13 @@ class EventWindowUiTests(unittest.TestCase):
                 self.assertGreaterEqual(alpha.getextrema()[0], 220)
 
     def test_option_asset_leaves_four_pixels_between_rows(self):
-        option_entry = _named_block(self.gui, "containerWindowType", "event_option_entry")
+        option_entry = _named_block(
+            self.gui, "containerWindowType", "event_option_entry"
+        )
         _, slot_height = _size(option_entry)
-        with Image.open(ROOT / "gfx/interface/event_option_entry_adiscord.png") as image:
+        with Image.open(
+            ROOT / "gfx/interface/event_option_entry_adiscord.png"
+        ) as image:
             _, background_height = image.size
         self.assertEqual(slot_height - background_height, 4)
 
@@ -353,7 +382,11 @@ class EventWindowUiTests(unittest.TestCase):
         self.assertTrue(BUILDER.is_file(), "missing event UI asset builder")
         registry = json.loads(OWNERS.read_text(encoding="utf-8"))
         owner = next(
-            (entry for entry in registry["families"] if entry["id"] == "event_ui_assets"),
+            (
+                entry
+                for entry in registry["families"]
+                if entry["id"] == "event_ui_assets"
+            ),
             None,
         )
         self.assertIsNotNone(owner, "event_ui_assets is not registered")
@@ -364,7 +397,9 @@ class EventWindowUiTests(unittest.TestCase):
         )
         self.assertEqual(owner["ownership_mode"], "exclusive")
 
-        spec = importlib.util.spec_from_file_location("adiscord_event_ui_builder", BUILDER)
+        spec = importlib.util.spec_from_file_location(
+            "adiscord_event_ui_builder", BUILDER
+        )
         self.assertIsNotNone(spec)
         self.assertIsNotNone(spec.loader)
         module = importlib.util.module_from_spec(spec)
@@ -386,10 +421,14 @@ class EventWindowUiTests(unittest.TestCase):
 
     def test_every_visible_event_has_art_for_its_window_format(self):
         from tools.validators.validate_adiscord_event_ids import (
-            _mask_comments_and_strings, _brace_depths, _closing_brace,
+            _mask_comments_and_strings,
+            _brace_depths,
+            _closing_brace,
         )
 
-        sprite_text = self.event_pictures + (ROOT / "interface/ADISCORD_event_art.gfx").read_text(encoding="utf-8")
+        sprite_text = self.event_pictures + (
+            ROOT / "interface/ADISCORD_event_art.gfx"
+        ).read_text(encoding="utf-8")
         checked = 0
         for path in sorted((ROOT / "events").glob("*.txt")):
             text = path.read_text(encoding="utf-8-sig")
@@ -400,50 +439,86 @@ class EventWindowUiTests(unittest.TestCase):
                     continue
                 end = _closing_brace(masked, masked.index("{", match.start()))
                 fields = {}
-                for field in re.finditer(r"\b(id|hidden|picture)\s*=\s*([^\s{}]+)", masked[match.end():end]):
+                for field in re.finditer(
+                    r"\b(id|hidden|picture)\s*=\s*([^\s{}]+)", masked[match.end() : end]
+                ):
                     if depths[match.end() + field.start()] == 1:
                         fields[field[1]] = field[2]
                 if fields.get("hidden") == "yes":
                     continue
                 with self.subTest(event=fields.get("id"), path=path.name):
-                    self.assertIn("picture", fields, "visible event uses an unformatted engine fallback")
+                    self.assertIn(
+                        "picture",
+                        fields,
+                        "visible event uses an unformatted engine fallback",
+                    )
                     kind = match[1].split("_")[0]
                     expected = (507, 184) if kind == "country" else (396, 153)
                     sprite = _named_block(sprite_text, "spriteType", fields["picture"])
                     texture = re.search(r'texturefile\s*=\s*"([^"]+)"', sprite, re.I)[1]
                     if kind == "news":
-                        self.assertEqual(Path(texture).parent.as_posix(),
-                                         "gfx/event_pictures/standard/news")
-                        self.assertRegex(Path(texture).name, r"^[a-z0-9]+(?:_[a-z0-9]+)*\.png$")
+                        self.assertEqual(
+                            Path(texture).parent.as_posix(),
+                            "gfx/event_pictures/standard/news",
+                        )
+                        self.assertRegex(
+                            Path(texture).name, r"^[a-z0-9]+(?:_[a-z0-9]+)*\.png$"
+                        )
                     with Image.open(ROOT / texture) as artwork:
                         self.assertEqual(artwork.size, expected)
-                        self.assertEqual(artwork.convert("RGBA").getchannel("A").getextrema(), (255, 255))
+                        self.assertEqual(
+                            artwork.convert("RGBA").getchannel("A").getextrema(),
+                            (255, 255),
+                        )
                     checked += 1
-        self.assertGreater(checked, 100, "event audit unexpectedly skipped the main story files")
+        self.assertGreater(
+            checked, 100, "event audit unexpectedly skipped the main story files"
+        )
 
     def test_news_art_uses_preserved_authored_sources(self):
         from PIL import ImageOps
-        from tools.builders.build_adiscord_event_pictures import ART, NEWS_SCENES, formatted_art
+        from tools.builders.build_adiscord_event_pictures import (
+            ART,
+            NEWS_SCENES,
+            formatted_art,
+        )
 
         for scene, (_, formats) in ART.items():
             if "news" not in formats:
                 continue
             with self.subTest(scene=scene):
                 name = NEWS_SCENES.get(scene, scene)
-                with Image.open(ROOT / "gfx/event_pictures/source/news" / (name + ".png")) as source:
-                    expected = ImageOps.fit(source.convert("RGB"), (396, 153),
-                                            method=Image.Resampling.LANCZOS)
-                self.assertEqual(formatted_art(scene, "news").tobytes(), expected.tobytes())
+                with Image.open(
+                    ROOT / "gfx/event_pictures/source/news" / (name + ".png")
+                ) as source:
+                    expected = ImageOps.fit(
+                        source.convert("RGB"),
+                        (396, 153),
+                        method=Image.Resampling.LANCZOS,
+                    )
+                self.assertEqual(
+                    formatted_art(scene, "news").tobytes(), expected.tobytes()
+                )
 
     def test_event_artwork_builder_is_current_and_owned(self):
         from tools.builders.build_adiscord_event_pictures import expected_outputs
+
         registry = json.loads(OWNERS.read_text(encoding="utf-8"))
-        family = next(item for item in registry["families"] if item["id"] == "event_pictures")
-        self.assertLess(registry["apply_sequence"].index("event_ui_assets"),
-                        registry["apply_sequence"].index("event_pictures"))
+        family = next(
+            item for item in registry["families"] if item["id"] == "event_pictures"
+        )
+        self.assertLess(
+            registry["apply_sequence"].index("event_ui_assets"),
+            registry["apply_sequence"].index("event_pictures"),
+        )
         for path, expected in expected_outputs().items():
             with self.subTest(path=path):
-                self.assertTrue(any(path.relative_to(ROOT).match(pattern) for pattern in family["output_globs"]))
+                self.assertTrue(
+                    any(
+                        path.relative_to(ROOT).match(pattern)
+                        for pattern in family["output_globs"]
+                    )
+                )
                 self.assertEqual(path.read_bytes(), expected)
 
     def test_shared_option_template_still_fits_every_event_window(self):
@@ -459,25 +534,39 @@ class EventWindowUiTests(unittest.TestCase):
                 self.assertRegex(options, r"slotsize\s*=\s*\{\s*width\s*=\s*300\b")
 
 
-
 class StelanderNewsArtworkTests(unittest.TestCase):
     def test_public_war_reports_use_native_news_picture_dimensions(self):
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
-        events = parse_clausewitz((ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig"))
-        expected = {f"ADISCORD_STP_cw.{number}" for number in (70, 71, 72, 73, 80, 81, 82)}
+        events = parse_clausewitz(
+            (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8-sig")
+        )
+        expected = {
+            f"ADISCORD_STP_cw.{number}" for number in (70, 71, 72, 73, 80, 81, 82)
+        }
         pictures = {}
         for event in events:
             if event.key != "news_event":
                 continue
-            values = {entry.key: entry.value for entry in event.value if isinstance(entry.value, str)}
+            values = {
+                entry.key: entry.value
+                for entry in event.value
+                if isinstance(entry.value, str)
+            }
             if values.get("id") in expected:
                 self.assertNotIn(values["id"], pictures)
                 pictures[values["id"]] = values["picture"]
         self.assertEqual(set(pictures), expected)
         for event_id, name in pictures.items():
-            self.assertTrue(name.startswith("GFX_news_event_"), f"{event_id}: country report sprite in news window")
-        sprites = (ROOT / "interface/ADISCORD_event_art.gfx").read_text(encoding="utf-8")
+            self.assertTrue(
+                name.startswith("GFX_news_event_"),
+                f"{event_id}: country report sprite in news window",
+            )
+        sprites = (ROOT / "interface/ADISCORD_event_art.gfx").read_text(
+            encoding="utf-8"
+        )
         for event_id, name in pictures.items():
             sprite = _named_block(sprites, "spriteType", name)
             texture = re.search(r'texturefile\s*=\s*"([^"]+)"', sprite).group(1)
@@ -485,6 +574,7 @@ class StelanderNewsArtworkTests(unittest.TestCase):
             with Image.open(path) as bitmap:
                 self.assertEqual(bitmap.width, 396, event_id)
                 self.assertEqual(bitmap.height, 153, event_id)
+
 
 if __name__ == "__main__":
     unittest.main()

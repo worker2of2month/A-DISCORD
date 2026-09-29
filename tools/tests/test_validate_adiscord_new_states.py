@@ -31,7 +31,9 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         self.assertEqual(validator.ERRORS, [])
 
     def test_legacy_scalar_rewrite_removes_duplicate_declarations(self) -> None:
-        source = "state={\n\tlocal_supplies = 6.0\n\tlocal_supplies=10\n\thistory = { }\n}\n"
+        source = (
+            "state={\n\tlocal_supplies = 6.0\n\tlocal_supplies=10\n\thistory = { }\n}\n"
+        )
         updated = builder.set_scalar(source, "local_supplies", "6.0")
         self.assertEqual(
             re.findall(
@@ -83,8 +85,10 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         terrain: dict[int, str] = {}
         kind: dict[int, str] = {}
         for line in (
-            builder.ROOT / "map/definition.csv"
-        ).read_text(encoding="utf-8-sig").splitlines():
+            (builder.ROOT / "map/definition.csv")
+            .read_text(encoding="utf-8-sig")
+            .splitlines()
+        ):
             fields = line.split(";")
             if len(fields) > 6 and fields[0].isdigit():
                 terrain[int(fields[0])] = fields[6]
@@ -161,7 +165,9 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             re.findall(r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", updated),
             [("10", "3"), ("20", "5")],
         )
-        self.assertEqual(builder.replace_history_victory_points(updated, expected), updated)
+        self.assertEqual(
+            builder.replace_history_victory_points(updated, expected), updated
+        )
 
     def test_theatre_package_totals_are_exact(self) -> None:
         actual = {
@@ -214,8 +220,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
 
     def test_worker_outcome_marks_wartime_wkr_before_final_wrk_formation(self) -> None:
         maps = validator.text(
-            validator.ROOT
-            / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+            validator.ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
         )
         worker_map = validator.block(maps, "ADISCORD_vorkerland_apply_worker_map")
         self.assertRegex(
@@ -228,7 +233,12 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
             r"(?s)\bWRK\s*=\s*\{.*?ADISCORD_vorkerland_central_unifier",
         )
         self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", worker_map)
-        for forbidden in ("transfer_state", "annex_country", "puppet =", "set_autonomy"):
+        for forbidden in (
+            "transfer_state",
+            "annex_country",
+            "puppet =",
+            "set_autonomy",
+        ):
             self.assertNotIn(forbidden, worker_map)
 
         phase_effects = validator.text(
@@ -244,9 +254,7 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
         phase_events = validator.text(
             validator.ROOT / "events/ADISCORD_vorkerland_events.txt"
         )
-        phase_six = validator.event_block(
-            phase_events, "ADISCORD_vorkerland_phase.6"
-        )
+        phase_six = validator.event_block(phase_events, "ADISCORD_vorkerland_phase.6")
         for tag, effect in (
             ("WKR", "ADISCORD_vorkerland_form_wrk_from_wkr"),
             ("VAD", "ADISCORD_vorkerland_form_wrk_from_vad"),
@@ -260,52 +268,71 @@ class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
                 )
 
 
-
 class NorthernStartingStateContracts(unittest.TestCase):
     def setUp(self) -> None:
         from tools.validators import validate_adiscord_core_state_balance as core
+
         self.core = core
         core.ERRORS.clear()
 
     def tearDown(self) -> None:
         self.core.ERRORS.clear()
 
-    def test_campaign_states_match_population_industry_and_geography_contract(self) -> None:
+    def test_campaign_states_match_population_industry_and_geography_contract(
+        self,
+    ) -> None:
         self.core.validate()
         self.assertEqual(self.core.ERRORS, [])
 
-    def test_placeholder_population_and_unapproved_settlement_values_are_rejected(self) -> None:
+    def test_placeholder_population_and_unapproved_settlement_values_are_rejected(
+        self,
+    ) -> None:
         from unittest.mock import patch
+
         original = self.core.read_text
 
         def broken_state(path):
             text = original(path)
             if path.name == "14-Flaem-Prana.txt":
                 text = re.sub(r"(manpower\s*=\s*)\d+", r"\g<1>1253", text)
-                text = re.sub(r"victory_points\s*=\s*\{\s*75\s+\d+\s*\}",
-                              "victory_points = { 75 99 }", text)
+                text = re.sub(
+                    r"victory_points\s*=\s*\{\s*75\s+\d+\s*\}",
+                    "victory_points = { 75 99 }",
+                    text,
+                )
             return text
 
         with patch.object(self.core, "read_text", side_effect=broken_state):
             self.core.validate()
-        self.assertTrue(any("state 14: expected manpower" in error for error in self.core.ERRORS))
-        self.assertTrue(any("settlement VP 75 must equal 5" in error for error in self.core.ERRORS))
+        self.assertTrue(
+            any("state 14: expected manpower" in error for error in self.core.ERRORS)
+        )
+        self.assertTrue(
+            any("settlement VP 75 must equal 5" in error for error in self.core.ERRORS)
+        )
 
     def test_offshore_lighthouse_does_not_become_a_campaign_victory_point(self) -> None:
         from unittest.mock import patch
+
         original = self.core.read_text
 
         def island_objective(path):
             text = original(path)
             if path.name == "303-303.txt":
-                text = re.sub(r"(owner\s*=\s*TFF)",
-                              r"\1\n\t\tvictory_points = { 3261 1 }", text)
+                text = re.sub(
+                    r"(owner\s*=\s*TFF)", r"\1\n\t\tvictory_points = { 3261 1 }", text
+                )
             return text
 
         with patch.object(self.core, "read_text", side_effect=island_objective):
             self.core.validate()
-        self.assertTrue(any("northern state 303: expected exact campaign VPs ()" in error
-                            for error in self.core.ERRORS))
+        self.assertTrue(
+            any(
+                "northern state 303: expected exact campaign VPs ()" in error
+                for error in self.core.ERRORS
+            )
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

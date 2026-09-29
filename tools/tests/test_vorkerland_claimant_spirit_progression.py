@@ -50,8 +50,13 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
     )
 
     def test_all_three_claimants_share_the_same_last_stand(self) -> None:
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         last_stand = named_block(ideas, "ADISCORD_vorkerland_last_stand")
         self.assertIn("allowed = { always = no }", last_stand)
         self.assertIn("allowed_civil_war = { always = yes }", last_stand)
@@ -59,8 +64,12 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         self.assertEqual(last_stand.count("surrender_limit = 0.90"), 1)
 
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
-        finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
-        repair = named_block(effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression")
+        finalizer = named_block(
+            effects, "ADISCORD_vorkerland_finalize_conflict_spirits"
+        )
+        repair = named_block(
+            effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression"
+        )
         for tag in ("WKR", "VAD", "TVA"):
             with self.subTest(tag=tag):
                 self.assertRegex(
@@ -76,7 +85,10 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         self.assertNotIn("surrender_limit", fanaticism)
 
     def test_wkr_keeps_only_the_revolutionary_starting_spirit(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         repair = named_block(
             effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression"
         )
@@ -103,10 +115,23 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f'name = "GFX_idea_{spirit}"', gfx)
 
     def test_wkr_decisions_upgrade_one_spirit_in_order(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         chain = (
-            ("ADISCORD_vorkerland_wrk_convene_front_soviets", self.WRK_CHAIN[0], self.WRK_CHAIN[1], "60"),
-            ("ADISCORD_vorkerland_wrk_adopt_front_charter", self.WRK_CHAIN[1], self.WRK_CHAIN[2], "90"),
+            (
+                "ADISCORD_vorkerland_wrk_convene_front_soviets",
+                self.WRK_CHAIN[0],
+                self.WRK_CHAIN[1],
+                "60",
+            ),
+            (
+                "ADISCORD_vorkerland_wrk_adopt_front_charter",
+                self.WRK_CHAIN[1],
+                self.WRK_CHAIN[2],
+                "90",
+            ),
         )
         for decision, old, new, days in chain:
             with self.subTest(decision=decision):
@@ -120,15 +145,30 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"add_ideas = {new}", block)
 
     def test_tva_decisions_upgrade_field_directorate_in_order(self) -> None:
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         for spirit in self.TVA_CHAIN:
             block = named_block(ideas, spirit)
             self.assertIn("picture = generic_production_bonus", block)
             self.assertIn("original_tag = TVA", block)
         chain = (
-            ("ADISCORD_vorkerland_tva_unify_front_bureaus", self.TVA_CHAIN[0], self.TVA_CHAIN[1], "60"),
-            ("ADISCORD_vorkerland_tva_close_operational_loop", self.TVA_CHAIN[1], self.TVA_CHAIN[2], "90"),
+            (
+                "ADISCORD_vorkerland_tva_unify_front_bureaus",
+                self.TVA_CHAIN[0],
+                self.TVA_CHAIN[1],
+                "60",
+            ),
+            (
+                "ADISCORD_vorkerland_tva_close_operational_loop",
+                self.TVA_CHAIN[1],
+                self.TVA_CHAIN[2],
+                "90",
+            ),
         )
         for decision, old, new, days in chain:
             with self.subTest(decision=decision):
@@ -140,20 +180,36 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"add_ideas = {new}", block)
 
     def test_outbreak_runs_the_versioned_repair_without_startup_migration(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         outbreak = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\b"
             r"(.*?)(?=^country_event\s*=|\Z)",
             events,
         )
         self.assertIsNotNone(outbreak)
-        self.assertIn("WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
-        self.assertIn("VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
-        self.assertIn("TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }", outbreak.group(1))
-        self.assertIn("ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1))
+        self.assertIn(
+            "WKR = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
+            outbreak.group(1),
+        )
+        self.assertIn(
+            "VAD = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
+            outbreak.group(1),
+        )
+        self.assertIn(
+            "TVA = { ADISCORD_vorkerland_repair_claimant_spirit_progression = yes }",
+            outbreak.group(1),
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_claimant_spirit_progression_v3", outbreak.group(1)
+        )
 
         startup = named_block(
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             "on_startup",
         )
         for token in (
@@ -174,12 +230,16 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
         for path in paths:
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"), path)
             localisation += path.read_text(encoding="utf-8-sig")
-        keys = self.WRK_CHAIN[1:] + self.TVA_CHAIN[1:] + (
-            "ADISCORD_vorkerland_last_stand",
-            "ADISCORD_vorkerland_wrk_convene_front_soviets",
-            "ADISCORD_vorkerland_wrk_adopt_front_charter",
-            "ADISCORD_vorkerland_tva_unify_front_bureaus",
-            "ADISCORD_vorkerland_tva_close_operational_loop",
+        keys = (
+            self.WRK_CHAIN[1:]
+            + self.TVA_CHAIN[1:]
+            + (
+                "ADISCORD_vorkerland_last_stand",
+                "ADISCORD_vorkerland_wrk_convene_front_soviets",
+                "ADISCORD_vorkerland_wrk_adopt_front_charter",
+                "ADISCORD_vorkerland_tva_unify_front_bureaus",
+                "ADISCORD_vorkerland_tva_close_operational_loop",
+            )
         )
         for key in keys:
             self.assertIn(f" {key}:", localisation)

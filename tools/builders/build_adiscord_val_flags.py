@@ -1,4 +1,5 @@
 """Export Kefreyt administration flags from their approved source artwork."""
+
 from __future__ import annotations
 
 import argparse
@@ -10,7 +11,11 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 FLAGS = ("OCA", "OSF_VAL_commissariat")
 # Regional councils retain the heraldry of their parent administration.
-FLAG_ALIASES = {"ECA": "NOD_VAL_administration", "DCA": "YPR", "YPR_VAL_administration": "YPR"}
+FLAG_ALIASES = {
+    "ECA": "NOD_VAL_administration",
+    "DCA": "YPR",
+    "YPR_VAL_administration": "YPR",
+}
 SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
 
 
@@ -19,7 +24,9 @@ def outputs():
         with Image.open(ROOT / "tools/assets/source" / f"{tag}_flag.png") as source:
             for folder, size in SIZES.items():
                 buffer = BytesIO()
-                source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(buffer, format="TGA")
+                source.convert("RGBA").resize(size, Image.Resampling.LANCZOS).save(
+                    buffer, format="TGA"
+                )
                 yield ROOT / "gfx/flags" / folder / f"{tag}.tga", buffer.getvalue()
     for tag, source_tag in FLAG_ALIASES.items():
         for folder in SIZES:
@@ -42,7 +49,9 @@ def main():
     for path in changed:
         print(("Updated: " if args.apply else "Drift: ") + str(path.relative_to(ROOT)))
     if not changed:
-        print(f"Kefreyt administration flags are current ({(len(FLAGS) + len(FLAG_ALIASES)) * len(SIZES)} textures).")
+        print(
+            f"Kefreyt administration flags are current ({(len(FLAGS) + len(FLAG_ALIASES)) * len(SIZES)} textures)."
+        )
     return 1 if changed and not args.apply else 0
 
 

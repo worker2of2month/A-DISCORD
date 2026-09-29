@@ -56,9 +56,7 @@ class RecallVolunteersContractTests(unittest.TestCase):
         self.assertIn("show_acceptance_on_action_button = no", self.action)
 
     def test_action_excludes_both_sides_of_exclusion_zone_pair(self) -> None:
-        visible = re.search(
-            r"(?s)visible\s*=\s*\{(.{0,300}?)\n\s*\}", self.action
-        )
+        visible = re.search(r"(?s)visible\s*=\s*\{(.{0,300}?)\n\s*\}", self.action)
         self.assertIsNotNone(visible)
         body = visible.group(1)
         self.assertGreaterEqual(body.count("original_tag = EXZ"), 2)
@@ -92,9 +90,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             'quadTextureSprite = "GFX_ADISCORD_constructions_window_bg"', self.gui
         )
         self.assertGreaterEqual(
-            self.gui.count(
-                'quadTextureSprite = "GFX_ADISCORD_constructions_panel_bg"'
-            ),
+            self.gui.count('quadTextureSprite = "GFX_ADISCORD_constructions_panel_bg"'),
             5,
         )
         self.assertIn('text = "ADISCORD_DIPLOMACY_RELATIONS_HEADER"', self.gui)
@@ -140,9 +136,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
     def test_no_focus_state_does_not_expose_the_error_placeholder(self) -> None:
         start, end = named_block_span(self.gui, "goal_icon")
         block = self.gui[start : end + 1]
-        self.assertIn(
-            'spriteType = "GFX_goal_generic_political_pressure"', block
-        )
+        self.assertIn('spriteType = "GFX_goal_generic_political_pressure"', block)
         self.assertNotIn("GFX_goal_unknown", block)
 
     def test_diplomacy_builder_does_not_own_empty_focus_texture(self) -> None:
@@ -210,9 +204,7 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
             r'{0,100}?size\s*=\s*\{\s*width\s*=\s*389\s+height\s*=\s*68\s*\}',
         )
         self.assertGreaterEqual(
-            self.gui.count(
-                'quadTextureSprite = "GFX_ADISCORD_diplomacy_thin_frame"'
-            ),
+            self.gui.count('quadTextureSprite = "GFX_ADISCORD_diplomacy_thin_frame"'),
             5,
         )
         self.assertRegex(
@@ -230,9 +222,24 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
 
     def test_custom_art_overlays_are_click_through_siblings(self) -> None:
         for name, sprite, x, y in (
-            ("ADISCORD_diplo_flag_overlay", "GFX_ADISCORD_diplomacy_flag_overlay", 14, 2),
-            ("ADISCORD_diplo_leader_overlay", "GFX_ADISCORD_diplomacy_leader_overlay", 10, 0),
-            ("ADISCORD_party_popularity_overlay", "GFX_ADISCORD_diplomacy_parties_overlay", 179, 12),
+            (
+                "ADISCORD_diplo_flag_overlay",
+                "GFX_ADISCORD_diplomacy_flag_overlay",
+                14,
+                2,
+            ),
+            (
+                "ADISCORD_diplo_leader_overlay",
+                "GFX_ADISCORD_diplomacy_leader_overlay",
+                10,
+                0,
+            ),
+            (
+                "ADISCORD_party_popularity_overlay",
+                "GFX_ADISCORD_diplomacy_parties_overlay",
+                179,
+                12,
+            ),
         ):
             start, end = named_block_span(self.gui, name)
             block = self.gui[start : end + 1]
@@ -300,12 +307,12 @@ class DiplomacyLayoutContractTests(unittest.TestCase):
                 'quadTextureSprite = "GFX_ADISCORD_diplomacy_tab_button"',
                 self.gui[start : end + 1],
             )
-        with Image.open(ROOT / "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds") as atlas:
+        with Image.open(
+            ROOT / "gfx/interface/diplomacy/ADISCORD_diplomacy_tab_button.dds"
+        ) as atlas:
             self.assertEqual(atlas.size, (3 * 330, 38))
         self.assertEqual(
-            self.gui.count(
-                'quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"'
-            ),
+            self.gui.count('quadTextureSprite = "GFX_ADISCORD_diplomacy_item_bg"'),
             1,
         )
         self.assertNotIn(

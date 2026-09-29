@@ -18,16 +18,22 @@ SOURCE_ROOT = FLAG_ROOT / "source"
 CANVAS = (656, 416)
 
 
-def points(cx: int, cy: int, outer: int, inner: int, count: int, offset: float = -math.pi / 2):
+def points(
+    cx: int, cy: int, outer: int, inner: int, count: int, offset: float = -math.pi / 2
+):
     result = []
     for index in range(count * 2):
         radius = outer if index % 2 == 0 else inner
         angle = offset + index * math.pi / count
-        result.append((cx + round(math.cos(angle) * radius), cy + round(math.sin(angle) * radius)))
+        result.append(
+            (cx + round(math.cos(angle) * radius), cy + round(math.sin(angle) * radius))
+        )
     return result
 
 
-def ring(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], color: str, width: int) -> None:
+def ring(
+    draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], color: str, width: int
+) -> None:
     draw.ellipse(box, outline=color, width=width)
 
 
@@ -65,8 +71,14 @@ def ibl() -> Image.Image:
     bone, gold = "#e2d4a7", "#b58b42"
     draw.polygon(((0, 70), (656, 0), (656, 82), (0, 152)), fill=gold)
     draw.polygon(((0, 264), (656, 334), (656, 416), (0, 346)), fill=gold)
-    draw.polygon(((328, 68), (470, 120), (446, 300), (328, 365), (210, 300), (186, 120)), fill=bone)
-    draw.polygon(((328, 100), (430, 138), (412, 278), (328, 324), (244, 278), (226, 138)), fill="#314630")
+    draw.polygon(
+        ((328, 68), (470, 120), (446, 300), (328, 365), (210, 300), (186, 120)),
+        fill=bone,
+    )
+    draw.polygon(
+        ((328, 100), (430, 138), (412, 278), (328, 324), (244, 278), (226, 138)),
+        fill="#314630",
+    )
     draw.line((267, 237, 389, 237), fill=gold, width=22)
     draw.line((287, 190, 369, 190), fill=gold, width=18)
     return image
@@ -77,8 +89,14 @@ def wtd() -> Image.Image:
     draw = ImageDraw.Draw(image)
     pale, copper, deep = "#dde4d6", "#d18445", "#162b33"
     draw.rectangle((0, 0, 655, 415), outline=deep, width=24)
-    draw.polygon(((328, 58), (455, 132), (455, 284), (328, 358), (201, 284), (201, 132)), fill=pale)
-    draw.polygon(((328, 94), (420, 147), (420, 269), (328, 322), (236, 269), (236, 147)), fill=deep)
+    draw.polygon(
+        ((328, 58), (455, 132), (455, 284), (328, 358), (201, 284), (201, 132)),
+        fill=pale,
+    )
+    draw.polygon(
+        ((328, 94), (420, 147), (420, 269), (328, 322), (236, 269), (236, 147)),
+        fill=deep,
+    )
     ring(draw, (276, 156, 380, 260), copper, 18)
     draw.line((0, 208, 205, 208), fill=copper, width=18)
     draw.line((451, 208, 656, 208), fill=copper, width=18)
@@ -95,7 +113,11 @@ def slf() -> Image.Image:
     draw.pieslice((198, 118, 458, 378), 180, 360, fill=orange)
     for angle in range(200, 341, 20):
         rad = math.radians(angle)
-        draw.line((328, 248, 328 + math.cos(rad) * 225, 248 + math.sin(rad) * 225), fill=gold, width=15)
+        draw.line(
+            (328, 248, 328 + math.cos(rad) * 225, 248 + math.sin(rad) * 225),
+            fill=gold,
+            width=15,
+        )
     draw.rectangle((0, 248, 655, 282), fill="#1a1b18")
     draw.polygon(((260, 320), (328, 230), (396, 320)), fill="#1a1b18")
     return image
@@ -123,7 +145,19 @@ def rom() -> Image.Image:
         draw.arc((-40, y - 35, 250, y + 35), 190, 350, fill=rose, width=14)
         draw.arc((200, y - 35, 490, y + 35), 190, 350, fill=rose, width=14)
         draw.arc((440, y - 35, 730, y + 35), 190, 350, fill=rose, width=14)
-    draw.polygon(((170, 225), (278, 130), (332, 190), (395, 108), (486, 218), (396, 183), (332, 248), (270, 188)), fill=white)
+    draw.polygon(
+        (
+            (170, 225),
+            (278, 130),
+            (332, 190),
+            (395, 108),
+            (486, 218),
+            (396, 183),
+            (332, 248),
+            (270, 188),
+        ),
+        fill=white,
+    )
     draw.ellipse((305, 176, 350, 221), fill=rose)
     return image
 
@@ -135,7 +169,19 @@ def tru() -> Image.Image:
     draw.polygon(points(328, 180, 146, 105, 16), fill=gold)
     draw.ellipse((240, 92, 416, 268), fill=dark)
     draw.ellipse((266, 118, 390, 242), fill=gold)
-    draw.polygon(((0, 416), (0, 345), (130, 260), (235, 335), (350, 245), (480, 345), (656, 275), (656, 416)), fill=dark)
+    draw.polygon(
+        (
+            (0, 416),
+            (0, 345),
+            (130, 260),
+            (235, 335),
+            (350, 245),
+            (480, 345),
+            (656, 275),
+            (656, 416),
+        ),
+        fill=dark,
+    )
     draw.line((0, 350, 656, 350), fill=gold, width=18)
     return image
 
@@ -144,9 +190,22 @@ def vla() -> Image.Image:
     image = Image.new("RGB", CANVAS, "#6c2e2e")
     draw = ImageDraw.Draw(image)
     stone, dark = "#e7dfce", "#332825"
-    draw.polygon(((0, 0), (160, 0), (656, 300), (656, 416), (520, 416), (0, 105)), fill=dark)
+    draw.polygon(
+        ((0, 0), (160, 0), (656, 300), (656, 416), (520, 416), (0, 105)), fill=dark
+    )
     draw.rectangle((272, 110, 384, 350), fill=stone)
-    draw.polygon(((246, 126), (410, 126), (380, 76), (350, 112), (328, 65), (303, 112), (275, 76)), fill=stone)
+    draw.polygon(
+        (
+            (246, 126),
+            (410, 126),
+            (380, 76),
+            (350, 112),
+            (328, 65),
+            (303, 112),
+            (275, 76),
+        ),
+        fill=stone,
+    )
     draw.rectangle((307, 258, 349, 350), fill=dark)
     draw.line((215, 350, 441, 350), fill=stone, width=24)
     return image
@@ -171,8 +230,22 @@ def slf_republic() -> Image.Image:
     draw = ImageDraw.Draw(image)
     mint, deep = "#dce8c8", "#144b49"
     draw.rectangle((0, 0, 170, 416), fill=deep)
-    draw.polygon(((0, 315), (155, 250), (315, 330), (480, 245), (656, 310), (656, 416), (0, 416)), fill=mint)
-    draw.polygon(((355, 58), (443, 179), (405, 285), (328, 315), (256, 260), (265, 170)), fill=mint)
+    draw.polygon(
+        (
+            (0, 315),
+            (155, 250),
+            (315, 330),
+            (480, 245),
+            (656, 310),
+            (656, 416),
+            (0, 416),
+        ),
+        fill=mint,
+    )
+    draw.polygon(
+        ((355, 58), (443, 179), (405, 285), (328, 315), (256, 260), (265, 170)),
+        fill=mint,
+    )
     draw.line((300, 245, 405, 128), fill=deep, width=17)
     draw.line((331, 211, 280, 186), fill=deep, width=13)
     draw.line((365, 174, 409, 184), fill=deep, width=13)
@@ -201,7 +274,10 @@ def confederal_district(kind: str) -> Image.Image:
     if kind == "garrison":
         draw.rectangle((0, 0, 655, 415), fill=red)
         draw.rectangle((0, 164, 655, 252), fill=gold)
-        draw.polygon(((70, 0), (210, 0), (330, 208), (210, 416), (70, 416), (190, 208)), fill=orange)
+        draw.polygon(
+            ((70, 0), (210, 0), (330, 208), (210, 416), (70, 416), (190, 208)),
+            fill=orange,
+        )
         centre = (328, 208)
     elif kind == "river":
         draw.rectangle((0, 0, 655, 415), fill=blue)
@@ -218,7 +294,11 @@ def confederal_district(kind: str) -> Image.Image:
     draw.ellipse((cx - 82, cy - 82, cx + 82, cy + 82), fill="#101010")
     # Use the canonical federation seal; it is a supplied asset, not a new logo.
     with Image.open(FLAG_ROOT / "WRK.tga") as source:
-        seal = source.convert("RGB").crop((18, 17, 35, 37)).resize((100, 118), Image.Resampling.LANCZOS)
+        seal = (
+            source.convert("RGB")
+            .crop((18, 17, 35, 37))
+            .resize((100, 118), Image.Resampling.LANCZOS)
+        )
     image.paste(seal, (cx - 50, cy - 59))
     return image
 
@@ -245,11 +325,13 @@ SUPPLIED_FLAGS = {
     "TRU": SOURCE_ROOT / "TRU.png",
     "IBA": SOURCE_ROOT / "IBA.png",
     "TRU_zolotorevsk_republic": SOURCE_ROOT / "TRU_zolotorevsk_republic.png",
-    "WRK_vorkerland_utilitarian_republic": SOURCE_ROOT / "WRK_vorkerland_utilitarian_republic.png",
+    "WRK_vorkerland_utilitarian_republic": SOURCE_ROOT
+    / "WRK_vorkerland_utilitarian_republic.png",
 }
 
 SUPPLIED_RUNTIME_FLAGS = {
-    "SOL_vorkerland_worker_protectorate": SOURCE_ROOT / "SOL_vorkerland_worker_protectorate.png",
+    "SOL_vorkerland_worker_protectorate": SOURCE_ROOT
+    / "SOL_vorkerland_worker_protectorate.png",
 }
 
 COPIED_FLAG_TRIPLETS = {
@@ -258,14 +340,18 @@ COPIED_FLAG_TRIPLETS = {
 }
 
 
-def add_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image) -> None:
+def add_triplet(
+    outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image
+) -> None:
     outputs[SOURCE_ROOT / f"{flag_id}.png"] = image.copy()
     for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
         resized = image.resize(size, Image.Resampling.LANCZOS).convert("RGBA")
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = resized
 
 
-def add_runtime_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image) -> None:
+def add_runtime_triplet(
+    outputs: dict[Path, Image.Image], flag_id: str, image: Image.Image
+) -> None:
     prepared = image.convert("RGBA")
     if prepared.size != (82, 52):
         raise ValueError(f"{flag_id} runtime master must be 82x52, got {prepared.size}")
@@ -276,9 +362,15 @@ def add_runtime_triplet(outputs: dict[Path, Image.Image], flag_id: str, image: I
             with Image.open(supplied_size) as source:
                 rendered = source.convert("RGBA")
             if rendered.size != size:
-                raise ValueError(f"{supplied_size.name} must be {size}, got {rendered.size}")
+                raise ValueError(
+                    f"{supplied_size.name} must be {size}, got {rendered.size}"
+                )
         else:
-            rendered = prepared.copy() if prepared.size == size else prepared.resize(size, Image.Resampling.LANCZOS)
+            rendered = (
+                prepared.copy()
+                if prepared.size == size
+                else prepared.resize(size, Image.Resampling.LANCZOS)
+            )
         outputs[FLAG_ROOT / directory / f"{flag_id}.tga"] = rendered
 
 
@@ -289,7 +381,9 @@ def expected_outputs() -> dict[Path, Image.Image]:
 
     for flag_id, supplied in SUPPLIED_FLAGS.items():
         with Image.open(supplied) as source:
-            prepared = ImageOps.fit(source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS)
+            prepared = ImageOps.fit(
+                source.convert("RGB"), CANVAS, method=Image.Resampling.LANCZOS
+            )
         add_triplet(outputs, flag_id, prepared)
 
     for flag_id, supplied in SUPPLIED_RUNTIME_FLAGS.items():
@@ -317,9 +411,16 @@ def validate_outputs(outputs: dict[Path, Image.Image]) -> list[str]:
             continue
         expected_rgba = expected.convert("RGBA")
         if actual.size != expected_rgba.size:
-            issues.append(f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected_rgba.size}")
-        elif any(channel.getbbox() is not None for channel in ImageChops.difference(actual, expected_rgba).split()):
-            issues.append(f"{path.relative_to(ROOT)} pixels differ from deterministic render")
+            issues.append(
+                f"{path.relative_to(ROOT)} has size {actual.size}, expected {expected_rgba.size}"
+            )
+        elif any(
+            channel.getbbox() is not None
+            for channel in ImageChops.difference(actual, expected_rgba).split()
+        ):
+            issues.append(
+                f"{path.relative_to(ROOT)} pixels differ from deterministic render"
+            )
     return issues
 
 
@@ -343,20 +444,31 @@ def apply_outputs(outputs: dict[Path, Image.Image]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate Vorkerland successor-state flags.")
+    parser = argparse.ArgumentParser(
+        description="Generate Vorkerland successor-state flags."
+    )
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare current flags with deterministic renders (default)")
-    actions.add_argument("--apply", action="store_true", help="write source PNGs and TGA triplets")
-    parser.add_argument("--tags", nargs="+", help="limit checks and writes to these flag IDs")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="compare current flags with deterministic renders (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write source PNGs and TGA triplets"
+    )
+    parser.add_argument(
+        "--tags", nargs="+", help="limit checks and writes to these flag IDs"
+    )
     args = parser.parse_args()
     outputs = expected_outputs()
     if args.tags:
-        outputs = {path: image for path, image in outputs.items() if path.stem in args.tags}
+        outputs = {
+            path: image for path, image in outputs.items() if path.stem in args.tags
+        }
     if args.apply:
         apply_outputs(outputs)
         print(
-            f"Built {len({path.stem for path in outputs})} "
-            "original flag triplets."
+            f"Built {len({path.stem for path in outputs})} " "original flag triplets."
         )
     issues = validate_outputs(outputs)
     if issues:
@@ -365,5 +477,7 @@ def main() -> int:
         return 1
     print("Vorkerland successor-state flag validation passed.")
     return 0
+
+
 if __name__ == "__main__":
     raise SystemExit(main())

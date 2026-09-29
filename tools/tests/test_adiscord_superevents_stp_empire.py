@@ -10,14 +10,47 @@ SUPEREVENTS = ROOT / "interface/superevents.gfx"
 IMPERIAL_DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 IMPERIAL_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
 IMPERIAL_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
-WORKER_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
-DIRTY_OPENING_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
-UTILITARIAN_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
+WORKER_ART = (
+    ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"
+)
+DIRTY_OPENING_ART = (
+    ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
+)
+UTILITARIAN_ART = (
+    ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"
+)
 VLAD_ART = ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png"
 
 REQUIRED_IMPERIAL_STATES = (
-    4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-    20, 21, 22, 24, 30, 31, 41, 42, 48, 54, 55, 56, 57,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    24,
+    30,
+    31,
+    41,
+    42,
+    48,
+    54,
+    55,
+    56,
+    57,
 )
 
 
@@ -26,7 +59,11 @@ def read(path: Path) -> str:
 
 
 def event_block(text: str, event_id: str) -> str:
-    marker = re.search(rf"(?:country|news)_event\s*=\s*\{{(?:(?!\n\}}).)*?\bid\s*=\s*{re.escape(event_id)}\b", text, re.S)
+    marker = re.search(
+        rf"(?:country|news)_event\s*=\s*\{{(?:(?!\n\}}).)*?\bid\s*=\s*{re.escape(event_id)}\b",
+        text,
+        re.S,
+    )
     if marker is None:
         raise AssertionError(f"missing event {event_id}")
     start = marker.start()
@@ -155,17 +192,36 @@ class SupereventAndImperialUnionTests(unittest.TestCase):
         self.assertNotIn("transfer_state", effects)
 
     def test_direct_proclamation_revalidates_requirements_and_is_idempotent(self):
-        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, selected_effects
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            selected_effects,
+        )
+
         source = parse_clausewitz(read(IMPERIAL_EFFECTS))
         effect = block(source, "STP_proclaim_imperial_union")
         for eligible in (False, True):
             facts = {("STS", "STP_imperial_union_requirements_met", "yes"): eligible}
             applied = list(selected_effects(effect, facts, "STS"))
             self.assertEqual(any(e.key == "news_event" for _, e in applied), eligible)
-            self.assertEqual(any(e.key == "set_cosmetic_tag" for _, e in applied), eligible)
-        requirements = block(parse_clausewitz(read(IMPERIAL_TRIGGERS)), "STP_imperial_union_requirements_met")
-        self.assertTrue(any(e.key == "NOT" and any(c.key == "has_country_flag" and c.value == "STP_imperial_union_proclaimed" for c in e.value)
-                            for e in requirements))
+            self.assertEqual(
+                any(e.key == "set_cosmetic_tag" for _, e in applied), eligible
+            )
+        requirements = block(
+            parse_clausewitz(read(IMPERIAL_TRIGGERS)),
+            "STP_imperial_union_requirements_met",
+        )
+        self.assertTrue(
+            any(
+                e.key == "NOT"
+                and any(
+                    c.key == "has_country_flag"
+                    and c.value == "STP_imperial_union_proclaimed"
+                    for c in e.value
+                )
+                for e in requirements
+            )
+        )
 
 
 if __name__ == "__main__":
@@ -173,13 +229,18 @@ if __name__ == "__main__":
 
 
 class ObserverSupereventTimeoutTests(unittest.TestCase):
-    def test_timeout_covers_every_registered_presentation_and_starts_at_seven_days(self):
+    def test_timeout_covers_every_registered_presentation_and_starts_at_seven_days(
+        self,
+    ):
         source = read(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         tick = named_block(source, "ADISCORD_superevent_observer_tick")
         guis = read(ROOT / "common/scripted_guis/superevents.txt")
         flags = set(re.findall(r"window_name\s*=\s*\"(superevent_[a-z_]+)\"", guis))
         self.assertTrue(flags)
-        ages = re.findall(r"has_global_flag\s*=\s*\{\s*flag\s*=\s*(superevent_[a-z_]+)\s+days\s*>\s*(\d+)\s*\}", tick)
+        ages = re.findall(
+            r"has_global_flag\s*=\s*\{\s*flag\s*=\s*(superevent_[a-z_]+)\s+days\s*>\s*(\d+)\s*\}",
+            tick,
+        )
         self.assertEqual({name for name, _ in ages}, flags)
         for name, threshold in ages:
             with self.subTest(presentation=name):
@@ -191,16 +252,34 @@ class ObserverSupereventTimeoutTests(unittest.TestCase):
         self.assertNotIn("clear_array", tick)
         self.assertNotIn("set_global_flag = superevent_", tick)
         self.assertEqual(tick.count("ADISCORD_superevent_dispatch_next = yes"), 1)
-        self.assertLess(tick.rindex("clr_global_flag"), tick.index("ADISCORD_superevent_dispatch_next = yes"))
-
-    def test_observer_timeout_is_globally_guarded_and_never_closes_a_human_session(self):
-        tick = named_block(read(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "ADISCORD_superevent_observer_tick")
-        self.assertIn("NOT = { any_country = { is_ai = no } }", tick)
-        self.assertIn("NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }", tick)
-        self.assertIn("set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }", tick)
         self.assertLess(
-            tick.index("set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }"),
-            tick.index("has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }"),
+            tick.rindex("clr_global_flag"),
+            tick.index("ADISCORD_superevent_dispatch_next = yes"),
+        )
+
+    def test_observer_timeout_is_globally_guarded_and_never_closes_a_human_session(
+        self,
+    ):
+        tick = named_block(
+            read(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_superevent_observer_tick",
+        )
+        self.assertIn("NOT = { any_country = { is_ai = no } }", tick)
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_superevent_observer_checked_today }",
+            tick,
+        )
+        self.assertIn(
+            "set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }",
+            tick,
+        )
+        self.assertLess(
+            tick.index(
+                "set_global_flag = { flag = ADISCORD_superevent_observer_checked_today days = 1 }"
+            ),
+            tick.index(
+                "has_global_flag = { flag = superevent_vorkerland_civilwar days > 6 }"
+            ),
         )
         self.assertLess(tick.index("set_global_flag"), tick.index("any_country"))
         self.assertNotIn("every_country", tick)

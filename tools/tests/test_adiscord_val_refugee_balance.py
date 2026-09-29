@@ -37,7 +37,7 @@ def named_block(source: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     raise AssertionError(f"unterminated block: {name}")
 
 
@@ -64,7 +64,7 @@ def focus_block(source: str, focus_id: str) -> str:
             elif char == "}":
                 depth -= 1
                 if depth == 0:
-                    block = source[match.start():index + 1]
+                    block = source[match.start() : index + 1]
                     if re.search(rf"(?m)^\s*id\s*=\s*{re.escape(focus_id)}\s*$", block):
                         return block
                     break
@@ -73,9 +73,21 @@ def focus_block(source: str, focus_id: str) -> str:
 
 class KefreytRefugeeBalanceTests(unittest.TestCase):
     def test_national_intake_cannot_double_pay_deliver_or_refund(self) -> None:
-        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-        decision = block(parse_clausewitz(named_block(self.decisions, "VAL_launch_national_recruitment")), "VAL_launch_national_recruitment")
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            scalar,
+            selected_effects,
+        )
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
+
+        decision = block(
+            parse_clausewitz(
+                named_block(self.decisions, "VAL_launch_national_recruitment")
+            ),
+            "VAL_launch_national_recruitment",
+        )
         definitions = {e.key: e.value for e in parse_clausewitz(self.effects)}
         for cancel in (False, True):
             facts = {
@@ -90,7 +102,11 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             def run(rows):
                 nonlocal manpower
                 for _, e in selected_effects(rows, facts, "VAL"):
-                    if e.key in ("set_variable", "add_to_variable", "subtract_from_variable"):
+                    if e.key in (
+                        "set_variable",
+                        "add_to_variable",
+                        "subtract_from_variable",
+                    ):
                         name = scalar(e.value, "var")
                         value = scalar(e.value, "value")
                         amount = facts.get(("VAL", "variable", value))
@@ -98,7 +114,12 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                             amount = float(value)
                         key = ("VAL", "variable", name)
                         previous = facts.get(key, 0)
-                        facts[key] = amount if e.key == "set_variable" else previous + amount * (-1 if e.key == "subtract_from_variable" else 1)
+                        facts[key] = (
+                            amount
+                            if e.key == "set_variable"
+                            else previous
+                            + amount * (-1 if e.key == "subtract_from_variable" else 1)
+                        )
                         facts["VAL", "has_variable", name] = True
                     elif e.key == "clear_variable":
                         facts.pop(("VAL", "variable", e.value), None)
@@ -119,10 +140,17 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             run(definitions["VAL_finish_national_recruitment"])
             run(definitions["VAL_refund_national_recruitment"])
             self.assertEqual(manpower, 0 if cancel else 20000)
-            self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 3000 if cancel else 0)
-            self.assertEqual(facts["VAL", "variable", "VAL_local_volunteer_pool"], 2 if cancel else 0)
+            self.assertEqual(
+                facts["VAL", "variable", "ADISCORD_economy_treasury"],
+                3000 if cancel else 0,
+            )
+            self.assertEqual(
+                facts["VAL", "variable", "VAL_local_volunteer_pool"], 2 if cancel else 0
+            )
 
-    def test_national_intake_reserves_people_and_refunds_cancelled_preparation(self) -> None:
+    def test_national_intake_reserves_people_and_refunds_cancelled_preparation(
+        self,
+    ) -> None:
         decision = named_block(self.decisions, "VAL_launch_national_recruitment")
         self.assertIn("days_remove = 60", decision)
         start = named_block(decision, "complete_effect")
@@ -135,27 +163,70 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         self.assertIn("var = VAL_local_volunteer_pool value = 2", refund)
         self.assertIn("clear_variable = VAL_national_recruitment_deposit", refund)
 
-    def test_projects_use_capacity_available_for_projects_not_idle_construction(self) -> None:
+    def test_projects_use_capacity_available_for_projects_not_idle_construction(
+        self,
+    ) -> None:
         decisions = read("common/decisions/ADISCORD_economy_projects.txt")
         triggers = read("common/scripted_triggers/ADISCORD_economy_triggers.txt")
         self.assertNotIn("num_of_available_civilian_factories", decisions)
         for name in ("precision_tooling", "automated_industry", "national_computing"):
             gate = named_block(triggers, "ADISCORD_economy_can_start_" + name)
-            self.assertIn("NOT = { num_of_civilian_factories_available_for_projects < 3 }", gate)
+            self.assertIn(
+                "NOT = { num_of_civilian_factories_available_for_projects < 3 }", gate
+            )
 
     RECRUITMENT = (
-        ("VAL_recruit_contract_reserves", "VAL_Company_Service_Code", 5000, 1000, "political_power", 50, 120),
-        ("VAL_recall_contract_veterans", "VAL_Operational_Reserves", 6000, 1500, "command_power", 25, 180),
-        ("VAL_launch_national_recruitment", "VAL_Army_Of_The_Ledger", 20000, 3000, None, 0, 60),
+        (
+            "VAL_recruit_contract_reserves",
+            "VAL_Company_Service_Code",
+            5000,
+            1000,
+            "political_power",
+            50,
+            120,
+        ),
+        (
+            "VAL_recall_contract_veterans",
+            "VAL_Operational_Reserves",
+            6000,
+            1500,
+            "command_power",
+            25,
+            180,
+        ),
+        (
+            "VAL_launch_national_recruitment",
+            "VAL_Army_Of_The_Ledger",
+            20000,
+            3000,
+            None,
+            0,
+            60,
+        ),
     )
 
-    def test_contract_recruitment_charges_exact_prices_and_rejects_stale_clicks(self) -> None:
-        from tools.tests.test_adiscord_stp_preparation import block, scalar, selected_effects, matches_conditions
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+    def test_contract_recruitment_charges_exact_prices_and_rejects_stale_clicks(
+        self,
+    ) -> None:
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            scalar,
+            selected_effects,
+            matches_conditions,
+        )
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         for ident, focus, manpower, cash, currency, price, _ in self.RECRUITMENT:
-            decision = block(parse_clausewitz(named_block(self.decisions, ident)), ident)
-            resource = "command_power" if currency == "command_power" else "has_political_power"
+            decision = block(
+                parse_clausewitz(named_block(self.decisions, ident)), ident
+            )
+            resource = (
+                "command_power"
+                if currency == "command_power"
+                else "has_political_power"
+            )
             base = {
                 ("VAL", "has_completed_focus", "VAL_The_Contract_State"): True,
                 ("VAL", "has_completed_focus", focus): True,
@@ -169,7 +240,10 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
             cases = (
                 ({}, True),
                 ({("VAL", "numeric", resource): price - 0.01}, currency is None),
-                ({("VAL", "variable", "ADISCORD_economy_treasury"): cash - 0.01}, False),
+                (
+                    {("VAL", "variable", "ADISCORD_economy_treasury"): cash - 0.01},
+                    False,
+                ),
                 ({("VAL", "numeric", "has_manpower"): 50000}, currency is None),
                 ({("VAL", "numeric", "has_manpower"): 100000}, currency is None),
                 ({("VAL", "numeric", "has_manpower"): 49999.99}, True),
@@ -181,33 +255,81 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                 for changes, expected in cases:
                     with self.subTest(decision=ident, changes=changes, is_ai=is_ai):
                         facts = base | changes | {("VAL", "is_ai", "yes"): is_ai}
-                        selectable = all(matches_conditions(block(decision, key), facts, "VAL")
-                                         for key in ("visible", "available", "custom_cost_trigger"))
+                        selectable = all(
+                            matches_conditions(block(decision, key), facts, "VAL")
+                            for key in ("visible", "available", "custom_cost_trigger")
+                        )
                         self.assertEqual(selectable, expected)
-                        effects = [e for _, e in selected_effects(block(decision, "complete_effect"), facts, "VAL")]
+                        effects = [
+                            e
+                            for _, e in selected_effects(
+                                block(decision, "complete_effect"), facts, "VAL"
+                            )
+                        ]
                         if not expected:
                             self.assertEqual(effects, [])
                             continue
-                        self.assertEqual([float(e.value) for e in effects if e.key == "add_manpower"], [] if ident == "VAL_launch_national_recruitment" else [manpower])
-                        resource_debits = [float(e.value) for e in effects
-                                           if e.key in ("add_political_power", "add_command_power")]
+                        self.assertEqual(
+                            [
+                                float(e.value)
+                                for e in effects
+                                if e.key == "add_manpower"
+                            ],
+                            (
+                                []
+                                if ident == "VAL_launch_national_recruitment"
+                                else [manpower]
+                            ),
+                        )
+                        resource_debits = [
+                            float(e.value)
+                            for e in effects
+                            if e.key in ("add_political_power", "add_command_power")
+                        ]
                         self.assertEqual(resource_debits, [-price] if currency else [])
-                        debits = [(scalar(e.value, "var"), float(scalar(e.value, "value")))
-                                  for e in effects if e.key == "subtract_from_variable"]
-                        costs = [(scalar(e.value, "var"), float(scalar(e.value, "value")))
-                                 for e in effects if e.key == "add_to_variable"]
+                        debits = [
+                            (scalar(e.value, "var"), float(scalar(e.value, "value")))
+                            for e in effects
+                            if e.key == "subtract_from_variable"
+                        ]
+                        costs = [
+                            (scalar(e.value, "var"), float(scalar(e.value, "value")))
+                            for e in effects
+                            if e.key == "add_to_variable"
+                        ]
                         self.assertEqual(debits, [("ADISCORD_economy_treasury", cash)])
-                        self.assertEqual(costs, ([("VAL_local_volunteer_pool", -2)] if ident == "VAL_launch_national_recruitment" else []) + [("ADISCORD_economy_current_month_action_costs", cash)])
-                        self.assertEqual(sum(e.key == "ADISCORD_economy_mark_dirty" for e in effects), 1)
+                        self.assertEqual(
+                            costs,
+                            (
+                                [("VAL_local_volunteer_pool", -2)]
+                                if ident == "VAL_launch_national_recruitment"
+                                else []
+                            )
+                            + [("ADISCORD_economy_current_month_action_costs", cash)],
+                        )
+                        self.assertEqual(
+                            sum(
+                                e.key == "ADISCORD_economy_mark_dirty" for e in effects
+                            ),
+                            1,
+                        )
 
-    def test_contract_recruitment_uses_native_cooldowns_and_national_preparation(self) -> None:
+    def test_contract_recruitment_uses_native_cooldowns_and_national_preparation(
+        self,
+    ) -> None:
         from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         main = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         for ident, focus, _, _, _, _, cooldown in self.RECRUITMENT:
-            decision = block(parse_clausewitz(named_block(self.decisions, ident)), ident)
-            self.assertIn(f"unlock_decision_tooltip = {ident}", focus_block(main, focus))
+            decision = block(
+                parse_clausewitz(named_block(self.decisions, ident)), ident
+            )
+            self.assertIn(
+                f"unlock_decision_tooltip = {ident}", focus_block(main, focus)
+            )
             self.assertEqual(scalar(decision, "cost"), "0")
             self.assertEqual(scalar(decision, "days_re_enable"), str(cooldown))
             self.assertEqual(scalar(decision, "fire_only_once"), "no")
@@ -215,24 +337,45 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                 self.assertEqual(scalar(decision, "days_remove"), "60")
             else:
                 self.assertNotIn("days_remove", {e.key for e in decision})
-            self.assertFalse({e.key for e in walk(decision)} & {
-                "country_event", "random", "random_list", "add_dynamic_modifier",
-                "set_country_flag", "targets", "state_target",
-            })
+            self.assertFalse(
+                {e.key for e in walk(decision)}
+                & {
+                    "country_event",
+                    "random",
+                    "random_list",
+                    "add_dynamic_modifier",
+                    "set_country_flag",
+                    "targets",
+                    "state_target",
+                }
+            )
 
-    def test_contract_recruitment_prices_are_localized_including_blocked_variants(self) -> None:
+    def test_contract_recruitment_prices_are_localized_including_blocked_variants(
+        self,
+    ) -> None:
         for language in ("russian", "english"):
-            path = ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            path = (
+                ROOT
+                / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            )
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             source = path.read_text(encoding="utf-8-sig")
             for ident, _, manpower, cash, currency, price, cooldown in self.RECRUITMENT:
                 for suffix in ("", "_blocked", "_tooltip"):
-                    values = re.findall(r'^ ' + ident + r'_cost' + suffix + r':\d* "([^"\n]*)"$', source, re.M)
+                    values = re.findall(
+                        r'^ ' + ident + r'_cost' + suffix + r':\d* "([^"\n]*)"$',
+                        source,
+                        re.M,
+                    )
                     self.assertEqual(len(values), 1)
-                    self.assertIn(f"{cash}§! £ADISCORD_economy_treasury_texticon", values[0])
+                    self.assertIn(
+                        f"{cash}§! £ADISCORD_economy_treasury_texticon", values[0]
+                    )
                     if currency:
                         self.assertIn(f"{price}§! £{currency}_texticon", values[0])
-                description = re.search(r'^ ' + ident + r'_desc:\d* "([^"\n]*)"$', source, re.M).group(1)
+                description = re.search(
+                    r'^ ' + ident + r'_desc:\d* "([^"\n]*)"$', source, re.M
+                ).group(1)
                 self.assertIn(str(manpower), description)
                 self.assertIn(str(cooldown), description)
 
@@ -243,11 +386,15 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         self.assertIn('gfx/interface/focusview/filter/manpower_icon.dds', gfx)
 
         for language in ("english", "russian"):
-            loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+            loc = read(
+                f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            )
             self.assertIn(f"{filter_id}:0", loc)
 
         main = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-        defeated = read("common/national_focus/ADISCORD_national_focus_VAL_defeated.txt")
+        defeated = read(
+            "common/national_focus/ADISCORD_national_focus_VAL_defeated.txt"
+        )
         for focus_id in (
             "VAL_The_Contract_State",
             "VAL_Gromovs_Assault_Tables",
@@ -263,8 +410,12 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         self.assertIn(filter_id, focus_block(defeated, "VAL_defeat_Veterans_Register"))
 
     def setUp(self) -> None:
-        self.decisions = read("common/decisions/ADISCORD_VAL_logistics_market_decisions.txt")
-        self.effects = read("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt")
+        self.decisions = read(
+            "common/decisions/ADISCORD_VAL_logistics_market_decisions.txt"
+        )
+        self.effects = read(
+            "common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt"
+        )
         self.ideas = read("common/ideas/ADISCORD_VAL_logistics_market_ideas.txt")
 
     def test_admissions_are_cheaper_repeatable_and_less_punishing(self) -> None:
@@ -339,7 +490,10 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
 
     def test_population_ui_is_short_and_matches_balance(self) -> None:
         for language in ("russian", "english"):
-            path = ROOT / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            path = (
+                ROOT
+                / f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            )
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             loc = path.read_text(encoding="utf-8-sig")
             for key in (
@@ -350,7 +504,9 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
                 "VAL_accept_north_refugees_desc",
                 "VAL_accept_perimeter_refugees_desc",
             ):
-                line = next(row for row in loc.splitlines() if row.startswith(f" {key}:"))
+                line = next(
+                    row for row in loc.splitlines() if row.startswith(f" {key}:")
+                )
                 self.assertNotIn("—", line)
                 self.assertNotIn(";", line)
             self.assertIn("VAL_refugee_training_cost:", loc)

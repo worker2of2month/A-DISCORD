@@ -10,7 +10,10 @@ from PIL import Image, ImageChops
 
 from tools.builders import build_adiscord_new_states as state_builder
 from tools.builders import build_adiscord_stp_regions_map as regions_map_builder
-from tools.lib.adiscord_core_state_balance_manifest import EXPECTED_RESOURCES, TARGET_STATES
+from tools.lib.adiscord_core_state_balance_manifest import (
+    EXPECTED_RESOURCES,
+    TARGET_STATES,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,9 +27,15 @@ SCRIPTED_GUI = ROOT / "common/scripted_guis/ADISCORD_STP_regions_scripted_gui.tx
 GUI = ROOT / "interface/ADISCORD_STP_regions.gui"
 GFX = ROOT / "interface/ADISCORD_STP_regions.gfx"
 LOCALISATION = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
-LEGACY_REGIONS_LOCALISATION = ROOT / "localisation/russian/ADISCORD_STP_regions_l_russian.yml"
-SHARED_ACTION_EFFECTS = ROOT / "common/scripted_effects/ADISCORD_shared_action_effects.txt"
-SHARED_ACTION_TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_shared_action_triggers.txt"
+LEGACY_REGIONS_LOCALISATION = (
+    ROOT / "localisation/russian/ADISCORD_STP_regions_l_russian.yml"
+)
+SHARED_ACTION_EFFECTS = (
+    ROOT / "common/scripted_effects/ADISCORD_shared_action_effects.txt"
+)
+SHARED_ACTION_TRIGGERS = (
+    ROOT / "common/scripted_triggers/ADISCORD_shared_action_triggers.txt"
+)
 POLITICS_LOCALISATION = ROOT / "localisation/russian/politics_l_russian.yml"
 MAPICONS_GUI = ROOT / "interface/mapicons.gui"
 TEXTICON_GFX = ROOT / "interface/modifiericons_texticons.gfx"
@@ -156,19 +165,35 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             r'(?m)^[ \t]*STP_battle_for_stelander_desc:[ \t]*(?:[0-9]+[ \t]*)?"([^\r\n]*)"[ \t]*$',
             read(LOCALISATION),
         )
-        self.assertIsNotNone(description, "checklist must be a single quoted localisation line")
+        self.assertIsNotNone(
+            description, "checklist must be a single quoted localisation line"
+        )
         value = description.group(1)
-        self.assertNotIn("\u2022", value, "unsupported bullet glyph renders as a question mark")
+        self.assertNotIn(
+            "\u2022", value, "unsupported bullet glyph renders as a question mark"
+        )
         items = [line for line in value.split(r"\n") if line.startswith("- ")]
         self.assertEqual(len(items), 5)
 
-    def test_false_trail_closes_current_inspection_and_blocks_immediate_recheck(self) -> None:
+    def test_false_trail_closes_current_inspection_and_blocks_immediate_recheck(
+        self,
+    ) -> None:
         operation = named_block(read(DECISIONS), "STP_prepare_false_trail")
-        self.assertIn("STP_party_inspection_active", named_block(operation, "cancel_trigger"))
+        self.assertIn(
+            "STP_party_inspection_active", named_block(operation, "cancel_trigger")
+        )
         completion = named_block(operation, "remove_effect")
-        self.assertIn("has_state_flag = STP_party_inspection_active", named_block(completion, "limit"))
-        self.assertIn("STP_false_trail_in_progress", named_block(operation, "complete_effect"))
-        self.assertIn("clr_state_flag = STP_false_trail_in_progress", named_block(operation, "cancel_effect"))
+        self.assertIn(
+            "has_state_flag = STP_party_inspection_active",
+            named_block(completion, "limit"),
+        )
+        self.assertIn(
+            "STP_false_trail_in_progress", named_block(operation, "complete_effect")
+        )
+        self.assertIn(
+            "clr_state_flag = STP_false_trail_in_progress",
+            named_block(operation, "cancel_effect"),
+        )
         self.assertIn("STP_false_trail_clean_redirect = yes", completion)
         self.assertIn("STP_cw_abort_party_inspection = yes", completion)
         self.assertIn("STP_schedule_next_party_inspection = yes", completion)
@@ -177,9 +202,14 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         openable = named_block(read(TRIGGERS), "STP_cw_inspection_region_openable")
         self.assertIn("NOT = { has_state_flag = STP_false_trail_redirected }", openable)
 
-    def test_concession_surrenders_the_administrator_without_destroying_military_assets(self) -> None:
+    def test_concession_surrenders_the_administrator_without_destroying_military_assets(
+        self,
+    ) -> None:
         decision = named_block(read(DECISIONS), "STP_cw_sacrifice_local_contact")
-        self.assertIn("has_state_flag = STP_resistance_administration_asset", named_block(decision, "available"))
+        self.assertIn(
+            "has_state_flag = STP_resistance_administration_asset",
+            named_block(decision, "available"),
+        )
         paid = named_block(decision, "complete_effect")
         self.assertIn("clr_state_flag = STP_resistance_administration_asset", paid)
         self.assertIn("set_state_flag = STP_inspection_concession_prepared", paid)
@@ -189,10 +219,15 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertNotIn("STP_cw_return_preparation_reserves", paid)
         resolver = named_block(read(EFFECTS), "STP_resolve_party_inspection")
         first_guard = named_block(resolver, "limit")
-        self.assertIn("NOT = { has_state_flag = STP_inspection_concession_prepared }", first_guard)
+        self.assertIn(
+            "NOT = { has_state_flag = STP_inspection_concession_prepared }", first_guard
+        )
         self.assertIn("var = STP_last_party_response value = 9", resolver)
         self.assertIn("clr_state_flag = STP_inspection_concession_prepared", resolver)
-        self.assertIn("clr_state_flag = STP_inspection_concession_prepared", named_block(read(EFFECTS), "STP_clear_region_runtime"))
+        self.assertIn(
+            "clr_state_flag = STP_inspection_concession_prepared",
+            named_block(read(EFFECTS), "STP_clear_region_runtime"),
+        )
 
     def test_delay_extends_only_the_existing_inspection_with_a_cooldown(self) -> None:
         decision = named_block(read(DECISIONS), "STP_cw_delay_inspection")
@@ -206,27 +241,57 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertNotIn("activate_mission", reward)
         for state in OPERABLE_STATES:
             self.assertIn(f"FROM = {{ state = {state} }}", reward)
-            self.assertIn(f"has_active_mission = STP_party_inspection_state_{state}", reward)
+            self.assertIn(
+                f"has_active_mission = STP_party_inspection_state_{state}", reward
+            )
 
-    def test_counterintelligence_blocks_work_and_lost_assets_can_be_rebuilt(self) -> None:
+    def test_counterintelligence_blocks_work_and_lost_assets_can_be_rebuilt(
+        self,
+    ) -> None:
         gate = named_block(read(TRIGGERS), "STP_region_is_operable")
-        self.assertIn("NOT = { has_state_flag = STP_party_counterintelligence_asset }", gate)
-        self.assertIn("NOT = { has_state_flag = STP_inspection_concession_prepared }", gate)
+        self.assertIn(
+            "NOT = { has_state_flag = STP_party_counterintelligence_asset }", gate
+        )
+        self.assertIn(
+            "NOT = { has_state_flag = STP_inspection_concession_prepared }", gate
+        )
         decisions = read(DECISIONS)
         party_check = named_block(decisions, "STP_cw_check_district_command")
         for phase in ("available", "cancel_trigger", "remove_effect"):
-            self.assertIn("STP_region_is_operable", named_block(party_check, phase), phase)
+            self.assertIn(
+                "STP_region_is_operable", named_block(party_check, phase), phase
+            )
             self.assertIn("is_owned_by = ROOT", named_block(party_check, phase), phase)
-        for state, asset in ((2, "garrison"), (3, "supply"), (29, "garrison"),
-                             (45, "administration"), (46, "supply"), (53, "sabotage")):
+        for state, asset in (
+            (2, "garrison"),
+            (3, "supply"),
+            (29, "garrison"),
+            (45, "administration"),
+            (46, "supply"),
+            (53, "sabotage"),
+        ):
             operation = named_block(decisions, f"STP_region_unique_operation_{state}")
             self.assertNotIn("STP_region_unique_operation_done", operation)
-            self.assertIn(f"NOT = {{ has_state_flag = STP_resistance_{asset}_asset }}", named_block(operation, "visible"))
+            self.assertIn(
+                f"NOT = {{ has_state_flag = STP_resistance_{asset}_asset }}",
+                named_block(operation, "visible"),
+            )
             for phase in ("available", "cancel_trigger", "remove_effect"):
-                self.assertIn("STP_region_is_operable", named_block(operation, phase), (state, phase))
+                self.assertIn(
+                    "STP_region_is_operable",
+                    named_block(operation, phase),
+                    (state, phase),
+                )
 
-    def test_supply_depots_give_one_short_army_bonus_before_assets_are_cleared(self) -> None:
-        from tools.tests.test_adiscord_stp_preparation import block, parse_clausewitz, scalar, selected_effects
+    def test_supply_depots_give_one_short_army_bonus_before_assets_are_cleared(
+        self,
+    ) -> None:
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            scalar,
+            selected_effects,
+        )
 
         effects = read(EFFECTS)
         start = named_block(effects, "STP_cw_start")
@@ -235,27 +300,61 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertNotIn("STP_end_battle_for_stelander = yes", start)
         self.assertNotIn("clr_state_flag = STP_resistance_supply_asset", materialize)
         self.assertEqual(begin.count("idea = STP_cw_prepared_supply_lines"), 1)
-        self.assertLess(begin.index("idea = STP_cw_prepared_supply_lines"),
-                        begin.index("STP_end_battle_for_stelander = yes"))
+        self.assertLess(
+            begin.index("idea = STP_cw_prepared_supply_lines"),
+            begin.index("STP_end_battle_for_stelander = yes"),
+        )
         cleanup = named_block(effects, "STP_clear_region_runtime")
         self.assertIn("clr_state_flag = STP_resistance_supply_asset", cleanup)
         body = block(parse_clausewitz(effects), "STP_cw_begin_hostilities")
-        base = {("STP", "has_country_flag", "STP_cw_participant"): True,
-                ("STS", "exists", "yes"): True}
+        base = {
+            ("STP", "has_country_flag", "STP_cw_participant"): True,
+            ("STS", "exists", "yes"): True,
+        }
         for depots in ((), (3,), (46,), (3, 46)):
             for owned in ((), (3,), (46,), (3, 46)):
                 for started in (False, True):
-                    facts = {**base, ("STP", "has_global_flag", "STP_cw_started"): started}
-                    facts.update({(str(state), "has_state_flag", "STP_resistance_supply_asset"): state in depots
-                                  for state in (3, 46)})
-                    facts.update({(str(state), "is_owned_by", "STS"): state in owned for state in (3, 46)})
-                    grants = [(scope, scalar(e.value, "days")) for scope, e in selected_effects(body, facts)
-                              if e.key == "add_timed_idea" and scalar(e.value, "idea") == "STP_cw_prepared_supply_lines"]
+                    facts = {
+                        **base,
+                        ("STP", "has_global_flag", "STP_cw_started"): started,
+                    }
+                    facts.update(
+                        {
+                            (
+                                str(state),
+                                "has_state_flag",
+                                "STP_resistance_supply_asset",
+                            ): state
+                            in depots
+                            for state in (3, 46)
+                        }
+                    )
+                    facts.update(
+                        {
+                            (str(state), "is_owned_by", "STS"): state in owned
+                            for state in (3, 46)
+                        }
+                    )
+                    grants = [
+                        (scope, scalar(e.value, "days"))
+                        for scope, e in selected_effects(body, facts)
+                        if e.key == "add_timed_idea"
+                        and scalar(e.value, "idea") == "STP_cw_prepared_supply_lines"
+                    ]
                     with self.subTest(depots=depots, owned=owned, started=started):
-                        self.assertEqual(grants, [("STS", "21")] if set(depots) & set(owned) and not started else [])
+                        self.assertEqual(
+                            grants,
+                            (
+                                [("STS", "21")]
+                                if set(depots) & set(owned) and not started
+                                else []
+                            ),
+                        )
 
     def test_influence_math_handles_requested_edge_balances(self) -> None:
-        def shift(balance: tuple[int, int, int], recipient: int, amount: int) -> tuple[int, int, int]:
+        def shift(
+            balance: tuple[int, int, int], recipient: int, amount: int
+        ) -> tuple[int, int, int]:
             values = list(balance)
             donor_order = {
                 0: (1, 2),
@@ -283,7 +382,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         for balance in edge_balances:
             for recipient in range(3):
                 for amount in (1, 3, 6, 8, 10, 12, 100):
-                    with self.subTest(balance=balance, recipient=recipient, amount=amount):
+                    with self.subTest(
+                        balance=balance, recipient=recipient, amount=amount
+                    ):
                         result = shift(balance, recipient, amount)
                         self.assertEqual(sum(result), 100)
                         self.assertTrue(all(0 <= value <= 100 for value in result))
@@ -312,12 +413,15 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         entry = next(
             candidate
             for match in re.finditer(r"(?m)^country_event\s*=", events)
-            if "id = ADISCORD_STP_regions.1" in (candidate := named_block(events[match.start():], "country_event"))
+            if "id = ADISCORD_STP_regions.1"
+            in (candidate := named_block(events[match.start() :], "country_event"))
         )
         self.assertIn("id = ADISCORD_STP_regions.1", entry)
         self.assertIn("STP_initialize_battle_for_stelander = yes", entry)
 
-    def test_initial_balances_cover_every_stp_state_and_sum_to_one_hundred(self) -> None:
+    def test_initial_balances_cover_every_stp_state_and_sum_to_one_hundred(
+        self,
+    ) -> None:
         effects = read(EFFECTS)
         initializer = named_block(effects, "STP_initialize_battle_for_stelander")
         for state_id, expected in INITIAL_BALANCE.items():
@@ -349,21 +453,44 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertIn("value = 100", normalize)
         self.assertIn("STP_local_forces_influence", normalize)
         for effect_id, preferred_donor, fallback_donor in (
-            ("STP_add_resistance_influence", "STP_party_influence", "STP_local_forces_influence"),
-            ("STP_add_party_influence", "STP_resistance_influence", "STP_local_forces_influence"),
-            ("STP_add_local_forces_influence", "STP_party_influence", "STP_resistance_influence"),
+            (
+                "STP_add_resistance_influence",
+                "STP_party_influence",
+                "STP_local_forces_influence",
+            ),
+            (
+                "STP_add_party_influence",
+                "STP_resistance_influence",
+                "STP_local_forces_influence",
+            ),
+            (
+                "STP_add_local_forces_influence",
+                "STP_party_influence",
+                "STP_resistance_influence",
+            ),
         ):
             with self.subTest(effect=effect_id):
                 block = named_block(effects, effect_id)
                 self.assertIn("STP_region_influence_change", block)
-                self.assertLess(block.find(preferred_donor), block.rfind(fallback_donor))
+                self.assertLess(
+                    block.find(preferred_donor), block.rfind(fallback_donor)
+                )
                 self.assertIn("STP_normalize_region_influence = yes", block)
 
     def test_status_model_uses_both_lead_and_margin(self) -> None:
-        from tools.tests.test_adiscord_stp_preparation import matches_conditions, parse_clausewitz, scalar, walk
+        from tools.tests.test_adiscord_stp_preparation import (
+            matches_conditions,
+            parse_clausewitz,
+            scalar,
+            walk,
+        )
 
         triggers = parse_clausewitz(read(TRIGGERS))
-        regional = {entry.key: entry.value for entry in triggers if entry.key.startswith("STP_region_")}
+        regional = {
+            entry.key: entry.value
+            for entry in triggers
+            if entry.key.startswith("STP_region_")
+        }
         # Native scripted triggers accept boolean calls, never effect-style macro arguments.
         for body in regional.values():
             for entry in walk(body):
@@ -374,34 +501,78 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             strongest = regional[strongest_id]
             entrenched = regional[f"STP_region_{side}_entrenched"]
             self.assertEqual(scalar(entrenched, strongest_id), "yes")
-            rivals = [name for name in ("resistance", "party", "local_forces") if name != side]
-            values = {f"STP_{side}_influence": 55,
-                      f"STP_{rivals[0]}_influence": 40, f"STP_{rivals[1]}_influence": 5}
+            rivals = [
+                name for name in ("resistance", "party", "local_forces") if name != side
+            ]
+            values = {
+                f"STP_{side}_influence": 55,
+                f"STP_{rivals[0]}_influence": 40,
+                f"STP_{rivals[1]}_influence": 5,
+            }
             # Compare both rival variables from source, including ties and fractional margins.
-            for rival in (name for name in ("resistance", "party", "local_forces") if name != side):
-                for rival_value, margin, expected in ((54, 1, True), (55, 0, False), (56, 1, False), (54.5, .5, False)):
-                    facts = {("2", "variable", key): value for key, value in values.items()}
+            for rival in (
+                name for name in ("resistance", "party", "local_forces") if name != side
+            ):
+                for rival_value, margin, expected in (
+                    (54, 1, True),
+                    (55, 0, False),
+                    (56, 1, False),
+                    (54.5, 0.5, False),
+                ):
+                    facts = {
+                        ("2", "variable", key): value for key, value in values.items()
+                    }
                     facts[("2", "variable", f"STP_{rival}_influence")] = rival_value
                     facts[("2", "variable", "STP_region_margin")] = margin
-                    with self.subTest(side=side, rival=rival, value=rival_value, margin=margin):
-                        self.assertEqual(matches_conditions(strongest, facts, "2"), expected)
-            values.update(STP_region_lead=55, STP_region_runner_up=40, STP_region_margin=15, STP_region_status=status)
+                    with self.subTest(
+                        side=side, rival=rival, value=rival_value, margin=margin
+                    ):
+                        self.assertEqual(
+                            matches_conditions(strongest, facts, "2"), expected
+                        )
+            values.update(
+                STP_region_lead=55,
+                STP_region_runner_up=40,
+                STP_region_margin=15,
+                STP_region_status=status,
+            )
             facts = {("2", "variable", key): value for key, value in values.items()}
-            facts[("2", strongest_id, "yes")] = matches_conditions(strongest, facts, "2")
+            facts[("2", strongest_id, "yes")] = matches_conditions(
+                strongest, facts, "2"
+            )
             self.assertTrue(matches_conditions(entrenched, facts, "2"))
-            for key, value in (("STP_region_lead", 54.5), ("STP_region_runner_up", 40.5),
-                               ("STP_region_margin", 14.5), ("STP_region_status", status - 1)):
+            for key, value in (
+                ("STP_region_lead", 54.5),
+                ("STP_region_runner_up", 40.5),
+                ("STP_region_margin", 14.5),
+                ("STP_region_status", status - 1),
+            ):
                 with self.subTest(side=side, rejected=key):
-                    self.assertFalse(matches_conditions(entrenched, {**facts, ("2", "variable", key): value}, "2"))
-            self.assertFalse(matches_conditions(entrenched, {**facts, ("2", strongest_id, "yes"): False}, "2"))
+                    self.assertFalse(
+                        matches_conditions(
+                            entrenched, {**facts, ("2", "variable", key): value}, "2"
+                        )
+                    )
+            self.assertFalse(
+                matches_conditions(
+                    entrenched, {**facts, ("2", strongest_id, "yes"): False}, "2"
+                )
+            )
         for status in range(7):
             facts = {("2", "variable", "STP_region_status"): status}
-            for side, states in (("resistance", (1, 2)), ("party", (3, 4)), ("local_forces", (5, 6))):
+            for side, states in (
+                ("resistance", (1, 2)),
+                ("party", (3, 4)),
+                ("local_forces", (5, 6)),
+            ):
                 trigger = f"STP_region_{side}_leaning"
                 result = matches_conditions(regional[trigger], facts, "2")
                 self.assertEqual(result, status in states)
                 facts[("2", trigger, "yes")] = result
-            self.assertEqual(matches_conditions(regional["STP_region_contested"], facts, "2"), status == 0)
+            self.assertEqual(
+                matches_conditions(regional["STP_region_contested"], facts, "2"),
+                status == 0,
+            )
 
     def test_local_forces_exist_only_in_the_four_agreed_states(self) -> None:
         decisions = read(DECISIONS)
@@ -411,21 +582,33 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         ):
             block = named_block(decisions, decision_id)
             self.assertIn("state_target = yes", block)
-            targets = {int(value) for value in re.findall(r"\b\d+\b", named_block(block, "targets"))}
-            expected = set(OPERABLE_STATES) - ({45} if decision_id == "STP_recruit_regional_official" else set())
+            targets = {
+                int(value)
+                for value in re.findall(r"\b\d+\b", named_block(block, "targets"))
+            }
+            expected = set(OPERABLE_STATES) - (
+                {45} if decision_id == "STP_recruit_regional_official" else set()
+            )
             self.assertEqual(targets, expected)
             for state_id in LOCKED_STATES:
                 self.assertNotRegex(block, rf"(?m)^\s*{state_id}\s*$")
 
         local_bargain = named_block(decisions, "STP_bargain_with_local_councils")
-        targets = {int(value) for value in re.findall(r"\b\d+\b", named_block(local_bargain, "targets"))}
+        targets = {
+            int(value)
+            for value in re.findall(r"\b\d+\b", named_block(local_bargain, "targets"))
+        }
         self.assertEqual(targets, {45})
-        self.assertNotIn("STP_add_local_forces_influence", decisions.replace(local_bargain, "", 1))
+        self.assertNotIn(
+            "STP_add_local_forces_influence", decisions.replace(local_bargain, "", 1)
+        )
 
         for state_id in OPERABLE_STATES:
             self.assertIn(f"STP_region_unique_operation_{state_id} = {{", decisions)
 
-    def test_party_checks_start_with_a_hidden_event_then_chain_forty_day_missions(self) -> None:
+    def test_party_checks_start_with_a_hidden_event_then_chain_forty_day_missions(
+        self,
+    ) -> None:
         decisions = read(DECISIONS)
         effects = read(EFFECTS)
         events = read(EVENTS)
@@ -449,7 +632,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         initial_delay_body = initial_delay_event.group("body")
         self.assertIn("hidden = yes", initial_delay_body)
         self.assertIn("is_triggered_only = yes", initial_delay_body)
-        self.assertIn("has_country_flag = STP_battle_for_stelander_active", initial_delay_body)
+        self.assertIn(
+            "has_country_flag = STP_battle_for_stelander_active", initial_delay_body
+        )
         for state_id in OPERABLE_STATES:
             self.assertRegex(
                 initial_delay_body,
@@ -463,8 +648,12 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             mission = named_block(decisions, f"STP_party_inspection_state_{state_id}")
             self.assertIn("days_mission_timeout = 40", mission)
             self.assertIn("selectable_mission = no", mission)
-            self.assertIn(f"var = STP_last_inspection_state value = {state_id}", mission)
-            self.assertIn(f"{state_id} = {{ STP_resolve_party_inspection = yes }}", mission)
+            self.assertIn(
+                f"var = STP_last_inspection_state value = {state_id}", mission
+            )
+            self.assertIn(
+                f"{state_id} = {{ STP_resolve_party_inspection = yes }}", mission
+            )
             self.assertIn(
                 "STP_schedule_next_party_inspection = yes",
                 named_block(named_block(mission, "timeout_effect"), "hidden_effect"),
@@ -474,22 +663,37 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertIn("STP_cw_open_one_party_inspection = yes", scheduler)
         self.assertIn("STP_cw_second_inspection_unlocked = yes", scheduler)
         self.assertEqual(scheduler.count("STP_cw_open_one_party_inspection = yes"), 2)
-        self.assertIn("set_country_flag = STP_cw_inspection_chain_open", initial_delay_body)
+        self.assertIn(
+            "set_country_flag = STP_cw_inspection_chain_open", initial_delay_body
+        )
         for state_id in OPERABLE_STATES:
-            self.assertIn(f"activate_mission = STP_party_inspection_state_{state_id}", opener)
+            self.assertIn(
+                f"activate_mission = STP_party_inspection_state_{state_id}", opener
+            )
             self.assertIn(
                 f"var = STP_last_inspection_state value = {state_id} compare = equals",
                 opener,
             )
-            self.assertIn(f"{state_id} = {{ STP_region_has_detectable_assets = yes }}", opener)
-            self.assertIn(f"has_active_mission = STP_party_inspection_state_{state_id}", opener)
+            self.assertIn(
+                f"{state_id} = {{ STP_region_has_detectable_assets = yes }}", opener
+            )
+            self.assertIn(
+                f"has_active_mission = STP_party_inspection_state_{state_id}", opener
+            )
             self.assertIn(
                 f"{state_id} = {{ has_state_flag = STP_party_inspection_active }}",
                 opener,
             )
 
-    def test_inspections_wait_for_timeout_and_highlight_their_fixed_district(self) -> None:
-        from tools.tests.test_adiscord_stp_preparation import block, matches_conditions, parse_clausewitz, walk
+    def test_inspections_wait_for_timeout_and_highlight_their_fixed_district(
+        self,
+    ) -> None:
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            matches_conditions,
+            parse_clausewitz,
+            walk,
+        )
 
         category = block(parse_clausewitz(read(DECISIONS)), "STP_battle_for_stelander")
         facts = {
@@ -498,14 +702,25 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         }
         for state_id in OPERABLE_STATES:
             mission = block(category, f"STP_party_inspection_state_{state_id}")
-            goal = next((entry.value for entry in mission if entry.key == "available"), [])
+            goal = next(
+                (entry.value for entry in mission if entry.key == "available"), []
+            )
             with self.subTest(state=state_id, contract="timeout owns the result"):
-                self.assertFalse(matches_conditions(goal, facts),
-                                 "an empty or satisfied mission goal completes before timeout and stops the inspection chain")
+                self.assertFalse(
+                    matches_conditions(goal, facts),
+                    "an empty or satisfied mission goal completes before timeout and stops the inspection chain",
+                )
             with self.subTest(state=state_id, contract="fixed map target"):
-                targets = [entry.value for entry in walk(mission) if entry.key == "highlight_state_targets"]
+                targets = [
+                    entry.value
+                    for entry in walk(mission)
+                    if entry.key == "highlight_state_targets"
+                ]
                 self.assertEqual(len(targets), 1)
-                self.assertEqual([(entry.key, entry.value) for entry in targets[0]], [("state", str(state_id))])
+                self.assertEqual(
+                    [(entry.key, entry.value) for entry in targets[0]],
+                    [("state", str(state_id))],
+                )
 
     def test_regional_operations_use_expandable_variable_slots(self) -> None:
         decisions = read(DECISIONS)
@@ -529,7 +744,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
 
         initializer = named_block(effects, "STP_initialize_battle_for_stelander")
         self.assertIn("var = STP_political_action_slots_total value = 1", initializer)
-        self.assertIn("var = STP_political_action_slots_available value = 1", initializer)
+        self.assertIn(
+            "var = STP_political_action_slots_available value = 1", initializer
+        )
         shutdown = named_block(effects, "STP_end_battle_for_stelander")
         self.assertIn("clear_variable = STP_political_action_slots_total", shutdown)
         self.assertIn("clear_variable = STP_political_action_slots_available", shutdown)
@@ -540,8 +757,12 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             localisation,
         )
         self.assertIsNotNone(battle_description)
-        self.assertIn("[?STP_political_action_slots_available|0]", battle_description.group(1))
-        self.assertIn("[?STP_political_action_slots_total|0]", battle_description.group(1))
+        self.assertIn(
+            "[?STP_political_action_slots_available|0]", battle_description.group(1)
+        )
+        self.assertIn(
+            "[?STP_political_action_slots_total|0]", battle_description.group(1)
+        )
 
         for decision_id in REGIONAL_OPERATION_IDS:
             with self.subTest(decision=decision_id):
@@ -576,9 +797,13 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         for decision_id, amount in expected_costs.items():
             block = named_block(decisions, decision_id)
             self.assertIn(f"ADISCORD_economy_can_spend_{amount} = yes", block)
-            pp = {"STP_bargain_with_local_councils": 10, "STP_prepare_false_trail": 15,
-                  "STP_region_unique_operation_3": 10, "STP_region_unique_operation_45": 15,
-                  "STP_region_unique_operation_46": 20}[decision_id]
+            pp = {
+                "STP_bargain_with_local_councils": 10,
+                "STP_prepare_false_trail": 15,
+                "STP_region_unique_operation_3": 10,
+                "STP_region_unique_operation_45": 15,
+                "STP_region_unique_operation_46": 20,
+            }[decision_id]
             self.assertIn(f"custom_cost_text = STP_cost_pp{pp}_t{amount}", block)
             self.assertIn(f"add_political_power = -{pp}", block)
             self.assertIn(f"ADISCORD_economy_spend_{amount} = yes", block)
@@ -630,15 +855,24 @@ class STPRegionalMechanicsTests(unittest.TestCase):
             r"slotsize\s*=\s*\{\s*width\s*=\s*55\s+height\s*=\s*40\s*\}",
         )
 
-    def test_disputed_stelander_states_have_population_and_equal_resources(self) -> None:
-        self.assertEqual(set(state_builder.STELANDER_REGIONAL_PROFILES), set(LOCAL_FORCE_STATES))
-        self.assertEqual(set(state_builder.STELANDER_REGIONAL_RESOURCES), set(LOCAL_FORCE_STATES))
+    def test_disputed_stelander_states_have_population_and_equal_resources(
+        self,
+    ) -> None:
+        self.assertEqual(
+            set(state_builder.STELANDER_REGIONAL_PROFILES), set(LOCAL_FORCE_STATES)
+        )
+        self.assertEqual(
+            set(state_builder.STELANDER_REGIONAL_RESOURCES), set(LOCAL_FORCE_STATES)
+        )
         for state_id in LOCAL_FORCE_STATES:
             self.assertEqual(
                 int(state_builder.STELANDER_REGIONAL_PROFILES[state_id]["population"]),
                 STELANDER_POPULATION[state_id],
             )
-            self.assertEqual(state_builder.STELANDER_REGIONAL_RESOURCES[state_id], STELANDER_RESOURCE_PACKAGE)
+            self.assertEqual(
+                state_builder.STELANDER_REGIONAL_RESOURCES[state_id],
+                STELANDER_RESOURCE_PACKAGE,
+            )
             self.assertEqual(TARGET_STATES[state_id][2], STELANDER_POPULATION[state_id])
             self.assertEqual(EXPECTED_RESOURCES[state_id], STELANDER_RESOURCE_PACKAGE)
 
@@ -663,7 +897,13 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         registry = read(ROOT / "tools/data/generated_output_owners.json")
         self.assertIn('"id": "stp_regions_map"', registry)
         result = subprocess.run(
-            [sys.executable, "-B", "-m", "tools.builders.build_adiscord_stp_regions_map", "--check"],
+            [
+                sys.executable,
+                "-B",
+                "-m",
+                "tools.builders.build_adiscord_stp_regions_map",
+                "--check",
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -674,7 +914,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_region_overlay_uses_one_pixel_inner_border(self) -> None:
-        mask = Image.new("L", (regions_map_builder.WIDTH, regions_map_builder.HEIGHT), 0)
+        mask = Image.new(
+            "L", (regions_map_builder.WIDTH, regions_map_builder.HEIGHT), 0
+        )
         mask.paste(255, (100, 80, 140, 120))
 
         overlay = regions_map_builder.state_overlay(mask, (49, 154, 225))
@@ -685,7 +927,9 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         self.assertEqual(overlay.getpixel((101, 100)), (49, 154, 225, 214))
 
     def test_russian_localisation_has_bom_and_player_facing_region_data(self) -> None:
-        self.assertTrue(LOCALISATION.is_file(), f"missing file: {LOCALISATION.relative_to(ROOT)}")
+        self.assertTrue(
+            LOCALISATION.is_file(), f"missing file: {LOCALISATION.relative_to(ROOT)}"
+        )
         self.assertFalse(
             LEGACY_REGIONS_LOCALISATION.exists(),
             f"regional localisation must be merged into {LOCALISATION.relative_to(ROOT)}",
@@ -770,24 +1014,57 @@ class STPRegionalMechanicsTests(unittest.TestCase):
         decisions = read(DECISIONS)
         loc = read(LOCALISATION)
         goes_to = named_block(triggers, "STP_cw_region_goes_to_resistance")
-        self.assertIn("has_state_flag = { flag = STP_resistance_administration_asset days > 20 }", goes_to)
+        self.assertIn(
+            "has_state_flag = { flag = STP_resistance_administration_asset days > 20 }",
+            goes_to,
+        )
         self.assertIn("STP_cw_high_shabrat_legitimacy = yes", goes_to)
-        self.assertIn("value > 0.55", named_block(triggers, "STP_cw_high_shabrat_legitimacy"))
+        self.assertIn(
+            "value > 0.55", named_block(triggers, "STP_cw_high_shabrat_legitimacy")
+        )
         self.assertIn("STP_region_has_ready_administration", triggers)
         self.assertIn("STP_cw_second_inspection_unlocked", triggers)
-        self.assertIn("value = 50 compare = greater_than_or_equals", named_block(triggers, "STP_cw_second_inspection_unlocked"))
+        self.assertIn(
+            "value = 50 compare = greater_than_or_equals",
+            named_block(triggers, "STP_cw_second_inspection_unlocked"),
+        )
         for state_id in PARTICIPATING_STATES:
-            self.assertIn(f"STP_regions_{state_id}_resistance_entrenched_visible = {{ {state_id} = {{ STP_region_map_shows_resistance_held = yes }} }}", gui)
-            self.assertIn(f"STP_regions_{state_id}_local_dominant_visible = {{ {state_id} = {{ STP_region_map_shows_republics_held = yes }} }}", gui)
-        self.assertNotIn("every_owned_state = {", named_block(effects, "STP_cw_start").split("every_owned_state = { set_state_controller_to")[0])
+            self.assertIn(
+                f"STP_regions_{state_id}_resistance_entrenched_visible = {{ {state_id} = {{ STP_region_map_shows_resistance_held = yes }} }}",
+                gui,
+            )
+            self.assertIn(
+                f"STP_regions_{state_id}_local_dominant_visible = {{ {state_id} = {{ STP_region_map_shows_republics_held = yes }} }}",
+                gui,
+            )
+        self.assertNotIn(
+            "every_owned_state = {",
+            named_block(effects, "STP_cw_start").split(
+                "every_owned_state = { set_state_controller_to"
+            )[0],
+        )
         for state_id in OPERABLE_STATES:
-            self.assertIn(f"STS = {{ transfer_state = {state_id} }}", named_block(effects, "STP_cw_start"))
-        self.assertIn("set_temp_variable = { var = STP_region_influence_change value = 15 }", named_block(decisions, "STP_region_unique_operation_2"))
-        self.assertIn("set_temp_variable = { var = STP_region_influence_change value = 15 }", named_block(decisions, "STP_region_unique_operation_29"))
-        self.assertNotIn("value = 35 }", named_block(decisions, "STP_region_unique_operation_2"))
+            self.assertIn(
+                f"STS = {{ transfer_state = {state_id} }}",
+                named_block(effects, "STP_cw_start"),
+            )
+        self.assertIn(
+            "set_temp_variable = { var = STP_region_influence_change value = 15 }",
+            named_block(decisions, "STP_region_unique_operation_2"),
+        )
+        self.assertIn(
+            "set_temp_variable = { var = STP_region_influence_change value = 15 }",
+            named_block(decisions, "STP_region_unique_operation_29"),
+        )
+        self.assertNotIn(
+            "value = 35 }", named_block(decisions, "STP_region_unique_operation_2")
+        )
         self.assertIn("бросает кубик", loc)
         self.assertIn("Легитимность выше §Y55%§!", loc)
-        self.assertIn("STP_cw_inspection_chain_open", named_block(triggers, "STP_cw_can_schedule_party_inspections"))
+        self.assertIn(
+            "STP_cw_inspection_chain_open",
+            named_block(triggers, "STP_cw_can_schedule_party_inspections"),
+        )
         change = named_block(effects, "STP_change_party_suspicion")
         self.assertIn("STP_cw_can_schedule_party_inspections = yes", change)
         self.assertIn("STP_schedule_next_party_inspection = yes", change)
@@ -808,8 +1085,13 @@ class STPRegionAssetValidationTests(unittest.TestCase):
             original.save(root / filename)
             changed = original.copy()
             changed.putpixel((4, 4), (150, 77, 69, 255))
-            with patch.object(regions_map_builder, "ROOT", root), patch.object(regions_map_builder, "OUT", root):
-                self.assertEqual(regions_map_builder.validate_outputs({filename: original}), [])
+            with (
+                patch.object(regions_map_builder, "ROOT", root),
+                patch.object(regions_map_builder, "OUT", root),
+            ):
+                self.assertEqual(
+                    regions_map_builder.validate_outputs({filename: original}), []
+                )
                 issues = regions_map_builder.validate_outputs({filename: changed})
             self.assertEqual(len(issues), 1)
             self.assertIn("pixels differ", issues[0])

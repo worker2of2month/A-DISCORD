@@ -148,8 +148,7 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
             law
             for law in ACTIVE_LAWS
             if any(
-                entry.key == "default" and entry.value == "yes"
-                for entry in laws[law]
+                entry.key == "default" and entry.value == "yes" for entry in laws[law]
             )
         ]
         self.assertEqual(["ADISCORD_civilian_oriented_economy"], defaults)
@@ -157,7 +156,9 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
         self.assertEqual("8", scalar(laws["undisturbed_isolation"], "level"))
         self.assertEqual("7", scalar(laws["isolation"], "level"))
         for disabled in ("undisturbed_isolation", "isolation"):
-            self.assertEqual("no", scalar(unique_child(laws[disabled], "allowed"), "always"))
+            self.assertEqual(
+                "no", scalar(unique_child(laws[disabled], "allowed"), "always")
+            )
 
     def test_new_default_law_matches_the_approved_balance(self):
         law = law_entries()["ADISCORD_civilian_oriented_economy"]
@@ -178,9 +179,7 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
         modifier_effects = MODIFIER_EFFECTS_PATH.read_text(encoding="utf-8-sig")
         general_effects = GENERAL_EFFECTS_PATH.read_text(encoding="utf-8-sig")
 
-        wrapper = block(
-            triggers, "ADISCORD_economy_has_idea_civilian_oriented_economy"
-        )
+        wrapper = block(triggers, "ADISCORD_economy_has_idea_civilian_oriented_economy")
         self.assertIn("has_idea = ADISCORD_civilian_oriented_economy", wrapper)
 
         cache = block(modifier_effects, "ADISCORD_economy_recalculate_policy_modifiers")
@@ -194,7 +193,9 @@ class EconomicMobilizationLawContracts(unittest.TestCase):
         )
         self.assertIn(new_cache_branch, cache)
         self.assertIn(civilian_cache_branch, cache)
-        self.assertLess(cache.index(new_cache_branch), cache.index(civilian_cache_branch))
+        self.assertLess(
+            cache.index(new_cache_branch), cache.index(civilian_cache_branch)
+        )
 
         upgrade = block(general_effects, "upgrade_economy_law")
         self.assertEqual(

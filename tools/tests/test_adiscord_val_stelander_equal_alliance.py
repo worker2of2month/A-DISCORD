@@ -36,7 +36,7 @@ def named_block(text: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return text[match.start(): index + 1]
+                return text[match.start() : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -60,7 +60,7 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
         ):
             self.assertEqual(focuses.count(f"id = {focus_id}"), 1, focus_id)
         start = focuses.index("id = VAL_Equal_Powers_Pact")
-        pact = focuses[start:start + 4000]
+        pact = focuses[start : start + 4000]
         self.assertIn("prerequisite = { focus = VAL_Stelander_Ultimatum }", pact)
         self.assertIn("has_country_flag = VAL_stelander_equal_recognition", pact)
         self.assertIn("ai_will_do = { base = 1 }", pact)
@@ -68,15 +68,19 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
     def test_stelander_ai_rarely_accepts_alliance(self) -> None:
         events = read("events/ADISCORD_VAL_contract_events.txt")
         event_start = events.index("id = val_contract.354")
-        event = events[event_start:event_start + 3000]
+        event = events[event_start : event_start + 3000]
         self.assertIn("ai_chance = { base = 90 }", event)
         self.assertIn("base = 10", event)
-        self.assertIn("factor = 0 has_country_leader = { character = STP_maksim_shabrat }", event)
+        self.assertIn(
+            "factor = 0 has_country_leader = { character = STP_maksim_shabrat }", event
+        )
 
     def test_alliance_blocks_kefreyt_final_crisis_against_stelander(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         crisis = named_block(triggers, "VAL_final_crisis_available")
-        self.assertIn("NOT = { has_country_flag = VAL_stelander_equal_alliance }", crisis)
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_stelander_equal_alliance }", crisis
+        )
 
     def test_alliance_formation_preserves_equal_sovereignty(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
@@ -90,9 +94,11 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
     def test_treaty_marks_recognition_on_both_sides(self) -> None:
         events = read("events/ADISCORD_VAL_contract_events.txt")
         start = events.index("id = val_contract.343")
-        treaty = events[start:start + 5000]
+        treaty = events[start : start + 5000]
         self.assertIn("VAL_return_stelander_cores = yes", treaty)
-        self.assertGreaterEqual(treaty.count("set_country_flag = VAL_stelander_equal_recognition"), 2)
+        self.assertGreaterEqual(
+            treaty.count("set_country_flag = VAL_stelander_equal_recognition"), 2
+        )
 
     def test_event_id_and_localisation_are_registered(self) -> None:
         ledger = read("tools/data/adiscord_event_ids.json")

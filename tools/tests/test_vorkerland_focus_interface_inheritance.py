@@ -65,27 +65,47 @@ class VorkerlandFocusInterfaceInheritanceTests(unittest.TestCase):
     def test_focus_chrome_matches_its_registered_builder(self) -> None:
         from tools.builders.build_adiscord_focus_ui_assets import expected_outputs
         from tools.lib.generated_outputs import load_registry
+
         outputs = expected_outputs()
-        family = next(entry for entry in load_registry(ROOT)['families']
-                      if entry['id'] == 'focus_ui_assets')
-        self.assertEqual(set(family['output_globs']),
-                         {path.relative_to(ROOT).as_posix() for path in outputs})
+        family = next(
+            entry
+            for entry in load_registry(ROOT)['families']
+            if entry['id'] == 'focus_ui_assets'
+        )
+        self.assertEqual(
+            set(family['output_globs']),
+            {path.relative_to(ROOT).as_posix() for path in outputs},
+        )
         for path, data in outputs.items():
             self.assertEqual(path.read_bytes(), data, str(path))
 
     def test_backgrounds_keep_input_without_pressed_or_hover_tint(self) -> None:
         gfx = read(ROOT / 'interface/ADISCORD_focus_ui.gfx')
-        for role in ('window', 'panel', 'tree', 'detail_header', 'requirements', 'reward_header'):
-            block = re.search(r'name = "GFX_ADISCORD_focus_' + role + r'"(.*?)(?=\n    \})',
-                              gfx, re.DOTALL)[1]
+        for role in (
+            'window',
+            'panel',
+            'tree',
+            'detail_header',
+            'requirements',
+            'reward_header',
+        ):
+            block = re.search(
+                r'name = "GFX_ADISCORD_focus_' + role + r'"(.*?)(?=\n    \})',
+                gfx,
+                re.DOTALL,
+            )[1]
             if role in ('window', 'panel', 'tree'):
                 self.assertNotIn('alwaysTransparent = yes', block)
             else:
                 self.assertIn('alwaysTransparent = yes', block)
             self.assertIn('effectFile = "gfx/FX/buttonstate_onlydisable.lua"', block)
         shader = read(VANILLA_ROOT / 'gfx/FX/buttonstate_onlydisable.shader')
-        effects = [re.search(r'Effect ' + state + r'\s*\{[^}]*PixelShader = "([^"]+)"', shader)[1]
-                   for state in ('Up', 'Down', 'Over')]
+        effects = [
+            re.search(
+                r'Effect ' + state + r'\s*\{[^}]*PixelShader = "([^"]+)"', shader
+            )[1]
+            for state in ('Up', 'Down', 'Over')
+        ]
         self.assertEqual(len(set(effects)), 1)
 
     def test_additive_shines_are_unique_and_do_not_overlap_vanilla(self) -> None:

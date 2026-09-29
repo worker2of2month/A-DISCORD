@@ -31,10 +31,12 @@ def source_section(text: str, *sections: str) -> str:
     for section in sections:
         matches = [i for i, match in enumerate(markers) if match[1] == section]
         if len(matches) != 1:
-            raise ValueError(f"Expected one source section {section!r}, found {len(matches)}")
+            raise ValueError(
+                f"Expected one source section {section!r}, found {len(matches)}"
+            )
         index = matches[0]
         end = markers[index + 1].start() if index + 1 < len(markers) else len(text)
-        body = text[markers[index].end():end].strip("\n") + "\n"
+        body = text[markers[index].end() : end].strip("\n") + "\n"
         if text.lstrip().startswith("ideas = {"):
             body = "ideas = {\n\tcountry = {\n" + body + "\t}\n}\n"
         elif text.startswith(("l_english:", "l_russian:")):

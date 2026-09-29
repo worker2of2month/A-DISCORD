@@ -17,7 +17,10 @@ import re
 from collections import Counter, deque
 from pathlib import Path
 
-from tools.builders.build_adiscord_northern_countries import format_provinces, load_definition
+from tools.builders.build_adiscord_northern_countries import (
+    format_provinces,
+    load_definition,
+)
 from tools.builders.build_adiscord_strategic_regions import (
     connected_components,
     load_province_adjacency,
@@ -34,7 +37,18 @@ SOURCE_PATH = ROOT / "tools" / "data" / "adiscord_exclusion_zone_boundary_source
 # is an established victory-point state; unmarked urban terrain follows the
 # ordinary fringe realignment.
 CITY_EXCEPTION_STATES = {
-    49, 170, 171, 178, 181, 184, 186, 189, 193, 203, 204, 211,
+    49,
+    170,
+    171,
+    178,
+    181,
+    184,
+    186,
+    189,
+    193,
+    203,
+    204,
+    211,
 }
 
 # Small non-mountain provinces enclosed by the northern and central mountain
@@ -75,10 +89,13 @@ SUCCESSOR_CORES = {
     223: "LMN",
 }
 
+
 def state_path(state_id: int) -> Path:
     matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
     if len(matches) != 1:
-        raise RuntimeError(f"state {state_id}: expected one history file, found {len(matches)}")
+        raise RuntimeError(
+            f"state {state_id}: expected one history file, found {len(matches)}"
+        )
     return matches[0]
 
 
@@ -86,7 +103,10 @@ def load_source() -> dict[int, set[int]]:
     payload = json.loads(SOURCE_PATH.read_text(encoding="utf-8"))
     if payload.get("schema") != 1:
         raise RuntimeError("unsupported Exclusion Zone boundary source schema")
-    return {int(state_id): set(provinces) for state_id, provinces in payload["states"].items()}
+    return {
+        int(state_id): set(provinces)
+        for state_id, provinces in payload["states"].items()
+    }
 
 
 def load_current_owners() -> dict[int, str]:
@@ -122,7 +142,9 @@ def seeded_partition(
     adjacency: dict[int, set[int]],
 ) -> dict[int, set[int]]:
     """Split a connected fringe between external-border seeds."""
-    seeds: dict[int, set[int]] = {target: set() for target, _predicate in target_predicates}
+    seeds: dict[int, set[int]] = {
+        target: set() for target, _predicate in target_predicates
+    }
     for province_id in component:
         for neighbour in adjacency[province_id]:
             if neighbour in component:
@@ -153,7 +175,11 @@ def seeded_partition(
     if set(assignment) != component:
         raise RuntimeError("seeded boundary partition left provinces unassigned")
     return {
-        target: {province_id for province_id, assigned in assignment.items() if assigned == target}
+        target: {
+            province_id
+            for province_id, assigned in assignment.items()
+            if assigned == target
+        }
         for target in seeds
     }
 
@@ -231,7 +257,9 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
         elif 155 in source_states:
             planned[156].update(component)
         else:
-            raise RuntimeError(f"unclassified ordinary-terrain component: {sorted(source_states)}")
+            raise RuntimeError(
+                f"unclassified ordinary-terrain component: {sorted(source_states)}"
+            )
 
     # Pull every contaminated province from the populated WCG/ORV fringe into
     # the adjacent dirty-zone state.  Multi-state components are partitioned
@@ -245,13 +273,15 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
     for state_id in CONTAMINATED_FRINGE_STATES:
         planned[state_id].difference_update(fringe_contaminated)
     for component in connected_components(fringe_contaminated, adjacency):
-        targets = sorted({
-            province_to_state[neighbour]
-            for province_id in component
-            for neighbour in adjacency[province_id]
-            if province_to_state.get(neighbour) in original_exz
-            and province_to_state[neighbour] not in NEW_OWNERS
-        })
+        targets = sorted(
+            {
+                province_to_state[neighbour]
+                for province_id in component
+                for neighbour in adjacency[province_id]
+                if province_to_state.get(neighbour) in original_exz
+                and province_to_state[neighbour] not in NEW_OWNERS
+            }
+        )
         if not targets:
             raise RuntimeError(
                 f"contaminated fringe component {min(component)} has no EXZ border"
@@ -295,8 +325,12 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
             f"boundary plan changed province coverage: missing={sorted(expected_union-actual_union)}, "
             f"unexpected={sorted(actual_union-expected_union)}"
         )
-    counts = Counter(province_id for provinces in planned.values() for province_id in provinces)
-    duplicates = sorted(province_id for province_id, count in counts.items() if count != 1)
+    counts = Counter(
+        province_id for provinces in planned.values() for province_id in provinces
+    )
+    duplicates = sorted(
+        province_id for province_id, count in counts.items() if count != 1
+    )
     if duplicates:
         raise RuntimeError(f"boundary plan duplicates provinces: {duplicates}")
     for state_id, provinces in planned.items():
@@ -316,7 +350,9 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
             if state_id in FOREST_EXCEPTION_STATES:
                 allowed.add("forest")
             if not terrains <= allowed:
-                raise RuntimeError(f"EXZ state {state_id} retains forbidden terrain: {sorted(terrains-allowed)}")
+                raise RuntimeError(
+                    f"EXZ state {state_id} retains forbidden terrain: {sorted(terrains-allowed)}"
+                )
     return planned, original_exz, final_owners
 
 
@@ -331,6 +367,7 @@ def replace_owner_and_cores(source: str, state_id: int, owner: str) -> str:
     successor = SUCCESSOR_CORES.get(state_id)
     if successor:
         core_lines.append(f"add_core_of = {successor}")
+
     def render_cores(match: re.Match[str]) -> str:
         indentation = match.group("indent")
         return "\n".join(f"{indentation}{line}" for line in core_lines)
@@ -372,34 +409,58 @@ def apply() -> None:
     for state_id, provinces in sorted(planned.items()):
         path = state_path(state_id)
         path.write_text(
-            render_state(state_id, provinces, final_owners.get(state_id, current_owners[state_id])),
+            render_state(
+                state_id,
+                provinces,
+                final_owners.get(state_id, current_owners[state_id]),
+            ),
             encoding="utf-8",
             newline="\n",
         )
     print(f"Realigned {len(planned)} states around the Exclusion Zone.")
-    print("Run tools/build_adiscord_northern_countries.py --apply next to refresh dependent northern data.")
+    print(
+        "Run tools/build_adiscord_northern_countries.py --apply next to refresh dependent northern data."
+    )
 
 
 def print_summary() -> None:
     planned, original_exz, final_owners = plan_boundaries()
-    retained = sorted(state_id for state_id in original_exz if final_owners[state_id] == "EXZ")
-    reassigned = sorted(state_id for state_id in original_exz if final_owners[state_id] != "EXZ")
+    retained = sorted(
+        state_id for state_id in original_exz if final_owners[state_id] == "EXZ"
+    )
+    reassigned = sorted(
+        state_id for state_id in original_exz if final_owners[state_id] != "EXZ"
+    )
     print(f"EXZ retained states: {len(retained)}")
-    print(f"Reassigned former EXZ states: {', '.join(f'{state}:{final_owners[state]}' for state in reassigned)}")
-    print(f"Affected province allocation: {sum(len(provinces) for provinces in planned.values())} provinces")
+    print(
+        f"Reassigned former EXZ states: {', '.join(f'{state}:{final_owners[state]}' for state in reassigned)}"
+    )
+    print(
+        f"Affected province allocation: {sum(len(provinces) for provinces in planned.values())} provinces"
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write the planned state boundaries and owners")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated outputs (default)",
+    )
+    actions.add_argument(
+        "--apply",
+        action="store_true",
+        help="write the planned state boundaries and owners",
+    )
     args = parser.parse_args()
     if args.apply:
         print_summary()
         apply()
         return 0
-    from tools.validators.validate_adiscord_exclusion_zone_boundaries import main as validate_main
+    from tools.validators.validate_adiscord_exclusion_zone_boundaries import (
+        main as validate_main,
+    )
 
     return validate_main()
 

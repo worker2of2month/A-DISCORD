@@ -67,53 +67,89 @@ DIVISION_TEMPLATE_NAMES = (
 
 COUNTRIES: dict[str, dict[str, object]] = {
     "BOR": {
-        "states": (89, 126, 135, 139, 140, 142, 143), "capital": 140,
-        "capital_name": "Борея", "secondary_vps": ((89, "Иторские Ворота", 3),),
-        "population": 3_600_000, "civilian": 8, "military": 4,
-        "infrastructure": 3, "air_bases": 1,
+        "states": (89, 126, 135, 139, 140, 142, 143),
+        "capital": 140,
+        "capital_name": "Борея",
+        "secondary_vps": ((89, "Иторские Ворота", 3),),
+        "population": 3_600_000,
+        "civilian": 8,
+        "military": 4,
+        "infrastructure": 3,
+        "air_bases": 1,
         "resources": {"steel": 8, "coal": 5, "oil": 3},
-        "divisions": 4, "unit_type": "infantry",
+        "divisions": 4,
+        "unit_type": "infantry",
         "colors": ((64, 105, 124), (226, 226, 196), (172, 76, 58)),
     },
     "DOL": {
-        "states": (133, 136, 137, 138, 141), "capital": 138,
-        "capital_name": "Дольн", "population": 2_400_000,
-        "civilian": 5, "military": 3, "infrastructure": 2, "air_bases": 0,
+        "states": (133, 136, 137, 138, 141),
+        "capital": 138,
+        "capital_name": "Дольн",
+        "population": 2_400_000,
+        "civilian": 5,
+        "military": 3,
+        "infrastructure": 2,
+        "air_bases": 0,
         "resources": {"coal": 5, "aluminium": 4},
-        "divisions": 3, "unit_type": "ADISCORD_militia",
+        "divisions": 3,
+        "unit_type": "ADISCORD_militia",
         "colors": ((91, 117, 75), (219, 205, 157), (78, 67, 98)),
     },
     "RIN": {
-        "states": (134, 146, 147, 148, 149, 150), "capital": 149,
-        "capital_name": "Рина", "secondary_vps": ((147, "Палатинский Двор", 3),),
-        "population": 3_100_000, "civilian": 6, "military": 5,
-        "infrastructure": 3, "air_bases": 1,
+        "states": (134, 146, 147, 148, 149, 150),
+        "capital": 149,
+        "capital_name": "Рина",
+        "secondary_vps": ((147, "Палатинский Двор", 3),),
+        "population": 3_100_000,
+        "civilian": 6,
+        "military": 5,
+        "infrastructure": 3,
+        "air_bases": 1,
         "resources": {"steel": 8, "chromium": 4, "oil": 2},
-        "divisions": 5, "unit_type": "infantry",
+        "divisions": 5,
+        "unit_type": "infantry",
         "colors": ((102, 48, 61), (220, 190, 133), (55, 66, 79)),
     },
     "KRM": {
-        "states": (151, 156, 161, 162, 163), "capital": 161,
-        "capital_name": "Кремень", "population": 3_300_000,
-        "civilian": 7, "military": 4, "infrastructure": 3, "air_bases": 1,
+        "states": (151, 156, 161, 162, 163),
+        "capital": 161,
+        "capital_name": "Кремень",
+        "population": 3_300_000,
+        "civilian": 7,
+        "military": 4,
+        "infrastructure": 3,
+        "air_bases": 1,
         "resources": {"tungsten": 8, "steel": 6, "coal": 6},
-        "divisions": 4, "unit_type": "infantry",
+        "divisions": 4,
+        "unit_type": "infantry",
         "colors": ((83, 78, 69), (205, 180, 116), (64, 108, 103)),
     },
     "LMN": {
-        "states": (157, 158, 159, 160, 223), "capital": 159,
-        "capital_name": "Леман", "population": 1_250_000,
-        "civilian": 2, "military": 3, "infrastructure": 2, "air_bases": 0,
+        "states": (157, 158, 159, 160, 223),
+        "capital": 159,
+        "capital_name": "Леман",
+        "population": 1_250_000,
+        "civilian": 2,
+        "military": 3,
+        "infrastructure": 2,
+        "air_bases": 0,
         "resources": {"chromium": 3, "coal": 2},
-        "divisions": 3, "unit_type": "infantry",
+        "divisions": 3,
+        "unit_type": "infantry",
         "colors": ((59, 70, 68), (192, 179, 132), (137, 55, 47)),
     },
     "RLY": {
-        "states": (179,), "capital": 179,
-        "capital_name": "Релейн", "population": 180_000,
-        "civilian": 2, "military": 1, "infrastructure": 3, "air_bases": 0,
+        "states": (179,),
+        "capital": 179,
+        "capital_name": "Релейн",
+        "population": 180_000,
+        "civilian": 2,
+        "military": 1,
+        "infrastructure": 3,
+        "air_bases": 0,
         "resources": {"aluminium": 3, "oil": 2, "coal": 2},
-        "divisions": 1, "unit_type": "ADISCORD_militia",
+        "divisions": 1,
+        "unit_type": "ADISCORD_militia",
         "colors": ((45, 78, 73), (210, 198, 150), (156, 68, 50)),
     },
 }
@@ -130,8 +166,15 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "leader": "BOR_Elena_Borey",
         "ruling_party": "humanism",
         "elections_allowed": True,
-        "popularities": {"humanism": 65, "pragmatism": 20, "etatism": 10, "chauvinism": 5},
-        "stability": "0.70", "war_support": "0.35", "research_slots": 3,
+        "popularities": {
+            "humanism": 65,
+            "pragmatism": 20,
+            "etatism": 10,
+            "chauvinism": 5,
+        },
+        "stability": "0.70",
+        "war_support": "0.35",
+        "research_slots": 3,
         "ideas": ("BOR_itoran_relief_charter",),
     },
     "DOL": {
@@ -139,8 +182,15 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "leader": "DOL_Marko_Doln",
         "ruling_party": "pragmatism",
         "elections_allowed": True,
-        "popularities": {"pragmatism": 60, "humanism": 20, "utilitarism": 15, "etatism": 5},
-        "stability": "0.58", "war_support": "0.35", "research_slots": 3,
+        "popularities": {
+            "pragmatism": 60,
+            "humanism": 20,
+            "utilitarism": 15,
+            "etatism": 5,
+        },
+        "stability": "0.58",
+        "war_support": "0.35",
+        "research_slots": 3,
         "ideas": (),
     },
     "KRM": {
@@ -148,8 +198,15 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "leader": "KRM_Ivo_Kremen",
         "ruling_party": "utilitarism",
         "elections_allowed": True,
-        "popularities": {"utilitarism": 65, "pragmatism": 20, "technocracy": 10, "humanism": 5},
-        "stability": "0.61", "war_support": "0.48", "research_slots": 3,
+        "popularities": {
+            "utilitarism": 65,
+            "pragmatism": 20,
+            "technocracy": 10,
+            "humanism": 5,
+        },
+        "stability": "0.61",
+        "war_support": "0.48",
+        "research_slots": 3,
         "ideas": ("KRM_slag_road_compact",),
     },
     "LMN": {
@@ -157,8 +214,15 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "leader": "LMN_Vera_Lemann",
         "ruling_party": "etatism",
         "elections_allowed": False,
-        "popularities": {"etatism": 70, "pragmatism": 15, "chauvinism": 10, "humanism": 5},
-        "stability": "0.52", "war_support": "0.72", "research_slots": 2,
+        "popularities": {
+            "etatism": 70,
+            "pragmatism": 15,
+            "chauvinism": 10,
+            "humanism": 5,
+        },
+        "stability": "0.52",
+        "war_support": "0.72",
+        "research_slots": 2,
         "ideas": ("LMN_permanent_quarantine",),
     },
     "RLY": {
@@ -167,7 +231,9 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "ruling_party": "technocracy",
         "elections_allowed": False,
         "popularities": {"technocracy": 75, "pragmatism": 20, "etatism": 5},
-        "stability": "0.48", "war_support": "0.20", "research_slots": 2,
+        "stability": "0.48",
+        "war_support": "0.20",
+        "research_slots": 2,
         "ideas": ("RLY_closed_circuit",),
     },
     PROTECTORATE_TAG: {
@@ -175,19 +241,35 @@ COUNTRY_HISTORY_PROFILES: dict[str, dict[str, object]] = {
         "leader": "WCG_Edgar_Raut",
         "ruling_party": "etatism",
         "elections_allowed": False,
-        "popularities": {"etatism": 78, "chauvinism": 12, "pragmatism": 7, "humanism": 3},
-        "stability": "0.34", "war_support": "0.76", "research_slots": 2,
+        "popularities": {
+            "etatism": 78,
+            "chauvinism": 12,
+            "pragmatism": 7,
+            "humanism": 3,
+        },
+        "stability": "0.34",
+        "war_support": "0.76",
+        "research_slots": 2,
         "ideas": ("WCG_living_filter",),
     },
 }
 
 
 EXPECTED_STATES = {
-    89, 126,
+    89,
+    126,
     *range(133, 144),
     *range(146, 152),
-    156, 157, 158, 159, 161, 162, 163,
-    160, 179, 223,
+    156,
+    157,
+    158,
+    159,
+    161,
+    162,
+    163,
+    160,
+    179,
+    223,
 }
 STATE_OWNER = {
     state_id: tag
@@ -212,7 +294,9 @@ if set(STATE_OWNER) != EXPECTED_STATES:
 if len(STATE_OWNER) != sum(len(profile["states"]) for profile in COUNTRIES.values()):
     raise RuntimeError("an inner-frontier state is assigned more than once")
 if EXPECTED_STATES & set(range(474, 551)):
-    raise RuntimeError("the inner-frontier builder must never touch the western continent")
+    raise RuntimeError(
+        "the inner-frontier builder must never touch the western continent"
+    )
 
 
 def state_path(state_id: int) -> Path:
@@ -238,7 +322,9 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
     color_to_province, details = load_definition()
     areas = load_pixel_areas(color_to_province)
     positions = load_positions()
-    shells = {state_id: parse_state(state_path(state_id))[1] for state_id in EXPECTED_STATES}
+    shells = {
+        state_id: parse_state(state_path(state_id))[1] for state_id in EXPECTED_STATES
+    }
     principal_provinces: dict[int, int] = {}
     state_pixels: dict[int, int] = {}
     for state_id, provinces in shells.items():
@@ -248,19 +334,25 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
             for province_id in provinces
             if details[province_id]["terrain"] == "urban" and province_id in positions
         ]
-        available = urban or [province_id for province_id in provinces if province_id in positions]
+        available = urban or [
+            province_id for province_id in provinces if province_id in positions
+        ]
         if not available:
             principal_provinces[state_id] = min(provinces)
             continue
-        center_x = sum(positions[p][0] * areas[p] for p in available if p in positions) / sum(
-            areas[p] for p in available if p in positions
-        )
-        center_y = sum(positions[p][1] * areas[p] for p in available if p in positions) / sum(
-            areas[p] for p in available if p in positions
-        )
+        center_x = sum(
+            positions[p][0] * areas[p] for p in available if p in positions
+        ) / sum(areas[p] for p in available if p in positions)
+        center_y = sum(
+            positions[p][1] * areas[p] for p in available if p in positions
+        ) / sum(areas[p] for p in available if p in positions)
         principal_provinces[state_id] = min(
             available,
-            key=lambda p: ((positions[p][0] - center_x) ** 2 + (positions[p][1] - center_y) ** 2, -areas[p], p),
+            key=lambda p: (
+                (positions[p][0] - center_x) ** 2 + (positions[p][1] - center_y) ** 2,
+                -areas[p],
+                p,
+            ),
         )
 
     profiles: dict[int, dict[str, object]] = {}
@@ -268,20 +360,35 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
         states = list(country["states"])
         capital = int(country["capital"])
         weights = {
-            state_id: math.sqrt(state_pixels[state_id]) * (2.3 if state_id == capital else 1.0)
+            state_id: math.sqrt(state_pixels[state_id])
+            * (2.3 if state_id == capital else 1.0)
             for state_id in states
         }
         populations = largest_remainder(int(country["population"]), weights)
-        ranking = [capital] + sorted((state_id for state_id in states if state_id != capital), key=lambda state_id: (-populations[state_id], state_id))
+        ranking = [capital] + sorted(
+            (state_id for state_id in states if state_id != capital),
+            key=lambda state_id: (-populations[state_id], state_id),
+        )
         civilians = distribute_levels(int(country["civilian"]), ranking, 3)
         military = distribute_levels(int(country["military"]), ranking, 3)
         air_bases = distribute_levels(int(country["air_bases"]), ranking, 2)
-        resources_by_state: dict[int, Counter[str]] = {state_id: Counter() for state_id in states}
-        resource_ranking = sorted(states, key=lambda state_id: (-state_pixels[state_id], state_id))
-        for resource_index, (resource, total) in enumerate(country["resources"].items()):
+        resources_by_state: dict[int, Counter[str]] = {
+            state_id: Counter() for state_id in states
+        }
+        resource_ranking = sorted(
+            states, key=lambda state_id: (-state_pixels[state_id], state_id)
+        )
+        for resource_index, (resource, total) in enumerate(
+            country["resources"].items()
+        ):
             deposits = min(len(resource_ranking), max(1, min(3, int(total) // 3)))
-            targets = [resource_ranking[(resource_index + offset) % len(resource_ranking)] for offset in range(deposits)]
-            for state_id, amount in largest_remainder(int(total), {state_id: 1.0 for state_id in targets}).items():
+            targets = [
+                resource_ranking[(resource_index + offset) % len(resource_ranking)]
+                for offset in range(deposits)
+            ]
+            for state_id, amount in largest_remainder(
+                int(total), {state_id: 1.0 for state_id in targets}
+            ).items():
                 resources_by_state[state_id][resource] += amount
 
         vp_values: dict[int, tuple[str, int]] = {
@@ -299,7 +406,9 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
                 category = "town"
             else:
                 category = "rural"
-            infrastructure = min(5, int(country["infrastructure"]) + (1 if state_id == capital else 0))
+            infrastructure = min(
+                5, int(country["infrastructure"]) + (1 if state_id == capital else 0)
+            )
             profiles[state_id] = {
                 "owner": STARTING_OWNER[state_id],
                 "successor": tag,
@@ -313,7 +422,9 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
                 "vp": vp_values.get(state_id),
                 "vp_province": principal_provinces[state_id],
                 "claims": CLAIMS_BY_STATE.get(state_id, ()),
-                "local_supplies": round(min(7.0, 0.8 + infrastructure * 0.55 + factories * 0.20), 1),
+                "local_supplies": round(
+                    min(7.0, 0.8 + infrastructure * 0.55 + factories * 0.20), 1
+                ),
                 "provinces": shells[state_id],
             }
     return profiles, principal_provinces
@@ -331,8 +442,14 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
     if profile["vp"]:
         _name, value = profile["vp"]
         history.append(f"\t\tvictory_points = {{ {profile['vp_province']} {value} }}")
-    history.extend(("\t\tbuildings = {", f"\t\t\tinfrastructure = {profile['infrastructure']}"))
-    for key, field in (("industrial_complex", "civilian"), ("arms_factory", "military"), ("air_base", "air_base")):
+    history.extend(
+        ("\t\tbuildings = {", f"\t\t\tinfrastructure = {profile['infrastructure']}")
+    )
+    for key, field in (
+        ("industrial_complex", "civilian"),
+        ("arms_factory", "military"),
+        ("air_base", "air_base"),
+    ):
         if profile[field]:
             history.append(f"\t\t\t{key} = {profile[field]}")
     history.extend(("\t\t}", "\t}"))
@@ -344,23 +461,25 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
             resources.append(f"\t\t{resource} = {amount}")
         resources.append("\t}")
 
-    return "\n".join([
-        POPULATION_MARKER,
-        "state = {",
-        f"\tid = {state_id}",
-        f'\tname = "STATE_{state_id}"',
-        f"\tmanpower = {profile['population']}",
-        f"\tstate_category = {profile['category']}",
-        *history,
-        "\tprovinces = {",
-        format_provinces(profile["provinces"]),
-        "\t}",
-        *resources,
-        "\tbuildings_max_level_factor = 1.000",
-        f"\tlocal_supplies = {profile['local_supplies']:.1f}",
-        "}",
-        "",
-    ])
+    return "\n".join(
+        [
+            POPULATION_MARKER,
+            "state = {",
+            f"\tid = {state_id}",
+            f'\tname = "STATE_{state_id}"',
+            f"\tmanpower = {profile['population']}",
+            f"\tstate_category = {profile['category']}",
+            *history,
+            "\tprovinces = {",
+            format_provinces(profile["provinces"]),
+            "\t}",
+            *resources,
+            "\tbuildings_max_level_factor = 1.000",
+            f"\tlocal_supplies = {profile['local_supplies']:.1f}",
+            "}",
+            "",
+        ]
+    )
 
 
 def generated_country_profile(tag: str) -> dict[str, object]:
@@ -375,12 +494,14 @@ def generated_country_profile(tag: str) -> dict[str, object]:
 def render_common_country(tag: str) -> str:
     country = generated_country_profile(tag)
     red, green, blue = country["colors"][0]
-    return "\n".join((
-        "graphical_culture = western_european_gfx",
-        "graphical_culture_2d = western_european_2d",
-        f"color = rgb {{ {red} {green} {blue} }}",
-        "",
-    ))
+    return "\n".join(
+        (
+            "graphical_culture = western_european_gfx",
+            "graphical_culture_2d = western_european_2d",
+            f"color = rgb {{ {red} {green} {blue} }}",
+            "",
+        )
+    )
 
 
 def render_country_history(tag: str) -> str:
@@ -402,12 +523,14 @@ def render_country_history(tag: str) -> str:
         f"\t{ideology} = {popularity}"
         for ideology, popularity in history["popularities"].items()
     )
-    lines.extend((
-        "}",
-        f"set_stability = {history['stability']}",
-        f"set_war_support = {history['war_support']}",
-        f"set_research_slots = {history['research_slots']}",
-    ))
+    lines.extend(
+        (
+            "}",
+            f"set_stability = {history['stability']}",
+            f"set_war_support = {history['war_support']}",
+            f"set_research_slots = {history['research_slots']}",
+        )
+    )
     lines.extend(f"add_ideas = {idea}" for idea in history["ideas"])
     if tag == PROTECTORATE_TAG:
         lines.extend(("", "set_cosmetic_tag = WCG_confederation"))
@@ -415,10 +538,28 @@ def render_country_history(tag: str) -> str:
     return "\n".join(lines)
 
 
-def render_oob(tag: str, country: dict[str, object], principal_provinces: dict[int, int]) -> str:
-    states = [int(country["capital"])] + [int(state_id) for state_id in country["states"] if state_id != country["capital"]]
+def render_oob(
+    tag: str, country: dict[str, object], principal_provinces: dict[int, int]
+) -> str:
+    states = [int(country["capital"])] + [
+        int(state_id)
+        for state_id in country["states"]
+        if state_id != country["capital"]
+    ]
     unit_type = str(country["unit_type"])
-    template = PALATINE_LINE_TEMPLATE if tag == "RIN" else FILTRATION_TEMPLATE if tag == PROTECTORATE_TAG else FRONTIER_TEMPLATE if unit_type == "infantry" else SETTLER_MILITIA_TEMPLATE
+    template = (
+        PALATINE_LINE_TEMPLATE
+        if tag == "RIN"
+        else (
+            FILTRATION_TEMPLATE
+            if tag == PROTECTORATE_TAG
+            else (
+                FRONTIER_TEMPLATE
+                if unit_type == "infantry"
+                else SETTLER_MILITIA_TEMPLATE
+            )
+        )
+    )
     regiment_count = 5 if tag == "RIN" else 4 if unit_type == "infantry" else 3
     lines = [
         "division_template = {",
@@ -453,16 +594,26 @@ def protectorate_profile() -> dict[str, object]:
 
 
 def write_flags() -> None:
-    sizes = ((FLAG_DIR, (82, 52)), (FLAG_DIR / "medium", (41, 26)), (FLAG_DIR / "small", (10, 7)))
+    sizes = (
+        (FLAG_DIR, (82, 52)),
+        (FLAG_DIR / "medium", (41, 26)),
+        (FLAG_DIR / "small", (10, 7)),
+    )
     for style, (tag, country) in enumerate(COUNTRIES.items()):
         base = render_flag(tag, country["colors"], style)
         for directory, size in sizes:
             directory.mkdir(parents=True, exist_ok=True)
-            image = base if size == base.size else base.resize(size, Image.Resampling.LANCZOS)
+            image = (
+                base
+                if size == base.size
+                else base.resize(size, Image.Resampling.LANCZOS)
+            )
             image.save(directory / f"{tag}.tga")
     gate = render_flag(PROTECTORATE_TAG, PROTECTORATE_COLORS, 5)
     for directory, size in sizes:
-        image = gate if size == gate.size else gate.resize(size, Image.Resampling.LANCZOS)
+        image = (
+            gate if size == gate.size else gate.resize(size, Image.Resampling.LANCZOS)
+        )
         image.save(directory / f"{PROTECTORATE_TAG}.tga")
 
 
@@ -479,9 +630,15 @@ def write_country_sources() -> None:
 def apply() -> None:
     profiles, principal_provinces = build_profiles()
     for state_id, profile in sorted(profiles.items()):
-        state_path(state_id).write_text(render_state(state_id, profile), encoding="utf-8", newline="\n")
+        state_path(state_id).write_text(
+            render_state(state_id, profile), encoding="utf-8", newline="\n"
+        )
     for tag, country in COUNTRIES.items():
-        (UNIT_DIR / f"{tag}.txt").write_text(render_oob(tag, country, principal_provinces), encoding="utf-8", newline="\n")
+        (UNIT_DIR / f"{tag}.txt").write_text(
+            render_oob(tag, country, principal_provinces),
+            encoding="utf-8",
+            newline="\n",
+        )
     write_country_sources()
     gate_country = protectorate_profile()
     (UNIT_DIR / f"{PROTECTORATE_TAG}.txt").write_text(
@@ -492,9 +649,13 @@ def apply() -> None:
     localisation: dict[str, str] = {}
     for country in COUNTRIES.values():
         capital_state = int(country["capital"])
-        localisation[f"VICTORY_POINTS_{principal_provinces[capital_state]}"] = str(country["capital_name"])
+        localisation[f"VICTORY_POINTS_{principal_provinces[capital_state]}"] = str(
+            country["capital_name"]
+        )
         for state_id, name, _value in country.get("secondary_vps", ()):
-            localisation[f"VICTORY_POINTS_{principal_provinces[int(state_id)]}"] = str(name)
+            localisation[f"VICTORY_POINTS_{principal_provinces[int(state_id)]}"] = str(
+                name
+            )
     replace_generated_localisation_block(
         VP_LOCALISATION,
         "tools.builders.build_adiscord_inner_frontier_countries",
@@ -531,8 +692,16 @@ def print_summary() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write all generated inner-frontier outputs")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated outputs (default)",
+    )
+    actions.add_argument(
+        "--apply",
+        action="store_true",
+        help="write all generated inner-frontier outputs",
+    )
     actions.add_argument(
         "--apply-country-sources",
         action="store_true",
@@ -544,15 +713,26 @@ def main() -> int:
         help="write only the builder-owned deliberately blank EXZ localisation",
     )
     actions.add_argument(
-        "--apply-states", nargs="+", type=int, choices=sorted(EXPECTED_STATES),
+        "--apply-states",
+        nargs="+",
+        type=int,
+        choices=sorted(EXPECTED_STATES),
         help="write only selected builder-owned state histories",
     )
-    parser.add_argument("--english-localisation", action="store_true", help="check or apply only reviewed English names")
+    parser.add_argument(
+        "--english-localisation",
+        action="store_true",
+        help="check or apply only reviewed English names",
+    )
     args = parser.parse_args()
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 
-        return sync_builder_english_localisation(ROOT, "tools.builders.build_adiscord_inner_frontier_countries", apply=args.apply)
+        return sync_builder_english_localisation(
+            ROOT,
+            "tools.builders.build_adiscord_inner_frontier_countries",
+            apply=args.apply,
+        )
     if args.apply:
         print_summary()
         apply()
@@ -560,7 +740,9 @@ def main() -> int:
     elif args.apply_states:
         profiles, _principal = build_profiles()
         for state_id in args.apply_states:
-            state_path(state_id).write_text(render_state(state_id, profiles[state_id]), encoding="utf-8")
+            state_path(state_id).write_text(
+                render_state(state_id, profiles[state_id]), encoding="utf-8"
+            )
         print(f"Applied state histories: {args.apply_states}")
         return 0
     elif args.apply_country_sources:
@@ -578,7 +760,9 @@ def main() -> int:
         )
         print("Applied the deliberately blank EXZ country localisation.")
         return 0
-    from tools.validators.validate_adiscord_inner_frontier_countries import main as validate_main
+    from tools.validators.validate_adiscord_inner_frontier_countries import (
+        main as validate_main,
+    )
 
     return validate_main()
 

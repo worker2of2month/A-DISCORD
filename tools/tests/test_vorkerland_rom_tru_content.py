@@ -41,7 +41,7 @@ def named_block(source: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -54,30 +54,48 @@ def scalar(relative: str, key: str) -> float:
 
 class RomTruContentTests(unittest.TestCase):
     def test_republics_cannot_buy_entry_into_the_central_war(self) -> None:
-        decision = named_block(read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
-                               "ADISCORD_vorkerland_join_claimant_coalition")
+        decision = named_block(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            "ADISCORD_vorkerland_join_claimant_coalition",
+        )
         for gate in ("allowed", "available"):
-            self.assertIn("NOT = { OR = { tag = ROM tag = TRU } }",
-                          named_block(decision, gate))
-        host = named_block(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
-                           "ADISCORD_vorkerland_is_coalition_host_for_ROOT")
+            self.assertIn(
+                "NOT = { OR = { tag = ROM tag = TRU } }", named_block(decision, gate)
+            )
+        host = named_block(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            "ADISCORD_vorkerland_is_coalition_host_for_ROOT",
+        )
         self.assertIn("NOT = { ROOT = { OR = { tag = ROM tag = TRU } } }", host)
 
     def test_league_waits_for_local_settlement_and_does_not_join_wars(self) -> None:
         hooks = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         self.assertIn("AND = { ROOT = { tag = DVA } FROM = { tag = ROM } }", hooks)
         self.assertIn("AND = { ROOT = { tag = ZTA } FROM = { tag = TRU } }", hooks)
-        self.assertIn("FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }", hooks)
-        effect = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
-                             "ADISCORD_vorkerland_form_free_republics_league")
+        self.assertIn(
+            "FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }",
+            hooks,
+        )
+        effect = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_form_free_republics_league",
+        )
         for tag in ("ROM", "TRU"):
-            self.assertIn(f"{tag} = {{ exists = yes is_subject = no is_in_faction = no has_capitulated = no }}", effect)
+            self.assertIn(
+                f"{tag} = {{ exists = yes is_subject = no is_in_faction = no has_capitulated = no }}",
+                effect,
+            )
         for state in (144, 145, 319, 321, 199):
             self.assertIn(f"owns_state = {state}", effect)
         self.assertIn("template = faction_template_ADISCORD_standard", effect)
         self.assertIn("if = { limit = { tag = ROM } add_to_faction = TRU }", effect)
         self.assertIn("else = { add_to_faction = ROM }", effect)
-        for forbidden in ("declare_war_on", "add_to_war", "set_major", "set_country_flag"):
+        for forbidden in (
+            "declare_war_on",
+            "add_to_war",
+            "set_major",
+            "set_country_flag",
+        ):
             self.assertNotIn(forbidden, effect)
 
     def test_post_split_population_contract_is_generated_and_applied(self) -> None:
@@ -105,14 +123,23 @@ class RomTruContentTests(unittest.TestCase):
             )
             self.assertEqual(scalar(paths[state_id], "manpower"), population)
         self.assertEqual(expected[73], 1_300_000)
-        self.assertEqual(sum(expected[state] for state in (80, 315, 316, 317, 318)), 3_850_000)
+        self.assertEqual(
+            sum(expected[state] for state in (80, 315, 316, 317, 318)), 3_850_000
+        )
 
     def test_country_histories_start_with_playable_stability(self) -> None:
-        self.assertEqual(scalar("history/countries/ROM - RomelLand.txt", "set_stability"), 0.40)
-        self.assertEqual(scalar("history/countries/TRU - TrumanLand.txt", "set_stability"), 0.25)
+        self.assertEqual(
+            scalar("history/countries/ROM - RomelLand.txt", "set_stability"), 0.40
+        )
+        self.assertEqual(
+            scalar("history/countries/TRU - TrumanLand.txt", "set_stability"), 0.25
+        )
 
     def test_initialization_is_idempotent_and_adds_only_reserve_deltas(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'rom_tru_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'rom_tru_effects',
+        )
         rom = named_block(effects, "ADISCORD_vorkerland_rom_initialize_war_content")
         tru = named_block(effects, "ADISCORD_vorkerland_tru_initialize_war_content")
         for block, tag, support, idea in (
@@ -129,9 +156,16 @@ class RomTruContentTests(unittest.TestCase):
         self.assertIn("chauvinism = 42", tru)
 
     def test_each_country_has_a_bounded_three_step_chain(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'rom_tru_decisions')
-        rom_mission = named_block(decisions, "ADISCORD_vorkerland_rom_break_valley_administration")
-        tru_mission = named_block(decisions, "ADISCORD_vorkerland_tru_break_zlatorech_administration")
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'rom_tru_decisions',
+        )
+        rom_mission = named_block(
+            decisions, "ADISCORD_vorkerland_rom_break_valley_administration"
+        )
+        tru_mission = named_block(
+            decisions, "ADISCORD_vorkerland_tru_break_zlatorech_administration"
+        )
         self.assertIn("days_mission_timeout = 180", rom_mission)
         self.assertIn("DVA = { has_capitulated = yes }", rom_mission)
         self.assertIn("days_mission_timeout = 150", tru_mission)
@@ -152,7 +186,9 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn("cost = 40", block)
 
     def test_visible_events_are_fired_only_on_pair_war_edges(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'rom_tru_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'rom_tru_events'
+        )
         self.assertIn("add_namespace = ADISCORD_vorkerland_rom_tru", events)
         self.assertEqual(events.count("country_event = {"), 3)
         self.assertEqual(events.count("hidden = yes"), 1)
@@ -160,13 +196,23 @@ class RomTruContentTests(unittest.TestCase):
             (1, "ROM", "DVA", "ADISCORD_vorkerland_rom_break_valley_administration"),
             (2, "TRU", "ZTA", "ADISCORD_vorkerland_tru_break_zlatorech_administration"),
         ):
-            block = named_block(events, "country_event") if event_id == 1 else events[events.find("country_event = {", events.find("country_event = {") + 1):]
+            block = (
+                named_block(events, "country_event")
+                if event_id == 1
+                else events[
+                    events.find(
+                        "country_event = {", events.find("country_event = {") + 1
+                    ) :
+                ]
+            )
             self.assertIn(f"id = ADISCORD_vorkerland_rom_tru.{event_id}", block)
             self.assertIn(f"tag = {tag}", block)
             self.assertIn(f"has_war_with = {target}", block)
             self.assertIn(f"activate_mission = {mission}", block)
 
-        on_actions = read("common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt")
+        on_actions = read(
+            "common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt"
+        )
         self.assertIn("on_war = {", on_actions)
         for forbidden in (
             "on_startup",
@@ -181,7 +227,9 @@ class RomTruContentTests(unittest.TestCase):
         self.assertEqual(on_actions.count("ADISCORD_vorkerland_rom_tru.2"), 1)
 
     def test_pair_scoped_ai_overrides_are_offensive(self) -> None:
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'rom_tru_ai')
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'rom_tru_ai'
+        )
         for key, tag, target in (
             ("ADISCORD_vorkerland_rom_tru_rom_offensive", "ROM", "DVA"),
             ("ADISCORD_vorkerland_rom_tru_tru_offensive", "TRU", "ZTA"),
@@ -196,15 +244,30 @@ class RomTruContentTests(unittest.TestCase):
             self.assertIn(f"type = conquer id = {target} value = 200", block)
 
     def test_owned_scripts_do_not_touch_ivanland_or_use_global_polling(self) -> None:
-        owned = "\n".join((source_section(read(path), section) if section else read(path)) for path, section in (
-            ("common/ideas/ADISCORD_vorkerland_ideas.txt", "rom_tru_ideas"),
-            ("common/decisions/ADISCORD_vorkerland_decisions.txt", "rom_tru_decisions"),
-            ("common/decisions/categories/ADISCORD_vorkerland_categories.txt", "rom_tru_categories"),
-            ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "rom_tru_effects"),
-            ("events/ADISCORD_vorkerland_events.txt", "rom_tru_events"),
-            ("common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt", None),
-            ("common/ai_strategy/ADISCORD_vorkerland_ai.txt", "rom_tru_ai"),
-        ))
+        owned = "\n".join(
+            (source_section(read(path), section) if section else read(path))
+            for path, section in (
+                ("common/ideas/ADISCORD_vorkerland_ideas.txt", "rom_tru_ideas"),
+                (
+                    "common/decisions/ADISCORD_vorkerland_decisions.txt",
+                    "rom_tru_decisions",
+                ),
+                (
+                    "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
+                    "rom_tru_categories",
+                ),
+                (
+                    "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+                    "rom_tru_effects",
+                ),
+                ("events/ADISCORD_vorkerland_events.txt", "rom_tru_events"),
+                (
+                    "common/on_actions/02_ADISCORD_vorkerland_rom_tru_on_actions.txt",
+                    None,
+                ),
+                ("common/ai_strategy/ADISCORD_vorkerland_ai.txt", "rom_tru_ai"),
+            )
+        )
         self.assertNotRegex(owned, r"\b(?:IVN|RIN)\b")
         for forbidden in ("on_monthly", "on_daily", "every_country", "random_country"):
             self.assertNotIn(forbidden, owned)
@@ -212,7 +275,10 @@ class RomTruContentTests(unittest.TestCase):
     def test_russian_localisation_is_bom_encoded_and_complete(self) -> None:
         path = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
         self.assertTrue(path.read_bytes().startswith(codecs.BOM_UTF8))
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'rom_tru_l_russian')
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'rom_tru_l_russian',
+        )
         for key in (
             "ADISCORD_vorkerland_rom_tru_category",
             "ADISCORD_vorkerland_rom_assemble_valley_columns",

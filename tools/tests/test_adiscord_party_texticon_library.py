@@ -79,7 +79,12 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                 self.assertIsNotNone(alpha.getbbox())
                 self.assertLess(alpha.getextrema()[0], 255)
                 width, height = image.size
-                for corner in ((0, 0), (width - 1, 0), (0, height - 1), (width - 1, height - 1)):
+                for corner in (
+                    (0, 0),
+                    (width - 1, 0),
+                    (0, height - 1),
+                    (width - 1, height - 1),
+                ):
                     self.assertEqual(image.getpixel(corner)[3], 0)
 
     def test_all_fifty_two_generated_runtime_pngs_are_exact_32px_rgba(self) -> None:
@@ -101,7 +106,9 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
             with self.subTest(protected=protected.key), Image.open(path) as image:
                 self.assertEqual(image.size, (25, 25))
                 self.assertEqual(image.mode, "RGBA")
-            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), protected.sha256)
+            self.assertEqual(
+                hashlib.sha256(path.read_bytes()).hexdigest(), protected.sha256
+            )
 
     def test_all_fifty_five_gfx_sprites_resolve_once_to_catalog_paths(self) -> None:
         text = (ROOT / builder.REGISTRY_PATH).read_text(encoding="utf-8")
@@ -134,13 +141,24 @@ class PartyTexticonLibraryContractTests(unittest.TestCase):
                 localisation,
             )
         )
-        self.assertEqual(set(entries), {"NOD_hedonism_party", "NOD_hedonism_party_long"})
+        self.assertEqual(
+            set(entries), {"NOD_hedonism_party", "NOD_hedonism_party_long"}
+        )
         for value in entries.values():
             self.assertTrue(value.startswith("£GFX_STP_hedonist_party_texticon "))
-        self.assertFalse(any("NOD" in item.sprite.upper() for item in (*builder.ASSETS, *builder.PROTECTED)))
-        self.assertFalse(any("/NOD/" in item.output.as_posix().upper() for item in builder.ASSETS))
+        self.assertFalse(
+            any(
+                "NOD" in item.sprite.upper()
+                for item in (*builder.ASSETS, *builder.PROTECTED)
+            )
+        )
+        self.assertFalse(
+            any("/NOD/" in item.output.as_posix().upper() for item in builder.ASSETS)
+        )
 
-    def test_generic_sprites_are_registered_but_not_assigned_in_localisation_yet(self) -> None:
+    def test_generic_sprites_are_registered_but_not_assigned_in_localisation_yet(
+        self,
+    ) -> None:
         localisation = PARTIES_LOCALISATION.read_text(encoding="utf-8-sig")
         self.assertNotIn("GFX_generic_", localisation)
         self.assertEqual(

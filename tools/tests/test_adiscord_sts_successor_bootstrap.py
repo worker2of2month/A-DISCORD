@@ -64,7 +64,9 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
         cls.on_action = read_country_on_actions(ON_ACTION, 'stelander')
         cls.hook = named_block(cls.on_action, "on_war_relation_added")
 
-    def test_sts_reinherits_live_stp_technology_and_starts_bounded_production(self) -> None:
+    def test_sts_reinherits_live_stp_technology_and_starts_bounded_production(
+        self,
+    ) -> None:
         self.assertTrue(self.hook, "missing STP/STS war-edge successor bootstrap")
         self.assertIn("has_global_flag = STP_cw_started", self.hook)
         self.assertRegex(self.hook, r"ROOT\s*=\s*\{\s*tag\s*=\s*STP\s*\}")
@@ -74,8 +76,11 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
 
         self.assertIn("inherit_technology = STP", self.hook)
         self.assertIn("mark_technology_tree_layout_dirty = yes", self.hook)
-        self.assertNotIn("set_technology =", self.hook,
-                         "successor must inherit STP's live research, not a frozen baseline")
+        self.assertNotIn(
+            "set_technology =",
+            self.hook,
+            "successor must inherit STP's live research, not a frozen baseline",
+        )
         self.assertIn("STP_cw_sts_runtime_bootstrap_applied", self.hook)
 
         self.assertEqual(self.hook.count("add_equipment_production ="), 2)
@@ -85,7 +90,10 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
             self.hook,
         )
         self.assertEqual(
-            [int(value) for value in re.findall(r"requested_factories\s*=\s*(\d+)", self.hook)],
+            [
+                int(value)
+                for value in re.findall(r"requested_factories\s*=\s*(\d+)", self.hook)
+            ],
             [1, 1],
             "newborn STS has a two-factory bootstrap, not an oversized production queue",
         )
@@ -93,7 +101,9 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
     def test_old_fada_repositions_one_existing_paid_territorial_brigade(self) -> None:
         state = read(OLD_FADA)
         oob = read(STP_OOB)
-        self.assertRegex(state, r"provinces\s*=\s*\{[^}]*\b70\b", "state 53 must contain province 70")
+        self.assertRegex(
+            state, r"provinces\s*=\s*\{[^}]*\b70\b", "state 53 must contain province 70"
+        )
         self.assertRegex(
             oob,
             r"location\s*=\s*70[\s\S]{0,180}?division_template\s*=\s*\"Police division\"",
@@ -107,17 +117,23 @@ class StsSuccessorBootstrapTests(unittest.TestCase):
             r"53\s*=\s*\{\s*is_owned_by\s*=\s*STS\s*\}",
         )
         self.assertIn("any_country_division", self.hook)
-        self.assertIn("country_event = { id = ADISCORD_STP_cw.31 hours = 1 }", self.hook)
+        self.assertIn(
+            "country_event = { id = ADISCORD_STP_cw.31 hours = 1 }", self.hook
+        )
         self.assertNotIn("destroy_unit = yes", self.hook)
         self.assertNotIn("create_unit =", self.hook)
 
-        event = event_block(read(ROOT / "events/ADISCORD_STP_events.txt"), "ADISCORD_STP_cw.31")
+        event = event_block(
+            read(ROOT / "events/ADISCORD_STP_events.txt"), "ADISCORD_STP_cw.31"
+        )
         self.assertTrue(event, "missing delayed Old Fada reposition event")
         self.assertIn("hidden = yes", event)
         self.assertIn("is_triggered_only = yes", event)
         self.assertIn("any_country_division", event)
         self.assertIn("random_country_division", event)
-        self.assertIn("division_has_battalion_in_template = ADISCORD_territorial", event)
+        self.assertIn(
+            "division_has_battalion_in_template = ADISCORD_territorial", event
+        )
         self.assertIn("unit_strength > 0.99", event)
         self.assertEqual(event.count("destroy_unit = yes"), 1)
         self.assertEqual(event.count("create_unit ="), 1)

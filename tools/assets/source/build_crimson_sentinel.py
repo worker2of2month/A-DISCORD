@@ -28,9 +28,14 @@ def convert_textures(folder):
             levels.append(stream.getvalue())
             if image.width == 1 and image.height == 1:
                 break
-            image = image.resize((max(1, image.width // 2), max(1, image.height // 2)), Image.Resampling.LANCZOS)
+            image = image.resize(
+                (max(1, image.width // 2), max(1, image.height // 2)),
+                Image.Resampling.LANCZOS,
+            )
         header = bytearray(levels[0][:128])
-        struct.pack_into('<I', header, 8, struct.unpack_from('<I', header, 8)[0] | 0x20000)
+        struct.pack_into(
+            '<I', header, 8, struct.unpack_from('<I', header, 8)[0] | 0x20000
+        )
         struct.pack_into('<I', header, 28, len(levels))
         struct.pack_into('<I', header, 108, 0x401008)
         (folder / name).write_bytes(header + b''.join(level[128:] for level in levels))
@@ -83,7 +88,7 @@ def arguments():
     parser.add_argument('--apply', action='store_true')
     parser.add_argument('--export', action='store_true')
     parser.add_argument('--check', action='store_true')
-    return parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
+    return parser.parse_args(sys.argv[sys.argv.index('--') + 1 :])
 
 
 def reset_pose(rig):
@@ -109,21 +114,37 @@ def authored_weights(position):
     # Rear antenna and power unit follow the spine, including the part above the head.
     backpack = smoothstep(0.12, 0.38, y) * (1.0 - smoothstep(0.65, 0.95, x))
     head *= 1.0 - backpack
-    torso = {'Hip': 1.0 - upper_body, 'back_mid': upper_body * (1.0 - head), 'head': upper_body * head}
+    torso = {
+        'Hip': 1.0 - upper_body,
+        'back_mid': upper_body * (1.0 - head),
+        'head': upper_body * head,
+    }
     arm_boundary = 1.20 - 0.55 * smoothstep(4.40, 5.90, z)
     arm_amount = smoothstep(arm_boundary, arm_boundary + 0.38, x)
     arm_amount *= smoothstep(3.35, 3.65, z) * (1.0 - backpack)
     arm_amount *= 1.0 - smoothstep(5.45, 5.95, z)
     forearm = smoothstep(1.44, 1.87, x)
     hand = smoothstep(2.13, 2.42, x)
-    arm = {side + 'Arm': 1.0 - forearm, side + 'ForeArm': forearm * (1.0 - hand), side + 'Hand': forearm * hand}
+    arm = {
+        side + 'Arm': 1.0 - forearm,
+        side + 'ForeArm': forearm * (1.0 - hand),
+        side + 'Hand': forearm * hand,
+    }
     weights = {name: weight * (1.0 - arm_amount) for name, weight in torso.items()}
     for name, weight in arm.items():
         weights[name] = weight * arm_amount
-    leg_amount = (1.0 - smoothstep(3.12, 3.69, z)) * smoothstep(0.06, 0.32, x) * (1.0 - arm_amount)
+    leg_amount = (
+        (1.0 - smoothstep(3.12, 3.69, z))
+        * smoothstep(0.06, 0.32, x)
+        * (1.0 - arm_amount)
+    )
     shin = 1.0 - smoothstep(1.93, 2.32, z)
     foot = 1.0 - smoothstep(0.40, 0.78, z)
-    leg = {side + 'UpLeg': 1.0 - shin, side + 'Leg': shin * (1.0 - foot), side + 'Foot': shin * foot}
+    leg = {
+        side + 'UpLeg': 1.0 - shin,
+        side + 'Leg': shin * (1.0 - foot),
+        side + 'Foot': shin * foot,
+    }
     weights = {name: weight * (1.0 - leg_amount) for name, weight in weights.items()}
     for name, weight in leg.items():
         weights[name] = weight * leg_amount
@@ -140,14 +161,24 @@ def prepare(source, output, triangle_budget):
     original_dimensions = tuple(model.dimensions)
     for node in model.data.materials[0].node_tree.nodes:
         if node.type == 'TEX_IMAGE':
-            name = {'BASE COLOR': 'diffuse', 'METALLIC ROUGHNESS': 'orm', 'NORMAL MAP': 'normal'}[node.label]
+            name = {
+                'BASE COLOR': 'diffuse',
+                'METALLIC ROUGHNESS': 'orm',
+                'NORMAL MAP': 'normal',
+            }[node.label]
             node.image.filepath_raw = str(output / (name + '.png'))
             node.image.file_format = 'PNG'
             node.image.save()
-    pdx.import_meshfile(str(ROOT / 'gfx/models/units/ADISCORD_regulars/VAL_regular.mesh'),
-                        imp_mesh=True, imp_skel=True, imp_locs=True)
+    pdx.import_meshfile(
+        str(ROOT / 'gfx/models/units/ADISCORD_regulars/VAL_regular.mesh'),
+        imp_mesh=True,
+        imp_skel=True,
+        imp_locs=True,
+    )
     rig = next(obj for obj in bpy.context.scene.objects if obj.type == 'ARMATURE')
-    donors = [obj for obj in bpy.context.scene.objects if obj.type == 'MESH' and obj != model]
+    donors = [
+        obj for obj in bpy.context.scene.objects if obj.type == 'MESH' and obj != model
+    ]
     body = max(donors, key=lambda obj: obj.dimensions.z)
     points = [body.matrix_world @ Vector(corner) for corner in body.bound_box]
     target_height = max(point.z for point in points) - min(point.z for point in points)
@@ -172,11 +203,15 @@ def prepare(source, output, triangle_budget):
         polygon.use_smooth = True
 
     # Imported bone display tails are not anatomical segments; use authored regions.
-    groups = {bone.name: model.vertex_groups.new(name=bone.name) for bone in rig.data.bones}
+    groups = {
+        bone.name: model.vertex_groups.new(name=bone.name) for bone in rig.data.bones
+    }
     for vertex in model.data.vertices:
         position = vertex.co
         weights = authored_weights(position)
-        weights = dict(sorted(weights.items(), key=lambda pair: pair[1], reverse=True)[:4])
+        weights = dict(
+            sorted(weights.items(), key=lambda pair: pair[1], reverse=True)[:4]
+        )
         total = sum(weights.values())
         if total <= 0:
             raise RuntimeError(f'Unweighted vertex {vertex.index}')
@@ -200,17 +235,27 @@ def prepare(source, output, triangle_budget):
         'bones': len(rig.data.bones),
         'max_influences': max(len(v.groups) for v in model.data.vertices),
     }
-    (output / 'inspection.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    (output / 'inspection.json').write_text(
+        json.dumps(result, indent=2), encoding='utf-8'
+    )
     print(json.dumps(result))
     return model, rig
 
 
 def export_native(output, model, rig):
-    subprocess.run(['python', str(Path(__file__).resolve()), '--textures', str(output)], check=True)
-    shader = pdx.create_shader(SimpleNamespace(
-        shader=['PdxMeshAdvanced'], diff=['VAL_crimson_diffuse.dds'],
-        n=['VAL_crimson_normal.dds'], spec=['VAL_crimson_specular.dds']),
-        'Crimson Sentinel native', str(output))
+    subprocess.run(
+        ['python', str(Path(__file__).resolve()), '--textures', str(output)], check=True
+    )
+    shader = pdx.create_shader(
+        SimpleNamespace(
+            shader=['PdxMeshAdvanced'],
+            diff=['VAL_crimson_diffuse.dds'],
+            n=['VAL_crimson_normal.dds'],
+            spec=['VAL_crimson_specular.dds'],
+        ),
+        'Crimson Sentinel native',
+        str(output),
+    )
     model.data.materials.clear()
     model.data.materials.append(shader)
     reset_pose(rig)
@@ -221,9 +266,11 @@ def export_native(output, model, rig):
         if skin:
             stride = skin['bones'][0]
             for start in range(0, len(skin['ix']), stride):
-                indices = skin['ix'][start:start + stride]
+                indices = skin['ix'][start : start + stride]
                 valid = next(index for index in indices if index >= 0)
-                skin['ix'][start:start + stride] = [valid if index < 0 else index for index in indices]
+                skin['ix'][start : start + stride] = [
+                    valid if index < 0 else index for index in indices
+                ]
         return skin
 
     # The shader reads all four bone indices, including zero-weight slots.
@@ -232,15 +279,20 @@ def export_native(output, model, rig):
     previous_tree = pdx_data.read_meshfile(str(mesh_path)) if previous_mesh else None
     pdx.get_mesh_skin_info = safe_skin
     try:
-        pdx.export_meshfile(str(mesh_path), exp_mesh=True,
-                            exp_skel=True, exp_locs=True)
+        pdx.export_meshfile(str(mesh_path), exp_mesh=True, exp_skel=True, exp_locs=True)
     finally:
         pdx.get_mesh_skin_info = original_skin_export
-    if previous_tree is not None and equivalent_mesh(previous_tree, pdx_data.read_meshfile(str(mesh_path))):
+    if previous_tree is not None and equivalent_mesh(
+        previous_tree, pdx_data.read_meshfile(str(mesh_path))
+    ):
         mesh_path.write_bytes(previous_mesh)
     animation_source = GAME / 'gfx/models/units'
-    clips = [('idle', 'GER_infantry_moving_mg.anim'), ('move', 'GER_infantry_moving_mg.anim'),
-             ('attack', 'GER_infantry_attack_stand_mg.anim'), ('death', 'GER_infantry_death_mg.anim')]
+    clips = [
+        ('idle', 'GER_infantry_moving_mg.anim'),
+        ('move', 'GER_infantry_moving_mg.anim'),
+        ('attack', 'GER_infantry_attack_stand_mg.anim'),
+        ('death', 'GER_infantry_death_mg.anim'),
+    ]
     manifest = []
     for name, source in clips:
         reset_pose(rig)
@@ -249,8 +301,17 @@ def export_native(output, model, rig):
             bpy.context.scene.frame_set(1)
             base = {bone.name: bone.matrix_basis.copy() for bone in rig.pose.bones}
             # A stationary stance keeps both boots planted instead of freezing a stride.
-            for bone_name in ('Hip', 'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase',
-                              'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase'):
+            for bone_name in (
+                'Hip',
+                'LeftUpLeg',
+                'LeftLeg',
+                'LeftFoot',
+                'LeftToeBase',
+                'RightUpLeg',
+                'RightLeg',
+                'RightFoot',
+                'RightToeBase',
+            ):
                 base[bone_name].identity()
             rig.animation_data_clear()
             bpy.context.scene.frame_end = 121
@@ -261,20 +322,37 @@ def export_native(output, model, rig):
                     if bone.name == 'Hip':
                         bone.location.z += 0.015 * math.sin(phase)
                     if bone.name == 'head':
-                        bone.rotation_quaternion = bone.rotation_quaternion @ Quaternion((0, 1, 0), 0.009 * math.sin(phase))
+                        bone.rotation_quaternion = (
+                            bone.rotation_quaternion
+                            @ Quaternion((0, 1, 0), 0.009 * math.sin(phase))
+                        )
                     for channel in ('location', 'rotation_quaternion', 'scale'):
-                        bone.keyframe_insert(data_path=channel, frame=frame, group=bone.name)
+                        bone.keyframe_insert(
+                            data_path=channel, frame=frame, group=bone.name
+                        )
         bpy.context.scene.render.fps = 24 if name == 'move' else 30
         bpy.context.view_layer.objects.active = rig
-        pdx.export_animfile(str(output / f'VAL_crimson_{name}.anim'), frame_start=1,
-                            frame_end=bpy.context.scene.frame_end)
+        pdx.export_animfile(
+            str(output / f'VAL_crimson_{name}.anim'),
+            frame_start=1,
+            frame_end=bpy.context.scene.frame_end,
+        )
         action = rig.animation_data.action
         action.name = f'VAL_crimson_{name}'
         action.use_fake_user = True
-        manifest.append('animation = {\n\tname = "VAL_crimson_' + name + '_animation"\n\tfile = "VAL_crimson_' + name + '.anim"\n}')
+        manifest.append(
+            'animation = {\n\tname = "VAL_crimson_'
+            + name
+            + '_animation"\n\tfile = "VAL_crimson_'
+            + name
+            + '.anim"\n}'
+        )
     (output / 'VAL_crimson_animations.asset').write_text(
-        '# Generated by tools/assets/source/build_crimson_sentinel.py.\n' + '\n\n'.join(manifest) + '\n',
-        encoding='utf-8')
+        '# Generated by tools/assets/source/build_crimson_sentinel.py.\n'
+        + '\n\n'.join(manifest)
+        + '\n',
+        encoding='utf-8',
+    )
     reset_pose(rig)
     configure_preview_materials()
     bpy.ops.file.pack_all()
@@ -296,7 +374,10 @@ def equivalent_mesh(first, second):
             if len(values) != len(other):
                 return False
             if left.tag == 'mesh' and key == 'ta':
-                if any(not math.isclose(a, b, rel_tol=0, abs_tol=1e-5) for a, b in zip(values, other)):
+                if any(
+                    not math.isclose(a, b, rel_tol=0, abs_tol=1e-5)
+                    for a, b in zip(values, other)
+                ):
                     return False
             elif values != other:
                 return False
@@ -318,16 +399,23 @@ def validate_native(output):
     skin = mesh.find('skin').attrib
     stride = skin['bones'][0]
     for start in range(0, len(skin['ix']), stride):
-        if any(index < 0 or index >= len(skeleton) for index in skin['ix'][start:start + stride]):
+        if any(
+            index < 0 or index >= len(skeleton)
+            for index in skin['ix'][start : start + stride]
+        ):
             raise RuntimeError('Invalid skin index')
-        if abs(sum(skin['w'][start:start + stride]) - 1.0) > 1e-5:
+        if abs(sum(skin['w'][start : start + stride]) - 1.0) > 1e-5:
             raise RuntimeError('Unnormalised weights')
     for name in ('diffuse', 'normal', 'specular'):
         path = output / f'VAL_crimson_{name}.dds'
         data = path.read_bytes()
         height, width = struct.unpack_from('<II', data, 12)
         mipmaps = struct.unpack_from('<I', data, 28)[0]
-        if data[:4] != b'DDS ' or data[84:88] != b'DXT5' or (width, height, mipmaps) != (2048, 2048, 12):
+        if (
+            data[:4] != b'DDS '
+            or data[84:88] != b'DXT5'
+            or (width, height, mipmaps) != (2048, 2048, 12)
+        ):
             raise RuntimeError(f'Invalid DDS contract: {path}')
     bone_names = {bone.tag for bone in skeleton}
     for name in ('idle', 'move', 'attack', 'death'):
@@ -335,26 +423,47 @@ def validate_native(output):
         info = animation.find('info')
         if not {bone.tag for bone in info}.issubset(bone_names):
             raise RuntimeError(f'Animation skeleton mismatch: {name}')
-    print(json.dumps({'native_validation': 'passed', 'export_vertices': vertices,
-                      'triangles': len(mesh.attrib['tri']) // 3, 'bones': len(skeleton),
-                      'dds_mip_levels': 12, 'custom_clips': 4}))
+    print(
+        json.dumps(
+            {
+                'native_validation': 'passed',
+                'export_vertices': vertices,
+                'triangles': len(mesh.attrib['tri']) // 3,
+                'bones': len(skeleton),
+                'dds_mip_levels': 12,
+                'custom_clips': 4,
+            }
+        )
+    )
 
 
 def output_hashes(output):
-    return {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in sorted(output.glob('VAL_crimson_*')) if path.suffix in {'.mesh', '.dds', '.anim', '.asset'}}
+    return {
+        path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in sorted(output.glob('VAL_crimson_*'))
+        if path.suffix in {'.mesh', '.dds', '.anim', '.asset'}
+    }
 
 
 def configure_preview_materials():
     # Match the native shader's Y sign and gloss-to-roughness conversion in Blender.
     for material in bpy.data.materials:
-        if not material.use_nodes or not material.get('shader') or material.get('native_preview_corrected'):
+        if (
+            not material.use_nodes
+            or not material.get('shader')
+            or material.get('native_preview_corrected')
+        ):
             continue
         nodes = material.node_tree.nodes
         links = material.node_tree.links
         for link in list(links):
-            normal_y = link.to_node.type == 'COMBINE_COLOR' and link.to_socket.name == 'Green'
-            roughness = link.to_node.type == 'BSDF_PRINCIPLED' and link.to_socket.name == 'Roughness'
+            normal_y = (
+                link.to_node.type == 'COMBINE_COLOR' and link.to_socket.name == 'Green'
+            )
+            roughness = (
+                link.to_node.type == 'BSDF_PRINCIPLED'
+                and link.to_socket.name == 'Roughness'
+            )
             if normal_y or roughness:
                 source = link.from_socket
                 target = link.to_socket
@@ -380,32 +489,54 @@ def preview(output, rig):
     target = Vector((0, 0, 3.55))
     bpy.ops.object.camera_add(location=(8.2, -16.5, 7.0))
     camera = bpy.context.object
-    camera.rotation_euler = (target - camera.location).to_track_quat('-Z', 'Y').to_euler()
+    camera.rotation_euler = (
+        (target - camera.location).to_track_quat('-Z', 'Y').to_euler()
+    )
     camera.data.type = 'ORTHO'
     camera.data.ortho_scale = 8.3
     scene.camera = camera
     before = set(scene.objects)
-    pdx.import_meshfile(str(GAME / 'gfx/models/units/western_european_infantry_weapon_mg.mesh'),
-                        imp_mesh=True, imp_skel=False, imp_locs=False)
+    pdx.import_meshfile(
+        str(GAME / 'gfx/models/units/western_european_infantry_weapon_mg.mesh'),
+        imp_mesh=True,
+        imp_skel=False,
+        imp_locs=False,
+    )
     weapon = next(obj for obj in set(scene.objects) - before if obj.type == 'MESH')
     second_weapon = weapon.copy()
     scene.collection.objects.link(second_weapon)
-    for location, power, size in [((2, -8, 10), 2100, 6), ((-7, -3, 6), 1200, 5), ((3, 5, 10), 1900, 4)]:
+    for location, power, size in [
+        ((2, -8, 10), 2100, 6),
+        ((-7, -3, 6), 1200, 5),
+        ((3, 5, 10), 1900, 4),
+    ]:
         bpy.ops.object.light_add(type='AREA', location=location)
         light = bpy.context.object
         light.data.energy = power
         light.data.size = size
-        light.rotation_euler = (target - light.location).to_track_quat('-Z', 'Y').to_euler()
-    for name, animation, frame in [('rest', None, 1), ('idle', 'GER_infantry_idle_mg.anim', 40),
-                                    ('move', 'GER_infantry_moving_mg.anim', 12),
-                                    ('attack', 'GER_infantry_attack_stand_mg.anim', 25),
-                                    ('death', 'GER_infantry_death_mg.anim', 40)]:
+        light.rotation_euler = (
+            (target - light.location).to_track_quat('-Z', 'Y').to_euler()
+        )
+    for name, animation, frame in [
+        ('rest', None, 1),
+        ('idle', 'GER_infantry_idle_mg.anim', 40),
+        ('move', 'GER_infantry_moving_mg.anim', 12),
+        ('attack', 'GER_infantry_attack_stand_mg.anim', 25),
+        ('death', 'GER_infantry_death_mg.anim', 40),
+    ]:
         reset_pose(rig)
         if animation:
             custom = output / f'VAL_crimson_{name}.anim'
-            pdx.import_animfile(str(custom if custom.exists() else GAME / 'gfx/models/units' / animation))
+            pdx.import_animfile(
+                str(
+                    custom if custom.exists() else GAME / 'gfx/models/units' / animation
+                )
+            )
         scene.frame_set(frame)
-        for item, bone in [(weapon, 'Right_Hand_node'), (second_weapon, 'Left_Hand_node')]:
+        for item, bone in [
+            (weapon, 'Right_Hand_node'),
+            (second_weapon, 'Left_Hand_node'),
+        ]:
             item.hide_render = animation is None
             item.matrix_world = rig.matrix_world @ rig.pose.bones[bone].matrix
         scene.render.filepath = str(output / (name + '.png'))
@@ -418,18 +549,32 @@ def main():
         validate_native(args.output)
         return
     if not args.apply:
-        print(json.dumps({'source_exists': args.source.is_file(), 'target_triangles': args.triangles,
-                          'output': str(args.output), 'apply': False}))
+        print(
+            json.dumps(
+                {
+                    'source_exists': args.source.is_file(),
+                    'target_triangles': args.triangles,
+                    'output': str(args.output),
+                    'apply': False,
+                }
+            )
+        )
         return
     args.output.mkdir(parents=True, exist_ok=True)
     model, rig = prepare(args.source, args.output, args.triangles)
     if args.export:
         export_native(args.output, model, rig)
         validate_native(args.output)
-        (args.output / 'package_hashes.json').write_text(json.dumps(output_hashes(args.output), indent=2), encoding='utf-8')
+        (args.output / 'package_hashes.json').write_text(
+            json.dumps(output_hashes(args.output), indent=2), encoding='utf-8'
+        )
         bpy.ops.wm.read_factory_settings(use_empty=True)
-        pdx.import_meshfile(str(args.output / 'VAL_crimson_sentinel.mesh'), imp_mesh=True,
-                            imp_skel=True, imp_locs=True)
+        pdx.import_meshfile(
+            str(args.output / 'VAL_crimson_sentinel.mesh'),
+            imp_mesh=True,
+            imp_skel=True,
+            imp_locs=True,
+        )
         rig = next(obj for obj in bpy.context.scene.objects if obj.type == 'ARMATURE')
     preview(args.output, rig)
 

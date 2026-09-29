@@ -106,7 +106,10 @@ def owner_totals(tag: str) -> tuple[int, int, int]:
             continue
         manpower = re.search(r"\bmanpower\s*=\s*(\d+)", source)
         population += int(manpower.group(1)) if manpower else 0
-        for key, counter in (("industrial_complex", "civilian"), ("arms_factory", "military")):
+        for key, counter in (
+            ("industrial_complex", "civilian"),
+            ("arms_factory", "military"),
+        ):
             match = re.search(rf"(?m)^\s*{key}\s*=\s*(\d+)", source)
             if match and counter == "civilian":
                 civilian += int(match.group(1))
@@ -137,7 +140,9 @@ def validate() -> list[str]:
     for tag, expected_states in expected_split_territories.items():
         actual_states = set(COUNTRIES[tag]["states"])
         if actual_states != expected_states:
-            issues.append(f"{tag} expected states {sorted(expected_states)}, found {sorted(actual_states)}")
+            issues.append(
+                f"{tag} expected states {sorted(expected_states)}, found {sorted(actual_states)}"
+            )
 
     preserved_split_totals = {
         ("KRL", "VRA"): (3_800_000, 7, 4, 4),
@@ -154,8 +159,12 @@ def validate() -> list[str]:
             sum(int(COUNTRIES[tag]["divisions"]) for tag in tags),
         )
         if actual != expected:
-            issues.append(f"split balance for {'/'.join(tags)} expected {expected}, found {actual}")
-    if 457 in set(COUNTRIES["MON"]["states"]) or 457 not in set(COUNTRIES["KDL"]["states"]):
+            issues.append(
+                f"split balance for {'/'.join(tags)} expected {expected}, found {actual}"
+            )
+    if 457 in set(COUNTRIES["MON"]["states"]) or 457 not in set(
+        COUNTRIES["KDL"]["states"]
+    ):
         issues.append("state 457 must belong to KDL rather than MON")
 
     tags_source = read("common/country_tags/04_ADISCORD_northern_countries_tags.txt")
@@ -174,22 +183,34 @@ def validate() -> list[str]:
         )
     )
     country_loc = "\n".join(
-        path.read_text(encoding="utf-8-sig", errors="strict") for path in country_loc_paths
+        path.read_text(encoding="utf-8-sig", errors="strict")
+        for path in country_loc_paths
     )
-    vp_loc = VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict") if VP_LOCALISATION.exists() else ""
+    vp_loc = (
+        VP_LOCALISATION.read_text(encoding="utf-8-sig", errors="strict")
+        if VP_LOCALISATION.exists()
+        else ""
+    )
     tech_builder = read("tools/builders/build_adiscord_technology_system.py")
     tech_data = read("tools/data/adiscord_starting_technology_profiles.json")
 
     for localisation_path in (*country_loc_paths, VP_LOCALISATION):
-        if not localisation_path.exists() or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
-            issues.append(f"{localisation_path.relative_to(ROOT)} must retain a UTF-8 BOM")
+        if (
+            not localisation_path.exists()
+            or not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf")
+        ):
+            issues.append(
+                f"{localisation_path.relative_to(ROOT)} must retain a UTF-8 BOM"
+            )
 
     for state_id in sorted(EXPECTED_STATES):
         path = state_path(state_id)
         actual = path.read_text(encoding="utf-8-sig", errors="strict")
         expected = render_state(state_id, profiles[state_id])
         if actual != expected:
-            issues.append(f"{path.relative_to(ROOT)} is not synchronized with the northern builder")
+            issues.append(
+                f"{path.relative_to(ROOT)} is not synchronized with the northern builder"
+            )
 
     for tag, country in COUNTRIES.items():
         if f'{tag} = "countries/{tag}.txt"' not in tags_source:
@@ -216,7 +237,9 @@ def validate() -> list[str]:
             if idea in set().union(*map(set, EXPECTED_IDEAS.values()))
         }
         if actual_ideas != expected_ideas:
-            issues.append(f"{tag} starting ideas expected {sorted(expected_ideas)}, found {sorted(actual_ideas)}")
+            issues.append(
+                f"{tag} starting ideas expected {sorted(expected_ideas)}, found {sorted(actual_ideas)}"
+            )
         if LEADERS[tag] not in characters:
             issues.append(f"missing character {LEADERS[tag]}")
         trait = EXPECTED_TRAITS.get(tag)
@@ -226,50 +249,80 @@ def validate() -> list[str]:
             issues.append(f"leader trait {trait} is not defined")
         for idea in expected_ideas:
             if idea not in ideas or idea not in country_loc:
-                issues.append(f"national spirit {idea} lacks definition or localisation")
+                issues.append(
+                    f"national spirit {idea} lacks definition or localisation"
+                )
 
         oob_path = ROOT / "history" / "units" / f"{tag}.txt"
         expected_oob = render_oob(tag, country, principal_provinces)
-        if not oob_path.exists() or oob_path.read_text(encoding="utf-8-sig", errors="strict") != expected_oob:
-            issues.append(f"history/units/{tag}.txt is not synchronized with the northern builder")
+        if (
+            not oob_path.exists()
+            or oob_path.read_text(encoding="utf-8-sig", errors="strict") != expected_oob
+        ):
+            issues.append(
+                f"history/units/{tag}.txt is not synchronized with the northern builder"
+            )
         else:
             owned_provinces = {
                 province
                 for state_id in country["states"]
                 for province in profiles[int(state_id)]["provinces"]
             }
-            locations = {int(value) for value in re.findall(r"\blocation\s*=\s*(\d+)", expected_oob)}
+            locations = {
+                int(value)
+                for value in re.findall(r"\blocation\s*=\s*(\d+)", expected_oob)
+            }
             if not locations <= owned_provinces:
-                issues.append(f"{tag} OOB contains locations outside starting ownership")
+                issues.append(
+                    f"{tag} OOB contains locations outside starting ownership"
+                )
 
         for localisation_key in (tag, f"{tag}_DEF", f"{tag}_ADJ", LEADERS[tag]):
-            if not re.search(rf"(?m)^\s*{re.escape(localisation_key)}:\s*\"", country_loc):
+            if not re.search(
+                rf"(?m)^\s*{re.escape(localisation_key)}:\s*\"", country_loc
+            ):
                 issues.append(f"missing Russian localisation key {localisation_key}")
         if f'"{tag}"' not in tech_data or f'"{tag}":' not in tech_builder:
             issues.append(f"starting technology profile is missing for {tag}")
 
-        for directory, size in ((FLAG_DIR, (82, 52)), (FLAG_DIR / "medium", (41, 26)), (FLAG_DIR / "small", (10, 7))):
+        for directory, size in (
+            (FLAG_DIR, (82, 52)),
+            (FLAG_DIR / "medium", (41, 26)),
+            (FLAG_DIR / "small", (10, 7)),
+        ):
             flag = directory / f"{tag}.tga"
             if not flag.exists():
                 issues.append(f"missing flag {flag.relative_to(ROOT)}")
                 continue
             with Image.open(flag) as image:
                 if image.size != size or image.mode != "RGBA":
-                    issues.append(f"{flag.relative_to(ROOT)} expected RGBA {size}, found {image.mode} {image.size}")
+                    issues.append(
+                        f"{flag.relative_to(ROOT)} expected RGBA {size}, found {image.mode} {image.size}"
+                    )
 
     for portrait_id, relative_path in (
-        ("GFX_portrait_MON_Marius_II_Arken", "gfx/leaders/MON/portrait_MON_mongol_monarchy.png"),
-        ("GFX_portrait_HON_Honter_Woke", "gfx/leaders/HON/portrait_HON_honter_woke.png"),
+        (
+            "GFX_portrait_MON_Marius_II_Arken",
+            "gfx/leaders/MON/portrait_MON_mongol_monarchy.png",
+        ),
+        (
+            "GFX_portrait_HON_Honter_Woke",
+            "gfx/leaders/HON/portrait_HON_honter_woke.png",
+        ),
     ):
         if portrait_id not in portraits or relative_path not in portraits:
-            issues.append(f"portrait binding {portrait_id} -> {relative_path} is missing")
+            issues.append(
+                f"portrait binding {portrait_id} -> {relative_path} is missing"
+            )
         portrait_path = ROOT / relative_path
         if not portrait_path.exists():
             issues.append(f"portrait asset {relative_path} is missing")
         else:
             with Image.open(portrait_path) as image:
                 if image.size != (156, 210):
-                    issues.append(f"portrait asset {relative_path} expected 156x210, found {image.size}")
+                    issues.append(
+                        f"portrait asset {relative_path} expected 156x210, found {image.size}"
+                    )
 
     for country in COUNTRIES.values():
         capital_state = int(country["capital"])
@@ -278,16 +331,29 @@ def validate() -> list[str]:
             issues.append(f"missing generated victory-point localisation {key}")
 
     mon_population, mon_civilian, mon_military = owner_totals("MON")
-    if mon_population != int(COUNTRIES["MON"]["population"]) or (mon_civilian, mon_military) != (28, 18):
-        issues.append("MON must retain its 12.2M population and 28+18 factory great-power baseline")
+    if mon_population != int(COUNTRIES["MON"]["population"]) or (
+        mon_civilian,
+        mon_military,
+    ) != (28, 18):
+        issues.append(
+            "MON must retain its 12.2M population and 28+18 factory great-power baseline"
+        )
     for tag in set(COUNTRIES) - {"MON"}:
         population, civilian, military = owner_totals(tag)
-        if mon_population <= population or mon_civilian + mon_military <= civilian + military:
+        if (
+            mon_population <= population
+            or mon_civilian + mon_military <= civilian + military
+        ):
             issues.append(f"MON is not stronger than northern peer {tag}")
     for stronger in ("WRK", "IVN"):
         population, civilian, military = owner_totals(stronger)
-        if population <= mon_population or civilian + military <= mon_civilian + mon_military:
-            issues.append(f"MON must remain below {stronger} in raw population and factory totals")
+        if (
+            population <= mon_population
+            or civilian + military <= mon_civilian + mon_military
+        ):
+            issues.append(
+                f"MON must remain below {stronger} in raw population and factory totals"
+            )
     mon_history = named_history("MON")
     if mon_history and len(EXPECTED_IDEAS["MON"]) != 4:
         issues.append("MON must start with exactly four bespoke national spirits")

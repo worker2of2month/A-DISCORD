@@ -22,7 +22,7 @@ def named_block(text: str, name: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"Unclosed block: {name}")
 
 
@@ -34,23 +34,50 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
 
     def test_old_pre_stelander_final_war_is_closed(self) -> None:
         self.assertIn("VAL_stelander_dominated = no", self.reconcile)
-        self.assertIn("NOD = { has_country_flag = VAL_final_war_member }", self.reconcile)
-        self.assertIn("NOD = { NOT = { has_country_flag = VAL_frontier_guarantor } }", self.reconcile)
-        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }", self.reconcile)
+        self.assertIn(
+            "NOD = { has_country_flag = VAL_final_war_member }", self.reconcile
+        )
+        self.assertIn(
+            "NOD = { NOT = { has_country_flag = VAL_frontier_guarantor } }",
+            self.reconcile,
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }",
+            self.reconcile,
+        )
         self.assertIn("white_peace = VAL", self.reconcile)
 
     def test_missed_final_capitulation_is_recovered(self) -> None:
         self.assertIn("VAL_stelander_dominated = yes", self.reconcile)
-        self.assertGreaterEqual(self.reconcile.count("has_country_flag = VAL_final_war_member has_capitulated = yes"), 3)
-        self.assertGreaterEqual(self.reconcile.count("set_country_flag = VAL_final_defeat_pending"), 3)
+        self.assertGreaterEqual(
+            self.reconcile.count(
+                "has_country_flag = VAL_final_war_member has_capitulated = yes"
+            ),
+            3,
+        )
+        self.assertGreaterEqual(
+            self.reconcile.count("set_country_flag = VAL_final_defeat_pending"), 3
+        )
         self.assertIn("VAL_finalize_reserved_settlements = yes", self.reconcile)
 
-    def test_joint_shabrat_campaign_recovers_from_receipt_after_war_cleanup(self) -> None:
-        self.assertIn("has_country_flag = VAL_joint_nod_campaign_with_sts", self.reconcile)
-        self.assertIn("NOT = { has_country_flag = VAL_joint_nod_settlement_completed }", self.reconcile)
-        self.assertIn("has_country_flag = VAL_joint_nod_campaign_target", self.reconcile)
+    def test_joint_shabrat_campaign_recovers_from_receipt_after_war_cleanup(
+        self,
+    ) -> None:
+        self.assertIn(
+            "has_country_flag = VAL_joint_nod_campaign_with_sts", self.reconcile
+        )
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_joint_nod_settlement_completed }",
+            self.reconcile,
+        )
+        self.assertIn(
+            "has_country_flag = VAL_joint_nod_campaign_target", self.reconcile
+        )
         self.assertIn("has_capitulated = yes", self.reconcile)
-        self.assertNotIn("NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }", self.reconcile)
+        self.assertNotIn(
+            "NOD = { exists = yes has_war_with = VAL has_war_with = STS has_capitulated = yes }",
+            self.reconcile,
+        )
         self.assertIn("VAL_settle_joint_nod_shabrat_victory = yes", self.reconcile)
 
     def test_frontier_partner_can_receive_nodrul_capitulation_credit(self) -> None:
@@ -63,7 +90,9 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
             compact_router,
         )
 
-        ally = named_block(TRIGGERS.read_text(encoding="utf-8"), "VAL_final_campaign_ally")
+        ally = named_block(
+            TRIGGERS.read_text(encoding="utf-8"), "VAL_final_campaign_ally"
+        )
         self.assertIn("tag = VAL", ally)
         self.assertIn("is_subject_of = VAL", ally)
         self.assertIn("tag = TFF", ally)
@@ -79,9 +108,15 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
             self.assertIn("STP = { is_subject_of = VAL }", block)
 
     def test_party_victory_nested_nodrul_is_released_before_final_war(self) -> None:
-        release = named_block(self.source, "VAL_release_party_nodrul_for_final_campaign")
-        self.assertIn("NOD = { exists = yes has_capitulated = no is_subject_of = STP }", release)
-        self.assertIn("STP = { exists = yes has_capitulated = no is_subject_of = VAL }", release)
+        release = named_block(
+            self.source, "VAL_release_party_nodrul_for_final_campaign"
+        )
+        self.assertIn(
+            "NOD = { exists = yes has_capitulated = no is_subject_of = STP }", release
+        )
+        self.assertIn(
+            "STP = { exists = yes has_capitulated = no is_subject_of = VAL }", release
+        )
         self.assertIn("target = NOD", release)
         self.assertIn("autonomy_state = autonomy_free", release)
         self.assertIn("end_wars = no", release)
@@ -91,9 +126,13 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", launch)
         self.assertIn("id = val_rework.122 days = 1", launch)
         self.assertNotIn("declare_war_on = { target = STP", launch)
-        self.assertIn("declare_war_on = { target = NOD type = annex_everything }", execute)
+        self.assertIn(
+            "declare_war_on = { target = NOD type = annex_everything }", execute
+        )
 
-        decision = named_block(DECISIONS.read_text(encoding="utf-8"), "VAL_campaign_against_nod")
+        decision = named_block(
+            DECISIONS.read_text(encoding="utf-8"), "VAL_campaign_against_nod"
+        )
         self.assertIn("AND = { tag = NOD is_subject_of = STP }", decision)
         self.assertIn("VAL_release_party_nodrul_for_final_campaign = yes", decision)
 
@@ -118,7 +157,9 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
     def test_nodrul_administration_keeps_its_own_colour_identity(self) -> None:
         install = named_block(self.source, "VAL_install_nodrul_administration")
         finish = named_block(self.source, "VAL_finish_nodrul_administration")
-        autonomy = (ROOT / "common/autonomous_states/ADISCORD_contract_clients.txt").read_text(encoding="utf-8")
+        autonomy = (
+            ROOT / "common/autonomous_states/ADISCORD_contract_clients.txt"
+        ).read_text(encoding="utf-8")
         cosmetic = (ROOT / "common/countries/cosmetic.txt").read_text(encoding="utf-8")
 
         self.assertIn("set_cosmetic_tag = NOD_VAL_administration", install)
@@ -129,7 +170,10 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("set_cosmetic_tag = NOD_VAL_administration", finish)
         self.assertIn("id = autonomy_VAL_contract_administration", autonomy)
         contract = named_block(autonomy, "autonomy_state")
-        self.assertIn("use_overlord_color = no", autonomy[autonomy.index("id = autonomy_VAL_contract_administration"):])
+        self.assertIn(
+            "use_overlord_color = no",
+            autonomy[autonomy.index("id = autonomy_VAL_contract_administration") :],
+        )
         self.assertIn("NOD_VAL_administration = { color = rgb { 63 56 96 }", cosmetic)
 
     def test_ainholm_is_the_only_colony_in_the_new_northern_settlement(self) -> None:
@@ -147,37 +191,54 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_queue_ainholm_colony = yes", nodrul)
         self.assertIn("VAL_queue_ainholm_colony = yes", joint)
 
-        for block in (coalition, named_block(self.source, "VAL_partition_nodrul_settlement")):
+        for block in (
+            coalition,
+            named_block(self.source, "VAL_partition_nodrul_settlement"),
+        ):
             self.assertNotIn("autonomy_state = autonomy_colony", block)
 
         events = EVENTS.read_text(encoding="utf-8")
         self.assertIn("id = val_contract.355", events)
         self.assertIn("VAL_complete_ainholm_colony = yes", events)
 
-
     def test_northern_coalition_defensive_war_adopts_scripted_campaign(self) -> None:
-        adopt = named_block(self.source, "VAL_adopt_northern_coalition_defensive_campaign")
+        adopt = named_block(
+            self.source, "VAL_adopt_northern_coalition_defensive_campaign"
+        )
         self.assertIn("has_completed_focus = VAL_Northern_Settlement", adopt)
-        self.assertIn("NOT = { has_country_flag = VAL_northern_coalition_settlement_completed }", adopt)
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_northern_coalition_settlement_completed }",
+            adopt,
+        )
         for tag in ("YPR", "COF", "TFF"):
             self.assertGreaterEqual(adopt.count(f"{tag} = {{"), 2)
         self.assertEqual(adopt.count("has_war_with = VAL"), 3)
-        self.assertEqual(adopt.count("set_country_flag = VAL_northern_coalition_campaign_member"), 3)
+        self.assertEqual(
+            adopt.count("set_country_flag = VAL_northern_coalition_campaign_member"), 3
+        )
         self.assertEqual(adopt.count("set_major = yes"), 3)
-        self.assertIn("set_country_flag = VAL_northern_coalition_campaign_active", adopt)
+        self.assertIn(
+            "set_country_flag = VAL_northern_coalition_campaign_active", adopt
+        )
         self.assertIn("VAL_call_subjects_to_wars = yes", adopt)
 
-        lifecycle = named_block(VAL_ON_ACTIONS.read_text(encoding="utf-8"), "on_war_relation_added")
-        self.assertIn("VAL_adopt_northern_coalition_defensive_campaign = yes", lifecycle)
+        lifecycle = named_block(
+            VAL_ON_ACTIONS.read_text(encoding="utf-8"), "on_war_relation_added"
+        )
+        self.assertIn(
+            "VAL_adopt_northern_coalition_defensive_campaign = yes", lifecycle
+        )
 
     def test_northern_coalition_has_one_focus_and_one_scripted_settlement(self) -> None:
-        focuses = (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(encoding="utf-8")
+        focuses = (
+            ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
+        ).read_text(encoding="utf-8")
         triggers = TRIGGERS.read_text(encoding="utf-8")
         self.assertEqual(focuses.count("id = VAL_Break_The_Northern_Coalition"), 1)
 
         start = focuses.index("id = VAL_Break_The_Northern_Coalition")
         end = focuses.find("\n\tfocus = {", start)
-        focus = focuses[start:end if end != -1 else len(focuses)]
+        focus = focuses[start : end if end != -1 else len(focuses)]
         self.assertIn("prerequisite = { focus = VAL_Northern_Settlement }", focus)
         self.assertIn("VAL_can_attack_northern_coalition = yes", focus)
         self.assertIn("VAL_begin_northern_coalition_campaign = yes", focus)
@@ -190,7 +251,9 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         settlement = named_block(self.source, "VAL_settle_northern_coalition_victory")
         for tag in ("YPR", "COF", "TFF"):
             self.assertIn(f"target = {tag}", settlement)
-        self.assertEqual(settlement.count("autonomy_state = autonomy_VAL_contract_administration"), 3)
+        self.assertEqual(
+            settlement.count("autonomy_state = autonomy_VAL_contract_administration"), 3
+        )
         self.assertIn("target = YPR", start_effect)
         self.assertIn("targeted_alliance = YPR", start_effect)
 
@@ -199,10 +262,16 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("VAL_northern_coalition_capitulation_reserved", router)
         self.assertIn("VAL_settle_northern_coalition_victory = yes", router)
 
-        late_start = router.index("# BEGIN kefreyt_northern_reservations:on_capitulation")
-        late_end = router.index("# END kefreyt_northern_reservations:on_capitulation", late_start)
+        late_start = router.index(
+            "# BEGIN kefreyt_northern_reservations:on_capitulation"
+        )
+        late_end = router.index(
+            "# END kefreyt_northern_reservations:on_capitulation", late_start
+        )
         late_router = router[late_start:late_end]
-        self.assertIn("VAL_northern_coalition_campaign_victory_ready = yes", late_router)
+        self.assertIn(
+            "VAL_northern_coalition_campaign_victory_ready = yes", late_router
+        )
         self.assertIn("VAL_settle_northern_coalition_victory = yes", late_router)
 
         victory = named_block(triggers, "VAL_northern_coalition_campaign_victory_ready")
@@ -211,16 +280,25 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
                 f"{tag} = {{ has_country_flag = VAL_northern_coalition_capitulation_reserved }}",
                 victory,
             )
-        immediate_start = router.index("# BEGIN kefreyt_northern_reservations:on_capitulation_immediate")
-        immediate_end = router.index("# END kefreyt_northern_reservations:on_capitulation_immediate", immediate_start)
+        immediate_start = router.index(
+            "# BEGIN kefreyt_northern_reservations:on_capitulation_immediate"
+        )
+        immediate_end = router.index(
+            "# END kefreyt_northern_reservations:on_capitulation_immediate",
+            immediate_start,
+        )
         immediate_router = router[immediate_start:immediate_end]
         self.assertLess(
             immediate_router.index("VAL_northern_coalition_capitulation_reserved"),
-            immediate_router.index("VAL_northern_coalition_campaign_victory_ready = yes"),
+            immediate_router.index(
+                "VAL_northern_coalition_campaign_victory_ready = yes"
+            ),
         )
         self.assertIn("VAL_settle_northern_coalition_victory = yes", immediate_router)
         self.assertEqual(
-            settlement.count("clr_country_flag = VAL_northern_coalition_capitulation_reserved"),
+            settlement.count(
+                "clr_country_flag = VAL_northern_coalition_capitulation_reserved"
+            ),
             3,
         )
 
@@ -232,21 +310,29 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertIn("NOT = { is_in_faction_with = VAL }", gate)
 
         launch = named_block(self.source, "VAL_nod_launch_sts_overlord_war")
-        self.assertIn("declare_war_on = { target = VAL type = annex_everything }", launch)
+        self.assertIn(
+            "declare_war_on = { target = VAL type = annex_everything }", launch
+        )
         self.assertIn("has_war_with = VAL", launch)
         self.assertIn("set_country_flag = VAL_nod_overlord_sts_war_active", launch)
         self.assertIn("VAL_call_subjects_to_wars = yes", launch)
 
-        weekly = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(encoding="utf-8")
+        weekly = (ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt").read_text(
+            encoding="utf-8"
+        )
         self.assertIn("VAL_nod_can_attack_sts_overlord = yes", weekly)
         self.assertIn("VAL_nod_launch_sts_overlord_war = yes", weekly)
 
-    def test_nod_intervention_against_val_subject_has_limited_peace_both_ways(self) -> None:
+    def test_nod_intervention_against_val_subject_has_limited_peace_both_ways(
+        self,
+    ) -> None:
         router = ON_ACTIONS.read_text(encoding="utf-8")
         self.assertIn("VAL_settle_nod_overlord_sts_victory = yes", router)
         self.assertIn("VAL_settle_nod_overlord_sts_defeat = yes", router)
         self.assertIn("VAL_nod_overlord_sts_capitulation_reserved", router)
-        self.assertIn("STS = { exists = yes is_subject_of = VAL has_war_with = NOD }", router)
+        self.assertIn(
+            "STS = { exists = yes is_subject_of = VAL has_war_with = NOD }", router
+        )
 
         victory = named_block(self.source, "VAL_settle_nod_overlord_sts_victory")
         defeat = named_block(self.source, "VAL_settle_nod_overlord_sts_defeat")

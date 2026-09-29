@@ -4,7 +4,10 @@ import re
 import unittest
 
 from tools.tests.test_adiscord_stp_party_route import one
-from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+from tools.tests.test_adiscord_stp_preparation import (
+    matches_conditions,
+    selected_effects,
+)
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -33,7 +36,7 @@ def named_block(text: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unterminated block {name}")
 
 
@@ -46,7 +49,15 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         cls.loc = read(LOC)
 
     def test_faction_negotiations_remain_bounded_and_expensive(self) -> None:
-        for faction in ("conservatives", "borons", "security", "army", "advisers", "merchants", "radicals"):
+        for faction in (
+            "conservatives",
+            "borons",
+            "security",
+            "army",
+            "advisers",
+            "merchants",
+            "radicals",
+        ):
             block = named_block(self.decisions, f"STP_pf_negotiate_{faction}")
             self.assertRegex(block, r"(?m)^\s*cost\s*=\s*35\s*$")
             self.assertRegex(
@@ -63,12 +74,21 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             shift,
             r"set_temp_variable\s*=\s*\{\s*var\s*=\s*STP_pf_gain\s+value\s*=\s*5\s*\}",
         )
-    def test_veteran_guarantees_accept_either_policy_but_require_family_pensions(self) -> None:
+
+    def test_veteran_guarantees_accept_either_policy_but_require_family_pensions(
+        self,
+    ) -> None:
         source = read(ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt")
         tree = one(parse_clausewitz(source), "focus_tree")
-        focuses = {one(entry.value, "id"): entry.value for entry in tree if entry.key == "focus"}
+        focuses = {
+            one(entry.value, "id"): entry.value
+            for entry in tree
+            if entry.key == "focus"
+        }
         terminal = focuses["STP_pw_party_social_guarantees"]
-        prerequisites = [entry.value for entry in terminal if entry.key == "prerequisite"]
+        prerequisites = [
+            entry.value for entry in terminal if entry.key == "prerequisite"
+        ]
         civilian = "STP_pw_party_civilian_retraining"
         military = "STP_pw_party_veteran_reserve"
         pensions = "STP_pw_party_family_pensions"
@@ -76,11 +96,23 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
             for has_pensions in (False, True):
                 completed = {policy, pensions} if has_pensions else {policy}
                 with self.subTest(policy=policy, pensions=has_pensions):
-                    reachable = all(any(entry.value in completed for entry in group) for group in prerequisites)
+                    reachable = all(
+                        any(entry.value in completed for entry in group)
+                        for group in prerequisites
+                    )
                     self.assertEqual(reachable, has_pensions)
-        self.assertFalse(all(any(entry.value == pensions for entry in group) for group in prerequisites))
-        self.assertEqual(one(one(focuses[civilian], "mutually_exclusive"), "focus"), military)
-        self.assertEqual(one(one(focuses[military], "mutually_exclusive"), "focus"), civilian)
+        self.assertFalse(
+            all(
+                any(entry.value == pensions for entry in group)
+                for group in prerequisites
+            )
+        )
+        self.assertEqual(
+            one(one(focuses[civilian], "mutually_exclusive"), "focus"), military
+        )
+        self.assertEqual(
+            one(one(focuses[military], "mutually_exclusive"), "focus"), civilian
+        )
 
     def test_party_route_requires_staged_defensive_recovery(self) -> None:
         actions = read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt")
@@ -110,14 +142,20 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
         self.assertNotIn("STP_cw_congress_fall_crisis_applied", banquet)
 
     def test_balance_mechanics_have_player_facing_localisation(self) -> None:
-        for key in ("STP_ps_reorg_1:", "STP_ps_reorg_1_desc:",
-                    "STP_ps_congress_deadline:", "STP_ps_congress_deadline_desc:"):
+        for key in (
+            "STP_ps_reorg_1:",
+            "STP_ps_reorg_1_desc:",
+            "STP_ps_congress_deadline:",
+            "STP_ps_congress_deadline_desc:",
+        ):
             self.assertIn(key, self.loc)
 
     def test_northern_preparation_charges_both_currencies(self) -> None:
-        for action, pp, cash in (("emergency_mobilization", 50, 900),
-                                 ("fortify_border", 35, 1080),
-                                 ("staff_readiness", 35, 720)):
+        for action, pp, cash in (
+            ("emergency_mobilization", 50, 900),
+            ("fortify_border", 35, 1080),
+            ("staff_readiness", 35, 720),
+        ):
             block = named_block(self.decisions, f"STP_pw_party_nod_{action}")
             self.assertRegex(block, r"(?m)^\s*cost = 0\s*$")
             price = named_block(block, "custom_cost_trigger")
@@ -138,138 +176,264 @@ class StelanderPartyBalanceContracts(unittest.TestCase):
     def test_reform_capstones_require_delivered_recovery(self) -> None:
         focus = read(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
         parsed = parse_clausewitz(focus)
-        focuses = {one(f.value, "id"): f.value for tree in parsed
-                   if tree.key == "focus_tree" for f in tree.value if f.key == "focus"}
-        for fid, requirement in (("STP_pw_party_civil_charter", "STP_pw_recovery_services"),
-                                 ("STP_party_technical_institutes", "STP_pw_recovery_services"),
-                                 ("STP_pw_party_industrial_settlement", "STP_pw_recovery_industry")):
+        focuses = {
+            one(f.value, "id"): f.value
+            for tree in parsed
+            if tree.key == "focus_tree"
+            for f in tree.value
+            if f.key == "focus"
+        }
+        for fid, requirement in (
+            ("STP_pw_party_civil_charter", "STP_pw_recovery_services"),
+            ("STP_party_technical_institutes", "STP_pw_recovery_services"),
+            ("STP_pw_party_industrial_settlement", "STP_pw_recovery_industry"),
+        ):
             self.assertIn(requirement, str(one(focuses[fid], "available")))
 
     def test_northern_timeout_distinguishes_war_defeat_and_absent_enemy(self) -> None:
         effect = one(parse_clausewitz(self.effects), "STP_pw_party_launch_nod_invasion")
-        base = {("STP", "tag", "STP"): True,
-                ("STP", "has_country_flag", "STP_pw_party_nod_threat_active"): True,
-                ("NOD", "exists", "yes"): True,
-                ("NOD", "has_capitulated", "no"): True,
-                ("NOD", "is_subject", "no"): True}
-        scenarios = [({}, "active", True),
-                     ({("STP", "has_war_with", "NOD"): True}, "active", False),
-                     ({("NOD", "exists", "yes"): False}, "defeated", False),
-                     ({("NOD", "has_capitulated", "no"): False}, "defeated", False),
-                     ({("STP", "has_capitulated", "yes"): True}, "lost", False),
-                     ({("STP", "is_subject", "yes"): True}, "lost", False)]
+        base = {
+            ("STP", "tag", "STP"): True,
+            ("STP", "has_country_flag", "STP_pw_party_nod_threat_active"): True,
+            ("NOD", "exists", "yes"): True,
+            ("NOD", "has_capitulated", "no"): True,
+            ("NOD", "is_subject", "no"): True,
+        }
+        scenarios = [
+            ({}, "active", True),
+            ({("STP", "has_war_with", "NOD"): True}, "active", False),
+            ({("NOD", "exists", "yes"): False}, "defeated", False),
+            ({("NOD", "has_capitulated", "no"): False}, "defeated", False),
+            ({("STP", "has_capitulated", "yes"): True}, "lost", False),
+            ({("STP", "is_subject", "yes"): True}, "lost", False),
+        ]
         for changes, outcome, declaration in scenarios:
             with self.subTest(changes=changes):
                 effects = list(selected_effects(effect, base | changes))
-                marks = [e.value for scope, e in effects if scope == "STP" and e.key == "set_country_flag"]
+                marks = [
+                    e.value
+                    for scope, e in effects
+                    if scope == "STP" and e.key == "set_country_flag"
+                ]
                 self.assertEqual(marks, ["STP_pw_party_nod_invasion_" + outcome])
-                self.assertEqual(any(e.key == "declare_war_on" for _, e in effects), declaration)
-        self.assertEqual(list(selected_effects(effect, base | {
-            ("STP", "has_country_flag", "STP_pw_party_nod_threat_active"): False})), [])
+                self.assertEqual(
+                    any(e.key == "declare_war_on" for _, e in effects), declaration
+                )
+        self.assertEqual(
+            list(
+                selected_effects(
+                    effect,
+                    base
+                    | {
+                        (
+                            "STP",
+                            "has_country_flag",
+                            "STP_pw_party_nod_threat_active",
+                        ): False
+                    },
+                )
+            ),
+            [],
+        )
 
     def test_northern_payments_reject_fractional_shortfalls(self) -> None:
-        for action, pp, cash in (("emergency_mobilization", 50, 900),
-                                 ("fortify_border", 35, 1080), ("staff_readiness", 35, 720)):
-            parsed = one(parse_clausewitz(named_block(self.decisions, "STP_pw_party_nod_" + action)),
-                         "STP_pw_party_nod_" + action)
+        for action, pp, cash in (
+            ("emergency_mobilization", 50, 900),
+            ("fortify_border", 35, 1080),
+            ("staff_readiness", 35, 720),
+        ):
+            parsed = one(
+                parse_clausewitz(
+                    named_block(self.decisions, "STP_pw_party_nod_" + action)
+                ),
+                "STP_pw_party_nod_" + action,
+            )
             price = one(parsed, "custom_cost_trigger")
-            for actual_pp, actual_cash, expected in ((pp, cash, True), (pp - .01, cash, False),
-                                                   (pp, cash - .01, False), (pp + 1, cash + 1, True)):
-                facts = {("STP", "numeric", "has_political_power"): actual_pp,
-                         ("STP", "variable", "ADISCORD_economy_treasury"): actual_cash}
+            for actual_pp, actual_cash, expected in (
+                (pp, cash, True),
+                (pp - 0.01, cash, False),
+                (pp, cash - 0.01, False),
+                (pp + 1, cash + 1, True),
+            ):
+                facts = {
+                    ("STP", "numeric", "has_political_power"): actual_pp,
+                    ("STP", "variable", "ADISCORD_economy_treasury"): actual_cash,
+                }
                 self.assertEqual(matches_conditions(price, facts), expected)
 
     def test_prewar_settlement_eases_but_does_not_lock_postwar_course(self) -> None:
-        parsed = parse_clausewitz(read(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt"))
-        focuses = {one(f.value, "id"): f.value for tree in parsed
-                   if tree.key == "focus_tree" for f in tree.value if f.key == "focus"}
+        parsed = parse_clausewitz(
+            read(ROOT / "common/national_focus/ADISCORD_national_focus_STP.txt")
+        )
+        focuses = {
+            one(f.value, "id"): f.value
+            for tree in parsed
+            if tree.key == "focus_tree"
+            for f in tree.value
+            if f.key == "focus"
+        }
         for fid, faction, preparation in (
-                ("STP_pw_party_district_congress", "borons", "STP_party_district_compact"),
-                ("STP_pw_party_executive_secretariat", "security", "STP_ROTATE_DISTRICT_COMMAND")):
-            for prepared, support, expected in ((False, 49.99, False), (False, 50, True),
-                                                (True, 34.99, False), (True, 35, True)):
-                facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
-                         ("STP", "has_completed_focus", preparation): prepared,
-                         ("STP", "variable", f"STP_pf_{faction}_support"): support}
-                self.assertEqual(matches_conditions(one(focuses[fid], "available"), facts), expected)
+            ("STP_pw_party_district_congress", "borons", "STP_party_district_compact"),
+            (
+                "STP_pw_party_executive_secretariat",
+                "security",
+                "STP_ROTATE_DISTRICT_COMMAND",
+            ),
+        ):
+            for prepared, support, expected in (
+                (False, 49.99, False),
+                (False, 50, True),
+                (True, 34.99, False),
+                (True, 35, True),
+            ):
+                facts = {
+                    ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                    ("STP", "has_completed_focus", preparation): prepared,
+                    ("STP", "variable", f"STP_pf_{faction}_support"): support,
+                }
+                self.assertEqual(
+                    matches_conditions(one(focuses[fid], "available"), facts), expected
+                )
         for fid in ("STP_pw_party_northern_protocol", "STP_pw_party_protectorate"):
-            self.assertTrue(matches_conditions(one(focuses[fid], "bypass"), {
-                ("STP", "is_subject_of", "NOD"): True}))
+            self.assertTrue(
+                matches_conditions(
+                    one(focuses[fid], "bypass"), {("STP", "is_subject_of", "NOD"): True}
+                )
+            )
 
     def test_ai_negotiates_for_the_pending_reform_only_until_consent(self) -> None:
         for faction, prerequisite, capstone, threshold in (
-                ("borons", "STP_party_local_cadres", "STP_pw_party_district_congress", 50),
-                ("security", "STP_party_chain_of_command", "STP_pw_party_executive_secretariat", 50),
-                ("merchants", "STP_party_port_contracts", "STP_pw_party_commercial_recovery", 45),
-                ("army", "STP_party_industrial_board", "STP_pw_party_defence_combine", 45)):
+            ("borons", "STP_party_local_cadres", "STP_pw_party_district_congress", 50),
+            (
+                "security",
+                "STP_party_chain_of_command",
+                "STP_pw_party_executive_secretariat",
+                50,
+            ),
+            (
+                "merchants",
+                "STP_party_port_contracts",
+                "STP_pw_party_commercial_recovery",
+                45,
+            ),
+            ("army", "STP_party_industrial_board", "STP_pw_party_defence_combine", 45),
+        ):
             name = "STP_pf_negotiate_" + faction
             decision = one(parse_clausewitz(named_block(self.decisions, name)), name)
-            priority = next(e.value for e in one(decision, "ai_will_do")
-                            if e.key == "modifier" and one(e.value, "factor") == "50")
+            priority = next(
+                e.value
+                for e in one(decision, "ai_will_do")
+                if e.key == "modifier" and one(e.value, "factor") == "50"
+            )
             conditions = [e for e in priority if e.key != "factor"]
-            facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
-                     ("STP", "has_completed_focus", prerequisite): True,
-                     ("STP", "variable", f"STP_pf_{faction}_support"): threshold - .01}
+            facts = {
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("STP", "has_completed_focus", prerequisite): True,
+                ("STP", "variable", f"STP_pf_{faction}_support"): threshold - 0.01,
+            }
             self.assertTrue(matches_conditions(conditions, facts))
-            for changes in ({("STP", "has_completed_focus", prerequisite): False},
-                            {("STP", "has_completed_focus", capstone): True},
-                            {("STP", "variable", f"STP_pf_{faction}_support"): threshold}):
+            for changes in (
+                {("STP", "has_completed_focus", prerequisite): False},
+                {("STP", "has_completed_focus", capstone): True},
+                {("STP", "variable", f"STP_pf_{faction}_support"): threshold},
+            ):
                 self.assertFalse(matches_conditions(conditions, facts | changes))
 
     def test_settlement_event_left_open_cannot_spend_after_charter(self) -> None:
         events = parse_clausewitz(read(ROOT / "events/ADISCORD_STP_events.txt"))
         for number in (26, 27):
-            event = next(e.value for e in events if e.key == "country_event"
-                         and one(e.value, "id") == f"ADISCORD_STP_pc.{number}")
+            event = next(
+                e.value
+                for e in events
+                if e.key == "country_event"
+                and one(e.value, "id") == f"ADISCORD_STP_pc.{number}"
+            )
             self.assertEqual(one(event, "fire_only_once"), "yes")
             options = [e.value for e in event if e.key == "option"]
             self.assertFalse(any(e.key == "trigger" for e in options[0]))
             paid = options[1]
-            facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
-                     ("STP", "STP_pf_active", "yes"): True,
-                     ("STP", "variable", "ADISCORD_economy_treasury"): 540}
+            facts = {
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("STP", "STP_pf_active", "yes"): True,
+                ("STP", "variable", "ADISCORD_economy_treasury"): 540,
+            }
             self.assertTrue(matches_conditions(one(paid, "trigger"), facts))
             payload = [e for e in paid if e.key == "if"]
-            for changes in ({("STP", "has_completed_focus", "STP_pw_party_civil_charter"): True},
-                            {("STP", "variable", "ADISCORD_economy_treasury"): 539.99},
-                            {("STP", "STP_pf_active", "yes"): False}):
+            for changes in (
+                {("STP", "has_completed_focus", "STP_pw_party_civil_charter"): True},
+                {("STP", "variable", "ADISCORD_economy_treasury"): 539.99},
+                {("STP", "STP_pf_active", "yes"): False},
+            ):
                 self.assertEqual(list(selected_effects(payload, facts | changes)), [])
 
 
 class FactionProgramContracts(unittest.TestCase):
     """Execute the authored arithmetic; UI and native engine remain separate checks."""
-    from tools.tests.test_adiscord_stp_party_route import PartyFactionContracts as _Fixture
+
+    from tools.tests.test_adiscord_stp_party_route import (
+        PartyFactionContracts as _Fixture,
+    )
+
     simulate = _Fixture.simulate
     KEYS = _Fixture.KEYS
     PROGRAMS = {
         'conservatives': ('STP_pw_party_civil_records', 'STP_pw_party_civil_charter'),
         'borons': ('STP_party_district_charters', 'STP_pw_party_district_congress'),
-        'security': ('STP_party_personnel_commissions', 'STP_pw_party_executive_secretariat'),
+        'security': (
+            'STP_party_personnel_commissions',
+            'STP_pw_party_executive_secretariat',
+        ),
         'army': ('STP_pw_party_officer_school', 'STP_pw_party_field_staff'),
-        'advisers': ('STP_pw_party_nod_military_mission', 'STP_pw_party_joint_defence_board'),
+        'advisers': (
+            'STP_pw_party_nod_military_mission',
+            'STP_pw_party_joint_defence_board',
+        ),
         'merchants': ('STP_party_port_contracts', 'STP_pw_party_commercial_recovery'),
         'radicals': ('STP_pw_party_open_settlement', 'STP_pw_party_district_congress'),
     }
     # Actual modifier magnitudes at 20 influence and 70 support, by program level.
     EXPECTED = {
-        'conservatives': (-.03, -.04, -.05), 'borons': (.03, .04, .05),
-        'security': (.016, .020, .026), 'army': (.03, .04, .05),
-        'advisers': (.05, .07, .09), 'merchants': (.04, .06, .08),
-        'radicals': (-.05, -.07, -.09),
+        'conservatives': (-0.03, -0.04, -0.05),
+        'borons': (0.03, 0.04, 0.05),
+        'security': (0.016, 0.020, 0.026),
+        'army': (0.03, 0.04, 0.05),
+        'advisers': (0.05, 0.07, 0.09),
+        'merchants': (0.04, 0.06, 0.08),
+        'radicals': (-0.05, -0.07, -0.09),
     }
-    CAPS = {'conservatives': (.12,.15,.18), 'borons': (.12,.15,.18),
-            'security': (.06,.08,.10), 'army': (.10,.13,.16),
-            'advisers': (.20,.25,.30), 'merchants': (.15,.22,.30),
-            'radicals': (.20,.25,.30)}
-    PENALTIES = dict(zip(KEYS, (.06,.06,.03,.06,.12,.09,.09)))
+    CAPS = {
+        'conservatives': (0.12, 0.15, 0.18),
+        'borons': (0.12, 0.15, 0.18),
+        'security': (0.06, 0.08, 0.10),
+        'army': (0.10, 0.13, 0.16),
+        'advisers': (0.20, 0.25, 0.30),
+        'merchants': (0.15, 0.22, 0.30),
+        'radicals': (0.20, 0.25, 0.30),
+    }
+    PENALTIES = dict(zip(KEYS, (0.06, 0.06, 0.03, 0.06, 0.12, 0.09, 0.09)))
 
     @classmethod
     def setUpClass(cls):
         from tools.tests.test_adiscord_stp_preparation import scalar, walk
-        cls.effects = {e.key:e.value for e in parse_clausewitz(read(EFFECTS))}
-        cls.triggers = {e.key:e.value for e in parse_clausewitz(read(ROOT/'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'))}
-        cls.focuses = {scalar(e.value,'id'):e.value for e in walk(parse_clausewitz(read(ROOT/'common/national_focus/ADISCORD_national_focus_STP.txt')))
-                       if e.key=='focus' and isinstance(e.value,list)}
+
+        cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
+        cls.triggers = {
+            e.key: e.value
+            for e in parse_clausewitz(
+                read(
+                    ROOT / 'common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt'
+                )
+            )
+        }
+        cls.focuses = {
+            scalar(e.value, 'id'): e.value
+            for e in walk(
+                parse_clausewitz(
+                    read(ROOT / 'common/national_focus/ADISCORD_national_focus_STP.txt')
+                )
+            )
+            if e.key == 'focus' and isinstance(e.value, list)
+        }
 
     def state(self, faction='army', support=70, influence=20):
         values, flags = self.simulate('STP_pf_initialize')
@@ -277,137 +441,277 @@ class FactionProgramContracts(unittest.TestCase):
             values[f'STP_pf_{k}_support'] = 50
             values[f'STP_pf_{k}_influence'] = 0
         other = 'borons' if faction != 'borons' else 'army'
-        values[f'STP_pf_{other}_influence'] = 100-influence
+        values[f'STP_pf_{other}_influence'] = 100 - influence
         values[f'STP_pf_{faction}_support'] = support
         values[f'STP_pf_{faction}_influence'] = influence
         return values, flags
 
-    def test_later_focus_programs_improve_real_output_without_changing_political_shares(self):
+    def test_later_focus_programs_improve_real_output_without_changing_political_shares(
+        self,
+    ):
         for faction, stages in self.PROGRAMS.items():
             for level in range(3):
                 values, flags = self.state(faction)
-                before = {k:v for k,v in values.items() if k.endswith(('_support','_influence'))}
-                self.simulate('STP_refresh_apparatus_loyalty', values, flags, focuses=stages[:level])
-                self.assertAlmostEqual(float(values[f'STP_pf_{faction}_effect']),self.EXPECTED[faction][level],places=6)
-                self.assertEqual({k:v for k,v in values.items() if k in before},before)
-                self.assertEqual(float(values[f'STP_pf_{faction}_program']),level)
+                before = {
+                    k: v
+                    for k, v in values.items()
+                    if k.endswith(('_support', '_influence'))
+                }
+                self.simulate(
+                    'STP_refresh_apparatus_loyalty',
+                    values,
+                    flags,
+                    focuses=stages[:level],
+                )
+                self.assertAlmostEqual(
+                    float(values[f'STP_pf_{faction}_effect']),
+                    self.EXPECTED[faction][level],
+                    places=6,
+                )
+                self.assertEqual(
+                    {k: v for k, v in values.items() if k in before}, before
+                )
+                self.assertEqual(float(values[f'STP_pf_{faction}_program']), level)
 
     def test_caps_grow_with_programs_but_discontent_does_not(self):
         for faction, stages in self.PROGRAMS.items():
             for level in range(3):
-                values, flags=self.state(faction,100,100)
-                self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=stages[:level],quantize=True)
-                self.assertAlmostEqual(abs(float(values[f'STP_pf_{faction}_effect'])),self.CAPS[faction][level],places=3)
-                values[f'STP_pf_{faction}_support']=0
-                self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=stages[:level],quantize=True)
-                self.assertAlmostEqual(abs(float(values[f'STP_pf_{faction}_effect'])),self.PENALTIES[faction],places=3)
-            values, flags=self.state(faction,30)
-            self.simulate('STP_refresh_apparatus_loyalty',values,flags)
-            penalty=values[f'STP_pf_{faction}_effect']
-            self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=stages)
-            self.assertEqual(values[f'STP_pf_{faction}_effect'],penalty)
+                values, flags = self.state(faction, 100, 100)
+                self.simulate(
+                    'STP_refresh_apparatus_loyalty',
+                    values,
+                    flags,
+                    focuses=stages[:level],
+                    quantize=True,
+                )
+                self.assertAlmostEqual(
+                    abs(float(values[f'STP_pf_{faction}_effect'])),
+                    self.CAPS[faction][level],
+                    places=3,
+                )
+                values[f'STP_pf_{faction}_support'] = 0
+                self.simulate(
+                    'STP_refresh_apparatus_loyalty',
+                    values,
+                    flags,
+                    focuses=stages[:level],
+                    quantize=True,
+                )
+                self.assertAlmostEqual(
+                    abs(float(values[f'STP_pf_{faction}_effect'])),
+                    self.PENALTIES[faction],
+                    places=3,
+                )
+            values, flags = self.state(faction, 30)
+            self.simulate('STP_refresh_apparatus_loyalty', values, flags)
+            penalty = values[f'STP_pf_{faction}_effect']
+            self.simulate(
+                'STP_refresh_apparatus_loyalty', values, flags, focuses=stages
+            )
+            self.assertEqual(values[f'STP_pf_{faction}_effect'], penalty)
 
-    def test_neutral_support_zero_influence_and_disconnected_advisers_have_no_bonus(self):
+    def test_neutral_support_zero_influence_and_disconnected_advisers_have_no_bonus(
+        self,
+    ):
         for faction, stages in self.PROGRAMS.items():
-            for support,influence in ((50,20),(100,0),(0,0)):
-                values,flags=self.state(faction,support,influence)
-                self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=stages)
-                self.assertEqual(values[f'STP_pf_{faction}_effect'],0)
-        values,flags=self.state('advisers',100)
-        self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=self.PROGRAMS['advisers'],nod=False)
-        self.assertEqual(values['STP_pf_advisers_effect'],0)
-        self.assertEqual(values['STP_pf_advisers_support'],100)
-        self.assertEqual(values['STP_pf_advisers_influence'],20)
-        self.assertEqual(values['STP_pf_nod_connected'],0)
+            for support, influence in ((50, 20), (100, 0), (0, 0)):
+                values, flags = self.state(faction, support, influence)
+                self.simulate(
+                    'STP_refresh_apparatus_loyalty', values, flags, focuses=stages
+                )
+                self.assertEqual(values[f'STP_pf_{faction}_effect'], 0)
+        values, flags = self.state('advisers', 100)
+        self.simulate(
+            'STP_refresh_apparatus_loyalty',
+            values,
+            flags,
+            focuses=self.PROGRAMS['advisers'],
+            nod=False,
+        )
+        self.assertEqual(values['STP_pf_advisers_effect'], 0)
+        self.assertEqual(values['STP_pf_advisers_support'], 100)
+        self.assertEqual(values['STP_pf_advisers_influence'], 20)
+        self.assertEqual(values['STP_pf_nod_connected'], 0)
 
-    def test_focus_reward_applies_before_its_completion_flag_without_persistent_unlock_flags(self):
+    def test_focus_reward_applies_before_its_completion_flag_without_persistent_unlock_flags(
+        self,
+    ):
         from tools.tests.test_adiscord_stp_preparation import walk, scalar
-        for faction,stages in self.PROGRAMS.items():
-            for level,fid in enumerate(stages,1):
-                reward=one(self.focuses[fid],'completion_reward')
-                calls=[e for e in walk(reward) if e.key=='STP_pf_apply_focus_program']
-                self.assertEqual(len(calls),1,fid)
-                pending=[e for e in walk(reward) if e.key=='set_temp_variable' and scalar(e.value,'var')=='STP_pf_finishing_program']
-                self.assertEqual(len(pending),1,fid)
-                values,flags=self.state(faction)
-                values['STP_pf_finishing_program']=scalar(pending[0].value,'value')
-                self.simulate('STP_pf_apply_focus_program',values,flags)
-                self.assertEqual(float(values[f'STP_pf_{faction}_program']),level)
-                self.assertAlmostEqual(float(values[f'STP_pf_{faction}_effect']),self.EXPECTED[faction][level],places=6)
-                self.assertEqual(values['STP_pf_finishing_program'],0)
-                self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=stages[:level])
-                self.assertEqual(float(values[f'STP_pf_{faction}_program']),level)
-        authored=' '.join(str(self.effects[n]) for n in ('STP_pf_refresh_programs','STP_pf_apply_focus_program'))
-        self.assertNotIn('set_country_flag',authored)
-        self.assertNotIn('set_global_flag',authored)
+
+        for faction, stages in self.PROGRAMS.items():
+            for level, fid in enumerate(stages, 1):
+                reward = one(self.focuses[fid], 'completion_reward')
+                calls = [
+                    e for e in walk(reward) if e.key == 'STP_pf_apply_focus_program'
+                ]
+                self.assertEqual(len(calls), 1, fid)
+                pending = [
+                    e
+                    for e in walk(reward)
+                    if e.key == 'set_temp_variable'
+                    and scalar(e.value, 'var') == 'STP_pf_finishing_program'
+                ]
+                self.assertEqual(len(pending), 1, fid)
+                values, flags = self.state(faction)
+                values['STP_pf_finishing_program'] = scalar(pending[0].value, 'value')
+                self.simulate('STP_pf_apply_focus_program', values, flags)
+                self.assertEqual(float(values[f'STP_pf_{faction}_program']), level)
+                self.assertAlmostEqual(
+                    float(values[f'STP_pf_{faction}_effect']),
+                    self.EXPECTED[faction][level],
+                    places=6,
+                )
+                self.assertEqual(values['STP_pf_finishing_program'], 0)
+                self.simulate(
+                    'STP_refresh_apparatus_loyalty',
+                    values,
+                    flags,
+                    focuses=stages[:level],
+                )
+                self.assertEqual(float(values[f'STP_pf_{faction}_program']), level)
+        authored = ' '.join(
+            str(self.effects[n])
+            for n in ('STP_pf_refresh_programs', 'STP_pf_apply_focus_program')
+        )
+        self.assertNotIn('set_country_flag', authored)
+        self.assertNotIn('set_global_flag', authored)
 
     def test_program_receipt_survives_other_effects_in_the_same_focus_reward(self):
         from tools.tests.test_adiscord_stp_preparation import walk
+
         for fid in {fid for group in self.PROGRAMS.values() for fid in group}:
             payload = list(walk(one(self.focuses[fid], 'completion_reward')))
-            calls = [e.key for e in payload if e.key.startswith('STP_pf_') or e.key == 'STP_refresh_apparatus_loyalty']
+            calls = [
+                e.key
+                for e in payload
+                if e.key.startswith('STP_pf_')
+                or e.key == 'STP_refresh_apparatus_loyalty'
+            ]
             self.assertTrue(calls, fid)
             self.assertEqual(calls[-1], 'STP_pf_apply_focus_program', fid)
 
     def test_fortress_and_field_armies_both_receive_the_military_program(self):
-        for fid in ('STP_pw_party_field_staff','STP_pw_party_fortress_corps'):
-            values,flags=self.state('army')
-            self.simulate('STP_refresh_apparatus_loyalty',values,flags,focuses=(fid,))
+        for fid in ('STP_pw_party_field_staff', 'STP_pw_party_fortress_corps'):
+            values, flags = self.state('army')
+            self.simulate(
+                'STP_refresh_apparatus_loyalty', values, flags, focuses=(fid,)
+            )
             self.assertIn('STP_pf_army_program', values)
-            self.assertEqual(values['STP_pf_army_program'],2)
-            self.assertAlmostEqual(float(values['STP_pf_army_effect']),.05,places=6)
+            self.assertEqual(values['STP_pf_army_program'], 2)
+            self.assertAlmostEqual(float(values['STP_pf_army_effect']), 0.05, places=6)
 
-    def test_startup_refresh_preserves_old_campaign_and_cleanup_removes_program_caches(self):
+    def test_startup_refresh_preserves_old_campaign_and_cleanup_removes_program_caches(
+        self,
+    ):
         from tools.tests.test_adiscord_stp_preparation import walk
-        actions=one(parse_clausewitz(read(ROOT/'common/on_actions/02_ADISCORD_STP_on_actions.txt')),'on_actions')
-        self.assertTrue(any(e.key=='STP_pf_refresh_on_load' for e in walk(one(actions,'on_startup'))))
-        values,flags=self.state('army',73,28)
-        before={k:v for k,v in values.items() if k.endswith(('_support','_influence'))}
-        self.assertIn('STP_pf_refresh_on_load',self.effects)
+
+        actions = one(
+            parse_clausewitz(
+                read(ROOT / 'common/on_actions/02_ADISCORD_STP_on_actions.txt')
+            ),
+            'on_actions',
+        )
+        self.assertTrue(
+            any(
+                e.key == 'STP_pf_refresh_on_load'
+                for e in walk(one(actions, 'on_startup'))
+            )
+        )
+        values, flags = self.state('army', 73, 28)
+        before = {
+            k: v for k, v in values.items() if k.endswith(('_support', '_influence'))
+        }
+        self.assertIn('STP_pf_refresh_on_load', self.effects)
         for _ in range(2):
-            self.simulate('STP_pf_refresh_on_load',values,flags,focuses=self.PROGRAMS['army'])
-            self.assertEqual({k:v for k,v in values.items() if k in before},before)
-            self.assertEqual(values['STP_pf_army_program'],2)
-        self.simulate('STP_pf_clear',values,flags)
-        self.assertFalse(any(k.endswith(('_program','_capacity')) and k.startswith('STP_pf_') for k in values))
+            self.simulate(
+                'STP_pf_refresh_on_load', values, flags, focuses=self.PROGRAMS['army']
+            )
+            self.assertEqual({k: v for k, v in values.items() if k in before}, before)
+            self.assertEqual(values['STP_pf_army_program'], 2)
+        self.simulate('STP_pf_clear', values, flags)
+        self.assertFalse(
+            any(
+                k.endswith(('_program', '_capacity')) and k.startswith('STP_pf_')
+                for k in values
+            )
+        )
         for node in actions:
-            if node.key!='on_startup':
-                self.assertFalse(any(e.key=='STP_pf_refresh_on_load' for e in walk(node.value)))
+            if node.key != 'on_startup':
+                self.assertFalse(
+                    any(e.key == 'STP_pf_refresh_on_load' for e in walk(node.value))
+                )
 
     def test_bonus_artwork_aliases_resolve_bundled_stat_symbols(self):
         gfx = read(ROOT / 'interface/ADISCORD_STP_regions.gfx')
         for sprite, path in (
-                ('GFX_STP_pf_stability_effect', 'gfx/interface/stability_icon.dds'),
-                ('GFX_STP_pf_organization_effect', 'gfx/texticons/organization_gain_texticon.dds')):
+            ('GFX_STP_pf_stability_effect', 'gfx/interface/stability_icon.dds'),
+            (
+                'GFX_STP_pf_organization_effect',
+                'gfx/texticons/organization_gain_texticon.dds',
+            ),
+        ):
             self.assertIn('name = "' + sprite + '"', gfx)
             self.assertIn('texturefile = "' + path + '"', gfx)
             self.assertTrue((ROOT / path).is_file(), path)
 
-    def test_card_bonus_icons_and_values_fit_below_emblems_and_read_actual_modifier_variables(self):
-        from tools.tests.test_adiscord_stp_preparation import walk,scalar
-        gui=next(e.value for e in walk(parse_clausewitz(read(ROOT/'interface/ADISCORD_STP_regions.gui')))
-                 if e.key=='containerWindowType' and scalar(e.value,'name')=='ADISCORD_STP_party_factions_window')
-        widgets={scalar(e.value,'name'):e.value for e in gui if isinstance(e.value,list) and any(x.key=='name' for x in e.value)}
-        consumers=one(parse_clausewitz(read(ROOT/'common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt')),'STP_pf_balance_dynamic')
+    def test_card_bonus_icons_and_values_fit_below_emblems_and_read_actual_modifier_variables(
+        self,
+    ):
+        from tools.tests.test_adiscord_stp_preparation import walk, scalar
+
+        gui = next(
+            e.value
+            for e in walk(
+                parse_clausewitz(read(ROOT / 'interface/ADISCORD_STP_regions.gui'))
+            )
+            if e.key == 'containerWindowType'
+            and scalar(e.value, 'name') == 'ADISCORD_STP_party_factions_window'
+        )
+        widgets = {
+            scalar(e.value, 'name'): e.value
+            for e in gui
+            if isinstance(e.value, list) and any(x.key == 'name' for x in e.value)
+        }
+        consumers = one(
+            parse_clausewitz(
+                read(
+                    ROOT / 'common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt'
+                )
+            ),
+            'STP_pf_balance_dynamic',
+        )
         for faction in self.KEYS:
-            base='STP_pf_'+faction
-            self.assertIn(base+'_effect_icon',widgets)
-            self.assertIn(base+'_effect_value',widgets)
-            icon,text,emblem,card=[widgets[base+s] for s in ('_effect_icon','_effect_value','_emblem','_card')]
-            for widget in (icon,text):
-                y=float(scalar(one(widget,'position'),'y'))
-                self.assertGreaterEqual(y,float(scalar(one(emblem,'position'),'y'))+56)
-                self.assertLessEqual(y+20,float(scalar(one(card,'position'),'y'))+92)
-                self.assertEqual(scalar(widget,'pdx_tooltip'),base+'_tt')
-            self.assertTrue(any(e.value==base+'_effect' for e in consumers))
-            for language in ('russian','english'):
-                loc=read(ROOT/f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
-                self.assertRegex(loc,rf'(?m)^ {base}_effect_value:.*\[\?{base}_effect\|=')
-                self.assertIn(base+'_program',loc)
-                for fid in self.PROGRAMS[faction]:self.assertIn('$'+fid+'$',loc)
-        for language in ('russian','english'):
-            loc=read(ROOT/f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
-            self.assertIn('STP_pf_advisers_disconnected',loc)
+            base = 'STP_pf_' + faction
+            self.assertIn(base + '_effect_icon', widgets)
+            self.assertIn(base + '_effect_value', widgets)
+            icon, text, emblem, card = [
+                widgets[base + s]
+                for s in ('_effect_icon', '_effect_value', '_emblem', '_card')
+            ]
+            for widget in (icon, text):
+                y = float(scalar(one(widget, 'position'), 'y'))
+                self.assertGreaterEqual(
+                    y, float(scalar(one(emblem, 'position'), 'y')) + 56
+                )
+                self.assertLessEqual(
+                    y + 20, float(scalar(one(card, 'position'), 'y')) + 92
+                )
+                self.assertEqual(scalar(widget, 'pdx_tooltip'), base + '_tt')
+            self.assertTrue(any(e.value == base + '_effect' for e in consumers))
+            for language in ('russian', 'english'):
+                loc = read(
+                    ROOT / f'localisation/{language}/ADISCORD_STP_l_{language}.yml'
+                )
+                self.assertRegex(
+                    loc, rf'(?m)^ {base}_effect_value:.*\[\?{base}_effect\|='
+                )
+                self.assertIn(base + '_program', loc)
+                for fid in self.PROGRAMS[faction]:
+                    self.assertIn('$' + fid + '$', loc)
+        for language in ('russian', 'english'):
+            loc = read(ROOT / f'localisation/{language}/ADISCORD_STP_l_{language}.yml')
+            self.assertIn('STP_pf_advisers_disconnected', loc)
+
 
 class PartyNodInvasionLifecycleTests(unittest.TestCase):
     """Exercise authored branches and callbacks, not native diplomatic execution."""
@@ -426,7 +730,9 @@ class PartyNodInvasionLifecycleTests(unittest.TestCase):
             ("NOD", "has_capitulated", "no"): True,
             ("NOD", "is_subject", "no"): True,
         }
-        result.update({("STP", "has_country_flag", name): value for name, value in flags.items()})
+        result.update(
+            {("STP", "has_country_flag", name): value for name, value in flags.items()}
+        )
         return result
 
     def selected(self, name, facts):
@@ -436,11 +742,23 @@ class PartyNodInvasionLifecycleTests(unittest.TestCase):
         chosen = self.selected("STP_pw_party_start_nod_invasion_threat", self.facts())
         keys = [e.key for _, e in chosen]
         self.assertIn("STP_pw_party_break_nod_alliance", keys)
-        self.assertLess(keys.index("STP_pw_party_break_nod_alliance"), keys.index("activate_mission"))
-        for receipt in ("STP_pw_party_nod_threat_active", "STP_pw_party_nod_invasion_active",
-                        "STP_pw_party_nod_invasion_defeated", "STP_pw_party_nod_invasion_lost"):
-            self.assertEqual(self.selected("STP_pw_party_start_nod_invasion_threat",
-                                           self.facts(**{receipt: True})), [])
+        self.assertLess(
+            keys.index("STP_pw_party_break_nod_alliance"),
+            keys.index("activate_mission"),
+        )
+        for receipt in (
+            "STP_pw_party_nod_threat_active",
+            "STP_pw_party_nod_invasion_active",
+            "STP_pw_party_nod_invasion_defeated",
+            "STP_pw_party_nod_invasion_lost",
+        ):
+            self.assertEqual(
+                self.selected(
+                    "STP_pw_party_start_nod_invasion_threat",
+                    self.facts(**{receipt: True}),
+                ),
+                [],
+            )
 
     def test_alliance_break_preserves_the_remaining_faction(self):
         for leader, member in (("NOD", "STP"), ("AIN", "STP"), ("STP", "NOD")):
@@ -451,17 +769,26 @@ class PartyNodInvasionLifecycleTests(unittest.TestCase):
                     ("STP", "faction_leader"): leader,
                 }
                 chosen = self.selected("STP_pw_party_break_nod_alliance", facts)
-                self.assertEqual([(s, e.key, e.value) for s, e in chosen],
-                                 [(leader, "remove_from_faction", member)])
-        self.assertEqual(self.selected("STP_pw_party_break_nod_alliance", self.facts()), [])
+                self.assertEqual(
+                    [(s, e.key, e.value) for s, e in chosen],
+                    [(leader, "remove_from_faction", member)],
+                )
+        self.assertEqual(
+            self.selected("STP_pw_party_break_nod_alliance", self.facts()), []
+        )
 
     def test_allied_timeout_defers_declaration_without_consuming_the_threat(self):
         facts = self.facts(STP_pw_party_nod_threat_active=True) | {
-            ("STP", "is_in_faction_with", "NOD"): True}
+            ("STP", "is_in_faction_with", "NOD"): True
+        }
         chosen = self.selected("STP_pw_party_launch_nod_invasion", facts)
         self.assertIn("STP_pw_party_break_nod_alliance", [e.key for _, e in chosen])
-        self.assertFalse(any(e.key in {"declare_war_on", "set_country_flag", "clr_country_flag"}
-                             for _, e in chosen))
+        self.assertFalse(
+            any(
+                e.key in {"declare_war_on", "set_country_flag", "clr_country_flag"}
+                for _, e in chosen
+            )
+        )
         callbacks = [e.value for _, e in chosen if e.key == "country_event"]
         self.assertEqual(len(callbacks), 1)
         self.assertEqual(one(callbacks[0], "id"), "ADISCORD_STP_pc.33")
@@ -470,52 +797,94 @@ class PartyNodInvasionLifecycleTests(unittest.TestCase):
     def test_expired_save_can_launch_once_and_terminal_outcomes_stay_closed(self):
         facts = self.facts(STP_pw_party_nod_invasion_active=True)
         chosen = self.selected("STP_pw_party_launch_nod_invasion", facts)
-        declarations = [(s, one(e.value, "target")) for s, e in chosen if e.key == "declare_war_on"]
+        declarations = [
+            (s, one(e.value, "target")) for s, e in chosen if e.key == "declare_war_on"
+        ]
         self.assertEqual(declarations, [("NOD", "STP")])
-        self.assertEqual(self.selected("STP_pw_party_launch_nod_invasion", facts | {
-            ("STP", "has_war_with", "NOD"): True}), [])
-        for receipt in ("STP_pw_party_nod_invasion_defeated", "STP_pw_party_nod_invasion_lost"):
-            self.assertEqual(self.selected("STP_pw_party_launch_nod_invasion", facts | {
-                ("STP", "has_country_flag", receipt): True}), [])
+        self.assertEqual(
+            self.selected(
+                "STP_pw_party_launch_nod_invasion",
+                facts | {("STP", "has_war_with", "NOD"): True},
+            ),
+            [],
+        )
+        for receipt in (
+            "STP_pw_party_nod_invasion_defeated",
+            "STP_pw_party_nod_invasion_lost",
+        ):
+            self.assertEqual(
+                self.selected(
+                    "STP_pw_party_launch_nod_invasion",
+                    facts | {("STP", "has_country_flag", receipt): True},
+                ),
+                [],
+            )
 
     def test_load_repair_keeps_the_original_preparation_deadline(self):
-        chosen = self.selected("STP_pw_party_reconcile_nod_invasion", self.facts(
-            STP_pw_party_nod_threat_active=True))
-        self.assertEqual([e.key for _, e in chosen], ["STP_pw_party_break_nod_alliance"])
-        chosen = self.selected("STP_pw_party_reconcile_nod_invasion", self.facts(
-            STP_pw_party_nod_invasion_active=True))
-        self.assertEqual([e.key for _, e in chosen], ["STP_pw_party_launch_nod_invasion"])
-        for facts in (self.facts(), self.facts(STP_pw_party_nod_invasion_active=True) | {
-                ("STP", "has_war_with", "NOD"): True},
-                self.facts(STP_pw_party_nod_invasion_defeated=True)):
-            self.assertEqual(self.selected("STP_pw_party_reconcile_nod_invasion", facts), [])
-        actions = parse_clausewitz(read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"))
+        chosen = self.selected(
+            "STP_pw_party_reconcile_nod_invasion",
+            self.facts(STP_pw_party_nod_threat_active=True),
+        )
+        self.assertEqual(
+            [e.key for _, e in chosen], ["STP_pw_party_break_nod_alliance"]
+        )
+        chosen = self.selected(
+            "STP_pw_party_reconcile_nod_invasion",
+            self.facts(STP_pw_party_nod_invasion_active=True),
+        )
+        self.assertEqual(
+            [e.key for _, e in chosen], ["STP_pw_party_launch_nod_invasion"]
+        )
+        for facts in (
+            self.facts(),
+            self.facts(STP_pw_party_nod_invasion_active=True)
+            | {("STP", "has_war_with", "NOD"): True},
+            self.facts(STP_pw_party_nod_invasion_defeated=True),
+        ):
+            self.assertEqual(
+                self.selected("STP_pw_party_reconcile_nod_invasion", facts), []
+            )
+        actions = parse_clausewitz(
+            read(ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt")
+        )
         startup = one(one(one(actions, "on_actions"), "on_startup"), "effect")
-        self.assertIn(("STP", "STP_pw_party_reconcile_nod_invasion"),
-                      [(s, e.key) for s, e in selected_effects(startup, self.facts())])
+        self.assertIn(
+            ("STP", "STP_pw_party_reconcile_nod_invasion"),
+            [(s, e.key) for s, e in selected_effects(startup, self.facts())],
+        )
 
     def test_deferred_callback_is_registered_with_its_owner(self):
         import json
 
         registry = json.loads(read(ROOT / "tools/data/adiscord_event_ids.json"))
-        matches = [entry for entry in registry["events"] if entry["id"] == "ADISCORD_STP_pc.33"]
+        matches = [
+            entry for entry in registry["events"] if entry["id"] == "ADISCORD_STP_pc.33"
+        ]
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0]["owner"], "events/ADISCORD_STP_events.txt")
         self.assertEqual(matches[0]["status"], "active")
 
     def test_deferred_callback_is_hidden_and_never_requeues_a_failed_detachment(self):
-        events = [e.value for e in self.events if e.key == "country_event"
-                  and one(e.value, "id") == "ADISCORD_STP_pc.33"]
+        events = [
+            e.value
+            for e in self.events
+            if e.key == "country_event" and one(e.value, "id") == "ADISCORD_STP_pc.33"
+        ]
         self.assertEqual(len(events), 1)
         event = events[0]
         self.assertEqual(one(event, "hidden"), "yes")
         self.assertEqual(one(event, "is_triggered_only"), "yes")
         trigger = one(event, "trigger")
-        self.assertFalse(matches_conditions(trigger, self.facts() | {
-            ("STP", "is_in_faction_with", "NOD"): True}))
+        self.assertFalse(
+            matches_conditions(
+                trigger, self.facts() | {("STP", "is_in_faction_with", "NOD"): True}
+            )
+        )
         self.assertTrue(matches_conditions(trigger, self.facts()))
-        self.assertEqual([e.key for _, e in selected_effects(one(event, "immediate"), self.facts())],
-                         ["STP_pw_party_launch_nod_invasion"])
+        self.assertEqual(
+            [e.key for _, e in selected_effects(one(event, "immediate"), self.facts())],
+            ["STP_pw_party_launch_nod_invasion"],
+        )
 
 
 if __name__ == "__main__":

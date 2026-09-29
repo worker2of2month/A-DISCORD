@@ -2,12 +2,17 @@
 
 These fixtures check script arithmetic and authored routes, not the native game.
 """
+
 from pathlib import Path
 import re
 import unittest
 
 from tools.tests.test_adiscord_economy_weekly_contracts import (
-    EconomyScriptFixture, EFFECTS, MODIFIER_EFFECTS, TRIGGERS, block,
+    EconomyScriptFixture,
+    EFFECTS,
+    MODIFIER_EFFECTS,
+    TRIGGERS,
+    block,
 )
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 from tools.lib.focus_sources import read_focus_source
@@ -25,7 +30,9 @@ def focus(text, identifier):
         if tree.key != "focus_tree":
             continue
         for node in tree.value:
-            if node.key == "focus" and any(c.key == "id" and c.value == identifier for c in node.value):
+            if node.key == "focus" and any(
+                c.key == "id" and c.value == identifier for c in node.value
+            ):
                 return node.value
     raise AssertionError(f"missing focus {identifier}")
 
@@ -41,24 +48,35 @@ def walk(entries, previews=False):
 
 def income_fixture(civilian=25, military=12, resources=10, business=2):
     source = EFFECTS + MODIFIER_EFFECTS
-    facts = {name: False for name in re.findall(
-        r"\b(ADISCORD_(?:economy_(?:cached_has_|model_is_)\w+|\w+_development_(?:at_least|exact)_\d))\s*=\s*yes", source)}
+    facts = {
+        name: False
+        for name in re.findall(
+            r"\b(ADISCORD_(?:economy_(?:cached_has_|model_is_)\w+|\w+_development_(?:at_least|exact)_\d))\s*=\s*yes",
+            source,
+        )
+    }
     facts[P + "model_is_mixed"] = True
     fixture = EconomyScriptFixture(facts=facts)
-    fixture.definitions.update({n.key: n.value for n in parse_clausewitz(MODIFIER_EFFECTS)})
+    fixture.definitions.update(
+        {n.key: n.value for n in parse_clausewitz(MODIFIER_EFFECTS)}
+    )
     v = fixture.scopes["A"]
     for name in set(re.findall(r"\bADISCORD_\w+_factor_bp\b", source)):
         v[name] = 100
-    v.update({P + "cached_civilian_factories": civilian,
-              P + "cached_military_factories": military,
-              P + "resource_endowment": resources,
-              P + "cached_resource_trade_law_factor": 1,
-              P + "state_financial_control": 50,
-              P + "investment_confidence": 50,
-              P + "tax_burden_mode": 3,
-              P + "monthly_expenses": 18,
-              P + "treasury": 100,
-              "ADISCORD_business_center_count": business})
+    v.update(
+        {
+            P + "cached_civilian_factories": civilian,
+            P + "cached_military_factories": military,
+            P + "resource_endowment": resources,
+            P + "cached_resource_trade_law_factor": 1,
+            P + "state_financial_control": 50,
+            P + "investment_confidence": 50,
+            P + "tax_burden_mode": 3,
+            P + "monthly_expenses": 18,
+            P + "treasury": 100,
+            "ADISCORD_business_center_count": business,
+        }
+    )
     return fixture
 
 
@@ -67,42 +85,95 @@ class EconomyRefreshCadenceTests(unittest.TestCase):
         # Isolate periodic pressure/AI work; execute the actual refresh routing,
         # law caches and treasury-cap arithmetic against fixed native inputs.
         isolated = (
-            "initialize_country", "update_postwar_demobilization", "clear_one_month_action_ideas",
-            "recount_economic_buildings", "refresh_ai_assistance", "update_bombing_disruption",
-            "calculate_income", "calculate_macro_indicators", "calculate_expenses",
-            "calculate_monthly_balance", "update_ai_state", "ai_monthly_policy", "ai_yearly_policy",
-            "update_monthly_budget_trend", "apply_tax_burden_side_effects", "update_fiscal_stress",
-            "update_inflation", "update_casualty_delta", "update_war_fatigue",
-            "tick_postwar_demobilization", "update_demographic_fatigue", "update_workforce_drain",
-            "update_stretched", "update_public_investment_stock", "calculate_development_multiplier",
-            "check_economic_development_upgrade", "refresh_spending_ideas", "clear_recent_action_flags",
-            "tick_budget_cooldowns", "clamp_all_variables", "light_update", "refresh_policy_previews",
-            "update_gui", "set_simulation_tier",
+            "initialize_country",
+            "update_postwar_demobilization",
+            "clear_one_month_action_ideas",
+            "recount_economic_buildings",
+            "refresh_ai_assistance",
+            "update_bombing_disruption",
+            "calculate_income",
+            "calculate_macro_indicators",
+            "calculate_expenses",
+            "calculate_monthly_balance",
+            "update_ai_state",
+            "ai_monthly_policy",
+            "ai_yearly_policy",
+            "update_monthly_budget_trend",
+            "apply_tax_burden_side_effects",
+            "update_fiscal_stress",
+            "update_inflation",
+            "update_casualty_delta",
+            "update_war_fatigue",
+            "tick_postwar_demobilization",
+            "update_demographic_fatigue",
+            "update_workforce_drain",
+            "update_stretched",
+            "update_public_investment_stock",
+            "calculate_development_multiplier",
+            "check_economic_development_upgrade",
+            "refresh_spending_ideas",
+            "clear_recent_action_flags",
+            "tick_budget_cooldowns",
+            "clamp_all_variables",
+            "light_update",
+            "refresh_policy_previews",
+            "update_gui",
+            "set_simulation_tier",
         )
-        facts = {name: False for name in re.findall(
-            r"\b(ADISCORD_(?:economy_has_\w+|\w+_development_(?:at_least|at_most|exact)_\d))\s*=\s*yes",
-            MODIFIER_EFFECTS + block(EFFECTS, P + "update_model_and_cycle"))}
-        facts.update({P + "should_show_player_ui": human, "is_ai": not human,
-                      P + "has_idea_free_trade": True, P + "has_idea_economic_system_mixed": True})
-        f = EconomyScriptFixture(facts=facts, stubs=tuple(P + name for name in isolated))
-        f.definitions.update({n.key: n.value for n in parse_clausewitz(MODIFIER_EFFECTS)})
-        f.scopes["A"].update({P + "show_window": int(opened), P + "treasury": 1234,
-                              "ADISCORD_state_development_level": 3,
-                              "ADISCORD_economic_development_level": 2,
-                              "ADISCORD_business_center_count": 1})
+        facts = {
+            name: False
+            for name in re.findall(
+                r"\b(ADISCORD_(?:economy_has_\w+|\w+_development_(?:at_least|at_most|exact)_\d))\s*=\s*yes",
+                MODIFIER_EFFECTS + block(EFFECTS, P + "update_model_and_cycle"),
+            )
+        }
+        facts.update(
+            {
+                P + "should_show_player_ui": human,
+                "is_ai": not human,
+                P + "has_idea_free_trade": True,
+                P + "has_idea_economic_system_mixed": True,
+            }
+        )
+        f = EconomyScriptFixture(
+            facts=facts, stubs=tuple(P + name for name in isolated)
+        )
+        f.definitions.update(
+            {n.key: n.value for n in parse_clausewitz(MODIFIER_EFFECTS)}
+        )
+        f.scopes["A"].update(
+            {
+                P + "show_window": int(opened),
+                P + "treasury": 1234,
+                "ADISCORD_state_development_level": 3,
+                "ADISCORD_economic_development_level": 2,
+                "ADISCORD_business_center_count": 1,
+            }
+        )
         return f
 
     def test_refresh_prices_policy_once_with_clean_dirty_and_quarterly_sources(self):
-        for effect, months, dirty in (("monthly_update", 0, 0), ("monthly_update", 0, 1),
-                                      ("monthly_update", 2, 0), ("monthly_update", 2, 1),
-                                      ("yearly_update", 0, 0), ("open_window", 0, 0)):
+        for effect, months, dirty in (
+            ("monthly_update", 0, 0),
+            ("monthly_update", 0, 1),
+            ("monthly_update", 2, 0),
+            ("monthly_update", 2, 1),
+            ("yearly_update", 0, 0),
+            ("open_window", 0, 0),
+        ):
             with self.subTest(effect=effect, months=months, dirty=dirty):
                 f = self.fixture()
-                f.scopes["A"].update({P + "building_recount_months": months,
-                                      P + "needs_full_refresh": dirty})
+                f.scopes["A"].update(
+                    {
+                        P + "building_recount_months": months,
+                        P + "needs_full_refresh": dirty,
+                    }
+                )
                 f.run(P + effect)
                 self.assertEqual(f.calls.count(P + "recalculate_policy_modifiers"), 1)
-                self.assertEqual(f.scopes["A"][P + "cached_resource_trade_law_factor"], 1.25)
+                self.assertEqual(
+                    f.scopes["A"][P + "cached_resource_trade_law_factor"], 1.25
+                )
                 self.assertEqual(f.scopes["A"][P + "model"], 2)
                 self.assertEqual(f.scopes["A"][P + "treasury"], 1234)
                 if dirty or months == 2 or effect != "monthly_update":
@@ -111,18 +182,32 @@ class EconomyRefreshCadenceTests(unittest.TestCase):
 
     def test_periodic_previews_run_only_for_open_human_window(self):
         for effect in ("monthly_update", "yearly_update"):
-            for human, opened in ((False, False), (False, True), (True, False), (True, True)):
+            for human, opened in (
+                (False, False),
+                (False, True),
+                (True, False),
+                (True, True),
+            ):
                 with self.subTest(effect=effect, human=human, opened=opened):
                     f = self.fixture(human, opened)
                     f.run(P + effect)
-                    self.assertEqual(f.calls.count(P + "refresh_policy_previews"), int(human and opened))
+                    self.assertEqual(
+                        f.calls.count(P + "refresh_policy_previews"),
+                        int(human and opened),
+                    )
 
     def test_opening_window_refreshes_previews_before_display_without_paying_cash(self):
         f = self.fixture(opened=False)
         f.run(P + "open_window")
         self.assertEqual(f.calls.count(P + "refresh_policy_previews"), 1)
-        self.assertLess(f.calls.index(P + "light_update"), f.calls.index(P + "refresh_policy_previews"))
-        self.assertLess(f.calls.index(P + "refresh_policy_previews"), f.calls.index(P + "update_gui"))
+        self.assertLess(
+            f.calls.index(P + "light_update"),
+            f.calls.index(P + "refresh_policy_previews"),
+        )
+        self.assertLess(
+            f.calls.index(P + "refresh_policy_previews"),
+            f.calls.index(P + "update_gui"),
+        )
         self.assertEqual(f.scopes["A"][P + "show_window"], 1)
         self.assertEqual(f.scopes["A"][P + "treasury"], 1234)
 
@@ -131,13 +216,22 @@ class EconomyRefreshCadenceTests(unittest.TestCase):
             with self.subTest(dirty=dirty):
                 f = self.fixture()
                 f.stubs.remove(P + "update_bombing_disruption")
-                f.scopes["A"].update({P + "needs_full_refresh": dirty,
-                                      P + "damaged_industry_score": 1,
-                                      P + "final_bombing_disruption_resistance_factor_bp": 100,
-                                      P + "static_bombing_disruption_resistance_bonus_bp": 100})
+                f.scopes["A"].update(
+                    {
+                        P + "needs_full_refresh": dirty,
+                        P + "damaged_industry_score": 1,
+                        P + "final_bombing_disruption_resistance_factor_bp": 100,
+                        P + "static_bombing_disruption_resistance_bonus_bp": 100,
+                    }
+                )
                 f.run(P + "monthly_update")
-                self.assertEqual(f.scopes["A"][P + "bombing_disruption_level"], expected_disruption)
-                self.assertEqual(f.scopes["A"][P + "final_bombing_disruption_resistance_factor_bp"], 200)
+                self.assertEqual(
+                    f.scopes["A"][P + "bombing_disruption_level"], expected_disruption
+                )
+                self.assertEqual(
+                    f.scopes["A"][P + "final_bombing_disruption_resistance_factor_bp"],
+                    200,
+                )
 
 
 class ProductiveIncomeTests(unittest.TestCase):
@@ -181,8 +275,10 @@ class ProductiveIncomeTests(unittest.TestCase):
                 full = income_fixture()
                 full.scopes["A"][P + "tax_burden_mode"] = level
                 full.run(P + "calculate_income")
-                self.assertAlmostEqual(cached.scopes["A"][P + "monthly_income"],
-                                       full.scopes["A"][P + "monthly_income"])
+                self.assertAlmostEqual(
+                    cached.scopes["A"][P + "monthly_income"],
+                    full.scopes["A"][P + "monthly_income"],
+                )
 
     def test_repeated_forecasts_do_not_multiply_income_or_pay_cash(self):
         f = income_fixture()
@@ -224,30 +320,57 @@ class DebtRepaymentGateTests(unittest.TestCase):
 
 class NorthernCampaignRouteTests(unittest.TestCase):
     def test_frontier_does_not_require_participation_in_the_stelander_crisis(self):
-        nodes = focus(read("common/national_focus/ADISCORD_national_focus_VAL.txt"), "VAL_frontier_conference")
-        alternatives = [{c.value for c in n.value if c.key == "focus"}
-                        for n in nodes if n.key == "prerequisite"]
+        nodes = focus(
+            read("common/national_focus/ADISCORD_national_focus_VAL.txt"),
+            "VAL_frontier_conference",
+        )
+        alternatives = [
+            {c.value for c in n.value if c.key == "focus"}
+            for n in nodes
+            if n.key == "prerequisite"
+        ]
         self.assertIn({"VAL_One_Ledger_One_Banner"}, alternatives)
         self.assertIn({"VAL_Trading_Partners", "VAL_October_Of_2160"}, alternatives)
-        self.assertNotIn("VAL_The_Steel_Contract", {focus_id for group in alternatives for focus_id in group})
+        self.assertNotIn(
+            "VAL_The_Steel_Contract",
+            {focus_id for group in alternatives for focus_id in group},
+        )
         self.assertTrue(any(n.key == "VAL_frontier_postwar" for n in walk(nodes)))
 
     def test_demand_and_offensive_share_a_force_quality_gate_not_24_divisions(self):
         text = read("common/decisions/ADISCORD_VAL_decisions.txt")
-        for identifier in ("VAL_frontier_demand_CIN", "VAL_frontier_demand_ERT",
-                           "VAL_frontier_begin_offensive"):
+        for identifier in (
+            "VAL_frontier_demand_CIN",
+            "VAL_frontier_demand_ERT",
+            "VAL_frontier_begin_offensive",
+        ):
             with self.subTest(identifier=identifier):
                 body = block(text, identifier)
                 self.assertNotIn("num_divisions < 24", body)
                 self.assertIn("VAL_ai_frontier_force_ready = no", body)
-        gate = block(read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
-                     "VAL_ai_frontier_force_ready")
-        for token in ("has_army_manpower", "has_equipment", "has_capitulated = no", "is_subject = no"):
+        gate = block(
+            read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+            "VAL_ai_frontier_force_ready",
+        )
+        for token in (
+            "has_army_manpower",
+            "has_equipment",
+            "has_capitulated = no",
+            "is_subject = no",
+        ):
             self.assertIn(token, gate)
 
     def test_security_plan_pays_for_one_ultimatum_and_only_unlocks_scripted_war(self):
-        nodes = focus(read("common/national_focus/ADISCORD_national_focus_VAL.txt"), "VAL_frontier_security_plan")
-        self.assertTrue(any(n.key == "add_political_power" and float(n.value) >= 75 for n in walk(nodes)))
+        nodes = focus(
+            read("common/national_focus/ADISCORD_national_focus_VAL.txt"),
+            "VAL_frontier_security_plan",
+        )
+        self.assertTrue(
+            any(
+                n.key == "add_political_power" and float(n.value) >= 75
+                for n in walk(nodes)
+            )
+        )
         self.assertFalse(any(n.key == "set_rule" for n in walk(nodes)))
 
 
@@ -255,20 +378,36 @@ class RecoveryRewardTests(unittest.TestCase):
     def test_shabrat_reforms_have_native_delta_previews_and_real_fiscal_gains(self):
         source = read("common/national_focus/ADISCORD_national_focus_STP.txt")
         total = 0
-        for suffix in ("count_the_cost", "reopen_tax_offices", "repair_workshops", "stabilize_currency", "recovery_budget"):
+        for suffix in (
+            "count_the_cost",
+            "reopen_tax_offices",
+            "repair_workshops",
+            "stabilize_currency",
+            "recovery_budget",
+        ):
             identifier = "STP_pc_economy_" + suffix
             nodes = focus(source, identifier)
-            self.assertTrue(any(n.key == "effect_tooltip" for n in walk(nodes, previews=True)), identifier)
+            self.assertTrue(
+                any(n.key == "effect_tooltip" for n in walk(nodes, previews=True)),
+                identifier,
+            )
             for node in walk(nodes):
                 if node.key == "add_to_variable":
                     fields = {c.key: c.value for c in node.value}
-                    if fields.get("var") == "STP_pw_ADISCORD_economy_overall_income_factor":
+                    if (
+                        fields.get("var")
+                        == "STP_pw_ADISCORD_economy_overall_income_factor"
+                    ):
                         total += float(fields["value"])
         self.assertGreaterEqual(total, 0.35 - 1e-9)
 
     def test_kefreite_fiscal_reforms_are_persistent_not_one_off_money(self):
         text = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-        for identifier in ("VAL_Contract_Accounting_Office", "VAL_Export_Clearing_House", "VAL_Industrial_Mobilization_Plan"):
+        for identifier in (
+            "VAL_Contract_Accounting_Office",
+            "VAL_Export_Clearing_House",
+            "VAL_Industrial_Mobilization_Plan",
+        ):
             nodes = focus(text, identifier)
             changes = [
                 {child.key: child.value for child in node.value}
@@ -281,30 +420,53 @@ class RecoveryRewardTests(unittest.TestCase):
             }
             for variable, expected in expected_deltas.items():
                 self.assertTrue(
-                    any(change.get("var") == variable and change.get("value") == expected
-                        for change in changes), identifier,
+                    any(
+                        change.get("var") == variable
+                        and change.get("value") == expected
+                        for change in changes
+                    ),
+                    identifier,
                 )
             self.assertTrue(
-                any(node.key == "VAL_refresh_contract_modifier" and node.value == "yes"
-                    for node in walk(nodes)), identifier,
+                any(
+                    node.key == "VAL_refresh_contract_modifier" and node.value == "yes"
+                    for node in walk(nodes)
+                ),
+                identifier,
             )
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
-        self.assertIn("VAL_fiscal_administration_investment", block(effects, "VAL_refresh_contract_modifier"))
+        self.assertIn(
+            "VAL_fiscal_administration_investment",
+            block(effects, "VAL_refresh_contract_modifier"),
+        )
 
     def test_mixed_fiscal_and_industry_previews_reject_a_wrong_delta(self):
-        from tools.validators.validate_adiscord_val_rework import validate_val_preview_ideas
+        from tools.validators.validate_adiscord_val_rework import (
+            validate_val_preview_ideas,
+        )
+
         ideas = read("common/ideas/ADISCORD_VAL_rework_ideas.txt")
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
-        dynamic = read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt")
+        dynamic = read(
+            "common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"
+        )
         sources = {"focuses": focuses, "effects": effects}
-        self.assertEqual(validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], [])
+        self.assertEqual(
+            validate_val_preview_ideas(ideas, sources, dynamic, effects)[1], []
+        )
         source_delta = "var = VAL_fiscal_admin_savings value = -0.05"
         self.assertEqual(focuses.count(source_delta), 3)
-        sources["focuses"] = focuses.replace(source_delta, "var = VAL_fiscal_admin_savings value = -0.10", 1)
+        sources["focuses"] = focuses.replace(
+            source_delta, "var = VAL_fiscal_admin_savings value = -0.10", 1
+        )
         issues = validate_val_preview_ideas(ideas, sources, dynamic, effects)[1]
-        self.assertTrue(any("VAL_fiscal_administration_delta does not match actual" in issue for issue in issues))
-
+        self.assertTrue(
+            any(
+                "VAL_fiscal_administration_delta does not match actual" in issue
+                for issue in issues
+            )
+        )
 
 
 def building_budget_fixture(business=12, clusters=4, science=2):
@@ -318,30 +480,34 @@ def building_budget_fixture(business=12, clusters=4, science=2):
     for name in tuple(f.facts):
         match = re.search(r'_development_(at_least|exact)_(\d)$', name)
         if match:
-            f.facts[name] = int(match[2]) <= 3 if match[1] == 'at_least' else int(match[2]) == 3
+            f.facts[name] = (
+                int(match[2]) <= 3 if match[1] == 'at_least' else int(match[2]) == 3
+            )
     # Every authored manpower threshold is below this scenario's 250,000 soldiers.
     f.facts.update({'has_army_manpower': True, 'has_war': False})
     values = f.scopes['A']
-    values.update({
-        'ADISCORD_industrial_cluster_count': clusters,
-        'ADISCORD_science_center_count': science,
-        'ADISCORD_state_development_level': 3,
-        'ADISCORD_economic_development_level': 3,
-        'ADISCORD_social_system_development_level': 3,
-        'num_deployed_planes': 300,
-        'num_ships': 12,
-        'num_battalions': 250,
-        P + 'cached_army_organization_factor': 1,
-        P + 'cached_available_civilian_factories': 0,
-        P + 'cached_available_military_factories': 0,
-        P + 'cached_naval_factories': 4,
-        P + 'army_spending_mode': 3,
-        P + 'social_spending_mode': 3,
-        P + 'research_spending_mode': 3,
-        P + 'debt_service': 6,
-        P + 'debt': 600,
-        P + 'accounting_period_treasury_start': 100,
-    })
+    values.update(
+        {
+            'ADISCORD_industrial_cluster_count': clusters,
+            'ADISCORD_science_center_count': science,
+            'ADISCORD_state_development_level': 3,
+            'ADISCORD_economic_development_level': 3,
+            'ADISCORD_social_system_development_level': 3,
+            'num_deployed_planes': 300,
+            'num_ships': 12,
+            'num_battalions': 250,
+            P + 'cached_army_organization_factor': 1,
+            P + 'cached_available_civilian_factories': 0,
+            P + 'cached_available_military_factories': 0,
+            P + 'cached_naval_factories': 4,
+            P + 'army_spending_mode': 3,
+            P + 'social_spending_mode': 3,
+            P + 'research_spending_mode': 3,
+            P + 'debt_service': 6,
+            P + 'debt': 600,
+            P + 'accounting_period_treasury_start': 100,
+        }
+    )
     f.run(P + 'calculate_income')
     f.run(P + 'calculate_expenses')
     f.run(P + 'calculate_monthly_balance')
@@ -365,14 +531,18 @@ class BuildingIncomeTests(unittest.TestCase):
             with self.subTest(existing_centers=count):
                 before = building_budget_fixture(business=count).scopes['A']
                 after = building_budget_fixture(business=count + 1).scopes['A']
-                self.assertGreaterEqual(after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 6)
+                self.assertGreaterEqual(
+                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 6
+                )
 
     def test_industrial_cluster_adds_at_least_two_net_weekly_without_low_caps(self):
         for count in (0, 4, 12, 24):
             with self.subTest(existing_clusters=count):
                 before = building_budget_fixture(clusters=count).scopes['A']
                 after = building_budget_fixture(clusters=count + 1).scopes['A']
-                self.assertGreaterEqual(after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 2)
+                self.assertGreaterEqual(
+                    after[P + 'weekly_balance'] - before[P + 'weekly_balance'], 2
+                )
 
     def test_large_network_tax_preview_matches_full_calculation_and_never_pays(self):
         for level in range(1, 6):
@@ -382,14 +552,21 @@ class BuildingIncomeTests(unittest.TestCase):
             full = building_budget_fixture(business=25, clusters=15)
             full.scopes['A'][P + 'tax_burden_mode'] = level
             full.run(P + 'calculate_income')
-            self.assertAlmostEqual(cached.scopes['A'][P + 'monthly_income'], full.scopes['A'][P + 'monthly_income'])
+            self.assertAlmostEqual(
+                cached.scopes['A'][P + 'monthly_income'],
+                full.scopes['A'][P + 'monthly_income'],
+            )
             self.assertEqual(cached.scopes['A'][P + 'treasury'], 100)
 
     def test_large_weekly_surplus_reaches_cash_exactly_thirteen_times(self):
         f = building_budget_fixture()
-        f.stubs.update(P + suffix for suffix in (
-            'update_debt_state_after_settlement', 'queue_debt_notification',
-        ))
+        f.stubs.update(
+            P + suffix
+            for suffix in (
+                'update_debt_state_after_settlement',
+                'queue_debt_notification',
+            )
+        )
         balance = f.scopes['A'][P + 'weekly_balance']
         self.assertGreaterEqual(balance, 100)
         for _ in range(13):
@@ -403,51 +580,84 @@ class BuildingIncomeTests(unittest.TestCase):
         self.assertLess(f.scopes['A'][P + 'weekly_balance'], 25)
         self.assertEqual(f.scopes['A'][P + 'treasury'], 100)
 
-
     def test_science_network_has_large_but_bounded_native_research_bonuses(self):
         ideas = read('common/ideas/ADISCORD_economy_ideas.txt')
         for tier, expected in enumerate((0.05, 0.10, 0.15, 0.20), 1):
             body = block(ideas, P + f'science_network_{tier}')
-            self.assertAlmostEqual(float(re.search(r'research_speed_factor\s*=\s*([\d.]+)', body)[1]), expected)
+            self.assertAlmostEqual(
+                float(re.search(r'research_speed_factor\s*=\s*([\d.]+)', body)[1]),
+                expected,
+            )
 
     def test_science_keeps_its_research_cost_instead_of_becoming_a_cash_printer(self):
         before = building_budget_fixture(science=0).scopes['A']
         after = building_budget_fixture(science=1).scopes['A']
-        self.assertAlmostEqual(after[P + 'monthly_balance'] - before[P + 'monthly_balance'], -0.62)
+        self.assertAlmostEqual(
+            after[P + 'monthly_balance'] - before[P + 'monthly_balance'], -0.62
+        )
 
     def test_storage_scales_with_the_economic_building_network(self):
-        base = building_budget_fixture(business=0, science=0).scopes['A'][P + 'treasury_cap']
-        business = building_budget_fixture(business=1, science=0).scopes['A'][P + 'treasury_cap']
-        science = building_budget_fixture(business=0, science=1).scopes['A'][P + 'treasury_cap']
+        base = building_budget_fixture(business=0, science=0).scopes['A'][
+            P + 'treasury_cap'
+        ]
+        business = building_budget_fixture(business=1, science=0).scopes['A'][
+            P + 'treasury_cap'
+        ]
+        science = building_budget_fixture(business=0, science=1).scopes['A'][
+            P + 'treasury_cap'
+        ]
         self.assertEqual(business - base, 400)
         self.assertEqual(science - base, 160)
-        large = building_budget_fixture(business=30, science=6).scopes['A'][P + 'treasury_cap']
+        large = building_budget_fixture(business=30, science=6).scopes['A'][
+            P + 'treasury_cap'
+        ]
         self.assertGreater(large, 12000)
         self.assertLessEqual(large, 20000)
 
     def test_ai_growth_targets_do_not_remove_crisis_or_peacetime_guards(self):
         text = read('common/ai_strategy/ADISCORD_economy_ai.txt')
         healthy = block(text, 'ADISCORD_ai_healthy_civilian_growth')
-        for required in ('ADISCORD_economy_ai_is_healthy = yes', 'has_war = no', 'ADISCORD_economy_surplus_streak'):
+        for required in (
+            'ADISCORD_economy_ai_is_healthy = yes',
+            'has_war = no',
+            'ADISCORD_economy_surplus_streak',
+        ):
             self.assertIn(required, healthy)
-        self.assertIn('building_target id = ADISCORD_business_center value = 8', healthy)
+        self.assertIn(
+            'building_target id = ADISCORD_business_center value = 8', healthy
+        )
         self.assertIn('building_target id = ADISCORD_science_center value = 2', healthy)
-        self.assertIn('building_target id = ADISCORD_industrial_cluster value = 4', healthy)
+        self.assertIn(
+            'building_target id = ADISCORD_industrial_cluster value = 4', healthy
+        )
         for name in ('ADISCORD_ai_fiscal_crisis', 'ADISCORD_ai_fiscal_stress'):
             body = block(text, name)
             for building in ('business_center', 'science_center', 'industrial_cluster'):
-                self.assertIn('building_target id = ADISCORD_' + building + ' value = 0', body)
-
+                self.assertIn(
+                    'building_target id = ADISCORD_' + building + ' value = 0', body
+                )
 
 
 class ReserveInvestmentTests(unittest.TestCase):
     def fixture(self, cash=2000, balance=0, fund=0, ai=False):
-        f = EconomyScriptFixture(facts={"is_ai": ai}, stubs=(
-            P + "update_debt_state_after_settlement", P + "queue_debt_notification",
-            P + "mark_dirty", "country_event"))
-        f.scopes["A"].update({P + "treasury": cash, P + "treasury_cap": 2000,
-            P + "accounting_period_treasury_start": cash, P + "weekly_balance": balance,
-            P + "overflow_investment_fund": fund})
+        f = EconomyScriptFixture(
+            facts={"is_ai": ai},
+            stubs=(
+                P + "update_debt_state_after_settlement",
+                P + "queue_debt_notification",
+                P + "mark_dirty",
+                "country_event",
+            ),
+        )
+        f.scopes["A"].update(
+            {
+                P + "treasury": cash,
+                P + "treasury_cap": 2000,
+                P + "accounting_period_treasury_start": cash,
+                P + "weekly_balance": balance,
+                P + "overflow_investment_fund": fund,
+            }
+        )
         return f
 
     def week(self, f):
@@ -515,30 +725,61 @@ class ReserveInvestmentTests(unittest.TestCase):
         self.assertEqual(v[P + "last_period_unexplained_delta"], 0)
 
     def test_capacity_ceiling_and_minimum_follow_fourfold_scale(self):
-        for count, factor, expected in ((0, 25, 1200), (0, 100, 2000), (100, 250, 20000)):
+        for count, factor, expected in (
+            (0, 25, 1200),
+            (0, 100, 2000),
+            (100, 250, 20000),
+        ):
             f = self.fixture()
-            f.scopes["A"].update({"ADISCORD_business_center_count": count,
-                                   P + "final_treasury_capacity_factor_bp": factor})
+            f.scopes["A"].update(
+                {
+                    "ADISCORD_business_center_count": count,
+                    P + "final_treasury_capacity_factor_bp": factor,
+                }
+            )
             f.run(P + "recalculate_treasury_cap")
             self.assertEqual(f.scopes["A"][P + "treasury_cap"], expected)
 
     def test_regular_programs_require_and_charge_one_hundred(self):
-        for name, gate in (("invest_reserves", "can_expand_public_capital"),
-                           ("civilian_investment_action", "can_use_civilian_stimulus"),
-                           ("military_investment_action", "can_use_military_investment")):
-            f = EconomyScriptFixture(facts={P + gate: True,
-                **{P + "model_is_" + model: False for model in (
-                    "decentralized_market", "mixed", "technocratic", "oligarchic_clan",
-                    "state_coordinated", "planned_bureaucratic")}}, stubs=(
-                P + "initialize_country", P + "mark_dirty", P + "check_economic_development_upgrade", "add_timed_idea"))
+        for name, gate in (
+            ("invest_reserves", "can_expand_public_capital"),
+            ("civilian_investment_action", "can_use_civilian_stimulus"),
+            ("military_investment_action", "can_use_military_investment"),
+        ):
+            f = EconomyScriptFixture(
+                facts={
+                    P + gate: True,
+                    **{
+                        P + "model_is_" + model: False
+                        for model in (
+                            "decentralized_market",
+                            "mixed",
+                            "technocratic",
+                            "oligarchic_clan",
+                            "state_coordinated",
+                            "planned_bureaucratic",
+                        )
+                    },
+                },
+                stubs=(
+                    P + "initialize_country",
+                    P + "mark_dirty",
+                    P + "check_economic_development_upgrade",
+                    "add_timed_idea",
+                ),
+            )
             f.scopes["A"][P + "treasury"] = 100
             f.run(P + name)
             self.assertEqual(f.scopes["A"][P + "treasury"], 0)
             self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], 100)
         for name in ("can_invest_reserves", "can_use_military_investment"):
             entries = parse_clausewitz(block(TRIGGERS, P + name))
-            money_gate = [n for n in entries if n.key == "check_variable"
-                          and any(c.value == P + "treasury" for c in n.value)]
+            money_gate = [
+                n
+                for n in entries
+                if n.key == "check_variable"
+                and any(c.value == P + "treasury" for c in n.value)
+            ]
             self.assertEqual(len(money_gate), 1)
             f = self.fixture(cash=99.99)
             self.assertFalse(f.condition(money_gate))
@@ -548,11 +789,19 @@ class ReserveInvestmentTests(unittest.TestCase):
 
 class PostwarProgramPriceTests(unittest.TestCase):
     PRICES = {
-        "party_restore_ministries": 540, "party_reopen_port": 1080, "party_refit_guard": 900,
-        "party_return_specialists": 540, "party_security_reserve": 540,
-        "party_standard_order": 900, "party_frontier_exercise": 540,
-        "restore_services": 720, "restart_workshops": 1080, "integrate_veterans": 540,
-        "army_procurement": 900, "air_procurement": 1080, "border_dossier": 360,
+        "party_restore_ministries": 540,
+        "party_reopen_port": 1080,
+        "party_refit_guard": 900,
+        "party_return_specialists": 540,
+        "party_security_reserve": 540,
+        "party_standard_order": 900,
+        "party_frontier_exercise": 540,
+        "restore_services": 720,
+        "restart_workshops": 1080,
+        "integrate_veterans": 540,
+        "army_procurement": 900,
+        "air_procurement": 1080,
+        "border_dossier": 360,
     }
 
     def test_affordability_payment_accounting_and_localised_prices_agree(self):
@@ -567,11 +816,22 @@ class PostwarProgramPriceTests(unittest.TestCase):
                 self.assertFalse(f.condition(gate))
                 f.scopes["A"][P + "treasury"] = price
                 self.assertTrue(f.condition(gate))
-                transaction = [n for n in walk(parse_clausewitz(block(body, "complete_effect")))
-                               if n.key in ("subtract_from_variable", "add_to_variable", "set_variable")
-                               and any(c.key == "var" and c.value in (
-                                   P + "treasury", P + "current_month_action_costs", "STP_pw_project_deposit")
-                                   for c in n.value)]
+                transaction = [
+                    n
+                    for n in walk(parse_clausewitz(block(body, "complete_effect")))
+                    if n.key
+                    in ("subtract_from_variable", "add_to_variable", "set_variable")
+                    and any(
+                        c.key == "var"
+                        and c.value
+                        in (
+                            P + "treasury",
+                            P + "current_month_action_costs",
+                            "STP_pw_project_deposit",
+                        )
+                        for c in n.value
+                    )
+                ]
                 f.execute(transaction, "A", None, "A")
                 self.assertEqual(f.scopes["A"][P + "treasury"], 0)
                 self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], price)
@@ -579,8 +839,11 @@ class PostwarProgramPriceTests(unittest.TestCase):
                     self.assertEqual(f.scopes["A"]["STP_pw_project_deposit"], price)
                 self.assertIn("custom_cost_text = STP_pw_price_" + str(price), body)
                 for suffix in ("", "_blocked", "_tooltip"):
-                    line = next(line for line in loc.splitlines()
-                                if line.startswith(" STP_pw_price_" + str(price) + suffix + ":"))
+                    line = next(
+                        line
+                        for line in loc.splitlines()
+                        if line.startswith(" STP_pw_price_" + str(price) + suffix + ":")
+                    )
                     self.assertIn(str(price) + "§!", line)
 
     def test_old_and_new_project_receipts_finish_and_refund_once(self):
@@ -588,22 +851,36 @@ class PostwarProgramPriceTests(unittest.TestCase):
         for effect in ("STP_pw_finish_project", "STP_pw_party_finish_project"):
             entries = parse_clausewitz(block(source, effect))
             # Isolate receipt alternatives from ownership and political engine predicates.
-            alternatives = next(n for n in walk(entries) if n.key == "OR"
-                                and any(c.key == "AND" for c in n.value))
+            alternatives = next(
+                n
+                for n in walk(entries)
+                if n.key == "OR" and any(c.key == "AND" for c in n.value)
+            )
             for branch in alternatives.value:
                 kind = next(n for n in branch.value if n.key == "check_variable")
-                kind_value = float(next(c.value for c in kind.value if c.key == "value"))
+                kind_value = float(
+                    next(c.value for c in kind.value if c.key == "value")
+                )
                 receipts = next(n for n in branch.value if n.key == "OR")
-                accepted = [float(next(c.value for c in n.value if c.key == "value"))
-                            for n in receipts.value]
+                accepted = [
+                    float(next(c.value for c in n.value if c.key == "value"))
+                    for n in receipts.value
+                ]
                 self.assertEqual(accepted[3], accepted[2] * 1.2)
                 self.assertEqual(accepted[0], accepted[2] * 9)
                 for paid in accepted:
                     f = EconomyScriptFixture(stubs=(P + "mark_dirty",))
-                    f.definitions.update({n.key: n.value for n in parse_clausewitz(source)})
+                    f.definitions.update(
+                        {n.key: n.value for n in parse_clausewitz(source)}
+                    )
                     v = f.scopes["A"]
-                    v.update({"STP_pw_project_deposit": paid, "STP_pw_project_kind": kind_value,
-                              P + "treasury": 0})
+                    v.update(
+                        {
+                            "STP_pw_project_deposit": paid,
+                            "STP_pw_project_kind": kind_value,
+                            P + "treasury": 0,
+                        }
+                    )
                     self.assertTrue(f.condition([receipts]))
                     f.run("STP_pw_cancel_project")
                     f.run("STP_pw_cancel_project")
@@ -622,18 +899,32 @@ class BudgetAndLawBalanceTests(unittest.TestCase):
             for level in (5, 3, 4, 1, 5, 5):
                 v[P + budget + "_spending_mode"] = level
                 f.run(P + "refresh_" + budget + "_policy_idea")
-                active = [n for n in range(1, 6) if v.get("idea@" + P + budget + "_spending_" + str(n))]
+                active = [
+                    n
+                    for n in range(1, 6)
+                    if v.get("idea@" + P + budget + "_spending_" + str(n))
+                ]
                 self.assertEqual(active, [level])
                 self.assertEqual(v[P + "treasury"], 137)
 
     def test_law_replacement_queues_one_refresh_and_preserves_cash(self):
-        refreshes = ("recalculate_policy_modifiers", "recalculate_treasury_cap",
-                     "update_model_and_cycle", "light_update", "calculate_development_multiplier",
-                     "refresh_policy_previews", "update_gui")
-        f = EconomyScriptFixture(facts={P + "has_current_schema": True,
-                                        P + "should_show_player_ui": True},
-                                 stubs=(P + "mark_dirty", "country_event",
-                                        *(P + name for name in refreshes)))
+        refreshes = (
+            "recalculate_policy_modifiers",
+            "recalculate_treasury_cap",
+            "update_model_and_cycle",
+            "light_update",
+            "calculate_development_multiplier",
+            "refresh_policy_previews",
+            "update_gui",
+        )
+        f = EconomyScriptFixture(
+            facts={P + "has_current_schema": True, P + "should_show_player_ui": True},
+            stubs=(
+                P + "mark_dirty",
+                "country_event",
+                *(P + name for name in refreshes),
+            ),
+        )
         v = f.scopes["A"]
         v.update({P + "treasury": 137, P + "debt": 250, P + "show_window": 1})
         for _ in range(4):
@@ -667,25 +958,44 @@ class BudgetAndLawBalanceTests(unittest.TestCase):
                     if not isinstance(category.value, list):
                         continue
                     for law in category.value:
-                        if not isinstance(law.value, list) or not any(n.key == "cost" for n in law.value):
+                        if not isinstance(law.value, list) or not any(
+                            n.key == "cost" for n in law.value
+                        ):
                             continue
                         if law.key in ("undisturbed_isolation", "isolation"):
                             continue
                         count += 1
                         for hook in ("on_add", "on_remove"):
                             body = next(n.value for n in law.value if n.key == hook)
-                            hidden = next(n.value for n in body if n.key == "hidden_effect")
-                            self.assertTrue(any(n.key == P + "queue_law_refresh" and n.value == "yes" for n in hidden), law.key)
+                            hidden = next(
+                                n.value for n in body if n.key == "hidden_effect"
+                            )
+                            self.assertTrue(
+                                any(
+                                    n.key == P + "queue_law_refresh"
+                                    and n.value == "yes"
+                                    for n in hidden
+                                ),
+                                law.key,
+                            )
         self.assertEqual(count, 127)
 
     def test_recruitment_shares_stay_bounded_and_emergency_laws_retain_costs(self):
         source = read("common/ideas/_manpower.txt")
-        for law,share in (("disarmed_nation", 0.01), ("volunteer_only", 0.015),
-                          ("limited_conscription", 0.025), ("extensive_conscription", 0.05),
-                          ("service_by_requirement", 0.10), ("all_adults_serve", 0.20),
-                          ("scraping_the_barrel", 0.25)):
+        for law, share in (
+            ("disarmed_nation", 0.01),
+            ("volunteer_only", 0.015),
+            ("limited_conscription", 0.025),
+            ("extensive_conscription", 0.05),
+            ("service_by_requirement", 0.10),
+            ("all_adults_serve", 0.20),
+            ("scraping_the_barrel", 0.25),
+        ):
             entries = parse_clausewitz(block(source, law))
-            mods = {n.key: float(n.value) for n in next(n.value for n in entries if n.key == "modifier")}
+            mods = {
+                n.key: float(n.value)
+                for n in next(n.value for n in entries if n.key == "modifier")
+            }
             self.assertEqual(mods["conscription"], share)
             if share >= 0.10:
                 self.assertLess(mods["industrial_capacity_factory"], 0)
@@ -695,36 +1005,62 @@ class BudgetAndLawBalanceTests(unittest.TestCase):
 
 
 class StartingLawAndPriceTierTests(unittest.TestCase):
-    def test_custom_categories_keep_one_default_and_all_choices_have_localisation_and_icons(self):
+    def test_custom_categories_keep_one_default_and_all_choices_have_localisation_and_icons(
+        self,
+    ):
         categories = parse_clausewitz(read("common/ideas/ADISCORD_laws.txt"))[0].value
-        gfx = "\n".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "interface").glob("*.gfx"))
+        gfx = "\n".join(
+            p.read_text(encoding="utf-8-sig")
+            for p in (ROOT / "interface").glob("*.gfx")
+        )
         names = set(re.findall(r'name\s*=\s*"([^"\n]+)"', gfx))
-        locs = [read("localisation/" + lang + "/ADISCORD_laws_l_" + lang + ".yml")
-                for lang in ("russian", "english")]
+        locs = [
+            read("localisation/" + lang + "/ADISCORD_laws_l_" + lang + ".yml")
+            for lang in ("russian", "english")
+        ]
         for category in categories:
-            laws = [n for n in category.value if isinstance(n.value, list)
-                    and any(c.key == "cost" for c in n.value)]
+            laws = [
+                n
+                for n in category.value
+                if isinstance(n.value, list) and any(c.key == "cost" for c in n.value)
+            ]
             self.assertEqual(len(laws), 6, category.key)
-            self.assertEqual(sum(any(c.key == "default" and c.value == "yes" for c in law.value)
-                                 for law in laws), 1, category.key)
+            self.assertEqual(
+                sum(
+                    any(c.key == "default" and c.value == "yes" for c in law.value)
+                    for law in laws
+                ),
+                1,
+                category.key,
+            )
             for law in laws:
                 icon = next(n.value for n in law.value if n.key == "picture")
                 self.assertIn("GFX_idea_" + icon, names, law.key)
                 for loc in locs:
                     for suffix in ("", "_desc"):
-                        self.assertRegex(loc, r'(?m)^ ' + law.key + suffix + r':\s*"[^"\n]+"$')
+                        self.assertRegex(
+                            loc, r'(?m)^ ' + law.key + suffix + r':\s*"[^"\n]+"$'
+                        )
 
     def test_starting_profiles_select_at_most_one_law_per_category(self):
         categories = parse_clausewitz(read("common/ideas/ADISCORD_laws.txt"))[0].value
-        law_category = {law.key: category.key for category in categories
-                        for law in category.value if isinstance(law.value, list)
-                        and any(n.key == "cost" for n in law.value)}
+        law_category = {
+            law.key: category.key
+            for category in categories
+            for law in category.value
+            if isinstance(law.value, list) and any(n.key == "cost" for n in law.value)
+        }
         profiles = []
         for tag in ("STP", "NOD", "VAL", "IVN", "WRK"):
             path = next((ROOT / "history/countries").glob(tag + " - *.txt"))
             nodes = parse_clausewitz(path.read_text(encoding="utf-8-sig"))
-            ids = [item.value for node in nodes if node.key == "add_ideas" and isinstance(node.value, list)
-                   for item in node.value if not isinstance(item.value, list)]
+            ids = [
+                item.value
+                for node in nodes
+                if node.key == "add_ideas" and isinstance(node.value, list)
+                for item in node.value
+                if not isinstance(item.value, list)
+            ]
             selected = [key for key in ids if key in law_category]
             categories = [law_category[key] for key in selected]
             self.assertGreaterEqual(len(selected), 8, tag)
@@ -739,23 +1075,33 @@ class StartingLawAndPriceTierTests(unittest.TestCase):
             if path.name == "ADISCORD_STP_decisions.txt":
                 continue
             text = path.read_text(encoding="utf-8-sig")
-            for match in re.finditer(r'(subtract_from_variable|add_to_variable)\s*=\s*\{\s*'
-                                     r'var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*(-?[\d.]+)', text):
+            for match in re.finditer(
+                r'(subtract_from_variable|add_to_variable)\s*=\s*\{\s*'
+                r'var\s*=\s*ADISCORD_economy_treasury\s+value\s*=\s*(-?[\d.]+)',
+                text,
+            ):
                 amount = float(match[2])
                 if match[1] == "subtract_from_variable" or amount < 0:
                     self.assertIn(abs(amount), tiers, str(path))
                     used.add(abs(amount))
-            for match in re.finditer(r'ADISCORD_economy_(?:can_)?spend_(\d+)\s*=\s*yes', text):
+            for match in re.finditer(
+                r'ADISCORD_economy_(?:can_)?spend_(\d+)\s*=\s*yes', text
+            ):
                 self.assertIn(int(match[1]), tiers, str(path))
         self.assertTrue(used.issubset(tiers))
 
 
 class StelanderPurchasingPowerTests(unittest.TestCase):
     def fixture(self, countries=None, facts=None):
-        f = EconomyScriptFixture(countries=countries, facts=facts, stubs=(
-            P + "initialize_country", P + "mark_dirty", "add_political_power"))
-        for path in ("common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
-                     "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"):
+        f = EconomyScriptFixture(
+            countries=countries,
+            facts=facts,
+            stubs=(P + "initialize_country", P + "mark_dirty", "add_political_power"),
+        )
+        for path in (
+            "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+            "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt",
+        ):
             f.definitions.update({n.key: n.value for n in parse_clausewitz(read(path))})
         return f
 
@@ -787,14 +1133,31 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
 
     def test_large_focus_grants_survive_capacity_and_ledger_reconciliation(self):
         source = read("common/national_focus/ADISCORD_national_focus_STP.txt")
-        for identifier, amount in (("STP_cw_military_committee_fund", 18000),
-                                   ("STP_cw_seize_vorkerland_accounts", 3000)):
+        for identifier, amount in (
+            ("STP_cw_military_committee_fund", 18000),
+            ("STP_cw_seize_vorkerland_accounts", 3000),
+        ):
             f = self.fixture(facts={"STP_uses_campaign_currency_scale": True})
             f.scopes["A"][P + "final_treasury_capacity_factor_bp"] = 100
-            reward = next(n.value for n in focus(source, identifier) if n.key == "completion_reward")
-            monetary = [n for n in walk(reward) if n.key.startswith("STP_receive_") or
-                        (n.key == "add_to_variable" and any(c.key == "var" and c.value in
-                         (P + "treasury", P + "current_month_action_income") for c in n.value))]
+            reward = next(
+                n.value
+                for n in focus(source, identifier)
+                if n.key == "completion_reward"
+            )
+            monetary = [
+                n
+                for n in walk(reward)
+                if n.key.startswith("STP_receive_")
+                or (
+                    n.key == "add_to_variable"
+                    and any(
+                        c.key == "var"
+                        and c.value
+                        in (P + "treasury", P + "current_month_action_income")
+                        for c in n.value
+                    )
+                )
+            ]
             f.execute(monetary, "A", None, "A")
             f.run(P + "clamp_all_variables")
             self.assertEqual(f.scopes["A"][P + "treasury"], amount)
@@ -811,15 +1174,19 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertLess(abs((new / 26) / (old / 3) - 1), 0.04)
 
     def test_legacy_and_new_wartime_escrows_refund_the_actual_payment_once(self):
-        for name, variable, fraction in (("STP_cw_refund_arsenal_project", "STP_cw_arsenal_deposit", .5),
-                                         ("STP_cw_refund_disruption", "STP_cw_disruption_deposit", 1)):
+        for name, variable, fraction in (
+            ("STP_cw_refund_arsenal_project", "STP_cw_arsenal_deposit", 0.5),
+            ("STP_cw_refund_disruption", "STP_cw_disruption_deposit", 1),
+        ):
             for paid in (100, 1200):
                 f = self.fixture()
                 f.scopes["A"][variable] = paid
                 f.run(name)
                 f.run(name)
                 self.assertEqual(f.scopes["A"][P + "treasury"], paid * fraction)
-                self.assertEqual(f.scopes["A"][P + "current_month_action_income"], paid * fraction)
+                self.assertEqual(
+                    f.scopes["A"][P + "current_month_action_income"], paid * fraction
+                )
                 self.assertNotIn(variable, f.scopes["A"])
 
     def test_northern_deposit_handoff_preserves_old_and_new_money(self):
@@ -828,19 +1195,37 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             for paid in receipts:
                 f = self.fixture(countries={"STP": {variable: paid}, "STS": {}})
                 branches = f.definitions["STP_cw_transfer_preparation_modifiers"]
-                branch = next(n for n in branches if n.key == "if" and any(
-                    c.key == "limit" and any(x.key == "has_variable" and x.value == variable for x in c.value)
-                    for c in n.value))
+                branch = next(
+                    n
+                    for n in branches
+                    if n.key == "if"
+                    and any(
+                        c.key == "limit"
+                        and any(
+                            x.key == "has_variable" and x.value == variable
+                            for x in c.value
+                        )
+                        for c in n.value
+                    )
+                )
                 f.execute([branch], "STP", None, "STP")
                 f.execute([branch], "STP", None, "STP")
                 self.assertEqual(f.scopes["STS"][P + "treasury"], paid)
-                self.assertEqual(f.scopes["STS"][P + "current_month_action_income"], paid)
+                self.assertEqual(
+                    f.scopes["STS"][P + "current_month_action_income"], paid
+                )
                 self.assertNotIn(variable, f.scopes["STP"])
 
     def test_bilateral_compacts_debit_and_credit_the_same_amount(self):
-        for recipient, price, settled in (("VAL", 1800, False), ("VAL", 900, True), ("NOD", 1350, False)):
-            f = self.fixture(countries={"A": {P + "treasury": price}, recipient: {}},
-                             facts={"STP_pw_kefreyt_accounts_settled": settled})
+        for recipient, price, settled in (
+            ("VAL", 1800, False),
+            ("VAL", 900, True),
+            ("NOD", 1350, False),
+        ):
+            f = self.fixture(
+                countries={"A": {P + "treasury": price}, recipient: {}},
+                facts={"STP_pw_kefreyt_accounts_settled": settled},
+            )
             if settled:
                 f.scopes["A"]["STP_pw_kefreyt_accounts_settled"] = True
             gate = f.definitions["STP_pc_can_pay_" + recipient.lower() + "_compact"]
@@ -852,19 +1237,25 @@ class StelanderPurchasingPowerTests(unittest.TestCase):
             self.assertEqual(f.scopes["A"][P + "treasury"], 0)
             self.assertEqual(f.scopes[recipient][P + "treasury"], price)
             self.assertEqual(f.scopes["A"][P + "current_month_action_costs"], price)
-            self.assertEqual(f.scopes[recipient][P + "current_month_action_income"], price)
+            self.assertEqual(
+                f.scopes[recipient][P + "current_month_action_income"], price
+            )
 
 
 class BattalionArmyUpkeepTests(unittest.TestCase):
     def calculate(self, battalions, mode=3, war=False, divisions=20):
         f = income_fixture()
         f.facts.update({"has_war": war, "has_army_manpower": False})
-        f.scopes["A"].update({
-            "tag": "VAL", "num_battalions": battalions, "num_divisions": divisions,
-            P + "army_spending_mode": mode,
-            P + "cached_army_organization_factor": 1,
-            P + "cached_army_organization_flat_expense": 0,
-        })
+        f.scopes["A"].update(
+            {
+                "tag": "VAL",
+                "num_battalions": battalions,
+                "num_divisions": divisions,
+                P + "army_spending_mode": mode,
+                P + "cached_army_organization_factor": 1,
+                P + "cached_army_organization_flat_expense": 0,
+            }
+        )
         f.run(P + "calculate_army_expenses")
         return f
 
@@ -872,22 +1263,26 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
         for count in (0, 1, 9, 10, 100, 999, 1000):
             with self.subTest(count=count):
                 f = self.calculate(count)
-                self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], count * .1)
+                self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], count * 0.1)
 
     def test_reorganizing_same_battalions_does_not_change_base_upkeep(self):
-        costs = [self.calculate(100, divisions=d).scopes["A"][P + "army_expenses"]
-                 for d in (5, 10, 20)]
+        costs = [
+            self.calculate(100, divisions=d).scopes["A"][P + "army_expenses"]
+            for d in (5, 10, 20)
+        ]
         self.assertEqual(costs, [10, 10, 10])
 
     def test_war_funding_and_weekly_conversion_apply_once(self):
-        for mode, factor in ((1, .25), (2, .6), (3, 1), (4, 1.3), (5, 1.7)):
+        for mode, factor in ((1, 0.25), (2, 0.6), (3, 1), (4, 1.3), (5, 1.7)):
             for war in (False, True):
                 f = self.calculate(100, mode, war)
                 expected = 10 * factor * (1.25 if war else 1)
                 self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], expected)
                 f.run(P + "sum_expenses")
                 f.run(P + "calculate_weekly_budget")
-                self.assertAlmostEqual(f.scopes["A"][P + "weekly_expenses"], expected * 3 / 13)
+                self.assertAlmostEqual(
+                    f.scopes["A"][P + "weekly_expenses"], expected * 3 / 13
+                )
 
     def test_recount_and_cached_policy_preview_do_not_accumulate(self):
         f = self.calculate(100)
@@ -895,8 +1290,13 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
         f.run(P + "calculate_army_expenses")
         f.run(P + "calculate_army_expenses")
         self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], 20)
-        f.scopes["A"].update({P + "policy_preview_uses_cached_base_temp": 1,
-                              "num_battalions": 999, P + "army_spending_mode": 4})
+        f.scopes["A"].update(
+            {
+                P + "policy_preview_uses_cached_base_temp": 1,
+                "num_battalions": 999,
+                P + "army_spending_mode": 4,
+            }
+        )
         f.run(P + "calculate_army_expenses")
         self.assertAlmostEqual(f.scopes["A"][P + "army_expenses"], 26)
         self.assertEqual(f.scopes["A"][P + "army_battalion_count"], 200)
@@ -913,19 +1313,35 @@ class BattalionArmyUpkeepTests(unittest.TestCase):
 
 class ValMercenaryPayrollTests(unittest.TestCase):
     def fixture(self, authority=35):
-        f = EconomyScriptFixture(facts={"has_dynamic_modifier": True},
-                                 stubs=("force_update_dynamic_modifier", P + "mark_dirty"))
-        f.definitions.update({n.key: n.value for n in parse_clausewitz(
-            read("common/scripted_effects/ADISCORD_VAL_effects.txt"))})
+        f = EconomyScriptFixture(
+            facts={"has_dynamic_modifier": True},
+            stubs=("force_update_dynamic_modifier", P + "mark_dirty"),
+        )
+        f.definitions.update(
+            {
+                n.key: n.value
+                for n in parse_clausewitz(
+                    read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+                )
+            }
+        )
         f.scopes["A"]["VAL_contract_authority"] = authority
         return f
 
     def test_base_premium_preserves_authority_discounts_without_stacking(self):
-        for authority, discount in ((10, 0), (35, 0), (60, .03), (80, .05), (95, .07)):
+        for authority, discount in (
+            (10, 0),
+            (35, 0),
+            (60, 0.03),
+            (80, 0.05),
+            (95, 0.07),
+        ):
             f = self.fixture(authority)
             for _ in range(3):
                 f.run("VAL_refresh_contract_modifier")
-                self.assertAlmostEqual(f.scopes["A"]["VAL_contract_army_expense_factor"], .25 - discount)
+                self.assertAlmostEqual(
+                    f.scopes["A"]["VAL_contract_army_expense_factor"], 0.25 - discount
+                )
 
     def test_late_reforms_remove_only_premium_and_survive_tree_change(self):
         f = self.fixture(95)
@@ -935,15 +1351,20 @@ class ValMercenaryPayrollTests(unittest.TestCase):
         for step in range(1, 11):
             f.execute(payload, "A", None, "A")
             f.run("VAL_refresh_contract_modifier")
-            expected = .25 - min(step, 5) * .05 - .07 - .03
-            self.assertAlmostEqual(f.scopes["A"]["VAL_contract_army_expense_factor"], expected)
+            expected = 0.25 - min(step, 5) * 0.05 - 0.07 - 0.03
+            self.assertAlmostEqual(
+                f.scopes["A"]["VAL_contract_army_expense_factor"], expected
+            )
             if step == 3:
                 f.scopes["A"]["VAL_stelander_defeated"] = True
         self.assertIn(P + "mark_dirty", f.calls)
 
     def test_both_defeat_routes_reach_all_five_reforms(self):
         text = read("common/national_focus/ADISCORD_national_focus_VAL_defeated.txt")
-        for branch in ("VAL_defeat_Technical_Institute", "VAL_defeat_Return_To_The_Passes"):
+        for branch in (
+            "VAL_defeat_Technical_Institute",
+            "VAL_defeat_Return_To_The_Passes",
+        ):
             visited = set()
 
             def visit(identifier):
@@ -957,9 +1378,14 @@ class ValMercenaryPayrollTests(unittest.TestCase):
                     visit(branch if branch in choices else choices[0])
 
             visit("VAL_defeat_Recovered_State")
-            reforms = [identifier for identifier in visited if any(
-                n.key == "VAL_reform_mercenary_payroll" and n.value == "yes"
-                for n in walk(focus(text, identifier)))]
+            reforms = [
+                identifier
+                for identifier in visited
+                if any(
+                    n.key == "VAL_reform_mercenary_payroll" and n.value == "yes"
+                    for n in walk(focus(text, identifier))
+                )
+            ]
             self.assertEqual(len(reforms), 5, (branch, reforms))
 
     def test_load_migrates_recorded_reforms_once_before_refresh(self):
@@ -968,41 +1394,72 @@ class ValMercenaryPayrollTests(unittest.TestCase):
         completed = set()
 
         def condition(entries, scope="A", previous=None, root="A"):
-            return all(n.value in completed if n.key == "has_completed_focus"
-                       else original_condition([n], scope, previous, root) for n in entries)
+            return all(
+                (
+                    n.value in completed
+                    if n.key == "has_completed_focus"
+                    else original_condition([n], scope, previous, root)
+                )
+                for n in entries
+            )
 
         f.condition = condition
-        completed.update(n.value for n in walk(f.definitions["VAL_migrate_mercenary_payroll"])
-                         if n.key == "has_completed_focus")
+        completed.update(
+            n.value
+            for n in walk(f.definitions["VAL_migrate_mercenary_payroll"])
+            if n.key == "has_completed_focus"
+        )
         self.assertEqual(len(completed), 10)
         f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.25)
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.25)
         completed.clear()
         f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.25)
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.25)
         f.scopes["A"].pop("VAL_contract_payroll_relief")
         completed.update(("VAL_State_Contract", "VAL_defeat_Staff_College"))
         f.run("VAL_migrate_mercenary_payroll")
-        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -.1)
+        self.assertAlmostEqual(f.scopes["A"]["VAL_contract_payroll_relief"], -0.1)
         startup = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
-        self.assertLess(startup.index("VAL_migrate_mercenary_payroll = yes"),
-                        startup.index("VAL_initialize_contract_authority = yes"))
+        self.assertLess(
+            startup.index("VAL_migrate_mercenary_payroll = yes"),
+            startup.index("VAL_initialize_contract_authority = yes"),
+        )
 
 
 class NodrulDivisionEconomyTests(unittest.TestCase):
-    def fixture(self, divisions=38, civilian=9, military=12, war=False,
-                stress=0, crisis=0, tag="NOD", mode=3):
+    def fixture(
+        self,
+        divisions=38,
+        civilian=9,
+        military=12,
+        war=False,
+        stress=0,
+        crisis=0,
+        tag="NOD",
+        mode=3,
+    ):
         f = income_fixture(civilian=civilian, military=military)
-        f.facts.update({"has_army_manpower": True, "has_war": war,
-                        "is_ai": True, "has_capitulated": False})
-        f.scopes["A"].update({
-            "tag": tag, "num_divisions": divisions,
-            P + "army_spending_mode": mode,
-            P + "cached_army_organization_factor": 1,
-            P + "cached_army_organization_flat_expense": 0,
-            P + "fiscal_stress": stress, P + "debt_crisis_level": crisis,
-            P + "initialized": 1, P + "schema_version": 15,
-        })
+        f.facts.update(
+            {
+                "has_army_manpower": True,
+                "has_war": war,
+                "is_ai": True,
+                "has_capitulated": False,
+            }
+        )
+        f.scopes["A"].update(
+            {
+                "tag": tag,
+                "num_divisions": divisions,
+                P + "army_spending_mode": mode,
+                P + "cached_army_organization_factor": 1,
+                P + "cached_army_organization_flat_expense": 0,
+                P + "fiscal_stress": stress,
+                P + "debt_crisis_level": crisis,
+                P + "initialized": 1,
+                P + "schema_version": 15,
+            }
+        )
         return f
 
     def calculate(self, **kwargs):
@@ -1011,8 +1468,10 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
         return f
 
     def test_each_additional_division_costs_money_at_equal_fielded_manpower(self):
-        costs = [self.calculate(divisions=d).scopes["A"][P + "army_expenses"]
-                 for d in (20, 21, 33, 34, 80, 81)]
+        costs = [
+            self.calculate(divisions=d).scopes["A"][P + "army_expenses"]
+            for d in (20, 21, 33, 34, 80, 81)
+        ]
         self.assertAlmostEqual(costs[1] - costs[0], 0.5)
         self.assertAlmostEqual(costs[3] - costs[2], 2.5)
         self.assertAlmostEqual(costs[5] - costs[4], 2.5)
@@ -1023,39 +1482,65 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
                 v = self.calculate(war=war).scopes["A"]
                 self.assertEqual(v.get(P + "nod_division_capacity"), cap)
                 self.assertEqual(v.get(P + "nod_division_count"), 38)
-                self.assertEqual(v.get(P + "nod_excess_divisions"), max(38-cap, 0))
+                self.assertEqual(v.get(P + "nod_excess_divisions"), max(38 - cap, 0))
 
     def test_stress_and_debt_reduce_capacity_once_not_cumulatively(self):
-        for stress, crisis, cap in ((44.99, 1, 33), (45, 0, 27), (0, 2, 27),
-                                    (74.99, 2, 27), (75, 0, 21), (0, 3, 21),
-                                    (100, 4, 21)):
+        for stress, crisis, cap in (
+            (44.99, 1, 33),
+            (45, 0, 27),
+            (0, 2, 27),
+            (74.99, 2, 27),
+            (75, 0, 21),
+            (0, 3, 21),
+            (100, 4, 21),
+        ):
             with self.subTest(stress=stress, crisis=crisis):
                 v = self.calculate(stress=stress, crisis=crisis).scopes["A"]
                 self.assertEqual(v.get(P + "nod_division_capacity"), cap)
 
     def test_capacity_has_a_floor_and_war_does_not_remove_the_ceiling(self):
-        for factories, war, crisis, cap in ((0, False, 4, 12), (0, True, 4, 12),
-                                            (100, False, 0, 48), (100, True, 0, 54),
-                                            (100, True, 4, 42)):
+        for factories, war, crisis, cap in (
+            (0, False, 4, 12),
+            (0, True, 4, 12),
+            (100, False, 0, 48),
+            (100, True, 0, 54),
+            (100, True, 4, 42),
+        ):
             with self.subTest(factories=factories, war=war, crisis=crisis):
-                self.assertEqual(self.calculate(civilian=factories, military=0,
-                                 war=war, crisis=crisis).scopes["A"].get(P + "nod_division_capacity"), cap)
+                self.assertEqual(
+                    self.calculate(
+                        civilian=factories, military=0, war=war, crisis=crisis
+                    )
+                    .scopes["A"]
+                    .get(P + "nod_division_capacity"),
+                    cap,
+                )
 
-    def test_low_funding_does_not_raise_capacity_and_previews_do_not_erase_pressure(self):
-        for level, factor in ((1, .25), (2, .6), (3, 1), (4, 1.3), (5, 1.7)):
+    def test_low_funding_does_not_raise_capacity_and_previews_do_not_erase_pressure(
+        self,
+    ):
+        for level, factor in ((1, 0.25), (2, 0.6), (3, 1), (4, 1.3), (5, 1.7)):
             with self.subTest(level=level):
                 live = self.calculate(divisions=50, mode=level)
                 baseline = self.calculate(divisions=50, mode=3)
                 v = live.scopes["A"]
                 self.assertEqual(v.get(P + "nod_division_capacity"), 33)
-                self.assertAlmostEqual(v[P + "army_expenses"],
-                                       baseline.scopes["A"][P + "army_expenses"] * factor)
+                self.assertAlmostEqual(
+                    v[P + "army_expenses"],
+                    baseline.scopes["A"][P + "army_expenses"] * factor,
+                )
                 before = dict(v)
                 v[P + "policy_preview_uses_cached_base_temp"] = 1
                 v["num_divisions"] = 200
                 live.run(P + "calculate_army_expenses")
-                self.assertAlmostEqual(v[P + "army_expenses"], before[P + "army_expenses"])
-                for key in ("nod_division_capacity", "nod_division_count", "nod_excess_divisions"):
+                self.assertAlmostEqual(
+                    v[P + "army_expenses"], before[P + "army_expenses"]
+                )
+                for key in (
+                    "nod_division_capacity",
+                    "nod_division_count",
+                    "nod_excess_divisions",
+                ):
                     self.assertEqual(v.get(P + key), before.get(P + key))
 
     def test_recalculation_is_idempotent_and_consumes_current_division_count(self):
@@ -1076,7 +1561,9 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
         f.run(P + "sum_expenses")
         f.run(P + "calculate_weekly_budget")
         v = f.scopes["A"]
-        self.assertAlmostEqual(v[P + "weekly_expenses"], v[P + "army_expenses"] * 3 / 13)
+        self.assertAlmostEqual(
+            v[P + "weekly_expenses"], v[P + "army_expenses"] * 3 / 13
+        )
         self.assertEqual(v[P + "treasury"], 100)
 
     def test_other_countries_keep_their_existing_army_cost_curve(self):
@@ -1093,8 +1580,12 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
         self.assertIn("NOD_economy_army_capacity_reached", strategies)
         stop = strategies["NOD_economy_army_capacity_reached"]
         enables = next(n.value for n in stop if n.key == "enable")
-        self.assertEqual(next(n.value for n in stop if n.key == "abort_when_not_enabled"), "yes")
-        weights = [{c.key: c.value for c in n.value} for n in stop if n.key == "ai_strategy"]
+        self.assertEqual(
+            next(n.value for n in stop if n.key == "abort_when_not_enabled"), "yes"
+        )
+        weights = [
+            {c.key: c.value for c in n.value} for n in stop if n.key == "ai_strategy"
+        ]
         self.assertIn({"type": "ai_wanted_divisions_factor", "value": "-1000"}, weights)
         for d, expected in ((32, False), (33, True), (80, True)):
             f = self.calculate(divisions=d)
@@ -1107,14 +1598,27 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
                 f.facts.update(overrides)
             self.assertFalse(f.condition(enables))
         f = self.fixture(divisions=80)
-        self.assertFalse(f.condition(enables), "No zero-cap lock before first economy refresh")
+        self.assertFalse(
+            f.condition(enables), "No zero-cap lock before first economy refresh"
+        )
 
     def test_ai_brakes_before_the_cap_without_stacking_the_stop_policy(self):
-        strategies = {n.key: n.value for n in parse_clausewitz(read("common/ai_strategy/ADISCORD_economy_ai.txt"))}
+        strategies = {
+            n.key: n.value
+            for n in parse_clausewitz(
+                read("common/ai_strategy/ADISCORD_economy_ai.txt")
+            )
+        }
         self.assertIn("NOD_economy_army_capacity_approaching", strategies)
-        gate = next(n.value for n in strategies["NOD_economy_army_capacity_approaching"] if n.key == "enable")
+        gate = next(
+            n.value
+            for n in strategies["NOD_economy_army_capacity_approaching"]
+            if n.key == "enable"
+        )
         for divisions, expected in ((28, False), (29, True), (32, True), (33, False)):
-            self.assertEqual(self.calculate(divisions=divisions).condition(gate), expected)
+            self.assertEqual(
+                self.calculate(divisions=divisions).condition(gate), expected
+            )
 
     def test_capacity_details_are_connected_to_the_existing_army_tooltip(self):
         script = read("common/scripted_localisation/ADISCORD_economy_scripted_loc.txt")
@@ -1123,15 +1627,30 @@ class NodrulDivisionEconomyTests(unittest.TestCase):
             path = ROOT / f"localisation/{language}/ADISCORD_economy_l_{language}.yml"
             self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             text = path.read_text(encoding="utf-8-sig")
-            row = re.search(r"^ ADISCORD_economy_army_controls_tt:.*$", text, re.M).group()
+            row = re.search(
+                r"^ ADISCORD_economy_army_controls_tt:.*$", text, re.M
+            ).group()
             self.assertIn("[GetADISCORDEconomyNodDivisionCapacityLoc]", row)
-            for key in ("nod_division_capacity", "nod_division_count", "nod_excess_divisions"):
+            for key in (
+                "nod_division_capacity",
+                "nod_division_count",
+                "nod_excess_divisions",
+            ):
                 self.assertIn("[?" + P + key + "|0]", text)
 
     def test_existing_starting_forces_are_not_destroyed_or_rebuilt_by_the_cap(self):
-        effect = block(read("common/scripted_effects/ADISCORD_economy_effects.txt"),
-                       P + "calculate_army_expenses")
-        for forbidden in ("destroy_unit", "delete_units", "load_oob", "every_unit", "every_country", "every_state"):
+        effect = block(
+            read("common/scripted_effects/ADISCORD_economy_effects.txt"),
+            P + "calculate_army_expenses",
+        )
+        for forbidden in (
+            "destroy_unit",
+            "delete_units",
+            "load_oob",
+            "every_unit",
+            "every_country",
+            "every_state",
+        ):
             self.assertNotIn(forbidden, effect)
 
 

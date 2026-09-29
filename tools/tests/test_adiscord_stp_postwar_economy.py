@@ -1,4 +1,5 @@
 """Regression contract for Shabrat's postwar economy and development branches."""
+
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
 import unittest
@@ -22,7 +23,7 @@ def focus_block(text: str, focus_id: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unclosed focus {focus_id}")
 
 
@@ -31,7 +32,7 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.assertIn("STP_pw_rebuild_economy_after_unification = {", effects)
         start = effects.index("STP_pw_rebuild_economy_after_unification = {")
-        body = effects[start:start + 4000]
+        body = effects[start : start + 4000]
         for token in (
             "ADISCORD_economy_initialize_country = yes",
             "ADISCORD_economy_mark_dirty = yes",
@@ -42,15 +43,17 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         ):
             self.assertIn(token, body)
 
-        settlement = effects[effects.index("STP_cw_settle_union_victory = {"):]
-        settlement = settlement[:settlement.index("\nSTP_cw_settle_nod_victory = {")]
-        self.assertLess(settlement.index("annex_country = { target = ROOT transfer_troops = no }"),
-                        settlement.index("STP_pw_rebuild_economy_after_unification = yes"))
+        settlement = effects[effects.index("STP_cw_settle_union_victory = {") :]
+        settlement = settlement[: settlement.index("\nSTP_cw_settle_nod_victory = {")]
+        self.assertLess(
+            settlement.index("annex_country = { target = ROOT transfer_troops = no }"),
+            settlement.index("STP_pw_rebuild_economy_after_unification = yes"),
+        )
 
     def test_republic_dynamic_exposes_economic_and_development_recovery(self):
         dynamic = read("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt")
-        republic = dynamic[dynamic.index("STP_pw_republic_dynamic = {"):]
-        republic = republic[:republic.index("\nSTP_pw_party_dynamic = {")]
+        republic = dynamic[dynamic.index("STP_pw_republic_dynamic = {") :]
+        republic = republic[: republic.index("\nSTP_pw_party_dynamic = {")]
         for token in (
             "ADISCORD_economy_overall_income_factor = STP_pw_ADISCORD_economy_overall_income_factor",
             "ADISCORD_economy_treasury_capacity_factor = STP_pw_ADISCORD_economy_treasury_capacity_factor",
@@ -115,10 +118,21 @@ class ShabratPostwarEconomyTests(unittest.TestCase):
         second_block = focus_block(focus, second_id)
         self.assertEqual(first_block.count("add_research_slot = 1"), 1)
         self.assertEqual(second_block.count("add_research_slot = 1"), 1)
-        self.assertIn("prerequisite = { focus = STP_pc_development_engineers_on_radio }", first_block)
-        self.assertIn("prerequisite = { focus = STP_pc_development_generation_reconstruction }", second_block)
-        self.assertIn("prerequisite = { focus = STP_pc_economy_recovery_budget }", second_block)
-        self.assertIn("prerequisite = { focus = STP_pc_development_reopen_universities }", second_block)
+        self.assertIn(
+            "prerequisite = { focus = STP_pc_development_engineers_on_radio }",
+            first_block,
+        )
+        self.assertIn(
+            "prerequisite = { focus = STP_pc_development_generation_reconstruction }",
+            second_block,
+        )
+        self.assertIn(
+            "prerequisite = { focus = STP_pc_economy_recovery_budget }", second_block
+        )
+        self.assertIn(
+            "prerequisite = { focus = STP_pc_development_reopen_universities }",
+            second_block,
+        )
 
         ai = read("common/ai_strategy_plans/ADISCORD_STP_plans.txt")
         self.assertIn(first_id, ai)

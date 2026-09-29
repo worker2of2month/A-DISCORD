@@ -53,27 +53,38 @@ def compact(source: str) -> str:
 class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.ai = without_comments(source_section(AI_PATH.read_text(encoding="utf-8-sig"), 'collapse_ai'))
+        cls.ai = without_comments(
+            source_section(AI_PATH.read_text(encoding="utf-8-sig"), 'collapse_ai')
+        )
 
     def test_solar_intervention_fronts_have_exact_bounded_contracts(self) -> None:
         for slug, (target, target_flag) in CASES.items():
             with self.subTest(target=target):
                 name = f"ADISCORD_vorkerland_vad_solar_intervention_front_{slug}"
                 block = named_block(self.ai, name)
-                self.assertEqual(compact(named_block(block, "allowed")), "allowed = { tag = VAD }")
+                self.assertEqual(
+                    compact(named_block(block, "allowed")), "allowed = { tag = VAD }"
+                )
 
                 enable = named_block(block, "enable")
                 self.assertEqual(
                     re.findall(r"has_global_flag\s*=\s*([A-Za-z0-9_]+)", enable),
                     [ACTIVE_FLAG, target_flag],
                 )
-                self.assertEqual(re.findall(r"country_exists\s*=\s*([A-Z]{3})", enable), [target])
-                self.assertEqual(re.findall(r"has_war_with\s*=\s*([A-Z]{3})", enable), [target])
+                self.assertEqual(
+                    re.findall(r"country_exists\s*=\s*([A-Z]{3})", enable), [target]
+                )
+                self.assertEqual(
+                    re.findall(r"has_war_with\s*=\s*([A-Z]{3})", enable), [target]
+                )
                 self.assertNotIn("OR =", enable)
                 self.assertEqual(block.count("abort_when_not_enabled = yes"), 1)
 
                 self.assertEqual(
-                    {compact(strategy) for strategy in named_blocks(block, "ai_strategy")},
+                    {
+                        compact(strategy)
+                        for strategy in named_blocks(block, "ai_strategy")
+                    },
                     {
                         f"ai_strategy = {{ type = front_unit_request tag = {target} value = 100 }}",
                         f"ai_strategy = {{ type = front_control tag = {target} ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }}",
@@ -83,8 +94,7 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
 
     def test_no_vad_solar_attack_profile_activates_outside_intervention(self) -> None:
         expected_names = {
-            f"ADISCORD_vorkerland_vad_solar_intervention_front_{slug}"
-            for slug in CASES
+            f"ADISCORD_vorkerland_vad_solar_intervention_front_{slug}" for slug in CASES
         }
         counter_names = {
             f"ADISCORD_vorkerland_vad_solyarino_counter_front_{slug}"
@@ -95,7 +105,9 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
         for match in re.finditer(r"(?m)^([A-Za-z0-9_]+)\s*=\s*\{", self.ai):
             name = match.group(1)
             block = named_block(self.ai, name)
-            allowed = named_block(block, "allowed") if named_blocks(block, "allowed") else ""
+            allowed = (
+                named_block(block, "allowed") if named_blocks(block, "allowed") else ""
+            )
             if not re.search(r"\btag\s*=\s*VAD\b", allowed):
                 continue
             strategies = "\n".join(named_blocks(block, "ai_strategy"))
@@ -111,7 +123,9 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                     compact(enable),
                     name,
                 )
-                self.assertNotIn(f"has_global_flag = {ACTIVE_FLAG}", compact(enable), name)
+                self.assertNotIn(
+                    f"has_global_flag = {ACTIVE_FLAG}", compact(enable), name
+                )
                 continue
 
             solar_targets = targets & {"SRA", "CSL"}
@@ -156,7 +170,9 @@ class VorkerlandVadSolarBehaviorTests(unittest.TestCase):
                 ):
                     self.assertIn(token, enable)
                 self.assertEqual(block.count("abort_when_not_enabled = yes"), 1)
-                strategies = {compact(strategy) for strategy in named_blocks(block, "ai_strategy")}
+                strategies = {
+                    compact(strategy) for strategy in named_blocks(block, "ai_strategy")
+                }
                 self.assertIn(
                     "ai_strategy = { type = front_unit_request tag = VAD value = 100 }",
                     strategies,

@@ -84,8 +84,18 @@ def collect_issues() -> list[str]:
     texts = {
         path: read(path)
         for path in (
-            EVENTS, DECISIONS, CATEGORIES, EFFECTS, TRIGGERS, ON_ACTIONS,
-            IDEAS, CHARACTERS, MON_HISTORY, RIN_HISTORY, RIN_COUNTRY, RIN_OOB,
+            EVENTS,
+            DECISIONS,
+            CATEGORIES,
+            EFFECTS,
+            TRIGGERS,
+            ON_ACTIONS,
+            IDEAS,
+            CHARACTERS,
+            MON_HISTORY,
+            RIN_HISTORY,
+            RIN_COUNTRY,
+            RIN_OOB,
         )
     }
 
@@ -94,12 +104,19 @@ def collect_issues() -> list[str]:
     events = texts[EVENTS]
     event_ids = re.findall(r"(?m)^\s*id\s*=\s*(ADISCORD_rin_crisis\.\d+)\b", events)
     if event_ids != [
-        "ADISCORD_rin_crisis.1", "ADISCORD_rin_crisis.2",
-        "ADISCORD_rin_crisis.3", "ADISCORD_rin_crisis.4",
-        "ADISCORD_rin_crisis.10", "ADISCORD_rin_crisis.11",
-        "ADISCORD_rin_crisis.12", "ADISCORD_rin_crisis.13", "ADISCORD_rin_crisis.14",
+        "ADISCORD_rin_crisis.1",
+        "ADISCORD_rin_crisis.2",
+        "ADISCORD_rin_crisis.3",
+        "ADISCORD_rin_crisis.4",
+        "ADISCORD_rin_crisis.10",
+        "ADISCORD_rin_crisis.11",
+        "ADISCORD_rin_crisis.12",
+        "ADISCORD_rin_crisis.13",
+        "ADISCORD_rin_crisis.14",
     ]:
-        issues.append(f"RIN event namespace must contain exactly .1-.4 and news .10-.14, found {event_ids}")
+        issues.append(
+            f"RIN event namespace must contain exactly .1-.4 and news .10-.14, found {event_ids}"
+        )
     if events.count("add_namespace = ADISCORD_rin_crisis") != 1:
         issues.append("RIN event namespace declaration is missing or duplicated")
 
@@ -150,7 +167,9 @@ def collect_issues() -> list[str]:
         "ADISCORD_rin_apply_partition_armistice = yes" in partition_terminal
         or partition_terminal.count("country_event =") != 1
     ):
-        issues.append("terminal partition verifier schedules or performs an unbounded second repair")
+        issues.append(
+            "terminal partition verifier schedules or performs an unbounded second repair"
+        )
 
     on_actions = texts[ON_ACTIONS]
     try:
@@ -172,21 +191,42 @@ def collect_issues() -> list[str]:
         ):
             if token not in block:
                 issues.append(f"{block_name} producer lacks {token}")
-        if block.find("set_global_flag = ADISCORD_rin_oath_crisis_scheduled") > block.find(
-            f"ADISCORD_rin_crisis.1 days = {delay}"
-        ):
-            issues.append(f"{block_name} schedules the event before raising its global guard")
+        if block.find(
+            "set_global_flag = ADISCORD_rin_oath_crisis_scheduled"
+        ) > block.find(f"ADISCORD_rin_crisis.1 days = {delay}"):
+            issues.append(
+                f"{block_name} schedules the event before raising its global guard"
+            )
         event_position = block.find(f"ADISCORD_rin_crisis.1 days = {delay}")
-        release_positions = [match.start() for match in re.finditer(
-            "ADISCORD_release_non_participating_minor_optimization = yes", block
-        )]
-        if len(release_positions) != 2 or any(position > event_position for position in release_positions):
-            issues.append(f"{block_name} must release dormant MON and RIN before scheduling the event")
+        release_positions = [
+            match.start()
+            for match in re.finditer(
+                "ADISCORD_release_non_participating_minor_optimization = yes", block
+            )
+        ]
+        if len(release_positions) != 2 or any(
+            position > event_position for position in release_positions
+        ):
+            issues.append(
+                f"{block_name} must release dormant MON and RIN before scheduling the event"
+            )
     if "ADISCORD_rin_is_vorkerland_war_actor = yes" not in war:
         issues.append("on_war producer is not restricted to a Vorkerland claimant")
-    for forbidden in ("on_daily", "on_weekly", "on_monthly", "on_yearly", "every_country"):
-        if re.search(rf"(?m)^\s*{forbidden}\s*=", on_actions) or forbidden == "every_country" and forbidden in on_actions:
-            issues.append(f"RIN crisis uses forbidden recurring/global poll {forbidden}")
+    for forbidden in (
+        "on_daily",
+        "on_weekly",
+        "on_monthly",
+        "on_yearly",
+        "every_country",
+    ):
+        if (
+            re.search(rf"(?m)^\s*{forbidden}\s*=", on_actions)
+            or forbidden == "every_country"
+            and forbidden in on_actions
+        ):
+            issues.append(
+                f"RIN crisis uses forbidden recurring/global poll {forbidden}"
+            )
     for token in (
         "set_global_flag = skip_default_capitulation",
         "white_peace = ROOT",
@@ -199,19 +239,25 @@ def collect_issues() -> list[str]:
     if "ADISCORD_rin_complete_partition_armistice = yes" not in peace:
         issues.append("on_peace fallback does not settle an externally ended RIN war")
     if "event_target:ADISCORD_rin_southern_charter" not in peace:
-        issues.append("on_peace fallback resolves the ambiguous original RIN tag instead of cached southern ROOT")
+        issues.append(
+            "on_peace fallback resolves the ambiguous original RIN tag instead of cached southern ROOT"
+        )
 
     triggers = texts[TRIGGERS]
     try:
         actor = named_block(triggers, "ADISCORD_rin_is_vorkerland_war_actor")
         schedule = named_block(triggers, "ADISCORD_rin_oath_crisis_can_schedule")
-        partition_valid = named_block(triggers, "ADISCORD_rin_partition_armistice_is_valid")
+        partition_valid = named_block(
+            triggers, "ADISCORD_rin_partition_armistice_is_valid"
+        )
     except ValueError as exc:
         issues.append(str(exc))
         actor = schedule = partition_valid = ""
     actor_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", actor))
     if actor_tags != {"WKR", "VAD", "TVA"}:
-        issues.append(f"war producer actor set is {sorted(actor_tags)}, expected WKR/VAD/TVA")
+        issues.append(
+            f"war producer actor set is {sorted(actor_tags)}, expected WKR/VAD/TVA"
+        )
     for token in (
         "ADISCORD_rin_oath_crisis_scheduled",
         "ADISCORD_rin_oath_crisis_opened",
@@ -227,9 +273,13 @@ def collect_issues() -> list[str]:
         issues.append("retired RIN startup migration trigger remains reachable")
     for state_id in (134, 146, 147, 148, 149, 150):
         if f"owns_state = {state_id}" not in partition_valid:
-            issues.append(f"partition runtime assertion does not check ownership of state {state_id}")
+            issues.append(
+                f"partition runtime assertion does not check ownership of state {state_id}"
+            )
         if f"controls_state = {state_id}" not in partition_valid:
-            issues.append(f"partition runtime assertion does not check control of state {state_id}")
+            issues.append(
+                f"partition runtime assertion does not check control of state {state_id}"
+            )
     for token in (
         "has_country_flag = ADISCORD_rin_charter_compact_survived",
         "has_country_flag = ADISCORD_rin_crown_palatin_survived",
@@ -245,12 +295,16 @@ def collect_issues() -> list[str]:
         begin = named_block(effects, "ADISCORD_rin_begin_oath_crisis")
         split = named_block(effects, "ADISCORD_rin_start_oath_civil_war")
         apply_partition = named_block(effects, "ADISCORD_rin_apply_partition_armistice")
-        complete_partition = named_block(effects, "ADISCORD_rin_complete_partition_armistice")
+        complete_partition = named_block(
+            effects, "ADISCORD_rin_complete_partition_armistice"
+        )
         armistice = named_block(effects, "ADISCORD_rin_force_partition_armistice")
     except ValueError as exc:
         issues.append(str(exc))
         begin = split = apply_partition = complete_partition = armistice = ""
-    if begin.find("autonomy_state = autonomy_free") > begin.find("ADISCORD_rin_crisis.2 days = 1"):
+    if begin.find("autonomy_state = autonomy_free") > begin.find(
+        "ADISCORD_rin_crisis.2 days = 1"
+    ):
         issues.append("RIN is not freed before the one-day diplomatic cache barrier")
     for token in (
         "ideology = chauvinism",
@@ -270,8 +324,15 @@ def collect_issues() -> list[str]:
         if token not in split:
             issues.append(f"deterministic RIN split lacks {token}")
     if "\n\tRIN = {" in split:
-        issues.append("post-civil-war split resolves the ambiguous original RIN tag instead of southern ROOT")
-    for forbidden in ("declare_war_on", "add_to_war", "create_faction", "add_to_faction"):
+        issues.append(
+            "post-civil-war split resolves the ambiguous original RIN tag instead of southern ROOT"
+        )
+    for forbidden in (
+        "declare_war_on",
+        "add_to_war",
+        "create_faction",
+        "add_to_faction",
+    ):
         if forbidden in effects or forbidden in events or forbidden in on_actions:
             issues.append(f"RIN crisis can merge with another war through {forbidden}")
     if "white_peace = ROOT" not in armistice or "has_war_with = ROOT" not in armistice:
@@ -280,26 +341,44 @@ def collect_issues() -> list[str]:
         issues.append("mission timeout does not preserve its southern ROOT")
 
     try:
-        north_partition = named_block(apply_partition, "event_target:ADISCORD_rin_northern_court")
+        north_partition = named_block(
+            apply_partition, "event_target:ADISCORD_rin_northern_court"
+        )
     except ValueError as exc:
         issues.append(str(exc))
         north_partition = ""
-    all_transfers = [int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", apply_partition)]
-    north_transfers = [int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north_partition)]
+    all_transfers = [
+        int(value)
+        for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", apply_partition)
+    ]
+    north_transfers = [
+        int(value)
+        for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north_partition)
+    ]
     if all_transfers != [146, 148, 149, 150, 134, 147]:
-        issues.append(f"partition transfer order/set is {all_transfers}, expected south 146/148/149/150 then north 134/147")
+        issues.append(
+            f"partition transfer order/set is {all_transfers}, expected south 146/148/149/150 then north 134/147"
+        )
     if north_transfers != [134, 147]:
-        issues.append(f"northern partition transfer set is {north_transfers}, expected 134/147")
+        issues.append(
+            f"northern partition transfer set is {north_transfers}, expected 134/147"
+        )
     if "\n\tRIN = {" in apply_partition:
-        issues.append("partition repair resolves the ambiguous original RIN tag instead of southern ROOT")
+        issues.append(
+            "partition repair resolves the ambiguous original RIN tag instead of southern ROOT"
+        )
     for state_id in (146, 148, 149, 150):
         token = f"{state_id} = {{ set_state_controller_to = event_target:ADISCORD_rin_southern_charter }}"
         if token not in apply_partition:
-            issues.append(f"southern partition does not restore controller of state {state_id}")
+            issues.append(
+                f"southern partition does not restore controller of state {state_id}"
+            )
     for state_id in (134, 147):
         token = f"{state_id} = {{ set_state_controller_to = event_target:ADISCORD_rin_northern_court }}"
         if token not in apply_partition:
-            issues.append(f"northern partition does not restore controller of state {state_id}")
+            issues.append(
+                f"northern partition does not restore controller of state {state_id}"
+            )
     for token in (
         "remove_mission = ADISCORD_rin_palatin_breakup_mission",
         "remove_ideas = RIN_two_oaths",
@@ -346,7 +425,9 @@ def collect_issues() -> list[str]:
         if token not in mission:
             issues.append(f"RIN breakup mission lacks {token}")
     if "ADISCORD_rin_southern_charter_side" not in category:
-        issues.append("RIN mission category is not limited to the playable southern side")
+        issues.append(
+            "RIN mission category is not limited to the playable southern side"
+        )
 
     mon_history = texts[MON_HISTORY]
     if not re.search(
@@ -367,7 +448,9 @@ def collect_issues() -> list[str]:
             rf"(?m)^\s*{re.escape(field)}\s*=\s*{re.escape(expected)}\s*$",
             rin_country,
         ):
-            issues.append(f"RIN common country definition lacks authoritative {field} = {expected}")
+            issues.append(
+                f"RIN common country definition lacks authoritative {field} = {expected}"
+            )
     characters = texts[CHARACTERS]
     try:
         regency = named_block(characters, "RIN_Northern_Court_Regency")
@@ -392,16 +475,24 @@ def collect_issues() -> list[str]:
         issues.append(str(exc))
         rin_regiments = ""
     if "ADISCORD_line_artillery = {" not in rin_regiments:
-        issues.append("RIN line template lacks its runtime-safe ADISCORD_line_artillery battalion")
+        issues.append(
+            "RIN line template lacks its runtime-safe ADISCORD_line_artillery battalion"
+        )
     if re.search(r"(?m)^\s*artillery\s*=\s*\{", rin_regiments):
-        issues.append("RIN places the support-only artillery subunit in a regiment column")
+        issues.append(
+            "RIN places the support-only artillery subunit in a regiment column"
+        )
     for state_id in (134, 146, 147, 148, 149, 150):
         state = state_history(state_id)
         if "owner = RIN" not in state or "add_core_of = RIN" not in state:
-            issues.append(f"state {state_id} no longer starts as a RIN core and possession")
+            issues.append(
+                f"state {state_id} no longer starts as a RIN core and possession"
+            )
     for state_id in (134, 147):
         if "add_claim_by = MON" not in state_history(state_id):
-            issues.append(f"northern split state {state_id} lacks its established MON claim")
+            issues.append(
+                f"northern split state {state_id} lacks its established MON claim"
+            )
 
     ideas = texts[IDEAS]
     for idea in (
@@ -430,7 +521,9 @@ def collect_issues() -> list[str]:
             issues.append(f"missing Russian localisation key {key}")
 
     if list((ROOT / "gfx/flags").glob("RIN_northern_court.*")):
-        issues.append("RIN crisis added a bitmap cosmetic flag instead of reusing RIN graphics")
+        issues.append(
+            "RIN crisis added a bitmap cosmetic flag instead of reusing RIN graphics"
+        )
 
     return issues
 

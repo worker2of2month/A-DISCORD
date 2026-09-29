@@ -12,7 +12,9 @@ import re
 ENTRY = re.compile(r'^\s*([^\s:#]+):\d*\s*"((?:[^"\\]|\\.)*)"\s*(?:#.*)?$')
 # Consume a texticon's frame and closing marker so adjacent English prose is
 # not mistaken for another icon, and frame changes remain detectable.
-TOKENS = re.compile(r'\$[^$\r\n]+\$|\[[^\]\r\n]+\]|£[A-Za-z0-9_]+(?:\|[0-9]+)?£?|@[A-Z0-9]{3}')
+TOKENS = re.compile(
+    r'\$[^$\r\n]+\$|\[[^\]\r\n]+\]|£[A-Za-z0-9_]+(?:\|[0-9]+)?£?|@[A-Z0-9]{3}'
+)
 CYRILLIC = re.compile(r'[А-Яа-яЁё]')
 # AGENTS.md forbids adding localisation for the exclusion zone.
 EXCLUDED_KEYS = {'EXZ_pragmatism_party', 'EXZ_No_Authority', 'EXZ_No_Authority_desc'}
@@ -65,56 +67,78 @@ def audit(root: Path, game_root: Path) -> dict:
             excluded.append(key)
             continue
         if key not in english:
-            if key in vanilla_en and comparable(vanilla_ru.get(key, {}).get('value', '')) == comparable(entry['value']):
+            if key in vanilla_en and comparable(
+                vanilla_ru.get(key, {}).get('value', '')
+            ) == comparable(entry['value']):
                 inherited += 1
             else:
                 missing[key] = entry
             continue
         translated = english[key]
         if entry['value'].strip() and not translated['value'].strip():
-            issues.append(f'{translated["file"]}:{translated["line"]}: {key}: empty English translation')
+            issues.append(
+                f'{translated["file"]}:{translated["line"]}: {key}: empty English translation'
+            )
         if CYRILLIC.search(translated['value']):
-            issues.append(f'{translated["file"]}:{translated["line"]}: {key}: Cyrillic in English')
+            issues.append(
+                f'{translated["file"]}:{translated["line"]}: {key}: Cyrillic in English'
+            )
         if re.search('[—–−]', translated['value']):
-            issues.append(f'{translated["file"]}:{translated["line"]}: {key}: non-ASCII dash in English')
+            issues.append(
+                f'{translated["file"]}:{translated["line"]}: {key}: non-ASCII dash in English'
+            )
         source_tokens = Counter(TOKENS.findall(entry['value']))
         target_tokens = Counter(TOKENS.findall(translated['value']))
         # Native languages sometimes use different static aliases or formatting.
         native_pair = (
-            key in vanilla_ru and key in vanilla_en
+            key in vanilla_ru
+            and key in vanilla_en
             and comparable(entry['value']).replace('\xa0', '')
             == comparable(vanilla_ru[key]['value']).replace('\xa0', '')
             and comparable(translated['value']) == comparable(vanilla_en[key]['value'])
         )
         if source_tokens != target_tokens and not native_pair:
-            issues.append(f'{translated["file"]}:{translated["line"]}: {key}: localisation token mismatch')
+            issues.append(
+                f'{translated["file"]}:{translated["line"]}: {key}: localisation token mismatch'
+            )
     return {
-        'russian_keys': len(russian), 'english_keys': len(english),
-        'inherited_unchanged': inherited, 'missing_count': len(missing),
+        'russian_keys': len(russian),
+        'english_keys': len(english),
+        'inherited_unchanged': inherited,
+        'missing_count': len(missing),
         'excluded_by_repository_rule': sorted(excluded),
         'missing_by_file': dict(Counter(entry['file'] for entry in missing.values())),
-        'missing': missing, 'issues': issues,
+        'missing': missing,
+        'issues': issues,
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--root', type=Path, default=Path(__file__).resolve().parents[2])
+    parser.add_argument(
+        '--root', type=Path, default=Path(__file__).resolve().parents[2]
+    )
     parser.add_argument('--game-root', type=Path, required=True)
     parser.add_argument('--report', type=Path)
     parser.add_argument('--limit', type=int, default=20)
     args = parser.parse_args()
     result = audit(args.root, args.game_root)
     if args.report:
-        args.report.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+        args.report.write_text(
+            json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8'
+        )
     print(f'English: {result["english_keys"]}; Russian: {result["russian_keys"]}')
     print(f'Unchanged vanilla fallbacks: {result["inherited_unchanged"]}')
     print(f'Missing English overrides: {result["missing_count"]}')
-    print(f'Excluded by repository rule: {", ".join(result["excluded_by_repository_rule"])}')
-    for path, count in sorted(result['missing_by_file'].items(), key=lambda item: -item[1]):
+    print(
+        f'Excluded by repository rule: {", ".join(result["excluded_by_repository_rule"])}'
+    )
+    for path, count in sorted(
+        result['missing_by_file'].items(), key=lambda item: -item[1]
+    ):
         print(f'  {count:5} {path}')
     print(f'Syntax and token issues: {len(result["issues"])}')
-    for issue in result['issues'][:args.limit]:
+    for issue in result['issues'][: args.limit]:
         print(f'  {issue}')
     return int(bool(result['missing_count'] or result['issues']))
 

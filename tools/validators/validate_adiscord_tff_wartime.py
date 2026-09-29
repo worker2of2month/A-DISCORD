@@ -99,9 +99,25 @@ def loc_value(source: str, key: str) -> str:
 def collect_issues() -> list[str]:
     issues: list[str] = []
     paths = (
-        CHARACTERS, HISTORY, ON_ACTIONS, EFFECTS, IDEAS, EVENTS, DECISIONS,
-        CATEGORIES, COSMETIC, IDEOLOGIES, SCRIPTED_LOC, PORTRAITS_GFX,
-        MINISTERS, RU_LOC, EN_LOC, RU_CHAR, EN_CHAR, RU_PARTIES, COUNTRY_TAGS,
+        CHARACTERS,
+        HISTORY,
+        ON_ACTIONS,
+        EFFECTS,
+        IDEAS,
+        EVENTS,
+        DECISIONS,
+        CATEGORIES,
+        COSMETIC,
+        IDEOLOGIES,
+        SCRIPTED_LOC,
+        PORTRAITS_GFX,
+        MINISTERS,
+        RU_LOC,
+        EN_LOC,
+        RU_CHAR,
+        EN_CHAR,
+        RU_PARTIES,
+        COUNTRY_TAGS,
     )
     texts = {}
     for path in paths:
@@ -130,7 +146,9 @@ def collect_issues() -> list[str]:
     if "GFX_portrait_TFF_Colt_Ardent" not in colt:
         issues.append("TFF_Colt_Ardent must use GFX_portrait_TFF_Colt_Ardent")
     if "ideology = tff_emergency_war_coordinator" not in colt:
-        issues.append("TFF_Colt_Ardent must keep an anarchism subtype country_leader role")
+        issues.append(
+            "TFF_Colt_Ardent must keep an anarchism subtype country_leader role"
+        )
     if characters.count("TFF_Colt_Ardent = {") != 1:
         issues.append("TFF_Colt_Ardent must be defined exactly once")
     if "minister_TFF_Colt_Ardent" in characters:
@@ -141,12 +159,21 @@ def collect_issues() -> list[str]:
         issues.append("TFF history must still recruit The_Absent_Government")
     if "recruit_character = TFF_Colt_Ardent" not in history:
         issues.append("TFF history must recruit TFF_Colt_Ardent")
-    if "promote_character = { character = The_Absent_Government ideology = anarchism_ideology }" not in history:
-        issues.append("TFF history must keep The Absent Government as the starting leader")
-    if history.find("recruit_character = The_Absent_Government") > history.find("recruit_character = TFF_Colt_Ardent"):
+    if (
+        "promote_character = { character = The_Absent_Government ideology = anarchism_ideology }"
+        not in history
+    ):
+        issues.append(
+            "TFF history must keep The Absent Government as the starting leader"
+        )
+    if history.find("recruit_character = The_Absent_Government") > history.find(
+        "recruit_character = TFF_Colt_Ardent"
+    ):
         issues.append("The Absent Government must be recruited before Colt")
     if "minister_TFF_Colt_Ardent" not in history:
-        issues.append("starting TFF cabinet must still include minister_TFF_Colt_Ardent")
+        issues.append(
+            "starting TFF cabinet must still include minister_TFF_Colt_Ardent"
+        )
     if "ruling_party = anarchism" not in history:
         issues.append("TFF must keep anarchism as the starting ruling party")
 
@@ -172,9 +199,18 @@ def collect_issues() -> list[str]:
     ):
         if token not in war:
             issues.append(f"on_war_relation_added lacks {token}")
-    if war.find("set_country_flag = TFF_nodrul_war_crisis_started") > war.find("country_event = { id = ADISCORD_TFF.1 }"):
+    if war.find("set_country_flag = TFF_nodrul_war_crisis_started") > war.find(
+        "country_event = { id = ADISCORD_TFF.1 }"
+    ):
         issues.append("one-shot crisis flag must be set before the event is fired")
-    for recurring in ("on_daily", "on_weekly", "on_monthly", "on_yearly", "mean_time_to_happen", "every_country"):
+    for recurring in (
+        "on_daily",
+        "on_weekly",
+        "on_monthly",
+        "on_yearly",
+        "mean_time_to_happen",
+        "every_country",
+    ):
         if recurring in on_actions:
             issues.append(f"TFF wartime on_actions must not use {recurring}")
 
@@ -195,7 +231,9 @@ def collect_issues() -> list[str]:
             issues.append(f"wartime effect lacks {token}")
     if "clr_country_flag = TFF_wartime_confederation_formed" in effects:
         issues.append("historical confederation flag must not be cleared")
-    if form.find("TFF_wartime_confederation_formed") == form.find("TFF_wartime_command_active"):
+    if form.find("TFF_wartime_confederation_formed") == form.find(
+        "TFF_wartime_command_active"
+    ):
         issues.append("historical and current wartime flags must stay distinct")
 
     events = texts.get(EVENTS, "")
@@ -219,7 +257,10 @@ def collect_issues() -> list[str]:
             issues.append(f"Empty Chair event lacks {token}")
     if re.search(r"(?m)^\s*option\s*=", empty_chair):
         option_start = empty_chair.find("option =")
-        if "ADISCORD_TFF_form_wartime_confederation = yes" in empty_chair[option_start:]:
+        if (
+            "ADISCORD_TFF_form_wartime_confederation = yes"
+            in empty_chair[option_start:]
+        ):
             issues.append("transformation must not wait for the event option")
 
     ideas = texts.get(IDEAS, "")
@@ -233,8 +274,13 @@ def collect_issues() -> list[str]:
     except ValueError as exc:
         issues.append(str(exc))
         category = ""
-    if "has_country_flag = TFF_wartime_command_active" not in category or "has_war_with = NOD" not in category:
-        issues.append("wartime decision category must require active command and war with NOD")
+    if (
+        "has_country_flag = TFF_wartime_command_active" not in category
+        or "has_war_with = NOD" not in category
+    ):
+        issues.append(
+            "wartime decision category must require active command and war with NOD"
+        )
     for decision_id in DECISION_IDS:
         try:
             decision = named_block(decisions, decision_id)
@@ -251,7 +297,9 @@ def collect_issues() -> list[str]:
         forts = named_block(decisions, "TFF_fortify_the_nodrul_border")
         provinces = tuple(re.findall(r"province\s*=\s*(\d+)", forts))
         if provinces != BORDER_PROVINCES:
-            issues.append(f"Nodrul border forts must be {BORDER_PROVINCES}, found {provinces}")
+            issues.append(
+                f"Nodrul border forts must be {BORDER_PROVINCES}, found {provinces}"
+            )
         if "controls_state = 83" not in forts:
             issues.append("border forts must stay in TFF state 83")
     except ValueError as exc:
@@ -271,13 +319,20 @@ def collect_issues() -> list[str]:
         r"(?s)\btff_emergency_war_coordinator\s*=\s*\{.*?can_be_randomly_selected\s*=\s*no",
         anarchism_types,
     ):
-        issues.append("tff_emergency_war_coordinator must be a non-random anarchism subtype")
+        issues.append(
+            "tff_emergency_war_coordinator must be a non-random anarchism subtype"
+        )
 
     scripted_loc = texts.get(SCRIPTED_LOC, "")
     if "name = GetSubIdeologyAnarchism" not in scripted_loc:
         issues.append("GetSubIdeologyAnarchism scripted loc is missing")
-    elif "has_country_leader_ideology = tff_emergency_war_coordinator" not in scripted_loc:
-        issues.append("GetSubIdeologyAnarchism must display the emergency coordinator title")
+    elif (
+        "has_country_leader_ideology = tff_emergency_war_coordinator"
+        not in scripted_loc
+    ):
+        issues.append(
+            "GetSubIdeologyAnarchism must display the emergency coordinator title"
+        )
 
     gfx = texts.get(PORTRAITS_GFX, "")
     if 'name = "GFX_portrait_TFF_Colt_Ardent"' not in gfx:
@@ -285,7 +340,9 @@ def collect_issues() -> list[str]:
     if 'texturefile = "gfx/leaders/TFF/portrait_TFF_Colt_Ardent.png"' not in gfx:
         issues.append("Colt portrait sprite must point at portrait_TFF_Colt_Ardent.png")
     if (ROOT / "gfx/leaders/TFF/portrait.png").exists():
-        issues.append("prepared Colt portrait must be renamed, not left as portrait.png")
+        issues.append(
+            "prepared Colt portrait must be renamed, not left as portrait.png"
+        )
     portrait = ROOT / PORTRAIT
     if not portrait.is_file():
         issues.append("portrait_TFF_Colt_Ardent.png is missing")
@@ -295,7 +352,9 @@ def collect_issues() -> list[str]:
             issues.append("Colt portrait must remain a PNG")
         width, height = struct.unpack(">II", data[16:24])
         if (width, height) != (156, 210):
-            issues.append(f"Colt portrait size must stay 156x210, found {width}x{height}")
+            issues.append(
+                f"Colt portrait size must stay 156x210, found {width}x{height}"
+            )
     if not (ROOT / ABSENT_PORTRAIT).is_file():
         issues.append("Absent Government portrait must remain in place")
 
@@ -304,7 +363,12 @@ def collect_issues() -> list[str]:
         issues.append("real country tag TFF must remain registered")
     extra_tags = []
     for path in (ROOT / "common/country_tags").glob("*.txt"):
-        extra_tags.extend(re.findall(r'(?m)^(TFF_[A-Za-z0-9_]+)\s*=\s*"countries/', path.read_text(encoding="utf-8-sig")))
+        extra_tags.extend(
+            re.findall(
+                r'(?m)^(TFF_[A-Za-z0-9_]+)\s*=\s*"countries/',
+                path.read_text(encoding="utf-8-sig"),
+            )
+        )
     if extra_tags:
         issues.append(f"must not create a new real country tag: {extra_tags}")
 
@@ -312,7 +376,12 @@ def collect_issues() -> list[str]:
         texts.get(path, "")
         for path in (ON_ACTIONS, EFFECTS, EVENTS, DECISIONS, CATEGORIES, IDEAS)
     )
-    for forbidden in ("start_civil_war", "create_dynamic_country", "transfer_state", "set_state_owner"):
+    for forbidden in (
+        "start_civil_war",
+        "create_dynamic_country",
+        "transfer_state",
+        "set_state_owner",
+    ):
         if forbidden in tff_sources:
             issues.append(f"TFF wartime files must not use {forbidden}")
 
@@ -323,24 +392,38 @@ def collect_issues() -> list[str]:
             issues.append(f"missing Russian loc {key}")
         if not loc_value(en, key):
             issues.append(f"missing English loc {key}")
-    if loc_value(en, "TFF_frontier_defense_confederation") != "Frontier Defense Confederation":
+    if (
+        loc_value(en, "TFF_frontier_defense_confederation")
+        != "Frontier Defense Confederation"
+    ):
         issues.append("English cosmetic name drifted")
-    if loc_value(en, "TFF_frontier_defense_confederation_DEF") != "the Frontier Defense Confederation":
+    if (
+        loc_value(en, "TFF_frontier_defense_confederation_DEF")
+        != "the Frontier Defense Confederation"
+    ):
         issues.append("English cosmetic DEF drifted")
     if loc_value(en, "TFF_frontier_defense_confederation_ADJ") != "Frontier":
         issues.append("English cosmetic ADJ drifted")
-    if loc_value(ru, "TFF_frontier_defense_confederation") != "Конфедерация обороны Фронтира":
+    if (
+        loc_value(ru, "TFF_frontier_defense_confederation")
+        != "Конфедерация обороны Фронтира"
+    ):
         issues.append("Russian cosmetic name drifted")
     desc = loc_value(ru, "ADISCORD_TFF.1.d").replace("\\n", "\n")
     if len(desc) > 3000 or len(desc.encode("utf-8")) > 5500:
-        issues.append("Empty Chair description exceeds the editorial event-page ceiling")
+        issues.append(
+            "Empty Chair description exceeds the editorial event-page ceiling"
+        )
     if "\u2014" in desc or "\u2022" in desc:
         issues.append("Empty Chair description must not use em-dashes or bullets")
     if not loc_value(texts.get(RU_CHAR, ""), "TFF_Colt_Ardent"):
         issues.append("Russian character name for TFF_Colt_Ardent is missing")
     if not loc_value(texts.get(EN_CHAR, ""), "TFF_Colt_Ardent"):
         issues.append("English character name for TFF_Colt_Ardent is missing")
-    if loc_value(texts.get(RU_PARTIES, ""), "tff_emergency_war_coordinator") != "Чрезвычайный военный координатор":
+    if (
+        loc_value(texts.get(RU_PARTIES, ""), "tff_emergency_war_coordinator")
+        != "Чрезвычайный военный координатор"
+    ):
         issues.append("Russian coordinator title drifted")
     if loc_value(en, "tff_emergency_war_coordinator") != "Emergency War Coordinator":
         issues.append("English coordinator title drifted")

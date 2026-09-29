@@ -76,10 +76,16 @@ def render_gui() -> str:
         if old in FIXED_ROWS:
             new = f"GFX_ADISCORD_logistics_{FIXED_ROWS[old]}_row"
         text = replace_counted(text, old, new, expected)
-    text = replace_gui_block(text, "instantTextboxType", "equipment_type", (
-        (r'maxWidth\s*=\s*115', 'maxWidth = 170'),
-        (r'position\s*=\s*\{[^}]+\}', 'position = { x = 37 y = 2 }'),
-    ), expected=3)
+    text = replace_gui_block(
+        text,
+        "instantTextboxType",
+        "equipment_type",
+        (
+            (r'maxWidth\s*=\s*115', 'maxWidth = 170'),
+            (r'position\s*=\s*\{[^}]+\}', 'position = { x = 37 y = 2 }'),
+        ),
+        expected=3,
+    )
     return "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
 
 
@@ -134,10 +140,14 @@ def expected_outputs() -> dict[Path, bytes]:
         image.putalpha(native.getchannel("A"))
         outputs[OUTPUT_DIR / filename] = dds_bytes(image)
         block = block.replace(f'"{name}"', f'"{target}"')
-        block = block.replace(match[0], f'textureFile = "gfx/interface/logistics/ui/{filename}"')
+        block = block.replace(
+            match[0], f'textureFile = "gfx/interface/logistics/ui/{filename}"'
+        )
         entries.append(block)
     gfx = render_gfx().rstrip()
-    outputs[GFX_OUTPUT] = (gfx[:-1] + "\n" + "\n".join(entries) + "\n}\n").encode("utf-8")
+    outputs[GFX_OUTPUT] = (gfx[:-1] + "\n" + "\n".join(entries) + "\n}\n").encode(
+        "utf-8"
+    )
     return outputs
 
 

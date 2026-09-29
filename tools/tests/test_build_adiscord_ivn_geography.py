@@ -16,8 +16,12 @@ from tools.builders import build_adiscord_ivn_geography as builder
 from tools.builders import build_adiscord_terrain_snow as terrain_builder
 
 
-HEIGHT_OUTSIDE_ISLAND_SHA256 = "4488136EDE13650B33ADD2F251E8B40130168CAF569F9FC8798F8F1A04FE27FE"
-NORMAL_OUTSIDE_FEATHER_SHA256 = "7D0A2D01518C1FC4682D42F7C482031A9D2C175E4D34C0EE95EC8EEEFF8E61AE"
+HEIGHT_OUTSIDE_ISLAND_SHA256 = (
+    "4488136EDE13650B33ADD2F251E8B40130168CAF569F9FC8798F8F1A04FE27FE"
+)
+NORMAL_OUTSIDE_FEATHER_SHA256 = (
+    "7D0A2D01518C1FC4682D42F7C482031A9D2C175E4D34C0EE95EC8EEEFF8E61AE"
+)
 
 
 def island_height_slopes(
@@ -74,7 +78,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         grayscale: bool = False,
     ) -> Iterator[LandscapeFixture]:
         state_ids = tuple(sorted(builder.NORTHERN_LANDSCAPE_STATE_IDS))
-        province_by_state = {state_id: 9000 + index for index, state_id in enumerate(state_ids)}
+        province_by_state = {
+            state_id: 9000 + index for index, state_id in enumerate(state_ids)
+        }
         original_state_dir = builder.STATE_DIR
         with TemporaryDirectory() as temporary_directory:
             state_dir = Path(temporary_directory)
@@ -116,7 +122,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_landscape_masks_rgb_scope_and_inclusive_bbox(self) -> None:
         with self.landscape_fixture() as fixture:
-            masks = builder.landscape_masks(fixture.provinces, fixture.definition_colors)
+            masks = builder.landscape_masks(
+                fixture.provinces, fixture.definition_colors
+            )
         self.assertEqual(masks.north, bytearray([1] * 9))
         self.assertEqual(
             [index for index, value in enumerate(masks.island) if value],
@@ -126,7 +134,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_landscape_masks_accepts_grayscale_fixture(self) -> None:
         with self.landscape_fixture(grayscale=True) as fixture:
-            masks = builder.landscape_masks(fixture.provinces, fixture.definition_colors)
+            masks = builder.landscape_masks(
+                fixture.provinces, fixture.definition_colors
+            )
         self.assertEqual(masks.north, bytearray([1] * 9))
         self.assertEqual(masks.island_bbox, (1, 0, 2, 2))
 
@@ -134,16 +144,22 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         with self.landscape_fixture() as fixture:
             definition_colors = dict(fixture.definition_colors)
             del definition_colors[fixture.province_by_state[127]]
-            with self.assertRaisesRegex(RuntimeError, "missing northern landscape provinces"):
+            with self.assertRaisesRegex(
+                RuntimeError, "missing northern landscape provinces"
+            ):
                 builder.landscape_masks(fixture.provinces, definition_colors)
 
     def test_landscape_masks_rejects_vanished_non_island_province(self) -> None:
         with self.landscape_fixture(absent_from_bitmap=frozenset({127})) as fixture:
-            with self.assertRaisesRegex(RuntimeError, "missing northern landscape bitmap provinces"):
+            with self.assertRaisesRegex(
+                RuntimeError, "missing northern landscape bitmap provinces"
+            ):
                 builder.landscape_masks(fixture.provinces, fixture.definition_colors)
 
     def test_landscape_masks_rejects_empty_island(self) -> None:
-        with self.landscape_fixture(absent_from_bitmap=builder.ISLAND_HEIGHT_STATE_IDS) as fixture:
+        with self.landscape_fixture(
+            absent_from_bitmap=builder.ISLAND_HEIGHT_STATE_IDS
+        ) as fixture:
             with self.assertRaisesRegex(RuntimeError, "no island landscape pixels"):
                 builder.landscape_masks(fixture.provinces, fixture.definition_colors)
 
@@ -160,13 +176,35 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         )
 
     def test_distance_from_edge_increases_inward(self) -> None:
-        mask = bytearray([
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-        ])
+        mask = bytearray(
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            ]
+        )
         distances = builder.distance_from_edge(mask, 5, 5)
         self.assertEqual(distances[2 * 5 + 2], 1)
         self.assertEqual(distances[1 * 5 + 1], 0)
@@ -176,14 +214,20 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(first, builder.island_height_value(0.52, 0.45, 8))
         self.assertGreaterEqual(first, 97)
         self.assertLess(first, 180)
-        self.assertEqual(builder.stable_unit_hash(41, 73, 19), builder.stable_unit_hash(41, 73, 19))
+        self.assertEqual(
+            builder.stable_unit_hash(41, 73, 19), builder.stable_unit_hash(41, 73, 19)
+        )
 
     def test_tree_probabilities_are_ordered(self) -> None:
         self.assertEqual(builder.tree_probability("mountain"), 0.0)
         self.assertEqual(builder.tree_probability("urban"), 0.0)
         self.assertEqual(builder.tree_probability("ocean"), 0.0)
-        self.assertLess(builder.tree_probability("hills"), builder.tree_probability("plains"))
-        self.assertLess(builder.tree_probability("plains"), builder.tree_probability("forest"))
+        self.assertLess(
+            builder.tree_probability("hills"), builder.tree_probability("plains")
+        )
+        self.assertLess(
+            builder.tree_probability("plains"), builder.tree_probability("forest")
+        )
 
     def test_tree_probability_values(self) -> None:
         self.assertEqual(builder.tree_probability("forest"), 0.62)
@@ -191,10 +235,14 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(builder.tree_probability("hills"), 0.04)
         self.assertEqual(builder.tree_probability("marsh"), 0.08)
 
-    def test_render_northern_terrain_uses_relief_shoulders_forests_and_preserves_specials(self) -> None:
+    def test_render_northern_terrain_uses_relief_shoulders_forests_and_preserves_specials(
+        self,
+    ) -> None:
         width = height = 6
         source = Image.new("P", (width, height), 0)
-        source.putpalette([value for index in range(256) for value in (index, index, index)])
+        source.putpalette(
+            [value for index in range(256) for value in (index, index, index)]
+        )
         source_pixels = [0] * (width * height)
         urban = 5 * width
         marsh = 5 * width + 5
@@ -228,10 +276,14 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertIn(17, pixels)
         self.assertEqual(pixels.count(4), 9)
 
-    def test_generated_mountains_have_connected_hill_shoulders_and_no_interior_plain_edge(self) -> None:
+    def test_generated_mountains_have_connected_hill_shoulders_and_no_interior_plain_edge(
+        self,
+    ) -> None:
         width = height = 9
         source = Image.new("P", (width, height), 0)
-        source.putpalette([value for index in range(256) for value in (index, index, index)])
+        source.putpalette(
+            [value for index in range(256) for value in (index, index, index)]
+        )
         heightmap = Image.new("L", (width, height), 125)
         summit = 4 * width + 4
         heights = [125] * (width * height)
@@ -307,10 +359,14 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         maximum_run = floor(round(sqrt(len(first))) / 2)
         self.assertLessEqual(builder.straight_boundary_run(first, width), maximum_run)
 
-    def test_tree_cell_sampling_uses_full_rectangles_strict_majority_and_priority(self) -> None:
+    def test_tree_cell_sampling_uses_full_rectangles_strict_majority_and_priority(
+        self,
+    ) -> None:
         width = height = 8
         terrain = Image.new("P", (width, height), 0)
-        terrain.putpalette([value for index in range(256) for value in (index, index, index)])
+        terrain.putpalette(
+            [value for index in range(256) for value in (index, index, index)]
+        )
         terrain_pixels = [0] * (width * height)
         state_by_pixel = [0] * (width * height)
 
@@ -336,7 +392,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         palette = {0: "plains", 4: "forest", 13: "urban", 15: "ocean"}
 
         forest = builder.tree_cell_sample(0, 0, 2, 2, terrain, state_by_pixel, palette)
-        tied_scope = builder.tree_cell_sample(1, 0, 2, 2, terrain, state_by_pixel, palette)
+        tied_scope = builder.tree_cell_sample(
+            1, 0, 2, 2, terrain, state_by_pixel, palette
+        )
         water = builder.tree_cell_sample(0, 1, 2, 2, terrain, state_by_pixel, palette)
         urban = builder.tree_cell_sample(1, 1, 2, 2, terrain, state_by_pixel, palette)
         self.assertEqual((forest.state_id, forest.terrain_type), (128, "forest"))
@@ -345,7 +403,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(urban.terrain_type, "urban")
 
         tree_source = Image.new("P", (2, 2))
-        tree_source.putpalette([value for index in range(256) for value in (index, 0, 255 - index)])
+        tree_source.putpalette(
+            [value for index in range(256) for value in (index, 0, 255 - index)]
+        )
         tree_source.putdata([1, 2, 3, 4])
         rendered = builder.render_trees(tree_source, terrain, state_by_pixel, palette)
         self.assertEqual(list(rendered.get_flattened_data()), [6, 2, 0, 0])
@@ -370,13 +430,35 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         self.assertEqual(builder.height_slope(pixels, 3, 2, 2), 0)
 
     def test_island_slope_gate_ignores_coastline_to_water(self) -> None:
-        mask = bytearray([
-            0, 0, 0, 0, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 1, 1, 1, 0,
-            0, 0, 0, 0, 0,
-        ])
+        mask = bytearray(
+            [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            ]
+        )
         pixels = bytearray(100 if included else 0 for included in mask)
         self.assertEqual(set(island_height_slopes(pixels, 5, 5, mask).values()), {0})
 
@@ -445,10 +527,17 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_generated_height_and_normals_are_scoped_and_distributed(self) -> None:
         outputs = builder.expected()
-        self.assertEqual((outputs.heightmap.mode, outputs.heightmap.size), ("L", (5632, 2048)))
-        self.assertEqual((outputs.world_normal.mode, outputs.world_normal.size), ("RGB", (2816, 1024)))
+        self.assertEqual(
+            (outputs.heightmap.mode, outputs.heightmap.size), ("L", (5632, 2048))
+        )
+        self.assertEqual(
+            (outputs.world_normal.mode, outputs.world_normal.size),
+            ("RGB", (2816, 1024)),
+        )
 
-        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        _lines, _newline, _bom, definition_colors, _declared = (
+            builder.definition_contract()
+        )
         with Image.open(builder.PROVINCES_PATH) as provinces_source:
             masks = builder.landscape_masks(provinces_source, definition_colors)
         with Image.open(builder.HEIGHTMAP_PATH) as height_source:
@@ -457,14 +546,20 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             source_normal_bytes = normal_source.tobytes()
 
         height_bytes = outputs.heightmap.tobytes()
-        island_values = [height_bytes[index] for index, included in enumerate(masks.island) if included]
+        island_values = [
+            height_bytes[index]
+            for index, included in enumerate(masks.island)
+            if included
+        ]
         self.assertGreaterEqual(min(island_values), 97)
         self.assertLess(max(island_values), 180)
         self.assertGreaterEqual(len(set(island_values)), 45)
         self.assertGreaterEqual(sum(value >= 145 for value in island_values), 250)
         changed_height_outside_island = sum(
             before != after
-            for index, (before, after) in enumerate(zip(source_height_bytes, height_bytes))
+            for index, (before, after) in enumerate(
+                zip(source_height_bytes, height_bytes)
+            )
             if not masks.island[index]
         )
         self.assertEqual(changed_height_outside_island, 0)
@@ -481,7 +576,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                     (full_y + 1) * outputs.heightmap.width + full_x,
                     (full_y + 1) * outputs.heightmap.width + full_x + 1,
                 )
-                coarse_island[ny * normal_width + nx] = any(masks.island[index] for index in full_indices)
+                coarse_island[ny * normal_width + nx] = any(
+                    masks.island[index] for index in full_indices
+                )
         feathered = bytearray(coarse_island)
         for index, included in enumerate(coarse_island):
             if not included:
@@ -498,8 +595,8 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 feathered[index + normal_width] = 1
         rendered_normal_bytes = outputs.world_normal.tobytes()
         changed_normal_outside_feathered_mask = sum(
-            source_normal_bytes[index * 3:index * 3 + 3]
-            != rendered_normal_bytes[index * 3:index * 3 + 3]
+            source_normal_bytes[index * 3 : index * 3 + 3]
+            != rendered_normal_bytes[index * 3 : index * 3 + 3]
             for index, included in enumerate(feathered)
             if not included
         )
@@ -507,11 +604,15 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_generated_height_has_downstream_terrain_eligibility(self) -> None:
         outputs = builder.expected()
-        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        _lines, _newline, _bom, definition_colors, _declared = (
+            builder.definition_contract()
+        )
         with Image.open(builder.PROVINCES_PATH) as provinces_source:
             masks = builder.landscape_masks(provinces_source, definition_colors)
         height_bytes = outputs.heightmap.tobytes()
-        island_indices = [index for index, included in enumerate(masks.island) if included]
+        island_indices = [
+            index for index, included in enumerate(masks.island) if included
+        ]
         island_values = [height_bytes[index] for index in island_indices]
         slopes = list(
             island_height_slopes(
@@ -529,7 +630,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_steep_height_cells_form_coherent_ridge_shoulders(self) -> None:
         outputs = builder.expected()
-        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        _lines, _newline, _bom, definition_colors, _declared = (
+            builder.definition_contract()
+        )
         with Image.open(builder.PROVINCES_PATH) as provinces_source:
             masks = builder.landscape_masks(provinces_source, definition_colors)
         height_bytes = outputs.heightmap.tobytes()
@@ -553,10 +656,15 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                     and masks.island[(y + dy) * width + x + dx]
                 )
             }
-            self.assertTrue(neighbours & shoulders, f"steep height pixel {index} is an isolated spike")
+            self.assertTrue(
+                neighbours & shoulders,
+                f"steep height pixel {index} is an isolated spike",
+            )
 
     def test_generated_maps_preserve_stable_outside_scope_streams(self) -> None:
-        _lines, _newline, _bom, definition_colors, _declared = builder.definition_contract()
+        _lines, _newline, _bom, definition_colors, _declared = (
+            builder.definition_contract()
+        )
         with Image.open(builder.PROVINCES_PATH) as provinces_source:
             masks = builder.landscape_masks(provinces_source, definition_colors)
         with Image.open(builder.HEIGHTMAP_PATH) as height_source:
@@ -581,7 +689,12 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
                 left = nx * 2
                 coarse_island[ny * normal_width + nx] = any(
                     masks.island[index]
-                    for index in (top + left, top + left + 1, bottom + left, bottom + left + 1)
+                    for index in (
+                        top + left,
+                        top + left + 1,
+                        bottom + left,
+                        bottom + left + 1,
+                    )
                 )
         feathered = bytearray(coarse_island)
         for index, included in enumerate(coarse_island):
@@ -602,13 +715,15 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         normal_outside = bytearray()
         for index, included in enumerate(feathered):
             if not included:
-                normal_outside.extend(normal_bytes[index * 3:index * 3 + 3])
+                normal_outside.extend(normal_bytes[index * 3 : index * 3 + 3])
         self.assertEqual(
             hashlib.sha256(normal_outside).hexdigest().upper(),
             NORMAL_OUTSIDE_FEATHER_SHA256,
         )
 
-    def test_atomic_save_bmp_replaces_target_without_leaving_temporary_file(self) -> None:
+    def test_atomic_save_bmp_replaces_target_without_leaving_temporary_file(
+        self,
+    ) -> None:
         with TemporaryDirectory() as temporary_directory:
             target = Path(temporary_directory) / "test.bmp"
             Image.new("L", (2, 2), 10).save(target, format="BMP")
@@ -654,7 +769,9 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
-        self.assertEqual(digest, "A168AC5FDC0860A7C668B3612C4D0FC2091950DE95FC29522FAAF141BDEFED3F")
+        self.assertEqual(
+            digest, "A168AC5FDC0860A7C668B3612C4D0FC2091950DE95FC29522FAAF141BDEFED3F"
+        )
 
 
 if __name__ == "__main__":

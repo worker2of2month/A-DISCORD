@@ -81,16 +81,25 @@ class NorthernLandContaminationTests(unittest.TestCase):
     effects_path = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 
     def test_northern_tribal_land_is_excluded_from_dirty_bootstrap(self):
-        from tools.lib.vorkerland_collapse_manifest import CONTAMINATED_STATES, DIRTY_GROUPS
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.lib.vorkerland_collapse_manifest import (
+            CONTAMINATED_STATES,
+            DIRTY_GROUPS,
+        )
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         self.assertFalse(self.states & CONTAMINATED_STATES)
-        block = named_block(read(self.effects_path), "ADISCORD_vorkerland_apply_dirty_modifiers")
+        block = named_block(
+            read(self.effects_path), "ADISCORD_vorkerland_apply_dirty_modifiers"
+        )
         applied = {int(entry.key) for entry in parse_clausewitz(block)[0].value}
         self.assertFalse(self.states & applied)
         self.assertEqual(applied, CONTAMINATED_STATES)
         self.assertTrue({24, 57} <= applied)
-        self.assertTrue({state for group in DIRTY_GROUPS.values() for state in group} <= applied)
+        self.assertTrue(
+            {state for group in DIRTY_GROUPS.values() for state in group} <= applied
+        )
 
     def test_northern_tribal_provinces_have_ordinary_terrain(self):
         terrain = {}
@@ -109,39 +118,76 @@ class NorthernLandContaminationTests(unittest.TestCase):
             provinces = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source)
             self.assertIsNotNone(provinces)
             for province in map(int, re.findall(r"\d+", provinces.group(1))):
-                self.assertNotEqual(terrain[province], "contaminated", (state, province))
+                self.assertNotEqual(
+                    terrain[province], "contaminated", (state, province)
+                )
         self.assertEqual(found, self.states)
 
     def test_northern_save_cleanup_is_ungated_bounded_and_owner_independent(self):
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         source = read(self.effects_path)
         cleanup_id = "ADISCORD_vorkerland_clear_northern_dirty_modifiers"
         helper_id = "ADISCORD_vorkerland_remove_dirty_state_modifier"
         dirty_id = "ADISCORD_vorkerland_dirty_state"
-        self.assertTrue(re.search(r"(?m)^" + cleanup_id + r"\s*=\s*\{", source), "missing northern cleanup")
+        self.assertTrue(
+            re.search(r"(?m)^" + cleanup_id + r"\s*=\s*\{", source),
+            "missing northern cleanup",
+        )
         cleanup = parse_clausewitz(named_block(source, cleanup_id))[0].value
-        self.assertEqual({entry.key for entry in cleanup}, {str(state) for state in self.states})
+        self.assertEqual(
+            {entry.key for entry in cleanup}, {str(state) for state in self.states}
+        )
         self.assertEqual(len(cleanup), len(self.states))
         for entry in cleanup:
-            self.assertEqual([(call.key, call.value) for call in entry.value], [(helper_id, "yes")])
+            self.assertEqual(
+                [(call.key, call.value) for call in entry.value], [(helper_id, "yes")]
+            )
         helper = parse_clausewitz(named_block(source, helper_id))[0].value
         self.assertEqual([entry.key for entry in helper], ["if"])
         branch = helper[0].value
-        self.assertEqual([entry.key for entry in branch], ["limit", "remove_dynamic_modifier", "owner"])
-        self.assertEqual([entry.key for entry in branch[0].value], ["has_dynamic_modifier"])
+        self.assertEqual(
+            [entry.key for entry in branch],
+            ["limit", "remove_dynamic_modifier", "owner"],
+        )
+        self.assertEqual(
+            [entry.key for entry in branch[0].value], ["has_dynamic_modifier"]
+        )
         guard = branch[0].value[0].value
-        self.assertEqual([(entry.key, entry.value) for entry in guard], [("modifier", dirty_id)])
-        self.assertEqual([(entry.key, entry.value) for entry in branch[1].value], [("modifier", dirty_id)])
-        self.assertEqual([(entry.key, entry.value) for entry in branch[2].value], [("ADISCORD_economy_mark_dirty", "yes")])
-        startup = parse_clausewitz(named_block(read("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_startup"))[0].value
+        self.assertEqual(
+            [(entry.key, entry.value) for entry in guard], [("modifier", dirty_id)]
+        )
+        self.assertEqual(
+            [(entry.key, entry.value) for entry in branch[1].value],
+            [("modifier", dirty_id)],
+        )
+        self.assertEqual(
+            [(entry.key, entry.value) for entry in branch[2].value],
+            [("ADISCORD_economy_mark_dirty", "yes")],
+        )
+        startup = parse_clausewitz(
+            named_block(
+                read(
+                    "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
+                ),
+                "on_startup",
+            )
+        )[0].value
         payload = next(entry.value for entry in startup if entry.key == "effect")
-        self.assertEqual([entry.value for entry in payload if entry.key == cleanup_id], ["yes"])
+        self.assertEqual(
+            [entry.value for entry in payload if entry.key == cleanup_id], ["yes"]
+        )
 
 
 class VorkerlandCollapseValidatorTests(unittest.TestCase):
-    def test_prewar_compact_ratifies_after_second_commitment_in_either_order(self) -> None:
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+    def test_prewar_compact_ratifies_after_second_commitment_in_either_order(
+        self,
+    ) -> None:
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         text = read("common/national_focus/ADISCORD_vorkerland_focus.txt")
         rewards = {}
@@ -152,9 +198,14 @@ class VorkerlandCollapseValidatorTests(unittest.TestCase):
                 if focus.key != "focus":
                     continue
                 focus_id = next(item.value for item in focus.value if item.key == "id")
-                if focus_id in ("WRK_offer_emergency_compact", "VAD_ratify_emergency_compact"):
+                if focus_id in (
+                    "WRK_offer_emergency_compact",
+                    "VAD_ratify_emergency_compact",
+                ):
                     rewards[focus_id] = next(
-                        item.value for item in focus.value if item.key == "completion_reward"
+                        item.value
+                        for item in focus.value
+                        if item.key == "completion_reward"
                     )
         self.assertEqual(len(rewards), 2)
         required = {
@@ -218,16 +269,25 @@ ADISCORD_vorkerland_claimant_decision_spending = {
         self.assertIsNotNone(check, "collapse validator must expose the PP contract")
         self.assertEqual(check(*self._claimant_pp_sources()), [])
 
-    def test_claimant_decision_spending_contract_rejects_low_baseline_budget(self) -> None:
+    def test_claimant_decision_spending_contract_rejects_low_baseline_budget(
+        self,
+    ) -> None:
         check = getattr(
             collapse_validator, "claimant_decision_spending_contract_issues", None
         )
         self.assertIsNotNone(check, "collapse validator must expose the PP contract")
         default_ai, collapse_ai = self._claimant_pp_sources()
-        issues = check(default_ai.replace("decision value = 100", "decision value = 75"), collapse_ai)
-        self.assertTrue(any("baseline decision budget" in issue for issue in issues), issues)
+        issues = check(
+            default_ai.replace("decision value = 100", "decision value = 75"),
+            collapse_ai,
+        )
+        self.assertTrue(
+            any("baseline decision budget" in issue for issue in issues), issues
+        )
 
-    def test_claimant_decision_spending_contract_rejects_unbounded_strategy(self) -> None:
+    def test_claimant_decision_spending_contract_rejects_unbounded_strategy(
+        self,
+    ) -> None:
         check = getattr(
             collapse_validator, "claimant_decision_spending_contract_issues", None
         )
@@ -236,13 +296,21 @@ ADISCORD_vorkerland_claimant_decision_spending = {
         issues = check(default_ai, collapse_ai.replace("        has_war = yes\n", ""))
         self.assertTrue(any("war-bounded" in issue for issue in issues), issues)
 
-    def test_claimant_decision_spending_contract_rejects_forced_completion(self) -> None:
+    def test_claimant_decision_spending_contract_rejects_forced_completion(
+        self,
+    ) -> None:
         check = getattr(
             collapse_validator, "claimant_decision_spending_contract_issues", None
         )
         self.assertIsNotNone(check, "collapse validator must expose the PP contract")
         default_ai, collapse_ai = self._claimant_pp_sources()
-        issues = check(default_ai, collapse_ai.replace("abort_when_not_enabled = yes", "complete_effect = { add_political_power = -25 }"))
+        issues = check(
+            default_ai,
+            collapse_ai.replace(
+                "abort_when_not_enabled = yes",
+                "complete_effect = { add_political_power = -25 }",
+            ),
+        )
         self.assertTrue(any("must not force" in issue for issue in issues), issues)
 
     def test_event_helper_uses_the_declared_id_not_a_nested_scheduled_id(self) -> None:
@@ -272,11 +340,29 @@ country_event = {
         self.assertEqual(len(TAGS), 28)
         self.assertEqual(len(set(TAGS)), 28)
         self.assertEqual(set(TAGS), set(CAPITALS))
-        self.assertTrue({"RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "IBA", "IBL", "CSL"} <= set(TAGS))
+        self.assertTrue(
+            {
+                "RIV",
+                "REV",
+                "YOR",
+                "NDN",
+                "SWB",
+                "VHV",
+                "OSV",
+                "TGD",
+                "IBA",
+                "IBL",
+                "CSL",
+            }
+            <= set(TAGS)
+        )
 
     def test_main_startup_is_fresh_campaign_only(self) -> None:
         startup = named_block(
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             "on_startup",
         )
         marker = "ADISCORD_vorkerland_fresh_start_collapse_pending_v1"
@@ -316,9 +402,10 @@ country_event = {
             self.assertNotIn(forbidden, startup.lower())
 
     def test_main_claimant_collapse_category_requires_local_action(self) -> None:
-        categories = source_section(read(
-            "common/decisions/categories/ADISCORD_vorkerland_categories.txt"
-        ), 'collapse_categories')
+        categories = source_section(
+            read("common/decisions/categories/ADISCORD_vorkerland_categories.txt"),
+            'collapse_categories',
+        )
         category = named_block(categories, "ADISCORD_vorkerland_collapse_category")
         visible = named_blocks(category, "visible")
         self.assertEqual(len(visible), 1)
@@ -335,23 +422,43 @@ country_event = {
     def test_premature_wrk_release_hooks_and_package_recovery_are_guarded(self) -> None:
         issues: list[str] = []
         validate_premature_wrk_release_contract(
-            source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers'),
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            source_section(
+                read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+                'collapse_triggers',
+            ),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             read(
                 "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
             ),
-            source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'release_effects'),
+            source_section(
+                read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                'release_effects',
+            ),
             issues,
         )
         self.assertEqual(issues, [])
 
-    def test_premature_release_validator_rejects_scope_and_branch_mutations(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+    def test_premature_release_validator_rejects_scope_and_branch_mutations(
+        self,
+    ) -> None:
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         capitulation = read(
             "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
         )
-        release_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'release_effects')
+        release_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'release_effects',
+        )
 
         malformed_interceptor = release_effects.replace(
             "exists = yes\n\t\t\t\t\tis_subject = no\n",
@@ -363,7 +470,9 @@ country_event = {
             triggers, on_actions, capitulation, malformed_interceptor, issues
         )
         self.assertTrue(
-            any("claimant branch" in issue or "interceptor" in issue for issue in issues),
+            any(
+                "claimant branch" in issue or "interceptor" in issue for issue in issues
+            ),
             issues,
         )
 
@@ -407,26 +516,37 @@ country_event = {
         ):
             issues = []
             validate_premature_wrk_release_contract(
-                triggers, on_actions, capitulation,
-                release_effects.replace(token, "", 1), issues,
+                triggers,
+                on_actions,
+                capitulation,
+                release_effects.replace(token, "", 1),
+                issues,
             )
             self.assertTrue(issues, f"liveness token removed: {token}")
         for nested_not in (
             "NOT = { ROOT = { has_capitulated = yes } }",
             "NOT = { FROM = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active } }",
         ):
-            mutated = release_effects.replace(
-                "NOT = { has_capitulated = yes }",
-                nested_not,
-                1,
-            ) if "has_capitulated" in nested_not else release_effects.replace(
-                "NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }",
-                nested_not,
-                1,
+            mutated = (
+                release_effects.replace(
+                    "NOT = { has_capitulated = yes }",
+                    nested_not,
+                    1,
+                )
+                if "has_capitulated" in nested_not
+                else release_effects.replace(
+                    "NOT = { has_global_flag = ADISCORD_vorkerland_premature_wrk_subject_cleanup_active }",
+                    nested_not,
+                    1,
+                )
             )
             issues = []
             validate_premature_wrk_release_contract(
-                triggers, on_actions, capitulation, mutated, issues,
+                triggers,
+                on_actions,
+                capitulation,
+                mutated,
+                issues,
             )
             self.assertTrue(issues, f"nested NOT accepted: {nested_not}")
 
@@ -474,12 +594,20 @@ country_event = {
         for guard in ("tag = VLA is_subject_of = WKR", "tag = VLA is_subject_of = WRK"):
             issues = []
             validate_premature_wrk_release_contract(
-                triggers, on_actions, capitulation, release_effects, issues,
+                triggers,
+                on_actions,
+                capitulation,
+                release_effects,
+                issues,
             )
             mutated = on_actions.replace(guard, "tag = VLA is_subject_of = BROKEN", 1)
             issues = []
             validate_premature_wrk_release_contract(
-                triggers, mutated, capitulation, release_effects, issues,
+                triggers,
+                mutated,
+                capitulation,
+                release_effects,
+                issues,
             )
             self.assertTrue(any("VLA" in issue for issue in issues), guard)
 
@@ -493,7 +621,10 @@ country_event = {
         self.assertTrue(any("cosmetic" in issue for issue in issues))
 
     def test_every_vorkerland_superevent_route_plays_audible_sound(self) -> None:
-        map_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
+        map_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_map_effects',
+        )
         for name, event_id in (
             ("dirty_opening", "ADISCORD_superevent.4"),
             ("worker_victory", "ADISCORD_superevent.2"),
@@ -501,16 +632,30 @@ country_event = {
             ("vlad_victory", "ADISCORD_superevent.5"),
             ("dorian_victory", "ADISCORD_superevent.6"),
         ):
-            show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
+            show_effect = named_block(
+                map_effects, f"ADISCORD_vorkerland_show_{name}_superevent"
+            )
             self.assertIn(f"country_event = {{ id = {event_id} }}", show_effect, name)
             self.assertIn("any_country = { is_ai = no }", show_effect, name)
             self.assertIn("random_country = {", show_effect, name)
-        dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
+        dirty_show = named_block(
+            map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent"
+        )
         self.assertNotIn("ADISCORD_vorkerland_dirty_opened", dirty_show)
-        worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", worker_show)
-        utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_central_victory_announced", utilitarian_show)
+        worker_show = named_block(
+            map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent"
+        )
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_central_victory_announced",
+            worker_show,
+        )
+        utilitarian_show = named_block(
+            map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
+        )
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_central_victory_announced",
+            utilitarian_show,
+        )
 
         news = read("events/ADISCORD_superevents.txt")
         civilwar_event = event_block(news, "ADISCORD_superevent.1")
@@ -527,7 +672,9 @@ country_event = {
         self.assertIn("superevent_vorkerland_utilitarian_victory", utilitarian_event)
         self.assertIn("ADISCORD_superevent_enqueue = yes", utilitarian_event)
         self.assertNotIn("limit = { is_ai = no }", utilitarian_event)
-        self.assertNotIn("ADISCORD_vorkerland_central_victory_announced", utilitarian_event)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_central_victory_announced", utilitarian_event
+        )
         dirty_event = event_block(news, "ADISCORD_superevent.4")
         self.assertIn("hidden = yes", dirty_event)
         self.assertIn("superevent_vorkerland_dirty_opening", dirty_event)
@@ -572,7 +719,9 @@ country_event = {
             self.assertNotIn("limit = { is_ai = no }", definition)
             audio_proxy = event_block(news, audio_id)
             self.assertNotIn("limit = { is_ai = no }", audio_proxy)
-            self.assertIn(f'play_song = "{sound_effect.removesuffix("_sound_e")}"', audio_proxy)
+            self.assertIn(
+                f'play_song = "{sound_effect.removesuffix("_sound_e")}"', audio_proxy
+            )
 
         sound_effects = read("sound/superevents_effects.asset")
         self.assertEqual(sound_effects.count("volume = 1.0"), 8)
@@ -585,10 +734,14 @@ country_event = {
             "superevent_vorkerland_vlad_victory_sound_e",
         ):
             self.assertIn(f"name = {effect_name}", sound_effects)
-        local_audio = named_block(map_effects, "ADISCORD_vorkerland_play_local_superevent_audio")
+        local_audio = named_block(
+            map_effects, "ADISCORD_vorkerland_play_local_superevent_audio"
+        )
         self.assertIn("ADISCORD_vorkerland_play_superevent_sound = yes", local_audio)
         self.assertNotIn("limit = { is_ai = no }", local_audio)
-        shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
+        shared_audio = named_block(
+            map_effects, "ADISCORD_vorkerland_play_superevent_sound"
+        )
         self.assertEqual(shared_audio.count('play_song = "one_minute_of_silence"'), 1)
         self.assertNotIn('play_song = "superevent_', shared_audio)
         self.assertNotIn("scoped_sound_effect", shared_audio)
@@ -599,20 +752,32 @@ country_event = {
             gfx,
         )
         self.assertTrue(
-            (ROOT / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png").is_file()
+            (
+                ROOT
+                / "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"
+            ).is_file()
         )
 
     def test_central_outcome_dispatches_claimant_victory_events(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         outcome = named_block(effects, "ADISCORD_vorkerland_check_central_outcome")
-        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.20 }", outcome)
-        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.21 }", outcome)
-        self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.22 }", outcome)
+        self.assertIn(
+            "country_event = { id = ADISCORD_vorkerland_collapse.20 }", outcome
+        )
+        self.assertIn(
+            "country_event = { id = ADISCORD_vorkerland_collapse.21 }", outcome
+        )
+        self.assertIn(
+            "country_event = { id = ADISCORD_vorkerland_collapse.22 }", outcome
+        )
         self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome)
         self.assertIn("ADISCORD_vorkerland_vlad_victory_candidate = yes", outcome)
 
     def test_wrk_border_countries_keep_plain_geographic_names(self) -> None:
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
         self.assertIn('NDN: "Норден"', loc)
         self.assertIn('SWB: "Старый Воркенсберг"', loc)
         self.assertIn('VHV: "Верховье"', loc)
@@ -628,20 +793,26 @@ country_event = {
 
 class BorderWarArchitectureTests(unittest.TestCase):
     def test_day_one_event_declares_no_wars(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         match = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.2\b(.*?)(?=^country_event|\Z)",
             events,
         )
         self.assertIsNotNone(match)
         self.assertNotIn("declare_war_on", match.group(1))
-        self.assertIn("ADISCORD_vorkerland_teardown_confederation = yes", match.group(1))
+        self.assertIn(
+            "ADISCORD_vorkerland_teardown_confederation = yes", match.group(1)
+        )
         self.assertIn("ADISCORD_vorkerland_collapse.31", match.group(1))
         self.assertIn("days = 21", match.group(1))
         self.assertRegex(match.group(1), r"WKR\s*=\s*\{[^{}]*country_event\s*=\s*\{")
 
     def test_mobilisation_pause_unlocks_ai_regional_decision(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         authorization = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.31\b"
             r"(.*?)(?=^country_event\s*=\s*\{|\Z)",
@@ -663,10 +834,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for event_id in (32, 33, 34, 35):
             self.assertNotIn(f"ADISCORD_vorkerland_collapse.{event_id}", events)
 
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        self.assertNotIn(
-            "ADISCORD_vorkerland_consolidate_central_border", decisions
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
         )
+        self.assertNotIn("ADISCORD_vorkerland_consolidate_central_border", decisions)
         regional = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
         self.assertNotIn("declare_war_on", named_block(regional, "complete_effect"))
         self.assertIn("ADISCORD_vorkerland_collapse.63 days = 1", regional)
@@ -674,36 +846,49 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("ai_will_do", regional)
 
     def test_border_wars_use_decisions_without_recurring_seed_watchdogs(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         focus_decisions = read_focus_decisions()
 
         for event_id in (32, 33, 34, 35):
-            self.assertNotIn(
-                f"id = ADISCORD_vorkerland_collapse.{event_id}", events
-            )
+            self.assertNotIn(f"id = ADISCORD_vorkerland_collapse.{event_id}", events)
         self.assertNotIn("ADISCORD_vorkerland_seed_watchdog_scheduled", events)
         self.assertNotIn("ADISCORD_vorkerland_seed_watchdog_scheduled", on_actions)
         self.assertIn(
             "declare_war_on",
             named_block(decisions, "ADISCORD_vorkerland_continue_reunification"),
         )
-        wave = named_block(focus_decisions, "ADISCORD_vorkerland_launch_central_minor_wave")
+        wave = named_block(
+            focus_decisions, "ADISCORD_vorkerland_launch_central_minor_wave"
+        )
         self.assertIn("ADISCORD_vorkerland_focus_launch_central_minor_wave = yes", wave)
         regional = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
         self.assertNotIn("declare_war_on", named_block(regional, "complete_effect"))
         self.assertIn("ADISCORD_vorkerland_collapse.63 days = 1", regional)
 
     def test_central_minor_wars_are_early_adjacent_wave_decision(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        collapse_decisions = source_section(read(
-            "common/decisions/ADISCORD_vorkerland_decisions.txt"
-        ), 'collapse_decisions')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        collapse_decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         focus_decisions = read_focus_decisions()
-        phase_triggers = source_section(read(
-            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
-        ), 'phase_triggers')
+        phase_triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'phase_triggers',
+        )
 
         rival = named_block(
             triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT"
@@ -762,18 +947,45 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{suffix}",
                 complete,
             )
-            self.assertIn("ADISCORD_vorkerland_focus_launch_central_minor_wave = yes", remove)
+            self.assertIn(
+                "ADISCORD_vorkerland_focus_launch_central_minor_wave = yes", remove
+            )
             self.assertNotIn("declare_war_on", decision)
-        self.assertEqual(decision.count("set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_"), 9)
-        self.assertEqual(decision.count("ADISCORD_vorkerland_focus_launch_central_minor_wave"), 1)
+        self.assertEqual(
+            decision.count(
+                "set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_"
+            ),
+            9,
+        )
+        self.assertEqual(
+            decision.count("ADISCORD_vorkerland_focus_launch_central_minor_wave"), 1
+        )
 
-    def test_worker_doctor_showdown_uses_phase_queue_and_wtd_protectorate_join(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+    def test_worker_doctor_showdown_uses_phase_queue_and_wtd_protectorate_join(
+        self,
+    ) -> None:
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
 
         rival = named_block(
             triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT"
@@ -784,32 +996,58 @@ class BorderWarArchitectureTests(unittest.TestCase):
         ):
             self.assertIn(token, rival)
 
-        self.assertFalse(named_block(decisions, "ADISCORD_vorkerland_prepare_worker_doctor_showdown"))
-        self.assertFalse(named_block(effects, "ADISCORD_vorkerland_detach_worker_doctor_factions"))
-        self.assertFalse(named_block(effects, "ADISCORD_vorkerland_launch_worker_doctor_war"))
+        self.assertFalse(
+            named_block(decisions, "ADISCORD_vorkerland_prepare_worker_doctor_showdown")
+        )
+        self.assertFalse(
+            named_block(effects, "ADISCORD_vorkerland_detach_worker_doctor_factions")
+        )
+        self.assertFalse(
+            named_block(effects, "ADISCORD_vorkerland_launch_worker_doctor_war")
+        )
         for event_id in (48, 49):
             self.assertNotRegex(
                 events,
                 rf"(?m)^\s*id\s*=\s*ADISCORD_vorkerland_collapse\.{event_id}\b",
             )
 
-        phase_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'phase_events')
+        phase_events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'phase_events'
+        )
         phase_four = event_block(phase_events, "ADISCORD_vorkerland_phase.4")
         phase_five = event_block(phase_events, "ADISCORD_vorkerland_phase.5")
-        self.assertIn("ADISCORD_vorkerland_initialize_showdown_edge_queue = yes", phase_four)
+        self.assertIn(
+            "ADISCORD_vorkerland_initialize_showdown_edge_queue = yes", phase_four
+        )
         self.assertIn("ADISCORD_vorkerland_advance_showdown_launch = yes", phase_five)
 
-        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
-        queue = named_block(phase_effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue")
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
+        queue = named_block(
+            phase_effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue"
+        )
         self.assertIn("ADISCORD_vorkerland_detach_showdown_claimants = yes", queue)
         self.assertIn(
-            "set_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_required", queue
+            "set_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_required",
+            queue,
         )
-        attempt = named_block(phase_effects, "ADISCORD_vorkerland_attempt_showdown_edge_wkr_tva")
-        self.assertIn("WKR = { declare_war_on = { target = TVA type = annex_everything } }", attempt)
-        verify = named_block(phase_effects, "ADISCORD_vorkerland_verify_showdown_edge_wkr_tva")
+        attempt = named_block(
+            phase_effects, "ADISCORD_vorkerland_attempt_showdown_edge_wkr_tva"
+        )
+        self.assertIn(
+            "WKR = { declare_war_on = { target = TVA type = annex_everything } }",
+            attempt,
+        )
+        verify = named_block(
+            phase_effects, "ADISCORD_vorkerland_verify_showdown_edge_wkr_tva"
+        )
         self.assertIn("WKR = { has_war_with = TVA }", verify)
-        self.assertIn("ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check = yes", verify)
+        self.assertIn(
+            "ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check = yes",
+            verify,
+        )
 
         join = event_block(events, "ADISCORD_vorkerland_collapse.47")
         for token in (
@@ -824,10 +1062,14 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn(token, join)
         retry = event_block(events, "ADISCORD_vorkerland_collapse.67")
         self.assertIn("limit = { has_war_with = WKR }", retry)
-        self.assertIn("set_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx", retry)
+        self.assertIn(
+            "set_country_flag = ADISCORD_vorkerland_wtd_fighting_for_worx", retry
+        )
         self.assertIn("set_country_flag = ADISCORD_vorkerland_wtd_join_failed", retry)
         self.assertEqual(
-            retry.count("country_event = { id = ADISCORD_vorkerland_collapse.67 days = 1 }"),
+            retry.count(
+                "country_event = { id = ADISCORD_vorkerland_collapse.67 days = 1 }"
+            ),
             1,
         )
         monthly = named_block(on_actions, "on_monthly")
@@ -840,34 +1082,58 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_vorkerland_worker_doctor_front_preparation", ai)
 
     def test_peripheral_decision_opens_northern_three_sided_campaign(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         regional = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
         self.assertEqual(
             set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(regional, "allowed"))),
             {"ZAO", "VLA", "ROM", "SOL", "TRU"},
         )
         complete = named_block(regional, "complete_effect")
-        self.assertIn("ADISCORD_vorkerland_detach_regional_war_factions = yes", complete)
+        self.assertIn(
+            "ADISCORD_vorkerland_detach_regional_war_factions = yes", complete
+        )
         self.assertIn("ADISCORD_vorkerland_collapse.63 days = 1", complete)
         self.assertNotIn("declare_war_on", complete)
         self.assertNotIn("add_to_war", complete)
         repair = named_block(effects, "ADISCORD_vorkerland_repair_regional_wars")
-        for attacker, defender in (("ZAO", "WPA"), ("ZAO", "PSD"), ("VLA", "EBA"), ("SOL", "SRA")):
+        for attacker, defender in (
+            ("ZAO", "WPA"),
+            ("ZAO", "PSD"),
+            ("VLA", "EBA"),
+            ("SOL", "SRA"),
+        ):
             self.assertIn(f"target = {defender}", repair, attacker)
         for attacker, defender in (
-            ("WPS", "ZAO"), ("PWR", "ZAO"),
-            ("WPA", "PSD"), ("WPA", "PWR"),
-            ("WPS", "PSD"), ("WPS", "PWR"), ("PWR", "PSD"),
+            ("WPS", "ZAO"),
+            ("PWR", "ZAO"),
+            ("WPA", "PSD"),
+            ("WPA", "PWR"),
+            ("WPS", "PSD"),
+            ("WPS", "PWR"),
+            ("PWR", "PSD"),
             ("TGD", "EBA"),
         ):
             self.assertRegex(
                 repair,
                 rf"{attacker}\s*=\s*\{{\s*declare_war_on\s*=\s*\{{\s*target\s*=\s*{defender}",
             )
-        self.assertRegex(repair, r"SRA\s*=\s*\{\s*declare_war_on\s*=\s*\{\s*target\s*=\s*CSL")
+        self.assertRegex(
+            repair, r"SRA\s*=\s*\{\s*declare_war_on\s*=\s*\{\s*target\s*=\s*CSL"
+        )
         self.assertEqual(repair.count("declare_war_on ="), 17)
         self.assertEqual(repair.count("is_subject = no"), 34)
         self.assertEqual(repair.count("has_capitulated = yes"), 34)
@@ -875,7 +1141,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("target = TGD", repair)
         self.assertIn("target = CSL", repair)
         self.assertIn("factor = 1000", regional)
-        launch = named_block(effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach")
+        launch = named_block(
+            effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach"
+        )
         self.assertIn("ADISCORD_vorkerland_repair_regional_wars = yes", launch)
         self.assertIn("ADISCORD_vorkerland_collapse.64 days = 1", launch)
         launch_success_tokens = (
@@ -886,19 +1154,28 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for token in launch_success_tokens:
             self.assertNotIn(token, launch)
 
-        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         verifier = named_block(
             phase_effects, "ADISCORD_vorkerland_verify_regional_war_launch"
         )
         self.assertIn("ADISCORD_vorkerland_repair_regional_wars = yes", verifier)
-        self.assertIn("ADISCORD_vorkerland_regional_war_graph_active_or_terminal = yes", verifier)
+        self.assertIn(
+            "ADISCORD_vorkerland_regional_war_graph_active_or_terminal = yes", verifier
+        )
         for token in launch_success_tokens:
             self.assertIn(token, verifier)
 
         launch_event = event_block(events, "ADISCORD_vorkerland_collapse.63")
         verify_event = event_block(events, "ADISCORD_vorkerland_collapse.64")
-        self.assertIn("ADISCORD_vorkerland_open_regional_fronts_after_detach = yes", launch_event)
-        self.assertIn("ADISCORD_vorkerland_verify_regional_war_launch = yes", verify_event)
+        self.assertIn(
+            "ADISCORD_vorkerland_open_regional_fronts_after_detach = yes", launch_event
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_verify_regional_war_launch = yes", verify_event
+        )
         self.assertNotIn("ADISCORD_vorkerland_repair_regional_wars = yes", verify_event)
         startup = named_block(on_actions, "on_startup")
         self.assertNotIn("ADISCORD_vorkerland_collapse.64", startup)
@@ -922,18 +1199,25 @@ class BorderWarArchitectureTests(unittest.TestCase):
         loc = read("localisation/russian/victory_points_l_russian.yml")
         for province in set().union(*(set(points) for points in expected.values())):
             self.assertRegex(loc, rf"(?m)^\s*VICTORY_POINTS_{province}:\s*\"[^\"]+\"")
-        for forbidden in ("\u0443\u0437\u0435\u043b", "\u043f\u0435\u0440\u0438\u043c\u0435\u0442\u0440"):
+        for forbidden in (
+            "\u0443\u0437\u0435\u043b",
+            "\u043f\u0435\u0440\u0438\u043c\u0435\u0442\u0440",
+        ):
             self.assertNotRegex(
                 loc.lower(), rf"(?m)^\s*VICTORY_POINTS_\d+:[^\n]*{forbidden}"
             )
 
     def test_dynamic_regional_front_fallback_is_removed(self) -> None:
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
         self.assertNotIn("ADISCORD_vorkerland_dynamic_regional_front_commitment", ai)
         self.assertNotIn("country_trigger = {", ai)
 
     def test_central_wars_have_target_specific_ai_fronts(self) -> None:
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
         minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
         contracts = {
             "wrk": ("WKR", {"VAD", "TVA"}, {"WTD"}, 100, "balanced", "no"),
@@ -944,16 +1228,23 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 for tag in minors
             },
         }
-        for slug, (defender, required, optional, request, execution, manual) in contracts.items():
-            front = named_block(
-                ai, f"ADISCORD_vorkerland_front_central_against_{slug}"
-            )
+        for slug, (
+            defender,
+            required,
+            optional,
+            request,
+            execution,
+            manual,
+        ) in contracts.items():
+            front = named_block(ai, f"ADISCORD_vorkerland_front_central_against_{slug}")
             allowed = named_block(front, "allowed")
             actual = set(re.findall(r"tag\s*=\s*([A-Z]{3})", allowed))
             self.assertLessEqual(required, actual)
             self.assertLessEqual(actual, required | optional)
             self.assertIn(f"has_war_with = {defender}", front)
-            self.assertIn(f"front_unit_request tag = {defender} value = {request}", front)
+            self.assertIn(
+                f"front_unit_request tag = {defender} value = {request}", front
+            )
             self.assertIn(f"front_control tag = {defender}", front)
             self.assertIn("priority = 1250", front)
             self.assertIn(f"execution_type = {execution}", front)
@@ -965,7 +1256,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 ai, f"ADISCORD_vorkerland_central_minor_defense_against_{slug}"
             )
             self.assertEqual(
-                set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(defense, "allowed"))),
+                set(
+                    re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(defense, "allowed"))
+                ),
                 minors,
             )
             self.assertIn(f"front_unit_request tag = {claimant} value = 100", defense)
@@ -975,8 +1268,13 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn("manual_attack = no", defense)
             self.assertNotIn("type = conquer", defense)
 
-    def test_main_claimants_are_smaller_and_new_countries_form_connected_belts(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+    def test_main_claimants_are_smaller_and_new_countries_form_connected_belts(
+        self,
+    ) -> None:
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         initial = named_block(effects, "ADISCORD_vorkerland_apply_initial_map")
 
         expected_states = {
@@ -1002,7 +1300,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
             else:
                 block = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
             self.assertEqual(
-                {int(value) for value in re.findall(r"transfer_state\s*=\s*(\d+)", block)},
+                {
+                    int(value)
+                    for value in re.findall(r"transfer_state\s*=\s*(\d+)", block)
+                },
                 states,
                 tag,
             )
@@ -1014,7 +1315,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertEqual(read("history/units/WRK.txt").count("division = {"), 12)
         self.assertEqual(read("history/units/VAD.txt").count("division = {"), 12)
         effects = named_block(
-            source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects'),
+            source_section(
+                read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                'collapse_effects',
+            ),
             "ADISCORD_vorkerland_prepare_initial_combatants",
         )
         for tag in ("VAD",):
@@ -1036,7 +1340,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
         }
         for tag, divisions in central_minor_oobs.items():
             self.assertEqual(
-                read(f"history/units/{tag}_vorkerland_collapse.txt").count("division = {"),
+                read(f"history/units/{tag}_vorkerland_collapse.txt").count(
+                    "division = {"
+                ),
                 divisions,
                 tag,
             )
@@ -1046,7 +1352,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
 
     def test_wkr_has_an_annex_independent_home_guard_before_minor_wars(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
         for token in (
             "tag = WKR",
@@ -1057,9 +1366,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "amount = 960 producer = WKR",
         ):
             self.assertIn(token, home_guard)
-        shared_templates = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'emergency_template_effects')
+        shared_templates = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'emergency_template_effects',
+        )
         worker_home_guard = named_block(
             shared_templates,
             "ADISCORD_vorkerland_ensure_worker_home_guard_template",
@@ -1083,7 +1393,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         wkr = named_block(initial, "WKR")
         self.assertIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", wkr)
         startup = named_block(
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             "on_startup",
         )
         self.assertNotIn("ADISCORD_vorkerland_ensure_wkr_home_guard = yes", startup)
@@ -1103,13 +1416,21 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn(
             "ADISCORD_vorkerland_ensure_wkr_home_guard = yes",
             named_block(
-                read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+                read_country_on_actions(
+                    "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                    'vorkerland_collapse',
+                ),
                 "on_monthly",
             ),
         )
 
-    def test_wkr_materialization_creates_recruitable_line_and_mobile_templates(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+    def test_wkr_materialization_creates_recruitable_line_and_mobile_templates(
+        self,
+    ) -> None:
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         package = named_block(
             effects, "ADISCORD_vorkerland_ensure_wkr_force_templates_v2"
         )
@@ -1135,7 +1456,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertEqual(line.count("ADISCORD_line_artillery = {"), 1)
 
         mobile = next(
-            (block for block in templates if 'name = "Workerland Mobile Group"' in block),
+            (
+                block
+                for block in templates
+                if 'name = "Workerland Mobile Group"' in block
+            ),
             None,
         )
         self.assertIsNotNone(mobile, "WKR must receive its recruitable mobile template")
@@ -1143,14 +1468,24 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("force_allow_recruiting = yes", mobile)
         self.assertEqual(mobile.count("ADISCORD_mechanized_infantry = {"), 6)
         self.assertEqual(mobile.count("ADISCORD_combat_platform = {"), 4)
-        for support in ("engineer", "artillery", "maintenance_company", "signal_company"):
+        for support in (
+            "engineer",
+            "artillery",
+            "maintenance_company",
+            "signal_company",
+        ):
             self.assertEqual(mobile.count(f"{support} = {{"), 1)
 
         home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
-        self.assertIn("ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes", home_guard)
+        self.assertIn(
+            "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes", home_guard
+        )
 
     def test_minor_emergency_levies_are_bounded_and_decision_driven(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
         minor = named_block(triggers, "ADISCORD_vorkerland_is_minor_combatant")
         for tag in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
             self.assertIn(f"tag = {tag}", minor)
@@ -1158,7 +1493,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for tag in ("WRK", "VAD", "TVA", "IVN", "EXZ"):
             self.assertNotIn(f"tag = {tag}", minor)
 
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         reserves = {
             "EYR": (6500, 800),
             "EGC": (5500, 650),
@@ -1185,7 +1523,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("every_country", levies)
         self.assertNotIn("every_state", levies)
 
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         decision = named_block(decisions, "ADISCORD_vorkerland_raise_emergency_levies")
         for token in (
             "allowed = { ADISCORD_vorkerland_is_minor_combatant = yes }",
@@ -1196,7 +1537,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
             "remove_effect = { ADISCORD_vorkerland_raise_emergency_levies = yes }",
         ):
             self.assertIn(token, decision)
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         self.assertNotIn("ADISCORD_vorkerland_raise_emergency_levies", on_actions)
 
     def test_ivanland_starts_as_a_major_with_a_field_army(self) -> None:
@@ -1209,26 +1553,57 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertEqual(units.count("division = {"), 16)
         self.assertEqual(units.count('division_template = "Capital Guard"'), 2)
         self.assertEqual(units.count('division_template = "Line Infantry Brigade"'), 10)
-        self.assertEqual(units.count('division_template = "Local Security Detachment"'), 4)
+        self.assertEqual(
+            units.count('division_template = "Local Security Detachment"'), 4
+        )
         self.assertEqual(
             [int(value) for value in re.findall(r"location\s*=\s*(\d+)", units)],
-            [16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 595, 2262, 423, 4217],
+            [
+                16568,
+                9327,
+                3462,
+                3318,
+                888,
+                838,
+                2448,
+                882,
+                702,
+                595,
+                1971,
+                3447,
+                595,
+                2262,
+                423,
+                4217,
+            ],
         )
         self.assertGreaterEqual(
-            min(float(value) for value in re.findall(r"start_equipment_factor\s*=\s*([0-9.]+)", units)),
+            min(
+                float(value)
+                for value in re.findall(
+                    r"start_equipment_factor\s*=\s*([0-9.]+)", units
+                )
+            ),
             0.70,
         )
         self.assertIn("requested_factories = 6", oob)
         self.assertGreaterEqual(oob.count("requested_factories = 2"), 2)
 
-        profiles = json.loads(read("tools/data/adiscord_starting_technology_profiles.json"))
+        profiles = json.loads(
+            read("tools/data/adiscord_starting_technology_profiles.json")
+        )
         ivn_profile = profiles["countries"]["IVN"]
         self.assertEqual(ivn_profile["evidence"]["research_slots"], 5)
         self.assertEqual(ivn_profile["evidence"]["oob_divisions"], 16)
         self.assertIn("five research slots", ivn_profile["rationale"])
 
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        intervention = named_block(effects, "ADISCORD_vorkerland_begin_ivanland_intervention")
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        intervention = named_block(
+            effects, "ADISCORD_vorkerland_begin_ivanland_intervention"
+        )
         for token in (
             "ADISCORD_vorkerland_ivanland_expedition_supplied",
             "add_manpower = 8000",
@@ -1240,7 +1615,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertIn(token, intervention)
 
     def test_partition_evacuates_legacy_armies_to_owned_capitals(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         relocation = named_block(effects, "ADISCORD_vorkerland_relocate_legacy_armies")
         self.assertIn("every_state", relocation)
         self.assertNotIn("tag = WKR", relocation)
@@ -1266,19 +1644,27 @@ class BorderWarArchitectureTests(unittest.TestCase):
             initial.find("ADISCORD_vorkerland_prepare_initial_combatants = yes"),
         )
 
-    def test_reunification_requires_neighbors_and_legacy_central_producer_is_retired(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        reunification = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
+    def test_reunification_requires_neighbors_and_legacy_central_producer_is_retired(
+        self,
+    ) -> None:
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        reunification = named_block(
+            decisions, "ADISCORD_vorkerland_continue_reunification"
+        )
         self.assertIn("every_neighbor_country", reunification)
         self.assertIn("declare_war_on", reunification)
         self.assertIn("ai_will_do", reunification)
 
-        self.assertNotIn(
-            "ADISCORD_vorkerland_consolidate_central_border", decisions
-        )
+        self.assertNotIn("ADISCORD_vorkerland_consolidate_central_border", decisions)
 
     def test_unrelated_wars_do_not_freeze_new_fronts(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
         for key in (
             "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT",
             "ADISCORD_vorkerland_is_central_target_for_ROOT",
@@ -1287,12 +1673,21 @@ class BorderWarArchitectureTests(unittest.TestCase):
             self.assertNotIn("has_war = no", named_block(triggers, key), key)
 
     def test_central_winners_receive_a_short_recovery_window(self) -> None:
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", capitulation)
-        self.assertIn("ADISCORD_vorkerland_settle_central_capitulation = yes", capitulation)
-        effects = read("common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt")
-        settlement = named_block(effects, "ADISCORD_vorkerland_settle_central_capitulation")
+        self.assertIn(
+            "ADISCORD_vorkerland_settle_central_capitulation = yes", capitulation
+        )
+        effects = read(
+            "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt"
+        )
+        settlement = named_block(
+            effects, "ADISCORD_vorkerland_settle_central_capitulation"
+        )
         self.assertIn("flag = ADISCORD_vorkerland_central_recovery", settlement)
         self.assertIn("days = 35", settlement)
         self.assertIn("add_manpower = 1500", settlement)
@@ -1307,9 +1702,13 @@ class BorderWarArchitectureTests(unittest.TestCase):
             finalizer,
         )
         self.assertIn("WRK = { exists = yes is_subject = no", finalizer)
-        self.assertIn("annex_country = { target = ROOT transfer_troops = no }", finalizer)
+        self.assertIn(
+            "annex_country = { target = ROOT transfer_troops = no }", finalizer
+        )
         retry = event_block(
-            source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'),
+            source_section(
+                read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+            ),
             "ADISCORD_vorkerland_collapse.66",
         )
         self.assertIn(
@@ -1322,9 +1721,13 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 finalizer,
             )
 
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
         pending = named_block(
-            triggers, "ADISCORD_vorkerland_has_matching_pending_central_minor_settlement"
+            triggers,
+            "ADISCORD_vorkerland_has_matching_pending_central_minor_settlement",
         )
         for tag, winner_flag in (
             ("WKR", "wkr"),
@@ -1373,7 +1776,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
                 f"annex_country = {{ target = {district} transfer_troops = no }}",
                 sweep,
             )
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         first = event_block(events, "ADISCORD_vorkerland_collapse.69")
         last = event_block(events, "ADISCORD_vorkerland_collapse.70")
         self.assertIn(
@@ -1388,7 +1793,10 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_central_minors_can_genuinely_defeat_a_main_claimant(self) -> None:
         capitulation = named_block(
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             "on_capitulation",
         )
         self.assertNotIn(
@@ -1397,18 +1805,36 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
 
     def test_collapse_opening_news_is_immediate_and_single_shot(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         news = read("events/ADISCORD_superevents.txt")
         outbreak = named_block(events, "country_event")
-        announce = named_block(effects, "ADISCORD_vorkerland_announce_first_central_war")
-        central_launch = named_block(effects, "ADISCORD_vorkerland_launch_central_local_brackets")
+        announce = named_block(
+            effects, "ADISCORD_vorkerland_announce_first_central_war"
+        )
+        central_launch = named_block(
+            effects, "ADISCORD_vorkerland_launch_central_local_brackets"
+        )
         self.assertEqual(events.count("id = ADISCORD_superevent_news.1"), 0)
         self.assertNotIn("ADISCORD_superevent_news.1", outbreak)
-        self.assertEqual(effects.count("ADISCORD_vorkerland_announce_first_central_war = yes"), 1)
-        self.assertIn("ADISCORD_vorkerland_announce_first_central_war = yes", central_launch)
-        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }", announce)
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_collapse_news_shown", announce)
+        self.assertEqual(
+            effects.count("ADISCORD_vorkerland_announce_first_central_war = yes"), 1
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_announce_first_central_war = yes", central_launch
+        )
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_collapse_news_shown }",
+            announce,
+        )
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_collapse_news_shown", announce
+        )
         opening = named_block(announce, "news_event")
         for delayed in ("hours =", "days =", "random_hours", "random_days"):
             self.assertNotIn(delayed, opening)
@@ -1452,29 +1878,54 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("entity = ADISCORD_unity_tower_ruins_entity", destroyed)
         self.assertIn("entity = ADISCORD_vorkerland_pyramid_entity", intact)
         self.assertNotIn("ADISCORD_unity_tower_collapse_entity", sync)
-        animate = named_block(effects, "ADISCORD_vorkerland_animate_unity_tower_destruction")
+        animate = named_block(
+            effects, "ADISCORD_vorkerland_animate_unity_tower_destruction"
+        )
         smoke = named_block(effects, "ADISCORD_vorkerland_clear_dirty_zone_smoke")
-        actors = named_blocks(sync, "create_entity") + named_blocks(animate, "create_entity")
+        actors = named_blocks(sync, "create_entity") + named_blocks(
+            animate, "create_entity"
+        )
         self.assertEqual(len(actors), 3)
         # All forms must replace one actor at the same transform, including on load.
         for field in ("id", "x", "y", "z", "rotation", "scale", "min_zoom"):
-            values = [re.search(rf"\b{field}\s*=\s*([^\s}}]+)", actor).group(1) for actor in actors]
+            values = [
+                re.search(rf"\b{field}\s*=\s*([^\s}}]+)", actor).group(1)
+                for actor in actors
+            ]
             self.assertEqual(len(set(values)), 1, (field, values))
-        self.assertEqual({re.search(r"min_zoom\s*=\s*([^\s}]+)", actor).group(1) for actor in actors}, {"2000"})
+        self.assertEqual(
+            {
+                re.search(r"min_zoom\s*=\s*([^\s}]+)", actor).group(1)
+                for actor in actors
+            },
+            {"2000"},
+        )
         for block in (sync, animate):
             self.assertIn("destroy_entity = 610040", named_block(block, "40"))
         self.assertIn(f"{sync_name} = yes", smoke)
         self.assertIn("destroy_entity = 610040", named_block(smoke, "else"))
-        startup = named_block(read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'), "on_startup")
+        startup = named_block(
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
+            "on_startup",
+        )
         # Startup has no scope. Use the permanent landmark state even if WRK
         # no longer exists after the civil war.
         self.assertIn(f"{sync_name} = yes", named_block(startup, "40"))
         self.assertNotIn(f"{sync_name} = yes", named_block(startup, "WRK"))
-        self.assertNotIn('type="ADISCORD_vorkerland_pyramid_entity"', read("map/ambient_object.txt"))
+        self.assertNotIn(
+            'type="ADISCORD_vorkerland_pyramid_entity"', read("map/ambient_object.txt")
+        )
 
     def test_tower_settled_state_does_not_replay_explosion(self) -> None:
         entities = named_blocks(read("gfx/entities/mapitems_custom.asset"), "entity")
-        collapse = next(block for block in entities if 'name = "ADISCORD_unity_tower_collapse_entity"' in block)
+        collapse = next(
+            block
+            for block in entities
+            if 'name = "ADISCORD_unity_tower_collapse_entity"' in block
+        )
         states = named_blocks(collapse, "state")
         falling = next(block for block in states if 'name = "collapse"' in block)
         ruins = next(block for block in states if 'name = "ruins"' in block)
@@ -1483,7 +1934,11 @@ class BorderWarArchitectureTests(unittest.TestCase):
         for particle in named_blocks(falling, "event"):
             self.assertIn("trigger_once = yes", particle)
         self.assertFalse(named_blocks(ruins, "event"))
-        restored = next(block for block in entities if 'name = "ADISCORD_unity_tower_ruins_entity"' in block)
+        restored = next(
+            block
+            for block in entities
+            if 'name = "ADISCORD_unity_tower_ruins_entity"' in block
+        )
         self.assertIn('default_state = "ruins"', restored)
         self.assertIn('default_state = "collapse"', collapse)
         gfx = read("gfx/entities/mapitems_custom.gfx")
@@ -1504,8 +1959,13 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("cull_distance = 8000.0", pyramid_meshes[0])
 
     def test_tower_is_one_shot_and_dirty_zone_waits_three_years(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         outbreak = event_block(events, "ADISCORD_vorkerland_collapse.1")
         reveal = event_block(events, "ADISCORD_vorkerland_collapse.85")
 
@@ -1513,12 +1973,18 @@ class BorderWarArchitectureTests(unittest.TestCase):
         outbreak_trigger = named_block(outbreak, "trigger")
         self.assertNotIn(tower_guard, outbreak_trigger)
         self.assertEqual(outbreak.count(f"set_global_flag = {tower_guard}"), 0)
-        self.assertNotIn("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes", outbreak)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes", outbreak
+        )
         self.assertEqual(events.count("launch_nuke = {"), 1)
         self.assertEqual(outbreak.count("launch_nuke = {"), 0)
-        self.assertNotIn("ADISCORD_vorkerland_animate_unity_tower_destruction = yes", outbreak)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_animate_unity_tower_destruction = yes", outbreak
+        )
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
-        announce = named_block(effects, "ADISCORD_vorkerland_announce_first_central_war")
+        announce = named_block(
+            effects, "ADISCORD_vorkerland_announce_first_central_war"
+        )
         tower_destruction = announce
         self.assertIn(
             f"NOT = {{ has_global_flag = {tower_guard} }}",
@@ -1548,10 +2014,15 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertNotIn("type = anti_air_building", tower_state_damage)
         self.assertLess(
             tower_destruction.find(f"set_global_flag = {tower_guard}"),
-            tower_destruction.find("ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"),
+            tower_destruction.find(
+                "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"
+            ),
         )
         self.assertEqual(
-            detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes"), 1,
+            detonation.count(
+                "ADISCORD_vorkerland_animate_unity_tower_destruction = yes"
+            ),
+            1,
         )
         self.assertIn(
             "WKR = { country_event = { id = ADISCORD_vorkerland_collapse.6 days = 1 } }",
@@ -1581,7 +2052,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("id = ADISCORD_vorkerland_collapse.4 hours = 1", camera_schedule)
         news = read("events/ADISCORD_superevents.txt")
         opening = named_block(news, "news_event")
-        self.assertIn(f"goto_province = {UNITY_TOWER_PROVINCE}", named_block(opening, "option"))
+        self.assertIn(
+            f"goto_province = {UNITY_TOWER_PROVINCE}", named_block(opening, "option")
+        )
 
         launch_producers: list[tuple[str, str]] = []
         for gameplay_directory in ("common", "events", "history"):
@@ -1601,7 +2074,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
             [path for path, _ in tower_launch_producers],
             ["events/ADISCORD_vorkerland_events.txt"],
         )
-        self.assertFalse(any("province = 6713" in block for _, block in launch_producers))
+        self.assertFalse(
+            any("province = 6713" in block for _, block in launch_producers)
+        )
 
         reveal_flag = "ADISCORD_vorkerland_dirty_reveal_v2_scheduled"
         self.assertIn(f"set_global_flag = {reveal_flag}", outbreak)
@@ -1621,17 +2096,37 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
 
     def test_central_claimants_must_finish_the_core_first(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
         main = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant")
-        self.assertEqual(set(re.findall(r"tag\s*=\s*([A-Z]{3})", main)), {"WKR", "VAD", "TVA"})
+        self.assertEqual(
+            set(re.findall(r"tag\s*=\s*([A-Z]{3})", main)), {"WKR", "VAD", "TVA"}
+        )
         for candidate in ("worker", "vlad", "dorian"):
-            block = named_block(triggers, f"ADISCORD_vorkerland_{candidate}_victory_candidate")
-            for defeated in ("eyr", "egc", "riv", "rev", "yor", "ndn", "swb", "vhv", "osv"):
+            block = named_block(
+                triggers, f"ADISCORD_vorkerland_{candidate}_victory_candidate"
+            )
+            for defeated in (
+                "eyr",
+                "egc",
+                "riv",
+                "rev",
+                "yor",
+                "ndn",
+                "swb",
+                "vhv",
+                "osv",
+            ):
                 self.assertIn(f"ADISCORD_vorkerland_{defeated}_defeated = yes", block)
             self.assertNotIn("ADISCORD_vorkerland_tgd_defeated", block)
             self.assertIn("controls_state = 40", block)
         self.assertNotIn("ADISCORD_vorkerland_is_central_claimant", triggers)
-        stalemate = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'stalemate_triggers')
+        stalemate = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'stalemate_triggers',
+        )
         self.assertNotIn("ADISCORD_vorkerland_is_central_claimant", stalemate)
         central_minor = named_block(stalemate, "ADISCORD_vorkerland_is_central_minor")
         self.assertNotIn("tag = TGD", central_minor)
@@ -1649,7 +2144,9 @@ class BorderWarArchitectureTests(unittest.TestCase):
         sources = [path.read_text(encoding="utf-8-sig") for path in common_paths]
         for path, source in zip(common_paths, sources, strict=True):
             if "ADISCORD_vorkerland_is_central_claimant" in source:
-                self.fail(f"{path.relative_to(ROOT)} still references the retired alias")
+                self.fail(
+                    f"{path.relative_to(ROOT)} still references the retired alias"
+                )
         self.assertEqual(
             sum(
                 len(
@@ -1664,28 +2161,49 @@ class BorderWarArchitectureTests(unittest.TestCase):
         )
 
     def test_central_victory_does_not_annex_the_periphery(self) -> None:
-        maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
+        maps = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_map_effects',
+        )
         for candidate in ("worker", "vlad", "dorian"):
             block = named_block(maps, f"ADISCORD_vorkerland_apply_{candidate}_map")
-            for forbidden in ("transfer_state", "annex_country", "puppet =", "set_autonomy"):
+            for forbidden in (
+                "transfer_state",
+                "annex_country",
+                "puppet =",
+                "set_autonomy",
+            ):
                 self.assertNotIn(forbidden, block, f"{candidate}: {forbidden}")
             self.assertIn("ADISCORD_vorkerland_central_unifier", block)
 
     def test_rom_and_tru_coexist_with_wrk_but_not_vad(self) -> None:
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        targets = named_block(triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT")
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        targets = named_block(
+            triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT"
+        )
         self.assertIn("tag = ROM", targets)
         self.assertIn("tag = TRU", targets)
         self.assertIn("ROOT = { tag = VAD }", targets)
         decisions = read_focus_decisions()
-        recognition = named_block(decisions, "ADISCORD_vorkerland_recognize_free_republics")
-        self.assertIn("has_country_flag = ADISCORD_vorkerland_focus_worker_free_republics", recognition)
+        recognition = named_block(
+            decisions, "ADISCORD_vorkerland_recognize_free_republics"
+        )
+        self.assertIn(
+            "has_country_flag = ADISCORD_vorkerland_focus_worker_free_republics",
+            recognition,
+        )
         self.assertEqual(recognition.count("is_subject = no"), 4)
         self.assertIn("country = ROM", recognition)
         self.assertIn("country = TRU", recognition)
 
     def test_central_sloboda_is_an_independent_local_target(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         egc = named_block(effects, "ADISCORD_vorkerland_setup_egc")
         csl = named_block(effects, "ADISCORD_vorkerland_setup_csl")
         self.assertNotIn("transfer_state = 104", egc)
@@ -1693,22 +2211,38 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("104 = { add_core_of = CSL", csl)
         self.assertIn("set_capital = { state = 104 }", csl)
 
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
         regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
         for tag in ("SOL", "SRA", "CSL"):
             self.assertIn(f"tag = {tag}", regional)
 
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        regional_war = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        regional_war = named_block(
+            decisions, "ADISCORD_vorkerland_open_regional_fronts"
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         repair = named_block(effects, "ADISCORD_vorkerland_repair_regional_wars")
         self.assertIn("tag = SOL", regional_war)
         self.assertIn("target = CSL", repair)
         self.assertNotIn("add_to_war", regional_war)
 
     def test_worker_victory_has_no_reunification_war_decision(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        reunification = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        reunification = named_block(
+            decisions, "ADISCORD_vorkerland_continue_reunification"
+        )
         allowed = named_block(reunification, "allowed")
         self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", allowed)
         self.assertIn("NOT = { tag = WRK }", allowed)
@@ -1738,20 +2272,34 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
 class FrontAndSupplyTests(unittest.TestCase):
     def test_dead_stalemate_system_is_gone(self) -> None:
-        combined = "\n".join((source_section(read(path), section) if section else read(path)) for path, section in (
-            ("common/ai_strategy/ADISCORD_vorkerland_ai.txt", "collapse_ai"),
-            ("common/decisions/ADISCORD_vorkerland_decisions.txt", "collapse_decisions"),
-            ("common/ideas/ADISCORD_vorkerland_ideas.txt", "collapse_ideas"),
-            ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "collapse_effects"),
-            ("events/ADISCORD_vorkerland_events.txt", "collapse_events"),
-            ("localisation/russian/ADISCORD_vorkerland_l_russian.yml", "collapse_l_russian"),
-        ))
+        combined = "\n".join(
+            (source_section(read(path), section) if section else read(path))
+            for path, section in (
+                ("common/ai_strategy/ADISCORD_vorkerland_ai.txt", "collapse_ai"),
+                (
+                    "common/decisions/ADISCORD_vorkerland_decisions.txt",
+                    "collapse_decisions",
+                ),
+                ("common/ideas/ADISCORD_vorkerland_ideas.txt", "collapse_ideas"),
+                (
+                    "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+                    "collapse_effects",
+                ),
+                ("events/ADISCORD_vorkerland_events.txt", "collapse_events"),
+                (
+                    "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
+                    "collapse_l_russian",
+                ),
+            )
+        )
         for stale in ("stalemate", "war_weariness", "to_the_last"):
             self.assertNotIn(stale, combined)
         self.assertIn("ADISCORD_vorkerland_phase.", combined)
 
     def test_ai_fronts_keep_pressure_without_supply_blind_local_attacks(self) -> None:
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
         economy = named_block(ai, "ADISCORD_vorkerland_collapse_war_economy")
         self.assertIn("type = ai_wanted_divisions_factor value = 8", economy)
         field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
@@ -1759,42 +2307,75 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertIn("type = dont_defend_ally_borders value = 1", field_army)
         self.assertNotIn("ADISCORD_vorkerland_collapse_front_commitment", ai)
         for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
-            if "type = front_control" in strategy or "type = front_unit_request" in strategy:
+            if (
+                "type = front_control" in strategy
+                or "type = front_unit_request" in strategy
+            ):
                 self.assertEqual(len(re.findall(r"\btag\s*=", strategy)), 1, strategy)
         for attacker, defender in (
-            ("ZAO", "WPA"), ("WPA", "ZAO"), ("WPS", "ZAO"), ("ZAO", "WPS"),
-            ("ZAO", "PSD"), ("PSD", "ZAO"), ("ZAO", "PWR"), ("PWR", "ZAO"),
-            ("WPA", "PSD"), ("PSD", "WPA"), ("WPA", "PWR"), ("PWR", "WPA"),
-            ("WPS", "PSD"), ("PSD", "WPS"), ("WPS", "PWR"), ("PWR", "WPS"),
-            ("PWR", "PSD"), ("PSD", "PWR"),
+            ("ZAO", "WPA"),
+            ("WPA", "ZAO"),
+            ("WPS", "ZAO"),
+            ("ZAO", "WPS"),
+            ("ZAO", "PSD"),
+            ("PSD", "ZAO"),
+            ("ZAO", "PWR"),
+            ("PWR", "ZAO"),
+            ("WPA", "PSD"),
+            ("PSD", "WPA"),
+            ("WPA", "PWR"),
+            ("PWR", "WPA"),
+            ("WPS", "PSD"),
+            ("PSD", "WPS"),
+            ("WPS", "PWR"),
+            ("PWR", "WPS"),
+            ("PWR", "PSD"),
+            ("PSD", "PWR"),
         ):
-            front = named_block(ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}")
+            front = named_block(
+                ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}"
+            )
             self.assertIn(f"has_war_with = {defender}", front)
             request = 33 if attacker in {"WPA", "WPS"} else 25
-            self.assertIn(f"front_unit_request tag = {defender} value = {request}", front)
+            self.assertIn(
+                f"front_unit_request tag = {defender} value = {request}", front
+            )
             self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
             self.assertNotIn("value = 80", front)
             self.assertNotIn("execution_type = rush", front)
 
         for attacker, defender in (
-            ("VLA", "EBA"), ("EBA", "VLA"),
-            ("VLA", "TGD"), ("TGD", "VLA"), ("EBA", "TGD"), ("TGD", "EBA"),
-            ("SOL", "SRA"), ("SRA", "SOL"),
-            ("SOL", "CSL"), ("CSL", "SOL"),
-            ("SRA", "CSL"), ("CSL", "SRA"),
+            ("VLA", "EBA"),
+            ("EBA", "VLA"),
+            ("VLA", "TGD"),
+            ("TGD", "VLA"),
+            ("EBA", "TGD"),
+            ("TGD", "EBA"),
+            ("SOL", "SRA"),
+            ("SRA", "SOL"),
+            ("SOL", "CSL"),
+            ("CSL", "SOL"),
+            ("SRA", "CSL"),
+            ("CSL", "SRA"),
         ):
-            front = named_block(ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}")
+            front = named_block(
+                ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}"
+            )
             self.assertIn(f"has_war_with = {defender}", front)
             self.assertIn(f"front_control tag = {defender}", front)
             self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
 
         for attacker, defender in (
-            ("ROM", "DVA"), ("DVA", "ROM"),
-            ("TRU", "ZTA"), ("ZTA", "TRU"),
+            ("ROM", "DVA"),
+            ("DVA", "ROM"),
+            ("TRU", "ZTA"),
+            ("ZTA", "TRU"),
         ):
-            front = named_block(ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}")
+            front = named_block(
+                ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}"
+            )
             self.assertIn(f"front_unit_request tag = {defender} value = 75", front)
             self.assertIn("execution_type = balanced", front)
             self.assertIn("manual_attack = no", front)
@@ -1816,12 +2397,20 @@ class FrontAndSupplyTests(unittest.TestCase):
         state_paths = list((ROOT / "history" / "states").glob("105-*.txt"))
         self.assertEqual(len(state_paths), 1)
         state = state_paths[0].read_text(encoding="utf-8-sig")
-        for token in ("manpower = 9800000", "state_category = megalopolis", "infrastructure = 5", "local_supplies = 10.0"):
+        for token in (
+            "manpower = 9800000",
+            "state_category = megalopolis",
+            "infrastructure = 5",
+            "local_supplies = 10.0",
+        ):
             self.assertIn(token, state)
         self.assertNotIn("impassable = yes", state)
 
     def test_technograd_uses_the_real_vla_eba_border_region(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         tgd = named_block(effects, "ADISCORD_vorkerland_setup_tgd")
         self.assertIn("transfer_state = 105", tgd)
         self.assertIn("105 = { add_core_of = TGD", tgd)
@@ -1836,12 +2425,17 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertNotRegex(wkr, r"transfer_state\s*=\s*105\b")
 
     def test_technograd_starts_crippled_and_has_one_120_day_recovery(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         setup = named_block(effects, "ADISCORD_vorkerland_setup_tgd")
         self.assertIn("add_ideas = ADISCORD_vorkerland_tgd_grid_collapse", setup)
         self.assertNotIn("add_ideas = ADISCORD_vorkerland_tgd_living_grid", setup)
 
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
         collapse = named_block(ideas, "ADISCORD_vorkerland_tgd_grid_collapse")
         for penalty in (
             "recruitable_population_factor = -1.00",
@@ -1856,7 +2450,10 @@ class FrontAndSupplyTests(unittest.TestCase):
         living = named_block(ideas, "ADISCORD_vorkerland_tgd_living_grid")
         self.assertIn("recruitable_population_factor = -1.00", living)
 
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         recovery = named_block(decisions, "ADISCORD_vorkerland_tgd_rebuild_grid")
         self.assertIn("days_remove = 120", recovery)
         self.assertIn("has_war = no", recovery)
@@ -1876,7 +2473,10 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertEqual(technical_aid.count(f"set_country_flag = {aid_flag}"), 1)
         self.assertNotIn(f"clr_country_flag = {aid_flag}", decisions)
 
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         self.assertNotIn("ADISCORD_vorkerland_tgd_rebuild_grid", on_actions)
 
     def test_border_states_are_not_demilitarized(self) -> None:
@@ -1889,9 +2489,10 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertGreaterEqual(supply, 1.5)
 
     def test_precollapse_itoran_armistice_owns_exact_fresh_scenario_dmz(self) -> None:
-        armistice = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'itoran_armistice_effects')
+        armistice = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'itoran_armistice_effects',
+        )
         apply_armistice = named_block(
             armistice, "ADISCORD_vorkerland_apply_precollapse_itoran_armistice"
         )
@@ -1942,10 +2543,13 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertNotIn("transfer_state", armistice)
         self.assertNotIn("every_state", armistice)
 
-    def test_itoran_armistice_is_fresh_start_and_same_tick_collapse_driven(self) -> None:
-        armistice = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'itoran_armistice_effects')
+    def test_itoran_armistice_is_fresh_start_and_same_tick_collapse_driven(
+        self,
+    ) -> None:
+        armistice = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'itoran_armistice_effects',
+        )
         on_actions = read(
             "common/on_actions/04_ADISCORD_vorkerland_itoran_armistice_on_actions.txt"
         )
@@ -1978,7 +2582,9 @@ class FrontAndSupplyTests(unittest.TestCase):
         for recurring_hook in ("on_weekly", "on_monthly", "on_war_relation_added"):
             self.assertEqual(named_block(on_actions, recurring_hook), "")
 
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         outbreak = event_block(events, "ADISCORD_vorkerland_collapse.1")
         collapse_started = outbreak.find(
             "set_global_flag = ADISCORD_vorkerland_collapse_started"
@@ -1989,7 +2595,9 @@ class FrontAndSupplyTests(unittest.TestCase):
         apply_map = outbreak.find("ADISCORD_vorkerland_apply_initial_map = yes")
         self.assertTrue(0 <= collapse_started < expire_call < apply_map)
         self.assertEqual(
-            outbreak.find("set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"),
+            outbreak.find(
+                "set_global_flag = ADISCORD_vorkerland_unity_tower_destruction_resolved"
+            ),
             -1,
         )
 
@@ -1997,11 +2605,20 @@ class FrontAndSupplyTests(unittest.TestCase):
         for gameplay_directory in ("common", "events", "history"):
             for path in sorted((ROOT / gameplay_directory).rglob("*.txt")):
                 gameplay_sources.append(
-                    (path.relative_to(ROOT).as_posix(), path.read_text(encoding="utf-8-sig"))
+                    (
+                        path.relative_to(ROOT).as_posix(),
+                        path.read_text(encoding="utf-8-sig"),
+                    )
                 )
-        expire_call_text = "ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes"
-        self.assertEqual(sum(source.count(apply_call) for _, source in gameplay_sources), 1)
-        self.assertEqual(sum(source.count(expire_call_text) for _, source in gameplay_sources), 1)
+        expire_call_text = (
+            "ADISCORD_vorkerland_expire_precollapse_itoran_armistice = yes"
+        )
+        self.assertEqual(
+            sum(source.count(apply_call) for _, source in gameplay_sources), 1
+        )
+        self.assertEqual(
+            sum(source.count(expire_call_text) for _, source in gameplay_sources), 1
+        )
         self.assertFalse(
             any(
                 "clr_global_flag = ADISCORD_vorkerland_precollapse_itoran_armistice_expired"
@@ -2078,31 +2695,65 @@ class FrontAndSupplyTests(unittest.TestCase):
             self.assertIn(hub, railway_provinces, tag)
 
     def test_selected_armies_receive_finite_starting_reserves(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        for tag in ("TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        for tag in (
+            "TVA",
+            "EYR",
+            "EGC",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "TGD",
+            "EBA",
+            "PSD",
+            "DVA",
+            "ZTA",
+            "WPA",
+            "WPS",
+        ):
             block = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
             manpower = re.search(r"add_manpower\s*=\s*(\d+)", block)
-            rifles = re.search(r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", block)
+            rifles = re.search(
+                r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", block
+            )
             self.assertIsNotNone(manpower, tag)
-            self.assertGreaterEqual(int(manpower.group(1)), 2000 if tag == "NDN" else 3000, tag)
+            self.assertGreaterEqual(
+                int(manpower.group(1)), 2000 if tag == "NDN" else 3000, tag
+            )
             self.assertIsNotNone(rifles, tag)
             self.assertGreaterEqual(int(rifles.group(1)), 160, tag)
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
         for tag, manpower, rifles in (
-            ("ZAO", 4000, 850), ("PWR", 8000, 1600), ("VLA", 8000, 1800),
+            ("ZAO", 4000, 850),
+            ("PWR", 8000, 1600),
+            ("VLA", 8000, 1800),
             ("NAM", 8000, 1600),
-            ("ROM", 10000, 1800), ("SOL", 3000, 500), ("TRU", 11000, 2000),
+            ("ROM", 10000, 1800),
+            ("SOL", 3000, 500),
+            ("TRU", 11000, 2000),
         ):
             block = named_block(initial, tag)
             self.assertIn(f"add_manpower = {manpower}", block, tag)
             self.assertIn(f"amount = {rifles}", block, tag)
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
         self.assertEqual(tva_oob.count("division = {"), 19)
-        self.assertEqual(tva_oob.count('division_template = "TVA Mobile Test Group"'), 2)
+        self.assertEqual(
+            tva_oob.count('division_template = "TVA Mobile Test Group"'), 2
+        )
         self.assertIn("TVA Infiltration Cell", tva_oob)
 
     def test_eba_receives_the_approved_finite_reserve(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         eba = named_block(effects, "ADISCORD_vorkerland_setup_eba")
         self.assertIn("add_manpower = 10000", eba)
         self.assertIn("amount = 1100", eba)
@@ -2118,18 +2769,28 @@ class FrontAndSupplyTests(unittest.TestCase):
         oob = read("history/units/VLA.txt")
         self.assertEqual(oob.count("division = {"), 4)
         self.assertEqual(oob.count('division_template = "Line Infantry Brigade"'), 2)
-        self.assertEqual(oob.count('division_template = "Local Security Detachment"'), 2)
+        self.assertEqual(
+            oob.count('division_template = "Local Security Detachment"'), 2
+        )
         self.assertGreaterEqual(oob.count("start_equipment_factor = 0.55"), 2)
 
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
         vla = named_block(initial, "VLA")
         self.assertIn("add_manpower = 8000", vla)
         self.assertIn("amount = 1800", vla)
 
     def test_collapse_frees_actual_subjects_and_factions_after_spawn(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         outbreak = named_block(events, "country_event")
         self.assertLess(
             outbreak.find("ADISCORD_vorkerland_apply_initial_map = yes"),
@@ -2139,7 +2800,27 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertNotIn("is_subject_of = WRK", teardown)
         self.assertNotIn("create_faction", outbreak)
         self.assertNotIn("add_to_faction", outbreak)
-        for tag in ("NAM", "DAN", "VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU", "TVA", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "IBL"):
+        for tag in (
+            "NAM",
+            "DAN",
+            "VAD",
+            "ZAO",
+            "PWR",
+            "VLA",
+            "ROM",
+            "SOL",
+            "TRU",
+            "TVA",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "TGD",
+            "IBL",
+        ):
             block = named_block(teardown, tag)
             self.assertIn("is_subject = yes", block, tag)
             self.assertIn("overlord =", block, tag)
@@ -2149,25 +2830,45 @@ class FrontAndSupplyTests(unittest.TestCase):
         self.assertEqual(named_block(teardown, "IBA"), "")
 
     def test_only_zao_and_volnograd_can_restore_district_status(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        decision = named_block(decisions, "ADISCORD_vorkerland_restore_loyalist_district")
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        decision = named_block(
+            decisions, "ADISCORD_vorkerland_restore_loyalist_district"
+        )
         allowed = named_block(decision, "allowed")
-        self.assertEqual(set(re.findall(r"tag\s*=\s*([A-Z]{3})", allowed)), {"ZAO", "VLA"})
+        self.assertEqual(
+            set(re.findall(r"tag\s*=\s*([A-Z]{3})", allowed)), {"ZAO", "VLA"}
+        )
         for excluded in ("PWR", "ROM", "TRU", "SOL"):
             self.assertNotIn(f"tag = {excluded}", allowed)
         self.assertIn("autonomy_state = autonomy_district_in_Vorkerland", decision)
         self.assertIn("drop_cosmetic_tag = yes", decision)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_phase_postwar_integration", decision)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_reunification_verified", decision)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration", decision
+        )
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_reunification_verified", decision
+        )
         self.assertIn("owns_state = 32", decision)
         self.assertIn("controls_state = 32", decision)
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
-        self.assertNotIn("ADISCORD_vorkerland_northern_loyalist_district_restored", decisions + on_actions)
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_northern_loyalist_district_restored",
+            decisions + on_actions,
+        )
 
 
 class CharactersAndPoliticsTests(unittest.TestCase):
     def test_dynamic_successors_promote_predeclared_country_leaders(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         expected = {
             "tva": ("TVA_Dorian_Worx", "technocracy_ideology"),
             "eyr": ("EYR_Irina_Koval", "humanism_ideology"),
@@ -2202,8 +2903,13 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             )
 
     def test_joint_government_appoints_temp_government_portrait(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         council = named_block(characters, "WRK_VAD_Joint_Council")
         joint = named_block(effects, "ADISCORD_vorkerland_form_joint_government")
         appointment = named_block(effects, "ADISCORD_vorkerland_appoint_joint_council")
@@ -2213,10 +2919,15 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         vad_cosmetics = named_block(claimant_cosmetics, "VAD")
         preserved_joint = named_block(vad_cosmetics, "if")
         ordinary_vad = named_block(vad_cosmetics, "else")
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         repair = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.62\b"
             r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
@@ -2233,11 +2944,15 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("promote_character", appointment)
         self.assertIn("character = WRK_VAD_Joint_Council", appointment)
         self.assertIn("portrait = GFX_portrait_WRK_Temporary_Government", appointment)
-        self.assertIn("ADISCORD_vorkerland_joint_council_character_repair_v2", appointment)
+        self.assertIn(
+            "ADISCORD_vorkerland_joint_council_character_repair_v2", appointment
+        )
         self.assertIn("ADISCORD_vorkerland_collapse.62 days = 1", joint)
         self.assertNotIn("ADISCORD_vorkerland_collapse.62", startup)
         self.assertIsNotNone(repair)
-        self.assertIn("ADISCORD_vorkerland_appoint_joint_council = yes", repair.group(1))
+        self.assertIn(
+            "ADISCORD_vorkerland_appoint_joint_council = yes", repair.group(1)
+        )
         self.assertIn("character = WRK_VAD_Joint_Council", repair.group(1))
         self.assertIn("ruling_only = yes", repair.group(1))
         self.assertNotIn("ADISCORD_vorkerland_appoint_joint_council = yes", monthly)
@@ -2257,12 +2972,20 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", ordinary_vad)
 
     def test_rimat_is_a_named_technocratic_directorate(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         history = read("history/countries/PWR - PostWarZone.txt")
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         appointment = named_block(effects, "ADISCORD_vorkerland_appoint_pwr_technocrat")
         loc = read("localisation/russian/countries_l_russian.yml")
-        collapse_loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        collapse_loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
 
         self.assertIn("PWR_Alexey_Lange", characters)
         self.assertIn("recruit_character = PWR_Alexey_Lange", history)
@@ -2276,11 +2999,21 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn('PWR_rimat_republic: "Риматская инженерная директория"', loc)
         self.assertIn('PWR_Alexey_Lange: "Алексей Ланге"', collapse_loc)
 
-    def test_republic_wartime_ideologies_are_applied_only_by_collapse_events(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+    def test_republic_wartime_ideologies_are_applied_only_by_collapse_events(
+        self,
+    ) -> None:
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         startup = named_block(
-            read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse'),
+            read_country_on_actions(
+                "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+                'vorkerland_collapse',
+            ),
             "on_startup",
         )
         histories = {
@@ -2292,37 +3025,65 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("ruling_party = pragmatism", histories["ROM"])
         self.assertIn("ruling_party = pragmatism", histories["TRU"])
         for effect_id, ruling_party, character, event_id in (
-            ("ADISCORD_vorkerland_appoint_pwr_technocrat", "technocracy", "PWR_Alexey_Lange", 44),
-            ("ADISCORD_vorkerland_appoint_rom_etatist", "etatism", "ROM_Erwin_Von_Romanovskiy", 60),
-            ("ADISCORD_vorkerland_appoint_tru_chauvinist", "chauvinism", "TRU_Nikita_Truman", 61),
+            (
+                "ADISCORD_vorkerland_appoint_pwr_technocrat",
+                "technocracy",
+                "PWR_Alexey_Lange",
+                44,
+            ),
+            (
+                "ADISCORD_vorkerland_appoint_rom_etatist",
+                "etatism",
+                "ROM_Erwin_Von_Romanovskiy",
+                60,
+            ),
+            (
+                "ADISCORD_vorkerland_appoint_tru_chauvinist",
+                "chauvinism",
+                "TRU_Nikita_Truman",
+                61,
+            ),
         ):
             appointment = named_block(effects, effect_id)
             self.assertIn(f"ruling_party = {ruling_party}", appointment)
             self.assertIn(f"character = {character}", appointment)
             self.assertIn(f"ideology = {ruling_party}_ideology", appointment)
             self.assertNotIn("recruit_character", appointment)
-            self.assertEqual(events.count(f"id = ADISCORD_vorkerland_collapse.{event_id}"), 1)
+            self.assertEqual(
+                events.count(f"id = ADISCORD_vorkerland_collapse.{event_id}"), 1
+            )
             self.assertNotIn(f"ADISCORD_vorkerland_collapse.{event_id}", startup)
 
     def test_zaozersk_uses_bassam_and_a_bounded_wartime_focus_program(self) -> None:
         history = read("history/countries/ZAO - WestAutonomicZone.txt")
         characters = read("common/characters/WRK.txt")
         portraits = read("interface/ADISCORD_leader_portraits.gfx")
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         appointment = named_block(
             effects, "ADISCORD_vorkerland_appoint_zao_administrator"
         )
-        cosmetics = named_block(
-            effects, "ADISCORD_vorkerland_apply_claimant_cosmetics"
-        )
+        cosmetics = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
         zao_cosmetics = named_block(cosmetics, "ZAO")
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         repair = event_block(events, "ADISCORD_vorkerland_collapse.68")
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
-        focus_tree = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'zao_focus')
-        english = source_section(read("localisation/english/ADISCORD_vorkerland_l_english.yml"), 'collapse_l_english')
+        focus_tree = source_section(
+            read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'zao_focus'
+        )
+        english = source_section(
+            read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
+            'collapse_l_english',
+        )
         russian_path = ROOT / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
         russian = russian_path.read_text(encoding="utf-8-sig")
 
@@ -2335,7 +3096,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("traits = { An_Ordinary_Bureaucrat }", bassam)
         self.assertIn("GFX_portrait_WRK_Bassam_Zogby", portraits)
         self.assertIn("gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png", portraits)
-        self.assertTrue((ROOT / "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png").is_file())
+        self.assertTrue(
+            (ROOT / "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png").is_file()
+        )
 
         for token in (
             "ruling_party = pragmatism",
@@ -2396,18 +3159,27 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertTrue(russian_path.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_joint_government_starts_with_reduced_frontier(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         joint = named_block(effects, "ADISCORD_vorkerland_form_joint_government")
 
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", joint)
-        self.assertNotIn("annex_country = { target = VAD transfer_troops = yes }", joint)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", joint
+        )
+        self.assertNotIn(
+            "annex_country = { target = VAD transfer_troops = yes }", joint
+        )
         self.assertNotIn("transfer_state = 27", joint)
         self.assertNotIn("transfer_state = 82", joint)
         self.assertNotIn("transfer_state = 123", joint)
         self.assertNotIn("add_core_of = TVA", joint)
 
     def test_supplied_portraits_belong_to_country_leaders(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         expected = {
             "EBA_Vlad_Mecra": "GFX_portrait_WRK_Vlad_Mecra",
             "TGD_Ted_Cuttle": "GFX_portrait_WRK_Ted_Cuttle",
@@ -2435,8 +3207,13 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertNotIn("corps_commander", block, character)
 
     def test_civil_war_switches_all_requested_portraits(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         for portrait in (
             "GFX_portrait_WRK_Nikita_Worcker_civilwar",
             "GFX_portrait_WRK_Vlad_Petrichev_civilwar",
@@ -2446,13 +3223,29 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         ):
             self.assertIn(portrait, events + effects)
 
-    def test_dorian_worx_keeps_his_original_suited_identity_and_technocratic_state(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+    def test_dorian_worx_keeps_his_original_suited_identity_and_technocratic_state(
+        self,
+    ) -> None:
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         portraits = read("interface/ADISCORD_leader_portraits.gfx")
-        collapse_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
-        recovery_en = source_section(read("localisation/english/ADISCORD_vorkerland_l_english.yml"), 'recovery_l_english')
-        recovery_ru = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'recovery_l_russian')
+        collapse_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
+        recovery_en = source_section(
+            read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
+            'recovery_l_english',
+        )
+        recovery_ru = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'recovery_l_russian',
+        )
 
         dorian = named_block(characters, "TVA_Dorian_Worx")
         self.assertIn("GFX_portrait_WRK_Dorian_Worx", dorian)
@@ -2484,11 +3277,15 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         ):
             self.assertIn(token, formation)
         self.assertNotIn("ruling_party = utilitarism", formation)
-        self.assertNotIn("set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", formation)
+        self.assertNotIn(
+            "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", formation
+        )
         self.assertNotIn("GFX_portrait_WRK_Anton_Bagley", formation)
         self.assertIn("Control Dorian Worx's technical administration.", recovery_en)
         self.assertNotIn("Control the utilitarian directorate.", recovery_en)
-        self.assertIn("Играть за техническую администрацию Дориана Воркса.", recovery_ru)
+        self.assertIn(
+            "Играть за техническую администрацию Дориана Воркса.", recovery_ru
+        )
         self.assertNotIn("Играть за утилитарный директорат.", recovery_ru)
         self.assertIn(
             'WRK_technocracy: "Technocratic Republic of Vorkerland"',
@@ -2500,20 +3297,40 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
 
     def test_worker_death_installs_cowboy_utilitarian_anton_bagley(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         portraits = read("interface/ADISCORD_leader_portraits.gfx")
-        claimant_setup = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
+        claimant_setup = named_block(
+            effects, "ADISCORD_vorkerland_apply_claimant_cosmetics"
+        )
         wkr_setup = named_block(claimant_setup, "WKR")
         anton_path = named_block(wkr_setup, "else")
         successor = named_block(effects, "ADISCORD_vorkerland_promote_anton_bagley")
-        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
-        worker_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
-        recovery_en = source_section(read("localisation/english/ADISCORD_vorkerland_l_english.yml"), 'recovery_l_english')
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
+        worker_formation = named_block(
+            phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
+        )
+        recovery_en = source_section(
+            read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
+            'recovery_l_english',
+        )
         cosmetic_loc = read("localisation/russian/countries_l_russian.yml")
 
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists", claimant_setup)
-        self.assertIn("GFX_portrait_WRK_Anton_Bagley", named_block(characters, "WRK_Anton_Bagley"))
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",
+            claimant_setup,
+        )
+        self.assertIn(
+            "GFX_portrait_WRK_Anton_Bagley", named_block(characters, "WRK_Anton_Bagley")
+        )
         self.assertRegex(
             portraits,
             r'(?s)name\s*=\s*"GFX_portrait_WRK_Anton_Bagley"'
@@ -2521,7 +3338,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
         self.assertIn("ruling_party = utilitarism", anton_path)
         self.assertIn("elections_allowed = no", anton_path)
-        self.assertIn("set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", anton_path)
+        self.assertIn(
+            "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic", anton_path
+        )
         self.assertIn("portrait = GFX_portrait_WRK_Anton_Bagley", anton_path)
         self.assertIn("ideology = utilitarian_accelerationism", successor)
         self.assertIn(
@@ -2547,9 +3366,15 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             worker_formation.index("ruling_party = utilitarism"),
             "Anton must be registered before restored WRK switches to utilitarism",
         )
-        finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
-        self.assertIn("ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer)
-        self.assertIn("ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer)
+        finalizer = named_block(
+            phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes", finalizer
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_show_worker_victory_superevent = yes", finalizer
+        )
         self.assertIn(
             "has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
             finalizer,
@@ -2574,7 +3399,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "set_country_flag = ADISCORD_vorkerland_utilitarian_victory_presented",
             utilitarian_show,
         )
-        self.assertIn("country_event = { id = ADISCORD_superevent.3 }", utilitarian_show)
+        self.assertIn(
+            "country_event = { id = ADISCORD_superevent.3 }", utilitarian_show
+        )
         self.assertIn(
             'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"',
             recovery_en,
@@ -2583,32 +3410,60 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             'WRK_vorkerland_utilitarian_republic: "Утилитарная Республика Воркерланда"',
             cosmetic_loc,
         )
-        for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
-            path = ROOT / "gfx" / "flags" / directory / "WRK_vorkerland_utilitarian_republic.tga"
+        for directory, size in (
+            ("", (82, 52)),
+            ("medium", (41, 26)),
+            ("small", (10, 7)),
+        ):
+            path = (
+                ROOT
+                / "gfx"
+                / "flags"
+                / directory
+                / "WRK_vorkerland_utilitarian_republic.tga"
+            )
             self.assertTrue(path.is_file(), path)
             with Image.open(path) as flag:
                 self.assertEqual(flag.size, size, path)
 
-    def test_vlad_keeps_imperial_identity_except_for_the_survivor_joint_government(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        claimant_setup = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
+    def test_vlad_keeps_imperial_identity_except_for_the_survivor_joint_government(
+        self,
+    ) -> None:
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        claimant_setup = named_block(
+            effects, "ADISCORD_vorkerland_apply_claimant_cosmetics"
+        )
         vad_setup = named_block(claimant_setup, "VAD")
         joint = named_block(vad_setup, "if")
         imperial = named_block(vad_setup, "else")
-        phase_effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+        phase_effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         cosmetic_loc = read("localisation/russian/countries_l_russian.yml")
 
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_joint_government_formed", joint)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_joint_government_formed", joint
+        )
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_joint_government", joint)
         self.assertIn("ADISCORD_vorkerland_appoint_joint_council = yes", joint)
         self.assertNotIn("VAD_vorkerland_restoration", joint)
         self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", joint)
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", imperial)
         self.assertIn("portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar", imperial)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", formation)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_joint_government_formed", formation)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_worker_rescued_by_vlad", formation
+        )
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_joint_government_formed", formation
+        )
         self.assertIn("set_cosmetic_tag = WRK_vorkerland_joint_government", formation)
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", formation)
         self.assertIn("character = WRK_Vlad_Petrichev", formation)
@@ -2618,27 +3473,54 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             formation,
         )
         self.assertIsNotNone(identity)
-        self.assertIn("ADISCORD_vorkerland_joint_government_formed", identity.group("limit"))
-        self.assertNotIn("ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit"))
-        self.assertIn("GFX_portrait_WRK_Temporary_Government", named_block(characters, "WRK_VAD_Joint_Council"))
-        self.assertIn('VAD_vorkerland_restoration: "Воркерландская Империя"', cosmetic_loc)
+        self.assertIn(
+            "ADISCORD_vorkerland_joint_government_formed", identity.group("limit")
+        )
+        self.assertNotIn(
+            "ADISCORD_vorkerland_worker_rescued_by_vlad", identity.group("limit")
+        )
+        self.assertIn(
+            "GFX_portrait_WRK_Temporary_Government",
+            named_block(characters, "WRK_VAD_Joint_Council"),
+        )
+        self.assertIn(
+            'VAD_vorkerland_restoration: "Воркерландская Империя"', cosmetic_loc
+        )
 
-    def test_election_news_reports_the_settled_wrk_result_to_other_countries(self) -> None:
+    def test_election_news_reports_the_settled_wrk_result_to_other_countries(
+        self,
+    ) -> None:
         effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
         resolve = named_block(effects, "ADISCORD_vorkerland_wrk_resolve_elections")
         guarded = named_block(resolve, "if")
-        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_worker_election_settled }", guarded)
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_worker_election_settled }",
+            guarded,
+        )
         self.assertLess(guarded.index("random_list ="), guarded.index("news_event ="))
         self.assertIn("id = ADISCORD_vorkerland_news.3 hours = 1", guarded)
-        news = event_block(read("events/ADISCORD_vorkerland_events.txt"), "ADISCORD_vorkerland_news.3", "news_event")
+        news = event_block(
+            read("events/ADISCORD_vorkerland_events.txt"),
+            "ADISCORD_vorkerland_news.3",
+            "news_event",
+        )
         self.assertIn("major = yes", news)
         self.assertIn("fire_only_once = yes", news)
         for winner in ("worker", "yastrebtsev", "filopo"):
-            self.assertIn(f"WRK = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}", news)
+            self.assertIn(
+                f"WRK = {{ has_country_flag = ADISCORD_vorkerland_{winner}_elected }}",
+                news,
+            )
             for language in ("russian", "english"):
-                loc = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+                loc = (
+                    ROOT
+                    / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
+                )
                 self.assertTrue(loc.read_bytes().startswith(b"\xef\xbb\xbf"))
-                self.assertIn(f' ADISCORD_vorkerland_news.3.{winner}.d: "', loc.read_text(encoding="utf-8-sig"))
+                self.assertIn(
+                    f' ADISCORD_vorkerland_news.3.{winner}.d: "',
+                    loc.read_text(encoding="utf-8-sig"),
+                )
 
     def test_nikita_victory_can_elect_or_usurp(self) -> None:
         issues = validate(ROOT, "outcomes")
@@ -2647,16 +3529,26 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             "phase_effects",
         )
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), "collapse_events")
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), "collapse_events"
+        )
         characters = read("common/characters/WRK.txt")
         portraits = read("interface/ADISCORD_leader_portraits.gfx")
         usurp = named_block(phase_effects, "ADISCORD_vorkerland_wrk_usurp_mandate")
-        resolve = named_block(phase_effects, "ADISCORD_vorkerland_wrk_resolve_elections")
+        resolve = named_block(
+            phase_effects, "ADISCORD_vorkerland_wrk_resolve_elections"
+        )
         choice = event_block(events, "ADISCORD_vorkerland_collapse.100")
         result = event_block(events, "ADISCORD_vorkerland_collapse.101")
 
-        self.assertIn("ideology = humanism_ideology", named_block(characters, "WRK_Mark_Yastrebtsev"))
-        self.assertIn("ideology = chauvinism_ideology", named_block(characters, "WRK_Necro_Filopo"))
+        self.assertIn(
+            "ideology = humanism_ideology",
+            named_block(characters, "WRK_Mark_Yastrebtsev"),
+        )
+        self.assertIn(
+            "ideology = chauvinism_ideology",
+            named_block(characters, "WRK_Necro_Filopo"),
+        )
         self.assertIn("GFX_portrait_WRK_Nikita_Worcker_victory", usurp)
         self.assertEqual(resolve.count("1 = {"), 3)
         self.assertIn("timeout_days = 21", choice)
@@ -2664,7 +3556,10 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for sprite, texture in (
             ("GFX_portrait_WRK_Mark_Yastrebtsev", "portrait_WRK_Mark_Yastrebtsev.png"),
             ("GFX_portrait_WRK_Necro_Filopo", "portrait_WRK_Necro_Filopo.png"),
-            ("GFX_portrait_WRK_Nikita_Worcker_victory", "portrait_WRK_Nikita_Worcker_victory.png"),
+            (
+                "GFX_portrait_WRK_Nikita_Worcker_victory",
+                "portrait_WRK_Nikita_Worcker_victory.png",
+            ),
         ):
             self.assertRegex(
                 portraits,
@@ -2675,14 +3570,34 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertFalse((ROOT / "gfx/leaders/некро филопо.png").exists())
 
     def test_successor_ideologies_are_diverse(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
         ideologies = set(re.findall(r"ideology\s*=\s*([a-z_]+)_ideology", characters))
-        self.assertTrue({"humanism", "etatism", "technocracy", "hedonism", "chauvinism", "pragmatism"} <= ideologies)
+        self.assertTrue(
+            {
+                "humanism",
+                "etatism",
+                "technocracy",
+                "hedonism",
+                "chauvinism",
+                "pragmatism",
+            }
+            <= ideologies
+        )
 
     def test_cultural_erasure_has_a_national_spirit(self) -> None:
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
         self.assertIn("ADISCORD_vorkerland_erased_nations", ideas)
         self.assertIn(
             "picture = generic_oppression",
@@ -2691,12 +3606,20 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("Стёртые народы Империи", loc)
         prepare = named_block(effects, "ADISCORD_vorkerland_prepare_conflict_country")
         self.assertNotIn("add_ideas = ADISCORD_vorkerland_erased_nations", prepare)
-        self.assertEqual(effects.count("add_ideas = ADISCORD_vorkerland_erased_nations"), 2)
+        self.assertEqual(
+            effects.count("add_ideas = ADISCORD_vorkerland_erased_nations"), 2
+        )
         initial = named_block(effects, "ADISCORD_vorkerland_prepare_initial_combatants")
-        self.assertRegex(initial, r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations")
+        self.assertRegex(
+            initial,
+            r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
+        )
 
     def test_initial_partition_grants_owned_state_cores_once(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         prepare = named_block(effects, "ADISCORD_vorkerland_prepare_conflict_country")
         self.assertEqual(prepare.count("every_owned_state"), 1)
         self.assertRegex(
@@ -2705,15 +3628,38 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
 
     def test_main_claimants_have_repeatable_wartime_decisions(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
         expected = {
-            "ADISCORD_vorkerland_wrk_activate_front_committees": ("WKR", "ADISCORD_vorkerland_wrk_front_committees"),
-            "ADISCORD_vorkerland_wrk_requisition_rail_stock": ("WKR", "ADISCORD_vorkerland_wrk_rail_requisition"),
-            "ADISCORD_vorkerland_vad_open_imperial_registers": ("VAD", "ADISCORD_vorkerland_vad_imperial_registers"),
-            "ADISCORD_vorkerland_vad_form_field_commandantures": ("VAD", "ADISCORD_vorkerland_vad_field_commandantures"),
-            "ADISCORD_vorkerland_tva_reroute_city_grid": ("TVA", "ADISCORD_vorkerland_tva_grid_rerouting"),
-            "ADISCORD_vorkerland_tva_deploy_field_laboratories": ("TVA", "ADISCORD_vorkerland_tva_field_laboratories"),
+            "ADISCORD_vorkerland_wrk_activate_front_committees": (
+                "WKR",
+                "ADISCORD_vorkerland_wrk_front_committees",
+            ),
+            "ADISCORD_vorkerland_wrk_requisition_rail_stock": (
+                "WKR",
+                "ADISCORD_vorkerland_wrk_rail_requisition",
+            ),
+            "ADISCORD_vorkerland_vad_open_imperial_registers": (
+                "VAD",
+                "ADISCORD_vorkerland_vad_imperial_registers",
+            ),
+            "ADISCORD_vorkerland_vad_form_field_commandantures": (
+                "VAD",
+                "ADISCORD_vorkerland_vad_field_commandantures",
+            ),
+            "ADISCORD_vorkerland_tva_reroute_city_grid": (
+                "TVA",
+                "ADISCORD_vorkerland_tva_grid_rerouting",
+            ),
+            "ADISCORD_vorkerland_tva_deploy_field_laboratories": (
+                "TVA",
+                "ADISCORD_vorkerland_tva_field_laboratories",
+            ),
         }
         for decision_id, (tag, spirit) in expected.items():
             block = named_block(decisions, decision_id)
@@ -2748,8 +3694,13 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertNotIn("add_army_experience", field_labs)
 
     def test_doctor_worx_starts_as_a_real_third_claimant(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
         setup = named_block(effects, "ADISCORD_vorkerland_setup_tva")
         for token in (
             "add_ideas = ADISCORD_vorkerland_tva_field_directorate",
@@ -2768,7 +3719,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             "supply_consumption_factor = -0.12",
         ):
             self.assertIn(modifier, directorate)
-        fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
+        fanaticism = named_block(
+            ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism"
+        )
         for modifier in (
             "war_support_factor = 0.12",
             "army_org_regain = 0.10",
@@ -2779,14 +3732,23 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         state_36 = read("history/states/36-36.txt")
         self.assertRegex(state_36, r"victory_points\s*=\s*\{\s*12227\s+10\s*\}")
 
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        battalions = named_block(decisions, "ADISCORD_vorkerland_tva_raise_technical_battalions")
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        battalions = named_block(
+            decisions, "ADISCORD_vorkerland_tva_raise_technical_battalions"
+        )
         self.assertEqual(battalions.count("create_unit ="), 4)
         self.assertIn("36 = {", battalions)
         self.assertIn("owner = WPS", battalions)
         self.assertIn("owner = TGD", battalions)
-        wrk_cells = named_block(decisions, "ADISCORD_vorkerland_tva_infiltrate_wrk_rear")
-        vad_cells = named_block(decisions, "ADISCORD_vorkerland_tva_infiltrate_vad_rear")
+        wrk_cells = named_block(
+            decisions, "ADISCORD_vorkerland_tva_infiltrate_wrk_rear"
+        )
+        vad_cells = named_block(
+            decisions, "ADISCORD_vorkerland_tva_infiltrate_vad_rear"
+        )
         for state in (33, 34):
             self.assertIn(f"{state} = {{", wrk_cells)
         for state in (75, 106):
@@ -2795,7 +3757,10 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertNotIn(f"{island} = {{", wrk_cells)
 
     def test_regional_winners_can_join_a_main_claimant_as_puppets(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         expected = {
             "ADISCORD_vorkerland_tva_integrate_wps": ("TVA", "WPS", "196"),
             "ADISCORD_vorkerland_tva_integrate_tgd": ("TVA", "TGD", "105"),
@@ -2805,28 +3770,57 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(f"allowed = {{ tag = {claimant} }}", block, decision_id)
             self.assertIn(f"controls_state = {state}", block, decision_id)
             self.assertIn(f"puppet = {target}", block, decision_id)
-            autonomy = "autonomy_district_in_Vorkerland" if target == "VLA" else "autonomy_puppet"
-            self.assertIn(f"set_autonomy = {{ target = {target} autonomy_state = {autonomy}", block, decision_id)
+            autonomy = (
+                "autonomy_district_in_Vorkerland"
+                if target == "VLA"
+                else "autonomy_puppet"
+            )
+            self.assertIn(
+                f"set_autonomy = {{ target = {target} autonomy_state = {autonomy}",
+                block,
+                decision_id,
+            )
 
     def test_btl_and_kefreyt_choose_only_one_claimant_to_support(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
         for patron, flag, spirit, rifles in (
-            ("btl", "ADISCORD_vorkerland_btl_contract_signed", "ADISCORD_vorkerland_btl_contract_support", "250"),
-            ("val", "ADISCORD_vorkerland_val_contract_signed", "ADISCORD_vorkerland_val_contract_support", "400"),
+            (
+                "btl",
+                "ADISCORD_vorkerland_btl_contract_signed",
+                "ADISCORD_vorkerland_btl_contract_support",
+                "250",
+            ),
+            (
+                "val",
+                "ADISCORD_vorkerland_val_contract_signed",
+                "ADISCORD_vorkerland_val_contract_support",
+                "400",
+            ),
         ):
             self.assertIn(f"{spirit} = {{", ideas)
             for claimant in ("wrk", "vad", "tva"):
                 decision_id = f"ADISCORD_vorkerland_{patron}_support_{claimant}"
                 block = named_block(decisions, decision_id)
-                self.assertIn(f"NOT = {{ has_global_flag = {flag} }}", block, decision_id)
+                self.assertIn(
+                    f"NOT = {{ has_global_flag = {flag} }}", block, decision_id
+                )
                 self.assertIn(f"set_global_flag = {flag}", block, decision_id)
                 self.assertIn(f"add_ideas = {spirit}", block, decision_id)
                 self.assertIn(f"amount = {rifles}", block, decision_id)
                 if patron == "val":
-                    self.assertIn("type = support_equipment amount = 60 producer = VAL", block)
+                    self.assertIn(
+                        "type = support_equipment amount = 60 producer = VAL", block
+                    )
                 else:
-                    self.assertIn("add_ideas = ADISCORD_vorkerland_btl_volunteer_contract", block)
+                    self.assertIn(
+                        "add_ideas = ADISCORD_vorkerland_btl_volunteer_contract", block
+                    )
                     self.assertIn(f"ADISCORD_vorkerland_btl_supports_{claimant}", block)
         btl_contract = named_block(ideas, "ADISCORD_vorkerland_btl_volunteer_contract")
         self.assertIn("can_send_volunteers = yes", btl_contract)
@@ -2837,17 +3831,28 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
 
     def test_fallback_spirit_pictures_use_registered_idea_sprites(self) -> None:
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
-        mission = named_block(
-            ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission"
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
         )
+        mission = named_block(ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission")
         self.assertIn("picture = generic_volunteer_expedition_bonus", mission)
 
     def test_selected_sides_have_unique_moderate_spirits(self) -> None:
-        ideas = source_section(read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        ideas = source_section(
+            read("common/ideas/ADISCORD_vorkerland_ideas.txt"), 'collapse_ideas'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
         spirits = (
             "ADISCORD_vorkerland_vad_imperial_chancery",
             "ADISCORD_vorkerland_wkr_arsenal_command",
@@ -2868,7 +3873,10 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             self.assertIn(f" {spirit}_desc:", loc, spirit)
 
     def test_collapse_spirit_cleanup_is_tag_guarded_and_has_replacements(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         prepare = named_block(effects, "ADISCORD_vorkerland_prepare_conflict_country")
         self.assertNotIn("every_country", prepare)
         self.assertNotIn("every_other_country", prepare)
@@ -2884,23 +3892,61 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             },
         )
         for tag in (
-            "WRK", "VAD", "VLA", "ZAO", "PWR", "ROM", "SOL", "TRU",
-            "TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "PSD", "DVA", "SRA", "IBL", "IBA",
+            "WRK",
+            "VAD",
+            "VLA",
+            "ZAO",
+            "PWR",
+            "ROM",
+            "SOL",
+            "TRU",
+            "TVA",
+            "EYR",
+            "EGC",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "PSD",
+            "DVA",
+            "SRA",
+            "IBL",
+            "IBA",
         ):
             self.assertIn(f"tag = {tag}", prepare, tag)
-        self.assertIn("add_ideas = ADISCORD_vorkerland_republics_from_the_ruins", prepare)
+        self.assertIn(
+            "add_ideas = ADISCORD_vorkerland_republics_from_the_ruins", prepare
+        )
         self.assertIn("add_ideas = ADISCORD_vorkerland_mobilized_periphery", prepare)
         self.assertIn("ADISCORD_vorkerland_ensure_limited_conscription = yes", prepare)
 
     def test_collapse_runtime_cannot_remove_unrelated_national_spirits(self) -> None:
         paths = (
-            ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "collapse_effects"),
-            ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "collapse_map_effects"),
+            (
+                "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+                "collapse_effects",
+            ),
+            (
+                "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+                "collapse_map_effects",
+            ),
             ("events/ADISCORD_vorkerland_events.txt", "collapse_events"),
-            ("common/decisions/ADISCORD_vorkerland_decisions.txt", "collapse_decisions"),
+            (
+                "common/decisions/ADISCORD_vorkerland_decisions.txt",
+                "collapse_decisions",
+            ),
         )
-        runtime = "\n".join((source_section(read(path), section) if section else read(path)) for path, section in paths)
-        runtime += "\n" + read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", "vorkerland_collapse")
+        runtime = "\n".join(
+            (source_section(read(path), section) if section else read(path))
+            for path, section in paths
+        )
+        runtime += "\n" + read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            "vorkerland_collapse",
+        )
         removals = set(re.findall(r"remove_ideas\s*=\s*([A-Za-z0-9_]+)", runtime))
         self.assertEqual(
             removals,
@@ -2924,15 +3970,24 @@ class CharactersAndPoliticsTests(unittest.TestCase):
             },
         )
         for spirit in (
-            "IVN_national_spirit", "RUS_national_spirit", "PIV_national_spirit",
-            "NAM_national_spirit", "NOD_home_of_hedonist_revolution",
-            "STP_hedonism_with_no_bondaries", "VAL_worldwide_famous_weponry",
+            "IVN_national_spirit",
+            "RUS_national_spirit",
+            "PIV_national_spirit",
+            "NAM_national_spirit",
+            "NOD_home_of_hedonist_revolution",
+            "STP_hedonism_with_no_bondaries",
+            "VAL_worldwide_famous_weponry",
         ):
             self.assertNotIn(spirit, removals)
 
     def test_new_leaders_have_names_but_no_game_biographies(self) -> None:
-        characters = read("common/characters/ADISCORD_vorkerland_collapse_characters.txt")
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        characters = read(
+            "common/characters/ADISCORD_vorkerland_collapse_characters.txt"
+        )
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
         self.assertNotRegex(characters, r"\bdesc\s*=\s*[A-Za-z0-9_]+_desc\b")
         for leader in re.findall(r"(?m)^\s*([A-Z]{3}_[A-Za-z0-9_]+)\s*=", characters):
             self.assertNotIn(f"{leader}_desc:", loc, leader)
@@ -2943,16 +3998,24 @@ class CharactersAndPoliticsTests(unittest.TestCase):
 
 class InterventionAndVisualTests(unittest.TestCase):
     def test_krait_is_led_by_selevyostrov_before_and_after_puppeting(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         appointment = named_block(effects, "ADISCORD_vorkerland_appoint_selevyostrov")
         setup = named_block(effects, "ADISCORD_vorkerland_setup_ibl")
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         repair = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.42\b"
             r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
             events,
         )
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
 
@@ -2977,13 +4040,21 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_appoint_selevyostrov = yes", repair.group(1))
 
     def test_ivanland_puppet_is_led_by_mateusk(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         mandate = named_block(effects, "ADISCORD_vorkerland_setup_ivanland_mandate")
         appointment = named_block(effects, "ADISCORD_vorkerland_appoint_mateusk")
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         startup = named_block(on_actions, "on_startup")
         monthly = named_block(on_actions, "on_monthly")
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         repair = re.search(
             r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.40\b"
             r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
@@ -3008,20 +4079,39 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertNotIn("ADISCORD_vorkerland_collapse.40", startup)
         self.assertIsNotNone(repair)
         self.assertIn("ADISCORD_vorkerland_appoint_mateusk = yes", repair.group(1))
-        self.assertIn("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes", repair.group(1))
+        self.assertIn(
+            "ADISCORD_vorkerland_end_ivanland_intervention_wars = yes", repair.group(1)
+        )
         self.assertIn("character = IBA_Matvey_Mateusk", repair.group(1))
         self.assertIn("ruling_only = yes", repair.group(1))
 
     def test_ivanland_front_launch_is_postcondition_verified_and_bounded(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        triggers = source_section(read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"), 'collapse_triggers')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
 
         cache_event = event_block(events, "ADISCORD_vorkerland_collapse.77")
-        launch = named_block(effects, "ADISCORD_vorkerland_open_ivanland_intervention_front")
-        verifier_call = "country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }"
-        self.assertIn("ADISCORD_vorkerland_open_ivanland_intervention_front = yes", cache_event)
+        launch = named_block(
+            effects, "ADISCORD_vorkerland_open_ivanland_intervention_front"
+        )
+        verifier_call = (
+            "country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_open_ivanland_intervention_front = yes", cache_event
+        )
         self.assertIn(
             "clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending",
             launch,
@@ -3097,7 +4187,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         ):
             self.assertNotIn(token, startup)
 
-        cleanup = named_block(effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars")
+        cleanup = named_block(
+            effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars"
+        )
         cleanup_ivn = named_block(cleanup, "IVN")
         for flag in (
             "ADISCORD_vorkerland_ivanland_front_launch_pending",
@@ -3114,12 +4206,21 @@ class InterventionAndVisualTests(unittest.TestCase):
             )
 
     def test_ivanland_keeps_krait_and_norvane_as_separate_puppets(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         preparation = named_block(
             decisions, "ADISCORD_ivanland_prepare_northern_expedition"
         )
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4", preparation)
-        self.assertIn("available = { ADISCORD_ivanland_intervention_start_ready = yes }", preparation)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_ivanland_planning_unlocked_v4",
+            preparation,
+        )
+        self.assertIn(
+            "available = { ADISCORD_ivanland_intervention_start_ready = yes }",
+            preparation,
+        )
         self.assertIn("cost = 75", preparation)
         self.assertIn("days_remove = 120", preparation)
         self.assertIn("civilian_factory_use = 2", preparation)
@@ -3137,17 +4238,26 @@ class InterventionAndVisualTests(unittest.TestCase):
         cancel_effect = named_block(mission, "cancel_effect")
         self.assertIn("has_capitulated = yes", cancel_trigger)
         self.assertNotIn("NOT = { has_war_with = PWR }", cancel_trigger)
-        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_success = yes", cancel_effect)
-        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_failure = yes", cancel_effect)
+        self.assertIn(
+            "ADISCORD_vorkerland_ivanland_intervention_success = yes", cancel_effect
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_ivanland_intervention_failure = yes", cancel_effect
+        )
         self.assertIn(
             "timeout_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }",
             mission,
         )
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         activation = named_block(
             effects, "ADISCORD_vorkerland_activate_ivanland_intervention_mission"
         )
-        intervention_start = named_block(effects, "ADISCORD_vorkerland_begin_ivanland_intervention")
+        intervention_start = named_block(
+            effects, "ADISCORD_vorkerland_begin_ivanland_intervention"
+        )
         for token in (
             "set_global_flag = ADISCORD_vorkerland_ivanland_intervention_active",
             "add_timed_idea = { idea = ADISCORD_vorkerland_ivanland_expeditionary_command days = 260 }",
@@ -3155,7 +4265,9 @@ class InterventionAndVisualTests(unittest.TestCase):
             "ADISCORD_vorkerland_begin_ivanland_intervention = yes",
         ):
             self.assertIn(token, activation)
-        self.assertNotIn("ADISCORD_vorkerland_begin_ivanland_intervention = yes", mission)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_begin_ivanland_intervention = yes", mission
+        )
         self.assertIn("ADISCORD_vorkerland_restore_pwr_psd", intervention_start)
         self.assertIn("ADISCORD_vorkerland_collapse.77 days = 1", intervention_start)
         self.assertNotIn("declare_war_on =", intervention_start)
@@ -3163,8 +4275,15 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertNotIn("puppet = IBA", intervention_start)
         for state in (90, 91, 93, 94):
             self.assertIn(f"controls_state = {state}", mission)
-        cache_event = event_block(events := source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'), "ADISCORD_vorkerland_collapse.77")
-        self.assertIn("ADISCORD_vorkerland_open_ivanland_intervention_front = yes", cache_event)
+        cache_event = event_block(
+            events := source_section(
+                read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+            ),
+            "ADISCORD_vorkerland_collapse.77",
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_open_ivanland_intervention_front = yes", cache_event
+        )
         intervention_front = named_block(
             effects, "ADISCORD_vorkerland_open_ivanland_intervention_front"
         )
@@ -3178,7 +4297,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertNotIn("target = IBA", intervention_front)
         mandate = named_block(effects, "ADISCORD_vorkerland_setup_ivanland_mandate")
         krait_setup = named_block(effects, "ADISCORD_vorkerland_setup_ibl")
-        krait_expansion = named_block(effects, "ADISCORD_vorkerland_expand_krait_client")
+        krait_expansion = named_block(
+            effects, "ADISCORD_vorkerland_expand_krait_client"
+        )
         self.assertEqual(mandate.count("puppet ="), 1)
         self.assertIn("puppet = IBA", mandate)
         self.assertNotIn("set_nationality = IBA", mandate)
@@ -3191,9 +4312,13 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertNotIn("recruit_character", appointment)
         self.assertIn("promote_character", appointment)
         self.assertIn("portrait = GFX_portrait_IBA_Matvey_Mateusk", appointment)
-        self.assertEqual(set(re.findall(r"transfer_state\s*=\s*(\d+)", mandate)), {"90", "91"})
+        self.assertEqual(
+            set(re.findall(r"transfer_state\s*=\s*(\d+)", mandate)), {"90", "91"}
+        )
         self.assertIn("91 = { remove_core_of = IBL add_core_of = IBA", mandate)
-        self.assertEqual(set(re.findall(r"transfer_state\s*=\s*(\d+)", krait_setup)), {"93", "94"})
+        self.assertEqual(
+            set(re.findall(r"transfer_state\s*=\s*(\d+)", krait_setup)), {"93", "94"}
+        )
         self.assertIn("puppet = IBL", krait_setup)
         self.assertIn("ADISCORD_vorkerland_appoint_selevyostrov = yes", krait_setup)
         self.assertIn("ADISCORD_vorkerland_setup_ibl = yes", mandate)
@@ -3203,80 +4328,161 @@ class InterventionAndVisualTests(unittest.TestCase):
         iba_history = read("history/countries/IBA - Ivanland Northern Mandate.txt")
         self.assertNotIn("recruit_character = IBA_Matvey_Mateusk", ivn_history)
         self.assertIn("recruit_character = IBA_Matvey_Mateusk", iba_history)
-        focus = source_section(read("common/national_focus/ADISCORD_vorkerland_focus.txt"), 'collapse_focus')
+        focus = source_section(
+            read("common/national_focus/ADISCORD_vorkerland_focus.txt"),
+            'collapse_focus',
+        )
         self.assertIn("tag = IBA", focus)
         self.assertIn("id = IBA_organize_transitional_council", focus)
         self.assertNotIn("GFX_goal_unknown", focus)
-        english_focus_loc = source_section(read("localisation/english/ADISCORD_vorkerland_l_english.yml"), 'collapse_l_english')
+        english_focus_loc = source_section(
+            read("localisation/english/ADISCORD_vorkerland_l_english.yml"),
+            'collapse_l_english',
+        )
         self.assertIn("IBA_organize_transitional_council:", english_focus_loc)
         self.assertIn("IBA_organize_transitional_council_desc:", english_focus_loc)
-        success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
-        self.assertGreaterEqual(success.count("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes"), 2)
-        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }", success)
+        success = named_block(
+            effects, "ADISCORD_vorkerland_ivanland_intervention_success"
+        )
+        self.assertGreaterEqual(
+            success.count("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes"), 2
+        )
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }",
+            success,
+        )
         self.assertIn("Ivanland intervention resolved: SUCCESS", success)
-        self.assertIn("clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed", success)
-        front_cleanup = named_block(effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front")
+        self.assertIn(
+            "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed",
+            success,
+        )
+        front_cleanup = named_block(
+            effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front"
+        )
         self.assertNotIn("white_peace", front_cleanup)
         for defender in ("PWR", "ZAO", "WPA", "WPS", "PSD"):
-            self.assertIn("remove_ideas = ADISCORD_vorkerland_northern_defense_front", named_block(front_cleanup, defender))
+            self.assertIn(
+                "remove_ideas = ADISCORD_vorkerland_northern_defense_front",
+                named_block(front_cleanup, defender),
+            )
 
-        failure = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_failure")
-        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }", failure)
+        failure = named_block(
+            effects, "ADISCORD_vorkerland_ivanland_intervention_failure"
+        )
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }",
+            failure,
+        )
         self.assertIn("ruling_party = etatism", failure)
         self.assertIn("GFX_portrait_IVN_Vadim_Ivanchik_after_retreat", failure)
         self.assertIn("annex_country = { target = IBA", failure)
         self.assertIn("PWR = { transfer_state = 90 transfer_state = 91 }", failure)
         self.assertIn("PSD = { transfer_state = 93 transfer_state = 94 }", failure)
         self.assertIn("91 = { remove_core_of = IBA", failure)
-        self.assertIn("91 = { add_core_of = PWR set_state_controller_to = PWR }", failure)
+        self.assertIn(
+            "91 = { add_core_of = PWR set_state_controller_to = PWR }", failure
+        )
         self.assertIn("93 = { set_state_controller_to = PSD }", failure)
         self.assertIn("94 = { set_state_controller_to = PSD }", failure)
         self.assertIn("ADISCORD_vorkerland_vadim_etatist_role_added", failure)
         self.assertIn("Ivanland intervention resolved: FAILURE", failure)
-        self.assertIn("clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded", failure)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", failure)
+        self.assertIn(
+            "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded",
+            failure,
+        )
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+            failure,
+        )
         self.assertIn("limit = { has_capitulated = yes }", failure)
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", failure)
-        self.assertIn("ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes", failure)
-        self.assertIn("ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = yes", failure)
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+            failure,
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes", failure
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat = yes",
+            failure,
+        )
 
-        restore_queue = named_block(effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat")
+        restore_queue = named_block(
+            effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat"
+        )
         for host in ("PWR", "PSD", "ZAO", "WPA", "WPS"):
             self.assertIn(f"country_exists = {host}", restore_queue)
-            self.assertIn(f"{host} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.43 days = 2 }} }}", restore_queue)
+            self.assertIn(
+                f"{host} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.43 days = 2 }} }}",
+                restore_queue,
+            )
 
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         capitulation = named_block(on_actions, "on_capitulation")
         self.assertIn("set_global_flag = skip_default_capitulation", capitulation)
         self.assertIn("tag = PWR", capitulation)
         self.assertIn("ROOT = { tag = IVN }", capitulation)
-        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_success = yes", capitulation)
-        self.assertIn("ADISCORD_vorkerland_ivanland_intervention_failure = yes", capitulation)
+        self.assertIn(
+            "ADISCORD_vorkerland_ivanland_intervention_success = yes", capitulation
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_ivanland_intervention_failure = yes", capitulation
+        )
 
         ivn_defeat = next(
-            branch for branch in named_blocks(capitulation, "else_if")
+            branch
+            for branch in named_blocks(capitulation, "else_if")
             if "ROOT = { tag = IVN }" in branch
             and "ADISCORD_vorkerland_ivanland_intervention_failure = yes" in branch
         )
-        self.assertIn("set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention", ivn_defeat)
+        self.assertIn(
+            "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+            ivn_defeat,
+        )
         self.assertNotIn("skip_default_capitulation", ivn_defeat)
         self.assertNotIn("white_peace", ivn_defeat)
 
-        generic = named_block(read("common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"), "on_capitulation")
+        generic = named_block(
+            read("common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"),
+            "on_capitulation",
+        )
         self.assertIn("NOT = { has_global_flag = skip_default_capitulation }", generic)
         self.assertIn("annex_country = { target = PREV transfer_troops = no }", generic)
 
-        for event_id in ("ADISCORD_vorkerland_collapse.43", "ADISCORD_vorkerland_collapse.74", "ADISCORD_vorkerland_collapse.78"):
+        for event_id in (
+            "ADISCORD_vorkerland_collapse.43",
+            "ADISCORD_vorkerland_collapse.74",
+            "ADISCORD_vorkerland_collapse.78",
+        ):
             restore_event = event_block(events, event_id)
             for host in ("IVN", "PWR", "PSD", "ZAO", "WPA", "WPS"):
                 self.assertIn(f"tag = {host}", restore_event)
 
-    def test_late_ivanland_and_frealor_interventions_are_one_shot_and_state_bound(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        maps = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_map_effects')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+    def test_late_ivanland_and_frealor_interventions_are_one_shot_and_state_bound(
+        self,
+    ) -> None:
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        maps = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_map_effects',
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
 
         second = named_block(decisions, "ADISCORD_ivanland_second_intervention")
         self.assertEqual(second.count("value = 100"), 3)
@@ -3302,7 +4508,9 @@ class InterventionAndVisualTests(unittest.TestCase):
             "ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1",
             effects,
         )
-        success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
+        success = named_block(
+            effects, "ADISCORD_vorkerland_ivanland_intervention_success"
+        )
         self.assertNotIn("ADISCORD_vorkerland_ivanland_secure_zaozersk", success)
         self.assertNotIn("puppet = ZAO", success)
         self.assertNotIn("transfer_state = 72", success)
@@ -3323,7 +4531,9 @@ class InterventionAndVisualTests(unittest.TestCase):
             "ZAO = { ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate = yes }",
             startup,
         )
-        self.assertNotIn("ADISCORD_vorkerland_ivanland_secure_zaozersk", effects + startup)
+        self.assertNotIn(
+            "ADISCORD_vorkerland_ivanland_secure_zaozersk", effects + startup
+        )
         self.assertNotIn(
             "set_global_flag = ADISCORD_vorkerland_ivanland_zaozersk_secured",
             effects + startup,
@@ -3333,13 +4543,17 @@ class InterventionAndVisualTests(unittest.TestCase):
             effects + startup,
         )
 
-        frealor = named_block(decisions, "ADISCORD_vorkerland_rom_northern_intervention")
+        frealor = named_block(
+            decisions, "ADISCORD_vorkerland_rom_northern_intervention"
+        )
         self.assertIn("is_subject = no", frealor)
         self.assertIn("has_war = no", frealor)
         self.assertIn("generator = { 72 }", frealor)
         self.assertIn("generator = { 196 322 }", frealor)
         self.assertEqual(frealor.count("declare_war_on ="), 2)
-        frealor_success = named_block(effects, "ADISCORD_vorkerland_rom_northern_intervention_success")
+        frealor_success = named_block(
+            effects, "ADISCORD_vorkerland_rom_northern_intervention_success"
+        )
         for state in (72, 196, 322):
             self.assertIn(f"transfer_state = {state}", frealor_success)
 
@@ -3348,7 +4562,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("ROM = { is_neighbor_of = ROOT }", guarantee)
         self.assertIn("country = ROM relation = guarantee", guarantee)
         self.assertIn("country = TRU relation = guarantee", guarantee)
-        settlement = named_block(effects, "ADISCORD_vorkerland_resolve_unguaranteed_free_republics")
+        settlement = named_block(
+            effects, "ADISCORD_vorkerland_resolve_unguaranteed_free_republics"
+        )
         self.assertEqual(settlement.count("random_list ="), 2)
         self.assertIn("puppet = ROM", settlement)
         self.assertIn("puppet = TRU", settlement)
@@ -3363,11 +4579,18 @@ class InterventionAndVisualTests(unittest.TestCase):
             )
         self.assertLess(
             settlement.index("target = ZTA type = annex_everything"),
-            settlement.index("set_global_flag = ADISCORD_vorkerland_free_republics_resolution_done"),
+            settlement.index(
+                "set_global_flag = ADISCORD_vorkerland_free_republics_resolution_done"
+            ),
         )
-        phase = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'phase_effects')
+        phase = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'phase_effects',
+        )
         finalizer = named_block(phase, "ADISCORD_vorkerland_finalize_reunified_wrk")
-        self.assertIn("ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes", finalizer)
+        self.assertIn(
+            "ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes", finalizer
+        )
         for route in ("worker", "vlad", "dorian"):
             outcome = named_block(maps, f"ADISCORD_vorkerland_apply_{route}_map")
             self.assertIn("ADISCORD_vorkerland_begin_reunification = yes", outcome)
@@ -3385,26 +4608,37 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertIn("front_control", named_block(ai, key), key)
 
     def test_ivanland_outcome_news_has_one_guarded_immediate_route(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         loc = read("localisation/russian/events_l_russian.yml")
         routes = (
             (
                 "ADISCORD_vorkerland_news.1",
-                named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success"),
+                named_block(
+                    effects, "ADISCORD_vorkerland_ivanland_intervention_success"
+                ),
                 "ADISCORD_vorkerland_ivanland_success_news_shown",
                 "ADISCORD_vorkerland_setup_ivanland_mandate = yes",
             ),
             (
                 "ADISCORD_vorkerland_news.2",
-                named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_failure"),
+                named_block(
+                    effects, "ADISCORD_vorkerland_ivanland_intervention_failure"
+                ),
                 "ADISCORD_vorkerland_ivanland_failure_news_shown",
                 "PWR = { transfer_state = 90 transfer_state = 91 }",
             ),
         )
         for news_id, outcome, shown_flag, completion in routes:
             self.assertEqual(events.count(f"id = {news_id}"), 1, news_id)
-            self.assertEqual(effects.count(f"news_event = {{ id = {news_id} }}"), 1, news_id)
+            self.assertEqual(
+                effects.count(f"news_event = {{ id = {news_id} }}"), 1, news_id
+            )
             definition = re.search(
                 rf"(?ms)^news_event\s*=\s*\{{\s*id\s*=\s*{re.escape(news_id)}\b"
                 rf"(.*?)(?=^news_event\s*=\s*\{{|\Z)",
@@ -3421,16 +4655,31 @@ class InterventionAndVisualTests(unittest.TestCase):
                 definition.group(1),
                 news_id,
             )
-            for token in ("major = yes", "is_triggered_only = yes", "fire_only_once = no"):
+            for token in (
+                "major = yes",
+                "is_triggered_only = yes",
+                "fire_only_once = no",
+            ):
                 self.assertIn(token, definition.group(1), news_id)
             self.assertNotIn("hidden = yes", definition.group(1), news_id)
             if news_id == "ADISCORD_vorkerland_news.2":
-                self.assertIn("ADISCORD_vorkerland_news.2.capitulated", definition.group(1))
-                self.assertIn("ADISCORD_vorkerland_ivanland_capitulated_in_intervention", definition.group(1))
+                self.assertIn(
+                    "ADISCORD_vorkerland_news.2.capitulated", definition.group(1)
+                )
+                self.assertIn(
+                    "ADISCORD_vorkerland_ivanland_capitulated_in_intervention",
+                    definition.group(1),
+                )
                 self.assertIn("ADISCORD_vorkerland_news.2.capitulated:", loc)
-            self.assertIn(f"NOT = {{ has_global_flag = {shown_flag} }}", outcome, news_id)
+            self.assertIn(
+                f"NOT = {{ has_global_flag = {shown_flag} }}", outcome, news_id
+            )
             self.assertIn(f"set_global_flag = {shown_flag}", outcome, news_id)
-            self.assertLess(outcome.find(completion), outcome.find(f"news_event = {{ id = {news_id} }}"), news_id)
+            self.assertLess(
+                outcome.find(completion),
+                outcome.find(f"news_event = {{ id = {news_id} }}"),
+                news_id,
+            )
             call = named_block(outcome, "news_event")
             for delayed in ("hours =", "days =", "random_hours", "random_days"):
                 self.assertNotIn(delayed, call, news_id)
@@ -3438,9 +4687,18 @@ class InterventionAndVisualTests(unittest.TestCase):
                 self.assertIn(f"  {news_id}.{suffix}:", loc, news_id)
 
     def test_legacy_diplomacy_bypasses_are_owned_by_the_focus_flow(self) -> None:
-        collapse = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
-        diplomacy = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'diplomacy_decisions')
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        collapse = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        diplomacy = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'diplomacy_decisions',
+        )
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
 
         for legacy_id in (
             "ADISCORD_vorkerland_wrk_integrate_vla",
@@ -3472,11 +4730,19 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertTrue(block, decision_id)
             for token in tokens:
                 self.assertIn(token, block, decision_id)
-            for bypass in ("controls_state =", "puppet =", "set_autonomy =", "declare_war_on ="):
+            for bypass in (
+                "controls_state =",
+                "puppet =",
+                "set_autonomy =",
+                "declare_war_on =",
+            ):
                 self.assertNotIn(bypass, block, decision_id)
 
     def test_ivanland_has_paid_norvane_and_wit_diplomatic_decisions(self) -> None:
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         alliance = named_block(decisions, "ADISCORD_ivanland_form_norvane_alliance")
         self.assertRegex(alliance, r"\bcost\s*=\s*(?:[5-9]\d|\d{3,})\b")
         self.assertIn("create_faction_from_template", alliance)
@@ -3490,7 +4756,10 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn("WIT = { exists = yes", invitation)
         self.assertIn("add_to_faction = WIT", invitation)
 
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
         for key in (
             "ADISCORD_ivanland_form_norvane_alliance",
             "ADISCORD_ivanland_invite_wit",
@@ -3499,19 +4768,30 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertIn(f" {key}:", loc)
 
     def test_piv_supports_macri_without_puppeting_him(self) -> None:
-        ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+        ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
         piv = named_block(ai, "ADISCORD_vorkerland_piv_support_macri")
         self.assertIn("send_volunteers_desire", piv)
         self.assertIn("id = EBA", piv)
         self.assertIn("is_subject = no", piv)
-        all_collapse = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        all_collapse = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         eba_setup = named_block(all_collapse, "ADISCORD_vorkerland_setup_eba")
         self.assertNotIn("puppet", eba_setup)
-        decisions = source_section(read("common/decisions/ADISCORD_vorkerland_decisions.txt"), 'collapse_decisions')
+        decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
         pact = named_block(decisions, "ADISCORD_vorkerland_macri_piv_pact")
         for token in (
-            "controls_state = 74", "controls_state = 105", "controls_state = 197",
-            "NOT = { country_exists = VLA }", "NOT = { country_exists = TGD }",
+            "controls_state = 74",
+            "controls_state = 105",
+            "controls_state = 197",
+            "NOT = { country_exists = VLA }",
+            "NOT = { country_exists = TGD }",
             "available = { has_war = no }",
         ):
             self.assertIn(token, pact)
@@ -3522,7 +4802,9 @@ class InterventionAndVisualTests(unittest.TestCase):
         with Image.open(wrk_path) as wrk, Image.open(vad_path) as vad:
             self.assertEqual(wrk.size, (82, 52))
             self.assertEqual(vad.size, (82, 52))
-            self.assertNotEqual(wrk.convert("RGB").tobytes(), vad.convert("RGB").tobytes())
+            self.assertNotEqual(
+                wrk.convert("RGB").tobytes(), vad.convert("RGB").tobytes()
+            )
 
     def test_new_flags_are_original_and_have_complete_triplets(self) -> None:
         flag_ids = (
@@ -3541,7 +4823,9 @@ class InterventionAndVisualTests(unittest.TestCase):
             "WRK_vorkerland_utilitarian_republic",
         )
         variants = (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7)))
-        vanilla_root = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV\gfx\flags")
+        vanilla_root = Path(
+            r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV\gfx\flags"
+        )
 
         for directory, size in variants:
             decoded: dict[bytes, str] = {}
@@ -3559,12 +4843,19 @@ class InterventionAndVisualTests(unittest.TestCase):
                 with Image.open(path) as image:
                     self.assertEqual(image.size, size, path)
                     pixels = image.convert("RGBA").tobytes()
-                self.assertNotIn(pixels, decoded, f"{flag_id} duplicates {decoded.get(pixels)}")
-                self.assertNotIn(pixels, vanilla_pixels, f"{flag_id} reuses a vanilla flag")
+                self.assertNotIn(
+                    pixels, decoded, f"{flag_id} duplicates {decoded.get(pixels)}"
+                )
+                self.assertNotIn(
+                    pixels, vanilla_pixels, f"{flag_id} reuses a vanilla flag"
+                )
                 decoded[pixels] = flag_id
 
     def test_legacy_administrations_receive_republican_cosmetics(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         cosmetics = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
         for tag in ("ROM", "TRU", "ZAO"):
             self.assertIn(
@@ -3579,13 +4870,17 @@ class InterventionAndVisualTests(unittest.TestCase):
             self.assertIn(token, cosmetics)
         sync = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
         for token in (
-            "is_subject = yes", "drop_cosmetic_tag = yes",
+            "is_subject = yes",
+            "drop_cosmetic_tag = yes",
             "set_cosmetic_tag = ROM_frealor_republic",
             "set_cosmetic_tag = TRU_zolotorevsk_republic",
             "set_cosmetic_tag = ZAO_zaozersk_republic",
         ):
             self.assertIn(token, sync)
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             self.assertIn(
                 "ADISCORD_vorkerland_sync_independence_cosmetic = yes",
@@ -3601,9 +4896,15 @@ class InterventionAndVisualTests(unittest.TestCase):
         self.assertIn('VLA_volnograd_republic: "Вольноградская республика"', loc)
         self.assertIn('ROM_frealor_republic: "Республика Фреалор"', loc)
         self.assertIn('TRU_zolotorevsk_republic: "Золоторевская республика"', loc)
-        with Image.open(ROOT / "gfx/flags/PWR_rimat_republic.tga") as republic, Image.open(ROOT / "gfx/flags/PWR.tga") as administration:
+        with (
+            Image.open(ROOT / "gfx/flags/PWR_rimat_republic.tga") as republic,
+            Image.open(ROOT / "gfx/flags/PWR.tga") as administration,
+        ):
             self.assertEqual(republic.size, (82, 52))
-            self.assertNotEqual(republic.convert("RGB").tobytes(), administration.convert("RGB").tobytes())
+            self.assertNotEqual(
+                republic.convert("RGB").tobytes(),
+                administration.convert("RGB").tobytes(),
+            )
 
     def test_sol_worker_protectorate_cosmetic_tracks_worker_dependency(self) -> None:
         history = read("history/countries/SOL - Solarino.txt")
@@ -3612,7 +4913,10 @@ class InterventionAndVisualTests(unittest.TestCase):
             history,
         )
 
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         sync = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
         self.assertIn("OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }", sync)
         sol = named_block(sync, "if")
@@ -3630,7 +4934,10 @@ class InterventionAndVisualTests(unittest.TestCase):
             named_block(cosmetics, "SOL"),
         )
 
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         sol_hook_limit = "OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }"
         for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
             self.assertIn(sol_hook_limit, named_block(on_actions, hook), hook)
@@ -3641,19 +4948,35 @@ class InterventionAndVisualTests(unittest.TestCase):
 
     def test_claimant_map_colours_are_strongly_separated(self) -> None:
         cosmetics = read("common/countries/cosmetic.txt")
-        self.assertIn("color = rgb { 72 61 57 }", named_block(cosmetics, "WRK_vorkerland_emergency"))
-        self.assertIn("color = rgb { 19 45 105 }", named_block(cosmetics, "VAD_vorkerland_restoration"))
+        self.assertIn(
+            "color = rgb { 72 61 57 }",
+            named_block(cosmetics, "WRK_vorkerland_emergency"),
+        )
+        self.assertIn(
+            "color = rgb { 19 45 105 }",
+            named_block(cosmetics, "VAD_vorkerland_restoration"),
+        )
 
     def test_wrk_characters_are_recruited_in_history_not_runtime_effects(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
         history = read("history/countries/WRK - WorkerLand.txt")
         for character in ("WRK_Anton_Bagley", "WRK_VAD_Joint_Council"):
             self.assertIn(f"recruit_character = {character}", history)
             self.assertNotIn(f"recruit_character = {character}", effects)
 
     def test_player_facing_names_are_short_and_not_legacy_cringe(self) -> None:
-        loc = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
-        for banned in ("Западный союз", "Норвенская береговая республика", "Восточное содружество"):
+        loc = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
+        for banned in (
+            "Западный союз",
+            "Норвенская береговая республика",
+            "Восточное содружество",
+        ):
             self.assertNotIn(banned, loc)
         for expected in (
             "Республика Норвен",
@@ -3683,16 +5006,21 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
     """Lock in the local war graph: minors fight each other before the majors."""
 
     def setUp(self) -> None:
-        self.triggers = source_section(read(
-            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
-        ), 'collapse_triggers')
-        self.effects = source_section(read(
-            "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-        ), 'collapse_effects')
-        self.decisions = source_section(read(
-            "common/decisions/ADISCORD_vorkerland_decisions.txt"
-        ), 'collapse_decisions')
-        self.ai = source_section(read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai')
+        self.triggers = source_section(
+            read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+            'collapse_triggers',
+        )
+        self.effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        self.decisions = source_section(
+            read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            'collapse_decisions',
+        )
+        self.ai = source_section(
+            read("common/ai_strategy/ADISCORD_vorkerland_ai.txt"), 'collapse_ai'
+        )
 
     def test_bracket_section_is_registered_and_passes(self) -> None:
         self.assertIn("brackets", SECTIONS)
@@ -3736,7 +5064,9 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         )
 
     def test_one_parameterised_body_declares_every_staged_rivalry(self) -> None:
-        builder = named_block(self.effects, "ADISCORD_vorkerland_open_local_bracket_wars")
+        builder = named_block(
+            self.effects, "ADISCORD_vorkerland_open_local_bracket_wars"
+        )
         self.assertEqual(builder.count("declare_war_on ="), 1)
         self.assertIn("ADISCORD_vorkerland_is_local_attacker_of_PREV = yes", builder)
         self.assertIn("NOT = { has_war_with = PREV }", builder)
@@ -3751,9 +5081,7 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
                 )
 
     def test_coalition_join_splices_into_the_host_war(self) -> None:
-        join = named_block(
-            self.effects, "ADISCORD_vorkerland_join_coalition_of_FROM"
-        )
+        join = named_block(self.effects, "ADISCORD_vorkerland_join_coalition_of_FROM")
         splice = named_block(
             self.effects, "ADISCORD_vorkerland_splice_into_coalition_host_war"
         )
@@ -3782,12 +5110,17 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         self.assertIn("FROM = { tag = VAD }", join_ai)
         self.assertIn("factor = 0", join_ai)
 
-    def test_coalition_retry_resolves_its_own_faction_and_clears_terminal_markers(self) -> None:
+    def test_coalition_retry_resolves_its_own_faction_and_clears_terminal_markers(
+        self,
+    ) -> None:
         membership = named_block(
             self.effects, "ADISCORD_vorkerland_verify_coalition_membership"
         )
-        for name in ("join_coalition_of_FROM", "splice_into_coalition_host_war",
-                     "verify_coalition_membership"):
+        for name in (
+            "join_coalition_of_FROM",
+            "splice_into_coalition_host_war",
+            "verify_coalition_membership",
+        ):
             with self.subTest(effect=name):
                 body = named_block(self.effects, "ADISCORD_vorkerland_" + name)
                 self.assertNotIn("ADISCORD_vorkerland_coalition_host", body)
@@ -3797,24 +5130,51 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         retry = branches[0]
         self.assertIn("faction_leader = {", named_block(retry, "limit"))
         self.assertIn("has_war = yes", named_block(retry, "limit"))
-        self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used }", retry)
-        self.assertEqual(membership.count("country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }"), 1)
+        self.assertIn(
+            "NOT = { has_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used }",
+            retry,
+        )
+        self.assertEqual(
+            membership.count(
+                "country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }"
+            ),
+            1,
+        )
         terminal = named_block(membership, "else")
         refund = named_block(terminal, "if")
-        self.assertIn("has_country_flag = ADISCORD_vorkerland_coalition_join_paid", refund)
-        self.assertLess(refund.index("clr_country_flag"), refund.index("add_political_power = 25"))
-        self.assertIn("ADISCORD_vorkerland_reconcile_coalition_obligation = yes", terminal)
-        cleanup = named_block(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "ADISCORD_vorkerland_reconcile_coalition_obligation")
+        self.assertIn(
+            "has_country_flag = ADISCORD_vorkerland_coalition_join_paid", refund
+        )
+        self.assertLess(
+            refund.index("clr_country_flag"), refund.index("add_political_power = 25")
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_reconcile_coalition_obligation = yes", terminal
+        )
+        cleanup = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_reconcile_coalition_obligation",
+        )
         for marker in ("retry_used", "failed"):
-            self.assertIn("clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_" + marker, cleanup)
+            self.assertIn(
+                "clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_" + marker,
+                cleanup,
+            )
 
-    def test_validator_rejects_cross_country_coalition_hosts_and_reversed_war_scopes(self) -> None:
+    def test_validator_rejects_cross_country_coalition_hosts_and_reversed_war_scopes(
+        self,
+    ) -> None:
         variants = (
-            ("targeted_alliance = PREV.PREV", "targeted_alliance = PREV",
-             "host-enemy-winner scope order"),
-            ("targeted_alliance = PREV.PREV",
-             "targeted_alliance = event_target:ADISCORD_vorkerland_coalition_host",
-             "shares a mutable host"),
+            (
+                "targeted_alliance = PREV.PREV",
+                "targeted_alliance = PREV",
+                "host-enemy-winner scope order",
+            ),
+            (
+                "targeted_alliance = PREV.PREV",
+                "targeted_alliance = event_target:ADISCORD_vorkerland_coalition_host",
+                "shares a mutable host",
+            ),
         )
         for before, after, expected in variants:
             with self.subTest(replacement=after):
@@ -3823,14 +5183,21 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
                 issues: list[str] = []
                 collapse_validator.validate_bracket_engine(
                     altered,
-                    source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_dirty_effects'),
-                    source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'),
+                    source_section(
+                        read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                        'collapse_dirty_effects',
+                    ),
+                    source_section(
+                        read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+                    ),
                     issues,
                 )
                 self.assertTrue(any(expected in issue for issue in issues), issues)
 
     def test_bracket_events_are_hidden_and_never_polled(self) -> None:
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
         for event_id in (90, 91, 92, 93):
             with self.subTest(event=event_id):
                 block = event_block(events, f"ADISCORD_vorkerland_collapse.{event_id}")
@@ -3851,7 +5218,8 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         for claimant in sorted(MAIN_CLAIMANTS):
             with self.subTest(claimant=claimant):
                 block = named_block(
-                    self.ai, f"ADISCORD_vorkerland_local_focus_ignore_{claimant.lower()}"
+                    self.ai,
+                    f"ADISCORD_vorkerland_local_focus_ignore_{claimant.lower()}",
                 )
                 self.assertIn(f"type = ignore id = {claimant} value = 1000", block)
                 self.assertIn("ADISCORD_vorkerland_has_live_local_rival = yes", block)
@@ -3909,12 +5277,18 @@ class VorkerlandLocalBracketTests(unittest.TestCase):
         issues: list[str] = []
         collapse_validator.validate_bracket_engine(
             duplicated,
-            source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_dirty_effects'),
-            source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'),
+            source_section(
+                read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+                'collapse_dirty_effects',
+            ),
+            source_section(
+                read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+            ),
             issues,
         )
         self.assertTrue(
-            any("hand-written as well as generated" in issue for issue in issues), issues
+            any("hand-written as well as generated" in issue for issue in issues),
+            issues,
         )
 
 
@@ -3926,17 +5300,23 @@ class ConsolidatedSourceTests(unittest.TestCase):
         self.assertEqual(source_section("fixture = yes", "first"), "fixture = yes")
 
     def test_missing_and_duplicate_sections_are_errors(self):
-        for source in ("# --- second ---\nsecond = yes\n",
-                       "# --- first ---\nx = yes\n# --- first ---\nx = no\n"):
+        for source in (
+            "# --- second ---\nsecond = yes\n",
+            "# --- first ---\nx = yes\n# --- first ---\nx = no\n",
+        ):
             with self.subTest(source=source), self.assertRaises(ValueError):
                 source_section(source, "first")
 
     def test_idea_and_localisation_sections_retain_loader_headers(self):
         ideas = "ideas = {\n\tcountry = {\n# --- test_ideas ---\nidea = {}\n# --- end ---\n\t}\n}\n"
-        self.assertEqual(source_section(ideas, "test_ideas"),
-                         "ideas = {\n\tcountry = {\nidea = {}\n\t}\n}\n")
+        self.assertEqual(
+            source_section(ideas, "test_ideas"),
+            "ideas = {\n\tcountry = {\nidea = {}\n\t}\n}\n",
+        )
         loc = "l_russian:\n# --- test_loc ---\n key: \"value\"\n"
-        self.assertEqual(source_section(loc, "test_loc"), "l_russian:\n key: \"value\"\n")
+        self.assertEqual(
+            source_section(loc, "test_loc"), "l_russian:\n key: \"value\"\n"
+        )
 
 
 if __name__ == "__main__":

@@ -19,7 +19,10 @@ from tools.builders.build_adiscord_map_buildings import (
     ensure_nam_split_spawn_positions,
     synchronize_buildings,
 )
-from tools.lib.adiscord_core_state_balance_manifest import EXPECTED_RESOURCES, TARGET_STATES
+from tools.lib.adiscord_core_state_balance_manifest import (
+    EXPECTED_RESOURCES,
+    TARGET_STATES,
+)
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
     UNITY_TOWER_NAME,
     UNITY_TOWER_PROVINCE,
@@ -47,10 +50,45 @@ NAM_MAINLAND_STATE_RESOURCES = {
     NAM_DRYRIVER_STATE_ID: {"oil": 36, "chromium": 3},
 }
 NAM_ORIGINAL_MAINLAND_PROVINCES = (
-    176, 334, 461, 689, 1015, 1710, 2038, 2231, 2299, 2935,
-    3127, 4025, 4287, 4321, 4912, 6099, 6961, 7324, 7618, 7639,
-    8058, 8351, 8358, 8445, 8635, 8888, 9016, 9116, 9211, 9641,
-    10909, 10967, 11069, 11696, 11926, 11942, 12480, 12668, 12982,
+    176,
+    334,
+    461,
+    689,
+    1015,
+    1710,
+    2038,
+    2231,
+    2299,
+    2935,
+    3127,
+    4025,
+    4287,
+    4321,
+    4912,
+    6099,
+    6961,
+    7324,
+    7618,
+    7639,
+    8058,
+    8351,
+    8358,
+    8445,
+    8635,
+    8888,
+    9016,
+    9116,
+    9211,
+    9641,
+    10909,
+    10967,
+    11069,
+    11696,
+    11926,
+    11942,
+    12480,
+    12668,
+    12982,
 )
 NAM_PRE_CITY_MAINLAND_PROVINCES = tuple(
     sorted(set(NAM_ORIGINAL_MAINLAND_PROVINCES) - set(NAM_SVETLOGORSK_PROVINCES))
@@ -63,35 +101,182 @@ NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES = tuple(
     )
 )
 NAM_RESOURCE_BASIN_PROVINCES = (
-    334, 1710, 2935, 4287, 4321, 4912, 6099, 7324, 8351,
-    8445, 8888, 9116, 10909, 11069, 11696, 11942, 12480, 12668,
+    334,
+    1710,
+    2935,
+    4287,
+    4321,
+    4912,
+    6099,
+    7324,
+    8351,
+    8445,
+    8888,
+    9116,
+    10909,
+    11069,
+    11696,
+    11942,
+    12480,
+    12668,
 )
 NAM_DRYRIVER_PROVINCES = (461, 1015, 2231, 6961, 8058, 9016, 9641, 11926, 12982)
 EFL_UPPER_LOREN_PROVINCES = (
-    259, 324, 865, 1658, 1950, 2254, 2734, 2822, 3089, 3226,
-    3977, 4014, 4096, 4175, 4237, 4339, 4717, 5651, 5766, 6150,
-    6438, 7139, 7199, 7750, 7859, 8087, 8425, 9637, 9731, 10258,
-    10759, 10806, 10866, 10932, 11744, 12109, 12135,
+    259,
+    324,
+    865,
+    1658,
+    1950,
+    2254,
+    2734,
+    2822,
+    3089,
+    3226,
+    3977,
+    4014,
+    4096,
+    4175,
+    4237,
+    4339,
+    4717,
+    5651,
+    5766,
+    6150,
+    6438,
+    7139,
+    7199,
+    7750,
+    7859,
+    8087,
+    8425,
+    9637,
+    9731,
+    10258,
+    10759,
+    10806,
+    10866,
+    10932,
+    11744,
+    12109,
+    12135,
 )
 EFL_MIDDLE_LOREN_PROVINCES = (
-    786, 797, 1411, 2473, 3046, 3176, 3730, 3833, 3916, 4060,
-    4424, 5260, 5579, 6331, 7502, 8057, 8194, 8904, 9390, 9609,
-    9694, 10113, 10454, 10722, 11083, 11652, 12131, 12218, 12306, 12830,
+    786,
+    797,
+    1411,
+    2473,
+    3046,
+    3176,
+    3730,
+    3833,
+    3916,
+    4060,
+    4424,
+    5260,
+    5579,
+    6331,
+    7502,
+    8057,
+    8194,
+    8904,
+    9390,
+    9609,
+    9694,
+    10113,
+    10454,
+    10722,
+    11083,
+    11652,
+    12131,
+    12218,
+    12306,
+    12830,
 )
 AZH_CORE_PROVINCES = (
-    367, 643, 687, 729, 826, 1568, 2338, 2411, 2443, 4380, 5156,
-    5288, 5305, 5483, 5555, 5594, 5683, 6184, 6505, 6577, 7079,
-    7193, 7413, 7637, 7692, 7737, 8234, 8452, 8758, 8821, 8836,
-    8958, 8990, 8997, 9013, 9119, 9633, 9798, 9909, 10077, 12458,
-    12482, 12601, 12837, 12937, 13019,
+    367,
+    643,
+    687,
+    729,
+    826,
+    1568,
+    2338,
+    2411,
+    2443,
+    4380,
+    5156,
+    5288,
+    5305,
+    5483,
+    5555,
+    5594,
+    5683,
+    6184,
+    6505,
+    6577,
+    7079,
+    7193,
+    7413,
+    7637,
+    7692,
+    7737,
+    8234,
+    8452,
+    8758,
+    8821,
+    8836,
+    8958,
+    8990,
+    8997,
+    9013,
+    9119,
+    9633,
+    9798,
+    9909,
+    10077,
+    12458,
+    12482,
+    12601,
+    12837,
+    12937,
+    13019,
 )
 AZH_BLACK_COAST_PROVINCES = (
-    493, 601, 1360, 2264, 2362, 2802, 2804, 3464, 4089, 4678,
-    5039, 5527, 5837, 6193, 6768, 7033, 7777, 8114, 8441, 8829,
-    9264, 9375, 9758, 10489, 10626, 11445, 11630, 11734, 12498,
+    493,
+    601,
+    1360,
+    2264,
+    2362,
+    2802,
+    2804,
+    3464,
+    4089,
+    4678,
+    5039,
+    5527,
+    5837,
+    6193,
+    6768,
+    7033,
+    7777,
+    8114,
+    8441,
+    8829,
+    9264,
+    9375,
+    9758,
+    10489,
+    10626,
+    11445,
+    11630,
+    11734,
+    12498,
 )
-EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_MIDDLE_LOREN_PROVINCES)))
-AZH_ORIGINAL_PROVINCES = tuple(sorted((*AZH_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES)))
+EFL_ORIGINAL_UPPER_LOREN_PROVINCES = tuple(
+    sorted((*EFL_UPPER_LOREN_PROVINCES, *EFL_MIDDLE_LOREN_PROVINCES))
+)
+AZH_ORIGINAL_PROVINCES = tuple(
+    sorted((*AZH_CORE_PROVINCES, *AZH_BLACK_COAST_PROVINCES))
+)
 
 KDR_STATES = (234, 235, 236, 237, 238, 239, 240, 241, 242, 244, 245, 246, 247)
 RHM_STATES = (248, 249, 252, 253, 254, 255, 256, 257, 258)
@@ -113,13 +298,31 @@ STARTING_OWNERS = {
     **{state_id: "SHL" for state_id in SHL_STATES},
     **{state_id: "GLP" for state_id in GLP_STATES},
     303: "TFF",
-    306: "RIV", 307: "SOL", 308: "RIV", 309: "RIV",
-    310: "SOL", 311: "VLA", 312: "VLA", 313: "VLA",
-    314: "VLA", 315: "TRU", 316: "TRU", 317: "TRU",
-    318: "TRU", 319: "ROM", 320: "WRK", 321: "ROM",
-    322: "ZAO", 323: "WRK", 324: "WRK", 325: "WRK",
-    326: "PIV", 327: "RIV", 328: "PWR",
-    329: "EXZ", 330: "EXZ",
+    306: "RIV",
+    307: "SOL",
+    308: "RIV",
+    309: "RIV",
+    310: "SOL",
+    311: "VLA",
+    312: "VLA",
+    313: "VLA",
+    314: "VLA",
+    315: "TRU",
+    316: "TRU",
+    317: "TRU",
+    318: "TRU",
+    319: "ROM",
+    320: "WRK",
+    321: "ROM",
+    322: "ZAO",
+    323: "WRK",
+    324: "WRK",
+    325: "WRK",
+    326: "PIV",
+    327: "RIV",
+    328: "PWR",
+    329: "EXZ",
+    330: "EXZ",
 }
 
 LEGACY_OWNER_GAPS = {
@@ -131,11 +334,24 @@ LEGACY_OWNER_GAPS = {
 }
 
 LEGACY_OWNER_OVERRIDES = {
-    75: "EYR", 79: "RIV", 81: "EGC",
-    102: "YOR", 104: "SOL", 105: "VLA", 106: "EYR", 107: "YOR",
-    108: "YOR", 109: "YOR", 110: "EGC", 111: "YOR",
-    121: "YOR", 122: "YOR", 123: "YOR", 124: "EGC",
-    198: "SOL", 202: "PWR",
+    75: "EYR",
+    79: "RIV",
+    81: "EGC",
+    102: "YOR",
+    104: "SOL",
+    105: "VLA",
+    106: "EYR",
+    107: "YOR",
+    108: "YOR",
+    109: "YOR",
+    110: "EGC",
+    111: "YOR",
+    121: "YOR",
+    122: "YOR",
+    123: "YOR",
+    124: "EGC",
+    198: "SOL",
+    202: "PWR",
 }
 
 CAPITALS = {
@@ -150,31 +366,165 @@ CAPITALS = {
     300: (492, 10),
 }
 SECONDARY_CENTRES = {
-    240: (2309, 3), 248: (274, 3), 249: (488, 3),
-    267: (261, 3), 278: (857, 3), 288: (834, 3),
+    240: (2309, 3),
+    248: (274, 3),
+    249: (488, 3),
+    267: (261, 3),
+    278: (857, 3),
+    288: (834, 3),
     301: (251, 3),
 }
 
 # Smaller settlements spread VPs across the wide MZR and KYZ territories
 # without also granting the population and industry of a secondary city.
 MINOR_VPS = {
-    265: (3465, 1), 270: (2504, 2), 273: (3643, 2),
-    276: (10375, 1), 277: (6261, 2), 286: (7903, 2),
+    265: (3465, 1),
+    270: (2504, 2),
+    273: (3643, 2),
+    276: (10375, 1),
+    277: (6261, 2),
+    286: (7903, 2),
 }
 
 # Capital state IDs remain stable for country history and scripted references.
-SOUTHERN_CITIES = json.loads((ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8"))["cities"]
-SOUTHERN_CITY_POINTS = {entry["state"]: (entry["province"], entry["value"]) for entry in SOUTHERN_CITIES}
+SOUTHERN_CITIES = json.loads(
+    (ROOT / "tools/data/adiscord_southern_cities.json").read_text(encoding="utf-8")
+)["cities"]
+SOUTHERN_CITY_POINTS = {
+    entry["state"]: (entry["province"], entry["value"]) for entry in SOUTHERN_CITIES
+}
 for centres in (CAPITALS, SECONDARY_CENTRES, MINOR_VPS):
-    centres.update({state: point for state, point in SOUTHERN_CITY_POINTS.items() if state in centres})
+    centres.update(
+        {
+            state: point
+            for state, point in SOUTHERN_CITY_POINTS.items()
+            if state in centres
+        }
+    )
 SOUTHERN_CAPITAL_DISTRICTS = {
-    241: (702, 90000, 45000, (971, 1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
-    253: (703, 70000, 35000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966)),
-    260: (704, 48000, 24000, (197, 1396, 1571, 1784, 3967, 5123, 5590, 6040, 7727, 9572, 9817, 12495, 12578)),
-    275: (705, 97000, 48000, (193, 196, 2249, 2303, 2947, 3767, 4397, 5458, 6904, 9006, 9830, 10551, 10796, 11177, 11348)),
-    283: (706, 75000, 37000, (1349, 1534, 1555, 4186, 4804, 5921, 6571, 9302, 10920, 10998, 12033)),
-    294: (707, 85000, 43000, (1198, 2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903)),
-    300: (708, 79000, 39000, (492, 1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 10937, 11478, 11938, 12043, 12321, 12583)),
+    241: (
+        702,
+        90000,
+        45000,
+        (
+            971,
+            1295,
+            2374,
+            2523,
+            4093,
+            5262,
+            5348,
+            5711,
+            6343,
+            7512,
+            8280,
+            9141,
+            10293,
+            10755,
+        ),
+    ),
+    253: (
+        703,
+        70000,
+        35000,
+        (
+            443,
+            812,
+            1450,
+            2317,
+            3065,
+            3135,
+            5957,
+            6403,
+            7006,
+            7273,
+            8164,
+            8843,
+            9398,
+            9739,
+            11092,
+            12188,
+            12966,
+        ),
+    ),
+    260: (
+        704,
+        48000,
+        24000,
+        (197, 1396, 1571, 1784, 3967, 5123, 5590, 6040, 7727, 9572, 9817, 12495, 12578),
+    ),
+    275: (
+        705,
+        97000,
+        48000,
+        (
+            193,
+            196,
+            2249,
+            2303,
+            2947,
+            3767,
+            4397,
+            5458,
+            6904,
+            9006,
+            9830,
+            10551,
+            10796,
+            11177,
+            11348,
+        ),
+    ),
+    283: (
+        706,
+        75000,
+        37000,
+        (1349, 1534, 1555, 4186, 4804, 5921, 6571, 9302, 10920, 10998, 12033),
+    ),
+    294: (
+        707,
+        85000,
+        43000,
+        (
+            1198,
+            2407,
+            3042,
+            3284,
+            4949,
+            6218,
+            7306,
+            8216,
+            9056,
+            9294,
+            9508,
+            9600,
+            10264,
+            12903,
+        ),
+    ),
+    300: (
+        708,
+        79000,
+        39000,
+        (
+            492,
+            1169,
+            3222,
+            4782,
+            5595,
+            6011,
+            7073,
+            8056,
+            9672,
+            9950,
+            10937,
+            11478,
+            11938,
+            12043,
+            12321,
+            12583,
+        ),
+    ),
 }
 
 # Sparse deposits give every southern country something to extract and trade
@@ -229,16 +579,14 @@ AFRELA_STATE_RESOURCES = {
 }
 
 DIRTY_STATE_RESOURCES = {
-    state_id: {"steel": 4}
-    for state_id in (49, 152, 169, 173, 177, 181)
+    state_id: {"steel": 4} for state_id in (49, 152, 169, 173, 177, 181)
 }
 
 # The four states that will form the local Stelander separatist bloc use the
 # same resource package. Keeping the package exact makes every province worth
 # contesting without changing the character of the mining and port corridor.
 STELANDER_REGIONAL_RESOURCES = {
-    state_id: dict(EXPECTED_RESOURCES[state_id])
-    for state_id in (43, 44, 45, 88)
+    state_id: dict(EXPECTED_RESOURCES[state_id]) for state_id in (43, 44, 45, 88)
 }
 
 REGIONAL_STATE_RESOURCES = {
@@ -321,53 +669,325 @@ SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
-    306: {"population": 1_400_000, "category": "large_town", "infrastructure": 3, "industry": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
-    307: {"population": 800_000, "category": "town", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    308: {"population": 1_100_000, "category": "large_town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
-    309: {"population": 800_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0},
-    310: {"population": 400_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    311: {"population": 950_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
-    312: {"population": 850_000, "category": "town", "infrastructure": 3, "industry": 1, "military": 1, "supplies": 3.0},
-    313: {"population": 750_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 3.0},
-    314: {"population": 750_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 3.0},
-    315: {"population": 550_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    316: {"population": 500_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    317: {"population": 700_000, "category": "town", "infrastructure": 3, "industry": 1, "military": 1, "supplies": 3.0},
-    318: {"population": 750_000, "category": "town", "infrastructure": 3, "industry": 1, "military": 1, "supplies": 3.0},
-    319: {"population": 500_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    320: {"population": 500_000, "category": "rural", "infrastructure": 2, "industry": 0, "supplies": 1.5},
-    321: {"population": 450_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    322: {"population": 600_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.5},
-    323: {"population": 750_000, "category": "town", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    324: {"population": 700_000, "category": "town", "infrastructure": 3, "industry": 2, "supplies": 3.0},
-    325: {"population": 450_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
-    327: {"population": 600_000, "category": "town", "infrastructure": 3, "industry": 1, "supplies": 2.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
-    328: {"population": 500_000, "category": "rural", "infrastructure": 2, "industry": 1, "supplies": 2.0},
+    306: {
+        "population": 1_400_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "industry": 2,
+        "military": 1,
+        "supplies": 3.0,
+        "custom_buildings": {"ADISCORD_rare_components_plant": 1},
+    },
+    307: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    308: {
+        "population": 1_100_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 2.5,
+    },
+    309: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    310: {
+        "population": 400_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    311: {
+        "population": 950_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 2.5,
+    },
+    312: {
+        "population": 850_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    313: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 3.0,
+    },
+    314: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 3.0,
+    },
+    315: {
+        "population": 550_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    316: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    317: {
+        "population": 700_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    318: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    319: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    320: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 0,
+        "supplies": 1.5,
+    },
+    321: {
+        "population": 450_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    322: {
+        "population": 600_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 2.5,
+    },
+    323: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    324: {
+        "population": 700_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 2,
+        "supplies": 3.0,
+    },
+    325: {
+        "population": 450_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
+    327: {
+        "population": 600_000,
+        "category": "town",
+        "infrastructure": 3,
+        "industry": 1,
+        "supplies": 2.0,
+        "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1},
+    },
+    328: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "industry": 1,
+        "supplies": 2.0,
+    },
 }
 
 # Vorkerland's legacy state files predate the Nudge split.  These values keep
 # every civil-war front inhabited and supplied without flattening the old
 # resources, victory points, bunkers and state ownership into generated data.
 VORKERLAND_LEGACY_PROFILES = {
-    40: {"population": 20_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_science_center": 1}},
-    71: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    72: {"population": 850_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 2, "supplies": 3.0},
-    73: {"population": 1_300_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    74: {"population": 1_300_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 2, "air_base": 1, "supplies": 4.5},
-    76: {"population": 950_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    80: {"population": 1_350_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    90: {"population": 450_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
-    91: {"population": 450_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    93: {"population": 500_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
-    94: {"population": 500_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    144: {"population": 450_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    145: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    194: {"population": 850_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    195: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    196: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    197: {"population": 1_400_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
-    198: {"population": 800_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    199: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
+    40: {
+        "population": 20_000,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 6,
+        "military": 4,
+        "air_base": 3,
+        "supplies": 10.0,
+        "custom_buildings": {"ADISCORD_science_center": 1},
+    },
+    71: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    72: {
+        "population": 850_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 2,
+        "supplies": 3.0,
+    },
+    73: {
+        "population": 1_300_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    74: {
+        "population": 1_300_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "air_base": 1,
+        "supplies": 4.5,
+    },
+    76: {
+        "population": 950_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    80: {
+        "population": 1_350_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    90: {
+        "population": 450_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    91: {
+        "population": 450_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    93: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    94: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    144: {
+        "population": 450_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
+    145: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    194: {
+        "population": 850_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    195: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    196: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    197: {
+        "population": 1_400_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 1,
+        "air_base": 1,
+        "supplies": 4.5,
+    },
+    198: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    199: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
 }
 
 # These border states must remain mobilizable when the collapse fronts open;
@@ -378,27 +998,137 @@ PWR_PRE_COLLAPSE_DMZ_STATES = frozenset()
 # the broad resource basin, and a compact southern port which survives the SLF
 # victory settlement. Totals stay unchanged across the three states.
 NAM_STATE_PROFILES = {
-    67: {"population": 480_000, "category": "large_city", "infrastructure": 4, "civilian": 2, "military": 1, "air_base": 1, "supplies": 5.0},
-    225: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    226: {"population": 140_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    227: {"population": 180_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    228: {"population": 300_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    229: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    230: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    231: {"population": 160_000, "category": "rural", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 2.5},
-    NAM_SVETLOGORSK_STATE_ID: {"population": 90_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 0, "air_base": 1, "supplies": 3.0, "custom_buildings": {"dockyard": 1}},
-    NAM_RESIDUAL_CITY_STATE_ID: {"population": 40_000, "category": "rural", "infrastructure": 3, "civilian": 0, "military": 0, "supplies": 1.0},
-    NAM_DRYRIVER_STATE_ID: {"population": 270_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5},
+    67: {
+        "population": 480_000,
+        "category": "large_city",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 1,
+        "air_base": 1,
+        "supplies": 5.0,
+    },
+    225: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    226: {
+        "population": 140_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    227: {
+        "population": 180_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    228: {
+        "population": 300_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    229: {
+        "population": 120_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    230: {
+        "population": 100_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    231: {
+        "population": 160_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    NAM_SVETLOGORSK_STATE_ID: {
+        "population": 90_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 0,
+        "air_base": 1,
+        "supplies": 3.0,
+        "custom_buildings": {"dockyard": 1},
+    },
+    NAM_RESIDUAL_CITY_STATE_ID: {
+        "population": 40_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 0,
+        "military": 0,
+        "supplies": 1.0,
+    },
+    NAM_DRYRIVER_STATE_ID: {
+        "population": 270_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "supplies": 3.5,
+    },
 }
 
 # The three states facing NAM's resource basin need enough population and
 # local logistics for the restoration coalition to launch a real offensive.
 NAM_COALITION_FRONT_PROFILES = {
-    68: {"population": 520_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    69: {"population": 380_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "air_base": 1, "supplies": 4.0},
-    70: {"population": 350_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    EFL_MIDDLE_LOREN_STATE_ID: {"population": 190_000, "category": "rural", "infrastructure": 3, "civilian": 0, "supplies": 1.5},
-    AZH_BLACK_COAST_STATE_ID: {"population": 240_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 3.5, "custom_buildings": {"dockyard": 1}},
+    68: {
+        "population": 520_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    69: {
+        "population": 380_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "air_base": 1,
+        "supplies": 4.0,
+    },
+    70: {
+        "population": 350_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    EFL_MIDDLE_LOREN_STATE_ID: {
+        "population": 190_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 0,
+        "supplies": 1.5,
+    },
+    AZH_BLACK_COAST_STATE_ID: {
+        "population": 240_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "supplies": 3.5,
+        "custom_buildings": {"dockyard": 1},
+    },
 }
 
 # Every state owned and cored by Ivanland at game start receives a coherent
@@ -406,39 +1136,346 @@ NAM_COALITION_FRONT_PROFILES = {
 # spur through states 100 and 99 remain authoritative, so the frontier relies
 # on infrastructure plus local supply rather than a redundant second hub.
 IVANLAND_STATE_PROFILES = {
-    25: {"population": 1_300_000, "category": "large_city", "infrastructure": 5, "civilian": 2, "military": 2, "air_base": 2, "supplies": 2.0},
-    92: {"population": 480_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 4.0},
-    95: {"population": 780_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "air_base": 1, "supplies": 5.0},
-    96: {"population": 720_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 2, "supplies": 5.0},
-    97: {"population": 880_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    98: {"population": 1_450_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 4.5},
-    99: {"population": 1_650_000, "category": "large_city", "infrastructure": 4, "civilian": 4, "military": 3, "air_base": 2, "supplies": 5.0},
-    100: {"population": 1_200_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 4.0},
-    101: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
-    127: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0},
-    128: {"population": 90_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
-    129: {"population": 550_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    130: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    131: {"population": 680_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    132: {"population": 500_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    164: {"population": 400_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    693: {"population": 190_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
-    694: {"population": 80_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
-    695: {"population": 750_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
-    696: {"population": 700_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 1.5},
-    697: {"population": 600_000, "category": "town", "infrastructure": 3, "civilian": 1, "supplies": 1.5},
-    698: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 1, "air_base": 1, "supplies": 1.5},
+    25: {
+        "population": 1_300_000,
+        "category": "large_city",
+        "infrastructure": 5,
+        "civilian": 2,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 2.0,
+    },
+    92: {
+        "population": 480_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    95: {
+        "population": 780_000,
+        "category": "town",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 2,
+        "air_base": 1,
+        "supplies": 5.0,
+    },
+    96: {
+        "population": 720_000,
+        "category": "town",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 2,
+        "supplies": 5.0,
+    },
+    97: {
+        "population": 880_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    98: {
+        "population": 1_450_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "supplies": 4.5,
+    },
+    99: {
+        "population": 1_650_000,
+        "category": "large_city",
+        "infrastructure": 4,
+        "civilian": 4,
+        "military": 3,
+        "air_base": 2,
+        "supplies": 5.0,
+    },
+    100: {
+        "population": 1_200_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "supplies": 4.0,
+    },
+    101: {
+        "population": 600_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    127: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    128: {
+        "population": 90_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "supplies": 1.0,
+    },
+    129: {
+        "population": 550_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    130: {
+        "population": 650_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    131: {
+        "population": 680_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    132: {
+        "population": 500_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    164: {
+        "population": 400_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    693: {
+        "population": 190_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    694: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "supplies": 1.5,
+    },
+    695: {
+        "population": 750_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 1.5,
+    },
+    696: {
+        "population": 700_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 1.5,
+    },
+    697: {
+        "population": 600_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    698: {
+        "population": 650_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "air_base": 1,
+        "supplies": 1.5,
+    },
 }
 
 IVANLAND_OVERHAUL_PROVINCES = {
     128: (579, 7125, 8423, 9072, 16685),
-    693: (1191, 1744, 2219, 2991, 4334, 6905, 6928, 7678, 8048, 10730, 16679, 16680, 16688, 16692, 16695, 16700),
-    694: (2553, 5448, 11841, 12189, 16659, 16660, 16661, 16662, 16663, 16664, 16681, 16683, 16686),
-    695: (157, 217, 482, 1105, 1763, 2736, 3038, 3181, 3304, 3541, 3579, 4572, 5016, 6146, 6345, 8068, 8505, 8615, 9608, 10158, 10668, 10769, 10810, 10879, 11487, 12017, 12054),
-    696: (722, 1304, 2025, 2157, 2211, 3847, 4037, 5521, 5540, 5573, 5729, 6622, 7911, 8515, 9133, 9344, 11115, 11132, 12317, 12880, 12914),
-    697: (401, 1385, 1429, 3273, 4277, 4646, 5055, 5273, 6350, 6827, 6979, 6991, 7263, 8885, 9037, 9132, 9150, 9160, 9418, 9778, 11000, 12383, 16706),
-    25: (694, 932, 1634, 1861, 1862, 3017, 3302, 3503, 3648, 3714, 4503, 4534, 4909, 5611, 6580, 7508, 7654, 8717, 9066, 9236, 9598, 9614, 10539, 10675, 10835, 10885, 11124, 11612, 11653, 12313, 12410, 12790, 12899, 16568),
-    698: (1768, 1890, 2380, 3828, 3919, 5798, 6971, 8328, 8371, 9611, 10313, 10357, 10403, 10548, 12076, 12122),
+    693: (
+        1191,
+        1744,
+        2219,
+        2991,
+        4334,
+        6905,
+        6928,
+        7678,
+        8048,
+        10730,
+        16679,
+        16680,
+        16688,
+        16692,
+        16695,
+        16700,
+    ),
+    694: (
+        2553,
+        5448,
+        11841,
+        12189,
+        16659,
+        16660,
+        16661,
+        16662,
+        16663,
+        16664,
+        16681,
+        16683,
+        16686,
+    ),
+    695: (
+        157,
+        217,
+        482,
+        1105,
+        1763,
+        2736,
+        3038,
+        3181,
+        3304,
+        3541,
+        3579,
+        4572,
+        5016,
+        6146,
+        6345,
+        8068,
+        8505,
+        8615,
+        9608,
+        10158,
+        10668,
+        10769,
+        10810,
+        10879,
+        11487,
+        12017,
+        12054,
+    ),
+    696: (
+        722,
+        1304,
+        2025,
+        2157,
+        2211,
+        3847,
+        4037,
+        5521,
+        5540,
+        5573,
+        5729,
+        6622,
+        7911,
+        8515,
+        9133,
+        9344,
+        11115,
+        11132,
+        12317,
+        12880,
+        12914,
+    ),
+    697: (
+        401,
+        1385,
+        1429,
+        3273,
+        4277,
+        4646,
+        5055,
+        5273,
+        6350,
+        6827,
+        6979,
+        6991,
+        7263,
+        8885,
+        9037,
+        9132,
+        9150,
+        9160,
+        9418,
+        9778,
+        11000,
+        12383,
+        16706,
+    ),
+    25: (
+        694,
+        932,
+        1634,
+        1861,
+        1862,
+        3017,
+        3302,
+        3503,
+        3648,
+        3714,
+        4503,
+        4534,
+        4909,
+        5611,
+        6580,
+        7508,
+        7654,
+        8717,
+        9066,
+        9236,
+        9598,
+        9614,
+        10539,
+        10675,
+        10835,
+        10885,
+        11124,
+        11612,
+        11653,
+        12313,
+        12410,
+        12790,
+        12899,
+        16568,
+    ),
+    698: (
+        1768,
+        1890,
+        2380,
+        3828,
+        3919,
+        5798,
+        6971,
+        8328,
+        8371,
+        9611,
+        10313,
+        10357,
+        10403,
+        10548,
+        12076,
+        12122,
+    ),
 }
 
 IVANLAND_OVERHAUL_FILENAMES = {
@@ -486,68 +1523,379 @@ IVANLAND_OVERHAUL_PROVINCE_BUILDINGS = {
 # missions, but remains a medium power.  State 232 stays a small island port;
 # the connected mainland follows the existing capital hub and railway spine.
 AFRELA_STATE_PROFILES = {
-    52: {"population": 3_200_000, "category": "metropolis", "infrastructure": 4, "civilian": 5, "military": 2, "air_base": 2, "supplies": 7.0},
-    113: {"population": 1_500_000, "category": "large_city", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    114: {"population": 1_200_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    232: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    326: {"population": 1_100_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
+    52: {
+        "population": 3_200_000,
+        "category": "metropolis",
+        "infrastructure": 4,
+        "civilian": 5,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 7.0,
+    },
+    113: {
+        "population": 1_500_000,
+        "category": "large_city",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    114: {
+        "population": 1_200_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    232: {
+        "population": 120_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    326: {
+        "population": 1_100_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
 }
 
 # The contaminated zone is sparse, not empty.  Capitals and a few surviving
 # workshop/rail nodes support each successor republic; exposed wasteland
 # corridors in EXZ_REMAINDER_GROUPS deliberately remain at manpower 1.
 DIRTY_REPUBLIC_STATE_PROFILES = {
-    49: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
-    51: {"population": 150_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
-    155: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    176: {"population": 90_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    187: {"population": 80_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    191: {"population": 90_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    125: {"population": 120_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
-    177: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
-    188: {"population": 70_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    192: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    208: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    213: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    214: {"population": 50_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    215: {"population": 70_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    216: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    217: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    220: {"population": 80_000, "category": "rural", "infrastructure": 0, "military": 1, "supplies": 0.5},
-    152: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
-    153: {"population": 120_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    154: {"population": 100_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    189: {"population": 80_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    190: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    219: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    221: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    222: {"population": 80_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    224: {"population": 90_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    167: {"population": 80_000, "category": "rural", "infrastructure": 1, "civilian": 1, "supplies": 1.0},
-    168: {"population": 160_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    169: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.5},
-    171: {"population": 80_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    184: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    185: {"population": 50_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    203: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    178: {"population": 60_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    180: {"population": 60_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    181: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
-    182: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    183: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    193: {"population": 100_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    206: {"population": 50_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    207: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    165: {"population": 60_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    166: {"population": 60_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
-    172: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    173: {"population": 220_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.5},
-    204: {"population": 50_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    205: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    209: {"population": 60_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    210: {"population": 70_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    211: {"population": 80_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
-    212: {"population": 70_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
+    49: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    51: {
+        "population": 150_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "supplies": 1.5,
+    },
+    155: {
+        "population": 120_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    176: {
+        "population": 90_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    187: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    191: {
+        "population": 90_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    125: {
+        "population": 120_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "supplies": 1.5,
+    },
+    177: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    188: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    192: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    208: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    213: {
+        "population": 100_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    214: {
+        "population": 50_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    215: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    216: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    217: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    220: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "military": 1,
+        "supplies": 0.5,
+    },
+    152: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    153: {
+        "population": 120_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    154: {
+        "population": 100_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    189: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    190: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    219: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    221: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    222: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    224: {
+        "population": 90_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    167: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "civilian": 1,
+        "supplies": 1.0,
+    },
+    168: {
+        "population": 160_000,
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    169: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    171: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    184: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    185: {
+        "population": 50_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    203: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    178: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    180: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    181: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    182: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    183: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    193: {
+        "population": 100_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    206: {
+        "population": 50_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    207: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    165: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    166: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 1,
+        "supplies": 1.0,
+    },
+    172: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    173: {
+        "population": 220_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    204: {
+        "population": 50_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    205: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    209: {
+        "population": 60_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
+    210: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    211: {
+        "population": 80_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 1.5,
+    },
+    212: {
+        "population": 70_000,
+        "category": "rural",
+        "infrastructure": 0,
+        "supplies": 0.5,
+    },
 }
 
 # Legacy states moved by ADISCORD_vorkerland_apply_initial_map and its setup
@@ -561,44 +1909,300 @@ DIRTY_REPUBLIC_STATE_PROFILES = {
 # add shared slots, so their host category and starting factory count must fit
 # the post-modifier category capacity directly.
 VORKERLAND_INITIAL_MAP_LEGACY_PROFILES = {
-    27: {"population": 2_000_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
-    32: {"population": 7_000_000, "category": "megalopolis", "infrastructure": 5, "civilian": 2, "military": 3, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_unity_tower_complex": 1, "ADISCORD_business_center": 1}},
-    33: {"population": 10_913_334, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
-    34: {"population": 4_913_334, "category": "megalopolis", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 5.0},
-    35: {"population": 6_113_333, "category": "large_city", "infrastructure": 5, "civilian": 5, "military": 2, "supplies": 6.0},
-    36: {"population": 8_413_333, "category": "metropolis", "infrastructure": 5, "civilian": 4, "supplies": 7.0},
-    37: {"population": 3_200_000, "category": "large_city", "infrastructure": 5, "civilian": 6, "supplies": 5.0},
-    38: {"population": 3_713_333, "category": "metropolis", "infrastructure": 5, "civilian": 6, "military": 2, "air_base": 2, "supplies": 6.0, "custom_buildings": {"ADISCORD_rare_components_plant": 1}},
-    39: {"population": 7_413_333, "category": "metropolis", "infrastructure": 5, "civilian": 2, "military": 7, "supplies": 7.0},
-    75: {"population": 9_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 5, "military": 3, "air_base": 3, "supplies": 8.0},
-    79: {"population": 1_200_000, "category": "large_town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.0, "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1}},
-    81: {"population": 2_200_000, "category": "large_city", "infrastructure": 5, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
-    82: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 4.0},
-    102: {"population": 11_500_000, "category": "megalopolis", "infrastructure": 5, "civilian": 7, "military": 5, "air_base": 3, "supplies": 10.0},
-    104: {"population": 3_500_000, "category": "metropolis", "infrastructure": 4, "civilian": 4, "military": 2, "air_base": 2, "supplies": 6.0},
-    105: {"population": 9_800_000, "category": "megalopolis", "infrastructure": 5, "civilian": 6, "military": 4, "air_base": 3, "supplies": 10.0, "custom_buildings": {"ADISCORD_techlar_metallurgical_combine": 1, "ADISCORD_industrial_cluster": 1}},
-    106: {"population": 3_800_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "air_base": 2, "supplies": 5.0},
-    107: {"population": 1_200_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.5},
-    108: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "supplies": 2.5},
-    109: {"population": 900_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    110: {"population": 1_500_000, "category": "large_town", "infrastructure": 4, "civilian": 3, "military": 1, "air_base": 1, "supplies": 4.5},
-    111: {"population": 1_000_000, "category": "town", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 4.0},
-    112: {"population": 1_530_000, "category": "large_city", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 4.0},
-    113: {"population": 724_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 3.5},
-    114: {"population": 432_000, "category": "town", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 3.0},
-    115: {"population": 220_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    116: {"population": 180_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    117: {"population": 210_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    27: {
+        "population": 2_000_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.0,
+        "custom_buildings": {"ADISCORD_rare_components_plant": 1},
+    },
+    32: {
+        "population": 7_000_000,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 2,
+        "military": 3,
+        "air_base": 3,
+        "supplies": 10.0,
+        "custom_buildings": {
+            "ADISCORD_unity_tower_complex": 1,
+            "ADISCORD_business_center": 1,
+        },
+    },
+    33: {
+        "population": 10_913_334,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 7,
+        "military": 3,
+        "supplies": 10.0,
+        "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1},
+    },
+    34: {
+        "population": 4_913_334,
+        "category": "megalopolis",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 5.0,
+    },
+    35: {
+        "population": 6_113_333,
+        "category": "large_city",
+        "infrastructure": 5,
+        "civilian": 5,
+        "military": 2,
+        "supplies": 6.0,
+    },
+    36: {
+        "population": 8_413_333,
+        "category": "metropolis",
+        "infrastructure": 5,
+        "civilian": 4,
+        "supplies": 7.0,
+    },
+    37: {
+        "population": 3_200_000,
+        "category": "large_city",
+        "infrastructure": 5,
+        "civilian": 6,
+        "supplies": 5.0,
+    },
+    38: {
+        "population": 3_713_333,
+        "category": "metropolis",
+        "infrastructure": 5,
+        "civilian": 6,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 6.0,
+        "custom_buildings": {"ADISCORD_rare_components_plant": 1},
+    },
+    39: {
+        "population": 7_413_333,
+        "category": "metropolis",
+        "infrastructure": 5,
+        "civilian": 2,
+        "military": 7,
+        "supplies": 7.0,
+    },
+    75: {
+        "population": 9_500_000,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 5,
+        "military": 3,
+        "air_base": 3,
+        "supplies": 8.0,
+    },
+    79: {
+        "population": 1_200_000,
+        "category": "large_town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.0,
+        "custom_buildings": {"ADISCORD_rare_alloy_foundry": 1},
+    },
+    81: {
+        "population": 2_200_000,
+        "category": "large_city",
+        "infrastructure": 5,
+        "civilian": 3,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 5.0,
+    },
+    82: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    102: {
+        "population": 11_500_000,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 7,
+        "military": 5,
+        "air_base": 3,
+        "supplies": 10.0,
+    },
+    104: {
+        "population": 3_500_000,
+        "category": "metropolis",
+        "infrastructure": 4,
+        "civilian": 4,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 6.0,
+    },
+    105: {
+        "population": 9_800_000,
+        "category": "megalopolis",
+        "infrastructure": 5,
+        "civilian": 6,
+        "military": 4,
+        "air_base": 3,
+        "supplies": 10.0,
+        "custom_buildings": {
+            "ADISCORD_techlar_metallurgical_combine": 1,
+            "ADISCORD_industrial_cluster": 1,
+        },
+    },
+    106: {
+        "population": 3_800_000,
+        "category": "large_city",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "air_base": 2,
+        "supplies": 5.0,
+    },
+    107: {
+        "population": 1_200_000,
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    108: {
+        "population": 650_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 1,
+        "supplies": 2.5,
+    },
+    109: {
+        "population": 900_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    110: {
+        "population": 1_500_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 1,
+        "air_base": 1,
+        "supplies": 4.5,
+    },
+    111: {
+        "population": 1_000_000,
+        "category": "town",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    112: {
+        "population": 1_530_000,
+        "category": "large_city",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    113: {
+        "population": 724_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 3.5,
+    },
+    114: {
+        "population": 432_000,
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 3.0,
+    },
+    115: {
+        "population": 220_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
+    116: {
+        "population": 180_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
+    117: {
+        "population": 210_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
     # States 118-120 are now owned by the Ainholm mandate/Orval setup. Their
     # complete profiles belong to build_adiscord_ainholm_mandate.py; keeping
     # old theatre defaults here would silently overwrite that generator.
-    121: {"population": 3_000_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
-    122: {"population": 1_500_000, "category": "large_town", "infrastructure": 4, "civilian": 2, "military": 1, "supplies": 4.0},
-    123: {"population": 2_400_000, "category": "large_city", "infrastructure": 4, "civilian": 3, "military": 2, "supplies": 5.0},
-    124: {"population": 650_000, "category": "rural", "infrastructure": 3, "civilian": 1, "military": 1, "supplies": 2.5},
-    200: {"population": 700_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    201: {"population": 800_000, "category": "town", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
-    202: {"population": 650_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 2.0},
+    121: {
+        "population": 3_000_000,
+        "category": "large_city",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "supplies": 5.0,
+    },
+    122: {
+        "population": 1_500_000,
+        "category": "large_town",
+        "infrastructure": 4,
+        "civilian": 2,
+        "military": 1,
+        "supplies": 4.0,
+    },
+    123: {
+        "population": 2_400_000,
+        "category": "large_city",
+        "infrastructure": 4,
+        "civilian": 3,
+        "military": 2,
+        "supplies": 5.0,
+    },
+    124: {
+        "population": 650_000,
+        "category": "rural",
+        "infrastructure": 3,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 2.5,
+    },
+    200: {
+        "population": 700_000,
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
+    201: {
+        "population": 800_000,
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
+    202: {
+        "population": 650_000,
+        "category": "rural",
+        "infrastructure": 2,
+        "civilian": 1,
+        "supplies": 2.0,
+    },
 }
 
 VORKERLAND_LEGACY_VICTORY_POINTS = {
@@ -786,22 +2390,92 @@ COASTAL_CITY_NAMES = {
     16721: "Светлогорск",
 }
 GENERATED_VICTORY_POINT_NAMES.update(COASTAL_CITY_NAMES)
-GENERATED_VICTORY_POINT_NAMES.update({entry["province"]: entry["name"] for entry in SOUTHERN_CITIES})
+GENERATED_VICTORY_POINT_NAMES.update(
+    {entry["province"]: entry["name"] for entry in SOUTHERN_CITIES}
+)
 GENERATED_LEGACY_VICTORY_POINTS.update(COASTAL_CITY_POINTS)
 
 VORKERLAND_INITIAL_MAP_LEGACY_STATES = {
-    27, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    71, 72, 73, 74, 75, 76, 79, 80, 81, 82,
-    90, 91, 93, 94, 102, 104, 105, 106, 107, 108, 109, 110, 111,
-    121, 122, 123, 124, 144, 145, 194, 195, 196, 197, 198, 199,
-    200, 201, 202,
+    27,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    79,
+    80,
+    81,
+    82,
+    90,
+    91,
+    93,
+    94,
+    102,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    121,
+    122,
+    123,
+    124,
+    144,
+    145,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200,
+    201,
+    202,
 }
 
 STELANDER_REGIONAL_PROFILES = {
-    43: {"population": TARGET_STATES[43][2], "category": "town", "infrastructure": 2, "civilian": 2, "supplies": 0.0},
-    44: {"population": TARGET_STATES[44][2], "category": "town", "infrastructure": 2, "civilian": 1, "military": 1, "supplies": 0.0},
-    45: {"population": TARGET_STATES[45][2], "category": "town", "infrastructure": 3, "civilian": 3, "supplies": 0.0},
-    88: {"population": TARGET_STATES[88][2], "category": "town", "infrastructure": 4, "civilian": 3, "supplies": 0.0},
+    43: {
+        "population": TARGET_STATES[43][2],
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 2,
+        "supplies": 0.0,
+    },
+    44: {
+        "population": TARGET_STATES[44][2],
+        "category": "town",
+        "infrastructure": 2,
+        "civilian": 1,
+        "military": 1,
+        "supplies": 0.0,
+    },
+    45: {
+        "population": TARGET_STATES[45][2],
+        "category": "town",
+        "infrastructure": 3,
+        "civilian": 3,
+        "supplies": 0.0,
+    },
+    88: {
+        "population": TARGET_STATES[88][2],
+        "category": "town",
+        "infrastructure": 4,
+        "civilian": 3,
+        "supplies": 0.0,
+    },
 }
 
 LEGACY_STATE_PROFILES = {
@@ -843,9 +2517,19 @@ EXTRA_PROVINCES_BY_STATE = {
     291: (946,),
 }
 
-TOWN_STATES = set(CAPITALS) | set(SECONDARY_CENTRES) | {
-    306, 307, 308, 309, 318, 323, 327,
-}
+TOWN_STATES = (
+    set(CAPITALS)
+    | set(SECONDARY_CENTRES)
+    | {
+        306,
+        307,
+        308,
+        309,
+        318,
+        323,
+        327,
+    }
+)
 WASTELANDS = {238, 254, 258, 264, 267, 288, 292, 296, 329, 330}
 
 
@@ -944,7 +2628,9 @@ def render_state(state_id: int, owner: str) -> str:
     if state_id in SOUTHERN_CITY_POINTS:
         provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
         city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == state_id)
-        provinces = sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())})
+        provinces = sorted(
+            set(provinces) | {sector["province"] for sector in city.get("sectors", ())}
+        )
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
         provinces = [SOUTHERN_CITY_POINTS[state_id][0]]
     if not provinces:
@@ -954,8 +2640,12 @@ def render_state(state_id: int, owner: str) -> str:
     history.extend(f"\t\tadd_core_of = {tag}" for tag in EXTRA_CORES.get(state_id, ()))
     urban_provinces = {
         int(fields[0])
-        for line in (ROOT / "map" / "definition.csv").read_text(encoding="utf-8-sig").splitlines()
-        if len(fields := line.split(";")) > 6 and fields[0].isdigit() and fields[6] == "urban"
+        for line in (ROOT / "map" / "definition.csv")
+        .read_text(encoding="utf-8-sig")
+        .splitlines()
+        if len(fields := line.split(";")) > 6
+        and fields[0].isdigit()
+        and fields[6] == "urban"
     }
     centres = {
         **CAPITALS,
@@ -975,8 +2665,13 @@ def render_state(state_id: int, owner: str) -> str:
     elif state_id in centres:
         province, value = centres[state_id]
         if province not in provinces:
-            raise RuntimeError(f"state {state_id}: city VP {province} is outside the state")
-        if province in urban_provinces or VORKERLAND_MINOR_VPS.get(state_id) == (province, value):
+            raise RuntimeError(
+                f"state {state_id}: city VP {province} is outside the state"
+            )
+        if province in urban_provinces or VORKERLAND_MINOR_VPS.get(state_id) == (
+            province,
+            value,
+        ):
             history.append(f"\t\tvictory_points = {{ {province} {value} }}")
 
     state_buildings = buildings(state_id, owner)
@@ -987,11 +2682,19 @@ def render_state(state_id: int, owner: str) -> str:
 
     province_lines = []
     for start in range(0, len(provinces), 12):
-        province_lines.append("\t\t" + " ".join(map(str, provinces[start:start + 12])))
+        province_lines.append(
+            "\t\t" + " ".join(map(str, provinces[start : start + 12]))
+        )
 
     profile = STATE_PROFILES.get(state_id)
-    local_supplies = 0.0 if owner == "EXZ" else (
-        float(profile["supplies"]) if profile else (3.0 if state_id in CAPITALS else 1.5)
+    local_supplies = (
+        0.0
+        if owner == "EXZ"
+        else (
+            float(profile["supplies"])
+            if profile
+            else (3.0 if state_id in CAPITALS else 1.5)
+        )
     )
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
         local_supplies = 2.0
@@ -1003,24 +2706,26 @@ def render_state(state_id: int, owner: str) -> str:
             for resource, amount in ALL_STATE_RESOURCES[state_id].items()
         )
         resource_block.append("\t}")
-    return "\n".join([
-        "state = {",
-        f"\tid = {state_id}",
-        f'\tname = "STATE_{state_id}"',
-        f"\tmanpower = {population(state_id, owner)}",
-        f"\tstate_category = {category(state_id)}",
-        *resource_block,
-        "\thistory = {",
-        *history,
-        "\t}",
-        "\tprovinces = {",
-        *province_lines,
-        "\t}",
-        "\tbuildings_max_level_factor = 1.000",
-        f"\tlocal_supplies = {local_supplies:.1f}",
-        "}",
-        "",
-    ])
+    return "\n".join(
+        [
+            "state = {",
+            f"\tid = {state_id}",
+            f'\tname = "STATE_{state_id}"',
+            f"\tmanpower = {population(state_id, owner)}",
+            f"\tstate_category = {category(state_id)}",
+            *resource_block,
+            "\thistory = {",
+            *history,
+            "\t}",
+            "\tprovinces = {",
+            *province_lines,
+            "\t}",
+            "\tbuildings_max_level_factor = 1.000",
+            f"\tlocal_supplies = {local_supplies:.1f}",
+            "}",
+            "",
+        ]
+    )
 
 
 def detach_northern_lighthouse() -> None:
@@ -1029,7 +2734,9 @@ def detach_northern_lighthouse() -> None:
     source = outer.read_text(encoding="utf-8-sig", errors="strict")
     matches = re.findall(r"(?<!\d)3261(?!\d)", source)
     if len(matches) > 1:
-        raise RuntimeError("state 23: province 3261 is duplicated inside the placeholder")
+        raise RuntimeError(
+            "state 23: province 3261 is duplicated inside the placeholder"
+        )
     if matches:
         updated = re.sub(r"(?<!\d)3261(?!\d)\s*", "", source, count=1)
         outer.write_text(updated, encoding="utf-8", newline="\n")
@@ -1042,17 +2749,21 @@ def fill_legacy_owner_gaps() -> None:
         source = path.read_text(encoding="utf-8-sig", errors="strict")
         if re.search(r"(?m)^\s*owner\s*=", source):
             continue
-        history = f"\n\thistory = {{\n\t\towner = {owner}\n\t\tadd_core_of = {owner}\n\t}}\n"
+        history = (
+            f"\n\thistory = {{\n\t\towner = {owner}\n\t\tadd_core_of = {owner}\n\t}}\n"
+        )
         marker = re.search(r"(?m)^\s*provinces\s*=", source)
         if not marker:
             raise RuntimeError(f"state {state_id}: missing provinces block")
-        updated = source[:marker.start()] + history + source[marker.start():]
+        updated = source[: marker.start()] + history + source[marker.start() :]
         path.write_text(updated, encoding="utf-8", newline="\n")
 
 
 def apply_legacy_owner_overrides(owner_overrides: dict[int, str] | None = None) -> None:
     """Keep explicit ownership corrections without rebuilding legacy states."""
-    for state_id, owner in (LEGACY_OWNER_OVERRIDES if owner_overrides is None else owner_overrides).items():
+    for state_id, owner in (
+        LEGACY_OWNER_OVERRIDES if owner_overrides is None else owner_overrides
+    ).items():
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig", errors="strict")
         updated, owner_count = re.subn(
@@ -1111,7 +2822,9 @@ def set_scalar(source: str, key: str, value: str) -> str:
     history = re.search(r"(?m)^\s*history\s*=", source)
     if not history:
         raise RuntimeError(f"cannot insert {key}: state has no history block")
-    return source[:history.start()] + f"\t{key} = {value}\n" + source[history.start():]
+    return (
+        source[: history.start()] + f"\t{key} = {value}\n" + source[history.start() :]
+    )
 
 
 def ensure_history_buildings(source: str, profile: dict[str, object]) -> str:
@@ -1120,14 +2833,18 @@ def ensure_history_buildings(source: str, profile: dict[str, object]) -> str:
         state_close = source.rfind("}")
         if state_close < 0:
             raise RuntimeError("cannot insert history: state block is unclosed")
-        source = source[:state_close].rstrip() + "\n\thistory = {\n\t}\n" + source[state_close:]
+        source = (
+            source[:state_close].rstrip()
+            + "\n\thistory = {\n\t}\n"
+            + source[state_close:]
+        )
     history_open, history_close = named_block(source, "history")
-    history = source[history_open:history_close + 1]
+    history = source[history_open : history_close + 1]
     building_match = re.search(r"(?m)^\s*buildings\s*=\s*\{", history)
     if building_match:
         building_open = history.find("{", building_match.start(), building_match.end())
         building_close = matching_brace(history, building_open)
-        block = history[building_open:building_close + 1]
+        block = history[building_open : building_close + 1]
     else:
         block = "{\n\t\t}"
         building_open = -1
@@ -1139,10 +2856,12 @@ def ensure_history_buildings(source: str, profile: dict[str, object]) -> str:
         "arms_factory": int(profile.get("military", 0)),
         "air_base": int(profile.get("air_base", 0)),
     }
-    minima.update({
-        str(building): int(level)
-        for building, level in profile.get("custom_buildings", {}).items()
-    })
+    minima.update(
+        {
+            str(building): int(level)
+            for building, level in profile.get("custom_buildings", {}).items()
+        }
+    )
     for building, minimum in minima.items():
         if not minimum:
             continue
@@ -1155,10 +2874,10 @@ def ensure_history_buildings(source: str, profile: dict[str, object]) -> str:
             block = block[:1] + f"\n\t\t\t{building} = {minimum}" + block[1:]
 
     if building_match:
-        history = history[:building_open] + block + history[building_close + 1:]
+        history = history[:building_open] + block + history[building_close + 1 :]
     else:
         history = history[:-1].rstrip() + f"\n\t\tbuildings = {block}\n\t}}"
-    return source[:history_open] + history + source[history_close + 1:]
+    return source[:history_open] + history + source[history_close + 1 :]
 
 
 def ensure_state_resources(source: str, resources: dict[str, int]) -> str:
@@ -1167,18 +2886,18 @@ def ensure_state_resources(source: str, resources: dict[str, int]) -> str:
     if resource_match:
         opening = source.find("{", resource_match.start(), resource_match.end())
         closing = matching_brace(source, opening)
-        block = source[opening:closing + 1]
+        block = source[opening : closing + 1]
     else:
         history = re.search(r"(?m)^\s*history\s*=", source)
         if not history:
             raise RuntimeError("cannot insert resources: state has no history block")
         rendered = "\tresources = {\n\t}\n"
-        source = source[:history.start()] + rendered + source[history.start():]
+        source = source[: history.start()] + rendered + source[history.start() :]
         resource_match = re.search(r"(?m)^\s*resources\s*=\s*\{", source)
         assert resource_match is not None
         opening = source.find("{", resource_match.start(), resource_match.end())
         closing = matching_brace(source, opening)
-        block = source[opening:closing + 1]
+        block = source[opening : closing + 1]
 
     for resource, value in resources.items():
         pattern = rf"(?m)^([ \t]*){re.escape(resource)}\s*=\s*-?\d+\s*$"
@@ -1186,7 +2905,7 @@ def ensure_state_resources(source: str, resources: dict[str, int]) -> str:
             block = re.sub(pattern, rf"\1{resource} = {int(value)}", block, count=1)
         else:
             block = block[:-1].rstrip() + f"\n\t\t{resource} = {int(value)}\n\t}}"
-    return source[:opening] + block + source[closing + 1:]
+    return source[:opening] + block + source[closing + 1 :]
 
 
 def remove_state_resource(source: str, resource: str) -> str:
@@ -1196,27 +2915,29 @@ def remove_state_resource(source: str, resource: str) -> str:
         return source
     opening = source.find("{", resource_match.start(), resource_match.end())
     closing = matching_brace(source, opening)
-    block = source[opening:closing + 1]
+    block = source[opening : closing + 1]
     block = re.sub(
         rf"(?m)^[ \t]*{re.escape(resource)}\s*=\s*-?\d+\s*\r?\n?",
         "",
         block,
     )
     if not re.search(r"(?m)^\s*[A-Za-z_]+\s*=", block):
-        return source[:resource_match.start()] + source[closing + 1:]
-    return source[:opening] + block + source[closing + 1:]
+        return source[: resource_match.start()] + source[closing + 1 :]
+    return source[:opening] + block + source[closing + 1 :]
 
 
 def set_history_building_level(source: str, building: str, level: int) -> str:
     """Set one state building exactly while preserving province buildings."""
     history_open, history_close = named_block(source, "history")
-    history = source[history_open:history_close + 1]
+    history = source[history_open : history_close + 1]
     building_match = re.search(r"(?m)^\s*buildings\s*=\s*\{", history)
     if not building_match:
-        raise RuntimeError("cannot set exact building level: history has no buildings block")
+        raise RuntimeError(
+            "cannot set exact building level: history has no buildings block"
+        )
     building_open = history.find("{", building_match.start(), building_match.end())
     building_close = matching_brace(history, building_open)
-    block = history[building_open:building_close + 1]
+    block = history[building_open : building_close + 1]
     pattern = rf"(?m)^([ \t]*){re.escape(building)}\s*=\s*\d+\s*$"
     if re.search(pattern, block):
         if level:
@@ -1225,8 +2946,8 @@ def set_history_building_level(source: str, building: str, level: int) -> str:
             block = re.sub(pattern + r"\n?", "", block, count=1)
     elif level:
         block = block[:-1].rstrip() + f"\n\t\t\t{building} = {level}\n\t\t}}"
-    history = history[:building_open] + block + history[building_close + 1:]
-    return source[:history_open] + history + source[history_close + 1:]
+    history = history[:building_open] + block + history[building_close + 1 :]
+    return source[:history_open] + history + source[history_close + 1 :]
 
 
 def write_resource_war_state(
@@ -1246,7 +2967,7 @@ def write_resource_war_state(
         raise RuntimeError(f"state {state_id}: id is already occupied by {matches}")
 
     province_lines = [
-        "\t\t" + " ".join(map(str, provinces[start:start + 12]))
+        "\t\t" + " ".join(map(str, provinces[start : start + 12]))
         for start in range(0, len(provinces), 12)
     ]
     lines = [
@@ -1257,20 +2978,24 @@ def write_resource_war_state(
     ]
     if resources:
         lines.append("\tresources = {")
-        lines.extend(f"\t\t{resource} = {amount}" for resource, amount in resources.items())
+        lines.extend(
+            f"\t\t{resource} = {amount}" for resource, amount in resources.items()
+        )
         lines.append("\t}")
-    lines.extend([
-        "\tprovinces={",
-        *province_lines,
-        "\t}",
-        f"\tmanpower = {int(profile['population'])}",
-        "\tbuildings_max_level_factor = 1.000",
-        f"\tstate_category = {profile['category']}",
-        f"\tlocal_supplies = {float(profile['supplies']):.1f}",
-        "\thistory = {",
-        f"\t\towner = {owner}",
-        f"\t\tadd_core_of = {owner}",
-    ])
+    lines.extend(
+        [
+            "\tprovinces={",
+            *province_lines,
+            "\t}",
+            f"\tmanpower = {int(profile['population'])}",
+            "\tbuildings_max_level_factor = 1.000",
+            f"\tstate_category = {profile['category']}",
+            f"\tlocal_supplies = {float(profile['supplies']):.1f}",
+            "\thistory = {",
+            f"\t\towner = {owner}",
+            f"\t\tadd_core_of = {owner}",
+        ]
+    )
     lines.extend(
         f"\t\tvictory_points = {{ {province_id} {value} }}"
         for province_id, value in victory_points
@@ -1308,7 +3033,10 @@ def split_svetlogorsk_from_nam() -> None:
             frozenset(NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES),
             frozenset(NAM_RESOURCE_BASIN_PROVINCES),
         },
-        68: {frozenset(EFL_ORIGINAL_UPPER_LOREN_PROVINCES), frozenset(EFL_UPPER_LOREN_PROVINCES)},
+        68: {
+            frozenset(EFL_ORIGINAL_UPPER_LOREN_PROVINCES),
+            frozenset(EFL_UPPER_LOREN_PROVINCES),
+        },
         69: {frozenset(AZH_ORIGINAL_PROVINCES), frozenset(AZH_CORE_PROVINCES)},
     }
     for state_id, allowed in current_manifests.items():
@@ -1321,19 +3049,77 @@ def split_svetlogorsk_from_nam() -> None:
             raise RuntimeError(f"state {state_id}: resource-war split manifest drifted")
 
     definitions = (
-        (67, "67-67.txt", NAM_RESOURCE_BASIN_PROVINCES, "NAM", NAM_STATE_PROFILES[67], NAM_MAINLAND_STATE_RESOURCES[67]),
-        (68, "68-68.txt", EFL_UPPER_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[68], None),
-        (69, "69-69.txt", AZH_CORE_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[69], STATE_RESOURCES[69]),
-        (NAM_SVETLOGORSK_STATE_ID, "688-Svetlogorsk.txt", NAM_SVETLOGORSK_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_SVETLOGORSK_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_SVETLOGORSK_STATE_ID]),
-        (NAM_RESIDUAL_CITY_STATE_ID, "689-South-Coast.txt", NAM_RESIDUAL_CITY_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_RESIDUAL_CITY_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_RESIDUAL_CITY_STATE_ID]),
-        (NAM_DRYRIVER_STATE_ID, "690-Dryriver.txt", NAM_DRYRIVER_PROVINCES, "NAM", NAM_STATE_PROFILES[NAM_DRYRIVER_STATE_ID], NAM_MAINLAND_STATE_RESOURCES[NAM_DRYRIVER_STATE_ID]),
-        (EFL_MIDDLE_LOREN_STATE_ID, "691-Middle-Loren.txt", EFL_MIDDLE_LOREN_PROVINCES, "EFL", NAM_COALITION_FRONT_PROFILES[EFL_MIDDLE_LOREN_STATE_ID], None),
-        (AZH_BLACK_COAST_STATE_ID, "692-Black-Coast.txt", AZH_BLACK_COAST_PROVINCES, "AZH", NAM_COALITION_FRONT_PROFILES[AZH_BLACK_COAST_STATE_ID], NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID]),
+        (
+            67,
+            "67-67.txt",
+            NAM_RESOURCE_BASIN_PROVINCES,
+            "NAM",
+            NAM_STATE_PROFILES[67],
+            NAM_MAINLAND_STATE_RESOURCES[67],
+        ),
+        (
+            68,
+            "68-68.txt",
+            EFL_UPPER_LOREN_PROVINCES,
+            "EFL",
+            NAM_COALITION_FRONT_PROFILES[68],
+            None,
+        ),
+        (
+            69,
+            "69-69.txt",
+            AZH_CORE_PROVINCES,
+            "AZH",
+            NAM_COALITION_FRONT_PROFILES[69],
+            STATE_RESOURCES[69],
+        ),
+        (
+            NAM_SVETLOGORSK_STATE_ID,
+            "688-Svetlogorsk.txt",
+            NAM_SVETLOGORSK_PROVINCES,
+            "NAM",
+            NAM_STATE_PROFILES[NAM_SVETLOGORSK_STATE_ID],
+            NAM_MAINLAND_STATE_RESOURCES[NAM_SVETLOGORSK_STATE_ID],
+        ),
+        (
+            NAM_RESIDUAL_CITY_STATE_ID,
+            "689-South-Coast.txt",
+            NAM_RESIDUAL_CITY_PROVINCES,
+            "NAM",
+            NAM_STATE_PROFILES[NAM_RESIDUAL_CITY_STATE_ID],
+            NAM_MAINLAND_STATE_RESOURCES[NAM_RESIDUAL_CITY_STATE_ID],
+        ),
+        (
+            NAM_DRYRIVER_STATE_ID,
+            "690-Dryriver.txt",
+            NAM_DRYRIVER_PROVINCES,
+            "NAM",
+            NAM_STATE_PROFILES[NAM_DRYRIVER_STATE_ID],
+            NAM_MAINLAND_STATE_RESOURCES[NAM_DRYRIVER_STATE_ID],
+        ),
+        (
+            EFL_MIDDLE_LOREN_STATE_ID,
+            "691-Middle-Loren.txt",
+            EFL_MIDDLE_LOREN_PROVINCES,
+            "EFL",
+            NAM_COALITION_FRONT_PROFILES[EFL_MIDDLE_LOREN_STATE_ID],
+            None,
+        ),
+        (
+            AZH_BLACK_COAST_STATE_ID,
+            "692-Black-Coast.txt",
+            AZH_BLACK_COAST_PROVINCES,
+            "AZH",
+            NAM_COALITION_FRONT_PROFILES[AZH_BLACK_COAST_STATE_ID],
+            NAM_COALITION_FRONT_RESOURCES[AZH_BLACK_COAST_STATE_ID],
+        ),
     )
     province_buildings = {
         NAM_SVETLOGORSK_STATE_ID: ((689, "naval_base", 2),),
         NAM_RESIDUAL_CITY_STATE_ID: ((2038, "naval_base", 1),),
-        AZH_BLACK_COAST_STATE_ID: GENERATED_PROVINCE_BUILDINGS[AZH_BLACK_COAST_STATE_ID],
+        AZH_BLACK_COAST_STATE_ID: GENERATED_PROVINCE_BUILDINGS[
+            AZH_BLACK_COAST_STATE_ID
+        ],
     }
     for state_id, filename, provinces, owner, profile, resources in definitions:
         write_resource_war_state(
@@ -1357,13 +3143,17 @@ def split_svetlogorsk_from_nam() -> None:
         (71, 91): {3743},
     }
     unexpected = [
-        mismatch for mismatch in mismatches
-        if mismatch.province not in expected_moves.get(
+        mismatch
+        for mismatch in mismatches
+        if mismatch.province
+        not in expected_moves.get(
             (mismatch.recorded_state, mismatch.actual_state), set()
         )
     ]
     if unexpected:
-        raise RuntimeError(f"unrelated map/buildings state mismatches: {unexpected[:5]}")
+        raise RuntimeError(
+            f"unrelated map/buildings state mismatches: {unexpected[:5]}"
+        )
     if mismatches:
         synchronize_buildings(ROOT, apply=True)
     ensure_nam_split_spawn_positions(ROOT)
@@ -1376,10 +3166,16 @@ def validate_ivanland_split_inputs() -> None:
     """Reject unreviewed province drift before writing any Ivanland state."""
     original_groups = {
         25: frozenset().union(
-            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (25, 695, 696, 697, 698))
+            *(
+                frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id])
+                for state_id in (25, 695, 696, 697, 698)
+            )
         ),
         128: frozenset().union(
-            *(frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id]) for state_id in (128, 693, 694))
+            *(
+                frozenset(IVANLAND_OVERHAUL_PROVINCES[state_id])
+                for state_id in (128, 693, 694)
+            )
         ),
     }
     for state_id in (25, 128):
@@ -1432,7 +3228,7 @@ def replace_history_victory_points(
 ) -> str:
     """Replace every history VP with one exact ordered manifest block."""
     history_open, history_close = named_block(source, "history")
-    history = source[history_open:history_close + 1]
+    history = source[history_open : history_close + 1]
     pattern = re.compile(
         r"(?m)^([ \t]*)victory_points[ \t]*=[ \t]*\{[ \t]*"
         r"\d+[ \t]+\d+[ \t]*\}[ \t]*(?:\n|$)"
@@ -1455,7 +3251,7 @@ def replace_history_victory_points(
         )
         history = history[:insertion] + block + history[insertion:]
 
-    return source[:history_open] + history + source[history_close + 1:]
+    return source[:history_open] + history + source[history_close + 1 :]
 
 
 def ensure_history_victory_points(
@@ -1463,7 +3259,7 @@ def ensure_history_victory_points(
 ) -> str:
     """Set generated urban VPs while preserving every unrelated history item."""
     history_open, history_close = named_block(source, "history")
-    history = source[history_open:history_close + 1]
+    history = source[history_open : history_close + 1]
     for province_id, value in points:
         pattern = rf"(?m)^(\s*)victory_points\s*=\s*\{{\s*{province_id}\s+\d+\s*\}}\s*$"
         if re.search(pattern, history):
@@ -1477,13 +3273,13 @@ def ensure_history_victory_points(
             history = history[:-1].rstrip() + (
                 f"\n\t\tvictory_points = {{ {province_id} {value} }}\n\t}}"
             )
-    return source[:history_open] + history + source[history_close + 1:]
+    return source[:history_open] + history + source[history_close + 1 :]
 
 
 def set_history_demilitarized_zone(source: str, enabled: bool) -> str:
     """Set one canonical history-level DMZ entry without touching other data."""
     history_open, history_close = named_block(source, "history")
-    history = source[history_open:history_close + 1]
+    history = source[history_open : history_close + 1]
     history = re.sub(
         r"(?m)^\s*set_demilitarized_zone\s*=\s*yes\s*$\n?",
         "",
@@ -1491,7 +3287,7 @@ def set_history_demilitarized_zone(source: str, enabled: bool) -> str:
     )
     if enabled:
         history = history[:-1].rstrip() + "\n\t\tset_demilitarized_zone = yes\n\t}"
-    return source[:history_open] + history + source[history_close + 1:]
+    return source[:history_open] + history + source[history_close + 1 :]
 
 
 def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
@@ -1513,7 +3309,9 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
                 "# Three shared factories require at least three local building slots.",
                 "# Five base slots retain four shared buildings after the plant slot penalty.",
             )
-        source = set_scalar(source, "local_supplies", f"{float(profile['supplies']):.1f}")
+        source = set_scalar(
+            source, "local_supplies", f"{float(profile['supplies']):.1f}"
+        )
         if state_id in IMPASSABLE_LEGACY_STATE_IDS:
             source = set_scalar(source, "impassable", "yes")
         else:
@@ -1548,9 +3346,7 @@ def apply_legacy_state_profiles(state_ids: set[int] | None = None) -> None:
 
 def replace_localisation_value(source: str, key: str, value: str) -> str:
     """Set one localisation value while removing stale duplicate keys."""
-    pattern = re.compile(
-        rf'(?m)^([ \t]*){re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)'
-    )
+    pattern = re.compile(rf'(?m)^([ \t]*){re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)')
     seen = False
 
     def replace(match: re.Match[str]) -> str:
@@ -1567,9 +3363,7 @@ def replace_localisation_value(source: str, key: str, value: str) -> str:
 
 
 def remove_localisation_key(source: str, key: str) -> str:
-    pattern = re.compile(
-        rf'(?m)^[ \t]*{re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)'
-    )
+    pattern = re.compile(rf'(?m)^[ \t]*{re.escape(key)}:[ \t]*"[^"]*"[ \t]*(?:\n|$)')
     return pattern.sub("", source)
 
 
@@ -1605,7 +3399,10 @@ def apply_vorkerland_victory_points() -> None:
             )
     if UNITY_TOWER_PROVINCE in VORKERLAND_THEATRE_RETIRED_VP_IDS:
         raise RuntimeError("Unity Tower cannot be retired from the Vorkerland theatre")
-    if VORKERLAND_THEATRE_VP_NAME_OVERRIDES.get(UNITY_TOWER_PROVINCE) != UNITY_TOWER_NAME:
+    if (
+        VORKERLAND_THEATRE_VP_NAME_OVERRIDES.get(UNITY_TOWER_PROVINCE)
+        != UNITY_TOWER_NAME
+    ):
         raise RuntimeError("Unity Tower must retain its protected Russian name")
 
     for state_id, points in VORKERLAND_THEATRE_VICTORY_POINTS.items():
@@ -1614,17 +3411,27 @@ def apply_vorkerland_victory_points() -> None:
         province_match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
         if not province_match:
             raise RuntimeError(f"state {state_id}: missing provinces block")
-        provinces = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
-        wrong = sorted(province_id for province_id, _value in points if province_id not in provinces)
+        provinces = {
+            int(value) for value in re.findall(r"\d+", province_match.group(1))
+        }
+        wrong = sorted(
+            province_id
+            for province_id, _value in points
+            if province_id not in provinces
+        )
         if wrong:
             raise RuntimeError(f"state {state_id}: theatre VPs outside state: {wrong}")
         updated = replace_history_victory_points(source, points)
         if updated != source:
             path.write_text(updated, encoding="utf-8", newline="\n")
 
-    localisation_path = ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+    localisation_path = (
+        ROOT / "localisation" / "russian" / "victory_points_l_russian.yml"
+    )
     localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
-    updated_localisation = update_vorkerland_vp_localisation(localisation).rstrip() + "\n"
+    updated_localisation = (
+        update_vorkerland_vp_localisation(localisation).rstrip() + "\n"
+    )
     if updated_localisation != localisation:
         localisation_path.write_text(
             updated_localisation, encoding="utf-8-sig", newline="\n"
@@ -1650,10 +3457,22 @@ def southern_settlement_plan() -> dict[Path, bytes]:
     """Keep capital references stable and conserve their rural population."""
     outputs = {}
     for state_id in sorted(set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}):
-        outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
-    for capital, (district, _city_population, rural_population, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items():
+        outputs[state_path(state_id)] = render_state(
+            state_id, STARTING_OWNERS[state_id]
+        ).encode("utf-8")
+    for capital, (
+        district,
+        _city_population,
+        rural_population,
+        provinces,
+    ) in SOUTHERN_CAPITAL_DISTRICTS.items():
         city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == capital)
-        provinces = tuple(sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())}))
+        provinces = tuple(
+            sorted(
+                set(provinces)
+                | {sector["province"] for sector in city.get("sectors", ())}
+            )
+        )
         path = STATE_DIR / f"{district}-Southern-District.txt"
         existing = tuple(STATE_DIR.glob(f"{district}-*.txt"))
         if existing and existing != (path,):
@@ -1683,25 +3502,36 @@ def southern_settlement_plan() -> dict[Path, bytes]:
     path = ROOT / "localisation/russian/state_names_l_russian.yml"
     source = path.read_text(encoding="utf-8-sig")
     for district, *_rest in SOUTHERN_CAPITAL_DISTRICTS.values():
-        source = replace_localisation_value(source, f"STATE_{district}", GENERATED_STATE_NAMES[district])
+        source = replace_localisation_value(
+            source, f"STATE_{district}", GENERATED_STATE_NAMES[district]
+        )
     outputs[path] = source.encode("utf-8-sig")
     path = ROOT / "localisation/russian/victory_points_l_russian.yml"
     source = path.read_text(encoding="utf-8-sig")
     for entry in SOUTHERN_CITIES:
-        source = replace_localisation_value(source, f"VICTORY_POINTS_{entry['province']}", entry["name"])
+        source = replace_localisation_value(
+            source, f"VICTORY_POINTS_{entry['province']}", entry["name"]
+        )
     outputs[path] = source.encode("utf-8-sig")
     return outputs
 
 
 def update_southern_settlements(apply: bool) -> int:
     outputs = southern_settlement_plan()
-    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    changed = [
+        path
+        for path, data in outputs.items()
+        if not path.exists() or path.read_bytes() != data
+    ]
     for path in changed:
         print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
         if apply:
             path.write_bytes(outputs[path])
     if apply:
-        if any(path.read_bytes() != data for path, data in southern_settlement_plan().items()):
+        if any(
+            path.read_bytes() != data
+            for path, data in southern_settlement_plan().items()
+        ):
             raise RuntimeError("southern settlements are not idempotent")
         return 0
     return int(bool(changed))
@@ -1710,36 +3540,72 @@ def update_southern_settlements(apply: bool) -> int:
 def coastal_city_state_plan() -> dict[Path, bytes]:
     """Split painted urban centres without adding population or factories."""
     outputs = {}
-    residuals = {290: (29_510, 9_510, 0.5), 689: (120_000, 40_000, 1.0), 691: (280_000, 190_000, 1.5)}
+    residuals = {
+        290: (29_510, 9_510, 0.5),
+        689: (120_000, 40_000, 1.0),
+        691: (280_000, 190_000, 1.5),
+    }
     for state_id in (284, 290, 688, 689, 691):
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig")
         if state_id in (284, 688):
             province = 16720 if state_id == 284 else 16721
             match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
-            provinces = sorted(set(map(int, re.findall(r"\d+", match.group(1)))) | {province})
-            source = source[:match.start(1)] + "\n\t\t" + " ".join(map(str, provinces)) + "\n\t" + source[match.end(1):]
-            source = replace_history_victory_points(source, COASTAL_CITY_POINTS[state_id])
+            provinces = sorted(
+                set(map(int, re.findall(r"\d+", match.group(1)))) | {province}
+            )
+            source = (
+                source[: match.start(1)]
+                + "\n\t\t"
+                + " ".join(map(str, provinces))
+                + "\n\t"
+                + source[match.end(1) :]
+            )
+            source = replace_history_victory_points(
+                source, COASTAL_CITY_POINTS[state_id]
+            )
         if state_id in residuals:
             original, population, supplies = residuals[state_id]
             current = int(re.search(r"\bmanpower\s*=\s*(\d+)", source).group(1))
             if current not in (original, population):
-                raise RuntimeError(f"state {state_id}: population changed outside the city split")
+                raise RuntimeError(
+                    f"state {state_id}: population changed outside the city split"
+                )
             source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {population}", source)
-            source = re.sub(r"\blocal_supplies\s*=\s*[\d.]+", f"local_supplies = {supplies:.1f}", source)
-            source = re.sub(r"\bstate_category\s*=\s*\w+", "state_category = rural", source)
+            source = re.sub(
+                r"\blocal_supplies\s*=\s*[\d.]+",
+                f"local_supplies = {supplies:.1f}",
+                source,
+            )
+            source = re.sub(
+                r"\bstate_category\s*=\s*\w+", "state_category = rural", source
+            )
             if state_id in (689, 691):
-                source = re.sub(r"(?m)^\s*(?:industrial_complex|arms_factory)\s*=\s*\d+\s*\n", "", source)
+                source = re.sub(
+                    r"(?m)^\s*(?:industrial_complex|arms_factory)\s*=\s*\d+\s*\n",
+                    "",
+                    source,
+                )
             if state_id == 689:
                 source = replace_history_victory_points(source, ())
-                source = re.sub(r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source)
+                source = re.sub(
+                    r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source
+                )
         outputs[path] = source.encode("utf-8")
     profiles = {
         699: ("699-Khazar.txt", "SHL", 20_000, 2, 1.0, 0, 0),
         700: ("700-South-Harbour.txt", "NAM", 80_000, 3, 2.5, 1, 2),
         701: ("701-Middle-Loren-City.txt", "EFL", 90_000, 3, 2.0, 1, 0),
     }
-    for state_id, (filename, owner, population, infrastructure, supplies, civilian, military) in profiles.items():
+    for state_id, (
+        filename,
+        owner,
+        population,
+        infrastructure,
+        supplies,
+        civilian,
+        military,
+    ) in profiles.items():
         path = STATE_DIR / filename
         existing = tuple(STATE_DIR.glob(f"{state_id}-*.txt"))
         if existing and existing != (path,):
@@ -1761,7 +3627,10 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
             f"\t\towner = {owner}",
             f"\t\tadd_core_of = {owner}",
         ]
-        lines.extend(f"\t\tvictory_points = {{ {province} {value} }}" for province, value in points)
+        lines.extend(
+            f"\t\tvictory_points = {{ {province} {value} }}"
+            for province, value in points
+        )
         lines.extend(["\t\tbuildings = {", f"\t\t\tinfrastructure = {infrastructure}"])
         if civilian:
             lines.append(f"\t\t\tindustrial_complex = {civilian}")
@@ -1772,8 +3641,17 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
         lines.extend(["\t\t}", "\t}", "}", ""])
         outputs[path] = "\n".join(lines).encode("utf-8")
     for filename, names in (
-        ("victory_points_l_russian.yml", {f"VICTORY_POINTS_{key}": value for key, value in COASTAL_CITY_NAMES.items()}),
-        ("state_names_l_russian.yml", {f"STATE_{key}": GENERATED_STATE_NAMES[key] for key in profiles}),
+        (
+            "victory_points_l_russian.yml",
+            {
+                f"VICTORY_POINTS_{key}": value
+                for key, value in COASTAL_CITY_NAMES.items()
+            },
+        ),
+        (
+            "state_names_l_russian.yml",
+            {f"STATE_{key}": GENERATED_STATE_NAMES[key] for key in profiles},
+        ),
     ):
         path = ROOT / "localisation/russian" / filename
         source = path.read_text(encoding="utf-8-sig")
@@ -1785,13 +3663,20 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
 
 def update_coastal_city_states(apply: bool) -> int:
     outputs = coastal_city_state_plan()
-    changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
+    changed = [
+        path
+        for path, data in outputs.items()
+        if not path.exists() or path.read_bytes() != data
+    ]
     for path in changed:
         print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
         if apply:
             path.write_bytes(outputs[path])
     if apply:
-        if any(path.read_bytes() != data for path, data in coastal_city_state_plan().items()):
+        if any(
+            path.read_bytes() != data
+            for path, data in coastal_city_state_plan().items()
+        ):
             raise RuntimeError("coastal city states are not idempotent")
         return 0
     return int(bool(changed))
@@ -1807,22 +3692,24 @@ def apply() -> None:
     split_svetlogorsk_from_nam()
     split_ivanland_overhaul_states()
     for state_id, owner in sorted(STARTING_OWNERS.items()):
-        state_path(state_id).write_text(render_state(state_id, owner), encoding="utf-8", newline="\n")
+        state_path(state_id).write_text(
+            render_state(state_id, owner), encoding="utf-8", newline="\n"
+        )
     apply_legacy_state_profiles()
     update_coastal_city_states(True)
     update_southern_settlements(True)
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
-    print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
+    print(
+        f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched."
+    )
     update_val_resources(True)
 
 
 def apply_settlement_cluster_victory_points() -> None:
     """Apply only the settlement-cluster VP rule and its Russian names."""
     apply_vorkerland_victory_points()
-    apply_legacy_state_profiles(
-        set(SETTLEMENT_CLUSTER_VICTORY_POINTS) | {693, 694}
-    )
+    apply_legacy_state_profiles(set(SETTLEMENT_CLUSTER_VICTORY_POINTS) | {693, 694})
     for state_id in sorted(SETTLEMENT_CLUSTER_CENTRES):
         owner = STARTING_OWNERS[state_id]
         path = state_path(state_id)
@@ -1855,10 +3742,14 @@ def update_val_resources(apply_changes: bool = False) -> int:
         expected = EXPECTED_RESOURCES[state_id]
         if expected:
             updated = ensure_state_resources(updated, expected)
+
         # Compare parsed resources so harmless formatting does not cause drift.
         def resources(text):
             match = re.search(r"resources\s*=\s*\{([^}]*)\}", text)
-            return dict(re.findall(r"(\w+)\s*=\s*(\d+)", match.group(1))) if match else {}
+            return (
+                dict(re.findall(r"(\w+)\s*=\s*(\d+)", match.group(1))) if match else {}
+            )
+
         if resources(source) != resources(updated):
             changed.append(state_id)
             if apply_changes:
@@ -1870,8 +3761,16 @@ def update_val_resources(apply_changes: bool = False) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated state metadata and localisation")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated outputs (default)",
+    )
+    actions.add_argument(
+        "--apply",
+        action="store_true",
+        help="write generated state metadata and localisation",
+    )
     actions.add_argument(
         "--apply-nam-split",
         action="store_true",
@@ -1909,10 +3808,21 @@ def main() -> int:
         metavar="STATE_ID",
         help="patch only the selected legacy state profile; may be repeated",
     )
-    actions.add_argument("--apply-vorkerland-owners", action="store_true",
-                         help="apply only the prewar confederation owners and cores")
-    actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
-    actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
+    actions.add_argument(
+        "--apply-vorkerland-owners",
+        action="store_true",
+        help="apply only the prewar confederation owners and cores",
+    )
+    actions.add_argument(
+        "--apply-val-resources",
+        action="store_true",
+        help="apply the Kefreyt homeland resource manifest",
+    )
+    actions.add_argument(
+        "--check-val-resources",
+        action="store_true",
+        help="check the Kefreyt homeland resource manifest",
+    )
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--apply-coastal-cities", action="store_true")
     actions.add_argument("--check-southern-settlements", action="store_true")
@@ -1925,10 +3835,15 @@ def main() -> int:
     if args.apply_val_resources or args.check_val_resources:
         return update_val_resources(args.apply_val_resources)
     if args.apply_vorkerland_owners:
-        apply_legacy_owner_overrides({
-            **LEGACY_OWNER_OVERRIDES,
-            **{sid: STARTING_OWNERS[sid] for sid in (306, 307, 308, 309, 311, 324, 325, 327)},
-        })
+        apply_legacy_owner_overrides(
+            {
+                **LEGACY_OWNER_OVERRIDES,
+                **{
+                    sid: STARTING_OWNERS[sid]
+                    for sid in (306, 307, 308, 309, 311, 324, 325, 327)
+                },
+            }
+        )
         return 0
     if args.apply:
         apply()
@@ -1953,7 +3868,9 @@ def main() -> int:
         split_ivanland_overhaul_states()
         apply_generated_victory_point_localisation()
         apply_generated_state_name_localisation()
-        print("Applied the reviewed Ivanland island/Old March split and victory points.")
+        print(
+            "Applied the reviewed Ivanland island/Old March split and victory points."
+        )
         return 0
     if args.check_ivn_overhaul:
         validate_ivanland_split_inputs()
@@ -1965,7 +3882,9 @@ def main() -> int:
         if unknown:
             parser.error(f"states without a legacy profile: {unknown}")
         apply_legacy_state_profiles(state_ids)
-        print(f"Applied {len(state_ids)} selected legacy state profile(s): {sorted(state_ids)}.")
+        print(
+            f"Applied {len(state_ids)} selected legacy state profile(s): {sorted(state_ids)}."
+        )
         return 0
     from tools.validators.validate_adiscord_new_states import main as validate_main
 

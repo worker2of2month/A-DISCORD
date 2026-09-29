@@ -258,11 +258,7 @@ EXPECTED_TECHS = [
     "ADISCORD_tech_forbidden_automation_doctrine",
 ]
 
-EXPECTED_TECHS = [
-    tech.id
-    for branch in GENERATED_BRANCHES
-    for tech in branch.techs
-]
+EXPECTED_TECHS = [tech.id for branch in GENERATED_BRANCHES for tech in branch.techs]
 FORBIDDEN_TECHS = sorted(GENERATED_FORBIDDEN_IDS)
 
 EXPECTED_TRIGGERS = [
@@ -529,11 +525,56 @@ LOCAL_DOCTRINE_REFERENCE_ROOTS = [
 DOCTRINE_FOLDERS = {"land", "air", "naval", "special_forces"}
 
 VANILLA_TAGS = {
-    "AFG", "ALB", "ARG", "AST", "AUS", "BEL", "BOL", "BRA", "BUL", "CAN",
-    "CHI", "CHL", "COL", "COS", "CRO", "CUB", "CZE", "DEN", "DOM", "ECU",
-    "ELS", "ENG", "EST", "ETH", "FIN", "FRA", "GER", "GRE", "HOL", "HUN",
-    "INS", "ITA", "JAP", "LAT", "LIT", "LUX", "MEX", "NOR", "NZL", "POL",
-    "POR", "PRC", "RAJ", "SAF", "SIA", "SOV", "SPR", "SWE", "TUR", "USA",
+    "AFG",
+    "ALB",
+    "ARG",
+    "AST",
+    "AUS",
+    "BEL",
+    "BOL",
+    "BRA",
+    "BUL",
+    "CAN",
+    "CHI",
+    "CHL",
+    "COL",
+    "COS",
+    "CRO",
+    "CUB",
+    "CZE",
+    "DEN",
+    "DOM",
+    "ECU",
+    "ELS",
+    "ENG",
+    "EST",
+    "ETH",
+    "FIN",
+    "FRA",
+    "GER",
+    "GRE",
+    "HOL",
+    "HUN",
+    "INS",
+    "ITA",
+    "JAP",
+    "LAT",
+    "LIT",
+    "LUX",
+    "MEX",
+    "NOR",
+    "NZL",
+    "POL",
+    "POR",
+    "PRC",
+    "RAJ",
+    "SAF",
+    "SIA",
+    "SOV",
+    "SPR",
+    "SWE",
+    "TUR",
+    "USA",
     "YUG",
 }
 
@@ -602,9 +643,9 @@ def extract_block(text: str, start: int) -> str:
             elif ch == "}":
                 depth -= 1
                 if depth == 0:
-                    return text[open_at + 1:i]
+                    return text[open_at + 1 : i]
         escaped = False
-    return text[open_at + 1:]
+    return text[open_at + 1 :]
 
 
 def top_level_keys(block: str) -> set[str]:
@@ -723,7 +764,9 @@ def collect_doctrine_keys() -> tuple[set[str], set[str], set[str], dict[str, str
                 sub.add(key)
                 reward_match = re.search(r"\brewards\s*=\s*\{", blocks[key])
                 if reward_match:
-                    sub.update(top_level_keys(extract_block(blocks[key], reward_match.start())))
+                    sub.update(
+                        top_level_keys(extract_block(blocks[key], reward_match.start()))
+                    )
     return grand, tracks, sub, blocks
 
 
@@ -839,16 +882,24 @@ def check_technology_parser_constraints(tech_blocks: dict[str, str]) -> list[str
         }
         for invalid, replacement in invalid_equipment_scopes.items():
             if re.search(rf"\b{invalid}\s*=\s*\{{", block):
-                issues.append(f"{tech} uses invalid modifier scope {invalid}; use {replacement}")
+                issues.append(
+                    f"{tech} uses invalid modifier scope {invalid}; use {replacement}"
+                )
 
-        if re.search(r"\bfolder[^\S\r\n]*=[^\S\r\n]*\{[^\S\r\n]*name[^\S\r\n]*=", block):
-            issues.append(f"{tech} uses inline folder block; use vanilla multiline folder format")
+        if re.search(
+            r"\bfolder[^\S\r\n]*=[^\S\r\n]*\{[^\S\r\n]*name[^\S\r\n]*=", block
+        ):
+            issues.append(
+                f"{tech} uses inline folder block; use vanilla multiline folder format"
+            )
 
         year_match = re.search(r"\bstart_year\s*=\s*(\d+)", block)
         if not year_match:
             issues.append(f"{tech} has no start_year")
         elif int(year_match.group(1)) not in EXPECTED_TECH_YEARS:
-            issues.append(f"{tech} uses legacy or unsupported year {year_match.group(1)}")
+            issues.append(
+                f"{tech} uses legacy or unsupported year {year_match.group(1)}"
+            )
 
         folder_matches = list(re.finditer(r"\bfolder\s*=\s*\{", block))
         if not folder_matches:
@@ -868,7 +919,9 @@ def check_technology_parser_constraints(tech_blocks: dict[str, str]) -> list[str
                 if folder not in SAFE_TECH_GRID_POSITIONS:
                     issues.append(f"{tech} uses unsupported folder {folder}")
                 elif position not in SAFE_TECH_GRID_POSITIONS[folder]:
-                    issues.append(f"{tech} uses unsafe {folder} grid position {position}")
+                    issues.append(
+                        f"{tech} uses unsafe {folder} grid position {position}"
+                    )
                 elif position != EXPECTED_TECH_GRID_POSITIONS[tech]:
                     issues.append(
                         f"{tech} uses {folder} grid position {position}; "
@@ -913,7 +966,9 @@ def check_country_tag_database() -> list[str]:
 
     missing_dynamic = sorted(REQUIRED_DYNAMIC_TAGS - dynamic_tags)
     if missing_dynamic:
-        issues.append(f"missing reserved dynamic country tags: {', '.join(missing_dynamic)}")
+        issues.append(
+            f"missing reserved dynamic country tags: {', '.join(missing_dynamic)}"
+        )
 
     for tag, country_file in sorted(tags.items()):
         if not (ROOT / "common" / country_file).exists():
@@ -968,15 +1023,21 @@ def check_generated_doctrine_structure(
     missing_schools = sorted(expected_schools - subdoctrines)
     missing_rewards = sorted(expected_rewards - subdoctrines)
     if missing_schools:
-        issues.append(f"missing generated doctrine schools: {', '.join(missing_schools)}")
+        issues.append(
+            f"missing generated doctrine schools: {', '.join(missing_schools)}"
+        )
     if missing_rewards:
-        issues.append(f"missing generated mastery rewards: {', '.join(missing_rewards)}")
+        issues.append(
+            f"missing generated mastery rewards: {', '.join(missing_rewards)}"
+        )
 
     runtime_sprites = collect_runtime_sprite_names()
     for track in GENERATED_TRACKS:
         for sprite in (track.background, track.icon, track.frame):
             if sprite not in runtime_sprites:
-                issues.append(f"doctrine track {track.key} references unavailable sprite {sprite}")
+                issues.append(
+                    f"doctrine track {track.key} references unavailable sprite {sprite}"
+                )
     for grand_spec in GENERATED_GRANDS:
         if grand_spec["icon"] not in runtime_sprites:
             issues.append(
@@ -987,15 +1048,24 @@ def check_generated_doctrine_structure(
     for school in GENERATED_SCHOOLS:
         schools_per_track[school.track] = schools_per_track.get(school.track, 0) + 1
         if school.icon not in runtime_sprites:
-            issues.append(f"doctrine school {school.key} references unavailable sprite {school.icon}")
+            issues.append(
+                f"doctrine school {school.key} references unavailable sprite {school.icon}"
+            )
         block = doctrine_blocks.get(school.key, "")
         if not block:
             continue
         compact = re.sub(r"\s+", " ", block)
         if f"track = {school.track}" not in compact:
-            issues.append(f"doctrine school {school.key} is not assigned to {school.track}")
-        if "available = {" not in block or re.sub(r"\s+", " ", school.gate) not in compact:
-            issues.append(f"doctrine school {school.key} lost its technology/capability gate")
+            issues.append(
+                f"doctrine school {school.key} is not assigned to {school.track}"
+            )
+        if (
+            "available = {" not in block
+            or re.sub(r"\s+", " ", school.gate) not in compact
+        ):
+            issues.append(
+                f"doctrine school {school.key} lost its technology/capability gate"
+            )
         if "ai_will_do = {" not in block:
             issues.append(f"doctrine school {school.key} has no AI selection logic")
         for effect in school.root_effects:
@@ -1007,14 +1077,24 @@ def check_generated_doctrine_structure(
         reward_block = extract_block(block, reward_match.start())
         reward_keys = top_level_keys(reward_block)
         if len(reward_keys) != 5:
-            issues.append(f"doctrine school {school.key} has {len(reward_keys)} rewards instead of 5")
-        costs = tuple(int(value) for value in re.findall(r"\bmastery\s*=\s*(\d+)\b", reward_block))
+            issues.append(
+                f"doctrine school {school.key} has {len(reward_keys)} rewards instead of 5"
+            )
+        costs = tuple(
+            int(value) for value in re.findall(r"\bmastery\s*=\s*(\d+)\b", reward_block)
+        )
         if costs != GENERATED_MASTERY_COSTS:
-            issues.append(f"doctrine school {school.key} has incorrect mastery costs: {costs}")
-        for index, (slug, _ru, en, effects) in enumerate(GENERATED_REWARD_PROFILES[school.profile]):
+            issues.append(
+                f"doctrine school {school.key} has incorrect mastery costs: {costs}"
+            )
+        for index, (slug, _ru, en, effects) in enumerate(
+            GENERATED_REWARD_PROFILES[school.profile]
+        ):
             rid = generated_reward_id(school, index, slug)
             if not effects or any(token in en for token in ("=", "{", "}")):
-                issues.append(f"doctrine reward {rid} has missing effects or script in its label")
+                issues.append(
+                    f"doctrine reward {rid} has missing effects or script in its label"
+                )
             match = re.search(rf"\b{re.escape(rid)}\s*=\s*\{{", reward_block)
             if not match:
                 continue
@@ -1046,16 +1126,18 @@ def check_generated_doctrine_structure(
 
 def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
-    live_keys = {
-        tech.key
-        for branch in GENERATED_BRANCHES
-        for tech in branch.techs
-    }
+    live_keys = {tech.key for branch in GENERATED_BRANCHES for tech in branch.techs}
     if len(GENERATED_APPLIED_PROGRAMMES) != 7:
-        issues.append(f"expected 7 applied technology programmes, got {len(GENERATED_APPLIED_PROGRAMMES)}")
+        issues.append(
+            f"expected 7 applied technology programmes, got {len(GENERATED_APPLIED_PROGRAMMES)}"
+        )
     for programme in GENERATED_APPLIED_PROGRAMMES:
         retained = [tech for tech in programme["techs"] if tech[0] in live_keys]
-        maximum = 3 if programme["key"] in GENERATED_SIDE_PROGRAMME_KEYS else len(programme["techs"])
+        maximum = (
+            3
+            if programme["key"] in GENERATED_SIDE_PROGRAMME_KEYS
+            else len(programme["techs"])
+        )
         if not 1 <= len(retained) <= maximum:
             issues.append(
                 f"applied programme {programme['key']} retains {len(retained)} technologies; expected 1-{maximum}"
@@ -1075,12 +1157,17 @@ def check_applied_technology_programmes(tech_blocks: dict[str, str]) -> list[str
             continue
         tech_id = f"ADISCORD_tech_{key}"
         block = tech_blocks.get(tech_id, "")
-        if "show_effect_as_desc = yes" not in block or "on_research_complete" not in block:
+        if (
+            "show_effect_as_desc = yes" not in block
+            or "on_research_complete" not in block
+        ):
             issues.append(f"{tech_id} has no visible one-time leader training effect")
         if len(re.findall(r"\brandom_army_leader\s*=\s*\{", block)) != count:
             issues.append(f"{tech_id} should train {count} different random generals")
         if "clr_unit_leader_flag" not in block or "every_army_leader" not in block:
-            issues.append(f"{tech_id} does not clear temporary random-general selection flags")
+            issues.append(
+                f"{tech_id} does not clear temporary random-general selection flags"
+            )
     return issues
 
 
@@ -1094,7 +1181,17 @@ def check_duplicate_localisation_keys() -> list[str]:
                 if not match or match.group(1).startswith("l_"):
                     continue
                 key = match.group(1)
-                if key in seen and key.startswith(("ADISCORD_doctrine_", "ADISCORD_air_doctrine_", "ADISCORD_naval_doctrine_", "ADISCORD_special_forces_", "ADISCORD_land_", "ADISCORD_air_", "ADISCORD_naval_")):
+                if key in seen and key.startswith(
+                    (
+                        "ADISCORD_doctrine_",
+                        "ADISCORD_air_doctrine_",
+                        "ADISCORD_naval_doctrine_",
+                        "ADISCORD_special_forces_",
+                        "ADISCORD_land_",
+                        "ADISCORD_air_",
+                        "ADISCORD_naval_",
+                    )
+                ):
                     issues.append(
                         f"duplicate {language} doctrine localisation {key}: {seen[key]} and {rel(path)}"
                     )
@@ -1112,7 +1209,9 @@ def check_split_technology_layout() -> list[str]:
     if legacy.exists():
         text = re.sub(r"\s+", " ", strip_comments(read_text(legacy))).strip()
         if text not in {"", "technologies = { }"}:
-            issues.append("common/technologies/ADISCORD_technologies.txt must be empty after split migration")
+            issues.append(
+                "common/technologies/ADISCORD_technologies.txt must be empty after split migration"
+            )
     return issues
 
 
@@ -1124,26 +1223,33 @@ def check_equipment_definitions(equipment: set[str]) -> list[str]:
     return issues
 
 
-def check_equipment_unlocks(tech_blocks: dict[str, str], equipment: set[str]) -> list[str]:
+def check_equipment_unlocks(
+    tech_blocks: dict[str, str], equipment: set[str]
+) -> list[str]:
     issues: list[str] = []
     unlocked: set[str] = set()
     actual_equipment_by_tech: dict[str, set[str]] = {}
     for block in tech_blocks.values():
-        for match in re.finditer(r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S):
+        for match in re.finditer(
+            r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S
+        ):
             unlocked.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
     for tech_id, block in tech_blocks.items():
         entries: set[str] = set()
-        for match in re.finditer(r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S):
+        for match in re.finditer(
+            r"\benable_equipments\s*=\s*\{([^{}]*)\}", block, re.S
+        ):
             entries.update(re.findall(r"[A-Za-z0-9_]+", match.group(1)))
         if entries:
             actual_equipment_by_tech[tech_id] = entries
 
     expected_equipment_by_tech = {
-        tech_id: set(entries)
-        for tech_id, entries in GENERATED_ENABLE_EQUIPMENT.items()
+        tech_id: set(entries) for tech_id, entries in GENERATED_ENABLE_EQUIPMENT.items()
     }
     if actual_equipment_by_tech != expected_equipment_by_tech:
-        for tech_id in sorted(set(actual_equipment_by_tech) | set(expected_equipment_by_tech)):
+        for tech_id in sorted(
+            set(actual_equipment_by_tech) | set(expected_equipment_by_tech)
+        ):
             actual = actual_equipment_by_tech.get(tech_id, set())
             expected = expected_equipment_by_tech.get(tech_id, set())
             if actual != expected:
@@ -1173,7 +1279,9 @@ def check_equipment_unlocks(tech_blocks: dict[str, str], equipment: set[str]) ->
     return issues
 
 
-def check_generated_capability_unlock_contract(tech_blocks: dict[str, str]) -> list[str]:
+def check_generated_capability_unlock_contract(
+    tech_blocks: dict[str, str],
+) -> list[str]:
     issues: list[str] = []
     actual_subunits: dict[str, set[str]] = {}
     actual_buildings: dict[str, set[tuple[str, int]]] = {}
@@ -1196,12 +1304,10 @@ def check_generated_capability_unlock_contract(tech_blocks: dict[str, str]) -> l
             actual_buildings[tech_id] = buildings
 
     expected_subunits = {
-        tech_id: set(entries)
-        for tech_id, entries in GENERATED_ENABLE_SUBUNITS.items()
+        tech_id: set(entries) for tech_id, entries in GENERATED_ENABLE_SUBUNITS.items()
     }
     expected_buildings = {
-        tech_id: set(entries)
-        for tech_id, entries in GENERATED_ENABLE_BUILDINGS.items()
+        tech_id: set(entries) for tech_id, entries in GENERATED_ENABLE_BUILDINGS.items()
     }
     if actual_subunits != expected_subunits:
         for tech_id in sorted(set(actual_subunits) | set(expected_subunits)):
@@ -1226,12 +1332,18 @@ def check_equipment_parser_constraints() -> list[str]:
     issues: list[str] = []
     equipment = collect_equipment_blocks()
     supply_trucks = {
-        name for name, body in equipment.items()
+        name
+        for name, body in equipment.items()
         if re.search(r"\bsupply_truck\s*=\s*yes\b", body)
     }
     if supply_trucks != {"motorized_equipment"}:
-        issues.append("supply motorization requires the dedicated motorized_equipment archetype")
-    if not re.search(r"\barchetype\s*=\s*motorized_equipment\b", equipment.get("motorized_equipment_1", "")):
+        issues.append(
+            "supply motorization requires the dedicated motorized_equipment archetype"
+        )
+    if not re.search(
+        r"\barchetype\s*=\s*motorized_equipment\b",
+        equipment.get("motorized_equipment_1", ""),
+    ):
         issues.append("supply motorization has no buildable truck variant")
     invalid_air_stats = {
         "agility": "air_agility",
@@ -1364,14 +1476,22 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
             (r"\bhide_if_missing_tech\s*=\s*yes\b", "hide_if_missing_tech"),
             (r"\bstate_max\s*=\s*1\b", "state_max = 1"),
             (r"\bshares_slots\s*=\s*yes\b", "shares_slots = yes"),
-            (r"\bgroup_by\s*=\s*ADISCORD_resource_complexes\b", "shared resource-complex cap"),
-            (r"\bstate_production_speed_buildings_factor\s*=\s*-0\.0[5-9]", "regional construction penalty"),
+            (
+                r"\bgroup_by\s*=\s*ADISCORD_resource_complexes\b",
+                "shared resource-complex cap",
+            ),
+            (
+                r"\bstate_production_speed_buildings_factor\s*=\s*-0\.0[5-9]",
+                "regional construction penalty",
+            ),
         ):
             if not re.search(pattern, block):
                 issues.append(f"{building} is missing {label}")
         icon_match = re.search(r"\bicon_frame\s*=\s*(\d+)", block)
         if icon_match and int(icon_match.group(1)) > icon_capacity:
-            issues.append(f"{building} uses out-of-range building icon frame {icon_match.group(1)}")
+            issues.append(
+                f"{building} uses out-of-range building icon frame {icon_match.group(1)}"
+            )
 
     expected_unlocks = {
         tech: {(building, level) for building, level in entries}
@@ -1387,7 +1507,9 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
             if building_match and level_match:
                 actual.add((building_match.group(1), int(level_match.group(1))))
         if actual != expected:
-            issues.append(f"{tech} building unlocks are {sorted(actual)}; expected {sorted(expected)}")
+            issues.append(
+                f"{tech} building unlocks are {sorted(actual)}; expected {sorted(expected)}"
+            )
         for building, _ in actual:
             if building not in buildings:
                 issues.append(f"{tech} unlocks undefined building {building}")
@@ -1405,9 +1527,17 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
             resource_match = re.search(r"\bresource\s*=\s*([A-Za-z0-9_]+)", effect)
             amount_match = re.search(r"\bamount\s*=\s*(-?\d+)", effect)
             if building_match and resource_match and amount_match:
-                actual.add((building_match.group(1), resource_match.group(1), int(amount_match.group(1))))
+                actual.add(
+                    (
+                        building_match.group(1),
+                        resource_match.group(1),
+                        int(amount_match.group(1)),
+                    )
+                )
         if actual != expected:
-            issues.append(f"{tech} resource upgrades are {sorted(actual)}; expected {sorted(expected)}")
+            issues.append(
+                f"{tech} resource upgrades are {sorted(actual)}; expected {sorted(expected)}"
+            )
     return issues
 
 
@@ -1422,10 +1552,18 @@ def building_icon_strip_capacity() -> tuple[int, list[str]]:
                 continue
             texture = re.search(r'\btexture[Ff]ile\s*=\s*"([^"]+)"', block)
             frames = re.search(r"\bnoOfFrames\s*=\s*(\d+)", block)
-            if not texture or texture.group(1).replace("\\", "/") != "gfx/interface/buildings/building_icon_strip.dds":
-                issues.append(f"{gfx_path.relative_to(ROOT)} points GFX_buildings_strip at the wrong texture")
+            if (
+                not texture
+                or texture.group(1).replace("\\", "/")
+                != "gfx/interface/buildings/building_icon_strip.dds"
+            ):
+                issues.append(
+                    f"{gfx_path.relative_to(ROOT)} points GFX_buildings_strip at the wrong texture"
+                )
             if not frames:
-                issues.append(f"{gfx_path.relative_to(ROOT)} gives GFX_buildings_strip no frame count")
+                issues.append(
+                    f"{gfx_path.relative_to(ROOT)} gives GFX_buildings_strip no frame count"
+                )
                 continue
             declarations.append((gfx_path, int(frames.group(1))))
 
@@ -1496,12 +1634,8 @@ def check_infantry_visual_model_chain() -> list[str]:
 
     legacy_asset = ROOT / "gfx" / "units_infantry.asset"
     vanilla_override = ROOT / "gfx" / "entities" / "units_infantry.asset"
-    early_custom_asset = (
-        ROOT / "gfx" / "entities" / "ADISCORD_country_infantry.asset"
-    )
-    canonical_asset = (
-        ROOT / "gfx" / "entities" / "zz_ADISCORD_country_infantry.asset"
-    )
+    early_custom_asset = ROOT / "gfx" / "entities" / "ADISCORD_country_infantry.asset"
+    canonical_asset = ROOT / "gfx" / "entities" / "zz_ADISCORD_country_infantry.asset"
     progression_asset = (
         ROOT / "gfx" / "entities" / "zy_ADISCORD_infantry_weapon_progression.asset"
     )
@@ -1575,8 +1709,13 @@ def check_infantry_visual_model_chain() -> list[str]:
                 name_match.group(1),
             ):
                 actual_wrapper_names.append(name_match.group(1))
-        if len(actual_wrapper_names) != 24 or set(actual_wrapper_names) != expected_wrapper_names:
-            issues.append("weapon progression asset must define exactly 24 wrapper entities")
+        if (
+            len(actual_wrapper_names) != 24
+            or set(actual_wrapper_names) != expected_wrapper_names
+        ):
+            issues.append(
+                "weapon progression asset must define exactly 24 wrapper entities"
+            )
 
         for level, source_prefix in enumerate(source_prefixes):
             for pose in poses:
@@ -1600,7 +1739,10 @@ def check_infantry_visual_model_chain() -> list[str]:
                         f"{wrapper} uses {actual_mesh}; expected {expected_mesh}"
                     )
                 for neutral in ("idle", "move"):
-                    if not re.search(rf'state\s*=\s*\{{\s*name\s*=\s*"{neutral}"\s+animation\s*=\s*"idle"', wrapper_block):
+                    if not re.search(
+                        rf'state\s*=\s*\{{\s*name\s*=\s*"{neutral}"\s+animation\s*=\s*"idle"',
+                        wrapper_block,
+                    ):
                         issues.append(f"{wrapper} lacks a bind-pose clip for {neutral}")
                 for field in forbidden_wrapper_fields:
                     if re.search(rf"\b{field}\s*=", wrapper_block):
@@ -1616,7 +1758,9 @@ def check_infantry_visual_model_chain() -> list[str]:
             if not entity_block:
                 issues.append(f"weapon progression asset is missing {entity}")
                 continue
-            expected_parent = "infantry_rifle_entity" if level == 0 else "infantry_2_entity"
+            expected_parent = (
+                "infantry_rifle_entity" if level == 0 else "infantry_2_entity"
+            )
             clone_match = re.search(r'\bclone\s*=\s*"([^"]+)"', entity_block)
             actual_parent = clone_match.group(1) if clone_match else None
             if actual_parent != expected_parent:
@@ -1632,9 +1776,7 @@ def check_infantry_visual_model_chain() -> list[str]:
                     rf'{node}\s*=\s*"{wrapper}"\s*\}}'
                 )
                 if not re.search(pattern, entity_block):
-                    issues.append(
-                        f"{entity} must attach {wrapper} as {attachment}"
-                    )
+                    issues.append(f"{entity} must attach {wrapper} as {attachment}")
             for attachment, node, prop_entity in generic_body_attachments:
                 pattern = (
                     rf'attach\s*=\s*\{{\s*name\s*=\s*"{attachment}"\s+'
@@ -1703,9 +1845,7 @@ def check_infantry_visual_model_chain() -> list[str]:
                         rf'{node}\s*=\s*"{wrapper}"\s*\}}'
                     )
                     if not re.search(pattern, entity_block):
-                        issues.append(
-                            f"{entity} must attach {wrapper} as {attachment}"
-                        )
+                        issues.append(f"{entity} must attach {wrapper} as {attachment}")
     return issues
 
 
@@ -1728,7 +1868,9 @@ def check_required_unit_definitions() -> list[str]:
     for directory in ("history/units", "common/ai_templates"):
         for path in iter_text_files(directory):
             text = strip_comments(read_text(path))
-            for block_match in re.finditer(r"\b(regiments|support|regimental_support)\s*=\s*\{", text):
+            for block_match in re.finditer(
+                r"\b(regiments|support|regimental_support)\s*=\s*\{", text
+            ):
                 block = extract_block(text, block_match.start())
                 for match in re.finditer(r"^\s*([A-Za-z0-9_-]+)\s*=", block, re.M):
                     subunit = match.group(1)
@@ -1818,9 +1960,7 @@ def check_infantry_equipment_requirements() -> list[str]:
             )
         }
         if actual_need != expected_need:
-            issues.append(
-                f"{subunit} needs {actual_need}; expected {expected_need}"
-            )
+            issues.append(f"{subunit} needs {actual_need}; expected {expected_need}")
     return issues
 
 
@@ -1839,8 +1979,14 @@ def check_new_support_and_platform_units() -> list[str]:
             "ADISCORD_recon_platform_archetype": 18,
             "support_equipment": 5,
         },
-        "ADISCORD_combat_platform": {"infantry_equipment": 405, "ADISCORD_combat_platform_archetype": 40},
-        "ADISCORD_heavy_platform": {"infantry_equipment": 450, "ADISCORD_heavy_platform_archetype": 32},
+        "ADISCORD_combat_platform": {
+            "infantry_equipment": 405,
+            "ADISCORD_combat_platform_archetype": 40,
+        },
+        "ADISCORD_heavy_platform": {
+            "infantry_equipment": 450,
+            "ADISCORD_heavy_platform_archetype": 32,
+        },
         "ADISCORD_recovery_platform": {
             "infantry_equipment": 270,
             "ADISCORD_recovery_platform_archetype": 12,
@@ -1883,7 +2029,9 @@ def check_script_enums(equipment: set[str]) -> list[str]:
         return ["common/script_enums.txt missing"]
 
     text = strip_comments(read_text(path))
-    defined_enums = set(re.findall(r"^\s*(script_enum_[A-Za-z0-9_]+)\s*=\s*\{", text, re.M))
+    defined_enums = set(
+        re.findall(r"^\s*(script_enum_[A-Za-z0-9_]+)\s*=\s*\{", text, re.M)
+    )
     for enum_name in sorted(REQUIRED_SCRIPT_ENUMS - defined_enums):
         issues.append(f"common/script_enums.txt missing {enum_name}")
 
@@ -1893,18 +2041,28 @@ def check_script_enums(equipment: set[str]) -> list[str]:
         issues.append("common/script_enums.txt missing script_enum_equipment_category")
         categories: set[str] = set()
     else:
-        categories = set(re.findall(r"\b[A-Za-z0-9_]+\b", extract_block(text, category_match.start())))
+        categories = set(
+            re.findall(
+                r"\b[A-Za-z0-9_]+\b", extract_block(text, category_match.start())
+            )
+        )
 
     if not bonus_match:
-        return issues + ["common/script_enums.txt missing script_enum_equipment_bonus_type"]
+        return issues + [
+            "common/script_enums.txt missing script_enum_equipment_bonus_type"
+        ]
 
-    bonus_entries = set(re.findall(r"\b[A-Za-z0-9_]+\b", extract_block(text, bonus_match.start())))
+    bonus_entries = set(
+        re.findall(r"\b[A-Za-z0-9_]+\b", extract_block(text, bonus_match.start()))
+    )
     for eq in sorted(equipment - bonus_entries):
         issues.append(f"script_enum_equipment_bonus_type is missing equipment {eq}")
 
     allowed = equipment | categories
     for entry in sorted(bonus_entries - allowed):
-        issues.append(f"script_enum_equipment_bonus_type references undefined equipment/category {entry}")
+        issues.append(
+            f"script_enum_equipment_bonus_type references undefined equipment/category {entry}"
+        )
 
     return issues
 
@@ -1931,12 +2089,17 @@ def check_local_equipment_references(equipment: set[str]) -> list[str]:
         for match in re.finditer(r"\bhas_equipment\s*=\s*\{\s*([A-Za-z0-9_]+)\b", text):
             eq = match.group(1)
             if eq not in valid:
-                issues.append(f"{location}:{line_for_offset(text, match.start())}: has_equipment references {eq}")
+                issues.append(
+                    f"{location}:{line_for_offset(text, match.start())}: has_equipment references {eq}"
+                )
 
         if location.startswith("common/ai_strategy/"):
             for block_match in re.finditer(r"\bai_strategy\s*=\s*\{", text):
                 block = extract_block(text, block_match.start())
-                if "equipment_production" not in block and "equipment_variant_production" not in block:
+                if (
+                    "equipment_production" not in block
+                    and "equipment_variant_production" not in block
+                ):
                     continue
                 id_match = re.search(r"\bid\s*=\s*([A-Za-z0-9_]+)", block)
                 if id_match and id_match.group(1) not in valid:
@@ -1945,12 +2108,18 @@ def check_local_equipment_references(equipment: set[str]) -> list[str]:
                         f"equipment production strategy references {id_match.group(1)}"
                     )
 
-        for match in re.finditer(r"\bequipment\s*=\s*\{[^{}]*\btype\s*=\s*([A-Za-z0-9_]+)", text, re.S):
+        for match in re.finditer(
+            r"\bequipment\s*=\s*\{[^{}]*\btype\s*=\s*([A-Za-z0-9_]+)", text, re.S
+        ):
             eq = match.group(1)
             if eq not in valid:
-                issues.append(f"{location}:{line_for_offset(text, match.start())}: equipment type references {eq}")
+                issues.append(
+                    f"{location}:{line_for_offset(text, match.start())}: equipment type references {eq}"
+                )
 
-        for match in re.finditer(r"\ballowed_ship_equipments\s*=\s*\{([^{}]*)\}", text, re.S):
+        for match in re.finditer(
+            r"\ballowed_ship_equipments\s*=\s*\{([^{}]*)\}", text, re.S
+        ):
             for eq in re.findall(r"\b[A-Za-z0-9_]+\b", match.group(1)):
                 if eq not in valid:
                     issues.append(
@@ -1969,7 +2138,11 @@ def check_local_equipment_references(equipment: set[str]) -> list[str]:
                         )
 
         if location.startswith("common/military_industrial_organization/"):
-            for match in re.finditer(r"\b(?:equipment_type|limit_to_equipment_type)\s*=\s*\{([^{}]*)\}", text, re.S):
+            for match in re.finditer(
+                r"\b(?:equipment_type|limit_to_equipment_type)\s*=\s*\{([^{}]*)\}",
+                text,
+                re.S,
+            ):
                 for eq in re.findall(r"\b[A-Za-z0-9_]+\b", match.group(1)):
                     if eq not in valid:
                         issues.append(
@@ -1981,7 +2154,9 @@ def check_local_equipment_references(equipment: set[str]) -> list[str]:
 
 
 def check_total_conversion_technology_scope(defined_techs: set[str]) -> list[str]:
-    vanilla_techs = sorted(tech for tech in defined_techs if not tech.startswith("ADISCORD_"))
+    vanilla_techs = sorted(
+        tech for tech in defined_techs if not tech.startswith("ADISCORD_")
+    )
     if not vanilla_techs:
         return []
     sample = ", ".join(vanilla_techs[:20])
@@ -2010,7 +2185,9 @@ def check_doctrine_parser_constraints() -> list[str]:
                     f"{trigger}; {replacement}"
                 )
 
-        for match in re.finditer(r"\bcategory_[A-Za-z0-9_]+\s*=\s*\{[^{}]*\battrition\s*=", text, re.S):
+        for match in re.finditer(
+            r"\bcategory_[A-Za-z0-9_]+\s*=\s*\{[^{}]*\battrition\s*=", text, re.S
+        ):
             issues.append(
                 f"{rel_path}:{line_for_offset(text, match.start())}: attrition is not valid "
                 "inside a unit category modifier block"
@@ -2022,7 +2199,9 @@ def check_doctrine_parser_constraints() -> list[str]:
                 "not category_tactical_bomber"
             )
 
-        for match in re.finditer(r"\bsubmarine\s*=\s*\{[^{}]*\bvisibility\s*=", text, re.S):
+        for match in re.finditer(
+            r"\bsubmarine\s*=\s*\{[^{}]*\bvisibility\s*=", text, re.S
+        ):
             issues.append(
                 f"{rel_path}:{line_for_offset(text, match.start())}: submarine visibility modifier "
                 "is sub_visibility, not visibility"
@@ -2031,9 +2210,13 @@ def check_doctrine_parser_constraints() -> list[str]:
         if "/doctrines/tracks/" in rel_path:
             for mastery_match in re.finditer(r"\bmastery\s*=\s*\{", text):
                 mastery_block = extract_block(text, mastery_match.start())
-                equipment_match = re.search(r"\bequipment\s*=\s*\{([^{}]*)\}", mastery_block, re.S)
+                equipment_match = re.search(
+                    r"\bequipment\s*=\s*\{([^{}]*)\}", mastery_block, re.S
+                )
                 if equipment_match:
-                    for equipment in re.findall(r"[A-Za-z0-9_]+", equipment_match.group(1)):
+                    for equipment in re.findall(
+                        r"[A-Za-z0-9_]+", equipment_match.group(1)
+                    ):
                         if equipment not in VALID_DOCTRINE_MASTERY_EQUIPMENT:
                             issues.append(
                                 f"{rel_path}:{line_for_offset(text, mastery_match.start())}: "
@@ -2047,7 +2230,9 @@ def check_doctrine_parser_constraints() -> list[str]:
                     continue
                 block = extract_block(text, match.start())
                 if "rewards" not in block:
-                    issues.append(f"{rel_path}:{line_for_offset(text, match.start())}: {key} has no rewards block")
+                    issues.append(
+                        f"{rel_path}:{line_for_offset(text, match.start())}: {key} has no rewards block"
+                    )
 
     return issues
 
@@ -2104,24 +2289,38 @@ def check_technology_ui_years() -> list[str]:
         if not folder_block:
             issues.append(f"technology UI is missing folder container {folder}")
             continue
-        expected_elements = technology_layout_elements(render_generated_technology_folder(folder))
+        expected_elements = technology_layout_elements(
+            render_generated_technology_folder(folder)
+        )
         actual_elements = technology_layout_elements(folder_block)
         for name in sorted(expected_elements.keys() | actual_elements.keys()):
             if name not in expected_elements:
-                issues.append(f"{folder} has unexpected generated layout element {name}")
+                issues.append(
+                    f"{folder} has unexpected generated layout element {name}"
+                )
             elif name not in actual_elements:
                 issues.append(f"{folder} is missing generated layout element {name}")
             elif len(actual_elements[name]) != 1:
                 issues.append(f"{folder} has duplicate generated layout element {name}")
             elif actual_elements[name] != expected_elements[name]:
-                issues.append(f"{folder}: {name} does not match its generated text or geometry")
+                issues.append(
+                    f"{folder}: {name} does not match its generated text or geometry"
+                )
         for year in sorted(EXPECTED_TECH_UI_YEARS):
             count = len(re.findall(rf'\btext\s*=\s*"{year}"', folder_block))
-            expected = 1 if folder in GENERATED_HORIZONTAL_FOLDERS else sum(
-                int(year) in branch.years for branch in GENERATED_BRANCHES if folder in branch.folders
+            expected = (
+                1
+                if folder in GENERATED_HORIZONTAL_FOLDERS
+                else sum(
+                    int(year) in branch.years
+                    for branch in GENERATED_BRANCHES
+                    if folder in branch.folders
+                )
             )
             if count != expected:
-                issues.append(f"{folder} has {count} labels for era {year}; expected exactly {expected}")
+                issues.append(
+                    f"{folder} has {count} labels for era {year}; expected exactly {expected}"
+                )
 
     return issues
 
@@ -2139,7 +2338,9 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     gui_path = ROOT / "interface" / "countrytechtreeview.gui"
     if not gui_path.exists():
-        return ["interface/countrytechtreeview.gui is missing ADISCORD technology branch gridboxes"]
+        return [
+            "interface/countrytechtreeview.gui is missing ADISCORD technology branch gridboxes"
+        ]
 
     gui_text = strip_comments(read_text(gui_path))
     for template in (
@@ -2193,7 +2394,9 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
         for targets in graph.successors:
             for target in targets:
                 child = branch.techs[target].id
-                expected_incoming_count[child] = expected_incoming_count.get(child, 0) + 1
+                expected_incoming_count[child] = (
+                    expected_incoming_count.get(child, 0) + 1
+                )
         for index, tech_spec in enumerate(branch.techs):
             block = tech_blocks.get(tech_spec.id, "")
             if not block:
@@ -2239,9 +2442,7 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
                         dependency_block,
                     )
                 )
-            extra_dependencies = GENERATED_EXTRA_TECH_DEPENDENCIES.get(
-                tech_spec.id, ()
-            )
+            extra_dependencies = GENERATED_EXTRA_TECH_DEPENDENCIES.get(tech_spec.id, ())
             expected_parent_indices = graph.dependencies[index]
             if extra_dependencies:
                 expected_parent_indices = tuple(
@@ -2294,7 +2495,9 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
         direct_grid_blocks = top_level_blocks(folder_block, "gridboxtype")
         names = []
         for grid_block in direct_grid_blocks:
-            name_match = re.search(r'\bname\s*=\s*"(ADISCORD_tech_[^"]+_tree)"', grid_block)
+            name_match = re.search(
+                r'\bname\s*=\s*"(ADISCORD_tech_[^"]+_tree)"', grid_block
+            )
             if name_match:
                 names.append(name_match.group(1))
         actual = set(names)
@@ -2308,7 +2511,9 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
 
         positions: dict[tuple[int, int], str] = {}
         for grid_block in direct_grid_blocks:
-            name_match = re.search(r'\bname\s*=\s*"(ADISCORD_tech_[^"]+_tree)"', grid_block)
+            name_match = re.search(
+                r'\bname\s*=\s*"(ADISCORD_tech_[^"]+_tree)"', grid_block
+            )
             pos_match = re.search(
                 r"\bposition\s*=\s*\{\s*x\s*=\s*(-?\d+)\s*y\s*=\s*(-?\d+)\s*\}",
                 grid_block,
@@ -2318,7 +2523,9 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
             name = name_match.group(1)
             position = (int(pos_match.group(1)), int(pos_match.group(2)))
             if position in positions:
-                issues.append(f"{folder} gridboxes {positions[position]} and {name} overlap at {position}")
+                issues.append(
+                    f"{folder} gridboxes {positions[position]} and {name} overlap at {position}"
+                )
             positions[position] = name
             horizontal = folder in GENERATED_HORIZONTAL_FOLDERS
             expected_format = "LEFT" if horizontal else "UP"
@@ -2346,14 +2553,20 @@ def check_local_technology_references(defined_techs: set[str]) -> list[str]:
         for path in iter_text_files(root):
             text = strip_comments(read_text(path))
             for match in re.finditer(r"\bhas_tech\s*=\s*([A-Za-z0-9_]+)", text):
-                references.setdefault(match.group(1), set()).add(f"{rel(path)}:{line_for_offset(text, match.start())}")
+                references.setdefault(match.group(1), set()).add(
+                    f"{rel(path)}:{line_for_offset(text, match.start())}"
+                )
             for set_match in re.finditer(r"\bset_technology\s*=\s*\{", text):
                 block = extract_block(text, set_match.start())
                 for tech in re.findall(r"^\s*([A-Za-z0-9_]+)\s*=", block, re.M):
                     if tech != "popup":
-                        references.setdefault(tech, set()).add(f"{rel(path)}:{line_for_offset(text, set_match.start())}")
+                        references.setdefault(tech, set()).add(
+                            f"{rel(path)}:{line_for_offset(text, set_match.start())}"
+                        )
             for match in re.finditer(r"\bleads_to_tech\s*=\s*([A-Za-z0-9_]+)", text):
-                references.setdefault(match.group(1), set()).add(f"{rel(path)}:{line_for_offset(text, match.start())}")
+                references.setdefault(match.group(1), set()).add(
+                    f"{rel(path)}:{line_for_offset(text, match.start())}"
+                )
 
     for tech, locations in sorted(references.items()):
         if tech not in defined_techs:
@@ -2372,7 +2585,9 @@ def check_technology_migration_contract(defined_techs: set[str]) -> list[str]:
         return [f"technology migration manifest is unreadable: {exc}"]
     actual = payload.get("migrations", {})
     if actual != GENERATED_TECHNOLOGY_ID_MIGRATIONS:
-        issues.append("technology migration manifest differs from the generator contract")
+        issues.append(
+            "technology migration manifest differs from the generator contract"
+        )
     if payload.get("legacy_count") != len(GENERATED_TECHNOLOGY_ID_MIGRATIONS):
         issues.append("technology migration manifest has the wrong legacy count")
     if payload.get("current_count") != len(EXPECTED_TECHS):
@@ -2385,12 +2600,16 @@ def check_technology_migration_contract(defined_techs: set[str]) -> list[str]:
         if status in {"preserved", "replaced"} and replacement not in defined_techs:
             issues.append(f"{old_id} migrates to undefined technology {replacement}")
         if status == "removed" and replacement is not None:
-            issues.append(f"removed technology {old_id} still has replacement {replacement}")
+            issues.append(
+                f"removed technology {old_id} still has replacement {replacement}"
+            )
 
     retired_ids = set(GENERATED_TECHNOLOGY_ID_MIGRATIONS) - defined_techs
     if retired_ids:
         retired_pattern = re.compile(
-            r"\b(" + "|".join(re.escape(tech_id) for tech_id in sorted(retired_ids)) + r")\b"
+            r"\b("
+            + "|".join(re.escape(tech_id) for tech_id in sorted(retired_ids))
+            + r")\b"
         )
         for root in LOCAL_TECH_REFERENCE_ROOTS:
             for text_path in iter_text_files(root):
@@ -2405,11 +2624,18 @@ def check_technology_migration_contract(defined_techs: set[str]) -> list[str]:
 
 def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
-    path = ROOT / "common" / "scripted_effects" / "ADISCORD_technology_baseline_effects.txt"
+    path = (
+        ROOT
+        / "common"
+        / "scripted_effects"
+        / "ADISCORD_technology_baseline_effects.txt"
+    )
     if not path.exists():
         return ["missing generated starting-technology profiles"]
     text = strip_comments(read_text(path))
-    common_match = re.search(r"(?m)^ADISCORD_grant_technology_profile_common\s*=\s*\{", text)
+    common_match = re.search(
+        r"(?m)^ADISCORD_grant_technology_profile_common\s*=\s*\{", text
+    )
     common_block = extract_block(text, common_match.start()) if common_match else ""
     actual_common = set(
         re.findall(r"(?m)^\s*(ADISCORD_tech_[A-Za-z0-9_]+)\s*=\s*1\b", common_block)
@@ -2426,7 +2652,9 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
     if "ADISCORD_grant_technology_profile_common = yes" not in text:
         issues.append("legacy baseline no longer delegates to the common profile")
 
-    manifest_path = ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+    manifest_path = (
+        ROOT / "tools" / "data" / "adiscord_starting_technology_profiles.json"
+    )
     try:
         manifest = json.loads(read_text(manifest_path))
     except (OSError, json.JSONDecodeError) as exc:
@@ -2493,7 +2721,9 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
                 country_text,
             )
         history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
-        history_text = history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        history_text = (
+            history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        )
         oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
         oob_name = oob_match.group(1) if oob_match else tag
         oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
@@ -2508,9 +2738,13 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
             f"extra={sorted(assigned_tags - active_owners)}"
         )
 
-    manifest_countries = manifest.get("countries", {}) if isinstance(manifest, dict) else {}
+    manifest_countries = (
+        manifest.get("countries", {}) if isinstance(manifest, dict) else {}
+    )
     if set(manifest_countries) != assigned_tags:
-        issues.append("starting profile manifest country list differs from the generator map")
+        issues.append(
+            "starting profile manifest country list differs from the generator map"
+        )
     for tag, profiles in GENERATED_STARTING_COUNTRY_TECH_PROFILES.items():
         entry = manifest_countries.get(tag, {})
         expected_profiles = ["common", *profiles]
@@ -2524,42 +2758,59 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         evidence = observed_evidence[tag]
         factory_total = evidence["civilian_factories"] + evidence["military_factories"]
         if "industrial" in profiles and factory_total < 3:
-            issues.append(f"industrial starting profile for {tag} lacks a three-factory evidence base")
+            issues.append(
+                f"industrial starting profile for {tag} lacks a three-factory evidence base"
+            )
         if (
             "energy" in profiles
             and evidence["power_sites"] < 1
             and factory_total < 10
             and tag not in {"KYZ", "MZR", "RHM"}
         ):
-            issues.append(f"energy starting profile for {tag} lacks grid, industry, or water-system evidence")
+            issues.append(
+                f"energy starting profile for {tag} lacks grid, industry, or water-system evidence"
+            )
         if (
             "institutional" in profiles
             and evidence["research_slots"] < 3
             and not (evidence["states"] >= 2 and evidence["infrastructure_levels"] >= 4)
         ):
-            issues.append(f"institutional starting profile for {tag} lacks administrative evidence")
+            issues.append(
+                f"institutional starting profile for {tag} lacks administrative evidence"
+            )
         if (
             "land" in profiles
             and evidence["oob_divisions"] < 2
             and evidence["military_factories"] < 1
         ):
-            issues.append(f"land starting profile for {tag} lacks an army or arms-industry evidence base")
+            issues.append(
+                f"land starting profile for {tag} lacks an army or arms-industry evidence base"
+            )
         if (
             "air" in profiles
             and evidence["air_bases"] < 1
             and evidence["military_factories"] < 5
-            and not any("air_doctrine" in doctrine for doctrine in evidence["starting_doctrines"])
+            and not any(
+                "air_doctrine" in doctrine
+                for doctrine in evidence["starting_doctrines"]
+            )
         ):
-            issues.append(f"air starting profile for {tag} lacks airfield, doctrine, or arms-industry evidence")
+            issues.append(
+                f"air starting profile for {tag} lacks airfield, doctrine, or arms-industry evidence"
+            )
         if (
             "naval" in profiles
             and evidence["dockyards"] < 1
             and evidence["convoys"] < 1
             and tag != "GLP"
         ):
-            issues.append(f"naval starting profile for {tag} lacks dockyard, convoy, or port-lore evidence")
+            issues.append(
+                f"naval starting profile for {tag} lacks dockyard, convoy, or port-lore evidence"
+            )
         if not profiles and "intentionally" not in rationale.lower():
-            issues.append(f"common-only starting assignment for {tag} is not explicitly intentional")
+            issues.append(
+                f"common-only starting assignment for {tag} is not explicitly intentional"
+            )
         expected_techs = set(GENERATED_STARTING_TECH_PROFILES["common"])
         for profile in profiles:
             expected_techs.update(GENERATED_STARTING_TECH_PROFILES[profile])
@@ -2571,27 +2822,45 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
             for group in GENERATED_XOR_INDEX_GROUPS_BY_BRANCH.get(branch.key, ()):
                 choices = {branch.techs[index].id for index in group}
                 if choices <= expected_techs:
-                    issues.append(f"starting profile for {tag} grants both permanent XOR choices {sorted(choices)}")
+                    issues.append(
+                        f"starting profile for {tag} grants both permanent XOR choices {sorted(choices)}"
+                    )
 
     on_action = ROOT / "common" / "on_actions" / "00_ADISCORD_on_actions.txt"
     on_action_text = read_text(on_action) if on_action.exists() else ""
     general_history = ROOT / "history" / "general" / "ADISCORD_general_history.txt"
-    general_history_text = read_text(general_history) if general_history.exists() else ""
-    issues.extend(fresh_campaign_startup_contract_issues(general_history_text, on_action_text))
+    general_history_text = (
+        read_text(general_history) if general_history.exists() else ""
+    )
+    issues.extend(
+        fresh_campaign_startup_contract_issues(general_history_text, on_action_text)
+    )
     if "ADISCORD_grant_starting_technology_profile = yes" not in on_action_text:
         issues.append("on_startup does not apply generated country technology profiles")
     flag = "ADISCORD_starting_technology_profiles_applied"
-    if f"has_global_flag = {flag}" not in on_action_text or f"set_global_flag = {flag}" not in on_action_text:
-        issues.append("starting technology distribution is not guarded by a global one-shot flag")
-    if "date > 2183.1.1" not in text or "ADISCORD_grant_technology_profile_late_2183 = yes" not in text:
+    if (
+        f"has_global_flag = {flag}" not in on_action_text
+        or f"set_global_flag = {flag}" not in on_action_text
+    ):
+        issues.append(
+            "starting technology distribution is not guarded by a global one-shot flag"
+        )
+    if (
+        "date > 2183.1.1" not in text
+        or "ADISCORD_grant_technology_profile_late_2183 = yes" not in text
+    ):
         issues.append("late bookmark has no bounded starting-technology extension")
     for tag in assigned_tags:
         if not re.search(rf"limit\s*=\s*\{{\s*tag\s*=\s*{tag}\s*\}}", text):
             issues.append(f"starting technology dispatch is missing explicit tag {tag}")
 
     for country_path in (ROOT / "history" / "countries").glob("*.txt"):
-        if re.search(r"(?m)^\s*set_technology\s*=\s*\{", strip_comments(read_text(country_path))):
-            issues.append(f"{rel(country_path)} duplicates generated starting technology profiles")
+        if re.search(
+            r"(?m)^\s*set_technology\s*=\s*\{", strip_comments(read_text(country_path))
+        ):
+            issues.append(
+                f"{rel(country_path)} duplicates generated starting technology profiles"
+            )
 
     unlockers_by_equipment: dict[str, set[str]] = {}
     for tech_id, equipment_types in GENERATED_ENABLE_EQUIPMENT.items():
@@ -2602,14 +2871,18 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         for profile in profiles:
             granted.update(GENERATED_STARTING_TECH_PROFILES[profile])
         history_paths = sorted((ROOT / "history" / "countries").glob(f"{tag} - *.txt"))
-        history_text = history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        history_text = (
+            history_paths[0].read_text(encoding="utf-8-sig") if history_paths else ""
+        )
         oob_match = re.search(r'(?m)^\s*oob\s*=\s*"([^"\n]+)"', history_text)
         oob_name = oob_match.group(1) if oob_match else tag
         oob_path = ROOT / "history" / "units" / f"{oob_name}.txt"
         if not oob_path.exists():
             continue
         equipment_types = set(
-            re.findall(r"\btype\s*=\s*([A-Za-z0-9_]+)", strip_comments(read_text(oob_path)))
+            re.findall(
+                r"\btype\s*=\s*([A-Za-z0-9_]+)", strip_comments(read_text(oob_path))
+            )
         )
         for equipment_type in sorted(equipment_types):
             unlockers = unlockers_by_equipment.get(equipment_type)
@@ -2623,9 +2896,7 @@ def check_campaign_technology_baseline(tech_blocks: dict[str, str]) -> list[str]
         "tva": ("industrial", "energy", "institutional", "land", "air"),
         "wtd": ("industrial", "energy"),
     }
-    for collapse_name in (
-        "ADISCORD_vorkerland_effects.txt",
-    ):
+    for collapse_name in ("ADISCORD_vorkerland_effects.txt",):
         collapse_text = read_text(ROOT / "common" / "scripted_effects" / collapse_name)
         setup_matches = list(
             re.finditer(
@@ -2685,7 +2956,9 @@ def fresh_campaign_startup_contract_issues(
     completed_flag = "ADISCORD_starting_technology_profiles_applied"
     producer = f"set_global_flag = {fresh_flag}"
     if strip_comments(general_history_text).count(producer) != 1:
-        issues.append("history/general must produce the fresh-campaign contract exactly once")
+        issues.append(
+            "history/general must produce the fresh-campaign contract exactly once"
+        )
 
     source = strip_comments(on_action_text)
     startup_match = re.search(r"(?m)^\s*on_startup\s*=\s*\{", source)
@@ -2714,7 +2987,8 @@ def fresh_campaign_startup_contract_issues(
     if (
         len(setup_passes) != 1
         or "ADISCORD_grant_starting_technology_profile = yes" not in setup_passes[0]
-        or "ADISCORD_initialize_default_country_development = yes" not in setup_passes[0]
+        or "ADISCORD_initialize_default_country_development = yes"
+        not in setup_passes[0]
     ):
         issues.append(
             "starting technology and default development must share one startup country pass"
@@ -2744,7 +3018,9 @@ def fresh_campaign_startup_contract_issues(
         hook_match = re.search(rf"(?m)^\s*{hook_name}\s*=\s*\{{", source)
         hook = extract_block(source, hook_match.start()) if hook_match else ""
         if tick not in hook or f"has_global_flag = {fresh_flag}" not in hook:
-            issues.append(f"{hook_name} development tick lacks fresh-campaign provenance")
+            issues.append(
+                f"{hook_name} development tick lacks fresh-campaign provenance"
+            )
     return issues
 
 
@@ -2754,7 +3030,9 @@ def check_campaign_dates_cover_technology_tree() -> list[str]:
     bookmark = ROOT / "common" / "bookmarks" / "the_gathering_storm.txt"
     defines_text = read_text(defines) if defines.exists() else ""
     bookmark_text = read_text(bookmark) if bookmark.exists() else ""
-    if not re.search(r'NDefines\.NGame\.START_DATE\s*=\s*"2160\.1\.1\.1"', defines_text):
+    if not re.search(
+        r'NDefines\.NGame\.START_DATE\s*=\s*"2160\.1\.1\.1"', defines_text
+    ):
         issues.append("campaign START_DATE must be 2160.1.1.1")
     end_match = re.search(r'NDefines\.NGame\.END_DATE\s*=\s*"(\d+)\.', defines_text)
     if not end_match or int(end_match.group(1)) < max(GENERATED_YEARS):
@@ -2768,8 +3046,12 @@ def check_campaign_dates_cover_technology_tree() -> list[str]:
 
 def check_technology_description_contract(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
-    english_path = ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml"
-    russian_path = ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml"
+    english_path = (
+        ROOT / "localisation" / "english" / "ADISCORD_technology_doctrine_l_english.yml"
+    )
+    russian_path = (
+        ROOT / "localisation" / "russian" / "ADISCORD_technology_doctrine_l_russian.yml"
+    )
     english = read_text(english_path) if english_path.exists() else ""
     russian = read_text(russian_path) if russian_path.exists() else ""
 
@@ -2795,15 +3077,27 @@ def check_technology_description_contract(tech_blocks: dict[str, str]) -> list[s
             for index in group:
                 tech_id = branch.techs[index].id
                 if kind == "permanent":
-                    if not has_fragment(english, tech_id, "Permanent specialization choice:"):
-                        issues.append(f"{tech_id} English description does not mark permanent XOR")
-                    if not has_fragment(russian, tech_id, "Постоянный выбор специализации:"):
-                        issues.append(f"{tech_id} Russian description does not mark permanent XOR")
+                    if not has_fragment(
+                        english, tech_id, "Permanent specialization choice:"
+                    ):
+                        issues.append(
+                            f"{tech_id} English description does not mark permanent XOR"
+                        )
+                    if not has_fragment(
+                        russian, tech_id, "Постоянный выбор специализации:"
+                    ):
+                        issues.append(
+                            f"{tech_id} Russian description does not mark permanent XOR"
+                        )
                 elif kind == "temporary":
                     if not has_fragment(english, tech_id, "the common line continues"):
-                        issues.append(f"{tech_id} English description does not explain temporary XOR")
+                        issues.append(
+                            f"{tech_id} English description does not explain temporary XOR"
+                        )
                     if not has_fragment(russian, tech_id, "общая линия продолжится"):
-                        issues.append(f"{tech_id} Russian description does not explain temporary XOR")
+                        issues.append(
+                            f"{tech_id} Russian description does not explain temporary XOR"
+                        )
     return issues
 
 
@@ -2820,7 +3114,9 @@ def check_local_doctrine_references(
             text = strip_comments(read_text(path))
             location = rel(path)
 
-            for match in re.finditer(r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)", text):
+            for match in re.finditer(
+                r"\bset_grand_doctrine\s*=\s*([A-Za-z0-9_]+)", text
+            ):
                 doctrine = match.group(1)
                 if doctrine not in grand:
                     issues.append(
@@ -2836,7 +3132,9 @@ def check_local_doctrine_references(
                         f"has_doctrine references undefined or non-top-level doctrine {doctrine}"
                     )
 
-            for match in re.finditer(r"\bhas_completed_subdoctrine\s*=\s*([A-Za-z0-9_]+)", text):
+            for match in re.finditer(
+                r"\bhas_completed_subdoctrine\s*=\s*([A-Za-z0-9_]+)", text
+            ):
                 doctrine = match.group(1)
                 if doctrine not in subdoctrines:
                     issues.append(
@@ -2844,7 +3142,9 @@ def check_local_doctrine_references(
                         f"has_completed_subdoctrine references undefined subdoctrine {doctrine}"
                     )
 
-            for match in re.finditer(r"\bhas_completed_track\s*=\s*([A-Za-z0-9_]+)", text):
+            for match in re.finditer(
+                r"\bhas_completed_track\s*=\s*([A-Za-z0-9_]+)", text
+            ):
                 track = match.group(1)
                 if track not in tracks:
                     issues.append(
@@ -2852,7 +3152,9 @@ def check_local_doctrine_references(
                         f"has_completed_track references undefined doctrine track {track}"
                     )
 
-            for match in re.finditer(r"\b([A-Za-z0-9_]+)_mastery_gain_factor\s*=", text):
+            for match in re.finditer(
+                r"\b([A-Za-z0-9_]+)_mastery_gain_factor\s*=", text
+            ):
                 modifier = match.group(1)
                 if modifier in DOCTRINE_FOLDERS:
                     continue
@@ -2928,7 +3230,9 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 if bonus.start() >= len(effect_prefix):
                     persistent_effects += extract_block(block, bonus.start())
             effect_count = len(
-                re.findall(r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", persistent_effects)
+                re.findall(
+                    r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", persistent_effects
+                )
             )
             family_upgrade = any(
                 family in subunits and abs(float(value)) >= 0.06
@@ -2963,7 +3267,9 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                         "energy_ratio > 0.94",
                     ):
                         if required not in block:
-                            issues.append(f"concentrated-industry technology {tech.id} lacks {required}")
+                            issues.append(
+                                f"concentrated-industry technology {tech.id} lacks {required}"
+                            )
                 if lane == 2:
                     for required in (
                         "industrial_capacity_factory",
@@ -2971,7 +3277,9 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                         "energy_ratio < 0.80",
                     ):
                         if required not in block:
-                            issues.append(f"distributed-industry technology {tech.id} lacks {required}")
+                            issues.append(
+                                f"distributed-industry technology {tech.id} lacks {required}"
+                            )
 
             output_match = re.search(
                 r"\bindustrial_capacity_(?:factory|dockyard)\s*=\s*([0-9.]+)",
@@ -2983,11 +3291,15 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 and float(output_match.group(1)) >= 0.02
             ):
                 if "factory_energy_consumption" not in effect_prefix:
-                    issues.append(f"industrial output technology {tech.id} has no energy price")
+                    issues.append(
+                        f"industrial output technology {tech.id} has no energy price"
+                    )
 
             if branch.profile.startswith("forbidden_"):
                 if cost < 2.5:
-                    issues.append(f"forbidden technology {tech.id} is too cheap at {cost}")
+                    issues.append(
+                        f"forbidden technology {tech.id} is too cheap at {cost}"
+                    )
                 continue
             if year < 2160:
                 continue
@@ -3001,11 +3313,15 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
         return issues + ["no post-2160 technology costs collected"]
     mean_cost = statistics.mean(costs)
     if not 1.65 <= mean_cost <= 1.90:
-        issues.append(f"post-2160 mean research cost {mean_cost:.3f} is outside 1.65-1.90")
+        issues.append(
+            f"post-2160 mean research cost {mean_cost:.3f} is outside 1.65-1.90"
+        )
     if min(costs) < 1.10:
         issues.append(f"post-2160 technology floor is too low at {min(costs):.3f}")
     if max(costs) > 2.60:
-        issues.append(f"ordinary post-2160 technology ceiling is too high at {max(costs):.3f}")
+        issues.append(
+            f"ordinary post-2160 technology ceiling is too high at {max(costs):.3f}"
+        )
     return issues
 
 
@@ -3034,7 +3350,9 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
     for tech_id, dependencies in GENERATED_EXTRA_TECH_DEPENDENCIES.items():
         for dependency in dependencies:
             if dependency not in tech_years:
-                issues.append(f"{tech_id} has undefined generated dependency {dependency}")
+                issues.append(
+                    f"{tech_id} has undefined generated dependency {dependency}"
+                )
             elif tech_years[dependency] > tech_years[tech_id]:
                 issues.append(
                     f"{tech_id} ({tech_years[tech_id]}) depends on later "
@@ -3074,13 +3392,17 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
                 common_descendants &= set(option_distances)
             if xor_kind == "temporary" and not common_descendants:
                 choices = [branch.techs[index].id for index in group]
-                issues.append(f"temporary choice {choices} in {branch.key} never rejoins")
+                issues.append(
+                    f"temporary choice {choices} in {branch.key} never rejoins"
+                )
             if xor_kind == "permanent" and common_descendants:
                 choices = [branch.techs[index].id for index in group]
                 issues.append(f"permanent choice {choices} in {branch.key} rejoins")
             if xor_kind == "temporary" and common_descendants:
                 first_merge = min(common_descendants)
-                lengths = [option_distances[first_merge] for option_distances in distances]
+                lengths = [
+                    option_distances[first_merge] for option_distances in distances
+                ]
                 if len(set(lengths)) != 1:
                     choices = [branch.techs[index].id for index in group]
                     issues.append(
@@ -3092,14 +3414,14 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
         signatures: set[str] = set()
         for tech in branch.techs:
             block = tech_blocks.get(tech.id, "")
-            body = block[block.find("{") + 1:] if "{" in block else block
+            body = block[block.find("{") + 1 :] if "{" in block else block
             stop = re.search(
                 r"(?mi)^\s*(?:path|dependencies|XOR|enable_equipments|"
                 r"enable_subunits|enable_building|on_research_complete|"
                 r"research_cost|start_year|folder|ai_will_do|categories)\s*=",
                 body,
             )
-            effect_body = body[:stop.start()] if stop else body
+            effect_body = body[: stop.start()] if stop else body
             signature = re.sub(r"-?[0-9]+(?:\.[0-9]+)?", "#", effect_body)
             signature = re.sub(r"\s+", " ", signature).strip()
             if signature:
@@ -3139,10 +3461,14 @@ def ai_force_progression_contract_issues(
             issues.append("AI field baseline must contain at least six battalions")
         enable = _named_clausewitz_block(baseline, "enable")
         if "num_of_military_factories" in enable or "has_equipment" in enable:
-            issues.append("AI field baseline must not depend on factories or equipment stock")
+            issues.append(
+                "AI field baseline must not depend on factories or equipment stock"
+            )
         match = re.search(r"\btarget_min_match\s*=\s*([0-9.]+)", baseline)
         if not match or not 0.5 <= float(match.group(1)) <= 0.9:
-            issues.append("AI field baseline requires target_min_match between 0.5 and 0.9")
+            issues.append(
+                "AI field baseline requires target_min_match between 0.5 and 0.9"
+            )
 
     supported_line = _named_clausewitz_block(templates, "ADISCORD_line_brigade")
     if not supported_line:
@@ -3152,14 +3478,20 @@ def ai_force_progression_contract_issues(
         if "is_ai = yes" not in enable:
             issues.append("AI supported line template must be limited to AI countries")
         if "num_of_military_factories" in enable or "has_equipment" in enable:
-            issues.append("AI supported line template must be available before factory and stock gates")
+            issues.append(
+                "AI supported line template must be available before factory and stock gates"
+            )
         match = re.search(r"\btarget_min_match\s*=\s*([0-9.]+)", supported_line)
         if not match or not 0.5 <= float(match.group(1)) <= 0.9:
-            issues.append("AI supported line template requires gradual target_min_match")
+            issues.append(
+                "AI supported line template requires gradual target_min_match"
+            )
         target = _named_clausewitz_block(supported_line, "target_template")
         infantry = re.search(r"\binfantry\s*=\s*(\d+)", target)
         if not infantry or int(infantry.group(1)) < 8:
-            issues.append("AI supported line template must contain at least eight infantry battalions")
+            issues.append(
+                "AI supported line template must contain at least eight infantry battalions"
+            )
         line_artillery = re.search(r"\bADISCORD_line_artillery\s*=\s*(\d+)", target)
         if not line_artillery or int(line_artillery.group(1)) < 1:
             issues.append("AI supported line template must contain line artillery")
@@ -3226,9 +3558,7 @@ def modern_land_warfare_contract_issues(
     valid_variants = 0
     for index, variant in enumerate(variants):
         block = _named_clausewitz_block(equipment, variant)
-        if not re.search(
-            rf"\barchetype\s*=\s*{re.escape(archetype_id)}\b", block
-        ):
+        if not re.search(rf"\barchetype\s*=\s*{re.escape(archetype_id)}\b", block):
             continue
         if index:
             parent = variants[index - 1]
@@ -3240,15 +3570,13 @@ def modern_land_warfare_contract_issues(
 
     mechanized = _named_clausewitz_block(units, "ADISCORD_mechanized_infantry")
     if not (
-        re.search(
-            rf"\btransport\s*=\s*{re.escape(archetype_id)}\b", mechanized
-        )
+        re.search(rf"\btransport\s*=\s*{re.escape(archetype_id)}\b", mechanized)
         and re.search(r"\binfantry_equipment\s*=\s*[1-9]\d*", mechanized)
-        and re.search(
-            rf"\b{re.escape(archetype_id)}\s*=\s*[1-9]\d*", mechanized
-        )
+        and re.search(rf"\b{re.escape(archetype_id)}\s*=\s*[1-9]\d*", mechanized)
     ):
-        issues.append("mechanized infantry must use the carrier archetype transport and needs")
+        issues.append(
+            "mechanized infantry must use the carrier archetype transport and needs"
+        )
 
     unlocks = (
         ("ADISCORD_tech_armored_carrier_program", variants[0], True),
@@ -3263,23 +3591,19 @@ def modern_land_warfare_contract_issues(
         if needs_subunit and "ADISCORD_mechanized_infantry" not in block:
             unlocks_valid = False
     if not unlocks_valid:
-        issues.append("mechanized technologies must unlock generations and the battalion")
+        issues.append(
+            "mechanized technologies must unlock generations and the battalion"
+        )
 
     tank = _named_clausewitz_block(templates, "ADISCORD_tank_battlegroup")
     target = _named_clausewitz_block(tank, "target_template")
-    mechanized_count = re.search(
-        r"\bADISCORD_mechanized_infantry\s*=\s*(\d+)", target
-    )
+    mechanized_count = re.search(r"\bADISCORD_mechanized_infantry\s*=\s*(\d+)", target)
     if not mechanized_count or int(mechanized_count.group(1)) < 6:
         issues.append("armored battlegroups require six mechanized battalions")
-    if not re.search(
-        rf"has_equipment\s*=\s*\{{\s*{re.escape(archetype_id)}\s*>", tank
-    ):
+    if not re.search(rf"has_equipment\s*=\s*\{{\s*{re.escape(archetype_id)}\s*>", tank):
         issues.append("armored battlegroups require a carrier stock gate")
 
-    production = _named_clausewitz_block(
-        strategy, "ADISCORD_produce_armored_carriers"
-    )
+    production = _named_clausewitz_block(strategy, "ADISCORD_produce_armored_carriers")
     threshold = re.search(r"\bnum_of_military_factories\s*>\s*(\d+)", production)
     if not (
         threshold
@@ -3316,7 +3640,9 @@ def check_modern_land_warfare() -> list[str]:
 def check_ai_force_progression() -> list[str]:
     issues: list[str] = []
     templates_path = ROOT / "common" / "ai_templates" / "ADISCORD_land_templates.txt"
-    strategy_path = ROOT / "common" / "ai_strategy" / "ADISCORD_technology_doctrine_ai.txt"
+    strategy_path = (
+        ROOT / "common" / "ai_strategy" / "ADISCORD_technology_doctrine_ai.txt"
+    )
     default_strategy_path = ROOT / "common" / "ai_strategy" / "default.txt"
     icon_path = ROOT / "interface" / "modifiericons_texticons.gfx"
     if (
@@ -3393,14 +3719,11 @@ def check_economy_spending() -> list[str]:
             continue
         block = extract_block(text, match.start())
         pattern = rf"add_to_variable\s*=\s*\{{[^{{}}]*var\s*=\s*ADISCORD_economy_treasury[^{{}}]*value\s*=\s*{value}\b"
-        bounded_repayment = (
-            effect == "ADISCORD_economy_repay_debt"
-            and re.search(
-                r"subtract_from_variable\s*=\s*\{[^{}]*var\s*=\s*ADISCORD_economy_treasury"
-                r"[^{}]*value\s*=\s*ADISCORD_economy_repay_cash_temp\b",
-                block,
-                re.S,
-            )
+        bounded_repayment = effect == "ADISCORD_economy_repay_debt" and re.search(
+            r"subtract_from_variable\s*=\s*\{[^{}]*var\s*=\s*ADISCORD_economy_treasury"
+            r"[^{}]*value\s*=\s*ADISCORD_economy_repay_cash_temp\b",
+            block,
+            re.S,
         )
         if not re.search(pattern, block, re.S) and not bounded_repayment:
             issues.append(f"{effect} does not subtract {abs(value)} treasury")
@@ -3433,7 +3756,9 @@ def main() -> int:
         elif not texture_exists(sprites[sprite]):
             issues.append(f"{sprite} points to missing texture {sprites[sprite]}")
         elif sprites[sprite] and not texture_has_valid_dimensions(sprites[sprite]):
-            issues.append(f"{sprite} points to invalid or zero-sized DDS {sprites[sprite]}")
+            issues.append(
+                f"{sprite} points to invalid or zero-sized DDS {sprites[sprite]}"
+            )
 
     # Effect-only technologies use compact technical symbols. Real equipment
     # unlocks deliberately use wide vanilla weapon/vehicle art, but never a
@@ -3461,7 +3786,9 @@ def main() -> int:
             texture = sprites.get(sprite, "")
             dimensions = texture_dimensions(texture)
             if dimensions:
-                dimensions = tuple(size * sprite_scales.get(sprite, 1) for size in dimensions)
+                dimensions = tuple(
+                    size * sprite_scales.get(sprite, 1) for size in dimensions
+                )
             stem = Path(texture).stem
             is_equipment = tech_spec.id in GENERATED_ENABLE_EQUIPMENT
             if "nuclear_missile" in stem or "thermonuclear_bomb" in stem:
@@ -3536,8 +3863,13 @@ def main() -> int:
         block = tech_blocks.get(tech, "")
         if "allow" not in block:
             issues.append(f"forbidden technology {tech} has no allow gate")
-        if "ADISCORD_has_forbidden_legacy_access" not in block and "ADISCORD_has_black_grid_access" not in block:
-            issues.append(f"forbidden technology {tech} lacks forbidden/black-grid access gate")
+        if (
+            "ADISCORD_has_forbidden_legacy_access" not in block
+            and "ADISCORD_has_black_grid_access" not in block
+        ):
+            issues.append(
+                f"forbidden technology {tech} lacks forbidden/black-grid access gate"
+            )
         if re.search(r"allow\s*=\s*\{\s*always\s*=\s*yes\s*\}", block):
             issues.append(f"forbidden technology {tech} is freely available")
 
@@ -3558,7 +3890,9 @@ def main() -> int:
         if track in subdoctrines:
             match = re.search(r"\btrack\s*=\s*([A-Za-z0-9_]+)", block)
             if match and match.group(1) not in tracks:
-                issues.append(f"subdoctrine {track} references missing track {match.group(1)}")
+                issues.append(
+                    f"subdoctrine {track} references missing track {match.group(1)}"
+                )
 
     for tag in VANILLA_TAGS:
         if re.search(rf"\b(original_tag|tag|has_country_flag)\s*=\s*{tag}\b", new_text):
@@ -3584,7 +3918,9 @@ def main() -> int:
     issues.extend(check_resource_building_architecture(tech_blocks))
     issues.extend(check_doctrine_parser_constraints())
     issues.extend(check_doctrine_folder_database())
-    issues.extend(check_generated_doctrine_structure(grand, tracks, subdoctrines, doctrine_blocks))
+    issues.extend(
+        check_generated_doctrine_structure(grand, tracks, subdoctrines, doctrine_blocks)
+    )
     issues.extend(check_duplicate_localisation_keys())
     issues.extend(check_technology_replace_path())
     issues.extend(check_technology_ui_years())
@@ -3597,7 +3933,11 @@ def main() -> int:
     issues.extend(check_technology_graph_quality(tech_blocks))
     issues.extend(check_ai_force_progression())
     issues.extend(check_modern_land_warfare())
-    issues.extend(check_local_doctrine_references(grand, tracks, subdoctrines, top_level_doctrines))
+    issues.extend(
+        check_local_doctrine_references(
+            grand, tracks, subdoctrines, top_level_doctrines
+        )
+    )
     issues.extend(check_braces())
     issues.extend(check_economy_spending())
 

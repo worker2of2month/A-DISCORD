@@ -64,32 +64,58 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                 with self.subTest(tag=tag, level=level):
                     self.assertTrue(alias in generated, f"builder omits {child}")
                     self.assertEqual(installed.count(alias), 1, child)
-                    self.assertLess(installed.index(f'name = "{parent}"'), installed.index(alias))
+                    self.assertLess(
+                        installed.index(f'name = "{parent}"'), installed.index(alias)
+                    )
 
-    def test_nod_field_poses_preserve_weapon_family_without_smoking_or_prone_drills(self) -> None:
+    def test_nod_field_poses_preserve_weapon_family_without_smoking_or_prone_drills(
+        self,
+    ) -> None:
         entities = entity_blocks(COUNTRY_ASSET)
         for level in range(8):
             with self.subTest(level=level):
                 body = entities[custom_entity_name("NOD_infantry", level)]
-                states = [validator.extract_block(body, match.start())
-                          for match in re.finditer(r"\bstate\s*=\s*\{", body)]
-                idle = [state for state in states if re.search(r'name\s*=\s*"idle"', state)]
-                training = [state for state in states if re.search(r'name\s*=\s*"training"', state)]
+                states = [
+                    validator.extract_block(body, match.start())
+                    for match in re.finditer(r"\bstate\s*=\s*\{", body)
+                ]
+                idle = [
+                    state for state in states if re.search(r'name\s*=\s*"idle"', state)
+                ]
+                training = [
+                    state
+                    for state in states
+                    if re.search(r'name\s*=\s*"training"', state)
+                ]
                 self.assertEqual(len(idle), 4)
                 self.assertEqual(len(training), 2)
                 self.assertNotIn('"long_idle03"', "\n".join(idle))
-                self.assertEqual({re.search(r'animation\s*=\s*"([^"]+)"', state)[1]
-                                  for state in training}, {"idle", "aim_exercise"})
-                self.assertIn(f'clone = "{custom_entity_name("STP_infantry", level)}"', body)
+                self.assertEqual(
+                    {
+                        re.search(r'animation\s*=\s*"([^"]+)"', state)[1]
+                        for state in training
+                    },
+                    {"idle", "aim_exercise"},
+                )
+                self.assertIn(
+                    f'clone = "{custom_entity_name("STP_infantry", level)}"', body
+                )
 
     def test_weapon_grip_uses_the_matching_body_animation_family(self) -> None:
         entities = entity_blocks(COUNTRY_ASSET)
-        text = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(encoding="utf-8")
+        text = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(
+            encoding="utf-8"
+        )
         meshes = {}
         for match in re.finditer(r"\bpdxmesh\s*=\s*\{", text):
             block = validator.extract_block(text, match.start())
             name = re.search(r'\bname\s*=\s*"([^"]+)"', block)[1]
-            meshes[name] = dict(re.findall(r'animation\s*=\s*\{\s*id\s*=\s*"([^"]+)"\s+type\s*=\s*"([^"]+)"', block))
+            meshes[name] = dict(
+                re.findall(
+                    r'animation\s*=\s*\{\s*id\s*=\s*"([^"]+)"\s+type\s*=\s*"([^"]+)"',
+                    block,
+                )
+            )
 
         def body_animations(entity: str) -> dict[str, str]:
             seen = set()
@@ -103,27 +129,59 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
             self.fail("Entity clone cycle")
 
         expected = {}
-        for prefix in ("STP", "STS", "NOD", "VAL", "CIN", "OSF", "APH", "COF", "YPR", "TFF"):
+        for prefix in (
+            "STP",
+            "STS",
+            "NOD",
+            "VAL",
+            "CIN",
+            "OSF",
+            "APH",
+            "COF",
+            "YPR",
+            "TFF",
+        ):
             for level in range(8):
-                expected[custom_entity_name(prefix + "_infantry", level)] = "rifle" if level == 0 else "mg"
-        for name in ("ADISCORD_STP_party_entity", "ADISCORD_STS_regular_entity", "ADISCORD_VAL_regular_entity"):
+                expected[custom_entity_name(prefix + "_infantry", level)] = (
+                    "rifle" if level == 0 else "mg"
+                )
+        for name in (
+            "ADISCORD_STP_party_entity",
+            "ADISCORD_STS_regular_entity",
+            "ADISCORD_VAL_regular_entity",
+        ):
             expected[name] = "mg"
         for entity, family in expected.items():
             with self.subTest(entity=entity):
                 animations = body_animations(entity)
-                for state, clip in (("idle", "idle"), ("move", "moving"), ("attack", "attack"), ("support_attack", "support_attack")):
-                    self.assertEqual(animations[state], f"GER_infantry_{family}_{clip}_animation")
+                for state, clip in (
+                    ("idle", "idle"),
+                    ("move", "moving"),
+                    ("attack", "attack"),
+                    ("support_attack", "support_attack"),
+                ):
+                    self.assertEqual(
+                        animations[state], f"GER_infantry_{family}_{clip}_animation"
+                    )
                 if entity.startswith("NOD_infantry"):
-                    aim = "GER_infantry_aim_exercise_animation" if family == "rifle" else "GER_infantry_aim_exercise_mg_animation"
+                    aim = (
+                        "GER_infantry_aim_exercise_animation"
+                        if family == "rifle"
+                        else "GER_infantry_aim_exercise_mg_animation"
+                    )
                     self.assertEqual(animations["aim_exercise"], aim)
 
     def test_val_smoke_uses_each_body_head_locator(self) -> None:
         blocks = entity_blocks(COUNTRY_ASSET)
-        cases=[("VAL_infantry_entity", "head"),
-               ("VAL_infantry_2_entity", "head"),
-               ("ADISCORD_VAL_regular_entity", "head")]
-        cases += [(custom_entity_name("VAL_ADISCORD_militia", level), "back_mid|head|head")
-                  for level in range(8)]
+        cases = [
+            ("VAL_infantry_entity", "head"),
+            ("VAL_infantry_2_entity", "head"),
+            ("ADISCORD_VAL_regular_entity", "head"),
+        ]
+        cases += [
+            (custom_entity_name("VAL_ADISCORD_militia", level), "back_mid|head|head")
+            for level in range(8)
+        ]
         for entity, node in cases:
             self.assertIn(f'node="{node}"', blocks[entity])
             self.assertEqual(len(re.findall(r'name\s*=\s*"idle"', blocks[entity])), 5)
@@ -166,10 +224,14 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                         "transform",
                     ):
                         self.assertNotRegex(
-                            blocks[wrapper], rf"\b{field}\s*=",
+                            blocks[wrapper],
+                            rf"\b{field}\s*=",
                         )
                     for state in ("idle", "move"):
-                        self.assertRegex(blocks[wrapper],rf'state\s*=\s*\{{\s*name\s*=\s*"{state}"\s+animation\s*=\s*"idle"')
+                        self.assertRegex(
+                            blocks[wrapper],
+                            rf'state\s*=\s*\{{\s*name\s*=\s*"{state}"\s+animation\s*=\s*"idle"',
+                        )
 
     def test_generic_entity_chain_attaches_the_matching_wrapper_level(self) -> None:
         blocks = entity_blocks(PROGRESSION_ASSET)
@@ -236,7 +298,9 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
 
     def test_country_body_meshes_use_their_selected_forms(self) -> None:
         blocks = entity_blocks(COUNTRY_ASSET)
-        text = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(encoding="utf-8")
+        text = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(
+            encoding="utf-8"
+        )
         mesh_files = {}
         for match in re.finditer(r"\bpdxmesh\s*=\s*\{", text):
             block = validator.extract_block(text, match.start())
@@ -265,20 +329,34 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                 actual_mesh = re.search(r'\bpdxmesh\s*=\s*"([^"]+)"', blocks[entity])[1]
                 self.assertEqual(mesh_files[actual_mesh], mesh_files[mesh])
 
-    def test_militia_and_regular_forms_remain_distinct_at_every_weapon_tier(self) -> None:
+    def test_militia_and_regular_forms_remain_distinct_at_every_weapon_tier(
+        self,
+    ) -> None:
         blocks = entity_blocks(COUNTRY_ASSET)
-        families={"STP":("STP_party","STP_infantry_hedonist_mesh","STP_infantry_hedonist_mg_mesh"),
-                  "STS":("STS_regular","STP_shabrat_infantry_mesh","STP_shabrat_mg_infantry_mesh"),
-                  "VAL":("VAL_regular","VAL_infantry_mesh","VAL_infantry_mg_mesh")}
-        for tag,(regular,rifle,mg) in families.items():
+        families = {
+            "STP": (
+                "STP_party",
+                "STP_infantry_hedonist_mesh",
+                "STP_infantry_hedonist_mg_mesh",
+            ),
+            "STS": (
+                "STS_regular",
+                "STP_shabrat_infantry_mesh",
+                "STP_shabrat_mg_infantry_mesh",
+            ),
+            "VAL": ("VAL_regular", "VAL_infantry_mesh", "VAL_infantry_mg_mesh"),
+        }
+        for tag, (regular, rifle, mg) in families.items():
             for level in range(8):
-                with self.subTest(tag=tag,level=level):
-                    strong=custom_entity_name(tag+"_infantry",level)
-                    weak=custom_entity_name(tag+"_ADISCORD_militia",level)
-                    strong_mesh=f"ADISCORD_{regular}"+("_mesh" if level else "_rifle_mesh")
-                    self.assertIn(f'pdxmesh = "{strong_mesh}"',blocks[strong])
-                    self.assertIn(f'pdxmesh = "{mg if level else rifle}"',blocks[weak])
-                    self.assertIn(f'clone = "{strong}"',blocks[weak])
+                with self.subTest(tag=tag, level=level):
+                    strong = custom_entity_name(tag + "_infantry", level)
+                    weak = custom_entity_name(tag + "_ADISCORD_militia", level)
+                    strong_mesh = f"ADISCORD_{regular}" + (
+                        "_mesh" if level else "_rifle_mesh"
+                    )
+                    self.assertIn(f'pdxmesh = "{strong_mesh}"', blocks[strong])
+                    self.assertIn(f'pdxmesh = "{mg if level else rifle}"', blocks[weak])
+                    self.assertIn(f'clone = "{strong}"', blocks[weak])
 
     def test_custom_uniform_family_clone_bodies_remain_preserved(self) -> None:
         blocks = entity_blocks(COUNTRY_ASSET)
@@ -291,8 +369,12 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                     blocks[entity],
                     rf'\bclone\s*=\s*"{re.escape(expected_parent)}"',
                 )
-                mesh="ADISCORD_NOD_line_mesh" if level else "ADISCORD_NOD_line_rifle_mesh"
-                self.assertIn(f'pdxmesh = "{mesh}"',blocks[entity])
+                mesh = (
+                    "ADISCORD_NOD_line_mesh"
+                    if level
+                    else "ADISCORD_NOD_line_rifle_mesh"
+                )
+                self.assertIn(f'pdxmesh = "{mesh}"', blocks[entity])
 
         for prefix in (
             "STP_infantry",
@@ -311,7 +393,9 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
                         rf'\bclone\s*=\s*"{re.escape(expected_parent)}"',
                     )
 
-    def test_highland_infantry_covers_normal_militia_and_mountaineer_selection(self) -> None:
+    def test_highland_infantry_covers_normal_militia_and_mountaineer_selection(
+        self,
+    ) -> None:
         blocks = entity_blocks(COUNTRY_ASSET)
         for level in range(8):
             suffix = "" if level == 0 else f"_{level + 1}"
