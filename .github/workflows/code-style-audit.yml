@@ -4,75 +4,143 @@ on:
     branches: [main]
 permissions:
   contents: write
-  actions: read
 concurrency:
-  group: repository-code-style-final
-  cancel-in-progress: true
+  group: repository-code-style-pass2
+  cancel-in-progress: false
 jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/code-style-audit-20260929'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       PYTHONDONTWRITEBYTECODE: '1'
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 4fc04311686984769b57b2af2d01b91b4fea5068
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - uses: actions/download-artifact@v4
-        with:
-          name: code-style-main-delivery
-          run-id: 36561959180
-          github-token: ${{ github.token }}
-          path: /tmp/code-style-validated
-      - name: Restore the exact tree whose checks passed
+      - name: Prepare isolated fixed-baseline review
+        run: |
+          python -m pip install pillow numpy scipy
+          git fetch --depth=1 origin 049e32d35456b0105a008021bf242fe077c4b030
+          git worktree add --detach /tmp/pass2-before 049e32d35456b0105a008021bf242fe077c4b030
+          git worktree add --detach /tmp/pass2-current 049e32d35456b0105a008021bf242fe077c4b030
+          cp -a .superpowers/code-style-audit /tmp/pass2-tools
+          mkdir /tmp/pass2-evidence
+      - name: Verify formatter fixtures
+        run: |
+          cd /tmp/pass2-tools
+          python -B -m unittest tests_audit -v > /tmp/pass2-evidence/formatter-tests.log 2>&1
+      - name: Reflow explicitly owned authored blocks and prove equivalence
         run: |
           python -B - <<'PY'
           from pathlib import Path
+          import collections
           import hashlib
           import json
+          import re
           import subprocess
-          root = Path.cwd()
-          evidence = Path('/tmp/code-style-validated')
-          report = json.loads((evidence / 'verification.json').read_text())
-          def git(*args):
-              return subprocess.check_output(['git', *args], text=True).strip()
-          assert git('rev-parse', 'HEAD') == report['base'] == '4fc04311686984769b57b2af2d01b91b4fea5068'
-          assert not git('status', '--porcelain')
-          tests = (evidence / 'regression-tests.log').read_text()
-          assert '\nOK\n' in tests and 'FAILED (' not in tests and 'Ran 3 tests' in tests
-          validators = json.loads((evidence / 'validator-comparison.json').read_text())
-          assert validators['before'] and validators['before'] == validators['current']
-          assert 'Focus tree outputs are current.' in (evidence / 'focus-check.log').read_text()
-          names = {item['path'] for item in report['verified']}
-          assert len(names) == 454
-          assert not any(name.startswith(('localisation/', '.github/', '.superpowers/')) for name in names)
-          for item in report['verified']:
-              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['before'], item['path']
-          git('apply', '--check', str(evidence / 'style.patch'))
-          git('apply', str(evidence / 'style.patch'))
-          assert set(git('diff', '--name-only').splitlines()) == names
-          for item in report['verified']:
-              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['after'], item['path']
-          git('diff', '--check')
-          print('Restored and hash-verified all 454 files against the exact base and fully validated result.')
+          import sys
+          import zipfile
+          sys.path.insert(0, '/tmp/pass2-tools')
+          sys.path.insert(0, '/tmp/pass2-current')
+          from style_formatter import format_clausewitz, token_signature
+          from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+          root = Path('/tmp/pass2-current')
+          output = Path('/tmp/pass2-evidence')
+          names = [
+              'common/country_leader/ADISCORD_minister_traits.txt',
+              'common/ideas/ADISCORD_ministers_all_countries.txt',
+              'common/scripted_effects/ADISCORD_society_development_effects.txt',
+              'common/scripted_triggers/ADISCORD_society_development_triggers.txt',
+              'common/scripted_guis/ADISCORD_startup_menu.txt',
+              'common/scripted_localisation/ADISCORD_startup_menu.txt',
+              'common/decisions/ADISCORD_VAL_logistics_market_decisions.txt',
+              'common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt',
+              'common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt',
+              'common/on_actions/03_ADISCORD_VAL_logistics_market_on_actions.txt',
+          ]
+          registry = json.loads((root / 'tools/data/generated_output_owners.json').read_text())
+          protected = set()
+          for family in registry['families']:
+              for pattern in family['output_globs']:
+                  protected.update(p.relative_to(root).as_posix() for p in root.glob(pattern) if p.is_file())
+          assert not protected.intersection(names), protected.intersection(names)
+          marker = re.compile(r'^[ \t]*# --- [a-z_]+ ---[ \t]*$', re.M)
+          def normalized_ast(nodes):
+              return [(n.key, n.quoted, normalized_ast(n.value) if isinstance(n.value, list) else n.value) for n in nodes]
+          def format_source(source):
+              formatted = format_clausewitz(source)
+              before_markers = marker.findall(source)
+              assert [v.strip() for v in before_markers] == [v.strip() for v in marker.findall(formatted)]
+              originals = iter(before_markers)
+              return marker.sub(lambda match: next(originals).rstrip(' \t'), formatted)
+          changes = []
+          with zipfile.ZipFile(output / 'review-sources.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
+              for name in names:
+                  path = root / name
+                  before = path.read_bytes()
+                  source = before.decode('utf-8-sig')
+                  assert not re.search(r'(?im)^#.*(?:generated by|autogenerated|auto-generated|do not edit)', '\n'.join(source.splitlines()[:6])), name
+                  formatted = format_source(source)
+                  assert token_signature(source) == token_signature(formatted), name
+                  assert normalized_ast(parse_clausewitz(source)) == normalized_ast(parse_clausewitz(formatted)), name
+                  assert format_source(formatted) == formatted, name
+                  after = formatted.encode('utf-8')
+                  if before.startswith(b'\xef\xbb\xbf'):
+                      after = b'\xef\xbb\xbf' + after
+                  assert before.startswith(b'\xef\xbb\xbf') == after.startswith(b'\xef\xbb\xbf'), name
+                  archive.writestr('before/' + name, before)
+                  archive.writestr('after/' + name, after)
+                  if before != after:
+                      path.write_bytes(after)
+                      dense = lambda text: sum(len(line) > 140 and line.count('=') >= 3 and not line.lstrip().startswith('#') for line in text.splitlines())
+                      changes.append({'path': name, 'before': hashlib.sha256(before).hexdigest(), 'after': hashlib.sha256(after).hexdigest(), 'dense_lines_before': dense(source), 'dense_lines_after': dense(formatted)})
+          subprocess.run(['git', 'diff', '--check'], cwd=root, check=True)
+          actual = subprocess.check_output(['git', 'diff', '--name-only'], cwd=root, text=True).splitlines()
+          assert set(actual) == {item['path'] for item in changes}
+          report = {'base': '049e32d35456b0105a008021bf242fe077c4b030', 'changed': changes, 'localisation_unchanged': True, 'production_python_unchanged': True, 'generated_outputs_unchanged': True, 'runtime_tested': False}
+          (output / 'verification.json').write_text(json.dumps(report, indent=2))
+          (output / 'style.patch').write_bytes(subprocess.check_output(['git', 'diff', '--binary'], cwd=root))
+          print(json.dumps({'files': len(changes), 'dense_before': sum(c['dense_lines_before'] for c in changes), 'dense_after': sum(c['dense_lines_after'] for c in changes)}, indent=2))
           PY
-      - name: Recheck the focused regression tests
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-style-pass2-source-review
+          path: /tmp/pass2-evidence
+          retention-days: 7
+      - name: Compare bounded full test modules before and after
         run: |
-          set -euo pipefail
-          python -m pip install pillow numpy scipy
-          python -B -m unittest \
-            tools.tests.test_adiscord_vorkerland_civil_war_focus.VorkerlandLifecycleFocusTests.test_vorkerland_idea_localisation_and_ivanland_expedition_exist \
-            tools.tests.test_validate_adiscord_vorkerland_collapse.FrontAndSupplyTests.test_dead_stalemate_system_is_gone \
-            tools.tests.test_validate_adiscord_vorkerland_collapse.InterventionAndVisualTests.test_ivanland_outcome_news_has_one_guarded_immediate_route \
-            -v 2>&1 | tee /tmp/code-style-validated/delivery-tests.log
-          python -B -m tools.builders.build_adiscord_focus_trees --check
-      - name: Push the verified commit without overwriting concurrent main changes
+          python -B /tmp/pass2-tools/bounded_suite.py /tmp/pass2-before /tmp/pass2-evidence/before
+          python -B /tmp/pass2-tools/bounded_suite.py /tmp/pass2-current /tmp/pass2-evidence/after
+      - name: Compare repository validator diagnostics
+        run: |
+          python -B - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+          import subprocess
+          import sys
+          output = Path('/tmp/pass2-evidence')
+          results = {}
+          for stage in ['before', 'current']:
+              with (output / ('validator-' + stage + '.log')).open('w') as log:
+                  result = subprocess.run([sys.executable, '-B', 'tools/validate_tc.py', '--limit', '300'], cwd='/tmp/pass2-' + stage, stdout=log, stderr=subprocess.STDOUT, timeout=180)
+              assert result.returncode == 0, (stage, result.returncode)
+              text = (output / ('validator-' + stage + '.log')).read_text()
+              results[stage] = {name: int(count) for name, count in re.findall(r'^== (.+?): (\d+) ==$', text, re.M)}
+          (output / 'validator-comparison.json').write_text(json.dumps(results, indent=2))
+          assert results['before'] and results['before'] == results['current'], results
+          print('Validator exit codes 0/0; all diagnostic section counts match.')
+          PY
+      - name: Publish code-only review branch when comparison permits
         run: |
           python -B - <<'PY'
           from pathlib import Path
@@ -80,33 +148,40 @@ jobs:
           import json
           import os
           import subprocess
-          evidence = Path('/tmp/code-style-validated')
-          report = json.loads((evidence / 'verification.json').read_text())
+          root = Path('/tmp/pass2-current')
+          output = Path('/tmp/pass2-evidence')
+          before = json.loads((output / 'before/summary.json').read_text())
+          after = json.loads((output / 'after/summary.json').read_text())
+          complete = lambda r: {m['module'] for m in r['modules'] if m['status'] == 'completed'}
+          common = complete(before) & complete(after)
+          failures = lambda r: {item['test'] for m in r['modules'] if m['module'] in common for k in ['failures', 'errors'] for item in m.get(k, [])}
+          report = json.loads((output / 'verification.json').read_text())
+          report['tests'] = {'comparable_modules': len(common), 'before_tests': before['tests_run'], 'after_tests': after['tests_run'], 'new_failures': sorted(failures(after) - failures(before)), 'baseline_failures': len(before['failures']), 'baseline_errors': len(before['errors']), 'before_timeouts': before['timeouts'], 'after_timeouts': after['timeouts'], 'before_crashes': before['crashes'], 'after_crashes': after['crashes']}
+          (output / 'comparison.json').write_text(json.dumps(report, indent=2))
+          assert not report['tests']['new_failures'], report['tests']['new_failures']
+          assert {m['module'] for m in after['crashes']} <= {m['module'] for m in before['crashes']}
           def git(*args):
-              return subprocess.check_output(['git', *args], text=True).strip()
-          for item in report['verified']:
-              assert hashlib.sha256(Path(item['path']).read_bytes()).hexdigest() == item['after'], item['path']
-          assert set(git('diff', '--name-only').splitlines()) == {item['path'] for item in report['verified']}
+              return subprocess.check_output(['git', *args], cwd=root, text=True).strip()
+          actual = set(git('diff', '--name-only', 'HEAD').splitlines())
+          assert actual == {item['path'] for item in report['changed']}, actual
+          for item in report['changed']:
+              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['after'], item['path']
           git('config', 'user.name', 'github-actions[bot]')
           git('config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com')
-          for item in report['verified']:
-              git('add', '--', item['path'])
+          for name in sorted(actual):
+              git('add', '--', name)
           git('diff', '--cached', '--check')
-          git('commit', '-m', 'style: normalize authored mod scripts and Python tooling', '-m', 'Preserve ordered Clausewitz tokens, exact Python ASTs, localisation bytes, source-section boundaries and concurrent main changes. Regenerate focus outputs through their owner. Exclude temporary audit tooling and pre-existing syntax errors.')
+          git('commit', '-m', 'style: expand dense minister, development and logistics blocks')
           head = git('rev-parse', 'HEAD')
-          branch = 'codex/style-main-delivery-' + os.environ['GITHUB_RUN_ID']
-          report.update({'head': head, 'branch': branch, 'validation_run': 36561959180, 'delivery_run': os.environ['GITHUB_RUN_ID']})
-          (evidence / 'delivery.json').write_text(json.dumps(report, indent=2))
+          branch = 'codex/code-style-pass2-' + os.environ['GITHUB_RUN_ID']
           git('push', 'origin', head + ':refs/heads/' + branch)
-          git('push', 'origin', head + ':refs/heads/main')
-          report['main_after_push'] = git('ls-remote', 'origin', 'refs/heads/main').split()[0]
-          report['pushed_to_main'] = True
-          (evidence / 'delivery.json').write_text(json.dumps(report, indent=2))
-          print(json.dumps({key: report[key] for key in ['head', 'branch', 'base', 'counts', 'pushed_to_main', 'main_after_push']}, indent=2))
+          report.update({'head': head, 'branch': branch, 'run_id': os.environ['GITHUB_RUN_ID'], 'pushed_to_main': False})
+          (output / 'delivery.json').write_text(json.dumps(report, indent=2))
+          print(json.dumps({'head': head, 'branch': branch, 'files': len(actual), 'tests': report['tests']}, indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: code-style-main-delivery-final
-          path: /tmp/code-style-validated
+          name: code-style-pass2-review
+          path: /tmp/pass2-evidence
           retention-days: 7
