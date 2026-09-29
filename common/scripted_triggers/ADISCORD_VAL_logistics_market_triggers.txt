@@ -22,8 +22,20 @@ VAL_trade_corridors_unlocked = {
 # both sovereignty and effective control remain inside the VAL subject network.
 VAL_trade_state_in_contract_sphere = {
 	OR = {
-		AND = { owner = { has_country_flag = VAL_trade_transit_charter NOT = { has_war_with = VAL } } controller = { has_country_flag = VAL_trade_transit_charter NOT = { has_war_with = VAL } } }
-		AND = { is_owned_by = VAL is_controlled_by = VAL }
+		AND = {
+			owner = {
+				has_country_flag = VAL_trade_transit_charter
+				NOT = { has_war_with = VAL }
+			}
+			controller = {
+				has_country_flag = VAL_trade_transit_charter
+				NOT = { has_war_with = VAL }
+			}
+		}
+		AND = {
+			is_owned_by = VAL
+			is_controlled_by = VAL
+		}
 		AND = {
 			owner = { is_subject_of = VAL }
 			controller = { is_subject_of = VAL }
@@ -58,7 +70,10 @@ VAL_trade_route_west_open = {
 VAL_trade_route_north_open = {
 	tag = VAL
 	has_capitulated = no
-	24 = { is_owned_by = VAL is_controlled_by = VAL }
+	24 = {
+		is_owned_by = VAL
+		is_controlled_by = VAL
+	}
 }
 
 # COUNTRY VAL. The Stelander road uses the two border districts retained by
@@ -78,10 +93,26 @@ VAL_trade_route_vorkerland_open = {
 	33 = {
 		OR = {
 			VAL_trade_state_in_contract_sphere = yes
-			AND = { is_owned_by = WRK is_controlled_by = WRK WRK = { has_war = no } }
-			AND = { is_owned_by = WKR is_controlled_by = WKR WKR = { has_war = no } }
-			AND = { is_owned_by = VAD is_controlled_by = VAD VAD = { has_war = no } }
-			AND = { is_owned_by = TVA is_controlled_by = TVA TVA = { has_war = no } }
+			AND = {
+				is_owned_by = WRK
+				is_controlled_by = WRK
+				WRK = { has_war = no }
+			}
+			AND = {
+				is_owned_by = WKR
+				is_controlled_by = WKR
+				WKR = { has_war = no }
+			}
+			AND = {
+				is_owned_by = VAD
+				is_controlled_by = VAD
+				VAD = { has_war = no }
+			}
+			AND = {
+				is_owned_by = TVA
+				is_controlled_by = TVA
+				TVA = { has_war = no }
+			}
 		}
 	}
 }
@@ -93,10 +124,22 @@ VAL_trade_route_south_open = {
 		AND = {
 			VAL_trade_corridors_unlocked = yes
 			has_country_flag = VAL_efl_concession_active
-			68 = { is_owned_by = EFL is_controlled_by = EFL }
-			691 = { is_owned_by = EFL is_controlled_by = EFL }
-			701 = { is_owned_by = EFL is_controlled_by = EFL }
-			70 = { is_owned_by = EFL is_controlled_by = EFL }
+			68 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			691 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			701 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
+			70 = {
+				is_owned_by = EFL
+				is_controlled_by = EFL
+			}
 		}
 		has_country_flag = ADISCORD_debug_val_south_route_active
 	}
@@ -108,12 +151,30 @@ VAL_trade_network_disrupted = {
 	tag = VAL
 	VAL_trade_corridors_unlocked = yes
 	OR = {
-		AND = { has_country_flag = VAL_route_occidia_commissioned NOT = { VAL_trade_route_occidia_open = yes } }
-		AND = { has_country_flag = VAL_route_west_commissioned NOT = { VAL_trade_route_west_open = yes } }
-		AND = { has_country_flag = VAL_route_north_commissioned NOT = { VAL_trade_route_north_open = yes } }
-		AND = { has_country_flag = VAL_route_stelander_commissioned NOT = { VAL_trade_route_stelander_open = yes } }
-		AND = { has_country_flag = VAL_route_vorkerland_commissioned NOT = { VAL_trade_route_vorkerland_open = yes } }
-		AND = { has_country_flag = VAL_route_south_commissioned NOT = { VAL_trade_route_south_open = yes } }
+		AND = {
+			has_country_flag = VAL_route_occidia_commissioned
+			NOT = { VAL_trade_route_occidia_open = yes }
+		}
+		AND = {
+			has_country_flag = VAL_route_west_commissioned
+			NOT = { VAL_trade_route_west_open = yes }
+		}
+		AND = {
+			has_country_flag = VAL_route_north_commissioned
+			NOT = { VAL_trade_route_north_open = yes }
+		}
+		AND = {
+			has_country_flag = VAL_route_stelander_commissioned
+			NOT = { VAL_trade_route_stelander_open = yes }
+		}
+		AND = {
+			has_country_flag = VAL_route_vorkerland_commissioned
+			NOT = { VAL_trade_route_vorkerland_open = yes }
+		}
+		AND = {
+			has_country_flag = VAL_route_south_commissioned
+			NOT = { VAL_trade_route_south_open = yes }
+		}
 	}
 }
 
@@ -121,19 +182,58 @@ VAL_trade_network_disrupted = {
 VAL_regional_displacement_crisis = {
 	OR = {
 		has_war = yes
-		STP = { exists = yes has_war = yes }
-		STS = { exists = yes has_war = yes }
-		NOD = { exists = yes has_war = yes }
-		SRP = { exists = yes has_war = yes }
-		OCA = { exists = yes has_war = yes }
-		NKA = { exists = yes has_war = yes }
-		WRK = { exists = yes has_war = yes }
-		WKR = { exists = yes has_war = yes }
-		VAD = { exists = yes has_war = yes }
-		TVA = { exists = yes has_war = yes }
-		CIN = { exists = yes has_war = yes }
-		OSF = { exists = yes has_war = yes }
-		APH = { exists = yes has_war = yes }
+		STP = {
+			exists = yes
+			has_war = yes
+		}
+		STS = {
+			exists = yes
+			has_war = yes
+		}
+		NOD = {
+			exists = yes
+			has_war = yes
+		}
+		SRP = {
+			exists = yes
+			has_war = yes
+		}
+		OCA = {
+			exists = yes
+			has_war = yes
+		}
+		NKA = {
+			exists = yes
+			has_war = yes
+		}
+		WRK = {
+			exists = yes
+			has_war = yes
+		}
+		WKR = {
+			exists = yes
+			has_war = yes
+		}
+		VAD = {
+			exists = yes
+			has_war = yes
+		}
+		TVA = {
+			exists = yes
+			has_war = yes
+		}
+		CIN = {
+			exists = yes
+			has_war = yes
+		}
+		OSF = {
+			exists = yes
+			has_war = yes
+		}
+		APH = {
+			exists = yes
+			has_war = yes
+		}
 	}
 }
 
@@ -143,7 +243,24 @@ VAL_refugee_vorkerland_war = {
 	# once the claimant wars are over.
 	has_global_flag = ADISCORD_vorkerland_collapse_wars_started
 	NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
-	OR = { WRK = { exists = yes has_war = yes } WKR = { exists = yes has_war = yes } VAD = { exists = yes has_war = yes } TVA = { exists = yes has_war = yes } }
+	OR = {
+		WRK = {
+			exists = yes
+			has_war = yes
+		}
+		WKR = {
+			exists = yes
+			has_war = yes
+		}
+		VAD = {
+			exists = yes
+			has_war = yes
+		}
+		TVA = {
+			exists = yes
+			has_war = yes
+		}
+	}
 }
 
 VAL_refugee_stelander_war = {
@@ -152,11 +269,21 @@ VAL_refugee_stelander_war = {
 }
 
 VAL_refugee_nodrul_war = {
-	NOD = { OR = { has_war_with = STP has_war_with = STS has_war_with = VAL } }
+	NOD = {
+		OR = {
+			has_war_with = STP
+			has_war_with = STS
+			has_war_with = VAL
+		}
+	}
 }
 
 VAL_refugee_north_war = {
-	OR = { VAL = { has_war_with = CIN } VAL = { has_war_with = OSF } VAL = { has_war_with = APH } }
+	OR = {
+		VAL = { has_war_with = CIN }
+		VAL = { has_war_with = OSF }
+		VAL = { has_war_with = APH }
+	}
 }
 
 VAL_refugee_perimeter_open = {
@@ -166,19 +293,83 @@ VAL_refugee_perimeter_open = {
 # COUNTRY VAL: compare route inputs before the weekly payment, including war and autonomy changes.
 VAL_trade_network_changed = {
 	OR = {
-		AND = { VAL_trade_route_occidia_open = yes NOT = { check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_occidia_open = no check_variable = { var = VAL_route_occidia_active value = 1 compare = equals } }
-		AND = { VAL_trade_route_west_open = yes NOT = { check_variable = { var = VAL_route_west_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_west_open = no check_variable = { var = VAL_route_west_active value = 1 compare = equals } }
-		AND = { VAL_trade_route_north_open = yes NOT = { check_variable = { var = VAL_route_north_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_north_open = no check_variable = { var = VAL_route_north_active value = 1 compare = equals } }
-		AND = { VAL_trade_route_stelander_open = yes NOT = { check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_stelander_open = no check_variable = { var = VAL_route_stelander_active value = 1 compare = equals } }
-		AND = { VAL_trade_route_vorkerland_open = yes NOT = { check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_vorkerland_open = no check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals } }
-		AND = { VAL_trade_route_south_open = yes NOT = { check_variable = { var = VAL_route_south_active value = 1 compare = equals } } }
-		AND = { VAL_trade_route_south_open = no check_variable = { var = VAL_route_south_active value = 1 compare = equals } }
-		AND = { VAL_trade_corridors_unlocked = yes NOT = { OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } } }
-		AND = { VAL_trade_corridors_unlocked = no OR = { has_idea = VAL_corridor_network_fragmented has_idea = VAL_corridor_network_partial has_idea = VAL_corridor_network_integrated } }
+		AND = {
+			VAL_trade_route_occidia_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_occidia_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_occidia_open = no
+			check_variable = { var = VAL_route_occidia_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_route_west_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_west_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_west_open = no
+			check_variable = { var = VAL_route_west_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_route_north_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_north_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_north_open = no
+			check_variable = { var = VAL_route_north_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_route_stelander_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_stelander_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_stelander_open = no
+			check_variable = { var = VAL_route_stelander_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_route_vorkerland_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_vorkerland_open = no
+			check_variable = { var = VAL_route_vorkerland_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_route_south_open = yes
+			NOT = {
+				check_variable = { var = VAL_route_south_active value = 1 compare = equals }
+			}
+		}
+		AND = {
+			VAL_trade_route_south_open = no
+			check_variable = { var = VAL_route_south_active value = 1 compare = equals }
+		}
+		AND = {
+			VAL_trade_corridors_unlocked = yes
+			NOT = {
+				OR = {
+					has_idea = VAL_corridor_network_fragmented
+					has_idea = VAL_corridor_network_partial
+					has_idea = VAL_corridor_network_integrated
+				}
+			}
+		}
+		AND = {
+			VAL_trade_corridors_unlocked = no
+			OR = {
+				has_idea = VAL_corridor_network_fragmented
+				has_idea = VAL_corridor_network_partial
+				has_idea = VAL_corridor_network_integrated
+			}
+		}
 	}
 }
