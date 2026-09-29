@@ -6,7 +6,7 @@ permissions:
   contents: write
 concurrency:
   group: repository-code-style-final
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   audit:
     if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'codex/code-style-audit-20260929'
@@ -33,7 +33,7 @@ jobs:
           cp -a .superpowers/code-style-audit /tmp/code-style-tools
           mkdir /tmp/code-style-final
           git diff a233bbde756fc78bac28fe1e675658ed79523ff2 675cc0d50e4b750f3a9fc55f8e511be2dbf9130d -- . ':(exclude)localisation' > /tmp/code-style-final/style.patch
-      - name: Apply and verify style-only changes on latest main
+      - name: Apply style and retain native source-section boundaries
         run: |
           python -B - <<'PY'
           from pathlib import Path
@@ -41,6 +41,7 @@ jobs:
           import collections
           import hashlib
           import json
+          import re
           import subprocess
           import sys
           sys.path.insert(0, '/tmp/code-style-tools')
@@ -77,6 +78,26 @@ jobs:
                   result = b'\xef\xbb\xbf' + result
               path.write_bytes(result)
               git('add', '--', name)
+          marker = re.compile(r'^[ \t]*# --- [a-z_]+ ---[ \t]*$', re.M)
+          marker_repairs = []
+          for name in git('diff', '--name-only', 'HEAD').splitlines():
+              if Path(name).suffix not in {'.txt', '.gui', '.gfx', '.asset', '.mod'}:
+                  continue
+              original = git('show', 'HEAD:' + name, text=False)
+              current = (root / name).read_bytes()
+              old, new = original.decode('utf-8-sig'), current.decode('utf-8-sig')
+              before_markers = marker.findall(old)
+              after_markers = marker.findall(new)
+              assert [value.strip() for value in before_markers] == [value.strip() for value in after_markers], name
+              replacements = iter(before_markers)
+              fixed = marker.sub(lambda match: next(replacements).rstrip(' \t'), new)
+              if fixed != new:
+                  assert token_signature(new) == token_signature(fixed), name
+                  encoded = fixed.encode('utf-8')
+                  if current.startswith(b'\xef\xbb\xbf'):
+                      encoded = b'\xef\xbb\xbf' + encoded
+                  (root / name).write_bytes(encoded)
+                  marker_repairs.append(name)
           with (output / 'focus-check.log').open('w') as log:
               check = subprocess.run([sys.executable, '-B', '-m', 'tools.builders.build_adiscord_focus_trees', '--check'], cwd=root, stdout=log, stderr=subprocess.STDOUT)
               if check.returncode:
@@ -98,16 +119,18 @@ jobs:
                   kind = 'lua'
               else:
                   assert token_signature(old) == token_signature(new), name
+                  assert [s.rstrip() for s in marker.findall(old)] == [s.rstrip() for s in marker.findall(new)], name
                   kind = 'clausewitz'
               verified.append({'path': name, 'kind': kind, 'before': hashlib.sha256(before).hexdigest(), 'after': hashlib.sha256(after).hexdigest()})
           git('diff', '--check', 'HEAD')
-          report = {'base': base, 'verified': verified, 'counts': dict(collections.Counter(item['kind'] for item in verified)), 'conflicts_resolved_from_current_main': conflicts, 'localisation': 'unchanged', 'runtime_tested': False}
+          report = {'base': base, 'verified': verified, 'counts': dict(collections.Counter(item['kind'] for item in verified)), 'conflicts_resolved_from_current_main': conflicts, 'source_section_markers_preserved': marker_repairs, 'localisation': 'unchanged', 'runtime_tested': False}
           (output / 'verification.json').write_text(json.dumps(report, indent=2))
           (output / 'style.patch').write_bytes(git('diff', '--binary', 'HEAD', text=False))
-          print(json.dumps({'base': base, 'files': len(verified), 'counts': report['counts'], 'resolved_conflicts': conflicts}, indent=2))
+          print(json.dumps({'base': base, 'files': len(verified), 'counts': report['counts'], 'resolved_conflicts': conflicts, 'marker_repairs': marker_repairs}, indent=2))
           PY
-      - name: Verify the exact previously failing checks
+      - name: Verify previously failing checks with strict failure propagation
         run: |
+          set -euo pipefail
           cd /tmp/code-style-current
           python -B -m unittest \
             tools.tests.test_adiscord_vorkerland_civil_war_focus.VorkerlandLifecycleFocusTests.test_vorkerland_idea_localisation_and_ivanland_expedition_exist \
@@ -160,7 +183,7 @@ jobs:
           for name in sorted(actual):
               git('add', '--', name)
           git('diff', '--cached', '--check')
-          git('commit', '-m', 'style: normalize authored mod scripts and Python tooling', '-m', 'Preserve ordered Clausewitz tokens, exact Python ASTs, localisation bytes and concurrent main changes. Regenerate focus outputs through their owner. Exclude temporary audit tooling and pre-existing syntax errors.')
+          git('commit', '-m', 'style: normalize authored mod scripts and Python tooling', '-m', 'Preserve ordered Clausewitz tokens, exact Python ASTs, localisation bytes, source-section boundaries and concurrent main changes. Regenerate focus outputs through their owner. Exclude temporary audit tooling and pre-existing syntax errors.')
           head = git('rev-parse', 'HEAD')
           report['head'] = head
           report['run_id'] = os.environ['GITHUB_RUN_ID']
