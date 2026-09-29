@@ -68,6 +68,18 @@
 # Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
   superevent_stelander_shabrat_victory_quote: "What's past is prologue.\n\n- William Shakespeare, The Tempest"
   superevent_stelander_shabrat_victory_comment: "The civil war is over"
+  superevent_stelander_shabrat_victory_staff_title: "Shabrat's Staff Takes Stelander"
+# Quote source: Carl von Clausewitz, On War, book 1, chapter 1, section 24
+  superevent_stelander_shabrat_victory_staff_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, On War"
+  superevent_stelander_shabrat_victory_staff_comment: "The Officers' Directory promises order"
+  superevent_stelander_shabrat_victory_councils_title: "The Mountain Councils Enter Fada"
+# Quote source: Jean-Jacques Rousseau, The Social Contract, book 1, chapter 1
+  superevent_stelander_shabrat_victory_councils_quote: "Man is born free, and everywhere he is in chains.\n\n- Jean-Jacques Rousseau, The Social Contract"
+  superevent_stelander_shabrat_victory_councils_comment: "The passes gain a voice"
+  superevent_stelander_shabrat_victory_truth_title: "A Court of Truth in Fada"
+# Quote source: The Gospel of John, 8:32 (King James Version)
+  superevent_stelander_shabrat_victory_truth_quote: "And ye shall know the truth, and the truth shall make you free.\n\n- The Gospel of John, 8:32"
+  superevent_stelander_shabrat_victory_truth_comment: "The Lower Market archives go on public display"
 
 # Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
   superevent_nam_resource_war_title: "The Resource War"

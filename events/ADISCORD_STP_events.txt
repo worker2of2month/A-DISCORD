@@ -3461,3 +3461,175 @@ country_event = {
 	trigger = { has_variable = STP_pv_outcome }
 	option = { name = ADISCORD_STP_pv.50.a }
 }
+
+# ============================================================
+# RESISTANCE WAR: MANDATE OF THE MOUNTAINS
+# ============================================================
+add_namespace = ADISCORD_STP_hw
+
+country_event = {
+	id = ADISCORD_STP_hw.1
+	title = ADISCORD_STP_hw.1.t
+	desc = ADISCORD_STP_hw.1.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.1.a
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_hw.10
+	title = ADISCORD_STP_hw.10.t
+	desc = ADISCORD_STP_hw.10.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.10.a
+		ai_chance = { base = 60 }
+		add_manpower = -5000
+		custom_effect_tooltip = ADISCORD_STP_hw.10.a_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_councils value = 5 }
+			set_temp_variable = { var = STP_hw_mandate_change value = 10 }
+			STP_hw_change_mandate = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_hw.10.b
+		ai_chance = { base = 40 }
+		add_war_support = -0.03
+		custom_effect_tooltip = ADISCORD_STP_hw.10.b_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_officers value = 5 }
+			subtract_from_variable = { var = STP_hw_councils value = 5 }
+			STP_hw_refresh = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_hw.11
+	title = ADISCORD_STP_hw.11.t
+	desc = ADISCORD_STP_hw.11.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.11.a
+		ai_chance = { base = 60 }
+		add_political_power = -50
+		custom_effect_tooltip = ADISCORD_STP_hw.11.a_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_councils value = 10 }
+			set_temp_variable = { var = STP_hw_mandate_change value = 8 }
+			STP_hw_change_mandate = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_hw.11.b
+		ai_chance = { base = 40 }
+		add_stability = -0.05
+		custom_effect_tooltip = ADISCORD_STP_hw.11.b_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_officers value = 10 }
+			subtract_from_variable = { var = STP_hw_underground value = 10 }
+			set_temp_variable = { var = STP_hw_mandate_change value = 3 }
+			STP_hw_change_mandate = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_hw.20
+	title = ADISCORD_STP_hw.20.t
+	desc = ADISCORD_STP_hw.20.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.20.a
+		ai_chance = { base = 60 }
+		custom_effect_tooltip = ADISCORD_STP_hw.20.a_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_officers value = 20 }
+			subtract_from_variable = { var = STP_hw_councils value = 5 }
+			set_temp_variable = { var = STP_hw_mandate_change value = -5 }
+			STP_hw_change_mandate = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_hw.20.b
+		ai_chance = { base = 40 }
+		add_command_power = -20
+		add_timed_idea = { idea = STP_hw_officers_sulk_idea days = 60 }
+		custom_effect_tooltip = ADISCORD_STP_hw.20.b_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_officers value = 10 }
+			STP_hw_refresh = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_hw.21
+	title = ADISCORD_STP_hw.21.t
+	desc = ADISCORD_STP_hw.21.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.21.a
+		ai_chance = { base = 60 }
+		add_political_power = -50
+		custom_effect_tooltip = ADISCORD_STP_hw.21.a_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_councils value = 20 }
+			STP_hw_refresh = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_hw.21.b
+		ai_chance = { base = 40 }
+		add_stability = -0.05
+		custom_effect_tooltip = ADISCORD_STP_hw.21.b_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_councils value = 5 }
+			set_temp_variable = { var = STP_hw_mandate_change value = -8 }
+			STP_hw_change_mandate = yes
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_hw.22
+	title = ADISCORD_STP_hw.22.t
+	desc = ADISCORD_STP_hw.22.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { STP_hw_war_current = yes }
+	option = {
+		name = ADISCORD_STP_hw.22.a
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = ADISCORD_STP_hw.22.a_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_underground value = 20 }
+			subtract_from_variable = { var = STP_hw_officers value = 5 }
+			STP_hw_refresh = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_hw.22.b
+		ai_chance = { base = 50 }
+		add_war_support = 0.02
+		custom_effect_tooltip = ADISCORD_STP_hw.22.b_tt
+		hidden_effect = {
+			add_to_variable = { var = STP_hw_underground value = 5 }
+			set_temp_variable = { var = STP_hw_mandate_change value = -6 }
+			STP_hw_change_mandate = yes
+		}
+	}
+}

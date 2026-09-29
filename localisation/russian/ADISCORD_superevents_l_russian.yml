@@ -64,6 +64,18 @@
 # Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
   superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, «Буря»"
   superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
+  superevent_stelander_shabrat_victory_staff_title: "Штаб Шабрата берёт Стеландер"
+# Quote source: Carl von Clausewitz, On War, book 1, chapter 1, section 24
+  superevent_stelander_shabrat_victory_staff_quote: "Война есть лишь продолжение политики иными средствами.\n\n- Карл фон Клаузевиц, «О войне»"
+  superevent_stelander_shabrat_victory_staff_comment: "Директория офицеров обещает порядок"
+  superevent_stelander_shabrat_victory_councils_title: "Горные советы входят в Фаду"
+# Quote source: Jean-Jacques Rousseau, The Social Contract, book 1, chapter 1
+  superevent_stelander_shabrat_victory_councils_quote: "Человек рождается свободным, а между тем он везде в оковах.\n\n- Жан-Жак Руссо, «Об общественном договоре»"
+  superevent_stelander_shabrat_victory_councils_comment: "Перевалы получают голос"
+  superevent_stelander_shabrat_victory_truth_title: "Суд правды в Фаде"
+# Quote source: The Gospel of John, 8:32 (King James Version)
+  superevent_stelander_shabrat_victory_truth_quote: "И познаете истину, и истина сделает вас свободными.\n\n- Евангелие от Иоанна, 8:32"
+  superevent_stelander_shabrat_victory_truth_comment: "Архивы Нижнего рынка выносят на площадь"
 
 # Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
   superevent_nam_resource_war_title: "Ресурсная война"

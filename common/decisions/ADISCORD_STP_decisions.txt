@@ -5939,6 +5939,84 @@ STP_cw_war_council = {
 		ai_will_do = { base = 4 }
 	}
 
+	# Resistance war: coalition decisions keep the three pillars in balance.
+	STP_hw_staff_briefing = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STS }
+		visible = {
+			has_completed_focus = STP_hw_mountain_mandate
+			STP_hw_war_current = yes
+		}
+		available = { STP_hw_war_current = yes }
+		cost = 25
+		days_re_enable = 60
+		complete_effect = {
+			add_command_power = 10
+			custom_effect_tooltip = STP_hw_staff_briefing_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_officers value = 12 }
+				subtract_from_variable = { var = STP_hw_councils value = 4 }
+				STP_hw_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 5 check_variable = { var = STP_hw_officers value = 35 compare = less_than } }
+			modifier = { factor = 0 check_variable = { var = STP_hw_officers value = 70 compare = greater_than } }
+		}
+	}
+
+	STP_hw_council_guarantees = {
+		icon = generic_political_discourse
+		allowed = { tag = STS }
+		visible = {
+			has_completed_focus = STP_hw_mountain_mandate
+			STP_hw_war_current = yes
+		}
+		available = { STP_hw_war_current = yes }
+		cost = 35
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = STP_hw_council_guarantees_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_councils value = 12 }
+				subtract_from_variable = { var = STP_hw_officers value = 4 }
+				set_temp_variable = { var = STP_hw_mandate_change value = 3 }
+				STP_hw_change_mandate = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 5 check_variable = { var = STP_hw_councils value = 35 compare = less_than } }
+			modifier = { factor = 0 check_variable = { var = STP_hw_councils value = 70 compare = greater_than } }
+		}
+	}
+
+	STP_hw_night_printing = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STS }
+		visible = {
+			has_completed_focus = STP_hw_mountain_mandate
+			STP_hw_war_current = yes
+		}
+		available = { STP_hw_war_current = yes }
+		cost = 25
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = STP_hw_night_printing_tt
+			hidden_effect = {
+				STP = { add_war_support = -0.01 }
+				add_to_variable = { var = STP_hw_underground value = 12 }
+				set_temp_variable = { var = STP_hw_mandate_change value = 2 }
+				STP_hw_change_mandate = yes
+			}
+		}
+		ai_will_do = {
+			base = 2
+			modifier = { factor = 5 check_variable = { var = STP_hw_underground value = 35 compare = less_than } }
+			modifier = { factor = 0 check_variable = { var = STP_hw_underground value = 70 compare = greater_than } }
+		}
+	}
 }
 
 STP_cw_external_intervention = {

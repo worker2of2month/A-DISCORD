@@ -151,10 +151,18 @@ STS_shabrat_civil_war_plan = {
 		STP_cw_frontline_relief
 		STP_cw_road_to_fada
 		STP_cw_last_banquet
+		STP_hw_mountain_mandate
 		STP_cw_strike_squadrons
 		STP_cw_route_columns
 		STP_cw_organize_underground
+		STP_hw_leaflets_over_fada
+		STP_hw_open_black_book
 		STP_cw_forward_airstrips
+		STP_hw_council_of_passes
+		STP_hw_unified_district_command
+		STP_hw_kefreyt_contract
+		STP_hw_coalition_congress
+		STP_hw_course_staff
 		STP_cw_mobilization_register
 		STP_cw_wartime_arsenals
 		STP_cw_supply_routes

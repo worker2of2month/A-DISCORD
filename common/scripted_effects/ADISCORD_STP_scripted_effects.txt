@@ -4348,6 +4348,7 @@ STP_cw_settle_union_victory = {
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
 	if = { limit = { tag = STP } STP_pv_resolve_victory = yes }
+	if = { limit = { tag = STS } STP_hw_resolve_victory = yes }
 	# The party and NOD victory settlements can both run for one result; major
 	# news stays repeatable, so the publication flag is the one-shot guard.
 	if = {
@@ -5405,6 +5406,7 @@ STP_cw_win_operation = {
 		clear_variable = STP_cw_operation_target
 		remove_ideas = STP_cw_operation_disorganization
 		add_timed_idea = { idea = STP_cw_operation_tempo days = 21 }
+		STP_hw_operation_won = yes
 		if = {
 			limit = { check_variable = { var = STP_cw_operation_round value = 3 compare = less_than } }
 			set_variable = { var = STP_cw_operation_pending value = 1 }
@@ -5442,6 +5444,7 @@ STP_cw_fail_operation = {
 			clear_variable = STP_cw_operation_target
 			remove_ideas = STP_cw_operation_tempo
 			add_timed_idea = { idea = STP_cw_operation_disorganization days = 28 }
+			STP_hw_operation_failed = yes
 			if = {
 				limit = { check_variable = { var = STP_cw_operation_round value = 3 compare = less_than } }
 				set_variable = { var = STP_cw_operation_pending value = 1 }
@@ -12249,4 +12252,258 @@ STP_pv_close_war = {
 	clear_variable = STP_pv_front_stage
 	clear_variable = STP_pv_war_months
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# ============================================================
+# RESISTANCE WAR: MANDATE OF THE MOUNTAINS
+# ============================================================
+# COUNTRY STS. Shabrat's war runs on a popular mandate (0-100) and a
+# three-pillar coalition: officers, mountain councils and the underground
+# press. The mandate scales stability, war support and conscription; neglected
+# pillars raise crises; the chosen coalition course shapes the victory.
+
+# One-time start at the first weekly tick of the war with the party.
+STP_hw_begin_war = {
+	if = {
+		limit = {
+			tag = STS
+			has_war_with = STP
+			NOT = { has_variable = STP_hw_mandate }
+			NOT = { has_country_flag = STP_cw_postwar }
+		}
+		set_variable = { var = STP_hw_mandate value = 50 }
+		set_variable = { var = STP_hw_officers value = 50 }
+		set_variable = { var = STP_hw_councils value = 50 }
+		set_variable = { var = STP_hw_underground value = 50 }
+		set_variable = { var = STP_hw_war_months value = 0 }
+		# Prewar preparation carries into the coalition through the party's own flags.
+		if = {
+			limit = { STP = { has_country_flag = STP_cw_archives_used } }
+			add_to_variable = { var = STP_hw_mandate value = 5 }
+			add_to_variable = { var = STP_hw_underground value = 10 }
+		}
+		if = {
+			limit = { STP = { has_country_flag = STP_cw_officers_ready } }
+			add_to_variable = { var = STP_hw_officers value = 10 }
+		}
+		if = {
+			limit = { STP = { has_country_flag = STP_cw_young_officers_ready } }
+			add_to_variable = { var = STP_hw_officers value = 5 }
+		}
+		if = {
+			limit = { STP = { has_country_flag = STP_cw_shabrat_election_victory } }
+			add_to_variable = { var = STP_hw_mandate value = 10 }
+		}
+		if = {
+			limit = { STP = { has_country_flag = STP_cw_limited_party_revolt } }
+			subtract_from_variable = { var = STP_hw_mandate value = 5 }
+			add_to_variable = { var = STP_hw_councils value = 5 }
+		}
+		STP_hw_refresh = yes
+		if = { limit = { is_ai = no } country_event = { id = ADISCORD_STP_hw.1 days = 2 } }
+	}
+}
+
+# Fixed-point variables keep three decimals: scale before dividing.
+STP_hw_refresh = {
+	clamp_variable = { var = STP_hw_mandate min = 0 max = 100 }
+	clamp_variable = { var = STP_hw_officers min = 0 max = 100 }
+	clamp_variable = { var = STP_hw_councils min = 0 max = 100 }
+	clamp_variable = { var = STP_hw_underground min = 0 max = 100 }
+	# Mandate 50 is neutral; 0 and 100 give -10%/+10% stability and war support
+	# and -15%/+15% conscription.
+	set_variable = { var = STP_hw_mandate_stability value = STP_hw_mandate }
+	subtract_from_variable = { var = STP_hw_mandate_stability value = 50 }
+	multiply_variable = { var = STP_hw_mandate_stability value = 2 }
+	divide_variable = { var = STP_hw_mandate_stability value = 1000 }
+	set_variable = { var = STP_hw_mandate_war_support value = STP_hw_mandate_stability }
+	set_variable = { var = STP_hw_mandate_conscription value = STP_hw_mandate }
+	subtract_from_variable = { var = STP_hw_mandate_conscription value = 50 }
+	multiply_variable = { var = STP_hw_mandate_conscription value = 3 }
+	divide_variable = { var = STP_hw_mandate_conscription value = 1000 }
+	if = {
+		limit = {
+			STP_hw_war_current = yes
+			NOT = { has_dynamic_modifier = { modifier = STP_hw_mandate_dynamic } }
+		}
+		add_dynamic_modifier = { modifier = STP_hw_mandate_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Input: temporary STP_hw_mandate_change.
+STP_hw_change_mandate = {
+	if = {
+		limit = { STP_hw_war_current = yes }
+		add_to_variable = { var = STP_hw_mandate value = STP_hw_mandate_change }
+		STP_hw_refresh = yes
+	}
+	set_temp_variable = { var = STP_hw_mandate_change value = 0 }
+}
+
+STP_hw_monthly = {
+	if = {
+		limit = { STP_hw_war_current = yes }
+		add_to_variable = { var = STP_hw_war_months value = 1 }
+		# A long war wears the mandate down; the AI resistance erodes more slowly.
+		set_temp_variable = { var = STP_hw_mandate_change value = -2 }
+		if = {
+			limit = { is_ai = yes }
+			set_temp_variable = { var = STP_hw_mandate_change value = -1 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_hw_war_months value = 8 compare = greater_than } }
+			add_to_temp_variable = { var = STP_hw_mandate_change value = -1 }
+		}
+		# Holding the capital district shows the mountains that the war can be won.
+		if = {
+			limit = { 28 = { is_controlled_by = STS } }
+			add_to_temp_variable = { var = STP_hw_mandate_change value = 2 }
+		}
+		STP_hw_change_mandate = yes
+		STP_hw_check_mandate_thresholds = yes
+		STP_hw_check_pillar_crisis = yes
+	}
+}
+
+STP_hw_check_mandate_thresholds = {
+	if = {
+		limit = {
+			check_variable = { var = STP_hw_mandate value = 10 compare = less_than_or_equals }
+			NOT = { has_country_flag = STP_hw_collapse_cooldown }
+		}
+		set_country_flag = { flag = STP_hw_collapse_cooldown value = 1 days = 60 }
+		country_event = { id = ADISCORD_STP_hw.11 hours = 6 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { var = STP_hw_mandate value = 30 compare = less_than_or_equals }
+			NOT = { has_country_flag = STP_hw_tired_mountains_seen }
+		}
+		set_country_flag = STP_hw_tired_mountains_seen
+		country_event = { id = ADISCORD_STP_hw.10 hours = 6 }
+	}
+}
+
+# At most one coalition crisis per 45 days; each pillar confronts Shabrat once per war.
+STP_hw_check_pillar_crisis = {
+	if = {
+		limit = { NOT = { has_country_flag = STP_hw_crisis_cooldown } }
+		if = {
+			limit = {
+				check_variable = { var = STP_hw_officers value = 25 compare = less_than }
+				NOT = { has_country_flag = STP_hw_crisis_officers_seen }
+			}
+			set_country_flag = STP_hw_crisis_officers_seen
+			set_country_flag = { flag = STP_hw_crisis_cooldown value = 1 days = 45 }
+			country_event = { id = ADISCORD_STP_hw.20 hours = 12 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = STP_hw_councils value = 25 compare = less_than }
+				NOT = { has_country_flag = STP_hw_crisis_councils_seen }
+			}
+			set_country_flag = STP_hw_crisis_councils_seen
+			set_country_flag = { flag = STP_hw_crisis_cooldown value = 1 days = 45 }
+			country_event = { id = ADISCORD_STP_hw.21 hours = 12 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = STP_hw_underground value = 25 compare = less_than }
+				NOT = { has_country_flag = STP_hw_crisis_underground_seen }
+			}
+			set_country_flag = STP_hw_crisis_underground_seen
+			set_country_flag = { flag = STP_hw_crisis_cooldown value = 1 days = 45 }
+			country_event = { id = ADISCORD_STP_hw.22 hours = 12 }
+		}
+	}
+}
+
+# Front operations feed the mandate: officers claim the wins, the mountains count the losses.
+STP_hw_operation_won = {
+	if = {
+		limit = { STP_hw_war_current = yes }
+		add_to_variable = { var = STP_hw_officers value = 5 }
+		set_temp_variable = { var = STP_hw_mandate_change value = 5 }
+		STP_hw_change_mandate = yes
+	}
+}
+
+STP_hw_operation_failed = {
+	if = {
+		limit = { STP_hw_war_current = yes }
+		subtract_from_variable = { var = STP_hw_officers value = 5 }
+		subtract_from_variable = { var = STP_hw_councils value = 3 }
+		set_temp_variable = { var = STP_hw_mandate_change value = -6 }
+		STP_hw_change_mandate = yes
+	}
+}
+
+# Course: 1 officers' directory, 2 council of passes, 3 truth commission.
+# Without a chosen course the strongest pillar takes it at the victory.
+STP_hw_resolve_victory = {
+	if = {
+		limit = { tag = STS has_variable = STP_hw_mandate }
+		if = {
+			limit = { NOT = { has_variable = STP_hw_course } }
+			set_variable = { var = STP_hw_course value = 1 }
+			if = {
+				limit = {
+					check_variable = { var = STP_hw_councils value = STP_hw_officers compare = greater_than }
+					check_variable = { var = STP_hw_councils value = STP_hw_underground compare = greater_than_or_equals }
+				}
+				set_variable = { var = STP_hw_course value = 2 }
+			}
+			else_if = {
+				limit = {
+					check_variable = { var = STP_hw_underground value = STP_hw_officers compare = greater_than }
+					check_variable = { var = STP_hw_underground value = STP_hw_councils compare = greater_than }
+				}
+				set_variable = { var = STP_hw_course value = 3 }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
+			add_timed_idea = { idea = STP_hw_course_staff_idea days = 365 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
+			add_timed_idea = { idea = STP_hw_course_councils_idea days = 365 }
+		}
+		else = {
+			add_timed_idea = { idea = STP_hw_course_truth_idea days = 365 }
+		}
+		if = {
+			limit = { check_variable = { var = STP_hw_mandate value = 60 compare = greater_than_or_equals } }
+			add_timed_idea = { idea = STP_hw_republic_of_mountains_idea days = 365 }
+		}
+		else_if = {
+			limit = { check_variable = { var = STP_hw_mandate value = 30 compare = less_than_or_equals } }
+			add_timed_idea = { idea = STP_hw_victory_on_credit_idea days = 365 }
+		}
+		STP_hw_close_war = yes
+	}
+}
+
+# STP_hw_course stays for the victory report; everything else is wartime state.
+STP_hw_close_war = {
+	if = {
+		limit = { has_dynamic_modifier = { modifier = STP_hw_mandate_dynamic } }
+		remove_dynamic_modifier = { modifier = STP_hw_mandate_dynamic }
+	}
+	remove_ideas = {
+		STP_hw_kefreyt_quartermasters_idea
+		STP_hw_mountain_levies_idea
+		STP_hw_officers_sulk_idea
+	}
+	clr_country_flag = STP_hw_crisis_cooldown
+	clr_country_flag = STP_hw_collapse_cooldown
+	clear_variable = STP_hw_mandate
+	clear_variable = STP_hw_officers
+	clear_variable = STP_hw_councils
+	clear_variable = STP_hw_underground
+	clear_variable = STP_hw_war_months
+	clear_variable = STP_hw_mandate_stability
+	clear_variable = STP_hw_mandate_war_support
+	clear_variable = STP_hw_mandate_conscription
 }

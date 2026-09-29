@@ -164,6 +164,12 @@ on_actions = {
 		}
 	}
 
+	on_monthly_STS = {
+		effect = {
+			STP_hw_monthly = yes
+		}
+	}
+
 	# Country removal has no shared callback here; reconcile only an open offer.
 	on_weekly_STS = {
 		effect = {
@@ -187,6 +193,15 @@ on_actions = {
 					NOT = { has_global_flag = STP_cw_union_wars_finished }
 				}
 				STP_cw_begin_hostilities = yes
+			}
+			if = {
+				limit = {
+					tag = STS
+					has_global_flag = STP_cw_started
+					has_war_with = STP
+					NOT = { has_variable = STP_hw_mandate }
+				}
+				STP_hw_begin_war = yes
 			}
 			if = {
 				limit = { tag = STS is_ai = yes has_capitulated = no has_war_with = STP }

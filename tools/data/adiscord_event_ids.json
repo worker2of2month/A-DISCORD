@@ -3675,6 +3675,54 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_party_war",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.1",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 1,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.10",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 10,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.11",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 11,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.20",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 20,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.21",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 21,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_hw.22",
+      "namespace": "ADISCORD_STP_hw",
+      "number": 22,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_resistance_war",
+      "status": "active"
     }
   ]
 }

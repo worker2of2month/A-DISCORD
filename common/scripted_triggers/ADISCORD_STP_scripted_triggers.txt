@@ -2467,3 +2467,37 @@ STP_pv_kefreyt_offer_possible = {
 		NOT = { has_war_with = STP }
 	}
 }
+
+# ============================================================
+# RESISTANCE WAR: MANDATE OF THE MOUNTAINS
+# ============================================================
+
+# COUNTRY STS: the mandate and the coalition exist only during the war with the party.
+STP_hw_war_current = {
+	tag = STS
+	has_war_with = STP
+	has_variable = STP_hw_mandate
+	NOT = { has_country_flag = STP_cw_postwar }
+}
+
+# A coalition course needs its pillar to stand behind it.
+STP_hw_officers_can_lead = {
+	check_variable = { var = STP_hw_officers value = 40 compare = greater_than_or_equals }
+}
+
+STP_hw_councils_can_lead = {
+	check_variable = { var = STP_hw_councils value = 40 compare = greater_than_or_equals }
+}
+
+STP_hw_underground_can_lead = {
+	check_variable = { var = STP_hw_underground value = 40 compare = greater_than_or_equals }
+}
+
+# The Black Book needs the stolen archive or a printing network strong enough to rebuild it.
+STP_hw_black_book_ready = {
+	OR = {
+		has_country_flag = STP_cw_archives_used
+		STP = { has_country_flag = STP_cw_archives_used }
+		check_variable = { var = STP_hw_underground value = 50 compare = greater_than_or_equals }
+	}
+}

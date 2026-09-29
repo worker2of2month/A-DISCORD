@@ -83,6 +83,27 @@ defined_text = {
 		localization_key = superevent_stelander_party_victory_quote
 	}
 	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_staff_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_councils_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_truth_quote
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
 		localization_key = superevent_stelander_shabrat_victory_quote
 	}
@@ -188,6 +209,27 @@ defined_text = {
 		localization_key = superevent_stelander_party_victory_title
 	}
 	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_staff_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_councils_title
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_truth_title
+	}
+	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }
 		localization_key = superevent_stelander_shabrat_victory_title
 	}
@@ -291,6 +333,27 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_party_victory }
 		localization_key = superevent_stelander_party_victory_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 1 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_staff_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 2 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_councils_comment
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_stelander_shabrat_victory
+			STS = { check_variable = { var = STP_hw_course value = 3 compare = equals } }
+		}
+		localization_key = superevent_stelander_shabrat_victory_truth_comment
 	}
 	text = {
 		trigger = { has_global_flag = superevent_stelander_shabrat_victory }

@@ -452,6 +452,266 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_hw_mountain_mandate
+		icon = GFX_focus_STP_Side_With_Maksim
+		x = -2
+		y = 0
+		cost = 1
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			STP_hw_begin_war = yes
+			custom_effect_tooltip = STP_hw_mountain_mandate_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_hw_mandate_change value = 5 }
+				STP_hw_change_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_leaflets_over_fada
+		icon = GFX_focus_STP_Open_Wounds_Of_The_System
+		x = -3
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_hw_mountain_mandate }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			STP = { add_war_support = -0.03 add_stability = -0.02 }
+			custom_effect_tooltip = STP_hw_leaflets_over_fada_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_underground value = 10 }
+				set_temp_variable = { var = STP_hw_mandate_change value = 5 }
+				STP_hw_change_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_council_of_passes
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = -1
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_hw_mountain_mandate }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_manpower = 4000
+			custom_effect_tooltip = STP_hw_council_of_passes_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_councils value = 15 }
+				subtract_from_variable = { var = STP_hw_officers value = 5 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_open_black_book
+		icon = GFX_focus_generic_secret_service_agency
+		x = -3
+		y = 2
+		cost = 3
+		prerequisite = { focus = STP_hw_leaflets_over_fada }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		available = { custom_trigger_tooltip = { tooltip = STP_hw_black_book_ready_tt STP_hw_black_book_ready = yes } }
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			STP = { add_stability = -0.08 add_war_support = -0.05 }
+			custom_effect_tooltip = STP_hw_black_book_nod_tt
+			hidden_effect = {
+				NOD = {
+					if = {
+						limit = { has_active_mission = NOD_cw_intervention_preparation }
+						add_days_mission_timeout = { mission = NOD_cw_intervention_preparation days = 30 }
+					}
+				}
+				set_global_flag = STP_hw_black_book_opened
+			}
+			custom_effect_tooltip = STP_hw_open_black_book_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_underground value = 10 }
+				set_temp_variable = { var = STP_hw_mandate_change value = 12 }
+				STP_hw_change_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_unified_district_command
+		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
+		x = -1
+		y = 2
+		cost = 2
+		prerequisite = { focus = STP_hw_council_of_passes }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_unified_staff_idea }
+			}
+			hidden_effect = {
+				add_to_variable = { var = STP_cw_army_org_factor value = 0.03 }
+				STP_cw_refresh_army_modifier = yes
+			}
+			custom_effect_tooltip = STP_hw_unified_district_command_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_officers value = 10 }
+				subtract_from_variable = { var = STP_hw_councils value = 5 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_kefreyt_contract
+		icon = GFX_focus_STP_Kefreite_Security_Offer
+		x = -3
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_hw_open_black_book focus = STP_hw_unified_district_command }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		mutually_exclusive = { focus = STP_hw_mountains_pay }
+		available = { VAL = { exists = yes NOT = { has_war_with = STS } } }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = VAL }
+			add_timed_idea = { idea = STP_hw_kefreyt_quartermasters_idea days = 180 }
+			hidden_effect = { set_country_flag = STP_hw_kefreyt_debt }
+			custom_effect_tooltip = STP_hw_kefreyt_contract_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_officers value = 5 }
+				subtract_from_variable = { var = STP_hw_underground value = 10 }
+				set_temp_variable = { var = STP_hw_mandate_change value = -8 }
+				STP_hw_change_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_mountains_pay
+		icon = GFX_focus_STP_Ruin_Their_Deal
+		x = -1
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_hw_open_black_book focus = STP_hw_unified_district_command }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		mutually_exclusive = { focus = STP_hw_kefreyt_contract }
+		ai_will_do = { base = 3 }
+		completion_reward = {
+			add_manpower = 10000
+			add_timed_idea = { idea = STP_hw_mountain_levies_idea days = 180 }
+			custom_effect_tooltip = STP_hw_mountains_pay_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_councils value = 10 }
+				subtract_from_variable = { var = STP_hw_officers value = 5 }
+				set_temp_variable = { var = STP_hw_mandate_change value = 8 }
+				STP_hw_change_mandate = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_coalition_congress
+		icon = GFX_focus_STP_Triumph_Of_Common_Sense
+		x = -2
+		y = 4
+		cost = 3
+		prerequisite = { focus = STP_hw_kefreyt_contract focus = STP_hw_mountains_pay }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = STP_hw_coalition_congress_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_officers value = 5 }
+				add_to_variable = { var = STP_hw_councils value = 5 }
+				add_to_variable = { var = STP_hw_underground value = 5 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_course_staff
+		icon = GFX_focus_STP_ps_joint_staff
+		x = -4
+		y = 5
+		cost = 3
+		prerequisite = { focus = STP_hw_coalition_congress }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		mutually_exclusive = { focus = STP_hw_course_councils focus = STP_hw_course_truth }
+		available = { custom_trigger_tooltip = { tooltip = STP_hw_officers_can_lead_tt STP_hw_officers_can_lead = yes } }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_command_power = 30
+			army_experience = 20
+			custom_effect_tooltip = STP_hw_course_staff_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_officers value = 20 }
+				subtract_from_variable = { var = STP_hw_councils value = 5 }
+				subtract_from_variable = { var = STP_hw_underground value = 5 }
+				set_variable = { var = STP_hw_course value = 1 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_course_councils
+		icon = GFX_goal_generic_national_unity
+		x = -2
+		y = 5
+		cost = 3
+		prerequisite = { focus = STP_hw_coalition_congress }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		mutually_exclusive = { focus = STP_hw_course_staff focus = STP_hw_course_truth }
+		available = { custom_trigger_tooltip = { tooltip = STP_hw_councils_can_lead_tt STP_hw_councils_can_lead = yes } }
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			add_manpower = 8000
+			add_stability = 0.05
+			custom_effect_tooltip = STP_hw_course_councils_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_councils value = 20 }
+				subtract_from_variable = { var = STP_hw_officers value = 5 }
+				subtract_from_variable = { var = STP_hw_underground value = 5 }
+				set_variable = { var = STP_hw_course value = 2 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_hw_course_truth
+		icon = GFX_focus_STP_cw_expose_the_cabinet
+		x = 0
+		y = 5
+		cost = 3
+		prerequisite = { focus = STP_hw_coalition_congress }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		mutually_exclusive = { focus = STP_hw_course_staff focus = STP_hw_course_councils }
+		available = { custom_trigger_tooltip = { tooltip = STP_hw_underground_can_lead_tt STP_hw_underground_can_lead = yes } }
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			add_political_power = 60
+			add_war_support = 0.05
+			custom_effect_tooltip = STP_hw_course_truth_tt
+			hidden_effect = {
+				add_to_variable = { var = STP_hw_underground value = 20 }
+				subtract_from_variable = { var = STP_hw_officers value = 5 }
+				subtract_from_variable = { var = STP_hw_councils value = 5 }
+				set_variable = { var = STP_hw_course value = 3 }
+				STP_hw_refresh = yes
+			}
+		}
+	}
+
+	focus = {
 		id = STP_cw_strike_squadrons
 		icon = GFX_goal_generic_CAS
 		x = 11

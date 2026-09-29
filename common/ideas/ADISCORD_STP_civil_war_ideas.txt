@@ -1335,6 +1335,24 @@ ideas = {
 
 		STP_cw_assault_air_cover_idea = { picture = generic_war_preparation allowed = { always = no } removal_cost = -1 modifier = { air_cas_efficiency = 0.10 air_cas_present_factor = 0.08 } }
 
+		# Resistance war: patron, levy and coalition spirits (timed; removed when the war closes).
+		STP_hw_kefreyt_quartermasters_idea = { picture = ADISCORD_law_industrial_policy_military_prioritization allowed = { always = no } removal_cost = -1 modifier = { supply_consumption_factor = -0.10 army_org_regain = 0.05 } }
+
+		STP_hw_mountain_levies_idea = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { conscription_factor = 0.10 army_core_defence_factor = 0.05 } }
+
+		STP_hw_officers_sulk_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { planning_speed = -0.15 army_org_factor = -0.05 } }
+
+		# Resistance victory: the coalition course and the mandate the war left behind.
+		STP_hw_course_staff_idea = { picture = ADISCORD_law_military_cadre_army allowed = { always = no } removal_cost = -1 modifier = { army_org_factor = 0.05 planning_speed = 0.10 political_power_factor = -0.10 } }
+
+		STP_hw_course_councils_idea = { picture = ADISCORD_law_civic_local_councils allowed = { always = no } removal_cost = -1 modifier = { stability_factor = 0.08 conscription_factor = 0.05 production_speed_buildings_factor = 0.05 command_power_gain_mult = -0.10 } }
+
+		STP_hw_course_truth_idea = { picture = STP_National_Strikes allowed = { always = no } removal_cost = -1 modifier = { political_power_factor = 0.10 stability_factor = 0.05 } }
+
+		STP_hw_republic_of_mountains_idea = { picture = ADISCORD_law_civic_emergency_committees allowed = { always = no } removal_cost = -1 modifier = { stability_factor = 0.08 war_support_factor = 0.05 production_speed_buildings_factor = 0.05 } }
+
+		STP_hw_victory_on_credit_idea = { picture = STP_security_pressure allowed = { always = no } removal_cost = -1 modifier = { stability_factor = -0.08 political_power_factor = -0.10 ADISCORD_economy_overall_income_factor = -0.08 } }
+
 	}
 
 	political_advisor_head_of_state = {
