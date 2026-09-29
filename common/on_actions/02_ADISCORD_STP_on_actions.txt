@@ -188,7 +188,14 @@ on_actions = {
 				}
 				STP_cw_begin_hostilities = yes
 			}
-
+			if = {
+				limit = { tag = STS is_ai = yes has_capitulated = no has_war_with = STP }
+				STP_cw_ai_shabrat_offensive_tick = yes
+			}
+			else_if = {
+				limit = { has_variable = STS_ai_wave_start_states }
+				STP_cw_ai_shabrat_clear_offensive = yes
+			}
 		}
 	}
 	# The split creates STS before the actual STP-STS war relation. Reconcile the
@@ -252,6 +259,7 @@ on_actions = {
 						progress = 0.30
 						efficiency = 50
 					}
+					STP_cw_sts_ai_air_arm = yes
 					set_country_flag = STP_cw_sts_runtime_bootstrap_applied
 				}
 			}

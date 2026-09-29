@@ -329,3 +329,82 @@ class ShabratCongressPriorityTests(unittest.TestCase):
         self.assertGreater(
             int(scalar(strategies["force_concentration_target_weight"], "value")), 100
         )
+
+
+class ShabratAssaultWaveAndAirTests(unittest.TestCase):
+    """Shabrat attacks in waves, rests when outmatched and opens with CAS."""
+
+    EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
+    ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"
+
+    def text(self, path: Path) -> str:
+        return re.sub(r"(?m)#.*$", "", path.read_text(encoding="utf-8-sig"))
+
+    def test_recovery_holds_between_waves_and_against_a_stronger_party(self) -> None:
+        recovery = compact(named_block(self.text(AI_PATH), "STS_shabrat_recover_party_front"))
+        self.assertIn("is_ai = yes", recovery)
+        self.assertIn("OR = {", recovery)
+        self.assertIn("has_country_flag = STS_ai_regroup", recovery)
+        self.assertIn("fighting_army_strength_ratio = { tag = STP ratio < 0.8 }", recovery)
+        self.assertIn("execution_type = careful execute_order = no manual_attack = no", recovery)
+
+    def test_waves_alternate_with_regroups_unless_ground_was_taken(self) -> None:
+        tick = compact(named_block(self.text(self.EFFECTS), "STP_cw_ai_shabrat_offensive_tick"))
+        self.assertIn("set_country_flag = { flag = STS_ai_assault_wave days = 42 }", tick)
+        self.assertIn("set_country_flag = { flag = STS_ai_regroup days = 21 }", tick)
+        # The regroup branch requires that the party kept at least as many states.
+        regroup = tick[tick.index("has_variable = STS_ai_wave_start_states"):tick.index("STS_ai_regroup days")]
+        self.assertIn("compare = greater_than_or_equals", regroup)
+        self.assertIn("NOT = { fighting_army_strength_ratio = { tag = STP ratio > 1.5 } }", regroup)
+        self.assertIn("every_controlled_state", tick)
+        self.assertNotIn("every_state", tick.replace("every_controlled_state", ""))
+
+    def test_wave_tick_runs_weekly_only_for_the_ai_resistance_at_war(self) -> None:
+        weekly = compact(named_block(self.text(self.ON_ACTIONS), "on_weekly_STS"))
+        call = weekly.index("STP_cw_ai_shabrat_offensive_tick = yes")
+        guard = weekly[weekly.rindex("limit", 0, call):call]
+        for condition in ("tag = STS", "is_ai = yes", "has_capitulated = no", "has_war_with = STP"):
+            self.assertIn(condition, guard)
+        self.assertIn("STP_cw_ai_shabrat_clear_offensive = yes", weekly)
+
+    def test_party_starts_with_ground_attack_wings_inside_base_capacity(self) -> None:
+        oob = (ROOT / "history/units/STP.txt").read_text(encoding="utf-8")
+        wings = named_block(oob, "air_wings")
+        bases = {"28": 2, "1": 1}
+        for state, level in bases.items():
+            body = named_block(wings, state)
+            amounts = [int(value) for value in re.findall(r"amount = (\d+)", body)]
+            # Air base capacity is 200 aircraft per level in this mod.
+            self.assertLessEqual(sum(amounts), level * 200, state)
+            self.assertIn("ADISCORD_cas_airframe_2170", body, state)
+
+    def test_ai_resistance_gets_cas_only_against_a_player_party(self) -> None:
+        arm = compact(named_block(self.text(self.EFFECTS), "STP_cw_sts_ai_air_arm"))
+        self.assertIn("limit = { is_ai = yes STP = { is_ai = no } }", arm)
+        self.assertIn("type = ADISCORD_cas_airframe_2170", arm)
+        bootstrap = compact(self.text(self.ON_ACTIONS))
+        self.assertLess(
+            bootstrap.index("inherit_technology = STP"),
+            bootstrap.index("STP_cw_sts_ai_air_arm = yes"),
+        )
+
+    def test_shabrat_air_focuses_grant_cas_and_the_plan_takes_them(self) -> None:
+        source = (ROOT / "focus_trees/STP/civil_war/focuses.txt").read_text(encoding="utf-8-sig")
+        plan = (ROOT / "common/ai_strategy_plans/ADISCORD_STP_plans.txt").read_text(encoding="utf-8")
+        war_plan = named_block(plan, "STS_shabrat_civil_war_plan")
+        for focus in ("STP_cw_strike_squadrons", "STP_cw_forward_airstrips", "STP_cw_assault_air_cover"):
+            body = source[source.index(f"id = {focus}\n"):]
+            body = body[:body.index("\n\t}\n")]
+            self.assertIn("tag = STS", body, focus)
+            self.assertIn("type = ADISCORD_cas_airframe_2170", body, focus)
+            self.assertIn(focus, war_plan)
+        # The air branch follows the Last Banquet so the decisive window keeps its clock.
+        self.assertLess(war_plan.index("STP_cw_last_banquet"), war_plan.index("STP_cw_strike_squadrons"))
+
+    def test_worn_units_do_not_join_planned_attacks(self) -> None:
+        defines = (ROOT / "common/defines/ADISCORD_defines_changes.lua").read_text(encoding="utf-8")
+        for level, floor in (("LOW", 0.85), ("MED", 0.65), ("HIGH", 0.5)):
+            for kind in ("ORG", "STRENGTH"):
+                value = re.search(rf"PLAN_ATTACK_MIN_{kind}_FACTOR_{level} = ([\d.]+)", defines)
+                self.assertIsNotNone(value, (kind, level))
+                self.assertGreaterEqual(float(value.group(1)), floor)

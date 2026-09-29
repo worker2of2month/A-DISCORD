@@ -1159,6 +1159,8 @@ class NorthernStartingForceTests(unittest.TestCase):
             named_block(technology, "enable_equipments"),
         )
 
+        # Fighter totals per country; STP also opens with one CAS group per airfield.
+        ground_attack = {"STP": 100}
         for tag, expected in {"NOD": 500, "STP": 300, "VAL": 800}.items():
             with self.subTest(tag=tag):
                 country_path = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))
@@ -1169,6 +1171,7 @@ class NorthernStartingForceTests(unittest.TestCase):
                 )
                 entries = parse_clausewitz(read(f"history/units/{tag}.txt"))
                 total = 0
+                cas_total = 0
                 for base in self.value(entries, "air_wings", []):
                     history = states[int(base.key)]
                     self.assertEqual(self.value(history, "owner"), tag)
@@ -1182,12 +1185,19 @@ class NorthernStartingForceTests(unittest.TestCase):
                     )
                     aircraft = 0
                     for wing in base.value:
-                        self.assertEqual(wing.key, "ADISCORD_fighter_airframe_2163")
+                        self.assertIn(
+                            wing.key,
+                            ("ADISCORD_fighter_airframe_2163", "ADISCORD_cas_airframe_2170"),
+                        )
                         self.assertEqual(self.value(wing.value, "owner"), tag)
-                        aircraft += int(self.value(wing.value, "amount"))
+                        amount = int(self.value(wing.value, "amount"))
+                        aircraft += amount
+                        if wing.key == "ADISCORD_cas_airframe_2170":
+                            cas_total += amount
                     self.assertLessEqual(aircraft, capacity)
                     total += aircraft
-                self.assertEqual(total, expected)
+                self.assertEqual(total - cas_total, expected)
+                self.assertEqual(cas_total, ground_attack.get(tag, 0))
                 effect = self.value(entries, "instant_effect", [])
                 fuel = float(self.value(effect, "add_fuel", "0"))
                 self.assertGreaterEqual(fuel, 30000)

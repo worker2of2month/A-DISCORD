@@ -452,6 +452,58 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_cw_strike_squadrons
+		icon = GFX_goal_generic_CAS
+		x = 11
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_cw_unified_headquarters }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 40 producer = STS }
+			air_experience = 10
+		}
+	}
+
+	focus = {
+		id = STP_cw_forward_airstrips
+		icon = GFX_goal_generic_air_production
+		x = 11
+		y = 2
+		cost = 2
+		prerequisite = { focus = STP_cw_strike_squadrons }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			if = {
+				limit = { 1 = { is_controlled_by = ROOT } }
+				1 = { add_building_construction = { type = air_base level = 1 instant_build = yes } }
+			}
+			random_owned_controlled_state = {
+				limit = { NOT = { state = 1 } OR = { state = 2 state = 3 state = 29 state = 53 } }
+				add_building_construction = { type = air_base level = 1 instant_build = yes }
+			}
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = STS }
+		}
+	}
+
+	focus = {
+		id = STP_cw_assault_air_cover
+		icon = GFX_goal_generic_CAS
+		x = 12
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_cw_forward_airstrips }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 40 producer = STS }
+			add_timed_idea = { idea = STP_cw_assault_air_cover_idea days = 180 }
+		}
+	}
+
+	focus = {
 		id = STP_cw_mountain_staff
 		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 9
@@ -970,7 +1022,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_war_budget
 		icon = GFX_focus_STP_2160_budget
-		x = 15
+		x = 17
 		y = 0
 		cost = 2
 		allow_branch = {
@@ -1000,7 +1052,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_lower_market_ledgers
 		icon = GFX_focus_STP_cw_buy_silence
-		x = 14
+		x = 15
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1029,7 +1081,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_loyalty_tribunal
 		icon = GFX_focus_STP_PARTY_DISCIPLINE
-		x = 16
+		x = 19
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1054,7 +1106,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_victory_committee
 		icon = GFX_focus_STP_It_Has_Only_Begun
-		x = 15
+		x = 17
 		y = 2
 		cost = 3
 		prerequisite = { focus = STP_pv_lower_market_ledgers }
@@ -1091,7 +1143,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_staff
 		icon = GFX_focus_STP_defense_budget_tank
-		x = 14
+		x = 15
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1123,7 +1175,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_silence
 		icon = GFX_focus_STP_ps_permanent_security
-		x = 16
+		x = 19
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1155,7 +1207,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_festival
 		icon = GFX_focus_STP_party_presidium_broadcast
-		x = 15
+		x = 17
 		y = 4
 		cost = 3
 		allow_branch = {
@@ -1186,7 +1238,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_wallets
 		icon = GFX_focus_STP_cw_port_budget
-		x = 17
+		x = 21
 		y = 4
 		cost = 3
 		allow_branch = {
@@ -3136,7 +3188,7 @@ focus_tree = {
 			custom_effect_tooltip = STP_pc_civil_appointment_tt
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_republic_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
+					add_to_variable = { var = STP_pw_planning_speed value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3171,9 +3223,9 @@ focus_tree = {
 
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_army_staff_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
-				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
-				add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
+					add_to_variable = { var = STP_pw_army_org_factor value = 0.08 }
+					add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
+					add_to_variable = { var = STP_pw_political_power_gain value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3576,8 +3628,8 @@ focus_tree = {
 			add_political_power = 30
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_unity_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
+					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+					add_to_variable = { var = STP_pw_political_power_gain value = 0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -3624,7 +3676,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_subordinate_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 			add_timed_idea = { idea = STP_pc_authorized_recruit days = -1 }
@@ -3931,8 +3983,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_heg_burden_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
+					add_to_variable = { var = STP_pw_army_org_factor value = 0.10 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.06 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4051,8 +4103,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_lib_assembly_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
+					add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+					add_to_variable = { var = STP_pw_political_power_gain value = -0.10 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4479,7 +4531,7 @@ focus_tree = {
 			army_experience = 10
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_field_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
+					add_to_variable = { var = STP_pw_planning_speed value = 0.05 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4525,7 +4577,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_sot_state_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -4732,7 +4784,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_gornin_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.04 }
 				STP_pw_refresh_modifier = yes
 			}
 			custom_effect_tooltip = STP_pc_gornin_charter_tt
@@ -4758,8 +4810,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_vera_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
-				add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
+					add_to_variable = { var = STP_pw_political_power_gain value = 0.05 }
+					add_to_variable = { var = STP_pw_industrial_capacity_factory value = -0.03 }
 				STP_pw_refresh_modifier = yes
 			}
 		}

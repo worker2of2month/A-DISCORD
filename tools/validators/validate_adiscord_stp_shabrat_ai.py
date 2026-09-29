@@ -23,7 +23,7 @@ FOCUS = ROOT / "focus_trees/STP"
 EVENTS = ROOT / "events/ADISCORD_STP_events.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_STP_decisions.txt"
 
-SCORE_TOTAL = 105
+SCORE_TOTAL = 107
 
 INTRO_FOCUSES = (
     "STP_NECTAR_OF_GODS",
@@ -73,12 +73,15 @@ WAR_FOCUSES = (
     "STP_cw_frontline_relief",
     "STP_cw_road_to_fada",
     "STP_cw_last_banquet",
+    "STP_cw_strike_squadrons",
     "STP_cw_route_columns",
     "STP_cw_organize_underground",
+    "STP_cw_forward_airstrips",
     "STP_cw_mobilization_register",
     "STP_cw_wartime_arsenals",
     "STP_cw_supply_routes",
     "STP_cw_cut_capital_roads",
+    "STP_cw_assault_air_cover",
     "STP_cw_government_quarter_assault",
     "STP_cw_line_formations",
 )
@@ -637,6 +640,14 @@ def run_checks() -> list[tuple[str, bool, str]]:
         and "put_unit_buffers" not in army,
     )
     add("STS front rush_weak", "execution_type = rush_weak" in sts_front)
+    recovery = named_block(strategy_text, "STS_shabrat_recover_party_front")
+    add("Shabrat army wants ground-attack wings", "unit_ratio id = cas" in army)
+    add(
+        "Shabrat regroups between waves and when outmatched",
+        "has_country_flag = STS_ai_regroup" in recovery
+        and "fighting_army_strength_ratio = { tag = STP" in recovery
+        and "execute_order = no" in recovery,
+    )
     add("VAL front exists", bool(val_front) and "tag = VAL" in val_front)
     add("strategy file has no add_ai_strategy", "add_ai_strategy" not in strategy_text)
 

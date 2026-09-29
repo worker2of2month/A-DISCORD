@@ -3194,7 +3194,13 @@ STP_cw_begin_hostilities = {
 			add_ideas = STP_cw_party_battle_spirit
 			activate_mission = STP_cw_exhaustion_deadline_1
 			STS = { add_ideas = STP_cw_resistance_battle_spirit }
-			news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+			# Major news is repeatable so every country receives it; this flag is
+			# shared with the war-relation on_action that publishes the same report.
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_published } }
+				set_global_flag = ADISCORD_news_stelander_civil_war_published
+				news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+			}
 			STS = { country_event = { id = ADISCORD_STP_cw.91 days = 5 } }
 			if = { limit = { VAL = { exists = yes } } VAL = { country_event = { id = ADISCORD_STP_cw.20 days = 1 } } }
 			log = "[STP_CW] hostilities begin after side selection and full territorial control setup"
@@ -3222,7 +3228,11 @@ STP_cw_begin_hostilities = {
 						limit = { NOT = { has_idea = STP_cw_party_battle_spirit } }
 						add_ideas = STP_cw_party_battle_spirit
 						STS = { add_ideas = STP_cw_resistance_battle_spirit }
-						news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+						if = {
+							limit = { NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_published } }
+							set_global_flag = ADISCORD_news_stelander_civil_war_published
+							news_event = { id = ADISCORD_STP_cw.70 hours = 1 }
+						}
 						STS = { country_event = { id = ADISCORD_STP_cw.91 days = 5 } }
 						if = { limit = { VAL = { exists = yes } } VAL = { country_event = { id = ADISCORD_STP_cw.20 days = 1 } } }
 					}
@@ -3387,6 +3397,54 @@ STP_cw_divide_air_reserves = {
 			}
 		}
 	}
+}
+
+# When the party is played, the AI resistance opens the war with a ground-attack
+# arm: aircraft in the stockpile (the AI forms wings from them) and room at Abilia.
+STP_cw_sts_ai_air_arm = {
+	if = {
+		limit = { is_ai = yes STP = { is_ai = no } }
+		add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 50 producer = STS }
+		1 = {
+			if = {
+				limit = { is_owned_by = STS }
+				add_building_construction = { type = air_base level = 1 instant_build = yes }
+			}
+		}
+	}
+}
+
+# Shabrat's AI attacks in waves: 42 days of pressure, then 21 days of
+# regrouping (STS_shabrat_recover_party_front) unless the wave took a state
+# from the party or the resistance army clearly outweighs it.
+STP_cw_ai_shabrat_offensive_tick = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = STS_ai_assault_wave }
+			NOT = { has_country_flag = STS_ai_regroup }
+		}
+		set_temp_variable = { var = STS_ai_party_states_temp value = 0 }
+		STP = { every_controlled_state = { ROOT = { add_to_temp_variable = { var = STS_ai_party_states_temp value = 1 } } } }
+		if = {
+			limit = {
+				has_variable = STS_ai_wave_start_states
+				check_variable = { var = STS_ai_party_states_temp value = STS_ai_wave_start_states compare = greater_than_or_equals }
+				NOT = { fighting_army_strength_ratio = { tag = STP ratio > 1.5 } }
+			}
+			set_country_flag = { flag = STS_ai_regroup days = 21 }
+			clear_variable = STS_ai_wave_start_states
+		}
+		else = {
+			set_variable = { var = STS_ai_wave_start_states value = STS_ai_party_states_temp }
+			set_country_flag = { flag = STS_ai_assault_wave days = 42 }
+		}
+	}
+}
+
+STP_cw_ai_shabrat_clear_offensive = {
+	clr_country_flag = STS_ai_assault_wave
+	clr_country_flag = STS_ai_regroup
+	clear_variable = STS_ai_wave_start_states
 }
 
 STP_cw_start = {
@@ -4290,8 +4348,14 @@ STP_cw_settle_union_victory = {
 	STP_cw_finish_mobilization = yes
 	if = { limit = { tag = STS } STP_pw_rebuild_economy_after_unification = yes }
 	if = { limit = { tag = STP } STP_pv_resolve_victory = yes }
-	if = { limit = { tag = STP } news_event = { id = ADISCORD_STP_cw.71 hours = 1 } }
-	else_if = { limit = { tag = STS } news_event = { id = ADISCORD_STP_cw.72 hours = 1 } }
+	# The party and NOD victory settlements can both run for one result; major
+	# news stays repeatable, so the publication flag is the one-shot guard.
+	if = {
+		limit = { NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_result_published } }
+		set_global_flag = ADISCORD_news_stelander_civil_war_result_published
+		if = { limit = { tag = STP } news_event = { id = ADISCORD_STP_cw.71 hours = 1 } }
+		else_if = { limit = { tag = STS } news_event = { id = ADISCORD_STP_cw.72 hours = 1 } }
+	}
 	STP_cw_check_union_wars_finished = yes
 	STP_cw_queue_peace_reconciliation = yes
 }
@@ -4318,7 +4382,11 @@ STP_cw_settle_nod_victory = {
 			set_country_flag = STP_cw_won_union_battle
 			STP_cw_finish_mobilization = yes
 			STP_pv_resolve_victory = yes
-			news_event = { id = ADISCORD_STP_cw.71 hours = 1 }
+			if = {
+				limit = { NOT = { has_global_flag = ADISCORD_news_stelander_civil_war_result_published } }
+				set_global_flag = ADISCORD_news_stelander_civil_war_result_published
+				news_event = { id = ADISCORD_STP_cw.71 hours = 1 }
+			}
 		}
 		log = "[STP_CW] NOD military victory restores STS territory to STP"
 		STP_cw_check_union_wars_finished = yes

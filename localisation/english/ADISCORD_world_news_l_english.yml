@@ -1,20 +1,20 @@
 ﻿l_english:
- ADISCORD_world_news.1.t: "Fighting Begins Across Vorkerland"
- ADISCORD_world_news.1.d: "Armed clashes have begun between the main governments claiming authority over Vorkerland. Former federal units now answer to separate commands, while railway junctions, depots and major roads are being seized for military use. Several fronts have formed at once, and no claimant currently controls enough of the country to restore a central government."
- ADISCORD_world_news.1.a: "Vorkerland is now at war with itself."
+ ADISCORD_world_news.1.t: "War Engulfs Vorkerland"
+ ADISCORD_world_news.1.d: "The struggle for power in Vorkerland has turned into open fighting. Former federal units answer to rival headquarters, and railway junctions, depots and main roads are passing under military control. Fronts have opened in several places at once. None of the claimants currently has the strength to restore a single government, and foreign observers expect a long war."
+ ADISCORD_world_news.1.a: "This looks set to last."
 
  ADISCORD_world_news.2.t: "Nodrul Opens the Northern War"
- ADISCORD_world_news.2.d: "Nodrul has entered open war with the northern coalition. Mobilisation orders have been issued across the region, and both sides are moving troops toward the main roads and mountain passes. The coalition must coordinate several separate armies, while Nodrul is concentrating its forces for a sustained northern campaign."
+ ADISCORD_world_news.2.d: "Nodrul has declared war on the northern coalition. Mobilisation is under way across the region, and columns from both sides are moving toward the main roads and mountain passes. Nodrul's command is concentrating its forces for a long campaign, while the coalition has yet to agree on how its several armies will fight together."
  ADISCORD_world_news.2.a: "The northern campaign has begun."
 
  ADISCORD_world_news.3.t: "Civil War Begins in Stelander"
- ADISCORD_world_news.3.d: "The political crisis in Stelander has become a civil war. Government formations and resistance forces now operate under separate commands, local administrations are choosing sides, and arsenals are being opened to field units. Fighting has begun along the mountain roads that connect the main population centres."
- ADISCORD_world_news.3.a: "Stelander has split into rival camps."
+ ADISCORD_world_news.3.d: "The political crisis in Stelander has turned into civil war. Government troops and resistance forces answer to separate headquarters, district administrations are picking sides one after another, and arsenals are handing out weapons to field units. The first fighting is taking place on the mountain roads between the country's largest cities."
+ ADISCORD_world_news.3.a: "Stelander has split apart."
 
  ADISCORD_world_news.4.t: "Kefreyt Enters the Stelander Civil War"
- ADISCORD_world_news.4.d: "Kefreyt has begun direct military operations in Stelander. Its forces have opened a separate front against one of the civil war belligerents after a period of material support and political pressure. The intervention forces the local sides to account for an external army as well as their domestic opponents."
- ADISCORD_world_news.4.a: "Kefreyt is now a belligerent."
+ ADISCORD_world_news.4.d: "Kefreyt has moved from arms deliveries and political pressure to direct involvement in Stelander's civil war. Kefreyt's troops have opened their own front against one of the sides. The local armies must now fight not only each other but a full-scale foreign army as well."
+ ADISCORD_world_news.4.a: "The war has become international."
 
  ADISCORD_world_news.5.t: "Itora Enters the War in Northern Vorkerland"
- ADISCORD_world_news.5.d: "Itoran troops have crossed into the northern territories of former Vorkerland and begun combat operations against local forces. The intervention adds an external army to a region already divided among competing governments. Northern states are now redirecting troops from their local wars to cover the Itoran advance."
+ ADISCORD_world_news.5.d: "Itoran troops have crossed into the northern territories of former Vorkerland and engaged local forces. The northern states were already at war with one another; now they must pull units off their own fronts to halt the Itoran advance."
  ADISCORD_world_news.5.a: "Itora has entered the war."

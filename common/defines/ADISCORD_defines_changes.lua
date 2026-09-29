@@ -439,6 +439,16 @@ NDefines.NAI.LAND_DESIGN_DEMAND_GARRISON_DIVISION = 10
 NDefines.NAI.LAND_DESIGN_DEMAND_UNUSED_TEMPLATE = 10
 NDefines.NAI.LAND_DESIGN_DEMAND_ABSENT = 10
 
+-- A unit joins a planned attack only while it still has this share of organisation
+-- and strength (LOW/MED/HIGH = careful/balanced/rush). Worn divisions hold the line
+-- instead of feeding repeated assaults into the same province.
+NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_LOW = 0.85
+NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_LOW = 0.85
+NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_MED = 0.65
+NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_MED = 0.65
+NDefines.NAI.PLAN_ATTACK_MIN_ORG_FACTOR_HIGH = 0.5
+NDefines.NAI.PLAN_ATTACK_MIN_STRENGTH_FACTOR_HIGH = 0.5
+
 NDefines.NAI.PLAN_FACTION_STRONG_TO_EXECUTE = 0.65
 NDefines.NAI.ORG_UNIT_STRONG = 0.75
 NDefines.NAI.STR_UNIT_STRONG = 0.75

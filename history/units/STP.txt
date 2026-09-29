@@ -287,16 +287,19 @@ units = {
 	}
 }
 
+# Each airfield adds one ground-attack group within its base capacity.
 air_wings = {
 	28 = {
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_cas_airframe_2170 = { owner = "STP" amount = 50 }
 	}
 	1 = {
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
 		ADISCORD_fighter_airframe_2163 = { owner = "STP" amount = 50 }
+		ADISCORD_cas_airframe_2170 = { owner = "STP" amount = 50 }
 	}
 }
 

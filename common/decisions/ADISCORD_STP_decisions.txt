@@ -256,6 +256,211 @@ STP_elections_in_the_party = {
 		ai_will_do = { base = 2 }
 	}
 
+
+	# Party path, before the civil war: treasury decisions.
+	STP_pm_secretary_envelopes = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_600
+		custom_cost_trigger = { STP_cw_can_spend_600 = yes }
+		fire_only_once = no
+		days_re_enable = 21
+		complete_effect = {
+			add_political_power = 15
+			hidden_effect = { STP_cw_spend_600 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 150
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_delegates_banquet = {
+		icon = generic_political_discourse
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 35
+		complete_effect = {
+			add_political_power = 30
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 150
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_buy_newspaper_columns = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_2400
+		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_political_power = 65
+			hidden_effect = { STP_cw_spend_2400 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 150
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_district_clubs = {
+		icon = generic_national_unity
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+			has_stability < 0.9
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_stability = 0.03
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_stability > 0.8
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_guard_bonuses = {
+		icon = generic_nationalism
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+			has_war_support < 0.9
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_war_support = 0.03
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_war_support > 0.8
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_buy_draft_lists = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_manpower = 3000
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_retired_officers = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			has_country_flag = STP_sided_with_the_party_flag
+			STP_cw_preparation_open = yes
+		}
+		available = { STP_cw_preparation_open = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_2400
+		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			army_experience = 10
+			hidden_effect = { STP_cw_spend_2400 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
+			}
+		}
+	}
 }
 
 STP_shabrat_election_bop_category = {
@@ -2933,6 +3138,234 @@ STP_cw_war_council = {
 		}
 	}
 
+
+	# Party path, civil war: treasury decisions.
+	STP_pm_wavering_officials = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_600
+		custom_cost_trigger = { STP_cw_can_spend_600 = yes }
+		fire_only_once = no
+		days_re_enable = 21
+		complete_effect = {
+			add_political_power = 15
+			hidden_effect = { STP_cw_spend_600 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 120
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_commissar_pay = {
+		icon = generic_political_discourse
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			add_political_power = 30
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 120
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_front_gala = {
+		icon = generic_propaganda_campaigns
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_2400
+		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_political_power = 60
+			hidden_effect = { STP_cw_spend_2400 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_political_power > 120
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_front_bonuses = {
+		icon = generic_nationalism
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+			has_war_support < 0.9
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_war_support = 0.04
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				has_war_support > 0.8
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_paid_recruiters = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			add_manpower = 5000
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_smuggler_rifles = {
+		icon = generic_industry
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 900 producer = STP }
+			hidden_effect = { STP_cw_spend_1200 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_hired_instructors = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_2400
+		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			army_experience = 15
+			hidden_effect = { STP_cw_spend_2400 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_widow_pensions = {
+		icon = generic_national_unity
+		allowed = { tag = STP }
+		visible = {
+			STP_pv_war_current = yes
+			check_variable = { var = STP_pv_strain value = 0 compare = greater_than }
+		}
+		available = { STP_pv_war_current = yes }
+		cost = 0
+		custom_cost_text = STP_pm_cost_2400
+		custom_cost_trigger = { STP_cw_can_spend_2400 = yes }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			add_stability = 0.02
+			custom_effect_tooltip = STP_pv_strain_minus_6_tt
+			hidden_effect = {
+				set_temp_variable = { var = STP_pv_strain_change value = -6 }
+				STP_pv_change_strain = yes
+			}
+			hidden_effect = { STP_cw_spend_2400 = yes }
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				check_variable = { var = STP_pv_strain value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 7200 compare = less_than }
+			}
+		}
+	}
 
 	STP_ps_plot_1 = {
 		icon = GFX_decision_ADISCORD_covert_operation
@@ -7398,9 +7831,289 @@ STP_scenario_debug = {
 }
 
 STP_party_factions = {
+	# Party path: treasury-funded faction patronage (before and during the civil war).
+	STP_pm_fund_conservatives = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_conservatives_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_conservatives_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 1 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_conservatives_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_borons = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_borons_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_borons_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 2 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_borons_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_security = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_security_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_security_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 3 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_security_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_army = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_army_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_army_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 4 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_army_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_advisers = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_advisers_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_advisers_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 5 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_advisers_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_merchants = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_merchants_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_merchants_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 6 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_merchants_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
+	STP_pm_fund_radicals = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pf_active = yes
+			has_country_flag = STP_pf_initialized
+			OR = {
+				STP_cw_preparation_open = yes
+				STP_pv_war_current = yes
+			}
+			check_variable = { var = STP_pf_radicals_influence value = 60 compare = less_than }
+		}
+		available = { has_capitulated = no }
+		cost = 0
+		custom_cost_text = STP_pm_cost_1200
+		custom_cost_trigger = { STP_cw_can_spend_1200 = yes }
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = STP_pm_fund_radicals_tt
+			hidden_effect = {
+				STP_cw_spend_1200 = yes
+				set_temp_variable = { var = STP_pf_selected value = 7 }
+				STP_pm_fund_faction = yes
+			}
+		}
+		ai_will_do = {
+			base = 0.5
+			modifier = {
+				factor = 4
+				check_variable = { var = STP_pf_radicals_support value = 30 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 3600 compare = less_than }
+			}
+		}
+	}
+
 	STP_pf_negotiate_conservatives = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_conservatives_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_conservatives_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_conservatives_room_tt
@@ -7434,7 +8147,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_borons = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_borons_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_borons_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_borons_room_tt
@@ -7490,7 +8209,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_security = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_security_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_security_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_security_room_tt
@@ -7547,7 +8272,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_army = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_army_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_army_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_army_room_tt
@@ -7588,7 +8319,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_advisers = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_advisers_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_advisers_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_advisers_room_tt
@@ -7621,7 +8358,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_merchants = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_merchants_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_merchants_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_merchants_room_tt
@@ -7662,7 +8405,13 @@ STP_party_factions = {
 	}
 	STP_pf_negotiate_radicals = {
 		icon = generic_political_pressure
-		visible = { STP_pf_active = yes }
+		visible = {
+			STP_pf_active = yes
+			OR = {
+				check_variable = { var = STP_pf_radicals_influence value = 60 compare = less_than }
+				check_variable = { var = STP_pf_radicals_support value = 60 compare = less_than }
+			}
+		}
 		available = { STP_pf_can_negotiate = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pf_radicals_room_tt

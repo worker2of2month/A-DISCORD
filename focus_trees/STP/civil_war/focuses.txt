@@ -449,6 +449,58 @@ focus_tree = {
 	}
 
 	focus = {
+		id = STP_cw_strike_squadrons
+		icon = GFX_goal_generic_CAS
+		x = 11
+		y = 1
+		cost = 2
+		prerequisite = { focus = STP_cw_unified_headquarters }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 40 producer = STS }
+			air_experience = 10
+		}
+	}
+
+	focus = {
+		id = STP_cw_forward_airstrips
+		icon = GFX_goal_generic_air_production
+		x = 11
+		y = 2
+		cost = 2
+		prerequisite = { focus = STP_cw_strike_squadrons }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			if = {
+				limit = { 1 = { is_controlled_by = ROOT } }
+				1 = { add_building_construction = { type = air_base level = 1 instant_build = yes } }
+			}
+			random_owned_controlled_state = {
+				limit = { NOT = { state = 1 } OR = { state = 2 state = 3 state = 29 state = 53 } }
+				add_building_construction = { type = air_base level = 1 instant_build = yes }
+			}
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 30 producer = STS }
+		}
+	}
+
+	focus = {
+		id = STP_cw_assault_air_cover
+		icon = GFX_goal_generic_CAS
+		x = 12
+		y = 3
+		cost = 3
+		prerequisite = { focus = STP_cw_forward_airstrips }
+		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } tag = STS }
+		ai_will_do = { base = 5 }
+		completion_reward = {
+			add_equipment_to_stockpile = { type = ADISCORD_cas_airframe_2170 amount = 40 producer = STS }
+			add_timed_idea = { idea = STP_cw_assault_air_cover_idea days = 180 }
+		}
+	}
+
+	focus = {
 		id = STP_cw_mountain_staff
 		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 9
@@ -967,7 +1019,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_war_budget
 		icon = GFX_focus_STP_2160_budget
-		x = 15
+		x = 17
 		y = 0
 		cost = 2
 		allow_branch = {
@@ -997,7 +1049,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_lower_market_ledgers
 		icon = GFX_focus_STP_cw_buy_silence
-		x = 14
+		x = 15
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1026,7 +1078,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_loyalty_tribunal
 		icon = GFX_focus_STP_PARTY_DISCIPLINE
-		x = 16
+		x = 19
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1051,7 +1103,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_victory_committee
 		icon = GFX_focus_STP_It_Has_Only_Begun
-		x = 15
+		x = 17
 		y = 2
 		cost = 3
 		prerequisite = { focus = STP_pv_lower_market_ledgers }
@@ -1088,7 +1140,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_staff
 		icon = GFX_focus_STP_defense_budget_tank
-		x = 14
+		x = 15
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1120,7 +1172,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_silence
 		icon = GFX_focus_STP_ps_permanent_security
-		x = 16
+		x = 19
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1152,7 +1204,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_festival
 		icon = GFX_focus_STP_party_presidium_broadcast
-		x = 15
+		x = 17
 		y = 4
 		cost = 3
 		allow_branch = {
@@ -1183,7 +1235,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_wallets
 		icon = GFX_focus_STP_cw_port_budget
-		x = 17
+		x = 21
 		y = 4
 		cost = 3
 		allow_branch = {

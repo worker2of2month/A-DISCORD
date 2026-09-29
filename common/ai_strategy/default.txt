@@ -309,6 +309,32 @@ ADISCORD_active_enemy_front_concentration = {
 	}
 }
 
+# Against an enemy whose field army is half again as strong, uncontrolled fronts
+# hold and recover instead of attacking. Country profiles with a higher
+# front_control priority keep their scripted campaigns. FROM is our country.
+ADISCORD_hold_against_stronger_enemy = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_war_with = FROM
+			fighting_army_strength_ratio = { tag = FROM ratio > 1.5 }
+		}
+		ratio = 0.01
+		priority = 900
+		ordertype = front
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+	}
+}
+
 # FROM is the allocating country in a front's country_trigger. Keep a border
 # when either side has a concrete war preparation, even during another war.
 ADISCORD_wartime_neutral_borders = {

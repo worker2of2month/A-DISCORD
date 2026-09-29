@@ -40,8 +40,8 @@ on_actions = {
 			# Stelander already has a richer public outbreak report (.70) with
 			# election-dependent text. Schedule it from the actual STP/STS war
 			# relation after the split stack unwinds; opening the news window
-			# inside declare_war_on corrupts the observer client. fire_only_once
-			# still suppresses a second same-hour fallback call.
+			# inside declare_war_on corrupts the observer client. The fallback call in
+			# STP_cw_begin_hostilities checks the same publication flag.
 			if = {
 				limit = {
 					has_global_flag = STP_cw_started
