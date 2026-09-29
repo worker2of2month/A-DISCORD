@@ -30,7 +30,9 @@ def named_gui_block(text: str, declaration: str, name: str) -> str:
 
 
 class StateViewUIContracts(unittest.TestCase):
-    def test_native_stateview_paths_are_current_and_keep_engine_dimensions(self) -> None:
+    def test_native_stateview_paths_are_current_and_keep_engine_dimensions(
+        self,
+    ) -> None:
         outputs = expected_outputs()
         for path, size in STATEVIEW_OUTPUT_SIZES.items():
             self.assertIn(path, outputs)
@@ -39,7 +41,9 @@ class StateViewUIContracts(unittest.TestCase):
             with Image.open(path) as image:
                 self.assertEqual(image.size, size, path.name)
 
-    def test_stateview_shell_has_transparent_corners_and_visible_section_accents(self) -> None:
+    def test_stateview_shell_has_transparent_corners_and_visible_section_accents(
+        self,
+    ) -> None:
         with Image.open(STATEVIEW_WW_BACKGROUND) as image:
             panel = image.convert("RGBA")
         alpha = panel.getchannel("A")
@@ -57,7 +61,9 @@ class StateViewUIContracts(unittest.TestCase):
         )
         self.assertGreater(cyan_pixels, 1000)
 
-    def test_building_cards_and_shared_slots_are_separate_compact_surfaces(self) -> None:
+    def test_building_cards_and_shared_slots_are_separate_compact_surfaces(
+        self,
+    ) -> None:
         with Image.open(STATEVIEW_WW_ENTRY) as image:
             standing = image.convert("RGBA")
         with Image.open(STATEVIEW_BUILD_SLOT) as image:

@@ -18,7 +18,7 @@ state={
 		add_core_of = OSF
 	}
 	resources = {
-        tungsten = 4
-        aluminium = 15
-    }
+		tungsten = 4
+		aluminium = 15
+	}
 }

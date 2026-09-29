@@ -31,9 +31,13 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertIn("ADISCORD_rin_is_vorkerland_war_actor = yes", war)
         self.assertIn("ADISCORD_rin_oath_crisis_can_schedule = yes", war)
         self.assertEqual(war.count("ADISCORD_rin_crisis.1 days = 7"), 1)
-        self.assertEqual(war.count("ADISCORD_release_non_participating_minor_optimization = yes"), 2)
+        self.assertEqual(
+            war.count("ADISCORD_release_non_participating_minor_optimization = yes"), 2
+        )
         event_position = war.find("ADISCORD_rin_crisis.1 days = 7")
-        for match in re.finditer("ADISCORD_release_non_participating_minor_optimization = yes", war):
+        for match in re.finditer(
+            "ADISCORD_release_non_participating_minor_optimization = yes", war
+        ):
             self.assertLess(match.start(), event_position)
         self.assertLess(
             war.find("set_global_flag = ADISCORD_rin_oath_crisis_scheduled"),
@@ -72,11 +76,16 @@ class RinOathCrisisContractTests(unittest.TestCase):
             ("color", "rgb { 102 48 61 }"),
         ):
             self.assertNotRegex(history, rf"(?m)^\s*{field}\s*=")
-            self.assertRegex(country, rf"(?m)^\s*{field}\s*=\s*{re.escape(expected)}\s*$")
+            self.assertRegex(
+                country, rf"(?m)^\s*{field}\s*=\s*{re.escape(expected)}\s*$"
+            )
 
     def test_only_central_claimants_can_produce_the_crisis(self) -> None:
         actor = named_block(read(TRIGGERS), "ADISCORD_rin_is_vorkerland_war_actor")
-        self.assertEqual(set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", actor)), {"WKR", "VAD", "TVA"})
+        self.assertEqual(
+            set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", actor)),
+            {"WKR", "VAD", "TVA"},
+        )
 
     def test_visible_event_defaults_ai_to_the_split(self) -> None:
         prompt = event_block(read(EVENTS), "ADISCORD_rin_crisis.1")
@@ -84,7 +93,9 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertIn("desc = ADISCORD_rin_crisis.1.d", prompt)
         self.assertIn("picture = GFX_event_adiscord_negotiation_table", prompt)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_started", prompt)
-        self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_wars_started", prompt)
+        self.assertIn(
+            "has_global_flag = ADISCORD_vorkerland_collapse_wars_started", prompt
+        )
         self.assertIn("ai_chance = { base = 100 }", prompt)
         self.assertIn("ai_chance = { base = 0 }", prompt)
         self.assertIn("ADISCORD_rin_begin_oath_crisis = yes", prompt)
@@ -93,21 +104,32 @@ class RinOathCrisisContractTests(unittest.TestCase):
         begin = named_block(read(EFFECTS), "ADISCORD_rin_begin_oath_crisis")
         self.assertIn("autonomy_state = autonomy_free", begin)
         self.assertIn("ADISCORD_rin_crisis.2 days = 1", begin)
-        self.assertLess(begin.find("autonomy_state = autonomy_free"), begin.find("ADISCORD_rin_crisis.2 days = 1"))
+        self.assertLess(
+            begin.find("autonomy_state = autonomy_free"),
+            begin.find("ADISCORD_rin_crisis.2 days = 1"),
+        )
 
     def test_split_is_exact_and_does_not_merge_wars(self) -> None:
         effects = read(EFFECTS)
         split = named_block(effects, "ADISCORD_rin_start_oath_civil_war")
         for token in (
-            "size = 0", "army_ratio = 0.40", "capital = 147",
-            "states = { 134 147 }", "set_cosmetic_tag = RIN_northern_court",
+            "size = 0",
+            "army_ratio = 0.40",
+            "capital = 147",
+            "states = { 134 147 }",
+            "set_cosmetic_tag = RIN_northern_court",
             "save_global_event_target_as = ADISCORD_rin_southern_charter",
             "set_country_flag = ADISCORD_rin_southern_charter_side",
         ):
             self.assertIn(token, split)
         self.assertNotIn("\n\tRIN = {", split)
         combined = effects + read(EVENTS) + read_country_on_actions(ON_ACTIONS, 'rin')
-        for forbidden in ("declare_war_on", "add_to_war", "create_faction", "add_to_faction"):
+        for forbidden in (
+            "declare_war_on",
+            "add_to_war",
+            "create_faction",
+            "add_to_faction",
+        ):
             self.assertNotIn(forbidden, combined)
 
     def test_northern_court_uses_authored_chauvinist_leader(self) -> None:
@@ -129,18 +151,31 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertIn("days_mission_timeout = 180", mission)
         self.assertNotIn("activate_mission", mission)
         split = named_block(read(EFFECTS), "ADISCORD_rin_start_oath_civil_war")
-        self.assertEqual(split.count("activate_mission = ADISCORD_rin_palatin_breakup_mission"), 1)
+        self.assertEqual(
+            split.count("activate_mission = ADISCORD_rin_palatin_breakup_mission"), 1
+        )
 
     def test_capitulation_router_preempts_generic_fallback(self) -> None:
-        capitulation = named_block(read_country_on_actions(ON_ACTIONS, 'rin'), "on_capitulation")
-        self.assertEqual(capitulation.count("set_global_flag = skip_default_capitulation"), 2)
-        self.assertEqual(capitulation.count("annex_country = { target = ROOT transfer_troops = yes }"), 2)
+        capitulation = named_block(
+            read_country_on_actions(ON_ACTIONS, 'rin'), "on_capitulation"
+        )
+        self.assertEqual(
+            capitulation.count("set_global_flag = skip_default_capitulation"), 2
+        )
+        self.assertEqual(
+            capitulation.count(
+                "annex_country = { target = ROOT transfer_troops = yes }"
+            ),
+            2,
+        )
         self.assertIn("ADISCORD_rin_complete_southern_victory = yes", capitulation)
         self.assertIn("ADISCORD_rin_complete_northern_victory = yes", capitulation)
 
     def test_timeout_is_local_partition_not_external_war(self) -> None:
         armistice = named_block(read(EFFECTS), "ADISCORD_rin_force_partition_armistice")
-        self.assertIn("save_global_event_target_as = ADISCORD_rin_southern_charter", armistice)
+        self.assertIn(
+            "save_global_event_target_as = ADISCORD_rin_southern_charter", armistice
+        )
         self.assertIn("has_war_with = ROOT", armistice)
         self.assertIn("white_peace = ROOT", armistice)
         self.assertIn("ADISCORD_rin_complete_partition_armistice = yes", armistice)
@@ -149,8 +184,12 @@ class RinOathCrisisContractTests(unittest.TestCase):
         effects = read(EFFECTS)
         apply = named_block(effects, "ADISCORD_rin_apply_partition_armistice")
         north = named_block(apply, "event_target:ADISCORD_rin_northern_court")
-        all_transfers = [int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", apply)]
-        north_transfers = [int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north)]
+        all_transfers = [
+            int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", apply)
+        ]
+        north_transfers = [
+            int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north)
+        ]
         self.assertEqual(all_transfers, [146, 148, 149, 150, 134, 147])
         self.assertEqual(north_transfers, [134, 147])
         self.assertNotIn("\n\tRIN = {", apply)
@@ -165,7 +204,9 @@ class RinOathCrisisContractTests(unittest.TestCase):
                 apply,
             )
 
-    def test_partition_outcomes_and_temporary_content_are_mutually_exclusive(self) -> None:
+    def test_partition_outcomes_and_temporary_content_are_mutually_exclusive(
+        self,
+    ) -> None:
         apply = named_block(read(EFFECTS), "ADISCORD_rin_apply_partition_armistice")
         north = named_block(apply, "event_target:ADISCORD_rin_northern_court")
         for token in (
@@ -198,13 +239,17 @@ class RinOathCrisisContractTests(unittest.TestCase):
         self.assertIn("ADISCORD_rin_oath_crisis_terminal_failure", terminal)
         self.assertNotIn("ADISCORD_rin_apply_partition_armistice = yes", terminal)
         self.assertEqual(terminal.count("country_event ="), 1)
-        completion = named_block(read(EFFECTS), "ADISCORD_rin_complete_partition_armistice")
+        completion = named_block(
+            read(EFFECTS), "ADISCORD_rin_complete_partition_armistice"
+        )
         self.assertEqual(completion.count("ADISCORD_rin_crisis.3 days = 1"), 1)
 
     def test_external_peace_uses_cached_southern_country_not_original_tag(self) -> None:
         peace = named_block(read_country_on_actions(ON_ACTIONS, 'rin'), "on_peace")
         self.assertIn("event_target:ADISCORD_rin_southern_charter", peace)
-        self.assertNotIn("RIN = { ADISCORD_rin_complete_partition_armistice = yes }", peace)
+        self.assertNotIn(
+            "RIN = { ADISCORD_rin_complete_partition_armistice = yes }", peace
+        )
 
 
 if __name__ == "__main__":

@@ -271,9 +271,9 @@ focus_tree = {
 		ai_will_do = { base = 2 }
 
 		completion_reward = { 28 = {
-                if = { limit = { STP = { controls_province = 16351 } } add_building_construction = { type = bunker level = 1 province = 16351 instant_build = yes } }
-                if = { limit = { STP = { controls_province = 16377 } } add_building_construction = { type = bunker level = 1 province = 16377 instant_build = yes } }
-            } }
+				if = { limit = { STP = { controls_province = 16351 } } add_building_construction = { type = bunker level = 1 province = 16351 instant_build = yes } }
+				if = { limit = { STP = { controls_province = 16377 } } add_building_construction = { type = bunker level = 1 province = 16377 instant_build = yes } }
+		} }
 	}
 
 	focus = {
@@ -1005,10 +1005,10 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_reserve_training
 			custom_effect_tooltip = STP_ps_reserve_training_unlock_summary_tt
-		add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
+			add_timed_idea = { idea = STP_ps_reserve_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_4_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 4 } STP_pf_shift = yes }
-	}
+		}
 		mutually_exclusive = { focus = STP_ps_route_security }
 	}
 
@@ -1029,10 +1029,10 @@ focus_tree = {
 		completion_reward = {
 			unlock_decision_tooltip = STP_ps_secure_routes
 			custom_effect_tooltip = STP_ps_secure_routes_unlock_summary_tt
-		add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
+			add_timed_idea = { idea = STP_ps_route_guard_idea days = 42 }
 			custom_effect_tooltip = STP_ps_policy_faction_3_tt
 			hidden_effect = { set_temp_variable = { var = STP_pf_selected value = 3 } STP_pf_shift = yes }
-	}
+		}
 		mutually_exclusive = { focus = STP_ps_operational_reserve }
 	}
 
@@ -1050,10 +1050,10 @@ focus_tree = {
 		ai_will_do = { base = 4 }
 
 		completion_reward = { add_stability = 0.03
-            if = { limit = { has_active_mission = STP_ps_congress_deadline }
-                add_days_mission_timeout = { mission = STP_ps_congress_deadline days = 7 }
-            }
-            unlock_decision_tooltip = STP_ps_emergency_cabinet
+			if = { limit = { has_active_mission = STP_ps_congress_deadline }
+				add_days_mission_timeout = { mission = STP_ps_congress_deadline days = 7 }
+			}
+			unlock_decision_tooltip = STP_ps_emergency_cabinet
 			custom_effect_tooltip = STP_ps_emergency_cabinet_unlock_summary_tt
 		}
 	}
@@ -1097,20 +1097,20 @@ focus_tree = {
 			custom_effect_tooltip = STP_ps_val_intercept_unlock_summary_tt
 			unlock_decision_tooltip = STP_ps_val_pressure
 			custom_effect_tooltip = STP_ps_val_pressure_unlock_summary_tt
-		if = {
-                limit = { VAL = { exists = yes } }
-                add_intel = { target = VAL army_intel = 10 }
-            }
-            custom_effect_tooltip = STP_ps_counter_supply_current_tt
-            hidden_effect = {
-                VAL = {
-                    if = {
-                        limit = { has_variable = STP_ps_val_receipt_rifles }
-                        set_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence }
-                    }
-                }
-            }
-	}
+			if = {
+				limit = { VAL = { exists = yes } }
+				add_intel = { target = VAL army_intel = 10 }
+			}
+			custom_effect_tooltip = STP_ps_counter_supply_current_tt
+			hidden_effect = {
+				VAL = {
+					if = {
+						limit = { has_variable = STP_ps_val_receipt_rifles }
+						set_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence }
+					}
+				}
+			}
+		}
 	}
 
 

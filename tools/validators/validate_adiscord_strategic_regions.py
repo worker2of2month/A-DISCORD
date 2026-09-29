@@ -15,22 +15,22 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.builders.build_adiscord_strategic_regions import (
-    MONTH_RANGES,
-    OUTER_CLIMATE_BELTS,
-    OUTER_REGION_SPECS,
-    OUTER_STATE_MARKER,
-    ALL_SEA_REGIONS,
-    DEDICATED_SEA_PROVINCES,
-    REGIONS,
-    REMAINDER_STATE_MARKER,
-    TEMPERATURES,
-    arctic_water,
-    build_state_adjacency,
-    connected_components,
-    phenomenon,
-    load_province_adjacency,
-    load_province_definitions,
-    minimum_snow_level,
+        MONTH_RANGES,
+        OUTER_CLIMATE_BELTS,
+        OUTER_REGION_SPECS,
+        OUTER_STATE_MARKER,
+        ALL_SEA_REGIONS,
+        DEDICATED_SEA_PROVINCES,
+        REGIONS,
+        REMAINDER_STATE_MARKER,
+        TEMPERATURES,
+        arctic_water,
+        build_state_adjacency,
+        connected_components,
+        phenomenon,
+        load_province_adjacency,
+        load_province_definitions,
+        minimum_snow_level,
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_strategic_regions import (
@@ -54,7 +54,14 @@ except ModuleNotFoundError:
 
 
 ROOT = Path(__file__).resolve().parents[2]
-PHENOMENA = ("no_phenomenon", "rain_light", "rain_heavy", "snow", "blizzard", "sandstorm")
+PHENOMENA = (
+    "no_phenomenon",
+    "rain_light",
+    "rain_heavy",
+    "snow",
+    "blizzard",
+    "sandstorm",
+)
 WEATHER_VALUES = PHENOMENA + ("arctic_water", "mud", "min_snow_level")
 EXPECTED_INIT_RUN_PASSES = 720
 PHENOMENON_INDICES = {
@@ -80,13 +87,15 @@ def extract_block(text: str, key: str, start: int = 0) -> tuple[str, int]:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[opening + 1:index], index + 1
+                return text[opening + 1 : index], index + 1
     raise ValueError(f"unterminated {key} block")
 
 
 def load_definitions() -> dict[int, str]:
     definitions: dict[int, str] = {}
-    with (ROOT / "map" / "definition.csv").open(encoding="utf-8-sig", newline="") as handle:
+    with (ROOT / "map" / "definition.csv").open(
+        encoding="utf-8-sig", newline=""
+    ) as handle:
         for row in csv.reader(handle, delimiter=";"):
             if len(row) >= 5 and row[0].isdigit() and int(row[0]) > 0:
                 definitions[int(row[0])] = row[4]
@@ -100,7 +109,9 @@ def load_state_provinces() -> dict[int, set[int]]:
         state_match = re.search(r"\bid\s*=\s*(\d+)", text)
         province_match = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text, re.DOTALL)
         if state_match and province_match:
-            states[int(state_match.group(1))] = {int(value) for value in re.findall(r"\d+", province_match.group(1))}
+            states[int(state_match.group(1))] = {
+                int(value) for value in re.findall(r"\d+", province_match.group(1))
+            }
     return states
 
 
@@ -111,13 +122,17 @@ def load_generated_climate_keys(errors: list[str]) -> dict[int, str]:
         if not text.startswith((OUTER_STATE_MARKER, REMAINDER_STATE_MARKER)):
             continue
         state_match = re.search(r"\bid\s*=\s*(\d+)", text)
-        climate_match = re.search(r"(?m)^# adiscord_climate_region = ([a-z_]+)\s*$", text)
+        climate_match = re.search(
+            r"(?m)^# adiscord_climate_region = ([a-z_]+)\s*$", text
+        )
         if not state_match or not climate_match:
             errors.append(f"{path.relative_to(ROOT)}: missing generated climate marker")
             continue
         climate_key = climate_match.group(1)
         if climate_key not in OUTER_CLIMATE_BELTS:
-            errors.append(f"{path.relative_to(ROOT)}: unknown climate key {climate_key}")
+            errors.append(
+                f"{path.relative_to(ROOT)}: unknown climate key {climate_key}"
+            )
             continue
         climate_keys[int(state_match.group(1))] = climate_key
     return climate_keys
@@ -138,13 +153,20 @@ def parse_regions(errors: list[str]) -> dict[int, dict[str, object]]:
                 raise ValueError(f"duplicate strategic region id {region_id}")
             province_block, _ = extract_block(outer, "provinces")
             provinces = {int(value) for value in re.findall(r"\d+", province_block)}
-            parsed[region_id] = {"path": path, "name": name_match.group(1), "provinces": provinces, "text": outer}
+            parsed[region_id] = {
+                "path": path,
+                "name": name_match.group(1),
+                "provinces": provinces,
+                "text": outer,
+            }
         except (UnicodeError, ValueError) as exc:
             errors.append(f"{path.relative_to(ROOT)}: {exc}")
     return parsed
 
 
-def validate_weather(region_id: int, climate: str, text: str, errors: list[str]) -> None:
+def validate_weather(
+    region_id: int, climate: str, text: str, errors: list[str]
+) -> None:
     try:
         weather, _ = extract_block(text, "weather")
     except ValueError as exc:
@@ -160,20 +182,32 @@ def validate_weather(region_id: int, climate: str, text: str, errors: list[str])
             break
         periods.append(period)
     if len(periods) != 12:
-        errors.append(f"region {region_id}: expected 12 weather periods, found {len(periods)}")
+        errors.append(
+            f"region {region_id}: expected 12 weather periods, found {len(periods)}"
+        )
         return
 
     for month, period in enumerate(periods):
         between = re.search(r"\bbetween\s*=\s*\{\s*([^}]+?)\s*\}", period)
-        temperature = re.search(r"\btemperature\s*=\s*\{\s*(-?[0-9.]+)\s+(-?[0-9.]+)\s*\}", period)
+        temperature = re.search(
+            r"\btemperature\s*=\s*\{\s*(-?[0-9.]+)\s+(-?[0-9.]+)\s*\}", period
+        )
         if not between or " ".join(between.group(1).split()) != MONTH_RANGES[month]:
             errors.append(f"region {region_id}, month {month}: invalid date range")
         if not temperature:
-            errors.append(f"region {region_id}, month {month}: missing temperature range")
+            errors.append(
+                f"region {region_id}, month {month}: missing temperature range"
+            )
         elif float(temperature.group(1)) > float(temperature.group(2)):
-            errors.append(f"region {region_id}, month {month}: reversed temperature range")
-        elif tuple(map(float, temperature.groups())) != tuple(map(float, TEMPERATURES[climate][month])):
-            errors.append(f"region {region_id}, month {month}: temperature does not match {climate}")
+            errors.append(
+                f"region {region_id}, month {month}: reversed temperature range"
+            )
+        elif tuple(map(float, temperature.groups())) != tuple(
+            map(float, TEMPERATURES[climate][month])
+        ):
+            errors.append(
+                f"region {region_id}, month {month}: temperature does not match {climate}"
+            )
 
         values: dict[str, float] = {}
         for key in WEATHER_VALUES:
@@ -191,8 +225,7 @@ def validate_weather(region_id: int, climate: str, text: str, errors: list[str])
 
         expected_row = phenomenon(climate, month)
         expected = {
-            key: expected_row[index]
-            for key, index in PHENOMENON_INDICES.items()
+            key: expected_row[index] for key, index in PHENOMENON_INDICES.items()
         }
         expected["arctic_water"] = arctic_water(climate, month)
         expected["min_snow_level"] = minimum_snow_level(climate, month)
@@ -206,24 +239,46 @@ def validate_weather(region_id: int, climate: str, text: str, errors: list[str])
 
 def validate_climate_profiles(errors: list[str]) -> None:
     """Guard the gameplay-scale distinctions that normalization used to erase."""
-    profiles = {climate: [phenomenon(climate, month) for month in range(12)] for climate in TEMPERATURES}
+    profiles = {
+        climate: [phenomenon(climate, month) for month in range(12)]
+        for climate in TEMPERATURES
+    }
     checks = (
         (max(row[3] for row in profiles["polar"]), 0.50, "polar winter snow"),
         (max(row[4] for row in profiles["polar"]), 0.25, "polar blizzards"),
         (max(row[1] for row in profiles["cool_maritime"]), 0.70, "maritime rain"),
         (max(row[5] for row in profiles["temperate_wet"]), 1.00, "wet-climate mud"),
-        (max(row[2] for row in profiles["tropical_maritime"]), 0.45, "tropical downpours"),
+        (
+            max(row[2] for row in profiles["tropical_maritime"]),
+            0.45,
+            "tropical downpours",
+        ),
         (max(row[6] for row in profiles["hot_arid"]), 0.35, "desert sandstorms"),
     )
     for actual, minimum, label in checks:
         if actual < minimum:
-            errors.append(f"climate profiles: {label} is too weak ({actual} < {minimum})")
+            errors.append(
+                f"climate profiles: {label} is too weak ({actual} < {minimum})"
+            )
     if max(sum(row[:5]) + row[6] for rows in profiles.values() for row in rows) <= 1.0:
-        errors.append("climate profiles: phenomenon weights were incorrectly normalized to a total of 1")
-    if max(minimum_snow_level(climate, month) for climate in TEMPERATURES for month in range(12)) > 0.30:
-        errors.append("climate profiles: min_snow_level exceeds the vanilla-scale maximum of 0.30")
+        errors.append(
+            "climate profiles: phenomenon weights were incorrectly normalized to a total of 1"
+        )
+    if (
+        max(
+            minimum_snow_level(climate, month)
+            for climate in TEMPERATURES
+            for month in range(12)
+        )
+        > 0.30
+    ):
+        errors.append(
+            "climate profiles: min_snow_level exceeds the vanilla-scale maximum of 0.30"
+        )
     if max(phenomenon("temperate_continental", month)[3] for month in range(12)) > 0.18:
-        errors.append("climate profiles: temperate continental snow reaches too far south")
+        errors.append(
+            "climate profiles: temperate continental snow reaches too far south"
+        )
     if max(phenomenon("temperate_wet", month)[3] for month in range(12)) > 0.10:
         errors.append("climate profiles: temperate wet snow reaches too far south")
 
@@ -245,31 +300,45 @@ def validate_global_weather_settings(errors: list[str]) -> None:
     for key, expected in expected_values.items():
         matches = re.findall(rf"\b{key}\s*=\s*([0-9.]+)", text)
         if len(matches) != 1:
-            errors.append(f"common/weather.txt: expected one {key}, found {len(matches)}")
+            errors.append(
+                f"common/weather.txt: expected one {key}, found {len(matches)}"
+            )
         elif float(matches[0]) != expected:
-            errors.append(f"common/weather.txt: {key}={matches[0]} does not match {expected:g}")
+            errors.append(
+                f"common/weather.txt: {key}={matches[0]} does not match {expected:g}"
+            )
 
 
 def validate_naval_dominance_thresholds(source: str, errors: list[str]) -> None:
     # A zero threshold can mark an empty sea as controlled; the native caller
     # then dereferences a missing dominant country.
     source = re.sub(r"#[^\n]*", "", source)
-    terrain_names = {region.naval_terrain for region in ALL_SEA_REGIONS} | {"ocean", "water_fjords"}
+    terrain_names = {region.naval_terrain for region in ALL_SEA_REGIONS} | {
+        "ocean",
+        "water_fjords",
+    }
     for name in sorted(terrain_names):
         try:
             body, _ = extract_block(source, name)
         except ValueError:
             errors.append(f"missing naval terrain {name}")
             continue
-        values = re.findall(r"\bminimum_seazone_dominance\s*=\s*([-+]?\d+(?:\.\d+)?)\b", body)
+        values = re.findall(
+            r"\bminimum_seazone_dominance\s*=\s*([-+]?\d+(?:\.\d+)?)\b", body
+        )
         if len(values) != 1 or float(values[0]) <= 0:
-            errors.append(f"naval terrain {name}: minimum_seazone_dominance must be positive and defined once")
+            errors.append(
+                f"naval terrain {name}: minimum_seazone_dominance must be positive and defined once"
+            )
 
 
 def main() -> int:
     errors: list[str] = []
     validate_naval_dominance_thresholds(
-        (ROOT / "common" / "terrain" / "00_terrain.txt").read_text(encoding="utf-8-sig"), errors
+        (ROOT / "common" / "terrain" / "00_terrain.txt").read_text(
+            encoding="utf-8-sig"
+        ),
+        errors,
     )
     validate_climate_profiles(errors)
     validate_global_weather_settings(errors)
@@ -278,7 +347,11 @@ def main() -> int:
     physical_adjacency = load_province_adjacency(
         definitions, color_to_province, include_special_adjacencies=False
     )
-    sea_provinces = {province_id for province_id, province_type in definitions.items() if province_type == "sea"}
+    sea_provinces = {
+        province_id
+        for province_id, province_type in definitions.items()
+        if province_type == "sea"
+    }
     sea_components = connected_components(sea_provinces, adjacency)
     main_ocean = sea_components[0] if sea_components else set()
     states = load_state_provinces()
@@ -288,17 +361,25 @@ def main() -> int:
     sea_by_id = {region.region_id: region for region in ALL_SEA_REGIONS}
     sea_region_ids = set(sea_by_id)
     if set(regions) != expected_region_ids:
-        errors.append(f"strategic region ids differ: expected {sorted(expected_region_ids)}, found {sorted(regions)}")
+        errors.append(
+            f"strategic region ids differ: expected {sorted(expected_region_ids)}, found {sorted(regions)}"
+        )
 
     province_regions: dict[int, list[int]] = {}
     for region_id, data in regions.items():
         expected_name = f"STRATEGICREGION_{region_id}"
         if data["name"] != expected_name:
-            errors.append(f"region {region_id}: expected name {expected_name}, found {data['name']}")
-        naval_terrain_match = re.search(r"\bnaval_terrain\s*=\s*([a-z0-9_]+)\b", str(data["text"]))
+            errors.append(
+                f"region {region_id}: expected name {expected_name}, found {data['name']}"
+            )
+        naval_terrain_match = re.search(
+            r"\bnaval_terrain\s*=\s*([a-z0-9_]+)\b", str(data["text"])
+        )
         if region_id in sea_region_ids:
             expected_terrain = sea_by_id[region_id].naval_terrain
-            actual_terrain = naval_terrain_match.group(1) if naval_terrain_match else None
+            actual_terrain = (
+                naval_terrain_match.group(1) if naval_terrain_match else None
+            )
             if actual_terrain != expected_terrain:
                 errors.append(
                     f"sea region {region_id}: expected naval terrain {expected_terrain}, found {actual_terrain}"
@@ -311,20 +392,32 @@ def main() -> int:
                 errors.append(f"region {region_id}: unknown province {province_id}")
             elif region_id in sea_region_ids and definitions[province_id] != "sea":
                 errors.append(f"sea region {region_id}: non-sea province {province_id}")
-            elif region_id not in sea_region_ids and definitions[province_id] == "sea" and province_id in main_ocean:
+            elif (
+                region_id not in sea_region_ids
+                and definitions[province_id] == "sea"
+                and province_id in main_ocean
+            ):
                 errors.append(f"land region {region_id}: ocean province {province_id}")
 
     naval_provinces = set().union(
-        *(set(regions[region_id]["provinces"]) for region_id in sea_region_ids if region_id in regions)
+        *(
+            set(regions[region_id]["provinces"])
+            for region_id in sea_region_ids
+            if region_id in regions
+        )
     )
-    dedicated_naval = set().union(*(set(provinces) for provinces in DEDICATED_SEA_PROVINCES.values()))
+    dedicated_naval = set().union(
+        *(set(provinces) for provinces in DEDICATED_SEA_PROVINCES.values())
+    )
     expected_naval = main_ocean | dedicated_naval
     missing_ocean = sorted(expected_naval - naval_provinces)
     non_ocean_naval = sorted(naval_provinces - expected_naval)
     if missing_ocean:
         errors.append(f"ocean provinces outside naval regions: {missing_ocean[:30]}")
     if non_ocean_naval:
-        errors.append(f"isolated lake provinces inside naval regions: {non_ocean_naval[:30]}")
+        errors.append(
+            f"isolated lake provinces inside naval regions: {non_ocean_naval[:30]}"
+        )
     for region_id in sorted(sea_region_ids & set(regions)):
         provinces = set(regions[region_id]["provinces"])
         components = connected_components(provinces, adjacency)
@@ -341,7 +434,8 @@ def main() -> int:
         actual_regions = {
             province_regions[province_id][0]
             for province_id in component
-            if province_id in province_regions and len(province_regions[province_id]) == 1
+            if province_id in province_regions
+            and len(province_regions[province_id]) == 1
         }
         expected_dedicated_region = dedicated_components.get(frozenset(component))
         if expected_dedicated_region is not None:
@@ -364,21 +458,33 @@ def main() -> int:
             )
 
     missing = sorted(set(definitions) - set(province_regions))
-    duplicates = sorted(province_id for province_id, ids in province_regions.items() if len(ids) != 1)
+    duplicates = sorted(
+        province_id for province_id, ids in province_regions.items() if len(ids) != 1
+    )
     if missing:
         errors.append(f"provinces without strategic region: {missing[:30]}")
     if duplicates:
         errors.append(f"provinces in multiple strategic regions: {duplicates[:30]}")
 
-    expected_by_state = {state_id: region.region_id for region in REGIONS for state_id in region.states}
+    expected_by_state = {
+        state_id: region.region_id for region in REGIONS for state_id in region.states
+    }
     for state_id, provinces in sorted(states.items()):
-        actual = {province_regions[province_id][0] for province_id in provinces if province_id in province_regions}
+        actual = {
+            province_regions[province_id][0]
+            for province_id in provinces
+            if province_id in province_regions
+        }
         if len(actual) != 1:
-            errors.append(f"state {state_id}: split between strategic regions {sorted(actual)}")
+            errors.append(
+                f"state {state_id}: split between strategic regions {sorted(actual)}"
+            )
         elif state_id not in expected_by_state:
             errors.append(f"state {state_id}: absent from strategic-region manifest")
         elif next(iter(actual)) != expected_by_state[state_id]:
-            errors.append(f"state {state_id}: expected region {expected_by_state[state_id]}, found {next(iter(actual))}")
+            errors.append(
+                f"state {state_id}: expected region {expected_by_state[state_id]}, found {next(iter(actual))}"
+            )
 
     state_adjacency = build_state_adjacency(states, physical_adjacency)
     profile_belts: dict[str, set[int]] = {}
@@ -399,7 +505,9 @@ def main() -> int:
             if state_id in generated_climate_keys
         }
         if len(belts) != 1:
-            errors.append(f"generated land region {region.region_id}: crosses climate belts {sorted(belts)}")
+            errors.append(
+                f"generated land region {region.region_id}: crosses climate belts {sorted(belts)}"
+            )
         elif next(iter(belts)) not in profile_belts.get(region.climate, set()):
             errors.append(
                 f"generated land region {region.region_id}: profile {region.climate} does not match belt {next(iter(belts))}"
@@ -412,11 +520,15 @@ def main() -> int:
         max_snow = max(phenomenon(profile, month)[3] for month in range(12))
         max_blizzard = max(phenomenon(profile, month)[4] for month in range(12))
         if belt == 5 and (max_snow > 0.0 or max_blizzard > 0.0):
-            errors.append(f"{climate_key}: tropical belt must not generate snow or blizzards")
+            errors.append(
+                f"{climate_key}: tropical belt must not generate snow or blizzards"
+            )
         elif belt == 4 and (max_snow > 0.03 or max_blizzard > 0.0):
             errors.append(f"{climate_key}: warm belt has excessive winter weather")
         elif belt <= 1 and max_snow < 0.25:
-            errors.append(f"{climate_key}: polar/subarctic belt has too little winter snow")
+            errors.append(
+                f"{climate_key}: polar/subarctic belt has too little winter snow"
+            )
 
     checked_state_edges: set[tuple[int, int]] = set()
     for state_id, neighbours in state_adjacency.items():
@@ -438,8 +550,7 @@ def main() -> int:
                 )
 
     climate_by_region = {
-        region.region_id: region.climate
-        for region in (*ALL_SEA_REGIONS, *REGIONS)
+        region.region_id: region.climate for region in (*ALL_SEA_REGIONS, *REGIONS)
     }
     for region_id, data in regions.items():
         climate = climate_by_region.get(region_id)
@@ -448,13 +559,17 @@ def main() -> int:
             continue
         validate_weather(region_id, climate, str(data["text"]), errors)
 
-    localisation_path = ROOT / "localisation" / "replace" / "strategic_region_names_l_russian.yml"
+    localisation_path = (
+        ROOT / "localisation" / "replace" / "strategic_region_names_l_russian.yml"
+    )
     if not localisation_path.exists():
         errors.append("missing Russian strategic-region localisation")
     else:
         if not localisation_path.read_bytes().startswith(b"\xef\xbb\xbf"):
             errors.append("strategic-region localisation must use UTF-8 BOM")
-        localisation = localisation_path.read_text(encoding="utf-8-sig", errors="strict")
+        localisation = localisation_path.read_text(
+            encoding="utf-8-sig", errors="strict"
+        )
         localisation_rows = re.findall(
             r'^\s*(STRATEGICREGION_\d+)\s*:\s*"([^"]+)"', localisation, re.MULTILINE
         )
@@ -462,36 +577,48 @@ def main() -> int:
         for region_id in sorted(expected_region_ids):
             key = f"STRATEGICREGION_{region_id}"
             if keys[key] != 1:
-                errors.append(f"localisation key {key}: expected once, found {keys[key]}")
+                errors.append(
+                    f"localisation key {key}: expected once, found {keys[key]}"
+                )
         localisation_by_key = dict(localisation_rows)
         for region in ALL_SEA_REGIONS:
             if region.region_id in DEDICATED_SEA_PROVINCES:
-                actual_name = localisation_by_key.get(f"STRATEGICREGION_{region.region_id}")
+                actual_name = localisation_by_key.get(
+                    f"STRATEGICREGION_{region.region_id}"
+                )
                 if actual_name != region.russian_name:
                     errors.append(
                         f"dedicated sea region {region.region_id}: expected Russian name "
                         f"{region.russian_name}, found {actual_name}"
                     )
         generated_names = [
-            name
-            for key, name in localisation_rows
-            if int(key.rsplit("_", 1)[1]) >= 43
+            name for key, name in localisation_rows if int(key.rsplit("_", 1)[1]) >= 43
         ]
         duplicate_generated_names = sorted(
             name for name, count in Counter(generated_names).items() if count > 1
         )
         if duplicate_generated_names:
-            errors.append(f"generated strategic regions have duplicate names {duplicate_generated_names[:20]}")
+            errors.append(
+                f"generated strategic regions have duplicate names {duplicate_generated_names[:20]}"
+            )
         technical_names = [
-            name for name in generated_names if re.search(r"\b(?:лев(?:ый|ая|ое|ые)|прав(?:ый|ая|ое|ые))\b", name, re.IGNORECASE)
+            name
+            for name in generated_names
+            if re.search(
+                r"\b(?:лев(?:ый|ая|ое|ые)|прав(?:ый|ая|ое|ые))\b", name, re.IGNORECASE
+            )
         ]
         if technical_names:
-            errors.append(f"generated strategic regions expose technical side names {technical_names[:20]}")
+            errors.append(
+                f"generated strategic regions expose technical side names {technical_names[:20]}"
+            )
         numbered_names = [
             name for name in generated_names if re.search(r"\s[IVXLCDM]+$", name)
         ]
         if numbered_names:
-            errors.append(f"generated strategic regions expose technical Roman suffixes {numbered_names[:20]}")
+            errors.append(
+                f"generated strategic regions expose technical Roman suffixes {numbered_names[:20]}"
+            )
         misplaced_state_toponyms = [
             name
             for _key, name in localisation_rows
@@ -505,11 +632,20 @@ def main() -> int:
 
     weather_positions_path = ROOT / "map" / "weatherpositions.txt"
     position_counts: Counter[int] = Counter()
-    for line_number, line in enumerate(weather_positions_path.read_text(encoding="utf-8-sig", errors="strict").splitlines(), 1):
+    for line_number, line in enumerate(
+        weather_positions_path.read_text(
+            encoding="utf-8-sig", errors="strict"
+        ).splitlines(),
+        1,
+    ):
         if not line.strip():
             continue
         fields = line.split(";")
-        if len(fields) != 5 or not fields[0].isdigit() or fields[4] not in ("small", "big"):
+        if (
+            len(fields) != 5
+            or not fields[0].isdigit()
+            or fields[4] not in ("small", "big")
+        ):
             errors.append(f"weatherpositions.txt:{line_number}: invalid row")
             continue
         try:
@@ -525,7 +661,9 @@ def main() -> int:
             errors.append(f"region {region_id}: no weather position")
     unexpected_positions = sorted(set(position_counts) - expected_region_ids)
     if unexpected_positions:
-        errors.append(f"weather positions reference unknown regions: {unexpected_positions}")
+        errors.append(
+            f"weather positions reference unknown regions: {unexpected_positions}"
+        )
 
     if errors:
         print(f"Strategic-region validation failed: {len(errors)} error(s)")
@@ -533,9 +671,19 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    land_counts = {region_id: len(data["provinces"]) for region_id, data in regions.items() if region_id not in sea_region_ids}
-    sea_counts = {region_id: len(data["provinces"]) for region_id, data in regions.items() if region_id in sea_region_ids}
-    print(f"Strategic-region validation passed: {len(regions)} regions, {len(states)} states, {len(definitions)} provinces.")
+    land_counts = {
+        region_id: len(data["provinces"])
+        for region_id, data in regions.items()
+        if region_id not in sea_region_ids
+    }
+    sea_counts = {
+        region_id: len(data["provinces"])
+        for region_id, data in regions.items()
+        if region_id in sea_region_ids
+    }
+    print(
+        f"Strategic-region validation passed: {len(regions)} regions, {len(states)} states, {len(definitions)} provinces."
+    )
     print(f"Land-region province counts: {land_counts}")
     print(f"Sea-region province counts: {sea_counts}")
     return 0

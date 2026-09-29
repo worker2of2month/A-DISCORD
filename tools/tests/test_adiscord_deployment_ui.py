@@ -16,7 +16,9 @@ ROOT = Path(__file__).resolve().parents[2]
 GUI = ROOT / "interface/countrydeploymentview.gui"
 GFX = ROOT / "interface/ADISCORD_deployment_ui.gfx"
 ASSET_DIR = ROOT / "gfx/interface/deployment/ui"
-TRANSPARENT_DDS = ROOT / "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds"
+TRANSPARENT_DDS = (
+    ROOT / "gfx/interface/deployment/ui/ADISCORD_deployment_transparent.dds"
+)
 
 
 EXPECTED_FIXED = {
@@ -221,24 +223,34 @@ class DeploymentUiContractTests(unittest.TestCase):
             self.assertNotIn(f'"{vanilla}"', gui)
 
     def test_priority_strip_frames_keep_shape_but_signal_distinct_states(self) -> None:
-        contract = next(
-            item
-            for item in DEPLOYMENT_CONTRACTS
-            if item.target_name == "GFX_ADISCORD_deployment_priority_strip"
-        ) if any(
-            item.target_name == "GFX_ADISCORD_deployment_priority_strip"
-            for item in DEPLOYMENT_CONTRACTS
-        ) else None
+        contract = (
+            next(
+                item
+                for item in DEPLOYMENT_CONTRACTS
+                if item.target_name == "GFX_ADISCORD_deployment_priority_strip"
+            )
+            if any(
+                item.target_name == "GFX_ADISCORD_deployment_priority_strip"
+                for item in DEPLOYMENT_CONTRACTS
+            )
+            else None
+        )
         self.assertIsNotNone(contract)
         assert contract is not None
         image = Image.open(
             io.BytesIO(expected_outputs()[ASSET_DIR / contract.filename])
         ).convert("RGBA")
-        frames = [image.crop((index * 20, 0, (index + 1) * 20, 21)) for index in range(4)]
+        frames = [
+            image.crop((index * 20, 0, (index + 1) * 20, 21)) for index in range(4)
+        ]
         for frame in frames[1:]:
-            self.assertEqual(frames[0].getchannel("A").tobytes(), frame.getchannel("A").tobytes())
+            self.assertEqual(
+                frames[0].getchannel("A").tobytes(), frame.getchannel("A").tobytes()
+            )
         self.assertIsNotNone(
-            ImageChops.difference(frames[0].convert("RGB"), frames[2].convert("RGB")).getbbox()
+            ImageChops.difference(
+                frames[0].convert("RGB"), frames[2].convert("RGB")
+            ).getbbox()
         )
 
     def test_generated_gui_and_assets_are_clean_and_current(self) -> None:
@@ -253,7 +265,11 @@ class DeploymentUiContractTests(unittest.TestCase):
                     self.assertEqual(image.mode, "RGBA", path.name)
 
     def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
-        owned = {path for path in expected_outputs() if path.suffix == ".dds" and path.parent == ASSET_DIR}
+        owned = {
+            path
+            for path in expected_outputs()
+            if path.suffix == ".dds" and path.parent == ASSET_DIR
+        }
         checked_in = set(ASSET_DIR.glob("*.dds"))
         self.assertEqual(checked_in, owned)
 

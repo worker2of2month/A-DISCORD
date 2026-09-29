@@ -20,9 +20,13 @@ class MapLocalisationLayoutTests(unittest.TestCase):
         misplaced: list[str] = []
         for path in sorted(RUSSIAN.glob("*.yml")):
             source = path.read_text(encoding="utf-8-sig", errors="strict")
-            if path != STATE_LOCALISATION and re.search(r"(?m)^\s*STATE_\d+\s*:", source):
+            if path != STATE_LOCALISATION and re.search(
+                r"(?m)^\s*STATE_\d+\s*:", source
+            ):
                 misplaced.append(f"numeric STATE keys in {path.name}")
-            if path != VP_LOCALISATION and re.search(r"(?m)^\s*VICTORY_POINTS_\d+\s*:", source):
+            if path != VP_LOCALISATION and re.search(
+                r"(?m)^\s*VICTORY_POINTS_\d+\s*:", source
+            ):
                 misplaced.append(f"numeric VICTORY_POINTS keys in {path.name}")
         self.assertEqual(misplaced, [])
 

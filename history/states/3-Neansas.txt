@@ -2,7 +2,7 @@ state={
 	id=3
 	name="STATE_3"
 	provinces={
-		45 63 93 148 149 150 10217 16457 16462 16550 
+		45 63 93 148 149 150 10217 16457 16462 16550
 	}
 	manpower=1100000
 	buildings_max_level_factor=1.000
@@ -19,7 +19,7 @@ state={
 		victory_points = { 45 1 }
 	}
 	resources = {
-        steel = 22
-        oil = 2
-    }
+		steel = 22
+		oil = 2
+	}
 }

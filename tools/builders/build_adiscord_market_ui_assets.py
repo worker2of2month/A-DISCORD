@@ -11,11 +11,20 @@ import re
 from PIL import Image, ImageDraw, ImageOps
 
 from tools.builders.build_adiscord_resource_assets import (
-    _fit_glyph, _international_market_source_icon,
+    _fit_glyph,
+    _international_market_source_icon,
 )
-from tools.lib.adiscord_ui_contracts import contact_sheet, native_sprite_blocks, replace_gui_block
+from tools.lib.adiscord_ui_contracts import (
+    contact_sheet,
+    native_sprite_blocks,
+    replace_gui_block,
+)
 from tools.lib.adiscord_ui_surfaces import (
-    PALETTES, apply_or_check, dds_bytes, load_surface_source, metal_surface,
+    PALETTES,
+    apply_or_check,
+    dds_bytes,
+    load_surface_source,
+    metal_surface,
 )
 from tools.lib.paths import repository_root
 
@@ -28,11 +37,16 @@ OUTPUT_DIR = ROOT / "gfx/interface/international_market/adiscord"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_market_ui.gfx"
 PREVIEW = OUTPUT_DIR / "preview.png"
 GUI_FILES = (
-    "countryinternationalmarketview.gui", "marketaccessoverviewwindow.gui",
-    "marketpurchasableequipmentwindow.gui", "marketpurchasedraftwindow.gui",
-    "marketequipmentstockpilewindow.gui", "addequipmenttomarketwindow.gui",
-    "edit_market_stockpile_window.gui", "requestautomationoptionswindow.gui",
-    "pricelevelswidgets.gui", "markettutorialhint.gui",
+    "countryinternationalmarketview.gui",
+    "marketaccessoverviewwindow.gui",
+    "marketpurchasableequipmentwindow.gui",
+    "marketpurchasedraftwindow.gui",
+    "marketequipmentstockpilewindow.gui",
+    "addequipmenttomarketwindow.gui",
+    "edit_market_stockpile_window.gui",
+    "requestautomationoptionswindow.gui",
+    "pricelevelswidgets.gui",
+    "markettutorialhint.gui",
 )
 
 # Icons, flags, price-state controls and progressbars remain engine-owned.
@@ -74,7 +88,8 @@ SURFACES = {
     "GFX_hint_bg": "hint",
 }
 ENGINE_SURFACES = {
-    "GFX_land_equipment_market_entry", "GFX_naval_equipment_market_entry",
+    "GFX_land_equipment_market_entry",
+    "GFX_naval_equipment_market_entry",
     "GFX_equipment_on_market",
 }
 
@@ -84,47 +99,73 @@ def render_gui(name: str) -> str:
     for native, role in SURFACES.items():
         text = text.replace(f'"{native}"', f'"GFX_ADISCORD_market_{role}"')
     if name == "marketequipmentstockpilewindow.gui":
-        text = replace_gui_block(text, "buttonType", "add_to_market_button", (
-            (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
-        ))
+        text = replace_gui_block(
+            text,
+            "buttonType",
+            "add_to_market_button",
+            ((r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),),
+        )
     elif name == "pricelevelswidgets.gui":
-        text = replace_gui_block(text, "instantTextboxType", "price_label", (
-            (r'maxWidth\s*=\s*100', 'maxWidth = 150'),
-            (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
-        ))
+        text = replace_gui_block(
+            text,
+            "instantTextboxType",
+            "price_label",
+            (
+                (r'maxWidth\s*=\s*100', 'maxWidth = 150'),
+                (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+            ),
+        )
     elif name == "marketpurchasedraftwindow.gui":
         # Keep the long model name, stock count and convoy cost in separate
         # columns. The native name field extends through both amount controls.
         for widget, old_width, width in (
-            ("name", 308, 170), ("stockpile_amount", 100, 50), ("cic_cost", 160, 50),
+            ("name", 308, 170),
+            ("stockpile_amount", 100, 50),
+            ("cic_cost", 160, 50),
         ):
-            text = replace_gui_block(text, "instantTextboxType", widget, (
-                (rf'maxWidth\s*=\s*{old_width}', f'maxWidth = {width}'),
-            ))
+            text = replace_gui_block(
+                text,
+                "instantTextboxType",
+                widget,
+                ((rf'maxWidth\s*=\s*{old_width}', f'maxWidth = {width}'),),
+            )
         for widget, old_x, x, width in (
             ("equipment_header", 10, 10, 160),
             ("value_header", 150, 188, 82),
             ("applied_header", 220, 273, 84),
         ):
-            text = replace_gui_block(text, "instantTextboxType", widget, (
-                (rf'position\s*=\s*\{{\s*x={old_x}\s+y=47\s*\}}',
-                 f'position = {{ x={x} y=47 }}'),
-                (r'maxWidth\s*=\s*160', f'maxWidth = {width}'),
-                (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
-            ))
+            text = replace_gui_block(
+                text,
+                "instantTextboxType",
+                widget,
+                (
+                    (
+                        rf'position\s*=\s*\{{\s*x={old_x}\s+y=47\s*\}}',
+                        f'position = {{ x={x} y=47 }}',
+                    ),
+                    (r'maxWidth\s*=\s*160', f'maxWidth = {width}'),
+                    (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+                ),
+            )
         # The applied amount follows its header; both stay inside the row.
-        text = replace_gui_block(text, "containerWindowType", "subsidies_draft_item", (
-            (r'position\s*=\s*\{\s*x=290\s+y=49\s*\}',
-             'position = { x=303 y=49 }'),
-            (r'position\s*=\s*\{\s*x=260\s+y=40\s*\}',
-             'position = { x=273 y=40 }'),
-        ))
+        text = replace_gui_block(
+            text,
+            "containerWindowType",
+            "subsidies_draft_item",
+            (
+                (r'position\s*=\s*\{\s*x=290\s+y=49\s*\}', 'position = { x=303 y=49 }'),
+                (r'position\s*=\s*\{\s*x=260\s+y=40\s*\}', 'position = { x=273 y=40 }'),
+            ),
+        )
     return "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
 
 
 def render_surface(
-    native: Image.Image, block: str, metal: Image.Image,
-    role: str, market_art: Image.Image,
+    native: Image.Image,
+    block: str,
+    metal: Image.Image,
+    role: str,
+    market_art: Image.Image,
 ) -> Image.Image:
     palette = PALETTES["logistics"]
     if role == "armory":
@@ -133,7 +174,10 @@ def render_surface(
         output.alpha_composite(art, (55, 3))
         draw = ImageDraw.Draw(output)
         draw.line((8, 2, native.width - 9, 2), fill=palette.edge_light)
-        draw.line((8, native.height - 3, native.width - 9, native.height - 3), fill=palette.accent)
+        draw.line(
+            (8, native.height - 3, native.width - 9, native.height - 3),
+            fill=palette.accent,
+        )
         output.putalpha(native.getchannel("A"))
         return output
     frames_match = re.search(r'\bnoOfFrames\s*=\s*(\d+)', block, re.IGNORECASE)
@@ -143,11 +187,15 @@ def render_surface(
     frame_width = native.width // frames
     output = Image.new("RGBA", native.size)
     for index in range(frames):
-        original = native.crop((index * frame_width, 0, (index + 1) * frame_width, native.height))
+        original = native.crop(
+            (index * frame_width, 0, (index + 1) * frame_width, native.height)
+        )
         # Preserve actual recesses, controls and armory art rather than painting
         # arbitrary rectangles over the coordinates used by the live widgets.
         structure = ImageOps.colorize(
-            ImageOps.grayscale(original), black=(10, 13, 14), white=(159, 165, 159),
+            ImageOps.grayscale(original),
+            black=(10, 13, 14),
+            white=(159, 165, 159),
         ).convert("RGBA")
         surface = metal_surface(metal, original.size, palette, 0.94)
         output_frame = Image.blend(structure, surface, 0.28)
@@ -155,7 +203,8 @@ def render_surface(
             accent = palette.edge if index == 0 else palette.accent_light
             ImageDraw.Draw(output_frame).line(
                 (7, native.height - 5, frame_width - 8, native.height - 5),
-                fill=accent, width=2,
+                fill=accent,
+                width=2,
             )
         output_frame.putalpha(original.getchannel("A"))
         output.alpha_composite(output_frame, (index * frame_width, 0))
@@ -188,11 +237,25 @@ def expected_outputs() -> dict[Path, bytes]:
         if name in ENGINE_SURFACES:
             outputs[ROOT / match[1]] = data
         block = block.replace(f'"{name}"', f'"GFX_ADISCORD_market_{role}"')
-        block = block.replace(match[0], f'textureFile = "gfx/interface/international_market/adiscord/{filename}"')
+        block = block.replace(
+            match[0],
+            f'textureFile = "gfx/interface/international_market/adiscord/{filename}"',
+        )
         entries.append(block)
-        if role in {"buy_tab", "sell_tab", "land_offer", "stockpile", "armory", "command"}:
+        if role in {
+            "buy_tab",
+            "sell_tab",
+            "land_offer",
+            "stockpile",
+            "armory",
+            "command",
+        }:
             previews.append((role, rendered))
-    outputs[GFX_OUTPUT] = ("# Generated by build_adiscord_market_ui_assets.py\nspriteTypes = {\n" + "\n".join(entries) + "\n}\n").encode("utf-8")
+    outputs[GFX_OUTPUT] = (
+        "# Generated by build_adiscord_market_ui_assets.py\nspriteTypes = {\n"
+        + "\n".join(entries)
+        + "\n}\n"
+    ).encode("utf-8")
     stream = BytesIO()
     contact_sheet(previews, 640).save(stream, "PNG")
     outputs[PREVIEW] = stream.getvalue()

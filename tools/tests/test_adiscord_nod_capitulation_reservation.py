@@ -6,7 +6,9 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 STP_ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_STP_on_actions.txt"
 GUARD_ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
-GENERIC_ON_ACTIONS = ROOT / "common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"
+GENERIC_ON_ACTIONS = (
+    ROOT / "common/on_actions/ZZ_ADISCORD_default_capitulation_on_actions.txt"
+)
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt"
 
 
@@ -39,31 +41,46 @@ def named_block(text: str, name: str) -> str:
         elif ch == "}":
             depth -= 1
             if depth == 0:
-                return text[match.start(): index + 1]
+                return text[match.start() : index + 1]
     raise AssertionError(f"unterminated block {name}")
 
 
 class NodrulCapitulationReservationTests(unittest.TestCase):
     def test_existing_router_marks_managed_northern_capitulation(self) -> None:
-        immediate = named_block(read_country_on_actions(STP_ON_ACTIONS, 'stelander'), "on_capitulation_immediate")
+        immediate = named_block(
+            read_country_on_actions(STP_ON_ACTIONS, 'stelander'),
+            "on_capitulation_immediate",
+        )
         self.assertIn(
             "ROOT = { set_country_flag = STP_cw_northern_capitulation_pending }",
             immediate,
         )
 
     def test_durable_guard_bridges_immediate_and_generic_callbacks(self) -> None:
-        source = read_scripted_peace(Path(GUARD_ON_ACTIONS).with_name('09_ADISCORD_scripted_peace_on_actions.txt'), 'northern_reservation')
+        source = read_scripted_peace(
+            Path(GUARD_ON_ACTIONS).with_name(
+                '09_ADISCORD_scripted_peace_on_actions.txt'
+            ),
+            'northern_reservation',
+        )
         immediate = named_block(source, "on_capitulation_immediate")
         late = named_block(source, "on_capitulation")
         pending = "STP_cw_northern_capitulation_pending"
         reserved = "STP_cw_northern_capitulation_reserved"
 
         self.assertIn(f"ROOT = {{ has_country_flag = {pending} }}", immediate)
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
         from tools.tests.test_adiscord_stp_preparation import walk, scalar
-        reservations = [e.value for e in walk(parse_clausewitz(immediate))
-                        if e.key == "set_country_flag" and isinstance(e.value, list)
-                        and scalar(e.value, "flag") == reserved]
+
+        reservations = [
+            e.value
+            for e in walk(parse_clausewitz(immediate))
+            if e.key == "set_country_flag"
+            and isinstance(e.value, list)
+            and scalar(e.value, "flag") == reserved
+        ]
         self.assertEqual(len(reservations), 1)
         self.assertEqual(scalar(reservations[0], "value"), "1")
         self.assertEqual(scalar(reservations[0], "days"), "2")

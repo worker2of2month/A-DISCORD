@@ -109,7 +109,9 @@ class UiSurfaceTests(unittest.TestCase):
         self.assertEqual(image.getpixel((5, 6)), (40, 42, 44, 255))
         self.assertNotEqual(image.getpixel((48, 6)), (40, 42, 44, 255))
 
-    def test_surface_frame_field_and_state_strip_remain_inside_their_boxes(self) -> None:
+    def test_surface_frame_field_and_state_strip_remain_inside_their_boxes(
+        self,
+    ) -> None:
         image = Image.new("RGBA", (96, 64), (40, 42, 44, 255))
         palette = PALETTES["technology"]
 

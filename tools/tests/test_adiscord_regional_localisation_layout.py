@@ -76,11 +76,15 @@ class RegionalLocalisationLayoutTests(unittest.TestCase):
         self.assertEqual(keys.count("l_russian"), 1)
         self.assertEqual(len(keys), len(set(keys)))
         all_counts = Counter(
-            key for other in RUSSIAN.glob("*.yml")
+            key
+            for other in RUSSIAN.glob("*.yml")
             for key in localisation_keys(other.read_text(encoding="utf-8-sig"))
         )
-        for focus in ("STP_bookmark_support_shabrat", "STP_bookmark_last_banquet",
-                      "STP_bookmark_support_party"):
+        for focus in (
+            "STP_bookmark_support_shabrat",
+            "STP_bookmark_last_banquet",
+            "STP_bookmark_support_party",
+        ):
             for key in (focus, f"{focus}_desc"):
                 self.assertIn(key, keys)
                 self.assertEqual(all_counts[key], 1, key)
@@ -125,7 +129,12 @@ class RegionalLocalisationLayoutTests(unittest.TestCase):
             source = path.read_text(encoding="utf-8-sig", errors="strict")
             for key, value in entries.items():
                 self.assertEqual(
-                    len(re.findall(rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', source)),
+                    len(
+                        re.findall(
+                            rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$',
+                            source,
+                        )
+                    ),
                     1,
                     key,
                 )

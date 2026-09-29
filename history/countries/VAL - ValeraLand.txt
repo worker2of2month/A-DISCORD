@@ -84,22 +84,22 @@ add_equipment_to_stockpile = {
 ###diplomacy
 
 WRK = {
-		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+	add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
 NAM = {
-		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+	add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
 IVN = {
-		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+	add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
 WIT = {
-		add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
+	add_opinion_modifier = { target = VAL modifier = VAL_trading_partners }
 }
 TFF = {
-		add_opinion_modifier = { target = VAL modifier = VAL_different_views_on_freedom }
+	add_opinion_modifier = { target = VAL modifier = VAL_different_views_on_freedom }
 }
 STP = {
-		add_opinion_modifier = { target = VAL modifier = VAL_october_of_2160 }
+	add_opinion_modifier = { target = VAL modifier = VAL_october_of_2160 }
 }
 
 # Initial market access was rejected by 1.19 validation when no valid route exists.

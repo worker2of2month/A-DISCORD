@@ -1,6 +1,6 @@
 ideologies = {
 
-	humanism = { 
+	humanism = {
 
 		types = {
 			humanism_ideology = {
@@ -20,7 +20,7 @@ ideologies = {
 			"FACTION_NAME_HUMANISM_6"
 		}
 
-		color = {118 174 225} 
+		color = {118 174 225}
 
 		rules = {
 			can_create_collaboration_government = no
@@ -41,26 +41,26 @@ ideologies = {
 		faction_impact_on_world_tension = 0.1
 
 		modifiers = {
-		    generate_wargoal_tension = 1.00
-		    join_faction_tension = 0.80
-		    send_volunteer_factor = 0.30
-		    lend_lease_tension = 0.05
-		    send_volunteers_tension = 0.05
-		    send_volunteer_divisions_required = -0.25
-		    guarantee_tension = 0.05
+			generate_wargoal_tension = 1.00
+			join_faction_tension = 0.80
+			send_volunteer_factor = 0.30
+			lend_lease_tension = 0.05
+			send_volunteers_tension = 0.05
+			send_volunteer_divisions_required = -0.25
+			guarantee_tension = 0.05
 
-		    civilian_intel_to_others = 10.0
-		    army_intel_to_others = 5.0
-		    navy_intel_to_others = 10.0
-		    airforce_intel_to_others = 5.0
+			civilian_intel_to_others = 10.0
+			army_intel_to_others = 5.0
+			navy_intel_to_others = 10.0
+			airforce_intel_to_others = 5.0
 
-		    embargo_cost_factor = -0.30
-		    embargo_threshold_factor = -0.30
+			embargo_cost_factor = -0.30
+			embargo_threshold_factor = -0.30
 
-		    consumer_goods_factor = 0.05
-		    stability_weekly_factor = 0.002
-		    opinion_gain_monthly_same_ideology_factor = 0.20
-		  }
+			consumer_goods_factor = 0.05
+			stability_weekly_factor = 0.002
+			opinion_gain_monthly_same_ideology_factor = 0.20
+		}
 
 		faction_modifiers = {
 			faction_trade_opinion_factor = 0.50 #plus 50% trade opinion
@@ -107,18 +107,18 @@ ideologies = {
 		can_collaborate = yes
 
 		modifiers = {
-		    civilian_intel_to_others = 2.0
-		    army_intel_to_others = 10.0
-		    navy_intel_to_others = 10.0
-		    airforce_intel_to_others = 8.0
+			civilian_intel_to_others = 2.0
+			army_intel_to_others = 10.0
+			navy_intel_to_others = 10.0
+			airforce_intel_to_others = 8.0
 
-		    embargo_threshold_factor = 0.30
-		    lend_lease_tension = 0.40
+			embargo_threshold_factor = 0.30
+			lend_lease_tension = 0.40
 
-		    surrender_limit = 0.10
-		    local_resources_factor = 0.05
-		    consumer_goods_factor = -0.05
-		  }
+			surrender_limit = 0.10
+			local_resources_factor = 0.05
+			consumer_goods_factor = -0.05
+		}
 
 		faction_modifiers = {
 
@@ -158,36 +158,36 @@ ideologies = {
 			can_force_government = yes
 			can_send_volunteers = no
 			can_puppet = yes
-            can_join_opposite_factions = no
+			can_join_opposite_factions = no
 		}
 
 		can_collaborate = yes
 
 		modifiers = {
-		    justify_war_goal_when_in_major_war_time = -0.60
-		    offensive_war_stability_factor = 0.05
+			justify_war_goal_when_in_major_war_time = -0.60
+			offensive_war_stability_factor = 0.05
 
-		    surrender_limit = 0.15
-		    local_non_core_manpower = -0.40
-		    recruitable_population_factor = 0.03
-		    root_out_resistance_effectiveness_factor = 0.15
+			surrender_limit = 0.15
+			local_non_core_manpower = -0.40
+			recruitable_population_factor = 0.03
+			root_out_resistance_effectiveness_factor = 0.15
 
-		    civilian_intel_to_others = 5.0
-		    army_intel_to_others = 5.0
-		    navy_intel_to_others = 5.0
-		    airforce_intel_to_others = 5.0
+			civilian_intel_to_others = 5.0
+			army_intel_to_others = 5.0
+			navy_intel_to_others = 5.0
+			airforce_intel_to_others = 5.0
 
-		    join_faction_tension = 0.20
-		    embargo_cost_factor = 0.50
-		    lend_lease_tension = 0.35
-		    opinion_gain_monthly_same_ideology_factor = -0.15
-		  }
+			join_faction_tension = 0.20
+			embargo_cost_factor = 0.50
+			lend_lease_tension = 0.35
+			opinion_gain_monthly_same_ideology_factor = -0.15
+		}
 
 		faction_modifiers = {
 		}
 
 		ai_ideology_wanted_units_factor = 1.65
-		
+
 		ai_give_core_state_control_threshold = 10000
 		can_be_boosted = no
 	}
@@ -232,30 +232,30 @@ ideologies = {
 		}
 
 		modifiers = {
-		    generate_wargoal_tension = 0.60
-		    stability_factor = 0.10
+			generate_wargoal_tension = 0.60
+			stability_factor = 0.10
 
-		    join_faction_tension = 0.30
-		    lend_lease_tension = 0.35
-		    send_volunteers_tension = 0.30
-		    guarantee_tension = 0.20
+			join_faction_tension = 0.30
+			lend_lease_tension = 0.35
+			send_volunteers_tension = 0.30
+			guarantee_tension = 0.20
 
-		    drift_defence_factor = 0.25
+			drift_defence_factor = 0.25
 
-		    civilian_intel_to_others = 10.0
-		    army_intel_to_others = 5.0
-		    navy_intel_to_others = 5.0
-		    airforce_intel_to_others = 5.0
+			civilian_intel_to_others = 10.0
+			army_intel_to_others = 5.0
+			navy_intel_to_others = 5.0
+			airforce_intel_to_others = 5.0
 
-		    line_change_production_efficiency_factor = 0.05
- 		}
+			line_change_production_efficiency_factor = 0.05
+		}
 
 		faction_modifiers = {
 		}
 
 		ai_neutral = yes #
 		ai_ideology_wanted_units_factor = 1.15
-		
+
 		ai_give_core_state_control_threshold = 10000
 	}
 
@@ -287,36 +287,36 @@ ideologies = {
 
 		rules = {
 			can_force_government = yes
-                        can_join_factions = no
-                        can_create_factions = no
+			can_join_factions = no
+			can_create_factions = no
 			can_puppet = no
 			can_send_volunteers = no
-                        can_guarantee_other_ideologies = no
+			can_guarantee_other_ideologies = no
 		}
 
 		modifiers = {
-		    generate_wargoal_tension = 0.35
+			generate_wargoal_tension = 0.35
 
-		    resistance_target_on_our_occupied_states = 0.02
-		    resistance_damage_to_garrison_on_our_occupied_states = 0.02
-		    resistance_growth_on_our_occupied_states = 0.02
+			resistance_target_on_our_occupied_states = 0.02
+			resistance_damage_to_garrison_on_our_occupied_states = 0.02
+			resistance_growth_on_our_occupied_states = 0.02
 
-		    army_core_attack_factor = 0.02
-		    army_core_defence_factor = 0.02
+			army_core_attack_factor = 0.02
+			army_core_defence_factor = 0.02
 
-		    stability_factor = -0.10
-		    consumer_goods_factor = 0.05
+			stability_factor = -0.10
+			consumer_goods_factor = 0.05
 
-		    lend_lease_tension = 0.40
-		    send_volunteers_tension = -0.10
-		    guarantee_tension = -0.15
+			lend_lease_tension = 0.40
+			send_volunteers_tension = -0.10
+			guarantee_tension = -0.15
 
-		    drift_defence_factor = 0.40
+			drift_defence_factor = 0.40
 
-		    civilian_intel_to_others = 10.0
-		    army_intel_to_others = 10.0
-		    navy_intel_to_others = 10.0
-		    airforce_intel_to_others = 10.0
+			civilian_intel_to_others = 10.0
+			army_intel_to_others = 10.0
+			navy_intel_to_others = 10.0
+			airforce_intel_to_others = 10.0
 		}
 
 		faction_modifiers = {
@@ -324,7 +324,7 @@ ideologies = {
 
 		ai_communist = yes
 		ai_ideology_wanted_units_factor = 1.15
-		
+
 		ai_give_core_state_control_threshold = 10000
 	}
 	technocracy = {
@@ -355,28 +355,28 @@ ideologies = {
 		}
 
 		modifiers = {
-		    generate_wargoal_tension = -0.20
+			generate_wargoal_tension = -0.20
 
-		    monthly_population = -0.01
-		    supply_consumption_factor = -0.05
+			monthly_population = -0.01
+			supply_consumption_factor = -0.05
 
-		    consumer_goods_factor = 0.05
-		    production_factory_max_efficiency_factor = 0.05
-		    research_speed_factor = 0.08
+			consumer_goods_factor = 0.05
+			production_factory_max_efficiency_factor = 0.05
+			research_speed_factor = 0.08
 
-		    stability_factor = -0.05
+			stability_factor = -0.05
 
-		    join_faction_tension = -0.10
-		    lend_lease_tension = -0.20
-		    send_volunteers_tension = 0.20
-		    guarantee_tension = -0.15
+			join_faction_tension = -0.10
+			lend_lease_tension = -0.20
+			send_volunteers_tension = 0.20
+			guarantee_tension = -0.15
 
-		    drift_defence_factor = 0.20
+			drift_defence_factor = 0.20
 
-		    civilian_intel_to_others = -5.0
-		    army_intel_to_others = -5.0
-		    navy_intel_to_others = -5.0
-		    airforce_intel_to_others = -5.0
+			civilian_intel_to_others = -5.0
+			army_intel_to_others = -5.0
+			navy_intel_to_others = -5.0
+			airforce_intel_to_others = -5.0
 		}
 
 		faction_modifiers = {
@@ -384,7 +384,7 @@ ideologies = {
 
 		ai_communist = yes
 		ai_ideology_wanted_units_factor = 1.15
-		
+
 		ai_give_core_state_control_threshold = 10000
 	}
 	etatism = {
@@ -424,19 +424,19 @@ ideologies = {
 
 		modifiers = {
 			generate_wargoal_tension = -0.30
-		    recruitable_population_factor = 0.02
+			recruitable_population_factor = 0.02
 
-		    join_faction_tension = -0.20
-		    lend_lease_tension = 0.40
-		    send_volunteers_tension = -0.20
-		    guarantee_tension = -0.15
+			join_faction_tension = -0.20
+			lend_lease_tension = 0.40
+			send_volunteers_tension = -0.20
+			guarantee_tension = -0.15
 
-		    drift_defence_factor = 0.40
+			drift_defence_factor = 0.40
 
-		    civilian_intel_to_others = 10.0
-		    army_intel_to_others = 2.5
-		    navy_intel_to_others = 2.5
-		    airforce_intel_to_others = 2.5
+			civilian_intel_to_others = 10.0
+			army_intel_to_others = 2.5
+			navy_intel_to_others = 2.5
+			airforce_intel_to_others = 2.5
 		}
 
 		faction_modifiers = {
@@ -444,7 +444,7 @@ ideologies = {
 
 		ai_communist = yes
 		ai_ideology_wanted_units_factor = 1.15
-		
+
 		ai_give_core_state_control_threshold = 10000
 	}
 	hedonism = {
@@ -479,23 +479,23 @@ ideologies = {
 		}
 
 		modifiers = {
-            stability_factor = 0.10
-		    consumer_goods_factor = 0.10
+			stability_factor = 0.10
+			consumer_goods_factor = 0.10
 
-		    generate_wargoal_tension = 0.70
-		    monthly_population = 0.01
+			generate_wargoal_tension = 0.70
+			monthly_population = 0.01
 
-		    join_faction_tension = 0.35
-		    lend_lease_tension = 0.45
-		    send_volunteers_tension = 0.35
-		    guarantee_tension = 0.20
+			join_faction_tension = 0.35
+			lend_lease_tension = 0.45
+			send_volunteers_tension = 0.35
+			guarantee_tension = 0.20
 
-		    drift_defence_factor = 0.35
+			drift_defence_factor = 0.35
 
-		    civilian_intel_to_others = 10.5
-		    army_intel_to_others = 6.5
-		    navy_intel_to_others = 6.5
-		    airforce_intel_to_others = 6.5
+			civilian_intel_to_others = 10.5
+			army_intel_to_others = 6.5
+			navy_intel_to_others = 6.5
+			airforce_intel_to_others = 6.5
 		}
 
 		faction_modifiers = {
@@ -503,7 +503,7 @@ ideologies = {
 
 		ai_communist = yes
 		ai_ideology_wanted_units_factor = 1.15
-		
+
 		ai_give_core_state_control_threshold = 10000
 	}
 

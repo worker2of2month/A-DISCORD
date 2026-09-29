@@ -79,7 +79,9 @@ def load_manifest(path: Path = MANIFEST) -> tuple[IconSpec, ...]:
                 output=entry["output"],
                 crop=tuple(crop) if crop is not None else None,
                 source_size=tuple(entry.get("source_size", (1893, 831))),
-                family=entry.get("family", "night" if entry["kind"] == "compact" else "service"),
+                family=entry.get(
+                    "family", "night" if entry["kind"] == "compact" else "service"
+                ),
                 runtime_master=bool(entry.get("runtime_master", False)),
             )
         )
@@ -123,10 +125,14 @@ def _source_image(spec: IconSpec, root: Path) -> Image.Image:
         )
     with Image.open(BytesIO(data)) as source:
         if source.mode != "RGBA":
-            raise RuntimeError(f"technology icon source needs an alpha channel: {path.relative_to(root)}")
+            raise RuntimeError(
+                f"technology icon source needs an alpha channel: {path.relative_to(root)}"
+            )
         image = source.convert("RGBA")
     if image.getchannel("A").getextrema()[0] != 0:
-        raise RuntimeError(f"technology icon source has no transparent background: {path.relative_to(root)}")
+        raise RuntimeError(
+            f"technology icon source has no transparent background: {path.relative_to(root)}"
+        )
     if image.size != spec.source_size:
         raise RuntimeError(
             f"technology icon source must be {spec.source_size[0]}x{spec.source_size[1]}, "
@@ -169,23 +175,38 @@ def _png_bytes(image: Image.Image) -> bytes:
 
 
 def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.Image:
-    wide_families = tuple(dict.fromkeys(spec.family for spec, _ in rendered if spec.kind == "wide"))
+    wide_families = tuple(
+        dict.fromkeys(spec.family for spec, _ in rendered if spec.kind == "wide")
+    )
     compact = [(spec, icon) for spec, icon in rendered if spec.kind == "compact"]
     columns = 9
     cell_width = 212
     compact_columns = 18
     compact_rows = (len(compact) + compact_columns - 1) // compact_columns
     wide_rows = sum(
-        (sum(spec.kind == "wide" and spec.family == family for spec, _ in rendered) + columns - 1) // columns
+        (
+            sum(spec.kind == "wide" and spec.family == family for spec, _ in rendered)
+            + columns
+            - 1
+        )
+        // columns
         for family in wide_families
     )
     compact_top = 16 + wide_rows * 132
-    sheet = Image.new("RGBA", (cell_width * columns, compact_top + compact_rows * 102), (14, 16, 17, 255))
+    sheet = Image.new(
+        "RGBA",
+        (cell_width * columns, compact_top + compact_rows * 102),
+        (14, 16, 17, 255),
+    )
     draw = ImageDraw.Draw(sheet)
     font = ImageFont.load_default()
     row = 0
     for family in wide_families:
-        entries = [(spec, icon) for spec, icon in rendered if spec.kind == "wide" and spec.family == family]
+        entries = [
+            (spec, icon)
+            for spec, icon in rendered
+            if spec.kind == "wide" and spec.family == family
+        ]
         for index, (spec, icon) in enumerate(entries):
             column = index % columns
             y = 16 + (row + index // columns) * 132
@@ -194,7 +215,8 @@ def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.
             draw.text(
                 (column * cell_width + 8, y + 92),
                 f"{family} {spec.tier} {spec.key}"[:35],
-                fill=(222, 220, 205, 255), font=font,
+                fill=(222, 220, 205, 255),
+                font=font,
             )
         row += (len(entries) + columns - 1) // columns
 
@@ -208,12 +230,21 @@ def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.
 
 def render_outputs(root: Path = ROOT) -> dict[Path, bytes]:
     manifest = root / "tools" / "data" / "adiscord_technology_weapon_icons.json"
-    rendered = tuple((spec, render_icon(spec, root)) for spec in load_manifest(manifest))
+    rendered = tuple(
+        (spec, render_icon(spec, root)) for spec in load_manifest(manifest)
+    )
     outputs: dict[Path, bytes] = {}
     for spec, icon in rendered:
         relative = Path("gfx") / "interface" / "technologies" / spec.output
         if spec.runtime_master:
-            outputs[relative] = (root / "tools" / "assets" / "source" / "technology_weapons" / spec.source).read_bytes()
+            outputs[relative] = (
+                root
+                / "tools"
+                / "assets"
+                / "source"
+                / "technology_weapons"
+                / spec.source
+            ).read_bytes()
         else:
             outputs[relative] = _dds_bytes(icon)
     outputs[CONTACT_SHEET.relative_to(ROOT)] = _png_bytes(_contact_sheet(rendered))
@@ -252,10 +283,13 @@ def apply(outputs: dict[Path, bytes], root: Path = ROOT) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare outputs (default)")
+    actions.add_argument(
+        "--check", action="store_true", help="compare outputs (default)"
+    )
     actions.add_argument("--apply", action="store_true", help="write generated outputs")
     parser.add_argument(
-        "--normalize-existing", action="store_true",
+        "--normalize-existing",
+        action="store_true",
         help="losslessly encode existing technology artwork with DDS headers",
     )
     args = parser.parse_args()
@@ -293,7 +327,9 @@ def main() -> int:
             print(f"ERROR: {issue}")
         return 1
     dds_count = sum(path.suffix == ".dds" for path in outputs)
-    print(f"A-Discord technology UI assets are current ({dds_count} DDS files and one contact sheet).")
+    print(
+        f"A-Discord technology UI assets are current ({dds_count} DDS files and one contact sheet)."
+    )
     return 0
 
 

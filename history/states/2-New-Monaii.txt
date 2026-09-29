@@ -2,7 +2,7 @@ state={
 	id=2
 	name="STATE_2"
 	provinces={
-		1 10 117 119 134 16445 16539 16540 16541 16547 16553 
+		1 10 117 119 134 16445 16539 16540 16541 16547 16553
 	}
 	manpower=3000000
 	buildings_max_level_factor=1.000
@@ -19,6 +19,6 @@ state={
 		add_core_of = STP
 
 		victory_points = { 16445 5 }
-        victory_points = { 16547 10 }
+		victory_points = { 16547 10 }
 	}
 }

@@ -13,7 +13,10 @@ from PIL import Image
 
 
 from tools.lib.paths import source_section
-from tools.validators.validate_adiscord_division_templates import Entry, parse_clausewitz
+from tools.validators.validate_adiscord_division_templates import (
+    Entry,
+    parse_clausewitz,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -195,7 +198,9 @@ def assignment_names_at_depth(text: str, depth: int) -> list[str]:
     masked = mask_non_code(text)
     return [
         match.group(1)
-        for match in re.finditer(r"(?<![A-Za-z0-9_])([A-Za-z_][A-Za-z0-9_]*)\s*=", masked)
+        for match in re.finditer(
+            r"(?<![A-Za-z0-9_])([A-Za-z_][A-Za-z0-9_]*)\s*=", masked
+        )
         if brace_depth_before(masked, match.start()) == depth
     ]
 
@@ -213,7 +218,14 @@ def assignment_values_at_depth(text: str, key: str, depth: int) -> list[str]:
 
 
 def script_children(items: list[Entry], key: str) -> list[Entry]:
-    return next((item.value for item in items if item.key == key and isinstance(item.value, list)), [])
+    return next(
+        (
+            item.value
+            for item in items
+            if item.key == key and isinstance(item.value, list)
+        ),
+        [],
+    )
 
 
 def script_fields(items: list[Entry]) -> dict[str, str]:
@@ -222,15 +234,22 @@ def script_fields(items: list[Entry]) -> dict[str, str]:
 
 def walk_script(items: list[Entry], *, executable: bool = False):
     for item in items:
-        if executable and item.key in {"effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip", "limit", "trigger"}:
+        if executable and item.key in {
+            "effect_tooltip",
+            "custom_effect_tooltip",
+            "unlock_decision_tooltip",
+            "limit",
+            "trigger",
+        }:
             continue
         yield item
         if isinstance(item.value, list):
             yield from walk_script(item.value, executable=executable)
 
 
-def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_text: str = "",
-                                  decisions_text: str = "") -> list[str]:
+def validate_supplemental_rewards(
+    focus_text: str, effects_text: str, dynamic_text: str = "", decisions_text: str = ""
+) -> list[str]:
     """Points may accompany a real effect; display text and marker writes are not one.
 
     This checks presence, not balance or every conditional outcome. The targeted
@@ -238,35 +257,67 @@ def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_te
     """
     supplemental = {"army_experience", "add_command_power", "add_political_power"}
     material = {
-        "add_stability", "add_war_support", "add_manpower", "add_equipment_to_stockpile",
-        "add_offsite_building", "add_building_construction", "build_railway", "add_tech_bonus",
-        "add_ideas", "add_timed_idea", "swap_ideas", "add_dynamic_modifier", "add_intel",
-        "add_research_slot", "activate_decision", "activate_mission", "give_resource_rights", "recruit_character",
+        "add_stability",
+        "add_war_support",
+        "add_manpower",
+        "add_equipment_to_stockpile",
+        "add_offsite_building",
+        "add_building_construction",
+        "build_railway",
+        "add_tech_bonus",
+        "add_ideas",
+        "add_timed_idea",
+        "swap_ideas",
+        "add_dynamic_modifier",
+        "add_intel",
+        "add_research_slot",
+        "activate_decision",
+        "activate_mission",
+        "give_resource_rights",
+        "recruit_character",
     }
-    effects = {e.key: e.value for e in parse_clausewitz(effects_text) if isinstance(e.value, list)}
+    effects = {
+        e.key: e.value
+        for e in parse_clausewitz(effects_text)
+        if isinstance(e.value, list)
+    }
     refresh = effects.get("VAL_refresh_contract_modifier", [])
-    consumed_variables = {value for dynamic in parse_clausewitz(dynamic_text) if isinstance(dynamic.value, list)
-                          for value in script_fields(dynamic.value).values()}
+    consumed_variables = {
+        value
+        for dynamic in parse_clausewitz(dynamic_text)
+        if isinstance(dynamic.value, list)
+        for value in script_fields(dynamic.value).values()
+    }
     # Include inputs which select a modifier band, following the actual refresh
     # assignments/conditions instead of treating arbitrary country variables as rewards.
     while True:
         previous = consumed_variables.copy()
         for branch in (e for e in walk_script(refresh) if e.key in {"if", "else_if"}):
-            writes = [script_fields(e.value) for e in walk_script(branch.value, executable=True)
-                      if e.key in {"set_variable", "set_temp_variable", "add_to_variable"}]
+            writes = [
+                script_fields(e.value)
+                for e in walk_script(branch.value, executable=True)
+                if e.key in {"set_variable", "set_temp_variable", "add_to_variable"}
+            ]
             if any(fields.get("var") in consumed_variables for fields in writes):
                 for fields in writes:
                     source = fields.get("value", "")
-                    if fields.get("var") in consumed_variables and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", source):
+                    if fields.get("var") in consumed_variables and re.fullmatch(
+                        r"[A-Za-z_][A-Za-z0-9_]*", source
+                    ):
                         consumed_variables.add(source)
                 for check in walk_script(script_children(branch.value, "limit")):
                     if check.key == "check_variable":
-                        consumed_variables.add(script_fields(check.value).get("var", ""))
+                        consumed_variables.add(
+                            script_fields(check.value).get("var", "")
+                        )
         if previous == consumed_variables:
             break
 
-    refreshed_variables = {script_fields(entry.value).get("var")
-                           for entry in walk_script(refresh, executable=True) if entry.key == "set_variable"}
+    refreshed_variables = {
+        script_fields(entry.value).get("var")
+        for entry in walk_script(refresh, executable=True)
+        if entry.key == "set_variable"
+    }
 
     def nonzero(value, values):
         try:
@@ -303,24 +354,42 @@ def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_te
                 for variable in refreshed_variables:
                     changes.pop(variable, None)
                 for branch in (e for e in refresh if e.key == "if"):
-                    required_flags = {e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"}
+                    required_flags = {
+                        e.value
+                        for e in walk_script(script_children(branch.value, "limit"))
+                        if e.key == "has_country_flag"
+                    }
                     if required_flags and required_flags <= flags:
-                        additions = [script_fields(e.value) for e in walk_script(branch.value, executable=True) if e.key == "add_to_variable"]
+                        additions = [
+                            script_fields(e.value)
+                            for e in walk_script(branch.value, executable=True)
+                            if e.key == "add_to_variable"
+                        ]
                         for addition in additions:
                             variable = addition.get("var")
                             if variable in consumed_variables:
-                                changes[variable] = changes.get(variable, 0) + float(addition.get("value", 0))
+                                changes[variable] = changes.get(variable, 0) + float(
+                                    addition.get("value", 0)
+                                )
                 continue
             if entry.key in material:
                 if isinstance(entry.value, str) and nonzero(entry.value, values):
                     return True
                 if isinstance(entry.value, list):
                     fields = script_fields(entry.value)
-                    quantities = [fields[key] for key in ("amount", "level", "bonus") if key in fields]
-                    if not quantities or any(nonzero(value, values) for value in quantities):
+                    quantities = [
+                        fields[key]
+                        for key in ("amount", "level", "bonus")
+                        if key in fields
+                    ]
+                    if not quantities or any(
+                        nonzero(value, values) for value in quantities
+                    ):
                         return True
             if entry.key in effects and entry.key not in seen and entry.value == "yes":
-                if consequential(effects[entry.key], flags, values, changes, seen | {entry.key}):
+                if consequential(
+                    effects[entry.key], flags, values, changes, seen | {entry.key}
+                ):
                     return True
         return False
 
@@ -340,45 +409,67 @@ def validate_supplemental_rewards(focus_text: str, effects_text: str, dynamic_te
             if entry.key == "OR":
                 return bool(entry.value) and all(required(e) for e in entry.value)
             return False
+
         return any(required(e) for e in items)
 
     def paid_unlock(reward, focus_id):
-        for unlock in (e for e in walk_script(reward) if e.key == "unlock_decision_tooltip"):
-            definitions = decisions.get(unlock.value, []) if isinstance(unlock.value, str) else []
+        for unlock in (
+            e for e in walk_script(reward) if e.key == "unlock_decision_tooltip"
+        ):
+            definitions = (
+                decisions.get(unlock.value, []) if isinstance(unlock.value, str) else []
+            )
             if len(definitions) != 1:
                 continue
             decision = definitions[0]
             fields = script_fields(decision)
             try:
-                paid = math.isfinite(float(fields.get("cost", 0))) and float(fields.get("cost", 0)) > 0
+                paid = (
+                    math.isfinite(float(fields.get("cost", 0)))
+                    and float(fields.get("cost", 0)) > 0
+                )
             except ValueError:
                 paid = False
             # custom_cost_text replaces native payment; that separate contract
             # cannot be inferred from a positive cost field alone.
             if not paid or "custom_cost_text" in fields:
                 continue
-            gate = script_children(decision, "visible") + script_children(decision, "available")
+            gate = script_children(decision, "visible") + script_children(
+                decision, "available"
+            )
             if not requires_focus(gate, focus_id):
                 continue
             changes = {}
-            outcome = script_children(decision, "complete_effect") + script_children(decision, "remove_effect")
+            outcome = script_children(decision, "complete_effect") + script_children(
+                decision, "remove_effect"
+            )
             if consequential(outcome, set(), {}, changes) or any(changes.values()):
                 return True
         return False
 
     issues = []
-    for focus in (e for e in walk_script(parse_clausewitz(focus_text)) if e.key == "focus" and isinstance(e.value, list)):
+    for focus in (
+        e
+        for e in walk_script(parse_clausewitz(focus_text))
+        if e.key == "focus" and isinstance(e.value, list)
+    ):
         reward = script_children(focus.value, "completion_reward")
         changes = {}
-        if (any(e.key in supplemental for e in walk_script(reward, executable=True))
-                and not consequential(reward, set(), {}, changes) and not any(changes.values())
-                and not paid_unlock(reward, script_fields(focus.value).get("id"))):
-            issues.append(f"{script_fields(focus.value).get('id', 'unknown focus')} gives only supplemental points or unconsumed markers")
+        if (
+            any(e.key in supplemental for e in walk_script(reward, executable=True))
+            and not consequential(reward, set(), {}, changes)
+            and not any(changes.values())
+            and not paid_unlock(reward, script_fields(focus.value).get("id"))
+        ):
+            issues.append(
+                f"{script_fields(focus.value).get('id', 'unknown focus')} gives only supplemental points or unconsumed markers"
+            )
     return issues
 
 
-def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic_text: str,
-                             effects_text: str) -> tuple[set[str], list[str]]:
+def validate_val_preview_ideas(
+    ideas_text: str, sources: dict[str, str], dynamic_text: str, effects_text: str
+) -> tuple[set[str], list[str]]:
     """Prove display-only ideas from their real consumers, not an ID suffix.
 
     Aggregate previews follow focus flags or numeric input additions through
@@ -388,22 +479,36 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
     """
     issues: list[str] = []
     ideas_root = script_children(parse_clausewitz(ideas_text), "ideas")
-    declarations = [e for group in ideas_root if isinstance(group.value, list)
-                    for e in group.value if isinstance(e.value, list)]
+    declarations = [
+        e
+        for group in ideas_root
+        if isinstance(group.value, list)
+        for e in group.value
+        if isinstance(e.value, list)
+    ]
     ideas = {e.key: e.value for e in declarations}
     # Selectable ministers and designers may use a display name without being
     # country-spirit previews. Only native spirit categories participate in swaps.
-    spirit_ids = {entry.key for group in ideas_root
-                  if group.key in {"country", "hidden_ideas"} and isinstance(group.value, list)
-                  for entry in group.value if isinstance(entry.value, list)}
+    spirit_ids = {
+        entry.key
+        for group in ideas_root
+        if group.key in {"country", "hidden_ideas"} and isinstance(group.value, list)
+        for entry in group.value
+        if isinstance(entry.value, list)
+    }
     candidates = {key for key in spirit_ids if "name" in script_fields(ideas[key])}
     names = {key: script_fields(ideas[key])["name"] for key in candidates}
-    native_maps = {e.key: {v: k for k, v in script_fields(e.value).items()}
-                   for e in parse_clausewitz(dynamic_text) if isinstance(e.value, list)}
+    native_maps = {
+        e.key: {v: k for k, v in script_fields(e.value).items()}
+        for e in parse_clausewitz(dynamic_text)
+        if isinstance(e.value, list)
+    }
 
     def modifiers(idea):
         try:
-            return {e.key: float(e.value) for e in script_children(ideas[idea], "modifier")}
+            return {
+                e.key: float(e.value) for e in script_children(ideas[idea], "modifier")
+            }
         except (KeyError, ValueError, TypeError):
             issues.append(f"preview {idea} must use a declared numeric modifier vector")
             return {}
@@ -418,7 +523,9 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
         if names[idea] not in native_maps and names[idea] not in ideas:
             issues.append(f"preview {idea} has unknown native name {names[idea]}")
 
-    refresh = script_children(parse_clausewitz(effects_text), "VAL_refresh_contract_modifier")
+    refresh = script_children(
+        parse_clausewitz(effects_text), "VAL_refresh_contract_modifier"
+    )
     # Specialization tier templates must exactly match what the visible
     # VAL_contract_state dynamic modifier receives from the authoritative level.
     specialization_levels = {
@@ -433,7 +540,8 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
         for branch in (e for e in refresh if e.key in {"if", "else_if"}):
             limits = script_children(branch.value, "limit")
             checks = [
-                e for e in walk_script(limits)
+                e
+                for e in walk_script(limits)
                 if e.key == "check_variable" and isinstance(e.value, list)
             ]
             matching = []
@@ -452,7 +560,9 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                 continue
             vector: dict[str, float] = {}
             for effect in branch.value:
-                if effect.key != "add_to_variable" or not isinstance(effect.value, list):
+                if effect.key != "add_to_variable" or not isinstance(
+                    effect.value, list
+                ):
                     continue
                 fields = script_fields(effect.value)
                 modifier = dynamic_contract_map.get(fields.get("var", ""))
@@ -479,14 +589,20 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
 
     flag_deltas: dict[str, dict[str, float]] = {}
     for branch in (e for e in refresh if e.key == "if"):
-        flags = [e.value for e in walk_script(script_children(branch.value, "limit")) if e.key == "has_country_flag"]
+        flags = [
+            e.value
+            for e in walk_script(script_children(branch.value, "limit"))
+            if e.key == "has_country_flag"
+        ]
         if len(flags) == 1:
             delta = {}
             for effect in walk_script(branch.value, executable=True):
                 if effect.key == "add_to_variable":
                     fields = script_fields(effect.value)
                     try:
-                        delta[fields["var"]] = delta.get(fields["var"], 0) + float(fields["value"])
+                        delta[fields["var"]] = delta.get(fields["var"], 0) + float(
+                            fields["value"]
+                        )
                     except (KeyError, ValueError):
                         continue
             if delta:
@@ -506,7 +622,10 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                         already = False
             elif entry.key == "if":
                 chain = [entry]
-                while index + 1 < len(items) and items[index + 1].key in {"else_if", "else"}:
+                while index + 1 < len(items) and items[index + 1].key in {
+                    "else_if",
+                    "else",
+                }:
                     index += 1
                     chain.append(items[index])
                 outcomes = [resets_output(e.value, variable, already) for e in chain]
@@ -523,27 +642,68 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
         if branch.key != "if":
             continue
         guard = script_children(branch.value, "limit")
-        if len(guard) != 1 or guard[0].key != "has_variable" or not isinstance(guard[0].value, str):
+        if (
+            len(guard) != 1
+            or guard[0].key != "has_variable"
+            or not isinstance(guard[0].value, str)
+        ):
             continue
         source = guard[0].value
         payload = [e for e in branch.value if e.key != "limit"]
-        if not payload or any(e.key != "add_to_variable" or script_fields(e.value).get("value") != source for e in payload):
+        if not payload or any(
+            e.key != "add_to_variable" or script_fields(e.value).get("value") != source
+            for e in payload
+        ):
             continue
-        input_writes = [e for e in walk_script(refresh, executable=True)
-                        if e.key in {"set_variable", "set_temp_variable", "add_to_variable", "subtract_from_variable",
-                                     "multiply_variable", "divide_variable", "clamp_variable", "clear_variable"}
-                        and (e.value == source if isinstance(e.value, str) else script_fields(e.value).get("var") == source)]
+        input_writes = [
+            e
+            for e in walk_script(refresh, executable=True)
+            if e.key
+            in {
+                "set_variable",
+                "set_temp_variable",
+                "add_to_variable",
+                "subtract_from_variable",
+                "multiply_variable",
+                "divide_variable",
+                "clamp_variable",
+                "clear_variable",
+            }
+            and (
+                e.value == source
+                if isinstance(e.value, str)
+                else script_fields(e.value).get("var") == source
+            )
+        ]
         if input_writes:
             continue
         for effect in payload:
             fields = script_fields(effect.value)
             target = fields.get("var")
-            if fields.get("value") != source or not target or not resets_output(refresh[:index], target):
+            if (
+                fields.get("value") != source
+                or not target
+                or not resets_output(refresh[:index], target)
+            ):
                 continue
-            overwritten = any(e.key in {"set_variable", "set_temp_variable", "subtract_from_variable", "multiply_variable",
-                                        "divide_variable", "clamp_variable", "clear_variable"}
-                              and (e.value == target if isinstance(e.value, str) else script_fields(e.value).get("var") == target)
-                              for e in walk_script(refresh[index + 1:], executable=True))
+            overwritten = any(
+                e.key
+                in {
+                    "set_variable",
+                    "set_temp_variable",
+                    "subtract_from_variable",
+                    "multiply_variable",
+                    "divide_variable",
+                    "clamp_variable",
+                    "clear_variable",
+                }
+                and (
+                    e.value == target
+                    if isinstance(e.value, str)
+                    else script_fields(e.value).get("var") == target
+                )
+                for e in walk_script(refresh[index + 1 :], executable=True)
+            )
             if not overwritten:
                 numeric_copies.setdefault(source, []).append(target)
 
@@ -554,9 +714,20 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
             guard = script_children(branch.value, "limit")
             if len(guard) != 1 or guard[0].key != "has_dynamic_modifier":
                 continue
-            modifier = guard[0].value if isinstance(guard[0].value, str) else script_fields(guard[0].value).get("modifier")
-            if (modifier == native and script_fields(branch.value).get("force_update_dynamic_modifier") == "yes"
-                    and script_fields(script_children(refresh[index + 1].value, "add_dynamic_modifier")).get("modifier") == native):
+            modifier = (
+                guard[0].value
+                if isinstance(guard[0].value, str)
+                else script_fields(guard[0].value).get("modifier")
+            )
+            if (
+                modifier == native
+                and script_fields(branch.value).get("force_update_dynamic_modifier")
+                == "yes"
+                and script_fields(
+                    script_children(refresh[index + 1].value, "add_dynamic_modifier")
+                ).get("modifier")
+                == native
+            ):
                 return True
         return False
 
@@ -565,7 +736,11 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
             for entry in children:
                 if entry.key == "hidden_effect":
                     yield from country_sequence(entry.value)
-                elif entry.key not in {"effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip"}:
+                elif entry.key not in {
+                    "effect_tooltip",
+                    "custom_effect_tooltip",
+                    "unlock_decision_tooltip",
+                }:
                     yield entry
 
         pending, applied, invalid = {}, {}, set()
@@ -581,9 +756,20 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                         pending[variable] = pending.get(variable, 0) + amount
                     except (KeyError, ValueError):
                         invalid.add(variable)
-            elif entry.key in {"set_variable", "set_temp_variable", "subtract_from_variable", "multiply_variable",
-                               "divide_variable", "clamp_variable", "clear_variable"}:
-                invalid.add(entry.value if isinstance(entry.value, str) else script_fields(entry.value).get("var"))
+            elif entry.key in {
+                "set_variable",
+                "set_temp_variable",
+                "subtract_from_variable",
+                "multiply_variable",
+                "divide_variable",
+                "clamp_variable",
+                "clear_variable",
+            }:
+                invalid.add(
+                    entry.value
+                    if isinstance(entry.value, str)
+                    else script_fields(entry.value).get("var")
+                )
             elif entry.key == "VAL_refresh_contract_modifier" and entry.value == "yes":
                 applied = pending.copy()
         expected = {}
@@ -602,14 +788,21 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
     # Native swap previews need country ideas on both sides. These mirrors carry
     # full tier vectors; the engine computes the difference between them.
     mirrors = {
-        key for key in candidates
+        key
+        for key in candidates
         if re.fullmatch(r"VAL_(administration|army)_[123]_preview", key)
     }
     country_ids = {e.key for e in script_children(ideas_root, "country")}
     for idea in mirrors:
         native = "VAL_contract_" + idea.removeprefix("VAL_").removesuffix("_preview")
-        if idea not in country_ids or names[idea] != native or vectors[idea] != vectors.get(native):
-            issues.append(f"preview {idea} must mirror the full native country tier {native}")
+        if (
+            idea not in country_ids
+            or names[idea] != native
+            or vectors[idea] != vectors.get(native)
+        ):
+            issues.append(
+                f"preview {idea} must mirror the full native country tier {native}"
+            )
         checked.add(idea)
 
     def compare(idea, expected, context):
@@ -620,96 +813,172 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
 
     def tier_previews(items, level, inside=False):
         def condition(entry):
-            if entry.key == "NOT": return not any(condition(e) for e in entry.value)
-            if entry.key == "OR": return any(condition(e) for e in entry.value)
-            if entry.key == "AND": return all(condition(e) for e in entry.value)
+            if entry.key == "NOT":
+                return not any(condition(e) for e in entry.value)
+            if entry.key == "OR":
+                return any(condition(e) for e in entry.value)
+            if entry.key == "AND":
+                return all(condition(e) for e in entry.value)
             if entry.key == "has_variable":
                 if entry.value != "VAL_contract_industry_level":
-                    raise ValueError(f"industry preview checks the wrong variable {entry.value}")
+                    raise ValueError(
+                        f"industry preview checks the wrong variable {entry.value}"
+                    )
                 return level is not None
             if entry.key == "check_variable":
                 fields = script_fields(entry.value)
                 if fields.get("var") != "VAL_contract_industry_level":
-                    raise ValueError(f"industry preview checks the wrong variable {fields.get('var')}")
+                    raise ValueError(
+                        f"industry preview checks the wrong variable {fields.get('var')}"
+                    )
                 actual, expected = level or 0, float(fields["value"])
-                return {"less_than": actual < expected, "greater_than_or_equals": actual >= expected,
-                        "equals": actual == expected}[fields.get("compare", "greater_than_or_equals")]
+                return {
+                    "less_than": actual < expected,
+                    "greater_than_or_equals": actual >= expected,
+                    "equals": actual == expected,
+                }[fields.get("compare", "greater_than_or_equals")]
             raise ValueError(f"unsupported industry preview condition {entry.key}")
+
         found, matched = [], False
         for entry in items:
             if entry.key in {"if", "else_if", "else"}:
                 take = all(condition(e) for e in script_children(entry.value, "limit"))
-                if entry.key == "if": matched = False
+                if entry.key == "if":
+                    matched = False
                 if take and not matched:
-                    found += tier_previews([e for e in entry.value if e.key != "limit"], level, inside)
+                    found += tier_previews(
+                        [e for e in entry.value if e.key != "limit"], level, inside
+                    )
                     matched = True
             elif entry.key == "swap_ideas" and inside:
                 pair = script_fields(entry.value)
                 after = pair.get("add_idea")
                 native = names.get(after, "")
                 # Aggregate deltas are already checked independently of tier changes.
-                aggregate = (after in checked and native in native_maps
-                             and not native.startswith("VAL_contract_industry_"))
+                aggregate = (
+                    after in checked
+                    and native in native_maps
+                    and not native.startswith("VAL_contract_industry_")
+                )
                 if not aggregate:
                     found.append(pair)
-            elif isinstance(entry.value, list) and entry.key not in {"hidden_effect", "limit"}:
-                found += tier_previews(entry.value, level, inside or entry.key == "effect_tooltip")
+            elif isinstance(entry.value, list) and entry.key not in {
+                "hidden_effect",
+                "limit",
+            }:
+                found += tier_previews(
+                    entry.value, level, inside or entry.key == "effect_tooltip"
+                )
         return found
 
     def inspect(items, path, inside=False, reward=None, hidden=False):
         for entry in items:
             if entry.key == "focus" and isinstance(entry.value, list):
-                inspect(entry.value, path, inside, script_children(entry.value, "completion_reward"), hidden)
+                inspect(
+                    entry.value,
+                    path,
+                    inside,
+                    script_children(entry.value, "completion_reward"),
+                    hidden,
+                )
                 continue
             if isinstance(entry.value, str) and entry.value in candidates:
                 referenced.add(entry.value)
                 if entry.key != "has_idea" and not inside:
-                    issues.append(f"preview {entry.value} has executable/non-tooltip reference in {path}:{entry.line}")
+                    issues.append(
+                        f"preview {entry.value} has executable/non-tooltip reference in {path}:{entry.line}"
+                    )
                 elif entry.key != "has_idea" and hidden:
-                    issues.append(f"preview {entry.value} is hidden from the player in {path}:{entry.line}")
+                    issues.append(
+                        f"preview {entry.value} is hidden from the player in {path}:{entry.line}"
+                    )
             if entry.key == "swap_ideas" and inside:
                 pair = script_fields(entry.value)
                 before, after = pair.get("remove_idea"), pair.get("add_idea")
                 if after in candidates:
                     if after in mirrors:
-                        if before not in mirrors or before.rsplit("_", 2)[0] != after.rsplit("_", 2)[0]:
-                            issues.append(f"preview {after} needs a mirror of the same tier family")
-                    elif before not in candidates or names.get(before) != names[after] or vectors.get(before):
-                        issues.append(f"preview {after} needs an empty baseline with the same native name")
+                        if (
+                            before not in mirrors
+                            or before.rsplit("_", 2)[0] != after.rsplit("_", 2)[0]
+                        ):
+                            issues.append(
+                                f"preview {after} needs a mirror of the same tier family"
+                            )
+                    elif (
+                        before not in candidates
+                        or names.get(before) != names[after]
+                        or vectors.get(before)
+                    ):
+                        issues.append(
+                            f"preview {after} needs an empty baseline with the same native name"
+                        )
                     else:
                         checked.add(before)
                     native = names[after]
                     if native in native_maps and reward is not None:
                         executable = list(walk_script(reward, executable=True))
-                        flags = {e.value for e in executable if e.key == "set_country_flag"}
+                        flags = {
+                            e.value for e in executable if e.key == "set_country_flag"
+                        }
                         expected = {}
                         for flag in flags:
                             for variable, value in flag_deltas.get(flag, {}).items():
                                 modifier = native_maps[native].get(variable)
                                 if modifier:
-                                    expected[modifier] = expected.get(modifier, 0) + value
-                        for modifier, value in numeric_reward_delta(reward, native).items():
+                                    expected[modifier] = (
+                                        expected.get(modifier, 0) + value
+                                    )
+                        for modifier, value in numeric_reward_delta(
+                            reward, native
+                        ).items():
                             expected[modifier] = expected.get(modifier, 0) + value
-                        if not expected or not any(e.key == "VAL_refresh_contract_modifier" and e.value == "yes" for e in executable):
-                            issues.append(f"preview {after} has no matching executed flag/numeric-input refresh reward")
+                        if not expected or not any(
+                            e.key == "VAL_refresh_contract_modifier"
+                            and e.value == "yes"
+                            for e in executable
+                        ):
+                            issues.append(
+                                f"preview {after} has no matching executed flag/numeric-input refresh reward"
+                            )
                         compare(after, expected, native)
-                    elif after not in mirrors and not native.startswith("VAL_contract_industry_"):
-                        issues.append(f"preview {after} has no proven native reward consumer")
+                    elif after not in mirrors and not native.startswith(
+                        "VAL_contract_industry_"
+                    ):
+                        issues.append(
+                            f"preview {after} has no proven native reward consumer"
+                        )
             if isinstance(entry.value, list):
-                inspect(entry.value, path, inside or entry.key == "effect_tooltip", reward,
-                        hidden or entry.key == "hidden_effect")
+                inspect(
+                    entry.value,
+                    path,
+                    inside or entry.key == "effect_tooltip",
+                    reward,
+                    hidden or entry.key == "hidden_effect",
+                )
 
     for path, text in sources.items():
         entries = parse_clausewitz(text)
         inspect(entries, path)
-        for focus in (e for e in walk_script(entries) if e.key == "focus" and isinstance(e.value, list)):
+        for focus in (
+            e
+            for e in walk_script(entries)
+            if e.key == "focus" and isinstance(e.value, list)
+        ):
             reward = script_children(focus.value, "completion_reward")
-            tier_ids = {e.value for e in walk_script(reward) if e.key == "add_idea" and
-                        e.value in candidates and names[e.value].startswith("VAL_contract_industry_")}
+            tier_ids = {
+                e.value
+                for e in walk_script(reward)
+                if e.key == "add_idea"
+                and e.value in candidates
+                and names[e.value].startswith("VAL_contract_industry_")
+            }
             if not tier_ids:
                 continue
             target = max(int(names[idea].rsplit("_", 1)[1]) for idea in tier_ids)
-            if not any(e.key == f"VAL_apply_contract_industry_{target}" for e in walk_script(reward, executable=True)):
+            if not any(
+                e.key == f"VAL_apply_contract_industry_{target}"
+                for e in walk_script(reward, executable=True)
+            ):
                 issues.append(f"industry preview has no actual tier-{target} grant")
             for level in (None, 0, 1, 2, 3):
                 try:
@@ -719,7 +988,9 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                     break
                 expected_count = int((level or 0) < target)
                 if len(pairs) != expected_count:
-                    issues.append(f"industry tier-{target} preview is wrong at current tier {level}")
+                    issues.append(
+                        f"industry tier-{target} preview is wrong at current tier {level}"
+                    )
                 for pair in pairs:
                     idea = pair.get("add_idea")
                     if idea not in tier_ids:
@@ -727,7 +998,14 @@ def validate_val_preview_ideas(ideas_text: str, sources: dict[str, str], dynamic
                         continue
                     full = vectors.get(names[idea], {})
                     previous = vectors.get(f"VAL_contract_industry_{level}", {})
-                    compare(idea, {k: full.get(k, 0) - previous.get(k, 0) for k in full.keys() | previous.keys()}, f"industry tier {level}->{target}")
+                    compare(
+                        idea,
+                        {
+                            k: full.get(k, 0) - previous.get(k, 0)
+                            for k in full.keys() | previous.keys()
+                        },
+                        f"industry tier {level}->{target}",
+                    )
     for idea in sorted(candidates - (referenced & checked)):
         issues.append(f"preview {idea} has no validated tooltip-only consumer")
     return candidates if not issues else set(), issues
@@ -772,27 +1050,40 @@ def main() -> int:
     )
     machine_shop_reward = named_blocks(machine_shops, "completion_reward")
     if len(machine_shop_reward) != 1:
-        issues.append("VAL machine-shop focus must define exactly one completion reward")
+        issues.append(
+            "VAL machine-shop focus must define exactly one completion reward"
+        )
     else:
         capital_rewards = named_blocks(machine_shop_reward[0], "capital_scope")
-        expected_infrastructure = (
-            "add_building_construction = { type = infrastructure level = 1 instant_build = yes }"
-        )
-        if len(capital_rewards) != 1 or expected_infrastructure not in capital_rewards[0]:
-            issues.append("VAL machine-shop infrastructure reward is not capital-state scoped")
+        expected_infrastructure = "add_building_construction = { type = infrastructure level = 1 instant_build = yes }"
+        if (
+            len(capital_rewards) != 1
+            or expected_infrastructure not in capital_rewards[0]
+        ):
+            issues.append(
+                "VAL machine-shop infrastructure reward is not capital-state scoped"
+            )
     if len(focuses) < 70:
         issues.append(f"focus tree is still too small ({len(focuses)} focuses)")
     for block in focuses:
         focus_id = re.search(r"(?m)^\s*id\s*=\s*(\S+)", block)
         cost = re.search(r"(?m)^\s*cost\s*=\s*(\d+)", block)
         if not cost:
-            issues.append(f"{focus_id.group(1) if focus_id else 'unknown focus'} has no cost")
+            issues.append(
+                f"{focus_id.group(1) if focus_id else 'unknown focus'} has no cost"
+            )
         elif int(cost.group(1)) > 5:
-            issues.append(f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds 35 days")
-    issues.extend(validate_supplemental_rewards(
-        focus_text, read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
-        read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
-        read("common/decisions/ADISCORD_VAL_decisions.txt")))
+            issues.append(
+                f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds 35 days"
+            )
+    issues.extend(
+        validate_supplemental_rewards(
+            focus_text,
+            read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+            read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
+            read("common/decisions/ADISCORD_VAL_decisions.txt"),
+        )
+    )
 
     focus_blocks = {
         match.group(1): block
@@ -815,7 +1106,9 @@ def main() -> int:
         for pair in exclusive_pairs:
             if len(pair) != 2:
                 continue
-            if all(any(member in group for group in prerequisite_groups) for member in pair):
+            if all(
+                any(member in group for group in prerequisite_groups) for member in pair
+            ):
                 if not any(pair.issubset(group) for group in prerequisite_groups):
                     issues.append(
                         f"{focus_id} requires mutually exclusive focuses in separate prerequisite blocks"
@@ -905,7 +1198,9 @@ def main() -> int:
         occupied.setdefault(resolve(focus_id), []).append(focus_id)
     for position, focus_ids in occupied.items():
         if len(focus_ids) > 1:
-            issues.append(f"focus coordinate collision at {position}: {', '.join(focus_ids)}")
+            issues.append(
+                f"focus coordinate collision at {position}: {', '.join(focus_ids)}"
+            )
     if resolved:
         xs = [position[0] for position in resolved.values()]
         if max(xs) - min(xs) < 24:
@@ -920,11 +1215,17 @@ def main() -> int:
             )
         ]
         if final_position and all(terminal_positions):
-            if final_position[1] <= max(position[1] for position in terminal_positions if position):
-                issues.append("final branch join is drawn above a required branch ending")
+            if final_position[1] <= max(
+                position[1] for position in terminal_positions if position
+            ):
+                issues.append(
+                    "final branch join is drawn above a required branch ending"
+                )
             terminal_rows = {position[1] for position in terminal_positions if position}
             if len(terminal_rows) != 1:
-                issues.append("political, industrial and army branch endings are not aligned")
+                issues.append(
+                    "political, industrial and army branch endings are not aligned"
+                )
         strategy_positions = [
             resolved.get(strategy)
             for strategy in (
@@ -945,7 +1246,9 @@ def main() -> int:
             issues.append(f"{focus_id} is not world-reactive")
 
     shared_effects = read("common/scripted_effects/ADISCORD_shared_action_effects.txt")
-    shared_triggers = read("common/scripted_triggers/ADISCORD_shared_action_triggers.txt")
+    shared_triggers = read(
+        "common/scripted_triggers/ADISCORD_shared_action_triggers.txt"
+    )
     if "VAL_" in shared_effects or "VAL_" in shared_triggers:
         issues.append("shared action API contains Kefreyt-specific content")
     for token in (
@@ -961,9 +1264,10 @@ def main() -> int:
         if token not in shared_effects:
             issues.append(f"shared action API is missing {token}")
 
-    foreign_operations = source_section(read(
-        "common/scripted_effects/ADISCORD_VAL_effects.txt"
-    ), 'foreign_operation_effects')
+    foreign_operations = source_section(
+        read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+        'foreign_operation_effects',
+    )
     if re.search(
         r"\bVAL_recalculate_stp_campaign_readiness\s*=\s*yes\b",
         mask_comments(foreign_operations),
@@ -975,9 +1279,13 @@ def main() -> int:
         effect_id = f"VAL_resolve_{target}_operation"
         resolvers = named_blocks(foreign_operations, effect_id)
         if len(resolvers) != 1:
-            issues.append(f"foreign operation resolver must be declared once: {effect_id}")
+            issues.append(
+                f"foreign operation resolver must be declared once: {effect_id}"
+            )
         elif "VAL_clear_foreign_operation = yes" not in resolvers[0]:
-            issues.append(f"{effect_id} does not release the shared foreign-operation slot")
+            issues.append(
+                f"{effect_id} does not release the shared foreign-operation slot"
+            )
 
     decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
     for token in (
@@ -1016,9 +1324,13 @@ def main() -> int:
         settlement_call = "VAL_settle_wasteland_capitulation = yes"
         guard_release = "clr_global_flag = skip_default_capitulation"
         if settlement_call not in block or guard_release not in block:
-            issues.append("wasteland debug settlement must release the capitulation reservation")
+            issues.append(
+                "wasteland debug settlement must release the capitulation reservation"
+            )
         elif block.index(settlement_call) > block.index(guard_release):
-            issues.append("wasteland debug settlement releases the capitulation reservation too early")
+            issues.append(
+                "wasteland debug settlement releases the capitulation reservation too early"
+            )
 
     for debug_decision, effect_id in (
         ("VAL_debug_settle_stelander_victory", "VAL_cw_settle_republics"),
@@ -1028,7 +1340,9 @@ def main() -> int:
     ):
         blocks = named_blocks(decisions, debug_decision)
         if blocks and f"{effect_id} = yes" not in blocks[0]:
-            issues.append(f"{debug_decision} does not call authored settlement {effect_id}")
+            issues.append(
+                f"{debug_decision} does not call authored settlement {effect_id}"
+            )
 
     categories = read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt")
     debug_category = named_blocks(categories, "VAL_rework_debug")
@@ -1054,7 +1368,9 @@ def main() -> int:
     )
     for obsolete in sorted(legacy_children - service_decisions):
         issues.append(f"obsolete player-facing legacy decision remains: {obsolete}")
-    compatibility_mission = named_blocks(legacy_decisions, "VAL_resource_corridor_control_30")
+    compatibility_mission = named_blocks(
+        legacy_decisions, "VAL_resource_corridor_control_30"
+    )
     if compatibility_mission and "visible = { always = no }" not in " ".join(
         compatibility_mission[0].split()
     ):
@@ -1085,17 +1401,28 @@ def main() -> int:
         "VAL_ops_finance_osf_contacts",
     ):
         block = named_blocks(decisions, decision_id)
-        if not block or "has_country_flag = VAL_northern_operations_unlocked" not in block[0]:
+        if (
+            not block
+            or "has_country_flag = VAL_northern_operations_unlocked" not in block[0]
+        ):
             issues.append(f"{decision_id} is not gated by its world-reactive focus")
 
-    effects = source_section(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), 'rework_effects')
+    effects = source_section(
+        read("common/scripted_effects/ADISCORD_VAL_effects.txt"), 'rework_effects'
+    )
     on_actions = read_country_on_actions(VAL_ON_ACTIONS_FILE, 'kefreyt')
     startup_blocks = named_blocks(on_actions, "on_startup")
     if len(startup_blocks) != 1:
-        issues.append(f"VAL rework must define exactly one on_startup, found {len(startup_blocks)}")
+        issues.append(
+            f"VAL rework must define exactly one on_startup, found {len(startup_blocks)}"
+        )
     else:
         startup = mask_comments(startup_blocks[0])
-        startup_branches = [branch for branch in named_blocks(startup, "if") if "VAL_initialize_rework = yes" in branch]
+        startup_branches = [
+            branch
+            for branch in named_blocks(startup, "if")
+            if "VAL_initialize_rework = yes" in branch
+        ]
         if len(startup_branches) != 1:
             issues.append(
                 "VAL rework startup must contain one fresh-campaign initialization branch"
@@ -1104,7 +1431,9 @@ def main() -> int:
             startup_branch = startup_branches[0]
             limits = named_blocks(startup_branch, "limit")
             if len(limits) != 1:
-                issues.append("VAL rework startup branch must contain exactly one limit")
+                issues.append(
+                    "VAL rework startup branch must contain exactly one limit"
+                )
             else:
                 limit = limits[0]
                 fresh_guard = f"has_global_flag = {FRESH_CAMPAIGN_FLAG}"
@@ -1113,13 +1442,17 @@ def main() -> int:
                 )
                 for token in (fresh_guard, feature_guard, "VAL = { exists = yes }"):
                     if limit.count(token) != 1:
-                        issues.append(f"VAL rework startup limit must contain {token} exactly once")
+                        issues.append(
+                            f"VAL rework startup limit must contain {token} exactly once"
+                        )
 
             feature_set = f"set_global_flag = {VAL_FRESH_FEATURE_FLAG}"
             initialize_call = "VAL_initialize_rework = yes"
             for token in (feature_set, initialize_call):
                 if startup_branch.count(token) != 1:
-                    issues.append(f"VAL rework startup must contain {token} exactly once")
+                    issues.append(
+                        f"VAL rework startup must contain {token} exactly once"
+                    )
             if not re.search(
                 r"VAL\s*=\s*\{\s*VAL_initialize_rework\s*=\s*yes\s*\}",
                 startup_branch,
@@ -1133,7 +1466,9 @@ def main() -> int:
                 initialize_call,
             )
             if all(startup_branch.count(token) == 1 for token in ordered_tokens):
-                positions = tuple(startup_branch.index(token) for token in ordered_tokens)
+                positions = tuple(
+                    startup_branch.index(token) for token in ordered_tokens
+                )
                 if positions != tuple(sorted(positions)):
                     issues.append(
                         "VAL rework startup must check fresh provenance and one-shot guard "
@@ -1142,7 +1477,9 @@ def main() -> int:
 
     initialize_call = "VAL_initialize_rework = yes"
     if mask_comments(on_actions).count(initialize_call) != 1:
-        issues.append("VAL rework initializer must have exactly one guarded runtime caller")
+        issues.append(
+            "VAL rework initializer must have exactly one guarded runtime caller"
+        )
     for token in (
         "set_temp_variable = { var = VAL_contract_rifle_cost value = 4000 }",
         "VAL_pay_contract_rifles = yes",
@@ -1156,10 +1493,14 @@ def main() -> int:
             issues.append(f"rework effects are missing {token}")
     initialize = named_blocks(effects, "VAL_initialize_rework")
     if not initialize or "VAL_unlock_operations_map = yes" not in initialize[0]:
-        issues.append("rework initialization does not migrate the operations-map unlock")
+        issues.append(
+            "rework initialization does not migrate the operations-map unlock"
+        )
 
     tier_families = {
-        "administration": tuple(f"VAL_contract_administration_{tier}" for tier in range(1, 4)),
+        "administration": tuple(
+            f"VAL_contract_administration_{tier}" for tier in range(1, 4)
+        ),
         "industry": tuple(f"VAL_contract_industry_{tier}" for tier in range(1, 4)),
         "army": tuple(f"VAL_contract_army_{tier}" for tier in range(1, 4)),
         "reputation": tuple(f"VAL_contract_reputation_{tier}" for tier in range(4)),
@@ -1224,11 +1565,21 @@ def main() -> int:
             )
         if additions != [target] or assignment_values_at_depth(hidden, "add_idea", 1):
             issues.append(f"{owner} does not directly add only target tier {target}")
-        idea_commands = {"add_idea", "add_ideas", "remove_idea", "remove_ideas", "swap_ideas"}
+        idea_commands = {
+            "add_idea",
+            "add_ideas",
+            "remove_idea",
+            "remove_ideas",
+            "swap_ideas",
+        }
         direct_idea_commands = [
-            name for name in assignment_names_at_depth(hidden, 1) if name in idea_commands
+            name
+            for name in assignment_names_at_depth(hidden, 1)
+            if name in idea_commands
         ]
-        expected_direct_commands = ["remove_ideas"] * len(expected_ideas) + ["add_ideas"]
+        expected_direct_commands = ["remove_ideas"] * len(expected_ideas) + [
+            "add_ideas"
+        ]
         if direct_idea_commands != expected_direct_commands:
             issues.append(f"{owner} has an invalid direct idea-render command sequence")
         masked_hidden = mask_non_code(hidden)
@@ -1241,7 +1592,9 @@ def main() -> int:
             if brace_depth_before(masked_hidden, match.start()) > 1
         ]
         if nested_idea_commands:
-            issues.append(f"{owner} nests idea rendering below hidden_effect direct depth")
+            issues.append(
+                f"{owner} nests idea rendering below hidden_effect direct depth"
+            )
         removal_positions = [
             match.start()
             for match in re.finditer(r"(?m)^\s*remove_ideas\s*=", mask_comments(hidden))
@@ -1252,8 +1605,14 @@ def main() -> int:
             for match in re.finditer(r"(?m)^\s*add_ideas\s*=", mask_comments(hidden))
             if brace_depth_before(masked_hidden, match.start()) == 1
         ]
-        if removal_positions and addition_positions and max(removal_positions) > min(addition_positions):
-            issues.append(f"{owner} adds {target} before completing its remove-all render")
+        if (
+            removal_positions
+            and addition_positions
+            and max(removal_positions) > min(addition_positions)
+        ):
+            issues.append(
+                f"{owner} adds {target} before completing its remove-all render"
+            )
         return hidden
 
     for family in ("administration", "industry", "army"):
@@ -1277,16 +1636,22 @@ def main() -> int:
             branch = branches[0]
             limits = direct_named_blocks(branch.text, "limit", branch.start)
             setters = direct_named_blocks(branch.text, "set_variable", branch.start)
-            hidden_blocks = direct_named_blocks(branch.text, "hidden_effect", branch.start)
+            hidden_blocks = direct_named_blocks(
+                branch.text, "hidden_effect", branch.start
+            )
             for hidden_block in hidden_blocks:
-                setters += direct_named_blocks(hidden_block.text, "set_variable", hidden_block.start)
+                setters += direct_named_blocks(
+                    hidden_block.text, "set_variable", hidden_block.start
+                )
             if len(limits) != 1 or len(setters) != 1 or len(hidden_blocks) != 1:
                 issues.append(
                     f"{effect_id} must directly contain one limit, level setter, and hidden refresh"
                 )
                 continue
             limit = limits[0]
-            hidden_limits = direct_named_blocks(limit.text, "hidden_trigger", limit.start)
+            hidden_limits = direct_named_blocks(
+                limit.text, "hidden_trigger", limit.start
+            )
             if len(hidden_limits) == 1:
                 limit = hidden_limits[0]
             guards = direct_named_blocks(limit.text, "OR", limit.start)
@@ -1295,25 +1660,35 @@ def main() -> int:
             else:
                 guard = guards[0]
                 missing_checks = direct_named_blocks(guard.text, "NOT", guard.start)
-                level_checks = direct_named_blocks(guard.text, "check_variable", guard.start)
+                level_checks = direct_named_blocks(
+                    guard.text, "check_variable", guard.start
+                )
                 guard_operands = assignment_names_at_depth(guard.text, 1)
-                if len(guard_operands) != 2 or set(guard_operands) != {"NOT", "check_variable"}:
+                if len(guard_operands) != 2 or set(guard_operands) != {
+                    "NOT",
+                    "check_variable",
+                }:
                     issues.append(
                         f"{effect_id} OR guard must contain only missing-variable and less-than checks"
                     )
                 if (
                     len(missing_checks) != 1
-                    or assignment_values(missing_checks[0].text, "has_variable") != [variable]
-                    or assignment_names_at_depth(missing_checks[0].text, 1) != ["has_variable"]
+                    or assignment_values(missing_checks[0].text, "has_variable")
+                    != [variable]
+                    or assignment_names_at_depth(missing_checks[0].text, 1)
+                    != ["has_variable"]
                 ):
                     issues.append(f"{effect_id} does not guard the missing {variable}")
                 if len(level_checks) != 1 or (
                     scalar_values(level_checks[0].text, "var") != [variable]
                     or scalar_values(level_checks[0].text, "value") != [str(tier)]
                     or scalar_values(level_checks[0].text, "compare") != ["less_than"]
-                    or assignment_names_at_depth(level_checks[0].text, 1) != ["var", "value", "compare"]
+                    or assignment_names_at_depth(level_checks[0].text, 1)
+                    != ["var", "value", "compare"]
                 ):
-                    issues.append(f"{effect_id} does not guard {variable} as less than {tier}")
+                    issues.append(
+                        f"{effect_id} does not guard {variable} as less than {tier}"
+                    )
             setter = setters[0].text
             if not re.search(
                 rf"\bvar\s*=\s*{re.escape(variable)}\b.*?\bvalue\s*=\s*{tier}\b",
@@ -1332,9 +1707,13 @@ def main() -> int:
                     f"{effect_id} still installs/removes runtime tier ideas: "
                     + ", ".join(sorted(tier_refs))
                 )
-            refresh_calls = scalar_values(hidden_blocks[0].text, "VAL_refresh_contract_modifier")
+            refresh_calls = scalar_values(
+                hidden_blocks[0].text, "VAL_refresh_contract_modifier"
+            )
             if refresh_calls != ["yes"]:
-                issues.append(f"{effect_id} must refresh VAL_contract_state exactly once")
+                issues.append(
+                    f"{effect_id} must refresh VAL_contract_state exactly once"
+                )
 
     reputation_refresh = named_block_spans(effects, "VAL_refresh_contract_reputation")
     if len(reputation_refresh) != 1:
@@ -1348,13 +1727,21 @@ def main() -> int:
             ],
             key=lambda branch: branch.start,
         )
-        if [branch.name for branch in conditional_branches] != ["if", "else_if", "else_if"]:
-            issues.append("reputation refresh must select tiers 3, 2, and 1 in descending order")
+        if [branch.name for branch in conditional_branches] != [
+            "if",
+            "else_if",
+            "else_if",
+        ]:
+            issues.append(
+                "reputation refresh must select tiers 3, 2, and 1 in descending order"
+            )
         else:
             for tier, branch in zip((3, 2, 1), conditional_branches):
                 limits = direct_named_blocks(branch.text, "limit", branch.start)
                 checks = (
-                    direct_named_blocks(limits[0].text, "check_variable", limits[0].start)
+                    direct_named_blocks(
+                        limits[0].text, "check_variable", limits[0].start
+                    )
                     if len(limits) == 1
                     else []
                 )
@@ -1365,14 +1752,18 @@ def main() -> int:
                     or assignment_values(checks[0].text, "compare")
                     != ["greater_than_or_equals"]
                 ):
-                    issues.append(f"reputation refresh has an invalid tier {tier} level check")
+                    issues.append(
+                        f"reputation refresh has an invalid tier {tier} level check"
+                    )
                 effect_id = f"VAL_apply_contract_reputation_{tier}"
                 renderer_calls = re.findall(
                     r"\bVAL_apply_contract_reputation_([0-3])\s*=\s*yes\b",
                     mask_comments(branch.text),
                 )
                 if renderer_calls != [str(tier)]:
-                    issues.append(f"reputation refresh tier {tier} does not call only {effect_id}")
+                    issues.append(
+                        f"reputation refresh tier {tier} does not call only {effect_id}"
+                    )
         fallback = direct_named_blocks(refresh, "else")
         fallback_calls = re.findall(
             r"\bVAL_apply_contract_reputation_([0-3])\s*=\s*yes\b",
@@ -1456,14 +1847,18 @@ def main() -> int:
             for tier in (3, 2, 1)
         ]
         if len(migration_branches) != len(expected_branches):
-            issues.append("tier migration must have one descending three-branch chain per family")
+            issues.append(
+                "tier migration must have one descending three-branch chain per family"
+            )
         else:
             for branch, (family, tier, branch_name) in zip(
                 migration_branches, expected_branches
             ):
                 effect_id = f"VAL_apply_contract_{family}_{tier}"
                 if branch.name != branch_name:
-                    issues.append(f"{effect_id} migration branch is out of descending order")
+                    issues.append(
+                        f"{effect_id} migration branch is out of descending order"
+                    )
                 apply_calls = re.findall(
                     r"(?m)^\s*(VAL_apply_contract_(?:administration|industry|army)_[1-3])\s*=\s*yes\s*$",
                     mask_comments(branch.text),
@@ -1472,7 +1867,9 @@ def main() -> int:
                     issues.append(f"migration branch must call only {effect_id}")
                 limits = direct_named_blocks(branch.text, "limit", branch.start)
                 if len(limits) != 1:
-                    issues.append(f"{effect_id} migration branch needs one direct limit")
+                    issues.append(
+                        f"{effect_id} migration branch needs one direct limit"
+                    )
                     continue
                 limit = limits[0]
                 missing = direct_named_blocks(limit.text, "NOT", limit.start)
@@ -1480,10 +1877,11 @@ def main() -> int:
                 if (
                     len(missing) != 1
                     or assignment_values(missing[0].text, "has_variable") != [variable]
-                    or assignment_names_at_depth(missing[0].text, 1)
-                    != ["has_variable"]
+                    or assignment_names_at_depth(missing[0].text, 1) != ["has_variable"]
                 ):
-                    issues.append(f"{effect_id} migration must require missing {variable}")
+                    issues.append(
+                        f"{effect_id} migration must require missing {variable}"
+                    )
                 expected_focuses = migration_focuses[(family, tier)]
                 limit_operands = assignment_names_at_depth(limit.text, 1)
                 if len(expected_focuses) == 1:
@@ -1563,11 +1961,15 @@ def main() -> int:
         ):
             declarations = named_blocks(hidden_ideas[0], idea_id)
             if len(declarations) != 1:
-                issues.append(f"technical idea must be declared once under hidden_ideas: {idea_id}")
+                issues.append(
+                    f"technical idea must be declared once under hidden_ideas: {idea_id}"
+                )
 
     candidate_ids = {
-        entry.key for entry in walk_script(parse_clausewitz(ideas_text))
-        if isinstance(entry.value, list) and "name" in script_fields(entry.value)
+        entry.key
+        for entry in walk_script(parse_clausewitz(ideas_text))
+        if isinstance(entry.value, list)
+        and "name" in script_fields(entry.value)
         and entry.key.startswith("VAL_")
     }
     preview_sources = {}
@@ -1577,9 +1979,11 @@ def main() -> int:
             if any(idea in source for idea in candidate_ids):
                 preview_sources[path.relative_to(ROOT).as_posix()] = source
     display_only, preview_issues = validate_val_preview_ideas(
-        ideas_text, preview_sources,
+        ideas_text,
+        preview_sources,
         read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
-        read("common/scripted_effects/ADISCORD_VAL_effects.txt"))
+        read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+    )
     issues.extend(preview_issues)
 
     for ideas_path in (
@@ -1587,9 +1991,15 @@ def main() -> int:
         "common/ideas/ADISCORD_STP_VAL_crisis_ideas.txt",
     ):
         ideas_text = read(ideas_path)
-        for idea_id in sorted(set(re.findall(r"(?m)^\s*(VAL_[A-Za-z0-9_]+)\s*=\s*\{", ideas_text))):
+        for idea_id in sorted(
+            set(re.findall(r"(?m)^\s*(VAL_[A-Za-z0-9_]+)\s*=\s*\{", ideas_text))
+        ):
             idea_blocks = named_blocks(ideas_text, idea_id)
-            if idea_blocks and idea_id not in display_only and not re.search(r"\bpicture\s*=", mask_comments(idea_blocks[0])):
+            if (
+                idea_blocks
+                and idea_id not in display_only
+                and not re.search(r"\bpicture\s*=", mask_comments(idea_blocks[0]))
+            ):
                 issues.append(f"idea {idea_id} has no picture")
 
     # Kefreyt starts without domestic steel. Its initial steel supply comes from
@@ -1607,25 +2017,37 @@ def main() -> int:
         homeland = read(path)
         resources = named_blocks(homeland, "resources")
         if resources and re.search(r"(?m)^\s*steel\s*=", resources[0]):
-            issues.append(f"Kefreyt homeland state {state_id} must not contain starting steel")
+            issues.append(
+                f"Kefreyt homeland state {state_id} must not contain starting steel"
+            )
     vorkerland_start = read("history/states/33-33.txt")
     if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*16", vorkerland_start, re.S):
         issues.append("state 33 must retain Kefreyt's starting Vorkerland steel source")
-    arsenal_init = named_blocks(read("common/scripted_effects/ADISCORD_VAL_effects.txt"), "VAL_initialize_arsenal_recovery")
-    if not arsenal_init or "give_resource_rights = { receiver = VAL state = 33 }" not in arsenal_init[0]:
+    arsenal_init = named_blocks(
+        read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+        "VAL_initialize_arsenal_recovery",
+    )
+    if (
+        not arsenal_init
+        or "give_resource_rights = { receiver = VAL state = 33 }" not in arsenal_init[0]
+    ):
         issues.append("Kefreyt startup must grant Vorkerland steel rights in state 33")
 
     state_202 = read("history/states/38-38.txt")
     if not re.search(r"resources\s*=\s*\{[^}]*steel\s*=\s*10", state_202, re.S):
         issues.append("state 38 does not contain the baseline Vorkerland steel deposit")
-    collapse_events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
+    collapse_events = source_section(
+        read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+    )
     if "VAL_handle_vorkerland_war_outbreak = yes" not in collapse_events:
         issues.append("Vorkerland war start does not disrupt Kefreyt contracts")
 
     gfx = read("interface/ADISCORD_VAL_operations.gfx")
     gui = read("interface/ADISCORD_VAL_operations.gui")
     scripted_gui = read("common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt")
-    operations_effects = read("common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt")
+    operations_effects = read(
+        "common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"
+    )
     panel = named_blocks(scripted_gui, "ADISCORD_VAL_operations_panel")
     if not panel:
         issues.append("operations scripted-GUI panel is missing")
@@ -1638,12 +2060,18 @@ def main() -> int:
             if token not in " ".join(panel[0].split()):
                 issues.append(f"operations scripted-GUI panel is missing {token}")
     from tools.builders.build_adiscord_val_operations_map import STATE_IDS, FRAME_COUNT
-    operations_windows = [body for body in named_blocks(gui, "containerWindowType")
-                          if re.search(r'name\s*=\s*"ADISCORD_(?:VAL|STP)_operations_panel_window"', body)]
+
+    operations_windows = [
+        body
+        for body in named_blocks(gui, "containerWindowType")
+        if re.search(r'name\s*=\s*"ADISCORD_(?:VAL|STP)_operations_panel_window"', body)
+    ]
     if any("instantTextBoxType" in window for window in operations_windows):
         issues.append("operations map must not contain visible text labels")
     if "set_temp_variable" in scripted_gui:
-        issues.append("operations scripted GUI must not run effects from trigger blocks")
+        issues.append(
+            "operations scripted GUI must not run effects from trigger blocks"
+        )
     if not named_blocks(operations_effects, "VAL_operations_map_refresh_cache"):
         issues.append("missing shared operations-map cache effect")
     for state in STATE_IDS:
@@ -1652,17 +2080,32 @@ def main() -> int:
             issues.append(f"missing operations overlay for state {state}")
             continue
         with Image.open(path) as image:
-            if image.width % FRAME_COUNT or not 0 < image.width // FRAME_COUNT <= 420 or not 0 < image.height <= 340:
-                issues.append(f"state {state} overlay has size {image.size}, expected {FRAME_COUNT} cropped frames")
+            if (
+                image.width % FRAME_COUNT
+                or not 0 < image.width // FRAME_COUNT <= 420
+                or not 0 < image.height <= 340
+            ):
+                issues.append(
+                    f"state {state} overlay has size {image.size}, expected {FRAME_COUNT} cropped frames"
+                )
         for text, label in ((gfx, "GFX"), (gui, "GUI"), (scripted_gui, "scripted GUI")):
             if f"{state}" not in text:
                 issues.append(f"state {state} is missing from operations {label}")
-    operations_hooks = read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")
+    operations_hooks = read(
+        "common/on_actions/04_ADISCORD_operations_map_on_actions.txt"
+    )
     if "on_state_control_changed" not in operations_hooks:
         issues.append("operations-map cache has no event-driven state-control owner")
     if operations_hooks.count("VAL_operations_map_refresh_cache = yes") < 4:
-        issues.append("operations-map cache must refresh both VAL and STS on startup and theatre control changes")
-    for token in ("ROOT = {", "FROM = {", "has_country_flag = VAL_operations_map_unlocked", "has_country_flag = STP_cw_postwar"):
+        issues.append(
+            "operations-map cache must refresh both VAL and STS on startup and theatre control changes"
+        )
+    for token in (
+        "ROOT = {",
+        "FROM = {",
+        "has_country_flag = VAL_operations_map_unlocked",
+        "has_country_flag = STP_cw_postwar",
+    ):
         if token not in operations_hooks:
             issues.append(f"operations-map event-driven cache owner is missing {token}")
     for hook_path in (
@@ -1670,16 +2113,22 @@ def main() -> int:
         "common/on_actions/02_ADISCORD_STP_on_actions.txt",
     ):
         if "VAL_operations_map_refresh_cache = yes" in read(hook_path):
-            issues.append(f"operations-map cache still has a weekly country poll in {hook_path}")
+            issues.append(
+                f"operations-map cache still has a weekly country poll in {hook_path}"
+            )
     background = ROOT / "gfx/interface/VAL_operations/VAL_ops_map_background.png"
     if not background.exists():
         issues.append("missing operations-map background")
     else:
         with Image.open(background) as image:
             if image.size != (420, 340):
-                issues.append(f"operations background has size {image.size}, expected 420x340")
+                issues.append(
+                    f"operations background has size {image.size}, expected 420x340"
+                )
 
-    localization_path = ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
+    localization_path = (
+        ROOT / "localisation/russian/ADISCORD_VAL_decisions_l_russian.yml"
+    )
     if not localization_path.read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian rework localisation is missing its UTF-8 BOM")
     localization = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
@@ -1727,7 +2176,9 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print(f"Kefreyt rework validation passed ({len(focuses)} focuses, {len(STATE_IDS)} active map regions).")
+    print(
+        f"Kefreyt rework validation passed ({len(focuses)} focuses, {len(STATE_IDS)} active map regions)."
+    )
     return 0
 
 

@@ -147,7 +147,9 @@ class RepositoryHygieneTests(unittest.TestCase):
 
     def test_vendor_bundle_and_moved_reference_binaries_are_documented(self) -> None:
         """A vendor GUI stays outside tooling and every moved reference blob is attributable."""
-        self.assertEqual(tracked_paths(REPOSITORY_ROOT, f"{LEGACY_VENDOR_PREFIX}**"), [])
+        self.assertEqual(
+            tracked_paths(REPOSITORY_ROOT, f"{LEGACY_VENDOR_PREFIX}**"), []
+        )
 
         vendor_paths = tracked_paths(REPOSITORY_ROOT, f"{VENDOR_PREFIX}**")
         self.assertIn(f"{VENDOR_PREFIX}hoi4_flag_maker_gui.exe", vendor_paths)
@@ -164,7 +166,9 @@ class RepositoryHygieneTests(unittest.TestCase):
         for relative_path, expected_hash in REFERENCE_BINARY_HASHES.items():
             binary_path = REPOSITORY_ROOT / relative_path
             self.assertTrue(binary_path.is_file(), relative_path)
-            self.assertEqual(sha256(binary_path.read_bytes()).hexdigest(), expected_hash)
+            self.assertEqual(
+                sha256(binary_path.read_bytes()).hexdigest(), expected_hash
+            )
             self.assertIn(relative_path, tools_documentation)
             self.assertIn(expected_hash, tools_documentation)
 
@@ -176,12 +180,19 @@ class RepositoryHygieneTests(unittest.TestCase):
         self.assertEqual(list((REPOSITORY_ROOT / "tools").glob("*.psd")), [])
         for relative_path in EDITABLE_SOURCE_PATHS:
             self.assertTrue((REPOSITORY_ROOT / relative_path).is_file(), relative_path)
-            self.assertIn(relative_path.removeprefix("tools/assets/source/"), tools_documentation)
+            self.assertIn(
+                relative_path.removeprefix("tools/assets/source/"), tools_documentation
+            )
 
     def test_small_generic_content_uses_canonical_containers(self) -> None:
-        for old_path, (target_path, representative_definition) in (
-            CONSOLIDATED_CONTENT_CONTAINERS.items()
-        ):
+        for old_path, (
+            target_path,
+            representative_definition,
+        ) in CONSOLIDATED_CONTENT_CONTAINERS.items():
             self.assertFalse((REPOSITORY_ROOT / old_path).exists(), old_path)
-            target_text = (REPOSITORY_ROOT / target_path).read_text(encoding="utf-8-sig")
-            self.assertEqual(target_text.count(representative_definition), 1, target_path)
+            target_text = (REPOSITORY_ROOT / target_path).read_text(
+                encoding="utf-8-sig"
+            )
+            self.assertEqual(
+                target_text.count(representative_definition), 1, target_path
+            )

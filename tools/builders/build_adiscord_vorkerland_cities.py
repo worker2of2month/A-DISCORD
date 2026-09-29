@@ -24,11 +24,11 @@ DEFINITION_PATH = ROOT / "map" / "definition.csv"
 CITY_PALETTE_INDEX = 15
 TARGET_PROVINCES = frozenset(
     {
-        4443,   # Remmel
-        6192,   # Isaiah
-        8059,   # Revel
-        8243,   # Old Isaiah
-        8803,   # Verkhovye
+        4443,  # Remmel
+        6192,  # Isaiah
+        8059,  # Revel
+        8243,  # Old Isaiah
+        8803,  # Verkhovye
         11795,  # Langar
         11944,  # Sutritsa
         12443,  # Kairholm
@@ -66,12 +66,16 @@ def bitmap_layout(source: bytes) -> BitmapLayout:
     pixel_offset = struct.unpack_from("<I", source, 10)[0]
     dib_size = struct.unpack_from("<I", source, 14)[0]
     if dib_size < 40:
-        raise RuntimeError(f"map/cities.bmp uses unsupported DIB header size {dib_size}")
+        raise RuntimeError(
+            f"map/cities.bmp uses unsupported DIB header size {dib_size}"
+        )
     width, signed_height = struct.unpack_from("<ii", source, 18)
     planes, bits_per_pixel = struct.unpack_from("<HH", source, 26)
     compression = struct.unpack_from("<I", source, 30)[0]
     if width <= 0 or signed_height == 0:
-        raise RuntimeError(f"map/cities.bmp has invalid dimensions {width}x{signed_height}")
+        raise RuntimeError(
+            f"map/cities.bmp has invalid dimensions {width}x{signed_height}"
+        )
     if planes != 1 or bits_per_pixel != 8 or compression != 0:
         raise RuntimeError(
             "map/cities.bmp must be an uncompressed 8-bit paletted BMP "
@@ -87,7 +91,9 @@ def bitmap_layout(source: bytes) -> BitmapLayout:
     return BitmapLayout(width, height, pixel_offset, row_stride, signed_height > 0)
 
 
-def target_colours(definition_path: Path | None = None) -> tuple[dict[int, int], list[str]]:
+def target_colours(
+    definition_path: Path | None = None,
+) -> tuple[dict[int, int], list[str]]:
     """Return RGB keys for target land provinces and definition contract issues."""
     definition_path = DEFINITION_PATH if definition_path is None else definition_path
     issues: list[str] = []
@@ -189,11 +195,17 @@ def generated_issues(
     generated, counts, target_positions = render_bytes(source, provinces, colours)
     for province, count in sorted(counts.items()):
         if count == 0:
-            issues.append(f"map/provinces.bmp: target province {province} has an empty mask")
+            issues.append(
+                f"map/provinces.bmp: target province {province} has an empty mask"
+            )
     outside = unmanaged_difference_count(source, generated, target_positions)
     if outside:
-        issues.append(f"map/cities.bmp: generation would alter {outside} unmanaged bytes")
-    missing_city_pixels = sum(source[position] != CITY_PALETTE_INDEX for position in target_positions)
+        issues.append(
+            f"map/cities.bmp: generation would alter {outside} unmanaged bytes"
+        )
+    missing_city_pixels = sum(
+        source[position] != CITY_PALETTE_INDEX for position in target_positions
+    )
     if missing_city_pixels:
         issues.append(
             f"map/cities.bmp: {missing_city_pixels} target pixels are not palette index "
@@ -215,7 +227,10 @@ def validate() -> list[str]:
         return issues
     source = CITIES_PATH.read_bytes()
     try:
-        with Image.open(BytesIO(source)) as cities, Image.open(PROVINCES_PATH) as provinces:
+        with (
+            Image.open(BytesIO(source)) as cities,
+            Image.open(PROVINCES_PATH) as provinces,
+        ):
             if cities.mode != "P":
                 issues.append(f"map/cities.bmp must be paletted, found {cities.mode}")
             layout = bitmap_layout(source)
@@ -270,7 +285,9 @@ def apply() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current output (default)")
+    actions.add_argument(
+        "--check", action="store_true", help="validate current output (default)"
+    )
     actions.add_argument("--apply", action="store_true", help="write map/cities.bmp")
     args = parser.parse_args()
     if args.apply:

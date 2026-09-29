@@ -1,4 +1,5 @@
 """Regression contract for Shabrat's active postwar gameplay."""
+
 from tools.lib.on_actions import read_country_on_actions
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
@@ -22,7 +23,7 @@ def named_block(text: str, name: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -37,7 +38,7 @@ def event_block(text: str, event_id: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1]
+                return text[start : index + 1]
     raise AssertionError(f"unclosed event {event_id}")
 
 
@@ -56,7 +57,6 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         current = named_block(triggers, "STP_pc_nod_offer_current")
         self.assertIn("NOD = { STP_pc_nod_government_exists = yes", offer)
         self.assertIn("STP_pc_nod_government_exists = yes", current)
-
 
     def test_postwar_nodrul_defeat_is_recorded_before_white_peace(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -111,16 +111,21 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             self.assertIn("ADISCORD_campaign_slot_consume = yes", block)
             self.assertIn("ADISCORD_campaign_slot_release = yes", block)
             self.assertTrue(
-                any(metric in block for metric in (
-                    "STP_pw_reconstruction_momentum",
-                    "STP_pw_public_confidence",
-                    "STP_pw_regional_cohesion",
-                )),
+                any(
+                    metric in block
+                    for metric in (
+                        "STP_pw_reconstruction_momentum",
+                        "STP_pw_public_confidence",
+                        "STP_pw_regional_cohesion",
+                    )
+                ),
                 decision,
             )
 
     def test_postwar_categories_and_localisation_exist(self):
-        categories = read("common/decisions/categories/ADISCORD_decision_categories_STP.txt")
+        categories = read(
+            "common/decisions/categories/ADISCORD_decision_categories_STP.txt"
+        )
         self.assertIn("STP_postwar_reconstruction_drive = {", categories)
         self.assertIn("STP_postwar_propaganda_campaigns = {", categories)
 
@@ -186,7 +191,9 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
 
     def test_dual_ultimatum_defeat_closes_both_external_wars(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        cleanup = named_block(effects, "STP_close_competing_ultimatum_wars_after_defeat")
+        cleanup = named_block(
+            effects, "STP_close_competing_ultimatum_wars_after_defeat"
+        )
         self.assertIn("has_war_with = VAL", cleanup)
         self.assertIn("white_peace = VAL", cleanup)
         self.assertIn("has_war_with = NOD", cleanup)
@@ -194,17 +201,24 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         self.assertIn("VAL_stelander_truce", cleanup)
 
         settlement = named_block(effects, "STP_pc_begin_settlement")
-        defeat = settlement[settlement.index("STP_pc_cap_side value = 3"):]
+        defeat = settlement[settlement.index("STP_pc_cap_side value = 3") :]
         self.assertIn("STP_close_competing_ultimatum_wars_after_defeat = yes", defeat)
-        victory_prefix = settlement[:settlement.index("STP_pc_cap_side value = 3")]
-        self.assertNotIn("STP_close_competing_ultimatum_wars_after_defeat = yes", victory_prefix)
+        victory_prefix = settlement[: settlement.index("STP_pc_cap_side value = 3")]
+        self.assertNotIn(
+            "STP_close_competing_ultimatum_wars_after_defeat = yes", victory_prefix
+        )
 
     def test_postwar_initialization_is_event_driven(self):
-        on_actions = read_country_on_actions("common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander')
+        on_actions = read_country_on_actions(
+            "common/on_actions/02_ADISCORD_STP_on_actions.txt", 'stelander'
+        )
         weekly = named_block(on_actions, "on_weekly_STS")
         self.assertNotIn("STP_pw_reconcile_postwar_interactivity = yes", weekly)
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        self.assertIn("STP_pw_reconcile_postwar_interactivity = yes", named_block(effects, "STP_cw_finish_mobilization"))
+        self.assertIn(
+            "STP_pw_reconcile_postwar_interactivity = yes",
+            named_block(effects, "STP_cw_finish_mobilization"),
+        )
 
 
 if __name__ == "__main__":

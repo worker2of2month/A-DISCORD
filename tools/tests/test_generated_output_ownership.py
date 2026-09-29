@@ -17,12 +17,18 @@ from PIL import Image
 
 from tools.builders import build_adiscord_party_texticons as party_texticons
 from tools.builders import build_adiscord_deployment_ui_assets as deployment_ui_assets
-from tools.builders import build_adiscord_intelligence_ui_assets as intelligence_ui_assets
+from tools.builders import (
+    build_adiscord_intelligence_ui_assets as intelligence_ui_assets,
+)
 from tools.builders import build_adiscord_stp_regions_map as stp_regions_map
 from tools.builders import build_adiscord_technology_ui_assets as technology_ui_assets
 from tools.builders import build_adiscord_val_operations_map as val_operations_map
-from tools.builders.build_adiscord_diplomacy_ui_assets import expected_outputs as diplomacy_ui_asset_outputs
-from tools.builders.build_adiscord_resource_assets import expected_outputs as resource_asset_outputs
+from tools.builders.build_adiscord_diplomacy_ui_assets import (
+    expected_outputs as diplomacy_ui_asset_outputs,
+)
+from tools.builders.build_adiscord_resource_assets import (
+    expected_outputs as resource_asset_outputs,
+)
 from tools.lib.generated_outputs import (
     load_registry,
     run_apply_pipeline,
@@ -124,11 +130,12 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(self.entries["state_history"]["source_inputs"]),
         )
 
-    def test_resource_asset_registry_owns_every_exact_generated_path_and_source(self) -> None:
+    def test_resource_asset_registry_owns_every_exact_generated_path_and_source(
+        self,
+    ) -> None:
         entry = self.entries["resource_assets"]
         expected_paths = {
-            path.relative_to(ROOT).as_posix()
-            for path in resource_asset_outputs()
+            path.relative_to(ROOT).as_posix() for path in resource_asset_outputs()
         }
         self.assertEqual(set(entry["output_globs"]), expected_paths)
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))
@@ -146,11 +153,12 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             <= set(entry["source_inputs"])
         )
 
-    def test_diplomacy_ui_asset_registry_owns_every_exact_generated_path_and_source(self) -> None:
+    def test_diplomacy_ui_asset_registry_owns_every_exact_generated_path_and_source(
+        self,
+    ) -> None:
         entry = self.entries["diplomacy_ui_assets"]
         expected_paths = {
-            path.relative_to(ROOT).as_posix()
-            for path in diplomacy_ui_asset_outputs()
+            path.relative_to(ROOT).as_posix() for path in diplomacy_ui_asset_outputs()
         }
         self.assertEqual(set(entry["output_globs"]), expected_paths)
         self.assertTrue(all("*" not in path for path in entry["output_globs"]))
@@ -163,7 +171,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             },
         )
 
-    def test_intelligence_ui_registry_exactly_matches_builder_outputs_and_sources(self) -> None:
+    def test_intelligence_ui_registry_exactly_matches_builder_outputs_and_sources(
+        self,
+    ) -> None:
         entry = self.entries["intelligence_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
@@ -183,7 +193,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         )
         self.assertTrue(entry["may_delete_outputs"])
 
-    def test_deployment_ui_registry_exactly_matches_builder_outputs_and_sources(self) -> None:
+    def test_deployment_ui_registry_exactly_matches_builder_outputs_and_sources(
+        self,
+    ) -> None:
         entry = self.entries["deployment_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
@@ -202,7 +214,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         )
         self.assertTrue(entry["may_delete_outputs"])
 
-    def test_technology_ui_registry_exactly_matches_builder_outputs_and_sources(self) -> None:
+    def test_technology_ui_registry_exactly_matches_builder_outputs_and_sources(
+        self,
+    ) -> None:
         entry = self.entries["technology_screen_ui_assets"]
         expected_paths = {
             path.relative_to(ROOT).as_posix()
@@ -222,7 +236,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         )
         self.assertTrue(entry["may_delete_outputs"])
 
-    def test_technology_system_registry_tracks_ui_skin_generation_dependencies(self) -> None:
+    def test_technology_system_registry_tracks_ui_skin_generation_dependencies(
+        self,
+    ) -> None:
         entry = self.entries["technology_system"]
         self.assertTrue(
             {
@@ -243,18 +259,24 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png",
         }
         self.assertTrue(
-            state_outputs <= set(self.entries["technology_screen_ui_assets"]["output_globs"])
+            state_outputs
+            <= set(self.entries["technology_screen_ui_assets"]["output_globs"])
         )
         self.assertTrue(state_outputs.isdisjoint(entry["output_globs"]))
         for output in state_outputs:
             owners = {
                 family_id
                 for family_id, candidate in self.entries.items()
-                if any(fnmatchcase(output, pattern) for pattern in candidate["output_globs"])
+                if any(
+                    fnmatchcase(output, pattern)
+                    for pattern in candidate["output_globs"]
+                )
             }
             self.assertEqual(owners, {"technology_screen_ui_assets"}, output)
 
-    def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(self) -> None:
+    def test_party_texticon_registry_exactly_matches_assets_and_is_exclusive(
+        self,
+    ) -> None:
         entry = self.entries["party_texticons"]
         expected_outputs = [
             path.relative_to(ROOT).as_posix()
@@ -263,7 +285,11 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         expected_sources = [
             "tools/builders/build_adiscord_party_texticons.py",
             "tools/data/adiscord_party_texticons.json",
-            *(asset.source.as_posix() for asset in party_texticons.ASSETS if asset.source is not None),
+            *(
+                asset.source.as_posix()
+                for asset in party_texticons.ASSETS
+                if asset.source is not None
+            ),
             *(protected.output.as_posix() for protected in party_texticons.PROTECTED),
         ]
         self.assertEqual(entry["output_globs"], expected_outputs)
@@ -275,7 +301,10 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             owners = {
                 family_id
                 for family_id, candidate in self.entries.items()
-                if any(fnmatchcase(output, pattern) for pattern in candidate["output_globs"])
+                if any(
+                    fnmatchcase(output, pattern)
+                    for pattern in candidate["output_globs"]
+                )
             }
             self.assertEqual(owners, {"party_texticons"}, output)
 
@@ -363,7 +392,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
             registry_path = root / "tools" / "data" / "generated_output_owners.json"
 
             def write_registry(output_glob: str, source_input: str | list[str]) -> None:
-                source_inputs = [source_input] if isinstance(source_input, str) else source_input
+                source_inputs = (
+                    [source_input] if isinstance(source_input, str) else source_input
+                )
                 payload = {
                     "schema": 1,
                     "apply_sequence": ["fixture"],
@@ -374,10 +405,17 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
                             "output_globs": [output_glob],
                             "source_inputs": source_inputs,
                             "check_command": [
-                                "{python}", "-B", "-m", "tools.builders.build_fixture"
+                                "{python}",
+                                "-B",
+                                "-m",
+                                "tools.builders.build_fixture",
                             ],
                             "apply_command": [
-                                "{python}", "-B", "-m", "tools.builders.build_fixture", "--apply"
+                                "{python}",
+                                "-B",
+                                "-m",
+                                "tools.builders.build_fixture",
+                                "--apply",
                             ],
                             "may_delete_outputs": False,
                             "ownership_mode": "exclusive",
@@ -429,7 +467,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         before = snapshot_outputs(ROOT, self.registry)
         for entry in self.entries.values():
             with self.subTest(family=entry["id"], command="check"):
-                result = run_registered_command(ROOT, entry["check_command"], timeout=300)
+                result = run_registered_command(
+                    ROOT, entry["check_command"], timeout=300
+                )
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             with self.subTest(family=entry["id"], command="help"):
                 result = subprocess.run(
@@ -461,7 +501,9 @@ class GeneratedOutputOwnershipTests(unittest.TestCase):
         second = snapshot_outputs(sandbox, registry)
         self.assertEqual(second, first)
         for entry in registry["families"]:
-            result = run_registered_command(sandbox, entry["check_command"], timeout=300)
+            result = run_registered_command(
+                sandbox, entry["check_command"], timeout=300
+            )
             self.assertEqual(
                 result.returncode,
                 0,

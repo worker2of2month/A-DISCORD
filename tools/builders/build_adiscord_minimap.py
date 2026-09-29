@@ -115,7 +115,9 @@ def _minimap() -> Image.Image:
     eroded_land = land_binary.filter(ImageFilter.MinFilter(3))
     coast = ImageChops.subtract(land_binary, eroded_land)
     coast_colour = Image.new("RGB", MINIMAP_SIZE, (150, 174, 158))
-    result = Image.composite(coast_colour, result, coast.point(lambda value: value // 2))
+    result = Image.composite(
+        coast_colour, result, coast.point(lambda value: value // 2)
+    )
     return result.convert("RGBA")
 
 
@@ -168,8 +170,28 @@ def _minimap_border() -> Image.Image:
     frame_mask = ImageChops.subtract(outer_mask, inner_mask)
     output = _brushed_surface(size, frame_mask)
     draw = ImageDraw.Draw(output)
-    outer = ((5, 0), (270, 0), (275, 5), (275, 99), (270, 104), (5, 104), (0, 99), (0, 5), (5, 0))
-    inner = ((7, 4), (268, 4), (271, 7), (271, 97), (268, 100), (7, 100), (4, 97), (4, 7), (7, 4))
+    outer = (
+        (5, 0),
+        (270, 0),
+        (275, 5),
+        (275, 99),
+        (270, 104),
+        (5, 104),
+        (0, 99),
+        (0, 5),
+        (5, 0),
+    )
+    inner = (
+        (7, 4),
+        (268, 4),
+        (271, 7),
+        (271, 97),
+        (268, 100),
+        (7, 100),
+        (4, 97),
+        (4, 7),
+        (7, 4),
+    )
     draw.line(outer, fill=BLACK, width=2)
     draw.line(inner, fill=STEEL, width=1)
     draw.line(((7, 101), (268, 101)), fill=CYAN_DARK, width=2)
@@ -185,10 +207,16 @@ def _minimap_border() -> Image.Image:
 def _minimap_handle(pinged: bool) -> Image.Image:
     size = OUTPUT_SIZES[MINIMAP_HANDLE_PATH]
     mask = Image.new("L", size, 0)
-    ImageDraw.Draw(mask).polygon(((8, 0), (23, 0), (23, 63), (5, 63), (1, 58), (1, 18)), fill=255)
+    ImageDraw.Draw(mask).polygon(
+        ((8, 0), (23, 0), (23, 63), (5, 63), (1, 58), (1, 18)), fill=255
+    )
     output = _brushed_surface(size, mask)
     draw = ImageDraw.Draw(output)
-    draw.line(((8, 1), (22, 1), (22, 62), (5, 62), (2, 58), (2, 18), (8, 1)), fill=BLACK, width=2)
+    draw.line(
+        ((8, 1), (22, 1), (22, 62), (5, 62), (2, 58), (2, 18), (8, 1)),
+        fill=BLACK,
+        width=2,
+    )
     draw.line(((6, 59), (19, 59)), fill=CYAN if pinged else CYAN_DARK, width=2)
     draw.line(((20, 5), (20, 55)), fill=CYAN_SOFT if pinged else STEEL_SOFT, width=1)
     accent = BRASS if pinged else STEEL
@@ -197,12 +225,26 @@ def _minimap_handle(pinged: bool) -> Image.Image:
     return output
 
 
-def _draw_shield(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx, cy - 7), (cx + 7, cy - 4), (cx + 5, cy + 4), (cx, cy + 8), (cx - 5, cy + 4), (cx - 7, cy - 4)), fill=colour)
+def _draw_shield(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        (
+            (cx, cy - 7),
+            (cx + 7, cy - 4),
+            (cx + 5, cy + 4),
+            (cx, cy + 8),
+            (cx - 5, cy + 4),
+            (cx - 7, cy - 4),
+        ),
+        fill=colour,
+    )
     draw.line(((cx, cy - 4), (cx, cy + 5)), fill=(230, 234, 226, 255), width=1)
 
 
-def _draw_crossed_blades(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_crossed_blades(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.line(((cx - 7, cy - 7), (cx + 7, cy + 7)), fill=colour, width=2)
     draw.line(((cx + 7, cy - 7), (cx - 7, cy + 7)), fill=colour, width=2)
     draw.line(((cx - 8, cy + 5), (cx - 5, cy + 8)), fill=PALE, width=1)
@@ -230,7 +272,21 @@ def _mapmode_main_background() -> Image.Image:
     mask = _chamfered_mask(size, 7)
     output = _brushed_surface(size, mask)
     draw = ImageDraw.Draw(output)
-    draw.line(((7, 1), (79, 1), (85, 7), (85, 198), (79, 204), (7, 204), (1, 198), (1, 7), (7, 1)), fill=BLACK, width=2)
+    draw.line(
+        (
+            (7, 1),
+            (79, 1),
+            (85, 7),
+            (85, 198),
+            (79, 204),
+            (7, 204),
+            (1, 198),
+            (1, 7),
+            (7, 1),
+        ),
+        fill=BLACK,
+        width=2,
+    )
     draw.line(((6, 4), (77, 4)), fill=STEEL, width=1)
     draw.line(((3, 9), (3, 194)), fill=CYAN_DARK, width=2)
     draw.line(((4, 12), (4, 191)), fill=CYAN_SOFT, width=1)
@@ -278,7 +334,9 @@ def _mapmode_small_socket() -> Image.Image:
     size = OUTPUT_SIZES[MAPMODE_SMALL_BG_PATH]
     output = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(output)
-    draw.rounded_rectangle((1, 1, 21, 18), radius=6, fill=BLACK, outline=STEEL_SOFT, width=1)
+    draw.rounded_rectangle(
+        (1, 1, 21, 18), radius=6, fill=BLACK, outline=STEEL_SOFT, width=1
+    )
     draw.ellipse((4, 2, 19, 17), fill=DEEP, outline=(62, 73, 75, 255), width=1)
     return output
 
@@ -293,37 +351,66 @@ def _round_button_strip(
     for frame in range(size[0] // frame_width):
         left = frame * frame_width
         draw = ImageDraw.Draw(output)
-        draw.ellipse((left + 1, 1, left + frame_width - 2, size[1] - 2), fill=BLACK, outline=STEEL, width=1)
-        draw.ellipse((left + 3, 3, left + frame_width - 4, size[1] - 4), fill=DEEP, outline=STEEL_SOFT, width=1)
+        draw.ellipse(
+            (left + 1, 1, left + frame_width - 2, size[1] - 2),
+            fill=BLACK,
+            outline=STEEL,
+            width=1,
+        )
+        draw.ellipse(
+            (left + 3, 3, left + frame_width - 4, size[1] - 4),
+            fill=DEEP,
+            outline=STEEL_SOFT,
+            width=1,
+        )
         if frame:
-            draw.arc((left + 3, 3, left + frame_width - 4, size[1] - 4), 195, 340, fill=CYAN, width=1)
+            draw.arc(
+                (left + 3, 3, left + frame_width - 4, size[1] - 4),
+                195,
+                340,
+                fill=CYAN,
+                width=1,
+            )
         glyph(draw, left + frame_width // 2, size[1] // 2, CYAN if frame else PALE)
     return output
 
 
-def _draw_search(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_search(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 6, cy - 7, cx + 4, cy + 3), outline=colour, width=2)
     draw.line(((cx + 3, cy + 2), (cx + 9, cy + 8)), fill=BRASS, width=2)
     draw.line(((cx - 3, cy - 2), (cx + 1, cy - 2)), fill=CYAN_SOFT, width=1)
 
 
-def _draw_layers(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx, cy - 6), (cx + 7, cy - 2), (cx, cy + 2), (cx - 7, cy - 2)), outline=colour)
+def _draw_layers(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        ((cx, cy - 6), (cx + 7, cy - 2), (cx, cy + 2), (cx - 7, cy - 2)), outline=colour
+    )
     draw.line(((cx - 6, cy + 1), (cx, cy + 5), (cx + 6, cy + 1)), fill=colour, width=1)
 
 
-def _draw_gear(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_gear(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 5, cy - 5, cx + 5, cy + 5), outline=colour, width=2)
     draw.ellipse((cx - 1, cy - 1, cx + 1, cy + 1), fill=BRASS)
     for dx, dy in ((0, -7), (0, 7), (-7, 0), (7, 0)):
-        draw.line(((cx + dx, cy + dy), (cx + dx // 2, cy + dy // 2)), fill=colour, width=2)
+        draw.line(
+            ((cx + dx, cy + dy), (cx + dx // 2, cy + dy // 2)), fill=colour, width=2
+        )
 
 
 def _find_button() -> Image.Image:
     return _round_button_strip((39, 39), _draw_search, frame_width=39)
 
 
-def _two_state_button(size: tuple[int, int], glyph: Callable[[ImageDraw.ImageDraw, int, int, tuple[int, int, int, int]], None]) -> Image.Image:
+def _two_state_button(
+    size: tuple[int, int],
+    glyph: Callable[[ImageDraw.ImageDraw, int, int, tuple[int, int, int, int]], None],
+) -> Image.Image:
     return _round_button_strip(size, glyph, frame_width=size[0] // 2)
 
 
@@ -342,24 +429,61 @@ def _configure_background() -> Image.Image:
     return output
 
 
-def _draw_person(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_person(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 3, cy - 9, cx + 3, cy - 3), fill=colour)
-    draw.polygon(((cx - 7, cy + 8), (cx - 5, cy - 1), (cx, cy - 3), (cx + 5, cy - 1), (cx + 7, cy + 8)), fill=colour)
+    draw.polygon(
+        (
+            (cx - 7, cy + 8),
+            (cx - 5, cy - 1),
+            (cx, cy - 3),
+            (cx + 5, cy - 1),
+            (cx + 7, cy + 8),
+        ),
+        fill=colour,
+    )
     draw.line(((cx - 4, cy + 1), (cx + 4, cy + 1)), fill=CYAN_DARK, width=1)
 
 
-def _draw_plane(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx, cy - 10), (cx + 2, cy - 3), (cx + 9, cy), (cx + 9, cy + 2), (cx + 2, cy + 1), (cx + 2, cy + 7), (cx + 5, cy + 9), (cx + 5, cy + 10), (cx, cy + 8), (cx - 5, cy + 10), (cx - 5, cy + 9), (cx - 2, cy + 7), (cx - 2, cy + 1), (cx - 9, cy + 2), (cx - 9, cy), (cx - 2, cy - 3)), fill=colour)
+def _draw_plane(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        (
+            (cx, cy - 10),
+            (cx + 2, cy - 3),
+            (cx + 9, cy),
+            (cx + 9, cy + 2),
+            (cx + 2, cy + 1),
+            (cx + 2, cy + 7),
+            (cx + 5, cy + 9),
+            (cx + 5, cy + 10),
+            (cx, cy + 8),
+            (cx - 5, cy + 10),
+            (cx - 5, cy + 9),
+            (cx - 2, cy + 7),
+            (cx - 2, cy + 1),
+            (cx - 9, cy + 2),
+            (cx - 9, cy),
+            (cx - 2, cy - 3),
+        ),
+        fill=colour,
+    )
 
 
-def _draw_anchor(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_anchor(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 3, cy - 10, cx + 3, cy - 4), outline=colour, width=2)
     draw.line(((cx, cy - 4), (cx, cy + 7)), fill=colour, width=2)
     draw.line(((cx - 6, cy - 1), (cx + 6, cy - 1)), fill=colour, width=2)
     draw.arc((cx - 9, cy - 2, cx + 9, cy + 10), 10, 170, fill=colour, width=2)
 
 
-def _draw_eye(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_eye(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.arc((cx - 9, cy - 6, cx + 9, cy + 6), 200, 340, fill=colour, width=2)
     draw.arc((cx - 9, cy - 6, cx + 9, cy + 6), 20, 160, fill=colour, width=2)
     draw.ellipse((cx - 2, cy - 2, cx + 2, cy + 2), fill=BRASS)
@@ -378,75 +502,149 @@ def _big_mapmode_strip(selected: bool) -> Image.Image:
     return output
 
 
-def _draw_question(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_question(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.arc((cx - 4, cy - 6, cx + 4, cy + 1), 185, 355, fill=colour, width=2)
     draw.line(((cx + 3, cy - 1), (cx, cy + 3)), fill=colour, width=1)
     draw.point((cx, cy + 6), fill=BRASS)
 
 
-def _draw_flag(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_flag(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.line(((cx - 5, cy - 6), (cx - 5, cy + 6)), fill=colour, width=1)
     draw.polygon(((cx - 4, cy - 5), (cx + 5, cy - 3), (cx - 4, cy)), fill=colour)
 
 
-def _draw_document(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_document(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.rectangle((cx - 5, cy - 6, cx + 5, cy + 6), outline=colour)
     for y in (-3, 0, 3):
         draw.line(((cx - 3, cy + y), (cx + 3, cy + y)), fill=colour, width=1)
 
 
-def _draw_flame(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx, cy - 7), (cx + 4, cy - 1), (cx + 3, cy + 5), (cx, cy + 7), (cx - 4, cy + 4), (cx - 3, cy - 1)), fill=colour)
-    draw.polygon(((cx, cy - 1), (cx + 2, cy + 3), (cx, cy + 5), (cx - 2, cy + 3)), fill=BRASS)
+def _draw_flame(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        (
+            (cx, cy - 7),
+            (cx + 4, cy - 1),
+            (cx + 3, cy + 5),
+            (cx, cy + 7),
+            (cx - 4, cy + 4),
+            (cx - 3, cy - 1),
+        ),
+        fill=colour,
+    )
+    draw.polygon(
+        ((cx, cy - 1), (cx + 2, cy + 3), (cx, cy + 5), (cx - 2, cy + 3)), fill=BRASS
+    )
 
 
-def _draw_radio(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx - 7, cy - 2), (cx + 4, cy - 6), (cx + 4, cy + 4), (cx - 7, cy)), fill=colour)
+def _draw_radio(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        ((cx - 7, cy - 2), (cx + 4, cy - 6), (cx + 4, cy + 4), (cx - 7, cy)),
+        fill=colour,
+    )
     draw.line(((cx - 5, cy), (cx - 3, cy + 6)), fill=colour, width=2)
 
 
-def _draw_tag(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx - 7, cy - 3), (cx + 2, cy - 5), (cx + 7, cy), (cx + 2, cy + 5), (cx - 7, cy + 3)), outline=colour)
+def _draw_tag(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        (
+            (cx - 7, cy - 3),
+            (cx + 2, cy - 5),
+            (cx + 7, cy),
+            (cx + 2, cy + 5),
+            (cx - 7, cy + 3),
+        ),
+        outline=colour,
+    )
     draw.point((cx - 3, cy), fill=BRASS)
 
 
-def _draw_star(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    points = ((cx, cy - 7), (cx + 2, cy - 2), (cx + 7, cy - 2), (cx + 3, cy + 1), (cx + 5, cy + 6), (cx, cy + 3), (cx - 5, cy + 6), (cx - 3, cy + 1), (cx - 7, cy - 2), (cx - 2, cy - 2))
+def _draw_star(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    points = (
+        (cx, cy - 7),
+        (cx + 2, cy - 2),
+        (cx + 7, cy - 2),
+        (cx + 3, cy + 1),
+        (cx + 5, cy + 6),
+        (cx, cy + 3),
+        (cx - 5, cy + 6),
+        (cx - 3, cy + 1),
+        (cx - 7, cy - 2),
+        (cx - 2, cy - 2),
+    )
     draw.polygon(points, fill=colour)
 
 
-def _draw_people(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_people(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 6, cy - 6, cx - 2, cy - 2), fill=colour)
     draw.ellipse((cx + 2, cy - 6, cx + 6, cy - 2), fill=colour)
-    draw.polygon(((cx - 8, cy + 6), (cx - 6, cy), (cx - 2, cy), (cx, cy + 6)), fill=colour)
-    draw.polygon(((cx, cy + 6), (cx + 2, cy), (cx + 6, cy), (cx + 8, cy + 6)), fill=colour)
+    draw.polygon(
+        ((cx - 8, cy + 6), (cx - 6, cy), (cx - 2, cy), (cx, cy + 6)), fill=colour
+    )
+    draw.polygon(
+        ((cx, cy + 6), (cx + 2, cy), (cx + 6, cy), (cx + 8, cy + 6)), fill=colour
+    )
 
 
-def _draw_binoculars(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_binoculars(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 8, cy - 4, cx - 1, cy + 5), outline=colour, width=2)
     draw.ellipse((cx + 1, cy - 4, cx + 8, cy + 5), outline=colour, width=2)
     draw.line(((cx - 1, cy - 2), (cx + 1, cy - 2)), fill=colour, width=2)
 
 
-def _draw_globe(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_globe(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 7, cy - 7, cx + 7, cy + 7), outline=colour, width=1)
     draw.arc((cx - 4, cy - 7, cx + 4, cy + 7), 90, 270, fill=colour)
     draw.arc((cx - 4, cy - 7, cx + 4, cy + 7), 270, 90, fill=colour)
     draw.line(((cx - 6, cy), (cx + 6, cy)), fill=colour, width=1)
 
 
-def _draw_mountains(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
-    draw.polygon(((cx - 8, cy + 6), (cx - 2, cy - 6), (cx + 2, cy + 1), (cx + 5, cy - 4), (cx + 9, cy + 6)), outline=colour)
+def _draw_mountains(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
+    draw.polygon(
+        (
+            (cx - 8, cy + 6),
+            (cx - 2, cy - 6),
+            (cx + 2, cy + 1),
+            (cx + 5, cy - 4),
+            (cx + 9, cy + 6),
+        ),
+        outline=colour,
+    )
 
 
-def _draw_target(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_target(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 6, cy - 6, cx + 6, cy + 6), outline=colour)
     draw.line(((cx - 8, cy), (cx + 8, cy)), fill=colour)
     draw.line(((cx, cy - 8), (cx, cy + 8)), fill=colour)
     draw.point((cx, cy), fill=BRASS)
 
 
-def _draw_grid(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_grid(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.rectangle((cx - 6, cy - 6, cx + 6, cy + 6), outline=colour)
     draw.line(((cx, cy - 6), (cx, cy + 6)), fill=colour)
     draw.line(((cx - 6, cy), (cx + 6, cy)), fill=colour)
@@ -484,28 +682,39 @@ def _small_mapmode_strip(selected: bool) -> Image.Image:
     return output
 
 
-def _draw_moon(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_moon(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 6, cy - 6, cx + 5, cy + 5), fill=colour)
     draw.ellipse((cx - 2, cy - 7, cx + 7, cy + 2), fill=DEEP)
     draw.point((cx + 6, cy - 5), fill=BRASS)
 
 
-def _draw_radar(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_radar(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.line(((cx, cy + 6), (cx, cy - 4)), fill=colour, width=1)
     draw.line(((cx - 5, cy + 6), (cx + 5, cy + 6)), fill=colour, width=1)
     draw.arc((cx - 7, cy - 7, cx + 7, cy + 5), 210, 330, fill=colour, width=1)
     draw.line(((cx, cy - 3), (cx + 5, cy - 6)), fill=BRASS, width=1)
 
 
-def _draw_arrows(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_arrows(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.line(((cx - 7, cy + 4), (cx + 4, cy - 5)), fill=colour, width=2)
     draw.polygon(((cx + 4, cy - 5), (cx + 3, cy + 1), (cx + 8, cy - 6)), fill=colour)
     draw.line(((cx - 4, cy + 7), (cx + 7, cy - 2)), fill=BRASS, width=1)
 
 
-def _draw_counter(draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]) -> None:
+def _draw_counter(
+    draw: ImageDraw.ImageDraw, cx: int, cy: int, colour: tuple[int, int, int, int]
+) -> None:
     draw.ellipse((cx - 2, cy - 6, cx + 2, cy - 2), fill=colour)
-    draw.polygon(((cx - 5, cy + 6), (cx - 3, cy - 1), (cx + 3, cy - 1), (cx + 5, cy + 6)), fill=colour)
+    draw.polygon(
+        ((cx - 5, cy + 6), (cx - 3, cy - 1), (cx + 3, cy - 1), (cx + 5, cy + 6)),
+        fill=colour,
+    )
 
 
 def expected_outputs() -> dict[Path, bytes]:
@@ -532,9 +741,13 @@ def expected_outputs() -> dict[Path, bytes]:
         MAPMODE_DAY_NIGHT_PATH: _dds_bytes(_two_state_button((44, 22), _draw_moon)),
         MAPMODE_FOG_PATH: _dds_bytes(_two_state_button((44, 22), _draw_eye)),
         MAPMODE_RADAR_PATH: _dds_bytes(_two_state_button((44, 22), _draw_radar)),
-        MAPMODE_ALLIED_PLANS_PATH: _dds_bytes(_two_state_button((44, 22), _draw_arrows)),
+        MAPMODE_ALLIED_PLANS_PATH: _dds_bytes(
+            _two_state_button((44, 22), _draw_arrows)
+        ),
         MAPMODE_COUNTERS_PATH: _dds_bytes(_two_state_button((44, 22), _draw_counter)),
-        MAPMODE_COUNTER_COLOUR_PATH: _dds_bytes(_two_state_button((44, 22), _draw_flag)),
+        MAPMODE_COUNTER_COLOUR_PATH: _dds_bytes(
+            _two_state_button((44, 22), _draw_flag)
+        ),
     }
 
 
@@ -579,8 +792,12 @@ def apply(outputs: dict[Path, bytes]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="compare outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write generated lower-HUD assets")
+    actions.add_argument(
+        "--check", action="store_true", help="compare outputs (default)"
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write generated lower-HUD assets"
+    )
     args = parser.parse_args()
 
     try:
@@ -596,7 +813,9 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print("A-Discord lower-right HUD is current (custom minimap, gunmetal/cyan map-mode dock).")
+    print(
+        "A-Discord lower-right HUD is current (custom minimap, gunmetal/cyan map-mode dock)."
+    )
     return 0
 
 

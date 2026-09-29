@@ -2,7 +2,7 @@ state={
 	id=28
 	name="STATE_28"
 	provinces={
-		145 16351 16366 16368 16374 16377 16386 
+		145 16351 16366 16368 16374 16377 16386
 	}
 	manpower=6300000
 	buildings_max_level_factor=1.000
@@ -19,14 +19,14 @@ state={
 			ADISCORD_business_center = 1
 
 			16368 = {
-        		bunker = 3
-        		coastal_bunker = 5
-   			}
-   			16366 = {
-        		coastal_bunker = 1
-        		naval_base = 5
-   			}
-   			145 = { dam = 1 }
+				bunker = 3
+				coastal_bunker = 5
+			}
+			16366 = {
+				coastal_bunker = 1
+				naval_base = 5
+			}
+			145 = { dam = 1 }
 		}
 		add_core_of = STP
 
@@ -39,7 +39,7 @@ state={
 
 	}
 	resources = {
-    }
+	}
 	state_category = large_city
-	local_supplies=12.0 
+	local_supplies=12.0
 }

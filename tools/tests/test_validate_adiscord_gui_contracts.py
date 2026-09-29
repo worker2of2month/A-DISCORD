@@ -126,9 +126,7 @@ def _direct_scalar(entries, key):
 
 def _unique_direct_block(entries, key):
     matches = [
-        entry
-        for entry in entries
-        if entry.key == key and isinstance(entry.value, list)
+        entry for entry in entries if entry.key == key and isinstance(entry.value, list)
     ]
     return matches[0].value if len(matches) == 1 else None
 
@@ -226,8 +224,9 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
         ('social', 'increase'): 'ADISCORD_economy_increase_social_spending',
     }
     enabled = {
-        key: value.replace('ADISCORD_economy_decrease_', 'ADISCORD_economy_can_decrease_')
-        .replace('ADISCORD_economy_increase_', 'ADISCORD_economy_can_increase_')
+        key: value.replace(
+            'ADISCORD_economy_decrease_', 'ADISCORD_economy_can_decrease_'
+        ).replace('ADISCORD_economy_increase_', 'ADISCORD_economy_can_increase_')
         for key, value in effects.items()
     }
 
@@ -241,10 +240,12 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
     policy_rows = [
         match.group(1)
         for name in node_names
-        if (match := re.fullmatch(
-            r'ADISCORD_economy_(tax|army|research|social|construction)_row',
-            name,
-        ))
+        if (
+            match := re.fullmatch(
+                r'ADISCORD_economy_(tax|army|research|social|construction)_row',
+                name,
+            )
+        )
     ]
     if policy_rows != list(policies):
         issues.append(f'policy row order/identity is {policy_rows!r}')
@@ -299,9 +300,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
                 f'{target} is not called exactly once by its canonical click owner'
             )
 
-    gui_buttons = {
-        name for kind, name, _ in node_list if kind == 'buttonType'
-    }
+    gui_buttons = {name for kind, name, _ in node_list if kind == 'buttonType'}
     click_owner_names = [
         entry.key
         for entry in ownership_effect_entries
@@ -340,9 +339,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
     for policy in policies:
         row_name = f'ADISCORD_economy_{policy}_row'
         row_nodes = [
-            (kind, parents)
-            for kind, name, parents in node_list
-            if name == row_name
+            (kind, parents) for kind, name, parents in node_list if name == row_name
         ]
         if row_nodes != [('instantTextboxType', command_parent)]:
             issues.append(f'{row_name} has the wrong command-panel parent')
@@ -410,11 +407,14 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
                 if name == marker_name
             ]
             if marker_nodes != [
-                ('iconType', (
-                    'ADISCORD_economy_dashboard_window',
-                    'ADISCORD_economy_command_panel',
-                    f'ADISCORD_economy_{policy}_scale',
-                ))
+                (
+                    'iconType',
+                    (
+                        'ADISCORD_economy_dashboard_window',
+                        'ADISCORD_economy_command_panel',
+                        f'ADISCORD_economy_{policy}_scale',
+                    ),
+                )
             ]:
                 issues.append(f'{marker_name} is missing, duplicated, or disconnected')
                 continue
@@ -423,7 +423,10 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
                 issues.append(f'{marker_name} has the wrong level position')
             if 'alwaystransparent = yes' in marker:
                 issues.append(f'{marker_name} cannot receive hover input')
-            if f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"' not in marker:
+            if (
+                f'pdx_tooltip = "ADISCORD_economy_{policy}_level_{level}_tt"'
+                not in marker
+            ):
                 issues.append(f'{marker_name} lacks its level tooltip')
 
         for direction in directions:
@@ -441,10 +444,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
             if not (
                 len(gate) == 1
                 and isinstance(gate[0].value, list)
-                and [
-                    (entry.key, entry.value)
-                    for entry in gate[0].value
-                ]
+                and [(entry.key, entry.value) for entry in gate[0].value]
                 == [
                     ('ADISCORD_economy_should_show_player_ui', 'yes'),
                     (enabled[(policy, direction)], 'yes'),
@@ -455,9 +455,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
                 )
 
             title = 'Army' if policy == 'army' else policy.title()
-            reason_selector = (
-                f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
-            )
+            reason_selector = f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
             issues.extend(
                 economy_validator.policy_selector_issues(
                     scripted_loc,
@@ -467,9 +465,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
                     direction,
                 )
             )
-            effect_selector = (
-                f'GetADISCORDEconomy{title}{direction.title()}EffectLoc'
-            )
+            effect_selector = f'GetADISCORDEconomy{title}{direction.title()}EffectLoc'
             issues.extend(
                 economy_validator.policy_effect_selector_issues(
                     scripted_loc,
@@ -482,10 +478,7 @@ def economy_policy_ui_issues(gui, scripted_gui, scripted_loc):
         marker_owner = _direct_clausewitz(
             trigger_entries, f'ADISCORD_economy_{policy}_active_marker_visible'
         )
-        if not (
-            len(marker_owner) == 1
-            and isinstance(marker_owner[0].value, list)
-        ):
+        if not (len(marker_owner) == 1 and isinstance(marker_owner[0].value, list)):
             issues.append(f'{policy} active marker has no unique trigger owner')
         else:
             tokens = [
@@ -543,12 +536,15 @@ class NationalSpiritOverflowTests(unittest.TestCase):
     """Check the authored scroll axis, not the native renderer's output."""
 
     def assert_horizontal_overflow(self, filename, grid_name):
-        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.validators.validate_adiscord_division_templates import (
+            parse_clausewitz,
+        )
 
         text = (ROOT / "interface" / filename).read_text(encoding="utf-8-sig")
         entries = parse_clausewitz(text)
         panels = [
-            entry.value for entry in _walk_clausewitz(entries)
+            entry.value
+            for entry in _walk_clausewitz(entries)
             if entry.key.lower() == "containerwindowtype"
             and isinstance(entry.value, list)
             and _direct_scalar(entry.value, "name") == "national_spirit_container"
@@ -558,11 +554,14 @@ class NationalSpiritOverflowTests(unittest.TestCase):
         self.assertTrue(_direct_scalar(panel, "horizontalScrollbar"))
         self.assertIsNone(_direct_scalar(panel, "verticalScrollbar"))
         grids = [
-            entry.value for entry in panel
+            entry.value
+            for entry in panel
             if entry.key.lower() == "gridboxtype"
             and _direct_scalar(entry.value, "name") == grid_name
         ]
-        self.assertEqual(len(grids), 1, "retain the native overflow grid as a direct child")
+        self.assertEqual(
+            len(grids), 1, "retain the native overflow grid as a direct child"
+        )
         grid = grids[0]
         # Fixed columns grow downward, outside the horizontal-only viewport.
         # Bound rows instead so all later spirits remain on the scrollable axis.
@@ -577,19 +576,30 @@ class NationalSpiritOverflowTests(unittest.TestCase):
         )
 
     def test_politics_spirits_overflow_along_the_scrollbar(self):
-        self.assert_horizontal_overflow("countrypoliticsview.gui", "spirit_grid_over_defined")
+        self.assert_horizontal_overflow(
+            "countrypoliticsview.gui", "spirit_grid_over_defined"
+        )
 
     def test_diplomacy_spirits_overflow_along_the_scrollbar(self):
-        self.assert_horizontal_overflow("countrydiplomacyview.gui", "nat_spirit_ideas_grid_over_defined")
+        self.assert_horizontal_overflow(
+            "countrydiplomacyview.gui", "nat_spirit_ideas_grid_over_defined"
+        )
 
 
 class CountryPoliticsGuiContractTests(unittest.TestCase):
     def test_occupation_return_territory_is_not_accessible(self):
-        gui = (ROOT / 'interface/countryoccupationview.gui').read_text(encoding='utf-8-sig')
+        gui = (ROOT / 'interface/countryoccupationview.gui').read_text(
+            encoding='utf-8-sig'
+        )
         gui = gui_node_body(gui, 'occupied_territory_country_entry')
-        for name in ('return_territory_button', 'return_territory_button_pos_for_non_resistance'):
+        for name in (
+            'return_territory_button',
+            'return_territory_button_pos_for_non_resistance',
+        ):
             body = gui_node_body(gui, name)
-            self.assertRegex(body, r'position\s*=\s*\{\s*x\s*=\s*-10000\s+y\s*=\s*-10000\s*\}')
+            self.assertRegex(
+                body, r'position\s*=\s*\{\s*x\s*=\s*-10000\s+y\s*=\s*-10000\s*\}'
+            )
         button = gui_node_body(gui, 'return_territory_button')
         self.assertIn('alwaystransparent = yes', button)
         self.assertNotIn('shortcut', button)
@@ -599,19 +609,31 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
     def test_active_focus_controls_fit_their_visible_card(self):
         from PIL import Image
 
-        gui = (ROOT / 'interface/countrypoliticsview.gui').read_text(encoding='utf-8-sig')
+        gui = (ROOT / 'interface/countrypoliticsview.gui').read_text(
+            encoding='utf-8-sig'
+        )
         card = gui_node_body(gui, 'active_goal')
 
         def position(body):
-            return tuple(map(int, re.search(
-                r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', body
-            ).groups()))
+            return tuple(
+                map(
+                    int,
+                    re.search(
+                        r'position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s+y\s*=\s*(-?\d+)', body
+                    ).groups(),
+                )
+            )
 
         with Image.open(ROOT / 'gfx/interface/pol_goal_bg.dds') as background:
             card_width, card_height = background.size
-        declared_size = tuple(map(int, re.search(
-            r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', card
-        ).groups()))
+        declared_size = tuple(
+            map(
+                int,
+                re.search(
+                    r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', card
+                ).groups(),
+            )
+        )
         self.assertEqual(declared_size, (card_width, card_height))
         icon_body = gui_node_body(card, 'goal_icon')
         icon_x, icon_y = position(icon_body)
@@ -645,11 +667,18 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         progress_x, progress_y = position(gui_node_body(card, 'progress'))
         with Image.open(ROOT / 'gfx/interface/pol_goal_progress_frame.dds') as frame:
             left, top, right, bottom = frame.convert('RGBA').getbbox()
-        gfx = (ROOT / 'interface/countrypoliticsview.gfx').read_text(encoding='utf-8-sig')
-        width, height = map(int, re.search(
-            r'name\s*=\s*"GFX_activegoal_progress".*?'
-            r'size\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', gfx, re.DOTALL
-        ).groups())
+        gfx = (ROOT / 'interface/countrypoliticsview.gfx').read_text(
+            encoding='utf-8-sig'
+        )
+        width, height = map(
+            int,
+            re.search(
+                r'name\s*=\s*"GFX_activegoal_progress".*?'
+                r'size\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)',
+                gfx,
+                re.DOTALL,
+            ).groups(),
+        )
         self.assertGreater(progress_x, frame_x + left)
         self.assertGreater(progress_y, frame_y + top)
         self.assertLessEqual(progress_x + width, frame_x + right - 1)
@@ -657,12 +686,12 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         self.assertLessEqual(title_y + title_height, frame_y)
 
     def test_politics_window_uses_custom_open_and_close_sounds(self):
-        gui_text = (
-            ROOT / 'interface' / 'countrypoliticsview.gui'
-        ).read_text(encoding='utf-8-sig')
-        sound_text = (
-            ROOT / 'sound' / 'assets_adiscord_sounds.asset'
-        ).read_text(encoding='utf-8-sig')
+        gui_text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        sound_text = (ROOT / 'sound' / 'assets_adiscord_sounds.asset').read_text(
+            encoding='utf-8-sig'
+        )
         soundeffect_text = (
             ROOT / 'sound' / 'assets_adiscord_soundeffects.asset'
         ).read_text(encoding='utf-8-sig')
@@ -739,7 +768,11 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
             )
         with self.subTest(control='more_countries'):
             self.assertIn(
-                ('dropDownBoxType', 'more_countries', ('gamesetup_interesting_countries_window',)),
+                (
+                    'dropDownBoxType',
+                    'more_countries',
+                    ('gamesetup_interesting_countries_window',),
+                ),
                 setup_nodes,
             )
             dropdown = economy_validator.parse_clausewitz(
@@ -753,7 +786,11 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
             self.assertIsNotNone(grid)
             self.assertEqual(_direct_scalar(grid, 'name'), 'countries_mini_expanded')
         self.assertIn(
-            ('OverlappingElementsBoxType', 'filters', ('gamesetup_interesting_countries_window',)),
+            (
+                'OverlappingElementsBoxType',
+                'filters',
+                ('gamesetup_interesting_countries_window',),
+            ),
             setup_nodes,
         )
 
@@ -783,9 +820,10 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         )
         self.assertEqual(list(menu_directory.glob('*.mp3')), [])
         for name in sorted(expected_names):
-            with self.subTest(name=name), wave.open(
-                str(menu_directory / name), 'rb'
-            ) as sound_file:
+            with (
+                self.subTest(name=name),
+                wave.open(str(menu_directory / name), 'rb') as sound_file,
+            ):
                 self.assertEqual(sound_file.getcomptype(), 'NONE')
                 self.assertEqual(sound_file.getsampwidth(), 2)
                 self.assertEqual(sound_file.getframerate(), 44100)
@@ -798,7 +836,11 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
 
         required = {
             ('iconType', 'pol_faction_icon', ('countrypoliticsview',)),
-            ('containerWindowType', 'faction', ('countrypoliticsview', 'ruling_party_info')),
+            (
+                'containerWindowType',
+                'faction',
+                ('countrypoliticsview', 'ruling_party_info'),
+            ),
             (
                 'containerWindowType',
                 'no_faction',
@@ -831,26 +873,34 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         self.assertEqual(required - nodes, set())
 
     def test_law_list_keeps_usable_height_on_small_screens(self):
-        text = (ROOT / 'interface/countrypoliticsview.gui').read_text(encoding='utf-8-sig')
+        text = (ROOT / 'interface/countrypoliticsview.gui').read_text(
+            encoding='utf-8-sig'
+        )
         politics = gui_node_body(text, 'countrypoliticsview')
         ideas = gui_node_body(politics, 'ideas')
         _, top = _gui_position(ideas)
         bottom_offset = int(re.search(r'\bheight\s*=\s*(-\d+)', ideas).group(1))
         for screen_height, minimum in ((720, 64), (768, 104), (900, 208)):
             with self.subTest(screen_height=screen_height):
-                self.assertGreaterEqual(screen_height - 78 - top + bottom_offset, minimum)
+                self.assertGreaterEqual(
+                    screen_height - 78 - top + bottom_offset, minimum
+                )
         self.assertIn('verticalScrollbar = "right_vertical_slider"', ideas)
         self.assertIn('clipping = yes', ideas)
 
-    def test_development_popup_fits_above_laws_and_launcher_clears_header_controls(self):
-        development_text = (
-            ROOT / 'interface' / 'ADISCORD_CountryView.gui'
-        ).read_text(encoding='utf-8-sig')
-        politics_text = (
-            ROOT / 'interface' / 'countrypoliticsview.gui'
-        ).read_text(encoding='utf-8-sig')
+    def test_development_popup_fits_above_laws_and_launcher_clears_header_controls(
+        self,
+    ):
+        development_text = (ROOT / 'interface' / 'ADISCORD_CountryView.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        politics_text = (ROOT / 'interface' / 'countrypoliticsview.gui').read_text(
+            encoding='utf-8-sig'
+        )
 
-        panel = gui_node_body(development_text, 'ADISCORD_development_category_society_type')
+        panel = gui_node_body(
+            development_text, 'ADISCORD_development_category_society_type'
+        )
         x, y = _gui_position(panel)
         width, height = _gui_size(panel)
         self.assertIn('Orientation = UPPER_LEFT', panel)
@@ -858,17 +908,32 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         self.assertGreaterEqual(y, 44)
         self.assertLessEqual(x + width, 594)
         politics = gui_node_body(politics_text, 'countrypoliticsview')
-        self.assertLessEqual(y + height, _gui_position(gui_node_body(politics, 'ideas'))[1])
+        self.assertLessEqual(
+            y + height, _gui_position(gui_node_body(politics, 'ideas'))[1]
+        )
         self.assertLessEqual(78 + y + height, 720)
         self.assertIn('quadTextureSprite = "GFX_tiled_plain_bg_adiscord"', panel)
         close = gui_node_body(panel, 'ADISCORD_development_close')
         cx, cy = _gui_position(close)
         cw, ch = _gui_size(close)
         self.assertLessEqual(cx + cw, width)
-        self.assertLessEqual(cy + ch, 55)  # Header must not cover the first indicator row.
-        for category in ('society', 'social_system', 'army', 'cultural', 'state', 'economic'):
-            self.assertTrue(gui_node_body(panel, f'ADISCORD_development_{category}_level'))
-            self.assertTrue(gui_node_body(panel, f'ADISCORD_development_{category}_growth'))
+        self.assertLessEqual(
+            cy + ch, 55
+        )  # Header must not cover the first indicator row.
+        for category in (
+            'society',
+            'social_system',
+            'army',
+            'cultural',
+            'state',
+            'economic',
+        ):
+            self.assertTrue(
+                gui_node_body(panel, f'ADISCORD_development_{category}_level')
+            )
+            self.assertTrue(
+                gui_node_body(panel, f'ADISCORD_development_{category}_growth')
+            )
 
         launcher = gui_node_body(development_text, 'ADISCORD_development_launcher')
         lx, ly = _gui_position(launcher)
@@ -877,7 +942,10 @@ class CountryPoliticsGuiContractTests(unittest.TestCase):
         bw, bh = _gui_size(button)
         title = gui_node_body(politics, 'political_title')
         self.assertGreaterEqual(lx + bx, _gui_position(title)[0] + _gui_size(title)[0])
-        self.assertLessEqual(lx + bx + bw, _gui_position(gui_node_body(politics, 'manage_occupied_button'))[0])
+        self.assertLessEqual(
+            lx + bx + bw,
+            _gui_position(gui_node_body(politics, 'manage_occupied_button'))[0],
+        )
         self.assertLessEqual(ly + by + bh, 47)  # Portrait/focus area begins here.
 
 
@@ -931,32 +999,46 @@ class NationalFocusGuiContractTests(unittest.TestCase):
 
         text = local_gui.read_text(encoding='utf-8-sig')
         nodes = set(named_gui_nodes(text))
-        self.assertEqual(nodes, set(named_gui_nodes(vanilla_gui.read_text(encoding='utf-8-sig'))))
+        self.assertEqual(
+            nodes, set(named_gui_nodes(vanilla_gui.read_text(encoding='utf-8-sig')))
+        )
         self.assertIn(
             ('iconType', 'overlay', ('national_focus_item',)),
             nodes,
         )
 
     def test_focus_description_and_reward_have_disjoint_scroll_viewports(self):
-        text = (ROOT / 'interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
+        text = (ROOT / 'interface/nationalfocusview.gui').read_text(
+            encoding='utf-8-sig'
+        )
         for window in ('national_focus_detail_view', 'coninuous_focus_detail_view'):
             body = gui_node_body(text, window)
             desc = gui_node_body(body, 'desc')
             reward = gui_node_body(body, 'reward')
             label = gui_node_body(body, 'reward_label')
             background = gui_node_body(body, 'reward_bg')
+
             def rectangle(node):
-                position = re.search(r'position\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', node)
+                position = re.search(
+                    r'position\s*=\s*\{\s*x\s*=\s*(\d+)\s+y\s*=\s*(\d+)', node
+                )
                 width = re.search(r'maxWidth\s*=\s*(\d+)', node)
                 height = re.search(r'maxHeight\s*=\s*(\d+)', node)
                 return (*map(int, position.groups()), int(width[1]), int(height[1]))
+
             dx, dy, dw, dh = rectangle(desc)
             rx, ry, rw, rh = rectangle(reward)
             _, ly, _, lh = rectangle(label)
-            by = int(re.search(r'position\s*=\s*\{\s*x\s*=\s*\d+\s+y\s*=\s*(\d+)', background)[1])
+            by = int(
+                re.search(
+                    r'position\s*=\s*\{\s*x\s*=\s*\d+\s+y\s*=\s*(\d+)', background
+                )[1]
+            )
             self.assertLessEqual(dy + dh + 10, by)
             self.assertLessEqual(ly + lh + 10, ry)
-            size = re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', body)
+            size = re.search(
+                r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', body
+            )
             width, height = map(int, size.groups())
             self.assertLessEqual(ry + rh + 20, height)
             for node, x, w in ((desc, dx, dw), (reward, rx, rw)):
@@ -964,16 +1046,34 @@ class NationalFocusGuiContractTests(unittest.TestCase):
                 self.assertLessEqual(x + w + 20, width)
 
     def test_focus_symbols_and_tree_geometry_are_unchanged(self):
-        local = (ROOT / 'interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
-        native = Path('Z:/SteamLibrary/steamapps/common/Hearts of Iron IV/interface/nationalfocusview.gui').read_text(encoding='utf-8-sig')
-        for name in ('national_focus_item', 'continuous_national_focus_item',
-                     'national_focus_link', 'national_focus_exclusive_item',
-                     'focus_spacing', 'national_focus_center', 'link_spacing',
-                     'link_offsets', 'link_begin', 'link_end', 'exclusive_offset',
-                     'exclusive_offset_left', 'exclusive_positioning',
-                     'zoom_slider_container', 'find_view'):
-            self.assertEqual(re.sub(r'\s+', '', gui_node_body(local, name)),
-                             re.sub(r'\s+', '', gui_node_body(native, name)), name)
+        local = (ROOT / 'interface/nationalfocusview.gui').read_text(
+            encoding='utf-8-sig'
+        )
+        native = Path(
+            'Z:/SteamLibrary/steamapps/common/Hearts of Iron IV/interface/nationalfocusview.gui'
+        ).read_text(encoding='utf-8-sig')
+        for name in (
+            'national_focus_item',
+            'continuous_national_focus_item',
+            'national_focus_link',
+            'national_focus_exclusive_item',
+            'focus_spacing',
+            'national_focus_center',
+            'link_spacing',
+            'link_offsets',
+            'link_begin',
+            'link_end',
+            'exclusive_offset',
+            'exclusive_offset_left',
+            'exclusive_positioning',
+            'zoom_slider_container',
+            'find_view',
+        ):
+            self.assertEqual(
+                re.sub(r'\s+', '', gui_node_body(local, name)),
+                re.sub(r'\s+', '', gui_node_body(native, name)),
+                name,
+            )
         tree = gui_node_body(local, 'tree')
         self.assertIn('drag_scroll = { left middle }', tree)
         for axis in ('vertical', 'horizontal'):
@@ -1015,10 +1115,13 @@ defined_text = {
             " text = { localization_key = ADISCORD_economy_policy_preview_available }\n text = { trigger = { check_variable",
             1,
         )
-        disconnected = self.VALID.replace(
-            "name = GetADISCORDEconomyTaxDecreasePreviewLoc",
-            "name = DisconnectedSelector",
-        ) + "\ndefined_text = { name = GetADISCORDEconomyTaxDecreasePreviewLoc text = { localization_key = ADISCORD_economy_policy_preview_available } }"
+        disconnected = (
+            self.VALID.replace(
+                "name = GetADISCORDEconomyTaxDecreasePreviewLoc",
+                "name = DisconnectedSelector",
+            )
+            + "\ndefined_text = { name = GetADISCORDEconomyTaxDecreasePreviewLoc text = { localization_key = ADISCORD_economy_policy_preview_available } }"
+        )
         nested_dead_wrapper = f"ADISCORD_dead = {{ {self.VALID} }}"
         negated_boundary = self.VALID.replace(
             "trigger = { check_variable = { var = ADISCORD_economy_tax_burden_mode value = 1 compare = less_than_or_equals } }",
@@ -1062,24 +1165,20 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.localisation = (
             ROOT / 'localisation' / 'russian' / 'ADISCORD_economy_l_russian.yml'
         ).read_text(encoding='utf-8-sig')
-        self.events = (
-            ROOT / 'events' / 'ADISCORD_economy_events.txt'
-        ).read_text(encoding='utf-8-sig')
+        self.events = (ROOT / 'events' / 'ADISCORD_economy_events.txt').read_text(
+            encoding='utf-8-sig'
+        )
         self.nodes = set(named_gui_nodes(self.gui))
 
     def test_policy_ui_graph_geometry_and_selectors_are_connected(self):
         self.assertEqual(
-            economy_policy_ui_issues(
-                self.gui, self.scripted_gui, self.scripted_loc
-            ),
+            economy_policy_ui_issues(self.gui, self.scripted_gui, self.scripted_loc),
             [],
         )
 
     def test_policy_ui_graph_rejects_stable_invalid_mutations(self):
         self.assertEqual(
-            economy_policy_ui_issues(
-                self.gui, self.scripted_gui, self.scripted_loc
-            ),
+            economy_policy_ui_issues(self.gui, self.scripted_gui, self.scripted_loc),
             [],
             'live Task 9 UI must be valid before testing mutations',
         )
@@ -1096,13 +1195,11 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             )
             self.assertIsNotNone(match, f'mutation node is absent: {node_name}')
             node = match.group(0).strip()
-            without_node = text[:match.start()] + text[match.end():]
+            without_node = text[: match.start()] + text[match.end() :]
             root_close = without_node.rfind('\n}')
             self.assertGreater(root_close, 0, 'GUI root close is absent')
             return (
-                without_node[:root_close]
-                + f'\n\t{node}\n'
-                + without_node[root_close:]
+                without_node[:root_close] + f'\n\t{node}\n' + without_node[root_close:]
             )
 
         research_effect_1 = (
@@ -1281,7 +1378,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 )
         for name, invalid_scripted_loc in scripted_loc_mutations.items():
             with self.subTest(scripted_loc_mutation=name):
-                self.assertTrue(economy_validator.parse_clausewitz(invalid_scripted_loc))
+                self.assertTrue(
+                    economy_validator.parse_clausewitz(invalid_scripted_loc)
+                )
                 self.assertTrue(
                     economy_policy_ui_issues(
                         self.gui, self.scripted_gui, invalid_scripted_loc
@@ -1345,7 +1444,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                     r'(?:y|height)\s*=\s*(\d+)\s*\}',
                     arrow,
                 )
-                self.assertIsNotNone(size, f'{policy} {direction} lacks explicit hitbox')
+                self.assertIsNotNone(
+                    size, f'{policy} {direction} lacks explicit hitbox'
+                )
                 self.assertGreaterEqual(int(size.group(1)), 32, f'{policy} {direction}')
                 self.assertGreaterEqual(int(size.group(2)), 28, f'{policy} {direction}')
 
@@ -1357,10 +1458,22 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             'social': 'Social',
         }
         policy_variables = {
-            'tax': ('ADISCORD_economy_tax_burden_mode', 'ADISCORD_economy_tax_change_cooldown'),
-            'army': ('ADISCORD_economy_army_spending_mode', 'ADISCORD_economy_army_budget_change_cooldown'),
-            'research': ('ADISCORD_economy_research_spending_mode', 'ADISCORD_economy_research_budget_change_cooldown'),
-            'social': ('ADISCORD_economy_social_spending_mode', 'ADISCORD_economy_social_budget_change_cooldown'),
+            'tax': (
+                'ADISCORD_economy_tax_burden_mode',
+                'ADISCORD_economy_tax_change_cooldown',
+            ),
+            'army': (
+                'ADISCORD_economy_army_spending_mode',
+                'ADISCORD_economy_army_budget_change_cooldown',
+            ),
+            'research': (
+                'ADISCORD_economy_research_spending_mode',
+                'ADISCORD_economy_research_budget_change_cooldown',
+            ),
+            'social': (
+                'ADISCORD_economy_social_spending_mode',
+                'ADISCORD_economy_social_budget_change_cooldown',
+            ),
         }
         for policy, title in title_names.items():
             for level in range(1, 6):
@@ -1382,9 +1495,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                     f'?ADISCORD_economy_{policy}_{direction}_weekly_balance_delta|=+1',
                     tooltip,
                 )
-                selector = (
-                    f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
-                )
+                selector = f'GetADISCORDEconomy{title}{direction.title()}PreviewLoc'
                 self.assertIn(f'[{selector}]', tooltip)
                 selector_block = named_assignment_body(
                     self.scripted_loc, 'defined_text', selector
@@ -1468,10 +1579,18 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             delayed = localisation_value(self.localisation, delayed_key)
             for token in required:
                 self.assertIn(token, delayed, delayed_key)
-        self.assertIn('4', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
-        self.assertIn('13', localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'))
+        self.assertIn(
+            '4',
+            localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'),
+        )
+        self.assertIn(
+            '13',
+            localisation_value(self.localisation, 'ADISCORD_economy_debt_delayed_tt'),
+        )
 
-    def test_debt_notification_uses_dynamic_human_event_not_recurring_custom_popup(self):
+    def test_debt_notification_uses_dynamic_human_event_not_recurring_custom_popup(
+        self,
+    ):
         self.assertNotIn('ADISCORD_economy_auto_loan_popup_window', self.gui)
         self.assertNotIn('ADISCORD_economy_auto_loan_popup_ok', self.gui)
         self.assertNotIn('ADISCORD_economy_auto_loan_popup_script', self.scripted_gui)
@@ -1483,9 +1602,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         self.assertIn('title = ADISCORD_economy.3.t', event)
         self.assertIn('desc = ADISCORD_economy.3.d', event)
         self.assertIn('name = ADISCORD_economy.3.a', event)
-        description = localisation_value(
-            self.localisation, 'ADISCORD_economy.3.d'
-        )
+        description = localisation_value(self.localisation, 'ADISCORD_economy.3.d')
         for selector in (
             'GetADISCORDEconomyDebtNotificationCauseLoc',
             'GetADISCORDEconomyDebtNotificationStateLoc',
@@ -1503,7 +1620,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
 
     def test_debt_notification_selectors_bind_exact_state_semantics(self):
         analyzer = getattr(economy_validator, 'debt_notification_selector_issues', None)
-        self.assertIsNotNone(analyzer, 'missing parsed debt-notification selector validator')
+        self.assertIsNotNone(
+            analyzer, 'missing parsed debt-notification selector validator'
+        )
         if analyzer is None:
             return
         self.assertEqual(analyzer(self.scripted_loc), [])
@@ -1609,7 +1728,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.nodes,
         )
         button_body = gui_node_body(self.gui, 'ADISCORD_economy_topbar_button')
-        self.assertIn('quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"', button_body)
+        self.assertIn(
+            'quadTextureSprite = "GFX_ADISCORD_economy_topbar_button"', button_body
+        )
         self.assertNotIn('name = "ADISCORD_economy_topbar_icon"', self.gui)
         self.assertNotIn('name = "ADISCORD_economy_topbar_value"', self.gui)
 
@@ -1621,12 +1742,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
         )
         self.assertTrue(
             (
-                ROOT
-                / 'gfx'
-                / 'texticons'
-                / 'adiscord'
-                / 'custom'
-                / 'treasury.png'
+                ROOT / 'gfx' / 'texticons' / 'adiscord' / 'custom' / 'treasury.png'
             ).is_file()
         )
 
@@ -1649,7 +1765,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 rf'texturefile\s*=\s*"gfx/interface/ADISCORD_economy_gui/{filename}"',
             )
             self.assertTrue(
-                (ROOT / 'gfx' / 'interface' / 'ADISCORD_economy_gui' / filename).is_file()
+                (
+                    ROOT / 'gfx' / 'interface' / 'ADISCORD_economy_gui' / filename
+                ).is_file()
             )
 
     def test_economy_menu_values_do_not_embed_decorative_texticons(self):
@@ -1759,9 +1877,7 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             decrease_line = gui_node_body(
                 self.gui, f'ADISCORD_economy_{policy}_decrease'
             )
-            scale_line = gui_node_body(
-                self.gui, f'ADISCORD_economy_{policy}_scale'
-            )
+            scale_line = gui_node_body(self.gui, f'ADISCORD_economy_{policy}_scale')
             increase_line = gui_node_body(
                 self.gui, f'ADISCORD_economy_{policy}_increase'
             )
@@ -1772,7 +1888,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             self.assertIn('position = { x = 424 ', increase_line)
             self.assertNotIn('orientation = upper_right', increase_line)
 
-    def test_compact_dashboard_keeps_manual_borrowing_in_integrated_treasury_actions(self):
+    def test_compact_dashboard_keeps_manual_borrowing_in_integrated_treasury_actions(
+        self,
+    ):
         contracts = {
             'internal_bonds': (
                 'ADISCORD_economy_gui_try_issue_internal_bonds',
@@ -1789,11 +1907,16 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 (
                     'buttonType',
                     node_name,
-                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+                    (
+                        'ADISCORD_economy_dashboard_window',
+                        'ADISCORD_economy_command_panel',
+                    ),
                 ),
                 self.nodes,
             )
-            self.assertIn(f'{node_name}_click = {{ {effect} = yes }}', self.scripted_gui)
+            self.assertIn(
+                f'{node_name}_click = {{ {effect} = yes }}', self.scripted_gui
+            )
             self.assertIn(
                 f'{node_name}_click_enabled = {{ '
                 f'ADISCORD_economy_should_show_player_ui = yes {trigger} = yes }}',
@@ -1801,7 +1924,11 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
             )
             self.assertIn(
                 f'pdx_tooltip = "ADISCORD_economy_action_{action}_tt"',
-                next(line for line in self.gui.splitlines() if f'name = "{node_name}"' in line),
+                next(
+                    line
+                    for line in self.gui.splitlines()
+                    if f'name = "{node_name}"' in line
+                ),
             )
 
         internal_bonds_tt = re.search(
@@ -1876,7 +2003,10 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
                 (
                     'buttonType',
                     node_name,
-                    ('ADISCORD_economy_dashboard_window', 'ADISCORD_economy_command_panel'),
+                    (
+                        'ADISCORD_economy_dashboard_window',
+                        'ADISCORD_economy_command_panel',
+                    ),
                 ),
                 self.nodes,
             )
@@ -1889,10 +2019,26 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
 
     def test_headline_kpis_show_cash_flow_before_secondary_risks(self):
         for node, text_key, tooltip in (
-            ('ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_kpi_treasury', 'ADISCORD_economy_treasury_tt'),
-            ('ADISCORD_economy_kpi_income', 'ADISCORD_economy_kpi_income', 'ADISCORD_economy_income_tt'),
-            ('ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_kpi_expenses', 'ADISCORD_economy_expenses_tt'),
-            ('ADISCORD_economy_kpi_balance', 'ADISCORD_economy_kpi_balance', 'ADISCORD_economy_balance_tt'),
+            (
+                'ADISCORD_economy_kpi_treasury',
+                'ADISCORD_economy_kpi_treasury',
+                'ADISCORD_economy_treasury_tt',
+            ),
+            (
+                'ADISCORD_economy_kpi_income',
+                'ADISCORD_economy_kpi_income',
+                'ADISCORD_economy_income_tt',
+            ),
+            (
+                'ADISCORD_economy_kpi_expenses',
+                'ADISCORD_economy_kpi_expenses',
+                'ADISCORD_economy_expenses_tt',
+            ),
+            (
+                'ADISCORD_economy_kpi_balance',
+                'ADISCORD_economy_kpi_balance',
+                'ADISCORD_economy_balance_tt',
+            ),
         ):
             line = next(
                 line for line in self.gui.splitlines() if f'name = "{node}"' in line
@@ -1905,10 +2051,26 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
 
     def test_secondary_risks_have_visible_rows_and_dedicated_explanations(self):
         for node, text_key, tooltip in (
-            ('ADISCORD_economy_risk_debt', 'ADISCORD_economy_risk_debt', 'ADISCORD_economy_debt_tt'),
-            ('ADISCORD_economy_risk_inflation', 'ADISCORD_economy_risk_inflation', 'ADISCORD_economy_inflation_tt'),
-            ('ADISCORD_economy_risk_overload', 'ADISCORD_economy_risk_overload', 'ADISCORD_economy_stretched_tt'),
-            ('ADISCORD_economy_risk_war_fatigue', 'ADISCORD_economy_risk_war_fatigue', 'ADISCORD_economy_war_fatigue_tt'),
+            (
+                'ADISCORD_economy_risk_debt',
+                'ADISCORD_economy_risk_debt',
+                'ADISCORD_economy_debt_tt',
+            ),
+            (
+                'ADISCORD_economy_risk_inflation',
+                'ADISCORD_economy_risk_inflation',
+                'ADISCORD_economy_inflation_tt',
+            ),
+            (
+                'ADISCORD_economy_risk_overload',
+                'ADISCORD_economy_risk_overload',
+                'ADISCORD_economy_stretched_tt',
+            ),
+            (
+                'ADISCORD_economy_risk_war_fatigue',
+                'ADISCORD_economy_risk_war_fatigue',
+                'ADISCORD_economy_war_fatigue_tt',
+            ),
         ):
             line = next(
                 line for line in self.gui.splitlines() if f'name = "{node}"' in line
@@ -2080,9 +2242,9 @@ class EconomyDashboardGuiContractTests(unittest.TestCase):
 
 class RuntimePulseTests(unittest.TestCase):
     def test_economy_weekly_pulse_uses_the_light_settlement(self):
-        text = (ROOT / 'common' / 'on_actions' / '00_ADISCORD_on_actions.txt').read_text(
-            encoding='utf-8-sig'
-        )
+        text = (
+            ROOT / 'common' / 'on_actions' / '00_ADISCORD_on_actions.txt'
+        ).read_text(encoding='utf-8-sig')
 
         self.assertRegex(
             text,
@@ -2102,8 +2264,12 @@ class StartupGuideContractTests(unittest.TestCase):
         return (ROOT / path).read_text(encoding='utf-8-sig')
 
     def scripts(self):
-        return _unique_direct_block(economy_validator.parse_clausewitz(
-            self.read('common/scripted_guis/ADISCORD_startup_menu.txt')), 'scripted_gui')
+        return _unique_direct_block(
+            economy_validator.parse_clausewitz(
+                self.read('common/scripted_guis/ADISCORD_startup_menu.txt')
+            ),
+            'scripted_gui',
+        )
 
     def test_buttons_have_handlers_and_scripted_roots_exist(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
@@ -2128,66 +2294,125 @@ class StartupGuideContractTests(unittest.TestCase):
             for handler in effects:
                 handlers[handler.key] = handler.value
                 for entry in _walk_clausewitz(handler.value):
-                    self.assertIn(entry.key, {
-                        'if', 'else', 'limit', 'check_variable', 'var', 'value',
-                        'compare', 'clear_variable', 'set_variable',
-                    })
+                    self.assertIn(
+                        entry.key,
+                        {
+                            'if',
+                            'else',
+                            'limit',
+                            'check_variable',
+                            'var',
+                            'value',
+                            'compare',
+                            'clear_variable',
+                            'set_variable',
+                        },
+                    )
                     if entry.key in ('var', 'clear_variable'):
                         self.assertIn(entry.value, allowed)
         opening = handlers['ADISCORD_startup_open_click']
         cleared = {e.value for e in opening if e.key == 'clear_variable'}
         self.assertEqual(cleared, allowed - {'ADISCORD_startup_open'})
         for name, payload in handlers.items():
-            if name.endswith(('_country_click', '_guide_click', '_paths_click')) or '_page_' in name:
-                self.assertIn('ADISCORD_startup_spoilers',
-                              [e.value for e in payload if e.key == 'clear_variable'])
+            if (
+                name.endswith(('_country_click', '_guide_click', '_paths_click'))
+                or '_page_' in name
+            ):
+                self.assertIn(
+                    'ADISCORD_startup_spoilers',
+                    [e.value for e in payload if e.key == 'clear_variable'],
+                )
         for name in ('close', 'play'):
             payload = handlers[f'ADISCORD_startup_{name}_click']
-            self.assertEqual([(e.key, e.value) for e in payload],
-                             [('clear_variable', 'ADISCORD_startup_open')])
+            self.assertEqual(
+                [(e.key, e.value) for e in payload],
+                [('clear_variable', 'ADISCORD_startup_open')],
+            )
 
     def test_visibility_follows_player_and_never_an_unsupported_tag(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
         for script in self.scripts():
-            self.assertEqual(_direct_scalar(script.value, 'context_type'), 'player_context')
-            self.assertEqual(_direct_scalar(_unique_direct_block(script.value, 'ai_enabled'), 'always'), 'no')
+            self.assertEqual(
+                _direct_scalar(script.value, 'context_type'), 'player_context'
+            )
+            self.assertEqual(
+                _direct_scalar(
+                    _unique_direct_block(script.value, 'ai_enabled'), 'always'
+                ),
+                'no',
+            )
             visible = _unique_direct_block(script.value, 'visible')
             for tag in ('STP', 'VAL', 'STS', 'SRP', '---'):
                 for is_human in (True, False):
                     for opened in (0, 1):
-                        facts = {(tag, 'is_ai', 'no'): is_human,
-                                 (tag, 'variable', 'ADISCORD_startup_open'): opened}
+                        facts = {
+                            (tag, 'is_ai', 'no'): is_human,
+                            (tag, 'variable', 'ADISCORD_startup_open'): opened,
+                        }
                         expected = tag in ('STP', 'VAL') and is_human
                         if script.key == 'ADISCORDStartupMenu':
                             expected = expected and bool(opened)
-                        self.assertEqual(matches_conditions(visible, facts, tag), expected)
+                        self.assertEqual(
+                            matches_conditions(visible, facts, tag), expected
+                        )
 
     def test_localisation_routes_cover_both_countries_and_safe_fallback(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
         definitions = economy_validator.parse_clausewitz(
-            self.read('common/scripted_localisation/ADISCORD_startup_menu.txt'))
-        body = next(e.value for e in definitions if _direct_scalar(e.value, 'name') == 'ADISCORDGetStartupBody')
+            self.read('common/scripted_localisation/ADISCORD_startup_menu.txt')
+        )
+        body = next(
+            e.value
+            for e in definitions
+            if _direct_scalar(e.value, 'name') == 'ADISCORDGetStartupBody'
+        )
         branches = [e.value for e in body if e.key == 'text']
         for tag in ('STP', 'VAL'):
             cases = [(0, 0, 0, f'{tag}_startup_country')]
-            cases += [(1, i, 0, f'ADISCORD_startup_guide_{topic}')
-                      for i, topic in enumerate(('budget', 'army', 'diplomacy'))]
+            cases += [
+                (1, i, 0, f'ADISCORD_startup_guide_{topic}')
+                for i, topic in enumerate(('budget', 'army', 'diplomacy'))
+            ]
             cases += [(1, 3, 0, f'{tag}_startup_guide')]
-            cases += [(2, i, spoiler, f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''))
-                      for i in (0, 1) for spoiler in (0, 1)]
+            cases += [
+                (
+                    2,
+                    i,
+                    spoiler,
+                    f'{tag}_startup_path_{i}' + ('_details' if spoiler else ''),
+                )
+                for i in (0, 1)
+                for spoiler in (0, 1)
+            ]
             for tab, page, spoilers, expected in cases:
-                facts = {(tag, 'variable', 'ADISCORD_startup_' + k): v
-                         for k, v in [('tab', tab), ('page', page), ('spoilers', spoilers)]}
-                chosen = next(_direct_scalar(b, 'localization_key') for b in branches
-                              if matches_conditions(_unique_direct_block(b, 'trigger') or [], facts, tag))
+                facts = {
+                    (tag, 'variable', 'ADISCORD_startup_' + k): v
+                    for k, v in [('tab', tab), ('page', page), ('spoilers', spoilers)]
+                }
+                chosen = next(
+                    _direct_scalar(b, 'localization_key')
+                    for b in branches
+                    if matches_conditions(
+                        _unique_direct_block(b, 'trigger') or [], facts, tag
+                    )
+                )
                 self.assertEqual(chosen, expected)
-        self.assertEqual(_direct_scalar(branches[-1], 'localization_key'), 'ADISCORD_startup_unsupported')
+        self.assertEqual(
+            _direct_scalar(branches[-1], 'localization_key'),
+            'ADISCORD_startup_unsupported',
+        )
 
     def test_localisation_keys_values_and_encodings(self):
         by_language = {}
         for language in ('russian', 'english'):
             values = {}
-            for stem in ('ADISCORD_startup_menu', 'ADISCORD_STP', 'ADISCORD_VAL_decisions'):
+            for stem in (
+                'ADISCORD_startup_menu',
+                'ADISCORD_STP',
+                'ADISCORD_VAL_decisions',
+            ):
                 path = ROOT / f'localisation/{language}/{stem}_l_{language}.yml'
                 raw = path.read_bytes()
                 if language == 'russian':
@@ -2204,70 +2429,133 @@ class StartupGuideContractTests(unittest.TestCase):
         loc = self.read('common/scripted_localisation/ADISCORD_startup_menu.txt')
         for key in re.findall(r'localization_key\s*=\s*(\w+)', loc):
             self.assertIn(key, by_language['russian'])
-        for path in ('common/scripted_guis/ADISCORD_startup_menu.txt',
-                     'common/scripted_localisation/ADISCORD_startup_menu.txt'):
+        for path in (
+            'common/scripted_guis/ADISCORD_startup_menu.txt',
+            'common/scripted_localisation/ADISCORD_startup_menu.txt',
+        ):
             self.assertFalse((ROOT / path).read_bytes().startswith(b'\xef\xbb\xbf'))
 
     def test_autostart_is_inside_existing_fresh_campaign_guard(self):
-        ast = economy_validator.parse_clausewitz(self.read('common/on_actions/00_ADISCORD_on_actions.txt'))
+        ast = economy_validator.parse_clausewitz(
+            self.read('common/on_actions/00_ADISCORD_on_actions.txt')
+        )
         hooks = _unique_direct_block(ast, 'on_actions')
-        startup = _unique_direct_block(_unique_direct_block(hooks, 'on_startup'), 'effect')
-        guards = [e.value for e in startup if e.key == 'if'
-                  and any(c.key == 'set_global_flag' and c.value == 'ADISCORD_starting_technology_profiles_applied'
-                          for c in e.value)]
+        startup = _unique_direct_block(
+            _unique_direct_block(hooks, 'on_startup'), 'effect'
+        )
+        guards = [
+            e.value
+            for e in startup
+            if e.key == 'if'
+            and any(
+                c.key == 'set_global_flag'
+                and c.value == 'ADISCORD_starting_technology_profiles_applied'
+                for c in e.value
+            )
+        ]
         self.assertEqual(len(guards), 1)
         guard = guards[0]
-        self.assertIn('ADISCORD_fresh_campaign_contract_v1',
-                      [e.value for e in _walk_clausewitz(_unique_direct_block(guard, 'limit'))])
+        self.assertIn(
+            'ADISCORD_fresh_campaign_contract_v1',
+            [e.value for e in _walk_clausewitz(_unique_direct_block(guard, 'limit'))],
+        )
         for tag in ('STP', 'VAL'):
-            writes = [e for scope in guard if scope.key == tag for e in _walk_clausewitz(scope.value)
-                      if e.key == 'set_variable' and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open']
+            writes = [
+                e
+                for scope in guard
+                if scope.key == tag
+                for e in _walk_clausewitz(scope.value)
+                if e.key == 'set_variable'
+                and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open'
+            ]
             self.assertEqual(len(writes), 1, tag)
         for hook in hooks:
             if hook.key != 'on_startup':
-                self.assertNotIn('ADISCORD_startup_open', [e.value for e in _walk_clausewitz(hook.value)
-                                                        if isinstance(e.value, str)])
-        self.assertEqual(sum(1 for e in _walk_clausewitz(startup)
-                             if e.key == 'set_variable' and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open'), 2)
+                self.assertNotIn(
+                    'ADISCORD_startup_open',
+                    [
+                        e.value
+                        for e in _walk_clausewitz(hook.value)
+                        if isinstance(e.value, str)
+                    ],
+                )
+        self.assertEqual(
+            sum(
+                1
+                for e in _walk_clausewitz(startup)
+                if e.key == 'set_variable'
+                and _direct_scalar(e.value, 'var') == 'ADISCORD_startup_open'
+            ),
+            2,
+        )
 
     def test_custom_skin_has_exact_frame_geometry_and_local_assets(self):
         from PIL import Image
-        gfx = economy_validator.parse_clausewitz(self.read('interface/ADISCORD_startup_menu.gfx'))
+
+        gfx = economy_validator.parse_clausewitz(
+            self.read('interface/ADISCORD_startup_menu.gfx')
+        )
         sprites = _unique_direct_block(gfx, 'spriteTypes')
-        expected = {'background': (1000, 620), 'tab': (221, 36), 'page': (359, 36),
-                    'launcher': (98, 26), 'close': (36, 36)}
+        expected = {
+            'background': (1000, 620),
+            'tab': (221, 36),
+            'page': (359, 36),
+            'launcher': (98, 26),
+            'close': (36, 36),
+        }
         for role, size in expected.items():
-            sprite = next(e.value for e in sprites
-                          if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{role}')
+            sprite = next(
+                e.value
+                for e in sprites
+                if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{role}'
+            )
             frames = int(_direct_scalar(sprite, 'noOfFrames') or '1')
             with Image.open(ROOT / _direct_scalar(sprite, 'texturefile')) as image:
                 self.assertEqual(image.size, (size[0] * frames, size[1]))
         gui = self.read('interface/ADISCORD_startup_menu.gui')
         names = {_direct_scalar(e.value, 'name') for e in sprites}
-        country_gfx = economy_validator.parse_clausewitz(self.read('interface/ADISCORD_CountryView.gfx'))
-        names.update(_direct_scalar(e.value, 'name')
-                     for e in _unique_direct_block(country_gfx, 'spriteTypes'))
-        for name in re.findall(r'(?:quadTextureSprite|spriteType)\s*=\s*"([^"]+)"', gui):
+        country_gfx = economy_validator.parse_clausewitz(
+            self.read('interface/ADISCORD_CountryView.gfx')
+        )
+        names.update(
+            _direct_scalar(e.value, 'name')
+            for e in _unique_direct_block(country_gfx, 'spriteTypes')
+        )
+        for name in re.findall(
+            r'(?:quadTextureSprite|spriteType)\s*=\s*"([^"]+)"', gui
+        ):
             self.assertIn(name, names)
         for tag in ('stp', 'val'):
-            sprite = next(e.value for e in sprites
-                          if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{tag}')
+            sprite = next(
+                e.value
+                for e in sprites
+                if _direct_scalar(e.value, 'name') == f'GFX_ADISCORD_startup_{tag}'
+            )
             with Image.open(ROOT / _direct_scalar(sprite, 'texturefile')) as image:
                 self.assertEqual(image.size, (220, 440))
                 node = gui_node_body(gui, f'ADISCORD_startup_{tag}_picture')
                 self.assertNotRegex(node, r'\bscale\s*=')
                 self.assertEqual(_gui_position(node), (746, 108))
-            self.assertTrue((ROOT / f'gfx/interface/startup/{tag}_generated.png').is_file())
+            self.assertTrue(
+                (ROOT / f'gfx/interface/startup/{tag}_generated.png').is_file()
+            )
 
     def test_launcher_does_not_cover_existing_political_controls(self):
         gui = self.read('interface/ADISCORD_startup_menu.gui')
         launcher = gui_node_body(gui, 'ADISCORD_startup_launcher')
         x, y = _gui_position(launcher)
-        w, h = map(int, re.search(r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', launcher).groups())
+        w, h = map(
+            int,
+            re.search(
+                r'size\s*=\s*\{\s*width\s*=\s*(\d+)\s+height\s*=\s*(\d+)', launcher
+            ).groups(),
+        )
         native = self.read('interface/countrypoliticsview.gui')
         for name in ('manage_occupied_button', 'subjects_button_container', 'rules'):
             nx, ny = _gui_position(gui_node_body(native, name))
-            self.assertFalse(x < nx + 32 and nx < x + w and y < ny + 32 and ny < y + h, name)
+            self.assertFalse(
+                x < nx + 32 and nx < x + w and y < ny + 32 and ny < y + h, name
+            )
         self.assertGreaterEqual(x, 190)
         self.assertLessEqual(x + w, 340)
         self.assertGreaterEqual(y, 325)
@@ -2290,8 +2578,9 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertIn('§YМаксим Шабрат§!', intro)
         self.assertIn('монополию', intro)
         self.assertIn('§YПётр Иванов и партия§!', intro)
-        self.assertIn('§YMaksim Shabrat§!', localisation_value(english, 'STP_startup_country'))
-
+        self.assertIn(
+            '§YMaksim Shabrat§!', localisation_value(english, 'STP_startup_country')
+        )
 
     def test_stelander_guide_explains_time_pressure_debt_and_research(self):
         english = self.read('localisation/english/ADISCORD_STP_l_english.yml')
@@ -2322,8 +2611,6 @@ class StartupGuideContractTests(unittest.TestCase):
         bop = localisation_value(english, 'STP_shabrat_election_bop_category_desc')
         self.assertIn('Left is the Party Apparatus', bop)
         self.assertIn('not a current national bonus', bop)
-
-
 
 
 if __name__ == '__main__':

@@ -40,13 +40,22 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         self.assertFalse(legacy.exists())
         operations_source = operations.read_text(encoding="utf-8-sig")
         support_source = support.read_text(encoding="utf-8-sig")
-        self.assertEqual(operations_source.count("ADISCORD_vorkerland_focus_operations_category = {"), 1)
-        self.assertEqual(support_source.count("ADISCORD_vorkerland_allied_support_category = {"), 1)
+        self.assertEqual(
+            operations_source.count(
+                "ADISCORD_vorkerland_focus_operations_category = {"
+            ),
+            1,
+        )
+        self.assertEqual(
+            support_source.count("ADISCORD_vorkerland_allied_support_category = {"), 1
+        )
 
     def test_integrated_contract(self) -> None:
         self.assertEqual(collect_issues(), [])
 
-    def test_central_showdown_stays_visible_while_command_readiness_is_explained(self) -> None:
+    def test_central_showdown_stays_visible_while_command_readiness_is_explained(
+        self,
+    ) -> None:
         decisions = read(DECISION_FILE)
         showdown = named_block(
             decisions, "ADISCORD_vorkerland_commit_to_central_showdown"
@@ -66,17 +75,26 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             available,
         )
         self.assertIn("ADISCORD_vorkerland_can_commit_to_showdown = yes", available)
-        ready = named_block(read(PHASE_TRIGGER_FILE), "ADISCORD_vorkerland_can_commit_to_showdown")
-        self.assertIn("has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared", ready)
+        ready = named_block(
+            read(PHASE_TRIGGER_FILE), "ADISCORD_vorkerland_can_commit_to_showdown"
+        )
+        self.assertIn(
+            "has_country_flag = ADISCORD_vorkerland_focus_central_front_prepared", ready
+        )
         for tag in ("wkr", "vad", "tva"):
-            self.assertIn(f"ADISCORD_vorkerland_focus_{tag}_central_war_unlocked", ready)
+            self.assertIn(
+                f"ADISCORD_vorkerland_focus_{tag}_central_war_unlocked", ready
+            )
 
     def test_optional_minor_fronts_cannot_hold_the_showdown_clock_hostage(self) -> None:
         decisions = read(DECISION_FILE)
         effects = read(EFFECT_FILE)
         triggers = read(PHASE_TRIGGER_FILE)
         ready = named_block(triggers, "ADISCORD_vorkerland_can_commit_to_showdown")
-        for name, source in (("ADISCORD_vorkerland_commit_to_central_showdown", decisions), ("ADISCORD_vorkerland_focus_schedule_final_showdown", effects)):
+        for name, source in (
+            ("ADISCORD_vorkerland_commit_to_central_showdown", decisions),
+            ("ADISCORD_vorkerland_focus_schedule_final_showdown", effects),
+        ):
             body = named_block(source, name)
             self.assertIn("ADISCORD_vorkerland_can_commit_to_showdown = yes", body)
             for target in CENTRAL_TARGETS:
@@ -85,13 +103,20 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         clock = named_block(decisions, "ADISCORD_vorkerland_consolidation_deadline")
         self.assertIn("days_mission_timeout = 180", clock)
         self.assertIn("always = no", named_block(clock, "available"))
-        self.assertIn("ADISCORD_vorkerland_phase.4", named_block(clock, "timeout_effect"))
-        launch = named_block(effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave")
+        self.assertIn(
+            "ADISCORD_vorkerland_phase.4", named_block(clock, "timeout_effect")
+        )
+        launch = named_block(
+            effects, "ADISCORD_vorkerland_focus_launch_central_minor_wave"
+        )
         self.assertEqual(launch.count("declare_war_on = {"), 9)
         self.assertEqual(launch.count("is_in_faction = no"), 9)
         self.assertNotIn("else_if =", launch)
         for target in CENTRAL_TARGETS:
-            self.assertIn(f"declare_war_on = {{ target = {target} type = annex_everything }}", launch)
+            self.assertIn(
+                f"declare_war_on = {{ target = {target} type = annex_everything }}",
+                launch,
+            )
 
     def test_wave_ai_no_longer_serializes_a_solarino_target(self) -> None:
         decisions = read(DECISION_FILE)
@@ -107,8 +132,12 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         phase_triggers = source_section(read(PHASE_TRIGGER_FILE), 'phase_triggers')
         wave = named_block(decisions, CENTRAL_WAVE_DECISION)
         viability_name = "ADISCORD_vorkerland_has_adjacent_viable_central_minor"
-        self.assertEqual(named_block(wave, "visible").count(f"{viability_name} = yes"), 1)
-        self.assertEqual(named_block(wave, "available").count(f"{viability_name} = yes"), 1)
+        self.assertEqual(
+            named_block(wave, "visible").count(f"{viability_name} = yes"), 1
+        )
+        self.assertEqual(
+            named_block(wave, "available").count(f"{viability_name} = yes"), 1
+        )
 
         viability = named_block(phase_triggers, viability_name)
         for target in CENTRAL_TARGETS:
@@ -137,7 +166,9 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
                 f"ADISCORD_vorkerland_focus_central_minor_target_{target.lower()}",
                 pending_branches[0],
             )
-        self.assertEqual(decisions.count(pending_setter) + effects.count(pending_setter), 1)
+        self.assertEqual(
+            decisions.count(pending_setter) + effects.count(pending_setter), 1
+        )
         self.assertTrue(
             any(
                 "ADISCORD_vorkerland_focus_cleanup_central_minor_front = yes" in branch
@@ -204,7 +235,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             self.assertNotIn(forbidden, retry_confirmation)
 
         retryable = named_block(
-            phase_triggers, "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front"
+            phase_triggers,
+            "ADISCORD_vorkerland_has_retryable_recorded_central_minor_front",
         )
         for target in CENTRAL_TARGETS:
             retryable_branch = (
@@ -235,7 +267,9 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             self.assertEqual(len(matching_events), 1)
             self.assertIn("hidden = yes", matching_events[0])
             self.assertIn("is_triggered_only = yes", matching_events[0])
-            self.assertEqual(named_block(matching_events[0], "immediate").count(callback), 1)
+            self.assertEqual(
+                named_block(matching_events[0], "immediate").count(callback), 1
+            )
             expected = {
                 "id": event_id,
                 "namespace": "ADISCORD_vorkerland_phase",
@@ -244,7 +278,9 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
                 "subsystem": "vorkerland_phase",
                 "status": "active",
             }
-            self.assertEqual([entry for entry in registry if entry.get("id") == event_id], [expected])
+            self.assertEqual(
+                [entry for entry in registry if entry.get("id") == event_id], [expected]
+            )
 
     def test_minor_fronts_have_one_retry_and_a_non_forcing_240_day_marker(self) -> None:
         decisions = read(DECISION_FILE)
@@ -254,7 +290,8 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         )
         self.assertIn("days_mission_timeout = 240", deadline)
         self.assertIn(
-            "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes", deadline
+            "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline = yes",
+            deadline,
         )
         resolver = named_block(
             effects, "ADISCORD_vorkerland_focus_resolve_central_minor_wave_deadline"
@@ -273,7 +310,10 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         first_check = named_block(
             effects, "ADISCORD_vorkerland_focus_confirm_central_minor_wave_launch"
         )
-        self.assertIn("ADISCORD_vorkerland_central_minor_campaign_phase_available = yes", first_check)
+        self.assertIn(
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
+            first_check,
+        )
         self.assertIn(
             "country_event = { id = ADISCORD_vorkerland_phase.9 days = 1 }",
             first_check,
@@ -285,17 +325,27 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes",
             retry_check,
         )
-        finish = named_block(effects, "ADISCORD_vorkerland_focus_finish_central_minor_wave")
-        self.assertIn("ADISCORD_vorkerland_focus_central_minor_recovery_cooldown", finish)
+        finish = named_block(
+            effects, "ADISCORD_vorkerland_focus_finish_central_minor_wave"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_focus_central_minor_recovery_cooldown", finish
+        )
         self.assertIn("days = 14", finish)
         for target in CENTRAL_TARGETS:
-            declaration = f"declare_war_on = {{ target = {target} type = annex_everything }}"
+            declaration = (
+                f"declare_war_on = {{ target = {target} type = annex_everything }}"
+            )
             self.assertEqual(effects.count(declaration), 2)
 
     def test_captured_districts_core_only_after_full_civil_integration(self) -> None:
         decisions = read(DECISION_FILE)
         states: list[int] = []
-        for target, (decision_id, package, duration) in CENTRAL_INTEGRATION_PACKAGES.items():
+        for target, (
+            decision_id,
+            package,
+            duration,
+        ) in CENTRAL_INTEGRATION_PACKAGES.items():
             block = named_block(decisions, decision_id)
             states.extend(package)
             self.assertIn(f"NOT = {{ country_exists = {target} }}", block)
@@ -309,7 +359,10 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             self.assertIn("fire_only_once = no", block)
             self.assertIn("remove_effect = {", block)
             self.assertNotIn("add_core_of", named_block(block, "complete_effect"))
-            self.assertIn(f"set_country_flag = {decision_id}_paid", named_block(block, "complete_effect"))
+            self.assertIn(
+                f"set_country_flag = {decision_id}_paid",
+                named_block(block, "complete_effect"),
+            )
             self.assertIn(
                 "custom_effect_tooltip = ADISCORD_vorkerland_integrate_central_district_tt",
                 block,
@@ -324,23 +377,44 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
         self.assertEqual(len(states), 24)
         self.assertEqual(len(states), len(set(states)))
 
-    def test_reunification_preserves_earned_cores_without_requiring_all_neutrals(self) -> None:
+    def test_reunification_preserves_earned_cores_without_requiring_all_neutrals(
+        self,
+    ) -> None:
         phase = source_section(read(PHASE_EFFECT_FILE), 'phase_effects')
         triggers = read(PHASE_TRIGGER_FILE)
         reunification = named_block(phase, "ADISCORD_vorkerland_begin_reunification")
         victory = named_block(triggers, "ADISCORD_vorkerland_coalition_victory_ready")
-        capital = named_block(triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled")
-        self.assertIn("ADISCORD_vorkerland_coalition_victory_ready = yes", reunification)
-        self.assertIn("ADISCORD_vorkerland_has_single_surviving_claimant = yes", victory)
-        self.assertEqual(victory.count("ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"), 3)
-        self.assertIn("NOT = { any_enemy_country = { NOT = { has_capitulated = yes } } }", capital)
+        capital = named_block(
+            triggers, "ADISCORD_vorkerland_central_districts_owned_and_controlled"
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_coalition_victory_ready = yes", reunification
+        )
+        self.assertIn(
+            "ADISCORD_vorkerland_has_single_surviving_claimant = yes", victory
+        )
+        self.assertEqual(
+            victory.count(
+                "ADISCORD_vorkerland_central_districts_owned_and_controlled = yes"
+            ),
+            3,
+        )
+        self.assertIn(
+            "NOT = { any_enemy_country = { NOT = { has_capitulated = yes } } }", capital
+        )
         self.assertIn("controller = { is_in_faction_with = PREV.PREV }", capital)
         for target in CENTRAL_TARGETS:
             self.assertNotIn(f"NOT = {{ country_exists = {target} }}", victory)
         self.assertNotIn("is_core_of", victory + capital)
-        inheritance = named_block(phase, "ADISCORD_vorkerland_inherit_integrated_claimant_cores")
+        inheritance = named_block(
+            phase, "ADISCORD_vorkerland_inherit_integrated_claimant_cores"
+        )
         formation = named_block(phase, "ADISCORD_vorkerland_finalize_wrk_formation")
-        states = sorted(state for _, package, _ in CENTRAL_INTEGRATION_PACKAGES.values() for state in package)
+        states = sorted(
+            state
+            for _, package, _ in CENTRAL_INTEGRATION_PACKAGES.values()
+            for state in package
+        )
         inherited = sorted(set(states).union(CLAIMANT_HOME_STATES))
         for state in inherited:
             block = named_block(inheritance, str(state))
@@ -388,7 +462,12 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
             block = named_block(decisions, decision_id)
             self.assertIn("fire_only_once = no", block)
             effect = named_block(effects, decision_id)
-            for forbidden in ("add_to_faction", "create_faction", "puppet =", "set_autonomy"):
+            for forbidden in (
+                "add_to_faction",
+                "create_faction",
+                "puppet =",
+                "set_autonomy",
+            ):
                 self.assertNotIn(forbidden, effect)
             self.assertIn(
                 "add_equipment_to_stockpile = { type = infantry_equipment amount = -300 }",
@@ -419,7 +498,9 @@ class VorkerlandFocusDecisionTests(unittest.TestCase):
                 )
 
     def test_russian_localisation_keeps_utf8_bom(self) -> None:
-        self.assertTrue((ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"))
+        self.assertTrue(
+            (ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf")
+        )
 
 
 if __name__ == "__main__":

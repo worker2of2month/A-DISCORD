@@ -40,12 +40,10 @@ SOURCE_DIR = ROOT / "gfx/interface/technology/source"
 SOURCE = SOURCE_DIR / "technology_surface.png"
 OUTPUT_DIR = ROOT / "gfx/interface/technology/ui"
 PREVIEW = (
-    ROOT
-    / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
+    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
 )
 TREE_PREVIEW = (
-    ROOT
-    / "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png"
+    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_tree_preview.png"
 )
 GUI_OUTPUT = ROOT / "interface/countrytechnologyview.gui"
 GFX_OUTPUT = ROOT / "interface/ADISCORD_technology_ui.gfx"
@@ -75,8 +73,12 @@ FOLDER_TABS = (
 )
 FOLDER_TAB_CONTRACTS = tuple(
     SpriteContract(
-        sprite, f"GFX_ADISCORD_technology_folder_{key}",
-        f"ADISCORD_technology_folder_{key}.dds", "spriteType", (182, 61), frames=2,
+        sprite,
+        f"GFX_ADISCORD_technology_folder_{key}",
+        f"ADISCORD_technology_folder_{key}.dds",
+        "spriteType",
+        (182, 61),
+        frames=2,
     )
     for key, sprite, _ in FOLDER_TABS
 )
@@ -364,10 +366,15 @@ def render_gui() -> str:
     for old, (new, expected) in SPRITE_REPLACEMENTS.items():
         text = replace_counted(text, old, new, expected)
     for name in ("limited_research_bonus_text", "research_speed_text"):
-        text = replace_gui_block(text, "instantTextboxType", name, (
-            (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
-            (r'maxWidth\s*=\s*\d+', 'maxWidth = 160'),
-        ))
+        text = replace_gui_block(
+            text,
+            "instantTextboxType",
+            name,
+            (
+                (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+                (r'maxWidth\s*=\s*\d+', 'maxWidth = 160'),
+            ),
+        )
     for name, kind, x in (
         ("focus_bonuses", "iconType", 214),
         ("limited_research_bonus_value", "instantTextboxType", 247),
@@ -375,9 +382,12 @@ def render_gui() -> str:
         ("research_speed_value", "instantTextboxType", 490),
     ):
         y = 108 if kind == "iconType" else 110
-        text = replace_gui_block(text, kind, name, (
-            (r'position\s*=\s*\{[^}]+\}', f'position = {{ x = {x} y = {y} }}'),
-        ))
+        text = replace_gui_block(
+            text,
+            kind,
+            name,
+            ((r'position\s*=\s*\{[^}]+\}', f'position = {{ x = {x} y = {y} }}'),),
+        )
     text = "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
     return re.sub(r"(?m)^ +(?=\t)", "", text)
 
@@ -406,9 +416,18 @@ def apply_tree_skin(text: str) -> str:
     for old, (new, expected) in TREE_SPRITE_REPLACEMENTS.items():
         text = text.replace(f'"{new}"', f'"{old}"')
         text = replace_counted(text, old, new, expected)
-    text = replace_gui_block(text, "instantTextboxType", "tech_info_special_description", (
-        (r'font\s*=\s*"hoi4_typewriter16(?:_inverted)?"', 'font = "hoi4_typewriter16"'),
-    ), expected=2)
+    text = replace_gui_block(
+        text,
+        "instantTextboxType",
+        "tech_info_special_description",
+        (
+            (
+                r'font\s*=\s*"hoi4_typewriter16(?:_inverted)?"',
+                'font = "hoi4_typewriter16"',
+            ),
+        ),
+        expected=2,
+    )
     return text
 
 
@@ -514,7 +533,16 @@ def _overview_top(source: Image.Image) -> Image.Image:
         draw.line((x, 18, x, 90), fill=signal_soft)
     for y in range(22, 91, 17):
         draw.line((18, y, 306, y), fill=signal_soft)
-    trace = ((20, 77), (54, 67), (88, 71), (121, 46), (157, 59), (198, 34), (239, 48), (302, 24))
+    trace = (
+        (20, 77),
+        (54, 67),
+        (88, 71),
+        (121, 46),
+        (157, 59),
+        (198, 34),
+        (239, 48),
+        (302, 24),
+    )
     draw.line(trace, fill=signal, width=2)
     for x, y in trace:
         draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=palette.deep, outline=signal)
@@ -522,7 +550,9 @@ def _overview_top(source: Image.Image) -> Image.Image:
     for start, end in ((0, 1), (1, 2), (1, 4), (2, 3), (3, 5), (4, 5)):
         draw.line((nodes[start], nodes[end]), fill=signal_soft, width=2)
     for x, y in nodes:
-        draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=palette.deep, outline=signal, width=2)
+        draw.ellipse(
+            (x - 5, y - 5, x + 5, y + 5), fill=palette.deep, outline=signal, width=2
+        )
     return output
 
 
@@ -664,7 +694,9 @@ def _folder_tab(source: Image.Image, key: str) -> Image.Image:
     row = next(index for index, (name, _, _) in enumerate(FOLDER_TABS) if name == key)
     with Image.open(SOURCE_DIR / "folder_tabs.png") as atlas:
         if atlas.mode != "RGBA" or atlas.size != (182, 61 * len(FOLDER_TABS)):
-            raise ValueError("folder tabs: expected a 182px RGBA atlas with two frames per row")
+            raise ValueError(
+                "folder tabs: expected a 182px RGBA atlas with two frames per row"
+            )
         return atlas.crop((0, row * 61, 182, (row + 1) * 61))
 
 
@@ -695,9 +727,7 @@ def render_state_asset(contract: SpriteContract, source: Image.Image) -> Image.I
         "GFX_technology_researched_item_bg": lambda: _technology_node(
             source, MUTED_GREEN
         ),
-        "GFX_technology_branch_item_bg": lambda: _technology_node(
-            source, MUTED_BRANCH
-        ),
+        "GFX_technology_branch_item_bg": lambda: _technology_node(source, MUTED_BRANCH),
         "GFX_technology_currently_researching_item_bg": lambda: _researching_strip(
             source
         ),
@@ -861,12 +891,15 @@ def _remove_legacy_outputs() -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build A-Discord technology UI assets.")
+    parser = argparse.ArgumentParser(
+        description="Build A-Discord technology UI assets."
+    )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
     parser.add_argument(
-        "--state-definitions-only", action="store_true",
+        "--state-definitions-only",
+        action="store_true",
         help="check or write state sprite declarations using existing DDS assets",
     )
     args = parser.parse_args()
@@ -876,7 +909,8 @@ def main() -> int:
                 validate_contract_image(contract, asset)
         return apply_or_check(
             {STATE_GFX_OUTPUT: expected_technology_state_gfx_bytes()},
-            args.apply, "Technology state declarations",
+            args.apply,
+            "Technology state declarations",
         )
     if not args.apply:
         obsolete = [path for path in LEGACY_OUTPUTS if path.is_file()]

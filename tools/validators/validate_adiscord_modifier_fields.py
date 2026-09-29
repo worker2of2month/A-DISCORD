@@ -187,14 +187,48 @@ def _ideology_pattern_fields(ideologies: set[str]) -> dict[str, str]:
 # and then fail to flag them when they appear somewhere they do not belong.
 STRUCTURAL_TOKENS = frozenset(
     {
-        "enable", "remove_trigger", "icon", "attacker_modifier", "defender_modifier",
-        "targeted_modifier", "tag", "factor", "add", "value", "var", "modifier",
-        "picture", "allowed", "allowed_civil_war", "removal_cost", "ai_will_do",
-        "cancel_if_invalid", "available", "visible", "trigger", "name", "always",
-        "research_bonus", "equipment_bonus", "targeted_modifiers", "rule",
-        "traits", "cost", "level", "days", "id", "on_add", "on_remove",
-        "scaled_value", "is_good", "use_for_ai", "cancel_if_not_visible",
-        "law", "default", "allowed_to_remove", "on_add_effect",
+        "enable",
+        "remove_trigger",
+        "icon",
+        "attacker_modifier",
+        "defender_modifier",
+        "targeted_modifier",
+        "tag",
+        "factor",
+        "add",
+        "value",
+        "var",
+        "modifier",
+        "picture",
+        "allowed",
+        "allowed_civil_war",
+        "removal_cost",
+        "ai_will_do",
+        "cancel_if_invalid",
+        "available",
+        "visible",
+        "trigger",
+        "name",
+        "always",
+        "research_bonus",
+        "equipment_bonus",
+        "targeted_modifiers",
+        "rule",
+        "traits",
+        "cost",
+        "level",
+        "days",
+        "id",
+        "on_add",
+        "on_remove",
+        "scaled_value",
+        "is_good",
+        "use_for_ai",
+        "cancel_if_not_visible",
+        "law",
+        "default",
+        "allowed_to_remove",
+        "on_add_effect",
     }
 )
 
@@ -202,7 +236,9 @@ STRUCTURAL_TOKENS = frozenset(
 # ---------------------------------------------------------------------------
 # Parsing
 # ---------------------------------------------------------------------------
-FIELD_ASSIGNMENT = re.compile(r"(?m)^[ \t]*([a-z][a-z0-9_]*)[ \t]*=[ \t]*(-?[\d.]+|[A-Za-z_][\w.]*)[ \t]*(?:#.*)?$")
+FIELD_ASSIGNMENT = re.compile(
+    r"(?m)^[ \t]*([a-z][a-z0-9_]*)[ \t]*=[ \t]*(-?[\d.]+|[A-Za-z_][\w.]*)[ \t]*(?:#.*)?$"
+)
 
 
 def _strip_comments(text: str) -> str:
@@ -279,7 +315,9 @@ def harvest_from_game(game_root: Path) -> dict[str, list[str]]:
 
     for path in sorted(common.rglob("*.txt")):
         try:
-            text = _strip_comments(path.read_text(encoding="utf-8-sig", errors="replace"))
+            text = _strip_comments(
+                path.read_text(encoding="utf-8-sig", errors="replace")
+            )
         except OSError:
             continue
 
@@ -334,7 +372,9 @@ def refresh_snapshot() -> int:
         **harvested,
     }
     serialised = json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
-    previous = SNAPSHOT_PATH.read_text(encoding="utf-8") if SNAPSHOT_PATH.is_file() else ""
+    previous = (
+        SNAPSHOT_PATH.read_text(encoding="utf-8") if SNAPSHOT_PATH.is_file() else ""
+    )
     SNAPSHOT_PATH.parent.mkdir(parents=True, exist_ok=True)
     SNAPSHOT_PATH.write_text(serialised, encoding="utf-8", newline="\n")
 
@@ -363,7 +403,12 @@ def mod_ideologies(root: Path) -> set[str]:
 def mod_sprites(root: Path) -> set[str]:
     sprites: set[str] = set()
     for path in sorted((root / "interface").rglob("*.gfx")):
-        sprites |= set(re.findall(r'name\s*=\s*"?(GFX_[\w]+)"?', path.read_text(encoding="utf-8", errors="replace")))
+        sprites |= set(
+            re.findall(
+                r'name\s*=\s*"?(GFX_[\w]+)"?',
+                path.read_text(encoding="utf-8", errors="replace"),
+            )
+        )
     return sprites
 
 
@@ -377,7 +422,9 @@ def written_variables(root: Path) -> set[str]:
     )
     for pattern in VARIABLE_WRITER_GLOBS:
         for path in sorted(root.glob(pattern)):
-            text = _strip_comments(path.read_text(encoding="utf-8-sig", errors="replace"))
+            text = _strip_comments(
+                path.read_text(encoding="utf-8-sig", errors="replace")
+            )
             names |= {match.group(1) for match in writers.finditer(text)}
     return names
 
@@ -400,7 +447,9 @@ def covered_files(root: Path) -> list[Path]:
     return paths
 
 
-def _check_structural_shapes(path: Path, name: str, body: str, failures: list[str]) -> None:
+def _check_structural_shapes(
+    path: Path, name: str, body: str, failures: list[str]
+) -> None:
     """The two shapes that cost a live campaign, both cheap to detect.
 
     A dynamic modifier declared ``attacker_modifier = yes`` is a combat modifier
@@ -531,7 +580,9 @@ def validate(root: Path = REPOSITORY_ROOT) -> list[str]:
                             "modifier loads and silently does nothing."
                         )
 
-            for icon in re.findall(r"(?m)^[ \t]*(?:icon|picture)[ \t]*=[ \t]*(GFX_\w+)", body):
+            for icon in re.findall(
+                r"(?m)^[ \t]*(?:icon|picture)[ \t]*=[ \t]*(GFX_\w+)", body
+            ):
                 if icon not in sprites:
                     failures.append(
                         f"{relative}: {name}: icon '{icon}' resolves to no sprite in "

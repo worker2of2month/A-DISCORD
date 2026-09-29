@@ -43,7 +43,9 @@ def _landmark_positions(source: str) -> list[tuple[str, float, float, float]]:
 class ReactorZoneImpassableContract(unittest.TestCase):
     def test_reactor_zone_remains_impassable_after_legacy_regeneration(self) -> None:
         self.assertIn(125, builder.IMPASSABLE_LEGACY_STATE_IDS)
-        source = builder.state_path(125).read_text(encoding="utf-8-sig", errors="strict")
+        source = builder.state_path(125).read_text(
+            encoding="utf-8-sig", errors="strict"
+        )
         self.assertIn("impassable = yes", source)
 
 

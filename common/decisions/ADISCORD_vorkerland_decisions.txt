@@ -923,7 +923,7 @@ ADISCORD_vorkerland_collapse_category = {
 					amount = 60
 					producer = VAL
 				}
-			} }
+		} }
 		ai_will_do = { factor = 100 }
 	}
 
@@ -945,7 +945,7 @@ ADISCORD_vorkerland_collapse_category = {
 					amount = 60
 					producer = VAL
 				}
-			} }
+		} }
 		ai_will_do = { factor = 100 }
 	}
 

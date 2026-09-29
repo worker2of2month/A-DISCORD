@@ -2,7 +2,7 @@ state={
 	id=30
 	name="STATE_30"
 	provinces={
-		12434 16346 16363 16369 16441 16442 16444 
+		12434 16346 16363 16369 16441 16442 16444
 	}
 	manpower=7600000
 	buildings_max_level_factor=1.000
@@ -30,5 +30,5 @@ state={
 		victory_points = { 16363 10 }
 	}
 	state_category = large_city
-	local_supplies=12.0 
+	local_supplies=12.0
 }

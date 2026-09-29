@@ -34,14 +34,72 @@ WORLD_NORMAL_PATH = ROOT / "map/world_normal.bmp"
 TERRAIN_CONFIG_PATH = ROOT / "common/terrain/00_terrain.txt"
 STATE_DIR = ROOT / "history/states"
 
-IVN_STATE_IDS = frozenset({25, 92, 95, 96, 97, 98, 99, 100, 101, 127, 129, 130, 131, 132, 164, 695, 696, 697, 698})
+IVN_STATE_IDS = frozenset(
+    {
+        25,
+        92,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        127,
+        129,
+        130,
+        131,
+        132,
+        164,
+        695,
+        696,
+        697,
+        698,
+    }
+)
 IIA_STATE_IDS = frozenset({128, 693, 694})
 SCOPED_STATE_IDS = IVN_STATE_IDS | IIA_STATE_IDS
 ISLAND_HEIGHT_STATE_IDS = frozenset({128, 693, 694})
 NORTHERN_LANDSCAPE_STATE_IDS = frozenset({127, 128, 129, 130, 131, 132, 164, 693, 694})
-MAINLAND_FOREST_STATE_IDS = NORTHERN_LANDSCAPE_STATE_IDS - ISLAND_HEIGHT_STATE_IDS - {164}
-SETTLEMENT_PROVINCES = frozenset({16568, 3462, 3318, 888, 838, 2448, 882, 702, 9327, 595, 579, 1971, 3447, 2262, 423, 4217, 6905, 11841, 1763, 5573, 9160, 12076})
-TERRAIN_PRIORITY = ("urban", "mountain", "hills", "marsh", "forest", "plains", "jungle", "desert")
+MAINLAND_FOREST_STATE_IDS = (
+    NORTHERN_LANDSCAPE_STATE_IDS - ISLAND_HEIGHT_STATE_IDS - {164}
+)
+SETTLEMENT_PROVINCES = frozenset(
+    {
+        16568,
+        3462,
+        3318,
+        888,
+        838,
+        2448,
+        882,
+        702,
+        9327,
+        595,
+        579,
+        1971,
+        3447,
+        2262,
+        423,
+        4217,
+        6905,
+        11841,
+        1763,
+        5573,
+        9160,
+        12076,
+    }
+)
+TERRAIN_PRIORITY = (
+    "urban",
+    "mountain",
+    "hills",
+    "marsh",
+    "forest",
+    "plains",
+    "jungle",
+    "desert",
+)
 WATER_TYPES = frozenset({"ocean", "lakes"})
 WATER_PALETTES = frozenset({14, 15})
 PLAINS_PALETTE = 0
@@ -148,11 +206,17 @@ def landscape_masks(
     state_by_province = province_state_contract(NORTHERN_LANDSCAPE_STATE_IDS)
     missing = sorted(north_provinces - definition_colors.keys())
     if missing:
-        raise RuntimeError(f"definition.csv: missing northern landscape provinces {missing}")
+        raise RuntimeError(
+            f"definition.csv: missing northern landscape provinces {missing}"
+        )
 
-    color_to_id = {color: province_id for province_id, color in definition_colors.items()}
+    color_to_id = {
+        color: province_id for province_id, color in definition_colors.items()
+    }
     if len(color_to_id) != len(definition_colors):
-        raise RuntimeError("definition.csv: duplicate RGB inside northern landscape scope")
+        raise RuntimeError(
+            "definition.csv: duplicate RGB inside northern landscape scope"
+        )
     try:
         rgb = provinces.convert("RGB")
         pixels = rgb.tobytes()
@@ -168,7 +232,7 @@ def landscape_masks(
     max_x = -1
     max_y = -1
     for index in range(provinces.width * provinces.height):
-        color = tuple(pixels[index * 3:index * 3 + 3])
+        color = tuple(pixels[index * 3 : index * 3 + 3])
         province_id = color_to_id.get(color)
         if province_id in north_provinces:
             north[index] = 1
@@ -186,7 +250,9 @@ def landscape_masks(
         raise RuntimeError("provinces bitmap has no island landscape pixels")
     missing_pixels = sorted(north_provinces - seen_northern_provinces)
     if missing_pixels:
-        raise RuntimeError(f"provinces bitmap: missing northern landscape bitmap provinces {missing_pixels}")
+        raise RuntimeError(
+            f"provinces bitmap: missing northern landscape bitmap provinces {missing_pixels}"
+        )
     return LandscapeMasks(island, north, (min_x, min_y, max_x, max_y), state_by_pixel)
 
 
@@ -237,8 +303,8 @@ def stable_unit_hash(x: int, y: int, salt: int) -> float:
 def island_height_value(u: float, v: float, coast_distance: int) -> int:
     coast = min(1.0, coast_distance / 11.0)
     ridge_x = 0.50 + 0.12 * sin((v - 0.12) * pi * 1.35)
-    ridge = exp(-((u - ridge_x) / 0.17) ** 2)
-    ridge_spine = exp(-((u - ridge_x) / 0.026) ** 2)
+    ridge = exp(-(((u - ridge_x) / 0.17) ** 2))
+    ridge_spine = exp(-(((u - ridge_x) / 0.026) ** 2))
     north_lobe = exp(-(((u - 0.43) / 0.25) ** 2 + ((v - 0.27) / 0.19) ** 2))
     south_lobe = exp(-(((u - 0.57) / 0.24) ** 2 + ((v - 0.73) / 0.22) ** 2))
     valley = exp(-(((u - 0.67) / 0.13) ** 2 + ((v - 0.52) / 0.26) ** 2))
@@ -284,7 +350,9 @@ def render_heightmap(
     return Image.frombytes("L", source.size, bytes(pixels))
 
 
-def height_slope(pixels: list[int] | bytes | bytearray, width: int, height: int, index: int) -> int:
+def height_slope(
+    pixels: list[int] | bytes | bytearray, width: int, height: int, index: int
+) -> int:
     if len(pixels) != width * height:
         raise ValueError("height pixels do not match dimensions")
     if not 0 <= index < len(pixels):
@@ -316,7 +384,9 @@ def normal_from_height(
     width, height = heightmap.size
     normal_width, normal_height = source.size
     if (normal_width * 2, normal_height * 2) != (width, height):
-        raise ValueError("world normal dimensions must equal half the heightmap dimensions")
+        raise ValueError(
+            "world normal dimensions must equal half the heightmap dimensions"
+        )
     if len(island_mask) != width * height:
         raise ValueError("island mask dimensions do not match heightmap")
 
@@ -329,10 +399,17 @@ def normal_from_height(
         bottom = top + width
         for nx in range(normal_width):
             left = nx * 2
-            full_indices = (top + left, top + left + 1, bottom + left, bottom + left + 1)
+            full_indices = (
+                top + left,
+                top + left + 1,
+                bottom + left,
+                bottom + left + 1,
+            )
             normal_index = ny * normal_width + nx
             means[normal_index] = sum(heights[index] for index in full_indices) / 4.0
-            island_cells[normal_index] = any(island_mask[index] for index in full_indices)
+            island_cells[normal_index] = any(
+                island_mask[index] for index in full_indices
+            )
 
     affected = bytearray(cell_count)
     for index, included in enumerate(island_cells):
@@ -365,7 +442,7 @@ def normal_from_height(
         red = max(0, min(255, round(NORMAL_CENTER - NORMAL_SCALE * dx)))
         green = max(0, min(255, round(NORMAL_CENTER + NORMAL_SCALE * dy)))
         offset = index * 3
-        pixels[offset:offset + 3] = bytes((red, green, NORMAL_BLUE))
+        pixels[offset : offset + 3] = bytes((red, green, NORMAL_BLUE))
     return Image.frombytes("RGB", source.size, bytes(pixels))
 
 
@@ -398,7 +475,9 @@ def palette_types() -> dict[int, str]:
     return result
 
 
-def definition_contract() -> tuple[list[str], str, bytes, dict[int, tuple[int, int, int]], dict[int, str]]:
+def definition_contract() -> (
+    tuple[list[str], str, bytes, dict[int, tuple[int, int, int]], dict[int, str]]
+):
     raw = DEFINITION_PATH.read_bytes()
     bom = raw.startswith(b"\xef\xbb\xbf")
     decoded = raw.decode("utf-8-sig")
@@ -416,7 +495,9 @@ def definition_contract() -> tuple[list[str], str, bytes, dict[int, tuple[int, i
         if province_id not in scoped:
             continue
         if fields[4] != "land":
-            raise RuntimeError(f"province {province_id}: IVN/IIA scope contains non-land province")
+            raise RuntimeError(
+                f"province {province_id}: IVN/IIA scope contains non-land province"
+            )
         colors[province_id] = tuple(map(int, fields[1:4]))
         declared[province_id] = fields[6]
     missing = sorted(scoped - colors.keys())
@@ -472,7 +553,9 @@ def compact_footprint(indices: list[int], width: int, province_id: int = 0) -> s
         raise RuntimeError("cannot build an urban footprint for an empty province")
     maximum = int(len(indices) * MAX_URBAN_SHARE)
     if maximum < MIN_URBAN_PIXELS:
-        raise RuntimeError(f"province has only {len(indices)} pixels; cannot preserve 35% biome")
+        raise RuntimeError(
+            f"province has only {len(indices)} pixels; cannot preserve 35% biome"
+        )
     target = min(max(MIN_URBAN_PIXELS, round(len(indices) * URBAN_SHARE)), maximum)
     province = set(indices)
     mean_x = sum(index % width for index in indices) / len(indices)
@@ -492,7 +575,11 @@ def compact_footprint(indices: list[int], width: int, province_id: int = 0) -> s
 
     def add_frontier(index: int) -> None:
         for neighbour in pixel_neighbours(index, width, pixel_count):
-            if neighbour not in province or neighbour in selected or neighbour in queued:
+            if (
+                neighbour not in province
+                or neighbour in selected
+                or neighbour in queued
+            ):
                 continue
             x = neighbour % width
             y = neighbour // width
@@ -529,7 +616,9 @@ def compact_footprint(indices: list[int], width: int, province_id: int = 0) -> s
         selected.add(chosen[1])
         add_frontier(chosen[1])
     if len(selected) < target:
-        raise RuntimeError("province urban footprint cannot reach its target as one connected component")
+        raise RuntimeError(
+            "province urban footprint cannot reach its target as one connected component"
+        )
     return selected
 
 
@@ -591,9 +680,7 @@ def render_northern_terrain(
         raise ValueError("heightmap must use mode L and match terrain dimensions")
     width, height = source.size
     pixel_count = width * height
-    if not (
-        len(north_mask) == len(island_mask) == len(state_by_pixel) == pixel_count
-    ):
+    if not (len(north_mask) == len(island_mask) == len(state_by_pixel) == pixel_count):
         raise ValueError("northern terrain masks do not match terrain dimensions")
 
     original = bytearray(source.get_flattened_data())
@@ -613,7 +700,9 @@ def render_northern_terrain(
     preserved_marsh = {
         index
         for index, included in enumerate(north_mask)
-        if included and state_by_pixel[index] == 164 and original[index] == MARSH_PALETTE
+        if included
+        and state_by_pixel[index] == 164
+        and original[index] == MARSH_PALETTE
     }
     land = {
         index
@@ -622,13 +711,10 @@ def render_northern_terrain(
     }
     classifiable = land - urban - preserved_marsh
     slopes = {
-        index: masked_height_slope(heights, north_mask, width, index)
-        for index in land
+        index: masked_height_slope(heights, north_mask, width, index) for index in land
     }
     mountains = {
-        index
-        for index in classifiable
-        if heights[index] >= 158 or slopes[index] >= 12
+        index for index in classifiable if heights[index] >= 158 or slopes[index] >= 12
     }
 
     first_shoulder: set[int] = set()
@@ -753,7 +839,9 @@ def _tree_cell_sample_from_pixels(
             terrain_index = terrain_pixels[index]
             terrain_type = palette.get(terrain_index)
             if terrain_type is None:
-                raise RuntimeError(f"tree sample uses unknown terrain palette {terrain_index}")
+                raise RuntimeError(
+                    f"tree sample uses unknown terrain palette {terrain_index}"
+                )
             terrain_counts[terrain_type] += 1
     sample_size = (x1 - x0) * (y1 - y0)
     state_id = None
@@ -827,9 +915,7 @@ def _render_trees_with_metrics(
                 continue
             probability = tree_probability(sample.terrain_type)
             if stable_unit_hash(tx, ty, 23) < probability:
-                pixels[tree_index] = (
-                    6 if stable_unit_hash(tx, ty, 29) < 0.65 else 5
-                )
+                pixels[tree_index] = 6 if stable_unit_hash(tx, ty, 29) < 0.65 else 5
             else:
                 pixels[tree_index] = 0
             terrain_counts = counts.setdefault(sample.terrain_type, [0, 0])
@@ -842,7 +928,10 @@ def _render_trees_with_metrics(
     result.putdata(pixels)
     return (
         result,
-        {terrain_type: (values[0], values[1]) for terrain_type, values in counts.items()},
+        {
+            terrain_type: (values[0], values[1])
+            for terrain_type, values in counts.items()
+        },
         forbidden,
         outside_changes,
     )
@@ -870,9 +959,13 @@ def _build_expected() -> GeographyOutputs:
         Image.open(BytesIO(PROVINCES_PATH.read_bytes())) as provinces_source,
     ):
         if terrain_source.mode != "P" or terrain_source.size != provinces_source.size:
-            raise RuntimeError("terrain.bmp must be paletted and match provinces.bmp dimensions")
+            raise RuntimeError(
+                "terrain.bmp must be paletted and match provinces.bmp dimensions"
+            )
         if cities_source.mode != "P" or cities_source.size != terrain_source.size:
-            raise RuntimeError("cities.bmp must be paletted and match terrain.bmp dimensions")
+            raise RuntimeError(
+                "cities.bmp must be paletted and match terrain.bmp dimensions"
+            )
         terrain_original = terrain_source.copy()
         terrain_pixels = bytearray(terrain_source.get_flattened_data())
         city_pixels = bytearray(cities_source.get_flattened_data())
@@ -881,7 +974,9 @@ def _build_expected() -> GeographyOutputs:
 
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
         if height_source.mode != "L" or height_source.size != terrain_original.size:
-            raise RuntimeError("heightmap.bmp must use mode L and match provinces.bmp dimensions")
+            raise RuntimeError(
+                "heightmap.bmp must use mode L and match provinces.bmp dimensions"
+            )
         heightmap = render_heightmap(height_source, masks.island, masks.island_bbox)
     with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as normal_source:
         if normal_source.mode != "RGB":
@@ -891,7 +986,7 @@ def _build_expected() -> GeographyOutputs:
     province_by_pixel = array("H", [0]) * len(terrain_pixels)
     settlement_indices = {province_id: [] for province_id in SETTLEMENT_PROVINCES}
     for index in range(len(terrain_pixels)):
-        color = tuple(province_bytes[index * 3:index * 3 + 3])
+        color = tuple(province_bytes[index * 3 : index * 3 + 3])
         province_id = color_to_id.get(color)
         if province_id is None:
             continue
@@ -901,9 +996,14 @@ def _build_expected() -> GeographyOutputs:
 
     missing_settlements = sorted(SETTLEMENT_PROVINCES - province_colors.keys())
     if missing_settlements:
-        raise RuntimeError(f"settlement provinces outside IVN/IIA scope: {missing_settlements}")
+        raise RuntimeError(
+            f"settlement provinces outside IVN/IIA scope: {missing_settlements}"
+        )
 
-    priority = {terrain_type: len(TERRAIN_PRIORITY) - rank for rank, terrain_type in enumerate(TERRAIN_PRIORITY)}
+    priority = {
+        terrain_type: len(TERRAIN_PRIORITY) - rank
+        for rank, terrain_type in enumerate(TERRAIN_PRIORITY)
+    }
     footprints = {
         province_id: compact_footprint(indices, terrain_original.width, province_id)
         for province_id, indices in settlement_indices.items()
@@ -983,11 +1083,13 @@ def _build_expected() -> GeographyOutputs:
         if tree_source.mode != "P" or tree_source.size != (1650, 600):
             raise RuntimeError("trees.bmp must remain paletted at 1650x600")
         tree_palette = tree_source.getpalette()
-        trees, tree_counts, forbidden_trees, outside_tree_changes = _render_trees_with_metrics(
-            tree_source,
-            terrain,
-            masks.state_by_pixel,
-            palette,
+        trees, tree_counts, forbidden_trees, outside_tree_changes = (
+            _render_trees_with_metrics(
+                tree_source,
+                terrain,
+                masks.state_by_pixel,
+                palette,
+            )
         )
         if trees.getpalette() != tree_palette:
             raise RuntimeError("trees.bmp palette changed during generation")
@@ -1029,9 +1131,7 @@ def _build_expected() -> GeographyOutputs:
         for terrain_type in ("forest", "plains", "hills", "marsh")
     }
 
-    coast_distances = distance_from_edge(
-        masks.north, terrain.width, terrain.height
-    )
+    coast_distances = distance_from_edge(masks.north, terrain.width, terrain.height)
     transition_violations = 0
     mountains = {
         index
@@ -1054,16 +1154,19 @@ def _build_expected() -> GeographyOutputs:
         frontier = list(component)
         while frontier:
             index = frontier.pop()
-            connected = set(
-                pixel_neighbours(index, terrain.width, len(generated_pixels))
-            ) & remaining
+            connected = (
+                set(pixel_neighbours(index, terrain.width, len(generated_pixels)))
+                & remaining
+            )
             remaining.difference_update(connected)
             component.update(connected)
             frontier.extend(connected)
         if not any(
             generated_pixels[neighbour] == HILLS_PALETTE
             for index in component
-            for neighbour in pixel_neighbours(index, terrain.width, len(generated_pixels))
+            for neighbour in pixel_neighbours(
+                index, terrain.width, len(generated_pixels)
+            )
         ):
             components_without_shoulders += 1
 
@@ -1194,24 +1297,32 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
     with Image.open(BytesIO(TERRAIN_PATH.read_bytes())) as current:
         differences = sum(
             before != after
-            for before, after in zip(current.get_flattened_data(), outputs.terrain.get_flattened_data())
+            for before, after in zip(
+                current.get_flattened_data(), outputs.terrain.get_flattened_data()
+            )
         )
     if differences:
         issues.append(f"map/terrain.bmp: {differences} northern terrain pixels drifted")
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as current:
         differences = sum(
             before != after
-            for before, after in zip(current.get_flattened_data(), outputs.heightmap.get_flattened_data())
+            for before, after in zip(
+                current.get_flattened_data(), outputs.heightmap.get_flattened_data()
+            )
         )
     if differences:
         issues.append(f"map/heightmap.bmp: {differences} island height pixels drifted")
     with Image.open(BytesIO(WORLD_NORMAL_PATH.read_bytes())) as current:
         differences = sum(
             before != after
-            for before, after in zip(current.get_flattened_data(), outputs.world_normal.get_flattened_data())
+            for before, after in zip(
+                current.get_flattened_data(), outputs.world_normal.get_flattened_data()
+            )
         )
     if differences:
-        issues.append(f"map/world_normal.bmp: {differences} island normal cells drifted")
+        issues.append(
+            f"map/world_normal.bmp: {differences} island normal cells drifted"
+        )
     with Image.open(BytesIO(TREES_PATH.read_bytes())) as current:
         if current.mode != "P" or current.size != (1650, 600):
             issues.append(
@@ -1239,10 +1350,14 @@ def validate(outputs: GeographyOutputs | None = None) -> list[str]:
         )
     for province_id, footprint in outputs.footprints.items():
         if len(footprint) < MIN_URBAN_PIXELS:
-            issues.append(f"province {province_id}: urban footprint has only {len(footprint)} pixels")
+            issues.append(
+                f"province {province_id}: urban footprint has only {len(footprint)} pixels"
+            )
         total = sum(outputs.counts[province_id].values())
         if len(footprint) > total * MAX_URBAN_SHARE:
-            issues.append(f"province {province_id}: urban footprint erases too much biome")
+            issues.append(
+                f"province {province_id}: urban footprint erases too much biome"
+            )
         if outputs.desired[province_id] != "urban":
             issues.append(f"province {province_id}: settlement is not declared urban")
         maximum_run = floor(round(sqrt(len(footprint))) / 2)
@@ -1279,8 +1394,14 @@ def apply() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate synchronized terrain outputs (default)")
-    actions.add_argument("--apply", action="store_true", help="write synchronized terrain outputs")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate synchronized terrain outputs (default)",
+    )
+    actions.add_argument(
+        "--apply", action="store_true", help="write synchronized terrain outputs"
+    )
     args = parser.parse_args()
     if args.apply:
         apply()
@@ -1289,7 +1410,9 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print(f"Ivanland geography validation passed for {len(scoped_provinces())} land provinces and {len(SETTLEMENT_PROVINCES)} settlements.")
+    print(
+        f"Ivanland geography validation passed for {len(scoped_provinces())} land provinces and {len(SETTLEMENT_PROVINCES)} settlements."
+    )
     return 0
 
 

@@ -25,95 +25,428 @@ SPRITES = {
 PARTIES_LOCALISATION = "localisation/russian/parties_l_russian.yml"
 COLLAPSE_LOCALISATION = "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
 LOCALISATION_TEXTICON_KEYS = (
-    (PARTIES_LOCALISATION, "IVN_humanism_party", "GFX_IVN_roar_of_freedom_party_texticon"),
-    (PARTIES_LOCALISATION, "IVN_humanism_party_long", "GFX_IVN_roar_of_freedom_party_texticon"),
-    (PARTIES_LOCALISATION, "IVN_etatism_party", "GFX_IVN_emergency_committee_party_texticon"),
-    (PARTIES_LOCALISATION, "IVN_etatism_party_long", "GFX_IVN_emergency_committee_party_texticon"),
-    (COLLAPSE_LOCALISATION, "TVA_technocracy_party", "GFX_TVA_wartime_technocratic_worker_party_texticon"),
-    (COLLAPSE_LOCALISATION, "TVA_technocracy_party_long", "GFX_TVA_wartime_technocratic_worker_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_pragmatism_party_independent", "GFX_VAD_vorkerland_imperial_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_pragmatism_party_independent_long", "GFX_VAD_vorkerland_imperial_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_vorkerland_imperial_party", "GFX_VAD_vorkerland_imperial_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_vorkerland_imperial_party_long", "GFX_VAD_vorkerland_imperial_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_vorkerland_imperial_party_wrk_subject", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VAD_vorkerland_imperial_party_wrk_subject_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ZAO_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ZAO_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ZAO_pragmatism_party_independent", "GFX_ZAO_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "ZAO_pragmatism_party_independent_long", "GFX_ZAO_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_pragmatism_party_independent", "GFX_PWR_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_pragmatism_party_independent_long", "GFX_PWR_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_technocracy_party", "GFX_PWR_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_technocracy_party_long", "GFX_PWR_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_technocracy_party_wrk_subject", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "PWR_technocracy_party_wrk_subject_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VLA_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VLA_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "VLA_pragmatism_party_independent", "GFX_VLA_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "VLA_pragmatism_party_independent_long", "GFX_VLA_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_pragmatism_party_independent", "GFX_ROM_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_pragmatism_party_independent_long", "GFX_ROM_independent_party_texticon"),
+    (
+        PARTIES_LOCALISATION,
+        "IVN_humanism_party",
+        "GFX_IVN_roar_of_freedom_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "IVN_humanism_party_long",
+        "GFX_IVN_roar_of_freedom_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "IVN_etatism_party",
+        "GFX_IVN_emergency_committee_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "IVN_etatism_party_long",
+        "GFX_IVN_emergency_committee_party_texticon",
+    ),
+    (
+        COLLAPSE_LOCALISATION,
+        "TVA_technocracy_party",
+        "GFX_TVA_wartime_technocratic_worker_party_texticon",
+    ),
+    (
+        COLLAPSE_LOCALISATION,
+        "TVA_technocracy_party_long",
+        "GFX_TVA_wartime_technocratic_worker_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_pragmatism_party_independent",
+        "GFX_VAD_vorkerland_imperial_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_pragmatism_party_independent_long",
+        "GFX_VAD_vorkerland_imperial_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_vorkerland_imperial_party",
+        "GFX_VAD_vorkerland_imperial_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_vorkerland_imperial_party_long",
+        "GFX_VAD_vorkerland_imperial_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_vorkerland_imperial_party_wrk_subject",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VAD_vorkerland_imperial_party_wrk_subject_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ZAO_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ZAO_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ZAO_pragmatism_party_independent",
+        "GFX_ZAO_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ZAO_pragmatism_party_independent_long",
+        "GFX_ZAO_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_pragmatism_party_independent",
+        "GFX_PWR_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_pragmatism_party_independent_long",
+        "GFX_PWR_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_technocracy_party",
+        "GFX_PWR_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_technocracy_party_long",
+        "GFX_PWR_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_technocracy_party_wrk_subject",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "PWR_technocracy_party_wrk_subject_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VLA_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VLA_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VLA_pragmatism_party_independent",
+        "GFX_VLA_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "VLA_pragmatism_party_independent_long",
+        "GFX_VLA_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_pragmatism_party_independent",
+        "GFX_ROM_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_pragmatism_party_independent_long",
+        "GFX_ROM_independent_party_texticon",
+    ),
     (PARTIES_LOCALISATION, "ROM_etatism_party", "GFX_ROM_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_etatism_party_long", "GFX_ROM_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_etatism_party_wrk_subject", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "ROM_etatism_party_wrk_subject_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "SOL_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "SOL_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "SOL_pragmatism_party_independent", "GFX_SOL_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "SOL_pragmatism_party_independent_long", "GFX_SOL_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_pragmatism_party", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_pragmatism_party_long", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_pragmatism_party_independent", "GFX_TRU_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_pragmatism_party_independent_long", "GFX_TRU_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_chauvinism_party", "GFX_TRU_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_chauvinism_party_long", "GFX_TRU_independent_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_chauvinism_party_wrk_subject", "GFX_WRK_worker_revolutionary_party_texticon"),
-    (PARTIES_LOCALISATION, "TRU_chauvinism_party_wrk_subject_long", "GFX_WRK_worker_revolutionary_party_texticon"),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_etatism_party_long",
+        "GFX_ROM_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_etatism_party_wrk_subject",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "ROM_etatism_party_wrk_subject_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "SOL_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "SOL_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "SOL_pragmatism_party_independent",
+        "GFX_SOL_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "SOL_pragmatism_party_independent_long",
+        "GFX_SOL_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_pragmatism_party",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_pragmatism_party_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_pragmatism_party_independent",
+        "GFX_TRU_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_pragmatism_party_independent_long",
+        "GFX_TRU_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_chauvinism_party",
+        "GFX_TRU_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_chauvinism_party_long",
+        "GFX_TRU_independent_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_chauvinism_party_wrk_subject",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
+    (
+        PARTIES_LOCALISATION,
+        "TRU_chauvinism_party_wrk_subject_long",
+        "GFX_WRK_worker_revolutionary_party_texticon",
+    ),
 )
 SUCCESSOR_TAGS = ("VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU")
 SUCCESSOR_PATTERN = "|".join(SUCCESSOR_TAGS)
 SCRIPT_ROOTS = ("common", "events", "history")
 EXPECTED_TRANSITIONS = Counter(
     {
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "VAD", "autonomy_district_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "ZAO", "autonomy_district_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "PWR", "autonomy_district_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "VLA", "autonomy_district_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "ROM", "autonomy_republic_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "SOL", "autonomy_republic_in_Vorkerland"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "set_autonomy", "TRU", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "VLA", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "ROM", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "TRU", ""): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VLA", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VAD", "autonomy_free"): 2,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ZAO", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "PWR", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "VLA", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ROM", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_free"): 7,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "TRU", "autonomy_free"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "ROM", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "TRU", "autonomy_republic_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "puppet", "SOL", ""): 4,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "release_autonomy", "SOL", "autonomy_puppet"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "release_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 1,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_puppet"): 2,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "set_autonomy", "SOL", "autonomy_district_in_Vorkerland"): 2,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "VAD",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "ZAO",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "PWR",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "VLA",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "ROM",
+            "autonomy_republic_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "SOL",
+            "autonomy_republic_in_Vorkerland",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "set_autonomy",
+            "TRU",
+            "autonomy_republic_in_Vorkerland",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "puppet",
+            "VLA",
+            "",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "puppet",
+            "ROM",
+            "",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "puppet",
+            "TRU",
+            "",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "VLA",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "VAD",
+            "autonomy_free",
+        ): 2,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "ZAO",
+            "autonomy_free",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "PWR",
+            "autonomy_free",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "VLA",
+            "autonomy_free",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "ROM",
+            "autonomy_free",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "SOL",
+            "autonomy_free",
+        ): 7,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "TRU",
+            "autonomy_free",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "ROM",
+            "autonomy_republic_in_Vorkerland",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "TRU",
+            "autonomy_republic_in_Vorkerland",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "puppet",
+            "SOL",
+            "",
+        ): 4,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "release_autonomy",
+            "SOL",
+            "autonomy_puppet",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "release_autonomy",
+            "SOL",
+            "autonomy_district_in_Vorkerland",
+        ): 1,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "SOL",
+            "autonomy_puppet",
+        ): 2,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "set_autonomy",
+            "SOL",
+            "autonomy_district_in_Vorkerland",
+        ): 2,
     }
 )
 EXPECTED_SYNC_CALLERS = Counter(
     {
-        ("events/ADISCORD_vorkerland_events.txt", "ADISCORD_vorkerland_sync_all_party_identities"): 1,
-        ("history/countries/WRK - WorkerLand.txt", "ADISCORD_vorkerland_sync_all_party_identities"): 1,
-        ("common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt", "ADISCORD_vorkerland_sync_party_identity"): 4,
-        ("common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_sync_party_identity"): 16,
+        (
+            "events/ADISCORD_vorkerland_events.txt",
+            "ADISCORD_vorkerland_sync_all_party_identities",
+        ): 1,
+        (
+            "history/countries/WRK - WorkerLand.txt",
+            "ADISCORD_vorkerland_sync_all_party_identities",
+        ): 1,
+        (
+            "common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt",
+            "ADISCORD_vorkerland_sync_party_identity",
+        ): 4,
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "ADISCORD_vorkerland_sync_party_identity",
+        ): 16,
     }
 )
 
@@ -133,7 +466,7 @@ def named_block(text: str, name: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[match.start():index + 1]
+                return text[match.start() : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -160,7 +493,7 @@ def block_at(text: str, start: int) -> tuple[str, int]:
         elif character == "}":
             depth -= 1
             if depth == 0:
-                return text[start:index + 1], index + 1
+                return text[start : index + 1], index + 1
     raise AssertionError(f"unclosed block at {start}")
 
 
@@ -200,7 +533,9 @@ def script_sources() -> dict[str, str]:
     for root_name in SCRIPT_ROOTS:
         for path in sorted((ROOT / root_name).rglob("*.txt")):
             relative = path.relative_to(ROOT).as_posix()
-            sources[relative] = mask_script_non_code(path.read_text(encoding="utf-8-sig"))
+            sources[relative] = mask_script_non_code(
+                path.read_text(encoding="utf-8-sig")
+            )
     return sources
 
 
@@ -208,7 +543,9 @@ def script_location(relative: str, text: str, position: int) -> str:
     return f"{relative}:{text.count(chr(10), 0, position) + 1}"
 
 
-def transition_sites(sources: dict[str, str]) -> list[tuple[str, str, str, str, int, int]]:
+def transition_sites(
+    sources: dict[str, str],
+) -> list[tuple[str, str, str, str, int, int]]:
     sites = []
     for relative, text in sources.items():
         for match in re.finditer(
@@ -216,7 +553,9 @@ def transition_sites(sources: dict[str, str]) -> list[tuple[str, str, str, str, 
             rf"({SUCCESSOR_PATTERN})(?![A-Za-z0-9_])",
             text,
         ):
-            sites.append((relative, "puppet", match.group(1), "", match.start(), match.end()))
+            sites.append(
+                (relative, "puppet", match.group(1), "", match.start(), match.end())
+            )
         for command in ("release_autonomy", "set_autonomy"):
             for match in re.finditer(
                 rf"(?<![A-Za-z0-9_]){command}(?![A-Za-z0-9_])\s*=\s*\{{",
@@ -226,14 +565,23 @@ def transition_sites(sources: dict[str, str]) -> list[tuple[str, str, str, str, 
                 target = re.search(rf"\btarget\s*=\s*({SUCCESSOR_PATTERN})\b", block)
                 if target is None:
                     continue
-                autonomy = re.search(r"\bautonom(?:y|ous)_state\s*=\s*([A-Za-z0-9_]+)", block)
+                autonomy = re.search(
+                    r"\bautonom(?:y|ous)_state\s*=\s*([A-Za-z0-9_]+)", block
+                )
                 if autonomy is None:
                     location = script_location(relative, text, match.start())
                     raise AssertionError(
                         f"missing literal autonomy state at {location}: {command}:{target.group(1)}"
                     )
                 sites.append(
-                    (relative, command, target.group(1), autonomy.group(1), match.start(), end)
+                    (
+                        relative,
+                        command,
+                        target.group(1),
+                        autonomy.group(1),
+                        match.start(),
+                        end,
+                    )
                 )
     return sites
 
@@ -270,11 +618,26 @@ class PartyTexticonContractTests(unittest.TestCase):
 
     def test_requested_ivn_and_tva_names_have_unique_icons(self) -> None:
         parties = read("localisation/russian/parties_l_russian.yml")
-        collapse = source_section(read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"), 'collapse_l_russian')
-        self.assertIn('IVN_humanism_party: "£GFX_IVN_roar_of_freedom_party_texticon Рёв свободы"', parties)
-        self.assertIn('IVN_etatism_party: "£GFX_IVN_emergency_committee_party_texticon Чрезвычайный комитет Иторы"', parties)
-        self.assertIn('TVA_technocracy_party: "£GFX_TVA_wartime_technocratic_worker_party_texticon Технократическо-утилитарная рабочая партия свободного Воркерланда"', collapse)
-        self.assertIn('TVA_technocracy_party_long: "£GFX_TVA_wartime_technocratic_worker_party_texticon Технократическо-утилитарная рабочая партия свободного Воркерланда"', collapse)
+        collapse = source_section(
+            read("localisation/russian/ADISCORD_vorkerland_l_russian.yml"),
+            'collapse_l_russian',
+        )
+        self.assertIn(
+            'IVN_humanism_party: "£GFX_IVN_roar_of_freedom_party_texticon Рёв свободы"',
+            parties,
+        )
+        self.assertIn(
+            'IVN_etatism_party: "£GFX_IVN_emergency_committee_party_texticon Чрезвычайный комитет Иторы"',
+            parties,
+        )
+        self.assertIn(
+            'TVA_technocracy_party: "£GFX_TVA_wartime_technocratic_worker_party_texticon Технократическо-утилитарная рабочая партия свободного Воркерланда"',
+            collapse,
+        )
+        self.assertIn(
+            'TVA_technocracy_party_long: "£GFX_TVA_wartime_technocratic_worker_party_texticon Технократическо-утилитарная рабочая партия свободного Воркерланда"',
+            collapse,
+        )
 
     def test_successor_helper_keys_cover_dependency_and_independence(self) -> None:
         parties = read("localisation/russian/parties_l_russian.yml")
@@ -297,7 +660,11 @@ class PartyTexticonContractTests(unittest.TestCase):
             "SOL_pragmatism_party",
             "TRU_pragmatism_party",
         ):
-            line = next(line for line in parties.splitlines() if line.strip().startswith(f"{key}:"))
+            line = next(
+                line
+                for line in parties.splitlines()
+                if line.strip().startswith(f"{key}:")
+            )
             self.assertIn("£GFX_WRK_worker_revolutionary_party_texticon", line)
 
     def test_every_required_party_key_has_one_leading_declared_texticon(self) -> None:
@@ -312,12 +679,16 @@ class PartyTexticonContractTests(unittest.TestCase):
             relative = path.relative_to(ROOT).as_posix()
             text = path.read_text(encoding="utf-8-sig")
             for match in entry.finditer(text):
-                occurrences.setdefault(match.group(1), []).append((relative, match.group(2)))
+                occurrences.setdefault(match.group(1), []).append(
+                    (relative, match.group(2))
+                )
 
         gfx = read("interface/parties_texticons.gfx")
         for expected_file, key, sprite in LOCALISATION_TEXTICON_KEYS:
             with self.subTest(key=key):
-                self.assertEqual(len(occurrences.get(key, [])), 1, f"localisation count: {key}")
+                self.assertEqual(
+                    len(occurrences.get(key, [])), 1, f"localisation count: {key}"
+                )
                 actual_file, value = occurrences[key][0]
                 self.assertEqual(actual_file, expected_file)
                 self.assertTrue(
@@ -337,34 +708,66 @@ class PartyTexticonContractTests(unittest.TestCase):
             "localisation/russian/parties_l_russian.yml",
             "localisation/russian/ADISCORD_vorkerland_l_russian.yml",
         ):
-            self.assertTrue((ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative)
+            self.assertTrue(
+                (ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative
+            )
 
 
 class PartyIdentityLifecycleTests(unittest.TestCase):
-    def test_sync_effect_covers_exact_successors_and_never_changes_politics(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'party_identity_effects')
+    def test_sync_effect_covers_exact_successors_and_never_changes_politics(
+        self,
+    ) -> None:
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'party_identity_effects',
+        )
         sync = named_block(effects, "ADISCORD_vorkerland_sync_party_identity")
-        self.assertEqual(set(re.findall(r"\btag\s*=\s*([A-Z]{3})", sync)), {"VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"})
+        self.assertEqual(
+            set(re.findall(r"\btag\s*=\s*([A-Z]{3})", sync)),
+            {"VAD", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"},
+        )
         self.assertIn("OR = { is_subject_of = WRK is_subject_of = WKR }", sync)
         self.assertIn("has_global_flag = ADISCORD_vorkerland_collapse_started", sync)
         for ideology in ("pragmatism", "technocracy", "etatism", "chauvinism"):
             self.assertIn(f"ideology = {ideology}", sync)
-        for forbidden in ("set_politics", "set_popularities", "add_popularity", "elections_allowed", "promote_character", "country_leader"):
+        for forbidden in (
+            "set_politics",
+            "set_popularities",
+            "add_popularity",
+            "elections_allowed",
+            "promote_character",
+            "country_leader",
+        ):
             self.assertNotIn(forbidden, sync)
         self.assertNotIn("tag = NAM", sync)
         self.assertNotIn("tag = DAN", sync)
 
     def test_fresh_collapse_and_autonomy_entry_points_are_bounded(self) -> None:
         history = read("history/countries/WRK - WorkerLand.txt")
-        events = source_section(read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events')
-        on_actions = read("common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt")
+        events = source_section(
+            read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
+        )
+        on_actions = read(
+            "common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt"
+        )
         self.assertIn("ADISCORD_vorkerland_sync_all_party_identities = yes", history)
-        apply_cosmetics = events.index("ADISCORD_vorkerland_apply_claimant_cosmetics = yes")
-        sync_parties = events.index("ADISCORD_vorkerland_sync_all_party_identities = yes", apply_cosmetics)
-        repair_identities = events.index("ADISCORD_vorkerland_repair_claimant_identities = yes", apply_cosmetics)
+        apply_cosmetics = events.index(
+            "ADISCORD_vorkerland_apply_claimant_cosmetics = yes"
+        )
+        sync_parties = events.index(
+            "ADISCORD_vorkerland_sync_all_party_identities = yes", apply_cosmetics
+        )
+        repair_identities = events.index(
+            "ADISCORD_vorkerland_repair_claimant_identities = yes", apply_cosmetics
+        )
         self.assertLess(apply_cosmetics, sync_parties)
         self.assertLess(sync_parties, repair_identities)
-        for hook in ("on_puppet", "on_release_as_puppet", "on_release_as_free", "on_subject_free"):
+        for hook in (
+            "on_puppet",
+            "on_release_as_puppet",
+            "on_release_as_free",
+            "on_subject_free",
+        ):
             blocks = named_blocks(on_actions, hook)
             self.assertEqual(len(blocks), 1, hook)
             block = blocks[0]
@@ -375,7 +778,9 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
             )
             self.assertIn("ADISCORD_vorkerland_sync_party_identity = yes", block)
 
-    def test_repository_transition_inventory_and_sync_coverage_are_explicit(self) -> None:
+    def test_repository_transition_inventory_and_sync_coverage_are_explicit(
+        self,
+    ) -> None:
         inline_fixture = mask_script_non_code(
             'fixture = { if = { limit = { always = yes } puppet = ZAO } }'
         )
@@ -383,20 +788,28 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
             {"common/decisions/inline_party_identity_fixture.txt": inline_fixture}
         )
         self.assertEqual(
-            [(command, tag, autonomy) for _, command, tag, autonomy, _, _ in inline_sites],
+            [
+                (command, tag, autonomy)
+                for _, command, tag, autonomy, _, _ in inline_sites
+            ],
             [("puppet", "ZAO", "")],
         )
         ignored_fixture = mask_script_non_code(
             'fixture = { log = "puppet = ZAO" # puppet = ZAO\n}'
         )
         self.assertEqual(
-            transition_sites({"common/decisions/ignored_party_identity_fixture.txt": ignored_fixture}),
+            transition_sites(
+                {"common/decisions/ignored_party_identity_fixture.txt": ignored_fixture}
+            ),
             [],
         )
 
         sources = script_sources()
         sites = transition_sites(sources)
-        actual = Counter((relative, command, tag, autonomy) for relative, command, tag, autonomy, _, _ in sites)
+        actual = Counter(
+            (relative, command, tag, autonomy)
+            for relative, command, tag, autonomy, _, _ in sites
+        )
         unexpected = actual - EXPECTED_TRANSITIONS
         unexpected_locations = []
         remaining = unexpected.copy()
@@ -426,29 +839,37 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
                 autonomy_block, autonomy_end = block_at(text, autonomy_start)
                 self.assertRegex(autonomy_block, rf"\btarget\s*=\s*{tag}\b")
                 self.assertRegex(
-                    text[autonomy_end:autonomy_end + 250],
+                    text[autonomy_end : autonomy_end + 250],
                     rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
                     f"unsynchronized scripted puppet at {location}: {tag}",
                 )
             elif command == "release_autonomy":
                 self.assertRegex(
-                    text[end:end + 250],
+                    text[end : end + 250],
                     rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
                     f"unsynchronized scripted release at {location}: {tag}",
                 )
             elif autonomy == "autonomy_free":
                 subject_free = named_blocks(
-                    sources["common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt"],
+                    sources[
+                        "common/on_actions/05_ADISCORD_vorkerland_party_identity_on_actions.txt"
+                    ],
                     "on_subject_free",
                 )
                 self.assertEqual(len(subject_free), 1)
-                self.assertIn("ADISCORD_vorkerland_sync_party_identity = yes", subject_free[0])
-                self.assertIn(tag, set(re.findall(r"\btag\s*=\s*([A-Z]{3})", subject_free[0])))
+                self.assertIn(
+                    "ADISCORD_vorkerland_sync_party_identity = yes", subject_free[0]
+                )
+                self.assertIn(
+                    tag, set(re.findall(r"\btag\s*=\s*([A-Z]{3})", subject_free[0]))
+                )
             elif relative == "history/countries/WRK - WorkerLand.txt":
-                self.assertIn("ADISCORD_vorkerland_sync_all_party_identities = yes", text[end:])
+                self.assertIn(
+                    "ADISCORD_vorkerland_sync_all_party_identities = yes", text[end:]
+                )
             else:
                 self.assertRegex(
-                    text[end:end + 250],
+                    text[end : end + 250],
                     rf"(?s)^\s*{tag}\s*=\s*\{{\s*ADISCORD_vorkerland_sync_party_identity\s*=\s*yes",
                     f"unsynchronized set_autonomy at {location}: {tag}:{autonomy}",
                 )
@@ -477,8 +898,12 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
             for hook in ("on_daily", "on_weekly", "on_monthly"):
                 for block in named_blocks(text, hook):
                     if sync_call.search(block):
-                        recurring_callers.append((script_location(relative, text, text.index(block)), hook))
-        self.assertEqual(recurring_callers, [], "party identity sync must never use recurring hooks")
+                        recurring_callers.append(
+                            (script_location(relative, text, text.index(block)), hook)
+                        )
+        self.assertEqual(
+            recurring_callers, [], "party identity sync must never use recurring hooks"
+        )
 
         sync_sites = [
             (relative, match.group(1), match.start())
@@ -492,7 +917,9 @@ class PartyIdentityLifecycleTests(unittest.TestCase):
         for relative, name, start in sync_sites:
             key = (relative, name)
             if remaining[key]:
-                unexpected_locations.append(script_location(relative, sources[relative], start))
+                unexpected_locations.append(
+                    script_location(relative, sources[relative], start)
+                )
                 remaining[key] -= 1
         self.assertEqual(
             actual,

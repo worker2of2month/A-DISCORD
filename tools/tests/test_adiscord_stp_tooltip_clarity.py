@@ -10,9 +10,14 @@ TOOLTIPS = ROOT / "localisation/russian/ADISCORD_STP_l_russian.yml"
 
 
 class STPTooltipClarityTests(unittest.TestCase):
-    def test_niansas_transfer_requirements_are_explicit_at_every_decision_point(self) -> None:
+    def test_niansas_transfer_requirements_are_explicit_at_every_decision_point(
+        self,
+    ) -> None:
         self.assertTrue(TOOLTIPS.is_file(), "missing canonical STP localisation")
-        self.assertTrue(TOOLTIPS.read_bytes().startswith(b"\xef\xbb\xbf"), "tooltip override must keep UTF-8 BOM")
+        self.assertTrue(
+            TOOLTIPS.read_bytes().startswith(b"\xef\xbb\xbf"),
+            "tooltip override must keep UTF-8 BOM",
+        )
         localisation = TOOLTIPS.read_text(encoding="utf-8-sig")
 
         required_keys = (
@@ -23,7 +28,9 @@ class STPTooltipClarityTests(unittest.TestCase):
         )
         for key in required_keys:
             with self.subTest(key=key):
-                self.assertEqual(len(re.findall(rf"(?m)^\s*{re.escape(key)}:\s*", localisation)), 1)
+                self.assertEqual(
+                    len(re.findall(rf"(?m)^\s*{re.escape(key)}:\s*", localisation)), 1
+                )
 
         for phrase in (
             "90%",

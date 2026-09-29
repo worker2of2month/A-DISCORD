@@ -44,7 +44,9 @@ def issue_report(issues: list[str]) -> str:
 
 class DiplomacyValidatorHelperTests(unittest.TestCase):
     def test_ai_worx_lend_lease_is_limited_to_his_own_bloc(self) -> None:
-        source = read(Path("common/scripted_triggers/00_diplo_action_valid_triggers.txt"))
+        source = read(
+            Path("common/scripted_triggers/00_diplo_action_valid_triggers.txt")
+        )
         trigger = named_block(source, "is_diplomatic_action_valid_lend_lease")
         self.assertIn("ADISCORD_diplomacy_not_dirty_zone_pair = yes", trigger)
         self.assertEqual(trigger.count("character = TVA_Dorian_Worx"), 2)
@@ -91,9 +93,15 @@ AND = {
 
 class RegionalTerminalManifestTests(unittest.TestCase):
     def test_exact_solar_and_volnograd_packages_have_three_winners_each(self) -> None:
-        solar = [contract for contract in TERMINAL_CONTRACTS.values() if contract[2] == SOLAR_STATES]
+        solar = [
+            contract
+            for contract in TERMINAL_CONTRACTS.values()
+            if contract[2] == SOLAR_STATES
+        ]
         volnograd = [
-            contract for contract in TERMINAL_CONTRACTS.values() if contract[2] == VOLNOGRAD_STATES
+            contract
+            for contract in TERMINAL_CONTRACTS.values()
+            if contract[2] == VOLNOGRAD_STATES
         ]
         self.assertEqual({contract[0] for contract in solar}, {"SOL", "SRA", "CSL"})
         self.assertEqual({contract[0] for contract in volnograd}, {"VLA", "EBA", "TGD"})
@@ -110,7 +118,9 @@ class RegionalTerminalManifestTests(unittest.TestCase):
 
 
 class PeacefulAllianceTests(unittest.TestCase):
-    def test_sol_and_vla_accept_through_delayed_events_without_offer_side_effects(self) -> None:
+    def test_sol_and_vla_accept_through_delayed_events_without_offer_side_effects(
+        self,
+    ) -> None:
         issues = validate_peaceful_invitations()
         self.assertEqual(issues, [], issue_report(issues))
 
@@ -118,13 +128,16 @@ class PeacefulAllianceTests(unittest.TestCase):
         issues = validate_showdown_allies()
         self.assertEqual(issues, [], issue_report(issues))
 
-
-    def test_late_front_retains_actual_coalition_but_reopens_after_dissolution(self) -> None:
+    def test_late_front_retains_actual_coalition_but_reopens_after_dissolution(
+        self,
+    ) -> None:
         effects = read(DIPLOMACY_EFFECTS)
         helper = named_block(effects, "ADISCORD_vorkerland_leave_inherited_faction")
-        detach_limits = [next(child.value for child in branch.value if child.key == "limit")
-                         for branch in parse_clausewitz(helper)[0].value
-                         if branch.key in ("if", "else_if")]
+        detach_limits = [
+            next(child.value for child in branch.value if child.key == "limit")
+            for branch in parse_clausewitz(helper)[0].value
+            if branch.key in ("if", "else_if")
+        ]
         auxiliary = "ADISCORD_vorkerland_regional_auxiliary"
         factions = {"WKR": "WKR", "VHV": "WKR", "TVA": None, "VAD": None}
         flags = {"VHV": {auxiliary}}
@@ -136,20 +149,29 @@ class PeacefulAllianceTests(unittest.TestCase):
                 if key == "AND":
                     return evaluate(value, scope, previous)
                 if key == "NOT":
-                    return not any(evaluate([child], scope, previous) for child in value)
+                    return not any(
+                        evaluate([child], scope, previous) for child in value
+                    )
                 if key == "OR":
                     return any(evaluate([child], scope, previous) for child in value)
                 if key == "faction_leader":
                     leader = factions.get(scope)
                     return bool(leader) and evaluate(value, leader, scope)
                 if key == "any_allied_country":
-                    return any(tag != scope and faction and faction == factions.get(scope)
-                               and evaluate(value, tag, scope) for tag, faction in factions.items())
+                    return any(
+                        tag != scope
+                        and faction
+                        and faction == factions.get(scope)
+                        and evaluate(value, tag, scope)
+                        for tag, faction in factions.items()
+                    )
                 if key in factions and isinstance(value, list):
                     return evaluate(value, key, scope)
                 if key == "is_in_faction_with":
                     target = {"ROOT": root, "PREV": previous}.get(value, value)
-                    return bool(factions.get(scope)) and factions.get(scope) == factions.get(target)
+                    return bool(factions.get(scope)) and factions.get(
+                        scope
+                    ) == factions.get(target)
                 if key == "tag":
                     return scope == value
                 if key == "has_country_flag":
@@ -158,70 +180,134 @@ class PeacefulAllianceTests(unittest.TestCase):
                     return True
                 if key == "ADISCORD_vorkerland_is_main_claimant":
                     return (scope in ("WKR", "VAD", "TVA")) == (value == "yes")
-                if key in ("is_in_faction", "is_faction_leader", "exists", "is_subject", "has_capitulated"):
-                    actual = {"is_in_faction": bool(factions.get(scope)),
-                              "is_faction_leader": factions.get(scope) == scope,
-                              "exists": scope in factions, "is_subject": False,
-                              "has_capitulated": False}[key]
+                if key in (
+                    "is_in_faction",
+                    "is_faction_leader",
+                    "exists",
+                    "is_subject",
+                    "has_capitulated",
+                ):
+                    actual = {
+                        "is_in_faction": bool(factions.get(scope)),
+                        "is_faction_leader": factions.get(scope) == scope,
+                        "exists": scope in factions,
+                        "is_subject": False,
+                        "has_capitulated": False,
+                    }[key]
                     return actual == (value == "yes")
                 if key == "has_war_with":
                     return False
                 raise AssertionError(f"Unsupported coalition predicate: {key}")
+
             return all(matches(entry) for entry in items)
 
         def detaches(scope):
             return any(evaluate(limit, scope) for limit in detach_limits)
 
-        remaining = named_block(effects, "ADISCORD_vorkerland_attempt_remaining_central_fronts")
-        front = next(branch for branch in named_blocks(remaining, "if")
-                     if "declare_war_on = { target = VHV type = annex_everything }" in compact(branch)
-                     and branch.count("declare_war_on") == 1)
+        remaining = named_block(
+            effects, "ADISCORD_vorkerland_attempt_remaining_central_fronts"
+        )
+        front = next(
+            branch
+            for branch in named_blocks(remaining, "if")
+            if "declare_war_on = { target = VHV type = annex_everything }"
+            in compact(branch)
+            and branch.count("declare_war_on") == 1
+        )
         front_limit = parse_clausewitz(named_block(front, "limit"))[0].value
-        self.assertFalse(evaluate(front_limit, "TVA"), "an auxiliary is reached through its existing coalition war")
-        self.assertFalse(detaches("VHV"), "a new attacker must not remove the auxiliary")
-        self.assertFalse(detaches("WKR"), "a new offensive must not dismantle its own coalition")
+        self.assertFalse(
+            evaluate(front_limit, "TVA"),
+            "an auxiliary is reached through its existing coalition war",
+        )
+        self.assertFalse(
+            detaches("VHV"), "a new attacker must not remove the auxiliary"
+        )
+        self.assertFalse(
+            detaches("WKR"), "a new offensive must not dismantle its own coalition"
+        )
         root = "WKR"
-        self.assertFalse(evaluate(front_limit, "WKR"), "the host cannot attack its own auxiliary")
+        self.assertFalse(
+            evaluate(front_limit, "WKR"), "the host cannot attack its own auxiliary"
+        )
         factions["VHV"] = None
-        self.assertTrue(evaluate(front_limit, "WKR"), "a historical marker cannot protect a former ally")
-        self.assertTrue(detaches("WKR"), "the empty coalition no longer needs protection")
+        self.assertTrue(
+            evaluate(front_limit, "WKR"),
+            "a historical marker cannot protect a former ally",
+        )
+        self.assertTrue(
+            detaches("WKR"), "the empty coalition no longer needs protection"
+        )
         factions["VHV"] = "OLD"
         factions["OLD"] = "OLD"
-        self.assertTrue(detaches("VHV"), "an inherited unrelated faction remains detachable")
-        terminal = named_block(effects, "ADISCORD_vorkerland_prepare_claimants_for_formation")
+        self.assertTrue(
+            detaches("VHV"), "an inherited unrelated faction remains detachable"
+        )
+        terminal = named_block(
+            effects, "ADISCORD_vorkerland_prepare_claimants_for_formation"
+        )
         self.assertNotIn("ADISCORD_vorkerland_leave_inherited_faction", terminal)
         self.assertEqual(terminal.count("dismantle_faction = yes"), 3)
-        events = read(DIPLOMACY_EFFECTS.parents[2] / "events/ADISCORD_vorkerland_events.txt")
+        events = read(
+            DIPLOMACY_EFFECTS.parents[2] / "events/ADISCORD_vorkerland_events.txt"
+        )
         for event_id, recipient, host, pending in (
-            (2, "SOL", "VAD", "vad_sol"), (3, "VLA", "WKR", "wkr_vla"),
+            (2, "SOL", "VAD", "vad_sol"),
+            (3, "VLA", "WKR", "wkr_vla"),
         ):
-            invitation = event_block(events, f"ADISCORD_vorkerland_diplomacy.{event_id}")
+            invitation = event_block(
+                events, f"ADISCORD_vorkerland_diplomacy.{event_id}"
+            )
             option = named_block(invitation, "option")
             option_limit = parse_clausewitz(named_block(option, "trigger"))[0].value
             root = recipient
             flags[host] = {f"ADISCORD_vorkerland_{pending}_invitation_pending"}
             flags[recipient] = {auxiliary}
             other = "WKR" if host == "VAD" else "VAD"
-            for leader, expected in ((None, True), (host, True), (other, False), ("OLD", True)):
+            for leader, expected in (
+                (None, True),
+                (host, True),
+                (other, False),
+                ("OLD", True),
+            ):
                 factions.update({host: host, other: other, recipient: leader})
-                self.assertEqual(evaluate(option_limit, recipient), expected, (recipient, leader))
-        hooks = read_country_on_actions(DIPLOMACY_EFFECTS.parents[2] / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+                self.assertEqual(
+                    evaluate(option_limit, recipient), expected, (recipient, leader)
+                )
+        hooks = read_country_on_actions(
+            DIPLOMACY_EFFECTS.parents[2]
+            / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         war_hook = named_block(hooks, "on_war_relation_added")
         for host, enemy in (("ROOT", "FROM"), ("FROM", "ROOT")):
             host_scope = named_block(war_hook, host)
-            self.assertIn("ADISCORD_vorkerland_is_main_claimant = yes", named_block(host_scope, "limit"))
+            self.assertIn(
+                "ADISCORD_vorkerland_is_main_claimant = yes",
+                named_block(host_scope, "limit"),
+            )
             allies = named_block(host_scope, "every_allied_country")
             self.assertIn("is_in_faction_with = PREV", named_block(allies, "limit"))
-            self.assertIn(f"NOT = {{ has_war_with = {enemy} }}", named_block(allies, "limit"))
-            self.assertIn("country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }", allies)
+            self.assertIn(
+                f"NOT = {{ has_war_with = {enemy} }}", named_block(allies, "limit")
+            )
+            self.assertIn(
+                "country_event = { id = ADISCORD_vorkerland_collapse.93 days = 1 }",
+                allies,
+            )
         self.assertNotIn("every_country", war_hook)
-        membership = named_block(effects, "ADISCORD_vorkerland_verify_coalition_membership")
-        self.assertIn("NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }",
-                      compact(named_block(named_block(membership, "if"), "limit")))
+        membership = named_block(
+            effects, "ADISCORD_vorkerland_verify_coalition_membership"
+        )
+        self.assertIn(
+            "NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }",
+            compact(named_block(named_block(membership, "if"), "limit")),
+        )
 
 
 class SolarInterventionTests(unittest.TestCase):
-    def test_intervention_has_exact_reachable_edges_and_verified_restoration(self) -> None:
+    def test_intervention_has_exact_reachable_edges_and_verified_restoration(
+        self,
+    ) -> None:
         self.assertEqual(VAD_SOLAR_BORDER_PAIRS, ((81, 307), (110, 198), (110, 307)))
         issues = validate_vad_intervention_and_restoration()
         self.assertEqual(issues, [], issue_report(issues))
@@ -262,7 +348,10 @@ class SolarInterventionTests(unittest.TestCase):
         self.assertEqual(issues, [], issue_report(issues))
 
     def test_gordon_is_carried_across_annex_and_returned_before_promotion(self) -> None:
-        on_capitulation = named_block(read_country_on_actions(DIPLOMACY_ON_ACTIONS, 'vorkerland_diplomacy'), "on_capitulation")
+        on_capitulation = named_block(
+            read_country_on_actions(DIPLOMACY_ON_ACTIONS, 'vorkerland_diplomacy'),
+            "on_capitulation",
+        )
         settlement = next(
             block
             for block in named_blocks(on_capitulation, "if")

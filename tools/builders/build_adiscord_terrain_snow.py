@@ -56,10 +56,10 @@ CITY_PALETTE_INDICES = frozenset({2, CITY_PALETTE_INDEX})
 # definition.csv-to-bitmap rewrite from swallowing intentional terrain blends.
 VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset(
     {
-        4443,   # Remmel
-        6192,   # Isaiah
-        8243,   # Old Isaiah
-        8803,   # Verkhovye
+        4443,  # Remmel
+        6192,  # Isaiah
+        8243,  # Old Isaiah
+        8803,  # Verkhovye
         11944,  # Sutritsa
         12443,  # Kairholm
         16560,  # Severin
@@ -115,7 +115,9 @@ def province_color_contract() -> dict[tuple[int, int, int], int]:
         selected[color] = province_id
     missing = sorted(VORKERLAND_GRAPHICAL_URBAN_PROVINCES - definition_ids)
     if missing:
-        raise RuntimeError(f"definition.csv: missing graphical urban provinces {missing}")
+        raise RuntimeError(
+            f"definition.csv: missing graphical urban provinces {missing}"
+        )
     return selected
 
 
@@ -167,11 +169,11 @@ def generated_pixels(
         (
             URBAN_TERRAIN
             if (
-                tuple(province_pixels[index * 3:index * 3 + 3]) in selected_rgb
+                tuple(province_pixels[index * 3 : index * 3 + 3]) in selected_rgb
                 or (
                     city_pixels is not None
                     and city_pixels[index] in CITY_PALETTE_INDICES
-                    and tuple(province_pixels[index * 3:index * 3 + 3]) in land_colors
+                    and tuple(province_pixels[index * 3 : index * 3 + 3]) in land_colors
                 )
             )
             else classify_terrain(value, index // width, height_pixels[index])
@@ -191,7 +193,7 @@ def urban_coverage_issues(
     counts = {province_id: [0, 0] for province_id in selected_colors.values()}
     id_by_color = selected_colors
     for index, terrain_value in enumerate(pixels):
-        color = tuple(province_pixels[index * 3:index * 3 + 3])
+        color = tuple(province_pixels[index * 3 : index * 3 + 3])
         province_id = id_by_color.get(color)
         if province_id is None:
             continue
@@ -266,7 +268,9 @@ def validate() -> list[str]:
         or not HEIGHTMAP_PATH.exists()
         or not PROVINCES_PATH.exists()
     ):
-        return ["map/terrain.bmp, map/cities.bmp, map/heightmap.bmp, or map/provinces.bmp is missing"]
+        return [
+            "map/terrain.bmp, map/cities.bmp, map/heightmap.bmp, or map/provinces.bmp is missing"
+        ]
     try:
         selected_colors = province_color_contract()
     except (OSError, RuntimeError, ValueError) as error:
@@ -336,7 +340,11 @@ def apply() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     actions = parser.add_mutually_exclusive_group()
-    actions.add_argument("--check", action="store_true", help="validate current generated output (default)")
+    actions.add_argument(
+        "--check",
+        action="store_true",
+        help="validate current generated output (default)",
+    )
     actions.add_argument("--apply", action="store_true", help="write map/terrain.bmp")
     args = parser.parse_args()
     if args.apply:

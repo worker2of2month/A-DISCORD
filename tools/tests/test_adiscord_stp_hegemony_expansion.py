@@ -10,7 +10,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def read(relative: str) -> str:
     path = ROOT / relative
-    return read_focus_source(path, encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8")
+    return read_focus_source(
+        path, encoding="utf-8-sig" if path.suffix == ".yml" else "utf-8"
+    )
 
 
 def named_block(text: str, name: str) -> str:
@@ -37,7 +39,7 @@ def named_block(text: str, name: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return text[match.start(): index + 1]
+                return text[match.start() : index + 1]
     raise AssertionError(f"unclosed block {name}")
 
 
@@ -48,12 +50,22 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
 
         self.assertIn('name = "GFX_portrait_STP_Maksim_Shabrat_hegemony"', gfx)
-        self.assertIn('texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_uniform.png"', gfx)
+        self.assertIn(
+            'texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_uniform.png"',
+            gfx,
+        )
         self.assertIn('name = "GFX_portrait_STP_Maksim_Shabrat_freedom"', gfx)
-        self.assertIn('texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_alternative.png"', gfx)
+        self.assertIn(
+            'texturefile = "gfx/leaders/STP/portrait_STP_Maksim_Shabrat_alternative.png"',
+            gfx,
+        )
 
-        hegemony = re.search(r"(?ms)id = STP_pc_hegemony_open\b.*?(?=\n\tfocus = \{)", focuses)
-        freedom = re.search(r"(?ms)id = STP_pc_freedom_open\b.*?(?=\n\tfocus = \{)", focuses)
+        hegemony = re.search(
+            r"(?ms)id = STP_pc_hegemony_open\b.*?(?=\n\tfocus = \{)", focuses
+        )
+        freedom = re.search(
+            r"(?ms)id = STP_pc_freedom_open\b.*?(?=\n\tfocus = \{)", focuses
+        )
         self.assertIsNotNone(hegemony)
         self.assertIsNotNone(freedom)
         self.assertIn("set_portraits", hegemony.group(0))
@@ -89,7 +101,9 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         )
         self.assertIn('name = "GFX_focus_ADISCORD_All_In_shine"', shine)
         self.assertTrue(
-            (ROOT / "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png").is_file()
+            (
+                ROOT / "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
+            ).is_file()
         )
         self.assertFalse(
             (ROOT / "gfx/interface/goals/_spare/STP/GFX_focus_STP_All_In.png").exists()
@@ -107,10 +121,14 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
             self.assertEqual(focuses.count(f"id = {focus_id}"), 1, focus_id)
         north = named_block(effects, "STP_heg_start_northern_final_war")
         for tag in ("NOD", "YPR", "TFF"):
-            self.assertIn(f"declare_war_on = {{ target = {tag} type = annex_everything }}", north)
+            self.assertIn(
+                f"declare_war_on = {{ target = {tag} type = annex_everything }}", north
+            )
         self.assertNotIn("target = VAL", north)
         kefreyt = named_block(effects, "STP_heg_start_kefreyt_final_war")
-        self.assertIn("declare_war_on = { target = VAL type = annex_everything }", kefreyt)
+        self.assertIn(
+            "declare_war_on = { target = VAL type = annex_everything }", kefreyt
+        )
         resolved = named_block(triggers, "STP_heg_northern_final_resolved")
         for tag in ("NOD", "YPR", "TFF"):
             self.assertIn(f"NOT = {{ has_war_with = {tag} }}", resolved)
@@ -130,7 +148,9 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
     def test_second_kefreyt_war_uses_distinct_scripted_peace(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         peace = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
-        hegemony_actions = read("common/on_actions/11_ADISCORD_STP_hegemony_on_actions.txt")
+        hegemony_actions = read(
+            "common/on_actions/11_ADISCORD_STP_hegemony_on_actions.txt"
+        )
         settlement = named_block(effects, "STP_heg_settle_kefreyt_final")
         self.assertIn("STP_pc_recover_stelander_cores_from_val = yes", settlement)
         self.assertIn("every_enemy_country = {", settlement)
@@ -138,7 +158,9 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         self.assertNotIn("VAL_enter_stelander_defeat", settlement)
         self.assertIn("STP_heg_settle_kefreyt_final = yes", peace)
         self.assertIn("on_war_relation_added = {", hegemony_actions)
-        self.assertIn("set_country_flag = STP_heg_kefreyt_final_member", hegemony_actions)
+        self.assertIn(
+            "set_country_flag = STP_heg_kefreyt_final_member", hegemony_actions
+        )
 
     def test_late_hegemony_focuses_are_shorter(self) -> None:
         focuses = read("common/national_focus/ADISCORD_national_focus_STP.txt")
@@ -154,7 +176,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         for focus_id, cost in expected.items():
             start = focuses.index(f"id = {focus_id}")
             end = focuses.find("\n\tfocus = {", start)
-            block = focuses[start:end if end != -1 else len(focuses)]
+            block = focuses[start : end if end != -1 else len(focuses)]
             self.assertIn(f"cost = {cost}", block, focus_id)
 
     def test_hegemony_can_nationalise_without_generic_citizenship_focus(self) -> None:
@@ -164,7 +186,9 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         self.assertIn("has_completed_focus = STP_pw_regional_citizenship", nationalise)
 
     def test_provisional_administrations_are_closed_and_annexable(self) -> None:
-        autonomy = read("common/autonomous_states/ADISCORD_STP_provisional_administration.txt")
+        autonomy = read(
+            "common/autonomous_states/ADISCORD_STP_provisional_administration.txt"
+        )
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         self.assertIn("id = autonomy_STP_provisional_administration", autonomy)
@@ -176,8 +200,12 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
             self.assertIn(f"STP_heg_establish_{key}_administration = {{", decisions)
             self.assertIn(f"STP_heg_annex_{key}_administration = {{", decisions)
         self.assertEqual(decisions.count("days_remove = 90"), 4)
-        self.assertEqual(named_block(decisions, "STP_hegemony_administration").count("cost = 100"), 4)
-        self.assertGreaterEqual(effects.count("autonomy_STP_provisional_administration"), 8)
+        self.assertEqual(
+            named_block(decisions, "STP_hegemony_administration").count("cost = 100"), 4
+        )
+        self.assertGreaterEqual(
+            effects.count("autonomy_STP_provisional_administration"), 8
+        )
 
     def test_defeat_receipts_gate_new_administrations(self) -> None:
         on_actions = read("common/on_actions/11_ADISCORD_STP_hegemony_on_actions.txt")
@@ -200,9 +228,15 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
-        bezhaysk = re.search(r"(?ms)id = STP_pw_take_bezhaysk\\b.*?(?=\\n\\tfocus = \\{)", focuses)
-        nodrul = re.search(r"(?ms)id = STP_pc_heg_nod_break\\b.*?(?=\\n\\tfocus = \\{)", focuses)
-        kefreyt = re.search(r"(?ms)id = STP_pc_heg_val_audit\\b.*?(?=\\n\\tfocus = \\{)", focuses)
+        bezhaysk = re.search(
+            r"(?ms)id = STP_pw_take_bezhaysk\\b.*?(?=\\n\\tfocus = \\{)", focuses
+        )
+        nodrul = re.search(
+            r"(?ms)id = STP_pc_heg_nod_break\\b.*?(?=\\n\\tfocus = \\{)", focuses
+        )
+        kefreyt = re.search(
+            r"(?ms)id = STP_pc_heg_val_audit\\b.*?(?=\\n\\tfocus = \\{)", focuses
+        )
         self.assertIsNotNone(bezhaysk)
         self.assertIsNotNone(nodrul)
         self.assertIsNotNone(kefreyt)

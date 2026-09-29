@@ -37,7 +37,7 @@ def focus_block(source: str, focus_id: str) -> str:
         elif char == "}":
             depth -= 1
             if depth == 0:
-                return source[start:index + 1]
+                return source[start : index + 1]
     raise AssertionError(f"unterminated focus: {focus_id}")
 
 
@@ -120,7 +120,9 @@ class KefreytFocusLayoutTests(unittest.TestCase):
 
     def test_existing_campaign_gates_are_preserved(self) -> None:
         conference = focus_block(self.focuses, "VAL_frontier_conference")
-        prerequisites = " ".join(re.findall(r"prerequisite\s*=\s*\{([^}]+)\}", conference))
+        prerequisites = " ".join(
+            re.findall(r"prerequisite\s*=\s*\{([^}]+)\}", conference)
+        )
         for focus_id in (
             "VAL_Contracts_Outlive_Kings",
             "VAL_One_Ledger_One_Banner",
@@ -177,7 +179,7 @@ class KefreytWarTooltipTests(unittest.TestCase):
                 elif char == "}":
                     depth -= 1
                     if depth == 0:
-                        block = self.focuses[start:index + 1]
+                        block = self.focuses[start : index + 1]
                         id_match = re.search(r"\bid\s*=\s*([A-Za-z0-9_]+)", block)
                         if id_match and "declare_war_on" in block:
                             direct_wars.append(id_match.group(1))
@@ -187,20 +189,32 @@ class KefreytWarTooltipTests(unittest.TestCase):
         for focus_id, tooltip in expected.items():
             block = focus_block(self.focuses, focus_id)
             self.assertIn(f"custom_effect_tooltip = {tooltip}", block)
-            ru_line = next(line for line in self.ru.splitlines() if line.strip().startswith(tooltip + ":"))
-            en_line = next(line for line in self.en.splitlines() if line.strip().startswith(tooltip + ":"))
+            ru_line = next(
+                line
+                for line in self.ru.splitlines()
+                if line.strip().startswith(tooltip + ":")
+            )
+            en_line = next(
+                line
+                for line in self.en.splitlines()
+                if line.strip().startswith(tooltip + ":")
+            )
             self.assertIn("Объявляет войну", ru_line)
             self.assertIn("Declares war", en_line)
 
     def test_preparation_focuses_do_not_pretend_to_declare_war(self) -> None:
         passes = focus_block(self.focuses, "VAL_Seize_The_Northern_Passes")
         self.assertNotIn("declare_war_on", passes)
-        self.assertIn("custom_effect_tooltip = VAL_stelander_military_course_tt", passes)
+        self.assertIn(
+            "custom_effect_tooltip = VAL_stelander_military_course_tt", passes
+        )
         self.assertIn("Сам фокус войну не объявляет", self.ru)
 
         mandate = focus_block(self.focuses, "VAL_frontier_security_plan")
         self.assertNotIn("declare_war_on", mandate)
-        self.assertIn("custom_effect_tooltip = VAL_frontier_security_plan_war_tt", mandate)
+        self.assertIn(
+            "custom_effect_tooltip = VAL_frontier_security_plan_war_tt", mandate
+        )
         self.assertIn("Отказ позволяет начать войну отдельным решением", self.ru)
 
     def test_localisation_files_keep_bom(self) -> None:
@@ -210,7 +224,9 @@ class KefreytWarTooltipTests(unittest.TestCase):
             "localisation/english/ADISCORD_VAL_logistics_market_l_english.yml",
             "localisation/russian/ADISCORD_VAL_logistics_market_l_russian.yml",
         ):
-            self.assertTrue((ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative)
+            self.assertTrue(
+                (ROOT / relative).read_bytes().startswith(b"\xef\xbb\xbf"), relative
+            )
 
 
 if __name__ == "__main__":

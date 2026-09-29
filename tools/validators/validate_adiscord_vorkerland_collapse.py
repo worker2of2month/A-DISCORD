@@ -68,9 +68,7 @@ from tools.lib.paths import source_section
 
 ROOT = Path(__file__).resolve().parents[2]
 
-FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
-)
+FOCUS_DECISION_FILES = (Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),)
 SECTIONS = (
     "manifest",
     "states",
@@ -83,8 +81,24 @@ SECTIONS = (
     "superevents",
 )
 PERIPHERY_STATES = (
-    40, 71, 72, 73, 74, 76, 80, 90, 91, 93, 94, 105, 144, 145,
-    *range(194, 200), *range(306, 326), 327, 328,
+    40,
+    71,
+    72,
+    73,
+    74,
+    76,
+    80,
+    90,
+    91,
+    93,
+    94,
+    105,
+    144,
+    145,
+    *range(194, 200),
+    *range(306, 326),
+    327,
+    328,
 )
 STALE_SYSTEM_TOKENS = (
     "ADISCORD_vorkerland_stalemate",
@@ -94,26 +108,59 @@ STALE_SYSTEM_TOKENS = (
     "ADISCORD_vorkerland_ai_regional_window",
 )
 CENTRAL_MINOR_TARGETS = (
-    "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV",
+    "EYR",
+    "EGC",
+    "RIV",
+    "REV",
+    "YOR",
+    "NDN",
+    "SWB",
+    "VHV",
+    "OSV",
 )
 INITIAL_CENTRAL_BORDER_PAIRS = {
-    frozenset(pair) for pair in (
-        ("WKR", "TVA"), ("WKR", "RIV"), ("WKR", "NDN"), ("WKR", "SWB"),
-        ("VAD", "EYR"), ("VAD", "EGC"), ("VAD", "YOR"),
-        ("TVA", "EYR"), ("TVA", "EGC"), ("TVA", "RIV"),
-        ("TVA", "REV"), ("TVA", "SWB"), ("TVA", "OSV"),
-        ("EYR", "EGC"), ("EYR", "YOR"), ("EYR", "REV"),
-        ("EGC", "RIV"), ("RIV", "NDN"), ("RIV", "VHV"),
-        ("REV", "OSV"), ("NDN", "SWB"), ("NDN", "VHV"),
-        ("NDN", "OSV"), ("SWB", "OSV"),
+    frozenset(pair)
+    for pair in (
+        ("WKR", "TVA"),
+        ("WKR", "RIV"),
+        ("WKR", "NDN"),
+        ("WKR", "SWB"),
+        ("VAD", "EYR"),
+        ("VAD", "EGC"),
+        ("VAD", "YOR"),
+        ("TVA", "EYR"),
+        ("TVA", "EGC"),
+        ("TVA", "RIV"),
+        ("TVA", "REV"),
+        ("TVA", "SWB"),
+        ("TVA", "OSV"),
+        ("EYR", "EGC"),
+        ("EYR", "YOR"),
+        ("EYR", "REV"),
+        ("EGC", "RIV"),
+        ("RIV", "NDN"),
+        ("RIV", "VHV"),
+        ("REV", "OSV"),
+        ("NDN", "SWB"),
+        ("NDN", "VHV"),
+        ("NDN", "OSV"),
+        ("SWB", "OSV"),
     )
 }
 INITIAL_LOCAL_BORDER_PAIRS = {
-    frozenset(pair) for pair in (
-        ("ZAO", "WPS"), ("WPA", "WPS"), ("PWR", "PSD"),
-        ("VLA", "EBA"), ("VLA", "TGD"), ("EBA", "TGD"),
-        ("ROM", "DVA"), ("SOL", "SRA"), ("SOL", "CSL"),
-        ("SRA", "CSL"), ("TRU", "ZTA"),
+    frozenset(pair)
+    for pair in (
+        ("ZAO", "WPS"),
+        ("WPA", "WPS"),
+        ("PWR", "PSD"),
+        ("VLA", "EBA"),
+        ("VLA", "TGD"),
+        ("EBA", "TGD"),
+        ("ROM", "DVA"),
+        ("SOL", "SRA"),
+        ("SOL", "CSL"),
+        ("SRA", "CSL"),
+        ("TRU", "ZTA"),
     )
 }
 # The authored local rivalry table, in attacker -> defender direction. The
@@ -121,16 +168,33 @@ INITIAL_LOCAL_BORDER_PAIRS = {
 # in-game definition of these edges; this constant pins it so a rivalry can
 # never be dropped or silently redirected at a main claimant.
 LOCAL_RIVALRY_EDGES = (
-    ("ZAO", "WPA"), ("WPS", "ZAO"), ("ZAO", "PSD"), ("PWR", "ZAO"),
-    ("WPA", "PSD"), ("WPA", "PWR"), ("WPS", "PSD"), ("WPS", "PWR"),
+    ("ZAO", "WPA"),
+    ("WPS", "ZAO"),
+    ("ZAO", "PSD"),
+    ("PWR", "ZAO"),
+    ("WPA", "PSD"),
+    ("WPA", "PWR"),
+    ("WPS", "PSD"),
+    ("WPS", "PWR"),
     ("PWR", "PSD"),
-    ("VLA", "EBA"), ("VLA", "TGD"), ("TGD", "EBA"),
-    ("SOL", "SRA"), ("SOL", "CSL"), ("SRA", "CSL"),
-    ("ROM", "DVA"), ("TRU", "ZTA"),
-    ("EGC", "EYR"), ("EYR", "YOR"),
-    ("SWB", "NDN"), ("SWB", "OSV"), ("REV", "OSV"),
+    ("VLA", "EBA"),
+    ("VLA", "TGD"),
+    ("TGD", "EBA"),
+    ("SOL", "SRA"),
+    ("SOL", "CSL"),
+    ("SRA", "CSL"),
+    ("ROM", "DVA"),
+    ("TRU", "ZTA"),
+    ("EGC", "EYR"),
+    ("EYR", "YOR"),
+    ("SWB", "NDN"),
+    ("SWB", "OSV"),
+    ("REV", "OSV"),
     ("RIV", "VHV"),
-    ("RZA", "MLR"), ("RZA", "IRT"), ("IRT", "ERT"), ("ERT", "SCA"),
+    ("RZA", "MLR"),
+    ("RZA", "IRT"),
+    ("IRT", "ERT"),
+    ("ERT", "SCA"),
 )
 # The two bracket stages that the parameterised builder launches. The seventeen
 # peripheral rivalries keep their own decision-driven launch and are therefore
@@ -163,12 +227,18 @@ EMERGENCY_TEMPLATE_REQUIRED_METADATA = {
 # The six central pairs are already asserted to share a physical state border by
 # the countries section through INITIAL_CENTRAL_BORDER_PAIRS.
 NEW_CENTRAL_BRACKET_EDGES = (
-    ("EGC", "EYR"), ("EYR", "YOR"),
-    ("SWB", "NDN"), ("SWB", "OSV"), ("REV", "OSV"),
+    ("EGC", "EYR"),
+    ("EYR", "YOR"),
+    ("SWB", "NDN"),
+    ("SWB", "OSV"),
+    ("REV", "OSV"),
     ("RIV", "VHV"),
 )
 NEW_CLOSED_ZONE_BRACKET_EDGES = (
-    ("RZA", "MLR"), ("RZA", "IRT"), ("IRT", "ERT"), ("ERT", "SCA"),
+    ("RZA", "MLR"),
+    ("RZA", "IRT"),
+    ("IRT", "ERT"),
+    ("ERT", "SCA"),
 )
 LOCAL_BRACKET_LOC_KEYS = (
     "ADISCORD_vorkerland_join_claimant_coalition",
@@ -234,7 +304,7 @@ def named_block(source: str, name: str) -> str:
         elif not quoted and char == "}":
             depth -= 1
             if depth == 0:
-                return source[match.start():index + 1]
+                return source[match.start() : index + 1]
     return ""
 
 
@@ -243,15 +313,13 @@ def named_blocks(source: str, name: str) -> list[str]:
     blocks: list[str] = []
     pattern = re.compile(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{")
     for match in pattern.finditer(source):
-        block = named_block(source[match.start():], name)
+        block = named_block(source[match.start() :], name)
         if block:
             blocks.append(block)
     return blocks
 
 
-def event_block(
-    source: str, event_id: str, event_type: str = "country_event"
-) -> str:
+def event_block(source: str, event_id: str, event_type: str = "country_event") -> str:
     """Return the balanced top-level event whose own header declares event_id."""
     for match in re.finditer(
         rf"(?m)^{re.escape(event_type)}\s*=\s*\{{",
@@ -273,7 +341,7 @@ def event_block(
             elif not quoted and char == "}":
                 depth -= 1
                 if depth == 0:
-                    block = source[match.start():index + 1]
+                    block = source[match.start() : index + 1]
                     header = re.match(
                         rf"(?ms)^{re.escape(event_type)}\s*=\s*\{{[^\r\n]*\r?\n\s*"
                         r"id\s*=\s*([^\s}]+)",
@@ -301,8 +369,10 @@ def scalar(source: str, key: str) -> float | None:
 def initial_tag_states(effects: str, tag: str) -> set[int]:
     """Return states explicitly assigned to a tag by the collapse setup."""
     initial = named_block(effects, "ADISCORD_vorkerland_apply_initial_map")
-    source = named_block(initial, tag) + "\n" + named_block(
-        effects, f"ADISCORD_vorkerland_setup_{tag.lower()}"
+    source = (
+        named_block(initial, tag)
+        + "\n"
+        + named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
     )
     return {int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", source)}
 
@@ -318,7 +388,9 @@ def validate_manifest(root: Path, issues: list[str]) -> None:
         issues.append("dirty-state groups overlap")
     if set(dirty) != CONTAMINATED_STATES - {23, 24, 57, 59, 60}:
         issues.append("dirty-state groups no longer cover the playable exclusion zone")
-    remainder = tuple(state for states in EXZ_REMAINDER_GROUPS.values() for state in states)
+    remainder = tuple(
+        state for states in EXZ_REMAINDER_GROUPS.values() for state in states
+    )
     if len(remainder) != len(set(remainder)) or set(remainder) & set(dirty):
         issues.append("EXZ remainder groups overlap playable dirty states")
     if set(STATE_PARTITIONS) != {71, 72, 74, 76, 80}:
@@ -332,12 +404,20 @@ def validate_states(root: Path, issues: list[str]) -> None:
         for state_id, expected in partition.items():
             source = state_source(root, state_id, issues)
             match = re.search(r"provinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
-            actual = {int(value) for value in re.findall(r"\d+", match.group(1))} if match else set()
+            actual = (
+                {int(value) for value in re.findall(r"\d+", match.group(1))}
+                if match
+                else set()
+            )
             if actual != set(expected):
-                issues.append(f"state {state_id}: province partition drifted from source {source_state}")
+                issues.append(
+                    f"state {state_id}: province partition drifted from source {source_state}"
+                )
             actual_union |= actual
         if actual_union != expected_union:
-            issues.append(f"state {source_state}: partition no longer preserves all provinces")
+            issues.append(
+                f"state {source_state}: partition no longer preserves all provinces"
+            )
 
     for state_id in PERIPHERY_STATES:
         if state_id == 326:  # PIV, not a Vorkerland successor state.
@@ -350,10 +430,17 @@ def validate_states(root: Path, issues: list[str]) -> None:
         if supplies is None or supplies < 1.5:
             issues.append(f"state {state_id}: local supply must be at least 1.5")
         if "set_demilitarized_zone = yes" in source:
-            issues.append(f"state {state_id}: stale demilitarized zone freezes the front")
+            issues.append(
+                f"state {state_id}: stale demilitarized zone freezes the front"
+            )
 
     technograd = state_source(root, 105, issues)
-    for token in ("manpower = 9800000", "state_category = megalopolis", "infrastructure = 5", "local_supplies = 10.0"):
+    for token in (
+        "manpower = 9800000",
+        "state_category = megalopolis",
+        "infrastructure = 5",
+        "local_supplies = 10.0",
+    ):
         if token not in technograd:
             issues.append(f"Technograd state 105 is missing {token}")
     if "impassable = yes" in technograd or "state_category = wasteland" in technograd:
@@ -374,18 +461,33 @@ def validate_states(root: Path, issues: list[str]) -> None:
         if actual != expected:
             issues.append(f"TVA state {state_id}: victory-point layout drifted")
 
-    victory_point_loc = read(root, "localisation/russian/victory_points_l_russian.yml", issues)
-    for province in set().union(*(set(points) for points in tva_victory_points.values())):
-        if not re.search(rf"(?m)^\s*VICTORY_POINTS_{province}:\s*\"[^\"]+\"", victory_point_loc):
+    victory_point_loc = read(
+        root, "localisation/russian/victory_points_l_russian.yml", issues
+    )
+    for province in set().union(
+        *(set(points) for points in tva_victory_points.values())
+    ):
+        if not re.search(
+            rf"(?m)^\s*VICTORY_POINTS_{province}:\s*\"[^\"]+\"", victory_point_loc
+        ):
             issues.append(f"TVA victory point {province}: missing Russian city name")
-    for forbidden in ("\u0443\u0437\u0435\u043b", "\u043f\u0435\u0440\u0438\u043c\u0435\u0442\u0440"):
-        if re.search(rf"(?mi)^\s*VICTORY_POINTS_\d+:[^\n]*{forbidden}", victory_point_loc):
+    for forbidden in (
+        "\u0443\u0437\u0435\u043b",
+        "\u043f\u0435\u0440\u0438\u043c\u0435\u0442\u0440",
+    ):
+        if re.search(
+            rf"(?mi)^\s*VICTORY_POINTS_\d+:[^\n]*{forbidden}", victory_point_loc
+        ):
             issues.append(f"Vorkerland victory-point name still contains {forbidden}")
 
 
 def validate_countries(root: Path, issues: list[str]) -> None:
-    tags = read(root, "common/country_tags/01_ADISCORD_vorkerland_collapse_tags.txt", issues)
-    characters = read(root, "common/characters/ADISCORD_vorkerland_collapse_characters.txt", issues)
+    tags = read(
+        root, "common/country_tags/01_ADISCORD_vorkerland_collapse_tags.txt", issues
+    )
+    characters = read(
+        root, "common/characters/ADISCORD_vorkerland_collapse_characters.txt", issues
+    )
     portraits = read(root, "interface/ADISCORD_leader_portraits.gfx", issues)
     random_portraits = read(root, "interface/_random_portraits.gfx", issues)
     for tag in TAGS:
@@ -421,7 +523,9 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     for character, portrait in required_characters.items():
         block = named_block(characters, character)
         if not block or "country_leader" not in block or portrait not in block:
-            issues.append(f"{character}: supplied portrait is not used by a country leader")
+            issues.append(
+                f"{character}: supplied portrait is not used by a country leader"
+            )
         if portrait not in portraits and portrait not in random_portraits:
             issues.append(f"{character}: missing portrait sprite {portrait}")
 
@@ -460,24 +564,36 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "ROM_frealor_republic",
         "TRU_zolotorevsk_republic",
     ):
-        for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+        for directory, size in (
+            ("", (82, 52)),
+            ("medium", (41, 26)),
+            ("small", (10, 7)),
+        ):
             path = root / "gfx" / "flags" / directory / f"{cosmetic}.tga"
             if not path.exists():
                 issues.append(f"missing cosmetic flag {path.relative_to(root)}")
             else:
                 with Image.open(path) as image:
                     if image.size != size:
-                        issues.append(f"{path.relative_to(root)}: expected {size}, got {image.size}")
+                        issues.append(
+                            f"{path.relative_to(root)}: expected {size}, got {image.size}"
+                        )
 
     for tag in ("RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
-        for directory, size in (("", (82, 52)), ("medium", (41, 26)), ("small", (10, 7))):
+        for directory, size in (
+            ("", (82, 52)),
+            ("medium", (41, 26)),
+            ("small", (10, 7)),
+        ):
             path = root / "gfx" / "flags" / directory / f"{tag}.tga"
             if not path.exists():
                 issues.append(f"missing central-country flag {path.relative_to(root)}")
             else:
                 with Image.open(path) as image:
                     if image.size != size:
-                        issues.append(f"{path.relative_to(root)}: expected {size}, got {image.size}")
+                        issues.append(
+                            f"{path.relative_to(root)}: expected {size}, got {image.size}"
+                        )
 
     cosmetic_definitions = read(root, "common/countries/cosmetic.txt", issues)
     for token in (
@@ -499,14 +615,21 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     if pwr_flag.exists() and old_pwr_flag.exists():
         with Image.open(pwr_flag) as new_flag, Image.open(old_pwr_flag) as old_flag:
             if new_flag.convert("RGB").tobytes() == old_flag.convert("RGB").tobytes():
-                issues.append("PWR collapse cosmetic still reuses its administrative flag")
+                issues.append(
+                    "PWR collapse cosmetic still reuses its administrative flag"
+                )
 
     loc_path = root / "localisation" / "russian" / "ADISCORD_vorkerland_l_russian.yml"
     raw = loc_path.read_bytes() if loc_path.exists() else b""
     if not raw.startswith(b"\xef\xbb\xbf"):
         issues.append("Vorkerland Russian localisation must retain UTF-8 BOM")
     loc = raw.decode("utf-8-sig") if raw else ""
-    for token in ('NDN: "Норден"', 'SWB: "Старый Воркенсберг"', 'VHV: "Верховье"', 'OSV: "Оствин"'):
+    for token in (
+        'NDN: "Норден"',
+        'SWB: "Старый Воркенсберг"',
+        'VHV: "Верховье"',
+        'OSV: "Оствин"',
+    ):
         if token not in loc:
             issues.append(f"short border-country name is missing: {token}")
     for banned in (
@@ -518,7 +641,9 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "Йорский временный совет",
     ):
         if banned in loc:
-            issues.append(f"obsolete/cringe country name survived localisation: {banned}")
+            issues.append(
+                f"obsolete/cringe country name survived localisation: {banned}"
+            )
     cosmetic_loc = read(root, "localisation/russian/countries_l_russian.yml", issues)
     for key, name in (
         ("WRK_vorkerland_utilitarian_republic", "Утилитарная Республика Воркерланда"),
@@ -531,26 +656,52 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         if f'{key}: "{name}"' not in cosmetic_loc:
             issues.append(f"{key} lacks its required short country name")
 
-    recovery_en = source_section(read(root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues), 'recovery_l_english')
-    recovery_ru = source_section(read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues), 'recovery_l_russian')
+    recovery_en = source_section(
+        read(root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues),
+        'recovery_l_english',
+    )
+    recovery_ru = source_section(
+        read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues),
+        'recovery_l_russian',
+    )
     for localisation, required, banned in (
-        (recovery_en, "Control Dorian Worx's technical administration.", "Control the utilitarian directorate."),
-        (recovery_ru, "Играть за техническую администрацию Дориана Воркса.", "Играть за утилитарный директорат."),
+        (
+            recovery_en,
+            "Control Dorian Worx's technical administration.",
+            "Control the utilitarian directorate.",
+        ),
+        (
+            recovery_ru,
+            "Играть за техническую администрацию Дориана Воркса.",
+            "Играть за утилитарный директорат.",
+        ),
     ):
         if required not in localisation:
             issues.append(f"Worx claimant choice is missing {required}")
         if banned in localisation:
-            issues.append(f"Worx claimant choice still presents him as utilitarian: {banned}")
+            issues.append(
+                f"Worx claimant choice still presents him as utilitarian: {banned}"
+            )
     for localisation, country_name in (
         (recovery_en, 'WRK_technocracy: "Technocratic Republic of Vorkerland"'),
         (recovery_ru, 'WRK_technocracy: "Технократическая республика Воркерланда"'),
     ):
         if country_name not in localisation:
-            issues.append(f"Dorian's restored technocratic country name is missing {country_name}")
-    if 'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"' not in recovery_en:
-        issues.append("Anton Bagley's utilitarian cosmetic lacks its English country name")
+            issues.append(
+                f"Dorian's restored technocratic country name is missing {country_name}"
+            )
+    if (
+        'WRK_vorkerland_utilitarian_republic: "Utilitarian Republic of Vorkerland"'
+        not in recovery_en
+    ):
+        issues.append(
+            "Anton Bagley's utilitarian cosmetic lacks its English country name"
+        )
 
-    phase_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects')
+    phase_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'phase_effects',
+    )
     tva_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
     for token in (
         "set_country_flag = ADISCORD_vorkerland_route_utilitarian",
@@ -567,9 +718,14 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "GFX_portrait_WRK_Anton_Bagley",
     ):
         if forbidden in tva_formation:
-            issues.append(f"Dorian's technocratic formation still borrows Anton's identity: {forbidden}")
+            issues.append(
+                f"Dorian's technocratic formation still borrows Anton's identity: {forbidden}"
+            )
 
-    collapse_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
+    collapse_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_effects',
+    )
     tva_setup = named_block(collapse_effects, "ADISCORD_vorkerland_setup_tva")
     for token in (
         "ruling_party = technocracy",
@@ -578,14 +734,20 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "portrait = GFX_portrait_WRK_Dorian_Worx",
     ):
         if token not in tva_setup:
-            issues.append(f"TVA materialization is missing Dorian's technocratic identity: {token}")
+            issues.append(
+                f"TVA materialization is missing Dorian's technocratic identity: {token}"
+            )
     for forbidden in (
         "ruling_party = utilitarism",
         "GFX_portrait_WRK_Anton_Bagley",
     ):
         if forbidden in tva_setup:
-            issues.append(f"TVA materialization incorrectly borrows Anton's identity: {forbidden}")
-    claimant_setup = named_block(collapse_effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
+            issues.append(
+                f"TVA materialization incorrectly borrows Anton's identity: {forbidden}"
+            )
+    claimant_setup = named_block(
+        collapse_effects, "ADISCORD_vorkerland_apply_claimant_cosmetics"
+    )
     wkr_setup = named_block(claimant_setup, "WKR")
     anton_path = named_block(wkr_setup, "else")
     for token in (
@@ -596,7 +758,9 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     ):
         if token not in anton_path:
             issues.append(f"Anton Bagley's WKR succession is missing {token}")
-    anton_promoter = named_block(collapse_effects, "ADISCORD_vorkerland_promote_anton_bagley")
+    anton_promoter = named_block(
+        collapse_effects, "ADISCORD_vorkerland_promote_anton_bagley"
+    )
     for token in (
         "has_country_leader = { character = WRK_Anton_Bagley }",
         "promote_character = {",
@@ -604,8 +768,12 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "ideology = utilitarian_accelerationism",
     ):
         if token not in anton_promoter:
-            issues.append(f"Anton Bagley's promotion effect is not transfer-safe: missing {token}")
-    worker_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr")
+            issues.append(
+                f"Anton Bagley's promotion effect is not transfer-safe: missing {token}"
+            )
+    worker_formation = named_block(
+        phase_effects, "ADISCORD_vorkerland_form_wrk_from_wkr"
+    )
     for token in (
         "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
@@ -644,7 +812,9 @@ def validate_countries(root: Path, issues: list[str]) -> None:
                     f"{formation_name} must remove terminal wartime spirit {idea} "
                     f"inside the surviving {source_tag} scope"
                 )
-            elif formation.find(token) >= formation.find(f"change_tag_from = {source_tag}"):
+            elif formation.find(token) >= formation.find(
+                f"change_tag_from = {source_tag}"
+            ):
                 issues.append(
                     f"{formation_name} must remove terminal wartime spirit {idea} "
                     "before the player-tag handoff"
@@ -664,9 +834,13 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         "portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar",
     ):
         if token not in imperial_vad:
-            issues.append(f"Vlad Petrichev's imperial claimant identity is missing {token}")
+            issues.append(
+                f"Vlad Petrichev's imperial claimant identity is missing {token}"
+            )
         if token in joint_vad:
-            issues.append(f"survivor joint government incorrectly borrows Vlad's imperial identity: {token}")
+            issues.append(
+                f"survivor joint government incorrectly borrows Vlad's imperial identity: {token}"
+            )
 
     vad_formation = named_block(phase_effects, "ADISCORD_vorkerland_form_wrk_from_vad")
     joint_identity = re.search(
@@ -682,16 +856,23 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     else:
         limit = joint_identity.group("limit")
         if "ADISCORD_vorkerland_joint_government_formed" not in limit:
-            issues.append("VAD reunification does not key joint identity on the rare council flag")
+            issues.append(
+                "VAD reunification does not key joint identity on the rare council flag"
+            )
         if "ADISCORD_vorkerland_worker_rescued_by_vlad" in limit:
-            issues.append("VAD reunification still treats Worker rescue as the rare joint council")
+            issues.append(
+                "VAD reunification still treats Worker rescue as the rare joint council"
+            )
 
     if re.search(r"\bdesc\s*=\s*[A-Za-z0-9_]+_desc\b", characters):
         issues.append("new Vorkerland leaders still expose in-game biography desc keys")
     for leader in re.findall(r"(?m)^\s*([A-Z]{3}_[A-Za-z0-9_]+)\s*=", characters):
         if f"{leader}_desc:" in loc:
             issues.append(f"{leader}: obsolete in-game biography localisation survived")
-    if "ZTA_Vera_Holt" in characters + portraits + loc or "GFX_portrait_ZTA_Vera_Holt" in portraits:
+    if (
+        "ZTA_Vera_Holt" in characters + portraits + loc
+        or "GFX_portrait_ZTA_Vera_Holt" in portraits
+    ):
         issues.append("the obsolete Vera Holt character reference survived")
     viktor_portrait = root / "gfx" / "leaders" / "ZTA" / "portrait_ZTA_Viktor_Holt.png"
     if not viktor_portrait.exists():
@@ -726,7 +907,9 @@ def validate_premature_wrk_release_contract(
         if token not in forbidden:
             issues.append(f"WRK release-forbidden gate lacks {token}")
     if "exists = yes" in forbidden:
-        issues.append("WRK release-forbidden gate must not require exists: the peace AI evaluates a potential country")
+        issues.append(
+            "WRK release-forbidden gate must not require exists: the peace AI evaluates a potential country"
+        )
 
     release_guard = named_block(
         triggers, "ADISCORD_vorkerland_release_requires_interception"
@@ -757,9 +940,13 @@ def validate_premature_wrk_release_contract(
     for hook_name in ("on_puppet", "on_release_as_puppet", "on_release_as_free"):
         hook = named_block(on_actions, hook_name)
         if hook.count("ADISCORD_vorkerland_release_requires_interception = yes") != 1:
-            issues.append(f"{hook_name} must use the shared premature WRK release guard once")
+            issues.append(
+                f"{hook_name} must use the shared premature WRK release guard once"
+            )
         if hook.count("ADISCORD_vorkerland_intercept_premature_wrk_release = yes") != 1:
-            issues.append(f"{hook_name} must call the shared premature WRK interceptor once")
+            issues.append(
+                f"{hook_name} must call the shared premature WRK interceptor once"
+            )
         for copied_token in (
             "set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1",
             "FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }",
@@ -777,12 +964,20 @@ def validate_premature_wrk_release_contract(
         "ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes",
     ):
         if token not in capitulation:
-            issues.append(f"on_capitulation does not close the premature WRK shell: {token}")
-    stubs_path = _REPOSITORY_ROOT / "common/scripted_triggers/ADISCORD_vanilla_compat_stubs.txt"
+            issues.append(
+                f"on_capitulation does not close the premature WRK shell: {token}"
+            )
+    stubs_path = (
+        _REPOSITORY_ROOT / "common/scripted_triggers/ADISCORD_vanilla_compat_stubs.txt"
+    )
     if stubs_path.is_file():
-        unlikely = named_block(stubs_path.read_text(encoding="utf-8-sig"), "is_unlikely_country_tag")
+        unlikely = named_block(
+            stubs_path.read_text(encoding="utf-8-sig"), "is_unlikely_country_tag"
+        )
         if "ADISCORD_vorkerland_wrk_release_is_forbidden = yes" not in unlikely:
-            issues.append("is_unlikely_country_tag no longer forbids dormant WRK in peace conferences")
+            issues.append(
+                "is_unlikely_country_tag no longer forbids dormant WRK in peace conferences"
+            )
 
     for legacy_inference in (
         "ADISCORD_vorkerland_repair_premature_wrk",
@@ -793,7 +988,10 @@ def validate_premature_wrk_release_contract(
         "ADISCORD_vorkerland_premature_wrk_recorded_vad",
         "ADISCORD_vorkerland_premature_wrk_recorded_tva",
     ):
-        if legacy_inference in triggers + on_actions + capitulation_effects + release_effects:
+        if (
+            legacy_inference
+            in triggers + on_actions + capitulation_effects + release_effects
+        ):
             issues.append(
                 f"fresh-only premature WRK contract retains save inference: {legacy_inference}"
             )
@@ -852,7 +1050,12 @@ def validate_premature_wrk_release_contract(
                     )
 
     # Mixed recorded winners exercise the package-aware runtime release router.
-    for claimant, district in (("WKR", "RIV"), ("WKR", "SWB"), ("TVA", "REV"), ("TVA", "OSV")):
+    for claimant, district in (
+        ("WKR", "RIV"),
+        ("WKR", "SWB"),
+        ("TVA", "REV"),
+        ("TVA", "OSV"),
+    ):
         router = named_block(
             capitulation_effects,
             f"ADISCORD_vorkerland_restore_premature_wrk_packages_to_{claimant.lower()}",
@@ -880,56 +1083,99 @@ def validate_premature_wrk_release_contract(
     handoff = dissolve.find("change_tag_from = WRK")
     annex = dissolve.find("annex_country = { target = WRK transfer_troops = yes }")
     if route_end < 0 or not route_end < handoff < annex:
-        issues.append("premature WRK cleanup must route packages, hand off human control, then annex")
+        issues.append(
+            "premature WRK cleanup must route packages, hand off human control, then annex"
+        )
 
 
 def validate_events(root: Path, issues: list[str]) -> None:
-    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
-    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
-    armistice_effects = source_section(read(
-        root,
-        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
-        issues,
-    ), 'itoran_armistice_effects')
-    phase_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects')
-    force_design_effects = source_section(read(
-        root,
-        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
-        issues,
-    ), 'force_design_effects')
-    phase_events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'phase_events')
+    events = source_section(
+        read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events'
+    )
+    effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_effects',
+    )
+    armistice_effects = source_section(
+        read(
+            root,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            issues,
+        ),
+        'itoran_armistice_effects',
+    )
+    phase_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'phase_effects',
+    )
+    force_design_effects = source_section(
+        read(
+            root,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            issues,
+        ),
+        'force_design_effects',
+    )
+    phase_events = source_section(
+        read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'phase_events'
+    )
     capitulation_effects = read(
         root,
         "common/scripted_effects/ZZ_ADISCORD_capitulation_distribution_effects.txt",
         issues,
     )
-    release_effects = source_section(read(
-        root,
-        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
-        issues,
-    ), 'release_effects')
-    decisions = source_section(read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues), 'collapse_decisions')
-    focus_decisions = "\n".join(
-        read(root, path.as_posix(), issues)
-        for path in FOCUS_DECISION_FILES
+    release_effects = source_section(
+        read(
+            root,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            issues,
+        ),
+        'release_effects',
     )
-    diplomacy_decisions = source_section(read(
-        root,
-        "common/decisions/ADISCORD_vorkerland_decisions.txt",
-        issues,
-    ), 'diplomacy_decisions')
-    ideas = source_section(read(root, "common/ideas/ADISCORD_vorkerland_ideas.txt", issues), 'collapse_ideas')
-    loc = source_section(read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues), 'collapse_l_russian')
+    decisions = source_section(
+        read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues),
+        'collapse_decisions',
+    )
+    focus_decisions = "\n".join(
+        read(root, path.as_posix(), issues) for path in FOCUS_DECISION_FILES
+    )
+    diplomacy_decisions = source_section(
+        read(
+            root,
+            "common/decisions/ADISCORD_vorkerland_decisions.txt",
+            issues,
+        ),
+        'diplomacy_decisions',
+    )
+    ideas = source_section(
+        read(root, "common/ideas/ADISCORD_vorkerland_ideas.txt", issues),
+        'collapse_ideas',
+    )
+    loc = source_section(
+        read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues),
+        'collapse_l_russian',
+    )
     countries_loc = read(root, "localisation/russian/countries_l_russian.yml", issues)
     state_loc = read(root, "localisation/russian/state_names_l_russian.yml", issues)
-    victory_point_loc = read(root, "localisation/russian/victory_points_l_russian.yml", issues)
-    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
-    phase_triggers = source_section(read(
-        root,
-        "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
-        issues,
-    ), 'phase_triggers')
-    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
+    victory_point_loc = read(
+        root, "localisation/russian/victory_points_l_russian.yml", issues
+    )
+    triggers = source_section(
+        read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        'collapse_triggers',
+    )
+    phase_triggers = source_section(
+        read(
+            root,
+            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+            issues,
+        ),
+        'phase_triggers',
+    )
+    on_actions = read_country_on_actions(
+        (root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+        'vorkerland_collapse',
+    )
     template_migration_on_actions = read(
         root,
         "common/on_actions/03_ADISCORD_vorkerland_force_template_migration_on_actions.txt",
@@ -947,14 +1193,22 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
     pwr_history = read(root, "history/countries/PWR - PostWarZone.txt", issues)
-    map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    force_design_ai = source_section(read(
-        root,
-        "common/ai_strategy/ADISCORD_vorkerland_ai.txt",
-        issues,
-    ), 'force_design_ai')
+    map_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_map_effects',
+    )
+    force_design_ai = source_section(
+        read(
+            root,
+            "common/ai_strategy/ADISCORD_vorkerland_ai.txt",
+            issues,
+        ),
+        'force_design_ai',
+    )
     news_loc = read(root, "localisation/russian/events_l_russian.yml", issues)
-    superevent_loc = read(root, "localisation/russian/ADISCORD_superevents_l_russian.yml", issues)
+    superevent_loc = read(
+        root, "localisation/russian/ADISCORD_superevents_l_russian.yml", issues
+    )
     for label, source in (
         ("events", events),
         ("effects", effects),
@@ -1008,7 +1262,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if on_actions.count(marker_consume) != 1:
         issues.append("fresh collapse marker must be consumed exactly once")
     if startup.count("country_event = {") != 1:
-        issues.append("collapse startup must schedule only the fresh phase.1 campaign event")
+        issues.append(
+            "collapse startup must schedule only the fresh phase.1 campaign event"
+        )
     for forbidden in (
         "ADISCORD_vorkerland_collapse.",
         "migration",
@@ -1021,13 +1277,17 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "finalize_conflict_spirits",
     ):
         if forbidden.lower() in startup.lower():
-            issues.append(f"collapse startup contains forbidden old-save behavior: {forbidden}")
+            issues.append(
+                f"collapse startup contains forbidden old-save behavior: {forbidden}"
+            )
 
     if named_block(rom_tru_on_actions, "on_startup"):
         issues.append("ROM/TRU war content must start only from fresh on_war edges")
 
     if named_block(on_actions, "on_weekly"):
-        issues.append("collapse runtime must not poll force-design or save repair weekly")
+        issues.append(
+            "collapse runtime must not poll force-design or save repair weekly"
+        )
     for legacy_air_repair in (
         "ADISCORD_vorkerland_deploy_missing_claimant_air_wings",
         "ADISCORD_vorkerland_redeploy_air_wings_after_mission_fix",
@@ -1041,9 +1301,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"{tag} = {{ ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }}"
         )
         if verified_outbreak.count(bootstrap) != 1:
-            issues.append(f"fresh collapse outbreak must bootstrap {tag} AI exactly once")
+            issues.append(
+                f"fresh collapse outbreak must bootstrap {tag} AI exactly once"
+            )
         elif verified_outbreak.find(bootstrap) < verified_outbreak.find(wartime_flag):
-            issues.append(f"fresh collapse outbreak bootstraps {tag} before wartime starts")
+            issues.append(
+                f"fresh collapse outbreak bootstraps {tag} before wartime starts"
+            )
 
     validate_premature_wrk_release_contract(
         triggers, on_actions, capitulation_effects, release_effects, issues
@@ -1053,12 +1317,20 @@ def validate_events(root: Path, issues: list[str]) -> None:
         r"(?ms)^(?:country_event|news_event)\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.-]+)",
         events,
     )
-    duplicate_event_ids = sorted({event_id for event_id in event_definitions if event_definitions.count(event_id) > 1})
+    duplicate_event_ids = sorted(
+        {
+            event_id
+            for event_id in event_definitions
+            if event_definitions.count(event_id) > 1
+        }
+    )
     if duplicate_event_ids:
         issues.append(f"collapse event IDs are duplicated: {duplicate_event_ids}")
     for retired_id in (75, 76, 86):
         if f"ADISCORD_vorkerland_collapse.{retired_id}" in event_definitions:
-            issues.append(f"fresh-only collapse still defines retired save event .{retired_id}")
+            issues.append(
+                f"fresh-only collapse still defines retired save event .{retired_id}"
+            )
 
     apply_armistice = named_block(
         armistice_effects, "ADISCORD_vorkerland_apply_precollapse_itoran_armistice"
@@ -1101,17 +1373,23 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"set_state_flag = {armistice_state_flag}",
         ):
             if token not in applied_state:
-                issues.append(f"Itoran armistice apply does not own state {state_id}: {token}")
+                issues.append(
+                    f"Itoran armistice apply does not own state {state_id}: {token}"
+                )
         for token in (
             "set_demilitarized_zone = no",
             f"clr_state_flag = {armistice_state_flag}",
         ):
             if token not in expired_state:
-                issues.append(f"Itoran armistice expiration does not own state {state_id}: {token}")
+                issues.append(
+                    f"Itoran armistice expiration does not own state {state_id}: {token}"
+                )
     if named_block(apply_armistice, "94") or named_block(expire_armistice, "94"):
         issues.append("Itoran armistice incorrectly mutates non-treaty state 94")
     if "owns_state = 94" in armistice_effects:
-        issues.append("Itoran armistice contract must not depend on non-treaty state 94")
+        issues.append(
+            "Itoran armistice contract must not depend on non-treaty state 94"
+        )
     for forbidden in (
         "ADISCORD_vorkerland_apply_itoran_border_armistice",
         "ADISCORD_vorkerland_suspend_itoran_border_armistice_for_war",
@@ -1141,9 +1419,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         < pwr_startup.find(marker_consume)
         < pwr_startup.find(apply_call)
     ):
-        issues.append("fresh Itoran startup must guard, consume, then apply the armistice")
+        issues.append(
+            "fresh Itoran startup must guard, consume, then apply the armistice"
+        )
     if pwr_history.count(f"set_country_flag = {fresh_marker}") != 1:
-        issues.append("PWR history must seed the fresh Itoran armistice marker exactly once")
+        issues.append(
+            "PWR history must seed the fresh Itoran armistice marker exactly once"
+        )
     if armistice_on_actions.count(marker_consume) != 1:
         issues.append("fresh Itoran armistice marker must be consumed exactly once")
     for forbidden in (
@@ -1154,7 +1436,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "save-repair",
     ):
         if forbidden in armistice_startup:
-            issues.append(f"fresh Itoran startup contains forbidden save repair: {forbidden}")
+            issues.append(
+                f"fresh Itoran startup contains forbidden save repair: {forbidden}"
+            )
     for recurring_hook in ("on_weekly", "on_monthly", "on_war_relation_added"):
         if named_block(armistice_on_actions, recurring_hook):
             issues.append(f"Itoran armistice must not use {recurring_hook}")
@@ -1168,12 +1452,17 @@ def validate_events(root: Path, issues: list[str]) -> None:
             continue
         for path in sorted(directory.rglob("*.txt")):
             gameplay_sources.append(
-                (path.relative_to(root).as_posix(), path.read_text(encoding="utf-8-sig"))
+                (
+                    path.relative_to(root).as_posix(),
+                    path.read_text(encoding="utf-8-sig"),
+                )
             )
     if sum(source.count(apply_call) for _, source in gameplay_sources) != 1:
         issues.append("fresh Itoran armistice must have exactly one startup caller")
     if sum(source.count(expire_call) for _, source in gameplay_sources) != 1:
-        issues.append("Itoran armistice expiration must have exactly one collapse caller")
+        issues.append(
+            "Itoran armistice expiration must have exactly one collapse caller"
+        )
     if any(
         f"clr_global_flag = {expired_armistice_flag}" in source
         for _, source in gameplay_sources
@@ -1216,8 +1505,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in geography_loc:
             issues.append(f"Vorkensberg/Firnov-Tehlar geography is missing {token}")
-    if (UNITY_TOWER_PROVINCE, UNITY_TOWER_VALUE) not in VORKERLAND_THEATRE_VICTORY_POINTS[40]:
-        issues.append("impassable Unity Tower is no longer protected as a five-point landmark")
+    if (
+        UNITY_TOWER_PROVINCE,
+        UNITY_TOWER_VALUE,
+    ) not in VORKERLAND_THEATRE_VICTORY_POINTS[40]:
+        issues.append(
+            "impassable Unity Tower is no longer protected as a five-point landmark"
+        )
 
     outbreak = named_block(events, "country_event")
     if not outbreak:
@@ -1252,17 +1546,26 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in announce:
             issues.append(f"first-war announcement is missing {token}")
-    if any(token in opening_news for token in ("hours =", "days =", "random_hours", "random_days")):
+    if any(
+        token in opening_news
+        for token in ("hours =", "days =", "random_hours", "random_days")
+    ):
         issues.append("collapse opening news is still delayed or randomized")
     if effects.count("ADISCORD_vorkerland_announce_first_central_war = yes") != 1:
         issues.append("first-war announcement must have exactly one trigger path")
-    central_launch = named_block(effects, "ADISCORD_vorkerland_launch_central_local_brackets")
+    central_launch = named_block(
+        effects, "ADISCORD_vorkerland_launch_central_local_brackets"
+    )
     if "ADISCORD_vorkerland_announce_first_central_war = yes" not in central_launch:
-        issues.append("first-war announcement is not tied to the first central declarations")
-    if central_launch.find("ADISCORD_vorkerland_open_local_bracket_wars = yes") > central_launch.find(
-        "ADISCORD_vorkerland_announce_first_central_war = yes"
-    ):
-        issues.append("first-war announcement fires before the first central declarations")
+        issues.append(
+            "first-war announcement is not tied to the first central declarations"
+        )
+    if central_launch.find(
+        "ADISCORD_vorkerland_open_local_bracket_wars = yes"
+    ) > central_launch.find("ADISCORD_vorkerland_announce_first_central_war = yes"):
+        issues.append(
+            "first-war announcement fires before the first central declarations"
+        )
     if "ADISCORD_superevent_news.1" in on_actions:
         issues.append("collapse opening news still has an on-action duplicate path")
     tower_guard = "ADISCORD_vorkerland_unity_tower_destruction_resolved"
@@ -1284,9 +1587,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in tower_destruction:
             issues.append(f"Unity Tower executing one-shot block is missing {token}")
     if tower_destruction.find("change_tag_from") != -1:
-        issues.append("Unity Tower camera must not run before the player handoff finishes")
+        issues.append(
+            "Unity Tower camera must not run before the player handoff finishes"
+        )
     if outbreak.rfind("change_tag_from") < 0:
-        issues.append("collapse outbreak no longer hands the player off before later wars")
+        issues.append(
+            "collapse outbreak no longer hands the player off before later wars"
+        )
     camera_schedule = named_block(
         effects, "ADISCORD_vorkerland_schedule_unity_tower_camera_approach"
     )
@@ -1299,25 +1606,43 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             issues.append(f"Tower camera approach must fire collapse.3 as ROOT {tag}")
     if "id = ADISCORD_vorkerland_collapse.4 hours = 1" not in camera_schedule:
-        issues.append("AI-only campaigns must still detonate the Tower without a human camera")
+        issues.append(
+            "AI-only campaigns must still detonate the Tower without a human camera"
+        )
     approach = event_block(events, "ADISCORD_vorkerland_collapse.3")
     detonation = event_block(events, "ADISCORD_vorkerland_collapse.4")
     settle = event_block(events, "ADISCORD_vorkerland_collapse.5")
     if f"goto_province = {UNITY_TOWER_PROVINCE}" not in approach:
         issues.append("collapse.3 must goto the Tower as the human ROOT")
-    if "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }" not in approach:
-        issues.append("collapse.3 must wait one hour after the Tower close-up before the clip")
-    if "launch_nuke = {" in approach or "ADISCORD_vorkerland_animate_unity_tower_destruction = yes" in approach:
+    if (
+        "country_event = { id = ADISCORD_vorkerland_collapse.4 hours = 1 }"
+        not in approach
+    ):
+        issues.append(
+            "collapse.3 must wait one hour after the Tower close-up before the clip"
+        )
+    if (
+        "launch_nuke = {" in approach
+        or "ADISCORD_vorkerland_animate_unity_tower_destruction = yes" in approach
+    ):
         issues.append("collapse.3 still detonates before the Tower close-up finishes")
-    if detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes") != 1:
+    if (
+        detonation.count("ADISCORD_vorkerland_animate_unity_tower_destruction = yes")
+        != 1
+    ):
         issues.append("collapse.4 must play the Tower clip exactly once")
-    if "country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }" not in detonation:
+    if (
+        "country_event = { id = ADISCORD_vorkerland_collapse.5 days = 30 }"
+        not in detonation
+    ):
         issues.append("collapse.4 must settle the ruins actor after the clip")
     if "ADISCORD_vorkerland_sync_unity_tower_visual = yes" not in settle:
         issues.append("collapse.5 must restore the durable ruins actor")
     tower_launch = named_block(detonation, "launch_nuke")
     if f"province = {UNITY_TOWER_PROVINCE}" not in tower_launch:
-        issues.append("Unity Tower explosion no longer targets its protected VP province")
+        issues.append(
+            "Unity Tower explosion no longer targets its protected VP province"
+        )
     tower_state_damage = named_block(detonation, str(UNITY_TOWER_STATE))
     tower_damage_blocks = named_blocks(tower_state_damage, "damage_building")
     if len(tower_damage_blocks) != 1:
@@ -1327,15 +1652,22 @@ def validate_events(root: Path, issues: list[str]) -> None:
         )
     elif "type = infrastructure" not in tower_damage_blocks[0]:
         issues.append("Unity Tower explosion must damage guaranteed infrastructure")
-    if "type = rail_way" in tower_state_damage or "type = anti_air_building" in tower_state_damage:
-        issues.append("Unity Tower explosion still damages optional rail or anti-air buildings")
+    if (
+        "type = rail_way" in tower_state_damage
+        or "type = anti_air_building" in tower_state_damage
+    ):
+        issues.append(
+            "Unity Tower explosion still damages optional rail or anti-air buildings"
+        )
     if tower_destruction:
         guard_position = tower_destruction.find(f"set_global_flag = {tower_guard}")
         camera_position = tower_destruction.find(
             "ADISCORD_vorkerland_schedule_unity_tower_camera_approach = yes"
         )
         if guard_position < 0 or not guard_position < camera_position:
-            issues.append("Unity Tower guard must be recorded before the camera approach")
+            issues.append(
+                "Unity Tower guard must be recorded before the camera approach"
+            )
 
     launch_producers: list[tuple[str, str]] = []
     cleared_tower_guards: list[str] = []
@@ -1360,14 +1692,19 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "Unity Tower must have exactly one physical explosion producer across gameplay files"
         )
     elif tower_launch_producers[0][0] != "events/ADISCORD_vorkerland_events.txt":
-        issues.append("the sole Unity Tower explosion producer must remain in collapse events")
+        issues.append(
+            "the sole Unity Tower explosion producer must remain in collapse events"
+        )
     if any(
-        re.search(r"\bprovince\s*=\s*6713\b", block)
-        for _, block in launch_producers
+        re.search(r"\bprovince\s*=\s*6713\b", block) for _, block in launch_producers
     ):
-        issues.append("legacy Grand Vorkensberg province still hosts a physical Tower explosion")
+        issues.append(
+            "legacy Grand Vorkensberg province still hosts a physical Tower explosion"
+        )
     if cleared_tower_guards:
-        issues.append(f"permanent Unity Tower guard is cleared by {cleared_tower_guards}")
+        issues.append(
+            f"permanent Unity Tower guard is cleared by {cleared_tower_guards}"
+        )
 
     delayed_dirty_reveal = event_block(events, "ADISCORD_vorkerland_collapse.85")
     reveal_flag = "ADISCORD_vorkerland_dirty_reveal_v2_scheduled"
@@ -1378,9 +1715,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "days = 1095",
     ):
         if token not in outbreak:
-            issues.append(f"fresh collapse lacks the three-year dirty-zone timer token {token}")
+            issues.append(
+                f"fresh collapse lacks the three-year dirty-zone timer token {token}"
+            )
     if any(token in outbreak for token in ("days = 60", "random_days = 30")):
-        issues.append("fresh collapse still schedules the obsolete early dirty-zone reveal")
+        issues.append(
+            "fresh collapse still schedules the obsolete early dirty-zone reveal"
+        )
     if "ADISCORD_vorkerland_collapse.10" in event_definitions:
         issues.append("retired short dirty-zone timer collapse.10 must remain reserved")
     for token in (
@@ -1394,9 +1735,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in delayed_dirty_reveal:
             issues.append(f"three-year dirty-zone reveal lacks {token}")
     if 'news.0.t: "Начало боёв в Воркерланде"' not in news_loc:
-        issues.append("collapse opening world-news title is not 'Начало боёв в Воркерланде'")
+        issues.append(
+            "collapse opening world-news title is not 'Начало боёв в Воркерланде'"
+        )
     if 'news.0.a: "Приблизиться к Башне Единства."' not in news_loc:
-        issues.append("collapse opening news option A no longer names the Tower approach")
+        issues.append(
+            "collapse opening news option A no longer names the Tower approach"
+        )
     teardown = named_block(effects, "ADISCORD_vorkerland_teardown_confederation")
     if "is_subject_of = WRK" in teardown:
         issues.append("collapse teardown still assumes WRK is every country's overlord")
@@ -1413,9 +1758,35 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if portrait not in named_block(effects, effect_name):
             issues.append(f"{effect_name}: civil-war portrait is missing {portrait}")
     independent_tags = (
-        "WKR", "VAD", "NAM", "DAN", "ZAO", "PWR", "VLA", "ROM", "SOL", "TRU",
-        "TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "WPA", "WPS", "PSD", "EBA", "DVA", "SRA", "ZTA",
-        "TGD", "IBL",
+        "WKR",
+        "VAD",
+        "NAM",
+        "DAN",
+        "ZAO",
+        "PWR",
+        "VLA",
+        "ROM",
+        "SOL",
+        "TRU",
+        "TVA",
+        "EYR",
+        "EGC",
+        "RIV",
+        "REV",
+        "YOR",
+        "NDN",
+        "SWB",
+        "VHV",
+        "OSV",
+        "WPA",
+        "WPS",
+        "PSD",
+        "EBA",
+        "DVA",
+        "SRA",
+        "ZTA",
+        "TGD",
+        "IBL",
     )
     for tag in independent_tags:
         country = named_block(teardown, tag)
@@ -1462,13 +1833,21 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if actual != expected:
             issues.append(f"{tag}: central-state partition drifted: {sorted(actual)}")
     if "202 = { add_core_of = PWR set_state_controller_to = PWR }" not in initial_map:
-        issues.append("state 202 is not assigned as a PWR core in the initial collapse map")
+        issues.append(
+            "state 202 is not assigned as a PWR core in the initial collapse map"
+        )
     if "40 = { set_state_controller_to = WKR }" not in initial_map:
-        issues.append("impassable Unity Tower state 40 is not explicitly controlled by WKR")
+        issues.append(
+            "impassable Unity Tower state 40 is not explicitly controlled by WKR"
+        )
     for tag in ("RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
         if f"ADISCORD_vorkerland_setup_{tag.lower()} = yes" not in initial_map:
             issues.append(f"{tag}: central setup is not called by the initial map")
-    for token in ("transfer_state = 105", "105 = { add_core_of = TGD", "set_capital = { state = 105 }"):
+    for token in (
+        "transfer_state = 105",
+        "105 = { add_core_of = TGD",
+        "set_capital = { state = 105 }",
+    ):
         if token not in tgd_setup:
             issues.append(f"TGD peripheral capital is missing {token}")
     for forbidden in ("transfer_state = 32", "transfer_state = 40"):
@@ -1528,7 +1907,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
     viability_trigger = named_block(phase_triggers, viability_trigger_name)
     for target in CENTRAL_MINOR_TARGETS:
         suffix = target.lower()
-        if "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes" not in visible:
+        if (
+            "ADISCORD_vorkerland_central_minor_campaign_phase_available = yes"
+            not in visible
+        ):
             issues.append(
                 f"{decision_id}: early-campaign visibility is missing its phase gate"
             )
@@ -1550,29 +1932,42 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "ADISCORD_vorkerland_focus_central_front_prepared",
         ):
             if forbidden in visible:
-                issues.append(f"{decision_id}: retains late final-showdown gate {forbidden}")
-        target_flag = (
-            f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{suffix}"
-        )
+                issues.append(
+                    f"{decision_id}: retains late final-showdown gate {forbidden}"
+                )
+        target_flag = f"set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_{suffix}"
         if target_flag not in complete:
             issues.append(f"{decision_id}: does not own its named target flag")
         launch = "ADISCORD_vorkerland_focus_launch_central_minor_wave = yes"
         if launch not in remove:
             issues.append(f"{decision_id}: does not own the shared wave launch effect")
         if "declare_war_on" in decision:
-            issues.append(f"{decision_id}: bypasses the delayed shared-wave launch effect")
-    if decision.count("set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_") != 9:
-        issues.append(f"{decision_id}: must record all nine possible central-minor targets")
+            issues.append(
+                f"{decision_id}: bypasses the delayed shared-wave launch effect"
+            )
+    if (
+        decision.count(
+            "set_country_flag = ADISCORD_vorkerland_focus_central_minor_target_"
+        )
+        != 9
+    ):
+        issues.append(
+            f"{decision_id}: must record all nine possible central-minor targets"
+        )
     if decision.count("ADISCORD_vorkerland_focus_launch_central_minor_wave") != 1:
         issues.append(f"{decision_id}: must call exactly one shared wave launch effect")
 
-    claimant_rival = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT")
+    claimant_rival = named_block(
+        triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT"
+    )
     for token in (
         "AND = { tag = TVA ROOT = { tag = WKR } }",
         "AND = { tag = WKR ROOT = { tag = TVA } }",
     ):
         if token not in claimant_rival:
-            issues.append("Worker-Doctor pair is not excluded from immediate claimant wars")
+            issues.append(
+                "Worker-Doctor pair is not excluded from immediate claimant wars"
+            )
 
     retired_worker_doctor_sources = {
         "events": events,
@@ -1587,7 +1982,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         for label, source in retired_worker_doctor_sources.items():
             active = "\n".join(line.split("#", 1)[0] for line in source.splitlines())
             if re.search(rf"\b{re.escape(event_token)}\b", active):
-                issues.append(f"{label}: retired Worker-Doctor event survived: {event_token}")
+                issues.append(
+                    f"{label}: retired Worker-Doctor event survived: {event_token}"
+                )
 
     for retired in (
         "ADISCORD_vorkerland_prepare_worker_doctor_showdown",
@@ -1595,8 +1992,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_launch_worker_doctor_war",
     ):
         if retired in "\n".join(
-            line.split("#", 1)[0]
-            for line in (decisions + "\n" + effects).splitlines()
+            line.split("#", 1)[0] for line in (decisions + "\n" + effects).splitlines()
         ):
             issues.append(f"retired Worker-Doctor launcher survived: {retired}")
 
@@ -1621,7 +2017,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "ADISCORD_vorkerland_advance_showdown_launch = yes" not in phase_five:
         issues.append("phase.5 does not advance the guarded showdown queue")
 
-    queue = named_block(phase_effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue")
+    queue = named_block(
+        phase_effects, "ADISCORD_vorkerland_initialize_showdown_edge_queue"
+    )
     for token in (
         "set_global_flag = ADISCORD_vorkerland_showdown_edge_wkr_tva_required",
         "ADISCORD_vorkerland_detach_showdown_claimants = yes",
@@ -1703,10 +2101,14 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "set_country_flag = ADISCORD_vorkerland_wtd_join_failed",
     ):
         if token not in wtd_retry:
-            issues.append(f"TVA-subject WTD join postcondition event .67 is missing {token}")
+            issues.append(
+                f"TVA-subject WTD join postcondition event .67 is missing {token}"
+            )
     retry_call = "country_event = { id = ADISCORD_vorkerland_collapse.67 days = 1 }"
     if wtd_retry.count(retry_call) != 1:
-        issues.append("TVA-subject WTD join event .67 must contain exactly one bounded retry")
+        issues.append(
+            "TVA-subject WTD join event .67 must contain exactly one bounded retry"
+        )
     worker_doctor_monthly = named_block(on_actions, "on_monthly")
     for forbidden in (
         "ADISCORD_vorkerland_schedule_wtd_tva_temporary_alliance_check",
@@ -1716,17 +2118,38 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if forbidden in worker_doctor_monthly:
             issues.append(f"TVA-subject WTD join must not poll on_monthly: {forbidden}")
 
-    reunification_war = named_block(decisions, "ADISCORD_vorkerland_continue_reunification")
-    if not reunification_war or "every_neighbor_country" not in reunification_war or "declare_war_on" not in reunification_war:
-        issues.append("ADISCORD_vorkerland_continue_reunification: multi-front war is not gated by live borders")
+    reunification_war = named_block(
+        decisions, "ADISCORD_vorkerland_continue_reunification"
+    )
+    if (
+        not reunification_war
+        or "every_neighbor_country" not in reunification_war
+        or "declare_war_on" not in reunification_war
+    ):
+        issues.append(
+            "ADISCORD_vorkerland_continue_reunification: multi-front war is not gated by live borders"
+        )
     if "ai_will_do" not in reunification_war:
-        issues.append("ADISCORD_vorkerland_continue_reunification: AI cannot take the war decision")
+        issues.append(
+            "ADISCORD_vorkerland_continue_reunification: AI cannot take the war decision"
+        )
     regional_war = named_block(decisions, "ADISCORD_vorkerland_open_regional_fronts")
     regional_complete = named_block(regional_war, "complete_effect")
-    if "ADISCORD_vorkerland_detach_regional_war_factions = yes" not in regional_complete:
-        issues.append("regional-war decision does not clear inherited factions before declaring")
+    if (
+        "ADISCORD_vorkerland_detach_regional_war_factions = yes"
+        not in regional_complete
+    ):
+        issues.append(
+            "regional-war decision does not clear inherited factions before declaring"
+        )
     regional_allowed = named_block(regional_war, "allowed")
-    if set(re.findall(r"tag\s*=\s*([A-Z]{3})", regional_allowed)) != {"ZAO", "VLA", "ROM", "SOL", "TRU"}:
+    if set(re.findall(r"tag\s*=\s*([A-Z]{3})", regional_allowed)) != {
+        "ZAO",
+        "VLA",
+        "ROM",
+        "SOL",
+        "TRU",
+    }:
         issues.append("peripheral war decision has the wrong theatre-anchor allowlist")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_claim_wars_authorized",
@@ -1737,12 +2160,21 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in regional_war:
             issues.append(f"peripheral multi-country war decision is missing {token}")
     if "declare_war_on =" in regional_complete or "add_to_war =" in regional_complete:
-        issues.append("peripheral decision bypasses its one-day diplomatic-cache barrier")
+        issues.append(
+            "peripheral decision bypasses its one-day diplomatic-cache barrier"
+        )
     repair_wars = named_block(effects, "ADISCORD_vorkerland_repair_regional_wars")
     if repair_wars.count("declare_war_on =") != 17:
-        issues.append("startup regional-war repair must restore seventeen independent rivalries")
-    if repair_wars.count("is_subject = no") != 34 or repair_wars.count("has_capitulated = yes") != 34:
-        issues.append("startup regional-war repair can revive a defeated or integrated participant")
+        issues.append(
+            "startup regional-war repair must restore seventeen independent rivalries"
+        )
+    if (
+        repair_wars.count("is_subject = no") != 34
+        or repair_wars.count("has_capitulated = yes") != 34
+    ):
+        issues.append(
+            "startup regional-war repair can revive a defeated or integrated participant"
+        )
     for attacker, defender, label in (
         ("WPA", "PSD", "Norven-Grain"),
         ("PWR", "PSD", "Norven-Wit"),
@@ -1754,7 +2186,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             repair_wars,
         ):
             issues.append(f"{label} direct rivalry is missing")
-    regional_launch = named_block(effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach")
+    regional_launch = named_block(
+        effects, "ADISCORD_vorkerland_open_regional_fronts_after_detach"
+    )
     for token in (
         "ADISCORD_vorkerland_repair_regional_wars = yes",
         "ADISCORD_vorkerland_collapse.64 days = 1",
@@ -1768,7 +2202,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     for token in launch_success_tokens:
         if token in regional_launch:
-            issues.append(f"regional-war declaration launcher improperly owns verified success mutation {token}")
+            issues.append(
+                f"regional-war declaration launcher improperly owns verified success mutation {token}"
+            )
     regional_verifier = named_block(
         phase_effects, "ADISCORD_vorkerland_verify_regional_war_launch"
     )
@@ -1790,7 +2226,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             events,
         )
         if match is None or token not in match.group(1):
-            issues.append(f"regional diplomatic-cache event .{event_id} is missing {token}")
+            issues.append(
+                f"regional diplomatic-cache event .{event_id} is missing {token}"
+            )
     reunification_allowed = named_block(
         named_block(decisions, "ADISCORD_vorkerland_continue_reunification"), "allowed"
     )
@@ -1798,12 +2236,27 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("WRK can still launch post-victory reunification wars")
 
     for name, block in (
-        ("main claimant", named_block(triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT")),
-        ("central", named_block(triggers, "ADISCORD_vorkerland_is_central_target_for_ROOT")),
-        ("reunification", named_block(triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT")),
+        (
+            "main claimant",
+            named_block(
+                triggers, "ADISCORD_vorkerland_is_main_claimant_rival_for_ROOT"
+            ),
+        ),
+        (
+            "central",
+            named_block(triggers, "ADISCORD_vorkerland_is_central_target_for_ROOT"),
+        ),
+        (
+            "reunification",
+            named_block(
+                triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT"
+            ),
+        ),
     ):
         if "has_war = no" in block:
-            issues.append(f"{name} target still freezes while fighting an unrelated war")
+            issues.append(
+                f"{name} target still freezes while fighting an unrelated war"
+            )
 
     capitulation = named_block(on_actions, "on_capitulation")
     for token in (
@@ -1818,7 +2271,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     # the bounded district-settlement controller below.
     reverse_marker = "# A temporary main claimant defeated by a central minor"
     if reverse_marker in capitulation:
-        issues.append("central-minor victory is still intercepted by the retired claimant-shell reservation")
+        issues.append(
+            "central-minor victory is still intercepted by the retired claimant-shell reservation"
+        )
     central_settlement = named_block(
         capitulation_effects, "ADISCORD_vorkerland_settle_central_capitulation"
     )
@@ -1845,11 +2300,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
     settlement_retry = event_block(events, "ADISCORD_vorkerland_collapse.66")
     force_flag = "ADISCORD_vorkerland_central_minor_settlement_force_transfer"
     if f"set_country_flag = {force_flag}" not in settlement_retry:
-        issues.append("terminal central-minor retry does not arm force-transfer recovery")
+        issues.append(
+            "terminal central-minor retry does not arm force-transfer recovery"
+        )
     for tag in ("WKR", "VAD", "TVA", "WRK"):
         token = f"every_owned_state = {{ {tag} = {{ transfer_state = PREV }} }}"
         if token not in central_finalizer:
-            issues.append(f"terminal central-minor finalizer cannot transfer a {tag} remnant")
+            issues.append(
+                f"terminal central-minor finalizer cannot transfer a {tag} remnant"
+            )
 
     pending_trigger = named_block(
         triggers, "ADISCORD_vorkerland_has_matching_pending_central_minor_settlement"
@@ -1862,14 +2321,20 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if f"tag = {tag}" not in pending_trigger:
             issues.append(f"living-winner settlement trigger lacks {tag}")
-        if f"ADISCORD_vorkerland_central_minor_winner_{winner_flag}" not in pending_trigger:
+        if (
+            f"ADISCORD_vorkerland_central_minor_winner_{winner_flag}"
+            not in pending_trigger
+        ):
             issues.append(f"living-winner settlement trigger lacks {tag} winner flag")
     for district in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
         if pending_trigger.count(f"{district} = {{ exists = yes") != 4:
-            issues.append(f"living-winner settlement trigger does not bind {district} to all four winners")
+            issues.append(
+                f"living-winner settlement trigger does not bind {district} to all four winners"
+            )
 
     settlement_scheduler = named_block(
-        capitulation_effects, "ADISCORD_vorkerland_schedule_central_minor_settlement_recovery"
+        capitulation_effects,
+        "ADISCORD_vorkerland_schedule_central_minor_settlement_recovery",
     )
     for token in (
         "ADISCORD_vorkerland_has_matching_pending_central_minor_settlement = yes",
@@ -1878,11 +2343,17 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in settlement_scheduler:
             issues.append(f"living-winner settlement scheduler lacks {token}")
-    if "ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = yes" not in central_settlement:
-        issues.append("new central capitulations do not queue the living-winner controller")
+    if (
+        "ADISCORD_vorkerland_schedule_central_minor_settlement_recovery = yes"
+        not in central_settlement
+    ):
+        issues.append(
+            "new central capitulations do not queue the living-winner controller"
+        )
 
     winner_sweep = named_block(
-        capitulation_effects, "ADISCORD_vorkerland_sweep_pending_central_minor_settlements"
+        capitulation_effects,
+        "ADISCORD_vorkerland_sweep_pending_central_minor_settlements",
     )
     for district in ("EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
         for token in (
@@ -1890,7 +2361,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"annex_country = {{ target = {district} transfer_troops = no }}",
         ):
             if token not in winner_sweep:
-                issues.append(f"living-winner settlement sweep lacks {district} token {token}")
+                issues.append(
+                    f"living-winner settlement sweep lacks {district} token {token}"
+                )
     settlement_first = event_block(events, "ADISCORD_vorkerland_collapse.69")
     settlement_last = event_block(events, "ADISCORD_vorkerland_collapse.70")
     for token in (
@@ -1916,9 +2389,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
             province_types, colors, include_special_adjacencies=False
         )
         physical_states = map_regions.build_state_adjacency(states, physical_provinces)
-        collapse_tags = set().union(*(
-            set(pair) for pair in INITIAL_CENTRAL_BORDER_PAIRS | INITIAL_LOCAL_BORDER_PAIRS
-        ))
+        collapse_tags = set().union(
+            *(
+                set(pair)
+                for pair in INITIAL_CENTRAL_BORDER_PAIRS | INITIAL_LOCAL_BORDER_PAIRS
+            )
+        )
         assigned = {tag: initial_tag_states(effects, tag) for tag in collapse_tags}
 
         for tag in ("RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"):
@@ -1930,7 +2406,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 if state_id in reached:
                     continue
                 reached.add(state_id)
-                frontier.extend((physical_states.get(state_id, set()) & remaining) - reached)
+                frontier.extend(
+                    (physical_states.get(state_id, set()) & remaining) - reached
+                )
             if reached != remaining:
                 issues.append(f"{tag}: central state belt is not physically connected")
 
@@ -1945,13 +2423,18 @@ def validate_events(root: Path, issues: list[str]) -> None:
 
         for pair in INITIAL_CENTRAL_BORDER_PAIRS | INITIAL_LOCAL_BORDER_PAIRS:
             if not physical_borders(pair):
-                issues.append(f"initial war pair has no physical state border: {'-'.join(sorted(pair))}")
+                issues.append(
+                    f"initial war pair has no physical state border: {'-'.join(sorted(pair))}"
+                )
         if physical_borders(frozenset(("ZAO", "WPA"))):
-            issues.append("ZAO-WPA is incorrectly treated as an initial physical-border pair")
+            issues.append(
+                "ZAO-WPA is incorrectly treated as an initial physical-border pair"
+            )
         if physical_borders(frozenset(("VLA", "TGD"))) != {frozenset((74, 105))}:
             issues.append("TGD-VLA physical border drifted from states 105/74")
         if physical_borders(frozenset(("EBA", "TGD"))) != {
-            frozenset((105, 311)), frozenset((105, 312))
+            frozenset((105, 311)),
+            frozenset((105, 312)),
         }:
             issues.append("TGD-EBA physical border drifted from states 105/311-312")
     except (OSError, ValueError, KeyError, RuntimeError) as error:
@@ -1961,12 +2444,17 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append("collapse setup creates a faction and can merge initial wars")
     macri_pact = named_block(decisions, "ADISCORD_vorkerland_macri_piv_pact")
     for token in (
-        "controls_state = 74", "controls_state = 105", "controls_state = 197",
-        "NOT = { country_exists = VLA }", "NOT = { country_exists = TGD }",
+        "controls_state = 74",
+        "controls_state = 105",
+        "controls_state = 197",
+        "NOT = { country_exists = VLA }",
+        "NOT = { country_exists = TGD }",
         "available = { has_war = no }",
     ):
         if token not in macri_pact:
-            issues.append(f"Macri pact can merge an unfinished regional war: missing {token}")
+            issues.append(
+                f"Macri pact can merge an unfinished regional war: missing {token}"
+            )
 
     ivn_preparation = named_block(
         decisions, "ADISCORD_ivanland_prepare_northern_expedition"
@@ -1999,9 +2487,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "intervention_failure",
     ):
         if token not in ivn:
-            issues.append(f"Ivanland externally activated 240-day mission is missing {token}")
+            issues.append(
+                f"Ivanland externally activated 240-day mission is missing {token}"
+            )
     if "ADISCORD_vorkerland_begin_ivanland_intervention = yes" in ivn:
-        issues.append("Ivanland mission bypasses the authoritative preparation activation effect")
+        issues.append(
+            "Ivanland mission bypasses the authoritative preparation activation effect"
+        )
     ivn_cancel_trigger = named_block(ivn, "cancel_trigger")
     ivn_cancel_effect = named_block(ivn, "cancel_effect")
     if "has_capitulated = yes" not in ivn_cancel_trigger:
@@ -2014,7 +2506,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in ivn_cancel_effect:
             issues.append(f"Ivanland mission cancel routing is missing {token}")
-    if "timeout_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }" not in ivn:
+    if (
+        "timeout_effect = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }"
+        not in ivn
+    ):
         issues.append("Ivanland mission timeout does not resolve as failure")
     intervention_activation = named_block(
         effects, "ADISCORD_vorkerland_activate_ivanland_intervention_mission"
@@ -2027,7 +2522,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in intervention_activation:
             issues.append(f"Ivanland mission activation effect is missing {token}")
-    intervention_start = named_block(effects, "ADISCORD_vorkerland_begin_ivanland_intervention")
+    intervention_start = named_block(
+        effects, "ADISCORD_vorkerland_begin_ivanland_intervention"
+    )
     for token in (
         "ADISCORD_vorkerland_restore_pwr_psd",
         "ADISCORD_vorkerland_ivanland_expedition_supplied",
@@ -2037,7 +2534,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Ivanland intervention staging effect is missing {token}")
     for forbidden in ("puppet = IBL", "puppet = IBA", "declare_war_on ="):
         if forbidden in intervention_start:
-            issues.append(f"Ivanland intervention staging effect prematurely contains {forbidden}")
+            issues.append(
+                f"Ivanland intervention staging effect prematurely contains {forbidden}"
+            )
     intervention_front = named_block(
         effects, "ADISCORD_vorkerland_open_ivanland_intervention_front"
     )
@@ -2055,8 +2554,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "target = IBL" in intervention_front or "target = IBA" in intervention_front:
         issues.append("Ivanland delayed northern front targets a postwar client")
     intervention_cache = event_block(events, "ADISCORD_vorkerland_collapse.77")
-    if "ADISCORD_vorkerland_open_ivanland_intervention_front = yes" not in intervention_cache:
-        issues.append("Ivanland one-day diplomatic-cache event .77 does not open the intervention front")
+    if (
+        "ADISCORD_vorkerland_open_ivanland_intervention_front = yes"
+        not in intervention_cache
+    ):
+        issues.append(
+            "Ivanland one-day diplomatic-cache event .77 does not open the intervention front"
+        )
     verifier_call = "country_event = { id = ADISCORD_vorkerland_collapse.82 days = 1 }"
     for token in (
         "clr_country_flag = ADISCORD_vorkerland_ivanland_front_launch_pending",
@@ -2086,9 +2590,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 f"Ivanland front postcondition does not require live {defender} to share IVN's war"
             )
     for state in (90, 91, 93, 94):
-        reachability = (
-            f"{state} = {{ controller = {{ OR = {{ tag = IVN has_war_with = IVN }} }} }}"
-        )
+        reachability = f"{state} = {{ controller = {{ OR = {{ tag = IVN has_war_with = IVN }} }} }}"
         if reachability not in intervention_postcondition:
             issues.append(
                 f"Ivanland front postcondition does not verify controller reachability for state {state}"
@@ -2109,15 +2611,24 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if intervention_verifier.count(f"set_country_flag = {war_retry_flag}") != 1 or (
         f"NOT = {{ has_country_flag = {war_retry_flag} }}" not in intervention_verifier
     ):
-        issues.append("Ivanland front verifier .82 must permit exactly one guarded PWR war retry")
-    if intervention_verifier.count(
-        "declare_war_on = { target = PWR type = take_state_focus generator = { 90 91 } }"
-    ) != 1:
-        issues.append("Ivanland front verifier .82 must contain exactly one PWR war retry mutation")
+        issues.append(
+            "Ivanland front verifier .82 must permit exactly one guarded PWR war retry"
+        )
+    if (
+        intervention_verifier.count(
+            "declare_war_on = { target = PWR type = take_state_focus generator = { 90 91 } }"
+        )
+        != 1
+    ):
+        issues.append(
+            "Ivanland front verifier .82 must contain exactly one PWR war retry mutation"
+        )
     if intervention_verifier.count(f"set_country_flag = {join_retry_flag}") != 1 or (
         f"NOT = {{ has_country_flag = {join_retry_flag} }}" not in intervention_verifier
     ):
-        issues.append("Ivanland front verifier .82 must permit exactly one guarded coalition join retry")
+        issues.append(
+            "Ivanland front verifier .82 must permit exactly one guarded coalition join retry"
+        )
     live_join_guard = (
         "exists = yes is_subject = no NOT = { has_capitulated = yes } "
         "NOT = { has_war_with = IVN }"
@@ -2129,18 +2640,34 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "targeted_alliance = PWR enemy = IVN hostility_reason = asked_to_join",
         ):
             if token not in defender_scope:
-                issues.append(f"Ivanland .82 join retry for {defender} is missing {token}")
+                issues.append(
+                    f"Ivanland .82 join retry for {defender} is missing {token}"
+                )
     if intervention_verifier.count(verifier_call) != 2:
-        issues.append("Ivanland front verifier .82 must reschedule only its one war and one join retry")
-    if intervention_verifier.count("ADISCORD_vorkerland_ivanland_intervention_failure = yes") != 3:
-        issues.append("Ivanland front verifier .82 must terminate all exhausted/invalid retry paths as failure")
+        issues.append(
+            "Ivanland front verifier .82 must reschedule only its one war and one join retry"
+        )
+    if (
+        intervention_verifier.count(
+            "ADISCORD_vorkerland_ivanland_intervention_failure = yes"
+        )
+        != 3
+    ):
+        issues.append(
+            "Ivanland front verifier .82 must terminate all exhausted/invalid retry paths as failure"
+        )
 
     mandate = named_block(effects, "ADISCORD_vorkerland_setup_ivanland_mandate")
     if mandate.count("puppet =") != 1 or "puppet = IBA" not in mandate:
         issues.append("Ivanland success must create exactly one IBA puppet")
     ivn_history = read(root, "history/countries/IVN - IvanLand.txt", issues)
-    iba_history = read(root, "history/countries/IBA - Ivanland Northern Mandate.txt", issues)
-    if "recruit_character = IBA_Matvey_Mateusk" in ivn_history or "recruit_character = IBA_Matvey_Mateusk" not in iba_history:
+    iba_history = read(
+        root, "history/countries/IBA - Ivanland Northern Mandate.txt", issues
+    )
+    if (
+        "recruit_character = IBA_Matvey_Mateusk" in ivn_history
+        or "recruit_character = IBA_Matvey_Mateusk" not in iba_history
+    ):
         issues.append("Matvey Mateusk must be recruited directly by IBA history")
     for token in (
         "90 = { add_core_of = IBA add_claim_by = IBA",
@@ -2178,21 +2705,35 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in selevyostrov:
             issues.append(f"Selevyostrov appointment is missing {token}")
     if "create_country_leader" in selevyostrov or "recruit_character" in selevyostrov:
-        issues.append("Selevyostrov appointment must use the pre-recruited character API")
-    if mandate.find("ADISCORD_vorkerland_appoint_mateusk = yes") < mandate.find("puppet = IBA"):
-        issues.append("Mateusk must be appointed after IBA is puppeted so the political rebuild cannot replace him")
+        issues.append(
+            "Selevyostrov appointment must use the pre-recruited character API"
+        )
+    if mandate.find("ADISCORD_vorkerland_appoint_mateusk = yes") < mandate.find(
+        "puppet = IBA"
+    ):
+        issues.append(
+            "Mateusk must be appointed after IBA is puppeted so the political rebuild cannot replace him"
+        )
     owned_by_iba = set(re.findall(r"transfer_state\s*=\s*(\d+)", mandate))
     if owned_by_iba != {"90", "91"} or "transfer_state = 71" in mandate:
-        issues.append(f"Norvane ownership allowlist drifted from states 90-91: {sorted(owned_by_iba)}")
+        issues.append(
+            f"Norvane ownership allowlist drifted from states 90-91: {sorted(owned_by_iba)}"
+        )
     krait_setup = named_block(effects, "ADISCORD_vorkerland_setup_ibl")
     if set(re.findall(r"transfer_state\s*=\s*(\d+)", krait_setup)) != {"93", "94"}:
         issues.append("Krait ownership allowlist drifted from states 93-94")
     krait_expansion = named_block(effects, "ADISCORD_vorkerland_expand_krait_client")
     if "ADISCORD_vorkerland_setup_ibl = yes" not in krait_expansion:
-        issues.append("legacy Krait expansion wrapper no longer delegates to the canonical IBL setup")
+        issues.append(
+            "legacy Krait expansion wrapper no longer delegates to the canonical IBL setup"
+        )
     if "ADISCORD_vorkerland_setup_ibl = yes" not in mandate:
-        issues.append("Ivanland success settlement does not create the separate IBL client")
-    front_cleanup = named_block(effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front")
+        issues.append(
+            "Ivanland success settlement does not create the separate IBL client"
+        )
+    front_cleanup = named_block(
+        effects, "ADISCORD_vorkerland_cleanup_ivanland_intervention_front"
+    )
     cleanup_ivn = named_block(front_cleanup, "IVN")
     for flag in (
         "ADISCORD_vorkerland_ivanland_front_launch_pending",
@@ -2204,29 +2745,59 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"clr_country_flag = {flag}" not in cleanup_ivn:
             issues.append(f"Ivanland intervention cleanup does not clear {flag}")
     for defender in ("PWR", "ZAO", "WPA", "WPS", "PSD"):
-        if "remove_ideas = ADISCORD_vorkerland_northern_defense_front" not in named_block(
-            front_cleanup, defender
+        if (
+            "remove_ideas = ADISCORD_vorkerland_northern_defense_front"
+            not in named_block(front_cleanup, defender)
         ):
-            issues.append(f"Ivanland intervention cleanup leaves the defense idea on {defender}")
+            issues.append(
+                f"Ivanland intervention cleanup leaves the defense idea on {defender}"
+            )
     if "white_peace" in front_cleanup:
-        issues.append("Ivanland front-only cleanup must not white-peace a capitulated attacker")
+        issues.append(
+            "Ivanland front-only cleanup must not white-peace a capitulated attacker"
+        )
 
-    war_cleanup = named_block(effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars")
-    if "ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes" not in war_cleanup:
-        issues.append("Ivanland ordinary war cleanup no longer delegates to the shared front cleanup")
+    war_cleanup = named_block(
+        effects, "ADISCORD_vorkerland_end_ivanland_intervention_wars"
+    )
+    if (
+        "ADISCORD_vorkerland_cleanup_ivanland_intervention_front = yes"
+        not in war_cleanup
+    ):
+        issues.append(
+            "Ivanland ordinary war cleanup no longer delegates to the shared front cleanup"
+        )
     for pair in (
-        ("IVN", "ZAO"), ("IVN", "WPA"), ("IVN", "WPS"),
-        ("IVN", "PWR"), ("IVN", "PSD"), ("IVN", "IBL"), ("IVN", "IBA"),
+        ("IVN", "ZAO"),
+        ("IVN", "WPA"),
+        ("IVN", "WPS"),
+        ("IVN", "PWR"),
+        ("IVN", "PSD"),
+        ("IVN", "IBL"),
+        ("IVN", "IBA"),
     ):
         if f"has_war_with = {pair[1]}" not in named_block(war_cleanup, pair[0]):
-            issues.append(f"Ivanland ordinary cleanup does not white-peace {pair[0]}-{pair[1]}")
+            issues.append(
+                f"Ivanland ordinary cleanup does not white-peace {pair[0]}-{pair[1]}"
+            )
     success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
-    if success.count("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes") < 2 or "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }" not in success:
-        issues.append("Ivanland success is not idempotent or does not clean wars before and after setup")
+    if (
+        success.count("ADISCORD_vorkerland_end_ivanland_intervention_wars = yes") < 2
+        or "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }"
+        not in success
+    ):
+        issues.append(
+            "Ivanland success is not idempotent or does not clean wars before and after setup"
+        )
     if "Ivanland intervention resolved: SUCCESS" not in success:
         issues.append("Ivanland success has no deterministic outcome log")
-    if "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed" not in success:
-        issues.append("Ivanland success does not clear the mutually exclusive failure flag")
+    if (
+        "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_failed"
+        not in success
+    ):
+        issues.append(
+            "Ivanland success does not clear the mutually exclusive failure flag"
+        )
     failure = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_failure")
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_resolved }",
@@ -2245,8 +2816,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in failure:
             issues.append(f"Ivanland failure is missing {token}")
-    if "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded" not in failure:
-        issues.append("Ivanland failure does not clear the mutually exclusive success flag")
+    if (
+        "clr_global_flag = ADISCORD_vorkerland_ivanland_intervention_succeeded"
+        not in failure
+    ):
+        issues.append(
+            "Ivanland failure does not clear the mutually exclusive success flag"
+        )
     for token in (
         "91 = { add_core_of = PWR set_state_controller_to = PWR }",
         "93 = { set_state_controller_to = PSD }",
@@ -2254,15 +2830,21 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "clr_global_flag = ADISCORD_vorkerland_ivanland_krait_frontier_secured",
     ):
         if token not in failure:
-            issues.append(f"Ivanland failure cannot restore the pre-intervention northern map: {token}")
+            issues.append(
+                f"Ivanland failure cannot restore the pre-intervention northern map: {token}"
+            )
 
-    restore_queue = named_block(effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat")
+    restore_queue = named_block(
+        effects, "ADISCORD_vorkerland_queue_northern_war_restore_after_ivn_defeat"
+    )
     for host in ("PWR", "PSD", "ZAO", "WPA", "WPS"):
         if f"country_exists = {host}" not in restore_queue or (
             f"{host} = {{ country_event = {{ id = ADISCORD_vorkerland_collapse.43 days = 2 }} }}"
             not in restore_queue
         ):
-            issues.append(f"Ivanland military defeat cannot hand northern-war restoration to {host}")
+            issues.append(
+                f"Ivanland military defeat cannot hand northern-war restoration to {host}"
+            )
 
     startup = named_block(on_actions, "on_startup")
     monthly = named_block(on_actions, "on_monthly")
@@ -2289,7 +2871,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         r"(.*?)(?=^country_event\s*=\s*\{|^add_namespace\s*=|\Z)",
         events,
     )
-    selevyostrov_repair = selevyostrov_repair_match.group(1) if selevyostrov_repair_match else ""
+    selevyostrov_repair = (
+        selevyostrov_repair_match.group(1) if selevyostrov_repair_match else ""
+    )
     for token in (
         "tag = IBL",
         "character = IBL_Anton_Selevyostrov",
@@ -2308,7 +2892,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     joint_repair = joint_repair_match.group(1) if joint_repair_match else ""
     for token in ("tag = VAD", "ADISCORD_vorkerland_appoint_joint_council = yes"):
         if token not in joint_repair:
-            issues.append(f"Vorkerland joint-government delayed repair is missing {token}")
+            issues.append(
+                f"Vorkerland joint-government delayed repair is missing {token}"
+            )
     if "ADISCORD_vorkerland_appoint_joint_council = yes" in monthly:
         issues.append("joint-government repair still polls on_monthly")
     joint = named_block(effects, "ADISCORD_vorkerland_appoint_joint_council")
@@ -2323,7 +2909,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "create_country_leader" in joint:
         issues.append("joint-government appointment still uses the legacy leader API")
     if "recruit_character" in joint:
-        issues.append("joint-government appointment uses recruit_character outside history")
+        issues.append(
+            "joint-government appointment uses recruit_character outside history"
+        )
     claimant_cosmetics = named_block(
         effects, "ADISCORD_vorkerland_apply_claimant_cosmetics"
     )
@@ -2336,7 +2924,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_appoint_joint_council = yes",
     ):
         if token not in joint_cosmetics:
-            issues.append(f"VAD claimant cosmetics do not preserve joint identity: {token}")
+            issues.append(
+                f"VAD claimant cosmetics do not preserve joint identity: {token}"
+            )
     for token in (
         "set_cosmetic_tag = VAD_vorkerland_restoration",
         "portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar",
@@ -2344,7 +2934,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in ordinary_vad_cosmetics:
             issues.append(f"ordinary VAD claimant cosmetics are missing {token}")
         if token in joint_cosmetics:
-            issues.append(f"joint VAD claimant cosmetics still apply ordinary identity: {token}")
+            issues.append(
+                f"joint VAD claimant cosmetics still apply ordinary identity: {token}"
+            )
 
     for news_id, outcome, shown_flag, completion_token in (
         (
@@ -2369,13 +2961,23 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"{news_id}: expected exactly one world-news definition")
             continue
         body = definition.group(1)
-        if "picture = GFX_news_event_adiscord_vorkerland_northern_settlement" not in body:
-            issues.append(f"{news_id}: Ivanland outcome must use the northern-settlement picture")
+        if (
+            "picture = GFX_news_event_adiscord_vorkerland_northern_settlement"
+            not in body
+        ):
+            issues.append(
+                f"{news_id}: Ivanland outcome must use the northern-settlement picture"
+            )
         if "picture = GFX_news_event_adiscord_vorkerland_explosion" in body:
-            issues.append(f"{news_id}: Ivanland outcome still reuses the Unity Tower explosion")
+            issues.append(
+                f"{news_id}: Ivanland outcome still reuses the Unity Tower explosion"
+            )
         for token in (
-            "major = yes", "is_triggered_only = yes", "fire_only_once = no",
-            f"title = {news_id}.t", f"desc = {news_id}.d",
+            "major = yes",
+            "is_triggered_only = yes",
+            "fire_only_once = no",
+            f"title = {news_id}.t",
+            f"desc = {news_id}.d",
             f"option = {{ name = {news_id}.a }}",
         ):
             if token not in body:
@@ -2391,27 +2993,44 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ):
             if token not in outcome:
                 issues.append(f"{news_id}: guarded outcome route is missing {token}")
-        if outcome.find(completion_token) > outcome.find(f"news_event = {{ id = {news_id} }}"):
+        if outcome.find(completion_token) > outcome.find(
+            f"news_event = {{ id = {news_id} }}"
+        ):
             issues.append(f"{news_id}: news fires before the outcome is fully applied")
         call = named_block(outcome, "news_event")
-        if any(token in call for token in ("hours =", "days =", "random_hours", "random_days")):
+        if any(
+            token in call
+            for token in ("hours =", "days =", "random_hours", "random_days")
+        ):
             issues.append(f"{news_id}: outcome news call is delayed or randomized")
         for suffix in ("t", "d", "a"):
             if f"  {news_id}.{suffix}:" not in news_loc:
-                issues.append(f"{news_id}: missing Russian localisation key {news_id}.{suffix}")
-    if "ADISCORD_vorkerland_erased_nations" not in effects or "ADISCORD_vorkerland_erased_nations" not in ideas:
+                issues.append(
+                    f"{news_id}: missing Russian localisation key {news_id}.{suffix}"
+                )
+    if (
+        "ADISCORD_vorkerland_erased_nations" not in effects
+        or "ADISCORD_vorkerland_erased_nations" not in ideas
+    ):
         issues.append("cultural-erasure legacy is not represented as a national spirit")
     erased_nations = named_block(ideas, "ADISCORD_vorkerland_erased_nations")
     if "picture = generic_oppression" not in erased_nations:
-        issues.append("cultural-erasure spirit must use the registered generic_oppression picture")
+        issues.append(
+            "cultural-erasure spirit must use the registered generic_oppression picture"
+        )
     for token in (
-        "stability_factor = -0.10", "war_support_factor = -0.05",
-        "recruitable_population_factor = -0.08", "industrial_capacity_factory = -0.05",
-        "consumer_goods_factor = 0.05", "political_power_gain = -0.10",
+        "stability_factor = -0.10",
+        "war_support_factor = -0.05",
+        "recruitable_population_factor = -0.08",
+        "industrial_capacity_factory = -0.05",
+        "consumer_goods_factor = 0.05",
+        "political_power_gain = -0.10",
         "army_org_factor = -0.03",
     ):
         if token not in erased_nations:
-            issues.append(f"cultural-erasure legacy is missing its bounded wartime penalty {token}")
+            issues.append(
+                f"cultural-erasure legacy is missing its bounded wartime penalty {token}"
+            )
     macri_mission = named_block(
         ideas, "ADISCORD_vorkerland_piv_macri_volunteer_mission"
     )
@@ -2425,7 +3044,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         r"every_owned_state\s*=\s*\{\s*add_core_of\s*=\s*ROOT\s*\}",
         prepare,
     ):
-        issues.append("collapse preparation must grant every participant cores in its one-time setup")
+        issues.append(
+            "collapse preparation must grant every participant cores in its one-time setup"
+        )
     removed_by_prepare = set(re.findall(r"remove_ideas\s*=\s*([A-Za-z0-9_]+)", prepare))
     expected_prepare_removals = {
         "WRK_ashes_of_the_crown",
@@ -2451,26 +3072,67 @@ def validate_events(root: Path, issues: list[str]) -> None:
         prepare,
         re.DOTALL,
     ):
-        issues.append("VLA does not replace its obsolete district spirit in the same guarded branch")
+        issues.append(
+            "VLA does not replace its obsolete district spirit in the same guarded branch"
+        )
     republic_tags = {"ZAO", "PWR", "VLA", "ROM", "SOL", "TRU"}
-    mobilized_tags = {"TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "PSD", "DVA", "SRA", "IBL", "IBA", "CSL"}
+    mobilized_tags = {
+        "TVA",
+        "EYR",
+        "EGC",
+        "RIV",
+        "REV",
+        "YOR",
+        "NDN",
+        "SWB",
+        "VHV",
+        "OSV",
+        "PSD",
+        "DVA",
+        "SRA",
+        "IBL",
+        "IBA",
+        "CSL",
+    }
     for tag in republic_tags | mobilized_tags:
         if f"tag = {tag}" not in prepare:
-            issues.append(f"{tag}: replacement spirit has no explicit preparation guard")
+            issues.append(
+                f"{tag}: replacement spirit has no explicit preparation guard"
+            )
     for spirit in (
         "ADISCORD_vorkerland_republics_from_the_ruins",
         "ADISCORD_vorkerland_mobilized_periphery",
     ):
         if f"add_ideas = {spirit}" not in prepare:
-            issues.append(f"collapse preparation does not add replacement spirit {spirit}")
+            issues.append(
+                f"collapse preparation does not add replacement spirit {spirit}"
+            )
 
     repeatable_decisions = {
-        "ADISCORD_vorkerland_wrk_activate_front_committees": ("WKR", "ADISCORD_vorkerland_wrk_front_committees"),
-        "ADISCORD_vorkerland_wrk_requisition_rail_stock": ("WKR", "ADISCORD_vorkerland_wrk_rail_requisition"),
-        "ADISCORD_vorkerland_vad_open_imperial_registers": ("VAD", "ADISCORD_vorkerland_vad_imperial_registers"),
-        "ADISCORD_vorkerland_vad_form_field_commandantures": ("VAD", "ADISCORD_vorkerland_vad_field_commandantures"),
-        "ADISCORD_vorkerland_tva_reroute_city_grid": ("TVA", "ADISCORD_vorkerland_tva_grid_rerouting"),
-        "ADISCORD_vorkerland_tva_deploy_field_laboratories": ("TVA", "ADISCORD_vorkerland_tva_field_laboratories"),
+        "ADISCORD_vorkerland_wrk_activate_front_committees": (
+            "WKR",
+            "ADISCORD_vorkerland_wrk_front_committees",
+        ),
+        "ADISCORD_vorkerland_wrk_requisition_rail_stock": (
+            "WKR",
+            "ADISCORD_vorkerland_wrk_rail_requisition",
+        ),
+        "ADISCORD_vorkerland_vad_open_imperial_registers": (
+            "VAD",
+            "ADISCORD_vorkerland_vad_imperial_registers",
+        ),
+        "ADISCORD_vorkerland_vad_form_field_commandantures": (
+            "VAD",
+            "ADISCORD_vorkerland_vad_field_commandantures",
+        ),
+        "ADISCORD_vorkerland_tva_reroute_city_grid": (
+            "TVA",
+            "ADISCORD_vorkerland_tva_grid_rerouting",
+        ),
+        "ADISCORD_vorkerland_tva_deploy_field_laboratories": (
+            "TVA",
+            "ADISCORD_vorkerland_tva_field_laboratories",
+        ),
     }
     for decision_id, (tag, spirit) in repeatable_decisions.items():
         decision = named_block(decisions, decision_id)
@@ -2482,7 +3144,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"add_timed_idea = {{ idea = {spirit}",
         ):
             if token not in decision:
-                issues.append(f"{decision_id}: dynamic claimant decision is missing {token}")
+                issues.append(
+                    f"{decision_id}: dynamic claimant decision is missing {token}"
+                )
         if not named_block(ideas, spirit):
             issues.append(f"{decision_id}: timed national spirit {spirit} is missing")
     vad_route_decisions = {
@@ -2511,7 +3175,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         decisions, "ADISCORD_vorkerland_tva_deploy_field_laboratories"
     )
     if "army_experience = 5" not in field_labs or "add_army_experience" in field_labs:
-        issues.append("Doctor Worx field laboratories use an invalid army-experience effect")
+        issues.append(
+            "Doctor Worx field laboratories use an invalid army-experience effect"
+        )
 
     tva_setup = named_block(effects, "ADISCORD_vorkerland_setup_tva")
     for token in (
@@ -2532,7 +3198,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "supply_consumption_factor = -0.12",
     ):
         if modifier not in tva_directorate:
-            issues.append(f"Doctor Worx permanent directorate spirit is missing {modifier}")
+            issues.append(
+                f"Doctor Worx permanent directorate spirit is missing {modifier}"
+            )
 
     fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
     for modifier in (
@@ -2542,9 +3210,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if modifier not in fanaticism:
             issues.append(f"Doctor Worx ideological fanaticism is missing {modifier}")
     if "surrender_limit" in fanaticism:
-        issues.append("Doctor Worx fanaticism must not stack surrender limit above shared last stand")
+        issues.append(
+            "Doctor Worx fanaticism must not stack surrender limit above shared last stand"
+        )
     state_36_paths = list((root / "history" / "states").glob("36-*.txt"))
-    state_36 = state_36_paths[0].read_text(encoding="utf-8-sig") if len(state_36_paths) == 1 else ""
+    state_36 = (
+        state_36_paths[0].read_text(encoding="utf-8-sig")
+        if len(state_36_paths) == 1
+        else ""
+    )
     if not re.search(r"victory_points\s*=\s*\{\s*12227\s+10\s*\}", state_36):
         issues.append("Nordverk must retain the balanced 10-point capital objective")
 
@@ -2552,16 +3226,28 @@ def validate_events(root: Path, issues: list[str]) -> None:
         decisions, "ADISCORD_vorkerland_tva_raise_technical_battalions"
     )
     for token in (
-        "allowed = { tag = TVA }", "cost = 40", "days_re_enable = 60",
-        "36 = {", "owner = TVA", "owner = WPS", "owner = TGD",
-        "add_manpower = 1800", "amount = 300 producer = TVA",
+        "allowed = { tag = TVA }",
+        "cost = 40",
+        "days_re_enable = 60",
+        "36 = {",
+        "owner = TVA",
+        "owner = WPS",
+        "owner = TGD",
+        "add_manpower = 1800",
+        "amount = 300 producer = TVA",
     ):
         if token not in technical_battalions:
-            issues.append(f"Doctor Worx technical battalions decision is missing {token}")
+            issues.append(
+                f"Doctor Worx technical battalions decision is missing {token}"
+            )
     if technical_battalions.count("create_unit =") != 4:
-        issues.append("Doctor Worx technical battalions decision must create two home and two conditional allied units")
+        issues.append(
+            "Doctor Worx technical battalions decision must create two home and two conditional allied units"
+        )
     if technical_battalions.count("amount = 120 producer = TVA") != 2:
-        issues.append("Doctor Worx technical allies do not receive two finite rifle grants")
+        issues.append(
+            "Doctor Worx technical allies do not receive two finite rifle grants"
+        )
 
     for token in (
         "ADISCORD_grant_technology_profile_industrial = yes",
@@ -2576,9 +3262,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in tva_setup:
             issues.append(f"Doctor Worx advanced starting package is missing {token}")
 
-    disruption = named_block(decisions, "ADISCORD_vorkerland_tva_disrupt_enemy_logistics")
+    disruption = named_block(
+        decisions, "ADISCORD_vorkerland_tva_disrupt_enemy_logistics"
+    )
     for token in (
-        "any_neighbor_country =", "every_neighbor_country =", "has_war_with = ROOT",
+        "any_neighbor_country =",
+        "every_neighbor_country =",
+        "has_war_with = ROOT",
         "add_timed_idea = { idea = ADISCORD_vorkerland_tva_logistics_disruption days = 30 }",
         "days_re_enable = 45",
     ):
@@ -2586,51 +3276,95 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Doctor Worx logistics disruption is missing {token}")
     disruption_idea = named_block(ideas, "ADISCORD_vorkerland_tva_logistics_disruption")
     for token in (
-        "supply_consumption_factor = 0.12", "army_org_regain = -0.08",
-        "repair_speed_factor = -0.15", "planning_speed = -0.10",
+        "supply_consumption_factor = 0.12",
+        "army_org_regain = -0.08",
+        "repair_speed_factor = -0.15",
+        "planning_speed = -0.10",
     ):
         if token not in disruption_idea:
             issues.append(f"Doctor Worx logistics disruption spirit is missing {token}")
 
     for target, states in (("wrk", (33, 34)), ("vad", (75, 106))):
-        partisan = named_block(decisions, f"ADISCORD_vorkerland_tva_infiltrate_{target}_rear")
-        if partisan.count("create_unit =") != 2 or partisan.count("allow_spawning_on_enemy_provs = yes") != 2:
-            issues.append(f"Doctor Worx {target.upper()} infiltration must create exactly two enemy-rear cells")
+        partisan = named_block(
+            decisions, f"ADISCORD_vorkerland_tva_infiltrate_{target}_rear"
+        )
+        if (
+            partisan.count("create_unit =") != 2
+            or partisan.count("allow_spawning_on_enemy_provs = yes") != 2
+        ):
+            issues.append(
+                f"Doctor Worx {target.upper()} infiltration must create exactly two enemy-rear cells"
+            )
         for state in states:
             if f"{state} = {{" not in partisan:
-                issues.append(f"Doctor Worx {target.upper()} infiltration is missing state {state}")
+                issues.append(
+                    f"Doctor Worx {target.upper()} infiltration is missing state {state}"
+                )
         for token in ("TVA Infiltration Cell", "fire_only_once = yes"):
             if token not in partisan:
-                issues.append(f"Doctor Worx {target.upper()} infiltration is missing {token}")
+                issues.append(
+                    f"Doctor Worx {target.upper()} infiltration is missing {token}"
+                )
 
-    fortification = named_block(decisions, "ADISCORD_vorkerland_tva_seal_city_approaches")
+    fortification = named_block(
+        decisions, "ADISCORD_vorkerland_tva_seal_city_approaches"
+    )
     for token in (
-        "province = 12227", "province = 16400", "province = 16397",
-        "type = bunker", "level = 2", "fire_only_once = yes",
+        "province = 12227",
+        "province = 16400",
+        "province = 16397",
+        "type = bunker",
+        "level = 2",
+        "fire_only_once = yes",
         "ADISCORD_vorkerland_tva_prepared_defense",
     ):
         if token not in fortification:
             issues.append(f"Doctor Worx one-time fortification is missing {token}")
-    rotation = named_block(decisions, "ADISCORD_vorkerland_tva_rotate_fortress_garrisons")
+    rotation = named_block(
+        decisions, "ADISCORD_vorkerland_tva_rotate_fortress_garrisons"
+    )
     if "add_building_construction" in rotation or "fire_only_once = no" not in rotation:
-        issues.append("Doctor Worx repeatable garrison rotation can permanently spam forts")
+        issues.append(
+            "Doctor Worx repeatable garrison rotation can permanently spam forts"
+        )
 
     relief_chain = (
-        ("ADISCORD_vorkerland_wrk_open_erased_archives", "ADISCORD_vorkerland_erased_nations", "ADISCORD_vorkerland_erased_nations_relief_1", 90),
-        ("ADISCORD_vorkerland_wrk_restore_displaced_councils", "ADISCORD_vorkerland_erased_nations_relief_1", "ADISCORD_vorkerland_erased_nations_relief_2", 120),
-        ("ADISCORD_vorkerland_wrk_enact_constitutional_guarantees", "ADISCORD_vorkerland_erased_nations_relief_2", None, 150),
+        (
+            "ADISCORD_vorkerland_wrk_open_erased_archives",
+            "ADISCORD_vorkerland_erased_nations",
+            "ADISCORD_vorkerland_erased_nations_relief_1",
+            90,
+        ),
+        (
+            "ADISCORD_vorkerland_wrk_restore_displaced_councils",
+            "ADISCORD_vorkerland_erased_nations_relief_1",
+            "ADISCORD_vorkerland_erased_nations_relief_2",
+            120,
+        ),
+        (
+            "ADISCORD_vorkerland_wrk_enact_constitutional_guarantees",
+            "ADISCORD_vorkerland_erased_nations_relief_2",
+            None,
+            150,
+        ),
     )
     for decision_id, old_spirit, new_spirit, days in relief_chain:
         decision = named_block(decisions, decision_id)
         for token in (
-            "allowed = { tag = WKR }", f"has_idea = {old_spirit}",
-            f"days_remove = {days}", f"remove_ideas = {old_spirit}",
+            "allowed = { tag = WKR }",
+            f"has_idea = {old_spirit}",
+            f"days_remove = {days}",
+            f"remove_ideas = {old_spirit}",
             "has_global_flag = ADISCORD_vorkerland_collapse_started",
         ):
             if token not in decision:
-                issues.append(f"{decision_id}: cultural-erasure relief chain is missing {token}")
+                issues.append(
+                    f"{decision_id}: cultural-erasure relief chain is missing {token}"
+                )
         if new_spirit and f"add_ideas = {new_spirit}" not in decision:
-            issues.append(f"{decision_id}: cultural-erasure relief chain does not add {new_spirit}")
+            issues.append(
+                f"{decision_id}: cultural-erasure relief chain does not add {new_spirit}"
+            )
     for key in (
         "ADISCORD_vorkerland_tva_disrupt_enemy_logistics",
         "ADISCORD_vorkerland_tva_infiltrate_wrk_rear",
@@ -2657,7 +3391,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"set_autonomy = {{ target = {target} autonomy_state = {autonomy}",
         ):
             if token not in decision:
-                issues.append(f"{decision_id}: regional-winner integration is missing {token}")
+                issues.append(
+                    f"{decision_id}: regional-winner integration is missing {token}"
+                )
 
     legacy_diplomacy = (
         "ADISCORD_vorkerland_wrk_integrate_vla",
@@ -2689,16 +3425,29 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for decision_id, tokens in canonical_diplomacy.items():
         decision = named_block(diplomacy_decisions, decision_id)
         if not decision:
-            issues.append(f"{decision_id}: canonical diplomacy decision owner is missing")
+            issues.append(
+                f"{decision_id}: canonical diplomacy decision owner is missing"
+            )
             continue
         for token in tokens:
             if token not in decision:
-                issues.append(f"{decision_id}: canonical diplomacy flow is missing {token}")
-        for bypass in ("controls_state =", "puppet =", "set_autonomy =", "declare_war_on ="):
+                issues.append(
+                    f"{decision_id}: canonical diplomacy flow is missing {token}"
+                )
+        for bypass in (
+            "controls_state =",
+            "puppet =",
+            "set_autonomy =",
+            "declare_war_on =",
+        ):
             if bypass in decision:
-                issues.append(f"{decision_id}: canonical invitation contains legacy bypass {bypass}")
+                issues.append(
+                    f"{decision_id}: canonical invitation contains legacy bypass {bypass}"
+                )
 
-    republic_sync = named_block(effects, "ADISCORD_vorkerland_sync_republics_from_ruins")
+    republic_sync = named_block(
+        effects, "ADISCORD_vorkerland_sync_republics_from_ruins"
+    )
     for token in (
         "is_subject_of = WKR",
         "remove_ideas = ADISCORD_vorkerland_republics_from_the_ruins",
@@ -2707,8 +3456,18 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"WRK subject-spirit synchronizer is missing {token}")
 
     for patron, flag, spirit, rifles in (
-        ("btl", "ADISCORD_vorkerland_btl_contract_signed", "ADISCORD_vorkerland_btl_contract_support", 2500),
-        ("val", "ADISCORD_vorkerland_val_contract_signed", "ADISCORD_vorkerland_val_contract_support", 4000),
+        (
+            "btl",
+            "ADISCORD_vorkerland_btl_contract_signed",
+            "ADISCORD_vorkerland_btl_contract_support",
+            2500,
+        ),
+        (
+            "val",
+            "ADISCORD_vorkerland_val_contract_signed",
+            "ADISCORD_vorkerland_val_contract_support",
+            4000,
+        ),
     ):
         if not named_block(ideas, spirit):
             issues.append(f"{patron.upper()}: support spirit {spirit} is missing")
@@ -2722,51 +3481,82 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 f"amount = {rifles}",
             ):
                 if token not in decision:
-                    issues.append(f"{decision_id}: exclusive external support is missing {token}")
-            if patron == "val" and "type = support_equipment amount = 60 producer = VAL" not in decision:
-                issues.append(f"{decision_id}: Kefreyt support-equipment shipment is missing")
+                    issues.append(
+                        f"{decision_id}: exclusive external support is missing {token}"
+                    )
+            if (
+                patron == "val"
+                and "type = support_equipment amount = 60 producer = VAL"
+                not in decision
+            ):
+                issues.append(
+                    f"{decision_id}: Kefreyt support-equipment shipment is missing"
+                )
 
     btl_contract = named_block(ideas, "ADISCORD_vorkerland_btl_volunteer_contract")
     for token in (
-        "can_send_volunteers = yes", "send_volunteers_tension = -1.0",
-        "send_volunteer_divisions_required = -0.90", "send_volunteer_size = 1",
+        "can_send_volunteers = yes",
+        "send_volunteers_tension = -1.0",
+        "send_volunteer_divisions_required = -0.90",
+        "send_volunteer_size = 1",
     ):
         if token not in btl_contract:
             issues.append(f"BTL volunteer contract is missing {token}")
     if 'BTL_Paul_Dorini: "Пауль Дорини"' not in countries_loc:
         issues.append("BTL leader Paul Dorini lacks Russian localisation")
 
-    second_intervention = named_block(decisions, "ADISCORD_ivanland_second_intervention")
+    second_intervention = named_block(
+        decisions, "ADISCORD_ivanland_second_intervention"
+    )
     for token in (
         "allowed = { tag = IVN }",
         "ADISCORD_vorkerland_ivanland_intervention_resolved",
-        "has_war_with = VAD", "has_war_with = WKR",
+        "has_war_with = VAD",
+        "has_war_with = WKR",
         "NOT = { country_exists = TVA }",
         "var = ADISCORD_vorkerland_civil_war_exhaustion",
-        "compare = greater_than_or_equals", "target = PSD", "target = PWR",
-        "cost = 75", "ADISCORD_vorkerland_ivanland_second_intervention_started",
+        "compare = greater_than_or_equals",
+        "target = PSD",
+        "target = PWR",
+        "cost = 75",
+        "ADISCORD_vorkerland_ivanland_second_intervention_started",
     ):
         if token not in second_intervention:
             issues.append(f"Ivanland second intervention is missing {token}")
-    if second_intervention.count("declare_war_on =") != 2 or "add_to_war" in second_intervention:
-        issues.append("Ivanland second intervention must open exactly two independent wars")
+    if (
+        second_intervention.count("declare_war_on =") != 2
+        or "add_to_war" in second_intervention
+    ):
+        issues.append(
+            "Ivanland second intervention must open exactly two independent wars"
+        )
     if second_intervention.count("value = 100") != 3:
-        issues.append("Ivanland second intervention does not test every surviving main claimant")
+        issues.append(
+            "Ivanland second intervention does not test every surviving main claimant"
+        )
 
     island_occupation = named_block(decisions, "ADISCORD_ivanland_occupy_wrk_islands")
     for token in (
-        "allowed = { tag = IVN }", "NOT = { has_war_with = WKR }",
+        "allowed = { tag = IVN }",
+        "NOT = { has_war_with = WKR }",
         "200 = { is_owned_by = WKR is_controlled_by = WKR }",
         "201 = { is_owned_by = WKR is_controlled_by = WKR }",
-        "transfer_state = 200", "transfer_state = 201", "cost = 50",
+        "transfer_state = 200",
+        "transfer_state = 201",
+        "cost = 50",
     ):
         if token not in island_occupation:
             issues.append(f"Ivanland peaceful island occupation is missing {token}")
 
-    rom_intervention = named_block(decisions, "ADISCORD_vorkerland_rom_northern_intervention")
+    rom_intervention = named_block(
+        decisions, "ADISCORD_vorkerland_rom_northern_intervention"
+    )
     for token in (
-        "allowed = { tag = ROM }", "is_subject = no", "has_war = no",
-        "generator = { 72 }", "generator = { 196 322 }",
+        "allowed = { tag = ROM }",
+        "is_subject = no",
+        "has_war = no",
+        "generator = { 72 }",
+        "generator = { 196 322 }",
         "days_mission_timeout = 240",
         "ADISCORD_vorkerland_rom_northern_intervention_success = yes",
         "ADISCORD_vorkerland_rom_northern_intervention_failure = yes",
@@ -2775,20 +3565,33 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Frealor northern intervention is missing {token}")
     if rom_intervention.count("declare_war_on =") != 2:
         issues.append("Frealor northern intervention must open two limited wars")
-    rom_success = named_block(effects, "ADISCORD_vorkerland_rom_northern_intervention_success")
+    rom_success = named_block(
+        effects, "ADISCORD_vorkerland_rom_northern_intervention_success"
+    )
     for state in (72, 196, 322):
-        if f"transfer_state = {state}" not in rom_success or f"{state} = {{ add_claim_by = ROM" not in rom_success:
-            issues.append(f"Frealor intervention success does not award claimed state {state}")
+        if (
+            f"transfer_state = {state}" not in rom_success
+            or f"{state} = {{ add_claim_by = ROM" not in rom_success
+        ):
+            issues.append(
+                f"Frealor intervention success does not award claimed state {state}"
+            )
 
-    ivn_success = named_block(effects, "ADISCORD_vorkerland_ivanland_intervention_success")
+    ivn_success = named_block(
+        effects, "ADISCORD_vorkerland_ivanland_intervention_success"
+    )
     for forbidden in (
         "ADISCORD_vorkerland_migrate_legacy_ivanland_zaozersk_protectorate",
         "ADISCORD_vorkerland_ivanland_zaozersk_independence_migration_v1",
         "ADISCORD_vorkerland_ivanland_secure_zaozersk",
-        "puppet = ZAO", "transfer_state = 72", "target = ZAO",
+        "puppet = ZAO",
+        "transfer_state = 72",
+        "target = ZAO",
     ):
         if forbidden in ivn_success:
-            issues.append(f"Ivanland success still changes sovereign Zaozersk: {forbidden}")
+            issues.append(
+                f"Ivanland success still changes sovereign Zaozersk: {forbidden}"
+            )
     startup = named_block(on_actions, "on_startup")
     for forbidden in (
         "ADISCORD_vorkerland_ivanland_secure_zaozersk",
@@ -2796,42 +3599,56 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "set_country_flag = ADISCORD_vorkerland_ivanland_protectorate",
     ):
         if forbidden in effects + "\n" + startup:
-            issues.append(f"retired Ivanland-Zaozersk protectorate producer remains: {forbidden}")
+            issues.append(
+                f"retired Ivanland-Zaozersk protectorate producer remains: {forbidden}"
+            )
 
     guarantee = named_block(decisions, "ADISCORD_ivanland_guarantee_free_republics")
     for token in (
-        "allowed = { tag = IVN }", "cost = 100",
+        "allowed = { tag = IVN }",
+        "cost = 100",
         "ADISCORD_vorkerland_ivanland_intervention_succeeded",
         "NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }",
-        "ROM = { is_neighbor_of = ROOT }", "country = ROM relation = guarantee",
+        "ROM = { is_neighbor_of = ROOT }",
+        "country = ROM relation = guarantee",
         "country = TRU relation = guarantee",
         "ADISCORD_vorkerland_free_republics_guaranteed_by_ivn",
     ):
         if token not in guarantee:
             issues.append(f"Ivanland free-republic guarantee is missing {token}")
-    republic_resolution = named_block(effects, "ADISCORD_vorkerland_resolve_unguaranteed_free_republics")
+    republic_resolution = named_block(
+        effects, "ADISCORD_vorkerland_resolve_unguaranteed_free_republics"
+    )
     for token in (
         "NOT = { has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn }",
-        "puppet = ROM", "puppet = TRU",
+        "puppet = ROM",
+        "puppet = TRU",
         "autonomy_state = autonomy_republic_in_Vorkerland",
-        "target = ROM type = annex_everything", "target = TRU type = annex_everything",
+        "target = ROM type = annex_everything",
+        "target = TRU type = annex_everything",
         "ADISCORD_vorkerland_free_republics_resolution_done",
     ):
         if token not in republic_resolution:
             issues.append(f"Worker free-republic settlement is missing {token}")
     if republic_resolution.count("random_list =") != 2:
-        issues.append("Worker free-republic settlement must roll independently for ROM and TRU")
+        issues.append(
+            "Worker free-republic settlement must roll independently for ROM and TRU"
+        )
     worker_map = named_block(map_effects, "ADISCORD_vorkerland_apply_worker_map")
     finalizer = named_block(phase_effects, "ADISCORD_vorkerland_finalize_reunified_wrk")
     if "ADISCORD_vorkerland_resolve_unguaranteed_free_republics = yes" not in finalizer:
-        issues.append("verified Worker reunification does not resolve unguaranteed free republics")
+        issues.append(
+            "verified Worker reunification does not resolve unguaranteed free republics"
+        )
     for route, map_effect in (
         ("worker", worker_map),
         ("vlad", named_block(map_effects, "ADISCORD_vorkerland_apply_vlad_map")),
         ("dorian", named_block(map_effects, "ADISCORD_vorkerland_apply_dorian_map")),
     ):
         if "ADISCORD_vorkerland_begin_reunification = yes" not in map_effect:
-            issues.append(f"{route} claimant outcome does not enter guarded reunification")
+            issues.append(
+                f"{route} claimant outcome does not enter guarded reunification"
+            )
         for forbidden in (
             "ADISCORD_vorkerland_central_war_finished",
             "ADISCORD_vorkerland_collapse_finished",
@@ -2842,7 +3659,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
             "ADISCORD_vorkerland_split_external_gate = yes",
         ):
             if forbidden in map_effect:
-                issues.append(f"{route} claimant outcome announces/finalizes before verified WRK: {forbidden}")
+                issues.append(
+                    f"{route} claimant outcome announces/finalizes before verified WRK: {forbidden}"
+                )
 
     for key in (
         "ADISCORD_ivanland_second_intervention",
@@ -2872,14 +3691,22 @@ def validate_events(root: Path, issues: list[str]) -> None:
     }
     unexpected_removals = collapse_removals - allowed_collapse_removals
     if unexpected_removals:
-        issues.append(f"collapse runtime removes unrelated ideas: {sorted(unexpected_removals)}")
+        issues.append(
+            f"collapse runtime removes unrelated ideas: {sorted(unexpected_removals)}"
+        )
     for unrelated in (
-        "IVN_national_spirit", "RUS_national_spirit", "PIV_national_spirit",
-        "NAM_national_spirit", "NOD_home_of_hedonist_revolution",
-        "STP_hedonism_with_no_bondaries", "VAL_worldwide_famous_weponry",
+        "IVN_national_spirit",
+        "RUS_national_spirit",
+        "PIV_national_spirit",
+        "NAM_national_spirit",
+        "NOD_home_of_hedonist_revolution",
+        "STP_hedonism_with_no_bondaries",
+        "VAL_worldwide_famous_weponry",
     ):
         if unrelated in collapse_removals:
-            issues.append(f"collapse runtime can remove unrelated national spirit {unrelated}")
+            issues.append(
+                f"collapse runtime can remove unrelated national spirit {unrelated}"
+            )
     for audio_effect in (
         "ADISCORD_vorkerland_play_collapse_superevent_audio",
         "ADISCORD_vorkerland_play_local_superevent_audio",
@@ -2888,18 +3715,28 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if "ADISCORD_vorkerland_play_superevent_sound = yes" not in audio:
             issues.append(f"{audio_effect}: must use the shared unscoped audio helper")
         if "limit = { is_ai = no }" in audio:
-            issues.append(f"{audio_effect}: human-only audio gate silences observer/spectator")
+            issues.append(
+                f"{audio_effect}: human-only audio gate silences observer/spectator"
+            )
         if re.search(r"remove_ideas|swap_ideas|remove_dynamic_modifier", audio):
             issues.append(f"{audio_effect}: audio routing mutates country ideas")
     shared_audio = named_block(map_effects, "ADISCORD_vorkerland_play_superevent_sound")
     if "every_country" in shared_audio or "scoped_sound_effect" in shared_audio:
-        issues.append("shared superevent audio must stay unscoped for observer/spectator")
+        issues.append(
+            "shared superevent audio must stay unscoped for observer/spectator"
+        )
     if shared_audio.count('play_song = "one_minute_of_silence"') != 1:
-        issues.append("shared superevent audio must reserve the music channel with one_minute_of_silence")
+        issues.append(
+            "shared superevent audio must reserve the music channel with one_minute_of_silence"
+        )
     if 'play_song = "superevent_' in shared_audio:
-        issues.append("shared superevent audio must not duplicate presentation audio on the music channel")
+        issues.append(
+            "shared superevent audio must not duplicate presentation audio on the music channel"
+        )
     if "sound_effect =" in shared_audio:
-        issues.append("shared superevent audio must leave presentation playback to GUI show_sound")
+        issues.append(
+            "shared superevent audio must leave presentation playback to GUI show_sound"
+        )
     if "add_ideas = ADISCORD_vorkerland_erased_nations" in prepare:
         issues.append("cultural-erasure spirit still leaks to every successor")
     finalizer = named_block(effects, "ADISCORD_vorkerland_finalize_conflict_spirits")
@@ -2914,32 +3751,54 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in last_stand:
             issues.append(f"shared claimant last-stand spirit is missing {token}")
     if last_stand.count("surrender_limit = 0.90") != 1:
-        issues.append("shared claimant last-stand spirit must grant exactly +0.90 surrender limit")
+        issues.append(
+            "shared claimant last-stand spirit must grant exactly +0.90 surrender limit"
+        )
     for tag in ("WKR", "VAD", "TVA"):
-        if "add_ideas = ADISCORD_vorkerland_last_stand" not in named_block(initial, tag):
-            issues.append(f"{tag}: initial materialization does not grant the shared last-stand spirit")
+        if "add_ideas = ADISCORD_vorkerland_last_stand" not in named_block(
+            initial, tag
+        ):
+            issues.append(
+                f"{tag}: initial materialization does not grant the shared last-stand spirit"
+            )
         if f"tag = {tag}" not in finalizer:
-            issues.append(f"{tag}: deferred finalizer lacks a claimant branch for last stand")
+            issues.append(
+                f"{tag}: deferred finalizer lacks a claimant branch for last stand"
+            )
     if finalizer.count("add_ideas = ADISCORD_vorkerland_last_stand") != 3:
-        issues.append("deferred finalizer must assert last stand exactly once for WKR, VAD and TVA")
-    progression = named_block(effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression")
+        issues.append(
+            "deferred finalizer must assert last stand exactly once for WKR, VAD and TVA"
+        )
+    progression = named_block(
+        effects, "ADISCORD_vorkerland_repair_claimant_spirit_progression"
+    )
     if progression.count("add_ideas = ADISCORD_vorkerland_last_stand") != 3:
-        issues.append("outbreak progression must preserve last stand for all three claimants")
+        issues.append(
+            "outbreak progression must preserve last stand for all three claimants"
+        )
     fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
     if "surrender_limit" in fanaticism:
-        issues.append("TVA ideological fanaticism must not stack surrender limit above the shared +0.90")
+        issues.append(
+            "TVA ideological fanaticism must not stack surrender limit above the shared +0.90"
+        )
     for loc_key in (
         "ADISCORD_vorkerland_last_stand",
         "ADISCORD_vorkerland_last_stand_desc",
     ):
         if f" {loc_key}:" not in loc:
-            issues.append(f"shared claimant last-stand spirit lacks Russian localisation key {loc_key}")
+            issues.append(
+                f"shared claimant last-stand spirit lacks Russian localisation key {loc_key}"
+            )
 
-    if effects.count("add_ideas = ADISCORD_vorkerland_erased_nations") != 2 or not re.search(
-        r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
-        initial,
-        re.DOTALL,
-    ) or "tag = WKR" not in finalizer:
+    if (
+        effects.count("add_ideas = ADISCORD_vorkerland_erased_nations") != 2
+        or not re.search(
+            r"WKR\s*=\s*\{[^{}]*add_ideas\s*=\s*ADISCORD_vorkerland_erased_nations",
+            initial,
+            re.DOTALL,
+        )
+        or "tag = WKR" not in finalizer
+    ):
         issues.append("cultural-erasure spirit must be added only to WKR")
 
     spirit_cleanup = re.search(
@@ -2949,15 +3808,20 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     spirit_cleanup_body = spirit_cleanup.group(1) if spirit_cleanup else ""
     for token in (
-        "tag = WKR", "ADISCORD_vorkerland_finalize_conflict_spirits = yes",
+        "tag = WKR",
+        "ADISCORD_vorkerland_finalize_conflict_spirits = yes",
         "set_global_flag = ADISCORD_vorkerland_conflict_spirits_finalized",
         "set_global_flag = ADISCORD_vorkerland_unique_spirits_finalized_v2",
     ):
         if token not in spirit_cleanup_body:
             issues.append(f"one-shot legacy-spirit cleanup is missing {token}")
     if "ADISCORD_vorkerland_collapse.41 days = 1" not in events:
-        issues.append("collapse outbreak does not schedule the deferred legacy-spirit cleanup")
-    if "ADISCORD_vorkerland_finalize_conflict_spirits = yes" in named_block(on_actions, "on_monthly"):
+        issues.append(
+            "collapse outbreak does not schedule the deferred legacy-spirit cleanup"
+        )
+    if "ADISCORD_vorkerland_finalize_conflict_spirits = yes" in named_block(
+        on_actions, "on_monthly"
+    ):
         issues.append("legacy-spirit cleanup must not poll on_monthly")
 
     for tag, spirit in (
@@ -2969,7 +3833,10 @@ def validate_events(root: Path, issues: list[str]) -> None:
         ("TGD", "ADISCORD_vorkerland_tgd_grid_collapse"),
         ("CSL", "ADISCORD_vorkerland_csl_isolated_city"),
     ):
-        if f"limit = {{ tag = {tag} }}" not in finalizer or f"add_ideas = {spirit}" not in finalizer:
+        if (
+            f"limit = {{ tag = {tag} }}" not in finalizer
+            or f"add_ideas = {spirit}" not in finalizer
+        ):
             issues.append(f"{tag}: deferred spirit finalizer does not restore {spirit}")
     unique_spirits = {
         "VAD": "ADISCORD_vorkerland_vad_imperial_chancery",
@@ -2989,14 +3856,18 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"add_ideas = {spirit}" not in effects + decisions:
             issues.append(f"{tag}: unique collapse spirit {spirit} is not applied")
         if f" {spirit}:" not in loc or f" {spirit}_desc:" not in loc:
-            issues.append(f"{tag}: unique collapse spirit {spirit} lacks Russian localisation")
+            issues.append(
+                f"{tag}: unique collapse spirit {spirit} lacks Russian localisation"
+            )
 
     for spirit in (
         "ADISCORD_vorkerland_tgd_grid_collapse",
         "ADISCORD_vorkerland_tgd_living_grid",
     ):
         if "recruitable_population_factor = -1.00" not in named_block(ideas, spirit):
-            issues.append(f"TGD: {spirit} must keep the city-state manpower pool bounded")
+            issues.append(
+                f"TGD: {spirit} must keep the city-state manpower pool bounded"
+            )
     technical_aid = named_block(
         decisions, "ADISCORD_vorkerland_tva_raise_technical_battalions"
     )
@@ -3004,14 +3875,38 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if technical_aid.count(f"NOT = {{ has_country_flag = {tgd_aid_flag} }}") != 1:
         issues.append("TGD: technical battalion aid lacks its permanent one-shot guard")
     if technical_aid.count(f"set_country_flag = {tgd_aid_flag}") != 1:
-        issues.append("TGD: technical battalion aid must write its one-shot flag exactly once")
+        issues.append(
+            "TGD: technical battalion aid must write its one-shot flag exactly once"
+        )
     if f"clr_country_flag = {tgd_aid_flag}" in effects + decisions + on_actions:
-        issues.append("TGD: technical battalion aid one-shot flag must never be cleared")
+        issues.append(
+            "TGD: technical battalion aid one-shot flag must never be cleared"
+        )
 
-    for tag in ("TVA", "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "TGD", "EBA", "PSD", "DVA", "ZTA", "WPA", "WPS"):
+    for tag in (
+        "TVA",
+        "EYR",
+        "EGC",
+        "RIV",
+        "REV",
+        "YOR",
+        "NDN",
+        "SWB",
+        "VHV",
+        "OSV",
+        "TGD",
+        "EBA",
+        "PSD",
+        "DVA",
+        "ZTA",
+        "WPA",
+        "WPS",
+    ):
         setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
         manpower = re.search(r"add_manpower\s*=\s*(\d+)", setup)
-        reserve = re.search(r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", setup)
+        reserve = re.search(
+            r"add_equipment_to_stockpile\s*=\s*\{[^{}]*amount\s*=\s*(\d+)", setup
+        )
         minimum_manpower = 2000 if tag == "NDN" else 3000
         if not manpower or int(manpower.group(1)) < minimum_manpower:
             issues.append(f"{tag}: collapse OOB lacks a useful manpower reserve")
@@ -3021,15 +3916,23 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "add_manpower = 10000" not in eba_setup or "amount = 1100" not in eba_setup:
         issues.append("EBA: approved collapse reserve is missing")
     eba_oob = read(root, "history/units/EBA_vorkerland_collapse.txt", issues)
-    eba_locations = [int(value) for value in re.findall(r"location\s*=\s*(\d+)", eba_oob)]
+    eba_locations = [
+        int(value) for value in re.findall(r"location\s*=\s*(\d+)", eba_oob)
+    ]
     if sorted(eba_locations) != sorted([16623, 16623, 16617, 16637]):
         issues.append("EBA: militia deployment is not distributed across the republic")
     for tag in ("VAD",):
         country = re.search(rf"{tag}\s*=\s*\{{(.*?)\n\s*\}}", initial, re.DOTALL)
-        if not country or "add_manpower = 8000" not in country.group(1) or "amount = 600" not in country.group(1):
+        if (
+            not country
+            or "add_manpower = 8000" not in country.group(1)
+            or "amount = 600" not in country.group(1)
+        ):
             issues.append(f"{tag}: central claimant reserve is missing")
     wkr_initial = named_block(initial, "WKR")
-    wkr_air_stockpile = "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR"
+    wkr_air_stockpile = (
+        "type = ADISCORD_fighter_airframe_2163 amount = 30 producer = WKR"
+    )
     wkr_cas_stockpile = "type = ADISCORD_cas_airframe_2170 amount = 15 producer = WKR"
     wkr_air_oob = 'load_oob = "WRK_vorkerland_collapse_air"'
     for token in (
@@ -3047,16 +3950,26 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if stale in wkr_initial:
             issues.append(f"WKR: obsolete air reserve survived: {stale}")
     if "add_equipment_production" in wkr_initial:
-        issues.append("WKR: baseline air sustainment must not duplicate focus production lines")
+        issues.append(
+            "WKR: baseline air sustainment must not duplicate focus production lines"
+        )
 
-    shared_air_ai = named_block(force_design_ai, "ADISCORD_vorkerland_air_denial_program")
+    shared_air_ai = named_block(
+        force_design_ai, "ADISCORD_vorkerland_air_denial_program"
+    )
     wkr_air_ai = named_block(
         force_design_ai, "ADISCORD_vorkerland_wkr_air_denial_program"
     )
-    shared_air_tags = set(re.findall(r"\btag\s*=\s*([A-Z]{3})", named_block(shared_air_ai, "allowed")))
-    wkr_air_tags = set(re.findall(r"\btag\s*=\s*([A-Z]{3})", named_block(wkr_air_ai, "allowed")))
+    shared_air_tags = set(
+        re.findall(r"\btag\s*=\s*([A-Z]{3})", named_block(shared_air_ai, "allowed"))
+    )
+    wkr_air_tags = set(
+        re.findall(r"\btag\s*=\s*([A-Z]{3})", named_block(wkr_air_ai, "allowed"))
+    )
     if shared_air_tags != {"VAD", "TVA"}:
-        issues.append("shared claimant air denial AI must remain limited to VAD and TVA")
+        issues.append(
+            "shared claimant air denial AI must remain limited to VAD and TVA"
+        )
     if wkr_air_tags != {"WKR"}:
         issues.append("WKR air denial AI must have an exact WKR allowlist")
     for token in (
@@ -3086,7 +3999,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in wkr_force_templates:
             issues.append(f"WKR force-template v2 migration is missing {token}")
     if wkr_force_templates.count("division_template =") != 2:
-        issues.append("WKR force-template v2 migration must create exactly two templates")
+        issues.append(
+            "WKR force-template v2 migration must create exactly two templates"
+        )
     wkr_home_guard = named_block(effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
     for token in (
         "tag = WKR",
@@ -3100,11 +4015,14 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in wkr_home_guard:
             issues.append(f"WKR annex-independent home guard is missing {token}")
-    emergency_templates = source_section(read(
-        root,
-        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
-        issues,
-    ), 'emergency_template_effects')
+    emergency_templates = source_section(
+        read(
+            root,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            issues,
+        ),
+        'emergency_template_effects',
+    )
     worker_home_guard_template = named_block(
         emergency_templates,
         "ADISCORD_vorkerland_ensure_worker_home_guard_template",
@@ -3113,9 +4031,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if token not in worker_home_guard_template:
             issues.append(f"shared WKR home-guard template is missing {token}")
     if worker_home_guard_template.count("ADISCORD_militia =") != 3:
-        issues.append("WKR home-guard template must contain exactly three militia battalions")
-    if wkr_home_guard.count("create_unit =") != 2 or wkr_home_guard.count("count = 2") != 2:
-        issues.append("WKR home guard must deploy exactly two formations in state 33 and two in state 32")
+        issues.append(
+            "WKR home-guard template must contain exactly three militia battalions"
+        )
+    if (
+        wkr_home_guard.count("create_unit =") != 2
+        or wkr_home_guard.count("count = 2") != 2
+    ):
+        issues.append(
+            "WKR home guard must deploy exactly two formations in state 33 and two in state 32"
+        )
     for forbidden in ("annex_country", "every_country", "every_state"):
         if forbidden in wkr_home_guard:
             issues.append(f"WKR home-guard effect is not bounded: {forbidden}")
@@ -3123,9 +4048,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     if "tag = WRK" not in relocation:
         issues.append("legacy WRK formations are not evacuated before transfer_troops")
     if "tag = WKR" in relocation:
-        issues.append("legacy relocation erases WKR's authored state-33 home-guard deployment")
+        issues.append(
+            "legacy relocation erases WKR's authored state-33 home-guard deployment"
+        )
     if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" not in wkr_initial:
-        issues.append("fresh WKR split does not deploy its annex-independent home guard")
+        issues.append(
+            "fresh WKR split does not deploy its annex-independent home guard"
+        )
     if "ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = yes" not in wkr_home_guard:
         issues.append("fresh WKR split does not apply the force-template v2 package")
     template_migration_startup = named_block(
@@ -3137,11 +4066,17 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         issues.append("older WKR saves do not receive the force-template v2 migration")
     if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in template_migration_startup:
-        issues.append("old-save template migration must not duplicate the WKR Home Guard")
+        issues.append(
+            "old-save template migration must not duplicate the WKR Home Guard"
+        )
     for cadence in ("on_daily", "on_weekly", "on_monthly"):
         if cadence in template_migration_on_actions:
-            issues.append(f"WKR force-template migration must not poll through {cadence}")
-    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in named_block(on_actions, "on_monthly"):
+            issues.append(
+                f"WKR force-template migration must not poll through {cadence}"
+            )
+    if "ADISCORD_vorkerland_ensure_wkr_home_guard = yes" in named_block(
+        on_actions, "on_monthly"
+    ):
         issues.append("WKR home guard must not use monthly polling")
     for technology in (
         "ADISCORD_tech_semi_autonomous_combat_modules = 1",
@@ -3149,54 +4084,96 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "ADISCORD_tech_battlefield_attack_aircraft = 1",
     ):
         if technology not in wkr_initial:
-            issues.append(f"WKR: dormant claimant setup is missing pre-OOB technology {technology}")
+            issues.append(
+                f"WKR: dormant claimant setup is missing pre-OOB technology {technology}"
+            )
         elif (
             wkr_air_stockpile in wkr_initial
             and wkr_air_oob in wkr_initial
             and wkr_initial.index(technology)
             > min(wkr_initial.index(wkr_air_stockpile), wkr_initial.index(wkr_air_oob))
         ):
-            issues.append(f"WKR: {technology} must be granted before aircraft and air OOB materialize")
+            issues.append(
+                f"WKR: {technology} must be granted before aircraft and air OOB materialize"
+            )
     legacy_reserves = {
-        "ZAO": (4000, 8500), "PWR": (8000, 16000), "VLA": (8000, 18000),
+        "ZAO": (4000, 8500),
+        "PWR": (8000, 16000),
+        "VLA": (8000, 18000),
         "NAM": (8000, 16000),
-        "ROM": (10000, 18000), "SOL": (3000, 5000), "TRU": (11000, 20000),
+        "ROM": (10000, 18000),
+        "SOL": (3000, 5000),
+        "TRU": (11000, 20000),
     }
     for tag, (manpower, rifles) in legacy_reserves.items():
         country = named_block(initial, tag)
-        if f"add_manpower = {manpower}" not in country or f"amount = {rifles}" not in country:
+        if (
+            f"add_manpower = {manpower}" not in country
+            or f"amount = {rifles}" not in country
+        ):
             issues.append(f"{tag}: finite collapse reserve is missing")
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
-    if tva_oob.count("division = {") != 19 or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2 or "TVA Infiltration Cell" not in tva_oob:
-        issues.append("TVA must start with seventeen militia formations, two mobile groups and an infiltration template")
+    if (
+        tva_oob.count("division = {") != 19
+        or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2
+        or "TVA Infiltration Cell" not in tva_oob
+    ):
+        issues.append(
+            "TVA must start with seventeen militia formations, two mobile groups and an infiltration template"
+        )
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)
         initial_country = named_block(initial, tag)
         if oob.count("division = {") != 12 or "ADISCORD_combat_platform" not in oob:
-            issues.append(f"{tag} must retain twelve pre-collapse formations and a mobile template")
+            issues.append(
+                f"{tag} must retain twelve pre-collapse formations and a mobile template"
+            )
         for token in (
-            f"owner = {tag}", "create_unit =", "ADISCORD_combat_platform_2170",
-            "ADISCORD_fighter_airframe_2163", "ADISCORD_cas_airframe_2170",
+            f"owner = {tag}",
+            "create_unit =",
+            "ADISCORD_combat_platform_2170",
+            "ADISCORD_fighter_airframe_2163",
+            "ADISCORD_cas_airframe_2170",
         ):
             if token not in initial_country:
-                issues.append(f"{tag}: post-technology mobile/air package is missing {token}")
+                issues.append(
+                    f"{tag}: post-technology mobile/air package is missing {token}"
+                )
     central_minor_oobs = {
-        "EYR": 6, "EGC": 5, "RIV": 6, "REV": 5, "YOR": 5,
-        "NDN": 4, "SWB": 4, "VHV": 5, "OSV": 4,
+        "EYR": 6,
+        "EGC": 5,
+        "RIV": 6,
+        "REV": 5,
+        "YOR": 5,
+        "NDN": 4,
+        "SWB": 4,
+        "VHV": 5,
+        "OSV": 4,
     }
     for tag, divisions in central_minor_oobs.items():
         oob = read(root, f"history/units/{tag}_vorkerland_collapse.txt", issues)
         if oob.count("division = {") != divisions:
-            issues.append(f"{tag} must start with exactly {divisions} militia divisions")
+            issues.append(
+                f"{tag} must start with exactly {divisions} militia divisions"
+            )
 
     central_minor_reserves = {
-        "EYR": (6500, 8000), "EGC": (5500, 6500), "RIV": (7000, 8500),
-        "REV": (5500, 6500), "YOR": (5500, 6500), "NDN": (4500, 5500),
-        "SWB": (4500, 5500), "VHV": (5500, 6500), "OSV": (4500, 5500),
+        "EYR": (6500, 8000),
+        "EGC": (5500, 6500),
+        "RIV": (7000, 8500),
+        "REV": (5500, 6500),
+        "YOR": (5500, 6500),
+        "NDN": (4500, 5500),
+        "SWB": (4500, 5500),
+        "VHV": (5500, 6500),
+        "OSV": (4500, 5500),
     }
     for tag, (manpower, rifles) in central_minor_reserves.items():
         setup = named_block(effects, f"ADISCORD_vorkerland_setup_{tag.lower()}")
-        if f"add_manpower = {manpower}" not in setup or f"amount = {rifles} producer = {tag}" not in setup:
+        if (
+            f"add_manpower = {manpower}" not in setup
+            or f"amount = {rifles} producer = {tag}" not in setup
+        ):
             issues.append(f"{tag}: approved finite manpower/rifle reserve is missing")
 
     minor_trigger = named_block(triggers, "ADISCORD_vorkerland_is_minor_combatant")
@@ -3204,57 +4181,107 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if f"tag = {tag}" not in minor_trigger:
             issues.append(f"{tag}: missing from the bounded emergency-levy allowlist")
     if "ADISCORD_vorkerland_is_regional_combatant = yes" not in minor_trigger:
-        issues.append("regional combatants are missing from the bounded emergency-levy allowlist")
+        issues.append(
+            "regional combatants are missing from the bounded emergency-levy allowlist"
+        )
     for tag in ("WRK", "VAD", "TVA", "IVN", "EXZ"):
         if f"tag = {tag}" in minor_trigger:
             issues.append(f"{tag}: must not receive the minor emergency levy")
     levies = named_block(effects, "ADISCORD_vorkerland_raise_emergency_levies")
     for token in (
-        "add_manpower = 1800", "amount = 360 producer = ROOT",
-        'division_template = \\"Emergency Militia\\"', "count = 2",
+        "add_manpower = 1800",
+        "amount = 360 producer = ROOT",
+        'division_template = \\"Emergency Militia\\"',
+        "count = 2",
     ):
         if token not in levies:
             issues.append(f"bounded emergency levy is missing {token}")
     if "every_country" in levies or "every_state" in levies:
-        issues.append("bounded emergency levy must not perform a global country/state scan")
+        issues.append(
+            "bounded emergency levy must not perform a global country/state scan"
+        )
     levy_decision = named_block(decisions, "ADISCORD_vorkerland_raise_emergency_levies")
     for token in (
         "allowed = { ADISCORD_vorkerland_is_minor_combatant = yes }",
-        "has_war = yes", "cost = 25", "days_remove = 21",
+        "has_war = yes",
+        "cost = 25",
+        "days_remove = 21",
         "fire_only_once = yes",
         "remove_effect = { ADISCORD_vorkerland_raise_emergency_levies = yes }",
     ):
         if token not in levy_decision:
             issues.append(f"bounded emergency-levy decision is missing {token}")
     if "ADISCORD_vorkerland_raise_emergency_levies" in on_actions:
-        issues.append("emergency levies must be decision-driven, not polled by on_actions")
+        issues.append(
+            "emergency levies must be decision-driven, not polled by on_actions"
+        )
 
     ivn_oob = read(root, "history/units/IVN.txt", issues)
     ivn_units = named_block(ivn_oob, "units")
-    if "set_major = yes" not in ivn_history or "set_research_slots = 5" not in ivn_history:
+    if (
+        "set_major = yes" not in ivn_history
+        or "set_research_slots = 5" not in ivn_history
+    ):
         issues.append("IVN must start as a major with five research slots")
     if ivn_units.count("division = {") != 16:
         issues.append("IVN must start with exactly sixteen field formations")
-    for template, count in (("Capital Guard", 2), ("Line Infantry Brigade", 10), ("Local Security Detachment", 4)):
+    for template, count in (
+        ("Capital Guard", 2),
+        ("Line Infantry Brigade", 10),
+        ("Local Security Detachment", 4),
+    ):
         if ivn_units.count(f'division_template = "{template}"') != count:
             issues.append(f"IVN must field exactly {count} {template} formations")
-    equipment_factors = [float(value) for value in re.findall(r"start_equipment_factor\s*=\s*([0-9.]+)", ivn_units)]
+    equipment_factors = [
+        float(value)
+        for value in re.findall(r"start_equipment_factor\s*=\s*([0-9.]+)", ivn_units)
+    ]
     if len(equipment_factors) != 16 or min(equipment_factors, default=0.0) < 0.70:
-        issues.append("IVN field formations must start at 70 percent equipment or better")
-    ivn_locations = [int(value) for value in re.findall(r"location\s*=\s*(\d+)", ivn_units)]
-    if ivn_locations != [16568, 9327, 3462, 3318, 888, 838, 2448, 882, 702, 595, 1971, 3447, 595, 2262, 423, 4217]:
-        issues.append("IVN field formations do not match the post-island-administration deployment")
-    intervention_start = named_block(effects, "ADISCORD_vorkerland_begin_ivanland_intervention")
+        issues.append(
+            "IVN field formations must start at 70 percent equipment or better"
+        )
+    ivn_locations = [
+        int(value) for value in re.findall(r"location\s*=\s*(\d+)", ivn_units)
+    ]
+    if ivn_locations != [
+        16568,
+        9327,
+        3462,
+        3318,
+        888,
+        838,
+        2448,
+        882,
+        702,
+        595,
+        1971,
+        3447,
+        595,
+        2262,
+        423,
+        4217,
+    ]:
+        issues.append(
+            "IVN field formations do not match the post-island-administration deployment"
+        )
+    intervention_start = named_block(
+        effects, "ADISCORD_vorkerland_begin_ivanland_intervention"
+    )
     for token in (
-        "ADISCORD_vorkerland_ivanland_expedition_supplied", "add_manpower = 8000",
-        "amount = 1600 producer = IVN", "type = support_equipment amount = 120 producer = IVN",
-        "type = artillery_equipment amount = 48 producer = IVN", "add_fuel = 5000",
+        "ADISCORD_vorkerland_ivanland_expedition_supplied",
+        "add_manpower = 8000",
+        "amount = 1600 producer = IVN",
+        "type = support_equipment amount = 120 producer = IVN",
+        "type = artillery_equipment amount = 48 producer = IVN",
+        "add_fuel = 5000",
     ):
         if token not in intervention_start:
             issues.append(f"IVN one-shot expedition reserve is missing {token}")
     zta_oob = read(root, "history/units/ZTA_vorkerland_collapse.txt", issues)
     if zta_oob.count("division = {") != 3:
-        issues.append("ZTA must retain exactly three militia divisions after the northern split")
+        issues.append(
+            "ZTA must retain exactly three militia divisions after the northern split"
+        )
 
     local_oobs = {
         "PWR": "history/units/PWR.txt",
@@ -3271,13 +4298,22 @@ def validate_events(root: Path, issues: list[str]) -> None:
             for value in re.findall(r"start_equipment_factor\s*=\s*([\d.]+)", oob)
         ]
         expected = 5 if tag in {"PWR", "PSD"} else 3
-        if oob.count("division = {") != expected or len(equipment) != expected or min(equipment, default=0) < 0.55:
-            issues.append(f"{tag}: local war OOB must contain {expected} supplied formations")
+        if (
+            oob.count("division = {") != expected
+            or len(equipment) != expected
+            or min(equipment, default=0) < 0.55
+        ):
+            issues.append(
+                f"{tag}: local war OOB must contain {expected} supplied formations"
+            )
 
     local_capitals = {
-        "PWR": (71, "16591"), "PSD": (194, "2339"),
-        "ROM": (73, "16571"), "DVA": (145, "6729"),
-        "TRU": (80, "3083"), "ZTA": (199, "12930"),
+        "PWR": (71, "16591"),
+        "PSD": (194, "2339"),
+        "ROM": (73, "16571"),
+        "DVA": (145, "6729"),
+        "TRU": (80, "3083"),
+        "ZTA": (199, "12930"),
     }
     supply_nodes = {
         line.split()[1]
@@ -3299,11 +4335,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if not re.search(r"arms_factory\s*=\s*2\b", state):
             issues.append(f"{tag}: capital state must have two military factories")
         if hub not in supply_nodes or hub not in railway_provinces:
-            issues.append(f"{tag}: capital supply hub {hub} is missing from the rail network")
+            issues.append(
+                f"{tag}: capital supply hub {hub} is missing from the rail network"
+            )
 
     cosmetics = named_block(effects, "ADISCORD_vorkerland_apply_claimant_cosmetics")
     for tag in ("ROM", "TRU", "ZAO", "SOL"):
-        if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in named_block(cosmetics, tag):
+        if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in named_block(
+            cosmetics, tag
+        ):
             issues.append(f"{tag}: collapse independence cosmetic is not synchronized")
     for token in (
         "set_cosmetic_tag = PWR_rimat_republic",
@@ -3313,9 +4353,12 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in cosmetics:
             issues.append(f"collapse cosmetic is not applied: {token}")
-    cosmetic_sync = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
+    cosmetic_sync = named_block(
+        effects, "ADISCORD_vorkerland_sync_independence_cosmetic"
+    )
     for token in (
-        "is_subject = yes", "drop_cosmetic_tag = yes",
+        "is_subject = yes",
+        "drop_cosmetic_tag = yes",
         "set_cosmetic_tag = ROM_frealor_republic",
         "set_cosmetic_tag = TRU_zolotorevsk_republic",
         "set_cosmetic_tag = ZAO_zaozersk_republic",
@@ -3330,23 +4373,39 @@ def validate_events(root: Path, issues: list[str]) -> None:
         if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" not in hook_block:
             issues.append(f"{hook} does not synchronize republic/dependency cosmetics")
         if "OR = { tag = ROM tag = TRU tag = ZAO tag = SOL }" not in hook_block:
-            issues.append(f"{hook} does not include SOL in dependency cosmetic synchronization")
-    if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" in named_block(on_actions, "on_monthly"):
+            issues.append(
+                f"{hook} does not include SOL in dependency cosmetic synchronization"
+            )
+    if "ADISCORD_vorkerland_sync_independence_cosmetic = yes" in named_block(
+        on_actions, "on_monthly"
+    ):
         issues.append("republic cosmetic synchronization still polls on_monthly")
     sol_history = read(root, "history/countries/SOL - Solarino.txt", issues)
     if "set_cosmetic_tag = SOL_vorkerland_worker_protectorate" not in sol_history:
         issues.append("SOL does not start with its WRK worker-protectorate cosmetic")
     loyalist = named_block(decisions, "ADISCORD_vorkerland_restore_loyalist_district")
-    if set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(loyalist, "allowed"))) != {"ZAO", "VLA"}:
+    if set(re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(loyalist, "allowed"))) != {
+        "ZAO",
+        "VLA",
+    }:
         issues.append("only ZAO/VLA may voluntarily restore loyalist district status")
-    if "ADISCORD_vorkerland_northern_loyalist_district_restored" in decisions + on_actions:
+    if (
+        "ADISCORD_vorkerland_northern_loyalist_district_restored"
+        in decisions + on_actions
+    ):
         issues.append("obsolete shared ZAO/PWR loyalist slot survived")
     for token in (
-        "is_subject = no", "has_war = no", "is_subject = no", "target = ROOT",
-        "autonomy_state = autonomy_district_in_Vorkerland", "drop_cosmetic_tag = yes", "factor = 350",
+        "is_subject = no",
+        "has_war = no",
+        "is_subject = no",
+        "target = ROOT",
+        "autonomy_state = autonomy_district_in_Vorkerland",
+        "drop_cosmetic_tag = yes",
+        "factor = 350",
         "has_global_flag = ADISCORD_vorkerland_phase_postwar_integration",
         "has_global_flag = ADISCORD_vorkerland_reunification_verified",
-        "owns_state = 32", "controls_state = 32",
+        "owns_state = 32",
+        "controls_state = 32",
     ):
         if token not in loyalist:
             issues.append(f"loyalist restoration decision is missing {token}")
@@ -3363,9 +4422,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
             issues.append(f"Rimat technocratic appointment is missing {token}")
     if "recruit_character = PWR_Alexey_Lange" not in pwr_history:
         issues.append("PWR history does not recruit Alexey Lange")
-    if "ruling_party = pragmatism" not in pwr_history or "ruling_party = technocracy" in pwr_history:
+    if (
+        "ruling_party = pragmatism" not in pwr_history
+        or "ruling_party = technocracy" in pwr_history
+    ):
         issues.append("PWR must remain pragmatist before the Vorkerland collapse")
-    if "recruit_character" in pwr_appointment or "create_country_leader" in pwr_appointment:
+    if (
+        "recruit_character" in pwr_appointment
+        or "create_country_leader" in pwr_appointment
+    ):
         issues.append("Rimat appointment must promote its history-recruited character")
 
     wartime_republics = (
@@ -3388,7 +4453,14 @@ def validate_events(root: Path, issues: list[str]) -> None:
     )
     startup = named_block(on_actions, "on_startup")
     monthly = named_block(on_actions, "on_monthly")
-    for tag, history_path, effect_id, character, ideology, event_id in wartime_republics:
+    for (
+        tag,
+        history_path,
+        effect_id,
+        character,
+        ideology,
+        event_id,
+    ) in wartime_republics:
         history = read(root, history_path, issues)
         appointment = named_block(effects, effect_id)
         if "ruling_party = pragmatism" not in history:
@@ -3402,9 +4474,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
             if token not in appointment:
                 issues.append(f"{tag} wartime appointment is missing {token}")
         if "recruit_character" in appointment or "create_country_leader" in appointment:
-            issues.append(f"{tag} wartime appointment must use its history-recruited character")
+            issues.append(
+                f"{tag} wartime appointment must use its history-recruited character"
+            )
         if events.count(f"id = ADISCORD_vorkerland_collapse.{event_id}") != 1:
-            issues.append(f"{tag} wartime repair event {event_id} is missing or duplicated")
+            issues.append(
+                f"{tag} wartime repair event {event_id} is missing or duplicated"
+            )
         if f"{effect_id} = yes" in monthly:
             issues.append(f"{tag} wartime government still polls on_monthly")
 
@@ -3417,13 +4493,14 @@ def validate_events(root: Path, issues: list[str]) -> None:
     zao_cosmetics = named_block(cosmetics, "ZAO")
     zao_focus_path = "common/national_focus/ADISCORD_Vorkerland_zao.txt"
     zao_focus = source_section(read(root, zao_focus_path, issues), "zao_focus")
-    english_loc = source_section(read(
-        root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues
-    ), 'collapse_l_english')
-    russian_loc_path = (
-        root / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
+    english_loc = source_section(
+        read(root, "localisation/english/ADISCORD_vorkerland_l_english.yml", issues),
+        'collapse_l_english',
     )
-    english_characters = read(root, "localisation/english/nsb_characters_l_english.yml", issues)
+    russian_loc_path = root / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
+    english_characters = read(
+        root, "localisation/english/nsb_characters_l_english.yml", issues
+    )
     bassam = named_block(wrk_characters, "WRK_Bassam_Zogby")
     zao_repair = re.search(
         r"(?ms)^country_event\s*=\s*\{\s*id\s*=\s*ADISCORD_vorkerland_collapse\.68\b"
@@ -3435,7 +4512,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "promote_character = WRK_Bassam_Zogby",
     ):
         if token not in zao_history:
-            issues.append(f"ZAO history does not deterministically appoint Bassam: {token}")
+            issues.append(
+                f"ZAO history does not deterministically appoint Bassam: {token}"
+            )
     for token in (
         "country_leader",
         "ideology = pragmatism_ideology",
@@ -3452,8 +4531,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     ):
         if token not in zao_appointment:
             issues.append(f"ZAO administrator repair is missing {token}")
-    if "recruit_character" in zao_appointment or "create_country_leader" in zao_appointment:
-        issues.append("ZAO administrator repair must promote its history-recruited character")
+    if (
+        "recruit_character" in zao_appointment
+        or "create_country_leader" in zao_appointment
+    ):
+        issues.append(
+            "ZAO administrator repair must promote its history-recruited character"
+        )
     for token in (
         "ADISCORD_vorkerland_appoint_zao_administrator = yes",
         "tree = ADISCORD_vorkerland_zao_focus",
@@ -3475,10 +4559,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 issues.append(f"ZAO repair event 68 is missing {token}")
     if "ADISCORD_vorkerland_collapse.68" in monthly:
         issues.append("ZAO administrator/focus repair still polls on_monthly")
-    if "GFX_portrait_WRK_Bassam_Zogby" not in portraits or not (
-        root / "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png"
-    ).is_file():
-        issues.append("Bassam Zogby's authored portrait is not wired to an existing asset")
+    if (
+        "GFX_portrait_WRK_Bassam_Zogby" not in portraits
+        or not (root / "gfx/leaders/WRK/portrait_WRK_Bassam_Zogby.png").is_file()
+    ):
+        issues.append(
+            "Bassam Zogby's authored portrait is not wired to an existing asset"
+        )
     if "WRK_Bassam_Zogby:" not in english_characters:
         issues.append("Bassam Zogby lacks English localisation")
 
@@ -3508,7 +4595,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "add_war_support = 0.04",
     ):
         if token not in zao_focus:
-            issues.append(f"ZAO wartime focus programme is missing bounded reward/guard {token}")
+            issues.append(
+                f"ZAO wartime focus programme is missing bounded reward/guard {token}"
+            )
     for forbidden in (
         "GFX_goal_unknown",
         "declare_war_on",
@@ -3517,10 +4606,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "set_autonomy",
     ):
         if forbidden in zao_focus:
-            issues.append(f"ZAO wartime focus programme contains forbidden token {forbidden}")
-    russian_loc = source_section(read(
-        root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues
-    ), 'collapse_l_russian')
+            issues.append(
+                f"ZAO wartime focus programme contains forbidden token {forbidden}"
+            )
+    russian_loc = source_section(
+        read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues),
+        'collapse_l_russian',
+    )
     for focus_id in expected_zao_focuses:
         for suffix in ("", "_desc"):
             key = f"{focus_id}{suffix}"
@@ -3528,11 +4620,18 @@ def validate_events(root: Path, issues: list[str]) -> None:
                 issues.append(f"ZAO focus lacks English localisation: {key}")
             if f" {key}: " not in russian_loc:
                 issues.append(f"ZAO focus lacks Russian localisation: {key}")
-    if russian_loc_path.exists() and not russian_loc_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+    if russian_loc_path.exists() and not russian_loc_path.read_bytes().startswith(
+        b"\xef\xbb\xbf"
+    ):
         issues.append("Russian Vorkerland collapse localisation lost its UTF-8 BOM")
 
-    if "recruit_character = WRK_Anton_Bagley" in effects or "recruit_character = WRK_VAD_Joint_Council" in effects:
-        issues.append("collapse runtime effects still recruit WRK characters outside history")
+    if (
+        "recruit_character = WRK_Anton_Bagley" in effects
+        or "recruit_character = WRK_VAD_Joint_Council" in effects
+    ):
+        issues.append(
+            "collapse runtime effects still recruit WRK characters outside history"
+        )
     wrk_history = read(root, "history/countries/WRK - WorkerLand.txt", issues)
     for character in (
         "WRK_Anton_Bagley",
@@ -3583,7 +4682,9 @@ def claimant_decision_spending_contract_issues(
     }:
         issues.append("collapse AI claimant decision spending must stay war-bounded")
     if "abort_when_not_enabled = yes" not in spending:
-        issues.append("collapse AI claimant decision spending must abort outside its bounds")
+        issues.append(
+            "collapse AI claimant decision spending must abort outside its bounds"
+        )
 
     strategy_values: dict[tuple[str, str], int] = {}
     for strategy in named_blocks(spending, "ai_strategy"):
@@ -3596,9 +4697,16 @@ def claimant_decision_spending_contract_issues(
     if strategy_values.get(("pp_spend_priority", "decision"), 0) < 100:
         issues.append("collapse AI claimant decision priority must be at least 100")
     if strategy_values.get(("pp_spend_amount", "decision"), 0) < 125:
-        issues.append("collapse AI claimant wartime decision amount must be at least 125")
+        issues.append(
+            "collapse AI claimant wartime decision amount must be at least 125"
+        )
 
-    for forbidden in ("complete_effect", "country_event", "every_country", "on_monthly"):
+    for forbidden in (
+        "complete_effect",
+        "country_event",
+        "every_country",
+        "on_monthly",
+    ):
         if forbidden in spending:
             issues.append(
                 f"collapse AI claimant decision strategy must not force {forbidden}"
@@ -3607,7 +4715,10 @@ def claimant_decision_spending_contract_issues(
 
 
 def validate_ai(root: Path, issues: list[str]) -> None:
-    ai = source_section(read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues), 'collapse_ai')
+    ai = source_section(
+        read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues),
+        'collapse_ai',
+    )
     default_ai = read(root, "common/ai_strategy/default.txt", issues)
     defines = read(root, "common/defines/ADISCORD_defines_changes.lua", issues)
     if not balanced(ai):
@@ -3618,7 +4729,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             issues.append(f"collapse AI still contains dead token {stale}")
     economy = named_block(ai, "ADISCORD_vorkerland_collapse_war_economy")
     if "type = ai_wanted_divisions_factor value = 8" not in economy:
-        issues.append("collapse AI wanted-division factor must stay at the moderate value 8")
+        issues.append(
+            "collapse AI wanted-division factor must stay at the moderate value 8"
+        )
     field_army = named_block(ai, "ADISCORD_vorkerland_collapse_field_army")
     for token in (
         "type = role_ratio id = garrison value = -80",
@@ -3629,7 +4742,10 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             issues.append(f"collapse field-army profile is missing {token}")
     if "ADISCORD_vorkerland_collapse_front_commitment" in ai:
         issues.append("obsolete all-tags front commitment survived")
-    if "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai or "country_trigger = {" in ai:
+    if (
+        "ADISCORD_vorkerland_dynamic_regional_front_commitment" in ai
+        or "country_trigger = {" in ai
+    ):
         issues.append("removed dynamic regional front fallback survived")
     if "NDefines.NMilitary.PLAN_EXECUTE_RUSH = -200" not in defines:
         issues.append("collapse AI is missing its small-front plan execution threshold")
@@ -3640,12 +4756,19 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         "NDefines.NAITheatre.AI_THEATRE_SUPPLY_CRISIS_LIMIT",
     ):
         if re.search(rf"(?m)^\s*{re.escape(key)}\s*=", defines):
-            issues.append(f"collapse AI must inherit native readiness and supply checking: {key}")
+            issues.append(
+                f"collapse AI must inherit native readiness and supply checking: {key}"
+            )
 
     for strategy in re.findall(r"ai_strategy\s*=\s*\{([^{}]*)\}", ai, re.DOTALL):
-        if "type = front_control" in strategy or "type = front_unit_request" in strategy:
+        if (
+            "type = front_control" in strategy
+            or "type = front_unit_request" in strategy
+        ):
             if len(re.findall(r"\btag\s*=", strategy)) != 1:
-                issues.append("front scalar strategy must contain exactly one target tag")
+                issues.append(
+                    "front scalar strategy must contain exactly one target tag"
+                )
         if "type = front_control" in strategy:
             ratio = re.search(r"\bratio\s*=\s*([0-9.]+)", strategy)
             if ratio is None:
@@ -3657,7 +4780,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
                 )
 
     if "ADISCORD_vorkerland_worker_doctor_front_preparation" in ai:
-        issues.append("collapse AI still contains the retired Worker-Doctor preparation window")
+        issues.append(
+            "collapse AI still contains the retired Worker-Doctor preparation window"
+        )
 
     central_minors = {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}
     # The three claimant fronts stay symmetric: balanced execution, no rush or
@@ -3671,14 +4796,24 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             for tag in central_minors
         },
     }
-    for slug, (defender, required_attackers, optional_attackers, request, execution, manual) in central_fronts.items():
-        front = named_block(
-            ai, f"ADISCORD_vorkerland_front_central_against_{slug}"
-        )
+    for slug, (
+        defender,
+        required_attackers,
+        optional_attackers,
+        request,
+        execution,
+        manual,
+    ) in central_fronts.items():
+        front = named_block(ai, f"ADISCORD_vorkerland_front_central_against_{slug}")
         allowed = named_block(front, "allowed")
         actual_attackers = set(re.findall(r"tag\s*=\s*([A-Z]{3})", allowed))
-        if not required_attackers <= actual_attackers or not actual_attackers <= required_attackers | optional_attackers:
-            issues.append(f"central front against {defender} has the wrong attacker allowlist")
+        if (
+            not required_attackers <= actual_attackers
+            or not actual_attackers <= required_attackers | optional_attackers
+        ):
+            issues.append(
+                f"central front against {defender} has the wrong attacker allowlist"
+            )
         for token in (
             f"has_war_with = {defender}",
             f"front_unit_request tag = {defender} value = {request}",
@@ -3690,7 +4825,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             if token not in front:
                 issues.append(f"central front against {defender} is missing {token}")
         if f"conquer id = {defender}" not in front:
-            issues.append(f"central front against {defender} must force a conquest close")
+            issues.append(
+                f"central front against {defender} must force a conquest close"
+            )
 
     for slug, claimant in (("wkr", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
         defense = named_block(
@@ -3700,7 +4837,9 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             re.findall(r"tag\s*=\s*([A-Z]{3})", named_block(defense, "allowed"))
         )
         if actual_defenders != central_minors:
-            issues.append(f"central-minor defense against {claimant} has the wrong allowlist")
+            issues.append(
+                f"central-minor defense against {claimant} has the wrong allowlist"
+            )
         for token in (
             f"front_unit_request tag = {claimant} value = 100",
             f"front_control tag = {claimant}",
@@ -3709,33 +4848,78 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             "manual_attack = no",
         ):
             if token not in defense:
-                issues.append(f"central-minor defense against {claimant} is missing {token}")
+                issues.append(
+                    f"central-minor defense against {claimant} is missing {token}"
+                )
         if "type = conquer" in defense:
-            issues.append(f"central-minor defense against {claimant} still contains a conquest strategy")
+            issues.append(
+                f"central-minor defense against {claimant} still contains a conquest strategy"
+            )
 
     regional_pairs = (
-        ("ZAO", "WPA"), ("WPA", "ZAO"), ("WPS", "ZAO"), ("ZAO", "WPS"),
-        ("ZAO", "PSD"), ("PSD", "ZAO"), ("ZAO", "PWR"), ("PWR", "ZAO"),
-        ("WPA", "PSD"), ("PSD", "WPA"), ("WPA", "PWR"), ("PWR", "WPA"),
-        ("WPS", "PSD"), ("PSD", "WPS"), ("WPS", "PWR"), ("PWR", "WPS"),
-        ("PWR", "PSD"), ("PSD", "PWR"),
-        ("VLA", "EBA"), ("EBA", "VLA"), ("ROM", "DVA"), ("DVA", "ROM"),
-        ("VLA", "TGD"), ("TGD", "VLA"), ("EBA", "TGD"), ("TGD", "EBA"),
-        ("SOL", "SRA"), ("SRA", "SOL"), ("SOL", "CSL"), ("CSL", "SOL"),
-        ("SRA", "CSL"), ("CSL", "SRA"),
-        ("TRU", "ZTA"), ("ZTA", "TRU"),
+        ("ZAO", "WPA"),
+        ("WPA", "ZAO"),
+        ("WPS", "ZAO"),
+        ("ZAO", "WPS"),
+        ("ZAO", "PSD"),
+        ("PSD", "ZAO"),
+        ("ZAO", "PWR"),
+        ("PWR", "ZAO"),
+        ("WPA", "PSD"),
+        ("PSD", "WPA"),
+        ("WPA", "PWR"),
+        ("PWR", "WPA"),
+        ("WPS", "PSD"),
+        ("PSD", "WPS"),
+        ("WPS", "PWR"),
+        ("PWR", "WPS"),
+        ("PWR", "PSD"),
+        ("PSD", "PWR"),
+        ("VLA", "EBA"),
+        ("EBA", "VLA"),
+        ("ROM", "DVA"),
+        ("DVA", "ROM"),
+        ("VLA", "TGD"),
+        ("TGD", "VLA"),
+        ("EBA", "TGD"),
+        ("TGD", "EBA"),
+        ("SOL", "SRA"),
+        ("SRA", "SOL"),
+        ("SOL", "CSL"),
+        ("CSL", "SOL"),
+        ("SRA", "CSL"),
+        ("CSL", "SRA"),
+        ("TRU", "ZTA"),
+        ("ZTA", "TRU"),
     )
     supply_aware_pairs = {
-        ("ZAO", "WPA"), ("WPA", "ZAO"), ("WPS", "ZAO"), ("ZAO", "WPS"),
-        ("ZAO", "PSD"), ("PSD", "ZAO"), ("ZAO", "PWR"), ("PWR", "ZAO"),
-        ("WPA", "PSD"), ("PSD", "WPA"), ("WPA", "PWR"), ("PWR", "WPA"),
-        ("WPS", "PSD"), ("PSD", "WPS"), ("WPS", "PWR"), ("PWR", "WPS"),
-        ("PWR", "PSD"), ("PSD", "PWR"),
-        ("ROM", "DVA"), ("DVA", "ROM"),
-        ("TRU", "ZTA"), ("ZTA", "TRU"),
+        ("ZAO", "WPA"),
+        ("WPA", "ZAO"),
+        ("WPS", "ZAO"),
+        ("ZAO", "WPS"),
+        ("ZAO", "PSD"),
+        ("PSD", "ZAO"),
+        ("ZAO", "PWR"),
+        ("PWR", "ZAO"),
+        ("WPA", "PSD"),
+        ("PSD", "WPA"),
+        ("WPA", "PWR"),
+        ("PWR", "WPA"),
+        ("WPS", "PSD"),
+        ("PSD", "WPS"),
+        ("WPS", "PWR"),
+        ("PWR", "WPS"),
+        ("PWR", "PSD"),
+        ("PSD", "PWR"),
+        ("ROM", "DVA"),
+        ("DVA", "ROM"),
+        ("TRU", "ZTA"),
+        ("ZTA", "TRU"),
     }
     for attacker, defender in regional_pairs:
-        front = named_block(ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}")
+        front = named_block(
+            ai, f"ADISCORD_vorkerland_front_{attacker.lower()}_{defender.lower()}"
+        )
         for token in (
             f"allowed = {{ tag = {attacker} }}",
             f"has_war_with = {defender}",
@@ -3743,47 +4927,80 @@ def validate_ai(root: Path, issues: list[str]) -> None:
             f"front_control tag = {defender}",
         ):
             if token not in front:
-                issues.append(f"{attacker}-{defender} anti-freeze front is missing {token}")
+                issues.append(
+                    f"{attacker}-{defender} anti-freeze front is missing {token}"
+                )
         if (attacker, defender) in supply_aware_pairs:
-            northern_pair = attacker in {"ZAO", "WPA", "WPS", "PWR", "PSD"} and defender in {
-                "ZAO", "WPA", "WPS", "PWR", "PSD"
-            }
-            request = (33 if attacker in {"WPA", "WPS"} else 25) if northern_pair else 75
+            northern_pair = attacker in {
+                "ZAO",
+                "WPA",
+                "WPS",
+                "PWR",
+                "PSD",
+            } and defender in {"ZAO", "WPA", "WPS", "PWR", "PSD"}
+            request = (
+                (33 if attacker in {"WPA", "WPS"} else 25) if northern_pair else 75
+            )
             for token in (
                 f"front_unit_request tag = {defender} value = {request}",
                 "execution_type = balanced",
                 "manual_attack = no",
             ):
                 if token not in front:
-                    issues.append(f"{attacker}-{defender} supply-aware front is missing {token}")
+                    issues.append(
+                        f"{attacker}-{defender} supply-aware front is missing {token}"
+                    )
             for forbidden in ("execution_type = rush", "manual_attack = yes"):
                 if forbidden in front:
-                    issues.append(f"{attacker}-{defender} supply-aware front still has {forbidden}")
+                    issues.append(
+                        f"{attacker}-{defender} supply-aware front still has {forbidden}"
+                    )
             if "front_unit_request tag = " in front and " value = 80" in front:
-                issues.append(f"{attacker}-{defender} supply-aware front still rushes 80 percent of the army")
+                issues.append(
+                    f"{attacker}-{defender} supply-aware front still rushes 80 percent of the army"
+                )
         else:
             for token in ("execution_type = balanced", "manual_attack = no"):
                 if token not in front:
-                    issues.append(f"{attacker}-{defender} anti-freeze front is missing {token}")
+                    issues.append(
+                        f"{attacker}-{defender} anti-freeze front is missing {token}"
+                    )
     piv = named_block(ai, "ADISCORD_vorkerland_piv_support_macri")
-    for token in ("tag = PIV", "is_subject = no", "send_volunteers_desire", "id = EBA", "value = 1000"):
+    for token in (
+        "tag = PIV",
+        "is_subject = no",
+        "send_volunteers_desire",
+        "id = EBA",
+        "value = 1000",
+    ):
         if token not in piv:
             issues.append(f"PIV volunteer strategy is missing {token}")
     for slug, target in (("wrk", "WKR"), ("vad", "VAD"), ("tva", "TVA")):
         btl = named_block(ai, f"ADISCORD_vorkerland_btl_volunteers_{slug}")
-        for token in ("tag = BTL", f"ADISCORD_vorkerland_btl_supports_{slug}", f"id = {target}", "value = 2000"):
+        for token in (
+            "tag = BTL",
+            f"ADISCORD_vorkerland_btl_supports_{slug}",
+            f"id = {target}",
+            "value = 2000",
+        ):
             if token not in btl:
                 issues.append(f"BTL volunteer strategy for {target} is missing {token}")
     for target in ("PSD", "PWR"):
-        front = named_block(ai, f"ADISCORD_vorkerland_ivn_second_front_{target.lower()}")
+        front = named_block(
+            ai, f"ADISCORD_vorkerland_ivn_second_front_{target.lower()}"
+        )
         for token in (
             "allowed = { tag = IVN }",
             "ADISCORD_vorkerland_ivanland_second_intervention_started",
-            f"has_war_with = {target}", f"front_unit_request tag = {target} value = 100",
-            f"front_control tag = {target}", f"conquer id = {target}",
+            f"has_war_with = {target}",
+            f"front_unit_request tag = {target} value = 100",
+            f"front_control tag = {target}",
+            f"conquer id = {target}",
         ):
             if token not in front:
-                issues.append(f"Ivanland second-intervention front against {target} is missing {token}")
+                issues.append(
+                    f"Ivanland second-intervention front against {target} is missing {token}"
+                )
     for name, attacker, defender in (
         ("ADISCORD_vorkerland_rom_intervention_front_zao", "ROM", "ZAO"),
         ("ADISCORD_vorkerland_zao_defend_rom_intervention", "ZAO", "ROM"),
@@ -3794,23 +5011,41 @@ def validate_ai(root: Path, issues: list[str]) -> None:
         for token in (
             f"allowed = {{ tag = {attacker} }}",
             "ADISCORD_vorkerland_rom_northern_intervention_active",
-            f"has_war_with = {defender}", f"front_unit_request tag = {defender}",
-            f"front_control tag = {defender}", "manual_attack = no",
+            f"has_war_with = {defender}",
+            f"front_unit_request tag = {defender}",
+            f"front_control tag = {defender}",
+            "manual_attack = no",
         ):
             if token not in front:
-                issues.append(f"Frealor intervention AI profile {name} is missing {token}")
+                issues.append(
+                    f"Frealor intervention AI profile {name} is missing {token}"
+                )
 
 
 def validate_outcomes(root: Path, issues: list[str]) -> None:
-    maps = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
-    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
-    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
-    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
-    category_source = source_section(read(
-        root,
-        "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
-        issues,
-    ), 'collapse_categories')
+    maps = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_map_effects',
+    )
+    triggers = source_section(
+        read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        'collapse_triggers',
+    )
+    on_actions = read_country_on_actions(
+        (root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+        'vorkerland_collapse',
+    )
+    events = source_section(
+        read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events'
+    )
+    category_source = source_section(
+        read(
+            root,
+            "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
+            issues,
+        ),
+        'collapse_categories',
+    )
     collapse_category = named_block(
         category_source, "ADISCORD_vorkerland_collapse_category"
     )
@@ -3832,10 +5067,21 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
                 )
     for name, tag in (("worker", "WKR"), ("vlad", "VAD"), ("dorian", "TVA")):
         block = named_block(maps, f"ADISCORD_vorkerland_apply_{name}_map")
-        for forbidden in ("transfer_state", "annex_country", "puppet =", "set_autonomy"):
+        for forbidden in (
+            "transfer_state",
+            "annex_country",
+            "puppet =",
+            "set_autonomy",
+        ):
             if forbidden in block:
-                issues.append(f"{name} central victory still performs automatic {forbidden}")
-        for required in ("ADISCORD_vorkerland_begin_reunification = yes", "ADISCORD_vorkerland_central_unifier", tag):
+                issues.append(
+                    f"{name} central victory still performs automatic {forbidden}"
+                )
+        for required in (
+            "ADISCORD_vorkerland_begin_reunification = yes",
+            "ADISCORD_vorkerland_central_unifier",
+            tag,
+        ):
             if required not in block:
                 issues.append(f"{name} central victory is missing {required}")
         for premature in (
@@ -3845,16 +5091,25 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
             "victory_superevent = yes",
         ):
             if premature in block:
-                issues.append(f"{name} claimant outcome finalizes before verified WRK: {premature}")
+                issues.append(
+                    f"{name} claimant outcome finalizes before verified WRK: {premature}"
+                )
 
-    reunification = named_block(triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT")
-    if "tag = ROM" not in reunification or "tag = TRU" not in reunification or "ROOT = { tag = VAD }" not in reunification:
+    reunification = named_block(
+        triggers, "ADISCORD_vorkerland_is_reunification_target_for_ROOT"
+    )
+    if (
+        "tag = ROM" not in reunification
+        or "tag = TRU" not in reunification
+        or "ROOT = { tag = VAD }" not in reunification
+    ):
         issues.append("ROM/TRU must be targets only for the imperial VAD claimant")
     postwar_decisions = "\n".join(
-        read(root, path.as_posix(), issues)
-        for path in FOCUS_DECISION_FILES
+        read(root, path.as_posix(), issues) for path in FOCUS_DECISION_FILES
     )
-    recognition = named_block(postwar_decisions, "ADISCORD_vorkerland_recognize_free_republics")
+    recognition = named_block(
+        postwar_decisions, "ADISCORD_vorkerland_recognize_free_republics"
+    )
     if not recognition:
         issues.append("WRK cannot recognise the free ROM/TRU republics")
     else:
@@ -3866,13 +5121,19 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
             "country = TRU",
         ):
             if token not in recognition:
-                issues.append(f"postwar recognition lacks independent-republic contract {token}")
+                issues.append(
+                    f"postwar recognition lacks independent-republic contract {token}"
+                )
     common_sources = [
         path.read_text(encoding="utf-8-sig")
         for path in sorted((root / "common").rglob("*.txt"))
     ]
-    if any("ADISCORD_vorkerland_is_central_claimant" in source for source in common_sources):
-        issues.append("the retired central-claimant alias still has a definition or consumer")
+    if any(
+        "ADISCORD_vorkerland_is_central_claimant" in source for source in common_sources
+    ):
+        issues.append(
+            "the retired central-claimant alias still has a definition or consumer"
+        )
     main_definitions = sum(
         len(
             re.findall(
@@ -3883,28 +5144,37 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         for source in common_sources
     )
     if main_definitions != 1:
-        issues.append("the canonical main-claimant trigger must be defined exactly once")
+        issues.append(
+            "the canonical main-claimant trigger must be defined exactly once"
+        )
     main_claimant = named_block(triggers, "ADISCORD_vorkerland_is_main_claimant")
     if set(re.findall(r"tag\s*=\s*([A-Z]{3})", main_claimant)) != {"WKR", "VAD", "TVA"}:
         issues.append("the main claimant trigger must name exactly WKR, VAD and TVA")
-    stalemate_triggers = source_section(read(
-        root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues
-    ), 'stalemate_triggers')
-    central_minor = named_block(stalemate_triggers, "ADISCORD_vorkerland_is_central_minor")
-    if "tag = TGD" in central_minor or set(re.findall(r"tag\s*=\s*([A-Z]{3})", central_minor)) != {
-        "EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"
-    }:
+    stalemate_triggers = source_section(
+        read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        'stalemate_triggers',
+    )
+    central_minor = named_block(
+        stalemate_triggers, "ADISCORD_vorkerland_is_central_minor"
+    )
+    if "tag = TGD" in central_minor or set(
+        re.findall(r"tag\s*=\s*([A-Z]{3})", central_minor)
+    ) != {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"}:
         issues.append("TGD must be outside the central claimant campaign")
     regional = named_block(triggers, "ADISCORD_vorkerland_is_regional_combatant")
     if not all(f"tag = {tag}" in regional for tag in ("VLA", "EBA", "TGD")):
         issues.append("TGD/VLA/EBA peripheral country classification is missing")
     for candidate in ("worker", "vlad", "dorian"):
-        victory = named_block(triggers, f"ADISCORD_vorkerland_{candidate}_victory_candidate")
+        victory = named_block(
+            triggers, f"ADISCORD_vorkerland_{candidate}_victory_candidate"
+        )
         if "ADISCORD_vorkerland_tgd_defeated" in victory:
             issues.append(f"{candidate} central victory still requires peripheral TGD")
         for tag in ("riv", "rev", "yor", "ndn", "swb", "vhv", "osv"):
             if f"ADISCORD_vorkerland_{tag}_defeated = yes" not in victory:
-                issues.append(f"{candidate} central victory does not require {tag.upper()} to be defeated")
+                issues.append(
+                    f"{candidate} central victory does not require {tag.upper()} to be defeated"
+                )
     capitulation = named_block(on_actions, "on_capitulation")
     for token in (
         "set_global_flag = skip_default_capitulation",
@@ -3932,12 +5202,21 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         issues.append("Ivanland military-defeat capitulation branch is not unique")
     else:
         ivn_defeat = ivn_defeat_branches[0]
-        if "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention" not in ivn_defeat:
-            issues.append("Ivanland military defeat does not record the capitulation-specific outcome")
+        if (
+            "set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention"
+            not in ivn_defeat
+        ):
+            issues.append(
+                "Ivanland military defeat does not record the capitulation-specific outcome"
+            )
         if "skip_default_capitulation" in ivn_defeat:
-            issues.append("Ivanland military defeat still suppresses the generic annexation fallback")
+            issues.append(
+                "Ivanland military defeat still suppresses the generic annexation fallback"
+            )
         if "white_peace" in ivn_defeat:
-            issues.append("Ivanland military defeat still white-peaces the defeated attacker")
+            issues.append(
+                "Ivanland military defeat still white-peaces the defeated attacker"
+            )
 
     for event_id in (
         "ADISCORD_vorkerland_collapse.43",
@@ -3947,14 +5226,27 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         restore_event = event_block(events, event_id)
         for host in ("IVN", "PWR", "PSD", "ZAO", "WPA", "WPS"):
             if f"tag = {host}" not in restore_event:
-                issues.append(f"{event_id} cannot run from surviving northern host {host}")
+                issues.append(
+                    f"{event_id} cannot run from surviving northern host {host}"
+                )
 
-    for hook in ("on_capitulation", "on_startup", "on_state_control_changed", "ADISCORD_vorkerland_check_central_outcome"):
+    for hook in (
+        "on_capitulation",
+        "on_startup",
+        "on_state_control_changed",
+        "ADISCORD_vorkerland_check_central_outcome",
+    ):
         if hook not in on_actions:
             issues.append(f"central outcome fallback is missing {hook}")
-    if "ADISCORD_vorkerland_check_central_outcome = yes" in named_block(on_actions, "on_monthly"):
-        issues.append("central outcome still performs an unnecessary monthly fallback poll")
-    effects = read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues)
+    if "ADISCORD_vorkerland_check_central_outcome = yes" in named_block(
+        on_actions, "on_monthly"
+    ):
+        issues.append(
+            "central outcome still performs an unnecessary monthly fallback poll"
+        )
+    effects = read(
+        root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues
+    )
     central_outcome = named_block(effects, "ADISCORD_vorkerland_check_central_outcome")
     for token in (
         "country_event = { id = ADISCORD_vorkerland_collapse.20 }",
@@ -3963,7 +5255,9 @@ def validate_outcomes(root: Path, issues: list[str]) -> None:
         "ADISCORD_vorkerland_begin_reunification = yes",
     ):
         if token not in central_outcome:
-            issues.append(f"central outcome no longer dispatches a claimant victory: {token}")
+            issues.append(
+                f"central outcome no longer dispatches a claimant victory: {token}"
+            )
     for stale in (
         "ADISCORD_vorkerland_collapse.23",
         "ADISCORD_vorkerland_apply_fragmented_map",
@@ -3980,7 +5274,9 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
         "phase_effects",
     )
-    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), "collapse_events")
+    events = source_section(
+        read(root, "events/ADISCORD_vorkerland_events.txt", issues), "collapse_events"
+    )
     wrk_characters = read(root, "common/characters/WRK.txt", issues)
     portraits = read(root, "interface/ADISCORD_leader_portraits.gfx", issues)
     english_loc = source_section(
@@ -3991,8 +5287,12 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         read(root, "localisation/russian/ADISCORD_vorkerland_l_russian.yml", issues),
         "collapse_l_russian",
     )
-    english_characters = read(root, "localisation/english/nsb_characters_l_english.yml", issues)
-    russian_characters = read(root, "localisation/russian/nsb_characters_l_russian.yml", issues)
+    english_characters = read(
+        root, "localisation/english/nsb_characters_l_english.yml", issues
+    )
+    russian_characters = read(
+        root, "localisation/russian/nsb_characters_l_russian.yml", issues
+    )
 
     offer = named_block(phase_effects, "ADISCORD_vorkerland_offer_worker_mandate")
     schedule = named_block(phase_effects, "ADISCORD_vorkerland_wrk_schedule_elections")
@@ -4007,7 +5307,9 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
     result = event_block(events, "ADISCORD_vorkerland_collapse.101")
 
     if finalizer.count("ADISCORD_vorkerland_offer_worker_mandate = yes") != 1:
-        issues.append("verified WRK finalizer must offer Nikita's postwar mandate exactly once")
+        issues.append(
+            "verified WRK finalizer must offer Nikita's postwar mandate exactly once"
+        )
     if not re.search(
         r"has_country_flag\s*=\s*ADISCORD_vorkerland_route_worker[\s\S]*?"
         r"ADISCORD_vorkerland_offer_worker_mandate\s*=\s*yes",
@@ -4015,7 +5317,9 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
     ):
         issues.append("the mandate offer is not confined to the worker victory branch")
     if "ADISCORD_vorkerland_show_utilitarian_victory_superevent = yes" not in finalizer:
-        issues.append("Anton Bagley's worker-route victory lost its utilitarian presentation")
+        issues.append(
+            "Anton Bagley's worker-route victory lost its utilitarian presentation"
+        )
     utilitarian_identity = (
         "has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "has_government = utilitarism",
@@ -4035,7 +5339,9 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         "country_event = { id = ADISCORD_superevent.3 }",
     ):
         if token not in utilitarian_show:
-            issues.append(f"utilitarian victory presentation receipt is missing {token}")
+            issues.append(
+                f"utilitarian victory presentation receipt is missing {token}"
+            )
     for branch in named_blocks(finalizer, "else_if"):
         if "ADISCORD_vorkerland_offer_worker_mandate = yes" in branch:
             issues.append("a non-worker victory branch still offers Nikita's mandate")
@@ -4055,10 +5361,15 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         (elect_mark, "humanism_ideology", "WRK_Mark_Yastrebtsev"),
         (elect_necro, "chauvinism_ideology", "WRK_Necro_Filopo"),
     ):
-        if f"character = {character}" not in branch or f"ideology = {ideology}" not in branch:
+        if (
+            f"character = {character}" not in branch
+            or f"ideology = {ideology}" not in branch
+        ):
             issues.append(f"election outcome for {character} is missing {ideology}")
         if "elections_allowed = yes" not in branch:
-            issues.append(f"{character} election outcome does not keep elections allowed")
+            issues.append(
+                f"{character} election outcome does not keep elections allowed"
+            )
     if resolve.count("1 = {") != 3:
         issues.append("postwar elections must keep three equal random branches")
     for token in (
@@ -4070,8 +5381,13 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
         if token not in usurp:
             issues.append(f"usurpation path is missing {token}")
 
-    if "character = WRK_Mark_Yastrebtsev" not in formation or "character = WRK_Necro_Filopo" not in formation:
-        issues.append("restored WRK does not reclaim the postwar election candidates from WKR")
+    if (
+        "character = WRK_Mark_Yastrebtsev" not in formation
+        or "character = WRK_Necro_Filopo" not in formation
+    ):
+        issues.append(
+            "restored WRK does not reclaim the postwar election candidates from WKR"
+        )
 
     if not choice or not result:
         issues.append("worker mandate events 100/101 are missing")
@@ -4085,18 +5401,37 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
             if token not in choice:
                 issues.append(f"mandate choice event is missing {token}")
         if "ADISCORD_vorkerland_wrk_resolve_elections = yes" not in result:
-            issues.append("election result event does not resolve the random winner in immediate")
+            issues.append(
+                "election result event does not resolve the random winner in immediate"
+            )
         for variant in (".worker.d", ".yastrebtsev.d", ".filopo.d"):
             if f"ADISCORD_vorkerland_collapse.101{variant}" not in result:
                 issues.append(f"election result event is missing description {variant}")
 
     for character, ideology, sprite, texture in (
-        ("WRK_Mark_Yastrebtsev", "humanism_ideology", "GFX_portrait_WRK_Mark_Yastrebtsev", "portrait_WRK_Mark_Yastrebtsev.png"),
-        ("WRK_Necro_Filopo", "chauvinism_ideology", "GFX_portrait_WRK_Necro_Filopo", "portrait_WRK_Necro_Filopo.png"),
+        (
+            "WRK_Mark_Yastrebtsev",
+            "humanism_ideology",
+            "GFX_portrait_WRK_Mark_Yastrebtsev",
+            "portrait_WRK_Mark_Yastrebtsev.png",
+        ),
+        (
+            "WRK_Necro_Filopo",
+            "chauvinism_ideology",
+            "GFX_portrait_WRK_Necro_Filopo",
+            "portrait_WRK_Necro_Filopo.png",
+        ),
     ):
         block = named_block(wrk_characters, character)
-        if not block or "country_leader" not in block or ideology not in block or sprite not in block:
-            issues.append(f"{character} must be a {ideology} country leader with {sprite}")
+        if (
+            not block
+            or "country_leader" not in block
+            or ideology not in block
+            or sprite not in block
+        ):
+            issues.append(
+                f"{character} must be a {ideology} country leader with {sprite}"
+            )
         sprite_block = re.search(
             rf'(?ms)spriteType\s*=\s*\{{(?:(?!spriteType\s*=).)*?'
             rf'name\s*=\s*"{re.escape(sprite)}"(?:(?!spriteType\s*=).)*?\}}',
@@ -4111,7 +5446,10 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
             with Image.open(portrait_path) as image:
                 if image.size != (156, 210):
                     issues.append(f"{texture}: expected 156x210, got {image.size}")
-        if f"{character}:" not in english_characters or f"{character}:" not in russian_characters:
+        if (
+            f"{character}:" not in english_characters
+            or f"{character}:" not in russian_characters
+        ):
             issues.append(f"{character} lacks English or Russian localisation")
 
     victory = root / "gfx/leaders/WRK/portrait_WRK_Nikita_Worcker_victory.png"
@@ -4145,19 +5483,33 @@ def validate_worker_mandate(root: Path, issues: list[str]) -> None:
 
 
 def validate_exhaustion(root: Path, issues: list[str]) -> None:
-    on_actions = read_country_on_actions((root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), 'vorkerland_collapse')
-    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
-    map_effects = source_section(read(
-        root,
-        "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
-        issues,
-    ), 'collapse_map_effects')
-    dynamic = source_section(read(
-        root,
-        "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt",
-        issues,
-    ), 'collapse_dynamic_modifiers')
-    decisions = read(root, "common/decisions/ADISCORD_scenario_debug_decisions.txt", issues)
+    on_actions = read_country_on_actions(
+        (root) / ("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"),
+        'vorkerland_collapse',
+    )
+    effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_effects',
+    )
+    map_effects = source_section(
+        read(
+            root,
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            issues,
+        ),
+        'collapse_map_effects',
+    )
+    dynamic = source_section(
+        read(
+            root,
+            "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt",
+            issues,
+        ),
+        'collapse_dynamic_modifiers',
+    )
+    decisions = read(
+        root, "common/decisions/ADISCORD_scenario_debug_decisions.txt", issues
+    )
     categories = read(
         root,
         "common/decisions/categories/ADISCORD_scenario_debug_categories.txt",
@@ -4165,7 +5517,9 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
     )
 
     exhaustion_update = "ADISCORD_vorkerland_update_civil_war_exhaustion = yes"
-    shared_on_actions = read(root, "common/on_actions/00_ADISCORD_on_actions.txt", issues)
+    shared_on_actions = read(
+        root, "common/on_actions/00_ADISCORD_on_actions.txt", issues
+    )
     monthly = named_block(shared_on_actions, "on_monthly")
     for token in (
         "has_global_flag = ADISCORD_vorkerland_collapse_wars_started",
@@ -4194,24 +5548,38 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         if token not in capitulation:
             issues.append(f"on_capitulation exhaustion edge routing is missing {token}")
     if on_actions.count(exhaustion_update) != 3:
-        issues.append("civil-war exhaustion war, peace, and capitulation edges are incomplete")
+        issues.append(
+            "civil-war exhaustion war, peace, and capitulation edges are incomplete"
+        )
     if "on_daily" in on_actions:
         issues.append("Vorkerland exhaustion must not add a daily pulse")
 
     finish = named_block(map_effects, "ADISCORD_vorkerland_finish_civil_war_exhaustion")
     for tag in ("WKR", "WRK", "VAD", "TVA"):
-        if f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}" not in finish:
+        if (
+            f"{tag} = {{ ADISCORD_vorkerland_reset_civil_war_exhaustion = yes }}"
+            not in finish
+        ):
             issues.append(f"terminal exhaustion cleanup does not reset {tag}")
     finalizer = named_block(
-        source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'phase_effects'),
+        source_section(
+            read(
+                root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues
+            ),
+            'phase_effects',
+        ),
         "ADISCORD_vorkerland_finalize_reunified_wrk",
     )
     if "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes" not in finalizer:
         issues.append("verified WRK finalizer does not finish civil-war exhaustion")
     for outcome in ("worker", "vlad", "dorian"):
-        outcome_effect = named_block(map_effects, f"ADISCORD_vorkerland_apply_{outcome}_map")
+        outcome_effect = named_block(
+            map_effects, f"ADISCORD_vorkerland_apply_{outcome}_map"
+        )
         if "ADISCORD_vorkerland_finish_civil_war_exhaustion = yes" in outcome_effect:
-            issues.append(f"{outcome} claimant outcome ends exhaustion before verified WRK")
+            issues.append(
+                f"{outcome} claimant outcome ends exhaustion before verified WRK"
+            )
 
     update = named_block(effects, "ADISCORD_vorkerland_update_civil_war_exhaustion")
     compact_update = re.sub(r"\s+", " ", update)
@@ -4236,15 +5604,28 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
             update,
             re.DOTALL,
         ):
-            issues.append(f"casualty threshold {threshold}k does not add {gain} exhaustion")
+            issues.append(
+                f"casualty threshold {threshold}k does not add {gain} exhaustion"
+            )
     if "global.ADISCORD_vorkerland_civil_war_exhaustion" in update:
-        issues.append("WKR, VAD and TVA exhaustion must remain country-scoped, not global")
+        issues.append(
+            "WKR, VAD and TVA exhaustion must remain country-scoped, not global"
+        )
 
-    if "value = -8" in update or re.search(r"ADISCORD_vorkerland_civil_war_exhaustion\s+value\s*=\s*-", update):
+    if "value = -8" in update or re.search(
+        r"ADISCORD_vorkerland_civil_war_exhaustion\s+value\s*=\s*-", update
+    ):
         issues.append("civil-war exhaustion still decreases before the central outcome")
-    initialize = named_block(effects, "ADISCORD_vorkerland_initialize_civil_war_exhaustion")
-    if "value = 1" not in initialize or "ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes" not in initialize:
-        issues.append("civil-war exhaustion is not initialized visibly at collapse start")
+    initialize = named_block(
+        effects, "ADISCORD_vorkerland_initialize_civil_war_exhaustion"
+    )
+    if (
+        "value = 1" not in initialize
+        or "ADISCORD_vorkerland_refresh_civil_war_exhaustion = yes" not in initialize
+    ):
+        issues.append(
+            "civil-war exhaustion is not initialized visibly at collapse start"
+        )
 
     refresh = named_block(effects, "ADISCORD_vorkerland_refresh_civil_war_exhaustion")
     for token in (
@@ -4266,7 +5647,9 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
 
     modifier = named_block(dynamic, "ADISCORD_vorkerland_civil_war_exhaustion")
     if "icon = GFX_modifiers_sabotaged_resource" not in modifier:
-        issues.append("civil-war exhaustion does not use a registered dynamic-modifier icon")
+        issues.append(
+            "civil-war exhaustion does not use a registered dynamic-modifier icon"
+        )
     for token in (
         "war_support_factor",
         "stability_factor",
@@ -4278,7 +5661,9 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
             issues.append(f"civil-war exhaustion modifier is missing {token}")
     for forbidden in ("factory_output =", "army_attack_factor", "army_org_factor"):
         if forbidden in modifier:
-            issues.append(f"civil-war exhaustion must not refreeze fronts with {forbidden}")
+            issues.append(
+                f"civil-war exhaustion must not refreeze fronts with {forbidden}"
+            )
 
     category = named_block(categories, "ADISCORD_scenario_debug_category")
     if "visible = { is_debug = yes }" not in category:
@@ -4288,19 +5673,37 @@ def validate_exhaustion(root: Path, issues: list[str]) -> None:
         "ADISCORD_debug_reset_vorkerland_war_exhaustion",
     ):
         block = named_block(decisions, key)
-        for token in ("tag = WKR", "tag = VAD", "tag = TVA", "ai_will_do = { factor = 0 }"):
+        for token in (
+            "tag = WKR",
+            "tag = VAD",
+            "tag = TVA",
+            "ai_will_do = { factor = 0 }",
+        ):
             if token not in block:
                 issues.append(f"{key} is missing {token}")
 
     collapse_loc_path = root / "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
     debug_loc_path = root / "localisation/russian/ADISCORD_scenario_debug_l_russian.yml"
-    for path, label in ((collapse_loc_path, "collapse"), (debug_loc_path, "scenario debug")):
+    for path, label in (
+        (collapse_loc_path, "collapse"),
+        (debug_loc_path, "scenario debug"),
+    ):
         if not path.exists() or not path.read_bytes().startswith(b"\xef\xbb\xbf"):
             issues.append(f"{label} Russian localisation must retain UTF-8 BOM")
-    collapse_loc = collapse_loc_path.read_text(encoding="utf-8-sig") if collapse_loc_path.exists() else ""
-    debug_loc = debug_loc_path.read_text(encoding="utf-8-sig") if debug_loc_path.exists() else ""
+    collapse_loc = (
+        collapse_loc_path.read_text(encoding="utf-8-sig")
+        if collapse_loc_path.exists()
+        else ""
+    )
+    debug_loc = (
+        debug_loc_path.read_text(encoding="utf-8-sig")
+        if debug_loc_path.exists()
+        else ""
+    )
     if "[?ADISCORD_vorkerland_civil_war_exhaustion|0]/100" not in collapse_loc:
-        issues.append("civil-war exhaustion localisation does not expose the current score")
+        issues.append(
+            "civil-war exhaustion localisation does not expose the current score"
+        )
     for key in (
         "ADISCORD_debug_add_vorkerland_war_exhaustion:",
         "ADISCORD_debug_reset_vorkerland_war_exhaustion:",
@@ -4319,17 +5722,38 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
     )
     for relative in files:
         source = read(root, relative, issues)
-        for name in ("dirty_opening", "worker_victory", "utilitarian_victory", "vlad_victory", "dorian_victory"):
+        for name in (
+            "dirty_opening",
+            "worker_victory",
+            "utilitarian_victory",
+            "vlad_victory",
+            "dorian_victory",
+        ):
             if f"superevent_vorkerland_{name}" not in source:
                 issues.append(f"{relative}: missing Vorkerland {name} binding")
 
     gfx = read(root, "interface/superevents.gfx", issues)
     for name, filename in (
-        ("dirty_opening", "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png"),
-        ("worker_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png"),
-        ("utilitarian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png"),
-        ("vlad_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png"),
-        ("dorian_victory", "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png"),
+        (
+            "dirty_opening",
+            "gfx/interface/superevents/WRK/superevent_vorkerland_dirty_opening.png",
+        ),
+        (
+            "worker_victory",
+            "gfx/interface/superevents/WRK/superevent_vorkerland_worker_victory.png",
+        ),
+        (
+            "utilitarian_victory",
+            "gfx/interface/superevents/WRK/superevent_vorkerland_utilitarian_victory.png",
+        ),
+        (
+            "vlad_victory",
+            "gfx/interface/superevents/WRK/superevent_vorkerland_vlad_victory.png",
+        ),
+        (
+            "dorian_victory",
+            "gfx/interface/superevents/WRK/superevent_vorkerland_civilwar_doctor_won.png",
+        ),
     ):
         sprite = re.search(
             rf'(?ms)spriteType\s*=\s*\{{(?:(?!spriteType\s*=).)*?'
@@ -4338,11 +5762,16 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             gfx,
         )
         if not sprite or f'textureFile = "{filename}"' not in sprite.group(0):
-            issues.append(f"GFX_superevent_vorkerland_{name}: expected dedicated texture {filename}")
+            issues.append(
+                f"GFX_superevent_vorkerland_{name}: expected dedicated texture {filename}"
+            )
         if not (root / filename).is_file():
             issues.append(f"{filename}: missing dedicated superevent art")
 
-    map_effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_map_effects')
+    map_effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_map_effects',
+    )
     for name, event_id in (
         ("dirty_opening", "ADISCORD_superevent.4"),
         ("worker_victory", "ADISCORD_superevent.2"),
@@ -4350,26 +5779,46 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         ("vlad_victory", "ADISCORD_superevent.5"),
         ("dorian_victory", "ADISCORD_superevent.6"),
     ):
-        show_effect = named_block(map_effects, f"ADISCORD_vorkerland_show_{name}_superevent")
+        show_effect = named_block(
+            map_effects, f"ADISCORD_vorkerland_show_{name}_superevent"
+        )
         if f"country_event = {{ id = {event_id} }}" not in show_effect:
-            issues.append(f"Vorkerland {name} superevent has no console-fireable event route")
+            issues.append(
+                f"Vorkerland {name} superevent has no console-fireable event route"
+            )
         if "any_country = { is_ai = no }" not in show_effect:
-            issues.append(f"Vorkerland {name} superevent does not dispatch to a human country")
+            issues.append(
+                f"Vorkerland {name} superevent does not dispatch to a human country"
+            )
         if "random_country = {" not in show_effect:
-            issues.append(f"Vorkerland {name} superevent has no local-client country pick")
-    dirty_show = named_block(map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent")
+            issues.append(
+                f"Vorkerland {name} superevent has no local-client country pick"
+            )
+    dirty_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_dirty_opening_superevent"
+    )
     if "ADISCORD_vorkerland_dirty_opened" in dirty_show:
         issues.append("dirty-opening presentation must not start the country cascade")
-    worker_show = named_block(map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent")
+    worker_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_worker_victory_superevent"
+    )
     if "ADISCORD_vorkerland_central_victory_announced" not in worker_show:
         issues.append("Vorkerland worker_victory campaign show lost the announced lock")
-    utilitarian_show = named_block(map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent")
+    utilitarian_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_utilitarian_victory_superevent"
+    )
     if "ADISCORD_vorkerland_central_victory_announced" not in utilitarian_show:
-        issues.append("Vorkerland utilitarian_victory campaign show lost the announced lock")
-    vlad_show = named_block(map_effects, "ADISCORD_vorkerland_show_vlad_victory_superevent")
+        issues.append(
+            "Vorkerland utilitarian_victory campaign show lost the announced lock"
+        )
+    vlad_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_vlad_victory_superevent"
+    )
     if "ADISCORD_vorkerland_central_victory_announced" not in vlad_show:
         issues.append("Vorkerland vlad_victory campaign show lost the announced lock")
-    dorian_show = named_block(map_effects, "ADISCORD_vorkerland_show_dorian_victory_superevent")
+    dorian_show = named_block(
+        map_effects, "ADISCORD_vorkerland_show_dorian_victory_superevent"
+    )
     if "ADISCORD_vorkerland_central_victory_announced" not in dorian_show:
         issues.append("Vorkerland dorian_victory campaign show lost the announced lock")
 
@@ -4382,9 +5831,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in civilwar_event:
-            issues.append(f"ADISCORD_superevent.1: civil-war presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.1: civil-war presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in civilwar_event:
-        issues.append("ADISCORD_superevent.1: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.1: human-only audio gate silences observer/spectator"
+        )
     if "superevent_vorkerland_worker_victory" in civilwar_event:
         issues.append("ADISCORD_superevent.1 must stay the civil-war outbreak")
     worker_event = event_block(news, "ADISCORD_superevent.2")
@@ -4395,9 +5848,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in worker_event:
-            issues.append(f"ADISCORD_superevent.2: unscoped presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.2: unscoped presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in worker_event:
-        issues.append("ADISCORD_superevent.2: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.2: human-only audio gate silences observer/spectator"
+        )
     if "ADISCORD_vorkerland_central_victory_announced" in worker_event:
         issues.append("ADISCORD_superevent.2 must not lock the campaign ending")
     utilitarian_event = event_block(news, "ADISCORD_superevent.3")
@@ -4408,9 +5865,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in utilitarian_event:
-            issues.append(f"ADISCORD_superevent.3: unscoped presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.3: unscoped presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in utilitarian_event:
-        issues.append("ADISCORD_superevent.3: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.3: human-only audio gate silences observer/spectator"
+        )
     if "ADISCORD_vorkerland_central_victory_announced" in utilitarian_event:
         issues.append("ADISCORD_superevent.3 must not lock the campaign ending")
     dirty_event = event_block(news, "ADISCORD_superevent.4")
@@ -4421,16 +5882,22 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in dirty_event:
-            issues.append(f"ADISCORD_superevent.4: unscoped presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.4: unscoped presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in dirty_event:
-        issues.append("ADISCORD_superevent.4: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.4: human-only audio gate silences observer/spectator"
+        )
     for forbidden in (
         "ADISCORD_vorkerland_dirty_opened",
         "ADISCORD_vorkerland_collapse.11",
         "ADISCORD_vorkerland_central_victory_announced",
     ):
         if forbidden in dirty_event:
-            issues.append(f"ADISCORD_superevent.4 must stay a presentation replay: {forbidden}")
+            issues.append(
+                f"ADISCORD_superevent.4 must stay a presentation replay: {forbidden}"
+            )
     vlad_event = event_block(news, "ADISCORD_superevent.5")
     for token in (
         "hidden = yes",
@@ -4439,9 +5906,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in vlad_event:
-            issues.append(f"ADISCORD_superevent.5: unscoped presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.5: unscoped presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in vlad_event:
-        issues.append("ADISCORD_superevent.5: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.5: human-only audio gate silences observer/spectator"
+        )
     if "ADISCORD_vorkerland_central_victory_announced" in vlad_event:
         issues.append("ADISCORD_superevent.5 must not lock the campaign ending")
     dorian_event = event_block(news, "ADISCORD_superevent.6")
@@ -4452,9 +5923,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         "ADISCORD_superevent_enqueue = yes",
     ):
         if token not in dorian_event:
-            issues.append(f"ADISCORD_superevent.6: unscoped presentation is missing {token}")
+            issues.append(
+                f"ADISCORD_superevent.6: unscoped presentation is missing {token}"
+            )
     if "limit = { is_ai = no }" in dorian_event:
-        issues.append("ADISCORD_superevent.6: human-only audio gate silences observer/spectator")
+        issues.append(
+            "ADISCORD_superevent.6: human-only audio gate silences observer/spectator"
+        )
     if "ADISCORD_vorkerland_central_victory_announced" in dorian_event:
         issues.append("ADISCORD_superevent.6 must not lock the campaign ending")
     for news_id, title_id, audio_id, sound_effect in (
@@ -4487,7 +5962,9 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         if "hidden = yes" in definition:
             issues.append(f"{news_id}: superevent news must remain visible")
         if "limit = { is_ai = no }" in definition:
-            issues.append(f"{news_id}: human-only audio gate silences observer/spectator")
+            issues.append(
+                f"{news_id}: human-only audio gate silences observer/spectator"
+            )
 
         audio_proxy = event_block(news, audio_id)
         for token in (
@@ -4498,9 +5975,13 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
             if token not in audio_proxy:
                 issues.append(f"{audio_id}: unscoped audio proxy is missing {token}")
         if "limit = { is_ai = no }" in audio_proxy:
-            issues.append(f"{audio_id}: human-only audio gate silences observer/spectator")
+            issues.append(
+                f"{audio_id}: human-only audio gate silences observer/spectator"
+            )
         if "scoped_sound_effect" in audio_proxy:
-            issues.append(f"{audio_id}: observer/spectator cannot hear scoped_sound_effect")
+            issues.append(
+                f"{audio_id}: observer/spectator cannot hear scoped_sound_effect"
+            )
 
     sound_effects = read(root, "sound/superevents_effects.asset", issues)
     sound_defs = read(root, "sound/superevents_sound.asset", issues)
@@ -4544,7 +6025,10 @@ def validate_superevents(root: Path, issues: list[str]) -> None:
         )
         if not effect or f"sound = {sound_name}" not in effect.group(0):
             issues.append(f"{effect_name}: broken sound-effect binding")
-        if f'name = "{sound_name}"' not in sound_defs or not (root / filename).is_file():
+        if (
+            f'name = "{sound_name}"' not in sound_defs
+            or not (root / filename).is_file()
+        ):
             issues.append(f"{effect_name}: missing WAV sound definition or file")
 
 
@@ -4636,12 +6120,16 @@ def validate_bracket_graph(triggers: str, issues: list[str]) -> None:
         )
     )
     if closed_members != CLOSED_ZONE_BRACKET_TAGS:
-        issues.append("closed-zone bracket membership no longer matches the reactor administrations")
+        issues.append(
+            "closed-zone bracket membership no longer matches the reactor administrations"
+        )
     opener = named_block(triggers, "ADISCORD_vorkerland_can_open_local_war")
     for token in ("exists = yes", "is_subject = no", "has_capitulated = yes"):
         if token not in opener:
             issues.append(f"shared local-war participation guard is missing {token}")
-    autonomy_holders = named_block(triggers, "ADISCORD_vorkerland_holds_regional_autonomy")
+    autonomy_holders = named_block(
+        triggers, "ADISCORD_vorkerland_holds_regional_autonomy"
+    )
     if "tag = NAM" not in autonomy_holders:
         issues.append("NAM is excluded from regional autonomy despite fighting at home")
     host = named_block(triggers, "ADISCORD_vorkerland_is_coalition_host_for_ROOT")
@@ -4655,7 +6143,9 @@ def validate_bracket_graph(triggers: str, issues: list[str]) -> None:
             issues.append(f"coalition host trigger is missing {token}")
 
 
-def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[str]) -> None:
+def validate_bracket_engine(
+    effects: str, dirty: str, events: str, issues: list[str]
+) -> None:
     """One parameterised body owns every staged declaration and every retry."""
     builder = named_block(effects, "ADISCORD_vorkerland_open_local_bracket_wars")
     if builder.count("declare_war_on =") != 1:
@@ -4681,8 +6171,12 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
                 "generated; the table must stay the single source"
             )
 
-    central_launch = named_block(effects, "ADISCORD_vorkerland_launch_central_local_brackets")
-    closed_launch = named_block(effects, "ADISCORD_vorkerland_launch_closed_zone_local_brackets")
+    central_launch = named_block(
+        effects, "ADISCORD_vorkerland_launch_central_local_brackets"
+    )
+    closed_launch = named_block(
+        effects, "ADISCORD_vorkerland_launch_closed_zone_local_brackets"
+    )
     for label, launch, stage_flag, precondition in (
         (
             "central",
@@ -4698,9 +6192,13 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
         ),
     ):
         if launch.count(f"set_global_flag = {stage_flag}") != 1:
-            issues.append(f"{label} bracket launch must claim its stage flag exactly once")
+            issues.append(
+                f"{label} bracket launch must claim its stage flag exactly once"
+            )
         if f"NOT = {{ has_global_flag = {stage_flag} }}" not in launch:
-            issues.append(f"{label} bracket launch is not idempotent against its stage flag")
+            issues.append(
+                f"{label} bracket launch is not idempotent against its stage flag"
+            )
         if precondition not in launch:
             issues.append(f"{label} bracket launch is missing {precondition}")
         for token in (
@@ -4709,7 +6207,10 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
         ):
             if token not in launch:
                 issues.append(f"{label} bracket launch is missing {token}")
-    if "clr_global_flag = ADISCORD_vorkerland_local_bracket_wars_retry_used" not in closed_launch:
+    if (
+        "clr_global_flag = ADISCORD_vorkerland_local_bracket_wars_retry_used"
+        not in closed_launch
+    ):
         issues.append("second bracket stage inherits the first stage's spent retry")
 
     verifier = named_block(effects, "ADISCORD_vorkerland_verify_local_bracket_wars")
@@ -4720,7 +6221,12 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
     ):
         if token not in verifier:
             issues.append(f"bracket-war verifier is missing {token}")
-    if verifier.count("country_event = { id = ADISCORD_vorkerland_collapse.92 days = 1 }") != 1:
+    if (
+        verifier.count(
+            "country_event = { id = ADISCORD_vorkerland_collapse.92 days = 1 }"
+        )
+        != 1
+    ):
         issues.append("bracket-war verifier must reschedule itself exactly once")
     if verifier.count("ADISCORD_vorkerland_open_local_bracket_wars = yes") != 1:
         issues.append("bracket-war verifier must retry the builder exactly once")
@@ -4737,10 +6243,19 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
             issues.append(f"shared coalition-join body is missing {token}")
     splice = named_block(effects, "ADISCORD_vorkerland_splice_into_coalition_host_war")
     membership = named_block(effects, "ADISCORD_vorkerland_verify_coalition_membership")
-    for label, block in (("join", join), ("splice", splice), ("membership", membership)):
-        if "ADISCORD_vorkerland_coalition_host" in block or "save_global_event_target_as" in block:
+    for label, block in (
+        ("join", join),
+        ("splice", splice),
+        ("membership", membership),
+    ):
+        if (
+            "ADISCORD_vorkerland_coalition_host" in block
+            or "save_global_event_target_as" in block
+        ):
             issues.append(f"coalition {label} shares a mutable host between countries")
-    if join.find("add_to_faction = ROOT") > join.find("ADISCORD_vorkerland_splice_into_coalition_host_war = yes"):
+    if join.find("add_to_faction = ROOT") > join.find(
+        "ADISCORD_vorkerland_splice_into_coalition_host_war = yes"
+    ):
         issues.append("coalition membership must precede war entry")
     if "declare_war_on" in splice:
         issues.append(
@@ -4758,24 +6273,47 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
     ):
         if token not in splice:
             issues.append(f"coalition splice is missing {token}")
-    enemy_scope = named_block(named_block(splice, "faction_leader"), "every_enemy_country")
+    enemy_scope = named_block(
+        named_block(splice, "faction_leader"), "every_enemy_country"
+    )
     join_war = named_block(named_block(enemy_scope, "ROOT"), "add_to_war")
-    if not join_war or "targeted_alliance = PREV.PREV" not in join_war or "enemy = PREV" not in join_war:
-        issues.append("coalition war entry must preserve the host-enemy-winner scope order")
+    if (
+        not join_war
+        or "targeted_alliance = PREV.PREV" not in join_war
+        or "enemy = PREV" not in join_war
+    ):
+        issues.append(
+            "coalition war entry must preserve the host-enemy-winner scope order"
+        )
     retry_flag = "ADISCORD_vorkerland_regional_auxiliary_retry_used"
-    if membership.count(f"set_country_flag = {retry_flag}") != 1 or \
-            membership.count(f"NOT = {{ has_country_flag = {retry_flag} }}") != 1:
-        issues.append("coalition-membership verifier must own exactly one bounded retry")
+    if (
+        membership.count(f"set_country_flag = {retry_flag}") != 1
+        or membership.count(f"NOT = {{ has_country_flag = {retry_flag} }}") != 1
+    ):
+        issues.append(
+            "coalition-membership verifier must own exactly one bounded retry"
+        )
     if "ADISCORD_vorkerland_splice_into_coalition_host_war = yes" not in membership:
         issues.append("coalition-membership verifier cannot repair a rejected splice")
-    if "NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }" not in " ".join(named_block(named_block(membership, "if"), "limit").split()):
-        issues.append("coalition verification must cover every current war of the actual faction leader")
+    if (
+        "NOT = { any_enemy_country = { NOT = { has_war_with = ROOT } } }"
+        not in " ".join(named_block(named_block(membership, "if"), "limit").split())
+    ):
+        issues.append(
+            "coalition verification must cover every current war of the actual faction leader"
+        )
     failure = named_block(membership, "else")
     paid = "ADISCORD_vorkerland_coalition_join_paid"
     refund = named_block(failure, "if")
-    for token in (f"has_country_flag = {paid}", f"clr_country_flag = {paid}", "add_political_power = 25"):
+    for token in (
+        f"has_country_flag = {paid}",
+        f"clr_country_flag = {paid}",
+        "add_political_power = 25",
+    ):
         if token not in refund:
-            issues.append("failed coalition entry must settle its paid receipt exactly once")
+            issues.append(
+                "failed coalition entry must settle its paid receipt exactly once"
+            )
     if f"clr_country_flag = {paid}" not in named_block(membership, "if"):
         issues.append("successful coalition entry must consume its paid receipt")
     if "ADISCORD_vorkerland_reconcile_coalition_obligation = yes" not in failure:
@@ -4797,15 +6335,19 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
         if token not in single_grant:
             issues.append(f"per-country autonomy grant is missing {token}")
 
-    cascade = named_block(effects, "ADISCORD_vorkerland_finalize_dirty_cascade_if_ready") or \
-        named_block(dirty, "ADISCORD_vorkerland_finalize_dirty_cascade_if_ready")
+    cascade = named_block(
+        effects, "ADISCORD_vorkerland_finalize_dirty_cascade_if_ready"
+    ) or named_block(dirty, "ADISCORD_vorkerland_finalize_dirty_cascade_if_ready")
     if "ADISCORD_vorkerland_collapse.91" not in cascade:
         issues.append("closed-zone bracket is never launched from the dirty cascade")
     if "ADISCORD_vorkerland_closed_zone_bracket_scheduled" not in cascade:
         issues.append("closed-zone bracket launch can be scheduled more than once")
 
     authorization = event_block(events, "ADISCORD_vorkerland_collapse.31")
-    if "country_event = { id = ADISCORD_vorkerland_collapse.90 days = 1 }" not in authorization:
+    if (
+        "country_event = { id = ADISCORD_vorkerland_collapse.90 days = 1 }"
+        not in authorization
+    ):
         issues.append("central bracket is never launched from the war authorisation")
     for event_id, token in (
         (90, "ADISCORD_vorkerland_launch_central_local_brackets = yes"),
@@ -4822,7 +6364,9 @@ def validate_bracket_engine(effects: str, dirty: str, events: str, issues: list[
             issues.append(f"bracket event .{event_id} is missing {token}")
 
 
-def validate_bracket_decision(decisions: str, categories: str, issues: list[str]) -> None:
+def validate_bracket_decision(
+    decisions: str, categories: str, issues: list[str]
+) -> None:
     """A bracket winner may only fold into a claimant after clearing its own war."""
     decision = named_block(decisions, "ADISCORD_vorkerland_join_claimant_coalition")
     if not decision:
@@ -4837,10 +6381,18 @@ def validate_bracket_decision(decisions: str, categories: str, issues: list[str]
         if token not in available:
             issues.append(f"the coalition-join decision is missing {token}")
     target = named_block(decision, "target_trigger")
-    if "ADISCORD_vorkerland_is_main_claimant = yes" not in target or "ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes" not in available:
-        issues.append("the coalition-join decision does not restrict itself to valid hosts")
+    if (
+        "ADISCORD_vorkerland_is_main_claimant = yes" not in target
+        or "ADISCORD_vorkerland_is_coalition_host_for_ROOT = yes" not in available
+    ):
+        issues.append(
+            "the coalition-join decision does not restrict itself to valid hosts"
+        )
     declared_targets = re.search(r"targets\s*=\s*\{([^}]*)\}", decision)
-    if declared_targets is None or set(declared_targets.group(1).split()) != MAIN_CLAIMANTS:
+    if (
+        declared_targets is None
+        or set(declared_targets.group(1).split()) != MAIN_CLAIMANTS
+    ):
         issues.append(
             "the coalition-join decision must offer exactly the three claimants as "
             "targets instead of scanning every country"
@@ -4857,10 +6409,14 @@ def validate_bracket_decision(decisions: str, categories: str, issues: list[str]
     if "ADISCORD_vorkerland_join_coalition_of_FROM = yes" not in complete:
         issues.append("the coalition-join decision does not call the shared join body")
     if "declare_war_on" in complete or "add_to_war" in complete:
-        issues.append("the coalition-join decision performs war surgery outside the shared body")
+        issues.append(
+            "the coalition-join decision performs war surgery outside the shared body"
+        )
     ai_will_do = named_block(decision, "ai_will_do")
     if "ADISCORD_vorkerland_has_live_local_rival = yes" not in ai_will_do:
-        issues.append("the AI may take the coalition-join decision while still fighting locally")
+        issues.append(
+            "the AI may take the coalition-join decision while still fighting locally"
+        )
     if "FROM = { tag = VAD }" not in ai_will_do or "factor = 0" not in ai_will_do:
         issues.append("the AI must not fold surviving administrations into VAD")
     if "CSL" not in categories:
@@ -4870,9 +6426,13 @@ def validate_bracket_decision(decisions: str, categories: str, issues: list[str]
 def validate_bracket_ai(ai: str, issues: list[str]) -> None:
     """Local focus first, then the coalition front. Never both at once."""
     for claimant in sorted(MAIN_CLAIMANTS):
-        block = named_block(ai, f"ADISCORD_vorkerland_local_focus_ignore_{claimant.lower()}")
+        block = named_block(
+            ai, f"ADISCORD_vorkerland_local_focus_ignore_{claimant.lower()}"
+        )
         if not block:
-            issues.append(f"minors are never told to ignore {claimant} while fighting locally")
+            issues.append(
+                f"minors are never told to ignore {claimant} while fighting locally"
+            )
             continue
         for token in (
             "ADISCORD_vorkerland_is_local_bracket_member = yes",
@@ -4886,12 +6446,19 @@ def validate_bracket_ai(ai: str, issues: list[str]) -> None:
     if "type = avoid_starting_wars value = 1000" not in no_new_wars:
         issues.append("a minor with a live local rival may still open an extra war")
     for attacker, defender in LOCAL_RIVALRY_EDGES:
-        if (attacker, defender) not in NEW_CENTRAL_BRACKET_EDGES + NEW_CLOSED_ZONE_BRACKET_EDGES:
+        if (
+            attacker,
+            defender,
+        ) not in NEW_CENTRAL_BRACKET_EDGES + NEW_CLOSED_ZONE_BRACKET_EDGES:
             continue
         for owner, enemy in ((attacker, defender), (defender, attacker)):
-            front = named_block(ai, f"ADISCORD_vorkerland_front_{owner.lower()}_{enemy.lower()}")
+            front = named_block(
+                ai, f"ADISCORD_vorkerland_front_{owner.lower()}_{enemy.lower()}"
+            )
             if not front:
-                issues.append(f"{owner} has no front profile for its local rival {enemy}")
+                issues.append(
+                    f"{owner} has no front profile for its local rival {enemy}"
+                )
                 continue
             for token in (
                 f"country_exists = {enemy}",
@@ -4901,7 +6468,9 @@ def validate_bracket_ai(ai: str, issues: list[str]) -> None:
                 "abort_when_not_enabled = yes",
             ):
                 if token not in front:
-                    issues.append(f"local front {owner} against {enemy} is missing {token}")
+                    issues.append(
+                        f"local front {owner} against {enemy} is missing {token}"
+                    )
             if "priority = 1250" in front:
                 issues.append(
                     f"local front {owner} against {enemy} outranks the claimant fronts"
@@ -4909,7 +6478,8 @@ def validate_bracket_ai(ai: str, issues: list[str]) -> None:
     for host in sorted(MAIN_CLAIMANTS):
         for rival in sorted(MAIN_CLAIMANTS - {host}):
             block = named_block(
-                ai, f"ADISCORD_vorkerland_auxiliary_of_{host.lower()}_against_{rival.lower()}"
+                ai,
+                f"ADISCORD_vorkerland_auxiliary_of_{host.lower()}_against_{rival.lower()}",
             )
             if not block:
                 issues.append(
@@ -4926,7 +6496,10 @@ def validate_bracket_ai(ai: str, issues: list[str]) -> None:
                         f"{host} auxiliary front against {rival} is missing {token}"
                     )
     piv = named_block(ai, "ADISCORD_vorkerland_piv_local_focus")
-    for token in ("type = avoid_starting_wars value = 1000", "type = ignore id = WKR value = 1000"):
+    for token in (
+        "type = avoid_starting_wars value = 1000",
+        "type = ignore id = WKR value = 1000",
+    ):
         if token not in piv:
             issues.append(f"Afrela's expedition focus is missing {token}")
 
@@ -4943,7 +6516,10 @@ def validate_bracket_modifiers(modifiers: str, issues: list[str]) -> None:
     ):
         if token not in autonomy:
             issues.append(f"regional autonomy never expires: missing {token}")
-    for cost in ("local_building_slots_factor", "state_production_speed_buildings_factor"):
+    for cost in (
+        "local_building_slots_factor",
+        "state_production_speed_buildings_factor",
+    ):
         value = scalar(autonomy, cost)
         if value is None or value >= 0:
             issues.append(f"regional autonomy is a free bonus: {cost} is not a cost")
@@ -4966,14 +6542,45 @@ def validate_bracket_modifiers(modifiers: str, issues: list[str]) -> None:
 
 
 def validate_brackets(root: Path, issues: list[str]) -> None:
-    triggers = source_section(read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues), 'collapse_triggers')
-    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_effects')
-    dirty = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'collapse_dirty_effects')
-    events = source_section(read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events')
-    decisions = source_section(read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues), 'collapse_decisions')
-    categories = source_section(read(root, "common/decisions/categories/ADISCORD_vorkerland_categories.txt", issues), 'collapse_categories')
-    ai = source_section(read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues), 'collapse_ai')
-    modifiers = source_section(read(root, "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt", issues), 'collapse_dynamic_modifiers')
+    triggers = source_section(
+        read(root, "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt", issues),
+        'collapse_triggers',
+    )
+    effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_effects',
+    )
+    dirty = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'collapse_dirty_effects',
+    )
+    events = source_section(
+        read(root, "events/ADISCORD_vorkerland_events.txt", issues), 'collapse_events'
+    )
+    decisions = source_section(
+        read(root, "common/decisions/ADISCORD_vorkerland_decisions.txt", issues),
+        'collapse_decisions',
+    )
+    categories = source_section(
+        read(
+            root,
+            "common/decisions/categories/ADISCORD_vorkerland_categories.txt",
+            issues,
+        ),
+        'collapse_categories',
+    )
+    ai = source_section(
+        read(root, "common/ai_strategy/ADISCORD_vorkerland_ai.txt", issues),
+        'collapse_ai',
+    )
+    modifiers = source_section(
+        read(
+            root,
+            "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt",
+            issues,
+        ),
+        'collapse_dynamic_modifiers',
+    )
     for label, source in (
         ("triggers", triggers),
         ("effects", effects),
@@ -5009,12 +6616,19 @@ def validate_brackets(root: Path, issues: list[str]) -> None:
 
 def validate_emergency_templates(root: Path, issues: list[str]) -> None:
     """Ensure every late-spawn template is materialized in its owner scope."""
-    effects = source_section(read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues), 'emergency_template_effects')
+    effects = source_section(
+        read(root, "common/scripted_effects/ADISCORD_vorkerland_effects.txt", issues),
+        'emergency_template_effects',
+    )
     if not balanced(effects):
         issues.append("emergency template effects: unbalanced braces or quote")
     for name, effect in EMERGENCY_TEMPLATE_EFFECTS.items():
         block = named_block(effects, effect)
-        if not block or f'has_template = "{name}"' not in block or f'name = "{name}"' not in block:
+        if (
+            not block
+            or f'has_template = "{name}"' not in block
+            or f'name = "{name}"' not in block
+        ):
             issues.append(f"template {name}: missing idempotent ensure effect")
             continue
         for token in EMERGENCY_TEMPLATE_REQUIRED_METADATA.get(name, ()):
@@ -5027,10 +6641,15 @@ def validate_emergency_templates(root: Path, issues: list[str]) -> None:
         "common/decisions/ADISCORD_vorkerland_decisions.txt",
     ):
         source = read(root, relative, issues)
-        for match in re.finditer(r'create_unit\s*=\s*\{[^{}]*division_template\s*=\s*\\"([^"\\]+)', source):
+        for match in re.finditer(
+            r'create_unit\s*=\s*\{[^{}]*division_template\s*=\s*\\"([^"\\]+)', source
+        ):
             name = match.group(1)
             effect = EMERGENCY_TEMPLATE_EFFECTS.get(name)
-            if effect and effect not in source[max(0, match.start() - 700):match.start()]:
+            if (
+                effect
+                and effect not in source[max(0, match.start() - 700) : match.start()]
+            ):
                 issues.append(f"{relative}: {name} create_unit lacks owner ensure")
 
 
@@ -5049,7 +6668,9 @@ CHECKS = {
 
 def validate(root: Path, section: str | None = None) -> list[str]:
     if section is not None and section not in SECTIONS:
-        raise ValueError(f"unknown section {section!r}; choose from {', '.join(SECTIONS)}")
+        raise ValueError(
+            f"unknown section {section!r}; choose from {', '.join(SECTIONS)}"
+        )
     issues: list[str] = []
     for name in (section,) if section else SECTIONS:
         CHECKS[name](root, issues)

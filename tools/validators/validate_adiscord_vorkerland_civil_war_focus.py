@@ -15,12 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 FOCUS_FILE = Path("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
 CONTINUOUS_FOCUS_FILE = Path("common/continuous_focus/generic.txt")
-ENGLISH_LOCALISATION = Path(
-    "localisation/english/ADISCORD_vorkerland_l_english.yml"
-)
-RUSSIAN_LOCALISATION = Path(
-    "localisation/russian/ADISCORD_vorkerland_l_russian.yml"
-)
+ENGLISH_LOCALISATION = Path("localisation/english/ADISCORD_vorkerland_l_english.yml")
+RUSSIAN_LOCALISATION = Path("localisation/russian/ADISCORD_vorkerland_l_russian.yml")
 ENGLISH_COLLAPSE_LOCALISATION = Path(
     "localisation/english/ADISCORD_vorkerland_l_english.yml"
 )
@@ -39,33 +35,17 @@ VANILLA_SHINE_SHADOW_FILE = Path("interface/goals_shine.gfx")
 VANILLA_FOCUS_GFX_SHADOW_FILE = Path("interface/nationalfocusview.gfx")
 FOCUS_GFX_FILE = Path("interface/ADISCORD_national_focus.gfx")
 FOCUS_FALLBACK_TEXTURE = "gfx/interface/goals/focus_PLACEHOLDER.dds"
-FOCUS_DECISION_FILES = (
-    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
-)
+FOCUS_DECISION_FILES = (Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),)
 FOCUS_DECISIONS_FILE = FOCUS_DECISION_FILES
-DIPLOMACY_DECISIONS_FILE = Path(
-    "common/decisions/ADISCORD_vorkerland_decisions.txt"
-)
-DIPLOMACY_EFFECTS_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
-PHASE_EFFECTS_FILE = Path(
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
+DIPLOMACY_DECISIONS_FILE = Path("common/decisions/ADISCORD_vorkerland_decisions.txt")
+DIPLOMACY_EFFECTS_FILE = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+PHASE_EFFECTS_FILE = Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
 COLLAPSE_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_ideas.txt")
-FOCUS_EXPANSION_IDEAS_FILE = Path(
-    "common/ideas/ADISCORD_vorkerland_ideas.txt"
-)
+FOCUS_EXPANSION_IDEAS_FILE = Path("common/ideas/ADISCORD_vorkerland_ideas.txt")
 CLAIMANT_EVENTS_FILE = Path("events/ADISCORD_vorkerland_events.txt")
-WKR_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
-)
-VAD_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
-)
-TVA_AI_PLAN_FILE = Path(
-    "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
-)
+WKR_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
+VAD_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
+TVA_AI_PLAN_FILE = Path("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt")
 
 PREWAR_WRK_BASE_FOCUSES = (
     "WRK_measure_confederation_fault_lines",
@@ -288,12 +268,17 @@ PREWAR_EXPANSION_POSITIONS = {
 }
 
 PREWAR_EXPANSION_COSTS = {
-    focus_id: 1 if focus_id in {
-        "WRK_open_worker_vadl_backchannel",
-        "WRK_mobilize_loyal_republics",
-        "VAD_prepare_vadl_worker_terms",
-        "VAD_activate_eastern_mandate",
-    } else 2
+    focus_id: (
+        1
+        if focus_id
+        in {
+            "WRK_open_worker_vadl_backchannel",
+            "WRK_mobilize_loyal_republics",
+            "VAD_prepare_vadl_worker_terms",
+            "VAD_activate_eastern_mandate",
+        }
+        else 2
+    )
     for focus_id in PREWAR_EXPANSION_POSITIONS
 }
 
@@ -373,29 +358,71 @@ SHOWDOWN_COSTS = {
 }
 
 SHOWDOWN_PREREQUISITES = {
-    "WKR_establish_front_operations_bureau": (frozenset({"WKR_republic_fights_as_one"}),),
-    "WKR_authorize_republican_mission_commands": (frozenset({"WKR_establish_front_operations_bureau"}),),
-    "WKR_issue_normative_campaign_tables": (frozenset({"WKR_establish_front_operations_bureau"}),),
-    "WKR_form_rolling_factory_groups": (frozenset({"WKR_authorize_republican_mission_commands", "WKR_issue_normative_campaign_tables"}),),
-    "WKR_reopen_night_freight_corridors": (frozenset({"WKR_authorize_republican_mission_commands", "WKR_issue_normative_campaign_tables"}),),
+    "WKR_establish_front_operations_bureau": (
+        frozenset({"WKR_republic_fights_as_one"}),
+    ),
+    "WKR_authorize_republican_mission_commands": (
+        frozenset({"WKR_establish_front_operations_bureau"}),
+    ),
+    "WKR_issue_normative_campaign_tables": (
+        frozenset({"WKR_establish_front_operations_bureau"}),
+    ),
+    "WKR_form_rolling_factory_groups": (
+        frozenset(
+            {
+                "WKR_authorize_republican_mission_commands",
+                "WKR_issue_normative_campaign_tables",
+            }
+        ),
+    ),
+    "WKR_reopen_night_freight_corridors": (
+        frozenset(
+            {
+                "WKR_authorize_republican_mission_commands",
+                "WKR_issue_normative_campaign_tables",
+            }
+        ),
+    ),
     "WKR_arm_the_mobile_reserve": (frozenset({"WKR_form_rolling_factory_groups"}),),
     "WKR_coordinate_the_rolling_front": (
         frozenset({"WKR_arm_the_mobile_reserve"}),
         frozenset({"WKR_reopen_night_freight_corridors"}),
     ),
-    "VAD_convene_campaign_directorate": (frozenset({"VAD_publish_interim_restoration_register"}),),
-    "VAD_issue_prefectural_field_decrees": (frozenset({"VAD_convene_campaign_directorate"}),),
+    "VAD_convene_campaign_directorate": (
+        frozenset({"VAD_publish_interim_restoration_register"}),
+    ),
+    "VAD_issue_prefectural_field_decrees": (
+        frozenset({"VAD_convene_campaign_directorate"}),
+    ),
     "VAD_seat_front_commissars": (frozenset({"VAD_convene_campaign_directorate"}),),
-    "VAD_standardize_restoration_columns": (frozenset({"VAD_issue_prefectural_field_decrees", "VAD_seat_front_commissars"}),),
-    "VAD_advance_under_one_register": (frozenset({"VAD_standardize_restoration_columns"}),),
+    "VAD_standardize_restoration_columns": (
+        frozenset({"VAD_issue_prefectural_field_decrees", "VAD_seat_front_commissars"}),
+    ),
+    "VAD_advance_under_one_register": (
+        frozenset({"VAD_standardize_restoration_columns"}),
+    ),
     "TVA_merge_iteration_with_field_command": (
         frozenset({"TVA_close_operational_loop"}),
         frozenset({"TVA_authorize_iteration_two"}),
     ),
-    "TVA_mass_produce_assault_modules": (frozenset({"TVA_merge_iteration_with_field_command"}),),
-    "TVA_link_observers_to_fire_control": (frozenset({"TVA_merge_iteration_with_field_command"}),),
-    "TVA_turn_repair_trains_into_supply_web": (frozenset({"TVA_merge_iteration_with_field_command"}),),
-    "TVA_run_live_front_validation": (frozenset({"TVA_mass_produce_assault_modules", "TVA_link_observers_to_fire_control", "TVA_turn_repair_trains_into_supply_web"}),),
+    "TVA_mass_produce_assault_modules": (
+        frozenset({"TVA_merge_iteration_with_field_command"}),
+    ),
+    "TVA_link_observers_to_fire_control": (
+        frozenset({"TVA_merge_iteration_with_field_command"}),
+    ),
+    "TVA_turn_repair_trains_into_supply_web": (
+        frozenset({"TVA_merge_iteration_with_field_command"}),
+    ),
+    "TVA_run_live_front_validation": (
+        frozenset(
+            {
+                "TVA_mass_produce_assault_modules",
+                "TVA_link_observers_to_fire_control",
+                "TVA_turn_repair_trains_into_supply_web",
+            }
+        ),
+    ),
 }
 
 FOCUS_EXPANSION_IDEAS = (
@@ -489,7 +516,9 @@ VARIANT_BRANCHES = (
         "positions": ((0, 11), (0, 12), (0, 13)),
         "costs": (2, 3, 3),
         "root_prerequisite": "WKR_publish_emergency_constitution",
-        "branch_tokens": ("has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",),
+        "branch_tokens": (
+            "has_global_flag = ADISCORD_vorkerland_worker_safe_with_loyalists",
+        ),
         "identity_tokens": (
             "has_country_leader = { character = WRK_Nikita_Worcker ruling_only = yes }",
         ),
@@ -565,7 +594,9 @@ VARIANT_BRANCHES = (
         "positions": ((30, 11), (30, 12), (30, 13)),
         "costs": (2, 3, 3),
         "root_prerequisite": "VAD_ratify_joint_command",
-        "branch_tokens": ("has_global_flag = ADISCORD_vorkerland_joint_government_formed",),
+        "branch_tokens": (
+            "has_global_flag = ADISCORD_vorkerland_joint_government_formed",
+        ),
         "identity_tokens": (
             "has_country_leader = { character = WRK_VAD_Joint_Council ruling_only = yes }",
         ),
@@ -631,7 +662,11 @@ VARIANT_BRANCHES = (
 VARIANT_IDEAS = tuple(
     idea
     for branch in VARIANT_BRANCHES
-    for idea in (branch["permanent_ideas"][0], branch["timed_idea"], branch["permanent_ideas"][1])
+    for idea in (
+        branch["permanent_ideas"][0],
+        branch["timed_idea"],
+        branch["permanent_ideas"][1],
+    )
 )
 
 VARIANT_PERMANENT_IDEAS = tuple(
@@ -777,7 +812,9 @@ def _check_focus_gfx(focus_gfx: str, shine_source: str) -> list[str]:
         sprite = focus_icon_name(focus_id)
         texture = focus_texture_path(focus_id)
         if f'name = "{sprite}"' not in focus_gfx:
-            issues.append(f"{focus_id} lacks sprite {sprite} in {FOCUS_GFX_FILE.as_posix()}")
+            issues.append(
+                f"{focus_id} lacks sprite {sprite} in {FOCUS_GFX_FILE.as_posix()}"
+            )
         elif f'texturefile = "{texture}"' not in focus_gfx:
             issues.append(f"{sprite} must resolve to {texture}")
         if f'name = "{sprite}_shine"' not in shine_source:
@@ -1252,23 +1289,57 @@ VAD_PERMANENT_PROTOCOL_IDEAS = {
 
 VAD_WARTIME_IDEA_LOCALISATION_IDS = {
     idea_id for idea_id, _days in VAD_WARTIME_TIMED_IDEAS.values()
-} | {
-    own for own, _other in VAD_PERMANENT_PROTOCOL_IDEAS.values()
-}
+} | {own for own, _other in VAD_PERMANENT_PROTOCOL_IDEAS.values()}
 
 WARTIME_OUTCOME_EXCLUSIONS = {
     "WKR": (
-        frozenset({"WKR_empower_front_executive", "WKR_authorize_normative_command", "WKR_bind_workshops_to_directive"}),
-        frozenset({"WKR_convene_front_soviets", "WKR_open_free_republics_channel", "WKR_publish_emergency_constitution"}),
+        frozenset(
+            {
+                "WKR_empower_front_executive",
+                "WKR_authorize_normative_command",
+                "WKR_bind_workshops_to_directive",
+            }
+        ),
+        frozenset(
+            {
+                "WKR_convene_front_soviets",
+                "WKR_open_free_republics_channel",
+                "WKR_publish_emergency_constitution",
+            }
+        ),
     ),
     "VAD": (
-        frozenset({"VAD_form_field_commandantures", "VAD_guarantee_worker_committees", "VAD_ratify_joint_command"}),
-        frozenset({"VAD_open_imperial_registers", "VAD_restore_crown_commissions", "VAD_bind_officers_to_chancery"}),
+        frozenset(
+            {
+                "VAD_form_field_commandantures",
+                "VAD_guarantee_worker_committees",
+                "VAD_ratify_joint_command",
+            }
+        ),
+        frozenset(
+            {
+                "VAD_open_imperial_registers",
+                "VAD_restore_crown_commissions",
+                "VAD_bind_officers_to_chancery",
+            }
+        ),
     ),
     "TVA": tuple(
         frozenset(({*metric_choices} - {metric}) | ({*trial_choices} - {trial}))
-        for metric_choices in (("TVA_optimize_for_throughput", "TVA_delegate_to_algorithmic_board", "TVA_protect_irreplaceable_specialists"),)
-        for trial_choices in (("TVA_raise_technical_battalions", "TVA_test_remote_fire_control", "TVA_test_adaptive_logistics"),)
+        for metric_choices in (
+            (
+                "TVA_optimize_for_throughput",
+                "TVA_delegate_to_algorithmic_board",
+                "TVA_protect_irreplaceable_specialists",
+            ),
+        )
+        for trial_choices in (
+            (
+                "TVA_raise_technical_battalions",
+                "TVA_test_remote_fire_control",
+                "TVA_test_adaptive_logistics",
+            ),
+        )
         for metric in metric_choices
         for trial in trial_choices
     ),
@@ -1489,11 +1560,42 @@ CLAIMANT_TWO_OPTION_EVENT_IDS = (
     "ADISCORD_vorkerland_claimant.22",
 )
 CLAIMANT_ROUTE_LOCALISATION_KEYS = {
-    *(f"ADISCORD_vorkerland_claimant.4.{suffix}" for suffix in ("t", "nikita.d", "anton.d", "nikita.a", "nikita.b", "anton.a", "anton.b")),
-    *(f"ADISCORD_vorkerland_claimant.13.{suffix}" for suffix in ("t", "joint.d", "vlad.d", "joint.a", "joint.b", "vlad.a", "vlad.b")),
-    *(f"ADISCORD_vorkerland_claimant.14.{suffix}" for suffix in ("t", "joint.d", "vlad.d", "joint.a", "vlad.a")),
-    *(f"ADISCORD_vorkerland_claimant.23.{suffix}" for suffix in ("t", "d", "a", "b", "c")),
-    *(f"ADISCORD_vorkerland_claimant.24.{suffix}" for suffix in ("t", "d", "a", "b", "c")),
+    *(
+        f"ADISCORD_vorkerland_claimant.4.{suffix}"
+        for suffix in (
+            "t",
+            "nikita.d",
+            "anton.d",
+            "nikita.a",
+            "nikita.b",
+            "anton.a",
+            "anton.b",
+        )
+    ),
+    *(
+        f"ADISCORD_vorkerland_claimant.13.{suffix}"
+        for suffix in (
+            "t",
+            "joint.d",
+            "vlad.d",
+            "joint.a",
+            "joint.b",
+            "vlad.a",
+            "vlad.b",
+        )
+    ),
+    *(
+        f"ADISCORD_vorkerland_claimant.14.{suffix}"
+        for suffix in ("t", "joint.d", "vlad.d", "joint.a", "vlad.a")
+    ),
+    *(
+        f"ADISCORD_vorkerland_claimant.23.{suffix}"
+        for suffix in ("t", "d", "a", "b", "c")
+    ),
+    *(
+        f"ADISCORD_vorkerland_claimant.24.{suffix}"
+        for suffix in ("t", "d", "a", "b", "c")
+    ),
 }
 MOBILE_REPAIR_IDEA = "ADISCORD_vorkerland_tva_mobile_repair_trains"
 LAND_REPAIR_IDEAS = (
@@ -1512,9 +1614,7 @@ WORX_WARTIME_TIMED_IDEAS = {
         70,
     ),
 }
-WORX_ADAPTIVE_LOGISTICS_IDEA = (
-    "ADISCORD_vorkerland_worx_adaptive_logistics_trial"
-)
+WORX_ADAPTIVE_LOGISTICS_IDEA = "ADISCORD_vorkerland_worx_adaptive_logistics_trial"
 RETIRED_WORX_SECOND_PROTOCOL_IDEA = "ADISCORD_vorkerland_worx_second_protocol"
 WORX_FIELD_DIRECTORATE_IDEAS = (
     "ADISCORD_vorkerland_tva_field_directorate",
@@ -1768,9 +1868,7 @@ DEPTH_MODULE_FOCUSES = {
 }
 
 DEPTH_FOCUSES = tuple(
-    focus_id
-    for focus_ids in DEPTH_MODULE_FOCUSES.values()
-    for focus_id in focus_ids
+    focus_id for focus_ids in DEPTH_MODULE_FOCUSES.values() for focus_id in focus_ids
 )
 
 DEPTH_POSITIONS = {
@@ -2062,17 +2160,19 @@ DEPTH_EXCLUSIVE_PAIRS = (
 
 # These branches remain visible throughout the war but become available only
 # when the central showdown begins.
-DEPTH_LATE_WAR_FOCUSES = frozenset({
-    "WKR_the_last_levy",
-    "WKR_throw_the_reserves_forward",
-    "WKR_dig_in_along_the_interchange",
-    "VAD_hold_the_historic_capitals",
-    "VAD_march_on_the_old_capital",
-    "VAD_fortify_the_restoration_line",
-    "TVA_declare_the_final_iteration",
-    "TVA_spend_the_reserve_cadre",
-    "TVA_seal_the_technical_core",
-})
+DEPTH_LATE_WAR_FOCUSES = frozenset(
+    {
+        "WKR_the_last_levy",
+        "WKR_throw_the_reserves_forward",
+        "WKR_dig_in_along_the_interchange",
+        "VAD_hold_the_historic_capitals",
+        "VAD_march_on_the_old_capital",
+        "VAD_fortify_the_restoration_line",
+        "TVA_declare_the_final_iteration",
+        "TVA_spend_the_reserve_cadre",
+        "TVA_seal_the_technical_core",
+    }
+)
 
 # Positive entries build the ledger slowly, negative entries sell it for an
 # immediate gain. The ledger variable itself is never written from a focus.
@@ -2127,64 +2227,111 @@ DEPTH_PERMANENT_IDEAS = {
 
 DEPTH_TIMED_IDEAS = {
     "ADISCORD_vorkerland_wkr_reserves_forward": ("WKR_throw_the_reserves_forward", 70),
-    "ADISCORD_vorkerland_wkr_interchange_line": ("WKR_dig_in_along_the_interchange", 70),
+    "ADISCORD_vorkerland_wkr_interchange_line": (
+        "WKR_dig_in_along_the_interchange",
+        70,
+    ),
     "ADISCORD_vorkerland_wkr_bracket_patronage": ("WKR_arm_the_bracket_victors", 70),
     "ADISCORD_vorkerland_wkr_outside_recognition": ("WKR_seek_outside_recognition", 70),
-    "ADISCORD_vorkerland_vad_march_on_the_capital": ("VAD_march_on_the_old_capital", 70),
-    "ADISCORD_vorkerland_vad_restoration_line": ("VAD_fortify_the_restoration_line", 70),
+    "ADISCORD_vorkerland_vad_march_on_the_capital": (
+        "VAD_march_on_the_old_capital",
+        70,
+    ),
+    "ADISCORD_vorkerland_vad_restoration_line": (
+        "VAD_fortify_the_restoration_line",
+        70,
+    ),
     "ADISCORD_vorkerland_vad_bracket_patronage": ("VAD_court_the_bracket_victors", 70),
-    "ADISCORD_vorkerland_vad_legitimist_recognition": ("VAD_seek_legitimist_recognition", 70),
+    "ADISCORD_vorkerland_vad_legitimist_recognition": (
+        "VAD_seek_legitimist_recognition",
+        70,
+    ),
     "ADISCORD_vorkerland_tva_reserve_cadre_spent": ("TVA_spend_the_reserve_cadre", 70),
-    "ADISCORD_vorkerland_tva_technical_core_sealed": ("TVA_seal_the_technical_core", 70),
-    "ADISCORD_vorkerland_tva_technical_exchange": ("TVA_open_the_technical_exchange", 70),
+    "ADISCORD_vorkerland_tva_technical_core_sealed": (
+        "TVA_seal_the_technical_core",
+        70,
+    ),
+    "ADISCORD_vorkerland_tva_technical_exchange": (
+        "TVA_open_the_technical_exchange",
+        70,
+    ),
     "ADISCORD_vorkerland_tva_bracket_contractors": ("TVA_hire_the_bracket_victors", 70),
-    "ADISCORD_vorkerland_wkr_shopfloor_squadrons": ("WKR_commit_shopfloor_squadrons", 70),
-    "ADISCORD_vorkerland_wkr_interchange_sky_screen": ("WKR_screen_the_interchange_sky", 70),
-    "ADISCORD_vorkerland_wkr_republican_volunteers": ("WKR_send_republican_volunteers", 70),
+    "ADISCORD_vorkerland_wkr_shopfloor_squadrons": (
+        "WKR_commit_shopfloor_squadrons",
+        70,
+    ),
+    "ADISCORD_vorkerland_wkr_interchange_sky_screen": (
+        "WKR_screen_the_interchange_sky",
+        70,
+    ),
+    "ADISCORD_vorkerland_wkr_republican_volunteers": (
+        "WKR_send_republican_volunteers",
+        70,
+    ),
     "ADISCORD_vorkerland_wkr_licensed_patterns": ("WKR_license_outside_patterns", 70),
-    "ADISCORD_vorkerland_vad_guards_close_support": ("VAD_task_the_guards_for_close_support", 70),
-    "ADISCORD_vorkerland_vad_district_air_cover": ("VAD_cover_the_district_capitals", 70),
-    "ADISCORD_vorkerland_vad_restoration_guarantees": ("VAD_issue_restoration_guarantees", 70),
+    "ADISCORD_vorkerland_vad_guards_close_support": (
+        "VAD_task_the_guards_for_close_support",
+        70,
+    ),
+    "ADISCORD_vorkerland_vad_district_air_cover": (
+        "VAD_cover_the_district_capitals",
+        70,
+    ),
+    "ADISCORD_vorkerland_vad_restoration_guarantees": (
+        "VAD_issue_restoration_guarantees",
+        70,
+    ),
     "ADISCORD_vorkerland_vad_observer_missions": ("VAD_seat_the_observer_missions", 70),
-    "ADISCORD_vorkerland_tva_unattended_strike": ("TVA_print_unattended_strike_packages", 70),
-    "ADISCORD_vorkerland_tva_interdictor_station": ("TVA_keep_the_interdictors_on_station", 70),
+    "ADISCORD_vorkerland_tva_unattended_strike": (
+        "TVA_print_unattended_strike_packages",
+        70,
+    ),
+    "ADISCORD_vorkerland_tva_interdictor_station": (
+        "TVA_keep_the_interdictors_on_station",
+        70,
+    ),
     "ADISCORD_vorkerland_tva_surplus_export": ("TVA_export_surplus_output", 70),
-    "ADISCORD_vorkerland_tva_imported_specialists": ("TVA_import_surviving_specialists", 70),
+    "ADISCORD_vorkerland_tva_imported_specialists": (
+        "TVA_import_surviving_specialists",
+        70,
+    ),
 }
 
 DEPTH_IDEAS = (*DEPTH_PERMANENT_IDEAS, *DEPTH_TIMED_IDEAS)
 
 # A branch head hangs a whole module off a trunk focus, so it is allowed the
 # same wide horizontal reach the lifecycle block anchors get.
-DEPTH_BRANCH_HEADS = frozenset({
-    "WKR_convene_the_production_soviet",
-    "WKR_doctrine_of_the_armed_people",
-    "WKR_doctrine_of_measured_force",
-    "WKR_the_last_levy",
-    "WKR_seat_the_factory_councils",
-    "WKR_arm_the_bracket_victors",
-    "WKR_seek_outside_recognition",
-    "VAD_convene_the_restoration_treasury",
-    "VAD_doctrine_of_the_officer_estates",
-    "VAD_doctrine_of_the_district_levies",
-    "VAD_hold_the_historic_capitals",
-    "VAD_convene_the_court_of_honours",
-    "VAD_court_the_bracket_victors",
-    "VAD_seek_legitimist_recognition",
-    "TVA_convene_the_load_board",
-    "TVA_doctrine_of_continuous_assault",
-    "TVA_doctrine_of_the_measured_front",
-    "TVA_declare_the_final_iteration",
-    "TVA_certify_the_completed_programmes",
-    "TVA_open_the_technical_exchange",
-    "TVA_hire_the_bracket_victors",
-    "WKR_form_the_republican_air_staff",
-    "WKR_open_the_external_desk",
-    "VAD_restore_the_restoration_air_arm",
-    "VAD_open_the_foreign_chancery",
-    "TVA_stand_up_the_grid_air_staff",
-    "TVA_open_the_exchange_window",
-})
+DEPTH_BRANCH_HEADS = frozenset(
+    {
+        "WKR_convene_the_production_soviet",
+        "WKR_doctrine_of_the_armed_people",
+        "WKR_doctrine_of_measured_force",
+        "WKR_the_last_levy",
+        "WKR_seat_the_factory_councils",
+        "WKR_arm_the_bracket_victors",
+        "WKR_seek_outside_recognition",
+        "VAD_convene_the_restoration_treasury",
+        "VAD_doctrine_of_the_officer_estates",
+        "VAD_doctrine_of_the_district_levies",
+        "VAD_hold_the_historic_capitals",
+        "VAD_convene_the_court_of_honours",
+        "VAD_court_the_bracket_victors",
+        "VAD_seek_legitimist_recognition",
+        "TVA_convene_the_load_board",
+        "TVA_doctrine_of_continuous_assault",
+        "TVA_doctrine_of_the_measured_front",
+        "TVA_declare_the_final_iteration",
+        "TVA_certify_the_completed_programmes",
+        "TVA_open_the_technical_exchange",
+        "TVA_hire_the_bracket_victors",
+        "WKR_form_the_republican_air_staff",
+        "WKR_open_the_external_desk",
+        "VAD_restore_the_restoration_air_arm",
+        "VAD_open_the_foreign_chancery",
+        "TVA_stand_up_the_grid_air_staff",
+        "TVA_open_the_exchange_window",
+    }
+)
 
 # The three route settlements that end the war and must clear its spirits.
 DEPTH_POSTWAR_CAPSTONES = (
@@ -2403,7 +2550,10 @@ LAYOUT_WIDE_DROPS = {
         2,
         "routes the 5-column run along row 11, which is clear over that span",
     ),
-    ("VAD_issue_crown_mobilization_warrants", "VAD_turn_the_chancery_into_a_war_cabinet"): (
+    (
+        "VAD_issue_crown_mobilization_warrants",
+        "VAD_turn_the_chancery_into_a_war_cabinet",
+    ): (
         2,
         "straight drop into the war-cabinet node shared with the chancery link",
     ),
@@ -2592,7 +2742,8 @@ def expected_localisation_keys() -> set[str]:
         *(
             f"{event_id}.{suffix}"
             for event_id in (*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS)
-            if event_id not in {
+            if event_id
+            not in {
                 "ADISCORD_vorkerland_claimant.4",
                 "ADISCORD_vorkerland_claimant.13",
                 "ADISCORD_vorkerland_claimant.14",
@@ -2631,9 +2782,7 @@ def _prerequisite_groups(block: str) -> tuple[frozenset[str], ...]:
     """Return Clausewitz prerequisite groups (AND blocks containing OR focuses)."""
 
     return tuple(
-        frozenset(
-            re.findall(r"\bfocus\s*=\s*([A-Za-z0-9_]+)", prerequisite)
-        )
+        frozenset(re.findall(r"\bfocus\s*=\s*([A-Za-z0-9_]+)", prerequisite))
         for prerequisite in _blocks(block, "prerequisite")
     )
 
@@ -2647,9 +2796,7 @@ def _mutually_exclusive_focuses(block: str) -> set[str]:
     return {
         focus_id
         for mutually_exclusive in _blocks(block, "mutually_exclusive")
-        for focus_id in re.findall(
-            r"\bfocus\s*=\s*([A-Za-z0-9_]+)", mutually_exclusive
-        )
+        for focus_id in re.findall(r"\bfocus\s*=\s*([A-Za-z0-9_]+)", mutually_exclusive)
     }
 
 
@@ -2690,11 +2837,7 @@ def _postwar_completion_paths(
         if reachable == set(selected):
             valid.add(selected)
 
-    minimal = {
-        path
-        for path in valid
-        if not any(other < path for other in valid)
-    }
+    minimal = {path for path in valid if not any(other < path for other in valid)}
     return tuple(sorted(minimal, key=lambda path: tuple(sorted(path))))
 
 
@@ -2752,9 +2895,7 @@ def _reachable_wartime_outcome(
             for focus_id in pending
             if all(
                 prerequisite_group & reachable
-                for prerequisite_group in _prerequisite_groups(
-                    blocks.get(focus_id, "")
-                )
+                for prerequisite_group in _prerequisite_groups(blocks.get(focus_id, ""))
             )
         }
         if not newly_reachable:
@@ -2790,9 +2931,7 @@ def _reachable_vad_optional_outcome(
             for focus_id in pending
             if all(
                 prerequisite_group & all_reachable
-                for prerequisite_group in _prerequisite_groups(
-                    blocks.get(focus_id, "")
-                )
+                for prerequisite_group in _prerequisite_groups(blocks.get(focus_id, ""))
             )
         }
         if not newly_reachable:
@@ -2819,9 +2958,7 @@ def _reachable_tva_optional_outcome(
             for focus_id in pending
             if all(
                 prerequisite_group & all_reachable
-                for prerequisite_group in _prerequisite_groups(
-                    blocks.get(focus_id, "")
-                )
+                for prerequisite_group in _prerequisite_groups(blocks.get(focus_id, ""))
             )
         }
         if not newly_reachable:
@@ -2862,9 +2999,7 @@ def _check_graph(blocks: dict[str, str]) -> list[str]:
     return issues
 
 
-def _check_focus_reference_order(
-    source: str, blocks: dict[str, str]
-) -> list[str]:
+def _check_focus_reference_order(source: str, blocks: dict[str, str]) -> list[str]:
     offsets = {
         match.group(1): match.start()
         for match in re.finditer(
@@ -2880,9 +3015,7 @@ def _check_focus_reference_order(
         if anchor not in offsets:
             issues.append(f"{focus_id} references missing relative anchor {anchor}")
         elif offsets[anchor] > offsets[focus_id]:
-            issues.append(
-                f"{focus_id} references {anchor} before its definition"
-            )
+            issues.append(f"{focus_id} references {anchor} before its definition")
     return issues
 
 
@@ -2939,11 +3072,17 @@ def collect_issues() -> list[str]:
         )
     focus_gfx = read(FOCUS_GFX_FILE)
     focus_decisions = "\n".join(read(path) for path in FOCUS_DECISION_FILES)
-    diplomacy_decisions = source_section(read(DIPLOMACY_DECISIONS_FILE), 'diplomacy_decisions')
-    diplomacy_effects = source_section(read(DIPLOMACY_EFFECTS_FILE), 'diplomacy_effects')
+    diplomacy_decisions = source_section(
+        read(DIPLOMACY_DECISIONS_FILE), 'diplomacy_decisions'
+    )
+    diplomacy_effects = source_section(
+        read(DIPLOMACY_EFFECTS_FILE), 'diplomacy_effects'
+    )
     phase_effects = source_section(read(PHASE_EFFECTS_FILE), 'phase_effects')
     collapse_ideas = source_section(read(COLLAPSE_IDEAS_FILE), 'collapse_ideas')
-    focus_expansion_ideas = source_section(read(FOCUS_EXPANSION_IDEAS_FILE), 'focus_expansion_ideas')
+    focus_expansion_ideas = source_section(
+        read(FOCUS_EXPANSION_IDEAS_FILE), 'focus_expansion_ideas'
+    )
     claimant_events = source_section(read(CLAIMANT_EVENTS_FILE), 'claimant_events')
     wkr_ai_plans = source_section(read(WKR_AI_PLAN_FILE), 'wkr_wartime_plan')
     vad_ai_plans = source_section(read(VAD_AI_PLAN_FILE), 'vad_wartime_plan')
@@ -2969,7 +3108,9 @@ def collect_issues() -> list[str]:
     issues.extend(_check_focus_gfx(focus_gfx, shine_source))
 
     if len(trees) != 1:
-        issues.append(f"lifecycle focus source must define one tree, found {len(trees)}")
+        issues.append(
+            f"lifecycle focus source must define one tree, found {len(trees)}"
+        )
         tree = source
     else:
         tree = trees[0]
@@ -2980,23 +3121,33 @@ def collect_issues() -> list[str]:
 
     country_blocks = _blocks(tree, "country")
     if len(country_blocks) != 1:
-        issues.append(f"lifecycle focus tree must have one country selector, found {len(country_blocks)}")
+        issues.append(
+            f"lifecycle focus tree must have one country selector, found {len(country_blocks)}"
+        )
     else:
         country = country_blocks[0]
         tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", country))
         if tags != {"WRK", "WKR", "VAD", "TVA", "EYR", "EGC", "RIV", "YOR"}:
-            issues.append(f"country selector must cover the claimants and four prewar autonomies, found {sorted(tags)}")
+            issues.append(
+                f"country selector must cover the claimants and four prewar autonomies, found {sorted(tags)}"
+            )
         if "original_tag" in country:
-            issues.append("country selector must use current lifecycle tags, not original_tag")
+            issues.append(
+                "country selector must use current lifecycle tags, not original_tag"
+            )
         if not re.search(r"\bfactor\s*=\s*0\b", country):
             issues.append("country selector must start from factor 0")
         if not re.search(r"\badd\s*=\s*100\b", country):
             issues.append("country selector must add weight 100 for lifecycle tags")
 
     if tuple(blocks) != FOCUS_IDS:
-        issues.append(f"focus IDs/order differ from the 235-focus lifecycle manifest: {tuple(blocks)}")
+        issues.append(
+            f"focus IDs/order differ from the 235-focus lifecycle manifest: {tuple(blocks)}"
+        )
     if len(FOCUS_IDS) != 238:
-        issues.append(f"validator manifest must contain 238 definitions, found {len(FOCUS_IDS)}")
+        issues.append(
+            f"validator manifest must contain 238 definitions, found {len(FOCUS_IDS)}"
+        )
     issues.extend(_check_graph(blocks))
 
     if len(continuous_palettes) != 1:
@@ -3059,12 +3210,18 @@ def collect_issues() -> list[str]:
             carryover,
         )
         if "tag = WKR" not in carryover or carryover_guard is None:
-            issues.append("WRK prewar carryover must be WKR-only and guarded by its idempotence flag")
+            issues.append(
+                "WRK prewar carryover must be WKR-only and guarded by its idempotence flag"
+            )
         if carryover.count(f"set_country_flag = {PREWAR_CARRYOVER_FLAG}") != 1:
-            issues.append("WRK prewar carryover must set its idempotence flag exactly once")
+            issues.append(
+                "WRK prewar carryover must set its idempotence flag exactly once"
+            )
         for focus_id in PREWAR_WRK_CARRYOVER_FOCUSES:
             if carryover.count(f"has_completed_focus = {focus_id}") != 1:
-                issues.append(f"WRK prewar carryover must derive {focus_id} from completed-focus truth")
+                issues.append(
+                    f"WRK prewar carryover must derive {focus_id} from completed-focus truth"
+                )
 
     verify_collapse = lifecycle_effects.get(
         "ADISCORD_vorkerland_verify_collapse_materialized", ""
@@ -3078,7 +3235,9 @@ def collect_issues() -> list[str]:
         if len(wkr_tree_scopes) != 1 or (
             f"{PREWAR_CARRYOVER_EFFECT} = yes" not in wkr_tree_scopes[0]
         ):
-            issues.append("verified WKR tree installation must invoke the idempotent prewar carryover")
+            issues.append(
+                "verified WKR tree installation must invoke the idempotent prewar carryover"
+            )
 
     dormant_scrub = lifecycle_effects.get(DORMANT_WRK_SCRUB_EFFECT, "")
     if dormant_scrub:
@@ -3087,24 +3246,35 @@ def collect_issues() -> list[str]:
         )
         for idea_id in DORMANT_WRK_CRISIS_IDEAS:
             if scrubbed_ideas[idea_id] != 1:
-                issues.append(f"dormant WRK crisis scrub must remove {idea_id} exactly once")
+                issues.append(
+                    f"dormant WRK crisis scrub must remove {idea_id} exactly once"
+                )
 
     worker_inheritance = lifecycle_effects.get(WORKER_REFORM_INHERIT_EFFECT, "")
     if worker_inheritance:
         if worker_inheritance.count(f"{DORMANT_WRK_SCRUB_EFFECT} = yes") != 1:
-            issues.append("worker reform inheritance must begin from the common dormant-WRK scrub")
-        if len(_blocks(worker_inheritance, "if")) != 2 or len(
-            _blocks(worker_inheritance, "else_if")
-        ) != 4:
-            issues.append("worker reform inheritance must keep two exact three-stage fallback chains")
+            issues.append(
+                "worker reform inheritance must begin from the common dormant-WRK scrub"
+            )
+        if (
+            len(_blocks(worker_inheritance, "if")) != 2
+            or len(_blocks(worker_inheritance, "else_if")) != 4
+        ):
+            issues.append(
+                "worker reform inheritance must keep two exact three-stage fallback chains"
+            )
         inherited_ideas = re.findall(
             r"\badd_ideas\s*=\s*([A-Za-z0-9_]+)", worker_inheritance
         )
         if Counter(inherited_ideas) != Counter(WORKER_REFORM_STAGE_IDEAS):
-            issues.append("worker reform inheritance must add only the six exact reform stages")
+            issues.append(
+                "worker reform inheritance must add only the six exact reform stages"
+            )
         for idea_id in WORKER_REFORM_STAGE_IDEAS:
             if worker_inheritance.count(f"WKR = {{ has_idea = {idea_id} }}") != 1:
-                issues.append(f"worker reform inheritance must read {idea_id} from WKR exactly once")
+                issues.append(
+                    f"worker reform inheritance must read {idea_id} from WKR exactly once"
+                )
 
     for winner_tag, formation_name in WRK_FORMATION_EFFECTS.items():
         formation = lifecycle_effects.get(formation_name, "")
@@ -3116,13 +3286,19 @@ def collect_issues() -> list[str]:
             else DORMANT_WRK_SCRUB_EFFECT
         )
         bridge_token = f"{route_bridge} = yes"
-        annex_token = f"annex_country = {{ target = {winner_tag} transfer_troops = yes }}"
+        annex_token = (
+            f"annex_country = {{ target = {winner_tag} transfer_troops = yes }}"
+        )
         if formation.count(bridge_token) != 1:
             issues.append(f"{formation_name} must invoke {route_bridge} exactly once")
         if formation.count(annex_token) != 1:
-            issues.append(f"{formation_name} must annex its winner {winner_tag} exactly once")
+            issues.append(
+                f"{formation_name} must annex its winner {winner_tag} exactly once"
+            )
         elif formation.find(bridge_token) > formation.find(annex_token):
-            issues.append(f"{formation_name} must preserve/scrub dormant WRK before annexing {winner_tag}")
+            issues.append(
+                f"{formation_name} must preserve/scrub dormant WRK before annexing {winner_tag}"
+            )
 
     category_by_focus: dict[str, tuple[str, str | None]] = {}
     for focus_id in PREWAR_WRK_FOCUSES:
@@ -3160,7 +3336,9 @@ def collect_issues() -> list[str]:
 
     for focus_id, block in blocks.items():
         if "cancel_if_invalid = yes" not in block:
-            issues.append(f"{focus_id} must cancel when its lifecycle phase becomes invalid")
+            issues.append(
+                f"{focus_id} must cancel when its lifecycle phase becomes invalid"
+            )
         allow = _allow_branch(block)
         if not allow:
             issues.append(f"{focus_id} must define exactly one allow_branch gate")
@@ -3168,20 +3346,32 @@ def collect_issues() -> list[str]:
         flags = _phase_flags(block)
         if category == "prewar":
             if flags != {PREWAR_PHASE}:
-                issues.append(f"{focus_id} must be prewar-only, found phases {sorted(flags)}")
+                issues.append(
+                    f"{focus_id} must be prewar-only, found phases {sorted(flags)}"
+                )
             if _phase_flags(allow) != {PREWAR_PHASE}:
-                issues.append(f"{focus_id} allow_branch must hide outside the prewar phase")
-            expected_tags = {"EYR", "EGC", "RIV", "YOR"} if gate == "districts" else {gate}
+                issues.append(
+                    f"{focus_id} allow_branch must hide outside the prewar phase"
+                )
+            expected_tags = (
+                {"EYR", "EGC", "RIV", "YOR"} if gate == "districts" else {gate}
+            )
             if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != expected_tags:
                 issues.append(f"{focus_id} must expose only the prewar {gate} block")
             cost_expected = {1, 2, 3, 4, 5}
         elif category == "retired":
             if flags:
-                issues.append(f"retired focus {focus_id} must not keep lifecycle phase gates")
+                issues.append(
+                    f"retired focus {focus_id} must not keep lifecycle phase gates"
+                )
             if not re.search(r"\balways\s*=\s*no\b", allow):
-                issues.append(f"retired focus {focus_id} must be hidden by allow_branch")
+                issues.append(
+                    f"retired focus {focus_id} must be hidden by allow_branch"
+                )
             available = _blocks(block, "available")
-            if len(available) != 1 or not re.search(r"\balways\s*=\s*no\b", available[0]):
+            if len(available) != 1 or not re.search(
+                r"\balways\s*=\s*no\b", available[0]
+            ):
                 issues.append(f"retired focus {focus_id} must remain unavailable")
             cost_expected = {3, 4}
         elif category == "wartime":
@@ -3189,18 +3379,24 @@ def collect_issues() -> list[str]:
             if flags != expected_flags:
                 issues.append(f"{focus_id} has wrong wartime phases {sorted(flags)}")
             if _phase_flags(allow) != expected_flags:
-                issues.append(f"{focus_id} allow_branch has wrong wartime phases {sorted(_phase_flags(allow))}")
+                issues.append(
+                    f"{focus_id} allow_branch has wrong wartime phases {sorted(_phase_flags(allow))}"
+                )
             branch_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow))
             expected_tags = {gate}
             if branch_tags != expected_tags:
-                issues.append(f"{focus_id} branch tags {sorted(branch_tags)} != {sorted(expected_tags)}")
+                issues.append(
+                    f"{focus_id} branch tags {sorted(branch_tags)} != {sorted(expected_tags)}"
+                )
             cost_expected = {1, 2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one old-save/progression bypass")
         elif category == "depth_wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
             if flags != expected_flags:
-                issues.append(f"{focus_id} has wrong depth wartime phases {sorted(flags)}")
+                issues.append(
+                    f"{focus_id} has wrong depth wartime phases {sorted(flags)}"
+                )
             if _phase_flags(allow) != expected_flags:
                 issues.append(
                     f"{focus_id} allow_branch has wrong depth wartime phases "
@@ -3213,11 +3409,15 @@ def collect_issues() -> list[str]:
                 )
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
-                issues.append(f"{focus_id} must define one idempotent depth-branch bypass")
+                issues.append(
+                    f"{focus_id} must define one idempotent depth-branch bypass"
+                )
         elif category == "optional_wartime":
             expected_flags = ACTIVE_PHASE_FLAGS
             if flags != expected_flags:
-                issues.append(f"{focus_id} has wrong optional wartime phases {sorted(flags)}")
+                issues.append(
+                    f"{focus_id} has wrong optional wartime phases {sorted(flags)}"
+                )
             if _phase_flags(allow) != expected_flags:
                 issues.append(
                     f"{focus_id} allow_branch has wrong optional wartime phases "
@@ -3230,7 +3430,9 @@ def collect_issues() -> list[str]:
                 )
             cost_expected = {2, 3} if gate == "WKR" else {2, 3, 5}
             if len(_blocks(block, "bypass")) != 1:
-                issues.append(f"{focus_id} must define one idempotent optional-branch bypass")
+                issues.append(
+                    f"{focus_id} must define one idempotent optional-branch bypass"
+                )
         elif category == "late_war_bridge":
             expected_flags = LATE_WAR_PHASE_FLAGS
             if flags != expected_flags:
@@ -3242,9 +3444,7 @@ def collect_issues() -> list[str]:
                     f"{focus_id} allow_branch has wrong late-war bridge phases "
                     f"{sorted(_phase_flags(allow))}"
                 )
-            branch_tags = set(
-                re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)
-            )
+            branch_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow))
             if branch_tags != {"VAD"}:
                 issues.append(
                     f"{focus_id} late-war bridge tags {sorted(branch_tags)} != ['VAD']"
@@ -3263,23 +3463,23 @@ def collect_issues() -> list[str]:
                 issues.append(
                     f"{focus_id} allow_branch must hide outside the central showdown"
                 )
-            branch_tags = set(
-                re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)
-            )
+            branch_tags = set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow))
             if branch_tags != {gate}:
                 issues.append(
                     f"{focus_id} showdown branch tags {sorted(branch_tags)} != {[gate]}"
                 )
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
-                issues.append(
-                    f"{focus_id} must define one idempotent showdown bypass"
-                )
+                issues.append(f"{focus_id} must define one idempotent showdown bypass")
         elif category == "postwar":
             if flags != {POSTWAR_PHASE}:
-                issues.append(f"{focus_id} must be postwar-only, found phases {sorted(flags)}")
+                issues.append(
+                    f"{focus_id} must be postwar-only, found phases {sorted(flags)}"
+                )
             if _phase_flags(allow) != {POSTWAR_PHASE}:
-                issues.append(f"{focus_id} allow_branch must hide outside postwar integration")
+                issues.append(
+                    f"{focus_id} allow_branch must hide outside postwar integration"
+                )
             if set(re.findall(r"\btag\s*=\s*([A-Z0-9]{3})\b", allow)) != {"WRK"}:
                 issues.append(f"{focus_id} must expose only the reunified WRK block")
             if f"has_country_flag = {gate}" not in allow:
@@ -3296,7 +3496,9 @@ def collect_issues() -> list[str]:
 
         cell = grid.get(focus_id)
         if cell is None or cell[0] < 0 or cell[1] < 0:
-            issues.append(f"{focus_id} must resolve to a non-negative grid cell, found {cell}")
+            issues.append(
+                f"{focus_id} must resolve to a non-negative grid cell, found {cell}"
+            )
 
         icon_matches = re.findall(r"(?m)^\s*icon\s*=\s*([A-Za-z0-9_]+)\s*$", block)
         expected_drop_in_icon = focus_icon_name(focus_id)
@@ -3310,14 +3512,18 @@ def collect_issues() -> list[str]:
             )
         expected_icon = SIGNATURE_ICONS.get(focus_id)
         if expected_icon and icon_matches != [expected_icon]:
-            issues.append(f"{focus_id} signature icon {icon_matches} != {expected_icon}")
+            issues.append(
+                f"{focus_id} signature icon {icon_matches} != {expected_icon}"
+            )
         ai = _blocks(block, "ai_will_do")
         ai_base = re.search(r"\bbase\s*=\s*(\d+)\b", ai[0]) if len(ai) == 1 else None
         if ai_base is None or not 1 <= int(ai_base.group(1)) <= 250:
             issues.append(f"{focus_id} must define a bounded positive AI weight")
 
     if len(PREWAR_WRK_EXPANSION_FOCUSES) != 4 or len(PREWAR_VAD_EXPANSION_FOCUSES) != 4:
-        issues.append("prewar Worker-Vadl expansion must contain exactly eight definitions")
+        issues.append(
+            "prewar Worker-Vadl expansion must contain exactly eight definitions"
+        )
     for focus_id in (*PREWAR_WRK_EXPANSION_FOCUSES, *PREWAR_VAD_EXPANSION_FOCUSES):
         block = blocks.get(focus_id, "")
         position = grid.get(focus_id)
@@ -3354,7 +3560,9 @@ def collect_issues() -> list[str]:
         if selection.count(f"set_country_flag = {set_flag}") != 1:
             issues.append(f"{focus_id} must set course flag {set_flag} exactly once")
         if selection.count(f"clr_country_flag = {clear_flag}") != 1:
-            issues.append(f"{focus_id} must clear opposite course flag {clear_flag} exactly once")
+            issues.append(
+                f"{focus_id} must clear opposite course flag {clear_flag} exactly once"
+            )
 
     for focus_id, expected_base in {
         "WRK_open_worker_vadl_backchannel": 35,
@@ -3402,7 +3610,9 @@ def collect_issues() -> list[str]:
         reward = reward_blocks[0] if len(reward_blocks) == 1 else ""
         for token in tokens:
             if reward.count(token) != 1:
-                issues.append(f"{focus_id} must contain hardline reward {token} exactly once")
+                issues.append(
+                    f"{focus_id} must contain hardline reward {token} exactly once"
+                )
 
     if carryover:
         hardline_scopes = [
@@ -3412,7 +3622,9 @@ def collect_issues() -> list[str]:
             and scope.count("has_completed_focus = ") == 1
         ]
         if len(hardline_scopes) != 1:
-            issues.append("WRK hardline preparation must have one completed-focus carryover scope")
+            issues.append(
+                "WRK hardline preparation must have one completed-focus carryover scope"
+            )
         else:
             for token in (
                 "add_manpower = 250",
@@ -3422,19 +3634,59 @@ def collect_issues() -> list[str]:
                 "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
             ):
                 if hardline_scopes[0].count(token) != 1:
-                    issues.append(f"WRK hardline carryover must contain {token} exactly once")
+                    issues.append(
+                        f"WRK hardline carryover must contain {token} exactly once"
+                    )
 
     if {tag: len(focuses) for tag, focuses in SHOWDOWN_FOCUSES.items()} != {
         "WKR": 7,
         "VAD": 5,
         "TVA": 5,
     }:
-        issues.append("live-showdown expansion must contain exactly 7 WKR, 5 VAD, and 5 TVA focuses")
+        issues.append(
+            "live-showdown expansion must contain exactly 7 WKR, 5 VAD, and 5 TVA focuses"
+        )
 
     showdown_opponents = {
-        "WKR": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "VAD", "TVA"},
-        "VAD": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "WKR", "TVA"},
-        "TVA": {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV", "WKR", "VAD"},
+        "WKR": {
+            "EYR",
+            "EGC",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "VAD",
+            "TVA",
+        },
+        "VAD": {
+            "EYR",
+            "EGC",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "WKR",
+            "TVA",
+        },
+        "TVA": {
+            "EYR",
+            "EGC",
+            "RIV",
+            "REV",
+            "YOR",
+            "NDN",
+            "SWB",
+            "VHV",
+            "OSV",
+            "WKR",
+            "VAD",
+        },
     }
     for tag, focus_ids in SHOWDOWN_FOCUSES.items():
         positions: set[tuple[int, int]] = set()
@@ -3442,12 +3694,16 @@ def collect_issues() -> list[str]:
             block = blocks.get(focus_id, "")
             position = grid.get(focus_id)
             if position != SHOWDOWN_POSITIONS[focus_id]:
-                issues.append(f"{focus_id} position {position} != {SHOWDOWN_POSITIONS[focus_id]}")
+                issues.append(
+                    f"{focus_id} position {position} != {SHOWDOWN_POSITIONS[focus_id]}"
+                )
             if position in positions:
                 issues.append(f"{tag} showdown focus position {position} is duplicated")
             positions.add(position)
             if _focus_cost(block) != SHOWDOWN_COSTS[focus_id]:
-                issues.append(f"{focus_id} cost {_focus_cost(block)} != {SHOWDOWN_COSTS[focus_id]}")
+                issues.append(
+                    f"{focus_id} cost {_focus_cost(block)} != {SHOWDOWN_COSTS[focus_id]}"
+                )
             if _prerequisite_groups(block) != SHOWDOWN_PREREQUISITES[focus_id]:
                 issues.append(
                     f"{focus_id} prerequisites {_prerequisite_groups(block)} != "
@@ -3463,9 +3719,14 @@ def collect_issues() -> list[str]:
                     issues.append(f"{focus_id} showdown allow_branch lacks {token}")
             available_blocks = _blocks(block, "available")
             available = available_blocks[0] if len(available_blocks) == 1 else ""
-            if "tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt" not in available:
+            if (
+                "tooltip = ADISCORD_vorkerland_showdown_focus_live_war_tt"
+                not in available
+            ):
                 issues.append(f"{focus_id} must expose the live-war tooltip")
-            opponents = set(re.findall(r"\bhas_war_with\s*=\s*([A-Z0-9]{3})\b", available))
+            opponents = set(
+                re.findall(r"\bhas_war_with\s*=\s*([A-Z0-9]{3})\b", available)
+            )
             if opponents != showdown_opponents[tag]:
                 issues.append(
                     f"{focus_id} live-war opponents {sorted(opponents)} != "
@@ -3483,13 +3744,15 @@ def collect_issues() -> list[str]:
             f"{state_id} = {{ add_building_construction = {{ type = infrastructure level = 1 instant_build = yes }} }}",
         ):
             if token not in night_reward:
-                issues.append(f"WKR night freight reward lacks bounded state {state_id} token {token}")
+                issues.append(
+                    f"WKR night freight reward lacks bounded state {state_id} token {token}"
+                )
     for dead_state_id in (32, 33):
         if re.search(rf"\b{dead_state_id}\b", night_reward):
-            issues.append(f"WKR night freight must not target maxed state {dead_state_id}")
-    if night_reward.count(
-        "type = support_equipment amount = 50 producer = WKR"
-    ) != 1:
+            issues.append(
+                f"WKR night freight must not target maxed state {dead_state_id}"
+            )
+    if night_reward.count("type = support_equipment amount = 50 producer = WKR") != 1:
         issues.append("WKR night freight must grant one support-equipment fallback")
 
     expansion_source = "\n".join(
@@ -3497,7 +3760,11 @@ def collect_issues() -> list[str]:
         for focus_id in (
             *PREWAR_WRK_EXPANSION_FOCUSES,
             *PREWAR_VAD_EXPANSION_FOCUSES,
-            *(focus_id for focus_ids in SHOWDOWN_FOCUSES.values() for focus_id in focus_ids),
+            *(
+                focus_id
+                for focus_ids in SHOWDOWN_FOCUSES.values()
+                for focus_id in focus_ids
+            ),
             *WKR_VARIANT_FOCUSES,
             *VAD_VARIANT_FOCUSES,
             *TVA_VARIANT_FOCUSES,
@@ -3534,9 +3801,13 @@ def collect_issues() -> list[str]:
             "ai_will_do = { factor = 0 }",
         ):
             if idea.count(token) != 1:
-                issues.append(f"focus expansion idea {idea_id} must contain {token} exactly once")
+                issues.append(
+                    f"focus expansion idea {idea_id} must contain {token} exactly once"
+                )
         if expansion_source.count(idea_id) < 1:
-            issues.append(f"focus expansion idea {idea_id} is not earned by an expansion focus")
+            issues.append(
+                f"focus expansion idea {idea_id} is not earned by an expansion focus"
+            )
 
     ai_sources = {"WKR": wkr_ai_plans, "VAD": vad_ai_plans, "TVA": tva_ai_plans}
     for tag, plans in SHOWDOWN_AI_PLANS.items():
@@ -3577,7 +3848,9 @@ def collect_issues() -> list[str]:
             "VAD prewar continuity programme must expose two terminal paths, "
             f"found {len(vad_prewar_paths)}"
         )
-    if vad_prewar_paths and set().union(*vad_prewar_paths) != set(PREWAR_VAD_BASE_FOCUSES):
+    if vad_prewar_paths and set().union(*vad_prewar_paths) != set(
+        PREWAR_VAD_BASE_FOCUSES
+    ):
         issues.append("VAD prewar programme has focuses outside every terminal path")
     for path in vad_prewar_paths:
         if len(path) != 4:
@@ -3602,17 +3875,25 @@ def collect_issues() -> list[str]:
                 f"needs {minimum_payload}"
             )
     if _focus_cost(blocks.get(vad_prewar_terminal, "")) != 3:
-        issues.append("VAD emergency chancery must be a bundled 21-day convergence focus")
+        issues.append(
+            "VAD emergency chancery must be a bundled 21-day convergence focus"
+        )
 
     expected_wartime_sizes = {"WKR": 17, "VAD": 17, "TVA": 18}
     for tag, expected_size in expected_wartime_sizes.items():
         authored = len(WARTIME_ROUTE_FOCUSES[tag])
         if authored != expected_size:
-            issues.append(f"{tag} asymmetric wartime route must contain {expected_size} definitions, found {authored}")
-        route_source = "\n".join(blocks.get(focus_id, "") for focus_id in WARTIME_ROUTE_FOCUSES[tag])
+            issues.append(
+                f"{tag} asymmetric wartime route must contain {expected_size} definitions, found {authored}"
+            )
+        route_source = "\n".join(
+            blocks.get(focus_id, "") for focus_id in WARTIME_ROUTE_FOCUSES[tag]
+        )
         for retired_id in RETIRED_WARTIME_FOCUSES:
             if f"focus = {retired_id}" in route_source:
-                issues.append(f"{tag} compact route still depends on retired filler {retired_id}")
+                issues.append(
+                    f"{tag} compact route still depends on retired filler {retired_id}"
+                )
         if route_source.count("modifier =") < 3:
             issues.append(f"{tag} compact route lacks contextual AI modifiers")
 
@@ -3642,7 +3923,9 @@ def collect_issues() -> list[str]:
                 # reach further sideways: the fan-out from a block anchor to
                 # the head of each thematic branch, and a convergence edge that
                 # re-joins a second column into the spine.
-                spine_edge = prerequisite == anchor and prerequisite not in LAYOUT_ANCHORS
+                spine_edge = (
+                    prerequisite == anchor and prerequisite not in LAYOUT_ANCHORS
+                )
                 limit = 4 if spine_edge else 14
                 if not 1 <= dy <= 6 or dx > limit:
                     issues.append(
@@ -3656,9 +3939,7 @@ def collect_issues() -> list[str]:
             issues.append(f"{tag} outcome gate profiles do not match its exclusions")
         for outcome_index, excluded in enumerate(WARTIME_OUTCOME_EXCLUSIONS[tag]):
             expected = route_set - set(excluded)
-            eligible, reachable = _reachable_wartime_outcome(
-                blocks, tag, outcome_index
-            )
+            eligible, reachable = _reachable_wartime_outcome(blocks, tag, outcome_index)
             accidentally_gated = sorted(expected - eligible)
             if accidentally_gated:
                 issues.append(
@@ -3685,8 +3966,13 @@ def collect_issues() -> list[str]:
         capstone_flag = CENTRAL_CAPSTONES[tag][1]
         for focus_id in NEW_WARTIME_FOCUSES[tag]:
             bypasses = _blocks(blocks.get(focus_id, ""), "bypass")
-            if len(bypasses) != 1 or f"has_country_flag = {capstone_flag}" not in bypasses[0]:
-                issues.append(f"new focus {focus_id} lacks old-save capstone bypass {capstone_flag}")
+            if (
+                len(bypasses) != 1
+                or f"has_country_flag = {capstone_flag}" not in bypasses[0]
+            ):
+                issues.append(
+                    f"new focus {focus_id} lacks old-save capstone bypass {capstone_flag}"
+                )
 
     if len(WKR_OPTIONAL_WARTIME_FOCUSES) != 7:
         issues.append(
@@ -3709,7 +3995,9 @@ def collect_issues() -> list[str]:
     for focus_id, expected in optional_prerequisites.items():
         actual = _prerequisites(blocks.get(focus_id, ""))
         if actual != expected:
-            issues.append(f"{focus_id} optional prerequisites {sorted(actual)} != {sorted(expected)}")
+            issues.append(
+                f"{focus_id} optional prerequisites {sorted(actual)} != {sorted(expected)}"
+            )
     optional_source = "\n".join(
         blocks.get(focus_id, "") for focus_id in WKR_OPTIONAL_WARTIME_FOCUSES
     )
@@ -3735,7 +4023,9 @@ def collect_issues() -> list[str]:
         if token not in terminal:
             issues.append(f"WKR Solarino terminal lacks gate {token}")
     terminal_available_blocks = _blocks(terminal, "available")
-    terminal_available = terminal_available_blocks[0] if len(terminal_available_blocks) == 1 else ""
+    terminal_available = (
+        terminal_available_blocks[0] if len(terminal_available_blocks) == 1 else ""
+    )
     for obsolete_blocker in (
         "ADISCORD_vorkerland_focus_central_showdown_requested",
         "ADISCORD_vorkerland_showdown_queue_initialized",
@@ -3746,8 +4036,12 @@ def collect_issues() -> list[str]:
             issues.append(
                 f"WKR Solarino terminal must not retain obsolete blocker {obsolete_blocker}"
             )
-    if set(WKR_OPTIONAL_WARTIME_FOCUSES) & set(_prerequisites(blocks.get("WKR_republic_fights_as_one", ""))):
-        issues.append("WKR central capstone must not depend on the optional southern branch")
+    if set(WKR_OPTIONAL_WARTIME_FOCUSES) & set(
+        _prerequisites(blocks.get("WKR_republic_fights_as_one", ""))
+    ):
+        issues.append(
+            "WKR central capstone must not depend on the optional southern branch"
+        )
 
     expected_wkr_core_plans = {
         "ADISCORD_vorkerland_wkr_pragmatist_core_plan": (
@@ -3887,9 +4181,16 @@ def collect_issues() -> list[str]:
     ):
         if token not in remaining_fronts:
             issues.append(f"WKR remaining-fronts focus lacks {token}")
-    for forbidden in ("declare_war_on", "every_country", "random_country", "any_neighbor_country"):
+    for forbidden in (
+        "declare_war_on",
+        "every_country",
+        "random_country",
+        "any_neighbor_country",
+    ):
         if forbidden in remaining_fronts:
-            issues.append(f"WKR remaining-fronts focus must delegate world effects; found {forbidden}")
+            issues.append(
+                f"WKR remaining-fronts focus must delegate world effects; found {forbidden}"
+            )
     remaining_plan_id = "ADISCORD_vorkerland_wkr_remaining_fronts_plan"
     remaining_plan_blocks = _blocks(wkr_ai_plans, remaining_plan_id)
     if len(remaining_plan_blocks) != 1:
@@ -3897,12 +4198,19 @@ def collect_issues() -> list[str]:
     else:
         remaining_plan = remaining_plan_blocks[0]
         remaining_focuses = (
-            tuple(re.findall(r"(?m)^\s*([A-Za-z0-9_]+)\s*$", _blocks(remaining_plan, "ai_national_focuses")[0]))
+            tuple(
+                re.findall(
+                    r"(?m)^\s*([A-Za-z0-9_]+)\s*$",
+                    _blocks(remaining_plan, "ai_national_focuses")[0],
+                )
+            )
             if len(_blocks(remaining_plan, "ai_national_focuses")) == 1
             else ()
         )
         if remaining_focuses != ("WKR_open_the_remaining_fronts",):
-            issues.append("WKR remaining-fronts AI plan must select only its unstick focus")
+            issues.append(
+                "WKR remaining-fronts AI plan must select only its unstick focus"
+            )
         for token in (
             "ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes",
             "has_country_flag = ADISCORD_vorkerland_focus_central_minor_front_protracted",
@@ -3942,9 +4250,10 @@ def collect_issues() -> list[str]:
                     "WKR southern corridor must not target already capped "
                     f"state {capped_state_id} infrastructure"
                 )
-        if corridor_reward.count(
-            "type = infrastructure level = 1 instant_build = yes"
-        ) != 2:
+        if (
+            corridor_reward.count("type = infrastructure level = 1 instant_build = yes")
+            != 2
+        ):
             issues.append(
                 "WKR southern corridor must add exactly two live infrastructure levels"
             )
@@ -3974,10 +4283,15 @@ def collect_issues() -> list[str]:
                 continue
             other_x = re.search(r"(?m)^\s*x\s*=\s*(-?\d+)\s*$", other_block)
             other_y = re.search(r"(?m)^\s*y\s*=\s*(-?\d+)\s*$", other_block)
-            if other_x and other_y and (
-                int(other_x.group(1)),
-                int(other_y.group(1)),
-            ) == position:
+            if (
+                other_x
+                and other_y
+                and (
+                    int(other_x.group(1)),
+                    int(other_y.group(1)),
+                )
+                == position
+            ):
                 colliding_focuses.append(other_id)
         if colliding_focuses:
             issues.append(
@@ -4021,9 +4335,10 @@ def collect_issues() -> list[str]:
                     issues.append(
                         f"{focus_id} bridge reward must contain {token} exactly once"
                     )
-        if focus_id == "VAD_restore_eastern_supply_corridors" and block.count(
-            "type = infrastructure level = 1 instant_build = yes"
-        ) != 1:
+        if (
+            focus_id == "VAD_restore_eastern_supply_corridors"
+            and block.count("type = infrastructure level = 1 instant_build = yes") != 1
+        ):
             issues.append(
                 "VAD eastern supply bridge must add exactly one infrastructure level"
             )
@@ -4032,9 +4347,7 @@ def collect_issues() -> list[str]:
                 issues.append(
                     "VAD emergency workshops must add exactly one shared building slot"
                 )
-            if block.count(
-                "type = arms_factory level = 1 instant_build = yes"
-            ) != 1:
+            if block.count("type = arms_factory level = 1 instant_build = yes") != 1:
                 issues.append(
                     "VAD emergency workshops must add exactly one arms factory"
                 )
@@ -4093,9 +4406,7 @@ def collect_issues() -> list[str]:
             )
         cost = _focus_cost(block)
         if cost != VAD_OPTIONAL_COSTS[focus_id]:
-            issues.append(
-                f"{focus_id} cost {cost} != {VAD_OPTIONAL_COSTS[focus_id]}"
-            )
+            issues.append(f"{focus_id} cost {cost} != {VAD_OPTIONAL_COSTS[focus_id]}")
         payload = _postwar_reward_categories(block)
         if "country_event" in block:
             payload.add("event")
@@ -4158,7 +4469,9 @@ def collect_issues() -> list[str]:
         "country_event = { id = ADISCORD_vorkerland_claimant.14 hours = 1 }",
     ):
         if token not in solar_terminal:
-            issues.append(f"VAD Solar settlement focus lacks bounded integration {token}")
+            issues.append(
+                f"VAD Solar settlement focus lacks bounded integration {token}"
+            )
     solar_available = _blocks(solar_terminal, "available")
     solar_fallback_tokens = (
         "has_global_flag = ADISCORD_vorkerland_solar_terminal_verified",
@@ -4221,15 +4534,21 @@ def collect_issues() -> list[str]:
                 issues.append(
                     f"regional outcome recorder must set {winner_flag} exactly once"
                 )
-        if recorder.count(
-            "NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }"
-        ) != 3:
+        if (
+            recorder.count(
+                "NOT = { has_global_flag = ADISCORD_vorkerland_solar_terminal_verified }"
+            )
+            != 3
+        ):
             issues.append(
                 "regional outcome recorder must guard all three Solar terminal branches"
             )
-        if recorder.count(
-            "set_global_flag = ADISCORD_vorkerland_solar_terminal_verified"
-        ) != 3:
+        if (
+            recorder.count(
+                "set_global_flag = ADISCORD_vorkerland_solar_terminal_verified"
+            )
+            != 3
+        ):
             issues.append(
                 "regional outcome recorder must verify each direct Solar terminal branch"
             )
@@ -4237,7 +4556,9 @@ def collect_issues() -> list[str]:
     for focus_id, (idea_id, days) in VAD_WARTIME_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
         if blocks.get(focus_id, "").count(reward) != 1:
-            issues.append(f"{focus_id} must grant the bounded {days}-day spirit {idea_id}")
+            issues.append(
+                f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
+            )
         definitions = _blocks(collapse_ideas, idea_id)
         if len(definitions) != 1:
             issues.append(f"VAD wartime spirit {idea_id} must have one definition")
@@ -4371,10 +4692,14 @@ def collect_issues() -> list[str]:
         )
         if is_depth:
             if capstone_gate not in plan or "factor = 4" not in plan:
-                issues.append(f"VAD depth AI plan {plan_id} lacks post-capstone priority")
+                issues.append(
+                    f"VAD depth AI plan {plan_id} lacks post-capstone priority"
+                )
             enable_blocks = _blocks(plan, "enable")
             if len(enable_blocks) != 1:
-                issues.append(f"VAD depth AI plan {plan_id} must define one enable block")
+                issues.append(
+                    f"VAD depth AI plan {plan_id} must define one enable block"
+                )
             elif (
                 "ADISCORD_vorkerland_wkr_solyarino_intervention_active"
                 in enable_blocks[0]
@@ -4401,9 +4726,16 @@ def collect_issues() -> list[str]:
     ):
         if token not in vad_remaining_fronts:
             issues.append(f"VAD remaining-fronts focus lacks {token}")
-    for forbidden in ("declare_war_on", "every_country", "random_country", "any_neighbor_country"):
+    for forbidden in (
+        "declare_war_on",
+        "every_country",
+        "random_country",
+        "any_neighbor_country",
+    ):
         if forbidden in vad_remaining_fronts:
-            issues.append(f"VAD remaining-fronts focus must delegate world effects; found {forbidden}")
+            issues.append(
+                f"VAD remaining-fronts focus must delegate world effects; found {forbidden}"
+            )
     vad_remaining_plan_blocks = _blocks(
         vad_ai_plans, "ADISCORD_vorkerland_vad_remaining_fronts_plan"
     )
@@ -4422,7 +4754,9 @@ def collect_issues() -> list[str]:
             else ()
         )
         if vad_remaining_focuses != ("VAD_open_the_remaining_fronts",):
-            issues.append("VAD remaining-fronts AI plan must select only its unstick focus")
+            issues.append(
+                "VAD remaining-fronts AI plan must select only its unstick focus"
+            )
         for token in (
             "ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes",
             "weight = { factor = 5 }",
@@ -4450,9 +4784,7 @@ def collect_issues() -> list[str]:
             "TVA_network_observation_posts",
             "TVA_mandate_modular_repair",
         },
-        "TVA_preposition_switching_crews": {
-            "TVA_print_interchangeable_repair_modules"
-        },
+        "TVA_preposition_switching_crews": {"TVA_print_interchangeable_repair_modules"},
         "TVA_cross_validate_trial_logs": {"TVA_preposition_switching_crews"},
         "TVA_authorize_iteration_two": {"TVA_cross_validate_trial_logs"},
         "TVA_open_the_remaining_fronts": {"TVA_codify_utilitarian_directorate"},
@@ -4475,9 +4807,7 @@ def collect_issues() -> list[str]:
             )
         cost = _focus_cost(block)
         if cost != TVA_OPTIONAL_COSTS[focus_id]:
-            issues.append(
-                f"{focus_id} cost {cost} != {TVA_OPTIONAL_COSTS[focus_id]}"
-            )
+            issues.append(f"{focus_id} cost {cost} != {TVA_OPTIONAL_COSTS[focus_id]}")
         payload = _postwar_reward_categories(block)
         if "country_event" in block:
             payload.add("event")
@@ -4497,7 +4827,9 @@ def collect_issues() -> list[str]:
                 "has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }",
             ):
                 if identity_token not in allow:
-                    issues.append(f"{focus_id} lacks Worx identity gate {identity_token}")
+                    issues.append(
+                        f"{focus_id} lacks Worx identity gate {identity_token}"
+                    )
         bypasses = _blocks(block, "bypass")
         if len(bypasses) == 1:
             bypass_flags = re.findall(
@@ -4526,7 +4858,9 @@ def collect_issues() -> list[str]:
         )
     )
     if convergence_groups != expected_convergence_groups:
-        issues.append("TVA repair-module convergence must require one metric and one field trial")
+        issues.append(
+            "TVA repair-module convergence must require one metric and one field trial"
+        )
     for outcome_index, expected_optional in enumerate(TVA_OPTIONAL_OUTCOME_FOCUSES):
         reachable = _reachable_tva_optional_outcome(blocks, outcome_index)
         if reachable != set(expected_optional):
@@ -4556,7 +4890,9 @@ def collect_issues() -> list[str]:
     for focus_id, (idea_id, days) in TVA_OPTIONAL_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
         if blocks.get(focus_id, "").count(reward) != 1:
-            issues.append(f"{focus_id} must grant the bounded {days}-day spirit {idea_id}")
+            issues.append(
+                f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
+            )
         definitions = _blocks(collapse_ideas, idea_id)
         if len(definitions) != 1:
             issues.append(f"TVA optional spirit {idea_id} must have one definition")
@@ -4576,14 +4912,21 @@ def collect_issues() -> list[str]:
         f"{RETIRED_WORX_SECOND_PROTOCOL_IDEA} days = 120 }}"
     )
     if iteration.count(second_protocol_reward) != 1:
-        issues.append("TVA iteration two must grant exactly one 120-day second protocol")
+        issues.append(
+            "TVA iteration two must grant exactly one 120-day second protocol"
+        )
     if "field_directorate_3" in iteration:
         issues.append("TVA iteration two must not grant field directorate level 3")
     trial_log_focus = blocks.get("TVA_cross_validate_trial_logs", "")
-    if trial_log_focus.count(
-        "country_event = { id = ADISCORD_vorkerland_claimant.24 hours = 1 }"
-    ) != 1:
-        issues.append("TVA trial-log cross-validation must call claimant.24 exactly once")
+    if (
+        trial_log_focus.count(
+            "country_event = { id = ADISCORD_vorkerland_claimant.24 hours = 1 }"
+        )
+        != 1
+    ):
+        issues.append(
+            "TVA trial-log cross-validation must call claimant.24 exactly once"
+        )
 
     core_plan_definitions = _blocks(
         tva_ai_plans, "ADISCORD_vorkerland_tva_experimental_core_plan"
@@ -4660,11 +5003,20 @@ def collect_issues() -> list[str]:
     ):
         if token not in tva_remaining_fronts:
             issues.append(f"TVA remaining-fronts focus lacks {token}")
-    for forbidden in ("declare_war_on", "every_country", "random_country", "any_neighbor_country"):
+    for forbidden in (
+        "declare_war_on",
+        "every_country",
+        "random_country",
+        "any_neighbor_country",
+    ):
         if forbidden in tva_remaining_fronts:
-            issues.append(f"TVA remaining-fronts focus must delegate world effects; found {forbidden}")
+            issues.append(
+                f"TVA remaining-fronts focus must delegate world effects; found {forbidden}"
+            )
     if "has_government = technocracy" in _allow_branch(tva_remaining_fronts):
-        issues.append("TVA remaining-fronts allow_branch must not require Worx identity")
+        issues.append(
+            "TVA remaining-fronts allow_branch must not require Worx identity"
+        )
     tva_remaining_plan_blocks = _blocks(
         tva_ai_plans, "ADISCORD_vorkerland_tva_remaining_fronts_plan"
     )
@@ -4683,7 +5035,9 @@ def collect_issues() -> list[str]:
             else ()
         )
         if tva_remaining_focuses != ("TVA_open_the_remaining_fronts",):
-            issues.append("TVA remaining-fronts AI plan must select only its unstick focus")
+            issues.append(
+                "TVA remaining-fronts AI plan must select only its unstick focus"
+            )
         for token in (
             "ADISCORD_vorkerland_claimant_has_remaining_central_targets = yes",
             "weight = { factor = 5 }",
@@ -4698,10 +5052,14 @@ def collect_issues() -> list[str]:
             available = "\n".join(_blocks(block, "available"))
             for token in branch_tokens:
                 if token not in allow:
-                    issues.append(f"{focus_id} route gate lacks exact branch token {token}")
+                    issues.append(
+                        f"{focus_id} route gate lacks exact branch token {token}"
+                    )
             for token in identity_tokens:
                 if token not in available:
-                    issues.append(f"{focus_id} route gate lacks exact identity token {token}")
+                    issues.append(
+                        f"{focus_id} route gate lacks exact identity token {token}"
+                    )
                 if token in allow:
                     issues.append(
                         f"{focus_id} must not gate allow_branch on volatile identity token {token}"
@@ -4711,12 +5069,15 @@ def collect_issues() -> list[str]:
         left_tokens = WARTIME_ROUTE_IDENTITIES[left_index][1]
         right_tokens = WARTIME_ROUTE_IDENTITIES[right_index][1]
         if len(left_tokens) != 1 or len(right_tokens) != 1:
-            issues.append(f"{convergence_id} political lines must branch on exactly one roll flag")
+            issues.append(
+                f"{convergence_id} political lines must branch on exactly one roll flag"
+            )
             continue
         left_token = left_tokens[0]
         right_token = right_tokens[0]
         complementary = (
-            f"NOT = {{ {left_token} }}" == right_token or f"NOT = {{ {right_token} }}" == left_token
+            f"NOT = {{ {left_token} }}" == right_token
+            or f"NOT = {{ {right_token} }}" == left_token
         )
         if not complementary:
             issues.append(
@@ -4739,7 +5100,9 @@ def collect_issues() -> list[str]:
         "has_country_leader = { character = TVA_Dorian_Worx ruling_only = yes }",
     ):
         if token not in tva_root:
-            issues.append(f"TVA wartime programme root lacks exact Worx identity token {token}")
+            issues.append(
+                f"TVA wartime programme root lacks exact Worx identity token {token}"
+            )
 
     mex_pairs = (
         ("WRK_convene_council_of_republics", "WRK_inventory_emergency_stores"),
@@ -4752,9 +5115,13 @@ def collect_issues() -> list[str]:
         ("TVA_test_remote_fire_control", "TVA_test_adaptive_logistics"),
     )
     for left, right in mex_pairs:
-        if f"focus = {right}" not in "\n".join(_blocks(blocks.get(left, ""), "mutually_exclusive")):
+        if f"focus = {right}" not in "\n".join(
+            _blocks(blocks.get(left, ""), "mutually_exclusive")
+        ):
             issues.append(f"{left} must be mutually exclusive with {right}")
-        if f"focus = {left}" not in "\n".join(_blocks(blocks.get(right, ""), "mutually_exclusive")):
+        if f"focus = {left}" not in "\n".join(
+            _blocks(blocks.get(right, ""), "mutually_exclusive")
+        ):
             issues.append(f"{right} must be mutually exclusive with {left}")
 
     for focus_id in (
@@ -4766,14 +5133,18 @@ def collect_issues() -> list[str]:
         "TVA_harden_switching_stations",
     ):
         if "mutually_exclusive" in blocks.get(focus_id, ""):
-            issues.append(f"Worx military/industrial programme {focus_id} must remain jointly completable")
+            issues.append(
+                f"Worx military/industrial programme {focus_id} must remain jointly completable"
+            )
 
     for tag, (capstone, flag) in CENTRAL_CAPSTONES.items():
         capstone_block = blocks.get(capstone, "")
         if f"set_country_flag = {flag}" not in capstone_block:
             issues.append(f"{capstone} must set gameplay hook {flag}")
         if capstone_block.count(f"set_country_flag = {CENTRAL_PREPARED_FLAG}") != 1:
-            issues.append(f"{capstone} must set the shared central preparation gate exactly once")
+            issues.append(
+                f"{capstone} must set the shared central preparation gate exactly once"
+            )
         for token in (
             "add_command_power = 10",
             "add_war_support = 0.02",
@@ -4792,19 +5163,36 @@ def collect_issues() -> list[str]:
         )
         expected = Counter(expected_groups)
         if actual != expected:
-            issues.append(f"{tag} capstone {capstone} must AND-converge political/military/industrial terminals")
+            issues.append(
+                f"{tag} capstone {capstone} must AND-converge political/military/industrial terminals"
+            )
 
     for tag, hook in RETREAT_HOOKS.items():
-        route_source = "\n".join(blocks.get(focus_id, "") for focus_id in WARTIME_ROUTE_FOCUSES[tag])
+        route_source = "\n".join(
+            blocks.get(focus_id, "") for focus_id in WARTIME_ROUTE_FOCUSES[tag]
+        )
         if route_source.count(f"set_country_flag = {hook}") != 1:
-            issues.append(f"{tag} military terminal must set retreat hook {hook} exactly once")
+            issues.append(
+                f"{tag} military terminal must set retreat hook {hook} exactly once"
+            )
         if hook not in focus_decisions:
-            issues.append(f"{tag} retreat hook {hook} is not consumed by visible decisions")
+            issues.append(
+                f"{tag} retreat hook {hook} is not consumed by visible decisions"
+            )
 
     reward_classes = {
         "political": ("add_political_power", "add_stability"),
-        "military": ("army_experience", "add_command_power", "add_manpower", "add_war_support"),
-        "economic": ("add_equipment_to_stockpile", "add_building_construction", "add_timed_idea"),
+        "military": (
+            "army_experience",
+            "add_command_power",
+            "add_manpower",
+            "add_war_support",
+        ),
+        "economic": (
+            "add_equipment_to_stockpile",
+            "add_building_construction",
+            "add_timed_idea",
+        ),
     }
     for tag, route_ids in WARTIME_ROUTE_FOCUSES.items():
         route_source = "\n".join(blocks.get(focus_id, "") for focus_id in route_ids)
@@ -4817,12 +5205,16 @@ def collect_issues() -> list[str]:
         f"add_timed_idea = {{ idea = {MOBILE_REPAIR_IDEA} days = 35 }}"
     )
     if mobile_repair.count(mobile_repair_reward) != 1:
-        issues.append("TVA mobile repair trains must grant its concrete 35-day repair spirit")
+        issues.append(
+            "TVA mobile repair trains must grant its concrete 35-day repair spirit"
+        )
 
     for focus_id, (idea_id, days) in WORX_WARTIME_TIMED_IDEAS.items():
         reward = f"add_timed_idea = {{ idea = {idea_id} days = {days} }}"
         if blocks.get(focus_id, "").count(reward) != 1:
-            issues.append(f"{focus_id} must grant the bounded {days}-day spirit {idea_id}")
+            issues.append(
+                f"{focus_id} must grant the bounded {days}-day spirit {idea_id}"
+            )
         definitions = _blocks(collapse_ideas, idea_id)
         if len(definitions) != 1:
             issues.append(f"Worx wartime spirit {idea_id} must have one definition")
@@ -4831,7 +5223,9 @@ def collect_issues() -> list[str]:
         f"add_timed_idea = {{ idea = {WORX_ADAPTIVE_LOGISTICS_IDEA} days = 90 }}"
     )
     if blocks.get("TVA_test_adaptive_logistics", "").count(adaptive_reward) != 1:
-        issues.append("TVA adaptive-logistics trial must grant its bounded 90-day spirit")
+        issues.append(
+            "TVA adaptive-logistics trial must grant its bounded 90-day spirit"
+        )
     if len(_blocks(collapse_ideas, WORX_ADAPTIVE_LOGISTICS_IDEA)) != 1:
         issues.append("Worx adaptive-logistics trial spirit must have one definition")
 
@@ -4850,10 +5244,16 @@ def collect_issues() -> list[str]:
             "TVA emergency administration must reward an already upgraded directorate"
         )
     tva_formation = _blocks(phase_effects, "ADISCORD_vorkerland_form_wrk_from_tva")
-    if len(tva_formation) != 1 or tva_formation[0].count(
-        "add_ideas = ADISCORD_vorkerland_tva_field_directorate_3"
-    ) != 1:
-        issues.append("terminal TVA formation effect must uniquely award field directorate level 3")
+    if (
+        len(tva_formation) != 1
+        or tva_formation[0].count(
+            "add_ideas = ADISCORD_vorkerland_tva_field_directorate_3"
+        )
+        != 1
+    ):
+        issues.append(
+            "terminal TVA formation effect must uniquely award field directorate level 3"
+        )
     measurable_republic = blocks.get("WRK_utilitarian_build_measurable_republic", "")
     for idea_id in WORX_FIELD_DIRECTORATE_IDEAS:
         removals = re.findall(
@@ -4865,38 +5265,51 @@ def collect_issues() -> list[str]:
                 f"technocratic settlement must consolidate inherited field idea {idea_id}"
             )
 
-    public_utilities = blocks.get(
-        "WRK_utilitarian_prioritize_public_utilities", ""
-    )
+    public_utilities = blocks.get("WRK_utilitarian_prioritize_public_utilities", "")
     if public_utilities.count("limit = { controls_state = 37 }") != 1:
-        issues.append("WRK public utilities must target controlled state 37 exactly once")
+        issues.append(
+            "WRK public utilities must target controlled state 37 exactly once"
+        )
     if public_utilities.count("add_extra_state_shared_building_slots = 1") != 1:
         issues.append("WRK public utilities must create one live energy building slot")
-    if public_utilities.count(
-        "type = energy_infrastructure level = 1 instant_build = yes"
-    ) != 1:
-        issues.append("WRK public utilities must build exactly one energy infrastructure")
+    if (
+        public_utilities.count(
+            "type = energy_infrastructure level = 1 instant_build = yes"
+        )
+        != 1
+    ):
+        issues.append(
+            "WRK public utilities must build exactly one energy infrastructure"
+        )
 
     sol_hook = "ADISCORD_vorkerland_focus_vad_sol_invitation_intent"
     sol_focus = blocks.get("VAD_invite_sol_delegation", "")
     if f"set_country_flag = {sol_hook}" not in sol_focus:
-        issues.append("wartime VAD SOL policy focus must set its outcome-dependent intent hook")
+        issues.append(
+            "wartime VAD SOL policy focus must set its outcome-dependent intent hook"
+        )
     if source.count(f"set_country_flag = {sol_hook}") != 1:
         issues.append("VAD SOL invitation intent hook must have one focus owner")
 
     vla_hook = "ADISCORD_vorkerland_focus_wkr_vla_invitation_intent"
     vla_focus = blocks.get("WKR_open_free_republics_channel", "")
     if f"set_country_flag = {vla_hook}" not in vla_focus:
-        issues.append("expanded WKR diplomacy focus must expose the VLA invitation intent")
+        issues.append(
+            "expanded WKR diplomacy focus must expose the VLA invitation intent"
+        )
     for hook in (sol_hook, vla_hook):
         if hook not in diplomacy_decisions:
-            issues.append(f"diplomacy intent {hook} is not consumed by a visible decision")
+            issues.append(
+                f"diplomacy intent {hook} is not consumed by a visible decision"
+            )
     for accepted_flag in (
         "ADISCORD_vorkerland_wkr_vla_alliance_accepted",
         "ADISCORD_vorkerland_vad_sol_alliance_accepted",
     ):
         if accepted_flag not in focus_decisions:
-            issues.append(f"allied support decisions lack accepted-policy gate {accepted_flag}")
+            issues.append(
+                f"allied support decisions lack accepted-policy gate {accepted_flag}"
+            )
 
     postwar_source = "\n".join(
         blocks.get(focus_id, "")
@@ -4995,14 +5408,23 @@ def collect_issues() -> list[str]:
 
     for hook in POSTWAR_HOOKS:
         if postwar_source.count(f"set_country_flag = {hook}") != 1:
-            issues.append(f"postwar hook {hook} must have exactly one route focus owner")
+            issues.append(
+                f"postwar hook {hook} must have exactly one route focus owner"
+            )
 
-    for capstone_id, (settlement_idea, incompatible_ideas) in POSTWAR_SETTLEMENT_IDEAS.items():
+    for capstone_id, (
+        settlement_idea,
+        incompatible_ideas,
+    ) in POSTWAR_SETTLEMENT_IDEAS.items():
         capstone = blocks.get(capstone_id, "")
         if capstone.count(f"add_ideas = {settlement_idea}") != 1:
-            issues.append(f"postwar capstone {capstone_id} must add lasting idea {settlement_idea}")
+            issues.append(
+                f"postwar capstone {capstone_id} must add lasting idea {settlement_idea}"
+            )
         if f"remove_ideas = {settlement_idea}" in capstone:
-            issues.append(f"postwar capstone {capstone_id} must not remove its own settlement idea")
+            issues.append(
+                f"postwar capstone {capstone_id} must not remove its own settlement idea"
+            )
         for incompatible_idea in incompatible_ideas:
             if capstone.count(f"remove_ideas = {incompatible_idea}") != 1:
                 issues.append(
@@ -5017,23 +5439,33 @@ def collect_issues() -> list[str]:
                 f"found {len(idea_definitions)}"
             )
         elif not re.search(r"\bremoval_cost\s*=\s*-1\b", idea_definitions[0]):
-            issues.append(f"lasting postwar idea {settlement_idea} must be non-removable")
+            issues.append(
+                f"lasting postwar idea {settlement_idea} must be non-removable"
+            )
 
     worx_capstone = blocks.get("WRK_utilitarian_build_measurable_republic", "")
     for focus_id, idea_id in WORX_POSTWAR_PROVISIONAL_IDEAS.items():
         if blocks.get(focus_id, "").count(f"add_ideas = {idea_id}") != 1:
-            issues.append(f"{focus_id} must install concrete provisional institution {idea_id}")
+            issues.append(
+                f"{focus_id} must install concrete provisional institution {idea_id}"
+            )
         exact_removals = re.findall(
             rf"(?m)^\s*remove_ideas\s*=\s*{re.escape(idea_id)}\s*$",
             worx_capstone,
         )
         if len(exact_removals) != 1:
-            issues.append(f"Worx capstone must consolidate provisional institution {idea_id}")
+            issues.append(
+                f"Worx capstone must consolidate provisional institution {idea_id}"
+            )
         definitions = _blocks(collapse_ideas, idea_id)
         if len(definitions) != 1:
-            issues.append(f"Worx provisional institution {idea_id} must have one definition")
+            issues.append(
+                f"Worx provisional institution {idea_id} must have one definition"
+            )
         elif not re.search(r"\bremoval_cost\s*=\s*-1\b", definitions[0]):
-            issues.append(f"Worx provisional institution {idea_id} must be focus-controlled")
+            issues.append(
+                f"Worx provisional institution {idea_id} must be focus-controlled"
+            )
 
     for capstone_id, installers in POSTWAR_TRANSITIONAL_IDEAS.items():
         capstone = blocks.get(capstone_id, "")
@@ -5048,13 +5480,19 @@ def collect_issues() -> list[str]:
                 )
             definitions = _blocks(collapse_ideas, idea_id)
             if len(definitions) != 1:
-                issues.append(f"postwar transitional idea {idea_id} must have one definition")
+                issues.append(
+                    f"postwar transitional idea {idea_id} must have one definition"
+                )
             elif not re.search(r"\bremoval_cost\s*=\s*-1\b", definitions[0]):
-                issues.append(f"postwar transitional idea {idea_id} must be focus-controlled")
+                issues.append(
+                    f"postwar transitional idea {idea_id} must be focus-controlled"
+                )
 
     expedition_definitions = _blocks(collapse_ideas, IVANLAND_EXPEDITIONARY_IDEA)
     if len(expedition_definitions) != 1:
-        issues.append(f"Ivanland expedition spirit {IVANLAND_EXPEDITIONARY_IDEA} must have one definition")
+        issues.append(
+            f"Ivanland expedition spirit {IVANLAND_EXPEDITIONARY_IDEA} must have one definition"
+        )
     else:
         expedition = expedition_definitions[0]
         for token in (
@@ -5064,7 +5502,9 @@ def collect_issues() -> list[str]:
             "supply_consumption_factor = -0.08",
         ):
             if token not in expedition:
-                issues.append(f"Ivanland expedition spirit is missing bounded modifier {token}")
+                issues.append(
+                    f"Ivanland expedition spirit is missing bounded modifier {token}"
+                )
 
     mobile_idea_definitions = _blocks(collapse_ideas, MOBILE_REPAIR_IDEA)
     if len(mobile_idea_definitions) != 1:
@@ -5079,29 +5519,41 @@ def collect_issues() -> list[str]:
             issues.append(f"land repair spirit {idea_id} must have one definition")
             continue
         if definitions[0].count("industry_repair_factor = 0.20") != 1:
-            issues.append(f"land repair spirit {idea_id} must repair industry at +20 percent")
+            issues.append(
+                f"land repair spirit {idea_id} must repair industry at +20 percent"
+            )
         if re.search(r"\brepair_speed_factor\s*=", definitions[0]):
-            issues.append(f"land repair spirit {idea_id} must not use the ship repair modifier")
+            issues.append(
+                f"land repair spirit {idea_id} must not use the ship repair modifier"
+            )
 
     core_unlock = "ADISCORD_vorkerland_focus_postwar_core_decisions_unlocked"
     if postwar_source.count(f"set_country_flag = {core_unlock}") != 3:
-        issues.append("each postwar route must set the common core-decision unlock exactly once")
+        issues.append(
+            "each postwar route must set the common core-decision unlock exactly once"
+        )
     for focus_id in POSTWAR_CORE_UNLOCK_FOCUSES:
         if f"set_country_flag = {core_unlock}" not in blocks.get(focus_id, ""):
             issues.append(f"{focus_id} must unlock visible postwar core decisions")
     for decision_id in CORE_DECISIONS:
         decision_blocks = _blocks(focus_decisions, decision_id)
         if len(decision_blocks) != 1:
-            issues.append(f"core decision {decision_id} must have one public definition")
+            issues.append(
+                f"core decision {decision_id} must have one public definition"
+            )
         elif f"has_country_flag = {core_unlock}" not in decision_blocks[0]:
-            issues.append(f"core decision {decision_id} is not gated by its focus unlock")
+            issues.append(
+                f"core decision {decision_id} is not gated by its focus unlock"
+            )
 
     # Military victory is controller-owned. Postwar branches must be reachable
     # even if the showdown focus was canceled by a fast phase transition.
     for focus_ids in POSTWAR_ROUTE_FOCUSES.values():
         root = blocks.get(focus_ids[0], "")
         if _prerequisites(root):
-            issues.append(f"postwar root {focus_ids[0]} must not require a wartime focus")
+            issues.append(
+                f"postwar root {focus_ids[0]} must not require a wartime focus"
+            )
     fortification_foci = {
         "WKR": ("WKR_authorize_retreat_levies", 32, 6713),
         "VAD": ("VAD_assemble_joint_general_staff", 75, 6192),
@@ -5142,21 +5594,31 @@ def collect_issues() -> list[str]:
     )
     for token in forbidden_effects:
         if token in source:
-            issues.append(f"lifecycle focus tree contains forbidden controller/diplomacy effect {token}")
+            issues.append(
+                f"lifecycle focus tree contains forbidden controller/diplomacy effect {token}"
+            )
     if re.search(r"lucas", source, re.IGNORECASE):
         issues.append("lifecycle focus content must not depend on Lucas-specific state")
 
     focus_event_references = re.findall(
         r"\bcountry_event\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.]+)", source
     )
-    unexpected_focus_events = sorted(set(focus_event_references) - set(CLAIMANT_FOCUS_EVENT_IDS))
+    unexpected_focus_events = sorted(
+        set(focus_event_references) - set(CLAIMANT_FOCUS_EVENT_IDS)
+    )
     if unexpected_focus_events:
-        issues.append(f"wartime focuses reference unowned events {unexpected_focus_events}")
-    missing_focus_events = sorted(set(CLAIMANT_FOCUS_EVENT_IDS) - set(focus_event_references))
+        issues.append(
+            f"wartime focuses reference unowned events {unexpected_focus_events}"
+        )
+    missing_focus_events = sorted(
+        set(CLAIMANT_FOCUS_EVENT_IDS) - set(focus_event_references)
+    )
     if missing_focus_events:
         issues.append(f"claimant focus event hooks are missing {missing_focus_events}")
     if "news_event" in source:
-        issues.append("focus tree must route news through bounded claimant capstone events")
+        issues.append(
+            "focus tree must route news through bounded claimant capstone events"
+        )
 
     event_definitions = tuple(
         block
@@ -5171,11 +5633,15 @@ def collect_issues() -> list[str]:
     ]
     expected_event_ids = [*CLAIMANT_FOCUS_EVENT_IDS, *CLAIMANT_NEWS_EVENT_IDS]
     if defined_event_ids != expected_event_ids:
-        issues.append(f"claimant event definitions differ from the owned manifest: {defined_event_ids}")
+        issues.append(
+            f"claimant event definitions differ from the owned manifest: {defined_event_ids}"
+        )
     if claimant_events.count("add_namespace = ADISCORD_vorkerland_claimant") != 1:
         issues.append("claimant events must declare their owned namespace exactly once")
     if "has_command_power" in claimant_events:
-        issues.append("claimant events use invalid trigger has_command_power; use command_power")
+        issues.append(
+            "claimant events use invalid trigger has_command_power; use command_power"
+        )
     if len(event_definitions) != len(expected_event_ids):
         issues.append("claimant event file has missing or extra event definitions")
     if claimant_events.count("fire_only_once = yes") != len(expected_event_ids):
@@ -5194,7 +5660,9 @@ def collect_issues() -> list[str]:
     }.items():
         options = _blocks(event_blocks_by_id.get(event_id, ""), "option")
         if len(options) != expected_options:
-            issues.append(f"{event_id} must expose {expected_options} outcome-specific options")
+            issues.append(
+                f"{event_id} must expose {expected_options} outcome-specific options"
+            )
     trial_event = event_blocks_by_id.get("ADISCORD_vorkerland_claimant.23", "")
     for trial_flag in (
         "ADISCORD_vorkerland_tva_trial_technical_battalions",
@@ -5235,9 +5703,12 @@ def collect_issues() -> list[str]:
                 f"claimant.14 Solar settlement must contain {token} "
                 f"exactly {expected_count} time(s)"
             )
-    if solar_settlement_event.count(
-        "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active"
-    ) < 4:
+    if (
+        solar_settlement_event.count(
+            "has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active"
+        )
+        < 4
+    ):
         issues.append("claimant.14 must guard every Solar diplomacy lane against WKR")
     vad_attempt = _blocks(
         diplomacy_effects, "ADISCORD_vorkerland_attempt_vad_solar_intervention"
@@ -5245,10 +5716,16 @@ def collect_issues() -> list[str]:
     vad_verify = _blocks(
         diplomacy_effects, "ADISCORD_vorkerland_verify_vad_solar_intervention"
     )
-    if len(vad_attempt) != 1 or vad_attempt[0].count(
-        "country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 }"
-    ) != 2:
-        issues.append("claimant.14 intervention caller lacks the existing one-day verification stage")
+    if (
+        len(vad_attempt) != 1
+        or vad_attempt[0].count(
+            "country_event = { id = ADISCORD_vorkerland_diplomacy.6 days = 1 }"
+        )
+        != 2
+    ):
+        issues.append(
+            "claimant.14 intervention caller lacks the existing one-day verification stage"
+        )
     if len(vad_verify) != 1 or any(
         token not in vad_verify[0]
         for token in (
@@ -5257,7 +5734,9 @@ def collect_issues() -> list[str]:
             "ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes",
         )
     ):
-        issues.append("claimant.14 intervention caller is not backed by one bounded retry")
+        issues.append(
+            "claimant.14 intervention caller is not backed by one bounded retry"
+        )
     news_references = re.findall(
         r"\bnews_event\s*=\s*\{\s*id\s*=\s*([A-Za-z0-9_.]+)", claimant_events
     )
@@ -5288,7 +5767,9 @@ def collect_issues() -> list[str]:
     )
     for token in event_forbidden_effects:
         if token in claimant_events:
-            issues.append(f"claimant focus events contain forbidden lifecycle/controller effect {token}")
+            issues.append(
+                f"claimant focus events contain forbidden lifecycle/controller effect {token}"
+            )
 
     bounded_values = {
         "add_political_power": 25.0,
@@ -5303,18 +5784,28 @@ def collect_issues() -> list[str]:
         ("claimant event", claimant_events),
     ):
         for effect, maximum in bounded_values.items():
-            for raw in re.findall(rf"\b{effect}\s*=\s*(-?\d+(?:\.\d+)?)", reward_source):
+            for raw in re.findall(
+                rf"\b{effect}\s*=\s*(-?\d+(?:\.\d+)?)", reward_source
+            ):
                 if float(raw) > maximum:
                     issues.append(
                         f"{reward_source_name} {effect} reward {raw} exceeds maximum {maximum:g}"
                     )
-        for shipment in re.findall(r"\badd_equipment_to_stockpile\s*=\s*\{[^{}]*}", reward_source):
+        for shipment in re.findall(
+            r"\badd_equipment_to_stockpile\s*=\s*\{[^{}]*}", reward_source
+        ):
             amount = re.search(r"\bamount\s*=\s*(-?\d+(?:\.\d+)?)", shipment)
             if amount is None:
                 continue
-            maximum = 1500 if re.search(r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment) else 150
+            maximum = (
+                1500
+                if re.search(r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment)
+                else 150
+            )
             if float(amount[1]) > maximum:
-                issues.append(f"{reward_source_name} equipment reward {amount[1]} exceeds maximum {maximum}")
+                issues.append(
+                    f"{reward_source_name} equipment reward {amount[1]} exceeds maximum {maximum}"
+                )
     timed_idea_limits = {
         "ADISCORD_vorkerland_vad_eastern_mandate": 140,
         WORX_ADAPTIVE_LOGISTICS_IDEA: 90,
@@ -5334,14 +5825,18 @@ def collect_issues() -> list[str]:
     for construction in _blocks(source, "add_building_construction"):
         level = re.search(r"\blevel\s*=\s*(\d+)", construction)
         if not level or int(level.group(1)) != 1:
-            issues.append(f"focus construction must add exactly one level: {construction}")
+            issues.append(
+                f"focus construction must add exactly one level: {construction}"
+            )
 
     for bonus in _blocks(source, "add_tech_bonus"):
         amount = re.search(r"\bbonus\s*=\s*(\d+(?:\.\d+)?)", bonus)
         uses = re.search(r"\buses\s*=\s*(\d+)", bonus)
         category = re.search(r"\bcategory\s*=\s*([A-Za-z0-9_]+)", bonus)
         if amount is None or float(amount.group(1)) > 0.50:
-            issues.append(f"focus technology bonus exceeds the bounded 50 percent reward: {bonus}")
+            issues.append(
+                f"focus technology bonus exceeds the bounded 50 percent reward: {bonus}"
+            )
         if uses is None or int(uses.group(1)) != 1:
             issues.append(f"focus technology bonus must have exactly one use: {bonus}")
         if category is None or category.group(1) not in {
@@ -5349,23 +5844,41 @@ def collect_issues() -> list[str]:
             "electronics",
             "infantry_weapons",
         }:
-            issues.append(f"focus technology bonus uses an unsupported category: {bonus}")
+            issues.append(
+                f"focus technology bonus uses an unsupported category: {bonus}"
+            )
 
     english = source_section(read(ENGLISH_LOCALISATION), 'civil_war_focus_l_english')
     russian = source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian')
-    english_collapse_loc = source_section(read(ENGLISH_COLLAPSE_LOCALISATION), 'collapse_l_english')
-    russian_collapse_loc = source_section(read(RUSSIAN_COLLAPSE_LOCALISATION), 'collapse_l_russian')
-    english_ideas = source_section(read(ENGLISH_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_english')
-    russian_ideas = source_section(read(RUSSIAN_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_russian')
+    english_collapse_loc = source_section(
+        read(ENGLISH_COLLAPSE_LOCALISATION), 'collapse_l_english'
+    )
+    russian_collapse_loc = source_section(
+        read(RUSSIAN_COLLAPSE_LOCALISATION), 'collapse_l_russian'
+    )
+    english_ideas = source_section(
+        read(ENGLISH_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_english'
+    )
+    russian_ideas = source_section(
+        read(RUSSIAN_POSTWAR_IDEA_LOCALISATION), 'postwar_ideas_l_russian'
+    )
     if not english.startswith("l_english:\n"):
         issues.append("English lifecycle focus localisation has the wrong header")
     if not russian.startswith("l_russian:\n"):
         issues.append("Russian lifecycle focus localisation has the wrong header")
     if not (ROOT / RUSSIAN_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
         issues.append("Russian lifecycle focus localisation must use UTF-8 BOM")
-    if not (ROOT / RUSSIAN_COLLAPSE_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
+    if (
+        not (ROOT / RUSSIAN_COLLAPSE_LOCALISATION)
+        .read_bytes()
+        .startswith(b"\xef\xbb\xbf")
+    ):
         issues.append("Russian collapse idea localisation must use UTF-8 BOM")
-    if not (ROOT / RUSSIAN_POSTWAR_IDEA_LOCALISATION).read_bytes().startswith(b"\xef\xbb\xbf"):
+    if (
+        not (ROOT / RUSSIAN_POSTWAR_IDEA_LOCALISATION)
+        .read_bytes()
+        .startswith(b"\xef\xbb\xbf")
+    ):
         issues.append("Russian Vorkerland idea localisation must use UTF-8 BOM")
 
     expected_keys = expected_localisation_keys()
@@ -5378,21 +5891,23 @@ def collect_issues() -> list[str]:
         if set(entries) != expected_keys:
             missing = sorted(expected_keys - set(entries))
             extra = sorted(set(entries) - expected_keys)
-            issues.append(f"{language} localisation key mismatch: missing={missing}, extra={extra}")
+            issues.append(
+                f"{language} localisation key mismatch: missing={missing}, extra={extra}"
+            )
         empty = sorted(key for key, value in entries.items() if not value.strip())
         if empty:
             issues.append(f"{language} localisation has empty values: {empty}")
 
     referenced_tooltips = set(
-        re.findall(
-            r"\b(?:custom_effect_tooltip|tooltip)\s*=\s*([A-Za-z0-9_]+)", source
-        )
+        re.findall(r"\b(?:custom_effect_tooltip|tooltip)\s*=\s*([A-Za-z0-9_]+)", source)
     )
     for language, text in (("English", english), ("Russian", russian)):
         entries = localisation_entries(text)
         missing = sorted(referenced_tooltips - set(entries))
         if missing:
-            issues.append(f"{language} localisation lacks exact focus tooltip keys: {missing}")
+            issues.append(
+                f"{language} localisation lacks exact focus tooltip keys: {missing}"
+            )
 
     expected_idea_keys = {
         key
@@ -5411,8 +5926,7 @@ def collect_issues() -> list[str]:
     expected_wartime_idea_keys = {
         key
         for idea_id in (
-            VAD_WARTIME_IDEA_LOCALISATION_IDS
-            | TVA_OPTIONAL_IDEA_LOCALISATION_IDS
+            VAD_WARTIME_IDEA_LOCALISATION_IDS | TVA_OPTIONAL_IDEA_LOCALISATION_IDS
         )
         for key in (idea_id, f"{idea_id}_desc")
     }
@@ -5423,7 +5937,9 @@ def collect_issues() -> list[str]:
         entries = localisation_entries(text)
         missing = sorted(expected_wartime_idea_keys - set(entries))
         if missing:
-            issues.append(f"{language} claimant wartime idea localisation lacks {missing}")
+            issues.append(
+                f"{language} claimant wartime idea localisation lacks {missing}"
+            )
 
     character_definitions = _blocks(characters, "TVA_Dorian_Worx")
     if len(character_definitions) != 1:
@@ -5442,11 +5958,17 @@ def collect_issues() -> list[str]:
     tva_english = english_focus_entries.get("TVA_codify_utilitarian_directorate", "")
     tva_russian = russian_focus_entries.get("TVA_codify_utilitarian_directorate", "")
     if "Worx" not in tva_english or "Technocratic" not in tva_english:
-        issues.append("TVA wartime root must visibly name Worx's technocratic programme in English")
+        issues.append(
+            "TVA wartime root must visibly name Worx's technocratic programme in English"
+        )
     if "Воркс" not in tva_russian or "технократ" not in tva_russian.lower():
-        issues.append("TVA wartime root must visibly name Worx's technocratic programme in Russian")
+        issues.append(
+            "TVA wartime root must visibly name Worx's technocratic programme in Russian"
+        )
     if "utilitarian" in tva_english.lower() or "утилитар" in tva_russian.lower():
-        issues.append("TVA wartime root must not expose the legacy utilitarian route label")
+        issues.append(
+            "TVA wartime root must not expose the legacy utilitarian route label"
+        )
 
     issues.extend(
         _check_variant_branches(
@@ -5475,9 +5997,7 @@ def _position(block: str) -> tuple[int, int] | None:
 
 
 def _relative_anchor(block: str) -> str | None:
-    match = re.search(
-        r"(?m)^\s*relative_position_id\s*=\s*([A-Za-z0-9_]+)\s*$", block
-    )
+    match = re.search(r"(?m)^\s*relative_position_id\s*=\s*([A-Za-z0-9_]+)\s*$", block)
     return match.group(1) if match else None
 
 
@@ -5533,7 +6053,6 @@ def _layout_band(focus_id: str, block: str) -> str:
     return f"war_{tag}" if tag in {"WKR", "VAD", "TVA"} else "war_WKR"
 
 
-
 def _check_depth_branches(
     blocks: dict[str, str], grid: dict[str, tuple[int, int]], source: str
 ) -> list[str]:
@@ -5587,8 +6106,10 @@ def _check_depth_branches(
             issues.append(
                 f"depth focus {focus_id} cost {cost} != {DEPTH_COSTS[focus_id]}"
             )
-        base = re.search(r"\bbase\s*=\s*(\d+)", _blocks(block, "ai_will_do")[0]
-                         if _blocks(block, "ai_will_do") else "")
+        base = re.search(
+            r"\bbase\s*=\s*(\d+)",
+            _blocks(block, "ai_will_do")[0] if _blocks(block, "ai_will_do") else "",
+        )
         if base is None or int(base.group(1)) != DEPTH_AI_BASES[focus_id]:
             issues.append(
                 f"depth focus {focus_id} AI base must be {DEPTH_AI_BASES[focus_id]}"
@@ -5735,12 +6256,8 @@ WAR_ECONOMY_CAPSTONES = (
 WAR_ECONOMY_MODIFIER_FILE = (
     "common/dynamic_modifiers/ADISCORD_vorkerland_dynamic_modifiers.txt"
 )
-WAR_ECONOMY_REFRESH_FILE = (
-    "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
-)
-WAR_ECONOMY_REFRESH_EFFECT = (
-    "ADISCORD_vorkerland_refresh_war_economy_dynamic_state"
-)
+WAR_ECONOMY_REFRESH_FILE = "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
+WAR_ECONOMY_REFRESH_EFFECT = "ADISCORD_vorkerland_refresh_war_economy_dynamic_state"
 
 
 def _check_war_economy_dynamic(blocks: dict[str, str], source: str) -> list[str]:
@@ -5757,8 +6274,14 @@ def _check_war_economy_dynamic(blocks: dict[str, str], source: str) -> list[str]
     issues: list[str] = []
     root = Path(__file__).resolve().parents[2]
 
-    modifier_text = source_section((root / WAR_ECONOMY_MODIFIER_FILE).read_text(encoding="utf-8"), 'collapse_dynamic_modifiers')
-    refresh_text = source_section((root / WAR_ECONOMY_REFRESH_FILE).read_text(encoding="utf-8"), 'war_economy_effects')
+    modifier_text = source_section(
+        (root / WAR_ECONOMY_MODIFIER_FILE).read_text(encoding="utf-8"),
+        'collapse_dynamic_modifiers',
+    )
+    refresh_text = source_section(
+        (root / WAR_ECONOMY_REFRESH_FILE).read_text(encoding="utf-8"),
+        'war_economy_effects',
+    )
 
     for tag, (head, modifier, strain_flag, relief_flag) in WAR_ECONOMY_DYNAMIC.items():
         if modifier not in modifier_text:
@@ -5862,7 +6385,10 @@ def _check_depth_ai_plans() -> list[str]:
 
     issues: list[str] = []
     sources = {
-        key: source_section(read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"), f"{key}_wartime_plan")
+        key: source_section(
+            read("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"),
+            f"{key}_wartime_plan",
+        )
         for key in ("wkr", "vad", "tva")
     }
     for plan_id, plan in DEPTH_AI_PLANS.items():
@@ -5894,20 +6420,31 @@ def _check_depth_ai_plans() -> list[str]:
             )
         abort = _blocks(body, "abort")
         if len(abort) != 1 or plan["terminal"] not in abort[0]:
-            issues.append(
-                f"depth AI plan {plan_id} must abort on {plan['terminal']}"
-            )
+            issues.append(f"depth AI plan {plan_id} must abort on {plan['terminal']}")
 
-    orders = {
-        plan_id: plan["focuses"] for plan_id, plan in DEPTH_AI_PLANS.items()
-    }
+    orders = {plan_id: plan["focuses"] for plan_id, plan in DEPTH_AI_PLANS.items()}
     for tag, pair in (
-        ("WKR", ("ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan",
-                 "ADISCORD_vorkerland_wkr_utilitarian_depth_plan")),
-        ("VAD", ("ADISCORD_vorkerland_vad_imperial_depth_plan",
-                 "ADISCORD_vorkerland_vad_joint_depth_war_plan")),
-        ("TVA", ("ADISCORD_vorkerland_tva_throughput_depth_plan",
-                 "ADISCORD_vorkerland_tva_preservation_depth_plan")),
+        (
+            "WKR",
+            (
+                "ADISCORD_vorkerland_wkr_neo_vorkerist_depth_plan",
+                "ADISCORD_vorkerland_wkr_utilitarian_depth_plan",
+            ),
+        ),
+        (
+            "VAD",
+            (
+                "ADISCORD_vorkerland_vad_imperial_depth_plan",
+                "ADISCORD_vorkerland_vad_joint_depth_war_plan",
+            ),
+        ),
+        (
+            "TVA",
+            (
+                "ADISCORD_vorkerland_tva_throughput_depth_plan",
+                "ADISCORD_vorkerland_tva_preservation_depth_plan",
+            ),
+        ),
     ):
         left, right = (set(orders[plan_id]) for plan_id in pair)
         shared = left & right
@@ -5936,9 +6473,7 @@ def _check_layout(
     if unresolved:
         issues.append(f"focus positions could not be resolved: {unresolved}")
 
-    anchored = {
-        focus_id: _relative_anchor(block) for focus_id, block in blocks.items()
-    }
+    anchored = {focus_id: _relative_anchor(block) for focus_id, block in blocks.items()}
     roots = sorted(f for f, anchor in anchored.items() if anchor is None)
     if sorted(roots) != sorted(LAYOUT_ANCHORS):
         issues.append(
@@ -5958,9 +6493,7 @@ def _check_layout(
             issues.append(f"{focus_id} anchors to unknown focus {anchor}")
             continue
         prerequisites = {
-            token
-            for group in _prerequisite_groups(blocks[focus_id])
-            for token in group
+            token for group in _prerequisite_groups(blocks[focus_id]) for token in group
         }
         if anchor not in prerequisites:
             issues.append(
@@ -6134,7 +6667,9 @@ def _check_variant_branches(
         for index, focus_id in enumerate(chain):
             block = blocks.get(focus_id, "")
             if not block:
-                issues.append(f"{label} focus {focus_id} is missing from the lifecycle tree")
+                issues.append(
+                    f"{label} focus {focus_id} is missing from the lifecycle tree"
+                )
                 continue
 
             expected_position = branch["positions"][index]
@@ -6157,7 +6692,9 @@ def _check_variant_branches(
             if cost is None or int(cost.group(1)) != expected_cost:
                 issues.append(f"{focus_id} must cost {expected_cost}")
 
-            expected_prerequisite = branch["root_prerequisite"] if index == 0 else chain[index - 1]
+            expected_prerequisite = (
+                branch["root_prerequisite"] if index == 0 else chain[index - 1]
+            )
             if _prerequisites(block) != {expected_prerequisite}:
                 issues.append(
                     f"{focus_id} must depend only on {expected_prerequisite}, "
@@ -6168,10 +6705,14 @@ def _check_variant_branches(
             available = "\n".join(_blocks(block, "available"))
             for token in branch["branch_tokens"]:
                 if token not in allow:
-                    issues.append(f"{focus_id} allow_branch lacks the collapse roll token {token}")
+                    issues.append(
+                        f"{focus_id} allow_branch lacks the collapse roll token {token}"
+                    )
             for token in branch["identity_tokens"]:
                 if token not in available:
-                    issues.append(f"{focus_id} available lacks the identity token {token}")
+                    issues.append(
+                        f"{focus_id} available lacks the identity token {token}"
+                    )
                 if token in allow:
                     issues.append(
                         f"{focus_id} must not gate allow_branch on volatile identity token {token}"
@@ -6190,7 +6731,9 @@ def _check_variant_branches(
                 else f"add_ideas = {idea_id}"
             )
             if block.count(grant) != 1:
-                issues.append(f"{focus_id} must grant its variant spirit exactly once: {grant}")
+                issues.append(
+                    f"{focus_id} must grant its variant spirit exactly once: {grant}"
+                )
 
         doctrine = blocks.get(chain[0], "")
         sibling = branch["sibling"]
@@ -6202,14 +6745,22 @@ def _check_variant_branches(
 
         for idea_id in chain_ideas:
             if len(_blocks(focus_expansion_ideas, idea_id)) != 1:
-                issues.append(f"{label} spirit {idea_id} must be defined once in the expansion ideas")
-            for language, entries in (("English", english_entries), ("Russian", russian_entries)):
+                issues.append(
+                    f"{label} spirit {idea_id} must be defined once in the expansion ideas"
+                )
+            for language, entries in (
+                ("English", english_entries),
+                ("Russian", russian_entries),
+            ):
                 for key in (idea_id, f"{idea_id}_desc"):
                     if not entries.get(key):
                         issues.append(f"{language} localisation lacks {key}")
 
         for focus_id in chain:
-            for language, entries in (("English", english_entries), ("Russian", russian_entries)):
+            for language, entries in (
+                ("English", english_entries),
+                ("Russian", russian_entries),
+            ):
                 for key in (focus_id, f"{focus_id}_desc"):
                     if not entries.get(key):
                         issues.append(f"{language} localisation lacks {key}")
@@ -6226,13 +6777,17 @@ def _check_variant_branches(
         else:
             ordered = tuple(re.findall(r"\b([A-Z]{3}_[A-Za-z0-9_]+)\b", focus_lists[0]))
             if ordered != chain:
-                issues.append(f"{plan_id} must drive {list(chain)}, found {list(ordered)}")
+                issues.append(
+                    f"{plan_id} must drive {list(chain)}, found {list(ordered)}"
+                )
         enable = "\n".join(_blocks(plan, "enable"))
         for token in (f"tag = {tag}", "is_ai = yes", *branch["branch_tokens"]):
             if token not in enable:
                 issues.append(f"{plan_id} enable block lacks {token}")
         if not re.search(r"weight\s*=\s*\{\s*factor\s*=\s*4\s*\}", plan):
-            issues.append(f"{plan_id} must outrank the core plan and yield to the showdown plan")
+            issues.append(
+                f"{plan_id} must outrank the core plan and yield to the showdown plan"
+            )
         if not _blocks(plan, "abort"):
             issues.append(f"{plan_id} must define an abort block")
 
@@ -6240,7 +6795,9 @@ def _check_variant_branches(
         block = blocks.get(focus_id, "")
         for idea_id in VARIANT_PERMANENT_IDEAS:
             if f"remove_ideas = {idea_id}" not in block:
-                issues.append(f"{focus_id} must clear the wartime variant spirit {idea_id}")
+                issues.append(
+                    f"{focus_id} must clear the wartime variant spirit {idea_id}"
+                )
 
     return issues
 

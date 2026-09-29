@@ -16,14 +16,14 @@ ai_generic_operation_target_scorer  = {
 					has_capitulated = yes
 					is_ally_with = FROM
 				}
-				factor = 0 
+				factor = 0
 			}
-			
+
 			modifier = {
 				has_war_with = FROM
 				factor = 4.0
 			}
-			
+
 			modifier = {
 				OR = {
 					is_in_array = { FROM.potential_and_current_enemies = this }
@@ -50,7 +50,7 @@ ai_generic_operation_target_scorer  = {
 				factor = 1.5
 			}
 
-			
+
 			modifier = {
 				is_major = yes
 				factor = 1.1
@@ -70,13 +70,13 @@ ai_generic_operation_target_scorer  = {
 				clamp_temp_variable = { var = temp_score max = 2.2 }
 				factor = temp_score
 			}
-			
+
 			# continue targetting same country
 			modifier = {
 				check_variable = { id = generic_operation_target }
 				factor = 2.0
 			}
-			
+
 			# we got tokens to spend
 			modifier = {
 				FROM = {

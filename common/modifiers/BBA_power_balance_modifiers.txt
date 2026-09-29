@@ -23,11 +23,11 @@ SWI_romansh = {
 }
 
 SWI_DEBUG_all_cantons = {
-	power_balance_daily = -0.99	
+	power_balance_daily = -0.99
 }
 
 SWI_DEBUG_all_council = {
-	power_balance_daily = -0.99	
+	power_balance_daily = -0.99
 }
 
 #########################################
@@ -57,7 +57,7 @@ ETH_BoP_spanish_exiles_modifier = {
 ########### ITA BOP MODIFIERS ###########
 #########################################
 #LOST CORES - Max 2.5 weekly
-ITA_power_balance_lost_core_1 = { 
+ITA_power_balance_lost_core_1 = {
 	power_balance_weekly = -0.005
 }
 

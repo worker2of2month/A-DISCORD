@@ -52,7 +52,7 @@ def named_blocks(source: str, name: str) -> list[str]:
             elif source[index] == "}":
                 depth -= 1
                 if depth == 0:
-                    result.append(source[start + 1:index])
+                    result.append(source[start + 1 : index])
                     break
         else:
             ERRORS.append(f"unterminated {name} block")
@@ -85,7 +85,9 @@ def scalar(source: str, key: str) -> str | None:
 def victory_points(history: str) -> list[tuple[int, int]]:
     return [
         (int(province), int(value))
-        for province, value in re.findall(r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", history)
+        for province, value in re.findall(
+            r"victory_points\s*=\s*\{\s*(\d+)\s+(\d+)\s*\}", history
+        )
     ]
 
 
@@ -102,7 +104,10 @@ def validate() -> None:
 
     localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
     localisation_bytes = localisation_path.read_bytes()
-    check(localisation_bytes.startswith(b"\xef\xbb\xbf"), "victory point localisation must use UTF-8 BOM")
+    check(
+        localisation_bytes.startswith(b"\xef\xbb\xbf"),
+        "victory point localisation must use UTF-8 BOM",
+    )
     localisation = localisation_bytes.decode("utf-8-sig", errors="strict")
 
     sources: dict[int, str] = {}
@@ -113,7 +118,9 @@ def validate() -> None:
     industry_totals: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
     resource_totals: dict[str, dict[str, int]] = defaultdict(lambda: defaultdict(int))
 
-    for state_id, (relative_path, owner, population, category) in sorted(TARGET_STATES.items()):
+    for state_id, (relative_path, owner, population, category) in sorted(
+        TARGET_STATES.items()
+    ):
         path = ROOT / relative_path
         check(path.is_file(), f"state {state_id}: missing {relative_path}")
         if not path.is_file():
@@ -121,17 +128,32 @@ def validate() -> None:
         source = read_text(path)
         sources[state_id] = source
         history_blocks = named_blocks(source, "history")
-        check(len(history_blocks) == 1, f"state {state_id}: expected one history block, found {len(history_blocks)}")
+        check(
+            len(history_blocks) == 1,
+            f"state {state_id}: expected one history block, found {len(history_blocks)}",
+        )
         history = history_blocks[0] if history_blocks else ""
         histories[state_id] = history
 
         check(scalar(source, "id") == str(state_id), f"state {state_id}: wrong id")
         actual_population = scalar(source, "manpower")
-        check(actual_population == str(population), f"state {state_id}: expected manpower {population}, found {actual_population}")
+        check(
+            actual_population == str(population),
+            f"state {state_id}: expected manpower {population}, found {actual_population}",
+        )
         actual_category = scalar(source, "state_category")
-        check(actual_category == category, f"state {state_id}: expected category {category}, found {actual_category}")
-        check(scalar(history, "owner") == owner, f"state {state_id}: expected owner {owner}")
-        check(bool(re.search(rf"(?m)^\s*add_core_of\s*=\s*{owner}\s*$", history)), f"state {state_id}: missing {owner} core")
+        check(
+            actual_category == category,
+            f"state {state_id}: expected category {category}, found {actual_category}",
+        )
+        check(
+            scalar(history, "owner") == owner,
+            f"state {state_id}: expected owner {owner}",
+        )
+        check(
+            bool(re.search(rf"(?m)^\s*add_core_of\s*=\s*{owner}\s*$", history)),
+            f"state {state_id}: missing {owner} core",
+        )
         population_totals[owner] += int(actual_population or 0)
 
         province_block = first_block(source, "provinces")
@@ -146,35 +168,66 @@ def validate() -> None:
             len(building_blocks) == expected_block_count,
             f"state {state_id}: expected {expected_block_count} state buildings block(s), found {len(building_blocks)}",
         )
-        actual_buildings = direct_integer_assignments(building_blocks[0]) if building_blocks else {}
-        check(actual_buildings == expected_buildings, f"state {state_id}: wrong direct buildings {actual_buildings}")
+        actual_buildings = (
+            direct_integer_assignments(building_blocks[0]) if building_blocks else {}
+        )
+        check(
+            actual_buildings == expected_buildings,
+            f"state {state_id}: wrong direct buildings {actual_buildings}",
+        )
         for key in FACTORY_KEYS:
             industry_totals[owner][key] += actual_buildings.get(key, 0)
         for key in CUSTOM_BUILDING_KEYS:
             expected_custom = 1 if state_id in CAPITAL_CUSTOM_BUILDING_STATES else 0
-            check(actual_buildings.get(key, 0) == expected_custom, f"state {state_id}: expected {key} = {expected_custom}")
+            check(
+                actual_buildings.get(key, 0) == expected_custom,
+                f"state {state_id}: expected {key} = {expected_custom}",
+            )
 
         resource_blocks = named_blocks(source, "resources")
-        actual_resources = direct_integer_assignments(resource_blocks[0]) if resource_blocks else {}
-        check(actual_resources == EXPECTED_RESOURCES[state_id], f"state {state_id}: wrong resources {actual_resources}")
+        actual_resources = (
+            direct_integer_assignments(resource_blocks[0]) if resource_blocks else {}
+        )
+        check(
+            actual_resources == EXPECTED_RESOURCES[state_id],
+            f"state {state_id}: wrong resources {actual_resources}",
+        )
         for resource, value in actual_resources.items():
             resource_totals[owner][resource] += value
 
         state_vps = victory_points(history)
-        check(len(state_vps) == len({province for province, _value in state_vps}), f"state {state_id}: duplicate VP province")
+        check(
+            len(state_vps) == len({province for province, _value in state_vps}),
+            f"state {state_id}: duplicate VP province",
+        )
         vps_by_state[state_id] = state_vps
         for province, value in state_vps:
-            check(province in definition_provinces, f"state {state_id}: VP {province} missing from definition.csv")
-            check(province in provinces, f"state {state_id}: VP {province} is outside the state")
+            check(
+                province in definition_provinces,
+                f"state {state_id}: VP {province} missing from definition.csv",
+            )
+            check(
+                province in provinces,
+                f"state {state_id}: VP {province} is outside the state",
+            )
             terrain = province_terrain.get(province)
             if terrain == "urban":
                 check(value >= 5, f"state {state_id}: urban VP {province} is below 5")
             else:
-                check(province in NON_URBAN_SETTLEMENT_VPS, f"state {state_id}: unapproved non-urban VP {province}")
+                check(
+                    province in NON_URBAN_SETTLEMENT_VPS,
+                    f"state {state_id}: unapproved non-urban VP {province}",
+                )
                 expected = SETTLEMENT_VP_VALUES.get(province)
-                check(value == expected, f"state {state_id}: settlement VP {province} must equal {expected}")
+                check(
+                    value == expected,
+                    f"state {state_id}: settlement VP {province} must equal {expected}",
+                )
 
-    check(dict(population_totals) == EXPECTED_POPULATION_TOTALS, f"wrong population totals {dict(population_totals)}")
+    check(
+        dict(population_totals) == EXPECTED_POPULATION_TOTALS,
+        f"wrong population totals {dict(population_totals)}",
+    )
     for owner, expected in EXPECTED_INDUSTRY_TOTALS.items():
         actual = {key: industry_totals[owner].get(key, 0) for key in FACTORY_KEYS}
         check(actual == expected, f"{owner}: wrong industry totals {actual}")
@@ -183,28 +236,58 @@ def validate() -> None:
         check(actual == expected, f"{owner}: wrong resource totals {actual}")
 
     for state_id, (province, value, _name) in SETTLEMENT_VPS.items():
-        check((province, value) in vps_by_state.get(state_id, []), f"state {state_id}: missing settlement VP {province}:{value}")
-        check(province_terrain.get(province) != "urban", f"state {state_id}: settlement VP {province} unexpectedly became urban")
+        check(
+            (province, value) in vps_by_state.get(state_id, []),
+            f"state {state_id}: missing settlement VP {province}:{value}",
+        )
+        check(
+            province_terrain.get(province) != "urban",
+            f"state {state_id}: settlement VP {province} unexpectedly became urban",
+        )
     for state_id, expected_vps in NORTHERN_CAMPAIGN_VPS.items():
-        check(tuple(vps_by_state.get(state_id, [])) == expected_vps,
-              f"northern state {state_id}: expected exact campaign VPs {expected_vps}")
+        check(
+            tuple(vps_by_state.get(state_id, [])) == expected_vps,
+            f"northern state {state_id}: expected exact campaign VPs {expected_vps}",
+        )
     for state_id, expected_vps in URBAN_VP_MINIMUMS.items():
         actual_vps = dict(vps_by_state.get(state_id, []))
         for province, value in expected_vps.items():
-            check(actual_vps.get(province) == value, f"state {state_id}: expected urban VP {province}:{value}")
-            check(province_terrain.get(province) == "urban", f"state {state_id}: VP {province} is not urban")
+            check(
+                actual_vps.get(province) == value,
+                f"state {state_id}: expected urban VP {province}:{value}",
+            )
+            check(
+                province_terrain.get(province) == "urban",
+                f"state {state_id}: VP {province} is not urban",
+            )
 
     for province, expected_name in EXPECTED_VP_NAMES.items():
-        pattern = re.compile(rf'(?m)^\s*VICTORY_POINTS_{province}(?::\d+)?:\s*"([^"]*)"')
+        pattern = re.compile(
+            rf'(?m)^\s*VICTORY_POINTS_{province}(?::\d+)?:\s*"([^"]*)"'
+        )
         matches = pattern.findall(localisation)
-        check(len(matches) == 1, f"VP {province}: expected one Russian localisation key, found {len(matches)}")
+        check(
+            len(matches) == 1,
+            f"VP {province}: expected one Russian localisation key, found {len(matches)}",
+        )
         if matches:
-            check(matches[0] == expected_name, f"VP {province}: expected name {expected_name!r}, found {matches[0]!r}")
+            check(
+                matches[0] == expected_name,
+                f"VP {province}: expected name {expected_name!r}, found {matches[0]!r}",
+            )
 
     for state_id in STP_CLAIMS_ON_VAL:
-        check(bool(re.search(r"(?m)^\s*add_claim_by\s*=\s*STP\s*$", histories.get(state_id, ""))), f"state {state_id}: missing STP claim")
+        check(
+            bool(
+                re.search(
+                    r"(?m)^\s*add_claim_by\s*=\s*STP\s*$", histories.get(state_id, "")
+                )
+            ),
+            f"state {state_id}: missing STP claim",
+        )
     check(
-        EXPECTED_RESOURCE_TOTALS["VAL"] == {"oil": 19, "aluminium": 8, "tungsten": 2, "chromium": 2},
+        EXPECTED_RESOURCE_TOTALS["VAL"]
+        == {"oil": 19, "aluminium": 8, "tungsten": 2, "chromium": 2},
         "VAL homeland resource contract drifted",
     )
     for state_id, (_path, tag, *_rest) in TARGET_STATES.items():
@@ -214,7 +297,12 @@ def validate() -> None:
                 f"state {state_id}: Kefreyt must have no domestic starting steel",
             )
             check(
-                sum(amount for resource, amount in EXPECTED_RESOURCES[state_id].items() if resource != "oil") <= 12,
+                sum(
+                    amount
+                    for resource, amount in EXPECTED_RESOURCES[state_id].items()
+                    if resource != "oil"
+                )
+                <= 12,
                 f"state {state_id}: Kefreyt homeland metal deposits exceed the local cap",
             )
 
@@ -226,7 +314,9 @@ def main() -> int:
         for error in ERRORS:
             print(f"- {error}")
         return 1
-    print("Core state balance validation passed: NOD/STP/VAL and northern coalition population, VP, industry, buildings, and resources match the approved contract.")
+    print(
+        "Core state balance validation passed: NOD/STP/VAL and northern coalition population, VP, industry, buildings, and resources match the approved contract."
+    )
     return 0
 
 

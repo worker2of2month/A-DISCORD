@@ -1,15 +1,15 @@
 spriteTypes = {
 
-###VAL
- #ideas
+	###VAL
+	#ideas
 	spriteType = {
 		name = "GFX_VAL_harvest_of_ash_banner"
 		texturefile = "gfx/texticons/adiscord/banners/VAL_harvest_of_ash_banner.png"
 		legacy_lazy_load = no
 	}
 
-###WRK
- #ideas
+	###WRK
+	#ideas
 	spriteType = {
 		name = "GFX_WRK_ashes_of_the_crown_banner"
 		texturefile = "gfx/texticons/adiscord/banners/WRK_ashes_of_the_crown_banner.png"

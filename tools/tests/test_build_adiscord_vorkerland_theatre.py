@@ -52,11 +52,15 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
         for level, route in theatre.KHAN_CAMPAIGN_RAIL_UPGRADES:
             self.assertEqual(level, 2)
             self.assertEqual(
-                updated.splitlines().count(theatre.render_khan_campaign_rail(level, route)),
+                updated.splitlines().count(
+                    theatre.render_khan_campaign_rail(level, route)
+                ),
                 1,
             )
 
-    def test_dirty_zone_has_multiple_managed_supply_hubs_per_campaign_belt(self) -> None:
+    def test_dirty_zone_has_multiple_managed_supply_hubs_per_campaign_belt(
+        self,
+    ) -> None:
         belt_states = (
             {49, 50, 51, 155, 176, 187, 191, 233, 329, 461},
             {125, 177, 186, 188, 192, 208, 213, 214, 215, 216, 217, 220},
@@ -83,16 +87,26 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
                 path.write_text(broken, encoding="utf-8")
                 with patch.object(theatre, "RAILWAYS_PATH", path):
                     issues = theatre.validate()
-                self.assertTrue(any(tag in issue and "disconnected" in issue for issue in issues), issues)
+                self.assertTrue(
+                    any(tag in issue and "disconnected" in issue for issue in issues),
+                    issues,
+                )
 
     def test_rail_apply_preserves_unchanged_supply_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             rails = Path(directory) / "railways.txt"
             hubs = Path(directory) / "supply_nodes.txt"
             rails.write_text(theatre.update_source("1 2 100 101\n"), encoding="utf-8")
-            source = theatre.update_supply_source("1 100\n").replace("1 2539\n", "1 2539\r\n").encode("utf-8")
+            source = (
+                theatre.update_supply_source("1 100\n")
+                .replace("1 2539\n", "1 2539\r\n")
+                .encode("utf-8")
+            )
             hubs.write_bytes(source)
-            with patch.object(theatre, "RAILWAYS_PATH", rails), patch.object(theatre, "SUPPLY_NODES_PATH", hubs):
+            with (
+                patch.object(theatre, "RAILWAYS_PATH", rails),
+                patch.object(theatre, "SUPPLY_NODES_PATH", hubs),
+            ):
                 theatre.apply()
             self.assertEqual(hubs.read_bytes(), source)
 
@@ -105,7 +119,10 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             rails.write_text(broken, encoding="utf-8")
             with patch.object(theatre, "RAILWAYS_PATH", rails):
                 issues = theatre.validate()
-        self.assertTrue(any("RUS" in issue and "7445 is disconnected" in issue for issue in issues), issues)
+        self.assertTrue(
+            any("RUS" in issue and "7445 is disconnected" in issue for issue in issues),
+            issues,
+        )
 
 
 if __name__ == "__main__":

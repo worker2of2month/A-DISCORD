@@ -58,9 +58,15 @@ ACTIVE_FLAGS = (
 
 def _read(root: Path, relative: str) -> str:
     text = (root / relative).read_text(encoding="utf-8-sig")
-    sections = {TRIGGERS: "stalemate_triggers", EFFECTS: "stalemate_effects",
-                EVENTS: "stalemate_events", AI: "stalemate_ai", IDEAS: "stalemate_ideas",
-                ENGLISH: "stalemate_l_english", RUSSIAN: "stalemate_l_russian"}
+    sections = {
+        TRIGGERS: "stalemate_triggers",
+        EFFECTS: "stalemate_effects",
+        EVENTS: "stalemate_events",
+        AI: "stalemate_ai",
+        IDEAS: "stalemate_ideas",
+        ENGLISH: "stalemate_l_english",
+        RUSSIAN: "stalemate_l_russian",
+    }
     return source_section(text, sections[relative]) if relative in sections else text
 
 
@@ -119,7 +125,7 @@ def _named_block(text: str, name: str) -> str:
         elif text[index] == "}":
             depth -= 1
             if depth == 0:
-                return text[match.start():index + 1]
+                return text[match.start() : index + 1]
     return ""
 
 
@@ -130,7 +136,12 @@ def _gameplay_texts(root: Path) -> list[tuple[str, str]]:
         if not base.exists():
             continue
         for path in base.rglob("*.txt"):
-            result.append((path.relative_to(root).as_posix(), path.read_text(encoding="utf-8-sig")))
+            result.append(
+                (
+                    path.relative_to(root).as_posix(),
+                    path.read_text(encoding="utf-8-sig"),
+                )
+            )
     return result
 
 
@@ -159,7 +170,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     events = texts.get(EVENTS, "")
     ai = texts.get(AI, "")
     ideas = texts.get(IDEAS, "")
-    combined = _strip_comments("\n".join(texts.get(path, "") for path in required_text_files))
+    combined = _strip_comments(
+        "\n".join(texts.get(path, "") for path in required_text_files)
+    )
 
     for token in (
         "has_global_flag = ADISCORD_vorkerland_collapse_started",
@@ -187,7 +200,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             issues.append(f"live-war trigger is missing {tag}")
 
     if on_actions.count("on_war_relation_added = {") != 1:
-        issues.append("stalemate scheduling must have exactly one on_war_relation_added hook")
+        issues.append(
+            "stalemate scheduling must have exactly one on_war_relation_added hook"
+        )
     for token in (
         "ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }",
         "FROM = { ADISCORD_vorkerland_is_central_minor = yes }",
@@ -214,7 +229,12 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         token = f"country_event = {{ id = {event_id} days = {days} }}"
         if effects.count(token) != 1:
             issues.append(f"one-shot deadline is missing or has wrong delay: {token}")
-    if effects.count("add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }") != 2:
+    if (
+        effects.count(
+            "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
+        )
+        != 2
+    ):
         issues.append("exactly two AI-gated 75-day idea callers are required")
     for active_flag in ACTIVE_FLAGS:
         token = f"set_country_flag = {{ flag = {active_flag} days = 75 }}"
@@ -240,17 +260,28 @@ def collect_issues(root: Path = ROOT) -> list[str]:
         guard_write = block.find(f"set_country_flag = {resolved_flag}")
         payload = block.find(f"flag = {active_flag}")
         if guard_write < 0 or payload < 0 or guard_write > payload:
-            issues.append(f"{effect_name} must write its permanent guard before its payload")
+            issues.append(
+                f"{effect_name} must write its permanent guard before its payload"
+            )
 
     for event_id, resolver in (
-        ("ADISCORD_vorkerland_stalemate.1", "ADISCORD_vorkerland_resolve_central_stalemate_deadline"),
-        ("ADISCORD_vorkerland_stalemate.2", "ADISCORD_vorkerland_resolve_solarino_stalemate_deadline"),
+        (
+            "ADISCORD_vorkerland_stalemate.1",
+            "ADISCORD_vorkerland_resolve_central_stalemate_deadline",
+        ),
+        (
+            "ADISCORD_vorkerland_stalemate.2",
+            "ADISCORD_vorkerland_resolve_solarino_stalemate_deadline",
+        ),
     ):
         if events.count(f"id = {event_id}") != 1:
             issues.append(f"event definition count is not one: {event_id}")
         if events.count(f"{resolver} = yes") != 1:
             issues.append(f"deadline event must call {resolver} exactly once")
-    if events.count("hidden = yes") != 2 or events.count("is_triggered_only = yes") != 2:
+    if (
+        events.count("hidden = yes") != 2
+        or events.count("is_triggered_only = yes") != 2
+    ):
         issues.append("both stalemate events must be hidden and triggered-only")
     if events.count("country_event = {") != 2:
         issues.append("deadline events must not schedule a retry or another event")
@@ -281,7 +312,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 issues.append(f"Solarino breakthrough AI is missing: {token}")
     for active_flag in ACTIVE_FLAGS:
         if f"has_country_flag = {active_flag}" not in ai:
-            issues.append(f"AI plan is missing its timed activation flag: {active_flag}")
+            issues.append(
+                f"AI plan is missing its timed activation flag: {active_flag}"
+            )
     for token in (
         "priority = 2000",
         "execution_type = rush_weak",
@@ -331,14 +364,36 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     gameplay = _gameplay_texts(root)
     gameplay_joined = "\n".join(text for _, text in gameplay)
     for flag in SCHEDULED_FLAGS + RESOLVED_FLAGS:
-        if len(re.findall(rf"set_country_flag\s*=\s*{re.escape(flag)}\b", gameplay_joined)) != 1:
-            issues.append(f"permanent one-shot flag must have exactly one writer: {flag}")
+        if (
+            len(
+                re.findall(
+                    rf"set_country_flag\s*=\s*{re.escape(flag)}\b", gameplay_joined
+                )
+            )
+            != 1
+        ):
+            issues.append(
+                f"permanent one-shot flag must have exactly one writer: {flag}"
+            )
         if re.search(rf"clr_country_flag\s*=\s*{re.escape(flag)}\b", gameplay_joined):
             issues.append(f"permanent one-shot flag must never be cleared: {flag}")
     for flag in ACTIVE_FLAGS:
-        if len(re.findall(rf"set_country_flag\s*=\s*\{{[^}}]*\b{re.escape(flag)}\b", gameplay_joined)) != 1:
+        if (
+            len(
+                re.findall(
+                    rf"set_country_flag\s*=\s*\{{[^}}]*\b{re.escape(flag)}\b",
+                    gameplay_joined,
+                )
+            )
+            != 1
+        ):
             issues.append(f"timed active flag must have exactly one writer: {flag}")
-    if gameplay_joined.count("add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }") != 2:
+    if (
+        gameplay_joined.count(
+            "add_timed_idea = { idea = ADISCORD_vorkerland_ai_breakthrough_window days = 75 }"
+        )
+        != 2
+    ):
         issues.append("operational idea must have exactly two bounded gameplay writers")
 
     registry_text = texts.get(REGISTRY, "")
@@ -364,7 +419,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 else:
                     for key, value in expected.items():
                         if entry.get(key) != value:
-                            issues.append(f"event registry drift for {event_id}: {key} != {value}")
+                            issues.append(
+                                f"event registry drift for {event_id}: {key} != {value}"
+                            )
 
     for relative in (ENGLISH, RUSSIAN):
         loc = texts.get(relative, "")
@@ -375,7 +432,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
             if loc.count(key) != 1:
                 issues.append(f"{relative}: localisation key count is not one: {key}")
     russian_path = root / RUSSIAN
-    if russian_path.is_file() and not russian_path.read_bytes().startswith(b"\xef\xbb\xbf"):
+    if russian_path.is_file() and not russian_path.read_bytes().startswith(
+        b"\xef\xbb\xbf"
+    ):
         issues.append("Russian stalemate localisation must retain the UTF-8 BOM")
 
     return issues

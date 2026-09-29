@@ -1,4 +1,5 @@
 """Native landmark placement and regional reward contracts."""
+
 import csv
 import re
 import unittest
@@ -18,7 +19,11 @@ class KefreytLandmarkTests(unittest.TestCase):
         self.assertIn("state_production_speed_buildings_factor = 0.05", block)
         self.assertIn("state_resources_factor = 0.05", block)
         self.assertNotIn("country_modifiers", block)
-        states = [p for p in (ROOT / "history/states").glob("*.txt") if KEY in p.read_text(encoding="utf-8-sig")]
+        states = [
+            p
+            for p in (ROOT / "history/states").glob("*.txt")
+            if KEY in p.read_text(encoding="utf-8-sig")
+        ]
         self.assertEqual([p.name for p in states], ["48-Depoitodron.txt"])
         self.assertRegex(states[0].read_text(), KEY + r"\s*=\s*1\b")
 
@@ -28,13 +33,22 @@ class KefreytLandmarkTests(unittest.TestCase):
         self.assertIn("always_visible = yes", block)
         x, y, z = map(float, re.search(r"position\s*=\s*\{([^}]+)", block)[1].split())
         with (ROOT / "map/definition.csv").open() as stream:
-            colors = {tuple(map(int, row[1:4])) for row in csv.reader(stream, delimiter=";")
-                      if row and row[0] in {"16514", "16515", "16519", "16521", "16530", "16535"}}
-        with Image.open(ROOT / "map/provinces.bmp") as provinces, Image.open(ROOT / "map/heightmap.bmp") as heights:
+            colors = {
+                tuple(map(int, row[1:4]))
+                for row in csv.reader(stream, delimiter=";")
+                if row
+                and row[0] in {"16514", "16515", "16519", "16521", "16530", "16535"}
+            }
+        with (
+            Image.open(ROOT / "map/provinces.bmp") as provinces,
+            Image.open(ROOT / "map/heightmap.bmp") as heights,
+        ):
             # 32 x 22 mesh footprint at scale 0.20; foundation extends 0.4 below ground.
             for px in range(int(x - 3.2), int(x + 3.2) + 1):
                 for pz in range(int(z - 2.2), int(z + 2.2) + 1):
-                    self.assertIn(provinces.getpixel((px, provinces.height - 1 - pz)), colors)
+                    self.assertIn(
+                        provinces.getpixel((px, provinces.height - 1 - pz)), colors
+                    )
                     terrain = heights.getpixel((px, heights.height - 1 - pz)) / 10
                     self.assertLessEqual(y - 0.4, terrain)
                     self.assertGreaterEqual(y + 0.08, terrain)
@@ -46,8 +60,14 @@ class KefreytLandmarkTests(unittest.TestCase):
             if language == "russian":
                 self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
             for suffix in ("", "_plural", "_desc"):
-                line = next((line for line in raw.decode("utf-8-sig").splitlines()
-                             if line.startswith(" " + KEY + suffix + ":")), "")
+                line = next(
+                    (
+                        line
+                        for line in raw.decode("utf-8-sig").splitlines()
+                        if line.startswith(" " + KEY + suffix + ":")
+                    ),
+                    "",
+                )
                 self.assertRegex(line, r'^ ' + KEY + suffix + r':(?:0)? "[^\n]+"$')
         gfx = (ROOT / "gfx/entities/mapitems_custom.gfx").read_text()
         self.assertIn('name = "' + KEY + '_mesh"', gfx)

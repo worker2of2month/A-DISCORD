@@ -43,11 +43,16 @@ def named_value(source: str, key: str) -> str | None:
 def validate() -> list[str]:
     issues: list[str] = []
     tag_file = ROOT / "common" / "country_tags" / "06_ADISCORD_nodrul_mandate_tags.txt"
-    if not tag_file.exists() or 'AIN = "countries/AIN.txt"' not in tag_file.read_text(encoding="utf-8-sig"):
+    if not tag_file.exists() or 'AIN = "countries/AIN.txt"' not in tag_file.read_text(
+        encoding="utf-8-sig"
+    ):
         issues.append("AIN country tag is not registered")
 
     country_definition = ROOT / "common" / "countries" / "AIN.txt"
-    if not country_definition.exists() or "color = rgb" not in country_definition.read_text(encoding="utf-8-sig"):
+    if (
+        not country_definition.exists()
+        or "color = rgb" not in country_definition.read_text(encoding="utf-8-sig")
+    ):
         issues.append("AIN common country definition is missing its colour")
 
     country_history = ROOT / "history" / "countries" / "AIN - Ainholm Mandate.txt"
@@ -55,11 +60,18 @@ def validate() -> list[str]:
         issues.append("AIN country history is missing")
     else:
         source = country_history.read_text(encoding="utf-8-sig")
-        for token in ("capital = 118", 'oob = "AIN"', "recruit_character = AIN_Elias_Marven", "AIN_concession_economy"):
+        for token in (
+            "capital = 118",
+            'oob = "AIN"',
+            "recruit_character = AIN_Elias_Marven",
+            "AIN_concession_economy",
+        ):
             if token not in source:
                 issues.append(f"AIN history lacks {token}")
 
-    nod_history = (ROOT / "history" / "countries" / "NOD - Nodral.txt").read_text(encoding="utf-8-sig")
+    nod_history = (ROOT / "history" / "countries" / "NOD - Nodral.txt").read_text(
+        encoding="utf-8-sig"
+    )
     if "add_to_faction = AIN" not in nod_history:
         issues.append("NOD does not add AIN to its faction")
     autonomy_block = re.search(
@@ -73,14 +85,20 @@ def validate() -> list[str]:
     for state_id, profile in STATE_PROFILES.items():
         source = state_path(state_id).read_text(encoding="utf-8-sig")
         province_block = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source, re.DOTALL)
-        actual_provinces = tuple(int(value) for value in re.findall(r"\d+", province_block.group(1))) if province_block else ()
+        actual_provinces = (
+            tuple(int(value) for value in re.findall(r"\d+", province_block.group(1)))
+            if province_block
+            else ()
+        )
         if set(actual_provinces) != set(profile["provinces"]):
             issues.append(f"state {state_id} province allocation drifted")
         if named_value(source, "owner") != profile["owner"]:
             issues.append(f"state {state_id} owner drifted from {profile['owner']}")
         if f"add_core_of = {profile['core']}" not in source:
             issues.append(f"state {state_id} lacks core {profile['core']}")
-        actual_claims = set(re.findall(r"(?m)^\s*add_claim_by\s*=\s*([A-Z0-9]{3})\s*$", source))
+        actual_claims = set(
+            re.findall(r"(?m)^\s*add_claim_by\s*=\s*([A-Z0-9]{3})\s*$", source)
+        )
         if actual_claims != set(profile["claims"]):
             issues.append(f"state {state_id} claims drifted: {sorted(actual_claims)}")
         if named_value(source, "manpower") != str(profile["population"]):
@@ -88,14 +106,20 @@ def validate() -> list[str]:
         if named_value(source, "state_category") != profile["category"]:
             issues.append(f"state {state_id} category drifted")
         for building, level in profile["buildings"].items():
-            if not re.search(rf"(?m)^\s*{re.escape(building)}\s*=\s*{level}\s*$", source):
+            if not re.search(
+                rf"(?m)^\s*{re.escape(building)}\s*=\s*{level}\s*$", source
+            ):
                 issues.append(f"state {state_id} lacks {building}={level}")
         for resource, value in profile["resources"].items():
-            if not re.search(rf"(?m)^\s*{re.escape(resource)}\s*=\s*{value}\s*$", source):
+            if not re.search(
+                rf"(?m)^\s*{re.escape(resource)}\s*=\s*{value}\s*$", source
+            ):
                 issues.append(f"state {state_id} lacks {resource}={value}")
         for province_id, value in profile["victory_points"]:
             if f"victory_points = {{ {province_id} {value} }}" not in source:
-                issues.append(f"state {state_id} lacks victory point {province_id}={value}")
+                issues.append(
+                    f"state {state_id} lacks victory point {province_id}={value}"
+                )
 
     if not UNIT_PATH.exists():
         issues.append("AIN OOB is missing")
@@ -104,14 +128,25 @@ def validate() -> list[str]:
         if len(re.findall(r"(?m)^\s*division\s*=\s*\{", oob)) != 2:
             issues.append("AIN must start with exactly two guard divisions")
 
-    custom_autonomy = ROOT / "common" / "autonomous_states" / "ADISCORD_nodrul_licensed_mandate.txt"
+    custom_autonomy = (
+        ROOT / "common" / "autonomous_states" / "ADISCORD_nodrul_licensed_mandate.txt"
+    )
     if custom_autonomy.exists():
         issues.append("obsolete custom AIN autonomy still exists")
 
     required_content = {
-        ROOT / "common" / "characters" / "ADISCORD_ainholm_characters.txt": "AIN_Elias_Marven",
-        ROOT / "common" / "country_leader" / "ADISCORD_ainholm_traits.txt": "AIN_concessionary_director",
-        ROOT / "common" / "ideas" / "ADISCORD_ainholm_ideas.txt": "AIN_concession_economy",
+        ROOT
+        / "common"
+        / "characters"
+        / "ADISCORD_ainholm_characters.txt": "AIN_Elias_Marven",
+        ROOT
+        / "common"
+        / "country_leader"
+        / "ADISCORD_ainholm_traits.txt": "AIN_concessionary_director",
+        ROOT
+        / "common"
+        / "ideas"
+        / "ADISCORD_ainholm_ideas.txt": "AIN_concession_economy",
     }
     for path, token in required_content.items():
         if not path.exists() or token not in path.read_text(encoding="utf-8-sig"):
@@ -121,28 +156,43 @@ def validate() -> list[str]:
     if not portrait.is_file():
         issues.append("AIN Elias Marven portrait is missing")
     if (ROOT / "gfx" / "leaders" / "portrait.png").exists():
-        issues.append("AIN portrait must be renamed, not left as gfx/leaders/portrait.png")
+        issues.append(
+            "AIN portrait must be renamed, not left as gfx/leaders/portrait.png"
+        )
 
-    portrait_gfx = (ROOT / "interface" / "ADISCORD_leader_portraits.gfx").read_text(encoding="utf-8-sig")
+    portrait_gfx = (ROOT / "interface" / "ADISCORD_leader_portraits.gfx").read_text(
+        encoding="utf-8-sig"
+    )
     if 'name = "GFX_portrait_AIN_Elias_Marven"' not in portrait_gfx:
         issues.append("GFX_portrait_AIN_Elias_Marven sprite is missing")
-    if 'texturefile = "gfx/leaders/AIN/portrait_AIN_Elias_Marven.png"' not in portrait_gfx:
+    if (
+        'texturefile = "gfx/leaders/AIN/portrait_AIN_Elias_Marven.png"'
+        not in portrait_gfx
+    ):
         issues.append("AIN Elias Marven sprite points at the wrong texture")
 
-    character_source = (ROOT / "common" / "characters" / "ADISCORD_ainholm_characters.txt").read_text(encoding="utf-8-sig")
+    character_source = (
+        ROOT / "common" / "characters" / "ADISCORD_ainholm_characters.txt"
+    ).read_text(encoding="utf-8-sig")
     if "large = GFX_portrait_AIN_Elias_Marven" not in character_source:
         issues.append("AIN Elias Marven does not use the dedicated portrait")
 
     for localisation_path, expected_entries in AIN_LOCALISATION.items():
         if not localisation_path.exists():
-            issues.append(f"shared AIN localisation is missing: {localisation_path.relative_to(ROOT)}")
+            issues.append(
+                f"shared AIN localisation is missing: {localisation_path.relative_to(ROOT)}"
+            )
             continue
         raw = localisation_path.read_bytes()
         source = raw.decode("utf-8-sig")
         if not raw.startswith(b"\xef\xbb\xbf"):
-            issues.append(f"shared AIN localisation lost its UTF-8 BOM: {localisation_path.relative_to(ROOT)}")
+            issues.append(
+                f"shared AIN localisation lost its UTF-8 BOM: {localisation_path.relative_to(ROOT)}"
+            )
         for key, value in expected_entries.items():
-            if not re.search(rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', source):
+            if not re.search(
+                rf'(?m)^\s*{re.escape(key)}:\s*"{re.escape(value)}"\s*$', source
+            ):
                 issues.append(f"AIN localisation lacks synchronized key {key}")
 
     if not VP_LOCALISATION_PATH.exists():
@@ -151,8 +201,14 @@ def validate() -> list[str]:
         raw = VP_LOCALISATION_PATH.read_bytes()
         source = raw.decode("utf-8-sig")
         if not raw.startswith(b"\xef\xbb\xbf"):
-            issues.append("shared Russian victory-point localisation lost its UTF-8 BOM")
-        for key in ("VICTORY_POINTS_147:", "VICTORY_POINTS_16348:", "VICTORY_POINTS_16314:"):
+            issues.append(
+                "shared Russian victory-point localisation lost its UTF-8 BOM"
+            )
+        for key in (
+            "VICTORY_POINTS_147:",
+            "VICTORY_POINTS_16348:",
+            "VICTORY_POINTS_16314:",
+        ):
             if key not in source:
                 issues.append(f"AIN victory-point localisation lacks {key[:-1]}")
 
@@ -167,12 +223,18 @@ def validate() -> list[str]:
             continue
         with Image.open(flag) as image:
             if image.size != expected_size:
-                issues.append(f"AIN flag at {flag.relative_to(ROOT)} has size {image.size}")
+                issues.append(
+                    f"AIN flag at {flag.relative_to(ROOT)} has size {image.size}"
+                )
             if image.mode != "RGBA":
-                issues.append(f"AIN flag at {flag.relative_to(ROOT)} is not 32-bit RGBA")
+                issues.append(
+                    f"AIN flag at {flag.relative_to(ROOT)} is not 32-bit RGBA"
+                )
 
     if set(STATE_PROFILES) & set(range(474, 551)):
-        issues.append("Ainholm mandate entered the protected western-continent state range")
+        issues.append(
+            "Ainholm mandate entered the protected western-continent state range"
+        )
     return issues
 
 
@@ -183,7 +245,9 @@ def main() -> int:
         for issue in issues:
             print(f"- {issue}")
         return 1
-    print("Ainholm colony validation passed: states 118-119, state 120 to ARS, TFF claims both AIN states.")
+    print(
+        "Ainholm colony validation passed: states 118-119, state 120 to ARS, TFF claims both AIN states."
+    )
     return 0
 
 

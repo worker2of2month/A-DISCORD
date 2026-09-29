@@ -42,8 +42,7 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
         technical_names = [
             (template.path, template.line, template.name) for template in templates
         ] + [
-            (reference.path, reference.line, reference.name)
-            for reference in references
+            (reference.path, reference.line, reference.name) for reference in references
         ]
 
         self.assertEqual(parse_issues, [])
@@ -61,18 +60,26 @@ class RepositoryDivisionTemplateAsciiTests(unittest.TestCase):
         observed: dict[str, set[str]] = {}
         for path in sorted((root / "history" / "units").glob("*.txt")):
             for entry in parse_clausewitz(path.read_text(encoding="utf-8")):
-                if entry.key != "division_template" or not isinstance(entry.value, list):
+                if entry.key != "division_template" or not isinstance(
+                    entry.value, list
+                ):
                     continue
                 name = next(
                     (child.value for child in entry.value if child.key == "name"),
                     None,
                 )
                 counter = next(
-                    (child.value for child in entry.value if child.key == "template_counter"),
+                    (
+                        child.value
+                        for child in entry.value
+                        if child.key == "template_counter"
+                    ),
                     None,
                 )
                 self.assertIsInstance(name, str, path)
-                self.assertEqual(counter, str(starting_template_counter(name)), f"{path}: {name}")
+                self.assertEqual(
+                    counter, str(starting_template_counter(name)), f"{path}: {name}"
+                )
                 observed.setdefault(name, set()).add(counter)
         self.assertGreaterEqual(len(observed), 40)
         self.assertTrue(all(len(values) == 1 for values in observed.values()))
@@ -258,13 +265,17 @@ ADISCORD_grant_starting_technology_profile = {
     def _issues(self) -> list[str]:
         return validate(self.root, self.audit_path)
 
-    def test_semantic_parser_computes_full_cost_and_starting_technology_org(self) -> None:
+    def test_semantic_parser_computes_full_cost_and_starting_technology_org(
+        self,
+    ) -> None:
         issues = self._issues()
         non_ascii = [issue for issue in issues if "non-ASCII" in issue]
         self.assertEqual(len(non_ascii), 2, issues)
         self.assertFalse(any("computed" in issue for issue in issues), issues)
         self.assertFalse(any("coverage" in issue for issue in issues), issues)
-        self.assertFalse(any("Unrelated display name" in issue for issue in issues), issues)
+        self.assertFalse(
+            any("Unrelated display name" in issue for issue in issues), issues
+        )
 
     def test_missing_template_row_is_a_coverage_failure(self) -> None:
         audit = self._valid_audit()
@@ -275,7 +286,9 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
-    def test_regimental_support_is_included_in_slots_cost_and_organization(self) -> None:
+    def test_regimental_support_is_included_in_slots_cost_and_organization(
+        self,
+    ) -> None:
         path = self.root / "history/units/AAA.txt"
         text = path.read_text(encoding="utf-8").replace(
             "    division_names_group",
@@ -283,22 +296,30 @@ ADISCORD_grant_starting_technology_profile = {
         )
         path.write_text(text, encoding="utf-8")
         issues = self._issues()
-        self.assertTrue(any("computed regimental_support" in issue for issue in issues), issues)
+        self.assertTrue(
+            any("computed regimental_support" in issue for issue in issues), issues
+        )
         self.assertTrue(any("computed manpower" in issue for issue in issues), issues)
         self.assertTrue(any("computed equipment" in issue for issue in issues), issues)
         audit = self._valid_audit()
         row = audit["templates"][0]
         row["regimental_support"] = [{"type": "engineer", "x": 0, "y": 0}]
-        row["computed"].update({
-            "organization": 32.0,
-            "manpower": 1600.0,
-            "equipment": {"infantry_equipment": 100.0, "support_equipment": 60.0},
-            "supply": 0.1,
-        })
+        row["computed"].update(
+            {
+                "organization": 32.0,
+                "manpower": 1600.0,
+                "equipment": {"infantry_equipment": 100.0, "support_equipment": 60.0},
+                "supply": 0.1,
+            }
+        )
         self._write_audit(audit)
-        self.assertFalse(any("computed" in issue for issue in self._issues()), self._issues())
+        self.assertFalse(
+            any("computed" in issue for issue in self._issues()), self._issues()
+        )
 
-    def test_identical_script_source_alias_reuses_canonical_template_metadata(self) -> None:
+    def test_identical_script_source_alias_reuses_canonical_template_metadata(
+        self,
+    ) -> None:
         self._write(
             "common/scripted_effects/ADISCORD_template_alias.txt",
             '''ADISCORD_ensure_audit_line = {
@@ -485,7 +506,10 @@ ADISCORD_grant_starting_technology_profile = {
             encoding="utf-8",
         )
         self.assertTrue(
-            any("missing equipment archetype support_equipment" in issue for issue in self._issues()),
+            any(
+                "missing equipment archetype support_equipment" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
@@ -494,7 +518,10 @@ ADISCORD_grant_starting_technology_profile = {
         audit["role_floors"]["line"] = 40.0
         self._write_audit(audit)
         self.assertTrue(
-            any("organization 38" in issue and "floor 40" in issue for issue in self._issues()),
+            any(
+                "organization 38" in issue and "floor 40" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
@@ -504,7 +531,10 @@ ADISCORD_grant_starting_technology_profile = {
             "on_actions = { on_startup = { effect = { } } }\n",
         )
         self.assertTrue(
-            any("starting technology profile is not routed" in issue for issue in self._issues()),
+            any(
+                "starting technology profile is not routed" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
@@ -519,7 +549,9 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
-    def test_owner_specific_starting_organization_modifier_is_not_silently_ignored(self) -> None:
+    def test_owner_specific_starting_organization_modifier_is_not_silently_ignored(
+        self,
+    ) -> None:
         self._write(
             "common/technologies/ADISCORD_test_tech.txt",
             '''technologies = {
@@ -532,7 +564,10 @@ ADISCORD_grant_starting_technology_profile = {
 }
 ''',
         )
-        effects = self.root / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"
+        effects = (
+            self.root
+            / "common/scripted_effects/ADISCORD_technology_baseline_effects.txt"
+        )
         effects.write_text(
             effects.read_text(encoding="utf-8").replace(
                 "ADISCORD_tech_starting_org = 1 popup = no }\n}\nADISCORD_grant_2150",
@@ -541,7 +576,10 @@ ADISCORD_grant_starting_technology_profile = {
             encoding="utf-8",
         )
         self.assertTrue(
-            any("owner-specific starting organization modifier" in issue for issue in self._issues()),
+            any(
+                "owner-specific starting organization modifier" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
@@ -583,7 +621,9 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
-    def test_profile_granted_technology_without_definition_is_a_hard_issue(self) -> None:
+    def test_profile_granted_technology_without_definition_is_a_hard_issue(
+        self,
+    ) -> None:
         self._write(
             "common/scripted_effects/ADISCORD_technology_baseline_effects.txt",
             '''ADISCORD_grant_technology_profile_common = {
@@ -624,7 +664,9 @@ ADISCORD_grant_starting_technology_profile = {
             self._issues(),
         )
 
-    def test_divergent_duplicate_name_fails_across_oobs_with_the_same_owner(self) -> None:
+    def test_divergent_duplicate_name_fails_across_oobs_with_the_same_owner(
+        self,
+    ) -> None:
         self._write(
             "history/units/AAA.txt",
             '''division_template = {
@@ -682,11 +724,16 @@ units = {
         self._write_audit(audit)
 
         self.assertTrue(
-            any("divergent duplicate" in issue and "owner AAA" in issue for issue in self._issues()),
+            any(
+                "divergent duplicate" in issue and "owner AAA" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
-    def test_optional_source_requires_exact_registry_owner_and_audits_when_present(self) -> None:
+    def test_optional_source_requires_exact_registry_owner_and_audits_when_present(
+        self,
+    ) -> None:
         audit = self._valid_audit()
         audit["optional_sources"] = [
             {
@@ -696,7 +743,10 @@ units = {
         ]
         self._write_audit(audit)
         issues = self._issues()
-        self.assertTrue(any("optional source" in issue and "registry" in issue for issue in issues), issues)
+        self.assertTrue(
+            any("optional source" in issue and "registry" in issue for issue in issues),
+            issues,
+        )
 
         self._write(
             "tools/data/generated_output_owners.json",
@@ -713,7 +763,9 @@ units = {
                 }
             ),
         )
-        self.assertFalse(any("optional source" in issue for issue in self._issues()), self._issues())
+        self.assertFalse(
+            any("optional source" in issue for issue in self._issues()), self._issues()
+        )
 
         self._write(
             "history/countries/BBB - Optional.txt",
@@ -724,11 +776,16 @@ units = {
             'division_template = { name = "BBB Line" regiments = { infantry = { x = 0 y = 0 } } }\n',
         )
         self.assertTrue(
-            any("template coverage" in issue and "BBB" in issue for issue in self._issues()),
+            any(
+                "template coverage" in issue and "BBB" in issue
+                for issue in self._issues()
+            ),
             self._issues(),
         )
 
-    def test_absent_optional_oob_still_requires_exact_row_source_provenance(self) -> None:
+    def test_absent_optional_oob_still_requires_exact_row_source_provenance(
+        self,
+    ) -> None:
         self._write(
             "tools/data/generated_output_owners.json",
             json.dumps(
@@ -767,15 +824,23 @@ units = {
 
         issues = self._issues()
         self.assertTrue(
-            any("optional template row" in issue and "source kind" in issue for issue in issues),
+            any(
+                "optional template row" in issue and "source kind" in issue
+                for issue in issues
+            ),
             issues,
         )
         self.assertTrue(
-            any("optional template row" in issue and "source owner" in issue for issue in issues),
+            any(
+                "optional template row" in issue and "source owner" in issue
+                for issue in issues
+            ),
             issues,
         )
 
-    def test_template_source_kind_must_be_known_and_match_the_actual_definition(self) -> None:
+    def test_template_source_kind_must_be_known_and_match_the_actual_definition(
+        self,
+    ) -> None:
         for source_kind in ("unknown", "script"):
             with self.subTest(source_kind=source_kind):
                 audit = self._valid_audit()

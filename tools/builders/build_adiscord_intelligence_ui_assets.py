@@ -40,8 +40,7 @@ BASE_GAME = Path(r"Z:\SteamLibrary\steamapps\common\Hearts of Iron IV")
 BASE_INTERFACE = BASE_GAME / "interface"
 METAL_SOURCE = ROOT / "gfx/interface/production/source/production_surface_source.png"
 HEADER_SOURCE = (
-    ROOT
-    / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
+    ROOT / "gfx/interface/intelligence/source/ADISCORD_intelligence_header_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/intelligence/ui"
 PREVIEW = ROOT / "gfx/interface/intelligence/preview/ADISCORD_intelligence_preview.png"
@@ -60,9 +59,17 @@ INTELLIGENCE_CONTRACTS = (
         "GFX_empty_agency_slot_glow",
         "GFX_ADISCORD_intelligence_creation_glow",
         "ADISCORD_intelligence_creation_glow.dds",
-        "frameAnimatedSpriteType", (950, 78), frames=2,
-        effect_file="gfx/FX/buttonstate_blendframes.lua", always_transparent=True,
-        extra_lines=("animation_rate_fps = 1", "looping = yes", "play_on_show = yes", "pause_on_loop = 0.0"),
+        "frameAnimatedSpriteType",
+        (950, 78),
+        frames=2,
+        effect_file="gfx/FX/buttonstate_blendframes.lua",
+        always_transparent=True,
+        extra_lines=(
+            "animation_rate_fps = 1",
+            "looping = yes",
+            "play_on_show = yes",
+            "pause_on_loop = 0.0",
+        ),
     ),
     SpriteContract(
         "GFX_tiled_window_insigna",
@@ -469,13 +476,21 @@ def render_gui_files() -> dict[Path, bytes]:
         for old, (new, expected) in replacements.items():
             text = replace_counted(text, old, new, expected)
         if name == "countryintelligenceagencyview.gui":
-            text = replace_gui_block(text, "containerWindowType", "operatives_before_agency", (
-                (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
-                (r'maxWidth\s*=\s*240', 'maxWidth = 225'),
-            ))
-            text = replace_gui_block(text, "instantTextboxType", "operation_name_text", (
-                (r'maxWidth\s*=\s*340', 'maxWidth = 245'),
-            ))
+            text = replace_gui_block(
+                text,
+                "containerWindowType",
+                "operatives_before_agency",
+                (
+                    (r'font\s*=\s*"hoi_18mbs"', 'font = "hoi_16mbs"'),
+                    (r'maxWidth\s*=\s*240', 'maxWidth = 225'),
+                ),
+            )
+            text = replace_gui_block(
+                text,
+                "instantTextboxType",
+                "operation_name_text",
+                ((r'maxWidth\s*=\s*340', 'maxWidth = 245'),),
+            )
             for container_name, old, new in HEADER_REPLACEMENTS:
                 text = _replace_named_block_value(
                     text,
@@ -491,9 +506,12 @@ def render_gui_files() -> dict[Path, bytes]:
                     old_font,
                     new_font,
                 )
-            for container_name, textbox_name, old_font, new_font in (
-                DARK_SURFACE_FONT_REPLACEMENTS
-            ):
+            for (
+                container_name,
+                textbox_name,
+                old_font,
+                new_font,
+            ) in DARK_SURFACE_FONT_REPLACEMENTS:
                 text = _replace_named_container_font(
                     text,
                     container_name,
@@ -561,7 +579,11 @@ def _branches_header(metal: Image.Image) -> Image.Image:
     route = ((260, 79), (304, 55), (346, 66), (389, 38), (433, 48), (480, 22))
     draw.line(route, fill=(98, 137, 166, 112), width=2)
     for x, y in route:
-        draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=(12, 20, 28, 230), outline=(112, 151, 180, 148))
+        draw.ellipse(
+            (x - 3, y - 3, x + 3, y + 3),
+            fill=(12, 20, 28, 230),
+            outline=(112, 151, 180, 148),
+        )
     for radius, alpha in ((12, 100), (20, 74), (28, 46)):
         draw.arc(
             (451 - radius, 54 - radius, 451 + radius, 54 + radius),
@@ -597,7 +619,11 @@ def _operations_tabs(metal: Image.Image) -> Image.Image:
         edge = palette.accent_light if selected else palette.edge
         draw.line((10, 1, 251, 1, 260, 10), fill=palette.edge_light)
         draw.line((1, 10, 1, 51, 260, 51, 260, 10), fill=edge)
-        draw.line((8, 48, 253, 48), fill=palette.accent if not selected else VIOLET_LIGHT, width=3)
+        draw.line(
+            (8, 48, 253, 48),
+            fill=palette.accent if not selected else VIOLET_LIGHT,
+            width=3,
+        )
         output.alpha_composite(frame, (index * 262, 0))
     return output
 
@@ -641,7 +667,9 @@ def _upgrade_card(metal: Image.Image) -> Image.Image:
     ).convert("RGBA")
     draw = ImageDraw.Draw(output, "RGBA")
     draw.rectangle((1, 1, 97, 78), outline=(71, 87, 92, 255), width=2)
-    draw.rectangle((6, 7, 92, 45), fill=(188, 200, 201, 176), outline=(91, 108, 112, 255))
+    draw.rectangle(
+        (6, 7, 92, 45), fill=(188, 200, 201, 176), outline=(91, 108, 112, 255)
+    )
     draw.line((8, 48, 90, 48), fill=(224, 231, 232, 255))
     draw.line((8, 72, 90, 72), fill=palette.accent, width=2)
     return output
@@ -693,7 +721,9 @@ def _operation_frame(metal: Image.Image, selected: bool) -> Image.Image:
     edge = VIOLET_LIGHT if selected else STEEL_BLUE
     status_band(output, (8, 83, 509, 87), edge)
     if selected:
-        ImageDraw.Draw(output, "RGBA").line((3, 4, 515, 4), fill=palette.accent_light, width=2)
+        ImageDraw.Draw(output, "RGBA").line(
+            (3, 4, 515, 4), fill=palette.accent_light, width=2
+        )
     return output
 
 
@@ -895,7 +925,9 @@ def _remove_legacy_outputs() -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build A-Discord intelligence UI assets.")
+    parser = argparse.ArgumentParser(
+        description="Build A-Discord intelligence UI assets."
+    )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")

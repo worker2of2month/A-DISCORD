@@ -2,13 +2,13 @@ state={
 	id=19
 	name="STATE_19"
 	provinces={
-		4 48 83 108 
+		4 48 83 108
 	}
 	buildings_max_level_factor=1.000
-        manpower=140000
-        state_category = town
+	manpower=140000
+	state_category = town
 
-    history = {
+	history = {
 		owner = YPR
 		add_core_of = YPR
 		buildings = {

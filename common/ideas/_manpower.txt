@@ -1,14 +1,14 @@
 ideas = {
 
-	mobilization_laws = { 
+	mobilization_laws = {
 		law = yes
 
 		disarmed_nation = {
-						
+
 			cost = 150
 			removal_cost = -1
 			level = 7
-			
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -22,18 +22,18 @@ ideas = {
 				stability_factor = 0.05
 				political_power_gain = 0.05
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		volunteer_only = {
-						
+
 			cost = 150
 			removal_cost = -1
 			level = 6
-			
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -45,11 +45,11 @@ ideas = {
 			}
 
 			ai_will_do = {
-   				factor = 1
+				factor = 1
 
-   				modifier = {
+				modifier = {
 					factor = 60 # being disarmed is bad in a wargame yo
-					has_idea = disarmed_nation 
+					has_idea = disarmed_nation
 				}
 			}
 
@@ -59,16 +59,16 @@ ideas = {
 				experience_gain_army_factor = 0.10
 				training_time_factor = -0.05
 			}
-			
+
 			default = yes
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		limited_conscription = {
-					
+
 			cost = 150
 			removal_cost = -1
 			level = 5
@@ -90,7 +90,7 @@ ideas = {
 			}
 
 			ai_will_do = {
-   				factor = 1
+				factor = 1
 				modifier = {
 					#Prio if low on manpower
 					factor = 20
@@ -110,14 +110,14 @@ ideas = {
 					}
 				}
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		extensive_conscription = {
-			
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -132,11 +132,11 @@ ideas = {
 						enemies_strength_ratio > 0.5
 						#any_enemy_country = {
 						#	strength_ratio = {
-						#		tag = ROOT 
+						#		tag = ROOT
 						#		ratio > 0.5
 						#	}
 						#}
-					}					
+					}
 				}
 				has_war_support > 0.2
 			}
@@ -146,7 +146,7 @@ ideas = {
 					factor = 0
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
-   				factor = 1
+				factor = 1
 				modifier = {
 					#Prio if low on manpower
 					factor = 20
@@ -161,11 +161,11 @@ ideas = {
 					}
 				}
 			}
-			
+
 			cost = 150
 			removal_cost = -1
 			level = 4
-			
+
 			modifier = {
 				conscription = 0.05
 				#industrial_capacity_factory = -0.1
@@ -173,15 +173,15 @@ ideas = {
 				training_time_factor = 0.08
 				mobilization_speed = 0.25
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		service_by_requirement = {
-			
-			
+
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -196,7 +196,7 @@ ideas = {
 						enemies_strength_ratio > 0.6
 						#any_enemy_country = {
 						#	strength_ratio = {
-						#		tag = ROOT 
+						#		tag = ROOT
 						#		ratio > 0.6
 						#	}
 						#}
@@ -214,7 +214,7 @@ ideas = {
 					factor = 0
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
-   				factor = 1
+				factor = 1
 				modifier = {
 					#Prio if low on manpower
 					factor = 20
@@ -227,7 +227,7 @@ ideas = {
 				}
 
 			}
-			
+
 			cost = 150
 			removal_cost = -1
 			level = 3
@@ -240,15 +240,15 @@ ideas = {
 				training_time_factor = 0.15
 				mobilization_speed = 0.40
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		all_adults_serve = {
-			
-			
+
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -263,7 +263,7 @@ ideas = {
 				enemies_strength_ratio > 0.75
 				#any_enemy_country = {
 				#	strength_ratio = {
-				#		tag = ROOT 
+				#		tag = ROOT
 				#		ratio > 0.75
 				#	}
 				#}
@@ -275,7 +275,7 @@ ideas = {
 					factor = 0
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
-   				factor = 1
+				factor = 1
 				modifier = {
 					#Prio if low on manpower
 					factor = 20
@@ -287,11 +287,11 @@ ideas = {
 					manpower_per_military_factory >  1000
 				}
 			}
-		
+
 			cost = 150
 			removal_cost = -1
 			level = 2
-			
+
 			modifier = {
 				conscription = 0.2
 				industrial_capacity_factory = -0.25
@@ -301,15 +301,15 @@ ideas = {
 				training_time_factor = 0.25
 				mobilization_speed = 0.60
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 		}
-		
+
 		scraping_the_barrel = {
-			
-			
+
+
 			available = {
 				custom_trigger_tooltip = {
 					tooltip = VAL_contract_service_locked_tt
@@ -324,7 +324,7 @@ ideas = {
 				enemies_strength_ratio > 1
 				#any_enemy_country = {
 				#	strength_ratio = {
-				#		tag = ROOT 
+				#		tag = ROOT
 				#		ratio > 1
 				#	}
 				#}
@@ -336,12 +336,12 @@ ideas = {
 					factor = 0
 					ADISCORD_economy_demobilization_can_proceed = yes
 				}
-   				factor = 1
+				factor = 1
 				modifier = {
 					#Prio if low on manpower
 					factor = 20
 					manpower_per_military_factory <  500
-				}				
+				}
 				modifier = {
 					#Lower chance if has decent amount
 					factor = 0.5
@@ -366,7 +366,7 @@ ideas = {
 				training_time_factor = 0.40
 				mobilization_speed = 0.80
 			}
-			
+
 			cancel_if_invalid = no
 			on_add = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }
 			on_remove = { hidden_effect = { ADISCORD_economy_queue_law_refresh = yes } }

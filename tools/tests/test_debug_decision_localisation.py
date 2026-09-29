@@ -13,7 +13,10 @@ LOCALISATION = re.compile(r'^\s*([A-Za-z0-9_.-]+):(?:\d+)?\s*"([^"]*)"', re.MULT
 class DebugDecisionLocalisationTests(unittest.TestCase):
     def test_every_debug_decision_and_category_has_red_prefix(self) -> None:
         keys: set[str] = set()
-        for directory in (ROOT / "common" / "decisions", ROOT / "common" / "decisions" / "categories"):
+        for directory in (
+            ROOT / "common" / "decisions",
+            ROOT / "common" / "decisions" / "categories",
+        ):
             for path in directory.glob("*.txt"):
                 keys.update(DEBUG_BLOCK.findall(path.read_text(encoding="utf-8-sig")))
 

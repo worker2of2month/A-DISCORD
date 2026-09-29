@@ -2,7 +2,7 @@ state={
 	id=14
 	name="STATE_14"
 	provinces={
-		2 75 5421 8540 16359 16373 16381 
+		2 75 5421 8540 16359 16373 16381
 	}
 	manpower=220000
 	buildings_max_level_factor=1.000
@@ -20,7 +20,7 @@ state={
 			arms_factory = 2
 
 			75 = {
-			bunker = 2
+				bunker = 2
 			}
 		}
 		victory_points = { 75 5 }

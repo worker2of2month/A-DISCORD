@@ -73,13 +73,18 @@ class WrkIdeologyContractTests(unittest.TestCase):
                 )
                 self.assertIsNotNone(block)
                 self.assertEqual(block.group(1), "corneredTileSpriteType")
-                self.assertRegex(block.group(0), rf"(?s)size\s*=\s*\{{\s*x\s*=\s*{size}\s+y\s*=\s*{size}\s*\}}")
+                self.assertRegex(
+                    block.group(0),
+                    rf"(?s)size\s*=\s*\{{\s*x\s*=\s*{size}\s+y\s*=\s*{size}\s*\}}",
+                )
         self.assertEqual(
             gfx.count('texturefile = "gfx/interface/ideologies/vorkerism_group.png"'),
             2,
         )
         self.assertEqual(
-            gfx.count('texturefile = "gfx/interface/ideologies/vorkerism_pre_civil_war.png"'),
+            gfx.count(
+                'texturefile = "gfx/interface/ideologies/vorkerism_pre_civil_war.png"'
+            ),
             2,
         )
 
@@ -94,7 +99,9 @@ class WrkIdeologyContractTests(unittest.TestCase):
         self.assertIn("ideology_icon_vorkerism_visible", scripted_gui)
         self.assertIn("ideology_icon_neo_vorkerism_visible", scripted_gui)
         self.assertIn("NOT = { has_country_leader_ideology = vorkerism }", scripted_gui)
-        self.assertIn("NOT = { has_country_leader_ideology = neo_vorkerism }", scripted_gui)
+        self.assertIn(
+            "NOT = { has_country_leader_ideology = neo_vorkerism }", scripted_gui
+        )
         self.assertIn('name = "ideology_icon_vorkerism"', gui)
         self.assertIn('name = "ideology_icon_neo_vorkerism"', gui)
         self.assertIn('spriteType = "GFX_ideology_vorkerism_countryview"', gui)
@@ -111,8 +118,14 @@ class WrkIdeologyContractTests(unittest.TestCase):
         self.assertIn('pdx_tooltip = "neo_vorkerism_desc"', gui)
 
     def test_collapse_promotes_surviving_worker_to_neo_vorkerism(self) -> None:
-        effects = source_section(read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), 'collapse_effects')
-        on_actions = read_country_on_actions("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt", 'vorkerland_collapse')
+        effects = source_section(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            'collapse_effects',
+        )
+        on_actions = read_country_on_actions(
+            "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt",
+            'vorkerland_collapse',
+        )
         claimant_cosmetics = re.search(
             r"(?s)ADISCORD_vorkerland_apply_claimant_cosmetics\s*=\s*\{(.*?)\n\}",
             effects,
@@ -139,8 +152,12 @@ class WrkIdeologyContractTests(unittest.TestCase):
         localisation = read("localisation/russian/parties_l_russian.yml")
         self.assertIn('vorkerism: "Воркеризм"', localisation)
         self.assertIn('neo_vorkerism: "Неоворкеризм"', localisation)
-        pre_description = re.search(r'^\s*vorkerism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
-        neo_description = re.search(r'^\s*neo_vorkerism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
+        pre_description = re.search(
+            r'^\s*vorkerism_desc:\s*"(.+)"$', localisation, re.MULTILINE
+        )
+        neo_description = re.search(
+            r'^\s*neo_vorkerism_desc:\s*"(.+)"$', localisation, re.MULTILINE
+        )
         self.assertIsNotNone(pre_description)
         self.assertIsNotNone(neo_description)
         pre_text = pre_description.group(1).lower()
@@ -206,7 +223,9 @@ class WrkIdeologyContractTests(unittest.TestCase):
 
 class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
     IMPERIAL_ICON = ROOT / "gfx/interface/ideologies/imperial_restorationism_group.png"
-    ACCELERATION_ICON = ROOT / "gfx/interface/ideologies/utilitarian_accelerationism_group.png"
+    ACCELERATION_ICON = (
+        ROOT / "gfx/interface/ideologies/utilitarian_accelerationism_group.png"
+    )
 
     def test_subtypes_are_non_random_under_their_groups(self) -> None:
         ideologies = read("common/ideologies/00_ideologies.txt")
@@ -252,11 +271,15 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
         )
         self.assertIn(
             "ideology = utilitarian_accelerationism",
-            named_block(phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"),
+            named_block(
+                phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"
+            ),
         )
         self.assertIn(
             "ideology = imperial_restorationism",
-            named_block(phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"),
+            named_block(
+                phase_effects, "ADISCORD_vorkerland_repair_claimant_identities"
+            ),
         )
         self.assertIn(
             "ideology = imperial_restorationism",
@@ -296,13 +319,20 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
                 )
                 self.assertIsNotNone(block)
                 self.assertEqual(block.group(1), "corneredTileSpriteType")
-                self.assertRegex(block.group(0), rf"(?s)size\s*=\s*\{{\s*x\s*=\s*{size}\s+y\s*=\s*{size}\s*\}}")
+                self.assertRegex(
+                    block.group(0),
+                    rf"(?s)size\s*=\s*\{{\s*x\s*=\s*{size}\s+y\s*=\s*{size}\s*\}}",
+                )
         self.assertEqual(
-            gfx.count('texturefile = "gfx/interface/ideologies/imperial_restorationism_group.png"'),
+            gfx.count(
+                'texturefile = "gfx/interface/ideologies/imperial_restorationism_group.png"'
+            ),
             2,
         )
         self.assertEqual(
-            gfx.count('texturefile = "gfx/interface/ideologies/utilitarian_accelerationism_group.png"'),
+            gfx.count(
+                'texturefile = "gfx/interface/ideologies/utilitarian_accelerationism_group.png"'
+            ),
             2,
         )
 
@@ -315,7 +345,9 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
                 self.assertIn(f"has_country_leader_ideology = {subtype}", scripted_loc)
                 self.assertIn(f"localization_key = {subtype}", scripted_loc)
                 self.assertIn(f"ideology_icon_{subtype}_visible", scripted_gui)
-                self.assertIn(f"NOT = {{ has_country_leader_ideology = {subtype} }}", scripted_gui)
+                self.assertIn(
+                    f"NOT = {{ has_country_leader_ideology = {subtype} }}", scripted_gui
+                )
                 self.assertIn(f'name = "ideology_icon_{subtype}"', gui)
                 self.assertIn(f'spriteType = "GFX_ideology_{subtype}_countryview"', gui)
                 self.assertIn(f'pdx_tooltip = "{subtype}_desc"', gui)
@@ -328,10 +360,20 @@ class VadlAndBagleyIdeologyContractTests(unittest.TestCase):
 
     def test_russian_localisation_names_the_new_courses(self) -> None:
         localisation = read("localisation/russian/parties_l_russian.yml")
-        self.assertIn('imperial_restorationism: "Имперский реставрационизм"', localisation)
-        self.assertIn('utilitarian_accelerationism: "Утилитарный акселерационизм"', localisation)
-        imperial = re.search(r'^\s*imperial_restorationism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
-        acceleration = re.search(r'^\s*utilitarian_accelerationism_desc:\s*"(.+)"$', localisation, re.MULTILINE)
+        self.assertIn(
+            'imperial_restorationism: "Имперский реставрационизм"', localisation
+        )
+        self.assertIn(
+            'utilitarian_accelerationism: "Утилитарный акселерационизм"', localisation
+        )
+        imperial = re.search(
+            r'^\s*imperial_restorationism_desc:\s*"(.+)"$', localisation, re.MULTILINE
+        )
+        acceleration = re.search(
+            r'^\s*utilitarian_accelerationism_desc:\s*"(.+)"$',
+            localisation,
+            re.MULTILINE,
+        )
         self.assertIsNotNone(imperial)
         self.assertIsNotNone(acceleration)
         self.assertIn("иерархия", imperial.group(1).lower())

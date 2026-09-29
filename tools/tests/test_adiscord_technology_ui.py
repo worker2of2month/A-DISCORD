@@ -14,8 +14,7 @@ GUI = ROOT / "interface/countrytechnologyview.gui"
 GFX = ROOT / "interface/ADISCORD_technology_ui.gfx"
 ASSET_DIR = ROOT / "gfx/interface/technology/ui"
 PREVIEW = (
-    ROOT
-    / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
+    ROOT / "gfx/interface/technology/preview/ADISCORD_technology_overview_preview.png"
 )
 STATE_GFX = ROOT / "interface/zz_ADISCORD_technology_states.gfx"
 EXPECTED_STATES = {
@@ -111,29 +110,53 @@ def named_blocks(text: str, block_type: str, name: str) -> tuple[str, ...]:
 class TechnologyUiContractTests(unittest.TestCase):
     def test_tree_background_repeats_without_edge_seams(self) -> None:
         image = builder._tree_stripes(builder.load_surface_source(builder.SOURCE))
-        self.assertEqual(image.crop((0, 0, 1, 244)).tobytes(), image.crop((121, 0, 122, 244)).tobytes())
-        self.assertEqual(image.crop((0, 0, 122, 1)).tobytes(), image.crop((0, 243, 122, 244)).tobytes())
+        self.assertEqual(
+            image.crop((0, 0, 1, 244)).tobytes(),
+            image.crop((121, 0, 122, 244)).tobytes(),
+        )
+        self.assertEqual(
+            image.crop((0, 0, 122, 1)).tobytes(),
+            image.crop((0, 243, 122, 244)).tobytes(),
+        )
 
     def test_all_folder_tabs_keep_native_hit_areas_and_have_distinct_art(self) -> None:
         from tools.builders import build_adiscord_technology_system as system
 
         source = builder.load_surface_source(builder.SOURCE)
-        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
-        native = (system.BASE_GAME / "interface/countrytechtreeview.gui").read_text(encoding="utf-8-sig")
+        gui = (ROOT / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
+        native = (system.BASE_GAME / "interface/countrytechtreeview.gui").read_text(
+            encoding="utf-8-sig"
+        )
         native_tabs = named_blocks(native, "containerWindowType", "folder_tabs")[0]
         actual_tabs = named_blocks(gui, "containerWindowType", "folder_tabs")[0]
         artwork = []
-        for contract, (key, _, count) in zip(builder.FOLDER_TAB_CONTRACTS, builder.FOLDER_TABS):
+        for contract, (key, _, count) in zip(
+            builder.FOLDER_TAB_CONTRACTS, builder.FOLDER_TABS
+        ):
             self.assertEqual(contract.total_size, (182, 61))
             self.assertEqual(contract.frames, 2)
             self.assertEqual(actual_tabs.count(f'"{contract.target_name}"'), count)
-            actual_tabs = actual_tabs.replace(f'"{contract.target_name}"', f'"{contract.source_name}"')
+            actual_tabs = actual_tabs.replace(
+                f'"{contract.target_name}"', f'"{contract.source_name}"'
+            )
             image = builder._folder_tab(source, key)
             artwork.append(image.crop((10, 7, 80, 50)).tobytes())
             for offset in (0, 91):
                 pictogram = image.convert("RGB").crop((offset + 10, 7, offset + 80, 50))
-                self.assertGreater(sum(max(rgb) - min(rgb) > 15 for rgb in pictogram.get_flattened_data()), 30, key)
-            self.assertNotEqual(image.crop((0, 0, 91, 61)).tobytes(), image.crop((91, 0, 182, 61)).tobytes())
+                self.assertGreater(
+                    sum(
+                        max(rgb) - min(rgb) > 15
+                        for rgb in pictogram.get_flattened_data()
+                    ),
+                    30,
+                    key,
+                )
+            self.assertNotEqual(
+                image.crop((0, 0, 91, 61)).tobytes(),
+                image.crop((91, 0, 182, 61)).tobytes(),
+            )
         self.assertEqual(len(set(artwork)), 9)
         self.assertEqual(actual_tabs, native_tabs)
 
@@ -153,7 +176,9 @@ class TechnologyUiContractTests(unittest.TestCase):
         text = system.render_folder("infantry_folder")
         blocks = named_blocks(text, "iconType", "ADISCORD_tech_background")
         self.assertEqual(len(blocks), 1)
-        self.assertIn('spriteType = "GFX_ADISCORD_technology_transparent_tile"', blocks[0])
+        self.assertIn(
+            'spriteType = "GFX_ADISCORD_technology_transparent_tile"', blocks[0]
+        )
 
     def test_overview_assets_keep_native_dimensions_frames_and_metadata(self) -> None:
         contracts = {
@@ -178,7 +203,9 @@ class TechnologyUiContractTests(unittest.TestCase):
             contracts["GFX_ADISCORD_technology_bottom"].kind,
             "corneredTileSpriteType",
         )
-        self.assertEqual(contracts["GFX_ADISCORD_technology_info_top"].kind, "spriteType")
+        self.assertEqual(
+            contracts["GFX_ADISCORD_technology_info_top"].kind, "spriteType"
+        )
         self.assertEqual(contracts["GFX_ADISCORD_technology_info"].kind, "spriteType")
         self.assertIsNone(contracts["GFX_ADISCORD_technology_slot"].effect_file)
         self.assertEqual(
@@ -271,12 +298,16 @@ class TechnologyUiContractTests(unittest.TestCase):
         image = Image.open(io.BytesIO(outputs[path])).convert("RGBA")
         first = image.crop((0, 0, 475, 78))
         second = image.crop((475, 0, 950, 78))
-        self.assertEqual(first.getchannel("A").tobytes(), second.getchannel("A").tobytes())
+        self.assertEqual(
+            first.getchannel("A").tobytes(), second.getchannel("A").tobytes()
+        )
         self.assertIsNotNone(
             ImageChops.difference(first.convert("RGB"), second.convert("RGB")).getbbox()
         )
 
-    def test_research_overview_top_contains_visible_system_instrumentation(self) -> None:
+    def test_research_overview_top_contains_visible_system_instrumentation(
+        self,
+    ) -> None:
         outputs = builder.expected_outputs()
         image = Image.open(io.BytesIO(outputs[builder.TOP])).convert("RGB")
 
@@ -305,7 +336,10 @@ class TechnologyUiContractTests(unittest.TestCase):
         )
         self.assertIsNotNone(edge_delta.getbbox())
         self.assertLess(
-            abs(mean_luminance(normal, (12, 8, 246, 31)) - mean_luminance(selected, (12, 8, 246, 31))),
+            abs(
+                mean_luminance(normal, (12, 8, 246, 31))
+                - mean_luminance(selected, (12, 8, 246, 31))
+            ),
             18,
         )
 
@@ -323,7 +357,9 @@ class TechnologyUiContractTests(unittest.TestCase):
                 self.assertGreaterEqual(mean_luminance(image, box), 135.0)
                 self.assertGreaterEqual(black_contrast_ratio(image, box), 5.5)
 
-    def test_detail_writing_regions_keep_textured_cold_steel_dark_hierarchy(self) -> None:
+    def test_detail_writing_regions_keep_textured_cold_steel_dark_hierarchy(
+        self,
+    ) -> None:
         outputs = builder.expected_outputs()
         tree = Image.open(io.BytesIO(outputs[builder.TREE_WINDOW_TILE])).convert("RGBA")
         top = Image.open(io.BytesIO(outputs[builder.INFO_TOP])).convert("RGBA")
@@ -390,7 +426,6 @@ class TechnologyUiContractTests(unittest.TestCase):
             )
             self.assertEqual(len(pattern.findall(gui)), 2, name)
 
-
     def test_tree_skin_is_idempotent_for_generated_and_mixed_input(self) -> None:
         gui = (ROOT / "interface/countrytechtreeview.gui").read_text(encoding="utf-8")
         self.assertEqual(builder.apply_tree_skin(gui), gui)
@@ -424,13 +459,13 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertGreater(STATE_GFX.name.lower(), "countrytechtreeview.gfx")
 
         state_text = STATE_GFX.read_text(encoding="utf-8-sig")
-        declared = re.findall(r'name\s*=\s*"(GFX_technology_[^"]+_item_bg)"', state_text)
+        declared = re.findall(
+            r'name\s*=\s*"(GFX_technology_[^"]+_item_bg)"', state_text
+        )
         self.assertEqual(set(declared), set(EXPECTED_STATES))
         self.assertEqual(len(declared), len(EXPECTED_STATES))
         for engine_state in EXPECTED_STATES:
-            declaration = re.compile(
-                rf'name\s*=\s*"{re.escape(engine_state)}"'
-            )
+            declaration = re.compile(rf'name\s*=\s*"{re.escape(engine_state)}"')
             owners = [
                 path
                 for path in (ROOT / "interface").glob("*.gfx")
@@ -438,7 +473,9 @@ class TechnologyUiContractTests(unittest.TestCase):
             ]
             self.assertEqual(owners, [STATE_GFX], engine_state)
 
-    def test_technology_states_preserve_engine_names_dimensions_and_metadata(self) -> None:
+    def test_technology_states_preserve_engine_names_dimensions_and_metadata(
+        self,
+    ) -> None:
         contracts = {
             item.target_name: item for item in builder.TECHNOLOGY_STATE_CONTRACTS
         }
@@ -467,7 +504,9 @@ class TechnologyUiContractTests(unittest.TestCase):
             ),
         )
 
-    def test_node_states_share_geometry_and_use_only_muted_edge_status_identity(self) -> None:
+    def test_node_states_share_geometry_and_use_only_muted_edge_status_identity(
+        self,
+    ) -> None:
         outputs = builder.expected_outputs()
         filenames = {
             "unavailable": "ADISCORD_technology_node_unavailable.dds",
@@ -513,7 +552,9 @@ class TechnologyUiContractTests(unittest.TestCase):
         self.assertTrue(all(bright_segments))
         self.assertEqual(len(set(bright_segments)), 9)
 
-    def test_obsolete_generic_technology_surfaces_are_unreferenced_and_removed(self) -> None:
+    def test_obsolete_generic_technology_surfaces_are_unreferenced_and_removed(
+        self,
+    ) -> None:
         combined = "\n".join(
             path.read_text(encoding="utf-8-sig")
             for path in (
@@ -558,14 +599,23 @@ class TechnologyUiContractTests(unittest.TestCase):
             restored = restored.replace(f'"{new}"', f'"{old}"')
         # Ignore only the approved leaf properties, retaining every other
         # property and the complete widget hierarchy in the comparison.
-        for name in ("limited_research_bonus_text", "research_speed_text",
-                     "focus_bonuses", "limited_research_bonus_value",
-                     "research_speed_icon", "research_speed_value"):
+        for name in (
+            "limited_research_bonus_text",
+            "research_speed_text",
+            "focus_bonuses",
+            "limited_research_bonus_value",
+            "research_speed_icon",
+            "research_speed_value",
+        ):
             pattern = rf'(name\s*=\s*"{name}"\s*)(.*?)(?=\n\s*\}})'
+
             def without_layout(match):
                 return match[1] + re.sub(
                     r'position\s*=\s*\{[^}}]+\}|font\s*=\s*"[^"]+"|maxWidth\s*=\s*\d+',
-                    "", match[2])
+                    "",
+                    match[2],
+                )
+
             restored = re.sub(pattern, without_layout, restored, flags=re.S)
             normalized = re.sub(pattern, without_layout, normalized, flags=re.S)
         self.assertEqual(restored, normalized)
@@ -634,7 +684,9 @@ class TechnologyUiContractTests(unittest.TestCase):
 
     def test_runtime_dds_directory_contains_only_builder_owned_outputs(self) -> None:
         owned = {
-            path for path in builder.expected_outputs() if path.suffix == ".dds" and path.parent == ASSET_DIR
+            path
+            for path in builder.expected_outputs()
+            if path.suffix == ".dds" and path.parent == ASSET_DIR
         }
         checked_in = set(ASSET_DIR.glob("*.dds"))
         self.assertEqual(checked_in, owned)
