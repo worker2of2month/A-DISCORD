@@ -81,6 +81,56 @@ STS_shabrat_civil_war_army = {
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 }
 
+# Native offensive targets select states; province 145 controls this objective's lifetime.
+STS_shabrat_take_congress = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		STP_cw_fada_battle_active = yes
+		STP = { controls_province = 145 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			state = 28
+			FROM = { tag = STP }
+		}
+		value = 400
+	}
+	ai_strategy = {
+		type = force_concentration_front_factor
+		state_trigger = {
+			state = 28
+			FROM = { tag = STP }
+		}
+		value = 80
+	}
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			state = 28
+			FROM = { tag = STP }
+		}
+		value = 120
+	}
+	ai_strategy = {
+		type = front_control
+		state_trigger = {
+			state = 28
+			FROM = { tag = STP }
+		}
+		ratio = 0.01
+		# Recovery at priority 1700 still stops exhausted formations.
+		priority = 1650
+		ordertype = front
+		execution_type = rush_weak
+		execute_order = yes
+		manual_attack = yes
+	}
+}
+
 # Operational objectives reinforce the relevant part of the live party front.
 STS_shabrat_operation_front = {
 	allowed = { original_tag = STS }

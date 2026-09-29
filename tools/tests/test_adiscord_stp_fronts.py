@@ -195,3 +195,40 @@ class CivilWarVictorFallbackTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ShabratCongressPriorityTests(unittest.TestCase):
+    def test_capital_priority_tracks_the_actual_congress_and_only_live_ai_war(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, matches_conditions, scalar
+        profile = block(entries("common/ai_strategy/ADISCORD_STP_civil_war.txt"), "STS_shabrat_take_congress")
+        self.assertEqual(scalar(profile, "abort_when_not_enabled"), "yes")
+        self.assertEqual(scalar(block(profile, "allowed"), "original_tag"), "STS")
+        guard = block(profile, "enable")
+        facts = {("STS", "is_ai", "yes"): True, ("STS", "has_capitulated", "no"): True,
+                 ("STS", "STP_cw_fada_battle_active", "yes"): True,
+                 ("STP", "controls_province", "145"): True}
+        self.assertTrue(matches_conditions(guard, facts, "STS"))
+        for key in facts:
+            self.assertFalse(matches_conditions(guard, {**facts, key: False}, "STS"), key)
+        self.assertNotIn("has_completed_focus", str(guard))
+        self.assertNotIn("controls_state", str(guard))
+
+    def test_congress_push_uses_local_native_targets_and_yields_to_recovery(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, scalar, matches_conditions
+        profiles = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+        profile = block(profiles, "STS_shabrat_take_congress")
+        strategies = {scalar(e.value, "type"): e.value for e in profile if e.key == "ai_strategy"}
+        self.assertEqual(set(strategies), {"front_unit_request", "front_control", "force_concentration_front_factor", "force_concentration_target_weight"})
+        for strategy in strategies.values():
+            target = block(strategy, "state_trigger")
+            self.assertEqual(scalar(target, "state"), "28")
+            self.assertFalse(matches_conditions(target, {}, "29"))
+            self.assertEqual(scalar(block(target, "FROM"), "tag"), "STP")
+        control = strategies["front_control"]
+        self.assertEqual(scalar(control, "execute_order"), "yes")
+        self.assertEqual(scalar(control, "manual_attack"), "yes")
+        self.assertEqual(scalar(control, "execution_type"), "rush_weak")
+        recovery = block(profiles, "STS_shabrat_recover_party_front")
+        recovery_control = next(e.value for e in recovery if e.key == "ai_strategy" and scalar(e.value, "type") == "front_control")
+        self.assertLess(int(scalar(control, "priority")), int(scalar(recovery_control, "priority")))
+        self.assertGreater(int(scalar(strategies["force_concentration_target_weight"], "value")), 100)
