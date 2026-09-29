@@ -1,5 +1,65 @@
 ideas = {
 	country = {
+		STP_ps_radio_network_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+			}
+		}
+		STP_ps_reserve_hq_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+			}
+		}
+		STP_ps_evacuation_plan_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				army_org_regain = 0.05
+			}
+		}
+		STP_ps_northern_arms_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+		STP_ps_northern_engineers_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.05
+			}
+		}
+		STP_ps_joint_staff_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.04
+				planning_speed = 0.10
+			}
+		}
+		STP_ps_expedition_logistics_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				supply_consumption_factor = -0.10
+			}
+		}
+		STP_ps_asylum_protocol_preparation_delta = {
+			name = STP_cw_military_staff_dynamic
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.10
+				army_org_regain = 0.05
+			}
+		}
+
 		STP_ps_supply_disrupted = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }

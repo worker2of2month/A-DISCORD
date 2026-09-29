@@ -4598,3 +4598,46 @@ class NorthernStatusQuoTests(unittest.TestCase):
                 text = read(f"localisation/{language}/ADISCORD_STP_l_{language}.yml")
                 for ending in ("t", "d", "a"):
                     self.assertIn(event_id + "." + ending + ":", text)
+
+
+class PartyRightPreparationRewardsTests(unittest.TestCase):
+    def test_right_focus_previews_match_persistent_army_rewards(self):
+        tree = ast_block(entries("focus_trees/STP/preparation/focuses.txt"), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        ideas = ast_block(ast_block(entries("common/ideas/ADISCORD_STP_civil_war_ideas.txt"), "ideas"), "country")
+        expected = {
+            "radio_network": {"planning_speed": .10},
+            "reserve_hq": {"army_org_factor": .05},
+            "evacuation_plan": {"army_org_factor": .03, "army_org_regain": .05},
+            "northern_arms": {"army_org_factor": .03},
+            "northern_engineers": {"supply_consumption_factor": -.05},
+            "joint_staff": {"army_org_factor": .04, "planning_speed": .10},
+            "expedition_logistics": {"supply_consumption_factor": -.10},
+            "asylum_protocol": {"planning_speed": .10, "army_org_regain": .05},
+        }
+        for suffix, modifiers in expected.items():
+            delta = "STP_ps_" + suffix + "_preparation_delta"
+            focus = focuses["STP_ps_" + suffix]
+            reward = ast_block(focus, "completion_reward")
+            preview_index = next(i for i, e in enumerate(reward) if e.key == "effect_tooltip" and any(x.key == "add_idea" and x.value == delta for x in walk(e.value)))
+            effect = reward[preview_index + 1]
+            self.assertEqual(effect.key, "hidden_effect")
+            shown = {e.key: float(e.value) for e in ast_block(ast_block(ideas, delta), "modifier")}
+            applied = {scalar(e.value, "var").removeprefix("STP_cw_army_"): float(scalar(e.value, "value")) for e in effect.value if e.key == "add_to_variable"}
+            applied = {({"org_factor": "army_org_factor", "org_regain": "army_org_regain"}.get(k, k)): v for k, v in applied.items()}
+            self.assertEqual(shown, modifiers)
+            self.assertEqual(applied, modifiers)
+            self.assertEqual(scalar(effect.value, "STP_cw_refresh_army_modifier"), "yes")
+            self.assertEqual(scalar(focus, "cancel_if_invalid"), "yes")
+
+    def test_northern_unlocks_are_shorter_and_air_share_is_unchanged(self):
+        tree = ast_block(entries("focus_trees/STP/preparation/focuses.txt"), "focus_tree")
+        focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        for suffix, decision in (("northern_credit", "fund_nod"), ("northern_arms", "arm_nod"), ("northern_engineers", "engineers_nod")):
+            focus = focuses["STP_ps_" + suffix]
+            self.assertEqual(scalar(focus, "cost"), "1")
+            self.assertIn("STP_ps_" + decision, [e.value for e in walk(focus) if e.key == "unlock_decision_tooltip"])
+        air = block(read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"), "STP_cw_start")
+        self.assertIn("air_ratio = 0.8", air)
+        self.assertIn("air_ratio = 1", air)
+        self.assertEqual(scalar(focuses["STP_ps_loyal_aircrews"], "cost"), "3")
