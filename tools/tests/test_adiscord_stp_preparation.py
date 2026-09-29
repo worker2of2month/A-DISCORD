@@ -1391,6 +1391,71 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertFalse(matches_conditions(block(schedule, "limit"), active),
                          "repeated scheduling must not extend a running operation")
 
+    def test_second_opposition_starts_before_elections_and_respects_its_own_timer(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        gate = block(block(block(effects, "STP_cw_schedule_opposition_second"), "if"), "limit")
+        base = {
+            ("STP", "STP_cw_preparation_open", "yes"): True,
+            ("STP", "has_country_flag", "STP_battle_for_stelander_active"): True,
+            ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): True,
+        }
+        for first_done, elections, remaining, active, expected in (
+            (False, False, 0, False, False),
+            (True, False, 0, False, True),
+            (True, False, 0, True, False),
+            (True, True, 56, False, True),
+            (True, True, 55, False, False),
+        ):
+            facts = {
+                **base,
+                ("STP", "has_country_flag", "STP_ps_first_opposition_finished"): first_done,
+                ("STP", "has_active_mission", "STP_cw_election_window"): elections,
+                ("STP", "variable", "days_mission_timeout@STP_cw_election_window"): remaining,
+                ("STP", "has_active_mission", "STP_ps_opposition_preparation_second"): active,
+            }
+            with self.subTest(first_done=first_done, elections=elections, remaining=remaining, active=active):
+                self.assertEqual(matches_conditions(gate, facts), expected)
+
+    def test_finished_second_operation_can_reschedule_while_first_is_running(self):
+        events = entries("events/ADISCORD_STP_events.txt")
+        event = next(e.value for e in events if e.key == "country_event"
+                     and scalar(e.value, "id") == "ADISCORD_STP_preparation.5")
+        for open_phase, party, expected in ((True, True, True), (False, True, False), (True, False, False)):
+            facts = {
+                ("STP", "STP_cw_preparation_open", "yes"): open_phase,
+                ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): party,
+                ("STP", "has_active_mission", "STP_cw_opposition_preparation"): True,
+            }
+            calls = [e.key for _, e in selected_effects(block(event, "immediate"), facts)]
+            self.assertEqual("STP_cw_schedule_opposition" in calls, expected)
+
+    def test_two_unopposed_operations_can_entrench_each_contested_district(self):
+        effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        triggers = entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
+        initial = block(effects, "STP_initialize_battle_for_stelander")
+        # Two 28-day operations leave time for the 21-day administration maturity.
+        # The weakest initial district has 30 resistance / 70 party influence.
+        for operation in ("STP_cw_prepare_opposition", "STP_cw_prepare_opposition_second"):
+            district = block(block(block(effects, operation), "if"), "every_owned_state")
+            growth = next(float(scalar(e.value, "value")) for e in district
+                          if e.key == "set_temp_variable"
+                          and scalar(e.value, "var") == "STP_region_influence_change")
+            for state in ("2", "3", "29", "46", "53"):
+                values = {scalar(e.value, "var"): float(scalar(e.value, "value"))
+                          for e in block(initial, state) if e.key == "set_variable"}
+                resistance = min(100, values["STP_resistance_influence"] + 2 * growth)
+                party = 100 - resistance
+                facts = {
+                    (state, "STP_region_resistance_strongest", "yes"): resistance > party,
+                    (state, "variable", "STP_region_lead"): resistance,
+                    (state, "variable", "STP_region_runner_up"): party,
+                    (state, "variable", "STP_region_margin"): resistance - party,
+                    (state, "variable", "STP_region_status"): 2,
+                }
+                with self.subTest(operation=operation, state=state):
+                    self.assertTrue(matches_conditions(block(triggers, "STP_region_resistance_entrenched"), facts, state),
+                                    "two successful operations must be enough to build a transferable foothold")
+
     def test_opposition_announces_one_target_before_the_timer_and_raid_interrupts_it(self):
         effects = entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         schedule = block(block(effects, "STP_cw_schedule_opposition"), "if")

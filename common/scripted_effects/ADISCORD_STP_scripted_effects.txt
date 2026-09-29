@@ -777,7 +777,7 @@ STP_cw_prepare_opposition = {
 				}
 			}
 			STP = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.04 } }
-			set_temp_variable = { var = STP_region_influence_change value = 12 }
+			set_temp_variable = { var = STP_region_influence_change value = 20 }
 			STP_add_resistance_influence = yes
 			custom_effect_tooltip = STP_cw_loyalty_minus_6_tt
 			hidden_effect = {
@@ -7558,8 +7558,11 @@ STP_cw_schedule_opposition_second = {
 		limit = {
 			tag = STP
 			has_country_flag = STP_ps_first_opposition_finished
-			has_active_mission = STP_cw_election_window
-			check_variable = { var = days_mission_timeout@STP_cw_election_window value = 56 compare = greater_than_or_equals }
+			# Both networks operate before the election; stop opening the second late in the campaign.
+			OR = {
+				NOT = { has_active_mission = STP_cw_election_window }
+				check_variable = { var = days_mission_timeout@STP_cw_election_window value = 56 compare = greater_than_or_equals }
+			}
 			STP_cw_preparation_open = yes
 			has_country_flag = STP_battle_for_stelander_active
 			has_country_flag = STP_sided_with_the_party_flag
@@ -7641,7 +7644,7 @@ STP_cw_prepare_opposition_second = {
 				}
 			}
 			STP = { add_power_balance_value = { id = STP_shabrat_election_legitimacy value = 0.04 } }
-			set_temp_variable = { var = STP_region_influence_change value = 12 }
+			set_temp_variable = { var = STP_region_influence_change value = 20 }
 			STP_add_resistance_influence = yes
 			custom_effect_tooltip = STP_cw_loyalty_minus_6_tt
 			hidden_effect = {

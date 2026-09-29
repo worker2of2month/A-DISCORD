@@ -230,7 +230,8 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		if = {
-			limit = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag NOT = { has_active_mission = STP_cw_opposition_preparation } }
+			limit = { STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
+			# Each scheduler guards its own mission; a running first cycle must not block the second.
 			STP_cw_schedule_opposition = yes
 		}
 	}
