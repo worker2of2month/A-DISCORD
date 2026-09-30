@@ -1399,7 +1399,7 @@
 
 	focus = {
 		id = STP_pc_heg_nod_force
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_destroy_nodrul
 		x = 16
 		y = 13
 		cost = 3

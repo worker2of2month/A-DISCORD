@@ -4441,7 +4441,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pc_heg_nod_force
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_destroy_nodrul
 		x = 16
 		y = 13
 		cost = 3
@@ -5628,7 +5628,7 @@ focus_tree = {
 	}
 	focus = {
 		id = STP_pw_party_northern_campaign
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_destroy_nodrul
 		x = 4
 		y = 26
 		cost = 4

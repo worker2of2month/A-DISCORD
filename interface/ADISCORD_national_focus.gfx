@@ -1467,4 +1467,9 @@ spriteTypes = {
 		name = "GFX_focus_VAL_State_Above_Captains"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_State_Above_Captains.png"
 	}
+
+	spriteType = {
+		name = "GFX_focus_destroy_nodrul"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_destroy_nodrul.png"
+	}
 }
