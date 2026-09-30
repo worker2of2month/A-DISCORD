@@ -6965,10 +6965,18 @@ class StelanderPreparationTests(unittest.TestCase):
         self.assertEqual(scalar(chance, "base"), "10")
         modifiers = [e.value for e in chance if e.key == "modifier"]
         self.assertEqual(
-            scalar(block(modifiers[0], "NOT"), "has_country_flag"),
+            scalar(modifiers[0], "factor"),
+            "10",
+        )
+        self.assertEqual(
+            scalar(modifiers[0], "has_country_flag"),
             "STP_sided_with_Maksim_flag",
         )
-        self.assertEqual(scalar(modifiers[1], "has_global_flag"), "STP_cw_started")
+        self.assertEqual(scalar(modifiers[0], "tag"), "STP")
+        self.assertEqual(
+            scalar(block(modifiers[0], "NOT"), "has_global_flag"),
+            "STP_cw_started",
+        )
         self.assertIn(
             'ADISCORD_stp_shabrat: "3TEETH - Pumped Up Kicks"',
             (

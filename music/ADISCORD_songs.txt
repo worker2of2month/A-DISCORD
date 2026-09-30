@@ -16,8 +16,8 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { tag = VAL }
+			factor = 10
+			tag = VAL
 		}
 	}
 }
@@ -27,12 +27,10 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { has_country_flag = STP_sided_with_Maksim_flag }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_started
+			factor = 10
+			tag = STP
+			has_country_flag = STP_sided_with_Maksim_flag
+			NOT = { has_global_flag = STP_cw_started }
 		}
 	}
 }
@@ -42,12 +40,10 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { has_country_flag = STP_sided_with_the_party_flag }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_started
+			factor = 10
+			tag = STP
+			has_country_flag = STP_sided_with_the_party_flag
+			NOT = { has_global_flag = STP_cw_started }
 		}
 	}
 }
@@ -57,16 +53,12 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { has_global_flag = STP_cw_started }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_union_wars_finished
-		}
-		modifier = {
-			factor = 0
-			NOT = { tag = STP has_country_flag = STP_sided_with_the_party_flag has_war_with = STS }
+			factor = 10
+			tag = STP
+			has_country_flag = STP_sided_with_the_party_flag
+			has_global_flag = STP_cw_started
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			has_war_with = STS
 		}
 	}
 }
@@ -76,36 +68,38 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { has_global_flag = STP_cw_started }
-		}
-		modifier = {
-			factor = 0
-			has_global_flag = STP_cw_union_wars_finished
-		}
-		modifier = {
-			factor = 0
-			NOT = { tag = STS has_country_flag = STP_sided_with_Maksim_flag has_war_with = STP }
+			factor = 10
+			tag = STS
+			has_country_flag = STP_sided_with_Maksim_flag
+			has_global_flag = STP_cw_started
+			NOT = { has_global_flag = STP_cw_union_wars_finished }
+			has_war_with = STP
 		}
 	}
 }
 
-# Played by the opening postwar focus; excluded from random rotation.
+# The opening postwar focus also starts this track immediately.
 music = {
 	song = "ADISCORD_stp_civil_war_end"
 	chance = {
-		modifier = { factor = 0 }
+		base = 10
+		modifier = {
+			factor = 10
+			tag = STS
+			has_country_flag = STP_cw_postwar
+		}
 	}
 }
 
-# Kefreyt's postwar rotation follows the same settlement as its postwar content.
+# Kefreyt's postwar priority follows the same settlement as its postwar content.
 music = {
 	song = "ADISCORD_val_postwar"
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { AND = { tag = VAL has_global_flag = STP_cw_union_wars_finished } }
+			factor = 10
+			tag = VAL
+			has_global_flag = STP_cw_union_wars_finished
 		}
 	}
 }
@@ -115,8 +109,10 @@ music = {
 	chance = {
 		base = 10
 		modifier = {
-			factor = 0
-			NOT = { AND = { tag = STP has_country_flag = STP_cw_postwar has_country_flag = STP_cw_won_union_battle } }
+			factor = 10
+			tag = STP
+			has_country_flag = STP_cw_postwar
+			has_country_flag = STP_cw_won_union_battle
 		}
 	}
 }
@@ -153,5 +149,19 @@ music = {
 
 music = {
 	song = "ADISCORD_vorkerland_theme"
+	chance = {
+		base = 10
+		modifier = {
+			factor = 10
+			OR = {
+				tag = WRK
+				tag = WKR
+			}
+		}
+	}
+}
+
+music = {
+	song = "maintheme"
 	chance = { base = 10 }
 }
