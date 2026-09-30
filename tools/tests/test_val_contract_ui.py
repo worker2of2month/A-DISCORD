@@ -4,6 +4,23 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 
+GUARDED_OFFER_BUTTONS = {
+    "VAL_offer_transit_charter_button",
+    "VAL_partner_arms_button",
+    "VAL_partner_bulk_button",
+    "VAL_offer_order_arms_button",
+    "VAL_offer_order_bulk_button",
+    "VAL_military_offer_1_button",
+    "VAL_military_offer_2_button",
+    "VAL_partner_hire_button",
+    "VAL_partner_arsenal_button",
+    "VAL_partner_strategic_button",
+    "VAL_offer_order_arsenal_button",
+    "VAL_offer_order_strategic_button",
+    "VAL_military_offer_3_button",
+    "VAL_menu_advisors_button",
+}
+
 
 def read(path: str) -> str:
     return (ROOT / path).read_text(encoding="utf-8")
@@ -304,7 +321,7 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import selected_effects, scalar
 
         facts = self.facts(state=1)
-        facts["VAL", "equipment", "infantry_equipment"] = 7500
+        facts["VAL", "equipment", "infantry_equipment"] = 75000
         delivered = {tag: 0 for tag in ("YPR", "COF", "TFF")}
 
         def execute(name, recipient):
@@ -340,8 +357,8 @@ class ValNorthernCoalitionAidTests(unittest.TestCase):
             self.assertEqual(
                 facts["VAL", "variable", "VAL_northern_aid_state"], expected_state
             )
-        self.assertEqual(delivered, {"YPR": 2500, "COF": 2500, "TFF": 2500})
-        self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_rifles"], 7500)
+        self.assertEqual(delivered, {"YPR": 25000, "COF": 25000, "TFF": 25000})
+        self.assertEqual(facts["VAL", "variable", "VAL_northern_aid_rifles"], 75000)
         self.assertEqual(facts["VAL", "equipment", "infantry_equipment"], 0)
 
     def test_paid_legacy_defeat_reopens_only_during_the_live_campaign(self):
@@ -570,7 +587,6 @@ class ValPartnerSettlementTests(unittest.TestCase):
                 {("VAL", "has_capitulated", "no"): False},
                 {("CIN", "has_war_with", "VAL"): True},
                 {("CIN", "has_country_flag", "VAL_partner_offer_" + kind): False},
-                {("VAL", "has_country_flag", "VAL_partner_offer_pending"): False},
                 {("VAL", "has_idea", "VAL_export_income_1"): True},
                 {("VAL", "variable", "STP_ps_val_receipt_contract"): 3},
             ]
@@ -587,7 +603,27 @@ class ValPartnerSettlementTests(unittest.TestCase):
         self.assertFalse(self.matches("VAL_partner_bulk_can_accept", facts, "CIN"))
         facts["VAL", "has_completed_focus", "VAL_Northern_Clearing_House"] = True
         self.execute("VAL_settle_partner_bulk", facts)
-        self.assertTrue(facts["VAL", "has_idea", "VAL_export_income_2"])
+        self.assertEqual(facts["VAL", "variable", "VAL_order_2_state"], 2)
+        self.assertTrue(facts["VAL", "has_country_flag", "VAL_order_2_processing"])
+        self.assertFalse(self.matches("VAL_export_slot_free", facts, "VAL"))
+        settled = dict(facts)
+        self.execute("VAL_settle_partner_bulk", facts)
+        self.assertEqual(facts, settled)
+
+    def test_parallel_sales_keep_the_recipient_offer_valid_without_shared_desk_flag(self):
+        for kind, quantity, price in (
+            ("arms", 25000, 500),
+            ("bulk", 50000, 1000),
+            ("arsenal", 100000, 2250),
+            ("strategic", 200000, 5000),
+        ):
+            with self.subTest(kind=kind):
+                facts = self.facts(kind, quantity, price)
+                facts["VAL", "has_country_flag", "VAL_partner_offer_pending"] = False
+                self.assertTrue(self.matches(f"VAL_partner_{kind}_can_accept", facts, "CIN"))
+                self.execute(f"VAL_settle_partner_{kind}", facts)
+                self.assertEqual(facts["CIN", "equipment", "infantry_equipment"], quantity)
+                self.assertEqual(facts["CIN", "variable", "ADISCORD_economy_treasury"], 0)
 
     def test_all_order_sizes_count_as_nam_concession_aid(self):
         for kind, quantity, price in (
@@ -890,13 +926,17 @@ class TestValContractUi(unittest.TestCase):
         )
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
 
-        for current in ("VAL_contract_management", "VAL_postwar_administration"):
+        for current in (
+            "VAL_contract_management",
+            "VAL_contract_obligations",
+            "VAL_foreign_sales",
+            "VAL_frontier",
+        ):
             self.assertIn(f"{current} = {{", categories)
             self.assertIn(f"{current} = {{", decisions)
 
         for obsolete in (
             "VAL_propaganda_campaigns",
-            "VAL_contract_obligations",
             "VAL_regional_integration",
             "VAL_commonwealth_formation",
         ):
@@ -915,7 +955,7 @@ class TestValContractUi(unittest.TestCase):
         ):
             self.assertIn(f"{decision} = {{", contract)
 
-        postwar = named_block(decisions, "VAL_postwar_administration")
+        postwar = named_block(decisions, "VAL_frontier")
         for decision in ("VAL_nationalise_region", "VAL_proclaim_commonwealth"):
             self.assertIn(f"{decision} = {{", postwar)
         self.assertNotIn("VAL_establish_regional_administration =", postwar)
@@ -932,7 +972,6 @@ class TestValContractUi(unittest.TestCase):
             "VAL_econ_logistics",
             "VAL_econ_computing",
             "VAL_Resource_War_Contracts",
-            "VAL_frontier_return_irem",
         ):
             block = named_block(
                 focuses[focuses.index(f"id = {focus_id}") - 80 :], "focus"
@@ -946,7 +985,13 @@ class TestValContractUi(unittest.TestCase):
         self.assertIn("VAL_change_contract_authority = yes", licences[:1800])
 
         clearing = focuses[focuses.index("id = VAL_Northern_Clearing_House") :]
-        self.assertIn("ADISCORD_economy_receive_15 = yes", clearing[:1200])
+        self.assertIn("VAL_receive_contract_grant_300 = yes", clearing[:1200])
+        grant = named_block(
+            read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+            "VAL_receive_contract_grant_300",
+        )
+        self.assertIn("add_to_variable = { var = ADISCORD_economy_treasury value = 300 }", grant)
+        self.assertIn("ADISCORD_economy_mark_dirty = yes", grant)
 
         advisers = focuses[focuses.index("id = VAL_Contingency_Ledgers") :]
         self.assertIn("add_command_power = 15", advisers[:1200])
@@ -1159,14 +1204,14 @@ class TestValPropagandaRewards(unittest.TestCase):
             self.assertIsNotNone(deadline, language)
             self.assertIsNotNone(subcontract, language)
             if language == "russian":
-                self.assertIn("Сразу после начала квартала", deadline.group(1))
+                self.assertIn("В его начале", deadline.group(1))
                 self.assertIn("сразу", subcontract.group(1).lower())
-                self.assertIn("не ускоряет", deadline.group(1))
+                self.assertIn("не запускает следующий квартал", deadline.group(1))
             else:
-                self.assertIn("As soon as the quarter begins", deadline.group(1))
+                self.assertIn("At its start", deadline.group(1))
                 self.assertIn("Immediately", subcontract.group(1))
                 self.assertIn(
-                    "does not bring the next quarter forward", deadline.group(1)
+                    "does not start the next quarter", deadline.group(1)
                 )
 
     def test_political_campaign_has_a_positive_base_return_and_refreshes_income(
@@ -1397,9 +1442,19 @@ class TestValMergedContractFlows(unittest.TestCase):
             text = read(
                 f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             )
-            self.assertIn("$VAL_trade_corridors_desc$", text)
+            corridors = read(
+                f"localisation/{language}/ADISCORD_VAL_logistics_market_l_{language}.yml"
+            )
+            description = re.search(
+                r'(?m)^\s*VAL_trade_corridors_desc:\d*\s+"([^"\r\n]*)"',
+                corridors,
+            )
+            self.assertIsNotNone(description, language)
+            self.assertIn("[?VAL_trade_corridors_active|0]", description.group(1))
+            self.assertIn("[?VAL_trade_corridors_capacity|0]", description.group(1))
             self.assertIn("VAL_focus_paid_program_authorization_tt", text)
             self.assertNotRegex(text, r"(?m)^(?:<<<<<<<|=======|>>>>>>>)")
+            self.assertNotRegex(corridors, r"(?m)^(?:<<<<<<<|=======|>>>>>>>)")
         focuses = read("common/national_focus/ADISCORD_national_focus_VAL.txt")
         for decision in (
             "ADISCORD_economy_automated_industry",
@@ -1407,11 +1462,10 @@ class TestValMergedContractFlows(unittest.TestCase):
             "ADISCORD_economy_national_computing",
         ):
             self.assertIn(
-                "unlock_decision_tooltip = { decision = "
-                + decision
-                + " show_effect_tooltip = yes }",
+                "unlock_decision_tooltip = " + decision,
                 focuses,
             )
+        self.assertNotIn("show_effect_tooltip = yes", focuses)
 
 
 class TestValReclamationCompletion(unittest.TestCase):
@@ -1710,8 +1764,6 @@ class TestValExpansionRoute(unittest.TestCase):
             "VAL_The_Harvest_Of_Ash",
             "VAL_Stelander_Crisis_Opens",
             "VAL_The_Steel_Contract",
-            "VAL_frontier_conference",
-            "VAL_frontier_security_plan",
         ):
             self.assertLess(float(get(focuses[name], "y")), continuation_y, name)
         for name in (
@@ -1723,6 +1775,11 @@ class TestValExpansionRoute(unittest.TestCase):
         ):
             self.assertGreater(float(get(focuses[name], "y")), continuation_y, name)
 
+        conference_y = float(get(focuses["VAL_frontier_conference"], "y"))
+        security_y = float(get(focuses["VAL_frontier_security_plan"], "y"))
+        self.assertLess(continuation_y, conference_y)
+        self.assertLess(conference_y, security_y)
+
         harvest = focuses["VAL_The_Harvest_Of_Ash"]
         self.assertEqual(
             {
@@ -1731,7 +1788,7 @@ class TestValExpansionRoute(unittest.TestCase):
                 if group.key == "prerequisite"
                 for entry in group.value
             },
-            {"VAL_The_Contract_State"},
+            {"VAL_reclamation_survey"},
         )
 
         frontier = focuses["VAL_frontier_conference"]
@@ -1743,6 +1800,7 @@ class TestValExpansionRoute(unittest.TestCase):
         self.assertEqual(
             groups,
             [
+                {"VAL_Contracts_Outlive_Kings"},
                 {"VAL_One_Ledger_One_Banner"},
                 {"VAL_Trading_Partners", "VAL_October_Of_2160"},
             ],
@@ -2092,7 +2150,13 @@ class TestValProgressionChoices(unittest.TestCase):
 
         frontier_join = named_block(effects, "VAL_frontier_join_existing_war")
         self.assertEqual(
-            frontier_join.count("VAL = { VAL_stelander_dominated = yes }"), 3
+            len(
+                re.findall(
+                    r"VAL\s*=\s*\{\s*VAL_stelander_dominated\s*=\s*yes\s*\}",
+                    frontier_join,
+                )
+            ),
+            3,
         )
 
         guarantor_ai = named_block(triggers, "VAL_ai_frontier_guarantor_preparation")
@@ -2202,7 +2266,7 @@ class TestValProgressionContinuation(unittest.TestCase):
     def test_proclamation_category_is_visible_from_its_unlock(self):
         category = named_block(
             read("common/decisions/categories/ADISCORD_VAL_rework_categories.txt"),
-            "VAL_postwar_administration",
+            "VAL_frontier",
         )
         visible = named_block(category, "visible")
         for focus in ("VAL_frontier_conference", "VAL_Contracts_Outlive_Kings"):
@@ -2458,14 +2522,22 @@ class TestValReclamationCategory(unittest.TestCase):
     def test_projects_stay_in_their_category_with_both_map_and_list_entries(self):
         from tools.tests.test_adiscord_stp_preparation import block, scalar
 
-        self.assertEqual(set(self.decisions), {name for name, _ in self.steps})
+        self.assertEqual(
+            set(self.decisions),
+            {name for name, _ in self.steps}
+            | {
+                "VAL_recovery_road_corps_program",
+                "VAL_recovery_field_medicine_program",
+                "VAL_recovery_workshop_program",
+            },
+        )
         for name, _ in self.steps:
             body = self.decisions[name]
             self.assertEqual(scalar(body, "on_map_mode"), "map_and_decisions_view")
             self.assertEqual(scalar(body, "cost"), "0")
             targets = block(body, "targets")
             self.assertEqual(
-                {e.value for e in targets}, {"24", "42", "48", "54", "55", "56", "57"}
+                {e.value for e in targets}, {"24", "42", "48", "54", "55", "56", "57", "168"}
             )
             self.assertEqual(
                 scalar(body, "days_remove"), "60" if name.endswith("industry") else "90"
@@ -2480,7 +2552,7 @@ class ValAnnualMarketTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import scalar
 
         events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
-        ids = {361, 406, 407, 408, 409, 412, 413, 414, 416, 417, 418, 419}
+        ids = {361, 406, 407, 408, 412, 413, 414, 416, 417, 418}
         seen = set()
 
         def nested(rows):
@@ -2940,7 +3012,7 @@ class ValPartnerVisibilityTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import scalar, block
 
         events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
-        checked = 0
+        checked = set()
         for e in events:
             if e.key != "country_event":
                 continue
@@ -2954,7 +3026,7 @@ class ValPartnerVisibilityTests(unittest.TestCase):
                 ]
                 if not statuses:
                     continue
-                checked += 1
+                checked.add(scalar(option, "name"))
                 payload = block(option, "hidden_effect")
                 self.assertEqual([x.key for x in payload], ["if", "else"])
                 self.assertTrue(block(block(payload, "if"), "limit"))
@@ -2965,7 +3037,7 @@ class ValPartnerVisibilityTests(unittest.TestCase):
                 modifier = block(block(option, "ai_chance"), "modifier")
                 self.assertEqual(scalar(modifier, "factor"), "0")
                 self.assertTrue(block(modifier, "NOT"))
-        self.assertGreaterEqual(checked, 18)
+        self.assertEqual(checked, GUARDED_OFFER_BUTTONS)
 
 
 class ValOfferButtonStateTests(unittest.TestCase):
@@ -2989,7 +3061,7 @@ class ValOfferButtonStateTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import scalar
 
         events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
-        count = 0
+        checked = set()
         for e in events:
             if e.key != "country_event":
                 continue
@@ -3001,8 +3073,8 @@ class ValOfferButtonStateTests(unittest.TestCase):
                     for o in option
                 ):
                     self.assertTrue(scalar(option, "name").endswith("_button"))
-                    count += 1
-        self.assertGreaterEqual(count, 18)
+                    checked.add(scalar(option, "name"))
+        self.assertEqual(checked, GUARDED_OFFER_BUTTONS)
 
 
 class ValNativeTradeFeeTests(unittest.TestCase):
@@ -3346,6 +3418,7 @@ class ValHireFixedCostTests(unittest.TestCase):
             parse_clausewitz,
             block,
             matches_conditions,
+            scalar,
         )
 
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
@@ -3387,7 +3460,43 @@ class ValHireFixedCostTests(unittest.TestCase):
                     ).group(1)
                     self.assertIn(str(price), value)
                     self.assertIn("£ADISCORD_economy_treasury_texticon", value)
-                    self.assertNotIn("[", value)
+                    if suffix == "_tooltip":
+                        self.assertNotIn("[", value)
+                    else:
+                        self.assertIn("[ROOT.VALGetCostTreasury500]", value)
+                for key, color in (
+                    ("VAL_cost_value_500", "Y"),
+                    ("VAL_cost_value_500_blocked", "R"),
+                ):
+                    value = re.search(
+                        rf'^ {key}:0 "(.*)"$', loc, re.M
+                    ).group(1)
+                    self.assertEqual(value, f"§{color}{price}§!")
+            scripted = parse_clausewitz(
+                read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")
+            )
+            helpers = [
+                entry.value
+                for entry in scripted
+                if entry.key == "defined_text"
+                and scalar(entry.value, "name") == "VALGetCostTreasury500"
+            ]
+            self.assertEqual(len(helpers), 1)
+            variants = [entry.value for entry in helpers[0] if entry.key == "text"]
+            self.assertEqual(len(variants), 2)
+            self.assertEqual(
+                scalar(variants[0], "localization_key"), "VAL_cost_value_500_blocked"
+            )
+            self.assertEqual(scalar(variants[1], "localization_key"), "VAL_cost_value_500")
+            for affordable in (False, True):
+                self.assertEqual(
+                    matches_conditions(
+                        block(variants[0], "trigger"),
+                        {("VAL", "ADISCORD_economy_can_spend_500", "yes"): affordable},
+                        "VAL",
+                    ),
+                    not affordable,
+                )
         self.assertEqual(covered, {"CIN", "COF", "APH", "OSF", "TFF", "YPR"})
 
 
@@ -3514,7 +3623,7 @@ class ValHireReplyTests(ValHireReceiptTests):
         events = parse_clausewitz(read("events/ADISCORD_VAL_contract_events.txt"))
         event_ids = tuple(
             f"val_contract.{event_id}"
-            for event_id in (340, 341, 401, 402, 403, 404, 405, 410)
+            for event_id in (340, 341, 401, 402, 403, 404, 405)
         )
         indexed = {
             scalar(e.value, "id"): e.value
@@ -3534,6 +3643,76 @@ class ValHireReplyTests(ValHireReceiptTests):
                 self.assertEqual(scalar(block(decline, "ai_chance"), "base"), "0")
                 self.assertEqual(scalar(block(accept, "ai_chance"), "base"), "100")
                 self.assertFalse(any(entry.key == "trigger" for entry in accept))
+
+    def test_transit_reply_rechecks_receipt_and_allows_safe_ai_refusal(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            entries,
+            matches_conditions,
+            scalar,
+        )
+
+        event = next(
+            item.value
+            for item in entries("events/ADISCORD_VAL_contract_events.txt")
+            if item.key == "country_event"
+            and scalar(item.value, "id") == "val_contract.410"
+        )
+        options = {
+            scalar(item.value, "name"): item.value
+            for item in event if item.key == "option"
+        }
+        accept = options["VAL_export_accept"]
+        decline = options["VAL_export_decline"]
+        predicate = "VAL_transit_charter_can_accept"
+        self.assertEqual(scalar(event, "timeout_days"), "14")
+        self.assertEqual(scalar(block(accept, "trigger"), predicate), "yes")
+        payload = block(block(accept, "hidden_effect"), "if")
+        self.assertEqual(scalar(block(payload, "limit"), predicate), "yes")
+        self.assertEqual(scalar(payload, "VAL_begin_partner_contract_year"), "yes")
+        self.assertFalse(any(item.key == "trigger" for item in decline))
+        chance = block(decline, "ai_chance")
+        self.assertEqual(scalar(chance, "base"), "0")
+        modifier = block(chance, "modifier")
+        self.assertEqual(scalar(modifier, "add"), "100")
+        for current in (False, True):
+            self.assertEqual(
+                matches_conditions(
+                    [item for item in modifier if item.key != "add"],
+                    {("CIN", predicate, "yes"): current},
+                    "CIN",
+                ),
+                not current,
+            )
+        self.assertEqual(scalar(block(accept, "ai_chance"), "base"), "100")
+        gate = block(
+            entries("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+            predicate,
+        )
+        facts = {
+            ("CIN", "exists", "yes"): True,
+            ("CIN", "has_capitulated", "no"): True,
+            ("CIN", "has_country_flag", "VAL_transit_offer"): True,
+            ("CIN", "variable", "VAL_completed_contracts"): 2,
+            ("CIN", "VAL_has_transit_corridor_foothold", "yes"): True,
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "has_country_flag", "VAL_partner_offer_pending"): True,
+        }
+        self.assertTrue(matches_conditions(gate, facts, "CIN"))
+        for required in facts:
+            stale = {
+                **facts,
+                required: 1.99 if required[-1] == "VAL_completed_contracts" else False,
+            }
+            with self.subTest(missing=required):
+                self.assertFalse(matches_conditions(gate, stale, "CIN"))
+        for blocked in (
+            ("CIN", "has_war_with", "VAL"),
+            ("CIN", "has_country_flag", "VAL_trade_transit_charter"),
+        ):
+            with self.subTest(blocked=blocked):
+                self.assertFalse(matches_conditions(gate, {**facts, blocked: True}, "CIN"))
 
 
 class ValHirePeaceTests(ValHireReceiptTests):

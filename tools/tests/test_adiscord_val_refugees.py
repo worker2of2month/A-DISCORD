@@ -647,7 +647,9 @@ class RefugeeAdmissionTests(unittest.TestCase):
             if e.key == "add_to_variable":
                 self.assertLess(float(scalar(e.value, "value")), 0)
         for body in self.decisions.values():
-            self.assertFalse(any(e.key == "add_stability" for e in walk(body)))
+            for entry in walk(body):
+                if entry.key == "add_stability":
+                    self.assertLessEqual(float(entry.value), 0)
         labor = list(walk(self.decisions["VAL_contract_refugee_labor"]))
         self.assertFalse(any(e.key == "add_manpower" for e in labor))
         self.assertTrue(
@@ -1148,7 +1150,7 @@ class FinalSupplySettlementTests(unittest.TestCase):
         )
         self.decisions = {
             e.key: e.value
-            for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_frontier"]
+            for e in load("common/decisions/ADISCORD_VAL_decisions.txt")["VAL_military_operations"]
         }
         self.variables = {"ADISCORD_economy_treasury": 500, "VAL_final_crisis_phase": 1}
         self.facts = {
@@ -1475,7 +1477,8 @@ class WastelandCampaignTests(unittest.TestCase):
             ("VAL", "has_global_flag", "ADISCORD_vorkerland_dirty_opened"): True,
             ("VAL", "has_capitulated", "no"): True,
             ("VAL", "is_subject", "no"): True,
-            ("VAL", "VAL_frontier_idle", "yes"): True,
+            ("VAL", "has_war", "no"): True,
+            ("VAL", "owns_state", "168"): True,
             ("169", "is_owned_by", "ERT"): True,
             ("169", "is_controlled_by", "ERT"): True,
             ("ERT", "exists", "yes"): True,
@@ -1568,6 +1571,9 @@ class WastelandCampaignTests(unittest.TestCase):
 
         self.assertEqual(transfers(charter), [169])
         settlement = self.effects["VAL_settle_wasteland_capitulation"]
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        self.assertNotIn("every_owned_state", {e.key for e in walk(settlement)})
         targets = set(transfers(settlement))
         self.assertIn(168, targets)
         self.assertNotIn(330, targets)

@@ -488,5 +488,116 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertNotIn("VAL_focus_tree_phase", self.focuses)
 
 
+class KefreytAIExpansionPriorityTests(unittest.TestCase):
+    """Evaluate authored priorities; this does not simulate native AI scheduling."""
+
+    def weight(self, items, key, facts):
+        from tools.tests.test_adiscord_stp_preparation import (
+            block, matches_conditions, scalar,
+        )
+
+        weights = block(items, key)
+        result = float(scalar(weights, "base") or 1)
+        for modifier in weights:
+            if modifier.key != "modifier":
+                continue
+            conditions = [
+                item for item in modifier.value if item.key not in {"factor", "add"}
+            ]
+            if matches_conditions(conditions, facts, "VAL"):
+                adjustment = {item.key: item.value for item in modifier.value}
+                result *= float(adjustment.get("factor", 1))
+                result += float(adjustment.get("add", 0))
+        return result
+
+    def test_priority_plan_reaches_expansion_with_all_prerequisites(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        path = ROOT / "common/ai_strategy_plans/ADISCORD_VAL_plans.txt"
+        self.assertTrue(path.exists(), "VAL needs an explicit expansion focus plan")
+        plan = block(entries(path.relative_to(ROOT).as_posix()), "VAL_expansion_priority_plan")
+        order = [entry.value for entry in block(plan, "ai_national_focuses")]
+        focuses = {
+            scalar(entry.value, "id"): entry.value
+            for entry in block(entries("focus_trees/VAL/main/focuses.txt"), "focus_tree")
+            if entry.key == "focus"
+        }
+        done = set()
+        for focus_id in order:
+            self.assertIn(focus_id, focuses)
+            self.assertNotIn(focus_id, done)
+            for prerequisite in (e for e in focuses[focus_id] if e.key == "prerequisite"):
+                self.assertTrue(done.intersection(e.value for e in prerequisite.value), focus_id)
+            exclusions = {
+                e.value
+                for gate in focuses[focus_id] if gate.key == "mutually_exclusive"
+                for e in gate.value
+            }
+            self.assertFalse(done.intersection(exclusions), focus_id)
+            done.add(focus_id)
+        for focus_id in (
+            "VAL_Integrate_Occidia", "VAL_Contracts_Outlive_Kings",
+            "VAL_frontier_security_plan",
+        ):
+            self.assertIn(focus_id, done)
+        self.assertLess(order.index("VAL_Integrate_Occidia"), order.index("VAL_The_Weaponry_Baron"))
+        self.assertNotIn("VAL_Balchansk_Charter", done)
+        self.assertNotIn("VAL_Returning_Buyers", done)
+
+    def test_trade_route_does_not_permanently_defer_an_available_northern_target(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries
+
+        category = block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")
+        decision = block(category, "VAL_defer_northern_expansion")
+        self.assertTrue(decision)
+        for trade in (False, True):
+            for target in ("CIN", "OSF", "APH"):
+                facts = {
+                    ("VAL", "has_completed_focus", "VAL_Trading_Partners"): trade,
+                    (target, "VAL_frontier_bloc_target_eligible", "yes"): True,
+                }
+                with self.subTest(trade=trade, target=target):
+                    self.assertEqual(self.weight(decision, "ai_will_do", facts), 0)
+        self.assertGreater(self.weight(decision, "ai_will_do", {}), 0)
+
+    def test_northern_refusal_means_war_or_preparation_never_permanent_withdrawal(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, scalar
+
+        event = next(
+            e.value for e in entries("events/ADISCORD_VAL_contract_events.txt")
+            if isinstance(e.value, list) and scalar(e.value, "id") == "val_rework.111"
+        )
+        options = {scalar(e.value, "name"): e.value for e in event if e.key == "option"}
+        for target in (1, 2, 3):
+            for ready in (False, True):
+                facts = {
+                    ("VAL", "variable", "VAL_frontier_target"): target,
+                    ("VAL", "VAL_frontier_prewar_eligible", "yes"): True,
+                    ("VAL", "VAL_ai_frontier_force_ready", "yes"): ready,
+                    ("VAL", "VAL_ai_frontier_force_ready", "no"): not ready,
+                    ("VAL", "numeric", "has_manpower"): 30000,
+                }
+                with self.subTest(target=target, ready=ready):
+                    self.assertEqual(self.weight(options["val_rework.111.withdraw"], "ai_chance", facts), 0)
+                    chosen = "war" if ready else "prepare"
+                    self.assertGreater(self.weight(options[f"val_rework.111.{chosen}"], "ai_chance", facts), 0)
+                    if not ready:
+                        self.assertEqual(self.weight(options["val_rework.111.war"], "ai_chance", facts), 0)
+                    else:
+                        self.assertEqual(self.weight(options["val_rework.111.prepare"], "ai_chance", facts), 0)
+        ert = {("VAL", "variable", "VAL_frontier_target"): 4}
+        self.assertEqual(self.weight(options["val_rework.111.withdraw"], "ai_chance", ert), 30)
+
+    def test_ai_does_not_choose_the_permanent_occidian_client(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        focuses = block(entries("focus_trees/VAL/main/focuses.txt"), "focus_tree")
+        charter = next(
+            e.value for e in focuses
+            if e.key == "focus" and scalar(e.value, "id") == "VAL_Balchansk_Charter"
+        )
+        self.assertEqual(self.weight(charter, "ai_will_do", {}), 0)
+
+
 if __name__ == "__main__":
     unittest.main()

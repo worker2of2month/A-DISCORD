@@ -622,6 +622,15 @@ VAL_update_black_market_weekly = {
 			}
 			add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
 		}
+		if = {
+			limit = {
+				has_country_flag = VAL_route_south_commissioned
+				NOT = {
+					check_variable = { var = VAL_route_south_active value = 1 compare = equals }
+				}
+			}
+			add_to_temp_variable = { var = VAL_black_market_weekly_delta value = 3 }
+		}
 
 		if = {
 			limit = { has_war = yes }

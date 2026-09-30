@@ -4,6 +4,12 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.tests.test_adiscord_stp_preparation import (
+    block as parsed_block,
+    entries,
+    scalar,
+)
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -76,7 +82,7 @@ class KefreytFocusClarityTests(unittest.TestCase):
         self.ru = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
         self.en = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
 
-    def test_main_wars_are_visually_above_continuation(self) -> None:
+    def test_opening_crisis_precedes_postwar_and_expansion_layers(self) -> None:
         def xy(focus_id: str) -> tuple[int, int]:
             body = focus(self.focuses, focus_id)
             return (
@@ -89,8 +95,6 @@ class KefreytFocusClarityTests(unittest.TestCase):
             "VAL_The_Harvest_Of_Ash",
             "VAL_Stelander_Crisis_Opens",
             "VAL_The_Steel_Contract",
-            "VAL_frontier_conference",
-            "VAL_frontier_security_plan",
         ):
             self.assertLess(xy(focus_id)[1], continuation_y, focus_id)
         for focus_id in (
@@ -102,48 +106,33 @@ class KefreytFocusClarityTests(unittest.TestCase):
         ):
             self.assertGreater(xy(focus_id)[1], continuation_y, focus_id)
 
+        conference_y = xy("VAL_frontier_conference")[1]
+        security_y = xy("VAL_frontier_security_plan")[1]
+        self.assertLess(continuation_y, conference_y)
+        self.assertLess(conference_y, security_y)
+        self.assertLess(security_y, xy("VAL_frontier_treaty_offices")[1])
+
         tsaygen = focus(self.focuses, "VAL_Return_Southern_Tsaygen")
         self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", tsaygen)
         self.assertIn("prerequisite = { focus = VAL_Foreign_Broker_Licences }", tsaygen)
 
     def test_same_row_focuses_keep_visual_clearance(self) -> None:
         positions: list[tuple[str, int, int]] = []
-        for match in re.finditer(r"(?m)^\\s*focus\\s*=\\s*\\{", self.focuses):
-            start = match.start()
-            opening = self.focuses.find("{", start)
-            depth = 0
-            quoted = False
-            escaped = False
-            for index in range(opening, len(self.focuses)):
-                char = self.focuses[index]
-                if quoted:
-                    if escaped:
-                        escaped = False
-                    elif char == "\\":
-                        escaped = True
-                    elif char == '"':
-                        quoted = False
-                    continue
-                if char == '"':
-                    quoted = True
-                elif char == "{":
-                    depth += 1
-                elif char == "}":
-                    depth -= 1
-                    if depth == 0:
-                        body = self.focuses[start : index + 1]
-                        id_match = re.search(r"\\bid\\s*=\\s*([A-Za-z0-9_]+)", body)
-                        x_match = re.search(r"(?m)^\\s*x\\s*=\\s*(-?\\d+)", body)
-                        y_match = re.search(r"(?m)^\\s*y\\s*=\\s*(-?\\d+)", body)
-                        if id_match and x_match and y_match:
-                            positions.append(
-                                (
-                                    id_match.group(1),
-                                    int(x_match.group(1)),
-                                    int(y_match.group(1)),
-                                )
-                            )
-                        break
+        tree = parsed_block(
+            entries("common/national_focus/ADISCORD_national_focus_VAL.txt"),
+            "focus_tree",
+        )
+        for entry in tree:
+            if entry.key == "focus":
+                positions.append(
+                    (
+                        scalar(entry.value, "id"),
+                        int(scalar(entry.value, "x")),
+                        int(scalar(entry.value, "y")),
+                    )
+                )
+        self.assertGreater(len(positions), 1, "The layout check must visit focus nodes")
+        self.assertEqual(len(positions), len({name for name, _, _ in positions}))
 
         rows: dict[int, list[tuple[int, str]]] = {}
         for focus_id, x, y in positions:
@@ -158,12 +147,17 @@ class KefreytFocusClarityTests(unittest.TestCase):
                     f"Focus nodes visually merge on row {y}: {left_id} at x={left_x}, {right_id} at x={right_x}",
                 )
 
-    def test_population_and_cannibal_routes_no_longer_wait_for_late_spine(self) -> None:
+    def test_population_opens_early_and_frontier_waits_for_contract_readiness(self) -> None:
         harvest = focus(self.focuses, "VAL_The_Harvest_Of_Ash")
-        self.assertIn("prerequisite = { focus = VAL_The_Contract_State }", harvest)
+        self.assertIn("prerequisite = { focus = VAL_reclamation_survey }", harvest)
+        survey = focus(self.focuses, "VAL_reclamation_survey")
+        factories = focus(self.focuses, "VAL_Factories_Like_Cathedrals")
+        self.assertIn("prerequisite = { focus = VAL_Factories_Like_Cathedrals }", survey)
+        self.assertIn("prerequisite = { focus = VAL_The_Contract_State }", factories)
         self.assertNotIn("focus = VAL_One_Ledger_One_Banner", harvest)
 
         frontier = focus(self.focuses, "VAL_frontier_conference")
+        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", frontier)
         self.assertIn("prerequisite = { focus = VAL_One_Ledger_One_Banner }", frontier)
         self.assertIn(
             "prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }",
@@ -171,18 +165,10 @@ class KefreytFocusClarityTests(unittest.TestCase):
         )
         self.assertNotIn("VAL_Different_Views_On_Freedom", frontier)
         self.assertNotIn("VAL_The_Steel_Contract", frontier)
-        self.assertNotIn("VAL_Contracts_Outlive_Kings", frontier)
 
     def test_every_direct_war_focus_has_an_explicit_red_tooltip(self) -> None:
         cases = {
             "VAL_Bezhaysk_Operation": ("BJK", "VAL_declares_war_bezhaysk_tt"),
-            "VAL_Return_Southern_Tsaygen": (
-                "ERT",
-                "VAL_return_southern_tsaygen_war_tt",
-            ),
-            "VAL_frontier_return_irem": ("ERT", "VAL_declares_war_ert_irem_tt"),
-            "VAL_Southern_Expansion": ("ERT", "VAL_declares_war_ert_south_tt"),
-            "VAL_Eastern_Expansion": ("IRT", "VAL_declares_war_irt_tt"),
         }
         for focus_id, (target, tooltip) in cases.items():
             body = focus(self.focuses, focus_id)
@@ -202,6 +188,54 @@ class KefreytFocusClarityTests(unittest.TestCase):
                 row for row in self.ru.splitlines() if row.startswith(f" {ru_key}:")
             )
             self.assertIn("Объявляет войну", line)
+
+    def test_expansion_focuses_unlock_the_orders_that_declare_war(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        cases = (
+            (
+                "VAL_Return_Southern_Tsaygen",
+                "VAL_operation_return_southern_tsaygen",
+                "ERT",
+                "VAL_return_southern_tsaygen_war_tt",
+            ),
+            (
+                "VAL_frontier_return_irem",
+                "VAL_operation_cross_perimeter",
+                "ERT",
+                "VAL_declares_war_ert_irem_tt",
+            ),
+            (
+                "VAL_Southern_Expansion",
+                "VAL_operation_expand_southern_bridgehead",
+                "ERT",
+                "VAL_declares_war_ert_south_tt",
+            ),
+            (
+                "VAL_Eastern_Expansion",
+                "VAL_operation_eastern_security_belt",
+                "IRT",
+                "VAL_declares_war_irt_tt",
+            ),
+        )
+        for focus_id, decision_id, target, tooltip in cases:
+            with self.subTest(focus=focus_id):
+                body = focus(self.focuses, focus_id)
+                self.assertNotIn("declare_war_on", body)
+                self.assertIn(f"unlock_decision_tooltip = {decision_id}", body)
+                decision = block(self.decisions, decision_id)
+                self.assertIn(f"has_completed_focus = {focus_id}", decision)
+                reward = block(decision, "complete_effect")
+                self.assertIn(f"custom_effect_tooltip = {tooltip}", reward)
+                if focus_id == "VAL_Return_Southern_Tsaygen":
+                    self.assertIn("VAL_begin_southern_tsaygen_campaign = yes", reward)
+                    reward = block(effects, "VAL_begin_southern_tsaygen_campaign")
+                    self.assertIn("set_variable = { var = VAL_frontier_target value = 4 }", reward)
+                    self.assertIn("VAL_frontier_start_war = yes", reward)
+                    reward = block(effects, "VAL_frontier_start_war")
+                self.assertRegex(reward, rf"declare_war_on\s*=\s*\{{\s*target\s*=\s*{target}\b")
+                for loc in (self.ru, self.en):
+                    line = next(row for row in loc.splitlines() if row.startswith(f" {tooltip}:"))
+                    self.assertIn("§R", line)
 
     def test_indirect_war_routes_state_exactly_where_war_is_declared(self) -> None:
         passes = focus(self.focuses, "VAL_Seize_The_Northern_Passes")

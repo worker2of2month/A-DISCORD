@@ -1679,28 +1679,37 @@ VAL_qol_elite_army_available = {
 
 VAL_stelander_equal_partner_available = {
 	tag = VAL
+	exists = yes
 	has_country_flag = VAL_stelander_equal_recognition
 	is_subject = no
 	has_capitulated = no
 	has_war = no
 	NOT = { has_country_flag = VAL_stelander_defeated has_country_flag = VAL_stelander_alliance_refused }
+	NOT = { has_country_flag = VAL_stelander_equal_alliance }
+	NOT = { has_completed_focus = VAL_Campaign_Secured }
+	OR = { is_in_faction = no is_faction_leader = yes }
 	OR = {
-		STS = {
-			exists = yes
-			has_country_flag = VAL_stelander_equal_recognition
-			is_subject = no
-			has_capitulated = no
-			has_war = no
-			NOT = { has_war_with = VAL }
-		}
-		STP = {
-			exists = yes
-			has_country_flag = VAL_stelander_equal_recognition
-			is_subject = no
-			has_capitulated = no
-			has_war = no
-			NOT = { has_war_with = VAL }
-		}
+		STS = { VAL_stelander_equal_recipient_available = yes }
+		STP = { VAL_stelander_equal_recipient_available = yes }
+	}
+}
+
+VAL_stelander_equal_recipient_available = {
+	OR = { tag = STP tag = STS }
+	exists = yes
+	has_country_flag = VAL_stelander_equal_recognition
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	OR = { is_in_faction = no is_in_faction_with = VAL }
+}
+
+VAL_stelander_equal_offer_can_accept = {
+	VAL_stelander_equal_recipient_available = yes
+	has_country_flag = VAL_stelander_alliance_offer_received
+	VAL = {
+		has_country_flag = VAL_stelander_alliance_offer_pending
+		VAL_stelander_equal_partner_available = yes
 	}
 }
 
@@ -2292,6 +2301,21 @@ VAL_transit_charter_offerable = {
 	NOT = { has_country_flag = VAL_trade_transit_charter }
 	VAL_has_transit_corridor_foothold = yes
 	VAL = { VAL_partner_desk_free = yes }
+}
+
+VAL_transit_charter_can_accept = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	has_country_flag = VAL_transit_offer
+	check_variable = { var = VAL_completed_contracts value = 2 compare = greater_than_or_equals }
+	NOT = { has_country_flag = VAL_trade_transit_charter }
+	VAL_has_transit_corridor_foothold = yes
+	VAL = {
+		exists = yes
+		has_capitulated = no
+		has_country_flag = VAL_partner_offer_pending
+	}
 }
 
 # Existing direct shipping can precede a corridor; a commissioned route cannot be bypassed after its loss.

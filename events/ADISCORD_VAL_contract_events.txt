@@ -703,7 +703,15 @@ country_event = {
 			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
 			VAL_frontier_reply_is_current = yes
 		}
-		ai_chance = { base = 0 }
+		ai_chance = {
+			base = 100
+			modifier = { factor = 0 check_variable = { var = VAL_frontier_target value = 4 compare = equals } }
+			modifier = {
+				factor = 0
+				VAL_ai_frontier_force_ready = yes
+				VAL_frontier_prewar_eligible = yes
+			}
+		}
 		custom_effect_tooltip = VAL_frontier_prepare_tt
 	}
 	option = {
@@ -712,7 +720,10 @@ country_event = {
 			check_variable = { var = VAL_frontier_stage value = 2 compare = equals }
 			VAL_frontier_reply_is_current = yes
 		}
-		ai_chance = { base = 30 }
+		ai_chance = {
+			base = 30
+			modifier = { factor = 0 check_variable = { var = VAL_frontier_target value = 4 compare = less_than } }
+		}
 		custom_effect_tooltip = VAL_frontier_withdraw_tt
 		hidden_effect = {
 			if = {
@@ -1047,45 +1058,8 @@ country_event = {
 		hidden_effect = {
 			if = {
 				limit = { VAL_stelander_offer_current = yes }
-				43 = {
-					if = {
-						limit = {
-							is_owned_by = ROOT
-							is_controlled_by = ROOT
-						}
-						VAL = { transfer_state = 43 }
-					}
-				}
-				44 = {
-					if = {
-						limit = {
-							is_owned_by = ROOT
-							is_controlled_by = ROOT
-						}
-						VAL = { transfer_state = 44 }
-					}
-				}
-				45 = {
-					if = {
-						limit = {
-							is_owned_by = ROOT
-							is_controlled_by = ROOT
-						}
-						VAL = { transfer_state = 45 }
-					}
-				}
-				88 = {
-					if = {
-						limit = {
-							is_owned_by = ROOT
-							is_controlled_by = ROOT
-						}
-						VAL = { transfer_state = 88 }
-					}
-				}
 				VAL = {
 					VAL_return_stelander_cores = yes
-					VAL_form_occidian_administration = yes
 					set_country_flag = VAL_stelander_equal_recognition
 				}
 				set_country_flag = VAL_stelander_equal_recognition
@@ -1500,25 +1474,30 @@ country_event = {
 	option = {
 		name = val_contract.354.refuse
 		ai_chance = { base = 90 }
-		hidden_effect = { VAL = { set_country_flag = VAL_stelander_alliance_refused clr_country_flag = VAL_stelander_alliance_offer_pending } }
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = VAL_stelander_alliance_offer_received
+					VAL = { has_country_flag = VAL_stelander_alliance_offer_pending }
+				}
+				VAL = {
+					set_country_flag = VAL_stelander_alliance_refused
+					clr_country_flag = VAL_stelander_alliance_offer_pending
+				}
+				clr_country_flag = VAL_stelander_alliance_offer_received
+			}
+		}
 	}
 	option = {
 		name = val_contract.354.accept
-		trigger = { VAL = { has_country_flag = VAL_stelander_alliance_offer_pending } }
+		trigger = { VAL_stelander_equal_offer_can_accept = yes }
 		ai_chance = {
 			base = 10
 			modifier = { factor = 2 has_opinion = { target = VAL value > 74 } }
 			modifier = { factor = 0 has_country_leader = { character = STP_maksim_shabrat } }
 		}
 		custom_effect_tooltip = VAL_equal_alliance_accept_tt
-		hidden_effect = {
-			VAL = {
-				set_country_flag = VAL_stelander_equal_alliance
-				clr_country_flag = VAL_stelander_alliance_offer_pending
-				VAL_form_equal_stelander_alliance = yes
-			}
-			set_country_flag = VAL_stelander_equal_alliance
-		}
+		hidden_effect = { VAL_form_equal_stelander_alliance = yes }
 	}
 }
 country_event = {
@@ -2089,33 +2068,39 @@ country_event = {
 	desc = VAL_transit_charter_desc
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
-	timeout_days = 35
+	timeout_days = 14
 	option = {
 		name = VAL_export_decline
-		trigger = {
-			is_ai = no
-		}
 		ai_chance = {
 			base = 0
+			modifier = { add = 100 NOT = { VAL_transit_charter_can_accept = yes } }
 		}
 		hidden_effect = {
-			VAL_record_partner_refusal = yes
-			clr_country_flag = VAL_transit_offer
-			VAL = {
-				clr_country_flag = VAL_partner_offer_pending
+			if = {
+				limit = {
+					has_country_flag = VAL_transit_offer
+					VAL = { has_country_flag = VAL_partner_offer_pending }
+				}
+				VAL_record_partner_refusal = yes
+				clr_country_flag = VAL_transit_offer
+				VAL = { clr_country_flag = VAL_partner_offer_pending }
 			}
 		}
 	}
 	option = {
 		name = VAL_export_accept
+		trigger = { VAL_transit_charter_can_accept = yes }
 		ai_chance = { base = 100 }
 		hidden_effect = {
-			VAL_begin_partner_contract_year = yes
-			set_country_flag = VAL_trade_transit_charter
-			clr_country_flag = VAL_transit_offer
-			VAL = {
-				clr_country_flag = VAL_partner_offer_pending
-				VAL_refresh_trade_network = yes
+			if = {
+				limit = { VAL_transit_charter_can_accept = yes }
+				VAL_begin_partner_contract_year = yes
+				set_country_flag = VAL_trade_transit_charter
+				clr_country_flag = VAL_transit_offer
+				VAL = {
+					clr_country_flag = VAL_partner_offer_pending
+					VAL_refresh_trade_network = yes
+				}
 			}
 		}
 	}

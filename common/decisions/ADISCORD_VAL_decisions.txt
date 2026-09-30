@@ -1424,10 +1424,8 @@ VAL_frontier = {
 		}
 		ai_will_do = {
 			base = 5
-			modifier = { factor = 10 has_completed_focus = VAL_Trading_Partners }
 			modifier = {
 				factor = 0
-				NOT = { has_completed_focus = VAL_Trading_Partners }
 				OR = {
 					CIN = { VAL_frontier_bloc_target_eligible = yes }
 					OSF = { VAL_frontier_bloc_target_eligible = yes }

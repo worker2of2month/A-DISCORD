@@ -89,7 +89,9 @@ class PartySecondActTests(unittest.TestCase):
             elif entry.key == "add_equipment_to_stockpile":
                 key = ("STP", "equipment", scalar(entry.value, "type"))
                 facts[key] = facts.get(key, 0) + float(scalar(entry.value, "amount"))
-            elif entry.key not in ("custom_effect_tooltip", "unlock_decision_tooltip", "ADISCORD_economy_mark_dirty"):
+            # The fixture starts with an initialized treasury; native cache work is unmodelled.
+            elif entry.key not in ("custom_effect_tooltip", "unlock_decision_tooltip", "ADISCORD_economy_mark_dirty",
+                                   "ADISCORD_economy_initialize_country"):
                 raise AssertionError(f"Unhandled transaction effect: {entry.key}")
 
     def test_six_routes_each_have_twelve_new_focuses_with_reachable_endings(self):
@@ -135,23 +137,97 @@ class PartySecondActTests(unittest.TestCase):
                 ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt")))
             if e.key == "focus" and isinstance(e.value, list)
         }
+        def position(name):
+            focus = focuses[name]
+            x, y = int(scalar(focus, "x")), int(scalar(focus, "y"))
+            anchors = [e.value for e in focus if e.key == "relative_position_id"]
+            if anchors:
+                ax, ay = position(anchors[0])
+                x, y = x + ax, y + ay
+            return x, y
+
         for leader, route in enumerate(ROUTES, 1):
             facts = self.facts(route)
             facts[("STP", "has_country_flag", "STP_cw_postwar")] = True
             facts[("STP", f"STP_party_leader_{leader}", "yes")] = True
-            for phase in (1, 4):
+            for phase in (1, 2, 3, 4):
                 facts[("STP", "variable", "STP_ch_phase")] = phase
                 visible = {}
+                collisions = []
                 for name, focus in focuses.items():
                     gates = [e.value for e in focus if e.key == "allow_branch"]
                     if all(matches_conditions(gate, facts) for gate in gates):
-                        visible[name] = (int(scalar(focus, "x")), int(scalar(focus, "y")))
+                        visible[name] = position(name)
+                self.assertLessEqual(max(y for x, y in visible.values()), 16)
                 for name, (x, y) in visible.items():
-                    if not name.startswith("STP_pe_"):
-                        continue
                     for other, (ox, oy) in visible.items():
                         if name != other and y == oy:
-                            self.assertGreaterEqual(abs(x - ox), 2, f"{name} overlaps {other} at phase {phase}")
+                            if abs(x - ox) < 2:
+                                collisions.append((name, other, x, ox, y))
+                self.assertEqual(collisions, [], f"Overlapping leader route {leader}, phase {phase}")
+
+    def test_practical_programmes_do_not_delay_constitutional_laws(self):
+        def ancestors(name):
+            result = set()
+            for entry in self.focuses[name]:
+                if entry.key == "prerequisite":
+                    for parent in entry.value:
+                        if parent.value in self.focuses:
+                            result.add(parent.value)
+                            result.update(ancestors(parent.value))
+            return result
+
+        for route in ROUTES:
+            prefix = f"STP_pe_{route}_"
+            opening = self.focuses[prefix + "opening"]
+            self.assertEqual(scalar(block(opening, "prerequisite"), "focus"),
+                             "STP_pw_party_new_republic")
+            for side in ("a", "b"):
+                policy = self.focuses[prefix + "policy_" + side]
+                self.assertLessEqual(7 * (float(scalar(opening, "cost")) +
+                                         float(scalar(policy, "cost"))), 21)
+                self.assertEqual(scalar(block(policy, "completion_reward"), "add_ideas"),
+                                 prefix + "policy_" + side + "_idea")
+                ending = self.focuses[prefix + "ending_" + side]
+                groups = [e.value for e in ending if e.key == "prerequisite"]
+                self.assertEqual(len(groups), 2)
+                old_final = [e.value for group in groups for e in group
+                             if not e.value.startswith("STP_pe_")][0]
+                self.assertFalse(any(a.startswith("STP_pe_") for a in ancestors(old_final)))
+
+    def test_focus_settlement_refunds_pending_payment_once(self):
+        for route in ROUTES:
+            facts = self.facts(route, receipt=True)
+            facts[("STP", "numeric", "has_political_power")] = 0
+            facts[("STP", "variable", "ADISCORD_economy_treasury")] = 0
+            reward = block(self.focuses[f"STP_pe_{route}_settlement"], "completion_reward")
+            self.apply_transaction(reward, facts)
+            self.apply_transaction(reward, facts)
+            self.apply_transaction(self.effects[f"STP_pe_{route}_settle"], facts)
+            self.assertEqual(facts[("STP", "numeric", "has_political_power")], 35)
+            self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], 450)
+            self.assertTrue(facts[("STP", "has_country_flag", f"STP_pe_{route}_prepared")])
+            bypass = block(self.focuses[f"STP_pe_{route}_settlement"], "bypass")
+            self.assertTrue(matches_conditions(bypass, facts))
+
+    def test_institutions_charge_once_and_deliver_without_future_requirements(self):
+        for route in ROUTES:
+            decision = self.require(self.decisions, f"STP_pe_{route}_followup")
+            self.assertEqual(scalar(decision, "days_re_enable"), "30")
+            self.assertFalse(any(e.key == "remove_effect" for e in decision))
+            for upgraded in (False, True):
+                facts = self.facts(route)
+                facts[("STP", "has_completed_focus", f"STP_pe_{route}_next_day")] = True
+                facts[("STP", "has_completed_focus", f"STP_pe_{route}_commission")] = upgraded
+                self.assertTrue(matches_conditions(block(decision, "custom_cost_trigger"), facts))
+                self.apply_transaction(block(decision, "complete_effect"), facts)
+                self.assertEqual(facts[("STP", "numeric", "has_political_power")], 0)
+                expected = (1000 if upgraded else 750) if route == "houses" else 0
+                self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_treasury")], expected)
+                self.assertEqual(facts[("STP", "variable", "ADISCORD_economy_current_month_action_costs")], 450)
+                previous = dict(facts)
+                self.apply_transaction(block(decision, "complete_effect"), facts)
+                self.assertEqual(facts, previous)
 
     def test_program_payment_accepts_exact_balance_and_blocks_duplicate_receipts(self):
         for route in ROUTES:

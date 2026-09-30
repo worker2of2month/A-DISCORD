@@ -1127,6 +1127,35 @@ bitmapfonts = {
 		languages = { "l_japanese" }
 	}
 
+	# COUNTRY immediate effects emit black markup intended for paper backgrounds.
+	# Remap that markup only in the dark event body; other fonts retain their palette.
+	bitmapfont = {
+		name = "ADISCORD_event_body"
+		fontfiles = {
+			"gfx/fonts/hoi_16mbs"
+			"gfx/fonts/hoi_16mbs_cryllic"
+		}
+		color = 0xffffffff
+		textcolors = {
+			b = { 238 201 35 }
+			G = { 86 172 91 }
+			R = { 222 86 70 }
+			Y = { 238 201 35 }
+			O = { 238 123 35 }
+			H = { 238 201 35 }
+			T = { 255 255 255 }
+			g = { 175 175 175 }
+		}
+	}
+
+	bitmapfont_override = {
+		name = "ADISCORD_event_body"
+		fontfiles = {
+			"gfx/fonts/japanese/hoi_16mbs"
+		}
+		languages = { "l_japanese" }
+	}
+
 	bitmapfont = {
 		name = "hoi_18"
 #		path = "gfx/fonts/hoi_18"

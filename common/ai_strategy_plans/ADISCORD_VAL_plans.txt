@@ -1,0 +1,80 @@
+# Available Occidian settlement focuses precede domestic preparation.
+# Unavailable story focuses leave the required internal route available to the AI.
+VAL_expansion_priority_plan = {
+	name = "VAL expansion programme"
+	desc = ""
+	allowed = { original_tag = VAL }
+	enable = {
+		tag = VAL
+		is_ai = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_country_flag = VAL_stelander_defeated }
+	}
+	abort = {
+		OR = {
+			NOT = { tag = VAL }
+			is_subject = yes
+			has_capitulated = yes
+			has_country_flag = VAL_stelander_defeated
+		}
+	}
+	ai_national_focuses = {
+		VAL_The_Contract_State
+		VAL_Stelander_Crisis_Opens
+		VAL_Seize_The_Northern_Passes
+		VAL_The_Steel_Contract
+		VAL_Occidian_Claims_Commission
+		VAL_Occidian_Registries
+		VAL_Integrate_Occidia
+		VAL_The_Weaponry_Baron
+		VAL_Price_Of_Loyalty
+		VAL_Count_The_Captains
+		VAL_One_Ledger_One_Banner
+		VAL_Market_Roads_North
+		VAL_October_Of_2160
+		VAL_The_Mercenary_State
+		VAL_Company_Rosters
+		VAL_Company_Service_Code
+		VAL_Hire_Out_War
+		VAL_Stahls_Schedules
+		VAL_Morns_Supply_Trains
+		VAL_Field_Repair_Corps
+		VAL_Logistics_Command
+		VAL_Reserve_Battalions
+		VAL_Operational_Reserves
+		VAL_Contract_General_Staff
+		VAL_Army_Of_The_Ledger
+		VAL_Paid_Loyalty
+		VAL_Provincial_Brokers
+		VAL_Closed_Ledgers
+		VAL_Quarterly_Contract_Norm
+		VAL_Central_Payment_Office
+		VAL_Provincial_Contract_Courts
+		VAL_State_Above_Captains
+		VAL_Captains_Cannot_Veto
+		VAL_State_Contract
+		VAL_Operational_Directorate
+		VAL_Vorkerland_Contracts_Burn
+		VAL_Inventory_The_Empty_Yards
+		VAL_Factories_Like_Cathedrals
+		VAL_Ballistics_Schools
+		VAL_Export_Rifles_Not_Promises
+		VAL_Contract_Accounting_Office
+		VAL_Salvage_Every_Barrel
+		VAL_Munitions_Board
+		VAL_Standardize_Rifle_Lots
+		VAL_Standard_Cartridges
+		VAL_Mobilize_Machine_Shops
+		VAL_Three_Shift_Arsenals
+		VAL_Arsenal_Reserve
+		VAL_Reserve_Accounting
+		VAL_Industrial_Mobilization_Plan
+		VAL_Contracts_Outlive_Kings
+		VAL_frontier_conference
+		VAL_frontier_logistics
+		VAL_frontier_provincial_offices
+		VAL_frontier_security_plan
+	}
+	weight = { factor = 20 }
+}

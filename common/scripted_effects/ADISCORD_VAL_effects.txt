@@ -734,10 +734,10 @@ VAL_resolve_cin_operation = {
 	else = { set_variable = { var = VAL_CIN_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_CIN_repeat_streak value = 1 } }
 	if = {
 		limit = { check_variable = { var = VAL_CIN_repeat_streak value = 3 compare = greater_than_or_equals } }
-		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_CIN_block_market days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_CIN_block_arms days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_CIN_block_infrastructure days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_CIN_block_captain days = 90 value = 1 } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } } set_country_flag = { flag = VAL_CIN_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } } set_country_flag = { flag = VAL_CIN_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } } set_country_flag = { flag = VAL_CIN_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } } set_country_flag = { flag = VAL_CIN_block_captain days = 90 value = 1 } }
 		else = { set_country_flag = { flag = VAL_CIN_block_terms days = 90 value = 1 } }
 	}
 	if = {
@@ -745,6 +745,7 @@ VAL_resolve_cin_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 1
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_CIN_success_market
@@ -761,6 +762,7 @@ VAL_resolve_cin_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 2
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_CIN_success_arms
@@ -777,6 +779,7 @@ VAL_resolve_cin_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 3
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_CIN_success_infrastructure
@@ -793,6 +796,7 @@ VAL_resolve_cin_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 4
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_CIN_success_captain
@@ -809,6 +813,7 @@ VAL_resolve_cin_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 5
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_CIN_success_terms
@@ -833,10 +838,10 @@ VAL_resolve_osf_operation = {
 	else = { set_variable = { var = VAL_OSF_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_OSF_repeat_streak value = 1 } }
 	if = {
 		limit = { check_variable = { var = VAL_OSF_repeat_streak value = 3 compare = greater_than_or_equals } }
-		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_OSF_block_market days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_OSF_block_arms days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_OSF_block_infrastructure days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_OSF_block_captain days = 90 value = 1 } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } } set_country_flag = { flag = VAL_OSF_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } } set_country_flag = { flag = VAL_OSF_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } } set_country_flag = { flag = VAL_OSF_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } } set_country_flag = { flag = VAL_OSF_block_captain days = 90 value = 1 } }
 		else = { set_country_flag = { flag = VAL_OSF_block_terms days = 90 value = 1 } }
 	}
 	if = {
@@ -844,6 +849,7 @@ VAL_resolve_osf_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 1
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_OSF_success_market
@@ -860,6 +866,7 @@ VAL_resolve_osf_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 2
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_OSF_success_arms
@@ -876,6 +883,7 @@ VAL_resolve_osf_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 3
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_OSF_success_infrastructure
@@ -892,6 +900,7 @@ VAL_resolve_osf_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 4
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_OSF_success_captain
@@ -908,6 +917,7 @@ VAL_resolve_osf_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 5
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_OSF_success_terms
@@ -932,10 +942,10 @@ VAL_resolve_aph_operation = {
 	else = { set_variable = { var = VAL_APH_last_family value = ADISCORD_VAL_family_code } set_variable = { var = VAL_APH_repeat_streak value = 1 } }
 	if = {
 		limit = { check_variable = { var = VAL_APH_repeat_streak value = 3 compare = greater_than_or_equals } }
-		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 } } set_country_flag = { flag = VAL_APH_block_market days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 } } set_country_flag = { flag = VAL_APH_block_arms days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 } } set_country_flag = { flag = VAL_APH_block_infrastructure days = 90 value = 1 } }
-		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 } } set_country_flag = { flag = VAL_APH_block_captain days = 90 value = 1 } }
+		if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 1 compare = equals } } set_country_flag = { flag = VAL_APH_block_market days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 2 compare = equals } } set_country_flag = { flag = VAL_APH_block_arms days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 3 compare = equals } } set_country_flag = { flag = VAL_APH_block_infrastructure days = 90 value = 1 } }
+		else_if = { limit = { check_variable = { var = ADISCORD_VAL_family_code value = 4 compare = equals } } set_country_flag = { flag = VAL_APH_block_captain days = 90 value = 1 } }
 		else = { set_country_flag = { flag = VAL_APH_block_terms days = 90 value = 1 } }
 	}
 	if = {
@@ -943,6 +953,7 @@ VAL_resolve_aph_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 1
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_APH_success_market
@@ -959,6 +970,7 @@ VAL_resolve_aph_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 2
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_APH_success_arms
@@ -975,6 +987,7 @@ VAL_resolve_aph_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 3
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_APH_success_infrastructure
@@ -991,6 +1004,7 @@ VAL_resolve_aph_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 4
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_APH_success_captain
@@ -1007,6 +1021,7 @@ VAL_resolve_aph_operation = {
 			check_variable = {
 				var = ADISCORD_VAL_family_code
 				value = 5
+				compare = equals
 			}
 			NOT = {
 				has_country_flag = VAL_APH_success_terms
@@ -1977,7 +1992,6 @@ VAL_settle_wasteland_capitulation = {
 		limit = { tag = ERT }
 		if = {
 			limit = { VAL = { has_completed_focus = VAL_Southern_Expansion VAL_wasteland_administration_ready = yes } }
-			every_owned_state = { WCA = { transfer_state = PREV } add_core_of = WCA set_state_controller_to = WCA }
 			167 = {
 				if = {
 					limit = {
@@ -1999,7 +2013,29 @@ VAL_settle_wasteland_capitulation = {
 					set_state_controller_to = WCA
 				}
 			}
-			168 = { WCA = { transfer_state = 168 } add_core_of = WCA set_state_controller_to = WCA }
+			168 = {
+				if = {
+					limit = {
+						owner = {
+							OR = {
+								tag = ERT
+								tag = VAL
+								is_subject_of = VAL
+							}
+						}
+						controller = {
+							OR = {
+								tag = ERT
+								tag = VAL
+								is_subject_of = VAL
+							}
+						}
+					}
+					WCA = { transfer_state = 168 }
+					add_core_of = WCA
+					set_state_controller_to = WCA
+				}
+			}
 			169 = {
 				if = {
 					limit = {
@@ -2138,7 +2174,6 @@ VAL_settle_wasteland_capitulation = {
 	}
 	else_if = {
 		limit = { tag = IRT }
-		every_owned_state = { WCA = { transfer_state = PREV } add_core_of = WCA set_state_controller_to = WCA }
 		178 = {
 			if = {
 				limit = {
@@ -4872,6 +4907,7 @@ VAL_enter_stelander_defeat = {
 			NOT = { has_country_flag = VAL_stelander_defeated }
 		}
 		set_country_flag = VAL_stelander_defeated
+		VAL_close_northern_coalition_campaign = yes
 		if = { limit = { has_power_balance = { id = VAL_command_balance } } remove_power_balance = { id = VAL_command_balance } }
 		set_country_flag = VAL_cw_defeated
 		set_country_flag = VAL_cw_settled
@@ -5578,31 +5614,115 @@ VAL_restore_stelander_conquered_administrations = {
 
 	if = {
 		limit = { BJK = { exists = no } STS = { any_owned_state = { is_core_of = BJK } } }
-		release_autonomy = { target = BJK autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BJK autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BJK = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BJK
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { BLD = { exists = no } STS = { any_owned_state = { is_core_of = BLD } } }
-		release_autonomy = { target = BLD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BLD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BLD = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BLD
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { BHG = { exists = no } STS = { any_owned_state = { is_core_of = BHG } } }
-		release_autonomy = { target = BHG autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BHG autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BHG = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BHG
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { BGT = { exists = no } STS = { any_owned_state = { is_core_of = BGT } } }
-		release_autonomy = { target = BGT autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BGT autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BGT = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BGT
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { BBV = { exists = no } STS = { any_owned_state = { is_core_of = BBV } } }
-		release_autonomy = { target = BBV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BBV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BBV = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BBV
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { BCM = { exists = no } STS = { any_owned_state = { is_core_of = BCM } } }
-		release_autonomy = { target = BCM autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = BCM autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { BCM = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = BCM
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 	if = {
 		limit = { YPR = { exists = no } STS = { any_owned_state = { is_core_of = YPR } } }
-		release_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		STS = {
+			release_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+		}
+		if = {
+			limit = { YPR = { exists = yes is_subject_of = STS } }
+			set_autonomy = {
+				target = YPR
+				autonomy_state = autonomy_VAL_contract_administration
+				freedom_level = 0.10
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
 	}
 
 	4 = { if = { limit = { is_owned_by = STS } add_core_of = BGT BGT = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BGT } } }
@@ -5875,6 +5995,58 @@ VAL_settle_nod_overlord_sts_defeat = {
 	}
 }
 
+VAL_close_northern_coalition_campaign = {
+	clr_country_flag = VAL_northern_coalition_campaign_active
+	YPR = {
+		if = {
+			limit = { has_country_flag = VAL_northern_coalition_added_major }
+			set_major = no
+			clr_country_flag = VAL_northern_coalition_added_major
+		}
+		clr_country_flag = VAL_northern_coalition_campaign_member
+		clr_country_flag = VAL_northern_coalition_capitulation_reserved
+	}
+	COF = {
+		if = {
+			limit = { has_country_flag = VAL_northern_coalition_added_major }
+			set_major = no
+			clr_country_flag = VAL_northern_coalition_added_major
+		}
+		clr_country_flag = VAL_northern_coalition_campaign_member
+		clr_country_flag = VAL_northern_coalition_capitulation_reserved
+	}
+	TFF = {
+		if = {
+			limit = { has_country_flag = VAL_northern_coalition_added_major }
+			set_major = no
+			clr_country_flag = VAL_northern_coalition_added_major
+		}
+		clr_country_flag = VAL_northern_coalition_campaign_member
+		clr_country_flag = VAL_northern_coalition_capitulation_reserved
+	}
+}
+
+VAL_reconcile_northern_coalition_campaign = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_coalition_campaign_active
+			OR = {
+				exists = no
+				has_capitulated = yes
+				is_subject = yes
+				has_country_flag = VAL_stelander_defeated
+				AND = {
+					NOT = { has_war_with = YPR }
+					NOT = { has_war_with = COF }
+					NOT = { has_war_with = TFF }
+					NOT = { VAL_northern_coalition_campaign_victory_ready = yes }
+				}
+			}
+		}
+		VAL_close_northern_coalition_campaign = yes
+	}
+}
+
 # The intact northern coalition is a separate Kefreyt campaign. It is opened as
 # one native war and every member is kept major until the common settlement runs.
 VAL_adopt_northern_coalition_defensive_campaign = {
@@ -5908,15 +6080,27 @@ VAL_adopt_northern_coalition_defensive_campaign = {
 		set_country_flag = VAL_northern_coalition_campaign_active
 		YPR = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		COF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		TFF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		VAL_call_subjects_to_wars = yes
 	}
@@ -5928,15 +6112,27 @@ VAL_begin_northern_coalition_campaign = {
 		set_country_flag = VAL_northern_coalition_campaign_active
 		YPR = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		COF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		TFF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
-			set_major = yes
+			if = {
+				limit = { is_major = no }
+				set_country_flag = VAL_northern_coalition_added_major
+				set_major = yes
+			}
 		}
 		if = {
 			limit = {
@@ -5994,10 +6190,7 @@ VAL_begin_northern_coalition_campaign = {
 			if = { limit = { has_war_with = YPR } white_peace = YPR }
 			if = { limit = { has_war_with = COF } white_peace = COF }
 			if = { limit = { has_war_with = TFF } white_peace = TFF }
-			clr_country_flag = VAL_northern_coalition_campaign_active
-			YPR = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
-			COF = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
-			TFF = { clr_country_flag = VAL_northern_coalition_campaign_member set_major = no }
+			VAL_close_northern_coalition_campaign = yes
 		}
 	}
 }
@@ -6048,7 +6241,6 @@ VAL_settle_northern_coalition_victory = {
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
 				clr_country_flag = VAL_northern_coalition_capitulation_reserved
-				set_major = no
 			}
 		}
 		if = {
@@ -6066,7 +6258,6 @@ VAL_settle_northern_coalition_victory = {
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
 				clr_country_flag = VAL_northern_coalition_capitulation_reserved
-				set_major = no
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -6085,11 +6276,10 @@ VAL_settle_northern_coalition_victory = {
 				set_country_flag = VAL_northern_coalition_administration
 				clr_country_flag = VAL_northern_coalition_campaign_member
 				clr_country_flag = VAL_northern_coalition_capitulation_reserved
-				set_major = no
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
-		clr_country_flag = VAL_northern_coalition_campaign_active
+		VAL_close_northern_coalition_campaign = yes
 		set_country_flag = VAL_northern_coalition_settlement_completed
 		VAL_queue_ainholm_colony = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -6169,30 +6359,30 @@ VAL_finish_nodrul_administration = {
 		if = {
 			limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
 			set_cosmetic_tag = NOD_VAL_administration
-			set_politics = { ruling_party = etatism elections_allowed = no }
-			if = {
-				limit = {
-					has_character = NOD_VAL_Contract_Council
-					NOD_VAL_Contract_Council = {
-						NOT = {
-							has_ideology = contractual_etatism
-						}
-					}
-				}
-				add_country_leader_role = {
-					character = NOD_VAL_Contract_Council
-					promote_leader = no
-					country_leader = {
-						ideology = contractual_etatism
-						expire = "2200.1.1.1"
+		}
+		set_politics = { ruling_party = etatism elections_allowed = no }
+		if = {
+			limit = {
+				has_character = NOD_VAL_Contract_Council
+				NOD_VAL_Contract_Council = {
+					NOT = {
+						has_ideology = contractual_etatism
 					}
 				}
 			}
-			promote_character = { character = NOD_VAL_Contract_Council ideology = contractual_etatism }
-			load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
-			mark_focus_tree_layout_dirty = yes
-			VAL = { country_event = { id = val_contract.348 } }
+			add_country_leader_role = {
+				character = NOD_VAL_Contract_Council
+				promote_leader = no
+				country_leader = {
+					ideology = contractual_etatism
+					expire = "2200.1.1.1"
+				}
+			}
 		}
+		promote_character = { character = NOD_VAL_Contract_Council ideology = contractual_etatism }
+		load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
+		mark_focus_tree_layout_dirty = yes
+		VAL = { country_event = { id = val_contract.348 } }
 		clr_country_flag = NOD_cw_entered
 		clr_country_flag = NOD_cw_intervention_ready
 		clr_country_flag = NOD_cw_intervention_approved
@@ -7518,39 +7708,51 @@ VAL_return_stelander_cores = {
 VAL_offer_stelander_equal_alliance = {
 	if = {
 		limit = { tag = VAL VAL_stelander_equal_partner_available = yes NOT = { has_country_flag = VAL_stelander_alliance_offer_pending } }
-		set_country_flag = VAL_stelander_alliance_offer_pending
+		set_country_flag = { flag = VAL_stelander_alliance_offer_pending days = 30 }
 		if = {
-			limit = { STS = { exists = yes has_country_flag = VAL_stelander_equal_recognition } }
-			STS = { country_event = { id = val_contract.354 days = 1 } }
+			limit = { STS = { VAL_stelander_equal_recipient_available = yes } }
+			STS = {
+				set_country_flag = { flag = VAL_stelander_alliance_offer_received days = 30 }
+				country_event = { id = val_contract.354 days = 1 }
+			}
 		}
 		else_if = {
-			limit = { STP = { exists = yes has_country_flag = VAL_stelander_equal_recognition } }
-			STP = { country_event = { id = val_contract.354 days = 1 } }
+			limit = { STP = { VAL_stelander_equal_recipient_available = yes } }
+			STP = {
+				set_country_flag = { flag = VAL_stelander_alliance_offer_received days = 30 }
+				country_event = { id = val_contract.354 days = 1 }
+			}
 		}
 	}
 }
 
 VAL_form_equal_stelander_alliance = {
 	if = {
-		limit = { tag = VAL }
-		if = {
-			limit = { NOT = { is_in_faction = yes } }
-			create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_stelander_equal_alliance_name }
+		limit = { VAL_stelander_equal_offer_can_accept = yes }
+		# The event recipient is the consenting partner, even if both tags exist.
+		VAL = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = { template = faction_template_ADISCORD_standard name = VAL_stelander_equal_alliance_name }
+			}
+			add_to_faction = PREV
+			set_country_flag = VAL_stelander_equal_alliance
+			clr_country_flag = VAL_stelander_alliance_offer_pending
 		}
-		if = {
-			limit = { STS = { exists = yes NOT = { is_in_faction_with = VAL } } }
-			add_to_faction = STS
-		}
-		else_if = {
-			limit = { STP = { exists = yes NOT = { is_in_faction_with = VAL } } }
-			add_to_faction = STP
-		}
+		set_country_flag = VAL_stelander_equal_alliance
+		clr_country_flag = VAL_stelander_alliance_offer_received
 	}
 }
 
 VAL_call_stelander_partner_to_wars = {
 	if = {
-		limit = { tag = VAL has_country_flag = VAL_stelander_equal_alliance }
+		limit = {
+			tag = VAL
+			has_country_flag = VAL_stelander_equal_alliance
+			has_country_flag = VAL_stelander_joint_staff
+			has_capitulated = no
+			is_subject = no
+		}
 		if = {
 			limit = { has_war_with = NOD STS = { exists = yes is_in_faction_with = VAL NOT = { has_war_with = NOD } } }
 			STS = { add_to_war = { targeted_alliance = VAL enemy = NOD single_target_only = no } }
@@ -8887,11 +9089,11 @@ VAL_accept_quarterly_order_1 = {
 			}
 			set_variable = {
 				var = VAL_order_1_price
-				value = 50000
+				value = 5000
 			}
 			set_variable = {
 				var = VAL_order_1_remaining
-				value = 50000
+				value = 5000
 			}
 		}
 	}
@@ -9072,11 +9274,11 @@ VAL_accept_quarterly_order_2 = {
 			}
 			set_variable = {
 				var = VAL_order_2_price
-				value = 50000
+				value = 5000
 			}
 			set_variable = {
 				var = VAL_order_2_remaining
-				value = 50000
+				value = 5000
 			}
 		}
 	}
@@ -9295,5 +9497,3 @@ VAL_settle_stelander_support_victory = {
 }
 
 # VAL: settle the wager only from the authoritative STP-STS war result.
-
-

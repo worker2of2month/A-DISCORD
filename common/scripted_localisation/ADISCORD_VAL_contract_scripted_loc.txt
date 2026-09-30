@@ -1050,3 +1050,27 @@ defined_text = {
 	text = { trigger = { FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 1 compare = greater_than_or_equals } } } } localization_key = VAL_workshop_firstBlocked }
 	text = { localization_key = VAL_workshop_secondBlocked }
 }
+
+defined_text = {
+	name = VALGetCostPP10
+	text = { trigger = { has_political_power < 10 } localization_key = VAL_cost_value_10_blocked }
+	text = { localization_key = VAL_cost_value_10 }
+}
+
+defined_text = {
+	name = VALGetCostTreasury50
+	text = { trigger = { NOT = { ADISCORD_economy_can_spend_50 = yes } } localization_key = VAL_cost_value_50_blocked }
+	text = { localization_key = VAL_cost_value_50 }
+}
+
+defined_text = {
+	name = VALGetCostTreasury500
+	text = { trigger = { NOT = { ADISCORD_economy_can_spend_500 = yes } } localization_key = VAL_cost_value_500_blocked }
+	text = { localization_key = VAL_cost_value_500 }
+}
+
+defined_text = {
+	name = VALGetCostRifles40000
+	text = { trigger = { has_equipment = { infantry_equipment < 40000 } } localization_key = VAL_cost_value_40000_blocked }
+	text = { localization_key = VAL_cost_value_40000 }
+}

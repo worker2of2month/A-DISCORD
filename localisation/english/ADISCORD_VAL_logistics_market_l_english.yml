@@ -35,7 +35,7 @@
  VAL_license_grey_brokers: "License the Grey Brokers"
  VAL_license_grey_brokers_desc: "Do not destroy the underground network; make it pay for permission to operate. The treasury immediately receives §G50§!, while grey-market pressure rises by §R15§!."
  VAL_buy_contraband_arms: "Buy Arms Off the Ledger"
- VAL_buy_contraband_arms_desc: "When official corridors are overloaded or cut, private brokers can push weapons back onto the market. For §Y250§! treasury we receive §G1,500§! infantry weapons at the cost of §R10§! grey-market pressure."
+ VAL_buy_contraband_arms_desc:0 "When official corridors are overloaded or cut, private brokers can push weapons back onto the market. For §Y250§! treasury we receive §G15,000§! infantry weapons at the cost of §R10§! grey-market pressure."
  VAL_audit_broker_houses: "Audit the Broker Houses"
  VAL_audit_broker_houses_desc:0 "Spend 250 coins to reduce pressure by 25 and dependence by one. Audits close licences and contraband supplies for 60 days; check your weapon stocks before an offensive."
 

@@ -1145,7 +1145,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_cw_first_postwar_budget
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_2160_budget
 		x = 7
 		offset = { x = 9 trigger = { tag = STS } }
 		y = 0
@@ -1902,7 +1902,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_permanent_security
 		icon = GFX_focus_STP_ps_permanent_security
-		x = 5
+		x = -14
 		y = 9
 
 		cost = 3
@@ -1921,7 +1921,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_presidium_authority
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
-		x = 5
+		x = -14
 		y = 10
 
 		cost = 3
@@ -1936,7 +1936,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_district_fund
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_ps_northern_credit
 		x = -18
 		y = 9
 
@@ -1957,7 +1957,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_cells_agreement
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_party_district_compact
 		x = -18
 		y = 10
 
@@ -1994,7 +1994,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_cadastral_commissions
-		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
+		icon = GFX_focus_STP_cw_protocol_office
 		x = -2
 		y = 1
 		cost = 4
@@ -2013,7 +2013,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_regional_connections
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_VAL_Market_Roads_North
 		x = 2
 		y = 1
 		cost = 4
@@ -2039,7 +2039,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_workshop_contracts
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = -2
 		y = 2
 		cost = 5
@@ -2066,7 +2066,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_local_officer_courses
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_STP_ps_joint_staff
 		x = 2
 		y = 2
 		cost = 4
@@ -2085,7 +2085,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_common_market
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_VAL_Bread_From_Barracks
 		x = 0
 		y = 3
 		cost = 5
@@ -2106,7 +2106,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_kefreyt_settlement
-		icon = GFX_focus_STP_pw_party_open_settlement
+		icon = GFX_focus_STP_GUARANTEE_MINISTERS
 		x = 0
 		y = 4
 		cost = 5

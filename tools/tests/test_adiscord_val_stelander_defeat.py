@@ -327,6 +327,8 @@ class ValStelanderDefeatTests(unittest.TestCase):
         )
 
     def test_kefreyt_victory_closes_competing_nod_ultimatum(self):
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         install = named_block(effects, "VAL_install_stelander_administration")
         self.assertIn("STP_close_competing_ultimatum_wars_after_defeat = yes", install)

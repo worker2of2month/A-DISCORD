@@ -2742,6 +2742,340 @@ ideas = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
+
+		STP_pe_houses_guarantors_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.025
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_security_inspectors_idea = {
+			picture = STP_security_pressure
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.025
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_festival_services_idea = {
+			picture = STP_law_public_orgies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				stability_factor = 0.03
+				consumer_goods_factor = -0.02
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_regent_cadres_idea = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				research_speed_factor = 0.025
+				production_speed_industrial_complex_factor = 0.05
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_houses_course_a_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+				political_power_gain = -0.025
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_houses_course_b_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				political_power_gain = 0.075
+				ADISCORD_economy_overall_income_factor = -0.0125
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_festival_course_a_idea = {
+			picture = STP_law_public_orgies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				stability_factor = 0.0175
+				ADISCORD_economy_admin_expense_factor = 0.015
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_festival_course_b_idea = {
+			picture = STP_law_public_orgies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				ADISCORD_economy_overall_income_factor = 0.02
+				stability_factor = -0.01
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_staff_course_a_idea = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.02
+				mobilization_speed = -0.025
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_staff_course_b_idea = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				planning_speed = 0.025
+				ADISCORD_economy_army_expense_factor = 0.0175
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_trade_course_a_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				production_factory_max_efficiency_factor = 0.02
+				ADISCORD_economy_admin_expense_factor = 0.0125
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_trade_course_b_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				industrial_capacity_factory = 0.02
+				ADISCORD_economy_overall_income_factor = -0.015
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_security_course_a_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				stability_factor = 0.0175
+				political_power_gain = -0.025
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_security_course_b_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				political_power_gain = 0.075
+				stability_factor = -0.0125
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_regent_course_a_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+				production_speed_buildings_factor = -0.0075
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+
+		STP_pe_regent_course_b_idea = {
+			picture = STP_law_private_societies
+			allowed = {
+				always = no
+			}
+			removal_cost = -1
+			cancel = {
+				STP_pe_current = no
+			}
+			modifier = {
+				production_speed_buildings_factor = 0.02
+				ADISCORD_economy_overall_income_factor = -0.0175
+			}
+			on_add = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+			on_remove = {
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
 	}
 
 	political_advisor_head_of_state = {

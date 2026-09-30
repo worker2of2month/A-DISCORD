@@ -149,11 +149,7 @@ class KefreytWarTooltipTests(unittest.TestCase):
 
     def test_every_direct_war_focus_has_an_explicit_war_tooltip(self) -> None:
         expected = {
-            "VAL_Return_Southern_Tsaygen": "VAL_return_southern_tsaygen_war_tt",
-            "VAL_frontier_return_irem": "VAL_frontier_return_irem_war_tt",
-            "VAL_Southern_Expansion": "VAL_southern_expansion_war_tt",
-            "VAL_Eastern_Expansion": "VAL_eastern_expansion_war_tt",
-            "VAL_Bezhaysk_Operation": "VAL_bezhaysk_operation_war_tt",
+            "VAL_Bezhaysk_Operation": "VAL_declares_war_bezhaysk_tt",
         }
         direct_wars = []
         for match in re.finditer(r"(?m)^\s*focus\s*=\s*\{", self.focuses):
@@ -206,16 +202,30 @@ class KefreytWarTooltipTests(unittest.TestCase):
         passes = focus_block(self.focuses, "VAL_Seize_The_Northern_Passes")
         self.assertNotIn("declare_war_on", passes)
         self.assertIn(
-            "custom_effect_tooltip = VAL_stelander_military_course_tt", passes
+            "custom_effect_tooltip = VAL_stelander_war_route_tt", passes
         )
-        self.assertIn("Сам фокус войну не объявляет", self.ru)
+        for loc, phrase in (
+            (self.ru, "Этот фокус не объявляет войну сразу"),
+            (self.en, "This focus does not declare war immediately"),
+        ):
+            line = next(
+                row for row in loc.splitlines()
+                if row.strip().startswith("VAL_stelander_war_route_tt:")
+            )
+            self.assertIn(phrase, line)
+            self.assertIn("$VAL_cw_begin_mobilization$", line)
 
         mandate = focus_block(self.focuses, "VAL_frontier_security_plan")
         self.assertNotIn("declare_war_on", mandate)
         self.assertIn(
-            "custom_effect_tooltip = VAL_frontier_security_plan_war_tt", mandate
+            "custom_effect_tooltip = VAL_cannibal_war_route_tt", mandate
         )
-        self.assertIn("Отказ позволяет начать войну отдельным решением", self.ru)
+        for loc in (self.ru, self.en):
+            line = next(
+                row for row in loc.splitlines()
+                if row.strip().startswith("VAL_cannibal_war_route_tt:")
+            )
+            self.assertIn("$VAL_frontier_begin_offensive$", line)
 
     def test_localisation_files_keep_bom(self) -> None:
         for relative in (

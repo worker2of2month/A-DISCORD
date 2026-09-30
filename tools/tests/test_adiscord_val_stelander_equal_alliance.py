@@ -62,7 +62,12 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
         start = focuses.index("id = VAL_Equal_Powers_Pact")
         pact = focuses[start : start + 4000]
         self.assertIn("prerequisite = { focus = VAL_Stelander_Ultimatum }", pact)
-        self.assertIn("has_country_flag = VAL_stelander_equal_recognition", pact)
+        self.assertIn("VAL_stelander_equal_partner_available = yes", pact)
+        eligibility = named_block(
+            read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+            "VAL_stelander_equal_partner_available",
+        )
+        self.assertIn("has_country_flag = VAL_stelander_equal_recognition", eligibility)
         self.assertIn("ai_will_do = { base = 1 }", pact)
 
     def test_stelander_ai_rarely_accepts_alliance(self) -> None:
@@ -86,8 +91,10 @@ class ValStelanderEqualAllianceTests(unittest.TestCase):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         formation = named_block(effects, "VAL_form_equal_stelander_alliance")
         self.assertIn("create_faction_from_template", formation)
-        self.assertIn("add_to_faction = STS", formation)
-        self.assertIn("add_to_faction = STP", formation)
+        self.assertIn("VAL_stelander_equal_offer_can_accept = yes", formation)
+        self.assertIn("add_to_faction = PREV", formation)
+        self.assertNotIn("add_to_faction = STS", formation)
+        self.assertNotIn("add_to_faction = STP", formation)
         self.assertNotIn("puppet =", formation)
         self.assertNotIn("set_autonomy", formation)
 

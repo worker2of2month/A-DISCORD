@@ -4,6 +4,7 @@ on_actions = {
 			VAL_contract_reconcile = yes
 			VAL_resource_aid_daily = yes
 			VAL_northern_aid_daily = yes
+			VAL_reconcile_northern_coalition_campaign = yes
 			if = {
 				limit = { has_war = yes has_capitulated = no is_subject = no }
 				VAL_call_subjects_to_wars = yes # daily subject-war reconciliation
@@ -113,6 +114,7 @@ on_actions = {
 					VAL_final_crisis_initialize = yes
 					VAL_final_crisis_reconcile = yes
 					VAL_call_frontier_partner = yes
+					VAL_call_stelander_partner_to_wars = yes
 				}
 			}
 		}
@@ -120,6 +122,7 @@ on_actions = {
 
 	on_puppet = {
 		effect = {
+			VAL = { VAL_reconcile_northern_coalition_campaign = yes }
 			VAL_queue_frontier_reconciliation = yes
 			if = {
 				limit = { FROM = { tag = VAL } }

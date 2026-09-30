@@ -248,7 +248,12 @@ def walk_script(items: list[Entry], *, executable: bool = False):
 
 
 def validate_supplemental_rewards(
-    focus_text: str, effects_text: str, dynamic_text: str = "", decisions_text: str = ""
+    focus_text: str,
+    effects_text: str,
+    dynamic_text: str = "",
+    decisions_text: str = "",
+    triggers_text: str = "",
+    events_text: str = "",
 ) -> list[str]:
     """Points may accompany a real effect; display text and marker writes are not one.
 
@@ -275,11 +280,31 @@ def validate_supplemental_rewards(
         "activate_mission",
         "give_resource_rights",
         "recruit_character",
+        "add_corps_commander_role",
+        "add_field_marshal_role",
+        "set_technology",
+        "add_claim_by",
+        "create_unit",
+        "spawn_unit",
+        "create_faction_from_template",
+        "add_to_faction",
+        "declare_war_on",
+        "add_to_war",
     }
     effects = {
         e.key: e.value
         for e in parse_clausewitz(effects_text)
         if isinstance(e.value, list)
+    }
+    triggers = {
+        e.key: e.value
+        for e in parse_clausewitz(triggers_text)
+        if isinstance(e.value, list)
+    }
+    events = {
+        script_fields(e.value).get("id"): e.value
+        for e in parse_clausewitz(events_text)
+        if e.key == "country_event" and isinstance(e.value, list)
     }
     refresh = effects.get("VAL_refresh_contract_modifier", [])
     consumed_variables = {
@@ -319,16 +344,22 @@ def validate_supplemental_rewards(
         if entry.key == "set_variable"
     }
 
-    def nonzero(value, values):
+    def positive_reward(value, values):
         try:
-            return float(value) != 0
+            return float(value) > 0
         except (ValueError, TypeError):
-            return values[value] != 0 if value in values else bool(value)
+            return values[value] > 0 if value in values else bool(value)
 
     def consequential(items, flags, values, changes, seen=frozenset()):
         for entry in walk_script(items, executable=True):
             if entry.key == "set_country_flag":
-                flags.add(entry.value)
+                flag = (
+                    script_fields(entry.value).get("flag")
+                    if isinstance(entry.value, list)
+                    else entry.value
+                )
+                if flag:
+                    flags.add(flag)
             elif entry.key == "clr_country_flag":
                 flags.discard(entry.value)
             if entry.key in {"set_temp_variable", "set_variable"}:
@@ -348,6 +379,8 @@ def validate_supplemental_rewards(
                 if fields.get("var") in consumed_variables and amount:
                     variable = fields["var"]
                     changes[variable] = changes.get(variable, 0) + amount
+                if fields.get("var") == "ADISCORD_economy_treasury" and amount > 0:
+                    return True
             if entry.key == "VAL_refresh_contract_modifier":
                 # A refresh replaces derived outputs. Only input changes and
                 # specialisations still present after that replacement count.
@@ -373,7 +406,7 @@ def validate_supplemental_rewards(
                                 )
                 continue
             if entry.key in material:
-                if isinstance(entry.value, str) and nonzero(entry.value, values):
+                if isinstance(entry.value, str) and positive_reward(entry.value, values):
                     return True
                 if isinstance(entry.value, list):
                     fields = script_fields(entry.value)
@@ -383,7 +416,7 @@ def validate_supplemental_rewards(
                         if key in fields
                     ]
                     if not quantities or any(
-                        nonzero(value, values) for value in quantities
+                        positive_reward(value, values) for value in quantities
                     ):
                         return True
             if entry.key in effects and entry.key not in seen and entry.value == "yes":
@@ -391,6 +424,18 @@ def validate_supplemental_rewards(
                     effects[entry.key], flags, values, changes, seen | {entry.key}
                 ):
                     return True
+            if entry.key == "country_event" and isinstance(entry.value, list):
+                event_id = script_fields(entry.value).get("id")
+                if event_id in events and event_id not in seen:
+                    event = events[event_id]
+                    outcomes = script_children(event, "immediate") + [
+                        child
+                        for option in event if option.key == "option"
+                        for child in option.value
+                        if child.key not in {"name", "trigger", "ai_chance"}
+                    ]
+                    if consequential(outcomes, flags, values, changes, seen | {event_id}):
+                        return True
         return False
 
     decisions: dict[str, list[list[Entry]]] = {}
@@ -400,28 +445,61 @@ def validate_supplemental_rewards(
                 if isinstance(decision.value, list):
                     decisions.setdefault(decision.key, []).append(decision.value)
 
-    def requires_focus(items, focus_id):
+    def requires_focus(items, focus_id, seen=frozenset()):
         def required(entry):
             if entry.key == "has_completed_focus":
                 return entry.value == focus_id
             if entry.key in {"AND", "hidden_trigger", "custom_trigger_tooltip"}:
-                return requires_focus(entry.value, focus_id)
+                return requires_focus(entry.value, focus_id, seen)
             if entry.key == "OR":
                 return bool(entry.value) and all(required(e) for e in entry.value)
+            if entry.key in triggers and entry.value == "yes" and entry.key not in seen:
+                return requires_focus(triggers[entry.key], focus_id, seen | {entry.key})
+            if isinstance(entry.value, list) and re.fullmatch(r"VAL|ROOT|FROM", entry.key):
+                return requires_focus(entry.value, focus_id, seen)
             return False
 
         return any(required(e) for e in items)
 
     def paid_unlock(reward, focus_id):
+        def expanded(items, seen=frozenset()):
+            for entry in walk_script(items, executable=True):
+                yield entry
+                if entry.key in effects and entry.value == "yes" and entry.key not in seen:
+                    yield from expanded(effects[entry.key], seen | {entry.key})
+
+        def debit(entry):
+            if entry.key.startswith("ADISCORD_economy_spend_"):
+                return entry.value == "yes"
+            if entry.key == "subtract_from_variable":
+                return script_fields(entry.value).get("var") == "ADISCORD_economy_treasury"
+            if entry.key in {
+                "add_manpower", "add_political_power", "add_equipment_to_stockpile"
+            }:
+                value = (
+                    script_fields(entry.value).get("amount", "0")
+                    if isinstance(entry.value, list) else entry.value
+                )
+                try:
+                    return float(value) < 0
+                except ValueError:
+                    return False
+            return False
+
+        definitions = []
         for unlock in (
             e for e in walk_script(reward) if e.key == "unlock_decision_tooltip"
         ):
-            definitions = (
-                decisions.get(unlock.value, []) if isinstance(unlock.value, str) else []
+            named = (
+                decisions.get(unlock.value, [])
+                if isinstance(unlock.value, str) else []
             )
-            if len(definitions) != 1:
-                continue
-            decision = definitions[0]
+            if len(named) != 1:
+                return False
+            definitions.extend(named)
+        # Some capabilities alter an existing order rather than adding a new button.
+        definitions.extend(body for bodies in decisions.values() for body in bodies)
+        for decision in definitions:
             fields = script_fields(decision)
             try:
                 paid = (
@@ -432,13 +510,28 @@ def validate_supplemental_rewards(
                 paid = False
             # custom_cost_text replaces native payment; that separate contract
             # cannot be inferred from a positive cost field alone.
-            if not paid or "custom_cost_text" in fields:
+            if "custom_cost_text" in fields:
+                cost_gate = script_children(decision, "custom_cost_trigger")
+                paid = bool(cost_gate) and any(
+                    debit(e)
+                    for e in expanded(script_children(decision, "complete_effect"))
+                )
+            if not paid:
                 continue
             gate = script_children(decision, "visible") + script_children(
                 decision, "available"
             )
             if not requires_focus(gate, focus_id):
                 continue
+            modifier = script_fields(script_children(decision, "modifier"))
+            try:
+                if float(fields.get("days_remove", 0)) > 0 and any(
+                    math.isfinite(float(value)) and float(value) != 0
+                    for value in modifier.values()
+                ):
+                    return True
+            except ValueError:
+                pass
             changes = {}
             outcome = script_children(decision, "complete_effect") + script_children(
                 decision, "remove_effect"
@@ -536,6 +629,8 @@ def validate_val_preview_ideas(
     dynamic_contract_map = native_maps.get("VAL_contract_state", {})
     specialization_vectors: dict[str, dict[int, dict[str, float]]] = {}
     for family, level_variable in specialization_levels.items():
+        if not any(f"VAL_contract_{family}_{tier}" in ideas for tier in range(1, 4)):
+            continue
         tier_vectors: dict[int, dict[str, float]] = {}
         for branch in (e for e in refresh if e.key in {"if", "else_if"}):
             limits = script_children(branch.value, "limit")
@@ -1072,16 +1167,30 @@ def main() -> int:
             issues.append(
                 f"{focus_id.group(1) if focus_id else 'unknown focus'} has no cost"
             )
-        elif int(cost.group(1)) > 5:
+        elif int(cost.group(1)) > (
+            10 if focus_id and focus_id.group(1) in {
+                "VAL_Shield_Special_Forces", "VAL_Armored_Assault_Corps"
+            } else 5
+        ):
             issues.append(
-                f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds 35 days"
+                f"{focus_id.group(1) if focus_id else 'unknown focus'} exceeds its authored duration ceiling"
             )
     issues.extend(
         validate_supplemental_rewards(
             focus_text,
-            read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+            "\n".join(read(path) for path in (
+                "common/scripted_effects/ADISCORD_VAL_effects.txt",
+                "common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt",
+                "common/scripted_effects/ADISCORD_shared_action_effects.txt",
+                "common/scripted_effects/ADISCORD_economy_effects.txt",
+            )),
             read("common/dynamic_modifiers/ADISCORD_VAL_contract_dynamic_modifier.txt"),
-            read("common/decisions/ADISCORD_VAL_decisions.txt"),
+            "\n".join(read(path) for path in (
+                "common/decisions/ADISCORD_VAL_decisions.txt",
+                "common/decisions/ADISCORD_VAL_logistics_market_decisions.txt",
+            )),
+            read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"),
+            read("events/ADISCORD_VAL_contract_events.txt"),
         )
     )
 
@@ -1298,8 +1407,32 @@ def main() -> int:
     ):
         if token not in decisions:
             issues.append(f"decision system is missing {token}")
-    if re.search(r"ADISCORD_economy_treasury\s+value\s*=", decisions):
-        issues.append("Kefreyt decisions bypass the shared treasury API")
+    # Affordability probes and variable-price escrow are legitimate readers/writers.
+    # Fixed tariffs need the API or equivalent monthly accounting and cache invalidation.
+    def check_treasury_ledger(items, dirty=False):
+        dirty = dirty or script_fields(items).get("ADISCORD_economy_mark_dirty") == "yes"
+        for entry in items:
+            if entry.key in {"add_to_variable", "subtract_from_variable"}:
+                fields = script_fields(entry.value)
+                if fields.get("var") == "ADISCORD_economy_treasury" and re.fullmatch(
+                    r"[0-9]+(?:\.[0-9]+)?", fields.get("value", "")
+                ):
+                    accounting = "ADISCORD_economy_current_month_action_" + (
+                        "income" if entry.key == "add_to_variable" else "costs"
+                    )
+                    recorded = any(
+                        other.key == "add_to_variable" and script_fields(other.value) == {
+                            "var": accounting, "value": fields["value"]
+                        } for other in items
+                    )
+                    if not recorded or not dirty:
+                        issues.append("Kefreyt fixed-price decision bypasses treasury accounting")
+            elif isinstance(entry.value, list) and entry.key not in {
+                "limit", "available", "visible", "custom_cost_trigger", "ai_will_do"
+            }:
+                check_treasury_ledger(entry.value, dirty)
+
+    check_treasury_ledger(parse_clausewitz(decisions))
     for debug_decision in (
         "VAL_debug_initialize_systems",
         "VAL_debug_unlock_operations_map",
@@ -1481,7 +1614,6 @@ def main() -> int:
             "VAL rework initializer must have exactly one guarded runtime caller"
         )
     for token in (
-        "set_temp_variable = { var = VAL_contract_rifle_cost value = 4000 }",
         "VAL_pay_contract_rifles = yes",
         "limit = { has_country_flag = VAL_contract_rifles_paid }",
         "VAL_contract_reputation_level",
@@ -1491,6 +1623,15 @@ def main() -> int:
     ):
         if token not in effects:
             issues.append(f"rework effects are missing {token}")
+    quarterly = script_children(parse_clausewitz(effects), "VAL_pay_quarterly_contract_norm")
+    prices = [
+        script_fields(entry.value).get("value")
+        for entry in walk_script(quarterly, executable=True)
+        if entry.key == "set_temp_variable"
+        and script_fields(entry.value).get("var") == "VAL_contract_rifle_cost"
+    ]
+    if prices != ["40000"]:
+        issues.append("quarterly rifle contract must debit the authored 40000-rifle price exactly once")
     initialize = named_blocks(effects, "VAL_initialize_rework")
     if not initialize or "VAL_unlock_operations_map = yes" not in initialize[0]:
         issues.append(
@@ -1707,7 +1848,7 @@ def main() -> int:
                     f"{effect_id} still installs/removes runtime tier ideas: "
                     + ", ".join(sorted(tier_refs))
                 )
-            refresh_calls = scalar_values(
+            refresh_calls = assignment_values(
                 hidden_blocks[0].text, "VAL_refresh_contract_modifier"
             )
             if refresh_calls != ["yes"]:

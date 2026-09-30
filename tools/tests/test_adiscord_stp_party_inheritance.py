@@ -465,7 +465,8 @@ class PostwarLeaderProgrammeTests(unittest.TestCase):
                 shown = self.visible(self.facts(victor))
                 self.assertIn(root, shown)
                 self.assertGreaterEqual(len(shown), 10)
-                self.assertEqual(int(self.one(shown[root], "x")), 0)
+                # Constitutional policy and practical programmes occupy parallel lanes.
+                self.assertLess(int(self.one(shown[root], "x")), 0)
 
     def test_congress_result_replaces_victor_and_protectorate_overrides_both(self):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions

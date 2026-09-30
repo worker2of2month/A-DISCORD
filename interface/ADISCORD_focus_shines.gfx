@@ -1,4 +1,40 @@
 spriteTypes = {
+	SpriteType = {
+		name = "GFX_focus_STP_party_rear_administration_shine"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_rear_administration.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_rear_administration.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+	SpriteType = {
+		name = "GFX_focus_STP_party_war_directorate_shine"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_war_directorate.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_war_directorate.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
 	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
@@ -6197,6 +6233,24 @@ spriteTypes = {
 		effectFile = "gfx/FX/buttonstate.lua"
 		animation = {
 			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_destroy_nodrul.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+	SpriteType = {
+		name = "GFX_focus_VAL_Marine_Contract_Corps_shine"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Marine_Contract_Corps.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/VAL/GFX_focus_VAL_Marine_Contract_Corps.png"
 			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
 			animationrotation = -90.0
 			animationlooping = no
