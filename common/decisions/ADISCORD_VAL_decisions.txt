@@ -1663,16 +1663,8 @@ VAL_livonn_settlement_category = {
 			45 = { is_owned_by = OCA }
 		}
 		available = {
-			OR = {
-				AND = {
-					45 = { has_state_flag = STP_local_deal_asset }
-					STS = { STP_pw_can_reconstruct = yes }
-				}
-				STP = {
-					STP_pw_can_reconstruct = yes
-					has_country_flag = STP_sided_with_the_party_flag
-				}
-			}
+			45 = { has_state_flag = STP_local_deal_asset }
+			STS = { STP_pw_can_reconstruct = yes }
 		}
 		cost = 0
 		fire_only_once = yes

@@ -995,11 +995,13 @@ class PartyFactionContracts(unittest.TestCase):
         nod=True,
         quantize=False,
         focuses=(),
+        ideas=None,
     ):
         from decimal import Decimal, ROUND_DOWN
 
         values = {} if values is None else values
         flags = {"STP_sided_with_the_party_flag"} if flags is None else flags
+        ideas = set() if ideas is None else ideas
 
         def number(value):
             try:
@@ -1062,7 +1064,7 @@ class PartyFactionContracts(unittest.TestCase):
                         taken = True
                         execute([child for child in e.value if child.key != "limit"])
                 elif e.key in self.effects and e.key.startswith(
-                    ("STP_pf_", "STP_refresh_apparatus", "STP_change_apparatus")
+                    ("STP_pf_", "STP_pe_", "STP_refresh_apparatus", "STP_change_apparatus")
                 ):
                     self.assertEqual(e.value, "yes")
                     execute(self.effects[e.key])
@@ -1108,6 +1110,8 @@ class PartyFactionContracts(unittest.TestCase):
                     flags.add(e.value)
                 elif e.key == "clr_country_flag":
                     flags.discard(e.value)
+                elif e.key == "remove_ideas":
+                    ideas.discard(e.value)
                 elif e.key in (
                     "force_update_dynamic_modifier",
                     "add_dynamic_modifier",
@@ -1211,6 +1215,23 @@ class PartyFactionContracts(unittest.TestCase):
         self.assertIn(
             "STP_pf_clear", str(signature(self.effects["STP_cw_settle_union_victory"]))
         )
+
+    def test_terminal_cleanup_refunds_all_inherited_commissions_exactly_once(self):
+        routes = ("houses", "festival", "staff", "trade", "security", "regent")
+        values = {f"STP_pe_{route}_deposit": 450 for route in routes}
+        values["ADISCORD_economy_treasury"] = 100
+        flags = {f"STP_pe_{route}_prepared" for route in routes}
+        ideas = {f"STP_pe_{route}_{suffix}" for route in routes
+                 for suffix in ("crisis", "backlash", "ending_a_idea")}
+        self.simulate("STP_pf_clear", values, flags, ideas=ideas)
+        self.assertEqual(values["ADISCORD_economy_treasury"], 2800)
+        self.assertEqual(values["ADISCORD_economy_current_month_action_income"], 2700)
+        self.assertFalse(ideas)
+        self.assertFalse(flags)
+        self.assertFalse(any(name.endswith("_deposit") for name in values))
+        snapshot = dict(values)
+        self.simulate("STP_pf_clear", values, flags, ideas=ideas)
+        self.assertEqual(values, snapshot)
 
     def test_all_cards_actions_and_cooldowns_use_the_same_seven_factions(self):
         categories = parse_clausewitz(read(DECISIONS))
@@ -2385,6 +2406,83 @@ class PartyConstitutionContracts(unittest.TestCase):
         )
         effect = one(one(meta[0], "text"), "add_power_balance_value")
         self.assertEqual(one(effect, "value"), "[DELTA]")
+
+    def test_independent_identity_does_not_require_the_retired_balance(self):
+        body = self.effects["STP_pw_party_sync_revolution_identity"]
+        for independent in (True, False):
+            facts = {
+                ("STP", "STP_ch_current", "yes"): True,
+                ("STP", "is_subject", "no"): independent,
+                ("STP", "has_cosmetic_tag", "STP_revolution_capital"): True,
+            }
+            payload = [(e.key, e.value) for _, e in selected_effects(body, facts)]
+            self.assertEqual(
+                ("set_cosmetic_tag", "STP_revolution_capital") in payload,
+                independent,
+            )
+            self.assertEqual(("drop_cosmetic_tag", "yes") in payload, not independent)
+        for caller in (
+            self.effects["STP_ch_open_congress"],
+            one(self.focuses["STP_pw_party_revolution_capital"], "completion_reward"),
+        ):
+            self.assertIn(
+                "STP_pw_party_sync_revolution_identity", [e.key for e in walk(caller)]
+            )
+        hooks = one(
+            parse_clausewitz(read("common/on_actions/02_ADISCORD_STP_on_actions.txt")),
+            "on_actions",
+        )
+        for hook in ("on_puppet", "on_release_as_puppet", "on_subject_free"):
+            self.assertIn(
+                "STP_pw_party_sync_revolution_identity",
+                [e.key for e in walk(one(hooks, hook))],
+            )
+
+    def test_revolution_subject_gate_tracks_current_identity_and_overlord(self):
+        gate = one(
+            one(self.effects["STP_pw_party_sync_revolution_subject"], "if"), "limit"
+        )
+        for subject, independent, identity in (
+            (True, True, True),
+            (False, True, True),
+            (True, False, True),
+            (True, True, False),
+        ):
+            facts = {
+                ("NOD", "is_subject_of", "STP"): subject,
+                ("STP", "exists", "yes"): True,
+                ("STP", "is_subject", "no"): independent,
+                ("STP", "has_cosmetic_tag", "STP_revolution_capital"): identity,
+            }
+            self.assertEqual(
+                matches_conditions(gate, facts, "NOD"),
+                subject and independent and identity,
+            )
+
+    def test_nod_subject_appoints_renner_with_existing_name_and_portrait(self):
+        body = self.effects["STP_pw_party_sync_revolution_subject"]
+        nod = next(
+            e.value for e in walk(body)
+            if e.key == "if" and children(one(e.value, "limit"), "tag") == ["NOD"]
+        )
+        appointment = next(e.value for e in nod if e.key == "if")
+        self.assertIn(
+            "has_country_leader", [e.key for e in walk(one(appointment, "limit"))]
+        )
+        role = one(appointment, "add_country_leader_role")
+        self.assertEqual(one(role, "character"), "NOD_Edgar_Renner")
+        self.assertEqual(
+            one(one(appointment, "promote_character"), "character"), "NOD_Edgar_Renner"
+        )
+        characters = one(
+            parse_clausewitz(read("common/characters/NOD.txt")), "characters"
+        )
+        renner = one(characters, "NOD_Edgar_Renner")
+        self.assertEqual(one(renner, "name"), "STP_Edgar_Renner")
+        self.assertEqual(
+            one(one(one(renner, "portraits"), "civilian"), "large"),
+            "GFX_portrait_STP_Edgar_Renner",
+        )
 
     def test_revolution_colors_are_cosmetic_not_country_tags(self):
         regular = dict(

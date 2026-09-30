@@ -1937,8 +1937,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_district_fund
 		icon = GFX_focus_STP_pw_party_open_settlement
-		x = -2
-		y = 8
+		x = -18
+		y = 9
 
 		cost = 3
 		prerequisite = { focus = STP_party_local_cadres }
@@ -1958,8 +1958,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_cells_agreement
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
-		x = -2
-		y = 9
+		x = -18
+		y = 10
 
 		cost = 3
 		prerequisite = { focus = STP_ps_district_fund }

@@ -4707,3 +4707,1077 @@ country_event = {
 		}
 	}
 }
+
+country_event = {
+	id = ADISCORD_STP_ch.40
+	title = ADISCORD_STP_ch.40.t
+	desc = ADISCORD_STP_ch.40.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.40.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.46
+	title = ADISCORD_STP_ch.46.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_houses_prepared
+		}
+		text = ADISCORD_STP_ch.46.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_houses_prepared
+			}
+		}
+		text = ADISCORD_STP_ch.46.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_houses_prepared
+				}
+			}
+			add_ideas = STP_pe_houses_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.46.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_houses_crisis
+			NOT = {
+				has_variable = STP_pe_houses_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_houses_crisis
+					NOT = {
+						has_variable = STP_pe_houses_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_houses_crisis
+				set_country_flag = STP_pe_houses_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.46.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_houses_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_houses_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_houses_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_houses_crisis
+			hidden_effect = {
+				STP_pe_houses_cancel = yes
+				set_country_flag = STP_pe_houses_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.46.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_houses_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_houses_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.46.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_houses_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.52
+	title = ADISCORD_STP_ch.52.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_a
+		}
+		text = ADISCORD_STP_ch.52.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_houses_ending_b
+		}
+		text = ADISCORD_STP_ch.52.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.52.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.41
+	title = ADISCORD_STP_ch.41.t
+	desc = ADISCORD_STP_ch.41.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.41.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.47
+	title = ADISCORD_STP_ch.47.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_festival_prepared
+		}
+		text = ADISCORD_STP_ch.47.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_festival_prepared
+			}
+			OR = {
+				has_idea = STP_law_hard_drugs
+				has_idea = STP_law_slavery
+			}
+		}
+		text = ADISCORD_STP_ch.47.laws
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_festival_prepared
+			}
+			NOT = {
+				OR = {
+					has_idea = STP_law_hard_drugs
+					has_idea = STP_law_slavery
+				}
+			}
+		}
+		text = ADISCORD_STP_ch.47.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_festival_prepared
+				}
+			}
+			add_ideas = STP_pe_festival_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.47.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_festival_crisis
+			NOT = {
+				has_variable = STP_pe_festival_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_festival_crisis
+					NOT = {
+						has_variable = STP_pe_festival_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_festival_crisis
+				set_country_flag = STP_pe_festival_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.47.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_festival_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_festival_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_festival_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_festival_crisis
+			hidden_effect = {
+				STP_pe_festival_cancel = yes
+				set_country_flag = STP_pe_festival_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.47.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_festival_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_festival_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.47.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_festival_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.53
+	title = ADISCORD_STP_ch.53.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_festival_ending_a
+		}
+		text = ADISCORD_STP_ch.53.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_festival_ending_b
+		}
+		text = ADISCORD_STP_ch.53.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.53.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.42
+	title = ADISCORD_STP_ch.42.t
+	desc = ADISCORD_STP_ch.42.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.42.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.48
+	title = ADISCORD_STP_ch.48.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_staff_prepared
+		}
+		text = ADISCORD_STP_ch.48.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_staff_prepared
+			}
+		}
+		text = ADISCORD_STP_ch.48.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_staff_prepared
+				}
+			}
+			add_ideas = STP_pe_staff_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.48.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_staff_crisis
+			NOT = {
+				has_variable = STP_pe_staff_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_staff_crisis
+					NOT = {
+						has_variable = STP_pe_staff_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_staff_crisis
+				set_country_flag = STP_pe_staff_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.48.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_staff_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_staff_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_staff_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_staff_crisis
+			hidden_effect = {
+				STP_pe_staff_cancel = yes
+				set_country_flag = STP_pe_staff_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.48.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_staff_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_staff_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.48.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_staff_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.54
+	title = ADISCORD_STP_ch.54.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_staff_ending_a
+		}
+		text = ADISCORD_STP_ch.54.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_staff_ending_b
+		}
+		text = ADISCORD_STP_ch.54.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.54.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.43
+	title = ADISCORD_STP_ch.43.t
+	desc = ADISCORD_STP_ch.43.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.43.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.49
+	title = ADISCORD_STP_ch.49.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_trade_prepared
+		}
+		text = ADISCORD_STP_ch.49.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_trade_prepared
+			}
+		}
+		text = ADISCORD_STP_ch.49.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_trade_prepared
+				}
+			}
+			add_ideas = STP_pe_trade_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.49.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_trade_crisis
+			NOT = {
+				has_variable = STP_pe_trade_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_trade_crisis
+					NOT = {
+						has_variable = STP_pe_trade_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_trade_crisis
+				set_country_flag = STP_pe_trade_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.49.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_trade_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_trade_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_trade_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_trade_crisis
+			hidden_effect = {
+				STP_pe_trade_cancel = yes
+				set_country_flag = STP_pe_trade_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.49.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_trade_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_trade_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.49.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_trade_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.55
+	title = ADISCORD_STP_ch.55.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_trade_ending_a
+		}
+		text = ADISCORD_STP_ch.55.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_trade_ending_b
+		}
+		text = ADISCORD_STP_ch.55.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.55.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.44
+	title = ADISCORD_STP_ch.44.t
+	desc = ADISCORD_STP_ch.44.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.44.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.50
+	title = ADISCORD_STP_ch.50.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_security_prepared
+		}
+		text = ADISCORD_STP_ch.50.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_security_prepared
+			}
+		}
+		text = ADISCORD_STP_ch.50.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_security_prepared
+				}
+			}
+			add_ideas = STP_pe_security_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.50.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_security_crisis
+			NOT = {
+				has_variable = STP_pe_security_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_security_crisis
+					NOT = {
+						has_variable = STP_pe_security_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_security_crisis
+				set_country_flag = STP_pe_security_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.50.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_security_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_security_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_security_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_security_crisis
+			hidden_effect = {
+				STP_pe_security_cancel = yes
+				set_country_flag = STP_pe_security_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.50.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_security_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_security_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.50.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_security_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.56
+	title = ADISCORD_STP_ch.56.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_security_ending_a
+		}
+		text = ADISCORD_STP_ch.56.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_security_ending_b
+		}
+		text = ADISCORD_STP_ch.56.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.56.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.45
+	title = ADISCORD_STP_ch.45.t
+	desc = ADISCORD_STP_ch.45.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.45.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.51
+	title = ADISCORD_STP_ch.51.t
+	desc = {
+		trigger = {
+			has_country_flag = STP_pe_regent_prepared
+		}
+		text = ADISCORD_STP_ch.51.prepared
+	}
+	desc = {
+		trigger = {
+			NOT = {
+				has_country_flag = STP_pe_regent_prepared
+			}
+		}
+		text = ADISCORD_STP_ch.51.d
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	trigger = {
+		STP_pe_current = yes
+	}
+	immediate = {
+		if = {
+			limit = {
+				STP_pe_current = yes
+				NOT = {
+					has_country_flag = STP_pe_regent_prepared
+				}
+			}
+			add_ideas = STP_pe_regent_crisis
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.51.a
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_regent_crisis
+			NOT = {
+				has_variable = STP_pe_regent_deposit
+			}
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 450
+				compare = greater_than_or_equals
+			}
+		}
+		ai_chance = {
+			factor = 3
+		}
+		custom_effect_tooltip = STP_pe_emergency_payment_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					STP_pe_current = yes
+					has_idea = STP_pe_regent_crisis
+					NOT = {
+						has_variable = STP_pe_regent_deposit
+					}
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+						compare = greater_than_or_equals
+					}
+				}
+				subtract_from_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+				}
+				add_to_variable = {
+					var = ADISCORD_economy_current_month_action_costs
+					value = 450
+				}
+				ADISCORD_economy_mark_dirty = yes
+				remove_ideas = STP_pe_regent_crisis
+				set_country_flag = STP_pe_regent_prepared
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.51.b
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_regent_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_idea = STP_pe_regent_crisis
+			}
+			add_timed_idea = {
+				idea = STP_pe_regent_backlash
+				days = 120
+			}
+			remove_ideas = STP_pe_regent_crisis
+			hidden_effect = {
+				STP_pe_regent_cancel = yes
+				set_country_flag = STP_pe_regent_prepared
+			}
+		}
+		custom_effect_tooltip = STP_pe_compromise_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.51.c
+		trigger = {
+			STP_pe_current = yes
+			has_idea = STP_pe_regent_crisis
+		}
+		ai_chance = {
+			factor = 1
+		}
+		unlock_decision_tooltip = STP_pe_regent_programme
+		custom_effect_tooltip = STP_pe_dispute_wait_tt
+	}
+	option = {
+		name = ADISCORD_STP_ch.51.z
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pe_current = yes
+					has_idea = STP_pe_regent_crisis
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.57
+	title = ADISCORD_STP_ch.57.t
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_a
+		}
+		text = ADISCORD_STP_ch.57.a_desc
+	}
+	desc = {
+		trigger = {
+			has_completed_focus = STP_pe_regent_ending_b
+		}
+		text = ADISCORD_STP_ch.57.b_desc
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		STP_pe_current = yes
+	}
+	option = {
+		name = ADISCORD_STP_ch.57.a
+	}
+}

@@ -3923,6 +3923,150 @@
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_furnaces",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.40",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 40,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.41",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 41,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.42",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 42,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.43",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 43,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.44",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 44,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.45",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 45,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.46",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 46,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.47",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 47,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.48",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 48,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.49",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 49,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.50",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 50,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.51",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 51,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.52",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 52,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.53",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 53,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.54",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 54,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.55",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 55,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.56",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 56,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.57",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 57,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_party_chapters",
+      "status": "active"
     }
   ]
 }

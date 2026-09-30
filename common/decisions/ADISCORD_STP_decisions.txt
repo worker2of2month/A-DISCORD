@@ -13580,6 +13580,689 @@ STP_ch_chapters = {
 			base = 10
 		}
 	}
+
+
+	STP_pe_houses_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_houses_opening
+			NOT = {
+				has_country_flag = STP_pe_houses_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_houses_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_houses_opening
+				NOT = {
+					has_variable = STP_pe_houses_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_houses_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_houses_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_houses_opening
+						NOT = {
+							has_variable = STP_pe_houses_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_houses_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_houses_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_political_power = 50
+			}
+			hidden_effect = {
+				STP_pe_houses_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_houses_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	STP_pe_festival_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_festival_opening
+			NOT = {
+				has_country_flag = STP_pe_festival_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_festival_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_festival_opening
+				NOT = {
+					has_variable = STP_pe_festival_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_festival_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_festival_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_festival_opening
+						NOT = {
+							has_variable = STP_pe_festival_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_festival_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_festival_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_stability = 0.02
+			}
+			hidden_effect = {
+				STP_pe_festival_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_festival_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	STP_pe_staff_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_staff_opening
+			NOT = {
+				has_country_flag = STP_pe_staff_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_staff_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_staff_opening
+				NOT = {
+					has_variable = STP_pe_staff_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_staff_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_staff_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_staff_opening
+						NOT = {
+							has_variable = STP_pe_staff_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_staff_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_staff_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_manpower = 1200
+			}
+			hidden_effect = {
+				STP_pe_staff_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_staff_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	STP_pe_trade_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_trade_opening
+			NOT = {
+				has_country_flag = STP_pe_trade_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_trade_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_trade_opening
+				NOT = {
+					has_variable = STP_pe_trade_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_trade_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_trade_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_trade_opening
+						NOT = {
+							has_variable = STP_pe_trade_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_trade_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_trade_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_equipment_to_stockpile = {
+					type = ADISCORD_infantry_equipment_2156
+					amount = 250
+					producer = ROOT
+				}
+			}
+			hidden_effect = {
+				STP_pe_trade_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_trade_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	STP_pe_security_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_security_opening
+			NOT = {
+				has_country_flag = STP_pe_security_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_security_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_security_opening
+				NOT = {
+					has_variable = STP_pe_security_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_security_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_security_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_security_opening
+						NOT = {
+							has_variable = STP_pe_security_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_security_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_security_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_manpower = 600
+			}
+			hidden_effect = {
+				STP_pe_security_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_security_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	STP_pe_regent_programme = {
+		icon = generic_political_discourse
+		allowed = {
+			tag = STP
+		}
+		visible = {
+			STP_pe_current = yes
+			has_completed_focus = STP_pe_regent_opening
+			NOT = {
+				has_country_flag = STP_pe_regent_prepared
+			}
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_commission_slot_tt
+				NOT = {
+					has_variable = STP_pe_regent_deposit
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = STP_pe_programme_cost
+		custom_cost_trigger = {
+			hidden_trigger = {
+				STP_pe_current = yes
+				has_capitulated = no
+				has_completed_focus = STP_pe_regent_opening
+				NOT = {
+					has_variable = STP_pe_regent_deposit
+				}
+				NOT = {
+					has_country_flag = STP_pe_regent_prepared
+				}
+				NOT = {
+					has_political_power < 35
+				}
+				check_variable = {
+					var = ADISCORD_economy_treasury
+					value = 450
+					compare = greater_than_or_equals
+				}
+			}
+		}
+		fire_only_once = no
+		days_remove = 35
+		cancel_trigger = {
+			OR = {
+				STP_pe_current = no
+				has_capitulated = yes
+				has_country_flag = STP_pe_regent_prepared
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = STP_pe_programme_start_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						STP_pe_current = yes
+						has_capitulated = no
+						has_completed_focus = STP_pe_regent_opening
+						NOT = {
+							has_variable = STP_pe_regent_deposit
+						}
+						NOT = {
+							has_country_flag = STP_pe_regent_prepared
+						}
+						NOT = {
+							has_political_power < 35
+						}
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 450
+							compare = greater_than_or_equals
+						}
+					}
+					add_political_power = -35
+					subtract_from_variable = {
+						var = ADISCORD_economy_treasury
+						value = 450
+					}
+					add_to_variable = {
+						var = ADISCORD_economy_current_month_action_costs
+						value = 450
+					}
+					ADISCORD_economy_mark_dirty = yes
+					set_variable = {
+						var = STP_pe_regent_deposit
+						value = 450
+					}
+				}
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = STP_pe_programme_finish_tt
+			effect_tooltip = {
+				add_political_power = 50
+			}
+			hidden_effect = {
+				STP_pe_regent_settle = yes
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = STP_pe_programme_cancel_tt
+			hidden_effect = {
+				STP_pe_regent_cancel = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
 }
 
 STP_pw_programme = {

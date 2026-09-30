@@ -9,6 +9,16 @@ characters = {
 	##    ## ##     ## ##     ## ##   ###    ##    ##    ##     ##       ##       ##       ##     ## ##     ## ##       ##    ##  ##    ##
 	######   #######   #######  ##    ##    ##    ##     ##    ##       ######## ######## ##     ## ########  ######## ##     ##  ######
 
+	# The northern administration activates this role after subordination to STP.
+	NOD_Edgar_Renner = {
+		name = STP_Edgar_Renner
+		portraits = {
+			civilian = {
+				large = GFX_portrait_STP_Edgar_Renner
+			}
+		}
+	}
+
 	NOD_Tobis_Bentlix = {
 		name = NOD_Tobis_Bentlix
 		portraits = {

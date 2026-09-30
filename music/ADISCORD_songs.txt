@@ -155,3 +155,28 @@ music = {
 	song = "ADISCORD_vorkerland_theme"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_megadeth_peace_sells"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_eisbrecher_1000_narben"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_die_krupps_vision_2020_vision"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_erdling_mein_element"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_oomph_nur_ein_mensch"
+	chance = { base = 10 }
+}

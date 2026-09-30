@@ -169,3 +169,33 @@ music = {
 	file = "ADISCORD_vorkerland_theme.ogg"
 	volume = 0.65
 }
+
+music = {
+	name = "ADISCORD_megadeth_peace_sells"
+	file = "ADISCORD_megadeth_peace_sells.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_eisbrecher_1000_narben"
+	file = "ADISCORD_eisbrecher_1000_narben.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_die_krupps_vision_2020_vision"
+	file = "ADISCORD_die_krupps_vision_2020_vision.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_erdling_mein_element"
+	file = "ADISCORD_erdling_mein_element.ogg"
+	volume = 0.65
+}
+
+music = {
+	name = "ADISCORD_oomph_nur_ein_mensch"
+	file = "ADISCORD_oomph_nur_ein_mensch.ogg"
+	volume = 0.65
+}

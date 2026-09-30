@@ -29,7 +29,7 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn("set_country_flag = VAL_cw_livonn_settlement_pending", stage)
         self.assertIn("has_global_flag = STP_cw_union_wars_finished", stage)
         self.assertIn("STP_pw_can_reconstruct = yes", stage)
-        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", stage)
+        self.assertNotIn("has_country_flag = STP_sided_with_the_party_flag", stage)
 
     def test_livonn_cannot_be_taken_from_stelander_or_another_client(self):
         from tools.tests.test_adiscord_stp_preparation import (
@@ -70,7 +70,7 @@ class ValLivonnSettlement(unittest.TestCase):
             settlement,
         )
 
-    def test_return_choice_supports_shabrat_and_party_winners(self):
+    def test_return_choice_supports_only_shabrat_with_agreement(self):
         effects = source_section(
             read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
             "livonn_settlement_effects",
@@ -82,13 +82,42 @@ class ValLivonnSettlement(unittest.TestCase):
         self.assertIn(
             "45 = { remove_core_of = OCA set_state_controller_to = STS }", honor
         )
-        self.assertIn("STP = { transfer_state = 45 }", honor)
-        self.assertIn(
+        self.assertNotIn("STP = { transfer_state = 45 }", honor)
+        self.assertNotIn(
             "45 = { remove_core_of = OCA set_state_controller_to = STP }", honor
         )
         self.assertIn("set_country_flag = VAL_cw_livonn_agreement_honored", honor)
-        self.assertIn("set_country_flag = VAL_cw_livonn_returned_to_party", honor)
-        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", honor)
+        self.assertNotIn("VAL_cw_livonn_returned_to_party", honor)
+        self.assertNotIn("has_country_flag = STP_sided_with_the_party_flag", honor)
+
+    def test_return_guards_require_shabrat_and_agreement(self):
+        from tools.tests.test_adiscord_stp_preparation import entries, block, matches_conditions
+
+        effects = entries("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        stage = block(effects, "VAL_cw_stage_livonn_settlement")
+        outer = block(stage, "if")
+        settlement = [e for e in outer if e.key == "if"][1].value
+        eligible = block(block(settlement, "if"), "limit")
+        honor = block(block(block(effects, "VAL_cw_honor_livonn_agreement"), "if"), "limit")
+        decisions = entries("common/decisions/ADISCORD_VAL_decisions.txt")
+        available = block(block(block(decisions, "VAL_livonn_settlement_category"), "VAL_honor_livonn_agreement"), "available")
+        for shabrat in (False, True):
+            for agreement in (False, True):
+                facts = {
+                    ("VAL", "tag", "VAL"): True,
+                    ("VAL", "has_country_flag", "VAL_cw_livonn_settlement_pending"): True,
+                    ("45", "is_owned_by", "OCA"): True,
+                    ("45", "is_controlled_by", "OCA"): True,
+                    ("OCA", "exists", "yes"): True,
+                    ("OCA", "is_subject_of", "VAL"): True,
+                    ("45", "has_state_flag", "STP_local_deal_asset"): agreement,
+                    ("STS", "STP_pw_can_reconstruct", "yes"): shabrat,
+                    ("STP", "STP_pw_can_reconstruct", "yes"): not shabrat,
+                    ("STP", "has_country_flag", "STP_sided_with_the_party_flag"): not shabrat,
+                }
+                for guard in (eligible, honor, available):
+                    with self.subTest(shabrat=shabrat, agreement=agreement, guard=guard):
+                        self.assertEqual(matches_conditions(guard, facts, "VAL"), shabrat and agreement)
 
     def test_keep_choice_retains_livonn(self):
         effects = source_section(
@@ -130,7 +159,7 @@ class ValLivonnSettlement(unittest.TestCase):
             "VAL_keep_livonn = {", 1
         )[0]
         self.assertIn("STP_pw_can_reconstruct = yes", return_block)
-        self.assertIn("has_country_flag = STP_sided_with_the_party_flag", return_block)
+        self.assertNotIn("has_country_flag = STP_sided_with_the_party_flag", return_block)
 
     def test_union_winner_retries_pending_livonn_settlement(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")

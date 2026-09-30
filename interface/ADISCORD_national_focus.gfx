@@ -1457,4 +1457,14 @@ spriteTypes = {
 		name = "GFX_focus_STP_policy_slavery"
 		texturefile = "gfx/interface/ideas/laws/economic_labour_policy/ADISCORD_law_labor_policy_slavery.png"
 	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Army_Of_The_Ledger"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Army_Of_The_Ledger.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_State_Above_Captains"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_State_Above_Captains.png"
+	}
 }

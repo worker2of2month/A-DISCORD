@@ -6587,6 +6587,7 @@ STP_pf_shift = {
 }
 
 STP_pf_clear = {
+	STP_pe_clear = yes
 	clr_country_flag = STP_party_drug_health_fund
 	if = { limit = { has_variable = STP_ch_phase } STP_ch_clear = yes }
 	if = { limit = { has_country_flag = STP_pf_initialized }
@@ -8998,7 +8999,22 @@ STP_pw_open_marine_school = {
 	}
 }
 
-# The constitution reads existing faction influence and the currently enacted laws.
+# STP: sovereignty changes the state identity independently of constitutional BOP.
+STP_pw_party_sync_revolution_identity = {
+	if = {
+		limit = {
+			STP_ch_current = yes
+			is_subject = no
+		}
+		set_cosmetic_tag = STP_revolution_capital
+	}
+	else_if = {
+		limit = { has_cosmetic_tag = STP_revolution_capital }
+		drop_cosmetic_tag = yes
+	}
+	every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
+}
+
 # Subject scope: apply only to the independent revolutionary centre's dependants.
 # The autonomy guard prevents a repeated on_puppet callback from reapplying it.
 STP_pw_party_sync_revolution_subject = {
@@ -9008,7 +9024,7 @@ STP_pw_party_sync_revolution_subject = {
 			STP = {
 				exists = yes
 				is_subject = no
-				has_country_flag = STP_pw_party_constitution_initialized
+				has_cosmetic_tag = STP_revolution_capital
 			}
 		}
 		if = {
@@ -9028,6 +9044,28 @@ STP_pw_party_sync_revolution_subject = {
 		if = {
 			limit = { tag = NOD }
 			set_cosmetic_tag = NOD_STP_revolution
+			if = {
+				limit = { NOT = { has_country_leader = { character = NOD_Edgar_Renner } } }
+				if = {
+					limit = { NOT = { has_character = NOD_Edgar_Renner } }
+					recruit_character = NOD_Edgar_Renner
+				}
+				set_politics = {
+					ruling_party = hedonism
+					elections_allowed = no
+				}
+				add_country_leader_role = {
+					character = NOD_Edgar_Renner
+					country_leader = {
+						ideology = hedonism_ideology
+						expire = "2300.1.1"
+					}
+				}
+				promote_character = {
+					character = NOD_Edgar_Renner
+					ideology = hedonism_ideology
+				}
+			}
 		}
 		else_if = {
 			limit = { tag = VAL }
@@ -10346,6 +10384,7 @@ STP_ch_open_congress = {
 			clr_country_flag = STP_ch_protectorate_leader
 			STP_ch_restore_independent_leader = yes
 		}
+		STP_pw_party_sync_revolution_identity = yes
 		STP_ch_close_pressure = yes
 		clr_country_flag = STP_ch_release_pending
 		clr_country_flag = STP_ch_liberation_war
@@ -12949,4 +12988,354 @@ STP_party_refresh_policies = {
 	STP_pw_refresh_modifier = yes
 	STP_ch_schedule_refresh = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+
+STP_pe_houses_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_houses_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_houses_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_houses_deposit
+		}
+		clear_variable = STP_pe_houses_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_houses_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_houses_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_houses_prepared
+				}
+			}
+			set_country_flag = STP_pe_houses_prepared
+			remove_ideas = STP_pe_houses_crisis
+			add_political_power = 50
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_houses_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_houses_deposit
+			}
+		}
+		clear_variable = STP_pe_houses_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_festival_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_festival_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_festival_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_festival_deposit
+		}
+		clear_variable = STP_pe_festival_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_festival_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_festival_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_festival_prepared
+				}
+			}
+			set_country_flag = STP_pe_festival_prepared
+			remove_ideas = STP_pe_festival_crisis
+			add_stability = 0.02
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_festival_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_festival_deposit
+			}
+		}
+		clear_variable = STP_pe_festival_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_staff_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_staff_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_staff_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_staff_deposit
+		}
+		clear_variable = STP_pe_staff_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_staff_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_staff_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_staff_prepared
+				}
+			}
+			set_country_flag = STP_pe_staff_prepared
+			remove_ideas = STP_pe_staff_crisis
+			add_manpower = 1200
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_staff_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_staff_deposit
+			}
+		}
+		clear_variable = STP_pe_staff_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_trade_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_trade_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_trade_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_trade_deposit
+		}
+		clear_variable = STP_pe_trade_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_trade_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_trade_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_trade_prepared
+				}
+			}
+			set_country_flag = STP_pe_trade_prepared
+			remove_ideas = STP_pe_trade_crisis
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 250
+				producer = ROOT
+			}
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_trade_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_trade_deposit
+			}
+		}
+		clear_variable = STP_pe_trade_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_security_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_security_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_security_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_security_deposit
+		}
+		clear_variable = STP_pe_security_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_security_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_security_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_security_prepared
+				}
+			}
+			set_country_flag = STP_pe_security_prepared
+			remove_ideas = STP_pe_security_crisis
+			add_manpower = 600
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_security_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_security_deposit
+			}
+		}
+		clear_variable = STP_pe_security_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_regent_cancel = {
+	if = {
+		limit = {
+			has_variable = STP_pe_regent_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_treasury
+			value = STP_pe_regent_deposit
+		}
+		add_to_variable = {
+			var = ADISCORD_economy_current_month_action_income
+			value = STP_pe_regent_deposit
+		}
+		clear_variable = STP_pe_regent_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+STP_pe_regent_settle = {
+	if = {
+		limit = {
+			has_variable = STP_pe_regent_deposit
+		}
+		if = {
+			limit = {
+				STP_pe_current = yes
+				has_capitulated = no
+				NOT = {
+					has_country_flag = STP_pe_regent_prepared
+				}
+			}
+			set_country_flag = STP_pe_regent_prepared
+			remove_ideas = STP_pe_regent_crisis
+			add_political_power = 50
+		}
+		else = {
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = STP_pe_regent_deposit
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = STP_pe_regent_deposit
+			}
+		}
+		clear_variable = STP_pe_regent_deposit
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+STP_pe_clear = {
+	remove_ideas = STP_pe_houses_policy_a_idea
+	remove_ideas = STP_pe_houses_policy_b_idea
+	remove_ideas = STP_pe_houses_crisis
+	remove_ideas = STP_pe_houses_backlash
+	remove_ideas = STP_pe_houses_ending_a_idea
+	remove_ideas = STP_pe_houses_ending_b_idea
+	STP_pe_houses_cancel = yes
+	clr_country_flag = STP_pe_houses_prepared
+	remove_ideas = STP_pe_festival_policy_a_idea
+	remove_ideas = STP_pe_festival_policy_b_idea
+	remove_ideas = STP_pe_festival_crisis
+	remove_ideas = STP_pe_festival_backlash
+	remove_ideas = STP_pe_festival_ending_a_idea
+	remove_ideas = STP_pe_festival_ending_b_idea
+	STP_pe_festival_cancel = yes
+	clr_country_flag = STP_pe_festival_prepared
+	remove_ideas = STP_pe_staff_policy_a_idea
+	remove_ideas = STP_pe_staff_policy_b_idea
+	remove_ideas = STP_pe_staff_crisis
+	remove_ideas = STP_pe_staff_backlash
+	remove_ideas = STP_pe_staff_ending_a_idea
+	remove_ideas = STP_pe_staff_ending_b_idea
+	STP_pe_staff_cancel = yes
+	clr_country_flag = STP_pe_staff_prepared
+	remove_ideas = STP_pe_trade_policy_a_idea
+	remove_ideas = STP_pe_trade_policy_b_idea
+	remove_ideas = STP_pe_trade_crisis
+	remove_ideas = STP_pe_trade_backlash
+	remove_ideas = STP_pe_trade_ending_a_idea
+	remove_ideas = STP_pe_trade_ending_b_idea
+	STP_pe_trade_cancel = yes
+	clr_country_flag = STP_pe_trade_prepared
+	remove_ideas = STP_pe_security_policy_a_idea
+	remove_ideas = STP_pe_security_policy_b_idea
+	remove_ideas = STP_pe_security_crisis
+	remove_ideas = STP_pe_security_backlash
+	remove_ideas = STP_pe_security_ending_a_idea
+	remove_ideas = STP_pe_security_ending_b_idea
+	STP_pe_security_cancel = yes
+	clr_country_flag = STP_pe_security_prepared
+	remove_ideas = STP_pe_regent_policy_a_idea
+	remove_ideas = STP_pe_regent_policy_b_idea
+	remove_ideas = STP_pe_regent_crisis
+	remove_ideas = STP_pe_regent_backlash
+	remove_ideas = STP_pe_regent_ending_a_idea
+	remove_ideas = STP_pe_regent_ending_b_idea
+	STP_pe_regent_cancel = yes
+	clr_country_flag = STP_pe_regent_prepared
 }

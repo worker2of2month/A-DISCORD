@@ -2837,3 +2837,9 @@ STP_debug_party_current = {
 	STP_ch_current = yes
 	has_capitulated = no
 }
+
+STP_pe_current = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+}

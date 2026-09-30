@@ -1880,6 +1880,7 @@ def check_required_unit_definitions() -> list[str]:
                         )
 
     required_units = {
+        "railway_gun",
         "fighter",
         "cas",
         "tac_bomber",

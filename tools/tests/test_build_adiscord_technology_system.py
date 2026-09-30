@@ -118,6 +118,30 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
             self.assertIn("add_equipment_bonus = {", rendered)
             self.assertIn("railway_gun_equipment = {", rendered)
 
+    def test_railway_gun_equipment_has_an_active_map_unit(self):
+        text = validator.read_text(ROOT / "common/units/ADISCORD_land_units.txt")
+        match = re.search(r"(?m)^\s*railway_gun\s*=\s*\{", text)
+        self.assertIsNotNone(match, "Railway gun equipment needs a map subunit")
+        block = validator.extract_block(text, match.start())
+        self.assertRegex(block, r"\bactive\s*=\s*yes\b")
+        self.assertRegex(block, r"\btype\s*=\s*\{\s*railway_gun\s*\}")
+        self.assertRegex(
+            block, r"\bneed\s*=\s*\{\s*railway_gun_equipment\s*=\s*1\s*\}"
+        )
+        equipment = validator.collect_equipment_blocks()
+        for model in ("railway_gun_equipment_1", "ADISCORD_railway_gun_equipment_2200"):
+            self.assertRegex(
+                equipment[model], r"\barchetype\s*=\s*railway_gun_equipment\b"
+            )
+
+    def test_validator_requires_the_railway_gun_map_unit(self):
+        defined = validator.collect_defined_subunits() - {"railway_gun"}
+        with patch.object(validator, "collect_defined_subunits", return_value=defined):
+            self.assertIn(
+                "missing required engine/operation subunit railway_gun",
+                validator.check_required_unit_definitions(),
+            )
+
     def test_reconstruction_expands_shared_factory_capacity(self):
         expected = {
             "drone_construction_cartography": "0.10",

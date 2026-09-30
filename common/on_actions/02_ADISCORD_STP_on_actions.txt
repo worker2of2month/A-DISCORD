@@ -15,6 +15,10 @@ on_actions = {
 	on_puppet = {
 		effect = {
 			if = {
+				limit = { tag = STP }
+				STP_pw_party_sync_revolution_identity = yes
+			}
+			if = {
 				limit = {
 					OR = {
 						FROM = { tag = STP }
@@ -31,6 +35,10 @@ on_actions = {
 	on_release_as_puppet = {
 		effect = {
 			if = {
+				limit = { tag = STP }
+				STP_pw_party_sync_revolution_identity = yes
+			}
+			if = {
 				limit = { is_subject_of = STP }
 				STP_pw_party_sync_revolution_subject = yes
 			}
@@ -39,6 +47,10 @@ on_actions = {
 
 	on_subject_free = {
 		effect = {
+			if = {
+				limit = { tag = STP }
+				STP_pw_party_sync_revolution_identity = yes
+			}
 			if = {
 				limit = {
 					OR = {

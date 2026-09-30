@@ -454,7 +454,7 @@
 		id = STP_pw_party_settled_state
 		icon = GFX_goal_generic_national_unity
 		x = 0
-		y = 19
+		y = 27
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_civil_charter }
@@ -504,7 +504,7 @@
 		id = STP_pw_party_external_mandate
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 0
-		y = 20
+		y = 28
 		cost = 3
 		prerequisite = { focus = STP_pw_party_settled_state }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
@@ -529,7 +529,7 @@
 		id = STP_pw_party_bezhaysk_campaign
 		icon = GFX_goal_generic_major_war
 		x = -2
-		y = 21
+		y = 29
 		cost = 4
 		prerequisite = { focus = STP_pw_party_external_mandate }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
@@ -550,7 +550,7 @@
 		id = STP_pw_party_kefreyt_campaign
 		icon = GFX_focus_STP_End_Kefreit
 		x = 2
-		y = 21
+		y = 29
 		cost = 4
 		prerequisite = { focus = STP_pw_party_external_mandate }
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
@@ -572,7 +572,7 @@
 		id = STP_pw_party_regional_order
 		icon = GFX_goal_generic_major_alliance
 		x = 0
-		y = 22
+		y = 30
 		cost = 4
 		prerequisite = { focus = STP_pw_party_bezhaysk_campaign }
 		prerequisite = { focus = STP_pw_party_kefreyt_campaign }
@@ -1028,7 +1028,7 @@
 		id = STP_pw_party_joint_defence_board
 		icon = GFX_goal_generic_military_deal
 		x = -2
-		y = 16
+		y = 24
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_nod_military_mission }
@@ -1060,7 +1060,7 @@
 		id = STP_pw_party_armed_neutrality
 		icon = GFX_goal_generic_neutrality_focus
 		x = 2
-		y = 16
+		y = 24
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_domestic_pattern }
@@ -1084,7 +1084,7 @@
 		id = STP_pw_party_foreign_settlement
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 0
-		y = 17
+		y = 25
 		cost = 3
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_joint_defence_board focus = STP_pw_party_armed_neutrality }
@@ -1322,7 +1322,7 @@
 		id = STP_pw_party_northern_protocol
 		icon = GFX_focus_generic_treaty
 		x = 0
-		y = 13
+		y = 21
 		cost = 4
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1338,7 +1338,7 @@
 		id = STP_pw_party_protectorate
 		icon = GFX_goal_generic_dangerous_deal
 		x = -2
-		y = 14
+		y = 22
 		cost = 4
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1369,7 +1369,7 @@
 		id = STP_pw_party_sovereignty
 		icon = GFX_goal_generic_national_unity
 		x = 2
-		y = 14
+		y = 22
 		cost = 4
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1410,7 +1410,7 @@
 		id = STP_pw_party_nod_military_mission
 		icon = GFX_focus_generic_military_mission
 		x = -2
-		y = 15
+		y = 23
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -1435,7 +1435,7 @@
 		id = STP_pw_party_domestic_pattern
 		icon = GFX_goal_generic_production2
 		x = 2
-		y = 15
+		y = 23
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -1453,7 +1453,7 @@
 		id = STP_pw_party_revolution_capital
 		icon = GFX_focus_generic_support_the_left_right
 		x = 6
-		y = 15
+		y = 23
 		cost = 3
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals }
@@ -1474,6 +1474,7 @@
 		completion_reward = {
 			custom_effect_tooltip = STP_pw_party_revolution_capital_tt
 			hidden_effect = {
+				STP_pw_party_sync_revolution_identity = yes
 				subtract_from_variable = { var = STP_pf_advisers_support value = 12 }
 				STP_pf_calculate = yes
 			}
@@ -1484,7 +1485,7 @@
 		id = STP_pw_party_northern_contacts
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 6
-		y = 16
+		y = 24
 		cost = 3
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1501,7 +1502,7 @@
 		id = STP_pw_party_nod_congress
 		icon = GFX_focus_generic_self_management
 		x = 6
-		y = 17
+		y = 25
 		cost = 3
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1531,7 +1532,7 @@
 		id = STP_pw_party_northern_campaign
 		icon = GFX_goal_generic_major_war
 		x = 4
-		y = 18
+		y = 26
 		cost = 4
 		allow_branch = {
 			check_variable = { var = STP_ch_phase value = 1 compare = equals } has_country_flag = STP_cw_postwar tag = STP }
@@ -1555,7 +1556,7 @@
 		id = STP_pw_party_former_patron
 		icon = GFX_goal_generic_forceful_treaty
 		x = 8
-		y = 18
+		y = 26
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -1944,7 +1945,7 @@
 		id = STP_ch_program_settlement
 		icon = GFX_goal_generic_national_unity
 		x = 4
-		y = 11
+		y = 19
 		cost = 4
 		allow_branch = {
 			tag = STP
@@ -2004,7 +2005,7 @@
 		id = STP_ch_institutional_review
 		icon = GFX_goal_generic_neutrality_focus
 		x = 4
-		y = 12
+		y = 20
 		cost = 2
 		allow_branch = {
 			tag = STP
@@ -2285,15 +2286,12 @@
 		id = STP_ch_property_charter
 		icon = GFX_focus_generic_treaty
 		x = 0
-		y = 6
+		y = 10
 		cost = 3
 		allow_branch = {
 			STP_party_leader_1 = yes
 		}
-		prerequisite = {
-			focus = STP_party_houses_estates
-			focus = STP_party_houses_audit
-		}
+		prerequisite = { focus = STP_pe_houses_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -2319,7 +2317,7 @@
 		id = STP_party_houses_closed_lists
 		icon = GFX_focus_STP_party_district_compact
 		x = -2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2371,7 +2369,7 @@
 		id = STP_party_houses_hearings
 		icon = GFX_focus_STP_party_district_compact
 		x = 2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2429,7 +2427,7 @@
 		id = STP_party_houses_clients
 		icon = GFX_focus_STP_cw_protocol_office
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2472,7 +2470,7 @@
 		id = STP_party_houses_public_register
 		icon = GFX_focus_STP_cw_protocol_office
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2519,7 +2517,7 @@
 		id = STP_ch_houses_black_book
 		icon = GFX_focus_STP_cw_buy_silence
 		x = 0
-		y = 9
+		y = 13
 		cost = 5
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2566,7 +2564,7 @@
 		id = STP_party_houses_compact
 		icon = GFX_focus_STP_cw_protocol_office
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_1 = yes
@@ -2969,15 +2967,12 @@
 		id = STP_party_festival_accounts
 		icon = GFX_focus_STP_cw_protocol_office
 		x = 0
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_2 = yes
 		}
-		prerequisite = {
-			focus = STP_party_slave_market
-			focus = STP_ch_free_labour
-		}
+		prerequisite = { focus = STP_pe_festival_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -3007,7 +3002,7 @@
 		id = STP_party_festival_clinics
 		icon = GFX_focus_STP_ps_northern_credit
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -3063,7 +3058,7 @@
 		id = STP_party_festival_immunity
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -3117,7 +3112,7 @@
 		id = STP_ch_eternal_festival
 		icon = GFX_focus_STP_Nectar_of_the_Gods
 		x = 0
-		y = 9
+		y = 13
 		cost = 5
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -3169,7 +3164,7 @@
 		id = STP_party_festival_charter
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_2 = yes
@@ -3446,15 +3441,12 @@
 		id = STP_ch_regular_service
 		icon = GFX_goal_generic_allies_build_infantry
 		x = 0
-		y = 6
+		y = 10
 		cost = 3
 		allow_branch = {
 			STP_party_leader_3 = yes
 		}
-		prerequisite = {
-			focus = STP_party_staff_reserve_jobs
-			focus = STP_party_staff_districts
-		}
+		prerequisite = { focus = STP_pe_staff_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -3482,7 +3474,7 @@
 		id = STP_party_staff_civilian_minister
 		icon = GFX_focus_STP_ps_joint_staff
 		x = -2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3525,7 +3517,7 @@
 		id = STP_party_staff_veto
 		icon = GFX_focus_STP_ps_joint_staff
 		x = 2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3580,7 +3572,7 @@
 		id = STP_party_staff_public_budget
 		icon = GFX_focus_STP_defense_budget
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3623,7 +3615,7 @@
 		id = STP_party_staff_priority_orders
 		icon = GFX_focus_STP_defense_budget
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3665,7 +3657,7 @@
 		id = STP_ch_staff_state
 		icon = GFX_focus_STP_defense_budget_tank
 		x = 0
-		y = 9
+		y = 13
 		cost = 5
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3712,7 +3704,7 @@
 		id = STP_party_service_constitution
 		icon = GFX_focus_STP_defense_budget
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_3 = yes
@@ -3989,15 +3981,12 @@
 		id = STP_ch_market_charter
 		icon = GFX_goal_generic_positive_trade_relations
 		x = 0
-		y = 6
+		y = 10
 		cost = 3
 		allow_branch = {
 			STP_party_leader_4 = yes
 		}
-		prerequisite = {
-			focus = STP_party_trade_advance
-			focus = STP_party_trade_credit
-		}
+		prerequisite = { focus = STP_pe_trade_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -4031,7 +4020,7 @@
 		id = STP_party_trade_imports
 		icon = GFX_focus_STP_cw_port_budget
 		x = -2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4081,7 +4070,7 @@
 		id = STP_party_trade_industry
 		icon = GFX_focus_STP_cw_port_budget
 		x = 2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4135,7 +4124,7 @@
 		id = STP_party_trade_warehouses
 		icon = GFX_focus_STP_ps_northern_credit
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4178,7 +4167,7 @@
 		id = STP_party_trade_suppliers
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4217,7 +4206,7 @@
 		id = STP_ch_season_open
 		icon = GFX_focus_STP_cw_port_budget
 		x = 0
-		y = 9
+		y = 13
 		cost = 5
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4285,7 +4274,7 @@
 		id = STP_party_trade_republic
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_4 = yes
@@ -4543,15 +4532,12 @@
 		id = STP_ch_register_of_powers
 		icon = GFX_goal_generic_neutrality_focus
 		x = 0
-		y = 6
+		y = 10
 		cost = 3
 		allow_branch = {
 			STP_party_leader_5 = yes
 		}
-		prerequisite = {
-			focus = STP_party_security_courts
-			focus = STP_party_security_network
-		}
+		prerequisite = { focus = STP_pe_security_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -4582,7 +4568,7 @@
 		id = STP_party_security_judicial_control
 		icon = GFX_focus_STP_cw_security_collegium
 		x = -2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -4626,7 +4612,7 @@
 		id = STP_party_security_immunity
 		icon = GFX_focus_STP_cw_security_collegium
 		x = 2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -4677,7 +4663,7 @@
 		id = STP_party_security_restitution
 		icon = GFX_focus_STP_cw_quiet_registers
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -4724,7 +4710,7 @@
 		id = STP_party_security_cadres
 		icon = GFX_focus_STP_cw_quiet_registers
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -4775,7 +4761,7 @@
 		id = STP_ch_quiet_order
 		icon = GFX_focus_STP_ps_permanent_security
 		x = 0
-		y = 9
+		y = 13
 		cost = 5
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -4826,7 +4812,7 @@
 		id = STP_party_security_settlement
 		icon = GFX_focus_STP_cw_quiet_registers
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_5 = yes
@@ -5097,15 +5083,12 @@
 		id = STP_party_regent_accounts
 		icon = GFX_focus_STP_ps_joint_staff
 		x = 0
-		y = 6
+		y = 10
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
 		}
-		prerequisite = {
-			focus = STP_party_regent_joint_offices
-			focus = STP_party_regent_local_budget
-		}
+		prerequisite = { focus = STP_pe_regent_settlement }
 		available = {
 			STP_pw_can_reconstruct = yes
 			custom_trigger_tooltip = {
@@ -5131,7 +5114,7 @@
 		id = STP_party_regent_concessions
 		icon = GFX_focus_STP_ps_northern_credit
 		x = -2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5194,7 +5177,7 @@
 		id = STP_party_regent_industry
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 2
-		y = 7
+		y = 11
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5248,7 +5231,7 @@
 		id = STP_party_regent_customs
 		icon = GFX_focus_STP_ps_joint_staff
 		x = -2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5291,7 +5274,7 @@
 		id = STP_party_regent_schools
 		icon = GFX_focus_STP_ps_joint_staff
 		x = 2
-		y = 8
+		y = 12
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5338,7 +5321,7 @@
 		id = STP_party_regent_guarantees
 		icon = GFX_focus_STP_ps_northern_credit
 		x = 0
-		y = 9
+		y = 13
 		cost = 3
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5377,7 +5360,7 @@
 		id = STP_party_regent_settlement
 		icon = GFX_focus_STP_ps_joint_staff
 		x = 0
-		y = 10
+		y = 14
 		cost = 5
 		allow_branch = {
 			STP_party_leader_6 = yes
@@ -5403,6 +5386,2625 @@
 					value = 4
 				}
 				STP_party_refresh_policies = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_opening
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 0
+		y = 6
+		cost = 2
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_party_houses_estates
+			focus = STP_party_houses_audit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_houses_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.40
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.46
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_policy_a
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_houses_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_policy_b
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_houses_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_work_a
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 40
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_work_b
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_settlement
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 0
+		y = 9
+		cost = 3
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_work_a
+			focus = STP_pe_houses_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_next_day
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_party_houses_compact
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_commission
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_houses_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_course_a
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_course_b
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 40
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_ending_a
+		icon = GFX_focus_STP_cw_protocol_office
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_houses_policy_a_idea
+			remove_ideas = STP_pe_houses_policy_b_idea
+			add_ideas = STP_pe_houses_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.52
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_houses_ending_b
+		icon = GFX_focus_STP_cw_protocol_office
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_1 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_houses_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_houses_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_1 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_houses_policy_a_idea
+			remove_ideas = STP_pe_houses_policy_b_idea
+			add_ideas = STP_pe_houses_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.52
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_opening
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 0
+		y = 7
+		cost = 2
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_party_slave_market
+			focus = STP_ch_free_labour
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_festival_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.41
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.47
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_policy_a
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = -2
+		y = 8
+		cost = 3
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_festival_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_policy_b
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 2
+		y = 8
+		cost = 3
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_festival_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_work_a
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = -2
+		y = 9
+		cost = 2
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_manpower = 1000
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_work_b
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 2
+		y = 9
+		cost = 2
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_settlement
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 0
+		y = 10
+		cost = 3
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_work_a
+			focus = STP_pe_festival_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_next_day
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_party_festival_charter
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_commission
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_festival_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+			if = {
+				limit = {
+					has_idea = STP_law_hard_drugs
+				}
+				unlock_decision_tooltip = STP_party_health_commission
+			}
+			if = {
+				limit = {
+					has_idea = STP_law_slavery
+				}
+				unlock_decision_tooltip = STP_party_labour_inspections
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_course_a
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_free_participation_tt
+				has_completed_focus = STP_ch_free_labour
+				NOT = {
+					has_idea = STP_law_slavery
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_manpower = 1000
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_course_b
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 40
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_ending_a
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_festival_policy_a_idea
+			remove_ideas = STP_pe_festival_policy_b_idea
+			add_ideas = STP_pe_festival_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.53
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_festival_ending_b
+		icon = GFX_focus_STP_party_presidium_broadcast
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_2 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_festival_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_festival_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_2 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_festival_policy_a_idea
+			remove_ideas = STP_pe_festival_policy_b_idea
+			add_ideas = STP_pe_festival_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.53
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_opening
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 0
+		y = 6
+		cost = 2
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_party_staff_reserve_jobs
+			focus = STP_party_staff_districts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_staff_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.42
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.48
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_policy_a
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_staff_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_policy_b
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_staff_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_work_a
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_manpower = 1500
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_work_b
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			army_experience = 10
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_settlement
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 0
+		y = 9
+		cost = 3
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_work_a
+			focus = STP_pe_staff_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			army_experience = 5
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_next_day
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_party_service_constitution
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_commission
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_staff_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			army_experience = 10
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_course_a
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_course_b
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			army_experience = 12
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_ending_a
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_staff_policy_a_idea
+			remove_ideas = STP_pe_staff_policy_b_idea
+			add_ideas = STP_pe_staff_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.54
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_staff_ending_b
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_3 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_staff_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_staff_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_3 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_staff_policy_a_idea
+			remove_ideas = STP_pe_staff_policy_b_idea
+			add_ideas = STP_pe_staff_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.54
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_opening
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 6
+		cost = 2
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_party_trade_advance
+			focus = STP_party_trade_credit
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_trade_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.43
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.49
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_policy_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_trade_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_policy_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_trade_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_work_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 30
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_work_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 200
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_settlement
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 9
+		cost = 3
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_work_a
+			focus = STP_pe_trade_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_next_day
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_party_trade_republic
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_commission
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_trade_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 20
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_course_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_course_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 150
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_ending_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_trade_policy_a_idea
+			remove_ideas = STP_pe_trade_policy_b_idea
+			add_ideas = STP_pe_trade_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.55
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_trade_ending_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_4 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_trade_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_trade_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_4 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_trade_policy_a_idea
+			remove_ideas = STP_pe_trade_policy_b_idea
+			add_ideas = STP_pe_trade_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.55
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_opening
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 0
+		y = 6
+		cost = 2
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_party_security_courts
+			focus = STP_party_security_network
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_security_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.44
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.50
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_policy_a
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_security_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_policy_b
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_security_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_work_a
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_manpower = 800
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_work_b
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_settlement
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 0
+		y = 9
+		cost = 3
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_work_a
+			focus = STP_pe_security_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_next_day
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_party_security_settlement
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_commission
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_security_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_course_a
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.015
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_course_b
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 40
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_ending_a
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_security_policy_a_idea
+			remove_ideas = STP_pe_security_policy_b_idea
+			add_ideas = STP_pe_security_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.56
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_security_ending_b
+		icon = GFX_focus_STP_cw_quiet_registers
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_5 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_security_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_security_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_5 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_security_policy_a_idea
+			remove_ideas = STP_pe_security_policy_b_idea
+			add_ideas = STP_pe_security_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.56
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_opening
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 6
+		cost = 2
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_party_regent_joint_offices
+			focus = STP_party_regent_local_budget
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			unlock_decision_tooltip = STP_pe_regent_programme
+			custom_effect_tooltip = STP_pe_deadline_tt
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.45
+				}
+				country_event = {
+					id = ADISCORD_STP_ch.51
+					days = 90
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_policy_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_regent_policy_a_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_policy_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 7
+		cost = 3
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_opening
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_timed_idea = {
+				idea = STP_pe_regent_policy_b_idea
+				days = 180
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_work_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_policy_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 40
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_work_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 8
+		cost = 2
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_policy_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment_1
+				amount = 30
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_settlement
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 9
+		cost = 3
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_work_a
+			focus = STP_pe_regent_work_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_stability = 0.01
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_next_day
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 15
+		cost = 2
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_party_regent_settlement
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 25
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_commission
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 0
+		y = 16
+		cost = 3
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_next_day
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pe_dispute_resolved_tt
+				has_country_flag = STP_pe_regent_prepared
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 35
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_course_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_course_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_political_power = 50
+			custom_effect_tooltip = STP_pe_regent_negotiations_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = STP_ch_cooperation
+					value = 1
+				}
+				STP_ch_schedule_refresh = yes
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_course_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 17
+		cost = 4
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_commission
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_course_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = ADISCORD_infantry_equipment_2156
+				amount = 200
+				producer = ROOT
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_ending_a
+		icon = GFX_focus_STP_ps_northern_credit
+		x = -2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_course_a
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_ending_b
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_regent_policy_a_idea
+			remove_ideas = STP_pe_regent_policy_b_idea
+			add_ideas = STP_pe_regent_ending_a_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.57
+					hours = 1
+				}
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pe_regent_ending_b
+		icon = GFX_focus_STP_ps_northern_credit
+		x = 2
+		y = 18
+		cost = 5
+		allow_branch = {
+			STP_party_leader_6 = yes
+		}
+		prerequisite = {
+			focus = STP_pe_regent_course_b
+		}
+		mutually_exclusive = {
+			focus = STP_pe_regent_ending_a
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_current_leader_tt
+				STP_party_leader_6 = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 12
+		}
+		completion_reward = {
+			remove_ideas = STP_pe_regent_policy_a_idea
+			remove_ideas = STP_pe_regent_policy_b_idea
+			add_ideas = STP_pe_regent_ending_b_idea
+			hidden_effect = {
+				country_event = {
+					id = ADISCORD_STP_ch.57
+					hours = 1
+				}
 			}
 		}
 	}
