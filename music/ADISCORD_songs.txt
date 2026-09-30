@@ -180,3 +180,8 @@ music = {
 	song = "ADISCORD_oomph_nur_ein_mensch"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_arktida_beisya_do_kontsa"
+	chance = { base = 10 }
+}
