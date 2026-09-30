@@ -2963,7 +2963,6 @@ focus_tree = {
 				tooltip = VAL_stelander_equal_pact_available_tt
 				VAL_stelander_equal_partner_available = yes
 			}
-			NOT = { has_completed_focus = VAL_Campaign_Secured }
 		}
 		ai_will_do = { base = 1 }
 		completion_reward = {

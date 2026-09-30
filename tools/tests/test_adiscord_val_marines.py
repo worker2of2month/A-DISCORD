@@ -5,6 +5,9 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.tests.test_adiscord_stp_preparation import block as parsed_block, scalar
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
 
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
@@ -21,11 +24,7 @@ def read(path: Path) -> str:
 
 def block(source: str, marker: str) -> str:
     pos = source.index(marker)
-    start = (
-        source.rfind("focus = {", 0, pos)
-        if marker.startswith("id = ")
-        else source.rfind("\n", 0, pos) + 1
-    )
+    start = source.rfind("\n", 0, pos) + 1
     opening = source.index("{", pos)
     depth = 0
     quoted = False
@@ -54,7 +53,11 @@ def block(source: str, marker: str) -> str:
 class KefreytMarineBranchTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.focuses = read(FOCUS)
+        tree = parsed_block(parse_clausewitz(read(FOCUS)), "focus_tree")
+        cls.focuses = {
+            scalar(entry.value, "id"): entry.value
+            for entry in tree if entry.key == "focus"
+        }
         cls.units = read(UNITS)
         cls.tech = read(TECH)
         cls.effects = read(EFFECTS)
@@ -74,9 +77,15 @@ class KefreytMarineBranchTests(unittest.TestCase):
         self.assertIn("factor = 0", unlock)
 
     def test_root_focus_unlocks_template_and_one_initial_division(self) -> None:
-        root = block(self.focuses, "id = VAL_Marine_Contract_Corps")
-        self.assertIn("prerequisite = { focus = VAL_Contracts_Outlive_Kings }", root)
-        self.assertIn("VAL_raise_marine_contract_corps = yes", root)
+        root = self.focuses["VAL_Marine_Contract_Corps"]
+        self.assertEqual(
+            scalar(parsed_block(root, "prerequisite"), "focus"),
+            "VAL_Contracts_Outlive_Kings",
+        )
+        self.assertEqual(
+            scalar(parsed_block(root, "completion_reward"), "VAL_raise_marine_contract_corps"),
+            "yes",
+        )
 
         effect = block(self.effects, "VAL_raise_marine_contract_corps = {")
         self.assertIn("ADISCORD_tech_kefreyt_marine_corps = 1", effect)
@@ -87,17 +96,23 @@ class KefreytMarineBranchTests(unittest.TestCase):
         self.assertIn("force_allow_recruiting = yes", effect)
 
     def test_branch_splits_then_rejoins_before_final_corps(self) -> None:
-        assault = block(self.focuses, "id = VAL_Assault_From_The_Sea")
-        logistics = block(self.focuses, "id = VAL_Beachhead_Logistics")
-        landing = block(self.focuses, "id = VAL_Contract_Landing_Craft")
-        final = block(self.focuses, "id = VAL_Marines_Of_The_Ledger")
+        assault = self.focuses["VAL_Assault_From_The_Sea"]
+        logistics = self.focuses["VAL_Beachhead_Logistics"]
+        landing = self.focuses["VAL_Contract_Landing_Craft"]
+        final = self.focuses["VAL_Marines_Of_The_Ledger"]
         for body in (assault, logistics):
-            self.assertIn("prerequisite = { focus = VAL_Marine_Contract_Corps }", body)
-        self.assertIn(
-            "prerequisite = { focus = VAL_Assault_From_The_Sea focus = VAL_Beachhead_Logistics }",
-            landing,
+            self.assertEqual(
+                scalar(parsed_block(body, "prerequisite"), "focus"),
+                "VAL_Marine_Contract_Corps",
+            )
+        self.assertEqual(
+            {entry.value for entry in parsed_block(landing, "prerequisite")},
+            {"VAL_Assault_From_The_Sea", "VAL_Beachhead_Logistics"},
         )
-        self.assertIn("prerequisite = { focus = VAL_Contract_Landing_Craft }", final)
+        self.assertEqual(
+            scalar(parsed_block(final, "prerequisite"), "focus"),
+            "VAL_Contract_Landing_Craft",
+        )
 
         positions = {}
         for focus_id in (
@@ -107,9 +122,9 @@ class KefreytMarineBranchTests(unittest.TestCase):
             "VAL_Contract_Landing_Craft",
             "VAL_Marines_Of_The_Ledger",
         ):
-            body = block(self.focuses, f"id = {focus_id}")
-            x = int(re.search(r"(?m)^\s*x\s*=\s*(-?\d+)", body).group(1))
-            y = int(re.search(r"(?m)^\s*y\s*=\s*(-?\d+)", body).group(1))
+            body = self.focuses[focus_id]
+            x = int(scalar(body, "x"))
+            y = int(scalar(body, "y"))
             positions[focus_id] = (x, y)
         self.assertEqual(len(positions), len(set(positions.values())))
 

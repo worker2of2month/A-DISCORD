@@ -142,6 +142,21 @@ class ValCampaignContractsTests(unittest.TestCase):
                 ]
                 self.assertEqual(changes, [] if original_major else [(tag, "no") for tag in ("YPR", "COF", "TFF")])
 
+    def test_military_final_closes_new_alliance_offers(self):
+        gate = block(entries(TRIGGERS), "VAL_stelander_equal_partner_available")
+        facts = {
+            ("VAL", "exists", "yes"): True,
+            ("VAL", "has_country_flag", "VAL_stelander_equal_recognition"): True,
+            ("VAL", "is_subject", "no"): True,
+            ("VAL", "has_capitulated", "no"): True,
+            ("VAL", "has_war", "no"): True,
+            ("VAL", "is_in_faction", "no"): True,
+            ("STS", "VAL_stelander_equal_recipient_available", "yes"): True,
+        }
+        self.assertTrue(matches_conditions(gate, facts, "VAL"))
+        facts[("VAL", "has_completed_focus", "VAL_Campaign_Secured")] = True
+        self.assertFalse(matches_conditions(gate, facts, "VAL"))
+
     def test_southern_corridor_loss_uses_the_same_pressure_as_other_routes(self):
         weekly = block(entries("common/scripted_effects/ADISCORD_VAL_logistics_market_effects.txt"), "VAL_update_black_market_weekly")
         for route in ("occidia", "west", "north", "stelander", "vorkerland", "south"):

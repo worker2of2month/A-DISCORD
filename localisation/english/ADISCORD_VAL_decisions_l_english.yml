@@ -1318,7 +1318,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_wasteland_charter_available_tt:0 "The Perimeter is open. Kefreyt is independent, has not capitulated, owns and controls [169.GetName], and is not at war with $ERT$. $WCA$ does not yet exist."
  VAL_southern_expansion_available_tt:0 "The Perimeter is open. Kefreyt is independent, has not capitulated and is at peace. $WCA$ is Kefreyt's subject, has not capitulated, and owns and controls [169.GetName]. $ERT$ exists, has not capitulated and is not Kefreyt's subject."
  VAL_eastern_expansion_available_tt:0 "The Perimeter is open. Kefreyt is independent, has not capitulated and is at peace. $WCA$ is Kefreyt's subject, has not capitulated, and owns and controls [169.GetName]. It also owns and controls [184.GetName] and [185.GetName], or $ERT$ no longer exists or is Kefreyt's subject. $IRT$ exists, has not capitulated and is not Kefreyt's subject."
- VAL_stelander_equal_pact_available_tt:0 "Kefreyt and at least one Stelander government ($STS$ or $STP$) have recognised equal partnership. Both are independent, have not capitulated and are at peace. Kefreyt has neither been defeated in Stelander nor received an alliance refusal."
+ VAL_stelander_equal_pact_available_tt:0 "Kefreyt and at least one Stelander government ($STS$ or $STP$) have recognised equal partnership. Both are independent, have not capitulated and are at peace. Kefreyt has neither been defeated in Stelander nor received an alliance refusal. The alliance has not yet been concluded; $VAL_Campaign_Secured$ is not completed."
 
  WCA:0 "Southern Contract Administration"
 
@@ -2023,3 +2023,4 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
  VAL_cost_value_40000:0 "§Y40000§!"
 
  VAL_cost_value_40000_blocked:0 "§R40000§!"
+ VAL_stelander_alliance_offer_pending:0 "Stelander is considering the alliance offer"

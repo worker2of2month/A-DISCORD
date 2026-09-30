@@ -2791,9 +2791,9 @@ VAL_spawn_urban_breacher_trial = {
 			}
 		}
 		if = {
-			limit = { NOT = { has_template = "Испытательный щитовой отряд" } }
+			limit = { NOT = { has_template = "Kefreyt Urban Breacher Trial" } }
 			division_template = {
-				name = "Испытательный щитовой отряд"
+				name = "Kefreyt Urban Breacher Trial"
 				template_counter = 3
 				is_locked = yes
 				regiments = {
@@ -2804,7 +2804,7 @@ VAL_spawn_urban_breacher_trial = {
 		# Explicit staffing keeps the visual trial independent of reserve shortages.
 		48 = {
 			create_unit = {
-				division = "name = \"Испытательный щитовой отряд\" division_template = \"Испытательный щитовой отряд\" location = 16521 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Испытательный щитовой отряд\" division_template = \"Kefreyt Urban Breacher Trial\" location = 16521 start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}
