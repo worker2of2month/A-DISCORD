@@ -1,11 +1,11 @@
 From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment
+16803;16804;sea;15477;3738;926;3741;920;;central island bridge
 16709;16710;sea;14089;3804;933;3814;935;;misstana island bridge
+16351;16806;sea;15477;3745;933;3748;928;;northeastern island bridge
+16368;16433;sea;15477;3730;938;3739;937;;northern strait bridge
 16328;16488;sea;16264;-1;-1;-1;-1;;relyen bridge
 16710;16712;sea;14089;3814;935;3813;925;;southern island bridge
-14634;16266;sea;147;-1;-1;-1;-1;strugent_canal;strugent
-16433;16368;sea;15477;3730;938;3739;937;;northern strait bridge
-16448;16804;sea;15477;3728;928;3735;927;;western island bridge
-16351;16806;sea;15477;3745;933;3748;928;;northeastern island bridge
-16804;16803;sea;15477;3738;926;3741;920;;central island bridge
 16535;16807;sea;15477;3729;907;3737;910;;southwestern island bridge
+16448;16804;sea;15477;3728;928;3735;927;;western island bridge
+14634;16266;sea;147;-1;-1;-1;-1;strugent_canal;strugent
 -1;-1;;-1;-1;-1;-1;-1;-1
