@@ -586,6 +586,45 @@ on_actions = {
 				STP = { STP_pw_party_settle_kefreyt_victory = yes }
 				clr_global_flag = skip_default_capitulation
 			}
+			# Party final northern campaign: each defeated government becomes a
+			# subject; a defeated Party state leaves the war without annexation.
+			if = {
+				limit = {
+					ROOT = {
+						STP_pw_party_northern_march_target = yes
+						has_war_with = STP
+					}
+					STP = {
+						exists = yes
+						has_capitulated = no
+						has_country_flag = STP_pw_party_northern_march_active
+					}
+					FROM = { OR = { tag = STP is_subject_of = STP } }
+				}
+				set_global_flag = skip_default_capitulation
+				ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved days = 2 } }
+				ROOT = { STP_pw_party_settle_northern_march_member = yes }
+				clr_global_flag = skip_default_capitulation
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						tag = STP
+						has_country_flag = STP_pw_party_northern_march_active
+					}
+					FROM = {
+						has_war_with = STP
+						OR = {
+							STP_pw_party_northern_march_target = yes
+							any_allied_country = { STP_pw_party_northern_march_target = yes }
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved days = 2 } }
+				STP = { STP_pw_party_settle_northern_march_defeat = yes }
+				clr_global_flag = skip_default_capitulation
+			}
 			# END frontier:on_capitulation_immediate
 
 			# BEGIN bezhaysk:on_capitulation_immediate
@@ -1330,6 +1369,11 @@ on_actions = {
 				ROOT = { clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved }
 				set_global_flag = skip_default_capitulation
 			}
+			if = {
+				limit = { ROOT = { has_country_flag = STP_pw_party_northern_march_capitulation_reserved } }
+				ROOT = { clr_country_flag = STP_pw_party_northern_march_capitulation_reserved }
+				set_global_flag = skip_default_capitulation
+			}
 			# END frontier:on_capitulation
 
 			# BEGIN rin:on_capitulation
@@ -1718,6 +1762,13 @@ on_actions = {
 					STP = { has_country_flag = STP_pw_party_nod_campaign_active }
 				}
 				STP = { country_event = { id = ADISCORD_STP_pc.44 days = 1 } }
+			}
+			if = {
+				limit = {
+					OR = { ROOT = { tag = STP } FROM = { tag = STP } }
+					STP = { has_country_flag = STP_pw_party_northern_march_active }
+				}
+				STP = { country_event = { id = ADISCORD_STP_pc.51 days = 1 } }
 			}
 			STP = { STP_occidia_reconcile_peace = yes }
 			STS = { STP_occidia_reconcile_peace = yes }

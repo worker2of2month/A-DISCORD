@@ -431,6 +431,8 @@ STP_party_reconstruction_plan = {
 		STP_pw_party_bezhaysk_campaign
 		STP_pw_party_kefreyt_campaign
 		STP_pw_party_regional_order
+		STP_pw_party_northern_march
+		STP_pw_party_great_stelander
 	}
 	weight = { factor = 20 }
 }

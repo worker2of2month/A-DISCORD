@@ -3851,6 +3851,28 @@ STP_cw_war_council = {
 		ai_will_do = { base = 3 }
 	}
 
+	STP_pw_party_launch_northern_march = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = STP }
+		visible = {
+			has_completed_focus = STP_pw_party_northern_march
+			NOT = { has_country_flag = STP_pw_party_northern_march_active }
+			STP_pw_party_northern_march_targets_remain = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_party_launch_northern_march_available_tt
+				STP_pw_party_can_launch_northern_march = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = STP_pw_party_launch_northern_march_tt
+			hidden_effect = { STP_pw_party_launch_northern_march = yes }
+		}
+		ai_will_do = { base = 4 }
+	}
+
 
 
 	# The fixed wartime template and its existing payment helper own the price.

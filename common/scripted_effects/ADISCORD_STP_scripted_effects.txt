@@ -8876,6 +8876,215 @@ STP_pw_party_finalize_kefreyt_subject = {
 	}
 }
 
+# Party final northern campaign.
+# Outside dependency links are broken before the declarations, so no other
+# overlord keeps a claim on the northern bloc. Aynholm stays with an attacked
+# Nodrul and is separated in Nodrul's settlement.
+STP_pw_party_launch_northern_march = {
+	if = {
+		limit = { STP_pw_party_can_launch_northern_march = yes }
+		set_country_flag = STP_pw_party_northern_march_active
+		every_country = {
+			limit = {
+				STP_pw_party_northern_march_target = yes
+				NOT = {
+					AND = {
+						tag = AIN
+						is_subject_of = NOD
+					}
+				}
+			}
+			ADISCORD_release_non_participating_minor_optimization = yes
+			if = {
+				limit = { is_subject = yes }
+				overlord = {
+					set_autonomy = {
+						target = PREV
+						autonomy_state = autonomy_free
+						end_wars = no
+						end_civil_wars = no
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_in_faction = yes
+					faction_leader = { NOT = { STP_pw_party_northern_march_target = yes } }
+				}
+				leave_faction = yes
+			}
+		}
+		AIN = { ADISCORD_release_non_participating_minor_optimization = yes }
+		every_country = {
+			limit = {
+				STP_pw_party_northern_march_target = yes
+				is_subject = no
+				has_capitulated = no
+				NOT = { has_war_with = STP }
+			}
+			STP = { declare_war_on = { target = PREV type = puppet_wargoal_focus } }
+		}
+		# Closes a launch in which no declaration took place.
+		STP_pw_party_reconcile_northern_march = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY target: accepted defeat by STP. White peace runs here; the subject is
+# created a day later, after the native faction cache has dropped the old bloc.
+STP_pw_party_settle_northern_march_member = {
+	if = {
+		limit = {
+			STP_pw_party_northern_march_target = yes
+			has_war_with = STP
+		}
+		every_subject_country = {
+			limit = { STP_pw_party_northern_march_target = yes }
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			if = {
+				limit = {
+					is_in_faction = yes
+					is_faction_leader = no
+				}
+				faction_leader = { remove_from_faction = PREV }
+			}
+			STP = {
+				if = {
+					limit = { has_war_with = PREV }
+					white_peace = PREV
+				}
+			}
+			set_country_flag = STP_pw_party_northern_subject_pending
+			ADISCORD_economy_mark_dirty = yes
+		}
+		if = {
+			limit = { is_subject = yes }
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = { is_in_faction = yes }
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+			else = { faction_leader = { remove_from_faction = PREV } }
+		}
+		STP = { white_peace = PREV }
+		set_country_flag = STP_pw_party_northern_subject_pending
+		ADISCORD_economy_mark_dirty = yes
+		STP = { country_event = { id = ADISCORD_STP_pc.51 days = 1 } }
+	}
+}
+
+# COUNTRY STP: every pending receipt is consumed, even when STP can no longer
+# accept subjects, so a later campaign starts from a clean state.
+STP_pw_party_finalize_northern_march = {
+	every_country = {
+		limit = { has_country_flag = STP_pw_party_northern_subject_pending }
+		clr_country_flag = STP_pw_party_northern_subject_pending
+		if = {
+			limit = {
+				exists = yes
+				is_subject = no
+				NOT = { has_war_with = STP }
+				STP = {
+					exists = yes
+					is_subject = no
+					STP_pw_can_reconstruct = yes
+				}
+			}
+			STP = {
+				puppet = {
+					target = PREV
+					end_wars = no
+					end_civil_wars = no
+				}
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_puppet
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			STP_pw_party_sync_revolution_subject = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	ADISCORD_economy_mark_dirty = yes
+	STP_pw_party_reconcile_northern_march = yes
+}
+
+# COUNTRY STP: the campaign closes when no northern enemy or pending subject
+# remains. Surviving independent governments require a new launch.
+STP_pw_party_reconcile_northern_march = {
+	if = {
+		limit = {
+			has_country_flag = STP_pw_party_northern_march_active
+			NOT = { any_enemy_country = { STP_pw_party_northern_march_target = yes } }
+			NOT = { any_country = { has_country_flag = STP_pw_party_northern_subject_pending } }
+		}
+		clr_country_flag = STP_pw_party_northern_march_active
+		if = {
+			limit = { STP_pw_party_northern_march_targets_remain = no }
+			add_political_power = 100
+			add_war_support = 0.05
+		}
+	}
+}
+
+# COUNTRY STP: a lost campaign ends in white peace with the northern side
+# instead of the generic annexation of the Party state.
+STP_pw_party_settle_northern_march_defeat = {
+	if = {
+		limit = { has_country_flag = STP_pw_party_northern_march_active }
+		clr_country_flag = STP_pw_party_northern_march_active
+		set_country_flag = {
+			flag = STP_pw_party_northern_march_regrouping
+			days = 365
+		}
+		every_enemy_country = {
+			limit = {
+				OR = {
+					STP_pw_party_northern_march_target = yes
+					any_allied_country = { STP_pw_party_northern_march_target = yes }
+				}
+			}
+			STP = { white_peace = PREV }
+		}
+		add_stability = -0.10
+		add_war_support = -0.10
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY STP: presentation and state identity after the northern campaign.
+STP_pw_party_proclaim_great_stelander = {
+	if = {
+		limit = {
+			STP_pw_party_northern_march_resolved = yes
+			is_subject = no
+		}
+		set_cosmetic_tag = STP_great_stelander
+		every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
+		news_event = { id = ADISCORD_STP_pc.52 hours = 1 }
+	}
+}
+
 # COUNTRY NOD: consent, transfer and threat closure form one guarded settlement.
 STP_pw_party_settle_compact = {
 	if = {
@@ -9000,8 +9209,16 @@ STP_pw_open_marine_school = {
 }
 
 # STP: sovereignty changes the state identity independently of constitutional BOP.
+# The proclaimed Great Stelander replaces the revolutionary identity while independent.
 STP_pw_party_sync_revolution_identity = {
 	if = {
+		limit = {
+			is_subject = no
+			has_completed_focus = STP_pw_party_great_stelander
+		}
+		set_cosmetic_tag = STP_great_stelander
+	}
+	else_if = {
 		limit = {
 			STP_ch_current = yes
 			is_subject = no
@@ -9009,7 +9226,12 @@ STP_pw_party_sync_revolution_identity = {
 		set_cosmetic_tag = STP_revolution_capital
 	}
 	else_if = {
-		limit = { has_cosmetic_tag = STP_revolution_capital }
+		limit = {
+			OR = {
+				has_cosmetic_tag = STP_revolution_capital
+				has_cosmetic_tag = STP_great_stelander
+			}
+		}
 		drop_cosmetic_tag = yes
 	}
 	every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
@@ -9024,7 +9246,10 @@ STP_pw_party_sync_revolution_subject = {
 			STP = {
 				exists = yes
 				is_subject = no
-				has_cosmetic_tag = STP_revolution_capital
+				OR = {
+					has_cosmetic_tag = STP_revolution_capital
+					has_cosmetic_tag = STP_great_stelander
+				}
 			}
 		}
 		if = {
@@ -9098,7 +9323,10 @@ STP_pw_party_initialize_constitution = {
 		set_power_balance = { id = STP_party_constitution set_value = 0 }
 		set_country_flag = STP_pw_party_constitution_initialized
 		STP_pw_party_refresh_constitution = yes
-		set_cosmetic_tag = STP_revolution_capital
+		if = {
+			limit = { NOT = { has_completed_focus = STP_pw_party_great_stelander } }
+			set_cosmetic_tag = STP_revolution_capital
+		}
 		every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
 		news_event = { id = ADISCORD_STP_pc.47 hours = 1 }
 	}

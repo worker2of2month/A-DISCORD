@@ -591,6 +591,70 @@
 		ai_will_do = { base = 8 }
 	}
 
+	# Final Party campaign: every remaining northern government becomes a subject.
+	focus = {
+		id = STP_pw_party_northern_march
+		icon = GFX_focus_STP_Break_The_Northern_Ring
+		x = 0
+		y = 17
+		cost = 4
+		prerequisite = { focus = STP_pw_party_regional_order }
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			is_subject = no
+		}
+		bypass = { STP_pw_party_northern_march_targets_remain = no }
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_ANNEXATION }
+		completion_reward = {
+			add_war_support = 0.05
+			add_command_power = 15
+			unlock_decision_tooltip = STP_pw_party_launch_northern_march
+			custom_effect_tooltip = STP_pw_party_launch_northern_march_unlock_summary_tt
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = STP_pw_party_great_stelander
+		icon = GFX_focus_STP_Steland_Hegemony
+		x = 0
+		y = 18
+		cost = 5
+		prerequisite = { focus = STP_pw_party_northern_march }
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_party_northern_march_resolved_tt
+				STP_pw_party_northern_march_resolved = yes
+			}
+			is_subject = no
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		completion_reward = {
+			custom_effect_tooltip = STP_pw_party_great_stelander_identity_tt
+			add_political_power = 150
+			add_stability = 0.05
+			add_war_support = 0.05
+			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_great_stelander_delta } }
+			hidden_effect = {
+				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.15 }
+				add_to_variable = { var = STP_pw_industrial_capacity_factory value = 0.05 }
+				add_to_variable = { var = STP_pw_research_speed_factor value = 0.03 }
+				STP_pw_refresh_modifier = yes
+				STP_pw_party_proclaim_great_stelander = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
 	# Party district settlement, economic order and applied research.
 
 	focus = {

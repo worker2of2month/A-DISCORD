@@ -3749,6 +3749,30 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_pc.50",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 50,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.51",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 51,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_pc.52",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 52,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SLI.1",
       "namespace": "ADISCORD_SLI",
       "number": 1,

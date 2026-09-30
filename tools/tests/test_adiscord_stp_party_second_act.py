@@ -158,7 +158,7 @@ class PartySecondActTests(unittest.TestCase):
                     gates = [e.value for e in focus if e.key == "allow_branch"]
                     if all(matches_conditions(gate, facts) for gate in gates):
                         visible[name] = position(name)
-                self.assertLessEqual(max(y for x, y in visible.values()), 16)
+                self.assertLessEqual(max(y for x, y in visible.values()), 18)
                 for name, (x, y) in visible.items():
                     for other, (ox, oy) in visible.items():
                         if name != other and y == oy:

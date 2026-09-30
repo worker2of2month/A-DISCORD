@@ -1319,6 +1319,16 @@ ideas = {
 			allowed = { always = no }
 			modifier = { planning_speed = 0.02 }
 		}
+		STP_pw_party_great_stelander_delta = {
+			name = STP_pw_party_dynamic
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.15
+				industrial_capacity_factory = 0.05
+				research_speed_factor = 0.03
+			}
+		}
 		STP_pw_party_restore_roads_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }

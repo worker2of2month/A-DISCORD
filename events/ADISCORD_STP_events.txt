@@ -2521,6 +2521,43 @@ country_event = {
 	}
 }
 
+# STP: creates northern subjects after capitulation and reconciles the campaign after peace.
+country_event = {
+	id = ADISCORD_STP_pc.51
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { tag = STP }
+			STP_pw_party_finalize_northern_march = yes
+		}
+	}
+}
+
+news_event = {
+	id = ADISCORD_STP_pc.52
+	title = ADISCORD_STP_pc.52.t
+	desc = ADISCORD_STP_pc.52.d
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_STP_pc.52.stelander
+		trigger = { tag = STP }
+	}
+	option = {
+		name = ADISCORD_STP_pc.52.subject
+		trigger = { is_subject_of = STP }
+	}
+	option = {
+		name = ADISCORD_STP_pc.52.foreign
+		trigger = {
+			NOT = { tag = STP }
+			NOT = { is_subject_of = STP }
+		}
+	}
+}
+
 news_event = {
 	id = ADISCORD_STP_pc.47
 	title = ADISCORD_STP_pc.47.t

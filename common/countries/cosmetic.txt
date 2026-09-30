@@ -91,6 +91,11 @@ STP_revolution_capital = {
 	color_ui = rgb { 84 35 112 }
 }
 
+STP_great_stelander = {
+	color = rgb { 84 35 112 }
+	color_ui = rgb { 84 35 112 }
+}
+
 NOD_STP_revolution = {
 	color = rgb { 93 113 132 }
 	color_ui = rgb { 93 113 132 }
