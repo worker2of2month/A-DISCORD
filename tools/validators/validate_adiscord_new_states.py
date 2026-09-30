@@ -37,6 +37,7 @@ from tools.builders.build_adiscord_new_states import (
     MINOR_VPS,
     NAM_COALITION_FRONT_RESOURCES,
     NAM_LEGACY_VICTORY_POINTS,
+    REGIONAL_SETTLEMENTS,
     SECONDARY_CENTRES,
     SETTLEMENT_CLUSTER_CENTRES,
     SETTLEMENT_CLUSTER_VICTORY_POINTS,
@@ -84,6 +85,11 @@ INNER_FRONTIER_SETTLEMENT_STATES = {
 
 APPROVED_NON_URBAN_SETTLEMENT_VPS = (
     NON_URBAN_SETTLEMENT_VPS
+    | frozenset(
+        province
+        for settlements in REGIONAL_SETTLEMENTS.values()
+        for province, _value, _name in settlements
+    )
     | frozenset(
         province_id
         for points in (

@@ -1774,6 +1774,7 @@ class PartyRecoveryTransactions(unittest.TestCase):
             facts = {
                 **self.facts(),
                 ("STP", "variable", "STP_pw_recovery_progress"): progress,
+                ("STP", "has_completed_focus", "STP_party_service_constitution"): True,
             }
             self.assertEqual(
                 matches_conditions(block(final, "available"), facts, "STP"),

@@ -17,6 +17,12 @@ recruit_character = STP_Viktor_Marent
 recruit_character = STP_Severin_Drake
 recruit_character = STP_August_Veil
 
+# Dormant claimants remain on the party's STP through the authored split.
+recruit_character = STP_Cyan_Crowe
+recruit_character = STP_Pavel_Lanskoy
+recruit_character = STP_Vera_Korvina
+recruit_character = STP_Edgar_Renner
+
 ####### Basic shit
 
 set_politics = {

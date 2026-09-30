@@ -771,17 +771,19 @@ class SubjectWarParticipationTests(unittest.TestCase):
             for northern in ("YPR", "COF", "TFF"):
                 with self.subTest(reverse=reverse, northern=northern):
                     self.setUp()
-                    self.subjects = {"STP": "NOD", "N1": "NOD", "Y1": northern}
+                    self.subjects = {"STP": "NOD", "SLI": "NOD", "N1": "NOD", "Y1": northern}
                     (
                         self.declare(northern, "NOD")
                         if reverse
                         else self.declare("NOD", northern)
                     )
-                    self.assertFalse(any("STP" in pair for pair in self.wars))
+                    self.assertFalse(any({"STP", "SLI"} & pair for pair in self.wars))
                     self.assertIn(frozenset(("N1", "Y1")), self.wars)
                     self.declare("VAL", "NOD")
                     self.assertIn(frozenset(("STP", "VAL")), self.wars)
                     self.assertNotIn(frozenset(("STP", northern)), self.wars)
+                    self.assertNotIn(frozenset(("SLI", northern)), self.wars)
+                    self.assertIn(frozenset(("SLI", "VAL")), self.wars)
 
     def test_attack_on_stp_still_calls_nod(self):
         self.subjects = {"STP": "NOD"}

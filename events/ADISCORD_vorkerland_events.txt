@@ -813,6 +813,7 @@ country_event = {
 		WKR = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
 		VAD = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
 		TVA = { ADISCORD_vorkerland_bootstrap_ai_force_designs = yes }
+		ADISCORD_vorkerland_roll_central_initiative = yes
 		# The claimant spirits are asserted at the actual war-outbreak stage,
 		# after the initial partition and political cache rebuild. This prevents
 		# WRK's three obsolete starting spirits from resurfacing in live play.

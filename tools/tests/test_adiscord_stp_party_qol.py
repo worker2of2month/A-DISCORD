@@ -125,7 +125,9 @@ class PartyQualityOfLifeTests(unittest.TestCase):
                      ('STP', 'numeric', 'has_political_power'): 100}
             self.assertFalse(matches_conditions(block(decision, 'visible'), facts))
             self.assertFalse(matches_conditions(block(decision, 'available'), facts))
-            self.assertFalse(list(selected_effects(block(decision, 'complete_effect'), facts)))
+            # The player-facing tooltip is display-only; no mechanical write may run.
+            self.assertFalse([entry for _, entry in selected_effects(block(decision, 'complete_effect'), facts)
+                              if entry.key != 'custom_effect_tooltip'])
 
     def test_chapter_agreements_appear_at_the_support_boundary_and_hide_after_signing(self):
         for group in ('conservatives', 'borons', 'security', 'army', 'advisers', 'merchants', 'radicals'):
@@ -174,10 +176,16 @@ class PartyQualityOfLifeTests(unittest.TestCase):
             summary = localization(language)['STP_ch_chapters_desc']
             paragraphs = summary.split(r'\n\n')
             self.assertEqual(len(paragraphs), 3)
-            self.assertIn('[STPGetChapterFoundations]', paragraphs[0])
-            self.assertIn('[STPGetChapterNominee]', paragraphs[1])
-            self.assertIn('[?STP_ch_votes_5|1]', paragraphs[1])
-            self.assertIn('[STPGetChapterPressureTarget]', paragraphs[2])
+            # Stage and live pressure first, then the three foundations one per
+            # line, then the congress arithmetic.
+            self.assertIn('[STPGetChapterPhaseHint]', paragraphs[0])
+            self.assertIn('[STPGetChapterPressureLine]', paragraphs[0])
+            for area in ('Army', 'Economy', 'Party'):
+                self.assertIn(f'[STPGetChapter{area}Foundation]', paragraphs[1])
+            self.assertIn('[STPGetChapterNominee]', paragraphs[2])
+            self.assertIn('[?STP_ch_votes_5|1]', paragraphs[2])
+            line = localization(language)['STP_ch_pressure_line_1']
+            self.assertIn('[STPGetChapterPressureTarget]', line)
 
     def test_pressure_affects_the_current_shipment_on_purchase(self):
         start = list(

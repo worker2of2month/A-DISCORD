@@ -649,12 +649,17 @@ def run_checks() -> list[tuple[str, bool, str]]:
     )
     add("STS front rush_weak", "execution_type = rush_weak" in sts_front)
     recovery = named_block(strategy_text, "STS_shabrat_recover_party_front")
+    cautious = named_block(strategy_text, "STS_shabrat_cautious_party_front")
     add("Shabrat army wants ground-attack wings", "unit_ratio id = cas" in army)
     add(
-        "Shabrat regroups between waves and when outmatched",
+        "Shabrat pauses between waves but can attack carefully when outmatched",
         "has_country_flag = STS_ai_regroup" in recovery
-        and "fighting_army_strength_ratio = { tag = STP" in recovery
-        and "execute_order = no" in recovery,
+        and "execute_order = no" in recovery
+        and "stockpile_ratio" not in recovery
+        and "fighting_army_strength_ratio" not in recovery
+        and "fighting_army_strength_ratio = { tag = STP" in cautious
+        and "execution_type = careful" in cautious
+        and "execute_order = yes" in cautious,
     )
     add("VAL front exists", bool(val_front) and "tag = VAL" in val_front)
     add("strategy file has no add_ai_strategy", "add_ai_strategy" not in strategy_text)

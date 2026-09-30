@@ -3771,6 +3771,94 @@
       "owner": "events/ADISCORD_SLI_events.txt",
       "subsystem": "stelander_islands",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.20",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 20,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.21",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 21,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.22",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 22,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.23",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 23,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.24",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 24,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.25",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 25,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.26",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 26,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.27",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 27,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.28",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 28,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.29",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 29,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_STP_ch.30",
+      "namespace": "ADISCORD_STP_ch",
+      "number": 30,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
     }
   ]
 }

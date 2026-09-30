@@ -65,6 +65,31 @@ def signature(items):
     ]
 
 
+def expand_leader_conditions(entries, triggers):
+    from dataclasses import replace
+
+    expanded = []
+    for entry in entries:
+        if entry.key.startswith("STP_party_leader_"):
+            expanded.append(replace(entry, key="AND" if entry.value == "yes" else "NOT",
+                                    value=expand_leader_conditions(triggers[entry.key], triggers)))
+        elif isinstance(entry.value, list):
+            expanded.append(replace(entry, value=expand_leader_conditions(entry.value, triggers)))
+        else:
+            expanded.append(entry)
+    return expanded
+
+
+def elected_leader_facts(government):
+    return {
+        ("STP", "tag", "STP"): True,
+        ("STP", "STP_pf_active", "yes"): True,
+        ("STP", "has_country_flag", "STP_cw_postwar"): True,
+        ("STP", "has_variable", "STP_ch_government"): True,
+        ("STP", "variable", "STP_ch_government"): government,
+    }
+
+
 class PartyRouteContracts(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -2247,32 +2272,44 @@ class PartyConstitutionContracts(unittest.TestCase):
     def test_program_branches_recheck_the_elected_mandate_without_a_second_vote(self):
         for suffix, winner in (("high_houses", 1), ("unbound_revolution", 2)):
             focus = self.focuses["STP_pw_party_" + suffix]
-            self.assertEqual(one(one(focus, "prerequisite"), "focus"), "STP_ch_rules")
             self.assertEqual(one(focus, "cancel_if_invalid"), "yes")
             gate = one(focus, "available")
             self.assertNotIn("power_balance_value", [e.key for e in walk(gate)])
             for elected in (1, 2, 3):
                 facts = {
+                    **elected_leader_facts(elected),
                     ("STP", "STP_pw_can_reconstruct", "yes"): True,
                     ("STP", "variable", "STP_ch_phase"): 5,
                     ("STP", "variable", "STP_ch_government"): elected,
+                    ("STP", "has_completed_focus", "STP_ch_rules"): True,
                 }
-                self.assertEqual(matches_conditions(gate, facts), elected == winner)
+                self.assertEqual(matches_conditions(expand_leader_conditions(gate, self.triggers), facts), elected == winner)
 
-    def test_reconstruction_capstone_accepts_the_elected_military_program(self):
-        alternatives = {
-            "STP_pw_party_protectorate",
-            "STP_pw_party_high_houses",
-            "STP_pw_party_unbound_revolution",
-            "STP_ch_program_settlement",
-        }
+    def test_reconstruction_capstone_preserves_completed_routes_after_chapters_hide(self):
+        finals = ("STP_party_houses_compact", "STP_party_festival_charter",
+                  "STP_party_service_constitution", "STP_party_trade_republic",
+                  "STP_party_security_settlement", "STP_party_regent_settlement")
         focus = self.focuses["STP_pw_party_settled_state"]
-        self.assertTrue(
-            any(
-                alternatives.issubset(set(children(group, "focus")))
-                for group in children(focus, "prerequisite")
-            )
-        )
+        # Previous leaders' hidden branches must not be native prerequisites.
+        for group in children(focus, "prerequisite"):
+            self.assertFalse(set(children(group, "focus")) & set(finals))
+        gate = one(focus, "available")
+        facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                 ("STP", "variable", "STP_pw_recovery_progress"): 3}
+        self.assertFalse(matches_conditions(gate, facts))
+        for phase in (3, 4, 6, 7):
+            for final in finals:
+                completed = {**facts,
+                             ("STP", "has_country_flag", "STP_cw_postwar"): True,
+                             ("STP", "variable", "STP_ch_phase"): phase,
+                             ("STP", "has_completed_focus", final): True}
+                for group in children(focus, "prerequisite"):
+                    self.assertTrue(any(matches_conditions(
+                        one(self.focuses[target], "allow_branch"), completed)
+                        for target in children(group, "focus")))
+                self.assertTrue(matches_conditions(gate, completed))
+                self.assertFalse(matches_conditions(gate, {
+                    **completed, ("STP", "variable", "STP_pw_recovery_progress"): 2}))
 
     def test_special_laws_have_distinct_slots_and_a_real_victory_gate(self):
         self.assertIn("STP_pw_party_laws_available", self.triggers.keys())
@@ -2444,18 +2481,20 @@ class PartyConstitutionContracts(unittest.TestCase):
             self.constitution_value(-0.6, 0, 100, radical, active=False), -0.6
         )
 
-    def test_programs_require_the_government_phase_and_grant_substantive_laws(self):
+    def test_current_programs_persist_across_phases_and_policy_choices_grant_laws(self):
         for suffix, winner in (("high_houses", 1), ("unbound_revolution", 2)):
             gate = one(self.focuses["STP_pw_party_" + suffix], "available")
             for chapter in (1, 2, 3, 4, 5, 6, 7):
                 facts = {
+                    **elected_leader_facts(winner),
                     ("STP", "STP_pw_can_reconstruct", "yes"): True,
                     ("STP", "variable", "STP_ch_phase"): chapter,
                     ("STP", "variable", "STP_ch_government"): winner,
+                    ("STP", "has_completed_focus", "STP_ch_rules"): True,
                 }
-                self.assertEqual(matches_conditions(gate, facts), chapter == 5)
+                self.assertTrue(matches_conditions(expand_leader_conditions(gate, self.triggers), facts))
         conservative = one(
-            self.focuses["STP_pw_party_high_houses"], "completion_reward"
+            self.focuses["STP_party_houses_closed_lists"], "completion_reward"
         )
         self.assertIn("STP_law_private_societies", children(conservative, "add_ideas"))
         radical = one(self.focuses["STP_ch_free_labour"], "completion_reward")
@@ -2629,6 +2668,36 @@ class PoliticalChapterContracts(unittest.TestCase):
             ):
                 raise AssertionError(f"Unsupported ledger-fixture effect: {key}")
 
+    def test_chapter_transitions_do_not_depend_on_hidden_prerequisite_branches(self):
+        transitions = (
+            ("STP_ch_cabinet", "STP_ch_congress", 4, 1),
+            ("STP_ch_institutional_review", "STP_ch_program_settlement", 6, 1),
+        )
+        for name, predecessor, phase, government in transitions:
+            with self.subTest(focus=name):
+                facts = {
+                    ("STP", "tag", "STP"): True,
+                    ("STP", "has_country_flag", "STP_cw_postwar"): True,
+                    ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                    ("STP", "is_subject", "no"): True,
+                    ("STP", "variable", "STP_ch_phase"): phase,
+                    ("STP", "variable", "STP_ch_government"): government,
+                    ("STP", "has_completed_focus", predecessor): True,
+                }
+                focus = self.focuses[name]
+                self.assertTrue(matches_conditions(one(focus, "allow_branch"), facts))
+                self.assertFalse(matches_conditions(
+                    one(self.focuses[predecessor], "allow_branch"), facts
+                ))
+                for group in children(focus, "prerequisite"):
+                    self.assertTrue(any(
+                        matches_conditions(one(self.focuses[target], "allow_branch"), facts)
+                        for target in children(group, "focus")
+                    ), "A chapter entry must not depend on a hidden prerequisite branch")
+                self.assertTrue(matches_conditions(one(focus, "available"), facts))
+                facts[("STP", "has_completed_focus", predecessor)] = False
+                self.assertFalse(matches_conditions(one(focus, "available"), facts))
+
     def test_cabinet_reaches_each_elected_program_with_every_appointment_combination(self):
         from itertools import product
 
@@ -2637,7 +2706,7 @@ class PoliticalChapterContracts(unittest.TestCase):
         ministries = ("security_ministry", "economy_ministry", "appointments")
         for government, appointments in product(range(1, 6), product((1, 2), repeat=3)):
             with self.subTest(government=government, appointments=appointments):
-                facts = {("STP", "STP_pw_can_reconstruct", "yes"): True,
+                facts = {**elected_leader_facts(government), ("STP", "STP_pw_can_reconstruct", "yes"): True,
                          ("STP", "STP_ch_governing", "yes"): True,
                          ("STP", "tag", "STP"): True,
                          ("STP", "has_country_flag", "STP_cw_postwar"): True,
@@ -2648,7 +2717,6 @@ class PoliticalChapterContracts(unittest.TestCase):
                          ("STP", "has_completed_focus", "STP_ch_congress"): True}
                 cabinet = self.focuses["STP_ch_cabinet"]
                 self.assertTrue(matches_conditions(one(cabinet, "available"), facts))
-                self.assertEqual(one(one(cabinet, "prerequisite"), "focus"), "STP_ch_congress")
                 facts[("STP", "has_completed_focus", "STP_ch_cabinet")] = True
                 for ministry, choice in zip(ministries, appointments):
                     decision = self.decisions[f"STP_ch_appoint_{ministry}_{choice}"]
@@ -2680,8 +2748,8 @@ class PoliticalChapterContracts(unittest.TestCase):
                 facts[("STP", "variable", "STP_ch_phase")] = int(phase[0])
                 for index, name in enumerate(programs, 1):
                     focus = self.focuses[name]
-                    self.assertEqual(matches_conditions(one(focus, "allow_branch"), facts), index == government)
-                    self.assertEqual(matches_conditions(one(focus, "available"), facts), index == government)
+                    self.assertEqual(matches_conditions(expand_leader_conditions(one(focus, "allow_branch"), self.triggers), facts), index == government)
+                    self.assertEqual(matches_conditions(expand_leader_conditions(one(focus, "available"), self.triggers), facts), index == government)
 
     def test_chapter_transitions_preview_the_real_program_and_name_missing_appointments(self):
         scripted = {one(entry.value, "name"): entry.value for entry in parse_clausewitz(read(SCRIPTED_LOC))}
@@ -3259,8 +3327,8 @@ class PoliticalChapterContracts(unittest.TestCase):
 
     def test_new_governments_have_exclusive_programs_and_reach_settlement(self):
         for candidate, first, last in (
-            (4, "STP_ch_production_agreements", "STP_ch_market_charter"),
-            (5, "STP_ch_security_directorate", "STP_ch_register_of_powers"),
+            (4, "STP_ch_production_agreements", "STP_party_trade_republic"),
+            (5, "STP_ch_security_directorate", "STP_party_security_settlement"),
         ):
             self.assertIn(f"STP_ch_nominate_{candidate}", self.decisions)
             self.assertIn(
@@ -3273,23 +3341,27 @@ class PoliticalChapterContracts(unittest.TestCase):
             for focus_id in (first, last):
                 for government in range(1, 6):
                     facts = {
+                        **elected_leader_facts(government),
                         ("STP", "STP_pw_can_reconstruct", "yes"): True,
                         ("STP", "variable", "STP_ch_phase"): 5,
                         ("STP", "variable", "STP_ch_government"): government,
+                        ("STP", "has_completed_focus", "STP_ch_rules"): True,
                     }
                     self.assertEqual(
                         matches_conditions(
-                            one(self.focuses[focus_id], "available"), facts
+                            expand_leader_conditions(one(self.focuses[focus_id], "available"), self.triggers), facts
                         ),
                         government == candidate,
                     )
-            self.assertIn(
-                last,
-                children(
-                    one(self.focuses["STP_ch_program_settlement"], "prerequisite"),
-                    "focus",
-                ),
-            )
+            facts = {**elected_leader_facts(candidate),
+                     ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                     ("STP", "variable", "STP_ch_phase"): 5,
+                     ("STP", "has_completed_focus", "STP_ch_rules"): True}
+            gate = expand_leader_conditions(
+                one(self.focuses["STP_ch_program_settlement"], "available"), self.triggers)
+            self.assertFalse(matches_conditions(gate, facts))
+            facts[("STP", "has_completed_focus", last)] = True
+            self.assertTrue(matches_conditions(gate, facts))
 
     def test_protectorate_replaces_and_restores_leader_without_reopening_ballot(self):
         self.assertIn(

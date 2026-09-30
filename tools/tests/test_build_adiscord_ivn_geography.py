@@ -10,17 +10,19 @@ from tempfile import TemporaryDirectory
 from typing import Iterator
 import unittest
 
+import numpy as np
 from PIL import Image
 
 from tools.builders import build_adiscord_ivn_geography as builder
 from tools.builders import build_adiscord_terrain_snow as terrain_builder
+from tools.lib import coastal_clearance as clearance
 
 
 HEIGHT_OUTSIDE_ISLAND_SHA256 = (
-    "4488136EDE13650B33ADD2F251E8B40130168CAF569F9FC8798F8F1A04FE27FE"
+    "98EA41C210763E0512AE8F6851BC7F89FE84A2891201C9FBEF7C6F95834CB12F"
 )
 NORMAL_OUTSIDE_FEATHER_SHA256 = (
-    "7D0A2D01518C1FC4682D42F7C482031A9D2C175E4D34C0EE95EC8EEEFF8E61AE"
+    "5B542E782DCFDD03B6A208B36677EB84375892E885F1DBD768D64280BA43DFF5"
 )
 
 
@@ -231,8 +233,8 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
 
     def test_tree_probability_values(self) -> None:
         self.assertEqual(builder.tree_probability("forest"), 0.62)
-        self.assertEqual(builder.tree_probability("plains"), 0.11)
-        self.assertEqual(builder.tree_probability("hills"), 0.04)
+        self.assertEqual(builder.tree_probability("plains"), 0.04)
+        self.assertEqual(builder.tree_probability("hills"), 0.025)
         self.assertEqual(builder.tree_probability("marsh"), 0.08)
 
     def test_render_northern_terrain_uses_relief_shoulders_forests_and_preserves_specials(
@@ -515,10 +517,10 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
         occupancy = metrics.tree_occupancy
         self.assertGreaterEqual(occupancy["forest"], 0.50)
         self.assertLessEqual(occupancy["forest"], 0.72)
-        self.assertGreaterEqual(occupancy["plains"], 0.06)
-        self.assertLessEqual(occupancy["plains"], 0.16)
+        self.assertGreaterEqual(occupancy["plains"], 0.02)
+        self.assertLessEqual(occupancy["plains"], 0.07)
         self.assertGreaterEqual(occupancy["hills"], 0.01)
-        self.assertLessEqual(occupancy["hills"], 0.07)
+        self.assertLessEqual(occupancy["hills"], 0.05)
         self.assertLess(occupancy["hills"], occupancy["plains"])
         self.assertLessEqual(occupancy["hills"], occupancy["forest"] / 5)
         self.assertEqual(metrics.forbidden_tree_cells, 0)
@@ -754,13 +756,21 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
             Image.open(builder.PROVINCES_PATH) as provinces,
         ):
             city_pixels = list(cities.get_flattened_data())
-            province_bytes = provinces.convert("RGB").tobytes()
+            province_rgb = np.asarray(provinces.convert("RGB"))
+            province_bytes = province_rgb.tobytes()
+        water = clearance.water_mask(
+            province_rgb, clearance.water_colours(builder.DEFINITION_PATH)
+        )
+        shore = clearance.urban_blocked(
+            water, province_rgb, builder.DEFINITION_PATH
+        ).reshape(-1)
         generated = list(outputs.terrain.get_flattened_data())
         offenders = []
         for index, city_value in enumerate(city_pixels):
             colour = tuple(province_bytes[index * 3 : index * 3 + 3])
             if (
-                city_value == terrain_builder.CITY_PALETTE_INDEX
+                not shore[index]
+                and city_value == terrain_builder.CITY_PALETTE_INDEX
                 and colour in scoped_colours.values()
                 and generated[index] != builder.URBAN_PALETTE
             ):
@@ -770,7 +780,7 @@ class IvanlandGeographyBuilderTests(unittest.TestCase):
     def test_province_geometry_is_unchanged(self) -> None:
         digest = hashlib.sha256(builder.PROVINCES_PATH.read_bytes()).hexdigest().upper()
         self.assertEqual(
-            digest, "A168AC5FDC0860A7C668B3612C4D0FC2091950DE95FC29522FAAF141BDEFED3F"
+            digest, "85D8B27EE82AC123C5FC09AF2F802946BE26617497B384AE7453609C2D2EA39E"
         )
 
 

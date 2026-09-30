@@ -66,7 +66,47 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         home = named_block(self.effects, "ADISCORD_vorkerland_ensure_wkr_home_guard")
         self.assertIn("add_manpower = 12000", home)
         self.assertIn("amount = 960 producer = WKR", home)
-        self.assertEqual(home.count("count = 2"), 2)
+        self.assertEqual(home.count("count = 3"), 2)
+
+    def test_tva_has_one_mobile_group_without_losing_front_coverage(self):
+        oob = read("history/units/TVA_vorkerland_collapse.txt")
+        self.assertEqual(oob.count('division_template = "TVA Mobile Test Group"'), 1)
+        self.assertEqual(oob.count('division_template = "TVA Collapse Militia"'), 18)
+
+    def test_initiative_roll_covers_all_claimants_equally_and_only_once(self):
+        effect = named_block(self.effects, "ADISCORD_vorkerland_roll_central_initiative")
+        self.assertTrue(effect, "The central war has no campaign variation")
+        guard = " ".join(named_block(effect, "limit").split())
+        self.assertIn("NOT = { has_global_flag = ADISCORD_vorkerland_central_initiative_rolled }", guard)
+        for tag in ("WKR", "VAD", "TVA"):
+            self.assertIn(f"{tag} = {{ exists = yes is_ai = yes", guard)
+        self.assertIn("WRK = { exists = yes is_ai = no }", guard)
+        roll = named_block(effect, "random_list")
+        awards = re.findall(
+            r'(\d+)\s*=\s*\{\s*(WKR|VAD|TVA)\s*=\s*\{\s*add_timed_idea\s*=\s*\{\s*idea\s*=\s*ADISCORD_vorkerland_central_initiative\s+days\s*=\s*(\d+)',
+            roll,
+        )
+        self.assertEqual(len(awards), 3)
+        self.assertEqual({tag for _, tag, _ in awards}, {"WKR", "VAD", "TVA"})
+        self.assertEqual(len({weight for weight, _, _ in awards}), 1)
+        self.assertTrue(all(int(weight) > 0 and 0 < int(days) <= 730 for weight, _, days in awards))
+        events = read("events/ADISCORD_vorkerland_events.txt")
+        self.assertEqual(events.count("ADISCORD_vorkerland_roll_central_initiative = yes"), 1)
+
+    def test_initiative_is_limited_to_peers_and_removed_at_settlement(self):
+        idea = named_block(read("common/ideas/ADISCORD_vorkerland_ideas.txt"),
+                           "ADISCORD_vorkerland_central_initiative")
+        self.assertTrue(idea)
+        self.assertEqual(re.findall(r"targeted_modifier\s*=\s*\{\s*tag\s*=\s*(\w+)", idea),
+                         ["WKR", "VAD", "TVA"])
+        cancel = " ".join(named_block(idea, "cancel").split())
+        for token in ("is_ai = no", "has_capitulated = yes",
+                      "has_global_flag = ADISCORD_vorkerland_collapse_finished"):
+            self.assertIn(token, cancel)
+        for tag in ("WKR", "VAD", "TVA", "WRK"):
+            self.assertIn(f"{tag} = {{ exists = yes is_ai = no }}", cancel)
+        cleanup = named_block(self.effects, "ADISCORD_vorkerland_clear_claimant_war_modifiers")
+        self.assertIn("remove_ideas = ADISCORD_vorkerland_central_initiative", cleanup)
 
     def test_theatre_package_is_not_rewritten_as_a_balance_shortcut(self):
         manifest = read("tools/lib/adiscord_vorkerland_theatre_manifest.py")

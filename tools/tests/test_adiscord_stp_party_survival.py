@@ -748,7 +748,8 @@ class PartyWartimeFocusContracts(unittest.TestCase):
         self.assertTrue(
             matches_conditions(
                 visible,
-                {('STP', 'has_completed_focus', 'STP_ps_restore_couriers'): True},
+                {('STP', 'has_completed_focus', 'STP_ps_restore_couriers'): True,
+                 ('STP', 'has_war', 'yes'): True},
             )
         )
         self.assertEqual(one(one(order, 'complete_effect'), 'add_command_power'), '-25')

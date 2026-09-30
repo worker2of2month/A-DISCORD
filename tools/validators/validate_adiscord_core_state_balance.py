@@ -7,6 +7,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from tools.builders.build_adiscord_new_states import REGIONAL_SETTLEMENTS
 from tools.lib.adiscord_core_state_balance_manifest import (
     CAPITAL_CUSTOM_BUILDING_STATES,
     EXPECTED_DIRECT_BUILDINGS,
@@ -196,6 +197,10 @@ def validate() -> None:
             resource_totals[owner][resource] += value
 
         state_vps = victory_points(history)
+        regional_values = {
+            province: value
+            for province, value, _name in REGIONAL_SETTLEMENTS.get(state_id, ())
+        }
         check(
             len(state_vps) == len({province for province, _value in state_vps}),
             f"state {state_id}: duplicate VP province",
@@ -215,10 +220,10 @@ def validate() -> None:
                 check(value >= 5, f"state {state_id}: urban VP {province} is below 5")
             else:
                 check(
-                    province in NON_URBAN_SETTLEMENT_VPS,
+                    province in NON_URBAN_SETTLEMENT_VPS or province in regional_values,
                     f"state {state_id}: unapproved non-urban VP {province}",
                 )
-                expected = SETTLEMENT_VP_VALUES.get(province)
+                expected = regional_values.get(province, SETTLEMENT_VP_VALUES.get(province))
                 check(
                     value == expected,
                     f"state {state_id}: settlement VP {province} must equal {expected}",

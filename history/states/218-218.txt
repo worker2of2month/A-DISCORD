@@ -13,5 +13,6 @@ state={
 	history = {
 		owner = BTL
 		add_core_of = BTL
+		victory_points = { 7047 2 }
 	}
 }

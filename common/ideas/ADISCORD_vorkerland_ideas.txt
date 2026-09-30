@@ -1,6 +1,57 @@
 ideas = {
 	country = {
 # --- collapse_ideas ---
+		# Only peer combat is affected; regional conquests and foreign wars keep
+		# their normal balance. A player takeover ends the AI-only advantage.
+		ADISCORD_vorkerland_central_initiative = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = {
+				OR = {
+					is_ai = no
+					has_capitulated = yes
+					has_global_flag = ADISCORD_vorkerland_collapse_finished
+					WKR = {
+						exists = yes
+						is_ai = no
+					}
+					VAD = {
+						exists = yes
+						is_ai = no
+					}
+					TVA = {
+						exists = yes
+						is_ai = no
+					}
+					WRK = {
+						exists = yes
+						is_ai = no
+					}
+				}
+			}
+			targeted_modifier = {
+				tag = WKR
+				attack_bonus_against = 0.25
+				defense_bonus_against = 0.15
+				breakthrough_bonus_against = 0.20
+			}
+			targeted_modifier = {
+				tag = VAD
+				attack_bonus_against = 0.25
+				defense_bonus_against = 0.15
+				breakthrough_bonus_against = 0.20
+			}
+			targeted_modifier = {
+				tag = TVA
+				attack_bonus_against = 0.25
+				defense_bonus_against = 0.15
+				breakthrough_bonus_against = 0.20
+			}
+			ai_will_do = { factor = 0 }
+		}
+
 		ADISCORD_vorkerland_erased_nations = {
 			picture = generic_oppression
 			allowed = { always = no }

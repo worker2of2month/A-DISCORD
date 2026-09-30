@@ -49,6 +49,12 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
             self.assertNotIn(f"state = {unrelated}", state_hook)
 
     def test_operations_map_cache_is_event_driven(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            matches_conditions,
+            parse_clausewitz,
+        )
+
         owner = read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")
         state_hook = named_block(owner, "on_state_control_changed")
         startup = named_block(owner, "on_startup")
@@ -62,6 +68,18 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         self.assertIn("FROM = {", state_hook)
         self.assertIn("has_country_flag = VAL_operations_map_unlocked", state_hook)
         self.assertIn("has_country_flag = STP_cw_postwar", state_hook)
+        dispatch = block(
+            block(block(parse_clausewitz(state_hook), "on_state_control_changed"), "effect"),
+            "if",
+        )
+        controllers = block(block(dispatch, "limit"), "OR")
+        for scope in ("ROOT", "FROM"):
+            for controller, expected in (("SLI", True), ("VAL", True), ("RZA", False)):
+                with self.subTest(scope=scope, controller=controller):
+                    self.assertEqual(
+                        matches_conditions(block(controllers, scope), {}, controller),
+                        expected,
+                    )
         for path, hook in (
             (
                 "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt",

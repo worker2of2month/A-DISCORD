@@ -2,7 +2,7 @@ state={
 	id=45
 	name="STATE_45"
 	provinces={
-		111 6675 16458 16459 16461 16529 
+		111 6675 16458 16459 16461 16529 16810 
 	}
 	manpower = 1200000
 	buildings_max_level_factor = 1.000
@@ -17,6 +17,7 @@ state={
 		}
 		add_core_of = STP
 		victory_points = { 16529 5 }
+		victory_points = { 6675 2 }
 	}
 	resources = {
         steel = 18

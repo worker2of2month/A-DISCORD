@@ -1373,9 +1373,6 @@ VAL_frontier = {
 		ai_will_do = { base = 100 }
 	}
 
-
-
-
 	VAL_negotiate_yubora = {
 		icon = generic_diplomatic_treaty
 		allowed = { tag = VAL }

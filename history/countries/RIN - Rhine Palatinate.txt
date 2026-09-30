@@ -2,6 +2,7 @@ capital = 149
 oob = "RIN"
 
 recruit_character = RIN_Alaric_IV_Ren
+recruit_character = RIN_Northern_Court_Regency
 
 set_politics = {
 	ruling_party = hedonism

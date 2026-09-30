@@ -137,6 +137,38 @@ class KefreytFocusStagingTests(unittest.TestCase):
             self.assertIn("§Y", resource.group(1))
             self.assertIn("$VAL_Operational_Directorate$", resource.group(1))
 
+    def test_progression_tooltips_match_current_dependencies(self) -> None:
+        from tools.tests.test_adiscord_stp_preparation import scalar, walk
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        next_focuses = {}
+        for tree in parse_clausewitz(self.focuses):
+            for focus in tree.value:
+                if focus.key != "focus" or not isinstance(focus.value, list):
+                    continue
+                target = scalar(focus.value, "id")
+                for gate in focus.value:
+                    if gate.key not in ("prerequisite", "allow_branch", "available"):
+                        continue
+                    for condition in walk(gate.value):
+                        if condition.key in ("focus", "has_completed_focus"):
+                            next_focuses.setdefault(condition.value, set()).add(target)
+
+        for source in (self.ru_loc, self.en_loc):
+            rows = re.findall(
+                r'(?m)^\s*VAL_focus_progression_(VAL_\w+)_tt:\d*\s+"([^\"]+)"',
+                source,
+            )
+            self.assertGreaterEqual(len(rows), 50)
+            for parent, text in rows:
+                self.assertEqual(
+                    set(re.findall(r"\$(VAL_\w+)\$", text)),
+                    next_focuses[parent],
+                    parent,
+                )
+                self.assertNotIn("После завершения откроются", text, parent)
+                self.assertNotIn("Will reveal on completion", text, parent)
+
     def test_first_act_is_a_visible_roadmap_not_a_single_button(self) -> None:
         first_act = (
             "VAL_The_Contract_State",
@@ -245,6 +277,50 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 f"{focus_id} is inside the revealed chapter and must not disappear behind branch-cache state",
             )
             self.assertIn("prerequisite", block, focus_id)
+
+    def test_frontier_reveal_does_not_claim_the_focus_is_ready(self) -> None:
+        body = focus_block(self.focuses, "VAL_frontier_conference")
+        groups = re.findall(r"prerequisite\s*=\s*\{([^}]+)\}", body)
+        self.assertEqual(groups[0].strip(), "focus = VAL_Contracts_Outlive_Kings")
+        dependencies = set(re.findall(r"\bfocus\s*=\s*(\w+)", " ".join(groups)))
+        for source in (self.ru_loc, self.en_loc):
+            description = re.search(
+                r'(?m)^\s*VAL_frontier_conference_desc:\d*\s+"([^\"]+)"', source
+            ).group(1)
+            for dependency in dependencies:
+                self.assertIn(f"${dependency}$", description)
+            guide = re.search(
+                r'(?m)^\s*VAL_startup_guide:\d*\s+"([^\"]+)"', source
+            ).group(1)
+            self.assertIn("$VAL_Contracts_Outlive_Kings$", guide)
+
+    def test_unmasked_focus_condition_flags_have_localised_names(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        def visible_flags(nodes):
+            for node in nodes:
+                if node.key in ("custom_trigger_tooltip", "hidden_trigger"):
+                    continue
+                if node.key == "has_country_flag" and isinstance(node.value, str):
+                    yield node.value
+                elif isinstance(node.value, list):
+                    yield from visible_flags(node.value)
+
+        flags = set()
+        for path in (ROOT / "focus_trees/VAL").rglob("focuses.txt"):
+            for tree in parse_clausewitz(read(path)):
+                for node in tree.value:
+                    if node.key != "focus" or not isinstance(node.value, list):
+                        continue
+                    for condition in node.value:
+                        if condition.key in ("available", "bypass"):
+                            flags.update(visible_flags(condition.value))
+        for flag in flags:
+            for source in (self.ru_loc, self.en_loc):
+                self.assertIsNotNone(
+                    re.search(rf'(?m)^\s*{re.escape(flag)}:\d*\s+"[^\"]+"', source),
+                    flag,
+                )
 
     def test_world_reactive_branches_still_use_world_state(self) -> None:
         stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")

@@ -2,7 +2,7 @@ state={
 	id=61
 	name="STATE_61"
 	provinces={
-		1480 8938 11332 16316
+		1480 8938 11332 16316 16814
 	}
 	manpower=32000
 
@@ -16,6 +16,7 @@ state={
 			infrastructure = 1
 		}
 		add_core_of = OSF
+		victory_points = { 1480 1 }
 	}
 	resources = {
 		tungsten = 4

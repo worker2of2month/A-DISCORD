@@ -27,20 +27,58 @@ on_actions = {
 					OR = {
 						ROOT = {
 							OR = {
-								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
-								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
-								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
-								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
-								tag = BBV tag = BCM tag = WCA
+								tag = VAL
+								tag = STP
+								tag = STS
+								tag = SRP
+								tag = NOD
+								tag = CIN
+								tag = OSF
+								tag = APH
+								tag = ERT
+								tag = NKA
+								tag = OCA
+								tag = YPR
+								tag = COF
+								tag = TFF
+								tag = EXZ
+								tag = IRT
+								tag = BJK
+								tag = BLD
+								tag = BHG
+								tag = BGT
+								tag = BBV
+								tag = BCM
+								tag = WCA
+								tag = SLI
 							}
 						}
 						FROM = {
 							OR = {
-								tag = VAL tag = STP tag = STS tag = SRP tag = NOD
-								tag = CIN tag = OSF tag = APH tag = ERT tag = NKA
-								tag = OCA tag = YPR tag = COF tag = TFF tag = EXZ
-								tag = IRT tag = BJK tag = BLD tag = BHG tag = BGT
-								tag = BBV tag = BCM tag = WCA
+								tag = VAL
+								tag = STP
+								tag = STS
+								tag = SRP
+								tag = NOD
+								tag = CIN
+								tag = OSF
+								tag = APH
+								tag = ERT
+								tag = NKA
+								tag = OCA
+								tag = YPR
+								tag = COF
+								tag = TFF
+								tag = EXZ
+								tag = IRT
+								tag = BJK
+								tag = BLD
+								tag = BHG
+								tag = BGT
+								tag = BBV
+								tag = BCM
+								tag = WCA
+								tag = SLI
 							}
 						}
 					}

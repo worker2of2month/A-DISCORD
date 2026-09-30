@@ -777,12 +777,14 @@ def validate_countries(root: Path, issues: list[str]) -> None:
     for token in (
         "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
         "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
-        "recruit_character = WRK_Anton_Bagley",
+        "character = WRK_Anton_Bagley",
         "ruling_party = utilitarism",
         "ADISCORD_vorkerland_promote_anton_bagley = yes",
     ):
         if token not in worker_formation:
             issues.append(f"Anton Bagley's restored-WRK succession is missing {token}")
+    if "recruit_character =" in worker_formation:
+        issues.append("restored WRK recruits characters outside country history")
 
     for formation_name, source_tag, wartime_ideas in (
         (
@@ -4115,11 +4117,11 @@ def validate_events(root: Path, issues: list[str]) -> None:
     tva_oob = read(root, "history/units/TVA_vorkerland_collapse.txt", issues)
     if (
         tva_oob.count("division = {") != 19
-        or tva_oob.count('division_template = "TVA Mobile Test Group"') != 2
+        or tva_oob.count('division_template = "TVA Mobile Test Group"') != 1
         or "TVA Infiltration Cell" not in tva_oob
     ):
         issues.append(
-            "TVA must start with seventeen militia formations, two mobile groups and an infiltration template"
+            "TVA must start with eighteen militia formations, one mobile group and an infiltration template"
         )
     for tag in ("VAD",):
         oob = read(root, f"history/units/{tag}.txt", issues)

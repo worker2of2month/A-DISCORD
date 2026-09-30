@@ -6,7 +6,7 @@ VAL_unlock_operations_map = {
 }
 
 VAL_operations_map_refresh_cache = {
-	set_variable = { var = operations_state_43_frame value = 24 }
+	set_variable = { var = operations_state_43_frame value = 25 }
 	if = {
 		limit = {
 			43 = {
@@ -243,7 +243,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_43_frame value = 23 }
 	}
-	set_variable = { var = operations_state_44_frame value = 24 }
+	else_if = {
+		limit = {
+			43 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_43_frame value = 24 }
+	}
+	set_variable = { var = operations_state_44_frame value = 25 }
 	if = {
 		limit = {
 			44 = {
@@ -480,7 +490,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_44_frame value = 23 }
 	}
-	set_variable = { var = operations_state_45_frame value = 24 }
+	else_if = {
+		limit = {
+			44 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_44_frame value = 24 }
+	}
+	set_variable = { var = operations_state_45_frame value = 25 }
 	if = {
 		limit = {
 			45 = {
@@ -717,7 +737,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_45_frame value = 23 }
 	}
-	set_variable = { var = operations_state_88_frame value = 24 }
+	else_if = {
+		limit = {
+			45 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_45_frame value = 24 }
+	}
+	set_variable = { var = operations_state_88_frame value = 25 }
 	if = {
 		limit = {
 			88 = {
@@ -954,7 +984,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_88_frame value = 23 }
 	}
-	set_variable = { var = operations_state_58_frame value = 24 }
+	else_if = {
+		limit = {
+			88 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_88_frame value = 24 }
+	}
+	set_variable = { var = operations_state_58_frame value = 25 }
 	if = {
 		limit = {
 			58 = {
@@ -1191,7 +1231,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_58_frame value = 23 }
 	}
-	set_variable = { var = operations_state_59_frame value = 24 }
+	else_if = {
+		limit = {
+			58 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_58_frame value = 24 }
+	}
+	set_variable = { var = operations_state_59_frame value = 25 }
 	if = {
 		limit = {
 			59 = {
@@ -1428,7 +1478,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_59_frame value = 23 }
 	}
-	set_variable = { var = operations_state_60_frame value = 24 }
+	else_if = {
+		limit = {
+			59 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_59_frame value = 24 }
+	}
+	set_variable = { var = operations_state_60_frame value = 25 }
 	if = {
 		limit = {
 			60 = {
@@ -1665,7 +1725,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_60_frame value = 23 }
 	}
-	set_variable = { var = operations_state_61_frame value = 24 }
+	else_if = {
+		limit = {
+			60 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_60_frame value = 24 }
+	}
+	set_variable = { var = operations_state_61_frame value = 25 }
 	if = {
 		limit = {
 			61 = {
@@ -1902,7 +1972,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_61_frame value = 23 }
 	}
-	set_variable = { var = operations_state_62_frame value = 24 }
+	else_if = {
+		limit = {
+			61 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_61_frame value = 24 }
+	}
+	set_variable = { var = operations_state_62_frame value = 25 }
 	if = {
 		limit = {
 			62 = {
@@ -2139,7 +2219,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_62_frame value = 23 }
 	}
-	set_variable = { var = operations_state_63_frame value = 24 }
+	else_if = {
+		limit = {
+			62 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_62_frame value = 24 }
+	}
+	set_variable = { var = operations_state_63_frame value = 25 }
 	if = {
 		limit = {
 			63 = {
@@ -2376,7 +2466,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_63_frame value = 23 }
 	}
-	set_variable = { var = operations_state_64_frame value = 24 }
+	else_if = {
+		limit = {
+			63 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_63_frame value = 24 }
+	}
+	set_variable = { var = operations_state_64_frame value = 25 }
 	if = {
 		limit = {
 			64 = {
@@ -2613,7 +2713,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_64_frame value = 23 }
 	}
-	set_variable = { var = operations_state_65_frame value = 24 }
+	else_if = {
+		limit = {
+			64 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_64_frame value = 24 }
+	}
+	set_variable = { var = operations_state_65_frame value = 25 }
 	if = {
 		limit = {
 			65 = {
@@ -2850,7 +2960,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_65_frame value = 23 }
 	}
-	set_variable = { var = operations_state_24_frame value = 24 }
+	else_if = {
+		limit = {
+			65 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_65_frame value = 24 }
+	}
+	set_variable = { var = operations_state_24_frame value = 25 }
 	if = {
 		limit = {
 			24 = {
@@ -3087,7 +3207,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_24_frame value = 23 }
 	}
-	set_variable = { var = operations_state_42_frame value = 24 }
+	else_if = {
+		limit = {
+			24 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_24_frame value = 24 }
+	}
+	set_variable = { var = operations_state_42_frame value = 25 }
 	if = {
 		limit = {
 			42 = {
@@ -3324,7 +3454,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_42_frame value = 23 }
 	}
-	set_variable = { var = operations_state_48_frame value = 24 }
+	else_if = {
+		limit = {
+			42 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_42_frame value = 24 }
+	}
+	set_variable = { var = operations_state_48_frame value = 25 }
 	if = {
 		limit = {
 			48 = {
@@ -3561,7 +3701,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_48_frame value = 23 }
 	}
-	set_variable = { var = operations_state_54_frame value = 24 }
+	else_if = {
+		limit = {
+			48 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_48_frame value = 24 }
+	}
+	set_variable = { var = operations_state_54_frame value = 25 }
 	if = {
 		limit = {
 			54 = {
@@ -3798,7 +3948,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_54_frame value = 23 }
 	}
-	set_variable = { var = operations_state_55_frame value = 24 }
+	else_if = {
+		limit = {
+			54 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_54_frame value = 24 }
+	}
+	set_variable = { var = operations_state_55_frame value = 25 }
 	if = {
 		limit = {
 			55 = {
@@ -4035,7 +4195,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_55_frame value = 23 }
 	}
-	set_variable = { var = operations_state_56_frame value = 24 }
+	else_if = {
+		limit = {
+			55 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_55_frame value = 24 }
+	}
+	set_variable = { var = operations_state_56_frame value = 25 }
 	if = {
 		limit = {
 			56 = {
@@ -4272,7 +4442,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_56_frame value = 23 }
 	}
-	set_variable = { var = operations_state_57_frame value = 24 }
+	else_if = {
+		limit = {
+			56 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_56_frame value = 24 }
+	}
+	set_variable = { var = operations_state_57_frame value = 25 }
 	if = {
 		limit = {
 			57 = {
@@ -4509,7 +4689,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_57_frame value = 23 }
 	}
-	set_variable = { var = operations_state_1_frame value = 24 }
+	else_if = {
+		limit = {
+			57 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_57_frame value = 24 }
+	}
+	set_variable = { var = operations_state_1_frame value = 25 }
 	if = {
 		limit = {
 			1 = {
@@ -4746,7 +4936,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_1_frame value = 23 }
 	}
-	set_variable = { var = operations_state_2_frame value = 24 }
+	else_if = {
+		limit = {
+			1 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_1_frame value = 24 }
+	}
+	set_variable = { var = operations_state_2_frame value = 25 }
 	if = {
 		limit = {
 			2 = {
@@ -4983,7 +5183,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_2_frame value = 23 }
 	}
-	set_variable = { var = operations_state_3_frame value = 24 }
+	else_if = {
+		limit = {
+			2 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_2_frame value = 24 }
+	}
+	set_variable = { var = operations_state_3_frame value = 25 }
 	if = {
 		limit = {
 			3 = {
@@ -5220,7 +5430,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_3_frame value = 23 }
 	}
-	set_variable = { var = operations_state_28_frame value = 24 }
+	else_if = {
+		limit = {
+			3 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_3_frame value = 24 }
+	}
+	set_variable = { var = operations_state_28_frame value = 25 }
 	if = {
 		limit = {
 			28 = {
@@ -5457,7 +5677,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_28_frame value = 23 }
 	}
-	set_variable = { var = operations_state_29_frame value = 24 }
+	else_if = {
+		limit = {
+			28 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_28_frame value = 24 }
+	}
+	set_variable = { var = operations_state_29_frame value = 25 }
 	if = {
 		limit = {
 			29 = {
@@ -5694,7 +5924,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_29_frame value = 23 }
 	}
-	set_variable = { var = operations_state_46_frame value = 24 }
+	else_if = {
+		limit = {
+			29 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_29_frame value = 24 }
+	}
+	set_variable = { var = operations_state_46_frame value = 25 }
 	if = {
 		limit = {
 			46 = {
@@ -5931,7 +6171,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_46_frame value = 23 }
 	}
-	set_variable = { var = operations_state_53_frame value = 24 }
+	else_if = {
+		limit = {
+			46 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_46_frame value = 24 }
+	}
+	set_variable = { var = operations_state_53_frame value = 25 }
 	if = {
 		limit = {
 			53 = {
@@ -6168,7 +6418,264 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_53_frame value = 23 }
 	}
-	set_variable = { var = operations_state_10_frame value = 24 }
+	else_if = {
+		limit = {
+			53 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_53_frame value = 24 }
+	}
+	set_variable = { var = operations_state_709_frame value = 25 }
+	if = {
+		limit = {
+			709 = {
+				controller = {
+					OR = {
+						tag = STP
+						has_cosmetic_tag = STL_VAL_administration
+					}
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 2 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					OR = {
+						tag = BJK
+						is_subject_of = BJK
+					}
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 17 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = VAL
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 1 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = STS
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 3 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = SRP
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 4 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = NOD
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 5 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = CIN
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 6 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = OSF
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 7 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = APH
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 8 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = ERT
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 9 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = NKA
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 10 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = OCA
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 11 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = YPR
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 12 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = COF
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 13 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = TFF
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 14 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = EXZ
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 15 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = IRT
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 16 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = BLD
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 18 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = BHG
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 19 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = BGT
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 20 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = BBV
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 21 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = BCM
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 22 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = WCA
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 23 }
+	}
+	else_if = {
+		limit = {
+			709 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_709_frame value = 24 }
+	}
+	set_variable = { var = operations_state_10_frame value = 25 }
 	if = {
 		limit = {
 			10 = {
@@ -6405,7 +6912,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_10_frame value = 23 }
 	}
-	set_variable = { var = operations_state_11_frame value = 24 }
+	else_if = {
+		limit = {
+			10 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_10_frame value = 24 }
+	}
+	set_variable = { var = operations_state_11_frame value = 25 }
 	if = {
 		limit = {
 			11 = {
@@ -6642,7 +7159,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_11_frame value = 23 }
 	}
-	set_variable = { var = operations_state_12_frame value = 24 }
+	else_if = {
+		limit = {
+			11 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_11_frame value = 24 }
+	}
+	set_variable = { var = operations_state_12_frame value = 25 }
 	if = {
 		limit = {
 			12 = {
@@ -6879,7 +7406,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_12_frame value = 23 }
 	}
-	set_variable = { var = operations_state_13_frame value = 24 }
+	else_if = {
+		limit = {
+			12 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_12_frame value = 24 }
+	}
+	set_variable = { var = operations_state_13_frame value = 25 }
 	if = {
 		limit = {
 			13 = {
@@ -7116,7 +7653,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_13_frame value = 23 }
 	}
-	set_variable = { var = operations_state_17_frame value = 24 }
+	else_if = {
+		limit = {
+			13 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_13_frame value = 24 }
+	}
+	set_variable = { var = operations_state_17_frame value = 25 }
 	if = {
 		limit = {
 			17 = {
@@ -7353,7 +7900,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_17_frame value = 23 }
 	}
-	set_variable = { var = operations_state_18_frame value = 24 }
+	else_if = {
+		limit = {
+			17 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_17_frame value = 24 }
+	}
+	set_variable = { var = operations_state_18_frame value = 25 }
 	if = {
 		limit = {
 			18 = {
@@ -7590,7 +8147,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_18_frame value = 23 }
 	}
-	set_variable = { var = operations_state_30_frame value = 24 }
+	else_if = {
+		limit = {
+			18 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_18_frame value = 24 }
+	}
+	set_variable = { var = operations_state_30_frame value = 25 }
 	if = {
 		limit = {
 			30 = {
@@ -7827,7 +8394,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_30_frame value = 23 }
 	}
-	set_variable = { var = operations_state_4_frame value = 24 }
+	else_if = {
+		limit = {
+			30 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_30_frame value = 24 }
+	}
+	set_variable = { var = operations_state_4_frame value = 25 }
 	if = {
 		limit = {
 			4 = {
@@ -8064,7 +8641,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_4_frame value = 23 }
 	}
-	set_variable = { var = operations_state_5_frame value = 24 }
+	else_if = {
+		limit = {
+			4 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_4_frame value = 24 }
+	}
+	set_variable = { var = operations_state_5_frame value = 25 }
 	if = {
 		limit = {
 			5 = {
@@ -8301,7 +8888,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_5_frame value = 23 }
 	}
-	set_variable = { var = operations_state_6_frame value = 24 }
+	else_if = {
+		limit = {
+			5 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_5_frame value = 24 }
+	}
+	set_variable = { var = operations_state_6_frame value = 25 }
 	if = {
 		limit = {
 			6 = {
@@ -8538,7 +9135,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_6_frame value = 23 }
 	}
-	set_variable = { var = operations_state_7_frame value = 24 }
+	else_if = {
+		limit = {
+			6 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_6_frame value = 24 }
+	}
+	set_variable = { var = operations_state_7_frame value = 25 }
 	if = {
 		limit = {
 			7 = {
@@ -8775,7 +9382,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_7_frame value = 23 }
 	}
-	set_variable = { var = operations_state_9_frame value = 24 }
+	else_if = {
+		limit = {
+			7 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_7_frame value = 24 }
+	}
+	set_variable = { var = operations_state_9_frame value = 25 }
 	if = {
 		limit = {
 			9 = {
@@ -9012,7 +9629,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_9_frame value = 23 }
 	}
-	set_variable = { var = operations_state_31_frame value = 24 }
+	else_if = {
+		limit = {
+			9 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_9_frame value = 24 }
+	}
+	set_variable = { var = operations_state_31_frame value = 25 }
 	if = {
 		limit = {
 			31 = {
@@ -9249,7 +9876,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_31_frame value = 23 }
 	}
-	set_variable = { var = operations_state_41_frame value = 24 }
+	else_if = {
+		limit = {
+			31 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_31_frame value = 24 }
+	}
+	set_variable = { var = operations_state_41_frame value = 25 }
 	if = {
 		limit = {
 			41 = {
@@ -9486,7 +10123,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_41_frame value = 23 }
 	}
-	set_variable = { var = operations_state_14_frame value = 24 }
+	else_if = {
+		limit = {
+			41 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_41_frame value = 24 }
+	}
+	set_variable = { var = operations_state_14_frame value = 25 }
 	if = {
 		limit = {
 			14 = {
@@ -9723,7 +10370,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_14_frame value = 23 }
 	}
-	set_variable = { var = operations_state_8_frame value = 24 }
+	else_if = {
+		limit = {
+			14 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_14_frame value = 24 }
+	}
+	set_variable = { var = operations_state_8_frame value = 25 }
 	if = {
 		limit = {
 			8 = {
@@ -9960,7 +10617,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_8_frame value = 23 }
 	}
-	set_variable = { var = operations_state_15_frame value = 24 }
+	else_if = {
+		limit = {
+			8 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_8_frame value = 24 }
+	}
+	set_variable = { var = operations_state_15_frame value = 25 }
 	if = {
 		limit = {
 			15 = {
@@ -10197,7 +10864,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_15_frame value = 23 }
 	}
-	set_variable = { var = operations_state_16_frame value = 24 }
+	else_if = {
+		limit = {
+			15 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_15_frame value = 24 }
+	}
+	set_variable = { var = operations_state_16_frame value = 25 }
 	if = {
 		limit = {
 			16 = {
@@ -10434,7 +11111,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_16_frame value = 23 }
 	}
-	set_variable = { var = operations_state_19_frame value = 24 }
+	else_if = {
+		limit = {
+			16 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_16_frame value = 24 }
+	}
+	set_variable = { var = operations_state_19_frame value = 25 }
 	if = {
 		limit = {
 			19 = {
@@ -10671,7 +11358,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_19_frame value = 23 }
 	}
-	set_variable = { var = operations_state_20_frame value = 24 }
+	else_if = {
+		limit = {
+			19 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_19_frame value = 24 }
+	}
+	set_variable = { var = operations_state_20_frame value = 25 }
 	if = {
 		limit = {
 			20 = {
@@ -10908,7 +11605,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_20_frame value = 23 }
 	}
-	set_variable = { var = operations_state_21_frame value = 24 }
+	else_if = {
+		limit = {
+			20 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_20_frame value = 24 }
+	}
+	set_variable = { var = operations_state_21_frame value = 25 }
 	if = {
 		limit = {
 			21 = {
@@ -11145,7 +11852,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_21_frame value = 23 }
 	}
-	set_variable = { var = operations_state_22_frame value = 24 }
+	else_if = {
+		limit = {
+			21 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_21_frame value = 24 }
+	}
+	set_variable = { var = operations_state_22_frame value = 25 }
 	if = {
 		limit = {
 			22 = {
@@ -11382,7 +12099,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_22_frame value = 23 }
 	}
-	set_variable = { var = operations_state_83_frame value = 24 }
+	else_if = {
+		limit = {
+			22 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_22_frame value = 24 }
+	}
+	set_variable = { var = operations_state_83_frame value = 25 }
 	if = {
 		limit = {
 			83 = {
@@ -11619,7 +12346,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_83_frame value = 23 }
 	}
-	set_variable = { var = operations_state_84_frame value = 24 }
+	else_if = {
+		limit = {
+			83 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_83_frame value = 24 }
+	}
+	set_variable = { var = operations_state_84_frame value = 25 }
 	if = {
 		limit = {
 			84 = {
@@ -11856,7 +12593,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_84_frame value = 23 }
 	}
-	set_variable = { var = operations_state_85_frame value = 24 }
+	else_if = {
+		limit = {
+			84 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_84_frame value = 24 }
+	}
+	set_variable = { var = operations_state_85_frame value = 25 }
 	if = {
 		limit = {
 			85 = {
@@ -12093,7 +12840,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_85_frame value = 23 }
 	}
-	set_variable = { var = operations_state_86_frame value = 24 }
+	else_if = {
+		limit = {
+			85 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_85_frame value = 24 }
+	}
+	set_variable = { var = operations_state_86_frame value = 25 }
 	if = {
 		limit = {
 			86 = {
@@ -12330,7 +13087,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_86_frame value = 23 }
 	}
-	set_variable = { var = operations_state_87_frame value = 24 }
+	else_if = {
+		limit = {
+			86 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_86_frame value = 24 }
+	}
+	set_variable = { var = operations_state_87_frame value = 25 }
 	if = {
 		limit = {
 			87 = {
@@ -12567,7 +13334,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_87_frame value = 23 }
 	}
-	set_variable = { var = operations_state_303_frame value = 24 }
+	else_if = {
+		limit = {
+			87 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_87_frame value = 24 }
+	}
+	set_variable = { var = operations_state_303_frame value = 25 }
 	if = {
 		limit = {
 			303 = {
@@ -12804,7 +13581,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_303_frame value = 23 }
 	}
-	set_variable = { var = operations_state_118_frame value = 24 }
+	else_if = {
+		limit = {
+			303 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_303_frame value = 24 }
+	}
+	set_variable = { var = operations_state_118_frame value = 25 }
 	if = {
 		limit = {
 			118 = {
@@ -13041,7 +13828,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_118_frame value = 23 }
 	}
-	set_variable = { var = operations_state_119_frame value = 24 }
+	else_if = {
+		limit = {
+			118 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_118_frame value = 24 }
+	}
+	set_variable = { var = operations_state_119_frame value = 25 }
 	if = {
 		limit = {
 			119 = {
@@ -13278,7 +14075,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_119_frame value = 23 }
 	}
-	set_variable = { var = operations_state_168_frame value = 24 }
+	else_if = {
+		limit = {
+			119 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_119_frame value = 24 }
+	}
+	set_variable = { var = operations_state_168_frame value = 25 }
 	if = {
 		limit = {
 			168 = {
@@ -13515,7 +14322,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_168_frame value = 23 }
 	}
-	set_variable = { var = operations_state_169_frame value = 24 }
+	else_if = {
+		limit = {
+			168 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_168_frame value = 24 }
+	}
+	set_variable = { var = operations_state_169_frame value = 25 }
 	if = {
 		limit = {
 			169 = {
@@ -13752,7 +14569,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_169_frame value = 23 }
 	}
-	set_variable = { var = operations_state_167_frame value = 24 }
+	else_if = {
+		limit = {
+			169 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_169_frame value = 24 }
+	}
+	set_variable = { var = operations_state_167_frame value = 25 }
 	if = {
 		limit = {
 			167 = {
@@ -13989,7 +14816,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_167_frame value = 23 }
 	}
-	set_variable = { var = operations_state_170_frame value = 24 }
+	else_if = {
+		limit = {
+			167 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_167_frame value = 24 }
+	}
+	set_variable = { var = operations_state_170_frame value = 25 }
 	if = {
 		limit = {
 			170 = {
@@ -14226,7 +15063,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_170_frame value = 23 }
 	}
-	set_variable = { var = operations_state_171_frame value = 24 }
+	else_if = {
+		limit = {
+			170 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_170_frame value = 24 }
+	}
+	set_variable = { var = operations_state_171_frame value = 25 }
 	if = {
 		limit = {
 			171 = {
@@ -14463,7 +15310,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_171_frame value = 23 }
 	}
-	set_variable = { var = operations_state_184_frame value = 24 }
+	else_if = {
+		limit = {
+			171 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_171_frame value = 24 }
+	}
+	set_variable = { var = operations_state_184_frame value = 25 }
 	if = {
 		limit = {
 			184 = {
@@ -14700,7 +15557,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_184_frame value = 23 }
 	}
-	set_variable = { var = operations_state_185_frame value = 24 }
+	else_if = {
+		limit = {
+			184 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_184_frame value = 24 }
+	}
+	set_variable = { var = operations_state_185_frame value = 25 }
 	if = {
 		limit = {
 			185 = {
@@ -14937,7 +15804,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_185_frame value = 23 }
 	}
-	set_variable = { var = operations_state_203_frame value = 24 }
+	else_if = {
+		limit = {
+			185 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_185_frame value = 24 }
+	}
+	set_variable = { var = operations_state_203_frame value = 25 }
 	if = {
 		limit = {
 			203 = {
@@ -15174,7 +16051,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_203_frame value = 23 }
 	}
-	set_variable = { var = operations_state_178_frame value = 24 }
+	else_if = {
+		limit = {
+			203 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_203_frame value = 24 }
+	}
+	set_variable = { var = operations_state_178_frame value = 25 }
 	if = {
 		limit = {
 			178 = {
@@ -15411,7 +16298,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_178_frame value = 23 }
 	}
-	set_variable = { var = operations_state_180_frame value = 24 }
+	else_if = {
+		limit = {
+			178 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_178_frame value = 24 }
+	}
+	set_variable = { var = operations_state_180_frame value = 25 }
 	if = {
 		limit = {
 			180 = {
@@ -15648,7 +16545,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_180_frame value = 23 }
 	}
-	set_variable = { var = operations_state_181_frame value = 24 }
+	else_if = {
+		limit = {
+			180 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_180_frame value = 24 }
+	}
+	set_variable = { var = operations_state_181_frame value = 25 }
 	if = {
 		limit = {
 			181 = {
@@ -15885,7 +16792,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_181_frame value = 23 }
 	}
-	set_variable = { var = operations_state_182_frame value = 24 }
+	else_if = {
+		limit = {
+			181 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_181_frame value = 24 }
+	}
+	set_variable = { var = operations_state_182_frame value = 25 }
 	if = {
 		limit = {
 			182 = {
@@ -16122,7 +17039,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_182_frame value = 23 }
 	}
-	set_variable = { var = operations_state_183_frame value = 24 }
+	else_if = {
+		limit = {
+			182 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_182_frame value = 24 }
+	}
+	set_variable = { var = operations_state_183_frame value = 25 }
 	if = {
 		limit = {
 			183 = {
@@ -16359,7 +17286,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_183_frame value = 23 }
 	}
-	set_variable = { var = operations_state_193_frame value = 24 }
+	else_if = {
+		limit = {
+			183 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_183_frame value = 24 }
+	}
+	set_variable = { var = operations_state_193_frame value = 25 }
 	if = {
 		limit = {
 			193 = {
@@ -16596,7 +17533,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_193_frame value = 23 }
 	}
-	set_variable = { var = operations_state_206_frame value = 24 }
+	else_if = {
+		limit = {
+			193 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_193_frame value = 24 }
+	}
+	set_variable = { var = operations_state_206_frame value = 25 }
 	if = {
 		limit = {
 			206 = {
@@ -16833,7 +17780,17 @@ VAL_operations_map_refresh_cache = {
 		}
 		set_variable = { var = operations_state_206_frame value = 23 }
 	}
-	set_variable = { var = operations_state_207_frame value = 24 }
+	else_if = {
+		limit = {
+			206 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_206_frame value = 24 }
+	}
+	set_variable = { var = operations_state_207_frame value = 25 }
 	if = {
 		limit = {
 			207 = {
@@ -17069,6 +18026,16 @@ VAL_operations_map_refresh_cache = {
 			}
 		}
 		set_variable = { var = operations_state_207_frame value = 23 }
+	}
+	else_if = {
+		limit = {
+			207 = {
+				controller = {
+					tag = SLI
+				}
+			}
+		}
+		set_variable = { var = operations_state_207_frame value = 24 }
 	}
 }
 

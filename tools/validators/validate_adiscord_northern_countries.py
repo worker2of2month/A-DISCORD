@@ -82,11 +82,14 @@ LEADERS = {
     "KDL": "KDL_Oren_Kadel",
     "VES": "VES_Oskar_Vest",
     "DRV": "DRV_Council_of_Free_Valleys",
-    "ORV": "ORV_Anton_Orval",
+    "VEL": "VEL_Marten_Rovel",
     "ARS": "ARS_Lina_Arsal",
     "VLD": "VLD_Irma_Vald",
     "MON": "MON_Marius_II_Arken",
 }
+
+# Native base capacities for the categories emitted by the northern builder.
+STATE_CATEGORY_SLOTS = {"rural": 2, "town": 4, "large_town": 5}
 
 
 def read(relative: str) -> str:
@@ -133,7 +136,9 @@ def validate() -> list[str]:
         "SRV": {364, 368, 375, 386, 405},
         "LYS": {402, 408, 412, 415, 420, 422, 424, 432, 435, 437, 442, 447, 452},
         "KDL": {427, 446, 457},
-        "ORV": {426, 436, 454, 455},
+        "TMR": {409, 410, 416, 419, 423, 426, 429, 431, 436, 443, 454, 455},
+        "DRV": {440, 450, 451, 458, 463, 465},
+        "VEL": {414, 417, 418, 421, 428, 434},
         "ARS": {441, 449},
         "VLD": {460, 467, 472},
     }
@@ -149,7 +154,8 @@ def validate() -> list[str]:
         ("HON", "SVL"): (4_200_000, 8, 4, 5),
         ("KHV", "SRV"): (2_400_000, 4, 3, 3),
         ("LYS", "KDL"): (3_500_000, 7, 3, 4),
-        ("ORV", "ARS", "VLD"): (2_455_204, 5, 3, 3),
+        ("TMR", "ARS", "VLD"): (5_255_204, 10, 5, 6),
+        ("DRV", "VEL", "MON"): (14_600_000, 32, 20, 17),
     }
     for tags, expected in preserved_split_totals.items():
         actual = (
@@ -166,6 +172,25 @@ def validate() -> list[str]:
         COUNTRIES["KDL"]["states"]
     ):
         issues.append("state 457 must belong to KDL rather than MON")
+    if 439 not in COUNTRIES["MON"]["states"]:
+        issues.append("state 439 must belong to MON")
+    if owner_totals("ORV") != (0, 0, 0):
+        issues.append("ORV must not own starting territory")
+    regional_resources: Counter[str] = Counter()
+    for tag in ("DRV", "VEL", "MON", "TMR"):
+        regional_resources.update(COUNTRIES[tag]["resources"])
+    if regional_resources != {
+        "steel": 31,
+        "coal": 32,
+        "oil": 8,
+        "aluminium": 14,
+        "tungsten": 9,
+        "chromium": 4,
+    }:
+        issues.append("DRV/VEL/MON/TMR must preserve their combined resource totals")
+    for state_id in (426, 436, 454, 455):
+        if "add_core_of = ORV" not in state_path(state_id).read_text(encoding="utf-8"):
+            issues.append(f"state {state_id} must preserve its ORV core")
 
     tags_source = read("common/country_tags/04_ADISCORD_northern_countries_tags.txt")
     characters = read("common/characters/ADISCORD_northern_characters.txt")
@@ -204,6 +229,15 @@ def validate() -> list[str]:
             )
 
     for state_id in sorted(EXPECTED_STATES):
+        profile = profiles[state_id]
+        category = str(profile["category"])
+        factories = int(profile["civilian"]) + int(profile["military"])
+        slots = STATE_CATEGORY_SLOTS[category]
+        if factories > slots:
+            issues.append(
+                f"state {state_id} has {factories} starting factories but "
+                f"{category} supports only {slots} shared slots"
+            )
         path = state_path(state_id)
         actual = path.read_text(encoding="utf-8-sig", errors="strict")
         expected = render_state(state_id, profiles[state_id])
@@ -336,7 +370,7 @@ def validate() -> list[str]:
         mon_military,
     ) != (28, 18):
         issues.append(
-            "MON must retain its 12.2M population and 28+18 factory great-power baseline"
+            "MON must match its population manifest and retain 28+18 factories"
         )
     for tag in set(COUNTRIES) - {"MON"}:
         population, civilian, military = owner_totals(tag)

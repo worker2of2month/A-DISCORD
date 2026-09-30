@@ -32,6 +32,7 @@ guiTypes = {
   iconType = { name = "VAL_ops_29_controller" position = { x = 231 y = 229 } quadTextureSprite = "GFX_VAL_ops_state_29" }
   iconType = { name = "VAL_ops_46_controller" position = { x = 213 y = 215 } quadTextureSprite = "GFX_VAL_ops_state_46" }
   iconType = { name = "VAL_ops_53_controller" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_state_53" }
+  iconType = { name = "VAL_ops_709_controller" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_state_709" }
   iconType = { name = "VAL_ops_10_controller" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_state_10" }
   iconType = { name = "VAL_ops_11_controller" position = { x = 271 y = 192 } quadTextureSprite = "GFX_VAL_ops_state_11" }
   iconType = { name = "VAL_ops_12_controller" position = { x = 259 y = 167 } quadTextureSprite = "GFX_VAL_ops_state_12" }
@@ -130,6 +131,8 @@ guiTypes = {
   iconType = { name = "VAL_ops_46_contested" position = { x = 213 y = 215 } quadTextureSprite = "GFX_VAL_ops_contested_46" }
   iconType = { name = "VAL_ops_53_border" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_border_53" }
   iconType = { name = "VAL_ops_53_contested" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_contested_53" }
+  iconType = { name = "VAL_ops_709_border" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_border_709" }
+  iconType = { name = "VAL_ops_709_contested" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_contested_709" }
   iconType = { name = "VAL_ops_10_border" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_border_10" }
   iconType = { name = "VAL_ops_10_contested" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_contested_10" }
   iconType = { name = "VAL_ops_11_border" position = { x = 271 y = 192 } quadTextureSprite = "GFX_VAL_ops_border_11" }
@@ -255,6 +258,7 @@ guiTypes = {
   iconType = { name = "STP_ops_29_controller" position = { x = 231 y = 229 } quadTextureSprite = "GFX_VAL_ops_state_29" }
   iconType = { name = "STP_ops_46_controller" position = { x = 213 y = 215 } quadTextureSprite = "GFX_VAL_ops_state_46" }
   iconType = { name = "STP_ops_53_controller" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_state_53" }
+  iconType = { name = "STP_ops_709_controller" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_state_709" }
   iconType = { name = "STP_ops_10_controller" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_state_10" }
   iconType = { name = "STP_ops_11_controller" position = { x = 271 y = 192 } quadTextureSprite = "GFX_VAL_ops_state_11" }
   iconType = { name = "STP_ops_12_controller" position = { x = 259 y = 167 } quadTextureSprite = "GFX_VAL_ops_state_12" }
@@ -353,6 +357,8 @@ guiTypes = {
   iconType = { name = "STP_ops_46_contested" position = { x = 213 y = 215 } quadTextureSprite = "GFX_VAL_ops_contested_46" }
   iconType = { name = "STP_ops_53_border" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_border_53" }
   iconType = { name = "STP_ops_53_contested" position = { x = 252 y = 239 } quadTextureSprite = "GFX_VAL_ops_contested_53" }
+  iconType = { name = "STP_ops_709_border" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_border_709" }
+  iconType = { name = "STP_ops_709_contested" position = { x = 242 y = 273 } quadTextureSprite = "GFX_VAL_ops_contested_709" }
   iconType = { name = "STP_ops_10_border" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_border_10" }
   iconType = { name = "STP_ops_10_contested" position = { x = 248 y = 189 } quadTextureSprite = "GFX_VAL_ops_contested_10" }
   iconType = { name = "STP_ops_11_border" position = { x = 271 y = 192 } quadTextureSprite = "GFX_VAL_ops_border_11" }

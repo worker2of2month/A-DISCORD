@@ -317,7 +317,9 @@ def collect_issues() -> list[str]:
         "save_global_event_target_as = ADISCORD_rin_northern_court",
         "save_global_event_target_as = ADISCORD_rin_southern_charter",
         "set_cosmetic_tag = RIN_northern_court",
-        "recruit_character = RIN_Northern_Court_Regency",
+        "target_country = event_target:ADISCORD_rin_northern_court",
+        "add_country_leader_role = {",
+        "desc = RIN_Northern_Court_Regency_desc",
         "promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }",
         "activate_mission = ADISCORD_rin_palatin_breakup_mission",
     ):
@@ -327,6 +329,10 @@ def collect_issues() -> list[str]:
         issues.append(
             "post-civil-war split resolves the ambiguous original RIN tag instead of southern ROOT"
         )
+    if "recruit_character =" in effects:
+        issues.append("RIN crisis recruits characters outside country history")
+    if "recruit_character = RIN_Northern_Court_Regency" not in texts[RIN_HISTORY]:
+        issues.append("RIN history does not recruit its dormant northern court")
     for forbidden in (
         "declare_war_on",
         "add_to_war",
@@ -457,13 +463,10 @@ def collect_issues() -> list[str]:
     except ValueError as exc:
         issues.append(str(exc))
         regency = ""
-    for token in (
-        "GFX_Portrait_Forul_Generic_9",
-        "ideology = chauvinism_ideology",
-        "desc = RIN_Northern_Court_Regency_desc",
-    ):
-        if token not in regency:
-            issues.append(f"RIN northern court regency lacks {token}")
+    if "GFX_Portrait_Forul_Generic_9" not in regency:
+        issues.append("RIN northern court regency lacks its authored portrait")
+    if "country_leader =" in regency:
+        issues.append("RIN northern court gains a leader role before the civil-war split")
 
     rin_oob = texts[RIN_OOB]
     if rin_oob.count("division = {") != 5:

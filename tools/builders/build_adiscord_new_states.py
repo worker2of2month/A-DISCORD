@@ -318,6 +318,74 @@ SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES = {
     16704: "Сухой Ключ",
 }
 
+# Small regional objectives retain rural terrain and do not grant urban
+# population or industry. Island groups include their detached inhabited islets.
+REGIONAL_SETTLEMENTS = {
+    1: ((16382, 2, "Абилийский берег"),),
+    2: ((1, 2, "Монайский бор"),),
+    3: ((93, 2, "Нианский перевал"),),
+    7: ((72, 1, "Фрунга"),),
+    22: ((103, 1, "Отрия"),),
+    43: ((16432, 2, "Балчанские высоты"),),
+    45: ((6675, 2, "Верхний Ливон"),),
+    46: ((9376, 2, "Хосхейтский рудник"),),
+    53: ((60, 1, "Фадский берег"),),
+    58: ((16332, 1, "Медрон"),),
+    59: ((6885, 1, "Антолла"),),
+    60: ((16340, 1, "Фарейн"),),
+    61: ((1480, 1, "Химбер"),),
+    62: ((8327, 1, "Хеланд"),),
+    63: ((5606, 1, "Милхам"),),
+    64: ((16465, 1, "Килнет"),),
+    65: ((6440, 1, "Хебтава"),),
+    88: ((16429, 1, "Шахтёрская пристань"),),
+    112: ((3332, 1, "Северный Рейнг"),),
+    115: ((1524, 1, "Рейнгский перевал"),),
+    116: ((3344, 1, "Нижний Рейнг"),),
+    117: ((12455, 2, "Ливен"),),
+    174: ((5869, 2, "Феннский перевал"),),
+    175: ((10006, 1, "Марен"),),
+    218: ((7047, 2, "Западный Рейнг"),),
+    225: ((11393, 2, "Южноостровск"), (11606, 1, "Дальний мыс")),
+    226: ((4396, 1, "Малая гавань"), (8537, 1, "Чаечий")),
+    227: (
+        (2478, 1, "Восточная пристань"),
+        (5482, 1, "Каменный остров"),
+        (6322, 1, "Тихая бухта"),
+        (9192, 1, "Рыбачий"),
+    ),
+    228: ((6893, 3, "Большой остров"), (6145, 1, "Дальний рейд"), (8682, 1, "Малый рейд")),
+    229: ((3731, 1, "Северная пристань"),),
+    230: ((2742, 1, "Западная пристань"),),
+    231: ((13018, 2, "Среднеостровск"), (12732, 1, "Западный мыс")),
+    235: ((3924, 1, "Караль"),),
+    239: ((4349, 1, "Белис"),),
+    246: ((7497, 1, "Керим"),),
+    251: ((12517, 1, "Маран"),),
+    252: ((11429, 1, "Тазир"),),
+    255: ((2184, 1, "Дейра"),),
+    258: ((3614, 1, "Хамад"),),
+    259: ((6554, 1, "Асхар"),),
+    263: ((8946, 1, "Кесрат"),),
+    264: ((2327, 1, "Наран"),),
+    269: ((2806, 1, "Ресан"),),
+    274: ((7486, 1, "Туран"),),
+    279: ((5549, 1, "Ридан"),),
+    282: ((7947, 1, "Мейрук"),),
+    285: ((6233, 1, "Нарван"),),
+    287: ((4182, 1, "Арбин"),),
+    291: ((7825, 1, "Байрат"),),
+    296: ((10949, 1, "Салик"),),
+    297: ((3415, 1, "Норан"),),
+    299: ((10975, 1, "Кассен"),),
+    305: ((10842, 1, "Лерис"),),
+    709: (
+        (16807, 1, "Островная гавань"),
+        (16804, 1, "Малый Стеланд"),
+        (16802, 1, "Восточный Стеланд"),
+    ),
+}
+
 # Explicit profiles replace the old pseudo-random 24-72k population formula
 # around the densely populated Vorkernsberg conurbation.
 STATE_PROFILES = {
@@ -978,6 +1046,11 @@ def render_state(state_id: int, owner: str) -> str:
             raise RuntimeError(f"state {state_id}: city VP {province} is outside the state")
         if province in urban_provinces or VORKERLAND_MINOR_VPS.get(state_id) == (province, value):
             history.append(f"\t\tvictory_points = {{ {province} {value} }}")
+
+    for province, value, _name in REGIONAL_SETTLEMENTS.get(state_id, ()):
+        if province not in provinces:
+            raise RuntimeError(f"state {state_id}: regional VP {province} is outside the state")
+        history.append(f"\t\tvictory_points = {{ {province} {value} }}")
 
     state_buildings = buildings(state_id, owner)
     if state_buildings:
@@ -1673,13 +1746,18 @@ state = {
 	buildings_max_level_factor = 1.000
 }
 """
+    source = ensure_history_victory_points(
+        source, tuple((province, value) for province, value, _name in REGIONAL_SETTLEMENTS[709])
+    )
     outputs = {path: source.encode("utf-8")}
     for filename, key, value in (
         ("state_names_l_russian.yml", "STATE_709", "Стеландские острова"),
-        ("victory_points_l_russian.yml", "VICTORY_POINTS_16807", "Островная гавань"),
+        *(("victory_points_l_russian.yml", f"VICTORY_POINTS_{province}", name)
+          for province, _value, name in REGIONAL_SETTLEMENTS[709]),
     ):
         path = ROOT / "localisation/russian" / filename
-        source = replace_localisation_value(path.read_text(encoding="utf-8-sig"), key, value)
+        current = outputs.get(path, path.read_bytes()).decode("utf-8-sig")
+        source = replace_localisation_value(current, key, value)
         outputs[path] = source.encode("utf-8-sig")
     changed = [path for path, data in outputs.items() if not path.exists() or path.read_bytes() != data]
     for path in changed:
@@ -1840,6 +1918,48 @@ def update_coastal_city_states(apply: bool) -> int:
     return int(bool(changed))
 
 
+def regional_settlement_plan() -> dict[Path, bytes]:
+    """Own only the listed VP entries and their names in existing state files."""
+    definitions = {
+        int(row[0]): row[4]
+        for line in (ROOT / "map/definition.csv").read_text(encoding="utf-8-sig").splitlines()
+        if len(row := line.split(";")) > 4 and row[0].isdigit()
+    }
+    outputs = {}
+    localisation_path = ROOT / "localisation/russian/victory_points_l_russian.yml"
+    localisation = localisation_path.read_text(encoding="utf-8-sig")
+    seen = set()
+    for state_id, settlements in REGIONAL_SETTLEMENTS.items():
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        province_open, province_close = named_block(source, "provinces")
+        provinces = set(map(int, re.findall(r"\d+", source[province_open:province_close])))
+        for province, value, name in settlements:
+            if province in seen or province not in provinces or definitions.get(province) != "land":
+                raise RuntimeError(f"state {state_id}: duplicate or invalid regional VP {province}")
+            if not 1 <= value <= 3:
+                raise RuntimeError(f"regional VP {province}: expected a minor settlement value")
+            seen.add(province)
+            localisation = replace_localisation_value(localisation, f"VICTORY_POINTS_{province}", name)
+        points = tuple((province, value) for province, value, _name in settlements)
+        source = ensure_history_victory_points(source, points)
+        outputs[path] = source.encode("utf-8")
+    outputs[localisation_path] = localisation.encode("utf-8-sig")
+    return outputs
+
+
+def update_regional_settlements(apply: bool) -> int:
+    outputs = regional_settlement_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply and any(path.read_bytes() != data for path, data in regional_settlement_plan().items()):
+        raise RuntimeError("regional settlements are not idempotent")
+    return int(bool(changed) and not apply)
+
+
 def apply() -> None:
     missing = sorted(set(range(234, 331)) - set(STARTING_OWNERS))
     if missing:
@@ -1857,6 +1977,7 @@ def apply() -> None:
     update_stelander_islands(True)
     apply_generated_victory_point_localisation()
     apply_generated_state_name_localisation()
+    update_regional_settlements(True)
     print(f"Built metadata for {len(STARTING_OWNERS)} states; hand-authored flags were left untouched.")
     update_val_resources(True)
 
@@ -1963,7 +2084,11 @@ def main() -> int:
     actions.add_argument("--apply-southern-settlements", action="store_true")
     actions.add_argument("--check-stelander-islands", action="store_true")
     actions.add_argument("--apply-stelander-islands", action="store_true")
+    actions.add_argument("--check-regional-settlements", action="store_true")
+    actions.add_argument("--apply-regional-settlements", action="store_true")
     args = parser.parse_args()
+    if args.check_regional_settlements or args.apply_regional_settlements:
+        return update_regional_settlements(args.apply_regional_settlements)
     if args.check_stelander_islands or args.apply_stelander_islands:
         return update_stelander_islands(args.apply_stelander_islands)
     if args.check_southern_settlements or args.apply_southern_settlements:
@@ -2018,7 +2143,8 @@ def main() -> int:
     from tools.validators.validate_adiscord_new_states import main as validate_main
 
     island_drift = update_stelander_islands(False)
-    return max(island_drift, validate_main())
+    regional_drift = update_regional_settlements(False)
+    return max(island_drift, regional_drift, validate_main())
 
 
 if __name__ == "__main__":

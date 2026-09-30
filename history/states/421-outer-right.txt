@@ -7,8 +7,8 @@ state = {
 	manpower = 174092
 	state_category = rural
 	history = {
-		owner = DRV
-		add_core_of = DRV
+		owner = VEL
+		add_core_of = VEL
 		buildings = {
 			infrastructure = 2
 			industrial_complex = 1
@@ -17,6 +17,9 @@ state = {
 	provinces = {
 		764 785 1265 1324 1363 1880 1932 1949 3770 4201 5366 5460 5550 5833 5960 7514
 		7843 8674 9113 9258 9966 10644 11869 12339
+	}
+	resources = {
+		coal = 3
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 2.0

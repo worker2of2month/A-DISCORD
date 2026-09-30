@@ -1781,8 +1781,8 @@ country_event = {
 		ai_chance = { base = 50 }
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
-			custom_effect_tooltip = STP_pw_party_cabinet_apparatus_tt
-			custom_effect_tooltip = STP_pf_conservatives_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_cabinet_apparatus_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_conservatives_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_cabinet value = 1 }
 
@@ -1797,8 +1797,8 @@ country_event = {
 		ai_chance = { base = 50 }
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
-			custom_effect_tooltip = STP_pw_party_cabinet_districts_tt
-			custom_effect_tooltip = STP_pf_borons_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_cabinet_districts_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_borons_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_cabinet value = 2 }
 
@@ -1813,8 +1813,8 @@ country_event = {
 		ai_chance = { base = 50 }
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_cabinet } }
-			custom_effect_tooltip = STP_pw_party_cabinet_delegates_tt
-			custom_effect_tooltip = STP_pf_radicals_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_cabinet_delegates_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_radicals_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_cabinet value = 3 }
 
@@ -2214,8 +2214,8 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
 			effect_tooltip = { add_ideas = STP_pw_party_command_army_delta }
-			custom_effect_tooltip = STP_pw_party_security_objects_tt
-			custom_effect_tooltip = STP_pf_army_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_security_objects_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_command value = 1 }
 				add_to_variable = { var = STP_pw_army_org_factor value = 0.03 }
@@ -2234,8 +2234,8 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_command } }
 			effect_tooltip = { add_ideas = STP_pw_party_command_security_delta }
-			custom_effect_tooltip = STP_pw_party_army_objects_tt
-			custom_effect_tooltip = STP_pf_security_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_army_objects_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_command value = 2 }
 				add_to_variable = { var = STP_pw_stability_factor value = 0.04 }
@@ -2265,8 +2265,8 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } }
 			effect_tooltip = { add_ideas = STP_pw_party_requisition_delta }
-			custom_effect_tooltip = STP_pw_party_requisition_tt
-			custom_effect_tooltip = STP_pf_security_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_requisition_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_credit value = 2 }
 				add_to_variable = { var = ADISCORD_economy_treasury value = 540 }
@@ -2287,8 +2287,8 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_credit } check_variable = { var = ADISCORD_economy_treasury value = 360 compare = greater_than_or_equals } }
 			effect_tooltip = { add_ideas = STP_pw_party_contracts_delta }
-			custom_effect_tooltip = STP_pw_party_contracts_tt
-			custom_effect_tooltip = STP_pf_merchants_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pw_party_contracts_tt }
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_merchants_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_credit value = 1 }
 				subtract_from_variable = { var = ADISCORD_economy_treasury value = 360 }
@@ -2376,7 +2376,7 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
 			effect_tooltip = { add_ideas = STP_pw_party_joint_staff_delta }
-			custom_effect_tooltip = STP_pf_advisers_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_advisers_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_mission_policy value = 1 }
 				add_to_variable = { var = STP_pw_planning_speed value = 0.10 }
@@ -2395,7 +2395,7 @@ country_event = {
 		if = {
 			limit = { STP_pw_party_story_current = yes NOT = { has_variable = STP_pw_party_mission_policy } is_subject_of = NOD }
 			effect_tooltip = { add_ideas = STP_pw_party_domestic_staff_delta }
-			custom_effect_tooltip = STP_pf_army_deal_tt
+			if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_deal_tt }
 			hidden_effect = {
 				set_variable = { var = STP_pw_party_mission_policy value = 2 }
 				add_to_variable = { var = STP_pw_army_org_factor value = 0.02 }
@@ -2470,6 +2470,26 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { if = { limit = { tag = STP } STP_pw_party_finalize_nod_subject = yes } }
+}
+
+# NOD: the invasion mandate has run out while the war with STP continues.
+# A relaunch refreshes the mandate, so the earlier delayed call finds it still active and skips.
+country_event = {
+	id = ADISCORD_STP_pc.50
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				tag = NOD
+				has_war_with = STP
+				NOT = { has_idea = STP_pw_nod_invasion_mandate }
+				NOT = { has_idea = STP_pw_nod_invasion_exhausted }
+				STP = { has_country_flag = STP_pw_party_nod_invasion_active }
+			}
+			add_ideas = STP_pw_nod_invasion_exhausted
+		}
+	}
 }
 
 country_event = {
@@ -2976,7 +2996,7 @@ country_event = {
 		name = ADISCORD_STP_pv.10.a
 		ai_chance = { base = 40 }
 		add_stability = -0.03
-		custom_effect_tooltip = ADISCORD_STP_pv.10.a_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.10.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.10.a_tt_pf }
 		hidden_effect = {
 			ADISCORD_economy_initialize_country = yes
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
@@ -2994,7 +3014,7 @@ country_event = {
 		ai_chance = { base = 40 }
 		add_war_support = 0.05
 		add_political_power = 25
-		custom_effect_tooltip = ADISCORD_STP_pv.10.b_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.10.b_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.10.b_tt_pf }
 		hidden_effect = {
 			subtract_from_variable = { var = STP_pf_merchants_support value = 12 }
 			STP_refresh_apparatus_loyalty = yes
@@ -3005,7 +3025,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pv.10.c
 		ai_chance = { base = 20 }
-		custom_effect_tooltip = ADISCORD_STP_pv.10.c_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.10.c_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.10.c_tt_pf }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_merchants_support value = 6 }
 			add_to_variable = { var = STP_pf_radicals_support value = 4 }
@@ -3024,7 +3044,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pv.11.a
 		ai_chance = { base = 30 }
-		custom_effect_tooltip = ADISCORD_STP_pv.11.a_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.11.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.11.a_tt_pf }
 		hidden_effect = {
 			STP_receive_3000 = yes
 			subtract_from_variable = { var = STP_pf_conservatives_support value = 15 }
@@ -3038,7 +3058,7 @@ country_event = {
 		name = ADISCORD_STP_pv.11.b
 		ai_chance = { base = 40 }
 		add_stability = -0.05
-		custom_effect_tooltip = ADISCORD_STP_pv.11.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.11.b_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_merchants_support value = 10 }
 			add_to_variable = { var = STP_pf_conservatives_support value = 10 }
@@ -3050,7 +3070,7 @@ country_event = {
 		trigger = { STP_pf_nod_contacts = yes }
 		ai_chance = { base = 30 }
 		custom_effect_tooltip = ADISCORD_STP_pv.11.c_tt
-		custom_effect_tooltip = STP_pf_advisers_deal_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_advisers_deal_tt }
 		hidden_effect = {
 			set_country_flag = STP_pv_northern_loan_taken
 			set_temp_variable = { var = STP_pf_selected value = 5 }
@@ -3077,7 +3097,7 @@ country_event = {
 		add_stability = -0.08
 		add_war_support = -0.05
 		custom_effect_tooltip = ADISCORD_STP_pv.12.common_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.12.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.12.a_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_apparatus_loyalty_change value = -8 }
 			STP_change_apparatus_loyalty = yes
@@ -3093,7 +3113,7 @@ country_event = {
 		add_stability = -0.08
 		add_political_power = 50
 		custom_effect_tooltip = ADISCORD_STP_pv.12.common_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.12.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.12.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_apparatus_loyalty_change value = -8 }
 			STP_change_apparatus_loyalty = yes
@@ -3118,7 +3138,7 @@ country_event = {
 		name = ADISCORD_STP_pv.20.a
 		ai_chance = { base = 50 }
 		add_political_power = -60
-		custom_effect_tooltip = ADISCORD_STP_pv.20.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.20.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_army_support value = 20 }
 			subtract_from_variable = { var = STP_pf_advisers_support value = 8 }
@@ -3129,8 +3149,8 @@ country_event = {
 		name = ADISCORD_STP_pv.20.b
 		ai_chance = { base = 20 }
 		add_stability = -0.03
-		custom_effect_tooltip = STP_pf_security_deal_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.20.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.20.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_pf_selected value = 3 }
 			STP_pf_shift = yes
@@ -3157,7 +3177,7 @@ country_event = {
 		name = ADISCORD_STP_pv.21.a
 		ai_chance = { base = 50 }
 		add_political_power = -40
-		custom_effect_tooltip = ADISCORD_STP_pv.21.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.21.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_security_support value = 20 }
 			subtract_from_variable = { var = STP_pf_conservatives_support value = 10 }
@@ -3167,8 +3187,8 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pv.21.b
 		ai_chance = { base = 25 }
-		custom_effect_tooltip = STP_pf_army_deal_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.21.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_deal_tt }
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.21.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_pf_selected value = 4 }
 			STP_pf_shift = yes
@@ -3194,7 +3214,7 @@ country_event = {
 		name = ADISCORD_STP_pv.22.a
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals } }
 		ai_chance = { base = 40 }
-		custom_effect_tooltip = ADISCORD_STP_pv.22.a_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.22.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.22.a_tt_pf }
 		hidden_effect = {
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
 			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
@@ -3206,7 +3226,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pv.22.b
 		ai_chance = { base = 30 }
-		custom_effect_tooltip = ADISCORD_STP_pv.22.b_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.22.b_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.22.b_tt_pf }
 		hidden_effect = {
 			ADISCORD_economy_initialize_country = yes
 			add_to_variable = { var = ADISCORD_economy_treasury value = 1500 }
@@ -3221,7 +3241,7 @@ country_event = {
 	option = {
 		name = ADISCORD_STP_pv.22.c
 		ai_chance = { base = 30 }
-		custom_effect_tooltip = ADISCORD_STP_pv.22.c_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.22.c_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.22.c_tt_pf }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_merchants_support value = 5 }
 			STP_refresh_apparatus_loyalty = yes
@@ -3242,7 +3262,7 @@ country_event = {
 		name = ADISCORD_STP_pv.23.a
 		ai_chance = { base = 50 }
 		add_stability = -0.02
-		custom_effect_tooltip = ADISCORD_STP_pv.23.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.23.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_radicals_support value = 20 }
 			subtract_from_variable = { var = STP_pf_conservatives_support value = 10 }
@@ -3253,8 +3273,8 @@ country_event = {
 		name = ADISCORD_STP_pv.23.b
 		ai_chance = { base = 25 }
 		add_manpower = -4000
-		custom_effect_tooltip = STP_pf_army_deal_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.23.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_army_deal_tt }
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.23.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_pf_selected value = 4 }
 			STP_pf_shift = yes
@@ -3280,7 +3300,7 @@ country_event = {
 		name = ADISCORD_STP_pv.24.a
 		ai_chance = { base = 50 }
 		add_political_power = -40
-		custom_effect_tooltip = ADISCORD_STP_pv.24.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.24.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_conservatives_support value = 20 }
 			subtract_from_variable = { var = STP_pf_radicals_support value = 10 }
@@ -3291,8 +3311,8 @@ country_event = {
 		name = ADISCORD_STP_pv.24.b
 		ai_chance = { base = 25 }
 		add_stability = -0.03
-		custom_effect_tooltip = STP_pf_security_deal_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.24.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.24.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_pf_selected value = 3 }
 			STP_pf_shift = yes
@@ -3318,7 +3338,7 @@ country_event = {
 		name = ADISCORD_STP_pv.25.a
 		ai_chance = { base = 50 }
 		add_political_power = -40
-		custom_effect_tooltip = ADISCORD_STP_pv.25.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.25.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_borons_support value = 20 }
 			STP_refresh_apparatus_loyalty = yes
@@ -3328,8 +3348,8 @@ country_event = {
 		name = ADISCORD_STP_pv.25.b
 		ai_chance = { base = 25 }
 		add_stability = -0.02
-		custom_effect_tooltip = STP_pf_security_deal_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.25.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = STP_pf_security_deal_tt }
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.25.b_tt }
 		hidden_effect = {
 			set_temp_variable = { var = STP_pf_selected value = 3 }
 			STP_pf_shift = yes
@@ -3363,7 +3383,7 @@ country_event = {
 		name = ADISCORD_STP_pv.26.a
 		ai_chance = { base = 50 }
 		add_political_power = -30
-		custom_effect_tooltip = ADISCORD_STP_pv.26.a_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.26.a_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_advisers_support value = 20 }
 			subtract_from_variable = { var = STP_pf_army_support value = 8 }
@@ -3374,7 +3394,7 @@ country_event = {
 		name = ADISCORD_STP_pv.26.b
 		ai_chance = { base = 25 }
 		add_war_support = 0.03
-		custom_effect_tooltip = ADISCORD_STP_pv.26.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.26.b_tt }
 		hidden_effect = {
 			subtract_from_variable = { var = STP_pf_advisers_support value = 10 }
 			STP_refresh_apparatus_loyalty = yes
@@ -3436,7 +3456,7 @@ country_event = {
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 80 }
 		add_equipment_to_stockpile = { type = support_equipment amount = 60 }
 		custom_effect_tooltip = STP_pv_strain_minus_5_tt
-		custom_effect_tooltip = ADISCORD_STP_pv.40.a_tt
+		custom_effect_tooltip = ADISCORD_STP_pv.40.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.40.a_tt_pf }
 		hidden_effect = {
 			set_country_flag = STP_pv_kefreyt_debt
 			subtract_from_variable = { var = STP_pf_advisers_support value = 15 }
@@ -3449,7 +3469,7 @@ country_event = {
 		name = ADISCORD_STP_pv.40.b
 		ai_chance = { base = 60 }
 		add_political_power = 25
-		custom_effect_tooltip = ADISCORD_STP_pv.40.b_tt
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_pv.40.b_tt }
 		hidden_effect = {
 			add_to_variable = { var = STP_pf_advisers_support value = 10 }
 			STP_refresh_apparatus_loyalty = yes
@@ -3687,6 +3707,1003 @@ country_event = {
 		if = {
 			limit = { NOD = { STP_nod_border_war_active = yes } }
 			custom_effect_tooltip = STP_nod_border_treaty_terms_tt
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.20
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.20.t
+	desc = ADISCORD_STP_ch.20.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_property_disputes
+			days = 180
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.20.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = 25
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.20.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_conservatives_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = -6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.20.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -50
+		add_stability = 0.03
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.20.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_conservatives_support
+				value = -6
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.20.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.21
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.21.t
+	desc = ADISCORD_STP_ch.21.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_officer_petitions
+			days = 150
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.21.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -60
+		remove_ideas = STP_party_officer_petitions
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_21_a_delta
+			}
+		}
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.21.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_admin_expense_factor
+				value = 0.02
+			}
+			add_to_variable = {
+				var = STP_pf_army_support
+				value = 8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.21.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = 30
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.21.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_army_support
+				value = -8
+			}
+			add_to_variable = {
+				var = STP_pf_security_support
+				value = 5
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.21.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.22
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.22.t
+	desc = ADISCORD_STP_ch.22.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_contract_disputes
+			days = 180
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.22.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_22_a_delta
+			}
+		}
+		custom_effect_tooltip = ADISCORD_STP_ch.22.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.22.a_tt_pf }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_overall_income_factor
+				value = -0.02
+			}
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1000
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = 1000
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.22.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -60
+		remove_ideas = STP_party_contract_disputes
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.22.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -6
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.22.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.23
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.23.t
+	desc = ADISCORD_STP_ch.23.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_archive_backlog
+			days = 180
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.23.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -50
+		remove_ideas = STP_party_archive_backlog
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.23.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_security_support
+				value = -8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.23.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = 40
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.23.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_security_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = -6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.23.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.24
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.24.t
+	desc = ADISCORD_STP_ch.24.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_mandate_disputes
+			days = 150
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.24.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		remove_ideas = STP_party_mandate_disputes
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.24.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_advisers_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -6
+			}
+			add_to_variable = {
+				var = STP_ch_cooperation
+				value = 1
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.24.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -60
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.24.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_advisers_support
+				value = -8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.24.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.25
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.25.t
+	desc = ADISCORD_STP_ch.25.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_idea = STP_law_public_orgies
+	}
+	option = {
+		name = ADISCORD_STP_ch.25.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_public_orgies
+		}
+		add_political_power = -35
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.25.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 6
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = -4
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.25.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_public_orgies
+		}
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_25_b_delta
+			}
+		}
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.25.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_admin_expense_factor
+				value = 0.02
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.25.obsolete
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			NOT = { has_idea = STP_law_public_orgies }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.25.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.26
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.26.t
+	desc = ADISCORD_STP_ch.26.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_idea = STP_law_slavery
+	}
+	option = {
+		name = ADISCORD_STP_ch.26.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_slavery
+		}
+		add_political_power = -50
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_26_a_delta
+			}
+		}
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.26.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_admin_expense_factor
+				value = 0.02
+			}
+			add_to_variable = {
+				var = STP_pf_security_support
+				value = 6
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.26.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_slavery
+		}
+		add_stability = -0.03
+		custom_effect_tooltip = ADISCORD_STP_ch.26.b_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.26.b_tt_pf }
+		hidden_effect = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = 800
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = 800
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.26.obsolete
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			NOT = { has_idea = STP_law_slavery }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.26.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.27
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.27.t
+	desc = ADISCORD_STP_ch.27.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_idea = STP_law_hard_drugs
+	}
+	option = {
+		name = ADISCORD_STP_ch.27.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_hard_drugs
+		}
+		custom_effect_tooltip = ADISCORD_STP_ch.27.a_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.27.a_tt_pf }
+		hidden_effect = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = 400
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = 400
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 5
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -4
+			}
+			set_country_flag = STP_party_drug_health_fund
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.27.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_hard_drugs
+		}
+		custom_effect_tooltip = ADISCORD_STP_ch.27.b_tt if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.27.b_tt_pf }
+		hidden_effect = {
+			ADISCORD_economy_initialize_country = yes
+			add_to_variable = {
+				var = ADISCORD_economy_treasury
+				value = 1200
+			}
+			add_to_variable = {
+				var = ADISCORD_economy_current_month_action_income
+				value = 1200
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = 6
+			}
+			add_to_variable = {
+				var = STP_pf_army_support
+				value = -6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.27.obsolete
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			NOT = { has_idea = STP_law_hard_drugs }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.27.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.28
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.28.t
+	desc = ADISCORD_STP_ch.28.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_idea = STP_law_hard_drugs
+		NOT = { has_completed_focus = STP_party_festival_clinics }
+	}
+	immediate = {
+		if = {
+			limit = {
+				NOT = { has_country_flag = STP_party_drug_health_fund }
+			}
+			add_timed_idea = {
+				idea = STP_party_hospital_overload
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.28.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_hard_drugs
+		}
+		add_political_power = -60
+		remove_ideas = STP_party_hospital_overload
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.28.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 6
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -4
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.28.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_hard_drugs
+		}
+		add_stability = -0.04
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.28.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -10
+			}
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = 4
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.28.obsolete
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			NOT = { has_idea = STP_law_hard_drugs }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.28.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.29
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.29.t
+	desc = ADISCORD_STP_ch.29.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_idea = STP_law_slavery
+	}
+	immediate = {
+		add_timed_idea = {
+			idea = STP_party_forced_labour_resistance
+			days = 180
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.29.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_slavery
+		}
+		add_political_power = -60
+		remove_ideas = STP_party_forced_labour_resistance
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.29.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = -8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 6
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.29.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_idea = STP_law_slavery
+		}
+		add_stability = -0.04
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.29.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_merchants_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_security_support
+				value = 5
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = -10
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.29.obsolete
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			NOT = { has_idea = STP_law_slavery }
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.29.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_STP_ch.30
+	is_triggered_only = yes
+	fire_only_once = yes
+	timeout_days = 14
+	title = ADISCORD_STP_ch.30.t
+	desc = ADISCORD_STP_ch.30.d
+	picture = GFX_event_adiscord_negotiation_table
+	trigger = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+	}
+	immediate = {
+		if = {
+			limit = {
+				has_completed_focus = STP_party_festival_patrons
+			}
+			add_timed_idea = {
+				idea = STP_party_festival_creditors
+				days = 180
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.30.a
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_party_festival_patrons
+		}
+		remove_ideas = STP_party_festival_creditors
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_30_a_delta
+			}
+		}
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.30.a_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_overall_income_factor
+				value = -0.02
+			}
+			add_to_variable = {
+				var = STP_pf_conservatives_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = -8
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.30.b
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+		}
+		add_political_power = -60
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.30.b_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = 8
+			}
+			add_to_variable = {
+				var = STP_pf_conservatives_support
+				value = -8
+			}
+			add_to_variable = {
+				var = STP_pf_borons_support
+				value = 4
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.30.c
+		ai_chance = { factor = 1 }
+		trigger = {
+			STP_pf_active = yes
+			has_country_flag = STP_cw_postwar
+			has_completed_focus = STP_party_festival_levy
+		}
+		add_stability = 0.03
+		effect_tooltip = {
+			swap_ideas = {
+				remove_idea = STP_pw_party_dummy
+				add_idea = ADISCORD_STP_ch_30_c_delta
+			}
+		}
+		if = { limit = { NOT = { STP_pf_settled = yes } } custom_effect_tooltip = ADISCORD_STP_ch.30.c_tt }
+		hidden_effect = {
+			add_to_variable = {
+				var = STP_pw_ADISCORD_economy_overall_income_factor
+				value = -0.02
+			}
+			add_to_variable = {
+				var = STP_pf_conservatives_support
+				value = 6
+			}
+			add_to_variable = {
+				var = STP_pf_radicals_support
+				value = -4
+			}
+			STP_party_refresh_policies = yes
+		}
+	}
+	option = {
+		name = ADISCORD_STP_ch.30.z
+		ai_chance = { factor = 1 }
+		trigger = {
+			NOT = {
+				AND = {
+					STP_pf_active = yes
+					has_country_flag = STP_cw_postwar
+				}
+			}
 		}
 	}
 }

@@ -1,4 +1,12 @@
 spriteTypes = {
+	spriteType = {
+		name = "GFX_focus_STP_party_war_directorate"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_war_directorate.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_party_rear_administration"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_rear_administration.png"
+	}
 	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
@@ -1435,5 +1443,18 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_focus_STP_ps_evacuation_plan"
 		texturefile = "gfx/interface/ideas/laws/culture_healthcare/ADISCORD_law_healthcare_military_medical_service.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_policy_public_orgies"
+		texturefile = "gfx/interface/ideas/laws/culture_public_entertainment/STP_law_public_orgies.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_policy_hard_drugs"
+		texturefile = "gfx/interface/ideas/laws/culture_drugs/STP_law_hard_drugs.png"
+	}
+	spriteType = {
+		name = "GFX_focus_STP_policy_slavery"
+		texturefile = "gfx/interface/ideas/laws/economic_labour_policy/ADISCORD_law_labor_policy_slavery.png"
 	}
 }

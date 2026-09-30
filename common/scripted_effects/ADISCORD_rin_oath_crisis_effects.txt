@@ -39,7 +39,24 @@ ADISCORD_rin_start_oath_civil_war = {
 			save_global_event_target_as = ADISCORD_rin_northern_court
 			set_country_flag = ADISCORD_rin_northern_crown_side
 			set_cosmetic_tag = RIN_northern_court
-			recruit_character = RIN_Northern_Court_Regency
+			# The dormant court belongs to the southern ROOT until the split.
+			ROOT = {
+				if = {
+					limit = { has_character = RIN_Northern_Court_Regency }
+					set_nationality = {
+						character = RIN_Northern_Court_Regency
+						target_country = event_target:ADISCORD_rin_northern_court
+					}
+				}
+			}
+			add_country_leader_role = {
+				character = RIN_Northern_Court_Regency
+				country_leader = {
+					ideology = chauvinism_ideology
+					expire = "2200.1.1.1"
+					desc = RIN_Northern_Court_Regency_desc
+				}
+			}
 			promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }
 			add_ideas = RIN_northern_crown_columns
 			add_manpower = 1000

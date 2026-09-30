@@ -157,18 +157,40 @@ STS_shabrat_operation_front = {
 	}
 }
 
-# Shabrat attacks in waves (STP_cw_ai_shabrat_offensive_tick). Between waves,
-# with an empty rifle reserve, after a failed operation or against a stronger
-# party army the front holds and recovers organisation instead of attacking.
+# Persistent shortages limit attack selection without disabling the whole front.
+# The timed recovery profile has higher priority than this cautious mode.
+STS_shabrat_cautious_party_front = {
+	allowed = { original_tag = STS }
+	enable = {
+		is_ai = yes
+		has_war_with = STP
+		OR = {
+			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+			fighting_army_strength_ratio = { tag = STP ratio < 0.8 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+		tag = STP
+		ratio = 0.01
+		priority = 1675
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+}
+
+# Only bounded regrouping and operation disorganization stop planned attacks.
 STS_shabrat_recover_party_front = {
 	allowed = { original_tag = STS }
 	enable = {
-		is_ai = yes has_war_with = STP
+		is_ai = yes
+		has_war_with = STP
 		OR = {
-			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
 			has_idea = STP_cw_operation_disorganization
 			has_country_flag = STS_ai_regroup
-			fighting_army_strength_ratio = { tag = STP ratio < 0.8 }
 		}
 	}
 	abort_when_not_enabled = yes

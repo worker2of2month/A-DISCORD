@@ -78,7 +78,7 @@ VAL_refresh_contract_modifier = {
 	else_if = {
 		limit = { check_variable = { var = VAL_contract_authority value = 50 compare = less_than } }
 		set_variable = { var = VAL_contract_attack_factor value = 0.03 }
-		set_variable = { var = VAL_contract_defence_factor value = 0.03 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.02 }
 		set_variable = { var = VAL_contract_org_factor value = 0.05 }
 		set_variable = { var = VAL_contract_org_regain value = 0.03 }
 		set_variable = { var = VAL_contract_capture_factor value = 0.02 }
@@ -95,7 +95,7 @@ VAL_refresh_contract_modifier = {
 	else_if = {
 		limit = { check_variable = { var = VAL_contract_authority value = 75 compare = less_than } }
 		set_variable = { var = VAL_contract_attack_factor value = 0.05 }
-		set_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.03 }
 		set_variable = { var = VAL_contract_org_factor value = 0.07 }
 		set_variable = { var = VAL_contract_org_regain value = 0.04 }
 		set_variable = { var = VAL_contract_capture_factor value = 0.05 }
@@ -112,7 +112,7 @@ VAL_refresh_contract_modifier = {
 	else_if = {
 		limit = { check_variable = { var = VAL_contract_authority value = 90 compare = less_than } }
 		set_variable = { var = VAL_contract_attack_factor value = 0.08 }
-		set_variable = { var = VAL_contract_defence_factor value = 0.08 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.05 }
 		set_variable = { var = VAL_contract_org_factor value = 0.09 }
 		set_variable = { var = VAL_contract_org_regain value = 0.06 }
 		set_variable = { var = VAL_contract_capture_factor value = 0.08 }
@@ -128,7 +128,7 @@ VAL_refresh_contract_modifier = {
 	# VAL contract band 90-100
 	else = {
 		set_variable = { var = VAL_contract_attack_factor value = 0.10 }
-		set_variable = { var = VAL_contract_defence_factor value = 0.1 }
+		set_variable = { var = VAL_contract_defence_factor value = 0.06 }
 		set_variable = { var = VAL_contract_org_factor value = 0.10 }
 		set_variable = { var = VAL_contract_org_regain value = 0.08 }
 		set_variable = { var = VAL_contract_capture_factor value = 0.1 }
@@ -290,7 +290,7 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_special_forces_min value = 12 }
 		add_to_variable = { var = VAL_contract_recon_factor value = 0.2 }
 		add_to_variable = { var = VAL_contract_supply_factor value = -0.03 }
-		add_to_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = 0.03 }
 	}
 	if = {
 		limit = { has_tech = ADISCORD_tech_kefreyt_shield_special_forces }
@@ -325,7 +325,7 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_planning_factor value = 0.05 }
 		add_to_variable = { var = VAL_contract_capture_factor value = 0.07 }
 		add_to_variable = { var = VAL_contract_attack_factor value = 0.05 }
-		add_to_variable = { var = VAL_contract_defence_factor value = 0.05 }
+		add_to_variable = { var = VAL_contract_defence_factor value = 0.03 }
 	}
 	if = {
 		limit = { has_country_flag = VAL_contract_nco_schools }

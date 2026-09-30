@@ -836,6 +836,7 @@
       "output_globs": ["map/terrain.bmp"],
       "source_inputs": [
         "tools/builders/build_adiscord_terrain_snow.py",
+        "tools/lib/coastal_clearance.py",
         "map/terrain.bmp",
         "map/cities.bmp",
         "map/heightmap.bmp",
@@ -1354,6 +1355,7 @@
         "tools/data/adiscord_southern_cities.json",
         "tools/builders/build_adiscord_new_states.py",
         "tools/builders/build_adiscord_coastal_geography.py",
+        "tools/lib/coastal_clearance.py",
         "tools/builders/build_adiscord_ivn_geography.py",
         "map/provinces.bmp",
         "map/definition.csv",
@@ -1384,6 +1386,7 @@
       ],
       "source_inputs": [
         "tools/builders/build_adiscord_ivn_geography.py",
+        "tools/lib/coastal_clearance.py",
         "history/states/*.txt",
         "map/terrain.bmp",
         "map/cities.bmp",

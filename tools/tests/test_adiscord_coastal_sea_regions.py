@@ -15,6 +15,7 @@ from tools.builders import build_adiscord_coastal_geography as geography
 
 
 from tools.builders import build_adiscord_new_states as states
+from tools.lib import coastal_clearance as clearance
 from tools.lib.localisation import sync_builder_english_localisation
 from tools.validators.validate_adiscord_strategic_regions import parse_regions
 
@@ -131,13 +132,22 @@ class CoastalSeaRegionTests(unittest.TestCase):
             Image.open(ROOT / "map/cities.bmp") as cities,
         ):
             self.assertEqual(cities.mode, "P")
+            rgb = np.asarray(provinces.convert("RGB"))
+            water = clearance.water_mask(
+                rgb, clearance.water_colours(ROOT / "map/definition.csv")
+            )
+            shore = clearance.urban_blocked(water, rgb, ROOT / "map/definition.csv")
             seen = set()
             for y in range(provinces.height):
                 for x in range(provinces.width):
                     province = colors.get(provinces.getpixel((x, y)))
                     if province in new_cities:
                         seen.add(province)
-                        self.assertEqual(terrain.getpixel((x, y)), 13)
+                        # The shared shoreline band keeps city meshes off the water.
+                        self.assertEqual(
+                            terrain.getpixel((x, y)),
+                            clearance.URBAN_FALLBACK_PALETTE if shore[y, x] else 13,
+                        )
                         self.assertEqual(
                             cities.getpixel((x, y)),
                             2 if province in geography.ARAB_CITIES else 15,

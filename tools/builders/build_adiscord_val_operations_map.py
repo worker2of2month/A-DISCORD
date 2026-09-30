@@ -19,6 +19,7 @@ WIDTH, HEIGHT = 420, 340
 STATE_IDS = (43, 44, 45, 88, 58, 59, 60, 61, 62, 63, 64, 65)
 VAL_STATES = (24, 42, 48, 54, 55, 56, 57)
 STP_STATES = (1, 2, 3, 28, 29, 43, 44, 45, 46, 53, 88)
+SLI_STATES = (709,)
 NOD_STATES = (10, 11, 12, 13, 17, 18, 30)
 BJK_STATES = (4, 5, 6, 7, 9, 31, 41)
 COF_STATES = (14,)
@@ -50,6 +51,7 @@ STATE_IDS = tuple(
             *STATE_IDS,
             *VAL_STATES,
             *STP_STATES,
+            *SLI_STATES,
             *NOD_STATES,
             *BJK_STATES,
             *COF_STATES,
@@ -87,6 +89,7 @@ MAP_TAGS = (
     "BBV",
     "BCM",
     "WCA",
+    "SLI",
 )
 FRAME_COUNT = len(MAP_TAGS) + 1
 

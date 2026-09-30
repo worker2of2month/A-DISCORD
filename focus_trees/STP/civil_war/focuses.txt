@@ -7,8 +7,10 @@ focus_tree = {
 	focus = {
 		id = STP_cw_mountain_school
 		icon = GFX_focus_generic_mountain_fortification
-		x = -14
-		y = 0
+		x = -2
+		y = 1
+		relative_position_id = STP_cw_unified_headquarters
+		prerequisite = { focus = STP_cw_unified_headquarters }
 		cost = 1
 		allow_branch = {
 			OR = { tag = STP tag = STS }
@@ -182,7 +184,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_unified_headquarters
 		icon = GFX_focus_STP_ps_joint_staff
-		x = 7
+		x = 9
 		y = 0
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
 		cost = 2
@@ -267,7 +269,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_wartime_laboratories
 		icon = GFX_focus_STP_pw_party_civilian_retraining
-		x = 7
+		x = 9
 		y = 1
 		allow_branch = { NOT = { has_country_flag = STP_cw_postwar } }
 		cost = 3
@@ -370,7 +372,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_congress_in_session
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
-		x = 9
+		x = 11
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
@@ -397,7 +399,7 @@ focus_tree = {
 		id = STP_cw_guard_the_pier
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		icon = GFX_focus_STP_defense_budget
-		x = 11
+		x = 13
 		y = 1
 		cost = 1
 
@@ -416,7 +418,7 @@ focus_tree = {
 		id = STP_cw_capital_counteroffensive
 		prerequisite = { focus = STP_party_war_directorate }
 		icon = GFX_focus_STP_cw_capital_reserve_armored
-		x = 7
+		x = 9
 		y = 4
 		cost = 2
 
@@ -436,7 +438,7 @@ focus_tree = {
 		id = STP_cw_inner_ring
 		prerequisite = { focus = STP_party_rear_administration focus = STP_cw_guard_the_pier }
 		icon = GFX_focus_STP_PARTY_DISCIPLINE
-		x = 9
+		x = 11
 		y = 3
 		cost = 2
 
@@ -455,7 +457,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_assault_columns
 		icon = GFX_focus_STP_defense_budget_tank
-		x = 7
+		x = 9
 		y = 5
 		cost = 1
 		prerequisite = { focus = STP_cw_capital_counteroffensive }
@@ -476,7 +478,7 @@ focus_tree = {
 		id = STP_cw_harbour_batteries
 		prerequisite = { focus = STP_cw_guard_the_pier }
 		icon = GFX_focus_STP_cw_port_budget
-		x = 11
+		x = 13
 		y = 3
 		cost = 2
 
@@ -497,7 +499,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_road_to_fada
 		icon = GFX_focus_STP_All_In
-		x = 9
+		x = 11
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
@@ -529,7 +531,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_last_banquet
 		icon = GFX_focus_STP_Operation_Last_Banquette
-		x = 9
+		x = 11
 		y = 2
 		cost = 2
 		prerequisite = { focus = STP_cw_road_to_fada }
@@ -544,7 +546,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_cut_capital_roads
 		icon = GFX_focus_STP_Ruin_Their_Deal
-		x = 8
+		x = 10
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_last_banquet }
@@ -565,7 +567,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_district_levies
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = 10
+		x = 12
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_last_banquet }
@@ -586,7 +588,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_government_quarter_assault
 		icon = GFX_focus_STP_All_In
-		x = 8
+		x = 10
 		y = 4
 		cost = 3
 		prerequisite = { focus = STP_cw_cut_capital_roads }
@@ -603,7 +605,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_hold_resource_belt
 		icon = GFX_focus_STP_cw_repair_niansas
-		x = 10
+		x = 12
 		y = 4
 		cost = 3
 		prerequisite = { focus = STP_cw_district_levies }
@@ -887,7 +889,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_strike_squadrons
 		icon = GFX_goal_generic_CAS
-		x = 11
+		x = 13
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
@@ -902,7 +904,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_forward_airstrips
 		icon = GFX_goal_generic_air_production
-		x = 11
+		x = 13
 		y = 2
 		cost = 2
 		prerequisite = { focus = STP_cw_strike_squadrons }
@@ -924,7 +926,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_assault_air_cover
 		icon = GFX_goal_generic_CAS
-		x = 12
+		x = 14
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_forward_airstrips }
@@ -939,7 +941,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_mountain_staff
 		icon = GFX_focus_STP_Turn_The_Young_Officers
-		x = 9
+		x = 11
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_cw_unified_headquarters }
@@ -961,7 +963,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_pass_watch
 		icon = GFX_focus_STP_cw_northern_desk
-		x = 9
+		x = 11
 		y = 2
 		cost = 3
 		prerequisite = { focus = STP_cw_mountain_staff }
@@ -977,7 +979,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_hold_the_passes
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = 8
+		x = 10
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_pass_watch }
@@ -997,7 +999,7 @@ focus_tree = {
 	focus = {
 		id = STP_cw_raid_the_approaches
 		icon = GFX_focus_STP_cw_northern_dossier
-		x = 10
+		x = 12
 		y = 3
 		cost = 3
 		prerequisite = { focus = STP_cw_pass_watch }
@@ -1210,8 +1212,8 @@ focus_tree = {
 	focus = {
 		id = STP_party_rear_administration
 		prerequisite = { focus = STP_cw_congress_in_session focus = STP_ps_restore_couriers }
-		icon = GFX_focus_STP_DISTRICT_GOVERNMENT_office
-		x = 9
+		icon = GFX_focus_STP_party_rear_administration
+		x = 11
 		y = 2
 		cost = 2
 
@@ -1243,8 +1245,8 @@ focus_tree = {
 		id = STP_party_war_directorate
 		prerequisite = { focus = STP_party_rear_administration }
 		prerequisite = { focus = STP_ps_operational_reserve focus = STP_ps_route_security }
-		icon = GFX_focus_STP_ROTATE_DISTRICT_COMMAND
-		x = 7
+		icon = GFX_focus_STP_party_war_directorate
+		x = 9
 		y = 3
 		cost = 2
 
@@ -1455,7 +1457,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_war_budget
 		icon = GFX_focus_STP_2160_budget
-		x = 17
+		x = 19
 		y = 0
 		cost = 2
 		allow_branch = {
@@ -1485,7 +1487,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_lower_market_ledgers
 		icon = GFX_focus_STP_cw_buy_silence
-		x = 15
+		x = 17
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1514,7 +1516,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_loyalty_tribunal
 		icon = GFX_focus_STP_PARTY_DISCIPLINE
-		x = 19
+		x = 21
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_pv_war_budget }
@@ -1539,7 +1541,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_victory_committee
 		icon = GFX_focus_STP_It_Has_Only_Begun
-		x = 17
+		x = 19
 		y = 2
 		cost = 3
 		prerequisite = { focus = STP_pv_lower_market_ledgers }
@@ -1576,7 +1578,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_staff
 		icon = GFX_focus_STP_defense_budget_tank
-		x = 15
+		x = 17
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1608,7 +1610,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_silence
 		icon = GFX_focus_STP_ps_permanent_security
-		x = 19
+		x = 21
 		y = 3
 		cost = 3
 		allow_branch = {
@@ -1640,7 +1642,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_festival
 		icon = GFX_focus_STP_party_presidium_broadcast
-		x = 17
+		x = 19
 		y = 4
 		cost = 3
 		allow_branch = {
@@ -1671,7 +1673,7 @@ focus_tree = {
 	focus = {
 		id = STP_pv_glory_wallets
 		icon = GFX_focus_STP_cw_port_budget
-		x = 21
+		x = 23
 		y = 4
 		cost = 3
 		allow_branch = {
@@ -1761,7 +1763,7 @@ focus_tree = {
 		id = STP_ps_route_security
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		icon = GFX_focus_STP_cw_security_collegium
-		x = 11
+		x = 13
 		y = 2
 		cost = 2
 
@@ -1784,7 +1786,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_temporary_presidium
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
-		x = 13
+		x = 15
 		y = 0
 		cost = 1
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
@@ -1806,7 +1808,7 @@ focus_tree = {
 	focus = {
 		id = STP_ps_restore_couriers
 		icon = GFX_focus_STP_cw_protocol_office
-		x = 13
+		x = 15
 		y = 1
 		cost = 2
 		prerequisite = { focus = STP_ps_temporary_presidium }
@@ -1825,7 +1827,7 @@ focus_tree = {
 		id = STP_ps_counter_supply
 		prerequisite = { focus = STP_party_rear_administration focus = STP_ps_restore_couriers }
 		icon = GFX_focus_STP_cw_counter_network
-		x = 13
+		x = 15
 		y = 3
 		cost = 2
 
@@ -1862,7 +1864,7 @@ focus_tree = {
 		id = STP_ps_retake_congress
 		prerequisite = { focus = STP_ps_restore_couriers focus = STP_cw_congress_in_session }
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS
-		x = 13
+		x = 15
 		y = 4
 		cost = 1
 

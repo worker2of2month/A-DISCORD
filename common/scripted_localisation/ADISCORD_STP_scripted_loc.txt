@@ -447,6 +447,26 @@ defined_text = {
 defined_text = {
 	name = STPGetNodStatus
 	text = {
+		trigger = { tag = STP has_country_flag = STP_cw_postwar NOD = { exists = yes } has_war_with = NOD }
+		localization_key = STP_nod_status_postwar_war
+	}
+	text = {
+		trigger = { tag = STP has_active_mission = STP_pw_party_nod_invasion_countdown }
+		localization_key = STP_nod_status_postwar_invasion
+	}
+	text = {
+		trigger = {
+			tag = STP
+			OR = {
+				has_active_mission = STP_ch_pressure_1
+				has_active_mission = STP_ch_pressure_2
+				has_active_mission = STP_ch_pressure_3
+				has_active_mission = STP_ch_pressure_4
+			}
+		}
+		localization_key = STP_nod_status_postwar_pressure
+	}
+	text = {
 		trigger = { NOD = { has_war_with = STS } }
 		localization_key = STP_nod_status_intervened
 	}
@@ -1703,6 +1723,48 @@ defined_text = {
 defined_text = {
 	name = STPGetFrontResultTitle
 	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 1 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 1 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_win1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 2 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 1 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_win2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 3 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 1 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_win3
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 1 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 0 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_loss1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 2 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 0 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_loss2
+	}
+	text = {
+		trigger = {
+			check_variable = { var = STP_pv_front_stage value = 3 compare = equals }
+			check_variable = { var = STP_pv_front_result value = 0 compare = equals }
+		}
+		localization_key = ADISCORD_STP_pv.31.t_loss3
+	}
+	text = {
 		trigger = { check_variable = { var = STP_pv_front_result value = 1 compare = equals } }
 		localization_key = ADISCORD_STP_pv.31.t_win
 	}
@@ -1762,4 +1824,47 @@ defined_text = {
 		localization_key = STP_pv_news_2
 	}
 	text = { localization_key = STP_ps_empty }
+}
+
+# Political order header: readable per-area status, stage hint and pressure timer.
+defined_text = {
+	name = STPGetChapterPhaseHint
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 1 compare = equals } } localization_key = STP_ch_phase_hint_1 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 2 compare = equals } } localization_key = STP_ch_phase_hint_2 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 3 compare = equals } } localization_key = STP_ch_phase_hint_3 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 4 compare = equals } } localization_key = STP_ch_phase_hint_4 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 5 compare = equals } } localization_key = STP_ch_phase_hint_5 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 6 compare = equals } } localization_key = STP_ch_phase_hint_6 }
+	text = { trigger = { check_variable = { var = STP_ch_phase value = 7 compare = equals } } localization_key = STP_ch_phase_hint_7 }
+	text = { localization_key = STP_ch_empty }
+}
+defined_text = {
+	name = STPGetChapterArmyFoundation
+	text = { trigger = { STP_ch_army_ready = yes } localization_key = STP_ch_found_army_ready }
+	text = { trigger = { has_variable = STP_ch_train_army_deposit } localization_key = STP_ch_found_army_training }
+	text = { trigger = { has_country_flag = STP_ch_army_access } localization_key = STP_ch_found_army_access }
+	text = { localization_key = STP_ch_found_army_empty }
+}
+defined_text = {
+	name = STPGetChapterEconomyFoundation
+	text = { trigger = { STP_ch_economy_ready = yes } localization_key = STP_ch_found_economy_ready }
+	text = { trigger = { has_variable = STP_ch_train_economy_deposit } localization_key = STP_ch_found_economy_training }
+	text = { trigger = { has_country_flag = STP_ch_economy_access } localization_key = STP_ch_found_economy_access }
+	text = { localization_key = STP_ch_found_economy_empty }
+}
+defined_text = {
+	name = STPGetChapterPartyFoundation
+	text = { trigger = { STP_ch_party_ready = yes } localization_key = STP_ch_found_party_ready }
+	text = { trigger = { has_variable = STP_ch_train_party_deposit } localization_key = STP_ch_found_party_training }
+	text = { trigger = { has_country_flag = STP_ch_party_access } localization_key = STP_ch_found_party_access }
+	text = { localization_key = STP_ch_found_party_empty }
+}
+defined_text = {
+	name = STPGetChapterPressureLine
+	text = { trigger = { has_active_mission = STP_ch_pressure_1 } localization_key = STP_ch_pressure_line_1 }
+	text = { trigger = { has_active_mission = STP_ch_pressure_2 } localization_key = STP_ch_pressure_line_2 }
+	text = { trigger = { has_active_mission = STP_ch_pressure_3 } localization_key = STP_ch_pressure_line_3 }
+	text = { trigger = { has_active_mission = STP_ch_pressure_4 } localization_key = STP_ch_pressure_line_4 }
+	text = { trigger = { has_active_mission = STP_pw_party_nod_invasion_countdown } localization_key = STP_ch_pressure_line_invasion }
+	text = { localization_key = STP_ch_empty }
 }

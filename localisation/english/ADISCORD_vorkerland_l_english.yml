@@ -1639,3 +1639,5 @@ l_english:
  ADISCORD_vorkerland_news.4.t: "Vorkerland Rebuilds the Unity Tower"
  ADISCORD_vorkerland_news.4.d: "The government of [ROOT.GetNameDef] has announced the restoration of the Unity Tower, damaged by the explosion at the start of the civil war. Workers, engineers and archivists are returning the complex to its former appearance. Once the work is complete, it will again house the organs of government, a communications hub and the state archive."
  ADISCORD_vorkerland_news.4.a: "The Tower will be rebuilt."
+ ADISCORD_vorkerland_central_initiative:0 "Operational initiative"
+ ADISCORD_vorkerland_central_initiative_desc:0 "Coordinated staff work grants a temporary advantage against the other central claimants. Lasts at most two years from the outbreak and ends on capitulation, the end of the civil war, or a player taking control of a central claimant."

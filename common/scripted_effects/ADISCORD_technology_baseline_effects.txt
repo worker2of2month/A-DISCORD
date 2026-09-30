@@ -519,11 +519,6 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
-		limit = { tag = ORV }
-		ADISCORD_grant_technology_profile_fragment_low_tech = yes
-		ADISCORD_grant_technology_profile_land = yes
-	}
-	if = {
 		limit = { tag = OSF }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
@@ -627,6 +622,10 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
 		ADISCORD_grant_technology_profile_field_air_defense = yes
+	}
+	if = {
+		limit = { tag = VEL }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
 		limit = { tag = VES }

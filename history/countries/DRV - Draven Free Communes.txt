@@ -1,4 +1,4 @@
-capital = 434
+capital = 458
 oob = "DRV"
 
 recruit_character = DRV_Council_of_Free_Valleys

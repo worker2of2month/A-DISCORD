@@ -23,6 +23,23 @@ class TerrainSnowTests(unittest.TestCase):
             snow.classify_terrain(4, snow.POLAR_CAP_Y - 1, 100), snow.SNOW_PLAIN
         )
 
+    def test_polar_edge_is_ragged_but_bounded(self) -> None:
+        limit = snow.POLAR_CAP_Y
+        reach = limit * snow.POLAR_EDGE_SOUTHWARD_SHARE
+        limits = [snow.polar_limit(limit, x, limit) for x in range(0, 5632, 7)]
+        self.assertGreater(max(limits) - min(limits), reach / 2)
+        self.assertGreaterEqual(min(limits), limit - snow.POLAR_EDGE_DITHER_PIXELS)
+        self.assertLessEqual(max(limits), limit + reach)
+        self.assertEqual(snow.polar_limit(limit, None, 0), limit)
+        self.assertEqual(snow.polar_limit(0, 123, 0), 0)
+        self.assertEqual(
+            snow.classify_terrain(4, limit - snow.POLAR_EDGE_DITHER_PIXELS - 1, 100, 17),
+            snow.SNOW_PLAIN,
+        )
+        self.assertEqual(
+            snow.classify_terrain(4, int(limit + reach) + 1, 100, 17), 4
+        )
+
     def test_water_never_becomes_snow_terrain(self) -> None:
         self.assertEqual(snow.classify_terrain(15, 0, 255), 15)
         self.assertEqual(snow.classify_terrain(14, 0, 255), 14)

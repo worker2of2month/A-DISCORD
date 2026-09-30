@@ -1,0 +1,5 @@
+sub_unit_modifiers = {
+	modifier_army_sub_unit_mountaineers_attack_factor
+	modifier_army_sub_unit_mountaineers_defence_factor
+	modifier_army_sub_unit_mountaineers_max_org_factor
+}

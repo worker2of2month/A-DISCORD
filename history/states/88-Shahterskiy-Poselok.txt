@@ -17,6 +17,7 @@ state={
 		}
 		add_core_of = STP
 		victory_points = { 110 1 }
+		victory_points = { 16429 1 }
 	}
 
 	resources = {

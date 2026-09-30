@@ -15,12 +15,20 @@ from math import cos, exp, floor, pi, sin, sqrt
 from pathlib import Path
 from typing import Sequence
 
+import numpy as np
 from PIL import Image
 
 from tools.builders.build_adiscord_terrain_snow import (
     CITIES_PATH,
     CITY_PALETTE_INDEX,
     CITY_PALETTE_INDICES,
+)
+from tools.lib.coastal_clearance import (
+    URBAN_FALLBACK_PALETTE,
+    tree_cells_blocked,
+    urban_blocked,
+    water_colours,
+    water_mask,
 )
 
 
@@ -454,8 +462,8 @@ def moisture_value(u: float, v: float, x: int, y: int) -> float:
 def tree_probability(terrain_type: str) -> float:
     return {
         "forest": 0.62,
-        "plains": 0.11,
-        "hills": 0.04,
+        "plains": 0.04,
+        "hills": 0.025,
         "marsh": 0.08,
     }.get(terrain_type, 0.0)
 
@@ -885,6 +893,7 @@ def _render_trees_with_metrics(
     terrain: Image.Image,
     state_by_pixel: Sequence[int],
     palette: dict[int, str],
+    blocked: "np.ndarray | None" = None,
 ) -> tuple[Image.Image, dict[str, tuple[int, int]], int, int]:
     if source.mode != "P":
         raise RuntimeError("trees.bmp must remain paletted")
@@ -914,7 +923,9 @@ def _render_trees_with_metrics(
                     outside_changes += 1
                 continue
             probability = tree_probability(sample.terrain_type)
-            if stable_unit_hash(tx, ty, 23) < probability:
+            if blocked is not None and blocked[ty, tx]:
+                pixels[tree_index] = 0
+            elif stable_unit_hash(tx, ty, 23) < probability:
                 pixels[tree_index] = 6 if stable_unit_hash(tx, ty, 29) < 0.65 else 5
             else:
                 pixels[tree_index] = 0
@@ -942,12 +953,13 @@ def render_trees(
     terrain: Image.Image,
     state_by_pixel: Sequence[int],
     palette: dict[int, str],
+    blocked: "np.ndarray | None" = None,
 ) -> Image.Image:
-    return _render_trees_with_metrics(source, terrain, state_by_pixel, palette)[0]
+    return _render_trees_with_metrics(source, terrain, state_by_pixel, palette, blocked)[0]
 
 
 def _build_expected() -> GeographyOutputs:
-    lines, newline, bom, province_colors, _declared = definition_contract()
+    lines, newline, bom, province_colors, declared = definition_contract()
     palette = palette_types()
     color_to_id = {color: province_id for province_id, color in province_colors.items()}
     if len(color_to_id) != len(province_colors):
@@ -969,8 +981,11 @@ def _build_expected() -> GeographyOutputs:
         terrain_original = terrain_source.copy()
         terrain_pixels = bytearray(terrain_source.get_flattened_data())
         city_pixels = bytearray(cities_source.get_flattened_data())
-        province_bytes = provinces_source.convert("RGB").tobytes()
+        province_rgb = np.asarray(provinces_source.convert("RGB"))
+        province_bytes = province_rgb.tobytes()
         masks = landscape_masks(provinces_source, province_colors)
+    water = water_mask(province_rgb, water_colours(DEFINITION_PATH))
+    shore_blocked = urban_blocked(water, province_rgb, DEFINITION_PATH).reshape(-1)
 
     with Image.open(BytesIO(HEIGHTMAP_PATH.read_bytes())) as height_source:
         if height_source.mode != "L" or height_source.size != terrain_original.size:
@@ -1004,8 +1019,14 @@ def _build_expected() -> GeographyOutputs:
         terrain_type: len(TERRAIN_PRIORITY) - rank
         for rank, terrain_type in enumerate(TERRAIN_PRIORITY)
     }
+    # City meshes must not spill into the sea: settlements grow only from
+    # pixels outside the shared shoreline clearance band.
     footprints = {
-        province_id: compact_footprint(indices, terrain_original.width, province_id)
+        province_id: compact_footprint(
+            [index for index in indices if not shore_blocked[index]],
+            terrain_original.width,
+            province_id,
+        )
         for province_id, indices in settlement_indices.items()
     }
     old_urban = {
@@ -1038,6 +1059,15 @@ def _build_expected() -> GeographyOutputs:
             working_pixels[index] = base
         for index in footprints[province_id]:
             working_pixels[index] = URBAN_PALETTE
+    # Clear the shoreline band before rendering as well, so neighbourhood-aware
+    # rendering sees identical input on every pass.
+    for index, province_id in enumerate(province_by_pixel):
+        if (
+            province_id
+            and working_pixels[index] == URBAN_PALETTE
+            and shore_blocked[index]
+        ):
+            working_pixels[index] = URBAN_FALLBACK_PALETTE
     working = terrain_original.copy()
     working.putdata(working_pixels)
     terrain = render_northern_terrain(
@@ -1049,9 +1079,18 @@ def _build_expected() -> GeographyOutputs:
         footprints,
     )
     generated_pixels = bytearray(terrain.get_flattened_data())
+    shore_cleared: set[int] = set()
     for index, province_id in enumerate(province_by_pixel):
-        if province_id and city_pixels[index] in CITY_PALETTE_INDICES:
+        if not province_id:
+            continue
+        if city_pixels[index] in CITY_PALETTE_INDICES:
             generated_pixels[index] = URBAN_PALETTE
+        if (
+            generated_pixels[index] == URBAN_PALETTE
+            and shore_blocked[index]
+        ):
+            generated_pixels[index] = URBAN_FALLBACK_PALETTE
+            shore_cleared.add(index)
     terrain.putdata(generated_pixels)
 
     counts = {province_id: Counter() for province_id in province_colors}
@@ -1063,8 +1102,17 @@ def _build_expected() -> GeographyOutputs:
             raise RuntimeError(
                 f"province {province_id}: unknown graphical terrain palette {generated_pixels[index]}"
             )
+        # The shoreline band is cosmetic clearance: in a province already
+        # declared urban, its cleared pixels still count as city.
+        if (
+            shore_blocked[index]
+            and generated_pixels[index] == URBAN_FALLBACK_PALETTE
+            and declared.get(province_id) == "urban"
+        ):
+            terrain_type = "urban"
         if terrain_type not in WATER_TYPES:
             counts[province_id][terrain_type] += 1
+
     desired: dict[int, str] = {}
     for province_id, terrain_counts in counts.items():
         if not terrain_counts:
@@ -1089,6 +1137,7 @@ def _build_expected() -> GeographyOutputs:
                 terrain,
                 masks.state_by_pixel,
                 palette,
+                tree_cells_blocked(water, tree_source.width, tree_source.height),
             )
         )
         if trees.getpalette() != tree_palette:
@@ -1174,6 +1223,8 @@ def _build_expected() -> GeographyOutputs:
     for index, (before, after) in enumerate(zip(terrain_pixels, generated_pixels)):
         if before == after or masks.north[index]:
             continue
+        if index in shore_cleared and before == URBAN_PALETTE:
+            continue
         province_id = province_by_pixel[index]
         if (
             province_id not in SETTLEMENT_PROVINCES
@@ -1256,8 +1307,8 @@ def coverage_issues(outputs: GeographyOutputs) -> list[str]:
     occupancy = metrics.tree_occupancy
     for terrain_type, minimum, maximum in (
         ("forest", 0.50, 0.72),
-        ("plains", 0.06, 0.16),
-        ("hills", 0.01, 0.07),
+        ("plains", 0.02, 0.07),
+        ("hills", 0.01, 0.05),
     ):
         if not minimum <= occupancy[terrain_type] <= maximum:
             issues.append(

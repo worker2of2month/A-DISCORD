@@ -306,3 +306,7 @@
  EXZ_ADJ: ""
  EXZ_pragmatism: ""
  # END GENERATED: tools.builders.build_adiscord_inner_frontier_countries:exz
+ VEL: "Vel Cantonal Union"
+ VEL_DEF: "the Vel Cantonal Union"
+ VEL_ADJ: "Velish"
+ VEL_pragmatism: "Vel Cantonal Union"

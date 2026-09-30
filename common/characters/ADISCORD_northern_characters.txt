@@ -183,6 +183,18 @@ characters = {
 			desc = ORV_Anton_Orval_desc
 		}
 	}
+	VEL_Marten_Rovel = {
+		name = VEL_Marten_Rovel
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_5 }
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = VEL_Marten_Rovel_desc
+		}
+	}
 	ARS_Lina_Arsal = {
 		name = ARS_Lina_Arsal
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_7 } }

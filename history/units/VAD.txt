@@ -138,6 +138,12 @@ units = {
 	division = { division_name = { is_name_ordered = yes name_order = 10 } location = 11944 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 	division = { division_name = { is_name_ordered = yes name_order = 11 } location = 2539 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
 	division = { division_name = { is_name_ordered = yes name_order = 12 } location = 16560 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.75 }
+	# Frontage reserve: VAD fights WKR, TVA and the central districts at once;
+	# twelve formations could not cover its lines against TVA's nineteen.
+	division = { division_name = { is_name_ordered = yes name_order = 13 } location = 6192 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 14 } location = 11944 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 15 } location = 2539 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
+	division = { division_name = { is_name_ordered = yes name_order = 16 } location = 16560 division_template = "Armi Security Detachment" start_experience_factor = 0.20 start_equipment_factor = 0.80 }
 }
 
 instant_effect = {

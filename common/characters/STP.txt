@@ -75,11 +75,6 @@ characters = {
 				large = GFX_portrait_STP_Cyan_Crowe
 			}
 		}
-		country_leader = {
-			ideology = aristocratic_hedonism
-			expire = "2300.1.1"
-			id = -1
-		}
 	}
 
 	STP_Petr_Ivanov = {
@@ -303,10 +298,6 @@ characters = {
 				large = GFX_portrait_STP_Pavel_Lanskoy
 			}
 		}
-		country_leader = {
-			ideology = hedonism_ideology
-			expire = "2300.1.1"
-		}
 	}
 
 	STP_Vera_Korvina = {
@@ -316,10 +307,6 @@ characters = {
 				large = GFX_portrait_STP_Vera_Korvina
 			}
 		}
-		country_leader = {
-			ideology = hedonism_ideology
-			expire = "2300.1.1"
-		}
 	}
 
 	STP_Edgar_Renner = {
@@ -328,10 +315,6 @@ characters = {
 			civilian = {
 				large = GFX_portrait_STP_Edgar_Renner
 			}
-		}
-		country_leader = {
-			ideology = hedonism_ideology
-			expire = "2300.1.1"
 		}
 	}
 }

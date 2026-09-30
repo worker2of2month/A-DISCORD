@@ -14,6 +14,8 @@ state = {
 			industrial_complex = 1
 			16807 = { naval_base = 1 }
 		}
+		victory_points = { 16804 1 }
+		victory_points = { 16802 1 }
 	}
 	provinces = { 16802 16803 16804 16805 16806 16807 16808 }
 	buildings_max_level_factor = 1.000

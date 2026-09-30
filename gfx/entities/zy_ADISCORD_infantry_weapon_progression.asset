@@ -243,6 +243,7 @@ entity = {
 }
 
 entity = {
+	version = 1
 	clone = "infantry_rifle_entity"
 	name = "infantry_entity"
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_0_right_entity" }
@@ -258,6 +259,7 @@ entity = {
 }
 
 entity = {
+	version = 1
 	clone = "infantry_2_entity"
 	name = "generic_infantry_2_entity"
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_1_right_entity" }
@@ -273,6 +275,7 @@ entity = {
 }
 
 entity = {
+	version = 1
 	clone = "infantry_2_entity"
 	name = "generic_infantry_3_entity"
 	attach = { name = "rifle1" Right_Hand_node = "ADISCORD_infantry_weapon_2_right_entity" }

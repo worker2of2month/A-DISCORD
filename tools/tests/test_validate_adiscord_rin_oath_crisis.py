@@ -135,9 +135,21 @@ class RinOathCrisisContractTests(unittest.TestCase):
     def test_northern_court_uses_authored_chauvinist_leader(self) -> None:
         regency = named_block(read(CHARACTERS), "RIN_Northern_Court_Regency")
         self.assertIn("GFX_Portrait_Forul_Generic_9", regency)
-        self.assertIn("ideology = chauvinism_ideology", regency)
+        self.assertNotIn("country_leader =", regency)
+        self.assertEqual(
+            read(RIN_HISTORY).count("recruit_character = RIN_Northern_Court_Regency"),
+            1,
+        )
         split = named_block(read(EFFECTS), "ADISCORD_rin_start_oath_civil_war")
-        self.assertIn("recruit_character = RIN_Northern_Court_Regency", split)
+        self.assertNotIn("recruit_character =", split)
+        transfer = named_block(named_block(split, "ROOT"), "set_nationality")
+        self.assertIn("character = RIN_Northern_Court_Regency", transfer)
+        self.assertIn("target_country = event_target:ADISCORD_rin_northern_court", transfer)
+        role = named_block(split, "add_country_leader_role")
+        self.assertIn("character = RIN_Northern_Court_Regency", role)
+        self.assertIn("ideology = chauvinism_ideology", role)
+        self.assertIn("desc = RIN_Northern_Court_Regency_desc", role)
+        self.assertLess(split.index("set_nationality ="), split.index("add_country_leader_role ="))
         self.assertIn(
             "promote_character = { character = RIN_Northern_Court_Regency ideology = chauvinism_ideology }",
             split,

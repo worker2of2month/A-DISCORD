@@ -172,7 +172,8 @@ STP_change_party_suspicion = {
 
 # 0 loyalty -> -20% PP and -5% stability; 50 -> 0; 100 -> +20% PP and +5% stability.
 STP_refresh_apparatus_loyalty = {
-	if = { limit = { has_country_flag = STP_pf_initialized } STP_pf_calculate = yes }
+	# After the congress the faction balance is frozen at its last state.
+	if = { limit = { has_country_flag = STP_pf_initialized NOT = { STP_pf_settled = yes } } STP_pf_calculate = yes }
 	clamp_variable = {
 		var = STP_apparatus_loyalty
 		min = 0
@@ -3447,12 +3448,12 @@ STP_cw_ai_shabrat_offensive_tick = {
 				check_variable = { var = STS_ai_party_states_temp value = STS_ai_wave_start_states compare = greater_than_or_equals }
 				NOT = { fighting_army_strength_ratio = { tag = STP ratio > 1.5 } }
 			}
-			set_country_flag = { flag = STS_ai_regroup days = 21 }
+			set_country_flag = { flag = STS_ai_regroup value = 1 days = 21 }
 			clear_variable = STS_ai_wave_start_states
 		}
 		else = {
 			set_variable = { var = STS_ai_wave_start_states value = STS_ai_party_states_temp }
-			set_country_flag = { flag = STS_ai_assault_wave days = 42 }
+			set_country_flag = { flag = STS_ai_assault_wave value = 1 days = 42 }
 		}
 	}
 }
@@ -5887,6 +5888,65 @@ STP_debug_ensure_union_war = {
 	}
 }
 
+# Debug selection preserves chapter progress and all enacted policies.
+STP_debug_party_select_leader = {
+	if = {
+		limit = {
+			STP_debug_party_current = yes
+			is_subject = no
+			NOT = { has_country_flag = STP_ch_subject_pending }
+			check_variable = {
+				var = STP_debug_party_choice
+				value = 1
+				compare = greater_than_or_equals
+			}
+			check_variable = {
+				var = STP_debug_party_choice
+				value = 5
+				compare = less_than_or_equals
+			}
+		}
+		set_variable = {
+			var = STP_ch_government
+			value = STP_debug_party_choice
+		}
+		set_politics = {
+			ruling_party = hedonism
+			elections_allowed = no
+		}
+		clr_country_flag = STP_ch_protectorate_leader
+		remove_ideas = {
+			STP_pw_party_high_houses_government
+			STP_pw_party_unbound_government
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_government
+					value = 1
+					compare = equals
+				}
+				has_completed_focus = STP_pw_party_high_houses
+			}
+			add_ideas = STP_pw_party_high_houses_government
+		}
+		if = {
+			limit = {
+				check_variable = {
+					var = STP_ch_government
+					value = 2
+					compare = equals
+				}
+				has_completed_focus = STP_pw_party_unbound_revolution
+			}
+			add_ideas = STP_pw_party_unbound_government
+		}
+		STP_ch_restore_independent_leader = yes
+		STP_party_refresh_policies = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
 STP_debug_start_civil_war = {
 	STP_debug_ensure_union_war = yes
 }
@@ -6380,6 +6440,7 @@ STP_pf_shift = {
 	if = {
 		limit = {
 			STP_pf_active = yes
+			NOT = { STP_pf_settled = yes }
 			has_country_flag = STP_pf_initialized
 			check_variable = {
 				var = STP_pf_selected
@@ -6494,6 +6555,7 @@ STP_pf_shift = {
 }
 
 STP_pf_clear = {
+	clr_country_flag = STP_party_drug_health_fund
 	if = { limit = { has_variable = STP_ch_phase } STP_ch_clear = yes }
 	if = { limit = { has_country_flag = STP_pf_initialized }
 		STP_pw_party_clear_constitution = yes
@@ -6666,7 +6728,12 @@ STP_pw_party_launch_nod_invasion = {
 				clr_country_flag = STP_pw_party_nod_threat_active
 				clr_country_flag = STP_pw_party_compact_pending
 				set_country_flag = STP_pw_party_nod_invasion_active
-				NOD = { add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 365 } }
+				NOD = {
+					remove_ideas = STP_pw_nod_invasion_exhausted
+					add_timed_idea = { idea = STP_pw_nod_invasion_mandate days = 182 }
+					# Once the mandate expires, a still-running war leaves NOD overextended.
+					country_event = { id = ADISCORD_STP_pc.50 days = 183 }
+				}
 				if = {
 					limit = { NOT = { has_war_with = NOD } }
 					NOD = { declare_war_on = { target = STP type = annex_everything } }
@@ -9936,7 +10003,7 @@ STP_ch_refresh = {
 			}
 			add_to_variable = {
 				var = STP_ch_output
-				value = 0.05
+				value = 0.12
 			}
 		}
 		if = {
@@ -9945,7 +10012,7 @@ STP_ch_refresh = {
 			}
 			add_to_variable = {
 				var = STP_ch_trade
-				value = 0.05
+				value = 0.12
 			}
 		}
 		if = {
@@ -9954,7 +10021,7 @@ STP_ch_refresh = {
 			}
 			add_to_variable = {
 				var = STP_ch_stability
-				value = 0.03
+				value = 0.08
 			}
 			add_to_variable = {
 				var = STP_ch_administration
@@ -9967,7 +10034,7 @@ STP_ch_refresh = {
 			}
 			add_to_variable = {
 				var = STP_ch_political_power
-				value = 0.05
+				value = 0.12
 			}
 		}
 		if = {
@@ -10704,6 +10771,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_conservatives
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10721,6 +10789,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_borons
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10738,6 +10807,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_security
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10755,6 +10825,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_army
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10772,6 +10843,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_advisers
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10789,6 +10861,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_merchants
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -10806,6 +10879,7 @@ STP_ch_finish_crisis = {
 				value = 15
 			}
 			set_country_flag = STP_ch_broken_radicals
+			add_stability = -0.03
 		}
 		if = {
 			limit = {
@@ -11354,8 +11428,14 @@ STP_ch_leader_1 = {
 	if = {
 		limit = { check_variable = { var = STP_pv_outcome value = 1 compare = equals } }
 		if = {
-			limit = { NOT = { has_character = STP_Cyan_Crowe } }
-			recruit_character = STP_Cyan_Crowe
+			limit = { NOT = { has_country_leader = { character = STP_Cyan_Crowe } } }
+			add_country_leader_role = {
+				character = STP_Cyan_Crowe
+				country_leader = {
+					ideology = aristocratic_hedonism
+					expire = "2300.1.1"
+				}
+			}
 		}
 		promote_character = {
 			character = STP_Cyan_Crowe
@@ -11463,12 +11543,14 @@ STP_ch_leader_3 = {
 
 STP_ch_leader_4 = {
 	if = {
-		limit = {
-			NOT = {
-				has_character = STP_Pavel_Lanskoy
+		limit = { NOT = { has_country_leader = { character = STP_Pavel_Lanskoy } } }
+		add_country_leader_role = {
+			character = STP_Pavel_Lanskoy
+			country_leader = {
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
 			}
 		}
-		recruit_character = STP_Pavel_Lanskoy
 	}
 	promote_character = {
 		character = STP_Pavel_Lanskoy
@@ -11508,12 +11590,14 @@ STP_ch_elect_4 = {
 
 STP_ch_leader_5 = {
 	if = {
-		limit = {
-			NOT = {
-				has_character = STP_Vera_Korvina
+		limit = { NOT = { has_country_leader = { character = STP_Vera_Korvina } } }
+		add_country_leader_role = {
+			character = STP_Vera_Korvina
+			country_leader = {
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
 			}
 		}
-		recruit_character = STP_Vera_Korvina
 	}
 	promote_character = {
 		character = STP_Vera_Korvina
@@ -11553,12 +11637,14 @@ STP_ch_elect_5 = {
 
 STP_ch_leader_6 = {
 	if = {
-		limit = {
-			NOT = {
-				has_character = STP_Edgar_Renner
+		limit = { NOT = { has_country_leader = { character = STP_Edgar_Renner } } }
+		add_country_leader_role = {
+			character = STP_Edgar_Renner
+			country_leader = {
+				ideology = hedonism_ideology
+				expire = "2300.1.1"
 			}
 		}
-		recruit_character = STP_Edgar_Renner
 	}
 	promote_character = {
 		character = STP_Edgar_Renner
@@ -12824,4 +12910,11 @@ STP_hw_stall_clear = {
 	45 = { clr_state_flag = STP_hw_stall_objective }
 	46 = { clr_state_flag = STP_hw_stall_objective }
 	53 = { clr_state_flag = STP_hw_stall_objective }
+}
+
+STP_party_refresh_policies = {
+	STP_refresh_apparatus_loyalty = yes
+	STP_pw_refresh_modifier = yes
+	STP_ch_schedule_refresh = yes
+	ADISCORD_economy_mark_dirty = yes
 }

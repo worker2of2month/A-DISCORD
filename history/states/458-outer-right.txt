@@ -4,13 +4,16 @@
 state = {
 	id = 458
 	name = "STATE_458"
-	manpower = 170098
-	state_category = rural
+	manpower = 312209
+	state_category = town
 	history = {
 		owner = DRV
 		add_core_of = DRV
+		victory_points = { 269 5 }
 		buildings = {
-			infrastructure = 2
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
 		}
 	}
 	provinces = {
@@ -18,5 +21,5 @@ state = {
 		8675 9212 10384 10916 12170 12355 12586 12883
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 1.9
+	local_supplies = 2.8
 }

@@ -284,7 +284,37 @@ class PartyInheritanceScriptTests(unittest.TestCase):
         for candidate in range(1, 6):
             self.assertIn(f"add_to_variable = {{ var = STP_ch_votes_{candidate} value = 10 }}", recount)
         leader = definition(EFFECTS, "STP_ch_leader_1")
-        self.assertIn("recruit_character = STP_Cyan_Crowe", leader)
+        self.assertIn("character = STP_Cyan_Crowe", leader)
+
+    def test_future_party_leaders_are_dormant_until_their_outcome(self):
+        history = text("history/countries/STP - StepanLand.txt")
+        effects = text(EFFECTS)
+        characters = {
+            entry.key: entry.value for entry in top_level(CHARACTERS)["characters"]
+        }
+        for candidate, character in (
+            (1, "STP_Cyan_Crowe"),
+            (4, "STP_Pavel_Lanskoy"),
+            (5, "STP_Vera_Korvina"),
+            (6, "STP_Edgar_Renner"),
+        ):
+            with self.subTest(character=character):
+                self.assertEqual(history.count(f"recruit_character = {character}"), 1)
+                self.assertNotIn(f"recruit_character = {character}", effects)
+                self.assertNotIn(
+                    "country_leader", {entry.key for entry in characters[character]}
+                )
+                leader = definition(EFFECTS, f"STP_ch_leader_{candidate}")
+                self.assertIn("add_country_leader_role = {", leader)
+                self.assertIn(
+                    f"NOT = {{ has_country_leader = {{ character = {character} }} }}",
+                    leader,
+                )
+                self.assertIn("promote_character = {", leader)
+                self.assertLess(
+                    leader.index("add_country_leader_role = {"),
+                    leader.index("promote_character = {"),
+                )
 
     def test_new_portraits_and_character_resolve_to_files(self):
         portraits = text(PORTRAITS)
@@ -366,6 +396,337 @@ class PartyInheritanceEventTests(unittest.TestCase):
             rendered = value.replace("\\n", "\n")
             self.assertLessEqual(len(rendered), 3000, key)
             self.assertLessEqual(len(rendered.encode("utf-8")), 5500, key)
+
+
+class PostwarLeaderProgrammeTests(unittest.TestCase):
+    """Evaluate authored route predicates and focus graphs for current campaigns."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_party_route import one
+
+        cls.one = staticmethod(one)
+        cls.triggers = top_level(TRIGGERS)
+        cls.effects = top_level(EFFECTS)
+        cls.focus = {
+            one(entry.value, "id"): entry.value
+            for entry in parse_clausewitz(text("focus_trees/STP/postwar/party/focuses.txt"))
+            if entry.key == "focus"
+        }
+
+    def expanded(self, entries):
+        from dataclasses import replace
+
+        result = []
+        for entry in entries:
+            if entry.key.startswith("STP_party_leader_"):
+                self.assertIn(entry.key, self.triggers)
+                body = self.expanded(self.triggers[entry.key])
+                result.append(replace(entry, key="AND" if entry.value == "yes" else "NOT", value=body))
+            elif isinstance(entry.value, list):
+                result.append(replace(entry, value=self.expanded(entry.value)))
+            else:
+                result.append(entry)
+        return result
+
+    def facts(self, victor, government=None, protectorate=False):
+        facts = {
+            ("STP", "STP_pf_active", "yes"): True,
+            ("STP", "STP_pw_can_reconstruct", "yes"): True,
+            ("STP", "has_country_flag", "STP_cw_postwar"): True,
+            ("STP", "has_country_flag", "STP_ch_protectorate_leader"): protectorate,
+            ("STP", "is_subject_of", "NOD"): protectorate,
+            ("STP", "has_variable", "STP_pv_outcome"): True,
+            ("STP", "variable", "STP_pv_outcome"): victor,
+            ("STP", "has_variable", "STP_ch_government"): government is not None,
+            ("STP", "variable", "STP_ch_government"): government or 0,
+        }
+        return facts
+
+    def visible(self, facts):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        result = {}
+        for focus_id, focus in self.focus.items():
+            branches = [entry.value for entry in focus if entry.key == "allow_branch"]
+            if branches and any(entry.key.startswith("STP_party_leader_") for entry in branches[0]):
+                if matches_conditions(self.expanded(branches[0]), facts):
+                    result[focus_id] = focus
+        return result
+
+    def test_war_victor_opens_a_complete_programme_before_congress(self):
+        roots = (
+            "STP_pw_party_high_houses", "STP_pw_party_unbound_revolution",
+            "STP_ch_service_act", "STP_ch_production_agreements",
+            "STP_ch_security_directorate", "STP_party_regent_mandate",
+        )
+        for victor, root in enumerate(roots, 1):
+            with self.subTest(victor=victor):
+                shown = self.visible(self.facts(victor))
+                self.assertIn(root, shown)
+                self.assertGreaterEqual(len(shown), 10)
+                self.assertEqual(int(self.one(shown[root], "x")), 0)
+
+    def test_congress_result_replaces_victor_and_protectorate_overrides_both(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        for victor in range(1, 7):
+            for government in range(1, 6):
+                for protectorate in (False, True):
+                    facts = self.facts(victor, government, protectorate)
+                    actual = []
+                    for route in range(1, 7):
+                        key = f"STP_party_leader_{route}"
+                        self.assertIn(key, self.triggers)
+                        if matches_conditions(self.expanded(self.triggers[key]), facts):
+                            actual.append(route)
+                    self.assertEqual(actual, [6 if protectorate else government])
+
+    def test_visible_programmes_have_reachable_parents_and_nonoverlapping_columns(self):
+        for route in range(1, 7):
+            shown = self.visible(self.facts(route))
+            self.assertTrue(shown)
+            positions = {}
+            reached = {"STP_pw_party_new_republic"}
+            for _ in range(len(shown)):
+                for name, focus in shown.items():
+                    parents = [entry.value for entry in focus if entry.key == "prerequisite"]
+                    if all(any(e.value in reached for e in group if e.key == "focus") for group in parents):
+                        reached.add(name)
+            self.assertFalse(set(shown) - reached, f"route {route} has hidden or unreachable parents")
+            for name, focus in shown.items():
+                x, y = int(self.one(focus, "x")), int(self.one(focus, "y"))
+                for other, (ox, oy) in positions.items():
+                    if y == oy:
+                        self.assertGreaterEqual(abs(x - ox), 2, f"{name} overlaps {other}")
+                positions[name] = (x, y)
+
+    def test_hedersett_laws_are_separate_actions_and_slavery_has_an_alternative(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        expected = {
+            "STP_party_public_orgies": "STP_law_public_orgies",
+            "STP_party_hard_drugs": "STP_law_hard_drugs",
+            "STP_party_slave_market": "STP_law_slavery",
+        }
+        for name, law in expected.items():
+            self.assertIn(name, self.focus)
+            reward = self.one(self.focus[name], "completion_reward")
+            payload = [entry for _, entry in selected_effects(reward, self.facts(2))]
+            self.assertIn(law, [entry.value for entry in payload if entry.key == "add_ideas"])
+            self.assertTrue(any(entry.key == "country_event" for entry in payload))
+        for left, right in (("STP_party_slave_market", "STP_ch_free_labour"), ("STP_ch_free_labour", "STP_party_slave_market")):
+            exclusions = self.one(self.focus[left], "mutually_exclusive")
+            self.assertIn(right, [entry.value for entry in exclusions])
+        recovery = self.one(self.focus["STP_pw_party_new_republic"], "completion_reward")
+        self.assertNotIn("STP_law_slavery", [entry.value for _, entry in selected_effects(recovery, {})])
+
+    def test_elections_preserve_policy_laws_and_paid_programme_state(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        laws = {"STP_law_public_orgies", "STP_law_hard_drugs", "STP_law_slavery"}
+        for route in range(1, 6):
+            facts = self.facts(2, route)
+            facts[("STP", f"STP_ch_candidate_{route}_wins", "yes")] = True
+            payload = [entry for _, entry in selected_effects(self.effects[f"STP_ch_elect_{route}"], facts)]
+            removed = set()
+            for entry in payload:
+                if entry.key == "remove_ideas":
+                    removed.update([entry.value] if isinstance(entry.value, str) else [e.value for e in entry.value])
+                if entry.key in ("clear_variable", "clr_country_flag"):
+                    self.assertFalse(str(entry.value).startswith("STP_party_"))
+            self.assertFalse(removed & laws)
+
+    def test_required_leader_roots_cannot_replace_existing_cultural_or_drug_laws(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+
+        for route, root in ((1, "STP_pw_party_high_houses"), (2, "STP_pw_party_unbound_revolution")):
+            reward = self.one(self.focus[root], "completion_reward")
+            laws = [entry.value for _, entry in selected_effects(reward, self.facts(2, route))
+                    if entry.key == "add_ideas"]
+            self.assertNotIn("STP_law_private_societies", laws)
+            self.assertNotIn("STP_law_light_drugs", laws)
+
+    def test_liberation_replaces_the_regent_with_the_restored_leader(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        for government in (None, 1, 2, 3, 4, 5):
+            facts = self.facts(6, government)
+            facts[("STP", "has_country_flag", "STP_ch_liberated")] = True
+            actual = [route for route in range(1, 7) if matches_conditions(
+                self.expanded(self.triggers[f"STP_party_leader_{route}"]), facts)]
+            self.assertEqual(actual, [government or 2])
+
+    def test_complete_postwar_layout_including_emergency_branch_has_no_overlaps(self):
+        from itertools import product
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        tree = self.one(parse_clausewitz(text(CIVIL_WAR)), "focus_tree")
+        focuses = {self.one(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        for route, phase, subject in product(range(1, 7), range(1, 8), (False, True)):
+            facts = self.facts(route, route if route < 6 else None, subject)
+            facts.update({("STP", "variable", "STP_ch_phase"): phase,
+                          ("STP", "STP_kc_threat_current", "yes"): True,
+                          ("STP", "has_country_flag", "STP_cw_party_victory"): True,
+                          ("STP", "is_subject", "no"): not subject,
+                          ("STP", "is_subject", "yes"): subject})
+
+            def position(name):
+                focus = focuses[name]
+                x, y = float(self.one(focus, "x")), float(self.one(focus, "y"))
+                for e in focus:
+                    if e.key == "relative_position_id":
+                        px, py = position(e.value)
+                        x, y = x + px, y + py
+                    elif e.key == "offset" and matches_conditions(self.one(e.value, "trigger"), facts):
+                        x += sum(float(v.value) for v in e.value if v.key == "x")
+                        y += sum(float(v.value) for v in e.value if v.key == "y")
+                return x, y
+
+            shown = {}
+            for name, focus in focuses.items():
+                gates = [e.value for e in focus if e.key == "allow_branch"]
+                if not gates or matches_conditions(self.expanded(gates[0]), facts):
+                    shown[name] = position(name)
+            for name, (x, y) in shown.items():
+                for other, (ox, oy) in shown.items():
+                    if name < other and y == oy:
+                        self.assertGreaterEqual(abs(x - ox), 2,
+                            f"route={route}, phase={phase}, subject={subject}: {name} overlaps {other}")
+
+    def test_delayed_social_crises_follow_laws_after_a_leadership_change(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, selected_effects
+
+        events = {self.one(e.value, "id"): e.value for e in parse_clausewitz(text(EVENTS))
+                  if e.key == "country_event"}
+        for number, law in ((28, "STP_law_hard_drugs"), (29, "STP_law_slavery")):
+            event = events[f"ADISCORD_STP_ch.{number}"]
+            facts = self.facts(2, 1)
+            facts[("STP", "has_idea", law)] = True
+            self.assertTrue(matches_conditions(self.one(event, "trigger"), facts))
+            facts[("STP", "has_idea", law)] = False
+            self.assertFalse(matches_conditions(self.one(event, "trigger"), facts))
+            # A window already open when its law changes offers only a no-effect close.
+            options = [e.value for e in event if e.key == "option"]
+            available = [o for o in options if matches_conditions(self.one(o, "trigger"), facts)]
+            self.assertEqual(len(available), 1)
+            changes = [e for _, e in selected_effects(available[0], facts)
+                       if e.key in ("add_to_variable", "add_political_power", "add_ideas", "remove_ideas")]
+            self.assertFalse(changes)
+            facts[("STP", "STP_pf_active", "yes")] = False
+            available = [o for o in options if matches_conditions(self.one(o, "trigger"), facts)]
+            self.assertEqual([self.one(o, "name") for o in available], [f"ADISCORD_STP_ch.{number}.z"])
+
+    def test_programme_aggregate_rewards_have_real_modifier_consumers(self):
+        from tools.tests.test_adiscord_stp_party_route import walk
+
+        dynamic = top_level("common/dynamic_modifiers/ADISCORD_dynamic_modifiers_STP.txt")["STP_pw_party_dynamic"]
+        consumers = {e.value for e in dynamic if isinstance(e.value, str)}
+        for route in range(1, 7):
+            for name, focus in self.visible(self.facts(route)).items():
+                reward = self.one(focus, "completion_reward")
+                for entry in walk(reward):
+                    if entry.key == "add_to_variable":
+                        variable = self.one(entry.value, "var")
+                        if variable.startswith("STP_pw_"):
+                            self.assertIn(variable, consumers, f"{name} grants an unconnected bonus")
+
+
+class PostwarDebugControlsTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        from tools.tests.test_adiscord_stp_party_route import one
+
+        cls.one = staticmethod(one)
+        cls.decisions = {e.key: e.value for e in top_level(DECISIONS)["STP_scenario_debug"]}
+        cls.triggers = top_level(TRIGGERS)
+        cls.effects = top_level(EFFECTS)
+
+    def test_programme_controls_require_a_human_debug_postwar_country(self):
+        from itertools import product
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        self.assertIn("STP_debug_party_current", self.triggers)
+        gate = self.triggers["STP_debug_party_current"]
+        for debug, human, current, capitulated in product((False, True), repeat=4):
+            facts = {("STP", "is_debug", "yes"): debug,
+                     ("STP", "is_ai", "no"): human,
+                     ("STP", "STP_ch_current", "yes"): current,
+                     ("STP", "has_capitulated", "no"): not capitulated}
+            self.assertEqual(matches_conditions(gate, facts), debug and human and current and not capitulated)
+        for candidate in range(1, 6):
+            name = f"STP_debug_party_leader_{candidate}"
+            self.assertIn(name, self.decisions)
+            decision = self.decisions[name]
+            self.assertEqual(self.one(decision, "cost"), "0")
+            self.assertEqual(self.one(self.one(decision, "ai_will_do"), "factor"), "0")
+
+    def test_debug_leader_switch_preserves_laws_and_focus_progress(self):
+        from tools.tests.test_adiscord_stp_preparation import selected_effects
+        from tools.tests.test_adiscord_stp_party_route import walk
+
+        self.assertIn("STP_debug_party_select_leader", self.effects)
+        body = self.effects["STP_debug_party_select_leader"]
+        for debug, independent in ((True, True), (False, True), (True, False)):
+            facts = {("STP", "STP_debug_party_current", "yes"): debug,
+                     ("STP", "is_subject", "no"): independent,
+                     ("STP", "variable", "STP_debug_party_choice"): 2}
+            payload = [e for _, e in selected_effects(body, facts)]
+            writes = [self.one(e.value, "var") for e in payload if e.key == "set_variable"]
+            self.assertEqual("STP_ch_government" in writes, debug and independent)
+        for entry in walk(body):
+            self.assertNotIn(entry.key, ("uncomplete_national_focus", "complete_national_focus"))
+            if entry.key == "set_variable":
+                self.assertEqual(self.one(entry.value, "var"), "STP_ch_government")
+            if entry.key == "remove_ideas":
+                self.assertNotIn("STP_law_", str(entry.value))
+
+    def test_debug_crisis_shortcuts_respect_active_laws_and_health_protection(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
+        for suffix, law in (("hospital_crisis", "STP_law_hard_drugs"),
+                            ("labour_crisis", "STP_law_slavery")):
+            name = "STP_debug_party_" + suffix
+            self.assertIn(name, self.decisions)
+            gate = self.one(self.decisions[name], "available")
+            for law_active in (False, True):
+                facts = {("STP", "STP_debug_party_current", "yes"): True,
+                         ("STP", "has_idea", law): law_active}
+                self.assertEqual(matches_conditions(gate, facts), law_active)
+            if suffix == "hospital_crisis":
+                facts[("STP", "has_completed_focus", "STP_party_festival_clinics")] = True
+                self.assertFalse(matches_conditions(gate, facts))
+
+
+class FrontReportTests(unittest.TestCase):
+    def test_report_titles_distinguish_each_deadline_and_result(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
+
+        selector = next(
+            entry.value
+            for entry in parse_clausewitz(text(SCRIPTED_LOC))
+            if entry.key == "defined_text"
+            and scalar(entry.value, "name") == "STPGetFrontResultTitle"
+        )
+        for stage in (1, 2, 3):
+            for result in (0, 1):
+                facts = {
+                    ("STP", "variable", "STP_pv_front_stage"): stage,
+                    ("STP", "variable", "STP_pv_front_result"): result,
+                }
+                selected = None
+                for entry in selector:
+                    if entry.key != "text":
+                        continue
+                    gates = [item.value for item in entry.value if item.key == "trigger"]
+                    if not gates or matches_conditions(gates[0], facts, "STP"):
+                        selected = scalar(entry.value, "localization_key")
+                        break
+                outcome = "win" if result else "loss"
+                with self.subTest(stage=stage, result=result):
+                    self.assertEqual(selected, f"ADISCORD_STP_pv.31.t_{outcome}{stage}")
+                    for language in (RU, EN):
+                        self.assertTrue(loc_keys(language).get(selected), language)
 
 
 if __name__ == "__main__":

@@ -11718,6 +11718,51 @@
         "kind": "retain",
         "target": "val_crimson_trial"
       }
+    },
+    {
+      "key": "oob_vel_northern_militia",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/VEL.txt",
+        "owner": "VEL"
+      },
+      "technical_name": "Northern Militia",
+      "display_name": "Northern Militia",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_militia",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_militia",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700
+        },
+        "supply": 0.12
+      },
+      "equipment_availability": {
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_vel_northern_militia"
+      }
     }
   ],
   "references": [
@@ -12305,7 +12350,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 2
     },
     {
       "key": "dva_vorkerland_collapse_oob_dva_collapse_militia_xp_0_1_eq_0_75",
@@ -13387,7 +13432,7 @@
       ],
       "start_experience_factor": 0.15,
       "start_equipment_factor": 0.72,
-      "count": 3
+      "count": 4
     },
     {
       "key": "tru_oob_line_infantry_brigade_xp_0_17_eq_0_55",
@@ -14003,6 +14048,16 @@
       "legacy_names": [],
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "vel_oob_northern_militia_xp_0_15_eq_0_72",
+      "path": "history/units/VEL.txt",
+      "kind": "oob",
+      "technical_name": "Northern Militia",
+      "legacy_names": [],
+      "start_experience_factor": 0.15,
+      "start_equipment_factor": 0.72,
       "count": 1
     }
   ]

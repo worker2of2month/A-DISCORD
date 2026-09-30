@@ -1313,7 +1313,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
 
     def test_legacy_claimant_armies_are_split_among_the_new_states(self) -> None:
         self.assertEqual(read("history/units/WRK.txt").count("division = {"), 12)
-        self.assertEqual(read("history/units/VAD.txt").count("division = {"), 12)
+        self.assertEqual(read("history/units/VAD.txt").count("division = {"), 16)
         effects = named_block(
             source_section(
                 read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
@@ -1378,7 +1378,7 @@ class BorderWarArchitectureTests(unittest.TestCase):
         self.assertIn("is_locked = yes", worker_home_guard)
         self.assertEqual(worker_home_guard.count("ADISCORD_militia ="), 3)
         self.assertEqual(home_guard.count("create_unit ="), 2)
-        self.assertEqual(home_guard.count("count = 2"), 2)
+        self.assertEqual(home_guard.count("count = 3"), 2)
         self.assertIn("33 = {", home_guard)
         self.assertIn("32 = {", home_guard)
         self.assertNotIn("annex_country", home_guard)
@@ -2745,7 +2745,7 @@ class FrontAndSupplyTests(unittest.TestCase):
         tva_oob = read("history/units/TVA_vorkerland_collapse.txt")
         self.assertEqual(tva_oob.count("division = {"), 19)
         self.assertEqual(
-            tva_oob.count('division_template = "TVA Mobile Test Group"'), 2
+            tva_oob.count('division_template = "TVA Mobile Test Group"'), 1
         )
         self.assertIn("TVA Infiltration Cell", tva_oob)
 
@@ -3356,7 +3356,7 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for token in (
             "set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome",
             "set_cosmetic_tag = WRK_vorkerland_utilitarian_republic",
-            "recruit_character = WRK_Anton_Bagley",
+            "character = WRK_Anton_Bagley",
             "ruling_party = utilitarism",
             "ADISCORD_vorkerland_promote_anton_bagley = yes",
         ):
@@ -4958,6 +4958,10 @@ class InterventionAndVisualTests(unittest.TestCase):
         )
 
     def test_wrk_characters_are_recruited_in_history_not_runtime_effects(self) -> None:
+        formation = named_block(
+            read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_form_wrk_from_wkr",
+        )
         effects = source_section(
             read("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
             'collapse_effects',
@@ -4966,6 +4970,11 @@ class InterventionAndVisualTests(unittest.TestCase):
         for character in ("WRK_Anton_Bagley", "WRK_VAD_Joint_Council"):
             self.assertIn(f"recruit_character = {character}", history)
             self.assertNotIn(f"recruit_character = {character}", effects)
+            self.assertNotIn(f"recruit_character = {character}", formation)
+        self.assertLess(
+            formation.index("character = WRK_Anton_Bagley"),
+            formation.index("annex_country = { target = WKR"),
+        )
 
     def test_player_facing_names_are_short_and_not_legacy_cringe(self) -> None:
         loc = source_section(

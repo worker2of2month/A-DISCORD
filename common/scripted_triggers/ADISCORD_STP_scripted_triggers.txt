@@ -678,8 +678,8 @@ STP_cw_northern_fort_state = {
 	}
 }
 
-# COUNTRY enemy: exclude STP only from the live northern front, including
-# subject reinforcements. Other simultaneous NOD wars still call STP normally.
+# COUNTRY enemy: exclude STP and SLI from the live northern front, including
+# subject reinforcements. Other simultaneous NOD wars retain normal entry.
 STP_cw_northern_enemy_blocks_subject_entry = {
 	has_war_with = NOD
 	OR = {
@@ -1557,6 +1557,14 @@ STP_pf_active = {
 	exists = yes
 	has_country_flag = STP_sided_with_the_party_flag
 	NOT = { has_country_flag = STP_sided_with_Maksim_flag }
+}
+# COUNTRY STP: the congress has elected a government. Faction balance is frozen:
+# the panel hides, influence no longer shifts and faction bonuses stay as they were.
+STP_pf_settled = {
+	tag = STP
+	has_country_flag = STP_cw_postwar
+	has_variable = STP_ch_government
+	check_variable = { var = STP_ch_phase value = 4 compare = greater_than_or_equals }
 }
 STP_pf_nod_contacts = {
 	NOD = { exists = yes has_capitulated = no }
@@ -2649,4 +2657,183 @@ STP_hw_black_book_ready = {
 		STP = { has_country_flag = STP_cw_archives_used }
 		check_variable = { var = STP_hw_underground value = 50 compare = greater_than_or_equals }
 	}
+}
+
+STP_party_leader_1 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	NOT = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+	}
+	OR = {
+		AND = {
+			has_variable = STP_ch_government
+			check_variable = {
+				var = STP_ch_government
+				value = 1
+				compare = equals
+			}
+		}
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			check_variable = {
+				var = STP_pv_outcome
+				value = 1
+				compare = equals
+			}
+		}
+	}
+}
+
+STP_party_leader_2 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	NOT = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+	}
+	OR = {
+		AND = {
+			has_variable = STP_ch_government
+			check_variable = {
+				var = STP_ch_government
+				value = 2
+				compare = equals
+			}
+		}
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			OR = {
+				check_variable = {
+					var = STP_pv_outcome
+					value = 2
+					compare = equals
+				}
+				AND = {
+					has_country_flag = STP_ch_liberated
+					OR = {
+						NOT = { has_variable = STP_pv_outcome }
+						check_variable = {
+							var = STP_pv_outcome
+							value = 6
+							compare = equals
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+STP_party_leader_3 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	NOT = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+	}
+	OR = {
+		AND = {
+			has_variable = STP_ch_government
+			check_variable = {
+				var = STP_ch_government
+				value = 3
+				compare = equals
+			}
+		}
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			check_variable = {
+				var = STP_pv_outcome
+				value = 3
+				compare = equals
+			}
+		}
+	}
+}
+
+STP_party_leader_4 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	NOT = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+	}
+	OR = {
+		AND = {
+			has_variable = STP_ch_government
+			check_variable = {
+				var = STP_ch_government
+				value = 4
+				compare = equals
+			}
+		}
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			check_variable = {
+				var = STP_pv_outcome
+				value = 4
+				compare = equals
+			}
+		}
+	}
+}
+
+STP_party_leader_5 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	NOT = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+	}
+	OR = {
+		AND = {
+			has_variable = STP_ch_government
+			check_variable = {
+				var = STP_ch_government
+				value = 5
+				compare = equals
+			}
+		}
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			check_variable = {
+				var = STP_pv_outcome
+				value = 5
+				compare = equals
+			}
+		}
+	}
+}
+
+STP_party_leader_6 = {
+	tag = STP
+	STP_pf_active = yes
+	has_country_flag = STP_cw_postwar
+	OR = {
+		has_country_flag = STP_ch_protectorate_leader
+		is_subject_of = NOD
+		AND = {
+			NOT = { has_variable = STP_ch_government }
+			NOT = { has_country_flag = STP_ch_liberated }
+			check_variable = {
+				var = STP_pv_outcome
+				value = 6
+				compare = equals
+			}
+		}
+	}
+}
+
+STP_debug_party_current = {
+	is_debug = yes
+	is_ai = no
+	STP_ch_current = yes
+	has_capitulated = no
 }

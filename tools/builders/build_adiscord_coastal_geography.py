@@ -18,6 +18,13 @@ from scipy.ndimage import distance_transform_edt, gaussian_filter
 
 from tools.builders.build_adiscord_ivn_geography import normal_from_height
 from tools.builders.build_adiscord_new_states import SOUTHERN_CITIES, SOUTHERN_CITY_POINTS
+from tools.lib.coastal_clearance import (
+    URBAN_FALLBACK_PALETTE,
+    tree_cells_blocked,
+    urban_blocked,
+    water_colours,
+    water_mask,
+)
 from tools.lib.paths import repository_root
 
 
@@ -348,6 +355,10 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             outputs[Path("map/provinces.bmp")] = encoded.getvalue()
     packed = provinces.astype(np.uint32)
     sea = np.isin((packed[:, :, 0] << 16) | (packed[:, :, 1] << 8) | packed[:, :, 2], sea_colors)
+    # Shared shoreline clearance: no city meshes or trees at the waterline.
+    definition_text = "\n".join(definition_lines).encode("utf-8")
+    water = water_mask(provinces, water_colours(definition_text))
+    shore = urban_blocked(water, provinces, definition_text) & ~water
     relief_terrain = {}
     for index, line in enumerate(definition_lines):
         fields = line.split(";")
@@ -400,7 +411,8 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
             else:
                 pixels[islands] = value
                 if name == "terrain":
-                    pixels[cities] = 13
+                    pixels[cities & ~shore] = 13
+                    pixels[cities & shore] = URBAN_FALLBACK_PALETTE
                     for province, kind in relief_terrain.items():
                         province_mask = masks[province]
                         pixels[province_mask] = {"desert": 3, "hills": 2, "mountain": 18}[kind]
@@ -430,6 +442,7 @@ def build_plan(root: Path = ROOT, source_overrides: dict[Path, bytes] | None = N
         tx = xs * source.width // provinces.shape[1]
         ty = ys * source.height // provinces.shape[0]
         pixels[ty, tx] = 0
+        pixels[tree_cells_blocked(water, source.width, source.height)] = 0
         outputs[tree_path] = bmp_bytes(source, pixels, original)
     stack_path = Path("map/unitstacks.txt")
     outputs[stack_path] = unit_anchors((root / stack_path).read_bytes(), masks, heights)

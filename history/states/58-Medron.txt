@@ -15,5 +15,6 @@ state={
 			infrastructure = 1
 		}
 		add_core_of = CIN
+		victory_points = { 16332 1 }
 	}
 }

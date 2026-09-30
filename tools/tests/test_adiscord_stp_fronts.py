@@ -340,20 +340,67 @@ class ShabratAssaultWaveAndAirTests(unittest.TestCase):
     def text(self, path: Path) -> str:
         return re.sub(r"(?m)#.*$", "", path.read_text(encoding="utf-8-sig"))
 
-    def test_recovery_holds_between_waves_and_against_a_stronger_party(self) -> None:
-        recovery = compact(named_block(self.text(AI_PATH), "STS_shabrat_recover_party_front"))
-        self.assertIn("is_ai = yes", recovery)
-        self.assertIn("OR = {", recovery)
-        self.assertIn("has_country_flag = STS_ai_regroup", recovery)
-        self.assertIn("fighting_army_strength_ratio = { tag = STP ratio < 0.8 }", recovery)
-        self.assertIn("execution_type = careful execute_order = no manual_attack = no", recovery)
+    def test_shortages_allow_careful_attacks_and_only_temporary_recovery_stops_them(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
+
+        profiles = entries("common/ai_strategy/ADISCORD_STP_civil_war.txt")
+
+        def enabled(conditions, reserve, strength, regroup, disorganized):
+            def matches(condition):
+                key, value = condition.key, condition.value
+                if key == "OR":
+                    return any(matches(child) for child in value)
+                if key in ("stockpile_ratio", "fighting_army_strength_ratio"):
+                    comparison = [child.value for child in value if not child.key]
+                    self.assertEqual(comparison[1], "<")
+                    actual = reserve if key == "stockpile_ratio" else strength
+                    return actual < float(comparison[2])
+                facts = {
+                    ("is_ai", "yes"): True,
+                    ("has_war_with", "STP"): True,
+                    ("has_global_flag", "STP_cw_started"): True,
+                    ("has_country_flag", "STS_ai_regroup"): regroup,
+                    ("has_idea", "STP_cw_operation_disorganization"): disorganized,
+                }
+                return facts[(key, value)]
+
+            return all(matches(condition) for condition in conditions)
+
+        names = {
+            "STS_cw_front_against_stp",
+            "STS_shabrat_civil_war_army",
+            "STS_shabrat_cautious_party_front",
+            "STS_shabrat_recover_party_front",
+        }
+        for reserve, strength, regroup, disorganized, mode, execute in (
+            (0.0, 1.0, False, False, "careful", "yes"),
+            (0.1, 0.7, False, False, "careful", "yes"),
+            (0.0, 0.7, True, False, "careful", "no"),
+            (0.0, 0.7, False, True, "careful", "no"),
+            (0.0, 0.7, False, False, "careful", "yes"),
+            (0.05, 0.8, False, False, "rush_weak", "yes"),
+        ):
+            with self.subTest(reserve=reserve, strength=strength, regroup=regroup,
+                              disorganized=disorganized):
+                controls = [
+                    strategy.value
+                    for profile in profiles if profile.key in names
+                    if enabled(block(profile.value, "enable"), reserve, strength,
+                               regroup, disorganized)
+                    for strategy in profile.value
+                    if strategy.key == "ai_strategy"
+                    and scalar(strategy.value, "type") == "front_control"
+                ]
+                control = max(controls, key=lambda c: int(scalar(c, "priority")))
+                self.assertEqual(scalar(control, "execution_type"), mode)
+                self.assertEqual(scalar(control, "execute_order"), execute)
 
     def test_waves_alternate_with_regroups_unless_ground_was_taken(self) -> None:
         tick = compact(named_block(self.text(self.EFFECTS), "STP_cw_ai_shabrat_offensive_tick"))
-        self.assertIn("set_country_flag = { flag = STS_ai_assault_wave days = 42 }", tick)
-        self.assertIn("set_country_flag = { flag = STS_ai_regroup days = 21 }", tick)
+        self.assertIn("set_country_flag = { flag = STS_ai_assault_wave value = 1 days = 42 }", tick)
+        self.assertIn("set_country_flag = { flag = STS_ai_regroup value = 1 days = 21 }", tick)
         # The regroup branch requires that the party kept at least as many states.
-        regroup = tick[tick.index("has_variable = STS_ai_wave_start_states"):tick.index("STS_ai_regroup days")]
+        regroup = tick[tick.index("has_variable = STS_ai_wave_start_states"):tick.index("STS_ai_regroup value")]
         self.assertIn("compare = greater_than_or_equals", regroup)
         self.assertIn("NOT = { fighting_army_strength_ratio = { tag = STP ratio > 1.5 } }", regroup)
         self.assertIn("every_controlled_state", tick)

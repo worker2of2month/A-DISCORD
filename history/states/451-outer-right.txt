@@ -4,14 +4,13 @@
 state = {
 	id = 451
 	name = "STATE_451"
-	manpower = 174423
+	manpower = 145521
 	state_category = rural
 	history = {
 		owner = DRV
 		add_core_of = DRV
 		buildings = {
 			infrastructure = 2
-			industrial_complex = 1
 		}
 	}
 	provinces = {
@@ -19,8 +18,8 @@ state = {
 		9084 11966
 	}
 	resources = {
-		tungsten = 3
+		tungsten = 1
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 2.0
+	local_supplies = 1.9
 }

@@ -18,11 +18,19 @@ from __future__ import annotations
 
 import argparse
 from io import BytesIO
+from math import sin
 import os
 import re
 from pathlib import Path
 
+import numpy as np
 from PIL import Image
+from tools.lib.coastal_clearance import (
+    URBAN_FALLBACK_PALETTE,
+    urban_blocked,
+    water_colours,
+    water_mask,
+)
 from tools.lib.paths import repository_root
 
 
@@ -37,9 +45,13 @@ TERRAIN_DEFINITION_PATH = ROOT / "common" / "terrain" / "00_terrain.txt"
 POLAR_CAP_Y = 300
 POLAR_MOUNTAIN_Y = 300
 PERMANENT_PEAK_HEIGHT = 205
+# The cap edge is not a ruler line: per column it reaches up to this share of
+# the cap latitude further south, with a few pixels of ragged dithering.
+POLAR_EDGE_SOUTHWARD_SHARE = 0.10
+POLAR_EDGE_DITHER_PIXELS = 3
 
 MIN_PERMANENT_SNOW_PIXELS = 320_000
-MAX_PERMANENT_SNOW_PIXELS = 380_000
+MAX_PERMANENT_SNOW_PIXELS = 400_000
 MIN_PERMANENT_MOUNTAIN_PIXELS = 5_000
 
 WATER_TERRAIN = frozenset({14, 15})
@@ -72,15 +84,43 @@ VORKERLAND_GRAPHICAL_URBAN_PROVINCES = frozenset(
 )
 
 
-def classify_terrain(terrain: int, y: int, height: int) -> int:
+def _unit_hash(x: int, y: int, salt: int) -> float:
+    value = ((x * 73856093) ^ (y * 19349663) ^ (salt * 83492791)) & 0xFFFFFFFF
+    value = ((value ^ (value >> 13)) * 1274126177) & 0xFFFFFFFF
+    return (value ^ (value >> 16)) / 0xFFFFFFFF
+
+
+def polar_edge_share(x: int) -> float:
+    """Deterministic 0..1 southward reach of the polar edge in column ``x``."""
+    wave = (
+        0.50
+        + 0.26 * sin(x / 41.0 + 1.3)
+        + 0.14 * sin(x / 17.3 + 0.4)
+        + 0.07 * sin(x / 6.1 + 2.2)
+        + 0.03 * sin(x / 2.7)
+    )
+    return min(1.0, max(0.0, wave))
+
+
+def polar_limit(limit: int, x: int | None, y: int) -> float:
+    """Latitude limit for one pixel; ``x=None`` keeps the straight reference."""
+    if x is None or limit <= 0:
+        return limit
+    reach = limit * POLAR_EDGE_SOUTHWARD_SHARE * polar_edge_share(x)
+    return limit + reach - POLAR_EDGE_DITHER_PIXELS * _unit_hash(x, y, 71)
+
+
+def classify_terrain(terrain: int, y: int, height: int, x: int | None = None) -> int:
     """Return the generated terrain palette index for one map pixel."""
     base = RESTORE_SNOW.get(terrain, terrain)
     if base in WATER_TERRAIN:
         return base
     mountain = base in MOUNTAIN_TERRAIN
-    if y < POLAR_CAP_Y:
+    if y < polar_limit(POLAR_CAP_Y, x, y):
         return SNOW_MOUNTAIN if mountain else SNOW_PLAIN
-    if mountain and (y < POLAR_MOUNTAIN_Y or height >= PERMANENT_PEAK_HEIGHT):
+    if mountain and (
+        y < polar_limit(POLAR_MOUNTAIN_Y, x, y) or height >= PERMANENT_PEAK_HEIGHT
+    ):
         return SNOW_MOUNTAIN
     return base
 
@@ -165,7 +205,8 @@ def generated_pixels(
     height_pixels = list(heightmap.convert("L").get_flattened_data())
     province_pixels = provinces.convert("RGB").tobytes()
     city_pixels = list(cities.get_flattened_data()) if cities is not None else None
-    return [
+    blocked = shoreline_band(provinces)
+    result = [
         (
             URBAN_TERRAIN
             if (
@@ -176,10 +217,26 @@ def generated_pixels(
                     and tuple(province_pixels[index * 3 : index * 3 + 3]) in land_colors
                 )
             )
-            else classify_terrain(value, index // width, height_pixels[index])
+            else classify_terrain(
+                value, index // width, height_pixels[index], index % width
+            )
         )
         for index, value in enumerate(terrain_pixels)
     ]
+    # No city meshes on the waterline: the shared shore band falls back to plains.
+    for index in np.flatnonzero(blocked):
+        if result[index] == URBAN_TERRAIN:
+            result[index] = URBAN_FALLBACK_PALETTE
+    return result
+
+
+def shoreline_band(provinces: Image.Image) -> np.ndarray:
+    """Flat mask of dry pixels inside the shared urban shoreline clearance."""
+    rgb = np.asarray(provinces.convert("RGB"))
+    water = water_mask(rgb, water_colours(DEFINITION_PATH))
+    if not water.any():
+        return np.zeros(rgb.shape[0] * rgb.shape[1], dtype=bool)
+    return (urban_blocked(water, rgb, DEFINITION_PATH) & ~water).reshape(-1)
 
 
 def urban_coverage_issues(
@@ -187,15 +244,19 @@ def urban_coverage_issues(
     provinces: Image.Image,
     selected_colors: dict[tuple[int, int, int], int],
 ) -> list[str]:
-    """Require every pixel of every explicit repair province to be urban."""
+    """Require every pixel of every explicit repair province to be urban.
+
+    Pixels in the shared shoreline band are exempt: they stay plains.
+    """
     issues: list[str] = []
     province_pixels = provinces.convert("RGB").tobytes()
+    blocked = shoreline_band(provinces)
     counts = {province_id: [0, 0] for province_id in selected_colors.values()}
     id_by_color = selected_colors
     for index, terrain_value in enumerate(pixels):
         color = tuple(province_pixels[index * 3 : index * 3 + 3])
         province_id = id_by_color.get(color)
-        if province_id is None:
+        if province_id is None or blocked[index]:
             continue
         counts[province_id][0] += 1
         if terrain_value == URBAN_TERRAIN:

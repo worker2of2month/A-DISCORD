@@ -221,16 +221,17 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "colors": ((67, 72, 77), (181, 177, 156), (133, 48, 42)),
     },
     "TMR": {
-        "states": (409, 410, 416, 419, 423, 429, 431, 443),
+        "states": (409, 410, 416, 419, 423, 426, 429, 431, 436, 443, 454, 455),
         "capital": 423,
         "capital_name": "Тимер",
-        "population": 2_800_000,
-        "civilian": 5,
-        "military": 2,
+        "secondary_vps": ((455, "Орваль", 5),),
+        "population": 4_035_595,
+        "civilian": 8,
+        "military": 4,
         "infrastructure": 3,
-        "air_bases": 0,
-        "resources": {"coal": 7, "aluminium": 4},
-        "divisions": 3,
+        "air_bases": 1,
+        "resources": {"coal": 7, "aluminium": 4, "steel": 5},
+        "divisions": 4,
         "unit_type": "ADISCORD_militia",
         "colors": ((119, 65, 62), (220, 190, 141), (62, 85, 76)),
     },
@@ -278,32 +279,32 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "colors": ((73, 93, 119), (190, 188, 169), (123, 62, 48)),
     },
     "DRV": {
-        "states": (414, 417, 418, 421, 428, 434, 439, 440, 450, 451, 458, 463, 465),
-        "capital": 434,
+        "states": (440, 450, 451, 458, 463, 465),
+        "capital": 458,
         "capital_name": "Дравен",
-        "population": 2_400_000,
-        "civilian": 4,
-        "military": 2,
+        "population": 1_027_731,
+        "civilian": 2,
+        "military": 1,
         "infrastructure": 2,
         "air_bases": 0,
-        "resources": {"coal": 5, "tungsten": 3},
-        "divisions": 3,
+        "resources": {"coal": 2, "tungsten": 1},
+        "divisions": 2,
         "unit_type": "ADISCORD_militia",
         "colors": ((139, 70, 59), (217, 181, 132), (57, 93, 77)),
     },
-    "ORV": {
-        "states": (426, 436, 454, 455),
-        "capital": 455,
-        "capital_name": "Орваль",
-        "population": 1_235_595,
-        "civilian": 3,
-        "military": 2,
-        "infrastructure": 3,
-        "air_bases": 1,
-        "resources": {"steel": 5},
+    "VEL": {
+        "states": (414, 417, 418, 421, 428, 434),
+        "capital": 434,
+        "capital_name": "Вельск",
+        "population": 1_201_687,
+        "civilian": 2,
+        "military": 1,
+        "infrastructure": 2,
+        "air_bases": 0,
+        "resources": {"coal": 3, "tungsten": 2},
         "divisions": 1,
-        "unit_type": "infantry",
-        "colors": ((91, 112, 75), (213, 204, 158), (71, 72, 93)),
+        "unit_type": "ADISCORD_militia",
+        "colors": ((168, 139, 74), (231, 220, 182), (48, 69, 75)),
     },
     "ARS": {
         "states": (441, 449),
@@ -337,6 +338,7 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "states": (
             425,
             438,
+            439,
             444,
             445,
             448,
@@ -355,7 +357,7 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "capital": 469,
         "capital_name": "Монтера",
         "secondary_vps": ((459, "Аркен", 5), (471, "Валтор", 3)),
-        "population": 12_200_000,
+        "population": 12_370_582,
         "civilian": 28,
         "military": 18,
         "infrastructure": 4,
@@ -391,7 +393,7 @@ FLAG_STYLES = {
     "LYS": 10,
     "VES": 11,
     "DRV": 12,
-    "ORV": 13,
+    "VEL": 21,
     "MON": 14,
     "VRA": 15,
     "SVL": 16,
@@ -647,16 +649,17 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
 
         for state_id in states:
             population = populations[state_id]
+            factory_total = civilians[state_id] + military[state_id]
             if state_id == capital:
                 category = "large_town" if population >= 750_000 else "town"
-            elif population >= 700_000:
+            elif population >= 700_000 or factory_total > 2:
+                # Rural states have only two shared slots, even after population shifts.
                 category = "town"
             else:
                 category = "rural"
             infrastructure = min(
                 5, int(country["infrastructure"]) + (1 if state_id == capital else 0)
             )
-            factory_total = civilians[state_id] + military[state_id]
             profiles[state_id] = {
                 "owner": tag,
                 "population": population,
@@ -692,6 +695,8 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
         f"\t\towner = {profile['owner']}",
         f"\t\tadd_core_of = {profile['owner']}",
     ]
+    if state_id in (426, 436, 454, 455):
+        history.append("\t\tadd_core_of = ORV")
     if profile["vp"]:
         _name, value = profile["vp"]
         history.append(f"\t\tvictory_points = {{ {profile['vp_province']} {value} }}")
@@ -817,6 +822,11 @@ def render_flag(
     primary, secondary, accent = colors
     image = Image.new("RGBA", (width, height), primary + (255,))
     draw = ImageDraw.Draw(image)
+    if tag == "VEL":
+        draw.rectangle((0, 17, width, 34), fill=accent + (255,))
+        for x in (16, 39, 62):
+            draw.rectangle((x, 21, x + 5, 30), fill=secondary + (255,))
+        return image
     if tag == "MON":
         draw.rectangle(
             (0, 0, width - 1, height - 1), outline=secondary + (255,), width=4

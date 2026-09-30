@@ -7,6 +7,44 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_used_subunit_modifiers_are_registered_after_vanilla_replacement(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        registered = set()
+        for path in (ROOT / "common/units/unit_modifiers").glob("*.txt"):
+            for container in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if container.key == "sub_unit_modifiers":
+                    registered.update(entry.value for entry in container.value)
+        used = set()
+        for path in (ROOT / "common").rglob("*.txt"):
+            text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+            used.update(re.findall(r"\b(modifier_army_sub_unit_\w+)\s*=", text))
+        self.assertFalse(used - registered, sorted(used - registered))
+
+    def test_idea_tokens_cannot_be_parsed_as_scoped_variables(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        invalid = []
+        defined = set()
+        for path in (ROOT / "common/ideas").glob("*.txt"):
+            for root in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if root.key != "ideas":
+                    continue
+                for category in root.value:
+                    if not isinstance(category.value, list):
+                        continue
+                    for idea in category.value:
+                        if isinstance(idea.value, list):
+                            defined.add(idea.key)
+                            if "." in idea.key:
+                                invalid.append(f"{path.name}: {idea.key}")
+        self.assertFalse(invalid, invalid)
+        events = (ROOT / "events/ADISCORD_STP_events.txt").read_text(encoding="utf-8")
+        for entry in walk(parse_clausewitz(events)):
+            if entry.key == "add_idea" and isinstance(entry.value, str):
+                self.assertIn(entry.value, defined)
+
     def test_small_country_oobs_receive_common_equipment_before_loading(self):
         for tag in ("IVN", "WIT", "BTL"):
             path = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))

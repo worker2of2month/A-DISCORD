@@ -15,5 +15,6 @@ state={
 			infrastructure = 2
 		}
 		add_core_of = BTL
+		victory_points = { 12455 2 }
 	}
 }

@@ -1083,11 +1083,10 @@ ADISCORD_vorkerland_raise_emergency_levies = {
 # WKR normally inherits WRK's armed forces, but annexation transfers divisions
 # without copying WRK's recruitable template database. Materialize an editable
 # line division and mobile group alongside the locked emergency guard. The
-# one-shot reserve itself remains deliberately small: two border guards in
-# state 33 and two formations in the state 32 capital reserve. WKR already
-# inherits WRK's twelve pre-collapse formations and receives one mobile group;
-# a larger reserve makes the worker claimant win the central war by force
-# count before the other claimants can use their own programmes.
+# one-shot reserve itself remains small: three border guards in state 33 and
+# three formations in the state 32 capital reserve (was 2+2; raised because
+# WKR could not hold two claimant fronts against TVA's nineteen formations).
+# WKR also inherits WRK's twelve pre-collapse formations and one mobile group.
 ADISCORD_vorkerland_ensure_wkr_force_templates_v2 = {
 	if = {
 		limit = {
@@ -1162,14 +1161,14 @@ ADISCORD_vorkerland_ensure_wkr_home_guard = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 2
+				count = 3
 			}
 		}
 		32 = {
 			create_unit = {
 				division = "division_template = \"Worker Home Guard\" start_experience_factor = 0.10 start_equipment_factor = 0.85"
 				owner = WKR
-				count = 2
+				count = 3
 			}
 		}
 	}
@@ -6646,6 +6645,57 @@ ADISCORD_vorkerland_send_sol_support_tranche_2 = {
 }
 
 # --- force_design_effects ---
+# Roll once at outbreak, after country creation and before the first fronts.
+# WRK may still hold the player awaiting the claimant-selection event.
+ADISCORD_vorkerland_roll_central_initiative = {
+	if = {
+		limit = {
+			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+			NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished }
+			NOT = { has_global_flag = ADISCORD_vorkerland_central_initiative_rolled }
+			NOT = {
+				WRK = {
+					exists = yes
+					is_ai = no
+				}
+			}
+			WKR = {
+				exists = yes
+				is_ai = yes
+				NOT = { has_capitulated = yes }
+			}
+			VAD = {
+				exists = yes
+				is_ai = yes
+				NOT = { has_capitulated = yes }
+			}
+			TVA = {
+				exists = yes
+				is_ai = yes
+				NOT = { has_capitulated = yes }
+			}
+		}
+		set_global_flag = ADISCORD_vorkerland_central_initiative_rolled
+		random_list = {
+			1 = {
+				WKR = {
+					add_timed_idea = { idea = ADISCORD_vorkerland_central_initiative days = 730 }
+				}
+			}
+			1 = {
+				VAD = {
+					add_timed_idea = { idea = ADISCORD_vorkerland_central_initiative days = 730 }
+				}
+			}
+			1 = {
+				TVA = {
+					add_timed_idea = { idea = ADISCORD_vorkerland_central_initiative days = 730 }
+				}
+			}
+		}
+	}
+}
+
 # Fresh-campaign AI bootstrap. collapse.2 calls this once for each main
 # claimant immediately after the verified partition enters the wartime phase.
 ADISCORD_vorkerland_bootstrap_ai_force_designs = {
@@ -6995,6 +7045,7 @@ ADISCORD_vorkerland_clear_phase_flags = {
 # Attacker attrition has no remove_trigger. Country overlays survive annexation
 # and tag changes unless they are taken off here.
 ADISCORD_vorkerland_retire_civil_war_modifiers = {
+	clr_global_flag = ADISCORD_vorkerland_central_initiative_rolled
 	every_state = {
 		limit = { has_state_flag = ADISCORD_vorkerland_central_theatre }
 		if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_civil_war_attrition } }
@@ -7007,6 +7058,10 @@ ADISCORD_vorkerland_retire_civil_war_modifiers = {
 }
 
 ADISCORD_vorkerland_clear_claimant_war_modifiers = {
+	if = {
+		limit = { has_idea = ADISCORD_vorkerland_central_initiative }
+		remove_ideas = ADISCORD_vorkerland_central_initiative
+	}
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_legitimacy_dynamic } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_legitimacy_dynamic } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_wkr_doctrine } }
 	if = { limit = { has_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } } remove_dynamic_modifier = { modifier = ADISCORD_vorkerland_vad_doctrine } }
@@ -8439,10 +8494,6 @@ ADISCORD_vorkerland_form_wrk_from_wkr = {
 		# character role can otherwise briefly fail a ruling-leader check.
 		set_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome
 		set_cosmetic_tag = WRK_vorkerland_utilitarian_republic
-		if = {
-			limit = { NOT = { has_character = WRK_Anton_Bagley } }
-			recruit_character = WRK_Anton_Bagley
-		}
 		# The leader role must exist before the government flips to utilitarism.
 		ADISCORD_vorkerland_promote_anton_bagley = yes
 		set_politics = { ruling_party = utilitarism elections_allowed = no }

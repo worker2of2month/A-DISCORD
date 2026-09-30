@@ -125,7 +125,7 @@ STP_postwar_propaganda_campaigns = {
 
 STP_party_factions = {
 	allowed = { tag = STP }
-	visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized }
+	visible = { STP_pf_active = yes has_country_flag = STP_pf_initialized NOT = { STP_pf_settled = yes } }
 	visible_when_empty = yes
 	priority = 36
 	scripted_gui = ADISCORD_STP_party_factions_panel
@@ -177,4 +177,15 @@ STP_ch_chapters = {
 		STP_ch_current = yes
 	}
 	priority = 100
+}
+
+STP_pw_programme = {
+	icon = generic_industry
+	allowed = { tag = STP }
+	visible = {
+		STP_pf_active = yes
+		has_country_flag = STP_cw_postwar
+		has_completed_focus = STP_pw_party_new_republic
+	}
+	priority = 99
 }

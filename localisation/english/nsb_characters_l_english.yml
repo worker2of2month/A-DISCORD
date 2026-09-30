@@ -1032,3 +1032,5 @@
  VAL_Gromov_army_chief_desc: "Chief of Army Staff. Appointed upon completing §Y$VAL_Gromovs_Assault_Tables$§!."
  VAL_Morn_theorist: "$VAL_Renata_Morn$"
  VAL_Morn_theorist_desc: "Chief Military Theorist. Appointed upon completing §Y$VAL_Morns_Supply_Trains$§!."
+ VEL_Marten_Rovel: "Marten Rovel"
+ VEL_Marten_Rovel_desc: "A former superintendent of mountain crossings, Marten Rovel persuaded the northern cantons to establish a common treasury and an elected council. Each valley retains its own assembly and militia; tolls pay for roads and a shared guard. Rovel chairs the council only until the next congress and cannot levy an emergency tax without the cantons. To the southern communes he looks too much like a ruler; to the Montar Empire he answers to too many voters."

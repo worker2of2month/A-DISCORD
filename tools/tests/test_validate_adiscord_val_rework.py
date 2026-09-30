@@ -7223,7 +7223,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
     def test_operations_map_covers_all_requested_starting_countries(self):
         from tools.builders import build_adiscord_val_operations_map as builder
 
-        tags = {"NOD", "BJK", "COF", "TFF", "YPR"}
+        tags = {"NOD", "BJK", "COF", "TFF", "YPR", "SLI"}
         expected = set()
         for path in (ROOT / "history/states").glob("*.txt"):
             source = path.read_text(encoding="utf-8-sig")
