@@ -15,3 +15,11 @@ SHL_tenth_project = {
 	priority = 24
 }
 
+
+SHL_quarters_and_borders = {
+	icon = generic_political_pressure
+	allowed = { tag = SHL }
+	visible = { has_country_flag = SHL_furnaces_initialized }
+	visible_when_empty = yes
+	priority = 23
+}

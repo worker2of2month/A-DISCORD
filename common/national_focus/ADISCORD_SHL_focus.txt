@@ -327,6 +327,9 @@ focus_tree = {
 			custom_effect_tooltip = SHL_workers_charter_tt
 			hidden_effect = {
 				add_to_variable = { var = SHL_city_support value = 10 }
+				subtract_from_variable = { var = SHL_unrest value = 10 }
+				add_to_variable = { var = SHL_house_pressure value = 10 }
+				SHL_clamp_tensions = yes
 				SHL_refresh_furnaces = yes
 			}
 		}
@@ -433,6 +436,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -453,6 +457,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -503,6 +508,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -523,6 +529,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -569,6 +576,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -589,6 +597,7 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -671,6 +680,856 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_research_slot = 1
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_quarter_listening
+		icon = GFX_goal_generic_consumer_goods
+		x = 8
+		y = 2
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_census_of_nine
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_quarter_listening_tt
+			unlock_decision_tooltip = SHL_soup_kitchens
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_unrest value = 10 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_heralds_table
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 8
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_quarter_listening
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_heralds_table_tt
+			unlock_decision_tooltip = SHL_house_banquet
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_house_pressure value = 10 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_shift_arbitration
+		icon = GFX_focus_generic_self_management
+		x = 8
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_heralds_table
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.02
+			custom_effect_tooltip = SHL_shift_arbitration_tt
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_factory_militia
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 24
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_railway_guard
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 10
+			unlock_decision_tooltip = SHL_raise_furnace_guard
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_southern_watch
+		icon = GFX_goal_generic_defence
+		x = 24
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_factory_militia
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_southern_watch_idea
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_mobilise_furnaces
+		icon = GFX_goal_generic_small_arms
+		x = 24
+		y = 5
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_southern_watch
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 1500
+				producer = SHL
+			}
+			unlock_decision_tooltip = SHL_war_orders
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_water_question
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 26
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_railway_guard
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_artesian_wells
+			custom_effect_tooltip = SHL_water_question_tt
+			hidden_effect = { SHL_start_water_crisis = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_qanat_guard
+		icon = GFX_goal_generic_territory_or_war
+		x = 26
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_water_question
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 5
+			unlock_decision_tooltip = SHL_seize_qanats
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_veyr_duties
+		icon = GFX_goal_generic_trade
+		x = 28
+		y = 3
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_railway_guard
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_harbour_project
+			custom_effect_tooltip = SHL_veyr_duties_tt
+			hidden_effect = { SHL_start_veyr_crisis = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_veyr_ultimatum
+		icon = GFX_goal_generic_demand_territory
+		x = 28
+		y = 4
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_veyr_duties
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 5
+			unlock_decision_tooltip = SHL_ultimatum_veyr
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_golden_gate_cartel
+		icon = GFX_goal_generic_positive_trade_relations
+		x = 6
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_admit_tenth_house
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_export_contract
+			custom_effect_tooltip = SHL_golden_gate_cartel_tt
+			hidden_effect = {
+				add_to_variable = { var = SHL_treasury_capacity_bonus value = 0.05 }
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_house_guards
+		icon = GFX_goal_generic_allies_build_infantry
+		x = 5
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_golden_gate_cartel
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_house_guards_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+				subtract_from_variable = { var = SHL_house_pressure value = 15 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_veyr_partnership
+		icon = GFX_focus_generic_treaty
+		x = 7
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_golden_gate_cartel
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_veyr_partner_available_tt
+				GLP = {
+					exists = yes
+					NOT = { has_war_with = SHL }
+				}
+				NOT = { has_country_flag = SHL_veyr_offer_pending }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_veyr_partnership_tt
+			hidden_effect = {
+				set_country_flag = SHL_veyr_offer_pending
+				GLP = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_SHL.61 }
+				}
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_conclave_of_ten
+		icon = GFX_goal_generic_production2
+		x = 6
+		y = 17
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_house_guards
+			focus = SHL_veyr_partnership
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_conclave_of_ten_idea
+			if = {
+				limit = {
+					has_country_flag = SHL_veyr_partner
+					GLP = {
+						exists = yes
+						is_in_faction = no
+						NOT = { has_war_with = SHL }
+					}
+				}
+				custom_effect_tooltip = SHL_golden_gate_offer_tt
+				hidden_effect = { GLP = { country_event = { id = ADISCORD_SHL.91 } } }
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_council_of_cities
+		icon = GFX_goal_generic_national_unity
+		x = 12
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_rights_without_fire
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.03
+			custom_effect_tooltip = SHL_council_of_cities_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_unrest value = 20 }
+				add_to_variable = { var = SHL_city_support value = 10 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_fire_and_water
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 11
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_council_of_cities
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_kyz_brotherhood_available_tt
+				KYZ = {
+					exists = yes
+					NOT = { has_war_with = SHL }
+				}
+				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				NOT = { has_country_flag = SHL_water_offer_pending }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_kyz_brotherhood_offer_tt
+			hidden_effect = {
+				set_country_flag = SHL_water_offer_pending
+				KYZ = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_SHL.55 }
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_workers_brigades
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 13
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_council_of_cities
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			NOT = { has_manpower < 6000 }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = -6000
+			custom_effect_tooltip = SHL_workers_brigades_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_2 = yes
+				subtract_from_variable = { var = SHL_unrest value = 5 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_southern_compact
+		icon = GFX_goal_generic_alliance
+		x = 12
+		y = 17
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_fire_and_water
+			focus = SHL_workers_brigades
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_southern_compact_idea
+			if = {
+				limit = {
+					KYZ = {
+						exists = yes
+						is_in_faction = no
+						NOT = { has_war_with = SHL }
+					}
+					check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				}
+				custom_effect_tooltip = SHL_southern_compact_offer_tt
+				hidden_effect = {
+					KYZ = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						country_event = { id = ADISCORD_SHL.90 }
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	focus = {
+		id = SHL_war_directorate
+		icon = GFX_goal_generic_construct_mil_factory
+		x = 18
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = {
+			focus = SHL_state_furnaces
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.10
+			unlock_decision_tooltip = SHL_war_orders
+			294 = {
+				if = {
+					limit = {
+						is_owned_by = SHL
+						free_building_slots = { building = arms_factory size = 1 include_locked = no }
+					}
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_right_to_water
+		icon = GFX_goal_generic_more_territorial_claims
+		x = 17
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_war_directorate
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			280 = { add_claim_by = SHL }
+			284 = { add_claim_by = SHL }
+			285 = { add_claim_by = SHL }
+			286 = { add_claim_by = SHL }
+			unlock_decision_tooltip = SHL_seize_qanats
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_key_to_sea
+		icon = GFX_goal_generic_occupy_start_coast
+		x = 19
+		y = 16
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_war_directorate
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			297 = { add_claim_by = SHL }
+			298 = { add_claim_by = SHL }
+			299 = { add_claim_by = SHL }
+			708 = { add_claim_by = SHL }
+			unlock_decision_tooltip = SHL_ultimatum_veyr
+			custom_effect_tooltip = SHL_key_to_sea_tt
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_iron_shahrabad
+		icon = GFX_goal_generic_army_doctrines
+		x = 18
+		y = 17
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_right_to_water
+			focus = SHL_key_to_sea
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_iron_shahrabad_idea
+			army_experience = 15
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	focus = {
+		id = SHL_regency_council
+		icon = GFX_goal_generic_political_pressure
+		x = 24
+		y = 12
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			add_stability = 0.05
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_restore_privileges
+		icon = GFX_focus_generic_improve_the_administration
+		x = 24
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_regency_council
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_restore_privileges_tt
+			hidden_effect = { SHL_restore_house_privileges = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_private_armies
+		icon = GFX_goal_generic_special_forces
+		x = 23
+		y = 14
+		cost = 5
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_restore_privileges
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.05
+			custom_effect_tooltip = SHL_private_armies_tt
+			hidden_effect = {
+				SHL_raise_paid_levies_3 = yes
+				add_to_variable = { var = SHL_unrest value = 5 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_debt_shifts
+		icon = GFX_focus_generic_stockpile_currency
+		x = 25
+		y = 14
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_restore_privileges
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_debt_shift
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_hereditary_republic
+		icon = GFX_goal_generic_production
+		x = 24
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_private_armies
+			focus = SHL_debt_shifts
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_hereditary_republic_idea
+			custom_effect_tooltip = SHL_hereditary_republic_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_house_pressure value = 20 }
+				SHL_clamp_tensions = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_shift_councils
+		icon = GFX_focus_generic_self_management
+		x = 1
+		y = 12
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 50
+			add_war_support = 0.05
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_furnaces_to_workers
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 1
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_shift_councils
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_furnaces_to_workers_tt
+			hidden_effect = { SHL_give_furnaces_to_workers = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_common_smelting
+		icon = GFX_focus_generic_industry_3
+		x = 0
+		y = 14
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_furnaces_to_workers
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_common_smelting_tt
+			unlock_decision_tooltip = SHL_common_cauldron
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_qanat_brotherhood
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 2
+		y = 14
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_furnaces_to_workers
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_kyz_brotherhood_available_tt
+				KYZ = {
+					exists = yes
+					NOT = { has_war_with = SHL }
+				}
+				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				NOT = { has_country_flag = SHL_water_offer_pending }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_kyz_brotherhood_offer_tt
+			hidden_effect = {
+				set_country_flag = SHL_water_offer_pending
+				KYZ = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_SHL.55 }
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_commune_of_fire
+		icon = GFX_goal_generic_major_alliance
+		x = 1
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_common_smelting
+			focus = SHL_qanat_brotherhood
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_ideas = SHL_commune_of_fire_idea
+			if = {
+				limit = {
+					KYZ = {
+						exists = yes
+						is_in_faction = no
+						NOT = { has_war_with = SHL }
+					}
+					check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				}
+				custom_effect_tooltip = SHL_southern_compact_offer_tt
+				hidden_effect = {
+					KYZ = {
+						ADISCORD_release_non_participating_minor_optimization = yes
+						country_event = { id = ADISCORD_SHL.90 }
+					}
+				}
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

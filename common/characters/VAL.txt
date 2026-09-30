@@ -42,7 +42,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Kirill_Voron
-				small = GFX_portrait_VAL_Kirill_Voron
+				small = GFX_portrait_VAL_Kirill_Voron_small
 			}
 		}
 		corps_commander = {
@@ -71,7 +71,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Erika_Stahl
-				small = GFX_portrait_VAL_Erika_Stahl
+				small = GFX_portrait_VAL_Erika_Stahl_small
 			}
 		}
 		field_marshal = {
@@ -100,7 +100,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Boris_Gromov
-				small = GFX_portrait_VAL_Boris_Gromov
+				small = GFX_portrait_VAL_Boris_Gromov_small
 			}
 		}
 		corps_commander = {
@@ -129,7 +129,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_VAL_Renata_Morn
-				small = GFX_portrait_VAL_Renata_Morn
+				small = GFX_portrait_VAL_Renata_Morn_small
 			}
 		}
 		corps_commander = {

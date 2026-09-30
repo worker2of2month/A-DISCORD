@@ -29,6 +29,18 @@ SHL_furnaces_plan = {
 		SHL_city_charters
 		SHL_rights_without_fire
 		SHL_railway_guard
+		SHL_factory_militia
+		SHL_quarter_listening
+		SHL_heralds_table
+		SHL_shift_arbitration
+		SHL_southern_watch
+		SHL_water_question
+		SHL_veyr_duties
+		SHL_mobilise_furnaces
+		SHL_council_of_cities
+		SHL_fire_and_water
+		SHL_workers_brigades
+		SHL_southern_compact
 		SHL_factory_air_defence
 		SHL_industrial_evacuation
 	}

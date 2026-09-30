@@ -25,6 +25,7 @@ ORDER = {
         'frontier',
         'rin',
         'nam',
+        'shahrabad',
         'vorkerland_diplomacy',
         'kefreyt_northern_reservations',
         'bezhaysk',

@@ -2,6 +2,8 @@ capital = 294
 oob = "SHL"
 
 recruit_character = SHL_Jalil_Nur
+recruit_character = SHL_Darius_Safir
+recruit_character = SHL_Shift_Councils
 
 set_politics = {
 	ruling_party = hedonism

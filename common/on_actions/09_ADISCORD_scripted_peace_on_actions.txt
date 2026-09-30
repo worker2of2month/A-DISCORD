@@ -1404,6 +1404,85 @@ on_actions = {
 
 			# END nam:on_capitulation
 
+			# BEGIN shahrabad:on_capitulation
+			# Shahrabad wars are limited: white peace and the listed regions, never annexation.
+			if = {
+				limit = {
+					ROOT = { tag = SHL }
+					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+					FROM = { tag = MZR }
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_mzr_war_defeat = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = SHL }
+					SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+					FROM = { tag = KYZ }
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_kyz_war_defeat = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = SHL }
+					SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+					FROM = { tag = GLP }
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_glp_war_defeat = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = MZR }
+					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+					FROM = {
+						OR = {
+							tag = SHL
+							is_in_faction_with = SHL
+						}
+					}
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_mzr_war_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = KYZ }
+					SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+					FROM = { tag = SHL }
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_kyz_war_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = { tag = GLP }
+					SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+					FROM = { tag = SHL }
+				}
+				set_global_flag = skip_default_capitulation
+				SHL = { SHL_glp_war_victory = yes }
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						OR = {
+							tag = KYZ
+							tag = GLP
+						}
+						is_in_faction_with = SHL
+					}
+					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+					FROM = { tag = MZR }
+				}
+				# A defeated ally leaves the defensive war without losing its land.
+				set_global_flag = skip_default_capitulation
+				ROOT = { white_peace = MZR }
+			}
+			# END shahrabad:on_capitulation
+
 			# BEGIN vorkerland_diplomacy:on_capitulation
 			if = {
 				limit = {

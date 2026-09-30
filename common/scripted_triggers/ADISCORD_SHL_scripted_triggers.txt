@@ -83,3 +83,137 @@ SHL_selected_target = {
 		}
 	}
 }
+
+# ---------------------------------------------------------------------------
+# Quarters, crests and borders. Country scope SHL unless noted.
+# ---------------------------------------------------------------------------
+
+# STATE scope: the three furnaces fed by the Keyzan qanats.
+SHL_site_on_qanat_border = {
+	OR = {
+		state = 287
+		state = 288
+		state = 289
+	}
+}
+
+SHL_accident_ready = {
+	NOT = { has_country_flag = SHL_accident_pending }
+	check_variable = { var = SHL_cycle_number value = SHL_accident_ready_cycle compare = greater_than_or_equals }
+}
+
+SHL_strike_ready = {
+	check_variable = { var = SHL_unrest value = 60 compare = greater_than_or_equals }
+	NOT = { has_country_flag = SHL_strike_active }
+	NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+	check_variable = { var = SHL_cycle_number value = SHL_strike_ready_cycle compare = greater_than_or_equals }
+}
+
+SHL_conspiracy_ready = {
+	check_variable = { var = SHL_house_pressure value = 60 compare = greater_than_or_equals }
+	NOT = { has_country_flag = SHL_conspiracy_active }
+	OR = {
+		check_variable = { var = SHL_political_course value = 0 compare = equals }
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+	}
+	check_variable = { var = SHL_cycle_number value = SHL_conspiracy_ready_cycle compare = greater_than_or_equals }
+}
+
+SHL_can_lead_alliance = {
+	SHL_country_operable = yes
+	is_subject = no
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+	}
+}
+
+SHL_kyz_counterpart = {
+	KYZ = {
+		exists = yes
+		is_subject = no
+		NOT = { is_in_faction_with = SHL }
+	}
+	OR = {
+		280 = { is_owned_by = KYZ }
+		284 = { is_owned_by = KYZ }
+		285 = { is_owned_by = KYZ }
+		286 = { is_owned_by = KYZ }
+	}
+	NOT = { has_country_flag = SHL_kyz_brotherhood }
+}
+
+SHL_glp_counterpart = {
+	GLP = {
+		exists = yes
+		is_subject = no
+		NOT = { is_in_faction_with = SHL }
+	}
+	OR = {
+		297 = { is_owned_by = GLP }
+		299 = { is_owned_by = GLP }
+	}
+	NOT = { has_country_flag = SHL_veyr_partner }
+}
+
+SHL_can_seize_qanats = {
+	SHL_country_operable = yes
+	has_war = no
+	check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+	OR = {
+		has_completed_focus = SHL_qanat_guard
+		has_completed_focus = SHL_right_to_water
+	}
+	SHL_kyz_counterpart = yes
+	KYZ = { has_war = no }
+}
+
+SHL_can_strike_veyr = {
+	SHL_country_operable = yes
+	has_war = no
+	check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+	OR = {
+		has_completed_focus = SHL_veyr_ultimatum
+		has_completed_focus = SHL_key_to_sea
+	}
+	SHL_glp_counterpart = yes
+	GLP = { has_war = no }
+}
+
+SHL_mazar_can_threaten = {
+	707 = { is_owned_by = SHL }
+	MZR = {
+		exists = yes
+		is_subject = no
+		has_war = no
+		NOT = { is_in_faction_with = SHL }
+	}
+	OR = {
+		269 = { is_owned_by = MZR }
+		273 = { is_owned_by = MZR }
+	}
+}
+
+# Mazar tests a weak Shahrabad first and stops waiting after 24 cycles.
+SHL_mazar_demand_ready = {
+	check_variable = { var = SHL_mazar_state value = 0 compare = equals }
+	OR = {
+		check_variable = { var = SHL_cycle_number value = 24 compare = greater_than_or_equals }
+		AND = {
+			check_variable = { var = SHL_cycle_number value = 16 compare = greater_than_or_equals }
+			OR = {
+				check_variable = { var = SHL_running_count value = 6 compare = less_than_or_equals }
+				has_war = yes
+				has_stability < 0.35
+			}
+		}
+	}
+	SHL_mazar_can_threaten = yes
+}
+
+SHL_mazar_repeat_ready = {
+	check_variable = { var = SHL_mazar_state value = 2 compare = equals }
+	check_variable = { var = SHL_cycle_number value = SHL_mazar_repeat_cycle compare = greater_than_or_equals }
+	SHL_mazar_can_threaten = yes
+}

@@ -347,3 +347,177 @@ defined_text = {
 		localization_key = SHL_packet1_red
 	}
 }
+
+defined_text = {
+	name = SHLGetPrice150
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+		localization_key = SHL_price_150
+	}
+	text = {
+		localization_key = SHL_price_150_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice250
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
+		localization_key = SHL_price_250
+	}
+	text = {
+		localization_key = SHL_price_250_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice350
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals } }
+		localization_key = SHL_price_350
+	}
+	text = {
+		localization_key = SHL_price_350_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPP50
+	text = {
+		trigger = { has_political_power = 50 }
+		localization_key = SHL_pp50
+	}
+	text = {
+		localization_key = SHL_pp50_red
+	}
+}
+
+defined_text = {
+	name = SHLGetManpower3000
+	text = {
+		trigger = { NOT = { has_manpower < 3000 } }
+		localization_key = SHL_mp3000
+	}
+	text = {
+		localization_key = SHL_mp3000_red
+	}
+}
+
+defined_text = {
+	name = SHLGetQuartersStatus
+	text = {
+		trigger = { has_country_flag = SHL_strike_active }
+		localization_key = SHL_status_strike
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_unrest value = 60 compare = greater_than_or_equals } }
+		localization_key = SHL_status_unrest_high
+	}
+	text = {
+		localization_key = SHL_status_unrest_calm
+	}
+}
+
+defined_text = {
+	name = SHLGetCrestsStatus
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_status_crests_gone
+	}
+	text = {
+		trigger = { has_country_flag = SHL_conspiracy_active }
+		localization_key = SHL_status_conspiracy
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_house_pressure value = 60 compare = greater_than_or_equals } }
+		localization_key = SHL_status_pressure_high
+	}
+	text = {
+		localization_key = SHL_status_pressure_calm
+	}
+}
+
+defined_text = {
+	name = SHLGetWaterStatus
+	text = {
+		trigger = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		localization_key = SHL_status_water_war
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+		localization_key = SHL_status_water_open
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 2 compare = equals } }
+		localization_key = SHL_status_water_quota
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 3 compare = equals } }
+		localization_key = SHL_status_water_wells
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 4 compare = equals } }
+		localization_key = SHL_status_water_taken
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_water_crisis value = 5 compare = equals } }
+		localization_key = SHL_status_water_brotherhood
+	}
+	text = {
+		localization_key = SHL_status_water_quiet
+	}
+}
+
+defined_text = {
+	name = SHLGetVeyrStatus
+	text = {
+		trigger = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		localization_key = SHL_status_veyr_war
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_veyr_crisis value = 1 compare = equals } }
+		localization_key = SHL_status_veyr_duty
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_veyr_crisis value = 2 compare = equals } }
+		localization_key = SHL_status_veyr_union
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_veyr_crisis value = 3 compare = equals } }
+		localization_key = SHL_status_veyr_harbour
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_veyr_crisis value = 4 compare = equals } }
+		localization_key = SHL_status_veyr_taken
+	}
+	text = {
+		localization_key = SHL_status_veyr_quiet
+	}
+}
+
+defined_text = {
+	name = SHLGetMazarStatus
+	text = {
+		trigger = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		localization_key = SHL_status_mazar_war
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mazar_state value = 5 compare = equals } }
+		localization_key = SHL_status_mazar_deadline
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mazar_state value = 2 compare = equals } }
+		localization_key = SHL_status_mazar_paid
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+		localization_key = SHL_status_mazar_settled
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mazar_state value = 1 compare = equals } }
+		localization_key = SHL_status_mazar_demand
+	}
+	text = {
+		localization_key = SHL_status_mazar_quiet
+	}
+}

@@ -28,6 +28,7 @@ SHL_initialize_furnaces = {
 		set_variable = { var = SHL_pp_gain value = 0.05 }
 		set_variable = { var = SHL_course_stability value = 0 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0 }
+		SHL_initialize_tensions = yes
 		287 = {
 			set_variable = { var = SHL_furnace_running value = 1 }
 			set_variable = { var = SHL_furnace_owner value = 0 }
@@ -126,6 +127,8 @@ SHL_run_cycle = {
 			limit = { SHL_country_operable = yes }
 			SHL_produce_period = yes
 			SHL_refresh_furnaces = yes
+			SHL_update_tensions = yes
+			SHL_check_crises = yes
 		}
 		# A capitulated country keeps its clock; stale callbacks cannot advance it.
 		if = {
@@ -138,6 +141,7 @@ SHL_run_cycle = {
 
 SHL_produce_period = {
 	set_variable = { var = SHL_last_cycle_income value = 0 }
+	set_variable = { var = SHL_cycle_idle_sites value = 0 }
 	add_to_variable = { var = SHL_cycle_number value = 1 }
 	287 = { SHL_produce_site = yes }
 	288 = { SHL_produce_site = yes }
@@ -168,6 +172,8 @@ SHL_produce_period = {
 			set_variable = { var = SHL_tenth_period_wear value = 3 }
 			set_variable = { var = SHL_tenth_period_income value = 25 }
 		}
+		subtract_from_variable = { var = SHL_tenth_period_income value = SHL_income_deduction }
+		clamp_variable = { var = SHL_tenth_period_income min = 0 max = 50 }
 		if = {
 			limit = {
 				check_variable = { var = SHL_regular_supply value = 1 compare = equals }
@@ -237,6 +243,16 @@ SHL_produce_site = {
 			set_variable = { var = SHL_period_income value = 25 }
 		}
 		subtract_from_variable = { var = SHL_period_wear value = SHL_furnace_training }
+		# PREV is SHL: every producing site pays the same active deductions.
+		subtract_from_variable = { var = SHL_period_income value = PREV.SHL_income_deduction }
+		clamp_variable = { var = SHL_period_income min = 0 max = 50 }
+		if = {
+			limit = {
+				SHL_site_on_qanat_border = yes
+				SHL = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+			}
+			add_to_variable = { var = SHL_period_wear value = 4 }
+		}
 		if = {
 			limit = {
 				SHL = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
@@ -271,6 +287,7 @@ SHL_produce_site = {
 			add_to_variable = { var = SHL_furnace_shortages value = 1 }
 			add_to_variable = { var = SHL_furnace_wear value = 12 }
 			SHL = {
+				add_to_variable = { var = SHL_cycle_idle_sites value = 1 }
 				if = {
 					limit = { NOT = { has_country_flag = SHL_shortage_notice_seen } }
 					set_country_flag = SHL_shortage_notice_seen
@@ -279,6 +296,18 @@ SHL_produce_site = {
 			}
 		}
 		clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
+		if = {
+			limit = {
+				check_variable = { var = SHL_furnace_wear value = 90 compare = greater_than_or_equals }
+				check_variable = { var = SHL_furnace_wear value = 100 compare = less_than }
+				SHL = { SHL_accident_ready = yes }
+			}
+			set_state_flag = SHL_accident_site
+			SHL = {
+				set_country_flag = SHL_accident_pending
+				country_event = { id = ADISCORD_SHL.40 }
+			}
+		}
 		if = {
 			limit = {
 				OR = {
@@ -306,6 +335,10 @@ SHL_extinguish_site = {
 			limit = { check_variable = { var = SHL_furnace_owner value = 0 compare = equals } }
 			set_variable = { var = SHL_furnace_owner value = 1 }
 			SHL = { add_to_variable = { var = SHL_city_support value = 5 } }
+		}
+		SHL = {
+			add_to_variable = { var = SHL_unrest value = 5 }
+			SHL_clamp_tensions = yes
 		}
 		SHL = {
 			if = {
@@ -707,6 +740,11 @@ SHL_refresh_furnaces = {
 		limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
 		set_variable = { var = SHL_pp_gain value = 0.10 }
 	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		set_variable = { var = SHL_pp_gain value = 0.06 }
+	}
+	SHL_refresh_income_deduction = yes
 	SHL_refresh_selected_furnace = yes
 	if = {
 		limit = { NOT = { has_dynamic_modifier = SHL_conclave_industry } }
@@ -997,6 +1035,15 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_period_income value = 25 }
 	}
 	subtract_from_variable = { var = SHL_selected_period_wear value = SHL_selected_training }
+	subtract_from_variable = { var = SHL_selected_period_income value = SHL_income_deduction }
+	clamp_variable = { var = SHL_selected_period_income min = 0 max = 50 }
+	if = {
+		limit = {
+			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+			check_variable = { var = SHL_selected_furnace value = 3 compare = less_than_or_equals }
+		}
+		add_to_variable = { var = SHL_selected_period_wear value = 4 }
+	}
 }
 
 SHL_commit_house_course = {
@@ -1004,6 +1051,9 @@ SHL_commit_house_course = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 1 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
+		add_to_variable = { var = SHL_unrest value = 10 }
+		subtract_from_variable = { var = SHL_house_pressure value = 15 }
+		SHL_clamp_tensions = yes
 		SHL_refresh_furnaces = yes
 	}
 }
@@ -1031,6 +1081,8 @@ SHL_commit_city_course = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 2 }
 		set_variable = { var = SHL_course_stability value = 0.03 }
+		add_to_variable = { var = SHL_house_pressure value = 15 }
+		SHL_clamp_tensions = yes
 		287 = {
 			if = {
 				limit = { is_owned_by = SHL }
@@ -1094,6 +1146,8 @@ SHL_commit_state_course = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 3 }
 		set_variable = { var = SHL_pp_gain value = 0.10 }
+		add_to_variable = { var = SHL_house_pressure value = 20 }
+		SHL_clamp_tensions = yes
 		287 = {
 			if = {
 				limit = { is_owned_by = SHL }
@@ -1155,6 +1209,9 @@ SHL_commit_state_course = {
 SHL_abort_annexed_operations = {
 	clr_country_flag = SHL_cycle_pending
 	SHL_clear_project_receipt = yes
+	SHL_clear_guard_receipt = yes
+	clear_variable = SHL_wells_deposit
+	clear_variable = SHL_harbour_deposit
 	287 = {
 		clear_variable = SHL_operation_deposit
 		clear_variable = SHL_operation_pp
@@ -1200,4 +1257,1211 @@ SHL_abort_annexed_operations = {
 		clear_variable = SHL_operation_pp
 		clear_variable = SHL_operation
 	}
+}
+
+# ---------------------------------------------------------------------------
+# Quarters, crests and borders. Country scope SHL unless a comment says otherwise.
+# The 28-day cycle owns every recurring check; missions and one-shot timeout
+# events own the dated consequences.
+# ---------------------------------------------------------------------------
+
+SHL_initialize_tensions = {
+	set_variable = { var = SHL_unrest value = 25 }
+	set_variable = { var = SHL_house_pressure value = 20 }
+	set_variable = { var = SHL_strike_ready_cycle value = 0 }
+	set_variable = { var = SHL_conspiracy_ready_cycle value = 0 }
+	set_variable = { var = SHL_accident_ready_cycle value = 0 }
+	set_variable = { var = SHL_suppressions value = 0 }
+	set_variable = { var = SHL_water_crisis value = 0 }
+	set_variable = { var = SHL_water_quota value = 0 }
+	set_variable = { var = SHL_veyr_crisis value = 0 }
+	set_variable = { var = SHL_mazar_state value = 0 }
+	set_variable = { var = SHL_war_kyz value = 0 }
+	set_variable = { var = SHL_war_glp value = 0 }
+	set_variable = { var = SHL_war_mzr value = 0 }
+	set_variable = { var = SHL_income_deduction value = 0 }
+}
+
+SHL_clamp_tensions = {
+	clamp_variable = { var = SHL_unrest min = 0 max = 100 }
+	clamp_variable = { var = SHL_house_pressure min = 0 max = 100 }
+	clamp_variable = { var = SHL_city_support min = 0 max = 100 }
+	add_to_variable = { var = SHL_gui_dirty value = 1 }
+}
+
+# Every producing furnace pays the same active deductions until their source ends.
+SHL_refresh_income_deduction = {
+	set_variable = { var = SHL_income_deduction value = 0 }
+	if = {
+		limit = { check_variable = { var = SHL_veyr_crisis value = 1 compare = equals } }
+		add_to_variable = { var = SHL_income_deduction value = 5 }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_water_quota value = 1 compare = equals } }
+		add_to_variable = { var = SHL_income_deduction value = 3 }
+	}
+	if = {
+		limit = { has_country_flag = SHL_strike_active }
+		add_to_variable = { var = SHL_income_deduction value = 10 }
+	}
+}
+
+# Runs once after each settled production period.
+SHL_update_tensions = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_shift_policy value = 1 compare = equals }
+			NOT = { has_completed_focus = SHL_common_smelting }
+		}
+		add_to_variable = { var = SHL_unrest value = 4 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_shift_policy value = 2 compare = equals } }
+		subtract_from_variable = { var = SHL_unrest value = 2 }
+	}
+	add_to_variable = { var = SHL_unrest value = SHL_cycle_idle_sites }
+	if = {
+		limit = { check_variable = { var = SHL_city_support value = 40 compare = greater_than_or_equals } }
+		subtract_from_variable = { var = SHL_unrest value = 2 }
+	}
+	if = {
+		limit = { has_completed_focus = SHL_shift_arbitration }
+		subtract_from_variable = { var = SHL_unrest value = 1 }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		subtract_from_variable = { var = SHL_house_pressure value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		subtract_from_variable = { var = SHL_unrest value = 2 }
+		add_to_variable = { var = SHL_house_pressure value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		add_to_variable = { var = SHL_house_pressure value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		add_to_variable = { var = SHL_unrest value = 3 }
+		subtract_from_variable = { var = SHL_house_pressure value = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		subtract_from_variable = { var = SHL_unrest value = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_house_votes value = 7 compare = less_than } }
+		add_to_variable = { var = SHL_house_pressure value = 2 }
+	}
+	SHL_clamp_tensions = yes
+}
+
+SHL_check_crises = {
+	if = {
+		limit = { SHL_strike_ready = yes }
+		set_country_flag = SHL_strike_active
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.20 }
+	}
+	if = {
+		limit = { SHL_conspiracy_ready = yes }
+		set_country_flag = SHL_conspiracy_active
+		country_event = { id = ADISCORD_SHL.30 }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_cycle_number value = 8 compare = greater_than_or_equals } }
+		SHL_start_water_crisis = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				check_variable = { var = SHL_cycle_number value = 12 compare = greater_than_or_equals }
+				check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+			}
+		}
+		SHL_start_veyr_crisis = yes
+	}
+	if = {
+		limit = { SHL_mazar_demand_ready = yes }
+		set_variable = { var = SHL_mazar_state value = 1 }
+		country_event = { id = ADISCORD_SHL.70 }
+	}
+	else_if = {
+		limit = { SHL_mazar_repeat_ready = yes }
+		set_variable = { var = SHL_mazar_state value = 1 }
+		country_event = { id = ADISCORD_SHL.75 }
+	}
+}
+
+# ----- Cold shift (strike) -----
+
+SHL_end_strike = {
+	clr_country_flag = SHL_strike_active
+	set_variable = { var = SHL_strike_ready_cycle value = SHL_cycle_number }
+	add_to_variable = { var = SHL_strike_ready_cycle value = 4 }
+	SHL_clamp_tensions = yes
+	SHL_refresh_furnaces = yes
+}
+
+SHL_strike_concede = {
+	if = {
+		limit = {
+			has_country_flag = SHL_strike_active
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		subtract_from_variable = { var = SHL_unrest value = 35 }
+		add_to_variable = { var = SHL_house_pressure value = 10 }
+		add_to_variable = { var = SHL_city_support value = 5 }
+		SHL_end_strike = yes
+	}
+}
+
+SHL_strike_suppress = {
+	if = {
+		limit = { has_country_flag = SHL_strike_active }
+		subtract_from_variable = { var = SHL_unrest value = 25 }
+		subtract_from_variable = { var = SHL_city_support value = 10 }
+		add_to_variable = { var = SHL_suppressions value = 1 }
+		SHL_clamp_tensions = yes
+		if = {
+			limit = { check_variable = { var = SHL_suppressions value = 2 compare = greater_than_or_equals } }
+			country_event = { id = ADISCORD_SHL.21 days = 3 }
+		}
+		else = { SHL_end_strike = yes }
+	}
+}
+
+SHL_declare_martial_law = {
+	if = {
+		limit = { has_active_mission = SHL_strike_mission }
+		remove_mission = SHL_strike_mission
+	}
+	set_variable = { var = SHL_unrest value = 30 }
+	subtract_from_variable = { var = SHL_house_pressure value = 10 }
+	set_variable = { var = SHL_suppressions value = 0 }
+	SHL_end_strike = yes
+}
+
+# ----- Ultimatum of the crests -----
+
+SHL_end_conspiracy = {
+	clr_country_flag = SHL_conspiracy_active
+	set_variable = { var = SHL_conspiracy_ready_cycle value = SHL_cycle_number }
+	add_to_variable = { var = SHL_conspiracy_ready_cycle value = 4 }
+	SHL_clamp_tensions = yes
+}
+
+SHL_conspiracy_guarantees = {
+	if = {
+		limit = { has_country_flag = SHL_conspiracy_active }
+		subtract_from_variable = { var = SHL_house_pressure value = 25 }
+		add_to_variable = { var = SHL_unrest value = 10 }
+		subtract_from_variable = { var = SHL_city_support value = 5 }
+		SHL_end_conspiracy = yes
+	}
+}
+
+# The directorate seizes the two furnaces whose owners signed the ultimatum.
+SHL_conspiracy_arrests = {
+	if = {
+		limit = {
+			has_country_flag = SHL_conspiracy_active
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		subtract_from_variable = { var = SHL_house_pressure value = 30 }
+		subtract_from_variable = { var = SHL_unrest value = 5 }
+		290 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+				}
+				set_variable = { var = SHL_furnace_owner value = 2 }
+			}
+		}
+		295 = {
+			if = {
+				limit = {
+					is_owned_by = SHL
+					check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+				}
+				set_variable = { var = SHL_furnace_owner value = 2 }
+			}
+		}
+		SHL_end_conspiracy = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_resist_crests = {
+	if = {
+		limit = { has_active_mission = SHL_conspiracy_mission }
+		remove_mission = SHL_conspiracy_mission
+	}
+	set_variable = { var = SHL_house_pressure value = 40 }
+	SHL_end_conspiracy = yes
+}
+
+# ----- Hidden courses -----
+
+SHL_retire_nur = {
+	if = {
+		limit = { has_character = SHL_Jalil_Nur }
+		retire_character = SHL_Jalil_Nur
+	}
+}
+
+SHL_commit_regency_course = {
+	if = {
+		limit = {
+			NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		set_variable = { var = SHL_political_course value = 4 }
+		set_variable = { var = SHL_course_stability value = 0 }
+		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
+		set_country_flag = SHL_regency_path
+		promote_character = {
+			character = SHL_Darius_Safir
+			ideology = aristocratic_hedonism
+		}
+		SHL_retire_nur = yes
+		subtract_from_variable = { var = SHL_house_pressure value = 30 }
+		add_to_variable = { var = SHL_unrest value = 15 }
+		if = {
+			limit = { has_active_mission = SHL_conspiracy_mission }
+			remove_mission = SHL_conspiracy_mission
+		}
+		SHL_end_conspiracy = yes
+		mark_focus_tree_layout_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_commit_commune_course = {
+	if = {
+		limit = {
+			NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		set_variable = { var = SHL_political_course value = 5 }
+		set_variable = { var = SHL_course_stability value = 0.05 }
+		set_variable = { var = SHL_treasury_capacity_bonus value = 0 }
+		set_country_flag = SHL_commune_path
+		set_politics = {
+			ruling_party = anarchism
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = anarchism
+			popularity = 0.35
+		}
+		promote_character = {
+			character = SHL_Shift_Councils
+			ideology = anarchism_ideology
+		}
+		SHL_retire_nur = yes
+		subtract_from_variable = { var = SHL_unrest value = 30 }
+		set_variable = { var = SHL_house_pressure value = 0 }
+		set_variable = { var = SHL_suppressions value = 0 }
+		if = {
+			limit = { has_active_mission = SHL_strike_mission }
+			remove_mission = SHL_strike_mission
+		}
+		if = {
+			limit = { has_active_mission = SHL_conspiracy_mission }
+			remove_mission = SHL_conspiracy_mission
+		}
+		clr_country_flag = SHL_conspiracy_active
+		SHL_end_strike = yes
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+# STATE scope. A cold furnace whose ownership changes by course is ready for
+# a paid restart without a second settlement decision.
+SHL_assign_site_owner_house = {
+	if = {
+		limit = { is_owned_by = SHL }
+		set_variable = { var = SHL_furnace_owner value = 0 }
+		if = {
+			limit = { check_variable = { var = SHL_furnace_running value = 0 compare = equals } }
+			set_variable = { var = SHL_restart_settled value = 1 }
+		}
+	}
+}
+
+SHL_assign_site_owner_city = {
+	if = {
+		limit = { is_owned_by = SHL }
+		set_variable = { var = SHL_furnace_owner value = 1 }
+		if = {
+			limit = { check_variable = { var = SHL_furnace_running value = 0 compare = equals } }
+			set_variable = { var = SHL_restart_settled value = 1 }
+		}
+	}
+}
+
+SHL_restore_house_privileges = {
+	287 = { SHL_assign_site_owner_house = yes }
+	288 = { SHL_assign_site_owner_house = yes }
+	289 = { SHL_assign_site_owner_house = yes }
+	290 = { SHL_assign_site_owner_house = yes }
+	291 = { SHL_assign_site_owner_house = yes }
+	292 = { SHL_assign_site_owner_house = yes }
+	293 = { SHL_assign_site_owner_house = yes }
+	294 = { SHL_assign_site_owner_house = yes }
+	295 = { SHL_assign_site_owner_house = yes }
+	subtract_from_variable = { var = SHL_house_pressure value = 20 }
+	add_to_variable = { var = SHL_unrest value = 10 }
+	SHL_clamp_tensions = yes
+	SHL_refresh_furnaces = yes
+}
+
+SHL_give_furnaces_to_workers = {
+	287 = { SHL_assign_site_owner_city = yes }
+	288 = { SHL_assign_site_owner_city = yes }
+	289 = { SHL_assign_site_owner_city = yes }
+	290 = { SHL_assign_site_owner_city = yes }
+	291 = { SHL_assign_site_owner_city = yes }
+	292 = { SHL_assign_site_owner_city = yes }
+	293 = { SHL_assign_site_owner_city = yes }
+	294 = { SHL_assign_site_owner_city = yes }
+	295 = { SHL_assign_site_owner_city = yes }
+	subtract_from_variable = { var = SHL_unrest value = 20 }
+	add_to_variable = { var = SHL_city_support value = 15 }
+	SHL_clamp_tensions = yes
+	SHL_refresh_furnaces = yes
+}
+
+# ----- Furnace accident -----
+
+# STATE scope; PREV is SHL. Only the flagged site is closed.
+SHL_close_accident_site = {
+	if = {
+		limit = { has_state_flag = SHL_accident_site }
+		clr_state_flag = SHL_accident_site
+		if = {
+			limit = {
+				SHL_furnace_site_controlled = yes
+				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			}
+			SHL_extinguish_site = yes
+			damage_building = {
+				type = industrial_complex
+				damage = 1
+			}
+			if = {
+				limit = { SHL = { has_country_flag = SHL_accident_commission } }
+				set_variable = { var = SHL_furnace_training value = 1 }
+			}
+		}
+	}
+}
+
+SHL_resolve_accident = {
+	if = {
+		limit = { has_country_flag = SHL_accident_pending }
+		287 = { SHL_close_accident_site = yes }
+		288 = { SHL_close_accident_site = yes }
+		289 = { SHL_close_accident_site = yes }
+		290 = { SHL_close_accident_site = yes }
+		291 = { SHL_close_accident_site = yes }
+		292 = { SHL_close_accident_site = yes }
+		293 = { SHL_close_accident_site = yes }
+		294 = { SHL_close_accident_site = yes }
+		295 = { SHL_close_accident_site = yes }
+		clr_country_flag = SHL_accident_pending
+		clr_country_flag = SHL_accident_commission
+		set_variable = { var = SHL_accident_ready_cycle value = SHL_cycle_number }
+		add_to_variable = { var = SHL_accident_ready_cycle value = 6 }
+		SHL_clamp_tensions = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# ----- Furnace levy -----
+
+SHL_ensure_levy_template = {
+	if = {
+		limit = { NOT = { has_template = "Furnace Levy" } }
+		division_template = {
+			name = "Furnace Levy"
+			template_counter = 79
+			is_locked = yes
+			force_allow_recruiting = no
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				ADISCORD_militia = { x = 1 y = 0 }
+			}
+		}
+	}
+}
+
+# STATE scope, owner PREV. create_unit fills the division itself: every caller
+# debits its manpower and equipment price before this helper runs.
+SHL_create_levy = {
+	create_unit = {
+		division = "division_template = \"Furnace Levy\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+		owner = PREV
+		allow_spawning_on_enemy_provs = no
+	}
+}
+
+# 3000 manpower, 2700 rifles and 16 squad weapons per levy. The treasury
+# price buys the furnace-made weapons; manpower is the country's own pool.
+SHL_begin_guard_order = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			NOT = { has_variable = SHL_guard_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+			has_political_power = 25
+			NOT = { has_manpower < 3000 }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_political_power = -25
+		add_manpower = -3000
+		set_variable = { var = SHL_guard_deposit value = 150 }
+	}
+}
+
+SHL_clear_guard_receipt = {
+	clear_variable = SHL_guard_deposit
+}
+
+SHL_cancel_guard_order = {
+	if = {
+		limit = { has_variable = SHL_guard_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_guard_deposit }
+		add_political_power = 25
+		add_manpower = 3000
+		SHL_clear_guard_receipt = yes
+	}
+}
+
+SHL_finish_guard_order = {
+	if = {
+		limit = { has_variable = SHL_guard_deposit }
+		if = {
+			limit = {
+				SHL_country_operable = yes
+				294 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			SHL_ensure_levy_template = yes
+			294 = { SHL_create_levy = yes }
+			SHL_clear_guard_receipt = yes
+		}
+		else = { SHL_cancel_guard_order = yes }
+	}
+}
+
+# Levies paid by a course instead of the treasury: the houses, the city
+# brigades or the private guards supply the recruits and their rifles.
+SHL_raise_paid_levies_2 = {
+	SHL_ensure_levy_template = yes
+	294 = {
+		if = {
+			limit = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+			SHL_create_levy = yes
+			SHL_create_levy = yes
+		}
+	}
+}
+
+SHL_raise_paid_levies_3 = {
+	SHL_raise_paid_levies_2 = yes
+	294 = {
+		if = {
+			limit = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+			SHL_create_levy = yes
+		}
+	}
+}
+
+# ----- Qanat crisis and water war (KYZ) -----
+
+SHL_start_water_crisis = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_water_crisis value = 0 compare = equals }
+			SHL_kyz_counterpart = yes
+		}
+		set_variable = { var = SHL_water_crisis value = 1 }
+		KYZ = { ADISCORD_release_non_participating_minor_optimization = yes }
+		country_event = { id = ADISCORD_SHL.50 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# KYZ scope after its own answer. Payment and delivery are settled together.
+SHL_sign_water_treaty = {
+	SHL = {
+		clr_country_flag = SHL_water_offer_pending
+		if = {
+			limit = {
+				check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			}
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			set_variable = { var = SHL_water_crisis value = 2 }
+			set_variable = { var = SHL_water_quota value = 1 }
+			SHL_refresh_furnaces = yes
+			country_event = { id = ADISCORD_SHL.53 }
+		}
+		else = { country_event = { id = ADISCORD_SHL.54 } }
+	}
+}
+
+# KYZ scope. The brotherhood ends the dispute without a quota.
+SHL_sign_water_brotherhood = {
+	SHL = {
+		clr_country_flag = SHL_water_offer_pending
+		if = {
+			limit = { check_variable = { var = SHL_war_kyz value = 0 compare = equals } }
+			set_country_flag = SHL_kyz_brotherhood
+			set_variable = { var = SHL_water_quota value = 0 }
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = SHL_water_crisis value = 0 compare = equals }
+						check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+						check_variable = { var = SHL_water_crisis value = 2 compare = equals }
+					}
+				}
+				set_variable = { var = SHL_water_crisis value = 5 }
+			}
+			SHL_refresh_furnaces = yes
+			country_event = { id = ADISCORD_SHL.53 }
+		}
+		else = { country_event = { id = ADISCORD_SHL.54 } }
+	}
+}
+
+SHL_begin_wells = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_wells_deposit }
+			check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		set_variable = { var = SHL_wells_deposit value = 250 }
+	}
+}
+
+SHL_cancel_wells = {
+	if = {
+		limit = { has_variable = SHL_wells_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_wells_deposit }
+		clear_variable = SHL_wells_deposit
+	}
+}
+
+# A dispute already closed by treaty, brotherhood or war refunds the wells.
+SHL_finish_wells = {
+	if = {
+		limit = { has_variable = SHL_wells_deposit }
+		if = {
+			limit = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_water_crisis value = 1 compare = equals }
+			}
+			set_variable = { var = SHL_water_crisis value = 3 }
+			clear_variable = SHL_wells_deposit
+			SHL_refresh_furnaces = yes
+		}
+		else = { SHL_cancel_wells = yes }
+	}
+}
+
+# STATE scope, owner KYZ.
+SHL_kyz_raise_qanat_guard = {
+	if = {
+		limit = {
+			is_owned_by = KYZ
+			is_controlled_by = KYZ
+		}
+		create_unit = {
+			division = "division_template = \"Qanat Guard\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = KYZ
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+SHL_start_kyz_war = {
+	if = {
+		limit = { SHL_can_seize_qanats = yes }
+		KYZ = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_war_support = 0.15
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+				producer = KYZ
+			}
+		}
+		280 = { SHL_kyz_raise_qanat_guard = yes }
+		284 = { SHL_kyz_raise_qanat_guard = yes }
+		286 = { SHL_kyz_raise_qanat_guard = yes }
+		set_variable = { var = SHL_war_kyz value = 1 }
+		set_country_flag = SHL_war_kyz_clock
+		declare_war_on = {
+			target = KYZ
+			type = take_state_focus
+			generator = { 280 284 285 286 }
+		}
+		country_event = { id = ADISCORD_SHL.56 days = 270 }
+	}
+}
+
+SHL_close_kyz_war = {
+	if = {
+		limit = { has_war_with = KYZ }
+		white_peace = KYZ
+	}
+	set_variable = { var = SHL_war_kyz value = 0 }
+	clr_country_flag = SHL_war_kyz_clock
+}
+
+# STATE scope; transfers only land KYZ still owns.
+SHL_take_state_from_kyz = {
+	if = {
+		limit = { is_owned_by = KYZ }
+		SHL = { transfer_state = PREV }
+		set_state_controller_to = SHL
+	}
+}
+
+SHL_kyz_war_victory = {
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		SHL_close_kyz_war = yes
+		280 = { SHL_take_state_from_kyz = yes }
+		284 = { SHL_take_state_from_kyz = yes }
+		285 = { SHL_take_state_from_kyz = yes }
+		286 = { SHL_take_state_from_kyz = yes }
+		set_variable = { var = SHL_water_crisis value = 4 }
+		set_variable = { var = SHL_water_quota value = 0 }
+		add_timed_idea = { idea = SHL_captured_qanats days = 365 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.57 }
+	}
+}
+
+SHL_kyz_war_defeat = {
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		SHL_close_kyz_war = yes
+		if = {
+			limit = { 287 = { is_owned_by = SHL } }
+			KYZ = { transfer_state = 287 }
+			287 = { set_state_controller_to = KYZ }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+			set_variable = { var = SHL_water_crisis value = 2 }
+		}
+		set_variable = { var = SHL_water_quota value = 1 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.58 }
+	}
+}
+
+SHL_kyz_war_armistice = {
+	if = {
+		limit = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+		SHL_close_kyz_war = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# ----- Veyr duties and port war (GLP) -----
+
+SHL_start_veyr_crisis = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_veyr_crisis value = 0 compare = equals }
+			SHL_glp_counterpart = yes
+		}
+		set_variable = { var = SHL_veyr_crisis value = 1 }
+		GLP = { ADISCORD_release_non_participating_minor_optimization = yes }
+		country_event = { id = ADISCORD_SHL.60 }
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# GLP scope after its own answer.
+SHL_sign_veyr_union = {
+	SHL = {
+		clr_country_flag = SHL_veyr_offer_pending
+		if = {
+			limit = { check_variable = { var = SHL_war_glp value = 0 compare = equals } }
+			set_country_flag = SHL_veyr_partner
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = SHL_veyr_crisis value = 0 compare = equals }
+						check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+					}
+				}
+				set_variable = { var = SHL_veyr_crisis value = 2 }
+			}
+			SHL_refresh_furnaces = yes
+			country_event = { id = ADISCORD_SHL.62 }
+		}
+		else = { country_event = { id = ADISCORD_SHL.63 } }
+	}
+}
+
+SHL_begin_harbour = {
+	if = {
+		limit = {
+			NOT = { has_variable = SHL_harbour_deposit }
+			check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		set_variable = { var = SHL_harbour_deposit value = 300 }
+	}
+}
+
+SHL_cancel_harbour = {
+	if = {
+		limit = { has_variable = SHL_harbour_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_harbour_deposit }
+		clear_variable = SHL_harbour_deposit
+	}
+}
+
+# The harbour ends the duty; the dockyard is added only while Kerdan has room.
+SHL_finish_harbour = {
+	if = {
+		limit = { has_variable = SHL_harbour_deposit }
+		if = {
+			limit = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_veyr_crisis value = 1 compare = equals }
+				292 = {
+					is_owned_by = SHL
+					is_controlled_by = SHL
+				}
+			}
+			set_variable = { var = SHL_veyr_crisis value = 3 }
+			clear_variable = SHL_harbour_deposit
+			292 = {
+				if = {
+					limit = { free_building_slots = { building = dockyard size = 1 include_locked = no } }
+					add_building_construction = {
+						type = dockyard
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+			SHL_refresh_furnaces = yes
+		}
+		else = { SHL_cancel_harbour = yes }
+	}
+}
+
+# STATE scope, owner GLP.
+SHL_glp_raise_prismatic_guard = {
+	if = {
+		limit = {
+			is_owned_by = GLP
+			is_controlled_by = GLP
+		}
+		create_unit = {
+			division = "division_template = \"Prismatic Guard\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = GLP
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+SHL_start_glp_war = {
+	if = {
+		limit = { SHL_can_strike_veyr = yes }
+		GLP = {
+			ADISCORD_release_non_participating_minor_optimization = yes
+			add_war_support = 0.15
+			add_manpower = 6000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 4000
+				producer = GLP
+			}
+		}
+		297 = { SHL_glp_raise_prismatic_guard = yes }
+		298 = { SHL_glp_raise_prismatic_guard = yes }
+		708 = { SHL_glp_raise_prismatic_guard = yes }
+		set_variable = { var = SHL_war_glp value = 1 }
+		set_country_flag = SHL_war_glp_clock
+		if = {
+			limit = { has_completed_focus = SHL_key_to_sea }
+			set_country_flag = SHL_war_glp_sea_goal
+			declare_war_on = {
+				target = GLP
+				type = take_state_focus
+				generator = { 297 298 299 708 }
+			}
+		}
+		else = {
+			clr_country_flag = SHL_war_glp_sea_goal
+			declare_war_on = {
+				target = GLP
+				type = take_state_focus
+				generator = { 297 299 }
+			}
+		}
+		country_event = { id = ADISCORD_SHL.65 days = 270 }
+	}
+}
+
+SHL_close_glp_war = {
+	if = {
+		limit = { has_war_with = GLP }
+		white_peace = GLP
+	}
+	set_variable = { var = SHL_war_glp value = 0 }
+	clr_country_flag = SHL_war_glp_clock
+}
+
+# STATE scope; transfers only land GLP still owns.
+SHL_take_state_from_glp = {
+	if = {
+		limit = { is_owned_by = GLP }
+		SHL = { transfer_state = PREV }
+		set_state_controller_to = SHL
+	}
+}
+
+SHL_glp_war_victory = {
+	if = {
+		limit = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		SHL_close_glp_war = yes
+		297 = { SHL_take_state_from_glp = yes }
+		299 = { SHL_take_state_from_glp = yes }
+		if = {
+			limit = { has_country_flag = SHL_war_glp_sea_goal }
+			298 = { SHL_take_state_from_glp = yes }
+			708 = { SHL_take_state_from_glp = yes }
+		}
+		clr_country_flag = SHL_war_glp_sea_goal
+		set_variable = { var = SHL_veyr_crisis value = 4 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.66 }
+	}
+}
+
+SHL_glp_war_defeat = {
+	if = {
+		limit = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		SHL_close_glp_war = yes
+		clr_country_flag = SHL_war_glp_sea_goal
+		if = {
+			limit = { 296 = { is_owned_by = SHL } }
+			GLP = { transfer_state = 296 }
+			296 = { set_state_controller_to = GLP }
+		}
+		add_timed_idea = { idea = SHL_veyr_bondage days = 365 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.67 }
+	}
+}
+
+SHL_glp_war_armistice = {
+	if = {
+		limit = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+		SHL_close_glp_war = yes
+		clr_country_flag = SHL_war_glp_sea_goal
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# ----- Mazar ration and invasion (MZR) -----
+
+SHL_mazar_pay_first = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			has_political_power = 30
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_political_power = -30
+		set_variable = { var = SHL_mazar_state value = 2 }
+		set_variable = { var = SHL_mazar_repeat_cycle value = SHL_cycle_number }
+		add_to_variable = { var = SHL_mazar_repeat_cycle value = 10 }
+	}
+}
+
+SHL_mazar_pay_final = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		set_variable = { var = SHL_mazar_state value = 3 }
+	}
+}
+
+SHL_mazar_refuse = {
+	if = {
+		limit = { check_variable = { var = SHL_mazar_state value = 1 compare = equals } }
+		set_variable = { var = SHL_mazar_state value = 5 }
+		activate_mission = SHL_mazar_deadline
+	}
+}
+
+# The last payment closes the pending deadline before Mazar can march.
+SHL_mazar_buyout = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_mazar_state value = 5 compare = equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+			has_political_power = 50
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
+		add_political_power = -50
+		set_variable = { var = SHL_mazar_state value = 3 }
+		if = {
+			limit = { has_active_mission = SHL_mazar_deadline }
+			remove_mission = SHL_mazar_deadline
+		}
+	}
+}
+
+# STATE scope, owner MZR.
+SHL_mzr_raise_cistern_watch = {
+	if = {
+		limit = {
+			is_owned_by = MZR
+			is_controlled_by = MZR
+		}
+		create_unit = {
+			division = "division_template = \"Cistern Watch\" start_experience_factor = 0.2 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = MZR
+			allow_spawning_on_enemy_provs = no
+		}
+		create_unit = {
+			division = "division_template = \"Cistern Watch\" start_experience_factor = 0.15 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = MZR
+			allow_spawning_on_enemy_provs = no
+		}
+	}
+}
+
+# Deadline timeout. A busy or vanished Mazar postpones the demand instead of
+# discarding it.
+SHL_start_mzr_war = {
+	if = {
+		limit = {
+			check_variable = { var = SHL_mazar_state value = 5 compare = equals }
+			SHL_country_operable = yes
+			SHL_mazar_can_threaten = yes
+		}
+		set_variable = { var = SHL_mazar_state value = 4 }
+		set_variable = { var = SHL_war_mzr value = 1 }
+		set_country_flag = SHL_war_mzr_clock
+		MZR = {
+			add_war_support = 0.20
+			add_manpower = 12000
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 8000
+				producer = MZR
+			}
+		}
+		269 = { SHL_mzr_raise_cistern_watch = yes }
+		273 = { SHL_mzr_raise_cistern_watch = yes }
+		275 = {
+			if = {
+				limit = {
+					is_owned_by = MZR
+					is_controlled_by = MZR
+				}
+				create_unit = {
+					division = "division_template = \"Cistern Watch\" start_experience_factor = 0.1 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = MZR
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+		MZR = {
+			declare_war_on = {
+				target = SHL
+				type = take_state_focus
+				generator = { 707 }
+			}
+		}
+		KYZ = {
+			if = {
+				limit = {
+					exists = yes
+					is_in_faction_with = SHL
+					NOT = { has_war_with = MZR }
+				}
+				add_to_war = {
+					targeted_alliance = SHL
+					enemy = MZR
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+		GLP = {
+			if = {
+				limit = {
+					exists = yes
+					is_in_faction_with = SHL
+					NOT = { has_war_with = MZR }
+				}
+				add_to_war = {
+					targeted_alliance = SHL
+					enemy = MZR
+					hostility_reason = asked_to_join
+				}
+			}
+		}
+		country_event = { id = ADISCORD_SHL.71 }
+		country_event = { id = ADISCORD_SHL.72 days = 300 }
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_mazar_state value = 5 compare = equals } }
+		set_variable = { var = SHL_mazar_state value = 2 }
+		set_variable = { var = SHL_mazar_repeat_cycle value = SHL_cycle_number }
+		add_to_variable = { var = SHL_mazar_repeat_cycle value = 4 }
+	}
+}
+
+SHL_close_mzr_war = {
+	if = {
+		limit = { has_war_with = MZR }
+		white_peace = MZR
+	}
+	KYZ = {
+		if = {
+			limit = { has_war_with = MZR }
+			white_peace = MZR
+		}
+	}
+	GLP = {
+		if = {
+			limit = { has_war_with = MZR }
+			white_peace = MZR
+		}
+	}
+	set_variable = { var = SHL_war_mzr value = 0 }
+	set_variable = { var = SHL_mazar_state value = 3 }
+	clr_country_flag = SHL_war_mzr_clock
+}
+
+# STATE scope; transfers only land MZR still owns.
+SHL_take_state_from_mzr = {
+	if = {
+		limit = { is_owned_by = MZR }
+		SHL = { transfer_state = PREV }
+		set_state_controller_to = SHL
+	}
+}
+
+SHL_mzr_war_victory = {
+	if = {
+		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		SHL_close_mzr_war = yes
+		269 = { SHL_take_state_from_mzr = yes }
+		273 = { SHL_take_state_from_mzr = yes }
+		add_timed_idea = { idea = SHL_victory_over_ration days = 365 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.73 }
+	}
+}
+
+# Mazar requisitions two fifths of a positive treasury; the furnaces stay.
+SHL_mzr_war_defeat = {
+	if = {
+		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		SHL_close_mzr_war = yes
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = greater_than } }
+			set_variable = { var = SHL_mazar_requisition value = ADISCORD_economy_treasury }
+			multiply_variable = { var = SHL_mazar_requisition value = 0.4 }
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = SHL_mazar_requisition }
+		}
+		add_timed_idea = { idea = SHL_mazar_ration days = 540 }
+		SHL_refresh_furnaces = yes
+		country_event = { id = ADISCORD_SHL.74 }
+	}
+}
+
+SHL_mzr_war_armistice = {
+	if = {
+		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		SHL_close_mzr_war = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+# ----- Alliances -----
+
+# Partner scope after its own answer; an existing SHL alliance is reused.
+SHL_join_southern_compact = {
+	if = {
+		limit = {
+			SHL = { SHL_can_lead_alliance = yes }
+			is_in_faction = no
+			NOT = { has_war_with = SHL }
+		}
+		SHL = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = SHL_southern_compact_faction
+				}
+			}
+			add_to_faction = PREV
+			country_event = { id = ADISCORD_SHL.92 }
+		}
+	}
+	else = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
+}
+
+SHL_join_golden_gate = {
+	if = {
+		limit = {
+			SHL = { SHL_can_lead_alliance = yes }
+			is_in_faction = no
+			NOT = { has_war_with = SHL }
+		}
+		SHL = {
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = SHL_golden_gate_faction
+				}
+			}
+			add_to_faction = PREV
+			country_event = { id = ADISCORD_SHL.92 }
+		}
+	}
+	else = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
 }

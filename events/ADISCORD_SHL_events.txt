@@ -4,6 +4,7 @@ country_event = {
 	id = ADISCORD_SHL.7
 	title = ADISCORD_SHL.7.t
 	desc = ADISCORD_SHL.7.d
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -41,6 +42,7 @@ country_event = {
 	id = ADISCORD_SHL.8
 	title = ADISCORD_SHL.8.t
 	desc = ADISCORD_SHL.8.d
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -89,6 +91,7 @@ country_event = {
 	id = ADISCORD_SHL.2
 	title = ADISCORD_SHL.2.t
 	desc = ADISCORD_SHL.2.d
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -101,6 +104,7 @@ country_event = {
 	id = ADISCORD_SHL.3
 	title = ADISCORD_SHL.3.t
 	desc = ADISCORD_SHL.3.d
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -113,6 +117,7 @@ country_event = {
 	id = ADISCORD_SHL.4
 	title = ADISCORD_SHL.4.t
 	desc = ADISCORD_SHL.4.d
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -125,6 +130,7 @@ country_event = {
 	id = ADISCORD_SHL.5
 	title = ADISCORD_SHL.5.t
 	desc = ADISCORD_SHL.5.d
+	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = {
 		tag = SHL
@@ -140,6 +146,7 @@ country_event = {
 	id = ADISCORD_SHL.6
 	title = ADISCORD_SHL.6.t
 	desc = ADISCORD_SHL.6.d
+	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { tag = SHL }
 	option = {
@@ -170,5 +177,702 @@ country_event = {
 				clr_country_flag = SHL_transport_dispute
 			}
 		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Quarters and crests
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.20
+	title = ADISCORD_SHL.20.t
+	desc = ADISCORD_SHL.20.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_strike_active
+	}
+	option = {
+		name = ADISCORD_SHL.20.a
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
+		custom_effect_tooltip = SHL_strike_concede_tt
+		hidden_effect = { SHL_strike_concede = yes }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_SHL.20.b
+		default_option = yes
+		custom_effect_tooltip = SHL_strike_wait_tt
+		hidden_effect = { activate_mission = SHL_strike_mission }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.20.c
+		trigger = { has_completed_focus = SHL_railway_guard }
+		add_stability = -0.03
+		custom_effect_tooltip = SHL_strike_suppress_tt
+		hidden_effect = { SHL_strike_suppress = yes }
+		ai_chance = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { var = SHL_suppressions value = 1 compare = greater_than_or_equals }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.21
+	title = ADISCORD_SHL.21.t
+	desc = ADISCORD_SHL.21.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_strike_active
+	}
+	option = {
+		name = ADISCORD_SHL.21.a
+		trigger = { NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } } }
+		custom_effect_tooltip = SHL_commune_course_tt
+		hidden_effect = { SHL_commit_commune_course = yes }
+		ai_chance = {
+			base = 5
+			modifier = {
+				add = 40
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.21.b
+		default_option = yes
+		add_stability = -0.08
+		add_war_support = 0.05
+		add_timed_idea = {
+			idea = SHL_martial_law
+			days = 180
+		}
+		custom_effect_tooltip = SHL_martial_law_tt
+		hidden_effect = { SHL_declare_martial_law = yes }
+		ai_chance = { base = 50 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.22
+	title = ADISCORD_SHL.22.t
+	desc = ADISCORD_SHL.22.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.22.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.30
+	title = ADISCORD_SHL.30.t
+	desc = ADISCORD_SHL.30.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_conspiracy_active
+	}
+	option = {
+		name = ADISCORD_SHL.30.a
+		trigger = { has_political_power = 40 }
+		add_political_power = -40
+		custom_effect_tooltip = SHL_conspiracy_guarantees_tt
+		hidden_effect = { SHL_conspiracy_guarantees = yes }
+		ai_chance = { base = 40 }
+	}
+	option = {
+		name = ADISCORD_SHL.30.b
+		default_option = yes
+		custom_effect_tooltip = SHL_conspiracy_wait_tt
+		hidden_effect = { activate_mission = SHL_conspiracy_mission }
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.30.c
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		add_stability = -0.05
+		custom_effect_tooltip = SHL_conspiracy_arrests_tt
+		hidden_effect = { SHL_conspiracy_arrests = yes }
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.31
+	title = ADISCORD_SHL.31.t
+	desc = ADISCORD_SHL.31.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_conspiracy_active
+	}
+	option = {
+		name = ADISCORD_SHL.31.a
+		custom_effect_tooltip = SHL_regency_course_tt
+		hidden_effect = { SHL_commit_regency_course = yes }
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_SHL.31.b
+		default_option = yes
+		add_stability = -0.10
+		add_timed_idea = {
+			idea = SHL_broken_conclave
+			days = 365
+		}
+		custom_effect_tooltip = SHL_resist_crests_tt
+		hidden_effect = { SHL_resist_crests = yes }
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.32
+	title = ADISCORD_SHL.32.t
+	desc = ADISCORD_SHL.32.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.32.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.40
+	title = ADISCORD_SHL.40.t
+	desc = ADISCORD_SHL.40.d
+	picture = GFX_event_adiscord_vorkerland_explosion
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_accident_pending
+	}
+	option = {
+		name = ADISCORD_SHL.40.a
+		custom_effect_tooltip = SHL_accident_site_tt
+		custom_effect_tooltip = SHL_accident_house_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_house_pressure value = 10 }
+			add_to_variable = { var = SHL_city_support value = 5 }
+			subtract_from_variable = { var = SHL_unrest value = 10 }
+			SHL_resolve_accident = yes
+		}
+		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.40.b
+		default_option = yes
+		custom_effect_tooltip = SHL_accident_site_tt
+		custom_effect_tooltip = SHL_accident_masters_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_unrest value = 15 }
+			subtract_from_variable = { var = SHL_house_pressure value = 5 }
+			SHL_resolve_accident = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
+		name = ADISCORD_SHL.40.c
+		trigger = { has_political_power = 35 }
+		add_political_power = -35
+		custom_effect_tooltip = SHL_accident_site_tt
+		custom_effect_tooltip = SHL_accident_commission_tt
+		hidden_effect = {
+			set_country_flag = SHL_accident_commission
+			subtract_from_variable = { var = SHL_unrest value = 5 }
+			add_to_variable = { var = SHL_house_pressure value = 5 }
+			SHL_resolve_accident = yes
+		}
+		ai_chance = { base = 30 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Qanats (KYZ)
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.50
+	title = ADISCORD_SHL.50.t
+	desc = ADISCORD_SHL.50.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.50.a
+		default_option = yes
+		custom_effect_tooltip = SHL_water_crisis_tt
+	}
+}
+
+# Sent to KYZ. Payment and the quota are settled only after this answer.
+country_event = {
+	id = ADISCORD_SHL.52
+	title = ADISCORD_SHL.52.t
+	desc = ADISCORD_SHL.52.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = KYZ }
+	option = {
+		name = ADISCORD_SHL.52.a
+		default_option = yes
+		custom_effect_tooltip = SHL_kyz_accepts_treaty_tt
+		hidden_effect = { SHL_sign_water_treaty = yes }
+		ai_chance = { base = 80 }
+	}
+	option = {
+		name = ADISCORD_SHL.52.b
+		custom_effect_tooltip = SHL_kyz_refuses_tt
+		hidden_effect = {
+			SHL = {
+				clr_country_flag = SHL_water_offer_pending
+				country_event = { id = ADISCORD_SHL.54 }
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.53
+	title = ADISCORD_SHL.53.t
+	desc = ADISCORD_SHL.53.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.53.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.54
+	title = ADISCORD_SHL.54.t
+	desc = ADISCORD_SHL.54.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.54.a
+		default_option = yes
+	}
+}
+
+# Sent to KYZ by the brotherhood focuses of the open Conclave and the commune.
+country_event = {
+	id = ADISCORD_SHL.55
+	title = ADISCORD_SHL.55.t
+	desc = ADISCORD_SHL.55.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = KYZ }
+	option = {
+		name = ADISCORD_SHL.55.a
+		default_option = yes
+		custom_effect_tooltip = SHL_kyz_accepts_brotherhood_tt
+		hidden_effect = { SHL_sign_water_brotherhood = yes }
+		ai_chance = { base = 90 }
+	}
+	option = {
+		name = ADISCORD_SHL.55.b
+		custom_effect_tooltip = SHL_kyz_refuses_tt
+		hidden_effect = {
+			SHL = {
+				clr_country_flag = SHL_water_offer_pending
+				country_event = { id = ADISCORD_SHL.54 }
+			}
+		}
+		ai_chance = { base = 10 }
+	}
+}
+
+# One-shot timeout; the clock age rejects a callback from an earlier war.
+country_event = {
+	id = ADISCORD_SHL.56
+	title = ADISCORD_SHL.56.t
+	desc = ADISCORD_SHL.56.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+		has_country_flag = {
+			flag = SHL_war_kyz_clock
+			days > 268
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.56.a
+		default_option = yes
+		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_kyz_war_armistice = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.57
+	title = ADISCORD_SHL.57.t
+	desc = ADISCORD_SHL.57.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.57.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.58
+	title = ADISCORD_SHL.58.t
+	desc = ADISCORD_SHL.58.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.58.a
+		default_option = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Veyr (GLP)
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.60
+	title = ADISCORD_SHL.60.t
+	desc = ADISCORD_SHL.60.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.60.a
+		default_option = yes
+		custom_effect_tooltip = SHL_veyr_crisis_tt
+	}
+}
+
+# Sent to GLP by the trade-union focus.
+country_event = {
+	id = ADISCORD_SHL.61
+	title = ADISCORD_SHL.61.t
+	desc = ADISCORD_SHL.61.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = GLP }
+	option = {
+		name = ADISCORD_SHL.61.a
+		default_option = yes
+		custom_effect_tooltip = SHL_glp_accepts_union_tt
+		hidden_effect = { SHL_sign_veyr_union = yes }
+		ai_chance = { base = 80 }
+	}
+	option = {
+		name = ADISCORD_SHL.61.b
+		custom_effect_tooltip = SHL_glp_refuses_tt
+		hidden_effect = {
+			SHL = {
+				clr_country_flag = SHL_veyr_offer_pending
+				country_event = { id = ADISCORD_SHL.63 }
+			}
+		}
+		ai_chance = { base = 20 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.62
+	title = ADISCORD_SHL.62.t
+	desc = ADISCORD_SHL.62.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.62.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.63
+	title = ADISCORD_SHL.63.t
+	desc = ADISCORD_SHL.63.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.63.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.65
+	title = ADISCORD_SHL.65.t
+	desc = ADISCORD_SHL.65.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_war_glp value = 1 compare = equals }
+		has_country_flag = {
+			flag = SHL_war_glp_clock
+			days > 268
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.65.a
+		default_option = yes
+		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_glp_war_armistice = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.66
+	title = ADISCORD_SHL.66.t
+	desc = ADISCORD_SHL.66.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.66.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.67
+	title = ADISCORD_SHL.67.t
+	desc = ADISCORD_SHL.67.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.67.a
+		default_option = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Mazar (MZR)
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.70
+	title = ADISCORD_SHL.70.t
+	desc = ADISCORD_SHL.70.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+	}
+	option = {
+		name = ADISCORD_SHL.70.a
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			has_political_power = 30
+		}
+		custom_effect_tooltip = SHL_mazar_pay_first_tt
+		hidden_effect = { SHL_mazar_pay_first = yes }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.2
+				num_divisions > 7
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.70.b
+		default_option = yes
+		custom_effect_tooltip = SHL_mazar_refuse_tt
+		hidden_effect = { SHL_mazar_refuse = yes }
+		ai_chance = { base = 30 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.71
+	title = ADISCORD_SHL.71.t
+	desc = ADISCORD_SHL.71.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.71.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.72
+	title = ADISCORD_SHL.72.t
+	desc = ADISCORD_SHL.72.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_war_mzr value = 1 compare = equals }
+		has_country_flag = {
+			flag = SHL_war_mzr_clock
+			days > 298
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.72.a
+		default_option = yes
+		custom_effect_tooltip = SHL_armistice_tt
+		hidden_effect = { SHL_mzr_war_armistice = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.73
+	title = ADISCORD_SHL.73.t
+	desc = ADISCORD_SHL.73.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.73.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.74
+	title = ADISCORD_SHL.74.t
+	desc = ADISCORD_SHL.74.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.74.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.75
+	title = ADISCORD_SHL.75.t
+	desc = ADISCORD_SHL.75.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+	}
+	option = {
+		name = ADISCORD_SHL.75.a
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } }
+		custom_effect_tooltip = SHL_mazar_pay_final_tt
+		hidden_effect = { SHL_mazar_pay_final = yes }
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.2
+				num_divisions > 7
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.75.b
+		default_option = yes
+		custom_effect_tooltip = SHL_mazar_refuse_tt
+		hidden_effect = { SHL_mazar_refuse = yes }
+		ai_chance = { base = 30 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Alliances. Sent to the partner; SHL creates or reuses its alliance only
+# after this answer.
+# ---------------------------------------------------------------------------
+
+country_event = {
+	id = ADISCORD_SHL.90
+	title = ADISCORD_SHL.90.t
+	desc = ADISCORD_SHL.90.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = KYZ }
+	option = {
+		name = ADISCORD_SHL.90.a
+		default_option = yes
+		custom_effect_tooltip = SHL_partner_joins_tt
+		hidden_effect = { SHL_join_southern_compact = yes }
+		ai_chance = { base = 85 }
+	}
+	option = {
+		name = ADISCORD_SHL.90.b
+		hidden_effect = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
+		ai_chance = { base = 15 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.91
+	title = ADISCORD_SHL.91.t
+	desc = ADISCORD_SHL.91.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = GLP }
+	option = {
+		name = ADISCORD_SHL.91.a
+		default_option = yes
+		custom_effect_tooltip = SHL_partner_joins_tt
+		hidden_effect = { SHL_join_golden_gate = yes }
+		ai_chance = { base = 85 }
+	}
+	option = {
+		name = ADISCORD_SHL.91.b
+		hidden_effect = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
+		ai_chance = { base = 15 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.92
+	title = ADISCORD_SHL.92.t
+	desc = ADISCORD_SHL.92.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.92.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.93
+	title = ADISCORD_SHL.93.t
+	desc = ADISCORD_SHL.93.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.93.a
+		default_option = yes
 	}
 }

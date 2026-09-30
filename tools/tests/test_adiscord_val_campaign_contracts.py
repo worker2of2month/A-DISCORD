@@ -40,7 +40,86 @@ def selected_effects(items, facts, scope="VAL"):
             yield scope, entry
 
 
+def resolve_border_neighbors(items, neighbors, scope="VAL"):
+    """Expand native country adjacency from explicit scenario fixtures."""
+    resolved = []
+    for entry in items:
+        if entry.key == "any_neighbor_country":
+            countries = [
+                replace(entry, key=country, value=entry.value)
+                for country in neighbors.get(scope, ())
+            ]
+            resolved.append(replace(entry, key="OR", value=countries))
+        elif isinstance(entry.value, list):
+            country_scope = entry.key if entry.key in neighbors else scope
+            resolved.append(replace(
+                entry,
+                value=resolve_border_neighbors(entry.value, neighbors, country_scope),
+            ))
+        else:
+            resolved.append(entry)
+    return resolved
+
+
 class ValCampaignContractsTests(unittest.TestCase):
+    def test_northern_campaign_requires_a_current_border_for_focus_and_war(self):
+        gate = block(entries(TRIGGERS), "VAL_can_attack_northern_coalition")
+        focuses = block(entries(FOCUSES), "focus_tree")
+        focus = next(
+            entry.value for entry in focuses
+            if entry.key == "focus"
+            and scalar(entry.value, "id") == "VAL_Break_The_Northern_Coalition"
+        )
+        launch = block(entries(EFFECTS), "VAL_begin_northern_coalition_campaign")
+        facts = {
+            ("VAL", "has_completed_focus", "VAL_Northern_Settlement"): True,
+        }
+        for country in ("VAL", "YPR", "COF", "TFF", "NOD"):
+            for condition, value in (
+                ("exists", "yes"),
+                ("has_capitulated", "no"),
+                ("is_subject", "no"),
+                ("has_war", "no"),
+                ("is_in_faction", "no"),
+            ):
+                facts[(country, condition, value)] = True
+
+        scenarios = (
+            ("no border", None, None, False, False, False),
+            ("neutral Nodrul blocks access", "YPR", "NOD", False, False, False),
+            ("Yubora border", "YPR", "VAL", False, False, True),
+            ("Forest border", "COF", "VAL", False, False, True),
+            ("Frontier border", "TFF", "VAL", False, False, True),
+            ("subject border", "YPR", "NOD", True, False, True),
+            ("capitulated subject", "YPR", "NOD", True, True, False),
+        )
+        for name, target, neighbor, subject, capitulated, expected in scenarios:
+            with self.subTest(scenario=name):
+                neighbors = {country: () for country in ("VAL", "YPR", "COF", "TFF", "NOD")}
+                if target is not None:
+                    neighbors[target] = (neighbor,)
+                    neighbors[neighbor] = (target,)
+                current = {
+                    **facts,
+                    ("NOD", "is_subject_of", "VAL"): subject,
+                    ("NOD", "has_capitulated", "no"): not capitulated,
+                }
+                allowed = matches_conditions(
+                    resolve_border_neighbors(gate, neighbors), current, "VAL"
+                )
+                self.assertEqual(allowed, expected)
+                current[("VAL", "VAL_can_attack_northern_coalition", "yes")] = allowed
+                self.assertEqual(
+                    matches_conditions(block(focus, "available"), current, "VAL"),
+                    expected,
+                )
+                declarations = [
+                    scalar(entry.value, "target")
+                    for scope, entry in selected_effects(launch, current)
+                    if scope == "VAL" and entry.key == "declare_war_on"
+                ]
+                self.assertEqual(declarations, ["YPR"] if expected else [])
+
     def test_each_quarterly_tier_can_pay_its_quoted_price_in_both_slots(self):
         effects = entries(EFFECTS)
         triggers = entries(TRIGGERS)

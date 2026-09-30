@@ -47,6 +47,22 @@ leader_traits = {
 		production_speed_arms_factory_factor = 0.04
 	}
 
+	SHL_regent_of_the_crests = {
+		random = no
+		sprite = 1
+		production_factory_efficiency_gain_factor = 0.04
+		political_power_gain = 0.05
+		stability_factor = -0.02
+	}
+
+	SHL_voice_of_the_shifts = {
+		random = no
+		sprite = 1
+		stability_factor = 0.04
+		conscription_factor = 0.03
+		political_power_gain = -0.03
+	}
+
 	GLP_broker_of_glass_ports = {
 		random = no
 		sprite = 1

@@ -65,6 +65,29 @@ characters = {
 			traits = { SHL_mediator_of_nine_furnaces }
 		}
 	}
+	# Recruited in SHL history; crisis courses promote them instead of recruiting.
+	SHL_Darius_Safir = {
+		name = SHL_Darius_Safir
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_5 } }
+		country_leader = {
+			ideology = aristocratic_hedonism
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Darius_Safir_desc
+			traits = { SHL_regent_of_the_crests }
+		}
+	}
+	SHL_Shift_Councils = {
+		name = SHL_Shift_Councils
+		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_8 } }
+		country_leader = {
+			ideology = anarchism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+			desc = SHL_Shift_Councils_desc
+			traits = { SHL_voice_of_the_shifts }
+		}
+	}
 	GLP_Miran_Veyr = {
 		name = GLP_Miran_Veyr
 		portraits = { civilian = { large = GFX_portrait_GLP_Miran_Veyr } }

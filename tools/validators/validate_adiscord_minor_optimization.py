@@ -163,6 +163,19 @@ EVENT_AWAKENED_PARTICIPATION = {
     for tag in ("MON", "RIN")
 }
 
+# KYZ and GLP stay dormant until a Shahrabad crisis wakes them; the Shahrabad
+# effects release each country before its first event, alliance or war.
+SHAHRABAD_NEIGHBOUR_FILES = {
+    Path("common/decisions/ADISCORD_SHL_decisions.txt"),
+    Path("common/national_focus/ADISCORD_SHL_focus.txt"),
+    Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
+    Path("common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"),
+    Path("events/ADISCORD_SHL_events.txt"),
+}
+for _tag in ("GLP", "KYZ"):
+    EVENT_AWAKENED_PARTICIPATION[_tag] = set(SHAHRABAD_NEIGHBOUR_FILES)
+
 # The feudal bloc wakes on war entry or when an authored settlement installs
 # an administration without requiring that minor to have joined the war.
 BEZHAYSK_TAGS = {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}

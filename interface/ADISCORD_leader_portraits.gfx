@@ -204,18 +204,54 @@ spriteTypes = {
 		name = "GFX_portrait_VAL_Kirill_Voron"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Kirill_Voron_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Kirill_Voron.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_portrait_VAL_Erika_Stahl"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Erika_Stahl_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Erika_Stahl.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_portrait_VAL_Boris_Gromov"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Boris_Gromov_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Boris_Gromov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_portrait_VAL_Renata_Morn"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_VAL_Renata_Morn_small"
+		texturefile = "gfx/leaders/VAL/portrait_VAL_Renata_Morn.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_portrait_VAL_Aleksei_Veyr"
 		texturefile = "gfx/leaders/VAL/portrait_VAL_Aleksei_Veyr.png"

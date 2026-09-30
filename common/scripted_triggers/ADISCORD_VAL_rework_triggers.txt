@@ -855,6 +855,36 @@ VAL_can_attack_northern_coalition = {
 	is_subject = no
 	has_war = no
 	NOT = { has_country_flag = VAL_northern_coalition_campaign_active }
+	# Subject administrations provide a front; neutral transit countries do not.
+	OR = {
+		YPR = {
+			any_neighbor_country = {
+				has_capitulated = no
+				OR = {
+					tag = VAL
+					is_subject_of = VAL
+				}
+			}
+		}
+		COF = {
+			any_neighbor_country = {
+				has_capitulated = no
+				OR = {
+					tag = VAL
+					is_subject_of = VAL
+				}
+			}
+		}
+		TFF = {
+			any_neighbor_country = {
+				has_capitulated = no
+				OR = {
+					tag = VAL
+					is_subject_of = VAL
+				}
+			}
+		}
+	}
 	YPR = {
 		exists = yes
 		has_capitulated = no

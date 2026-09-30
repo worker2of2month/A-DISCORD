@@ -8,6 +8,12 @@ from pathlib import Path
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = Path(__file__).resolve().parents[2]
+NEIGHBOURS = ("KYZ", "GLP", "MZR")
+NEIGHBOUR_STATES = {
+    "KYZ": (280, 284, 285, 286),
+    "GLP": (297, 298, 299, 708),
+    "MZR": (269, 273, 275),
+}
 EFFECT_PATH = ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"
 TRIGGER_PATH = ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"
 
@@ -55,6 +61,19 @@ class ScriptMachine:
         self.dynamic = set()
         self.calls = []
         self.previous_scope = "SHL"
+        # Neighbour countries and simple engine facts used by the crisis layer.
+        self.countries = {tag: {"exists": True, "is_subject": False, "has_war": False} for tag in NEIGHBOURS}
+        self.wars = set()
+        self.factions = {}
+        self.missions = set()
+        self.ideas = set()
+        self.stability = 0.5
+        self.manpower = 100000.0
+        self.divisions = 2
+        self.ownership.update({str(state): owner for owner, states in NEIGHBOUR_STATES.items() for state in states})
+        self.ownership["296"] = "SHL"
+        self.ownership["707"] = "SHL"
+        self.control.update(self.ownership)
         self.target_scope = None
         self.variables["SHL"]["ADISCORD_economy_treasury"] = 1000.0
 
@@ -72,13 +91,28 @@ class ScriptMachine:
             return self.variables[scope].get(value, 0.0)
 
     def matches(self, items, scope, target=None):
+        def units(children):
+            grouped = []
+            index = 0
+            while index < len(children):
+                if not children[index].key:
+                    grouped.append(children[index:index + 3])
+                    index += 3
+                else:
+                    grouped.append([children[index]])
+                    index += 1
+            return grouped
+
+        def unit(entries):
+            return self.matches(entries, scope, target)
+
         def match(e):
             if e.key == "OR":
-                return any(match(child) for child in e.value)
+                return any(unit(child) for child in units(e.value))
             if e.key == "AND" or e.key in ("hidden_trigger", "custom_trigger_tooltip"):
-                return all(match(child) for child in e.value if child.key != "tooltip")
+                return all(unit(child) for child in units([c for c in e.value if c.key != "tooltip"]))
             if e.key == "NOT":
-                return not any(match(child) for child in e.value)
+                return not any(unit(child) for child in units(e.value))
             if e.key == "check_variable":
                 name = scalar(e.value, "var")
                 left = self.variables[scope].get(name, 0.0)
@@ -103,6 +137,30 @@ class ScriptMachine:
                 return e.value in self.flags[scope]
             if e.key in ("ROOT", "SHL"):
                 return self.condition_scope(e.value, "SHL", scope, target)
+            if e.key in NEIGHBOURS:
+                return self.condition_scope(e.value, e.key, scope, target)
+            if e.key == "exists" and scope in NEIGHBOURS:
+                return self.countries[scope]["exists"] == (e.value == "yes")
+            if e.key in ("is_subject", "has_war") and scope in self.countries:
+                return self.countries[scope][e.key] == (e.value == "yes")
+            if e.key == "is_subject" and scope == "SHL":
+                return e.value == "no"
+            if e.key == "has_war" and scope == "SHL":
+                return any("SHL" in war for war in self.wars) == (e.value == "yes")
+            if e.key == "has_war_with":
+                return frozenset((scope, e.value)) in self.wars
+            if e.key == "is_in_faction_with":
+                return self.factions.get(scope) is not None and self.factions.get(scope) == self.factions.get(e.value)
+            if e.key == "is_in_faction":
+                return (self.factions.get(scope) is not None) == (e.value == "yes")
+            if e.key == "is_faction_leader":
+                return (self.factions.get(scope) == scope) == (e.value == "yes")
+            if e.key == "has_active_mission":
+                return e.value in self.missions
+            if e.key == "has_character":
+                return True
+            if e.key == "has_template":
+                return e.value.strip('"') in self.calls
             if e.key == "FROM":
                 return self.condition_scope(e.value, target, scope, target)
             if e.key.isdigit():
@@ -141,10 +199,20 @@ class ScriptMachine:
             entry = items[index]
             if not entry.key:
                 comparison = [item.value for item in items[index:index + 3]]
-                if comparison[1:] != ["<", "5"] or comparison[0] not in ("infrastructure", "anti_air_building"):
+                native = {
+                    "has_stability": self.stability,
+                    "num_divisions": self.divisions,
+                    "has_manpower": self.manpower,
+                    "infrastructure": self.infrastructure,
+                    "anti_air_building": self.anti_air,
+                }
+                if comparison[0] not in native or comparison[1] not in ("<", ">"):
                     raise AssertionError("Unsupported native comparison: " + repr(comparison))
-                value = self.infrastructure if comparison[0] == "infrastructure" else self.anti_air
-                results.append(value < 5)
+                if comparison[0] in ("infrastructure", "anti_air_building") and comparison[1:] != ["<", "5"]:
+                    raise AssertionError("Unsupported native comparison: " + repr(comparison))
+                left = native[comparison[0]]
+                right = float(comparison[2])
+                results.append(left < right if comparison[1] == "<" else left > right)
                 index += 3
             else:
                 results.append(match(entry))
@@ -183,6 +251,43 @@ class ScriptMachine:
                 self.execute(e.value, scope, target)
             elif e.key in ("ROOT", "SHL"):
                 self.switch_scope(e.value, "SHL", scope, target)
+            elif e.key in NEIGHBOURS:
+                self.switch_scope(e.value, e.key, scope, target)
+            elif e.key == "declare_war_on":
+                self.wars.add(frozenset((scope, scalar(e.value, "target"))))
+                self.calls.append(("declare_war_on", scope, scalar(e.value, "target")))
+            elif e.key == "white_peace":
+                self.wars.discard(frozenset((scope, e.value)))
+            elif e.key == "transfer_state":
+                state = self.previous_scope if e.value == "PREV" else e.value
+                self.ownership[state] = scope
+            elif e.key == "set_state_controller_to":
+                self.control[scope] = e.value
+            elif e.key in ("activate_mission", "remove_mission"):
+                (self.missions.add if e.key == "activate_mission" else self.missions.discard)(e.value)
+            elif e.key == "add_timed_idea":
+                self.ideas.add(scalar(e.value, "idea"))
+            elif e.key == "add_ideas":
+                self.ideas.add(e.value)
+            elif e.key == "add_manpower":
+                self.manpower += self.value(e.value, scope)
+            elif e.key == "create_unit":
+                self.divisions += 1
+                self.calls.append(("create_unit", scope))
+            elif e.key == "division_template":
+                self.calls.append(scalar(e.value, "name").strip('"'))
+            elif e.key == "create_faction_from_template":
+                self.factions[scope] = scope
+            elif e.key == "add_to_faction":
+                member = self.previous_scope if e.value == "PREV" else e.value
+                self.factions[member] = self.factions.get(scope, scope)
+            elif e.key in (
+                "set_politics", "add_popularity", "promote_character", "retire_character",
+                "mark_focus_tree_layout_dirty", "damage_building", "add_to_war", "add_war_support",
+                "add_equipment_to_stockpile", "ADISCORD_release_non_participating_minor_optimization",
+                "add_claim_by",
+            ):
+                self.calls.append((e.key, scope))
             elif e.key == "FROM":
                 self.switch_scope(e.value, target, scope, target)
             elif e.key.isdigit():
@@ -455,18 +560,25 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 24.99)
         self.assertEqual(m.variables["287"]["SHL_furnace_stock"], 0)
 
-    def test_native_focus_tree_has_thirty_unique_reachable_focuses(self):
+    def test_native_focus_tree_has_unique_reachable_focuses_on_free_cells(self):
         path = ROOT / "focus_trees/SHL/main/focuses.txt"
         self.assertTrue(path.exists())
         tree = block(parse_clausewitz(path.read_text(encoding="utf-8")), "focus_tree")
         focuses = [e.value for e in tree if e.key == "focus"]
         ids = [scalar(f, "id") for f in focuses]
-        self.assertEqual(len(ids), 30)
-        self.assertEqual(len(set(ids)), 30)
+        self.assertEqual(len(ids), 62)
+        self.assertEqual(len(set(ids)), 62)
+        cells = [(scalar(f, "x"), scalar(f, "y")) for f in focuses]
+        self.assertEqual(len(cells), len(set(cells)))
         for focus in focuses:
             for prerequisite in [e.value for e in focus if e.key == "prerequisite"]:
                 for item in prerequisite:
                     self.assertIn(item.value, ids)
+
+    def test_hidden_courses_are_gated_by_their_crisis_flags(self):
+        for identifier, flag in (("SHL_regency_council", "SHL_regency_path"), ("SHL_shift_councils", "SHL_commune_path")):
+            allow = block(focus_definition(identifier), "allow_branch")
+            self.assertEqual([(e.key, e.value) for e in allow], [("has_country_flag", flag)])
 
     def test_annexation_clears_site_receipts_without_paying_new_owner(self):
         m = self.machine
@@ -613,3 +725,264 @@ class FurnaceAccountingTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CrisisLayerTests(unittest.TestCase):
+    def setUp(self):
+        effects = parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))
+        triggers = parse_clausewitz(TRIGGER_PATH.read_text(encoding="utf-8"))
+        self.m = ScriptMachine(effects, triggers)
+        for state in range(287, 296):
+            self.m.variables[str(state)].update({
+                "SHL_furnace_stock": 3.0,
+                "SHL_furnace_wear": 20.0,
+                "SHL_furnace_owner": 0.0,
+                "SHL_furnace_running": 1.0,
+                "SHL_furnace_training": 0.0,
+            })
+        self.m.flags["SHL"].add("SHL_furnaces_initialized")
+        self.m.variables["SHL"]["SHL_shift_policy"] = 0.0
+        self.m.run("SHL_initialize_tensions")
+        self.m.run("SHL_refresh_furnaces")
+
+    def country(self):
+        return self.m.variables["SHL"]
+
+    def test_overtime_and_idle_sites_raise_unrest_once_per_cycle(self):
+        c = self.country()
+        c["SHL_shift_policy"] = 1
+        c["SHL_cycle_idle_sites"] = 2
+        self.m.run("SHL_update_tensions")
+        self.assertEqual(c["SHL_unrest"], 31)
+        self.assertEqual(c["SHL_house_pressure"], 20)
+
+    def test_reform_courses_move_crest_pressure(self):
+        c = self.country()
+        c["SHL_political_course"] = 3
+        self.m.run("SHL_update_tensions")
+        self.assertEqual(c["SHL_house_pressure"], 23)
+        c["SHL_political_course"] = 1
+        self.m.run("SHL_update_tensions")
+        self.assertEqual(c["SHL_house_pressure"], 21)
+
+    def test_strike_fires_once_and_charges_every_producing_furnace(self):
+        c = self.country()
+        c["SHL_unrest"] = 60
+        self.m.run("SHL_check_crises")
+        self.m.run("SHL_check_crises")
+        self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.20"), 1)
+        self.assertEqual(c["SHL_income_deduction"], 10)
+        before = c["ADISCORD_economy_treasury"]
+        self.m.run("SHL_produce_period")
+        self.assertEqual(c["ADISCORD_economy_treasury"] - before, 9 * 25)
+
+    def test_strike_concession_is_paid_once_and_sets_cooldown(self):
+        c = self.country()
+        c["SHL_unrest"] = 70
+        c["SHL_cycle_number"] = 5
+        self.m.run("SHL_check_crises")
+        self.m.run("SHL_strike_concede")
+        self.m.run("SHL_strike_concede")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 850)
+        self.assertEqual(c["SHL_unrest"], 35)
+        self.assertEqual(c["SHL_strike_ready_cycle"], 9)
+        self.assertEqual(c["SHL_income_deduction"], 0)
+        c["SHL_unrest"] = 80
+        self.m.run("SHL_check_crises")
+        self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.20"), 1)
+
+    def test_second_crackdown_escalates_to_the_councils(self):
+        c = self.country()
+        c["SHL_unrest"] = 70
+        self.m.run("SHL_check_crises")
+        self.m.run("SHL_strike_suppress")
+        self.assertNotIn("ADISCORD_SHL.21", self.m.scheduled)
+        c["SHL_strike_ready_cycle"] = 0
+        c["SHL_unrest"] = 70
+        self.m.run("SHL_check_crises")
+        self.m.run("SHL_strike_suppress")
+        self.assertIn("ADISCORD_SHL.21", self.m.scheduled)
+
+    def test_commune_transfers_every_owned_furnace_and_stops_crests(self):
+        c = self.country()
+        self.m.variables["290"]["SHL_furnace_running"] = 0
+        self.m.run("SHL_commit_commune_course")
+        self.m.run("SHL_give_furnaces_to_workers")
+        self.assertEqual(c["SHL_political_course"], 5)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_owner"], 1)
+        self.assertEqual(self.m.variables["290"]["SHL_restart_settled"], 1)
+        self.assertEqual(c["SHL_pp_gain"], 0.06)
+        c["SHL_house_pressure"] = 90
+        self.assertFalse(self.m.matches(parse_clausewitz("SHL_conspiracy_ready = yes"), "SHL"))
+
+    def test_regency_cannot_replace_the_commune(self):
+        c = self.country()
+        self.m.run("SHL_commit_commune_course")
+        self.m.run("SHL_commit_regency_course")
+        self.assertEqual(c["SHL_political_course"], 5)
+        self.assertNotIn("SHL_regency_path", self.m.flags["SHL"])
+
+    def test_accident_extinguishes_only_the_flagged_site(self):
+        c = self.country()
+        self.m.variables["288"]["SHL_furnace_wear"] = 86
+        self.m.run("SHL_produce_period")
+        self.assertIn("ADISCORD_SHL.40", self.m.scheduled)
+        self.assertIn("SHL_accident_site", self.m.flags["288"])
+        c["SHL_cycle_number"] = 3
+        self.m.flags["SHL"].add("SHL_accident_commission")
+        self.m.run("SHL_resolve_accident")
+        self.assertEqual(self.m.variables["288"]["SHL_furnace_running"], 0)
+        self.assertEqual(self.m.variables["288"]["SHL_furnace_training"], 1)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_running"], 1)
+        self.assertEqual(c["SHL_accident_ready_cycle"], 9)
+        self.assertNotIn("SHL_accident_pending", self.m.flags["SHL"])
+
+    def test_water_crisis_wakes_keyzan_and_wears_only_border_furnaces(self):
+        c = self.country()
+        c["SHL_cycle_number"] = 8
+        self.m.run("SHL_check_crises")
+        self.assertEqual(c["SHL_water_crisis"], 1)
+        self.assertIn(("ADISCORD_release_non_participating_minor_optimization", "KYZ"), self.m.calls)
+        self.m.run("SHL_produce_period")
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_wear"], 30)
+        self.assertEqual(self.m.variables["290"]["SHL_furnace_wear"], 26)
+
+    def test_water_treaty_is_paid_only_after_keyzan_accepts(self):
+        c = self.country()
+        c["SHL_water_crisis"] = 1
+        self.m.flags["SHL"].add("SHL_water_offer_pending")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 1000)
+        self.m.run("SHL_sign_water_treaty", scope="KYZ")
+        self.m.run("SHL_sign_water_treaty", scope="KYZ")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 900)
+        self.assertEqual(c["SHL_water_crisis"], 2)
+        self.assertEqual(c["SHL_income_deduction"], 3)
+
+    def test_wells_refund_when_the_dispute_closed_first(self):
+        c = self.country()
+        c["SHL_water_crisis"] = 1
+        self.m.run("SHL_begin_wells")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 750)
+        c["SHL_water_crisis"] = 2
+        self.m.run("SHL_finish_wells")
+        self.m.run("SHL_finish_wells")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 1000)
+        self.assertEqual(c["SHL_water_crisis"], 2)
+
+    def test_qanat_war_victory_transfers_only_keyzan_land_once(self):
+        c = self.country()
+        c["SHL_water_crisis"] = 1
+        self.m.focuses.add("SHL_qanat_guard")
+        self.m.ownership["285"] = "MZR"
+        self.m.run("SHL_start_kyz_war")
+        self.assertIn(frozenset(("SHL", "KYZ")), self.m.wars)
+        self.m.run("SHL_kyz_war_victory")
+        self.m.run("SHL_kyz_war_victory")
+        self.assertEqual(self.m.ownership["280"], "SHL")
+        self.assertEqual(self.m.ownership["285"], "MZR")
+        self.assertEqual(c["SHL_water_crisis"], 4)
+        self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.57"), 1)
+        self.assertNotIn(frozenset(("SHL", "KYZ")), self.m.wars)
+
+    def test_qanat_war_defeat_cedes_arbin_and_imposes_quota(self):
+        c = self.country()
+        c["SHL_water_crisis"] = 1
+        self.m.focuses.add("SHL_qanat_guard")
+        self.m.run("SHL_start_kyz_war")
+        self.m.run("SHL_kyz_war_defeat")
+        self.assertEqual(self.m.ownership["287"], "KYZ")
+        self.assertEqual(c["SHL_water_quota"], 1)
+        self.assertEqual(c["SHL_income_deduction"], 3)
+
+    def test_port_war_sea_goal_follows_key_to_sea(self):
+        c = self.country()
+        c["SHL_veyr_crisis"] = 1
+        self.m.focuses.add("SHL_key_to_sea")
+        self.m.run("SHL_start_glp_war")
+        self.m.run("SHL_glp_war_victory")
+        for state in ("297", "298", "299", "708"):
+            self.assertEqual(self.m.ownership[state], "SHL")
+        self.assertEqual(c["SHL_veyr_crisis"], 4)
+        self.assertEqual(c["SHL_income_deduction"], 0)
+
+    def test_mazar_waits_for_weakness_before_cycle_24(self):
+        c = self.country()
+        c["SHL_cycle_number"] = 16
+        self.m.stability = 0.5
+        self.m.run("SHL_check_crises")
+        self.assertNotIn("ADISCORD_SHL.70", self.m.scheduled)
+        self.m.stability = 0.3
+        self.m.run("SHL_check_crises")
+        self.assertIn("ADISCORD_SHL.70", self.m.scheduled)
+
+    def test_mazar_refusal_leads_to_war_and_buyout_closes_the_threat(self):
+        c = self.country()
+        c["SHL_mazar_state"] = 1
+        self.m.run("SHL_mazar_refuse")
+        self.assertIn("SHL_mazar_deadline", self.m.missions)
+        self.m.run("SHL_mazar_buyout")
+        self.assertEqual(c["SHL_mazar_state"], 3)
+        self.assertNotIn("SHL_mazar_deadline", self.m.missions)
+        self.m.run("SHL_start_mzr_war")
+        self.assertNotIn(frozenset(("MZR", "SHL")), self.m.wars)
+
+    def test_busy_mazar_postpones_instead_of_discarding(self):
+        c = self.country()
+        c["SHL_mazar_state"] = 5
+        c["SHL_cycle_number"] = 20
+        self.m.countries["MZR"]["has_war"] = True
+        self.m.run("SHL_start_mzr_war")
+        self.assertEqual(c["SHL_mazar_state"], 2)
+        self.assertEqual(c["SHL_mazar_repeat_cycle"], 24)
+
+    def test_mazar_defeat_takes_two_fifths_of_a_positive_treasury(self):
+        c = self.country()
+        c["SHL_mazar_state"] = 5
+        self.m.run("SHL_start_mzr_war")
+        self.assertIn(frozenset(("MZR", "SHL")), self.m.wars)
+        self.m.run("SHL_mzr_war_defeat")
+        self.assertAlmostEqual(c["ADISCORD_economy_treasury"], 600)
+        self.assertEqual(c["SHL_mazar_state"], 3)
+        self.assertIn("SHL_mazar_ration", self.m.ideas)
+        self.assertEqual(self.m.ownership["707"], "SHL")
+
+    def test_guard_levy_refunds_exactly_when_capital_is_lost(self):
+        c = self.country()
+        self.m.run("SHL_begin_guard_order")
+        self.m.run("SHL_begin_guard_order")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 850)
+        self.assertEqual(self.m.manpower, 97000)
+        self.m.control["294"] = "MZR"
+        self.m.run("SHL_finish_guard_order")
+        self.assertEqual(c["ADISCORD_economy_treasury"], 1000)
+        self.assertEqual(self.m.manpower, 100000)
+        self.assertEqual(self.m.values["political_power"], 200)
+        self.assertEqual(self.m.divisions, 2)
+
+    def test_guard_levy_spawns_one_division_in_the_capital(self):
+        self.m.run("SHL_begin_guard_order")
+        self.m.run("SHL_finish_guard_order")
+        self.m.run("SHL_finish_guard_order")
+        self.assertEqual(self.m.divisions, 3)
+        self.assertIn("Furnace Levy", self.m.calls)
+
+    def test_partner_joins_only_a_free_shahrabad_alliance(self):
+        self.m.run("SHL_join_southern_compact", scope="KYZ")
+        self.assertEqual(self.m.factions.get("KYZ"), "SHL")
+        self.m.run("SHL_join_golden_gate", scope="GLP")
+        self.assertEqual(self.m.factions.get("GLP"), "SHL")
+        self.assertIn("ADISCORD_SHL.92", self.m.scheduled)
+
+    def test_every_crisis_event_and_decision_key_is_localised(self):
+        effects = EFFECT_PATH.read_text(encoding="utf-8")
+        events = (ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8")
+        decisions = (ROOT / "common/decisions/ADISCORD_SHL_decisions.txt").read_text(encoding="utf-8")
+        focuses = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
+        keys = set(re.findall(r"\b(ADISCORD_SHL\.\d+\.[a-z])\b", events))
+        keys |= set(re.findall(r"custom_effect_tooltip = (\w+)", effects + events + decisions + focuses))
+        keys |= set(re.findall(r"tooltip = (\w+)", events + decisions + focuses))
+        keys |= set(re.findall(r"custom_cost_text = (\w+)", decisions))
+        for language in ("russian", "english"):
+            text = (ROOT / f"localisation/{language}/ADISCORD_SHL_l_{language}.yml").read_text(encoding="utf-8-sig")
+            defined = set(re.findall(r"^ ([\w.]+):", text, re.M))
+            self.assertEqual(sorted(keys - defined), [], language)

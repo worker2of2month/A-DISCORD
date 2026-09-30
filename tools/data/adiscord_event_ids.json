@@ -4067,6 +4067,262 @@
       "owner": "events/ADISCORD_STP_events.txt",
       "subsystem": "stp_party_chapters",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.20",
+      "namespace": "ADISCORD_SHL",
+      "number": 20,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.21",
+      "namespace": "ADISCORD_SHL",
+      "number": 21,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.22",
+      "namespace": "ADISCORD_SHL",
+      "number": 22,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.30",
+      "namespace": "ADISCORD_SHL",
+      "number": 30,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.31",
+      "namespace": "ADISCORD_SHL",
+      "number": 31,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.32",
+      "namespace": "ADISCORD_SHL",
+      "number": 32,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.40",
+      "namespace": "ADISCORD_SHL",
+      "number": 40,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.50",
+      "namespace": "ADISCORD_SHL",
+      "number": 50,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.52",
+      "namespace": "ADISCORD_SHL",
+      "number": 52,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.53",
+      "namespace": "ADISCORD_SHL",
+      "number": 53,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.54",
+      "namespace": "ADISCORD_SHL",
+      "number": 54,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.55",
+      "namespace": "ADISCORD_SHL",
+      "number": 55,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.56",
+      "namespace": "ADISCORD_SHL",
+      "number": 56,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.57",
+      "namespace": "ADISCORD_SHL",
+      "number": 57,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.58",
+      "namespace": "ADISCORD_SHL",
+      "number": 58,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.60",
+      "namespace": "ADISCORD_SHL",
+      "number": 60,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.61",
+      "namespace": "ADISCORD_SHL",
+      "number": 61,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.62",
+      "namespace": "ADISCORD_SHL",
+      "number": 62,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.63",
+      "namespace": "ADISCORD_SHL",
+      "number": 63,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.65",
+      "namespace": "ADISCORD_SHL",
+      "number": 65,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.66",
+      "namespace": "ADISCORD_SHL",
+      "number": 66,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.67",
+      "namespace": "ADISCORD_SHL",
+      "number": 67,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.70",
+      "namespace": "ADISCORD_SHL",
+      "number": 70,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.71",
+      "namespace": "ADISCORD_SHL",
+      "number": 71,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.72",
+      "namespace": "ADISCORD_SHL",
+      "number": 72,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.73",
+      "namespace": "ADISCORD_SHL",
+      "number": 73,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.74",
+      "namespace": "ADISCORD_SHL",
+      "number": 74,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.75",
+      "namespace": "ADISCORD_SHL",
+      "number": 75,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.90",
+      "namespace": "ADISCORD_SHL",
+      "number": 90,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.91",
+      "namespace": "ADISCORD_SHL",
+      "number": 91,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.92",
+      "namespace": "ADISCORD_SHL",
+      "number": 92,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.93",
+      "namespace": "ADISCORD_SHL",
+      "number": 93,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_crises",
+      "status": "active"
     }
   ]
 }
