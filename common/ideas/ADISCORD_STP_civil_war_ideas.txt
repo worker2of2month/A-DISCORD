@@ -4,7 +4,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.03
+				ADISCORD_economy_overall_income_factor = -0.02
 			}
 		}
 
@@ -12,7 +12,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.1
+				ADISCORD_economy_overall_income_factor = 0.025
 			}
 		}
 
@@ -20,7 +20,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.1
+				ADISCORD_economy_admin_expense_factor = -0.035
 			}
 		}
 
@@ -28,8 +28,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = 0.02
-				ADISCORD_economy_overall_income_factor = 0.075
+				ADISCORD_economy_admin_expense_factor = 0.015
+				ADISCORD_economy_overall_income_factor = 0.02
 			}
 		}
 
@@ -37,7 +37,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.2
+				political_power_gain = 0.04
 			}
 		}
 
@@ -45,8 +45,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = -0.03
-				stability_factor = 0.1
+				political_power_gain = -0.02
+				stability_factor = 0.015
 			}
 		}
 
@@ -54,7 +54,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.075
+				production_speed_buildings_factor = 0.015
 			}
 		}
 
@@ -62,8 +62,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = 0.02
-				production_factory_max_efficiency_factor = 0.1
+				ADISCORD_economy_admin_expense_factor = 0.015
+				production_factory_max_efficiency_factor = 0.03
 			}
 		}
 
@@ -71,7 +71,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.03
+				ADISCORD_economy_overall_income_factor = -0.02
 			}
 		}
 
@@ -79,7 +79,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.05
+				ADISCORD_economy_overall_income_factor = 0.015
 			}
 		}
 
@@ -87,8 +87,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.03
-				stability_factor = 0.1
+				ADISCORD_economy_overall_income_factor = -0.02
+				stability_factor = 0.015
 			}
 		}
 
@@ -96,8 +96,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.1
-				stability_factor = -0.04
+				ADISCORD_economy_overall_income_factor = 0.025
+				stability_factor = -0.015
 			}
 		}
 
@@ -105,7 +105,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_industrial_complex_factor = 0.125
+				production_speed_industrial_complex_factor = 0.055
 			}
 		}
 
@@ -113,8 +113,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.075
-				ADISCORD_economy_admin_expense_factor = 0.03
+				army_org_factor = 0.02
+				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 		}
 
@@ -122,8 +122,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.1
-				ADISCORD_economy_admin_expense_factor = 0.02
+				production_speed_buildings_factor = 0.02
+				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
 
@@ -131,7 +131,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				supply_consumption_factor = -0.1
+				supply_consumption_factor = -0.045
 				production_speed_industrial_complex_factor = -0.02
 			}
 		}
@@ -140,8 +140,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				army_org_factor = 0.1
-				planning_speed = 0.125
+				army_org_factor = 0.025
+				planning_speed = 0.025
 			}
 		}
 
@@ -149,7 +149,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.1
+				ADISCORD_economy_admin_expense_factor = -0.035
 			}
 		}
 
@@ -157,7 +157,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.125
+				industrial_capacity_factory = 0.03
 				production_speed_industrial_complex_factor = -0.03
 			}
 		}
@@ -166,7 +166,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.03
+				ADISCORD_economy_overall_income_factor = -0.02
 			}
 		}
 
@@ -174,7 +174,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.1
+				production_factory_max_efficiency_factor = 0.03
 			}
 		}
 
@@ -182,7 +182,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.02
+				ADISCORD_economy_overall_income_factor = -0.015
 			}
 		}
 
@@ -190,8 +190,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_industrial_complex_factor = 0.125
-				ADISCORD_economy_admin_expense_factor = 0.02
+				production_speed_industrial_complex_factor = 0.055
+				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
 
@@ -199,8 +199,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				industrial_capacity_factory = 0.1
-				ADISCORD_economy_admin_expense_factor = 0.02
+				industrial_capacity_factory = 0.025
+				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
 
@@ -208,8 +208,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = 0.02
-				supply_consumption_factor = -0.075
+				ADISCORD_economy_admin_expense_factor = 0.015
+				supply_consumption_factor = -0.035
 			}
 		}
 
@@ -217,7 +217,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_factory_max_efficiency_factor = 0.1
+				production_factory_max_efficiency_factor = 0.03
 			}
 		}
 
@@ -225,8 +225,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.15
-				stability_factor = -0.02
+				political_power_gain = 0.03
+				stability_factor = -0.01
 			}
 		}
 
@@ -234,8 +234,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = 0.02
-				stability_factor = 0.075
+				ADISCORD_economy_admin_expense_factor = 0.015
+				stability_factor = 0.01
 			}
 		}
 
@@ -243,8 +243,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.15
-				ADISCORD_economy_admin_expense_factor = 0.03
+				political_power_gain = 0.03
+				ADISCORD_economy_admin_expense_factor = 0.025
 			}
 		}
 
@@ -252,7 +252,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.125
+				stability_factor = 0.02
 			}
 		}
 
@@ -260,7 +260,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_industrial_complex_factor = 0.1
+				production_speed_industrial_complex_factor = 0.04
 			}
 		}
 
@@ -268,8 +268,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				political_power_gain = 0.175
-				research_speed_factor = -0.02
+				political_power_gain = 0.03
+				research_speed_factor = -0.015
 			}
 		}
 
@@ -277,8 +277,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.125
-				political_power_gain = -0.05
+				production_speed_buildings_factor = 0.025
+				political_power_gain = -0.02
 			}
 		}
 
@@ -286,8 +286,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = 0.03
-				political_power_gain = 0.125
+				ADISCORD_economy_admin_expense_factor = 0.025
+				political_power_gain = 0.02
 			}
 		}
 
@@ -295,7 +295,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_admin_expense_factor = -0.075
+				ADISCORD_economy_admin_expense_factor = -0.025
 			}
 		}
 
@@ -303,7 +303,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.075
+				stability_factor = 0.01
 			}
 		}
 
@@ -311,7 +311,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = -0.04
+				ADISCORD_economy_overall_income_factor = -0.025
 			}
 		}
 
@@ -319,8 +319,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_industrial_complex_factor = 0.1
-				ADISCORD_economy_admin_expense_factor = 0.02
+				production_speed_industrial_complex_factor = 0.04
+				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
 
@@ -328,7 +328,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				ADISCORD_economy_overall_income_factor = 0.05
+				ADISCORD_economy_overall_income_factor = 0.015
 			}
 		}
 
@@ -336,7 +336,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				research_speed_factor = 0.075
+				research_speed_factor = 0.02
 			}
 		}
 
@@ -1234,138 +1234,138 @@ ideas = {
 		STP_pw_party_new_republic_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 }
+			modifier = { stability_factor = 0.01 }
 		}
 		STP_pw_party_district_authority_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.25 ADISCORD_economy_admin_expense_factor = -0.1 }
+			modifier = { political_power_gain = 0.05 ADISCORD_economy_admin_expense_factor = -0.035 }
 		}
 		STP_pw_party_civil_records_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_admin_expense_factor = -0.075 stability_factor = 0.025 }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.025 stability_factor = 0.01 }
 		}
 		STP_pw_party_open_settlement_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { research_speed_factor = 0.075 political_power_gain = -0.05 }
+			modifier = { research_speed_factor = 0.02 political_power_gain = -0.02 }
 		}
 		STP_pw_party_firm_settlement_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.375 research_speed_factor = -0.01 }
+			modifier = { political_power_gain = 0.07 research_speed_factor = -0.01 }
 		}
 		STP_pw_party_civil_charter_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.075 ADISCORD_economy_admin_expense_factor = -0.075 }
+			modifier = { stability_factor = 0.01 ADISCORD_economy_admin_expense_factor = -0.025 }
 		}
 		# Programme reforms and upgraded veteran focuses: display-only deltas.
 		STP_pw_prog_veteran_artels_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_speed_industrial_complex_factor = 0.1 stability_factor = 0.03 }
+			modifier = { production_speed_industrial_complex_factor = 0.04 stability_factor = 0.01 }
 		}
 		STP_pw_prog_insurance_fund_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.05 }
+			modifier = { stability_factor = 0.01 ADISCORD_economy_admin_expense_factor = -0.015 }
 		}
 		STP_pw_prog_houses_cadastre_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_admin_expense_factor = -0.08 ADISCORD_economy_treasury_capacity_factor = 0.15 }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.025 ADISCORD_economy_treasury_capacity_factor = 0.075 }
 		}
 		STP_pw_prog_festival_brigades_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_regain = 0.05 }
+			modifier = { army_org_regain = 0.015 }
 		}
 		STP_pw_prog_cadet_corps_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { training_time_factor = -0.15 army_org_factor = 0.05 }
+			modifier = { training_time_factor = -0.075 army_org_factor = 0.01 }
 		}
 		STP_pw_prog_state_contracts_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_factory_max_efficiency_factor = 0.05 }
+			modifier = { production_factory_max_efficiency_factor = 0.015 }
 		}
 		STP_pw_prog_apparatus_audit_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.1 stability_factor = 0.03 }
+			modifier = { political_power_gain = 0.02 stability_factor = 0.01 }
 		}
 		STP_pw_prog_joint_courses_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { research_speed_factor = 0.05 planning_speed = 0.1 }
+			modifier = { research_speed_factor = 0.015 planning_speed = 0.02 }
 		}
 		STP_pw_party_veterans_congress_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_regain = 0.05 political_power_gain = 0.05 }
+			modifier = { army_org_regain = 0.015 political_power_gain = 0.02 }
 		}
 		STP_pw_party_social_guarantees_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 ADISCORD_economy_admin_expense_factor = -0.05 }
+			modifier = { stability_factor = 0.01 ADISCORD_economy_admin_expense_factor = -0.015 }
 		}
 		STP_pw_party_external_mandate_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { planning_speed = 0.1 }
+			modifier = { planning_speed = 0.02 }
 		}
 		STP_pw_party_restore_roads_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_speed_buildings_factor = 0.125 }
+			modifier = { production_speed_buildings_factor = 0.025 }
 		}
 		STP_pw_party_homes_for_returnees_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 }
+			modifier = { stability_factor = 0.01 }
 		}
 		STP_pw_party_civil_workshops_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_factory_max_efficiency_factor = 0.125 }
+			modifier = { production_factory_max_efficiency_factor = 0.035 }
 		}
 		STP_pw_party_accountable_arsenals_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { industrial_capacity_factory = 0.2 production_speed_industrial_complex_factor = -0.05 }
+			modifier = { industrial_capacity_factory = 0.045 production_speed_industrial_complex_factor = -0.05 }
 		}
 		STP_pw_party_industrial_settlement_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { production_factory_max_efficiency_factor = 0.125 production_speed_buildings_factor = 0.125 }
+			modifier = { production_factory_max_efficiency_factor = 0.035 production_speed_buildings_factor = 0.025 }
 		}
 		STP_pw_party_army_register_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_factor = 0.05 }
+			modifier = { army_org_factor = 0.01 }
 		}
 		STP_pw_party_officer_school_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { planning_speed = 0.25 }
+			modifier = { planning_speed = 0.055 }
 		}
 		STP_pw_party_supply_service_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { supply_consumption_factor = -0.15 army_org_regain = 0.075 }
+			modifier = { supply_consumption_factor = -0.07 army_org_regain = 0.025 }
 		}
 		STP_pw_party_professional_service_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_factor = 0.1 training_time_factor = -0.125 }
+			modifier = { army_org_factor = 0.025 training_time_factor = -0.06 }
 		}
 		STP_pw_party_settled_state_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 industrial_capacity_factory = 0.075 }
+			modifier = { stability_factor = 0.01 industrial_capacity_factory = 0.02 }
 		}
 
 		STP_pc_coalition_hold_delta = { name = STP_pw_republic_dynamic allowed = { always = no } modifier = { army_org_factor = -0.03 } }
@@ -1835,8 +1835,8 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				stability_factor = 0.075
-				ADISCORD_economy_admin_expense_factor = 0.02
+				stability_factor = 0.01
+				ADISCORD_economy_admin_expense_factor = 0.015
 			}
 		}
 
@@ -1844,7 +1844,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				production_speed_buildings_factor = 0.075
+				production_speed_buildings_factor = 0.015
 			}
 		}
 
@@ -1852,7 +1852,7 @@ ideas = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
 			modifier = {
-				training_time_factor = -0.125
+				training_time_factor = -0.06
 			}
 		}
 
@@ -1869,93 +1869,93 @@ ideas = {
 		STP_party_district_charters_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.1 ADISCORD_economy_overall_income_factor = 0.1 political_power_gain = -0.05 }
+			modifier = { stability_factor = 0.015 ADISCORD_economy_overall_income_factor = 0.025 political_power_gain = -0.02 }
 		}
 		STP_party_local_cadres_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { research_speed_factor = 0.1 production_speed_buildings_factor = 0.2 ADISCORD_economy_admin_expense_factor = 0.03 }
+			modifier = { research_speed_factor = 0.025 production_speed_buildings_factor = 0.045 ADISCORD_economy_admin_expense_factor = 0.025 }
 		}
 		STP_party_personnel_commissions_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.375 ADISCORD_economy_admin_expense_factor = -0.1 production_speed_buildings_factor = -0.03 }
+			modifier = { political_power_gain = 0.07 ADISCORD_economy_admin_expense_factor = -0.035 production_speed_buildings_factor = -0.015 }
 		}
 		STP_party_chain_of_command_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_factor = 0.125 planning_speed = 0.25 ADISCORD_economy_admin_expense_factor = 0.03 }
+			modifier = { army_org_factor = 0.03 planning_speed = 0.055 ADISCORD_economy_admin_expense_factor = 0.025 }
 		}
 		STP_party_revenue_service_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_overall_income_factor = 0.3 ADISCORD_economy_creditworthiness_factor = 0.125 ADISCORD_economy_admin_expense_factor = -0.075 }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.075 ADISCORD_economy_creditworthiness_factor = 0.1 ADISCORD_economy_admin_expense_factor = -0.025 }
 		}
 		STP_party_port_contracts_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_overall_income_factor = 0.25 ADISCORD_economy_treasury_capacity_factor = 0.25 production_speed_industrial_complex_factor = 0.25 }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.065 ADISCORD_economy_treasury_capacity_factor = 0.125 production_speed_industrial_complex_factor = 0.105 }
 		}
 		STP_party_industrial_board_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { industrial_capacity_factory = 0.25 production_factory_max_efficiency_factor = 0.125 ADISCORD_economy_admin_expense_factor = 0.03 }
+			modifier = { industrial_capacity_factory = 0.06 production_factory_max_efficiency_factor = 0.035 ADISCORD_economy_admin_expense_factor = 0.025 }
 		}
 		STP_party_research_council_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { research_speed_factor = 0.075 }
+			modifier = { research_speed_factor = 0.02 }
 		}
 		STP_party_technical_institutes_post_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_admin_expense_factor = 0.02 }
+			modifier = { ADISCORD_economy_admin_expense_factor = 0.015 }
 		}
 
 		STP_pw_party_district_congress_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.075 ADISCORD_economy_overall_income_factor = 0.1 political_power_gain = -0.05 }
+			modifier = { stability_factor = 0.01 ADISCORD_economy_overall_income_factor = 0.025 political_power_gain = -0.02 }
 		}
 		STP_pw_party_executive_secretariat_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { political_power_gain = 0.25 ADISCORD_economy_admin_expense_factor = -0.05 stability_factor = -0.01 }
+			modifier = { political_power_gain = 0.05 ADISCORD_economy_admin_expense_factor = -0.015 stability_factor = -0.01 }
 		}
 		STP_pw_party_commercial_recovery_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { ADISCORD_economy_overall_income_factor = 0.2 ADISCORD_economy_treasury_capacity_factor = 0.2 production_speed_buildings_factor = 0.125 }
+			modifier = { ADISCORD_economy_overall_income_factor = 0.05 ADISCORD_economy_treasury_capacity_factor = 0.1 production_speed_buildings_factor = 0.025 }
 		}
 		STP_pw_party_defence_combine_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { industrial_capacity_factory = 0.2 production_factory_max_efficiency_factor = 0.125 ADISCORD_economy_admin_expense_factor = 0.02 }
+			modifier = { industrial_capacity_factory = 0.045 production_factory_max_efficiency_factor = 0.035 ADISCORD_economy_admin_expense_factor = 0.015 }
 		}
 		STP_pw_party_fortress_corps_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { supply_consumption_factor = -0.1 army_org_regain = 0.1 }
+			modifier = { supply_consumption_factor = -0.045 army_org_regain = 0.03 }
 		}
 		STP_pw_party_field_staff_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { planning_speed = 0.25 army_org_factor = 0.075 }
+			modifier = { planning_speed = 0.055 army_org_factor = 0.02 }
 		}
 		STP_pw_party_joint_defence_board_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { supply_consumption_factor = -0.075 army_org_regain = 0.05 stability_factor = 0.05 }
+			modifier = { supply_consumption_factor = -0.035 army_org_regain = 0.015 stability_factor = 0.01 }
 		}
 		STP_pw_party_armed_neutrality_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { army_org_factor = 0.05 production_factory_max_efficiency_factor = 0.075 }
+			modifier = { army_org_factor = 0.01 production_factory_max_efficiency_factor = 0.02 }
 		}
 		STP_pw_party_foreign_settlement_delta = {
 			name = STP_pw_party_dynamic
 			allowed = { always = no }
-			modifier = { stability_factor = 0.05 political_power_gain = 0.125 }
+			modifier = { stability_factor = 0.01 political_power_gain = 0.02 }
 		}
 
 

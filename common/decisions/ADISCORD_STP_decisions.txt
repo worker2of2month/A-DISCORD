@@ -12279,7 +12279,7 @@ STP_ch_chapters = {
 						value = 5
 					}
 					set_country_flag = STP_ch_emergency_powers
-					add_to_variable = { var = STP_pw_planning_speed value = 0.1 }
+					add_to_variable = { var = STP_pw_planning_speed value = 0.02 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -12358,7 +12358,7 @@ STP_ch_chapters = {
 						var = STP_pf_security_support
 						value = 5
 					}
-					add_to_variable = { var = STP_pw_stability_factor value = 0.03 }
+					add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -12437,7 +12437,7 @@ STP_ch_chapters = {
 						var = STP_pf_merchants_support
 						value = 5
 					}
-					add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.015 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -12516,7 +12516,7 @@ STP_ch_chapters = {
 						var = STP_pf_conservatives_support
 						value = 5
 					}
-					add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.1 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.05 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -12595,7 +12595,7 @@ STP_ch_chapters = {
 						var = STP_pf_conservatives_support
 						value = 5
 					}
-					add_to_variable = { var = STP_pw_political_power_gain value = 0.1 }
+					add_to_variable = { var = STP_pw_political_power_gain value = 0.02 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -12674,7 +12674,7 @@ STP_ch_chapters = {
 						var = STP_pf_borons_support
 						value = 5
 					}
-					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+					add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.015 }
 					STP_pw_refresh_modifier = yes
 					STP_refresh_apparatus_loyalty = yes
 					STP_ch_refresh = yes
@@ -13600,8 +13600,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_veteran_artels_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.1 }
-				add_to_variable = { var = STP_pw_stability_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.04 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13626,8 +13626,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_insurance_fund_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_stability_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.05 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.015 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13651,8 +13651,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_houses_cadastre_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.08 }
-				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.15 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = -0.025 }
+				add_to_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.075 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13677,7 +13677,7 @@ STP_pw_programme = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_festival_brigades_delta } }
 			add_manpower = 15000
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_army_org_regain value = 0.05 }
+				add_to_variable = { var = STP_pw_army_org_regain value = 0.015 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13701,8 +13701,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_cadet_corps_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_training_time_factor value = -0.15 }
-				add_to_variable = { var = STP_pw_army_org_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_training_time_factor value = -0.075 }
+				add_to_variable = { var = STP_pw_army_org_factor value = 0.01 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13753,7 +13753,7 @@ STP_pw_programme = {
 								}
 							}
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.05 }
+				add_to_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.015 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13777,8 +13777,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_apparatus_audit_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_political_power_gain value = 0.1 }
-				add_to_variable = { var = STP_pw_stability_factor value = 0.03 }
+				add_to_variable = { var = STP_pw_political_power_gain value = 0.02 }
+				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
 				STP_pw_refresh_modifier = yes
 			}
 		}
@@ -13802,8 +13802,8 @@ STP_pw_programme = {
 		remove_effect = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_prog_joint_courses_delta } }
 			hidden_effect = {
-				add_to_variable = { var = STP_pw_research_speed_factor value = 0.05 }
-				add_to_variable = { var = STP_pw_planning_speed value = 0.1 }
+				add_to_variable = { var = STP_pw_research_speed_factor value = 0.015 }
+				add_to_variable = { var = STP_pw_planning_speed value = 0.02 }
 				STP_pw_refresh_modifier = yes
 			}
 		}

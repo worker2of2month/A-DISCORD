@@ -4588,6 +4588,7 @@ STP_cw_end_northern_colonial_war = {
 STP_pw_begin_recovery = {
 	if = {
 		limit = { OR = { tag = STP tag = STS } NOT = { has_variable = STP_pw_recovery_progress } }
+		set_country_flag = STP_pw_party_rebalance_1
 		set_variable = { var = STP_pw_recovery_progress value = 0 }
 		set_variable = { var = STP_pw_recovery_services value = 0 }
 		set_variable = { var = STP_pw_recovery_industry value = 0 }
@@ -4810,6 +4811,37 @@ STP_pw_finish_project = {
 		STP_pw_refresh_modifier = yes
 	}
 	else = { STP_pw_cancel_project = yes }
+}
+
+# Saves made before the 2026-09-30 rebalance of «Обновлённый президиум» carry the old
+# accumulated bonuses. Scale each bonus once by (new route maximum / old route maximum).
+# New campaigns get the flag in STP_pw_begin_recovery before any bonus is written.
+STP_pw_party_rebalance_migrate = {
+	if = {
+		limit = {
+			tag = STP
+			has_variable = STP_pw_recovery_progress
+			NOT = { has_country_flag = STP_pw_party_rebalance_1 }
+		}
+		set_country_flag = STP_pw_party_rebalance_1
+		if = { limit = { check_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0 compare = less_than } } multiply_variable = { var = STP_pw_ADISCORD_economy_admin_expense_factor value = 0.33 } }
+		if = { limit = { check_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.29 } }
+		if = { limit = { check_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_ADISCORD_economy_treasury_capacity_factor value = 0.5 } }
+		if = { limit = { check_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_ADISCORD_economy_creditworthiness_factor value = 0.8 } }
+		if = { limit = { check_variable = { var = STP_pw_army_org_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_army_org_factor value = 0.3 } }
+		if = { limit = { check_variable = { var = STP_pw_army_org_regain value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_army_org_regain value = 0.47 } }
+		if = { limit = { check_variable = { var = STP_pw_industrial_capacity_factory value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_industrial_capacity_factory value = 0.24 } }
+		if = { limit = { check_variable = { var = STP_pw_planning_speed value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_planning_speed value = 0.27 } }
+		if = { limit = { check_variable = { var = STP_pw_political_power_gain value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_political_power_gain value = 0.23 } }
+		if = { limit = { check_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_production_factory_max_efficiency_factor value = 0.29 } }
+		if = { limit = { check_variable = { var = STP_pw_production_speed_buildings_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_production_speed_buildings_factor value = 0.28 } }
+		if = { limit = { check_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_production_speed_industrial_complex_factor value = 0.42 } }
+		if = { limit = { check_variable = { var = STP_pw_research_speed_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_research_speed_factor value = 0.27 } }
+		if = { limit = { check_variable = { var = STP_pw_stability_factor value = 0 compare = greater_than } } multiply_variable = { var = STP_pw_stability_factor value = 0.25 } }
+		if = { limit = { check_variable = { var = STP_pw_supply_consumption_factor value = 0 compare = less_than } } multiply_variable = { var = STP_pw_supply_consumption_factor value = 0.46 } }
+		if = { limit = { check_variable = { var = STP_pw_training_time_factor value = 0 compare = less_than } } multiply_variable = { var = STP_pw_training_time_factor value = 0.49 } }
+		STP_pw_refresh_modifier = yes
+	}
 }
 
 STP_pw_refresh_modifier = {
