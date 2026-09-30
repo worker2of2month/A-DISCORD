@@ -1,0 +1,349 @@
+defined_text = {
+	name = SHLGetForecast
+	text = {
+		trigger = { check_variable = { var = SHL_selected_status value = 1 compare = equals } }
+		localization_key = SHL_forecast_running
+	}
+	text = { localization_key = SHL_forecast_stopped }
+}
+
+defined_text = {
+	name = SHLGetTenthCondition
+	text = {
+		trigger = {
+			check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals }
+			294 = { SHL_furnace_site_controlled = yes }
+			check_variable = { var = SHL_tenth_running value = 1 compare = equals }
+		}
+		localization_key = SHL_tenth_condition_running
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals } }
+		localization_key = SHL_tenth_condition_stopped
+	}
+	text = { localization_key = SHL_tenth_condition_pending }
+}
+
+defined_text = {
+	name = SHLGetStatus1
+	text = {
+		trigger = { check_variable = { var = SHL_status_1 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_1 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus2
+	text = {
+		trigger = { check_variable = { var = SHL_status_2 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_2 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus3
+	text = {
+		trigger = { check_variable = { var = SHL_status_3 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_3 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus4
+	text = {
+		trigger = { check_variable = { var = SHL_status_4 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_4 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus5
+	text = {
+		trigger = { check_variable = { var = SHL_status_5 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_5 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus6
+	text = {
+		trigger = { check_variable = { var = SHL_status_6 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_6 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus7
+	text = {
+		trigger = { check_variable = { var = SHL_status_7 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_7 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus8
+	text = {
+		trigger = { check_variable = { var = SHL_status_8 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_8 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetStatus9
+	text = {
+		trigger = { check_variable = { var = SHL_status_9 value = 2 compare = equals } }
+		localization_key = SHL_status_occupied
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_status_9 value = 1 compare = equals } }
+		localization_key = SHL_status_running
+	}
+	text = {
+		localization_key = SHL_status_cold
+	}
+}
+
+defined_text = {
+	name = SHLGetSelectedOwner
+	text = {
+		trigger = { check_variable = { var = SHL_selected_owner value = 2 compare = equals } }
+		localization_key = SHL_owner_state
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_selected_owner value = 1 compare = equals } }
+		localization_key = SHL_owner_city
+	}
+	text = {
+		localization_key = SHL_owner_house
+	}
+}
+
+defined_text = {
+	name = SHLGetProjectStage
+	text = {
+		trigger = { has_variable = SHL_project_deposit }
+		localization_key = SHL_project_busy
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_project_stage value = 4 compare = equals } }
+		localization_key = SHL_project_stage_4
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_project_stage value = 3 compare = equals } }
+		localization_key = SHL_project_stage_3
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_project_stage value = 2 compare = equals } }
+		localization_key = SHL_project_stage_2
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_project_stage value = 1 compare = equals } }
+		localization_key = SHL_project_stage_1
+	}
+	text = {
+		localization_key = SHL_project_stage_0
+	}
+}
+
+defined_text = {
+	name = SHLGetShift
+	text = {
+		trigger = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
+		localization_key = SHL_shift_overtime_label
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_shift_policy value = 2 compare = equals } }
+		localization_key = SHL_shift_careful_label
+	}
+	text = {
+		localization_key = SHL_shift_ordinary_label
+	}
+}
+
+defined_text = {
+	name = SHLGetSupply
+	text = {
+		trigger = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
+		localization_key = SHL_supply_on
+	}
+	text = {
+		localization_key = SHL_supply_off
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice25
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals } }
+		localization_key = SHL_price_25
+	}
+	text = {
+		localization_key = SHL_price_25_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice40
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals } }
+		localization_key = SHL_price_40
+	}
+	text = {
+		localization_key = SHL_price_40_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice60
+	text = {
+		trigger = {
+			has_country_flag = SHL_supplier_premium
+			check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals }
+		}
+		localization_key = SHL_price_70
+	}
+	text = {
+		trigger = { has_country_flag = SHL_supplier_premium }
+		localization_key = SHL_price_70_red
+	}
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals } }
+		localization_key = SHL_price_60
+	}
+	text = {
+		localization_key = SHL_price_60_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice80
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals } }
+		localization_key = SHL_price_80
+	}
+	text = {
+		localization_key = SHL_price_80_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice100
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals } }
+		localization_key = SHL_price_100
+	}
+	text = {
+		localization_key = SHL_price_100_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice120
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals } }
+		localization_key = SHL_price_120
+	}
+	text = {
+		localization_key = SHL_price_120_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice200
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals } }
+		localization_key = SHL_price_200
+	}
+	text = {
+		localization_key = SHL_price_200_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPrice300
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals } }
+		localization_key = SHL_price_300
+	}
+	text = {
+		localization_key = SHL_price_300_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPP25
+	text = {
+		trigger = { has_political_power = 25 }
+		localization_key = SHL_pp25
+	}
+	text = {
+		localization_key = SHL_pp25_red
+	}
+}
+
+defined_text = {
+	name = SHLGetPacket1
+	text = {
+		trigger = { check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals } }
+		localization_key = SHL_packet1
+	}
+	text = {
+		localization_key = SHL_packet1_red
+	}
+}

@@ -1690,6 +1690,12 @@ on_actions = {
 			VAL_queue_frontier_reconciliation = yes
 			if = { limit = { FROM = { tag = NAM } } VAL = { VAL_check_nam_concession = yes } }
 			# END kefreyt:on_annex
+			# BEGIN shahrabad:on_annex
+			if = {
+				limit = { FROM = { tag = SHL } }
+				FROM = { SHL_abort_annexed_operations = yes }
+			}
+			# END shahrabad:on_annex
 		}
 	}
 	on_state_control_changed = {

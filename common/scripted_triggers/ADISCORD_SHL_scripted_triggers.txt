@@ -1,0 +1,85 @@
+# Furnace predicates run in state scope; the economic actor is always SHL.
+SHL_furnace_site_controlled = {
+	is_owned_by = SHL
+	is_controlled_by = SHL
+	SHL = {
+		has_country_flag = SHL_furnaces_initialized
+		has_capitulated = no
+	}
+}
+
+SHL_furnace_site_idle = {
+	SHL_furnace_site_controlled = yes
+	NOT = { has_variable = SHL_operation_deposit }
+}
+
+SHL_country_operable = {
+	tag = SHL
+	has_country_flag = SHL_furnaces_initialized
+	has_capitulated = no
+}
+
+SHL_project_idle = {
+	SHL_country_operable = yes
+	NOT = { has_variable = SHL_project_deposit }
+	294 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+}
+
+SHL_reserve_affordable = {
+	OR = {
+		AND = {
+			has_country_flag = SHL_supplier_premium
+			check_variable = { var = ADISCORD_economy_treasury value = 70 compare = greater_than_or_equals }
+		}
+		AND = {
+			NOT = { has_country_flag = SHL_supplier_premium }
+			check_variable = { var = ADISCORD_economy_treasury value = 60 compare = greater_than_or_equals }
+		}
+	}
+}
+
+# Only the GUI-selected site is listed for a human; AI may service all fixed sites.
+SHL_selected_target = {
+	OR = {
+		SHL = { is_ai = yes }
+		AND = {
+			state = 287
+			SHL = { check_variable = { var = SHL_selected_furnace value = 1 compare = equals } }
+		}
+		AND = {
+			state = 288
+			SHL = { check_variable = { var = SHL_selected_furnace value = 2 compare = equals } }
+		}
+		AND = {
+			state = 289
+			SHL = { check_variable = { var = SHL_selected_furnace value = 3 compare = equals } }
+		}
+		AND = {
+			state = 290
+			SHL = { check_variable = { var = SHL_selected_furnace value = 4 compare = equals } }
+		}
+		AND = {
+			state = 291
+			SHL = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
+		}
+		AND = {
+			state = 292
+			SHL = { check_variable = { var = SHL_selected_furnace value = 6 compare = equals } }
+		}
+		AND = {
+			state = 293
+			SHL = { check_variable = { var = SHL_selected_furnace value = 7 compare = equals } }
+		}
+		AND = {
+			state = 294
+			SHL = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
+		}
+		AND = {
+			state = 295
+			SHL = { check_variable = { var = SHL_selected_furnace value = 9 compare = equals } }
+		}
+	}
+}

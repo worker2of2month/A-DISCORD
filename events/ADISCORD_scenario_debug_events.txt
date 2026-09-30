@@ -81,3 +81,116 @@ country_event = {
 	}
 }
 # END CONSOLIDATED: ADISCORD_test_wars_events.txt
+
+# BEGIN ADISCORD portal test
+add_namespace = ADISCORD_portal_test
+
+# Spawns the test portal over sea province 15988 and moves the human camera
+# there. The province has no state, so the nearest coastal state 218 owns the
+# actor. z is absolute height: sea level is 9.5 (floating harbors in
+# map/buildings.txt). Particle size x10 comes from the pdxparticle scale.
+country_event = {
+	id = ADISCORD_portal_test.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		log = "ADISCORD_PORTAL open"
+		218 = {
+			destroy_entity = 610777
+			create_entity = {
+				entity = ADISCORD_portal_test_entity
+				id = 610777
+				x = 3409.8
+				y = 1521.9
+				z = 9.6
+				rotation = 0
+				scale = 1
+				min_zoom = 2000
+			}
+			set_entity_animation = { id = 610777 animation = "open" }
+			destroy_entity = 610778
+			create_entity = {
+				entity = ADISCORD_portal_burst_entity
+				id = 610778
+				x = 3409.8
+				y = 1521.9
+				z = 9.6
+				rotation = 0
+				scale = 1
+				min_zoom = 2000
+			}
+			set_entity_animation = { id = 610778 animation = "burst" }
+		}
+		goto_province = 15988
+		country_event = { id = ADISCORD_portal_test.2 hours = 1 }
+	}
+}
+
+# Removes the one-shot opening flash actor.
+country_event = {
+	id = ADISCORD_portal_test.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		218 = { destroy_entity = 610778 }
+	}
+}
+# END ADISCORD portal test
+
+# BEGIN ADISCORD orbital laser test
+add_namespace = ADISCORD_orbital_laser_test
+
+# Orbital laser strike 25 map px east of the Unity Tower (state 40; terrain
+# height there is ~12.8-13.0 in map/buildings.txt). Re-firing replaces both
+# actors. Sizes are in map units (pdxparticle scale 1).
+country_event = {
+	id = ADISCORD_orbital_laser_test.1
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		log = "ADISCORD_ORBITAL_LASER fire"
+		40 = {
+			destroy_entity = 610790
+			destroy_entity = 610791
+			create_entity = {
+				entity = ADISCORD_orbital_laser_strike_entity
+				id = 610790
+				x = 3185.0
+				y = 725.68
+				z = 13.0
+				rotation = 0
+				scale = 1
+				min_zoom = 2000
+			}
+			set_entity_animation = { id = 610790 animation = "strike" }
+			create_entity = {
+				entity = ADISCORD_orbital_laser_aftermath_entity
+				id = 610791
+				x = 3185.0
+				y = 725.68
+				z = 13.0
+				rotation = 0
+				scale = 1
+				min_zoom = 2000
+			}
+			set_entity_animation = { id = 610791 animation = "burn" }
+		}
+		goto_province = 16428
+		country_event = { id = ADISCORD_orbital_laser_test.2 hours = 1 }
+	}
+}
+
+# Removes the one-shot strike actor; the crater stays until cleared.
+country_event = {
+	id = ADISCORD_orbital_laser_test.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		40 = { destroy_entity = 610790 }
+	}
+}
+# END ADISCORD orbital laser test

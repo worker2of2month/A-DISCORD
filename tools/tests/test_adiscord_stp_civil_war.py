@@ -1277,8 +1277,10 @@ class CivilWarContracts(unittest.TestCase):
                 {"STS"},
                 {
                     "surrender_limit": 0.05,
-                    "army_org_factor": 0.03,
-                    "planning_speed": 0.05,
+                    "army_org_factor": 0.05,
+                    "planning_speed": 0.10,
+                    "army_attack_factor": 0.05,
+                    "army_defence_factor": 0.05,
                 },
             ),
             (

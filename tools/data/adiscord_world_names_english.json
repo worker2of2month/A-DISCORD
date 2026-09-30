@@ -2661,6 +2661,26 @@
         "STRATEGICREGION_232": {
           "russian": "Подступы к Стругентскому каналу",
           "english": "Strugent Canal Approaches"
+        },
+        "STRATEGICREGION_233": {
+          "russian": "Стремнина Течения",
+          "english": "Rapids of the Current"
+        },
+        "STRATEGICREGION_234": {
+          "russian": "Ледяные врата Течения",
+          "english": "Ice Gate of the Current"
+        },
+        "STRATEGICREGION_235": {
+          "russian": "Северный рукав Течения",
+          "english": "Northern Arm of the Current"
+        },
+        "STRATEGICREGION_236": {
+          "russian": "Южный рукав Течения",
+          "english": "Southern Arm of the Current"
+        },
+        "STRATEGICREGION_237": {
+          "russian": "Туманные врата Течения",
+          "english": "Fog Gate of the Current"
         }
       }
     }

@@ -2745,6 +2745,8 @@
 
  STP_ps_interrupt_opposition_second_desc: "Ответ относится к отмеченному округу второй операции. Награда - её срыв и местное влияние; повторяющийся прирост верности не выдаётся."
 
+ STP_ps_opposition_target_second: "В округе готовится объявленная вторая операция подполья"
+
  STP_ps_district_rebuild_cost: "§Y4000§! £ADISCORD_economy_treasury_texticon"
 
  STP_ps_district_rebuild_cost_blocked: "§R4000§! £ADISCORD_economy_treasury_texticon"

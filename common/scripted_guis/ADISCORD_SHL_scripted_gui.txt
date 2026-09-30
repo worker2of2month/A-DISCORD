@@ -1,0 +1,60 @@
+scripted_gui = {
+	ADISCORD_SHL_furnaces = {
+		context_type = decision_category
+		window_name = "ADISCORD_SHL_furnaces_window"
+		dirty = SHL_gui_dirty
+		visible = {
+			tag = SHL
+			has_country_flag = SHL_furnaces_initialized
+		}
+		ai_enabled = { always = no }
+		effects = {
+			SHL_furnace_1_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 1 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_2_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 2 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_3_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 3 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_4_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 4 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_5_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 5 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_6_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 6 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_7_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 7 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_8_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 8 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+			SHL_furnace_9_button_click = {
+				set_variable = { var = SHL_selected_furnace value = 9 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+	}
+}
+

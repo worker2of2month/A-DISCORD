@@ -124,6 +124,54 @@ DEDICATED_SEA_REGIONS = (
         2,
         2,
     ),
+    # Strongest Current: the lore barrier between the western and the central
+    # continent. One pole-to-pole corridor split into five zones, each cut from
+    # a single macro region and given its own storm climate.
+    SeaRegion(
+        233,
+        "strongest-current",
+        "Стремнина Течения",
+        "current_rapids",
+        2,
+        1,
+        "water_strongest_current",
+    ),
+    SeaRegion(
+        234,
+        "strongest-current-ice-gate",
+        "Ледяные врата Течения",
+        "current_ice",
+        0,
+        1,
+        "water_strongest_current",
+    ),
+    SeaRegion(
+        235,
+        "strongest-current-northern-arm",
+        "Северный рукав Течения",
+        "current_north",
+        1,
+        1,
+        "water_strongest_current",
+    ),
+    SeaRegion(
+        236,
+        "strongest-current-southern-arm",
+        "Южный рукав Течения",
+        "current_south",
+        3,
+        1,
+        "water_strongest_current",
+    ),
+    SeaRegion(
+        237,
+        "strongest-current-fog-gate",
+        "Туманные врата Течения",
+        "current_fog",
+        4,
+        1,
+        "water_strongest_current",
+    ),
 )
 DEDICATED_SEA_PROVINCES = {
     228: frozenset({16262, 16264, 16265}),
@@ -155,8 +203,70 @@ DEDICATED_SEA_PROVINCES = {
             16030,
         }
     ),
+    # Strongest Current corridor: every navigable sea province whose unit-stack
+    # position lies between the author-drawn edges x = 2466.9 - 0.0221 * z
+    # (west) and x = 2806.9 + 0.0827 * z (east). Each zone is the part of the
+    # corridor cut from one macro region; the Southern Arm also takes the
+    # enclosed Southern Inner Sea inlets 13156 13415 13608 13988 14328 14451
+    # 14815 14960 14974 15791 15996. Listed explicitly so later province edits
+    # cannot silently move the barrier.
+    # Rapids, from Central Seas (32).
+    233: frozenset(
+        {
+            13114, 13146, 13214, 13242, 13249, 13301, 13312, 13316, 13320, 13345, 13350, 13541,
+            13586, 13615, 13631, 13762, 13831, 13863, 13963, 14067, 14174, 14175, 14187, 14240,
+            14262, 14354, 14372, 14438, 14458, 14504, 14547, 14553, 14595, 14597, 14600, 14639,
+            14820, 14906, 15070, 15120, 15121, 15224, 15253, 15256, 15265, 15294, 15317, 15335,
+            15358, 15362, 15367, 15517, 15522, 15551, 15569, 15683, 15729, 15768, 15779, 15784,
+            15787, 15896, 15970, 16207, 16214, 16227,
+        }
+    ),
+    # Ice Gate, from the Northern Polar Ocean (26).
+    234: frozenset(
+        {
+            13070, 13076, 13090, 13208, 13215, 13255, 13271, 13293, 13304, 13329, 13356, 13395,
+            13403, 13408, 13446, 13499, 13514, 13605, 13613, 13655, 13670, 13722, 13724, 13869,
+            13875, 13876, 13902, 13906, 13938, 13989, 14106, 14164, 14189, 14216, 14233, 14251,
+            14263, 14286, 14331, 14423, 14497, 14529, 14562, 14652, 14700, 14708, 14726, 14756,
+            14986, 15008, 15110, 15178, 15182, 15301, 15359, 15364, 15411, 15487, 15660, 15662,
+            15807, 15825, 15844, 15890, 15893, 15911, 15917, 15959, 16020, 16150, 16198,
+        }
+    ),
+    # Northern Arm, from the Northern Inner Sea (29).
+    235: frozenset(
+        {
+            13206, 13210, 13233, 13275, 13288, 13444, 13472, 13487, 13583, 13584, 13663, 13799,
+            13903, 13942, 14024, 14062, 14098, 14115, 14193, 14230, 14252, 14434, 14446, 14447,
+            14607, 14613, 14711, 14764, 14789, 14811, 14823, 14862, 14880, 14896, 14940, 14965,
+            14969, 15018, 15086, 15088, 15166, 15170, 15242, 15252, 15254, 15281, 15322, 15351,
+            15396, 15453, 15502, 15623, 15689, 15695, 15758, 15871, 15910, 15913, 15930, 15941,
+            15950, 16011, 16024, 16036, 16107, 16128, 16133, 16152,
+        }
+    ),
+    # Southern Arm, from the Southern Inner Sea (35).
+    236: frozenset(
+        {
+            13069, 13133, 13156, 13174, 13199, 13303, 13401, 13414, 13415, 13456, 13474, 13490,
+            13494, 13608, 13886, 13973, 13988, 14182, 14328, 14387, 14404, 14451, 14475, 14486,
+            14517, 14641, 14653, 14668, 14675, 14686, 14748, 14762, 14815, 14960, 14974, 15001,
+            15139, 15260, 15261, 15293, 15315, 15345, 15352, 15389, 15446, 15501, 15527, 15626,
+            15778, 15791, 15936, 15995, 15996, 16026, 16045, 16057, 16203, 16205,
+        }
+    ),
+    # Fog Gate, from the Southern Ocean (38).
+    237: frozenset(
+        {
+            13102, 13310, 13358, 13371, 13404, 13432, 13587, 13807, 13836, 13905, 14308, 14358,
+            14383, 14398, 14457, 14548, 14563, 14572, 14605, 14890, 15012, 15158, 15225, 15250,
+            15357, 15375, 15394, 15422, 15480, 15482, 15598, 15606, 15620, 15775, 15776, 15794,
+            15866, 15874, 15928, 15994, 16004, 16060, 16166, 16190, 16210,
+        }
+    ),
 }
 ALL_SEA_REGIONS = (*SEA_REGIONS, *DEDICATED_SEA_REGIONS)
+# Strongest Current zones are under 100 provinces but their storm weather is
+# the point of the barrier, so their weather effects are drawn at "big" size.
+BIG_WEATHER_REGIONS = frozenset({233, 234, 235, 236, 237})
 
 SEA_REGION_GRID = (
     (1, 26, 27),
@@ -917,6 +1027,78 @@ TEMPERATURES = {
         (22, 33),
         (21, 32),
     ),
+    # Strongest Current zones: cold upwelling keeps them cooler than the open
+    # sea around them.
+    "current_ice": (
+        (-30, -12),
+        (-29, -11),
+        (-25, -8),
+        (-18, -2),
+        (-11, 3),
+        (-6, 8),
+        (-3, 11),
+        (-4, 9),
+        (-8, 4),
+        (-15, -2),
+        (-23, -8),
+        (-28, -11),
+    ),
+    "current_north": (
+        (-18, -1),
+        (-17, 0),
+        (-12, 4),
+        (-6, 9),
+        (-1, 14),
+        (4, 18),
+        (7, 21),
+        (6, 20),
+        (2, 16),
+        (-3, 10),
+        (-9, 4),
+        (-15, 0),
+    ),
+    "current_rapids": (
+        (-8, 8),
+        (-7, 9),
+        (-3, 12),
+        (1, 16),
+        (5, 20),
+        (9, 23),
+        (12, 26),
+        (12, 26),
+        (8, 22),
+        (3, 17),
+        (-2, 12),
+        (-6, 9),
+    ),
+    "current_south": (
+        (6, 19),
+        (7, 20),
+        (10, 23),
+        (13, 26),
+        (16, 29),
+        (19, 31),
+        (21, 33),
+        (21, 33),
+        (19, 31),
+        (15, 28),
+        (11, 23),
+        (7, 20),
+    ),
+    "current_fog": (
+        (15, 26),
+        (15, 26),
+        (16, 27),
+        (17, 28),
+        (18, 29),
+        (19, 30),
+        (20, 31),
+        (20, 31),
+        (19, 30),
+        (18, 29),
+        (17, 28),
+        (16, 27),
+    ),
     "polar": (
         (-32, -15),
         (-30, -13),
@@ -1215,6 +1397,38 @@ def phenomenon(
             if month in (4, 5, 6, 7, 8)
             else (0.50, 0.40, 0.25, 0.0, 0.0, 0.0, 0.0)
         )
+    # Strongest Current zones: thunderstorms (rain_heavy) nearly all year and
+    # almost no clear weather; cold zones mix them with blizzards.
+    if climate == "current_ice":
+        if winter:
+            return (0.10, 0.05, 0.40, 0.60, 0.60, 0.0, 0.0)
+        if shoulder:
+            return (0.10, 0.15, 0.60, 0.45, 0.45, 0.0, 0.0)
+        return (0.10, 0.20, 0.85, 0.25, 0.20, 0.0, 0.0)
+    if climate == "current_north":
+        if winter:
+            return (0.08, 0.30, 0.90, 0.35, 0.20, 0.0, 0.0)
+        return (0.08, 0.40, 0.95, 0.05, 0.02, 0.0, 0.0)
+    if climate == "current_rapids":
+        return (
+            0.05,
+            0.40,
+            1.00,
+            0.10 if winter else 0.0,
+            0.05 if winter else 0.0,
+            0.0,
+            0.0,
+        )
+    if climate == "current_south":
+        return (
+            (0.05, 0.35, 1.00, 0.0, 0.0, 0.0, 0.0)
+            if month in (4, 5, 6, 7, 8)
+            else (0.08, 0.40, 0.95, 0.0, 0.0, 0.0, 0.0)
+        )
+    if climate == "current_fog":
+        # Clausewitz has no fog state: steady drizzle stands in for it, broken
+        # by frequent thunderstorms.
+        return (0.08, 0.80, 0.70, 0.0, 0.0, 0.0, 0.0)
     if climate == "polar":
         if winter:
             return (0.32, 0.05, 0.01, 0.55, 0.30, 0.35, 0.0)
@@ -1313,6 +1527,10 @@ def phenomenon(
 
 
 def arctic_water(climate: str, month: int) -> float:
+    if climate == "current_ice":
+        return 0.85 if month in (11, 0, 1) else 0.55 if month in (2, 3, 9, 10) else 0.25
+    if climate == "current_north":
+        return 0.35 if month in (11, 0, 1) else 0.10 if month in (2, 10) else 0.0
     if climate == "polar_ocean":
         return 0.70 if month in (11, 0, 1) else 0.35 if month in (2, 3, 9, 10) else 0.08
     if climate == "subpolar_ocean":
@@ -1329,7 +1547,7 @@ def minimum_snow_level(climate: str, month: int) -> float:
     """
     winter = month in (11, 0, 1)
     shoulder = month in (2, 3, 9, 10)
-    if climate == "polar_ocean":
+    if climate in ("polar_ocean", "current_ice"):
         return 0.20 if winter else 0.10 if shoulder else 0.0
     if climate == "polar":
         return 0.30 if winter else 0.20 if shoulder else 0.0
@@ -1513,6 +1731,73 @@ def partition_connected_sea(
     for province_id, region_id in assignments.items():
         partition[region_id].add(province_id)
     return partition
+
+
+def rehome_detached_macro_fragments(
+    partition: dict[int, set[int]], adjacency: dict[int, set[int]]
+) -> None:
+    """Keep every macro sea region connected after corridor cuts.
+
+    The pole-to-pole Strongest Current splits the macro regions it crosses. Each keeps its
+    largest part; a detached remainder joins the neighbouring macro region it
+    shares the most borders with (lowest id on ties), repeated until stable.
+    """
+    macro_ids = [region.region_id for region in SEA_REGIONS]
+    changed = True
+    while changed:
+        changed = False
+        for region_id in macro_ids:
+            components = connected_components(partition[region_id], adjacency)
+            for component in components[1:]:
+                owner = {
+                    province_id: macro_id
+                    for macro_id in macro_ids
+                    for province_id in partition[macro_id]
+                }
+                borders = Counter(
+                    owner[neighbour]
+                    for province_id in sorted(component)
+                    for neighbour in adjacency[province_id]
+                    if neighbour in owner and owner[neighbour] != region_id
+                )
+                if not borders:
+                    raise ValueError(
+                        f"detached part of sea region {region_id} {sorted(component)[:12]} "
+                        "borders no other macro region"
+                    )
+                target = min(borders, key=lambda macro_id: (-borders[macro_id], macro_id))
+                partition[region_id].difference_update(component)
+                partition[target].update(component)
+                changed = True
+
+
+def build_sea_partition(
+    main_ocean: set[int],
+    adjacency: dict[int, set[int]],
+    positions: dict[int, tuple[float, float, float]],
+) -> dict[int, set[int]]:
+    """Return provinces of every navigable sea region (macro and dedicated)."""
+    # Partition the complete navigable ocean first, then cut the local basins
+    # out of their macro regions. This keeps every unrelated boundary stable.
+    macro_partition = partition_connected_sea(main_ocean, adjacency, positions)
+    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
+        source_regions = {
+            macro_region_id
+            for macro_region_id, macro_provinces in macro_partition.items()
+            if macro_provinces & set(provinces)
+        }
+        if len(source_regions) != 1:
+            raise ValueError(
+                f"dedicated sea region {region_id} crosses macro-ocean boundaries: {sorted(source_regions)}"
+            )
+        macro_partition[next(iter(source_regions))].difference_update(provinces)
+    rehome_detached_macro_fragments(macro_partition, adjacency)
+    region_provinces = {
+        region_id: set(provinces)
+        for region_id, provinces in DEDICATED_SEA_PROVINCES.items()
+    }
+    region_provinces.update(macro_partition)
+    return region_provinces
 
 
 def load_province_positions() -> dict[int, tuple[float, float, float]]:
@@ -1944,6 +2229,12 @@ def representative_positions(
     return [ordered[len(ordered) // 3], ordered[(2 * len(ordered)) // 3]]
 
 
+def weather_size(region_id: int, provinces: set[int]) -> str:
+    if region_id in BIG_WEATHER_REGIONS or len(provinces) >= 100:
+        return "big"
+    return "small"
+
+
 def sea_region_id_for(position: tuple[float, float, float]) -> int:
     x, _height, z = position
     latitude_band = (
@@ -2052,9 +2343,6 @@ def build() -> None:
         for province_id in provinces:
             land_region_by_province[province_id] = region.region_id
 
-    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
-        region_provinces[region_id] = set(provinces)
-
     # Inland lakes must belong to their surrounding land region. Combining them
     # with the ocean makes Clausewitz report a fractioned naval strategic region.
     for component in sea_components[1:]:
@@ -2074,21 +2362,9 @@ def build() -> None:
         )
         region_provinces[region_id].update(component)
 
-    # Partition the complete navigable ocean first, then cut the local basin out
-    # of its macro region.  This keeps every unrelated ocean boundary stable.
-    macro_partition = partition_connected_sea(main_ocean, adjacency, province_positions)
-    for region_id, provinces in DEDICATED_SEA_PROVINCES.items():
-        source_regions = {
-            macro_region_id
-            for macro_region_id, macro_provinces in macro_partition.items()
-            if macro_provinces & set(provinces)
-        }
-        if len(source_regions) != 1:
-            raise ValueError(
-                f"dedicated sea region {region_id} crosses macro-ocean boundaries: {sorted(source_regions)}"
-            )
-        macro_partition[next(iter(source_regions))].difference_update(provinces)
-    region_provinces.update(macro_partition)
+    region_provinces.update(
+        build_sea_partition(main_ocean, adjacency, province_positions)
+    )
 
     sea_by_id = {region.region_id: region for region in ALL_SEA_REGIONS}
     for region_id, region in sorted(sea_by_id.items()):
@@ -2138,7 +2414,7 @@ def build() -> None:
 
     weather_lines = []
     for region_id in sorted(region_provinces):
-        size = "big" if len(region_provinces[region_id]) >= 100 else "small"
+        size = weather_size(region_id, region_provinces[region_id])
         for x, height, z in representative_positions(
             region_provinces[region_id], province_positions, adjacency
         ):

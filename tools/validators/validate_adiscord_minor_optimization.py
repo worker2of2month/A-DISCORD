@@ -107,7 +107,6 @@ EXPECTED_SLOTS = {
     "RIN": 3,
     "RLY": 2,
     "SDR": 2,
-    "SHL": 2,
     "SKN": 3,
     "TMR": 2,
     "VES": 3,
@@ -115,7 +114,7 @@ EXPECTED_SLOTS = {
 }
 
 # Retired suppression entries still need restoration in existing campaigns.
-RESTORE_SLOTS = {"AIN": 1, **EXPECTED_SLOTS}
+RESTORE_SLOTS = {"AIN": 1, "SHL": 2, **EXPECTED_SLOTS}
 
 PARTICIPATION_ROOTS = (
     ROOT / "events",

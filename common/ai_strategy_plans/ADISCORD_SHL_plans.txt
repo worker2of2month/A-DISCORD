@@ -1,0 +1,37 @@
+SHL_furnaces_plan = {
+	name = "SHL industrial programme"
+	desc = ""
+	allowed = { original_tag = SHL }
+	enable = {
+		tag = SHL
+		is_ai = yes
+	}
+	abort = { NOT = { tag = SHL } }
+	ai_national_focuses = {
+		SHL_law_of_continuous_fire
+		SHL_census_of_nine
+		SHL_houses_railway
+		SHL_school_of_masters
+		SHL_careful_smelting
+		SHL_repair_without_extinction
+		SHL_reserve_for_next_shift
+		SHL_conclave_rules
+		SHL_common_industrial_account
+		SHL_engineer_society
+		SHL_right_to_land
+		SHL_own_transport
+		SHL_common_fund
+		SHL_workers_charter
+		SHL_build_tenth_complex
+		SHL_first_pour_focus
+		SHL_tenth_voice
+		SHL_open_conclave
+		SHL_city_charters
+		SHL_rights_without_fire
+		SHL_railway_guard
+		SHL_factory_air_defence
+		SHL_industrial_evacuation
+	}
+	weight = { factor = 20 }
+}
+

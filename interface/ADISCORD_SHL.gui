@@ -1,0 +1,367 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_SHL_furnaces_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 508 }
+		instantTextBoxType = {
+			name = "SHL_panel_title"
+			position = { x = 8 y = 4 }
+			text = "SHL_panel_title"
+			font = "hoi_20b"
+			maxWidth = 444
+			maxHeight = 26
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_totals"
+			position = { x = 8 y = 33 }
+			text = "SHL_panel_totals"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+		}
+		buttonType = {
+			name = "SHL_furnace_1_button"
+			position = { x = 6 y = 64 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_1_emblem"
+			position = { x = 11 y = 72 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_1_label"
+			position = { x = 48 y = 69 }
+			text = "SHL_furnace_1_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_1_condition"
+			position = { x = 11 y = 107 }
+			text = "SHL_furnace_1_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_2_button"
+			position = { x = 156 y = 64 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_2_emblem"
+			position = { x = 161 y = 72 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_2_label"
+			position = { x = 198 y = 69 }
+			text = "SHL_furnace_2_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_2_condition"
+			position = { x = 161 y = 107 }
+			text = "SHL_furnace_2_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_3_button"
+			position = { x = 306 y = 64 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_3_emblem"
+			position = { x = 311 y = 72 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_3_label"
+			position = { x = 348 y = 69 }
+			text = "SHL_furnace_3_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_3_condition"
+			position = { x = 311 y = 107 }
+			text = "SHL_furnace_3_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_4_button"
+			position = { x = 6 y = 136 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_4_emblem"
+			position = { x = 11 y = 144 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_4_label"
+			position = { x = 48 y = 141 }
+			text = "SHL_furnace_4_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_4_condition"
+			position = { x = 11 y = 179 }
+			text = "SHL_furnace_4_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_5_button"
+			position = { x = 156 y = 136 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_5_emblem"
+			position = { x = 161 y = 144 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_5_label"
+			position = { x = 198 y = 141 }
+			text = "SHL_furnace_5_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_5_condition"
+			position = { x = 161 y = 179 }
+			text = "SHL_furnace_5_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_6_button"
+			position = { x = 306 y = 136 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_6_emblem"
+			position = { x = 311 y = 144 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_6_label"
+			position = { x = 348 y = 141 }
+			text = "SHL_furnace_6_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_6_condition"
+			position = { x = 311 y = 179 }
+			text = "SHL_furnace_6_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_7_button"
+			position = { x = 6 y = 208 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_7_emblem"
+			position = { x = 11 y = 216 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_7_label"
+			position = { x = 48 y = 213 }
+			text = "SHL_furnace_7_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_7_condition"
+			position = { x = 11 y = 251 }
+			text = "SHL_furnace_7_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_8_button"
+			position = { x = 156 y = 208 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_8_emblem"
+			position = { x = 161 y = 216 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_8_label"
+			position = { x = 198 y = 213 }
+			text = "SHL_furnace_8_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_8_condition"
+			position = { x = 161 y = 251 }
+			text = "SHL_furnace_8_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "SHL_furnace_9_button"
+			position = { x = 306 y = 208 }
+			size = { x = 142 y = 64 }
+			quadTextureSprite = "GFX_SHL_furnace_button"
+			clicksound = click_default
+			pdx_tooltip = "SHL_furnace_select_tt"
+		}
+		iconType = {
+			name = "SHL_furnace_9_emblem"
+			position = { x = 311 y = 216 }
+			spriteType = "GFX_SHL_furnace_emblem"
+			scale = 0.38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_9_label"
+			position = { x = 348 y = 213 }
+			text = "SHL_furnace_9_label"
+			font = "hoi_16mbs"
+			maxWidth = 96
+			maxHeight = 38
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_furnace_9_condition"
+			position = { x = 311 y = 251 }
+			text = "SHL_furnace_9_condition"
+			font = "hoi_16mbs"
+			maxWidth = 134
+			maxHeight = 20
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_selection"
+			position = { x = 8 y = 286 }
+			text = "SHL_panel_selection"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_selected_details"
+			position = { x = 8 y = 312 }
+			text = "SHL_panel_selected_details"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 48
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_forecast"
+			position = { x = 8 y = 363 }
+			text = "SHL_panel_forecast"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 24
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_project"
+			position = { x = 8 y = 390 }
+			text = "SHL_panel_project"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 42
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_policy"
+			position = { x = 8 y = 436 }
+			text = "SHL_panel_policy"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 66
+			format = center
+		}
+	}
+}

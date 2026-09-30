@@ -1,0 +1,174 @@
+add_namespace = ADISCORD_SHL
+
+country_event = {
+	id = ADISCORD_SHL.7
+	title = ADISCORD_SHL.7.t
+	desc = ADISCORD_SHL.7.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.7.a
+		default_option = yes
+		custom_effect_tooltip = SHL_masters_wait_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_school_of_masters } }
+				set_country_flag = SHL_master_dispute
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.7.b
+		trigger = {
+			NOT = { has_completed_focus = SHL_school_of_masters }
+			check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_masters_pay_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = SHL_school_of_masters }
+					check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				clr_country_flag = SHL_master_dispute
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.8
+	title = ADISCORD_SHL.8.t
+	desc = ADISCORD_SHL.8.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.8.a
+		default_option = yes
+		custom_effect_tooltip = SHL_suppliers_wait_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_houses_railway } }
+				set_country_flag = SHL_supplier_premium
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.8.b
+		trigger = {
+			NOT = { has_completed_focus = SHL_houses_railway }
+			has_political_power = 15
+		}
+		custom_effect_tooltip = SHL_suppliers_pay_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = SHL_houses_railway }
+					has_political_power = 15
+				}
+				add_political_power = -15
+				clr_country_flag = SHL_supplier_premium
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.1
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		has_country_flag = SHL_furnaces_initialized
+	}
+	immediate = { SHL_run_cycle = yes }
+}
+
+country_event = {
+	id = ADISCORD_SHL.2
+	title = ADISCORD_SHL.2.t
+	desc = ADISCORD_SHL.2.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.2.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.3
+	title = ADISCORD_SHL.3.t
+	desc = ADISCORD_SHL.3.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.3.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.4
+	title = ADISCORD_SHL.4.t
+	desc = ADISCORD_SHL.4.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.4.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.5
+	title = ADISCORD_SHL.5.t
+	desc = ADISCORD_SHL.5.d
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		check_variable = { var = SHL_project_stage value = 4 compare = equals }
+	}
+	option = {
+		name = ADISCORD_SHL.5.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.6
+	title = ADISCORD_SHL.6.t
+	desc = ADISCORD_SHL.6.d
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = {
+		name = ADISCORD_SHL.6.a
+		default_option = yes
+		custom_effect_tooltip = SHL_pressure_wait_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_completed_focus = SHL_own_transport } }
+				set_country_flag = SHL_transport_dispute
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.6.b
+		trigger = {
+			NOT = { has_completed_focus = SHL_own_transport }
+			check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+		}
+		custom_effect_tooltip = SHL_pressure_pay_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_completed_focus = SHL_own_transport }
+					check_variable = { var = ADISCORD_economy_treasury value = 40 compare = greater_than_or_equals }
+				}
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 40 }
+				clr_country_flag = SHL_transport_dispute
+			}
+		}
+	}
+}

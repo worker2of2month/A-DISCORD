@@ -757,6 +757,66 @@ ADISCORD_scenario_debug_category = {
 		}
 		ai_will_do = { factor = 0 }
 	}
+
+	# Portal particle test. The hidden event owns the actor and the camera:
+	# goto_province only moves the human camera from an event scope.
+	# Close before reopening to replay the opening flash.
+	ADISCORD_debug_portal_open = {
+		icon = generic_research
+		visible = { is_debug = yes is_ai = no NOT = { has_global_flag = ADISCORD_debug_portal_open } }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_global_flag = ADISCORD_debug_portal_open
+			country_event = { id = ADISCORD_portal_test.1 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_portal_close = {
+		icon = generic_research
+		visible = { is_debug = yes is_ai = no has_global_flag = ADISCORD_debug_portal_open }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			clr_global_flag = ADISCORD_debug_portal_open
+			log = "ADISCORD_PORTAL close"
+			218 = {
+				destroy_entity = 610777
+				destroy_entity = 610778
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	# Orbital laser particle test (independent of the portal test).
+	ADISCORD_debug_orbital_laser_fire = {
+		icon = generic_research
+		visible = { is_debug = yes is_ai = no }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			set_global_flag = ADISCORD_debug_orbital_laser_active
+			country_event = { id = ADISCORD_orbital_laser_test.1 }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
+	ADISCORD_debug_orbital_laser_clear = {
+		icon = generic_research
+		visible = { is_debug = yes is_ai = no has_global_flag = ADISCORD_debug_orbital_laser_active }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			clr_global_flag = ADISCORD_debug_orbital_laser_active
+			log = "ADISCORD_ORBITAL_LASER clear"
+			40 = {
+				destroy_entity = 610790
+				destroy_entity = 610791
+			}
+		}
+		ai_will_do = { factor = 0 }
+	}
 }
 
 # BEGIN CONSOLIDATED: ADISCORD_test_wars_decisions.txt

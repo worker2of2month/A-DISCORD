@@ -1,0 +1,678 @@
+SHL_conclave = {
+	SHL_planned_supply = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_houses_railway }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_regular_supply value = 0 compare = equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_planned_supply_tt
+			hidden_effect = {
+				set_variable = { var = SHL_regular_supply value = 1 }
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	SHL_stop_planned_supply = {
+		icon = generic_industry
+		visible = { check_variable = { var = SHL_regular_supply value = 1 compare = equals } }
+		available = { SHL_country_operable = yes }
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_stop_supply_tt
+			hidden_effect = {
+				set_variable = { var = SHL_regular_supply value = 0 }
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	SHL_supply_furnace = {
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			always = yes
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_25
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
+		}
+		days_remove = 7
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_supply_result_tt
+			hidden_effect = { SHL_begin_supply = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_supply = yes } }
+		cancel_trigger = { FROM = { NOT = { SHL_furnace_site_controlled = yes } } }
+		cancel_effect = { hidden_effect = { SHL_cancel_operation = yes } }
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	SHL_repair_furnace = {
+		icon = generic_construction
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = SHL_repair_without_extinction
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_80
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+		days_remove = 14
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_repair_result_tt
+			hidden_effect = { SHL_begin_repair = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_repair = yes } }
+		cancel_trigger = { FROM = { NOT = { SHL_furnace_site_controlled = yes } } }
+		cancel_effect = { hidden_effect = { SHL_cancel_operation = yes } }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				FROM = { check_variable = { var = SHL_furnace_wear value = 30 compare = less_than } }
+			}
+			modifier = { factor = 10 FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } } }
+		}
+	}
+
+	SHL_training_furnace = {
+		icon = generic_army_support
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = SHL_school_of_masters
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				check_variable = { var = SHL_furnace_training value = 0 compare = equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			has_political_power = 25
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_100_25pp
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			has_political_power = 25
+		}
+		days_remove = 35
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_training_result_tt
+			hidden_effect = { SHL_begin_training = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_training = yes } }
+		cancel_trigger = { FROM = { NOT = { SHL_furnace_site_controlled = yes } } }
+		cancel_effect = { hidden_effect = { SHL_cancel_operation = yes } }
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	SHL_restart_furnace = {
+		icon = generic_construction
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			always = yes
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				custom_trigger_tooltip = { tooltip = SHL_owner_settled_tt has_variable = SHL_restart_settled }
+				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
+				check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_120
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_restart_result_tt
+			hidden_effect = { SHL_begin_restart = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_restart = yes } }
+		cancel_trigger = { FROM = { NOT = { SHL_furnace_site_controlled = yes } } }
+		cancel_effect = { hidden_effect = { SHL_cancel_operation = yes } }
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	SHL_shift_ordinary = {
+		icon = generic_industry
+		visible = { always = yes }
+		available = {
+			SHL_country_operable = yes
+			NOT = { check_variable = { var = SHL_shift_policy value = 0 compare = equals } }
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 7
+		complete_effect = {
+			custom_effect_tooltip = SHL_shift_ordinary_tt
+			hidden_effect = {
+				set_variable = { var = SHL_shift_policy value = 0 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	SHL_shift_overtime = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_overtime_shift }
+		available = {
+			SHL_country_operable = yes
+			NOT = { check_variable = { var = SHL_shift_policy value = 1 compare = equals } }
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 7
+		complete_effect = {
+			custom_effect_tooltip = SHL_shift_overtime_tt
+			hidden_effect = {
+				set_variable = { var = SHL_shift_policy value = 1 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	SHL_shift_careful = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_careful_smelting }
+		available = {
+			SHL_country_operable = yes
+			NOT = { check_variable = { var = SHL_shift_policy value = 2 compare = equals } }
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 7
+		complete_effect = {
+			custom_effect_tooltip = SHL_shift_careful_tt
+			hidden_effect = {
+				set_variable = { var = SHL_shift_policy value = 2 }
+				SHL_refresh_selected_furnace = yes
+				add_to_variable = { var = SHL_gui_dirty value = 1 }
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_buy_reserve = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_reserve_for_next_shift }
+		available = {
+			SHL_country_operable = yes
+			SHL_reserve_affordable = yes
+			check_variable = { var = SHL_reserve_stock value = 10 compare = less_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_60
+		custom_cost_trigger = { SHL_reserve_affordable = yes }
+		days_re_enable = 14
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_reserve_result_tt
+			hidden_effect = { SHL_purchase_reserve = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	SHL_use_reserve = {
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = { FROM = { SHL_selected_target = yes } }
+		available = {
+			FROM = {
+				SHL_furnace_site_controlled = yes
+				check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals }
+			}
+			check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_use_reserve_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_reserve_stock value = 1 }
+				FROM = { add_to_variable = { var = SHL_furnace_stock value = 1 } }
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_allow_extinction = {
+		icon = generic_political_discourse
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			has_completed_focus = SHL_conclave_rules
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			FROM = {
+				SHL_furnace_site_idle = yes
+				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			}
+		}
+		cost = 0
+		days_re_enable = 28
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_extinction_result_tt
+			hidden_effect = {
+				FROM = { SHL_extinguish_site = yes }
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	SHL_return_house = {
+		icon = generic_political_discourse
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			FROM = { SHL_selected_target = yes }
+			check_variable = { var = SHL_political_course value = 2 compare = less_than }
+		}
+		available = {
+			FROM = {
+				SHL_furnace_site_idle = yes
+				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
+				NOT = { has_variable = SHL_restart_settled }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_return_house_tt
+			hidden_effect = {
+				if = {
+					limit = { FROM = { check_variable = { var = SHL_furnace_owner value = 1 compare = equals } } }
+					subtract_from_variable = { var = SHL_city_support value = 5 }
+					clamp_variable = { var = SHL_city_support min = 0 max = 100 }
+				}
+				FROM = {
+					set_variable = { var = SHL_furnace_owner value = 0 }
+					set_variable = { var = SHL_restart_settled value = 1 }
+				}
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+	SHL_city_ownership = {
+		icon = generic_political_discourse
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			FROM = { SHL_selected_target = yes }
+			check_variable = { var = SHL_political_course value = 3 compare = less_than }
+		}
+		available = {
+			FROM = {
+				SHL_furnace_site_idle = yes
+				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
+				NOT = { has_variable = SHL_restart_settled }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_city_ownership_tt
+			hidden_effect = {
+				FROM = {
+					set_variable = { var = SHL_furnace_owner value = 1 }
+					set_variable = { var = SHL_restart_settled value = 1 }
+				}
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	SHL_state_ownership = {
+		icon = generic_political_discourse
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			FROM = { SHL_selected_target = yes }
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		available = {
+			FROM = {
+				SHL_furnace_site_idle = yes
+				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
+				NOT = { has_variable = SHL_restart_settled }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_state_ownership_tt
+			hidden_effect = {
+				FROM = {
+					set_variable = { var = SHL_furnace_owner value = 2 }
+					set_variable = { var = SHL_restart_settled value = 1 }
+				}
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 1 }
+	}
+
+}
+
+SHL_tenth_project = {
+	SHL_project_engineers = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = SHL_engineer_society
+			check_variable = { var = SHL_project_stage value = 0 compare = equals }
+		}
+		available = {
+			SHL_project_idle = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			has_political_power = 25
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_100_25pp
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			has_political_power = 25
+		}
+		days_remove = 35
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_project_engineers_tt
+			hidden_effect = { SHL_begin_engineers = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				294 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_project_foundation = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = SHL_right_to_land
+			check_variable = { var = SHL_project_stage value = 1 compare = equals }
+		}
+		available = {
+			SHL_project_idle = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_masters_ready_tt
+				NOT = { has_country_flag = SHL_master_dispute }
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_200
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		days_remove = 42
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_project_foundation_tt
+			hidden_effect = { SHL_begin_foundation = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				294 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_project_construction = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = SHL_build_tenth_complex
+			check_variable = { var = SHL_project_stage value = 2 compare = equals }
+		}
+		available = {
+			SHL_project_idle = yes
+			custom_trigger_tooltip = { tooltip = SHL_transport_ready_tt NOT = { has_country_flag = SHL_transport_dispute } }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			294 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		days_remove = 70
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_project_construction_tt
+			hidden_effect = { SHL_begin_construction = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				294 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_project_first_pour = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = SHL_first_pour_focus
+			check_variable = { var = SHL_project_stage value = 3 compare = equals }
+		}
+		available = {
+			SHL_project_idle = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_100_stock
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
+		}
+		days_remove = 14
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_project_first_pour_tt
+			hidden_effect = { SHL_begin_first_pour = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			OR = {
+				has_capitulated = yes
+				294 = {
+					NOT = {
+						AND = {
+							is_owned_by = SHL
+							is_controlled_by = SHL
+						}
+					}
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_supply_tenth = {
+		icon = generic_industry
+		visible = { check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals } }
+		available = {
+			SHL_country_operable = yes
+			294 = { SHL_furnace_site_controlled = yes }
+			check_variable = { var = SHL_reserve_stock value = 1 compare = greater_than_or_equals }
+			check_variable = { var = SHL_tenth_stock value = 2 compare = less_than_or_equals }
+		}
+		cost = 0
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_supply_tenth_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_reserve_stock value = 1 }
+				add_to_variable = { var = SHL_tenth_stock value = 1 }
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_service_tenth = {
+		icon = generic_construction
+		visible = { check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals } }
+		available = {
+			SHL_project_idle = yes
+			294 = { SHL_furnace_site_controlled = yes }
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+			check_variable = { var = SHL_tenth_wear value = 20 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_80
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals } }
+		days_remove = 14
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_service_tenth_tt
+			hidden_effect = { SHL_begin_tenth_service = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					SHL_country_operable = yes
+					294 = { SHL_furnace_site_controlled = yes }
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 10 }
+	}
+
+	SHL_restart_tenth = {
+		icon = generic_construction
+		visible = { check_variable = { var = SHL_project_stage value = 4 compare = greater_than_or_equals } }
+		available = {
+			SHL_project_idle = yes
+			294 = { SHL_furnace_site_controlled = yes }
+			check_variable = { var = SHL_tenth_running value = 0 compare = equals }
+			check_variable = { var = SHL_tenth_stock value = 1 compare = greater_than_or_equals }
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_120
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals } }
+		days_remove = 21
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_restart_tenth_tt
+			hidden_effect = { SHL_begin_tenth_restart = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_project = yes } }
+		cancel_trigger = {
+			NOT = {
+				AND = {
+					SHL_country_operable = yes
+					294 = { SHL_furnace_site_controlled = yes }
+				}
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_project = yes } }
+		ai_will_do = { base = 20 }
+	}
+}

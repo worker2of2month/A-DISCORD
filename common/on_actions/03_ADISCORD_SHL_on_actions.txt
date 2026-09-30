@@ -1,0 +1,37 @@
+on_actions = {
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						tag = SHL
+						FROM = { tag = SHL }
+					}
+					FROM.FROM = {
+						OR = {
+							state = 287
+							state = 288
+							state = 289
+							state = 290
+							state = 291
+							state = 292
+							state = 293
+							state = 294
+							state = 295
+						}
+					}
+				}
+				SHL = {
+					if = {
+						limit = {
+							exists = yes
+							has_country_flag = SHL_furnaces_initialized
+						}
+						SHL_refresh_furnaces = yes
+						SHL_schedule_cycle = yes
+					}
+				}
+			}
+		}
+	}
+}

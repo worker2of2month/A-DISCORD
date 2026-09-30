@@ -2265,6 +2265,8 @@
  STP_ps_opposition_preparation_second_desc: "After the first operation finishes, Shabrat opens a second parallel cycle, even before the election. It has a separate target and deadline. Success grants 20 influence; entrenched networks establish an administration and prepare military assets. Disrupting one operation does not stop the other. The second cycle stops opening new operations with fewer than 56 days left in the election."
  STP_ps_interrupt_opposition_second: "Disrupt the Second District Operation"
  STP_ps_interrupt_opposition_second_desc: "This response targets the marked district of the second operation. The reward is its disruption and local influence; no recurring loyalty increase is granted."
+
+ STP_ps_opposition_target_second: "The second underground operation is being prepared in this district"
  STP_ps_district_rebuild_cost: "§Y4000§! £ADISCORD_economy_treasury_texticon"
  STP_ps_district_rebuild_cost_blocked: "§R4000§! £ADISCORD_economy_treasury_texticon"
  STP_ps_district_rebuild_cost_tooltip: "§Y4000§! £ADISCORD_economy_treasury_texticon"

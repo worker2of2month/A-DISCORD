@@ -382,6 +382,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
+			add_manpower = 4000
+			add_war_support = 0.03
 			28 = { add_building_construction = { type = bunker level = 1 province = 145 instant_build = yes } }
 			effect_tooltip = {
 				swap_ideas = { remove_idea = STP_cw_army_dummy_idea add_idea = STP_cw_centralized_command_idea }
@@ -430,6 +432,7 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 10
 			add_command_power = 20
+			add_war_support = 0.03
 			add_timed_idea = { idea = STP_cw_offensive_preparation days = 28 }
 		}
 	}
@@ -469,6 +472,7 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 10
 			add_command_power = 10
+			add_manpower = 4000
 			unlock_decision_tooltip = STP_party_form_assault_column
 			custom_effect_tooltip = STP_party_form_assault_column_unlock_summary_tt
 		}
@@ -1306,7 +1310,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
 		completion_reward = {
-			add_war_support = 0.03
+			add_war_support = 0.05
+			add_stability = 0.02
 		}
 	}
 
@@ -1367,8 +1372,8 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
 		completion_reward = {
-			add_stability = 0.03
-			add_war_support = 0.02
+			add_stability = 0.05
+			add_war_support = 0.03
 		}
 	}
 
@@ -1395,6 +1400,7 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			army_experience = 15
+			add_manpower = 5000
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = STP_cw_party_dummy_idea
@@ -1436,6 +1442,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 3 }
 		completion_reward = {
+			add_stability = 0.02
 			effect_tooltip = {
 				swap_ideas = {
 					remove_idea = STP_cw_army_dummy_idea
@@ -1474,6 +1481,7 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			add_political_power = 25
+			add_stability = 0.02
 			custom_effect_tooltip = STP_pv_strain_minus_5_tt
 			hidden_effect = {
 				set_temp_variable = { var = STP_pv_strain_change value = -5 }
@@ -1567,6 +1575,8 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 		completion_reward = {
 			add_political_power = 50
+			add_stability = 0.02
+			add_war_support = 0.03
 			custom_effect_tooltip = STP_pv_victory_committee_tt
 			hidden_effect = {
 				STP_pv_refresh_claims = yes
@@ -1598,6 +1608,7 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 25
 			add_command_power = 20
+			add_manpower = 6000
 			custom_effect_tooltip = STP_pv_glory_staff_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_army_support value = 8 }
@@ -1629,7 +1640,7 @@ focus_tree = {
 		ai_will_do = { base = 3 }
 		completion_reward = {
 			add_political_power = 50
-			add_stability = 0.03
+			add_stability = 0.05
 			custom_effect_tooltip = STP_pv_glory_silence_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_security_support value = 8 }
@@ -1660,7 +1671,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
-			add_war_support = 0.05
+			add_war_support = 0.08
 			custom_effect_tooltip = STP_pv_glory_festival_tt
 			hidden_effect = {
 				add_to_variable = { var = STP_pf_radicals_support value = 8 }

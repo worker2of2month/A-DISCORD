@@ -1,0 +1,17 @@
+SHL_conclave = {
+	icon = generic_industry
+	allowed = { tag = SHL }
+	visible = { has_country_flag = SHL_furnaces_initialized }
+	visible_when_empty = yes
+	priority = 25
+	scripted_gui = ADISCORD_SHL_furnaces
+}
+
+SHL_tenth_project = {
+	icon = generic_construction
+	allowed = { tag = SHL }
+	visible = { has_completed_focus = SHL_engineer_society }
+	visible_when_empty = yes
+	priority = 24
+}
+

@@ -206,3 +206,48 @@ objectTypes = {
 	}
 }
 # END ADISCORD SHL palace
+
+# BEGIN ADISCORD portal test
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_portal_test_mesh"
+		file = "gfx/models/empty.mesh"
+		scale = 1.0
+		cull_distance = 3000.0
+
+		meshsettings = {
+			shader = "PdxMeshAdvanced"
+		}
+	}
+}
+# END ADISCORD portal test
+
+# BEGIN ADISCORD orbital laser test
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_orbital_laser_mesh"
+		file = "gfx/models/empty.mesh"
+		scale = 1.0
+		cull_distance = 3000.0
+
+		meshsettings = {
+			shader = "PdxMeshAdvanced"
+		}
+	}
+}
+# END ADISCORD orbital laser test
+
+# BEGIN ADISCORD strongest current
+objectTypes = {
+	pdxmesh = {
+		name = "ADISCORD_strongest_current_mesh"
+		file = "gfx/models/empty.mesh"
+		scale = 1.0
+		cull_distance = 3000.0
+
+		meshsettings = {
+			shader = "PdxMeshAdvanced"
+		}
+	}
+}
+# END ADISCORD strongest current

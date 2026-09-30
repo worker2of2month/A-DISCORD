@@ -245,3 +245,184 @@ entity = {
 	pdxmesh = "ADISCORD_SHL_palace_mesh"
 }
 # END ADISCORD SHL palace
+
+# BEGIN ADISCORD portal test
+# Particle-only test actor for ADISCORD_portal_open_particle (debug decisions).
+entity = {
+	name = "ADISCORD_portal_test_entity"
+	pdxmesh = "ADISCORD_portal_test_mesh"
+	locator = { name = "portal_core" position = { 0.0 0.0 0.0 } }
+	default_state = "open"
+	state = { name = "open"
+		event = { time = 0 node = "portal_core" particle = "ADISCORD_portal_open_particle" keep_particle = yes }
+	}
+}
+
+# One-shot opening flash. Separate actor so re-shown loop actors never replay it;
+# ADISCORD_portal_test.2 destroys it an hour after the opening.
+entity = {
+	name = "ADISCORD_portal_burst_entity"
+	pdxmesh = "ADISCORD_portal_test_mesh"
+	locator = { name = "portal_core" position = { 0.0 0.0 0.0 } }
+	default_state = "burst"
+	state = { name = "burst"
+		state_time = 1.5
+		looping = no
+		next_state = "spent"
+		event = { time = 0 node = "portal_core" particle = "ADISCORD_portal_burst_particle" keep_particle = yes }
+	}
+	state = { name = "spent" }
+}
+# END ADISCORD portal test
+
+# BEGIN ADISCORD orbital laser test
+# One-shot strike (lock, beam, detonation). Separate actor: particles restart
+# when the camera re-shows an actor, so the strike must not live on the
+# persistent crater. ADISCORD_orbital_laser_test.2 removes it after an hour.
+entity = {
+	name = "ADISCORD_orbital_laser_strike_entity"
+	pdxmesh = "ADISCORD_orbital_laser_mesh"
+	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
+	default_state = "strike"
+	state = { name = "strike"
+		state_time = 9.0
+		looping = no
+		next_state = "spent"
+		event = { time = 0 node = "impact" particle = "ADISCORD_orbital_laser_strike_particle" keep_particle = yes }
+	}
+	state = { name = "spent" }
+}
+
+# Persistent aftermath: burning crater and smoke column.
+entity = {
+	name = "ADISCORD_orbital_laser_aftermath_entity"
+	pdxmesh = "ADISCORD_orbital_laser_mesh"
+	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
+	default_state = "burn"
+	state = { name = "burn"
+		event = { time = 0 node = "impact" particle = "ADISCORD_orbital_laser_aftermath_particle" keep_particle = yes }
+	}
+}
+# END ADISCORD orbital laser test
+
+# BEGIN ADISCORD strongest current
+# Particle-only actors along the Strongest Current, one per flow heading.
+entity = {
+	name = "ADISCORD_strongest_current_east_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_east_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_northeast_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_northeast_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_north_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_north_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_northwest_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_northwest_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_west_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_west_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_southwest_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_southwest_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_south_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_south_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_southeast_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "flow" position = { 0.0 0.0 0.0 } }
+	default_state = "flow"
+	state = { name = "flow"
+		event = { time = 0 node = "flow" particle = "ADISCORD_strongest_current_southeast_particle" keep_particle = yes }
+	}
+}
+# Zone weather actors, one per climate zone of the current.
+entity = {
+	name = "ADISCORD_strongest_current_ice_weather_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "weather" position = { 0.0 0.0 0.0 } }
+	default_state = "weather"
+	state = { name = "weather"
+		event = { time = 0 node = "weather" particle = "ADISCORD_strongest_current_ice_weather_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_north_weather_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "weather" position = { 0.0 0.0 0.0 } }
+	default_state = "weather"
+	state = { name = "weather"
+		event = { time = 0 node = "weather" particle = "ADISCORD_strongest_current_north_weather_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_rapids_weather_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "weather" position = { 0.0 0.0 0.0 } }
+	default_state = "weather"
+	state = { name = "weather"
+		event = { time = 0 node = "weather" particle = "ADISCORD_strongest_current_rapids_weather_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_south_weather_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "weather" position = { 0.0 0.0 0.0 } }
+	default_state = "weather"
+	state = { name = "weather"
+		event = { time = 0 node = "weather" particle = "ADISCORD_strongest_current_south_weather_particle" keep_particle = yes }
+	}
+}
+entity = {
+	name = "ADISCORD_strongest_current_fog_weather_entity"
+	pdxmesh = "ADISCORD_strongest_current_mesh"
+	locator = { name = "weather" position = { 0.0 0.0 0.0 } }
+	default_state = "weather"
+	state = { name = "weather"
+		event = { time = 0 node = "weather" particle = "ADISCORD_strongest_current_fog_weather_particle" keep_particle = yes }
+	}
+}
+# END ADISCORD strongest current

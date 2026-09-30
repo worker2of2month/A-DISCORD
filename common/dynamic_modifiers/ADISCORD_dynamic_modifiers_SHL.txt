@@ -1,0 +1,9 @@
+SHL_conclave_industry = {
+	icon = GFX_idea_ADISCORD_industrial_policy_balanced_workshops
+	enable = { tag = SHL }
+	production_factory_efficiency_gain_factor = SHL_efficiency_factor
+	local_resources_factor = SHL_resources_factor
+	political_power_gain = SHL_pp_gain
+	stability_factor = SHL_course_stability
+	ADISCORD_economy_treasury_capacity_factor = SHL_treasury_capacity_bonus
+}

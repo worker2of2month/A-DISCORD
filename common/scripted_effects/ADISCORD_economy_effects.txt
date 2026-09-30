@@ -63,6 +63,10 @@ ADISCORD_economy_apply_country_starting_profile = {
 		limit = { tag = SRP }
 		ADISCORD_economy_apply_srp_starting_profile = yes
 	}
+	else_if = {
+		limit = { tag = SHL }
+		SHL_apply_starting_economy = yes
+	}
 }
 
 ADISCORD_economy_apply_val_starting_profile = {

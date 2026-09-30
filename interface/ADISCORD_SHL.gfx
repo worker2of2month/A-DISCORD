@@ -1,0 +1,12 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_SHL_furnace_button"
+		texturefile = "gfx/interface/ADISCORD_economy_gui/economy_button.dds"
+		noOfFrames = 2
+	}
+	spriteType = {
+		name = "GFX_SHL_furnace_emblem"
+		texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds"
+	}
+}
+

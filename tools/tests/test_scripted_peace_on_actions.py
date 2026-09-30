@@ -39,7 +39,7 @@ ORDER = {
         'stelander',
     ],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
-    'on_annex': ['stelander', 'kefreyt'],
+    'on_annex': ['stelander', 'kefreyt', 'shahrabad'],
     'on_state_control_changed': ['livonn', 'frontier'],
 }
 

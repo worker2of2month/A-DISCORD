@@ -17,4 +17,106 @@ objectTypes = {
 		type = "smog_file"
 		scale = 1
 	}
+
+	pdxparticle = {
+		name = "ADISCORD_portal_open_particle"
+		type = "ADISCORD_portal_open_file"
+		scale = 10
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_portal_burst_particle"
+		type = "ADISCORD_portal_burst_file"
+		scale = 10
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_orbital_laser_strike_particle"
+		type = "ADISCORD_orbital_laser_strike_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_orbital_laser_aftermath_particle"
+		type = "ADISCORD_orbital_laser_aftermath_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_east_particle"
+		type = "ADISCORD_strongest_current_east_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_northeast_particle"
+		type = "ADISCORD_strongest_current_northeast_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_north_particle"
+		type = "ADISCORD_strongest_current_north_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_northwest_particle"
+		type = "ADISCORD_strongest_current_northwest_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_west_particle"
+		type = "ADISCORD_strongest_current_west_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_southwest_particle"
+		type = "ADISCORD_strongest_current_southwest_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_south_particle"
+		type = "ADISCORD_strongest_current_south_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_southeast_particle"
+		type = "ADISCORD_strongest_current_southeast_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_ice_weather_particle"
+		type = "ADISCORD_strongest_current_ice_weather_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_north_weather_particle"
+		type = "ADISCORD_strongest_current_north_weather_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_rapids_weather_particle"
+		type = "ADISCORD_strongest_current_rapids_weather_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_south_weather_particle"
+		type = "ADISCORD_strongest_current_south_weather_file"
+		scale = 1
+	}
+
+	pdxparticle = {
+		name = "ADISCORD_strongest_current_fog_weather_particle"
+		type = "ADISCORD_strongest_current_fog_weather_file"
+		scale = 1
+	}
 }

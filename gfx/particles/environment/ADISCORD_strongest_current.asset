@@ -1,0 +1,3339 @@
+# Visual for the Strongest Current (strategic region 233, naval terrain
+# water_strongest_current). One particle per 45-degree flow heading; actors along
+# the current are spawned by ADISCORD_spawn_strongest_current_visuals.
+particle={
+	# Сильнейшее течение, поток на восток: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_east_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на северо-восток: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_northeast_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.707 0.000 0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.707 0.000 0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на север: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_north_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.000 1.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 0.000 1.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на северо-запад: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_northwest_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.707 0.000 0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.707 0.000 0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на запад: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_west_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на юго-запад: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_southwest_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.707 0.000 -0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.707 0.000 -0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на юг: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_south_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.000 0.000 -1.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			-0.000 0.000 -1.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+particle={
+	# Сильнейшее течение, поток на юго-восток: вода, пена, искры-струи и водовороты.
+	# Силы заданы в мировых осях (local_force=no), поворот актора не нужен.
+	name="ADISCORD_strongest_current_southeast_file"
+	subsystem={
+		name="dark_water"
+		max_amount=24
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 22.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=15.000
+			y=70.000
+			z=88.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.200
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 6.000 1.000 }
+		emission=2.500
+		size={ 58.000 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 6.000 }
+		force=flow
+	}
+	subsystem={
+		name="foam"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=160.000
+			y=225.000
+			z=238.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.400
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 4.000 1.000 }
+		emission=5.000
+		size={ 16.000,foam_size 5.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 12.000 }
+		force=flow
+	}
+	subsystem={
+		name="streaks"
+		max_amount=80
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 26.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=200.000
+			y=245.000
+			z=255.000
+			alpha=200.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.500 0.500 }
+		emission=24.000
+		size={ 1.800 0.600 }
+		rotation={ 0.000 180.000 }
+		force=flow_fast
+	}
+	subsystem={
+		name="eddies"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 20.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=215.000
+			z=232.000
+			alpha=90.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 3.000 0.500 }
+		emission=0.600
+		size={ 14.000,eddy_shrink 4.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 140.000 40.000 }
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="foam_size"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.600 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="eddy_shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="flow"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.707 0.000 -0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=3.500
+	}
+	force={
+		type="planar"
+		name="flow_fast"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.707 0.000 -0.707
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=9.000
+	}
+}
+
+# Zone weather over the Strongest Current, one particle per climate zone;
+# spawned on a grid over each zone by ADISCORD_spawn_strongest_current_visuals.
+particle={
+	# Ледяные врата: дрейфующие льдины, метель, морозная дымка и снежные грозы.
+	name="ADISCORD_strongest_current_ice_weather_file"
+	subsystem={
+		name="ice_floes"
+		max_amount=16
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=225.000
+			y=235.000
+			z=242.000
+			alpha=210.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=0.300
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 10.000 2.000 }
+		emission=1.200
+		size={ 14.000 6.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=drift
+	}
+	subsystem={
+		name="snow"
+		max_amount=160
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=235.000
+			y=245.000
+			z=255.000
+			alpha=200.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=40.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity_pitch={ -90.000 10.000 }
+		velocity={ 6.000 2.000 }
+		life={ 6.000 1.000 }
+		emission=25.000
+		size={ 1.200 0.400 }
+		rotation={ 0.000 180.000 }
+		force=chaos
+	}
+	subsystem={
+		name="frost_mist"
+		max_amount=14
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=200.000
+			y=215.000
+			z=225.000
+			alpha=90.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=6.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 8.000 1.000 }
+		emission=1.500
+		size={ 60.000 15.000 }
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=wind
+	}
+	subsystem={
+		name="lightning"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=190.000
+			y=215.000
+			z=255.000
+			alpha=255.000,flash
+		}
+		position={
+			x=0.000
+			y=42.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 0.180 0.060 }
+		emission=0.300
+		size={ 110.000 30.000 }
+		rotation={ 0.000 180.000 }
+	}
+	animation={
+		name="slow_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.800 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="flash"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.100 1.000 0.350 0.300 0.500 0.900 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="grow"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.400 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=1.500
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=4.000
+	}
+	force={
+		type="turbulence"
+		name="drift"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=0.500
+	}
+	force={
+		type="planar"
+		name="gravity"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 -1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=40.000
+	}
+}
+
+particle={
+	# Северный рукав: холодный шторм, ливневые завесы, молнии и барашки.
+	name="ADISCORD_strongest_current_north_weather_file"
+	subsystem={
+		name="storm_cloud"
+		max_amount=10
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=55.000
+			y=62.000
+			z=72.000
+			alpha=120.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=45.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 9.000 2.000 }
+		emission=1.000
+		size={ 90.000 20.000 }
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=wind
+	}
+	subsystem={
+		name="rain_curtain"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 40.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=120.000
+			y=135.000
+			z=150.000
+			alpha=110.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=32.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity_pitch={ -90.000 5.000 }
+		velocity={ 12.000 3.000 }
+		life={ 3.000 0.500 }
+		emission=5.000
+		size={ 30.000 8.000 }
+		rotation={ 0.000 180.000 }
+		force=wind
+	}
+	subsystem={
+		name="lightning"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=210.000
+			y=225.000
+			z=255.000
+			alpha=255.000,flash
+		}
+		position={
+			x=0.000
+			y=42.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 0.180 0.060 }
+		emission=0.700
+		size={ 110.000 30.000 }
+		rotation={ 0.000 180.000 }
+	}
+	subsystem={
+		name="whitecaps"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=220.000
+			y=240.000
+			z=245.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.000 0.500 }
+		emission=8.000
+		size={ 6.000 2.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 20.000 }
+	}
+	animation={
+		name="slow_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.800 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="flash"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.100 1.000 0.350 0.300 0.500 0.900 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="grow"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.400 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=1.500
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=4.000
+	}
+	force={
+		type="turbulence"
+		name="drift"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=0.500
+	}
+	force={
+		type="planar"
+		name="gravity"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 -1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=40.000
+	}
+}
+
+particle={
+	# Стремнина: сплошная гроза, частые молнии, брызги и большие водовороты.
+	name="ADISCORD_strongest_current_rapids_weather_file"
+	subsystem={
+		name="storm_cloud"
+		max_amount=14
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=40.000
+			y=45.000
+			z=55.000
+			alpha=150.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=45.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 9.000 2.000 }
+		emission=1.400
+		size={ 100.000 20.000 }
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=wind
+	}
+	subsystem={
+		name="rain_curtain"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 40.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=120.000
+			y=135.000
+			z=150.000
+			alpha=110.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=32.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity_pitch={ -90.000 5.000 }
+		velocity={ 12.000 3.000 }
+		life={ 3.000 0.500 }
+		emission=7.000
+		size={ 30.000 8.000 }
+		rotation={ 0.000 180.000 }
+		force=wind
+	}
+	subsystem={
+		name="lightning"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=210.000
+			y=225.000
+			z=255.000
+			alpha=255.000,flash
+		}
+		position={
+			x=0.000
+			y=42.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 0.180 0.060 }
+		emission=1.500
+		size={ 110.000 30.000 }
+		rotation={ 0.000 180.000 }
+	}
+	subsystem={
+		name="whitecaps"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=220.000
+			y=240.000
+			z=245.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.000 0.500 }
+		emission=14.000
+		size={ 6.000 2.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 20.000 }
+	}
+	subsystem={
+		name="spray"
+		max_amount=30
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=215.000
+			y=235.000
+			z=242.000
+			alpha=150.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=1.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity_pitch={ 70.000 15.000 }
+		velocity_yaw={ 0.000 180.000 }
+		velocity={ 25.000 8.000 }
+		life={ 1.500 0.300 }
+		emission=10.000
+		size={ 12.000,grow 4.000 }
+		rotation={ 0.000 180.000 }
+		force=gravity
+	}
+	subsystem={
+		name="maelstrom"
+		max_amount=3
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 35.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/bubble.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=150.000
+			y=210.000
+			z=230.000
+			alpha=110.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.600
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 5.000 1.000 }
+		emission=0.300
+		size={ 40.000,shrink 10.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 120.000 30.000 }
+	}
+	animation={
+		name="slow_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.800 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="flash"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.100 1.000 0.350 0.300 0.500 0.900 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="grow"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.400 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=1.500
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=4.000
+	}
+	force={
+		type="turbulence"
+		name="drift"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=0.500
+	}
+	force={
+		type="planar"
+		name="gravity"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 -1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=40.000
+	}
+}
+
+particle={
+	# Южный рукав: тёплый тропический шторм, ливни, молнии и барашки.
+	name="ADISCORD_strongest_current_south_weather_file"
+	subsystem={
+		name="storm_cloud"
+		max_amount=10
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=70.000
+			y=72.000
+			z=80.000
+			alpha=110.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=45.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 9.000 2.000 }
+		emission=1.000
+		size={ 90.000 20.000 }
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=wind
+	}
+	subsystem={
+		name="rain_curtain"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 40.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/rain_smoke.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=120.000
+			y=135.000
+			z=150.000
+			alpha=110.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=32.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity_pitch={ -90.000 5.000 }
+		velocity={ 12.000 3.000 }
+		life={ 3.000 0.500 }
+		emission=6.000
+		size={ 30.000 8.000 }
+		rotation={ 0.000 180.000 }
+		force=wind
+	}
+	subsystem={
+		name="lightning"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=235.000
+			y=225.000
+			z=255.000
+			alpha=255.000,flash
+		}
+		position={
+			x=0.000
+			y=42.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 0.180 0.060 }
+		emission=0.800
+		size={ 110.000 30.000 }
+		rotation={ 0.000 180.000 }
+	}
+	subsystem={
+		name="whitecaps"
+		max_amount=40
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=220.000
+			y=240.000
+			z=245.000
+			alpha=120.000,loop_fade
+		}
+		position={
+			x=0.000
+			y=0.500
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 2.000 0.500 }
+		emission=10.000
+		size={ 6.000 2.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 20.000 }
+	}
+	animation={
+		name="slow_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.800 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="flash"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.100 1.000 0.350 0.300 0.500 0.900 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="grow"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.400 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=1.500
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=4.000
+	}
+	force={
+		type="turbulence"
+		name="drift"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=0.500
+	}
+	force={
+		type="planar"
+		name="gravity"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 -1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=40.000
+	}
+}
+
+particle={
+	# Туманные врата: густые полосы тумана над водой, подсвеченные молниями.
+	name="ADISCORD_strongest_current_fog_weather_file"
+	subsystem={
+		name="fog_bank"
+		max_amount=16
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=205.000
+			y=210.000
+			z=215.000
+			alpha=150.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=8.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 12.000 2.000 }
+		emission=1.200
+		size={ 110.000 25.000 }
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 3.000 }
+		force=wind
+	}
+	subsystem={
+		name="low_mist"
+		max_amount=12
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=no
+		hide=no
+		texture={
+			file="gfx/particles/cloud_6.dds"
+			x=1
+			y=1
+			shader="ParticleAlphaBlend"
+		}
+		color={
+			x=215.000
+			y=220.000
+			z=225.000
+			alpha=100.000,slow_fade
+		}
+		position={
+			x=0.000
+			y=1.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 10.000 2.000 }
+		emission=1.000
+		size={ 80.000 20.000 }
+		particle_pitch=90.000
+		rotation={ 0.000 180.000 }
+		rotation_speed={ 0.000 4.000 }
+		force=wind
+	}
+	subsystem={
+		name="lightning"
+		max_amount=4
+		slave_particles=0
+		emitter_type="sphere"
+		sphere_emitter_radius={ 0.000 50.000 }
+		sphere_emitter_yaw={ 0.000 180.000 }
+		sphere_emitter_pitch={ 0.000 0.000 }
+		invert=no
+		trail=no
+		local_space=no
+		billboard=yes
+		hide=no
+		texture={
+			file="gfx/particles/glow.dds"
+			x=1
+			y=1
+			shader="ParticleAdditive"
+		}
+		color={
+			x=225.000
+			y=230.000
+			z=240.000
+			alpha=255.000,flash
+		}
+		position={
+			x=0.000
+			y=42.000
+			z=0.000
+		}
+		start=0.000
+		duration=-1.000
+		velocity=0.000
+		life={ 0.180 0.060 }
+		emission=0.350
+		size={ 110.000 30.000 }
+		rotation={ 0.000 180.000 }
+	}
+	animation={
+		name="slow_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.800 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="loop_fade"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.200 1.000 0.750 1.000 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="flash"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.000 0.100 1.000 0.350 0.300 0.500 0.900 1.000 0.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="grow"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 0.400 1.000 1.000
+		}
+		op="MUL"
+		time="life"
+	}
+	animation={
+		name="shrink"
+		start=0.000
+		duration=1.000
+		repeat=no
+		minValue=0.000
+		maxValue=1.000
+		curve={
+			0.000 1.000 1.000 0.250
+		}
+		op="MUL"
+		time="life"
+	}
+	force={
+		type="planar"
+		name="wind"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			1.000 0.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=1.500
+	}
+	force={
+		type="turbulence"
+		name="chaos"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=4.000
+	}
+	force={
+		type="turbulence"
+		name="drift"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=0.500
+	}
+	force={
+		type="planar"
+		name="gravity"
+		position={
+			0.000 0.000 0.000
+		}
+		direction={
+			0.000 -1.000 0.000
+		}
+		local_force=no
+		yaw=0.000
+		division=16
+		amount=40.000
+	}
+}

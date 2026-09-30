@@ -5,6 +5,7 @@ ADISCORD_is_playable_development_country = {
 		original_tag = VAL
 		original_tag = STP
 		original_tag = WRK
+		original_tag = SHL
 	}
 }
 

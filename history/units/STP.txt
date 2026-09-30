@@ -304,6 +304,7 @@ air_wings = {
 }
 
 instant_effect = {
+	add_manpower = 10000
 	add_equipment_to_stockpile = {
 		type = motorized_equipment_1
 		amount = 300

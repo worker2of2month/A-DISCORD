@@ -3,3 +3,5 @@
  vorkernsberg_desc: "A dense urban conurbation of layered development, transport interchanges, and industrial districts. Manoeuvre is constrained while defenders can rely on the city's infrastructure."
  contaminated: "Contaminated Zone"
  contaminated_desc: "Terrain contaminated by hazardous chemical and radioactive substances. Ruined roads, the need for protective equipment, and constant exposure risks severely hinder movement, supply, and combat operations."
+ water_strongest_current: "Strongest Current"
+ water_strongest_current_desc: "A relentless pole-to-pole current tearing between the western and the central continent. For centuries it smashed or carried off every ship that tried the crossing, which is why the two shores never met. Fleets here struggle to keep formation and to spot the enemy, but drifting mines are swept away."

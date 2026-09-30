@@ -28,7 +28,6 @@ ADISCORD_is_non_participating_minor = {
 		tag = RIN
 		tag = RLY
 		tag = SDR
-		tag = SHL
 		tag = SKN
 		tag = TMR
 		tag = VES

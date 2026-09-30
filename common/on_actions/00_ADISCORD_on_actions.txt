@@ -47,6 +47,8 @@ on_actions = {
 				scale = 0.02
 				min_zoom = 5555.0
 			}
+			# Strongest Current visuals (strategic region 233).
+			ADISCORD_spawn_strongest_current_visuals = yes
 			# Scenario history is the sole provenance producer. A pre-contract save
 			# cannot enter this branch, while the completion sentinel prevents a
 			# fresh campaign reload from overwriting research or development.
@@ -100,6 +102,9 @@ on_actions = {
 					ADISCORD_set_economic_development_3 = yes
 					ADISCORD_initialize_society_development_variables = yes
 					ADISCORD_update_total_country_development = yes
+				}
+				SHL = {
+					SHL_initialize_furnaces = yes
 				}
 				every_country = {
 					limit = {
