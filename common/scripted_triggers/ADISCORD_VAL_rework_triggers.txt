@@ -1828,22 +1828,51 @@ VAL_partner_trade_can_accept = {
 	OR = { has_country_flag = VAL_partner_offer_trade has_country_flag = VAL_trade_fee_paid }
 	VAL_partner_trade_terms_valid = yes
 }
-VAL_partner_hire_funds_ready = { VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } } }
-VAL_partner_hire_reserve_ready = { NOT = { has_manpower < 5000 } }
+# COUNTRY supplier. Bairinzh participates in recruitment only.
+VAL_hire_partner = {
+	exists = yes
+	has_capitulated = no
+	NOT = { has_war_with = VAL }
+	OR = { VAL_contract_partner = yes tag = BTL }
+}
+
+VAL_partner_hire_funds_ready = {
+	OR = {
+		AND = {
+			tag = BTL
+			VAL = { check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals } }
+		}
+		AND = {
+			NOT = { tag = BTL }
+			VAL = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		}
+	}
+}
+
+VAL_partner_hire_reserve_ready = {
+	OR = {
+		AND = { tag = BTL NOT = { has_manpower < 20000 } }
+		AND = { NOT = { tag = BTL } NOT = { has_manpower < 5000 } }
+	}
+}
+
+VAL_partner_hire_fee_reserved = {
+	OR = { has_country_flag = VAL_hire_fee_500_paid has_country_flag = VAL_hire_fee_3000_paid }
+}
 
 VAL_partner_hire_terms_valid = {
 	NOT = { has_country_flag = VAL_hire_fee_paid }
-	VAL_contract_partner = yes
+	VAL_hire_partner = yes
 	has_war = no
 	NOT = { has_country_flag = VAL_partner_hire_cooldown }
-	OR = { has_country_flag = VAL_hire_fee_500_paid VAL_partner_hire_funds_ready = yes }
+	OR = { VAL_partner_hire_fee_reserved = yes VAL_partner_hire_funds_ready = yes }
 	VAL_partner_hire_reserve_ready = yes
 }
 
 VAL_partner_hire_can_offer = {
 	NOT = { has_country_flag = VAL_hire_fee_paid }
 	VAL_partner_hire_terms_valid = yes
-	NOT = { has_country_flag = VAL_hire_fee_500_paid }
+	NOT = { VAL_partner_hire_fee_reserved = yes }
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	VAL = { VAL_partner_desk_free = yes }
 
@@ -1853,7 +1882,7 @@ VAL_partner_hire_can_accept = {
 	VAL_partner_hire_terms_valid = yes
 	# The reserved receipt is authoritative if the dated offer marker expires
 	# while a valid human response is still open.
-	OR = { has_country_flag = VAL_partner_offer_hire has_country_flag = VAL_hire_fee_500_paid }
+	OR = { has_country_flag = VAL_partner_offer_hire VAL_partner_hire_fee_reserved = yes }
 }
 
 VAL_partner_arms_terms_valid = {
@@ -2473,13 +2502,13 @@ VAL_trade_recipient_ready = {
 	NOT = { has_country_flag = VAL_market_term_started }
 }
 VAL_hire_recipient_ready = {
-	VAL_contract_partner = yes
+	VAL_hire_partner = yes
 	has_war = no
 	VAL_partner_hire_reserve_ready = yes
 	NOT = { has_country_flag = VAL_partner_contact_cooldown }
 	NOT = { has_country_flag = VAL_partner_hire_cooldown }
 	NOT = { has_country_flag = VAL_hire_fee_paid }
-	NOT = { has_country_flag = VAL_hire_fee_500_paid }
+	NOT = { VAL_partner_hire_fee_reserved = yes }
 }
 VAL_ready_recipient_ready = {
 	OR = { VAL_contract_partner = yes VAL_export_customer = yes }

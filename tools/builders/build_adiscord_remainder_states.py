@@ -37,6 +37,7 @@ from tools.builders.build_adiscord_strategic_regions import (
 )
 from tools.lib.paths import repository_root
 from tools.lib.localisation import replace_generated_localisation_block
+from tools.lib.adiscord_remainder_countries import synchronize
 
 
 ROOT = repository_root()
@@ -459,11 +460,22 @@ def main() -> int:
         help="write generated state files and localisation",
     )
     parser.add_argument(
+        "--countries-only",
+        action="store_true",
+        help="check or populate political history without rebuilding geography",
+    )
+    parser.add_argument(
         "--english-localisation",
         action="store_true",
         help="check or apply only reviewed English names",
     )
     args = parser.parse_args()
+    if args.countries_only:
+        changed = synchronize(apply=args.apply)
+        print(f"Remainder-country outputs {'updated' if args.apply else 'different'}: {len(changed)}")
+        for path in changed:
+            print(path)
+        return int(bool(changed) and not args.apply)
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
 
@@ -496,6 +508,8 @@ def main() -> int:
     )
     print(f"Climate groups: {dict(sorted(climate_counts.items()))}")
     apply_plan(planned, data, generated_paths)
+    changed = synchronize(apply=True)
+    print(f"Synchronized {len(changed)} remainder-country outputs.")
     mismatches = synchronize_buildings(ROOT, apply=True)
     print(f"Synchronized {len(mismatches)} map-building state assignments.")
     return 0

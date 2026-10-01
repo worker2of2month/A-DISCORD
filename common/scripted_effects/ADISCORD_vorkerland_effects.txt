@@ -3637,11 +3637,11 @@ ADISCORD_vorkerland_ivanland_intervention_failure = {
 }
 
 ADISCORD_vorkerland_promote_anton_bagley = {
-	# Anton is transferred between WKR and restored WRK. If his authored leader
-	# role already survived that transfer, promote the existing role instead of
-	# adding a duplicate one and letting HOI4 fall back to a generated leader.
+	# При переносе WKR -> WRK роль Антона сохраняется, но он ещё не правит.
+	# Проверяем и неправящие роли: повторное добавление существующей роли
+	# отклоняется движком и оставляет у власти сгенерированного лидера.
 	if = {
-		limit = { has_country_leader = { character = WRK_Anton_Bagley } }
+		limit = { has_country_leader = { character = WRK_Anton_Bagley ruling_only = no } }
 		promote_character = {
 			character = WRK_Anton_Bagley
 			ideology = utilitarian_accelerationism

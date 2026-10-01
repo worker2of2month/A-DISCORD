@@ -3344,8 +3344,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         self.assertIn("portrait = GFX_portrait_WRK_Anton_Bagley", anton_path)
         self.assertIn("ideology = utilitarian_accelerationism", successor)
         self.assertIn(
-            "has_country_leader = { character = WRK_Anton_Bagley }",
-            successor,
+            "has_country_leader = { character = WRK_Anton_Bagley ruling_only = no }",
+            named_block(named_block(successor, "if"), "limit"),
+            "A transferred leader role must be detected before Anton rules WRK",
         )
         self.assertIn("promote_character = {", successor)
         self.assertLess(

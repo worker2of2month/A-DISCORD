@@ -2601,7 +2601,27 @@ focus_tree = {
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
-		available = { custom_trigger_tooltip = { tooltip = VAL_frontier_postwar_ready_tt VAL_frontier_postwar = yes } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_contracts_required_tt
+				has_completed_focus = VAL_Contracts_Outlive_Kings
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_banner_required_tt
+				has_completed_focus = VAL_One_Ledger_One_Banner
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_course_required_tt
+				OR = {
+					has_completed_focus = VAL_Trading_Partners
+					has_completed_focus = VAL_October_Of_2160
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_frontier_postwar_ready_tt
+				VAL_frontier_postwar = yes
+			}
+		}
 
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nationalise_region

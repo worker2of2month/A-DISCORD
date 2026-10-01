@@ -762,7 +762,7 @@ def validate_countries(root: Path, issues: list[str]) -> None:
         collapse_effects, "ADISCORD_vorkerland_promote_anton_bagley"
     )
     for token in (
-        "has_country_leader = { character = WRK_Anton_Bagley }",
+        "has_country_leader = { character = WRK_Anton_Bagley ruling_only = no }",
         "promote_character = {",
         "add_country_leader_role = {",
         "ideology = utilitarian_accelerationism",

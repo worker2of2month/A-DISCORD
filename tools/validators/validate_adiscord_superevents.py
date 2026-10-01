@@ -56,6 +56,7 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.6",
     "ADISCORD_superevent.7",
     "ADISCORD_superevent.8",
+    "ADISCORD_superevent.9",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -67,6 +68,7 @@ SUPEREVENT_IDS = (
 class SupereventPresentation:
     name: str
     dedicated_sound_effect: str | None = None
+    legacy_music_asset: bool = True
 
 
 PRESENTATIONS = (
@@ -111,6 +113,11 @@ PRESENTATIONS = (
     ),
     SupereventPresentation(
         "superevent_rus_last_empire", "superevent_rus_last_empire_sound_e"
+    ),
+    SupereventPresentation(
+        "superevent_val_commonwealth",
+        "superevent_val_commonwealth_sound_e",
+        legacy_music_asset=False,
     ),
 )
 
@@ -437,7 +444,7 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
         issues.append("super-event silence carrier must have zero random-play chance")
 
-    for effect in sound_effect_names:
+    for item, effect in zip(sound_items, sound_effect_names):
         song = effect.removesuffix("_sound_e")
         assets = [
             block
@@ -452,7 +459,9 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 issues.append(
                     f"presentation music must not be registered in radio playlists: {song}"
                 )
-        if len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]:
+        if (item.legacy_music_asset or assets) and (
+            len(assets) != 1 or f'file = "{song}.ogg"' not in assets[0]
+        ):
             issues.append(f"missing or duplicate single-channel music asset {song}")
 
     if (root / RU_LOC).is_file() and not (root / RU_LOC).read_bytes().startswith(

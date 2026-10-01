@@ -838,11 +838,13 @@ defined_text = {
 
 defined_text = {
 	name = VALHireDecisionPeople
+	text = { trigger = { OR = { tag = BTL FROM = { tag = BTL } } } localization_key = VAL_hire_value_20000 }
 	text = { localization_key = VAL_hire_value_5000 }
 }
 
 defined_text = {
 	name = VALHireDecisionPrice
+	text = { trigger = { OR = { tag = BTL FROM = { tag = BTL } } } localization_key = VAL_hire_value_3000 }
 	text = { localization_key = VAL_hire_value_500 }
 }
 
@@ -1073,4 +1075,21 @@ defined_text = {
 	name = VALGetCostRifles40000
 	text = { trigger = { has_equipment = { infantry_equipment < 40000 } } localization_key = VAL_cost_value_40000_blocked }
 	text = { localization_key = VAL_cost_value_40000 }
+}
+
+defined_text = {
+	name = VALHireDecisionCost
+	text = {
+		trigger = {
+			FROM = { tag = BTL }
+			VAL = { NOT = { check_variable = { var = ADISCORD_economy_treasury value = 3000 compare = greater_than_or_equals } } }
+		}
+		localization_key = VAL_hire_cost_3000_blocked
+	}
+	text = { trigger = { FROM = { tag = BTL } } localization_key = VAL_hire_cost_3000 }
+	text = {
+		trigger = { VAL = { NOT = { ADISCORD_economy_can_spend_500 = yes } } }
+		localization_key = VAL_cost_value_500_blocked
+	}
+	text = { localization_key = VAL_cost_value_500 }
 }

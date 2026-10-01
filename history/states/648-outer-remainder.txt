@@ -4,11 +4,24 @@
 state = {
 	id = 648
 	name = "STATE_648"
-	manpower = 1
-	state_category = rural
+	manpower = 556879
+	state_category = town
 	provinces = {
 		1605 3094 6452 7579 7830 8802
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 0.0
+	local_supplies = 2.0
+# Populated by tools/build_adiscord_remainder_states.py
+	history = {
+		owner = ULV
+		add_core_of = ULV
+		victory_points = { 6452 10 }
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 1
+			arms_factory = 1
+			dockyard = 1
+			6452 = { naval_base = 1 }
+		}
+	}
 }

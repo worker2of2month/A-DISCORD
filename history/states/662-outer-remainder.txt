@@ -4,11 +4,20 @@
 state = {
 	id = 662
 	name = "STATE_662"
-	manpower = 1
+	manpower = 134508
 	state_category = rural
 	provinces = {
 		8252 10836 11599
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 0.0
+	local_supplies = 2.0
+# Populated by tools/build_adiscord_remainder_states.py
+	history = {
+		owner = OLR
+		add_core_of = OLR
+		buildings = {
+			infrastructure = 1
+			10836 = { naval_base = 1 }
+		}
+	}
 }

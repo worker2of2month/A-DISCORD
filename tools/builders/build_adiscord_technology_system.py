@@ -8,6 +8,7 @@ import re
 from PIL import Image
 
 from tools.lib.paths import repository_root
+from tools.lib.adiscord_remainder_countries import COUNTRIES as REMAINDER_COUNTRIES
 from tools.builders.build_adiscord_technology_ui_assets import (
     STATE_GFX_OUTPUT as TECHNOLOGY_STATE_GFX,
     apply_tree_skin,
@@ -6673,6 +6674,16 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "YPR": "Army-bearing regional polity whose small economy remains fragmentary.",
     "ZAO": "High-slot autonomous zone still lacks the factories and infrastructure for broad recovered packages.",
 }
+
+
+STARTING_COUNTRY_TECH_PROFILES.update({
+    tag: tuple(country["technology_profiles"])
+    for tag, country in REMAINDER_COUNTRIES.items()
+})
+STARTING_COUNTRY_TECH_PROFILE_RATIONALE.update({
+    tag: country["description"]["english"]
+    for tag, country in REMAINDER_COUNTRIES.items()
+})
 
 
 ENABLE_SUBUNITS = {

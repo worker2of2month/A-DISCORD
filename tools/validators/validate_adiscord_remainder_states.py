@@ -12,6 +12,8 @@ _REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPOSITORY_ROOT))
 
+from tools.lib.adiscord_remainder_countries import STATE_OWNERS, synchronize
+
 try:
     from tools.builders.build_adiscord_outer_states import (
         build_province_data,
@@ -112,13 +114,13 @@ def main() -> int:
             name_match.group(1).strip(),
         )
 
-        if str(state_id) not in western_source()["states"] and re.search(
+        if state_id not in STATE_OWNERS and str(state_id) not in western_source()["states"] and re.search(
             r"\b(owner|add_core_of|victory_points|buildings)\s*=", text
         ):
             errors.append(
                 f"{path.relative_to(ROOT)}: neutral shell has ownership/core/content history"
             )
-        if not re.search(r"\bmanpower\s*=\s*1\b", text):
+        if state_id not in STATE_OWNERS and not re.search(r"\bmanpower\s*=\s*1\b", text):
             errors.append(f"{path.relative_to(ROOT)}: neutral shell manpower must be 1")
 
     if 23 not in rows:
@@ -200,6 +202,7 @@ def main() -> int:
         errors.append(f"duplicate remainder state names {duplicates[:20]}")
 
     errors.extend(check_western_outputs())
+    errors.extend(f"remainder country output differs: {path}" for path in synchronize())
     from tools.validators.validate_adiscord_outer_states import western_geography_issues
 
     errors.extend(western_geography_issues(adjacency, data))

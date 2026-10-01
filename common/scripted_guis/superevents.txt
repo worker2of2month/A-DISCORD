@@ -178,4 +178,20 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_val_commonwealth = {
+		window_name = "superevent_val_commonwealth"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_val_commonwealth
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_val_commonwealth
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

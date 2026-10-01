@@ -12247,6 +12247,523 @@
       "definition_metadata": {
         "is_locked": false
       }
+    },
+    {
+      "key": "oob_pio_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/PIO.txt",
+        "owner": "PIO"
+      },
+      "technical_name": "PIO Territorial Brigade",
+      "display_name": "PIO Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_pio_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_mrv_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/MRV.txt",
+        "owner": "MRV"
+      },
+      "technical_name": "MRV Territorial Brigade",
+      "display_name": "MRV Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_mrv_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_rvn_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/RVN.txt",
+        "owner": "RVN"
+      },
+      "technical_name": "RVN Territorial Brigade",
+      "display_name": "RVN Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_rvn_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_sfr_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SFR.txt",
+        "owner": "SFR"
+      },
+      "technical_name": "SFR Territorial Brigade",
+      "display_name": "SFR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_sfr_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_flr_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/FLR.txt",
+        "owner": "FLR"
+      },
+      "technical_name": "FLR Territorial Brigade",
+      "display_name": "FLR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_flr_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_prr_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/PRR.txt",
+        "owner": "PRR"
+      },
+      "technical_name": "PRR Territorial Brigade",
+      "display_name": "PRR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_prr_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_ulv_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ULV.txt",
+        "owner": "ULV"
+      },
+      "technical_name": "ULV Territorial Brigade",
+      "display_name": "ULV Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_ulv_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_lur_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/LUR.txt",
+        "owner": "LUR"
+      },
+      "technical_name": "LUR Territorial Brigade",
+      "display_name": "LUR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_lur_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_chd_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/CHD.txt",
+        "owner": "CHD"
+      },
+      "technical_name": "CHD Territorial Brigade",
+      "display_name": "CHD Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_chd_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_evr_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/EVR.txt",
+        "owner": "EVR"
+      },
+      "technical_name": "EVR Territorial Brigade",
+      "display_name": "EVR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_evr_territorial_brigade"
+      }
+    },
+    {
+      "key": "oob_olr_territorial_brigade",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/OLR.txt",
+        "owner": "OLR"
+      },
+      "technical_name": "OLR Territorial Brigade",
+      "display_name": "OLR Territorial Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "infantry",
+          "x": 2,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 55.75,
+        "manpower": 3000,
+        "equipment": {
+          "ADISCORD_squad_weapons_equipment": 24,
+          "infantry_equipment": 2700
+        },
+        "supply": 0.18
+      },
+      "equipment_availability": {
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true
+      },
+      "ai_role": "territorial",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_olr_territorial_brigade"
+      }
     }
   ],
   "references": [
@@ -14612,6 +15129,116 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 1,
+      "count": 1
+    },
+    {
+      "key": "pio_oob_territorial_brigade",
+      "path": "history/units/PIO.txt",
+      "kind": "oob",
+      "technical_name": "PIO Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 2
+    },
+    {
+      "key": "mrv_oob_territorial_brigade",
+      "path": "history/units/MRV.txt",
+      "kind": "oob",
+      "technical_name": "MRV Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 2
+    },
+    {
+      "key": "rvn_oob_territorial_brigade",
+      "path": "history/units/RVN.txt",
+      "kind": "oob",
+      "technical_name": "RVN Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 5
+    },
+    {
+      "key": "sfr_oob_territorial_brigade",
+      "path": "history/units/SFR.txt",
+      "kind": "oob",
+      "technical_name": "SFR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 3
+    },
+    {
+      "key": "flr_oob_territorial_brigade",
+      "path": "history/units/FLR.txt",
+      "kind": "oob",
+      "technical_name": "FLR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 4
+    },
+    {
+      "key": "prr_oob_territorial_brigade",
+      "path": "history/units/PRR.txt",
+      "kind": "oob",
+      "technical_name": "PRR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 1
+    },
+    {
+      "key": "ulv_oob_territorial_brigade",
+      "path": "history/units/ULV.txt",
+      "kind": "oob",
+      "technical_name": "ULV Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 2
+    },
+    {
+      "key": "lur_oob_territorial_brigade",
+      "path": "history/units/LUR.txt",
+      "kind": "oob",
+      "technical_name": "LUR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 2
+    },
+    {
+      "key": "chd_oob_territorial_brigade",
+      "path": "history/units/CHD.txt",
+      "kind": "oob",
+      "technical_name": "CHD Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 3
+    },
+    {
+      "key": "evr_oob_territorial_brigade",
+      "path": "history/units/EVR.txt",
+      "kind": "oob",
+      "technical_name": "EVR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
+      "count": 2
+    },
+    {
+      "key": "olr_oob_territorial_brigade",
+      "path": "history/units/OLR.txt",
+      "kind": "oob",
+      "technical_name": "OLR Territorial Brigade",
+      "legacy_names": [],
+      "start_experience_factor": 0.1,
+      "start_equipment_factor": 0.7,
       "count": 1
     }
   ]

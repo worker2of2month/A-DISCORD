@@ -426,7 +426,7 @@ class ValPartnerSettlementTests(unittest.TestCase):
 
         return ValExpandedCampaignTests.match(self, name, facts, scope, root=scope)
 
-    def execute(self, name, facts, buyer="CIN"):
+    def execute(self, name, facts, buyer="CIN", native_flags=False):
         from tools.tests.test_adiscord_stp_preparation import scalar, block
         from tools.tests.test_validate_adiscord_val_rework import (
             ValExpandedCampaignTests,
@@ -492,6 +492,17 @@ class ValPartnerSettlementTests(unittest.TestCase):
                 elif key in ("set_country_flag", "clr_country_flag"):
                     flag = scalar(value, "flag") if isinstance(value, list) else value
                     facts[scope, "has_country_flag", flag] = key == "set_country_flag"
+                    if native_flags:
+                        amount = (
+                            int(next((e.value for e in value if e.key == "value"), 0))
+                            if isinstance(value, list)
+                            else 1
+                        ) if key == "set_country_flag" else 0
+                        facts[scope, "has_country_flag", flag] = amount != 0
+                        if isinstance(value, list):
+                            facts[scope, "flag_days", flag] = int(
+                                next((e.value for e in value if e.key == "days"), 0)
+                            )
                 elif key in ("add_ideas", "add_timed_idea", "remove_ideas"):
                     idea = scalar(value, "idea") if isinstance(value, list) else value
                     facts[scope, "has_idea", idea] = key != "remove_ideas"
@@ -3367,7 +3378,7 @@ class ValHireReceiptTests(unittest.TestCase):
         self.assertIn("custom_cost_text = VAL_hire_decision_cost", decision)
         self.assertIn("cost = 0", decision)
         self.assertIn(
-            "value = 500 compare = greater_than_or_equals",
+            "FROM = { VAL_partner_hire_funds_ready = yes }",
             named_block(decision, "custom_cost_trigger"),
         )
         self.assertIn(
@@ -3388,7 +3399,7 @@ class ValHireReceiptTests(unittest.TestCase):
                 f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
             )
             for suffix in ("", "_blocked", "_tooltip"):
-                self.assertIn("VAL_hire_decision_cost_500" + suffix + ":0", loc)
+                self.assertIn("VAL_hire_decision_cost" + suffix + ":0", loc)
 
     def test_every_hire_offer_path_reserves_the_fee_before_dispatch(self):
         import re
@@ -3413,91 +3424,177 @@ class ValHireReceiptTests(unittest.TestCase):
 
 
 class ValHireFixedCostTests(unittest.TestCase):
-    def test_fixed_quotes_cover_each_partner_once_and_match_exact_affordability(self):
-        from tools.tests.test_adiscord_stp_preparation import (
-            parse_clausewitz,
-            block,
-            matches_conditions,
-            scalar,
-        )
+    setUpClass = classmethod(ValPartnerSettlementTests.setUpClass.__func__)
+    matches = ValPartnerSettlementTests.matches
+    execute = ValPartnerSettlementTests.execute
+    facts = ValPartnerSettlementTests.facts
 
+    def test_quotes_match_exact_money_and_manpower_boundaries_for_every_supplier(self):
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
-        expected = {500: {"CIN", "COF", "APH", "OSF", "TFF", "YPR"}}
-        covered = set()
-        for price, targets in expected.items():
-            name = "VAL_hire_partner_volunteers"
-            decision = named_block(decisions, name)
-            actual = set(re.findall(r"\b[A-Z]{3}\b", named_block(decision, "targets")))
-            self.assertEqual(actual, targets)
-            self.assertFalse(covered & actual)
-            covered |= actual
-            self.assertIn(
-                f"custom_cost_text = VAL_hire_decision_cost_{price}", decision
-            )
-            guard = block(parse_clausewitz(decision)[0].value, "custom_cost_trigger")
-            for balance, enabled in (
-                (price - 0.01, False),
-                (price, True),
-                (price + 1, True),
-            ):
+        decision = named_block(decisions, "VAL_hire_partner_volunteers")
+        actual = re.findall(r"\b[A-Z]{3}\b", named_block(decision, "targets"))
+        expected = {"CIN", "COF", "APH", "OSF", "TFF", "YPR", "BTL"}
+        self.assertEqual(set(actual), expected)
+        self.assertEqual(len(actual), len(expected))
+        self.assertIn("custom_cost_text = VAL_hire_decision_cost", decision)
+        self.assertIn("FROM = { VAL_partner_hire_funds_ready = yes }", decision)
+        for supplier in actual:
+            price, people = (3000, 20000) if supplier == "BTL" else (500, 5000)
+            facts = self.facts("hire", buyer=supplier)
+            for balance in (price - 0.01, price, price + 1):
+                facts["VAL", "variable", "ADISCORD_economy_treasury"] = balance
                 self.assertEqual(
-                    matches_conditions(
-                        guard,
-                        {("VAL", "variable", "ADISCORD_economy_treasury"): balance},
-                        "VAL",
-                    ),
-                    enabled,
+                    self.matches("VAL_partner_hire_funds_ready", facts, supplier),
+                    balance >= price,
                 )
-            for language in ("russian", "english"):
-                loc = read(
-                    f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            for reserve in (people - 0.01, people, people + 1):
+                facts[supplier, "numeric", "has_manpower"] = reserve
+                self.assertEqual(
+                    self.matches("VAL_partner_hire_reserve_ready", facts, supplier),
+                    reserve >= people,
                 )
-                for suffix in ("", "_blocked", "_tooltip"):
-                    value = re.search(
-                        rf'^ VAL_hire_decision_cost_{price}{suffix}:0 "(.*)"$',
-                        loc,
-                        re.M,
-                    ).group(1)
-                    self.assertIn(str(price), value)
-                    self.assertIn("£ADISCORD_economy_treasury_texticon", value)
-                    if suffix == "_tooltip":
-                        self.assertNotIn("[", value)
+
+    def test_bairinzh_settlement_conserves_money_and_manpower_and_cannot_repeat(self):
+        facts = self.facts("hire", buyer="BTL")
+        facts["VAL", "variable", "ADISCORD_economy_treasury"] = 3000
+        facts["BTL", "numeric", "has_manpower"] = 20000
+        self.execute("VAL_reserve_partner_hire_fee", facts, "BTL", native_flags=True)
+        self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 0)
+        self.assertEqual(facts["BTL", "variable", "ADISCORD_economy_treasury"], 500)
+        self.assertNotIn(("VAL", "numeric", "has_manpower"), facts)
+        self.assertTrue(self.matches("VAL_partner_hire_can_accept", facts, "BTL"))
+        self.execute("VAL_settle_partner_hire", facts, "BTL", native_flags=True)
+        self.assertEqual(facts["BTL", "numeric", "has_manpower"], 0)
+        self.assertEqual(facts["VAL", "numeric", "has_manpower"], 20000)
+        self.assertEqual(facts["BTL", "variable", "ADISCORD_economy_treasury"], 3500)
+        self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 0)
+        self.assertFalse(facts["BTL", "has_country_flag", "VAL_hire_fee_3000_paid"])
+        after = dict(facts)
+        self.execute("VAL_settle_partner_hire", facts, "BTL", native_flags=True)
+        self.execute("VAL_decline_partner_hire", facts, "BTL", native_flags=True)
+        self.assertEqual(facts, after)
+
+    def test_bairinzh_refusal_expiry_war_and_short_reserve_refund_exactly_once(self):
+        for reason in ("refusal", "expiry", "war", "short_reserve"):
+            with self.subTest(reason=reason):
+                facts = self.facts("hire", buyer="BTL")
+                facts["VAL", "variable", "ADISCORD_economy_treasury"] = 3000
+                facts["BTL", "numeric", "has_manpower"] = 20000
+                self.execute("VAL_reserve_partner_hire_fee", facts, "BTL", native_flags=True)
+                if reason == "expiry":
+                    facts["BTL", "has_country_flag", "VAL_partner_offer_hire"] = False
+                    self.execute("VAL_reconcile_partner_hire_fee", facts, "BTL", native_flags=True)
+                elif reason == "refusal":
+                    self.execute("VAL_decline_partner_hire", facts, "BTL", native_flags=True)
+                else:
+                    if reason == "war":
+                        facts["BTL", "has_war", "no"] = False
                     else:
-                        self.assertIn("[ROOT.VALGetCostTreasury500]", value)
-                for key, color in (
-                    ("VAL_cost_value_500", "Y"),
-                    ("VAL_cost_value_500_blocked", "R"),
-                ):
-                    value = re.search(
-                        rf'^ {key}:0 "(.*)"$', loc, re.M
-                    ).group(1)
-                    self.assertEqual(value, f"§{color}{price}§!")
-            scripted = parse_clausewitz(
-                read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt")
-            )
-            helpers = [
-                entry.value
-                for entry in scripted
-                if entry.key == "defined_text"
-                and scalar(entry.value, "name") == "VALGetCostTreasury500"
-            ]
-            self.assertEqual(len(helpers), 1)
-            variants = [entry.value for entry in helpers[0] if entry.key == "text"]
-            self.assertEqual(len(variants), 2)
-            self.assertEqual(
-                scalar(variants[0], "localization_key"), "VAL_cost_value_500_blocked"
-            )
-            self.assertEqual(scalar(variants[1], "localization_key"), "VAL_cost_value_500")
-            for affordable in (False, True):
+                        facts["BTL", "numeric", "has_manpower"] = 19999.9
+                    self.execute("VAL_settle_partner_hire", facts, "BTL", native_flags=True)
+                self.assertEqual(facts["VAL", "variable", "ADISCORD_economy_treasury"], 3000)
+                self.assertEqual(facts["BTL", "variable", "ADISCORD_economy_treasury"], 500)
+                self.assertNotIn(("VAL", "numeric", "has_manpower"), facts)
+                self.assertFalse(facts["BTL", "has_country_flag", "VAL_hire_fee_3000_paid"])
+                self.assertFalse(facts["VAL", "has_country_flag", "VAL_partner_offer_pending"])
+                after = dict(facts)
+                self.execute("VAL_decline_partner_hire", facts, "BTL", native_flags=True)
+                self.assertEqual(facts, after)
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        self.assertIn("BTL = { VAL_reconcile_partner_hire_fee = yes }", named_block(effects, "VAL_reconcile_hire_fees"))
+
+    def test_nonzero_annual_flags_block_day_364_and_release_day_365_per_supplier(self):
+        for supplier in ("TFF", "YPR", "BTL"):
+            price, people = (3000, 20000) if supplier == "BTL" else (500, 5000)
+            facts = self.facts("hire", buyer=supplier)
+            facts["VAL", "variable", "ADISCORD_economy_treasury"] = price * 2
+            facts[supplier, "numeric", "has_manpower"] = people * 2
+            self.execute("VAL_reserve_partner_hire_fee", facts, supplier, native_flags=True)
+            self.execute("VAL_settle_partner_hire", facts, supplier, native_flags=True)
+            for flag in ("VAL_partner_hire_cooldown", "VAL_partner_contact_cooldown"):
+                self.assertTrue(facts[supplier, "has_country_flag", flag])
+                self.assertEqual(facts[supplier, "flag_days", flag], 365)
+            for elapsed in (0, 1, 30, 180, 364, 365):
+                advanced = dict(facts)
+                for (scope, kind, flag), days in facts.items():
+                    if kind == "flag_days" and elapsed >= days:
+                        advanced[scope, "has_country_flag", flag] = False
                 self.assertEqual(
-                    matches_conditions(
-                        block(variants[0], "trigger"),
-                        {("VAL", "ADISCORD_economy_can_spend_500", "yes"): affordable},
-                        "VAL",
-                    ),
-                    not affordable,
+                    self.matches("VAL_partner_hire_can_offer", advanced, supplier),
+                    elapsed >= 365,
+                    (supplier, elapsed),
                 )
-        self.assertEqual(covered, {"CIN", "COF", "APH", "OSF", "TFF", "YPR"})
+            other = "TFF" if supplier != "TFF" else "YPR"
+            facts[other, "exists", "yes"] = True
+            facts[other, "has_capitulated", "no"] = True
+            facts[other, "has_war", "no"] = True
+            facts[other, "numeric", "has_manpower"] = 5000
+            self.assertTrue(self.matches("VAL_partner_hire_can_offer", facts, other))
+
+    def test_all_hire_gate_writers_set_nonzero_values(self):
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, scalar
+
+        gates = {
+            "VAL_partner_hire_cooldown", "VAL_partner_contact_cooldown",
+            "VAL_partner_offer_hire", "VAL_partner_offer_pending", "VAL_export_offer_pending",
+        }
+
+        def walk(rows):
+            for row in rows:
+                if isinstance(row.value, list):
+                    if row.key == "set_country_flag" and scalar(row.value, "flag") in gates:
+                        self.assertEqual(scalar(row.value, "value"), "1", scalar(row.value, "flag"))
+                    walk(row.value)
+
+        for path in (
+            "common/decisions/ADISCORD_VAL_decisions.txt",
+            "common/scripted_effects/ADISCORD_VAL_effects.txt",
+            "events/ADISCORD_VAL_contract_events.txt",
+        ):
+            walk(parse_clausewitz(read(path)))
+
+    def test_bairinzh_is_not_added_to_unrelated_trade_partners(self):
+        facts = self.facts("hire", buyer="BTL")
+        self.assertTrue(self.matches("VAL_hire_partner", facts, "BTL"))
+        self.assertFalse(self.matches("VAL_contract_partner", facts, "BTL"))
+
+    def test_dynamic_cost_colors_and_event_quotes_match_supplier_and_balance(self):
+        from dataclasses import replace
+        from tools.tests.test_adiscord_stp_preparation import parse_clausewitz, block, scalar, matches_conditions
+
+        scripted = parse_clausewitz(read("common/scripted_localisation/ADISCORD_VAL_contract_scripted_loc.txt"))
+        helpers = {scalar(e.value, "name"): e.value for e in scripted if e.key == "defined_text"}
+
+        def resolve(name, supplier, balance, scope="VAL"):
+            def target(rows):
+                return [replace(e, key=supplier if e.key == "FROM" else e.key,
+                                value=target(e.value) if isinstance(e.value, list) else e.value)
+                        for e in rows]
+
+            facts = {
+                ("VAL", "variable", "ADISCORD_economy_treasury"): balance,
+                ("VAL", "ADISCORD_economy_can_spend_500", "yes"): balance >= 500,
+            }
+            for entry in helpers[name]:
+                if entry.key == "text":
+                    condition = next((e.value for e in entry.value if e.key == "trigger"), [])
+                    if matches_conditions(target(condition), facts, scope):
+                        return scalar(entry.value, "localization_key")
+            self.fail(name)
+
+        for supplier, price, people in (("BTL", 3000, 20000), ("TFF", 500, 5000), ("YPR", 500, 5000)):
+            for balance in (price - 0.01, price):
+                key = resolve("VALHireDecisionCost", supplier, balance)
+                for language in ("russian", "english"):
+                    loc = read(f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml")
+                    value = re.search(rf'^ {key}:0 "(.*)"$', loc, re.M).group(1)
+                    self.assertEqual(value, f"§{'Y' if balance >= price else 'R'}{price}§!")
+                    for suffix in ("", "_blocked", "_tooltip"):
+                        self.assertIn("VAL_hire_decision_cost" + suffix + ":0", loc)
+            self.assertEqual(resolve("VALHireDecisionPeople", supplier, price), f"VAL_hire_value_{people}")
+            self.assertEqual(resolve("VALHireDecisionPrice", supplier, price), f"VAL_hire_value_{price}")
+            self.assertEqual(resolve("VALHireDecisionPeople", "VAL", price, supplier), f"VAL_hire_value_{people}")
+            self.assertEqual(resolve("VALHireDecisionPrice", "VAL", price, supplier), f"VAL_hire_value_{price}")
 
 
 class ValHireReplyTests(ValHireReceiptTests):
@@ -3813,7 +3910,7 @@ class ValAnnualDecisionVisibilityTests(unittest.TestCase):
     def test_success_year_helper_is_separate_from_refusal_handling(self):
         effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
         self.assertIn(
-            "flag = VAL_partner_contact_cooldown days = 365",
+            "flag = VAL_partner_contact_cooldown value = 1 days = 365",
             named_block(effects, "VAL_begin_partner_contract_year"),
         )
         for key in (
@@ -3883,7 +3980,7 @@ class ValRecipientVisibilityTests(ValHireReceiptTests):
         self.execute("VAL_record_partner_refusal", facts)
         self.assertEqual(facts, after)
         self.assertIn(
-            "flag = VAL_partner_contact_cooldown days = 365",
+            "flag = VAL_partner_contact_cooldown value = 1 days = 365",
             named_block(
                 read("common/scripted_effects/ADISCORD_VAL_effects.txt"),
                 "VAL_record_partner_refusal",

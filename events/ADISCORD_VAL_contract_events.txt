@@ -51,12 +51,12 @@ country_event = {
 			if = {
 
 				limit = { CIN = { VAL_partner_trade_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				CIN = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_trade_offer = yes
 				}
 			}
@@ -74,12 +74,12 @@ country_event = {
 			if = {
 
 				limit = { CIN = { VAL_partner_arms_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				CIN = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					country_event = { id = val_contract.363 }
 				}
 			}
@@ -97,13 +97,13 @@ country_event = {
 			if = {
 
 				limit = { CIN = { VAL_partner_hire_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				CIN = {
 					VAL_reserve_partner_hire_fee = yes
 					ADISCORD_release_non_participating_minor_optimization = yes
-					set_country_flag = { flag = VAL_partner_offer_hire days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_offer_hire value = 1 days = 42 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_hire_offer = yes
 				}
 			}
@@ -130,12 +130,12 @@ country_event = {
 			if = {
 
 				limit = { OSF = { VAL_partner_trade_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				OSF = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_trade_offer = yes
 				}
 			}
@@ -153,12 +153,12 @@ country_event = {
 			if = {
 
 				limit = { OSF = { VAL_partner_arms_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				OSF = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					country_event = { id = val_contract.363 }
 				}
 			}
@@ -176,13 +176,13 @@ country_event = {
 			if = {
 
 				limit = { OSF = { VAL_partner_hire_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				OSF = {
 					VAL_reserve_partner_hire_fee = yes
 					ADISCORD_release_non_participating_minor_optimization = yes
-					set_country_flag = { flag = VAL_partner_offer_hire days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_offer_hire value = 1 days = 42 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_hire_offer = yes
 				}
 			}
@@ -209,12 +209,12 @@ country_event = {
 			if = {
 
 				limit = { APH = { VAL_partner_trade_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				APH = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_trade days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_trade_offer = yes
 				}
 			}
@@ -232,12 +232,12 @@ country_event = {
 			if = {
 
 				limit = { APH = { VAL_partner_arms_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				APH = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					set_country_flag = { flag = VAL_partner_offer_arms days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					country_event = { id = val_contract.363 }
 				}
 			}
@@ -255,13 +255,13 @@ country_event = {
 			if = {
 
 				limit = { APH = { VAL_partner_hire_can_offer = yes } }
-				set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				APH = {
 					VAL_reserve_partner_hire_fee = yes
 					ADISCORD_release_non_participating_minor_optimization = yes
-					set_country_flag = { flag = VAL_partner_offer_hire days = 42 }
-					set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+					set_country_flag = { flag = VAL_partner_offer_hire value = 1 days = 42 }
+					set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 					VAL_dispatch_partner_hire_offer = yes
 				}
 			}
@@ -1542,7 +1542,7 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_transit_charter
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = { set_country_flag = { flag = VAL_transit_offer days = 15 } country_event = { id = val_contract.410 } }
 				}
 			} else = { country_event = { id = val_contract.361 } } }
@@ -1835,8 +1835,8 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_partner_arms
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arms_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_country_flag = {
@@ -1845,6 +1845,7 @@ country_event = {
 						}
 						set_country_flag = {
 							flag = VAL_partner_contact_cooldown
+							value = 1
 							days = 30
 						}
 						country_event = {
@@ -1862,8 +1863,8 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_partner_bulk
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_partner_bulk_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_country_flag = {
@@ -1872,6 +1873,7 @@ country_event = {
 						}
 						set_country_flag = {
 							flag = VAL_partner_contact_cooldown
+							value = 1
 							days = 30
 						}
 						country_event = {
@@ -1913,14 +1915,14 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_order_arms
 		hidden_effect = { if = { limit = { has_completed_focus = VAL_Foreign_Broker_Licences event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_variable = { var = VAL_order_quote_tier value = 1 }
 						set_country_flag = { flag = VAL_order_offer days = 15 }
 						set_country_flag = { flag = VAL_quarterly_offer days = 15 }
-						set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 						country_event = { id = val_contract.401 }
 					}
 				}
@@ -1937,14 +1939,14 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_order_bulk
 		hidden_effect = { if = { limit = { has_completed_focus = VAL_Bulk_Arms_Contracts event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_variable = { var = VAL_order_quote_tier value = 2 }
 						set_country_flag = { flag = VAL_order_offer days = 15 }
 						set_country_flag = { flag = VAL_quarterly_offer days = 15 }
-						set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 						country_event = { id = val_contract.402 }
 					}
 				}
@@ -2128,13 +2130,13 @@ country_event = {
 				if = {
 
 					limit = { event_target:VAL_contract_partner = { VAL_partner_hire_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						VAL_reserve_partner_hire_fee = yes
 						ADISCORD_release_non_participating_minor_optimization = yes
-						set_country_flag = { flag = VAL_partner_offer_hire days = 42 }
-						set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+						set_country_flag = { flag = VAL_partner_offer_hire value = 1 days = 42 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 						VAL_dispatch_partner_hire_offer = yes
 					}
 				}
@@ -2186,7 +2188,7 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_transit_charter
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_transit_charter_offerable = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = { set_country_flag = { flag = VAL_transit_offer days = 15 } country_event = { id = val_contract.410 } }
 				}
 			} else = { country_event = { id = val_contract.414 } } }
@@ -2209,8 +2211,8 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_partner_arsenal
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_partner_arsenal_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_country_flag = {
@@ -2219,6 +2221,7 @@ country_event = {
 						}
 						set_country_flag = {
 							flag = VAL_partner_contact_cooldown
+							value = 1
 							days = 30
 						}
 						country_event = {
@@ -2236,8 +2239,8 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_partner_strategic
 		hidden_effect = { if = { limit = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_partner_strategic_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_country_flag = {
@@ -2246,6 +2249,7 @@ country_event = {
 						}
 						set_country_flag = {
 							flag = VAL_partner_contact_cooldown
+							value = 1
 							days = 30
 						}
 						country_event = {
@@ -2275,14 +2279,14 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_order_arsenal
 		hidden_effect = { if = { limit = { has_completed_focus = VAL_Army_Arsenal_Orders event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_variable = { var = VAL_order_quote_tier value = 3 }
 						set_country_flag = { flag = VAL_order_offer days = 15 }
 						set_country_flag = { flag = VAL_quarterly_offer days = 15 }
-						set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 						country_event = { id = val_contract.403 }
 					}
 				}
@@ -2296,14 +2300,14 @@ country_event = {
 		custom_effect_tooltip = VAL_offer_status_VAL_offer_order_strategic
 		hidden_effect = { if = { limit = { has_completed_focus = VAL_Strategic_Arms_Exports event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
 				if = { limit = { event_target:VAL_contract_partner = { VAL_order_can_offer = yes } }
-					set_country_flag = { flag = VAL_partner_offer_pending days = 42 }
-					set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+					set_country_flag = { flag = VAL_partner_offer_pending value = 1 days = 42 }
+					set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 					event_target:VAL_contract_partner = {
 						ADISCORD_release_non_participating_minor_optimization = yes
 						set_variable = { var = VAL_order_quote_tier value = 4 }
 						set_country_flag = { flag = VAL_order_offer days = 15 }
 						set_country_flag = { flag = VAL_quarterly_offer days = 15 }
-						set_country_flag = { flag = VAL_partner_contact_cooldown days = 30 }
+						set_country_flag = { flag = VAL_partner_contact_cooldown value = 1 days = 30 }
 						country_event = { id = val_contract.404 }
 					}
 				}
@@ -2361,7 +2365,7 @@ country_event = {
 					}
 				}
 				add_political_power = -30
-				set_country_flag = { flag = VAL_export_offer_pending days = 42 }
+				set_country_flag = { flag = VAL_export_offer_pending value = 1 days = 42 }
 				event_target:VAL_contract_partner = {
 					ADISCORD_release_non_participating_minor_optimization = yes
 					random_enemy_country = { save_global_event_target_as = VAL_advisor_enemy }

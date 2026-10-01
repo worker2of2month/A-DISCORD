@@ -1,0 +1,747 @@
+{
+  "schema": 1,
+  "countries": {
+    "PIO": {
+      "states": [
+        47
+      ],
+      "capital": 47,
+      "name": {
+        "russian": "Союз полярных островов",
+        "english": "Polar Islands Union"
+      },
+      "adjective": {
+        "russian": "Полярный",
+        "english": "Polar"
+      },
+      "city": {
+        "russian": "Северная гавань",
+        "english": "Northhaven"
+      },
+      "leader": {
+        "russian": "Ингвар Сольм",
+        "english": "Ingvar Solm"
+      },
+      "party": {
+        "russian": "Совет ледовых гаваней",
+        "english": "Ice Harbour Council"
+      },
+      "description": {
+        "russian": "Полярные гавани живут рыболовством, метеонаблюдением и проводкой судов среди льдов. Ингвар Сольм связывает островные советы общими складами и спасательными станциями.",
+        "english": "Polar harbours survive through fishing, weather stations and ice navigation. Ingvar Solm binds the island councils through shared stores and rescue stations."
+      },
+      "ideology": "pragmatism",
+      "population": 650000,
+      "civilian": 2,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 2,
+      "color": [
+        91,
+        137,
+        167
+      ],
+      "flag_colors": [
+        [
+          91,
+          137,
+          167
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          46,
+          55,
+          66
+        ]
+      ],
+      "flag_style": 0,
+      "portrait": "GFX_Portrait_Forul_Generic_1",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "MRV": {
+      "states": [
+        593,
+        621,
+        622
+      ],
+      "capital": 593,
+      "name": {
+        "russian": "Морвенская республика",
+        "english": "Republic of Morven"
+      },
+      "adjective": {
+        "russian": "Морвенский",
+        "english": "Morvenian"
+      },
+      "city": {
+        "russian": "Морвен",
+        "english": "Morven"
+      },
+      "leader": {
+        "russian": "Эдвард Марен",
+        "english": "Edvard Maren"
+      },
+      "party": {
+        "russian": "Союз северных муниципалитетов",
+        "english": "Northern Municipal Union"
+      },
+      "description": {
+        "russian": "Морвен контролирует северный выход из Равена к океану. Эдвард Марен опирается на портовые муниципалитеты, выборные советы и договор о совместном содержании маяков.",
+        "english": "Morven controls Raven's northern ocean approaches. Edvard Maren relies on port municipalities, elected councils and a shared lighthouse compact."
+      },
+      "ideology": "humanism",
+      "population": 1150000,
+      "civilian": 3,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 2,
+      "color": [
+        86,
+        156,
+        167
+      ],
+      "flag_colors": [
+        [
+          86,
+          156,
+          167
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          53,
+          60,
+          70
+        ]
+      ],
+      "flag_style": 1,
+      "portrait": "GFX_Portrait_Forul_Generic_7",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "RVN": {
+      "states": [
+        23,
+        626,
+        627
+      ],
+      "capital": 23,
+      "name": {
+        "russian": "Равенская федерация",
+        "english": "Raven Federation"
+      },
+      "adjective": {
+        "russian": "Равенский",
+        "english": "Ravenian"
+      },
+      "city": {
+        "russian": "Равенград",
+        "english": "Ravengrad"
+      },
+      "leader": {
+        "russian": "Арсен Ровель",
+        "english": "Arsen Rovel"
+      },
+      "party": {
+        "russian": "Федеральный союз округов",
+        "english": "Federal District Union"
+      },
+      "description": {
+        "russian": "Равен объединяет широкие внутренние равнины восточного материка. Арсен Ровель удерживает округа общим зерновым резервом, железнодорожной администрацией и федеральными гарнизонами.",
+        "english": "Raven unites the broad interior plains of the eastern continent. Arsen Rovel holds its districts together through grain reserves, a railway administration and federal garrisons."
+      },
+      "ideology": "etatism",
+      "population": 4800000,
+      "civilian": 6,
+      "military": 2,
+      "dockyard": 1,
+      "divisions": 5,
+      "color": [
+        133,
+        85,
+        98
+      ],
+      "flag_colors": [
+        [
+          133,
+          85,
+          98
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          60,
+          65,
+          74
+        ]
+      ],
+      "flag_style": 2,
+      "portrait": "GFX_Portrait_Forul_Generic_3",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "SFR": {
+      "states": [
+        625,
+        657,
+        654,
+        655,
+        656,
+        658,
+        659
+      ],
+      "capital": 657,
+      "name": {
+        "russian": "Южнофалорская директория",
+        "english": "South Falor Directorate"
+      },
+      "adjective": {
+        "russian": "Южнофалорский",
+        "english": "South Falorian"
+      },
+      "city": {
+        "russian": "Фалорские Ворота",
+        "english": "Falor Gate"
+      },
+      "leader": {
+        "russian": "Радан Фальк",
+        "english": "Radan Falk"
+      },
+      "party": {
+        "russian": "Береговая директория",
+        "english": "Coastal Directorate"
+      },
+      "description": {
+        "russian": "Директория занимает южный полуостров Равена и близлежащие острова. Радан Фальк управляет портами как единой службой снабжения, обменивая порядок на обязательную береговую службу.",
+        "english": "The Directorate occupies Raven's southern peninsula and nearby islands. Radan Falk runs its ports as a single supply service, trading security for compulsory coastal duty."
+      },
+      "ideology": "etatism",
+      "population": 1600000,
+      "civilian": 3,
+      "military": 2,
+      "dockyard": 1,
+      "divisions": 3,
+      "color": [
+        164,
+        111,
+        56
+      ],
+      "flag_colors": [
+        [
+          164,
+          111,
+          56
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          67,
+          70,
+          78
+        ]
+      ],
+      "flag_style": 3,
+      "portrait": "GFX_Portrait_Forul_Generic_2",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "FLR": {
+      "states": [
+        623,
+        624,
+        653,
+        681,
+        682,
+        683,
+        684,
+        685
+      ],
+      "capital": 653,
+      "name": {
+        "russian": "Фалорский союз",
+        "english": "Falor Union"
+      },
+      "adjective": {
+        "russian": "Фалорский",
+        "english": "Falorian"
+      },
+      "city": {
+        "russian": "Фалор",
+        "english": "Falor"
+      },
+      "leader": {
+        "russian": "Мирен Таль",
+        "english": "Miren Tal"
+      },
+      "party": {
+        "russian": "Союз водных округов",
+        "english": "Water District Union"
+      },
+      "description": {
+        "russian": "Фалорский союз вырос вокруг земледельческих долин юго-востока. Мирен Таль распределяет воду и материалы через советы округов; право на власть здесь подтверждают работающие каналы и дороги.",
+        "english": "The Falor Union grew around the farming valleys of the southeast. Miren Tal allocates water and materials through district councils; working canals and roads justify political authority."
+      },
+      "ideology": "utilitarism",
+      "population": 3600000,
+      "civilian": 5,
+      "military": 2,
+      "dockyard": 1,
+      "divisions": 4,
+      "color": [
+        100,
+        145,
+        74
+      ],
+      "flag_colors": [
+        [
+          100,
+          145,
+          74
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          74,
+          75,
+          82
+        ]
+      ],
+      "flag_style": 4,
+      "portrait": "GFX_Portrait_Forul_Generic_5",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "PRR": {
+      "states": [
+        617,
+        618,
+        619,
+        620
+      ],
+      "capital": 618,
+      "name": {
+        "russian": "Перринские вольные порты",
+        "english": "Perrin Free Ports"
+      },
+      "adjective": {
+        "russian": "Перринский",
+        "english": "Perrinian"
+      },
+      "city": {
+        "russian": "Перрин",
+        "english": "Perrin"
+      },
+      "leader": {
+        "russian": "Леон Перр",
+        "english": "Leon Perr"
+      },
+      "party": {
+        "russian": "Палата четырёх портов",
+        "english": "Chamber of Four Ports"
+      },
+      "description": {
+        "russian": "Четыре островных порта Перрина живут перевалкой грузов между центральными и восточными берегами. Леон Перр сохраняет их союз едиными сборами и независимым морским арбитражем.",
+        "english": "Perrin's four island ports handle cargo between the central and eastern coasts. Leon Perr preserves their union through common dues and independent maritime arbitration."
+      },
+      "ideology": "hedonism",
+      "population": 280000,
+      "civilian": 1,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 1,
+      "color": [
+        187,
+        142,
+        82
+      ],
+      "flag_colors": [
+        [
+          187,
+          142,
+          82
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          81,
+          80,
+          86
+        ]
+      ],
+      "flag_style": 5,
+      "portrait": "GFX_Portrait_Forul_Generic_6",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "ULV": {
+      "states": [
+        644,
+        645,
+        646,
+        647,
+        648
+      ],
+      "capital": 648,
+      "name": {
+        "russian": "Ульвенская лига",
+        "english": "Ulven League"
+      },
+      "adjective": {
+        "russian": "Ульвенский",
+        "english": "Ulvenian"
+      },
+      "city": {
+        "russian": "Ульвен",
+        "english": "Ulven"
+      },
+      "leader": {
+        "russian": "Сайр Ульв",
+        "english": "Sayr Ulv"
+      },
+      "party": {
+        "russian": "Совет верфей",
+        "english": "Shipyard Council"
+      },
+      "description": {
+        "russian": "Ульвенская лига связывает цепь островных мастерских у южных берегов центрального материка. Сайр Ульв поддерживает общий стандарт ремонта судов и обучение инженеров.",
+        "english": "The Ulven League links island workshops off the central continent's southern coast. Sayr Ulv maintains shared ship-repair standards and engineering schools."
+      },
+      "ideology": "technocracy",
+      "population": 850000,
+      "civilian": 2,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 2,
+      "color": [
+        76,
+        149,
+        133
+      ],
+      "flag_colors": [
+        [
+          76,
+          149,
+          133
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          88,
+          85,
+          90
+        ]
+      ],
+      "flag_style": 6,
+      "portrait": "GFX_Portrait_Forul_Generic_4",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "LUR": {
+      "states": [
+        649,
+        650,
+        651,
+        652
+      ],
+      "capital": 651,
+      "name": {
+        "russian": "Луренский архипелаг",
+        "english": "Luren Archipelago"
+      },
+      "adjective": {
+        "russian": "Луренский",
+        "english": "Lurenian"
+      },
+      "city": {
+        "russian": "Лурен",
+        "english": "Luren"
+      },
+      "leader": {
+        "russian": "Тарен Лур",
+        "english": "Taren Lur"
+      },
+      "party": {
+        "russian": "Собрание капитанов",
+        "english": "Captains Assembly"
+      },
+      "description": {
+        "russian": "Луренские острова охраняют морские пути между Ульвеном, Фалором и Шарденом. Тарен Лур избирается капитанами и общинами для содержания общих портов и береговой стражи.",
+        "english": "The Luren islands guard sea routes between Ulven, Falor and Charden. Captains and communities elect Taren Lur to maintain their shared ports and coast guard."
+      },
+      "ideology": "pragmatism",
+      "population": 540000,
+      "civilian": 2,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 2,
+      "color": [
+        90,
+        112,
+        170
+      ],
+      "flag_colors": [
+        [
+          90,
+          112,
+          170
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          95,
+          90,
+          94
+        ]
+      ],
+      "flag_style": 7,
+      "portrait": "GFX_Portrait_Forul_Generic_8",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "CHD": {
+      "states": [
+        672,
+        673,
+        674,
+        675,
+        676,
+        677,
+        678,
+        679,
+        680
+      ],
+      "capital": 680,
+      "name": {
+        "russian": "Шарденская конфедерация",
+        "english": "Charden Confederation"
+      },
+      "adjective": {
+        "russian": "Шарденский",
+        "english": "Chardenian"
+      },
+      "city": {
+        "russian": "Шарден",
+        "english": "Charden"
+      },
+      "leader": {
+        "russian": "Амир Шар",
+        "english": "Amir Shar"
+      },
+      "party": {
+        "russian": "Союз островных общин",
+        "english": "Island Communities Union"
+      },
+      "description": {
+        "russian": "Шарденская конфедерация объединяет большой южный остров и западные прибрежные общины. Амир Шар защищает самоуправление островов, собирая общие средства только на оборону, медицину и морское сообщение.",
+        "english": "Charden unites the large southern island and its western coastal communities. Amir Shar protects local autonomy while pooling funds for defence, medicine and sea transport."
+      },
+      "ideology": "humanism",
+      "population": 1900000,
+      "civilian": 4,
+      "military": 2,
+      "dockyard": 1,
+      "divisions": 3,
+      "color": [
+        175,
+        99,
+        68
+      ],
+      "flag_colors": [
+        [
+          175,
+          99,
+          68
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          102,
+          95,
+          98
+        ]
+      ],
+      "flag_style": 8,
+      "portrait": "GFX_Portrait_Forul_Generic_7",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "EVR": {
+      "states": [
+        686,
+        687
+      ],
+      "capital": 686,
+      "name": {
+        "russian": "Эвенорская республика",
+        "english": "Republic of Evenor"
+      },
+      "adjective": {
+        "russian": "Эвенорский",
+        "english": "Evenorian"
+      },
+      "city": {
+        "russian": "Эвенор",
+        "english": "Evenor"
+      },
+      "leader": {
+        "russian": "Оскар Эвен",
+        "english": "Oskar Even"
+      },
+      "party": {
+        "russian": "Союз южных гаваней",
+        "english": "Southern Harbour Union"
+      },
+      "description": {
+        "russian": "Эвенор занимает длинный остров на дальнем юго-востоке. Оскар Эвен опирается на рыбацкие кооперативы и ремонтные гавани, поддерживая морское сообщение с Фалором даже в сезон штормов.",
+        "english": "Evenor occupies a long island in the far southeast. Oskar Even relies on fishing cooperatives and repair harbours to maintain links with Falor through the storm season."
+      },
+      "ideology": "pragmatism",
+      "population": 720000,
+      "civilian": 2,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 2,
+      "color": [
+        156,
+        134,
+        77
+      ],
+      "flag_colors": [
+        [
+          156,
+          134,
+          77
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          109,
+          100,
+          102
+        ]
+      ],
+      "flag_style": 9,
+      "portrait": "GFX_Portrait_Forul_Generic_5",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    },
+    "OLR": {
+      "states": [
+        660,
+        661,
+        662
+      ],
+      "capital": 660,
+      "name": {
+        "russian": "Ольринский союз",
+        "english": "Olrin Union"
+      },
+      "adjective": {
+        "russian": "Ольринский",
+        "english": "Olrinian"
+      },
+      "city": {
+        "russian": "Ольрин",
+        "english": "Olrin"
+      },
+      "leader": {
+        "russian": "Норен Ольр",
+        "english": "Noren Olr"
+      },
+      "party": {
+        "russian": "Вольные островные советы",
+        "english": "Free Island Councils"
+      },
+      "description": {
+        "russian": "Ольринские острова лежат у восточных морских подступов к Равену. Норен Ольр представляет союз самостоятельных общин, совместно содержащих причалы, склады и добровольную береговую охрану.",
+        "english": "The Olrin islands lie on Raven's eastern sea approaches. Noren Olr represents independent communities sharing quays, stores and a volunteer coast guard."
+      },
+      "ideology": "anarchism",
+      "population": 390000,
+      "civilian": 1,
+      "military": 1,
+      "dockyard": 1,
+      "divisions": 1,
+      "color": [
+        139,
+        112,
+        153
+      ],
+      "flag_colors": [
+        [
+          139,
+          112,
+          153
+        ],
+        [
+          229,
+          221,
+          194
+        ],
+        [
+          116,
+          105,
+          106
+        ]
+      ],
+      "flag_style": 10,
+      "portrait": "GFX_Portrait_Forul_Generic_6",
+      "technology_profiles": [
+        "fragment_low_tech",
+        "naval"
+      ]
+    }
+  }
+}

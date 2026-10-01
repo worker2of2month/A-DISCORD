@@ -4,8 +4,8 @@
 state = {
 	id = 23
 	name = "STATE_23"
-	manpower = 1
-	state_category = rural
+	manpower = 4732149
+	state_category = town
 	provinces = {
 		207 213 294 297 357 433 439 473 480 491 658 853 944 1016 1047 1078
 		1165 1277 1339 1348 1432 1497 1508 1512 1530 1532 1587 1590 1694 1708 1739 1796
@@ -26,5 +26,18 @@ state = {
 		12347 12459 12780 12785 12794 12798 12874 12915 12957 12961 12996
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 0.0
+	local_supplies = 2.0
+# Populated by tools/build_adiscord_remainder_states.py
+	history = {
+		owner = RVN
+		add_core_of = RVN
+		victory_points = { 10798 10 }
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+			dockyard = 1
+			10798 = { naval_base = 1 }
+		}
+	}
 }
