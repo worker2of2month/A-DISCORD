@@ -319,7 +319,7 @@ STP_elections_in_the_party = {
 	}
 
 	STP_pm_buy_newspaper_columns = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STP }
 		visible = {
 			has_country_flag = STP_sided_with_the_party_flag
@@ -2891,7 +2891,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pv_printing_press = {
-		icon = generic_industry
+		icon = ADISCORD_propaganda
 		allowed = { tag = STP }
 		visible = {
 			has_completed_focus = STP_pv_war_budget
@@ -3199,7 +3199,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pm_front_gala = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STP }
 		visible = {
 			STP_pv_war_current = yes
@@ -3663,7 +3663,7 @@ STP_cw_war_council = {
 	}
 
 	STP_pw_party_nod_industrial_program = {
-		icon = generic_industry
+		icon = ADISCORD_factory
 		allowed = { tag = STP }
 		visible = { has_completed_focus = STP_pw_party_former_patron NOD = { exists = yes is_subject_of = STP } }
 		available = {
@@ -4553,7 +4553,7 @@ STP_cw_war_council = {
 	}
 
 	STP_cw_expand_arsenal = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		allowed = { OR = { tag = STP tag = STS tag = SRP } }
 		visible = {
 			STP_cw_can_rearm = yes
@@ -6080,7 +6080,7 @@ STP_cw_war_council = {
 	}
 
 	STP_hw_night_printing = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
 		visible = {
 			has_completed_focus = STP_hw_mountain_mandate
@@ -7891,7 +7891,7 @@ STP_postwar_reconstruction_drive = {
 
 STP_postwar_propaganda_campaigns = {
 	STP_pw_campaign_country_is_being_built = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
@@ -7911,7 +7911,7 @@ STP_postwar_propaganda_campaigns = {
 	}
 
 	STP_pw_campaign_one_steland = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 20
@@ -7931,7 +7931,7 @@ STP_postwar_propaganda_campaigns = {
 	}
 
 	STP_pw_campaign_engineers_of_peace = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 25
@@ -7952,7 +7952,7 @@ STP_postwar_propaganda_campaigns = {
 	}
 
 	STP_pw_campaign_victory_means_normal_life = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = STS }
 		available = { ADISCORD_has_campaign_slot = yes }
 		cost = 20

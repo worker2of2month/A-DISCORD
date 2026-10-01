@@ -148,7 +148,7 @@ NAM_national_programmes = {
 	}
 
 	NAM_workshop_batch = {
-		icon = generic_industry
+		icon = ADISCORD_factory
 		visible = {
 			has_completed_focus = NAM_domestic_refining
 		}
@@ -456,7 +456,7 @@ NAM_national_programmes = {
 	}
 
 	NAM_postwar_rearmament = {
-		icon = generic_industry
+		icon = ADISCORD_factory
 		visible = {
 			has_completed_focus = NAM_armed_peace
 		}

@@ -196,7 +196,7 @@ VAL_military_operations = {
 	}
 
 	VAL_ops_cin_contract = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { always = no  OR = { has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked has_completed_focus = VAL_Market_Roads_North } CIN = { exists = yes } }
 
@@ -208,7 +208,7 @@ VAL_military_operations = {
 	}
 
 	VAL_ops_osf_contract = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { always = no  OR = { has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked has_completed_focus = VAL_Market_Roads_North } OSF = { exists = yes } }
 
@@ -220,7 +220,7 @@ VAL_military_operations = {
 	}
 
 	VAL_ops_aph_contract = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { always = no  OR = { has_country_flag = VAL_foreign_operations_unlocked has_country_flag = VAL_northern_operations_unlocked has_completed_focus = VAL_Market_Roads_North } APH = { exists = yes } }
 
@@ -449,7 +449,7 @@ VAL_military_operations = {
 	}
 
 	VAL_frontier_transport_contract = {
-		icon = generic_resources
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_frontier_logistics check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
 		available = { has_capitulated = no NOT = { has_idea = VAL_frontier_transport_columns } }
@@ -701,7 +701,7 @@ VAL_military_operations = {
 
 VAL_contract_management = {
 	VAL_subcontract_quarterly_norm = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { VAL_contract_obligations_decisions_visible = yes NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { has_capitulated = no }
@@ -713,7 +713,7 @@ VAL_contract_management = {
 	}
 
 	VAL_campaign_rifles_and_bread = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
 		available = {
@@ -735,7 +735,7 @@ VAL_contract_management = {
 	}
 
 	VAL_campaign_contracts_feed_families = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
 		available = {
@@ -758,7 +758,7 @@ VAL_contract_management = {
 
 
 	VAL_campaign_contracts_mean_order = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
 		available = {
@@ -779,7 +779,7 @@ VAL_contract_management = {
 	}
 
 	VAL_campaign_state_keeps_its_word = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
 		available = {
@@ -800,7 +800,7 @@ VAL_contract_management = {
 	}
 
 	VAL_campaign_no_promise_without_payment = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory }
 		available = {
@@ -822,7 +822,7 @@ VAL_contract_management = {
 	}
 
 	VAL_campaign_the_mine_was_stolen = {
-		icon = generic_propaganda_campaigns
+		icon = ADISCORD_propaganda
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Ministry_Of_Contract_Memory has_country_flag = VAL_westerholm_metal_lost }
 		available = {
@@ -867,7 +867,7 @@ VAL_contract_management = {
 	}
 
 	VAL_quarterly_contract_deadline = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { VAL_contract_obligations_decisions_visible = yes }
 		available = { hidden_trigger = { always = no } }
@@ -877,7 +877,7 @@ VAL_contract_management = {
 	}
 
 	VAL_pay_quarterly_contract_norm = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { VAL_contract_obligations_decisions_visible = yes NOT = { has_country_flag = VAL_quarterly_contract_paid } }
 		available = { VAL_can_pay_quarterly_contract_norm = yes }
@@ -1226,7 +1226,7 @@ VAL_reclamation = {
 	}
 
 	VAL_reclamation_industry = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 24 42 48 54 55 56 57 168 }
@@ -1316,7 +1316,7 @@ VAL_reclamation = {
 	}
 
 	VAL_recovery_workshop_program = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		visible = {
 			has_completed_focus = VAL_reclamation_workshops
 			NOT = { ADISCORD_economic_development_at_least_5 = yes }
@@ -1468,7 +1468,7 @@ VAL_frontier = {
 	}
 
 	VAL_frontier_workshops = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		allowed = { tag = VAL }
 		state_target = yes
 		targets = { 58 59 60 61 62 63 64 65 }
@@ -1688,7 +1688,7 @@ VAL_livonn_settlement_category = {
 VAL_foreign_sales = {
 
 	VAL_sign_annual_trade = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR }
 		target_trigger = {
@@ -1751,7 +1751,7 @@ VAL_foreign_sales = {
 		ai_will_do = { base = 5 }
 	}
 	VAL_hire_partner_volunteers = {
-		icon = generic_manpower
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR }
 		target_trigger = { FROM = { exists = yes } }
@@ -1804,7 +1804,7 @@ VAL_foreign_sales = {
 	# Keep the foreign-sales category readable: arms exports are one abstract
 	# market action instead of one row per buyer and contract family.
 	VAL_sell_surplus_arms_market = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_Foreign_Broker_Licences }
 		available = {
@@ -1871,7 +1871,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_quarterly_partner_supply = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD }
 		target_trigger = { FROM = { exists = yes } }
@@ -1886,7 +1886,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_ready_partner_supply = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
@@ -1913,7 +1913,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_partner_contract = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
@@ -1942,7 +1942,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_export_bulk_order = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
@@ -1972,7 +1972,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_export_arsenal_order = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
@@ -2002,7 +2002,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_export_strategic_order = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }
@@ -2032,7 +2032,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_register_nam_concession = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		visible = { has_country_flag = VAL_nam_concession_agreed has_global_flag = ADISCORD_nam_resource_war_nam_victory NOT = { has_country_flag = VAL_nam_concession_granted } }
 		available = { custom_trigger_tooltip = { tooltip = VAL_nam_concession_ready_tt VAL_nam_concession_deliverable = yes } }
 		cost = 0
@@ -2041,7 +2041,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_ops_sell_rifles_to_cin = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_cin }
@@ -2153,7 +2153,7 @@ VAL_foreign_sales = {
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { NOT = { has_equipment = { infantry_equipment < 120000 } } } } }
 	}
 	VAL_ops_sell_rifles_to_osf = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 
 		visible = { has_country_flag = VAL_operation_sell_rifles_to_osf }
@@ -2265,7 +2265,7 @@ VAL_foreign_sales = {
 		ai_will_do = { base = 1 modifier = { factor = 0 NOT = { NOT = { has_equipment = { infantry_equipment < 120000 } } } } }
 	}
 	VAL_cw_sell_arms_to_resistance = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
@@ -2297,7 +2297,7 @@ VAL_foreign_sales = {
 		ai_will_do = { base = 10 }
 	}
 	VAL_cw_offer_contract_formations = {
-		icon = generic_prepare_civil_war
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_country_flag = VAL_cw_trade_course NOT = { has_country_flag = VAL_cw_arms_contract_fulfilled } }
 		available = {
@@ -2361,7 +2361,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_export_arms = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		icon = ADISCORD_deal allowed = { tag = VAL }
 		targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { always = no  has_completed_focus = VAL_Foreign_Broker_Licences FROM = { has_war = yes NOT = { tag = STS has_war_with = STP } } }
@@ -2390,7 +2390,7 @@ VAL_foreign_sales = {
 	}
 
 	VAL_export_advisors = {
-		icon = generic_prepare_civil_war allowed = { tag = VAL }
+		icon = ADISCORD_deal allowed = { tag = VAL }
 		targets = { CIN OSF APH WRK WKR VAD TVA STP STS SRP NOD YPR COF TFF }
 		target_trigger = { FROM = { exists = yes } }
 		visible = { always = no has_completed_focus = VAL_Contingency_Ledgers FROM = { has_war = yes } }
@@ -2527,7 +2527,7 @@ VAL_command_balance_category = {
 
 VAL_resource_war_aid = {
 	VAL_negotiate_nam_metals = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = {
 			ADISCORD_nam_resource_war_active = yes
@@ -2555,7 +2555,7 @@ VAL_resource_war_aid = {
 		ai_will_do = { base = 5 }
 	}
 	VAL_negotiate_efl_metals = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = {
 			ADISCORD_nam_resource_war_active = yes
@@ -2740,7 +2740,7 @@ VAL_northern_war_aid = {
 
 VAL_contract_obligations = {
 	VAL_order_1_deadline = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } }
 		activation = { always = no }
@@ -2751,7 +2751,7 @@ VAL_contract_obligations = {
 		timeout_effect = { hidden_effect = { set_country_flag = VAL_order_1_expired } }
 	}
 	VAL_order_1_send = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		visible = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } }
 		available = { custom_trigger_tooltip = { tooltip = VAL_order_dispatch_ready_tt VAL_order_1_can_dispatch = yes } }
 		cost = 0
@@ -2759,14 +2759,14 @@ VAL_contract_obligations = {
 		ai_will_do = { base = 20 }
 	}
 	VAL_order_1_withdraw = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		visible = { check_variable = { var = VAL_order_1_state value = 1 compare = equals } }
 		cost = 0
 		complete_effect = { custom_effect_tooltip = VAL_order_1_refund_tt hidden_effect = { VAL_order_1_cancel = yes } }
 		ai_will_do = { base = 0 }
 	}
 	VAL_order_2_deadline = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } }
 		activation = { always = no }
@@ -2777,7 +2777,7 @@ VAL_contract_obligations = {
 		timeout_effect = { hidden_effect = { set_country_flag = VAL_order_2_expired } }
 	}
 	VAL_order_2_send = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		visible = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } }
 		available = { custom_trigger_tooltip = { tooltip = VAL_order_dispatch_ready_tt VAL_order_2_can_dispatch = yes } }
 		cost = 0
@@ -2785,14 +2785,14 @@ VAL_contract_obligations = {
 		ai_will_do = { base = 20 }
 	}
 	VAL_order_2_withdraw = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		visible = { check_variable = { var = VAL_order_2_state value = 1 compare = equals } }
 		cost = 0
 		complete_effect = { custom_effect_tooltip = VAL_order_2_refund_tt hidden_effect = { VAL_order_2_cancel = yes } }
 		ai_will_do = { base = 0 }
 	}
 	VAL_refund_order_debt = {
-		icon = generic_political_pressure
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		targets = { CIN OSF APH COF TFF YPR WRK WKR VAD TVA STP STS SRP NOD NAM EFL }
 		target_trigger = { FROM = { exists = yes } }

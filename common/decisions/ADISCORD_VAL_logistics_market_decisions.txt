@@ -340,7 +340,7 @@ VAL_population_markets = {
 	}
 
 	VAL_contract_refugee_labor = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_completed_focus = VAL_The_Contract_State }
 		available = {
@@ -949,7 +949,7 @@ VAL_trade_routes = {
 	}
 
 	VAL_buy_contraband_arms = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = {
 			OR = {

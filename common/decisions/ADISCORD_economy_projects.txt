@@ -1,7 +1,7 @@
 ADISCORD_economy_projects = {
 
 	ADISCORD_economy_precision_tooling = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		visible = {
 			ADISCORD_economy_projects_unlocked = yes
 			OR = {
@@ -54,7 +54,7 @@ ADISCORD_economy_projects = {
 	}
 
 	ADISCORD_economy_automated_industry = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_automation has_completed_focus = STP_pc_investment_automation } NOT = { has_idea = ADISCORD_economy_automated_industry } }
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
@@ -98,7 +98,7 @@ ADISCORD_economy_projects = {
 	}
 
 	ADISCORD_economy_national_computing = {
-		icon = generic_construction
+		icon = ADISCORD_science
 		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_computing has_completed_focus = STP_pc_investment_computing } NOT = { has_idea = ADISCORD_economy_national_computing } }
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
@@ -142,7 +142,7 @@ ADISCORD_economy_projects = {
 	}
 
 	ADISCORD_economy_logistics_contract = {
-		icon = generic_construction
+		icon = ADISCORD_deal
 		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_logistics has_completed_focus = STP_pc_investment_logistics }  }
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
@@ -189,7 +189,7 @@ ADISCORD_economy_projects = {
 	}
 
 	ADISCORD_economy_drone_contract = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }  }
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }
@@ -234,7 +234,7 @@ ADISCORD_economy_projects = {
 	}
 
 	ADISCORD_economy_platform_contract = {
-		icon = generic_construction
+		icon = ADISCORD_factory
 		visible = { ADISCORD_economy_projects_unlocked = yes OR = { has_completed_focus = VAL_econ_defense_orders has_completed_focus = STP_pc_investment_defense_orders }  }
 		available = {
 			custom_trigger_tooltip = { tooltip = ADISCORD_economy_project_country_ready_tt ADISCORD_economy_projects_country_ready = yes }

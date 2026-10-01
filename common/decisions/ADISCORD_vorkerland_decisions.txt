@@ -454,7 +454,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_tva_reroute_city_grid = {
-		icon = generic_production
+		icon = ADISCORD_factory
 		allowed = { tag = TVA }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_tva_grid_rerouting } }
@@ -469,7 +469,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_tva_deploy_field_laboratories = {
-		icon = generic_research
+		icon = ADISCORD_science
 		allowed = { tag = TVA }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_collapse_finished } }
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_tva_field_laboratories } }
@@ -704,7 +704,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_tva_unify_front_bureaus = {
-		icon = generic_research
+		icon = ADISCORD_science
 		allowed = { tag = TVA }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -723,7 +723,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_tva_close_operational_loop = {
-		icon = generic_research
+		icon = ADISCORD_science
 		allowed = { tag = TVA }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -877,7 +877,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_val_support_wrk = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = {
 			has_global_flag = ADISCORD_vorkerland_collapse_wars_started
@@ -906,7 +906,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_val_support_vad = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed } VAD = { exists = yes NOT = { has_capitulated = yes } } }
 		cost = 35
@@ -928,7 +928,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_val_support_tva = {
-		icon = generic_production
+		icon = ADISCORD_deal
 		allowed = { tag = VAL }
 		visible = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started NOT = { has_global_flag = ADISCORD_vorkerland_val_contract_signed } TVA = { exists = yes NOT = { has_capitulated = yes } } }
 		cost = 35
@@ -1274,7 +1274,7 @@ ADISCORD_vorkerland_collapse_category = {
 	}
 
 	ADISCORD_vorkerland_tgd_rebuild_grid = {
-		icon = generic_production_bonus
+		icon = ADISCORD_factory
 		allowed = { tag = TGD }
 		visible = {
 			has_idea = ADISCORD_vorkerland_tgd_grid_collapse
