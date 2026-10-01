@@ -12031,50 +12031,48 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 0,
           "y": 1
         },
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 0,
           "y": 2
         },
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 1,
           "y": 0
         },
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 1,
           "y": 1
         },
         {
-          "type": "ADISCORD_assault_infantry",
+          "type": "ADISCORD_combat_robots",
           "x": 1,
           "y": 2
         }
       ],
       "support": [],
       "computed": {
-        "organization": 52.75,
-        "manpower": 6600.0,
+        "organization": 40.0,
+        "manpower": 1500.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 144.0,
-          "infantry_equipment": 5940.0,
-          "support_equipment": 180.0
+          "ADISCORD_combat_robot_equipment": 600.0,
+          "support_equipment": 120.0
         },
-        "supply": 0.6
+        "supply": 1.5
       },
       "equipment_availability": {
-        "ADISCORD_squad_weapons_equipment": true,
-        "infantry_equipment": true,
+        "ADISCORD_combat_robot_equipment": true,
         "support_equipment": true
       },
       "ai_role": "utility",

@@ -302,20 +302,43 @@ categories =  {
 		minimum_seazone_dominance = 250
 	}
 
-	# Strongest Current: the pole-to-pole corridor between the western and the
-	# central continent (strategic region 233). Lore barrier with light effects;
-	# the current also carries drifting mines away.
+	# Strongest Current: the pole-to-pole current between the western and the
+	# central continent (strategic regions 233-237). A real barrier: fleets
+	# crossing it are slow, half-blind and fight badly; the current carries
+	# drifting mines away.
 	water_strongest_current = {
 		naval_terrain = yes
 		color = { 0 150 170 }
-		movement_cost = 1.0
+		movement_cost = 1.5
 		is_water = yes
 		sound_type = sea
 
-		navy_visibility = -0.1
-		positioning = -0.1
+		navy_visibility = -0.35
+		positioning = -0.30
 		naval_mine_hit_chance = -0.9
-		minimum_seazone_dominance = 250
+		minimum_seazone_dominance = 400
+
+		heavy_cruiser = {
+			units = {
+				attack = -0.25
+				defence = -0.25
+				movement = -0.30
+			}
+		}
+		submarine = {
+			units = {
+				attack = -0.25
+				defence = -0.20
+				movement = -0.30
+			}
+		}
+		ADISCORD_coastal_patrol_vessel = {
+			units = {
+				attack = -0.40
+				defence = -0.40
+				movement = -0.40
+			}
+		}
 	}
 }
 

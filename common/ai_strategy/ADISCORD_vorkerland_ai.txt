@@ -2657,6 +2657,76 @@ ADISCORD_prepare_SRA_VAD = {
 	ai_strategy = { type = prepare_for_war id = VAD value = 100 }
 }
 
+# The crisis target is selected once; preparation does not expose ordinary diplomacy.
+
+RUS_crisis_prepare_VAL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:RUS_crisis_hegemon = { tag = VAL }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = VAL value = 200 }
+}
+
+VAL_crisis_prepare_RUS = {
+	allowed = { tag = VAL }
+	enable = {
+		is_ai = yes
+		tag = event_target:RUS_crisis_hegemon
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+RUS_crisis_conquer_VAL = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		VAL = { has_country_flag = RUS_crisis_defender }
+		has_war_with = VAL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = VAL value = 200 }
+}
+
+RUS_crisis_prepare_STS = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:RUS_crisis_hegemon = { tag = STS }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STS value = 200 }
+}
+
+STS_crisis_prepare_RUS = {
+	allowed = { tag = STS }
+	enable = {
+		is_ai = yes
+		tag = event_target:RUS_crisis_hegemon
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+RUS_crisis_conquer_STS = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		STS = { has_country_flag = RUS_crisis_defender }
+		has_war_with = STS
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = STS value = 200 }
+}
+
 ADISCORD_prepare_VAD_CSL = {
 	allowed = { tag = VAD }
 	enable = {

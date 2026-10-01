@@ -7,6 +7,35 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_civil_war_relative_positions_resolve_in_load_order(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = (ROOT / "common/national_focus/ADISCORD_STP_civil_war.txt").read_text(encoding="utf-8")
+        tree = next(entry.value for entry in parse_clausewitz(source) if entry.key == "focus_tree")
+        loaded = set()
+        for entry in tree:
+            if entry.key != "focus":
+                continue
+            fields = {field.key: field.value for field in entry.value}
+            if "relative_position_id" in fields:
+                self.assertIn(fields["relative_position_id"], loaded, fields["id"])
+            loaded.add(fields["id"])
+
+    def test_nod_revolutionary_character_is_dormant_until_the_settlement(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        history = (ROOT / "history/countries/NOD - Nodral.txt").read_text(encoding="utf-8")
+        recruits = [entry.value for entry in parse_clausewitz(history) if entry.key == "recruit_character"]
+        self.assertEqual(recruits.count("NOD_Edgar_Renner"), 1)
+        self.assertIn("NOD_Tobis_Bentlix", recruits)
+        characters = (ROOT / "common/characters/NOD.txt").read_text(encoding="utf-8")
+        definitions = {entry.key: entry.value for entry in parse_clausewitz(characters)[0].value}
+        self.assertNotIn("country_leader", {entry.key for entry in definitions["NOD_Edgar_Renner"]})
+        self.assertIn("country_leader", {entry.key for entry in definitions["NOD_Tobis_Bentlix"]})
+        effects = (ROOT / "common/scripted_effects/ADISCORD_STP_scripted_effects.txt").read_text(encoding="utf-8")
+        self.assertNotIn("recruit_character = NOD_Edgar_Renner", effects)
+        self.assertIn("character = NOD_Edgar_Renner", effects)
+
     def test_used_subunit_modifiers_are_registered_after_vanilla_replacement(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 

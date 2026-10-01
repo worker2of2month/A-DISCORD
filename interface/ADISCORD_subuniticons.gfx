@@ -1,5 +1,28 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_unit_ADISCORD_combat_robots_icon_medium"
+		texturefile = "gfx/interface/counters/divisions_large/ADISCORD_assault_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_combat_robots_icon_medium_white"
+		texturefile = "gfx/interface/counters/divisions_small/ADISCORD_assault_infantry_icon.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_unit_ADISCORD_combat_robots_icon_small"
+		texturefile = "gfx/texticons/ADISCORD_assault_infantry_icon_small.dds"
+		noOfFrames = 2
+	}
+
+	spriteType = {
+		name = "GFX_ADISCORD_combat_robot_equipment_medium"
+		texturefile = "gfx/interface/technologies/improved_computing_machine.dds"
+	}
+
+	spriteType = {
 		name = "GFX_unit_ADISCORD_hazard_infantry_icon_medium"
 		texturefile = "gfx/interface/counters/divisions_large/ADISCORD_hazard_infantry_icon.dds"
 		noOfFrames = 2

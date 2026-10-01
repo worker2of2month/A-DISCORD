@@ -1,3 +1,83 @@
+# --- rus_crisis_events ---
+add_namespace = ADISCORD_rus_crisis
+
+country_event = {
+	id = ADISCORD_rus_crisis.1
+	title = ADISCORD_rus_crisis.1.t
+	desc = ADISCORD_rus_crisis.1.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_rus_crisis.1.a
+		custom_effect_tooltip = RUS_crisis_warning_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.2
+	title = ADISCORD_rus_crisis.2.t
+	desc = ADISCORD_rus_crisis.2.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_rus_crisis.2.a
+		custom_effect_tooltip = RUS_crisis_warning_tt
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.3
+	title = ADISCORD_rus_crisis.3.t
+	desc = ADISCORD_rus_crisis.3.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = { name = ADISCORD_rus_crisis.3.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.4
+	title = ADISCORD_rus_crisis.4.t
+	desc = {
+		trigger = { tag = VAL }
+		text = ADISCORD_rus_crisis.4.val
+	}
+	desc = {
+		trigger = { tag = STS }
+		text = ADISCORD_rus_crisis.4.sts
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = {
+		name = ADISCORD_rus_crisis.4.a
+		unlock_decision_tooltip = RUS_crisis_establish_special_zone
+	}
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.5
+	title = ADISCORD_rus_crisis.5.t
+	desc = ADISCORD_rus_crisis.5.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = { name = ADISCORD_rus_crisis.5.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.6
+	title = ADISCORD_rus_crisis.6.t
+	desc = ADISCORD_rus_crisis.6.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = { name = ADISCORD_rus_crisis.6.a }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.7
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { RUS = { RUS_crisis_check_external_end = yes } }
+}
+
 # --- dirty_zone_events ---
 add_namespace = ADISCORD_vorkerland_dirty_zone
 

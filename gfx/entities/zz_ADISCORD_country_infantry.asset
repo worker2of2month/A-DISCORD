@@ -2,15 +2,20 @@
 # Generic and vanilla-tag entities are deliberately left to the base game.
 
 entity = {
-	name = "ADISCORD_assault_infantry_entity"
-	pdxmesh = "ADISCORD_assault_infantry_mesh"
+	name = "ADISCORD_combat_robots_entity"
+	pdxmesh = "ADISCORD_combat_robots_mesh"
 	default_state = "idle"
 	scale = 0.8
+	# State-entry sounds must not repeat on every animation loop.
 	state = {
 		name = "idle"
 		animation = "idle"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "move"
@@ -18,30 +23,50 @@ entity = {
 		animation_blend_time = 0.3
 		looping = yes
 		event = { sound = { soundeffect = "infantry_move_animation" } }
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "attack"
 		animation = "attack"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "defend"
 		animation = "attack"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "support_attack"
 		animation = "attack"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "retreat"
 		animation = "move"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+		}
 	}
 	state = {
 		name = "training"
@@ -66,8 +91,8 @@ entity = {
 }
 
 entity = {
-	clone = "ADISCORD_assault_infantry_entity"
-	name = "VAL_ADISCORD_assault_infantry_entity"
+	clone = "ADISCORD_combat_robots_entity"
+	name = "VAL_ADISCORD_combat_robots_entity"
 }
 
 entity = {

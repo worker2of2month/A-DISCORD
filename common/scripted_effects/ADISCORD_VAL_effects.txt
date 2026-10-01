@@ -2760,19 +2760,19 @@ VAL_spawn_crimson_trial = {
 				template_counter = 3
 				is_locked = yes
 				regiments = {
-					ADISCORD_assault_infantry = { x = 0 y = 0 }
-					ADISCORD_assault_infantry = { x = 0 y = 1 }
-					ADISCORD_assault_infantry = { x = 0 y = 2 }
-					ADISCORD_assault_infantry = { x = 1 y = 0 }
-					ADISCORD_assault_infantry = { x = 1 y = 1 }
-					ADISCORD_assault_infantry = { x = 1 y = 2 }
+					ADISCORD_combat_robots = { x = 0 y = 0 }
+					ADISCORD_combat_robots = { x = 0 y = 1 }
+					ADISCORD_combat_robots = { x = 0 y = 2 }
+					ADISCORD_combat_robots = { x = 1 y = 0 }
+					ADISCORD_combat_robots = { x = 1 y = 1 }
+					ADISCORD_combat_robots = { x = 1 y = 2 }
 				}
 			}
 		}
 		# Explicit staffing keeps the visual trial independent of reserve shortages.
 		capital_scope = {
 			create_unit = {
-				division = "name = \"Испытательная штурмовая дивизия\" division_template = \"Kefreyt Assault Trial\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				division = "name = \"Испытательная дивизия роботов\" division_template = \"Kefreyt Assault Trial\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
 				owner = VAL
 				allow_spawning_on_enemy_provs = no
 			}

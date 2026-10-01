@@ -135,13 +135,13 @@ SHL_conclave = {
 				check_variable = { var = SHL_furnace_training value = 0 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		cost = 0
 		custom_cost_text = SHL_cost_100_25pp
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		days_remove = 35
 		days_re_enable = 1
@@ -462,13 +462,13 @@ SHL_tenth_project = {
 		available = {
 			SHL_project_idle = yes
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		cost = 0
 		custom_cost_text = SHL_cost_100_25pp
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		days_remove = 35
 		fire_only_once = no
@@ -901,14 +901,14 @@ SHL_quarters_and_borders = {
 				is_controlled_by = SHL
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 			NOT = { has_manpower < 3000 }
 		}
 		cost = 0
 		custom_cost_text = SHL_cost_guard
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 			NOT = { has_manpower < 3000 }
 		}
 		days_remove = 21
@@ -1198,13 +1198,13 @@ SHL_quarters_and_borders = {
 		visible = { has_active_mission = SHL_mazar_deadline }
 		available = {
 			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
-			has_political_power = 50
+			NOT = { has_political_power < 50 }
 		}
 		cost = 0
 		custom_cost_text = SHL_cost_350_50pp
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
-			has_political_power = 50
+			NOT = { has_political_power < 50 }
 		}
 		fire_only_once = no
 		complete_effect = {
@@ -1718,7 +1718,7 @@ SHL_quarters_and_borders = {
 		cost = 0
 		custom_cost_text = SHL_cost_pp25
 		custom_cost_trigger = {
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		complete_effect = {
 			custom_effect_tooltip = SHL_house_aid_tt

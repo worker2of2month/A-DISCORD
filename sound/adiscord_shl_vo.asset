@@ -1,0 +1,176 @@
+category = {
+	name = "Voices"
+	soundeffects = {
+		SHL_infantry_idle
+		SHL_infantry_retreat
+		SHL_infantry_neutral_combat
+		SHL_infantry_positive_combat
+		SHL_infantry_move_out
+	}
+	compressor = {
+		enabled = yes
+		pregain = 0.0
+		postgain = 2.0
+		ratio = 10.0
+		threshold = -10.0
+		attacktime = 0.030
+		releasetime = 1.2
+	}
+}
+
+soundeffect = {
+	name = "SHL_infantry_idle"
+	sounds = {
+		sound = "SHL_idle_001"
+		sound = "SHL_idle_002"
+		sound = "SHL_idle_003"
+		sound = "SHL_idle_004"
+		sound = "SHL_idle_005"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+	volume_random_offset = { 0.0 -0.15 }
+	playbackrate_random_offset = { 0.0 -0.15 }
+}
+
+soundeffect = {
+	name = "SHL_infantry_retreat"
+	sounds = {
+		sound = "SHL_retreat_001"
+		sound = "SHL_retreat_002"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+	volume_random_offset = { 0.0 -0.15 }
+	playbackrate_random_offset = { 0.0 -0.15 }
+}
+
+soundeffect = {
+	name = "SHL_infantry_neutral_combat"
+	sounds = {
+		sound = "SHL_attack_001"
+		sound = "SHL_attack_002"
+		sound = "SHL_attack_003"
+		sound = "SHL_attack_004"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+	volume_random_offset = { 0.0 -0.15 }
+	playbackrate_random_offset = { 0.0 -0.15 }
+}
+
+soundeffect = {
+	name = "SHL_infantry_positive_combat"
+	sounds = {
+		sound = "SHL_positive_001"
+		sound = "SHL_positive_002"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+	volume_random_offset = { 0.0 -0.15 }
+	playbackrate_random_offset = { 0.0 -0.15 }
+}
+
+soundeffect = {
+	name = "SHL_infantry_move_out"
+	sounds = {
+		sound = "SHL_moving_001"
+		sound = "SHL_moving_002"
+		sound = "SHL_moving_003"
+		sound = "SHL_moving_004"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 0.80
+	volume_random_offset = { 0.0 -0.15 }
+	playbackrate_random_offset = { 0.0 -0.15 }
+}
+
+sound = {
+	name = "SHL_idle_001"
+	file = "SHL/SHL_idle_001.wav"
+}
+
+sound = {
+	name = "SHL_idle_002"
+	file = "SHL/SHL_idle_002.wav"
+}
+
+sound = {
+	name = "SHL_idle_003"
+	file = "SHL/SHL_idle_003.wav"
+}
+
+sound = {
+	name = "SHL_idle_004"
+	file = "SHL/SHL_idle_004.wav"
+}
+
+sound = {
+	name = "SHL_idle_005"
+	file = "SHL/SHL_idle_005.wav"
+}
+
+sound = {
+	name = "SHL_retreat_001"
+	file = "SHL/SHL_retreat_001.wav"
+}
+
+sound = {
+	name = "SHL_retreat_002"
+	file = "SHL/SHL_retreat_002.wav"
+}
+
+sound = {
+	name = "SHL_attack_001"
+	file = "SHL/SHL_attack_001.wav"
+}
+
+sound = {
+	name = "SHL_attack_002"
+	file = "SHL/SHL_attack_002.wav"
+}
+
+sound = {
+	name = "SHL_attack_003"
+	file = "SHL/SHL_attack_003.wav"
+}
+
+sound = {
+	name = "SHL_attack_004"
+	file = "SHL/SHL_attack_004.wav"
+}
+
+sound = {
+	name = "SHL_positive_001"
+	file = "SHL/SHL_positive_001.wav"
+}
+
+sound = {
+	name = "SHL_positive_002"
+	file = "SHL/SHL_positive_002.wav"
+}
+
+sound = {
+	name = "SHL_moving_001"
+	file = "SHL/SHL_moving_001.wav"
+}
+
+sound = {
+	name = "SHL_moving_002"
+	file = "SHL/SHL_moving_002.wav"
+}
+
+sound = {
+	name = "SHL_moving_003"
+	file = "SHL/SHL_moving_003.wav"
+}
+
+sound = {
+	name = "SHL_moving_004"
+	file = "SHL/SHL_moving_004.wav"
+}

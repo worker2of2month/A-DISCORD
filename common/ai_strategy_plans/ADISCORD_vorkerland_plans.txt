@@ -2114,13 +2114,13 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 	enable = {
 		tag = RUS
 		is_ai = yes
-		NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		is_subject = no
 	}
 
 	abort = {
 		OR = {
 			NOT = { tag = RUS }
-			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			is_subject = yes
 		}
 	}
 
@@ -2132,6 +2132,13 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_drive_starolesye_back
 		RUS_press_the_closed_zone
 		RUS_seat_the_khan_chancery
+		RUS_imperial_general_staff
+		RUS_western_supply_lines
+		RUS_imperial_arsenals
+		RUS_aimaq_reserve
+		RUS_break_the_hegemon
+		RUS_register_conquered_lands
+		RUS_empire_without_rivals
 	}
 
 	weight = { factor = 5 }

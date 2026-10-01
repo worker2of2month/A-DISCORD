@@ -11,6 +11,7 @@ SHARED = DIRECTORY / '09_ADISCORD_scripted_peace_on_actions.txt'
 GENERIC = DIRECTORY / 'ZZ_ADISCORD_default_capitulation_on_actions.txt'
 ORDER = {
     'on_capitulation_immediate': [
+        'vorkerland_collapse',
         'kefreyt_northern_reservations',
         'stelander',
         'kefreyt',
@@ -43,8 +44,8 @@ ORDER = {
         'stelander',
     ],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
-    'on_annex': ['nam', 'stelander', 'kefreyt', 'shahrabad'],
-    'on_puppet': ['nam', 'shahrabad'],
+    'on_annex': ['vorkerland_collapse', 'nam', 'stelander', 'kefreyt', 'shahrabad'],
+    'on_puppet': ['vorkerland_collapse', 'nam', 'shahrabad'],
     'on_state_control_changed': ['livonn', 'frontier'],
 }
 

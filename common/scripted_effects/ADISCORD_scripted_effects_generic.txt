@@ -72,143 +72,219 @@ focus_unlock = { ###I've decided to keep the same name as in other mods in order
 	}
 }
 
-# Strongest Current (strategic region 233): particle actors along the drawn
-# current line, north to south, 611000-611055. Each uses the particle for its
-# 45-degree flow heading; the nearest coastal state owns it. x/y are map
-# coordinates (y from the bottom), z is height just above sea level 9.5.
-# Destroy first: same-id replace is not reliable. Called from on_startup.
+# Strongest Current: formerly spawned particle actors (flow 611000-611055,
+# zone weather 611100-611174 and 611200-611274). Called from on_startup; now it
+# only destroys those ids so saves made with the old visuals are cleaned up.
 ADISCORD_spawn_strongest_current_visuals = {
-	555 = { destroy_entity = 611000 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611000 x = 2826.0 y = 1987.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611001 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611001 x = 2802.0 y = 1951.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611002 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611002 x = 2779.0 y = 1916.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611003 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611003 x = 2749.0 y = 1887.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611004 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611004 x = 2717.0 y = 1855.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611005 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611005 x = 2693.0 y = 1820.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611006 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611006 x = 2666.0 y = 1795.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611007 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611007 x = 2602.0 y = 1711.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	561 = { destroy_entity = 611008 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611008 x = 2583.0 y = 1686.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	558 = { destroy_entity = 611009 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611009 x = 2564.0 y = 1649.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	560 = { destroy_entity = 611010 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611010 x = 2540.0 y = 1614.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	560 = { destroy_entity = 611011 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611011 x = 2535.0 y = 1571.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	560 = { destroy_entity = 611012 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611012 x = 2559.0 y = 1539.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	560 = { destroy_entity = 611013 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611013 x = 2601.0 y = 1545.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611014 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611014 x = 2644.0 y = 1551.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611015 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611015 x = 2685.0 y = 1559.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611016 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611016 x = 2692.0 y = 1491.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611017 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611017 x = 2681.0 y = 1441.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	565 = { destroy_entity = 611018 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611018 x = 2654.0 y = 1407.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	591 = { destroy_entity = 611019 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611019 x = 2642.0 y = 1372.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	591 = { destroy_entity = 611020 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611020 x = 2610.0 y = 1335.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	590 = { destroy_entity = 611021 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611021 x = 2593.0 y = 1301.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	588 = { destroy_entity = 611022 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611022 x = 2570.0 y = 1262.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	589 = { destroy_entity = 611023 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611023 x = 2583.0 y = 1231.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	589 = { destroy_entity = 611024 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611024 x = 2625.0 y = 1225.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	128 = { destroy_entity = 611025 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611025 x = 2670.0 y = 1225.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	128 = { destroy_entity = 611026 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611026 x = 2713.0 y = 1231.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	693 = { destroy_entity = 611027 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611027 x = 2727.0 y = 1193.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	693 = { destroy_entity = 611028 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611028 x = 2707.0 y = 1109.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	694 = { destroy_entity = 611029 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611029 x = 2693.0 y = 1075.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	697 = { destroy_entity = 611030 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611030 x = 2669.0 y = 1037.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	697 = { destroy_entity = 611031 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611031 x = 2652.0 y = 999.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611032 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611032 x = 2633.0 y = 962.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611033 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611033 x = 2617.0 y = 924.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611034 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611034 x = 2612.0 y = 880.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611035 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611035 x = 2633.0 y = 816.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	514 = { destroy_entity = 611036 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611036 x = 2635.0 y = 766.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611037 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611037 x = 2690.0 y = 749.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611038 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611038 x = 2752.0 y = 714.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611039 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611039 x = 2805.0 y = 676.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611040 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611040 x = 2826.0 y = 643.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	201 = { destroy_entity = 611041 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611041 x = 2806.0 y = 613.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	641 = { destroy_entity = 611042 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611042 x = 2773.0 y = 588.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611043 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611043 x = 2735.0 y = 568.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611044 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611044 x = 2701.0 y = 542.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	637 = { destroy_entity = 611045 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611045 x = 2665.0 y = 518.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	532 = { destroy_entity = 611046 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611046 x = 2632.0 y = 490.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	532 = { destroy_entity = 611047 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611047 x = 2605.0 y = 457.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	532 = { destroy_entity = 611048 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611048 x = 2590.0 y = 420.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	537 = { destroy_entity = 611049 create_entity = { entity = ADISCORD_strongest_current_southwest_entity id = 611049 x = 2567.0 y = 364.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	543 = { destroy_entity = 611050 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611050 x = 2550.0 y = 342.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	543 = { destroy_entity = 611051 create_entity = { entity = ADISCORD_strongest_current_south_entity id = 611051 x = 2550.0 y = 309.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611052 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611052 x = 2574.0 y = 274.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611053 create_entity = { entity = ADISCORD_strongest_current_southeast_entity id = 611053 x = 2604.0 y = 238.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611054 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611054 x = 2646.0 y = 231.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611055 create_entity = { entity = ADISCORD_strongest_current_east_entity id = 611055 x = 2689.0 y = 225.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	# Zone weather actors 611100-611174 on a ~95 px grid over each zone:
-	# Rapids 233, Ice Gate 234, Northern Arm 235, Southern Arm 236, Fog Gate 237.
-	558 = { destroy_entity = 611100 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611100 x = 2452.0 y = 1690.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	482 = { destroy_entity = 611101 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611101 x = 2459.0 y = 1584.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	482 = { destroy_entity = 611102 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611102 x = 2491.0 y = 1441.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	587 = { destroy_entity = 611103 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611103 x = 2497.0 y = 1338.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	591 = { destroy_entity = 611104 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611104 x = 2597.0 y = 1328.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	128 = { destroy_entity = 611105 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611105 x = 2667.0 y = 1241.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	586 = { destroy_entity = 611106 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611106 x = 2512.0 y = 1193.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	693 = { destroy_entity = 611107 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611107 x = 2605.0 y = 1145.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	697 = { destroy_entity = 611108 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611108 x = 2498.0 y = 1091.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	694 = { destroy_entity = 611109 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611109 x = 2718.0 y = 1089.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	695 = { destroy_entity = 611110 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611110 x = 2805.0 y = 1041.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	498 = { destroy_entity = 611111 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611111 x = 2592.0 y = 1025.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	498 = { destroy_entity = 611112 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611112 x = 2459.0 y = 982.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	697 = { destroy_entity = 611113 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611113 x = 2743.0 y = 969.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611114 create_entity = { entity = ADISCORD_strongest_current_rapids_weather_entity id = 611114 x = 2624.0 y = 932.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	47 = { destroy_entity = 611115 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611115 x = 2516.0 y = 2035.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611116 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611116 x = 2716.0 y = 2034.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611117 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611117 x = 2878.0 y = 2029.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611118 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611118 x = 2553.0 y = 1945.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611119 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611119 x = 2830.0 y = 1945.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	47 = { destroy_entity = 611120 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611120 x = 2453.0 y = 1940.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611121 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611121 x = 2687.0 y = 1926.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	110 = { destroy_entity = 611122 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611122 x = 2953.0 y = 1921.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611123 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611123 x = 2783.0 y = 1851.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611124 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611124 x = 2477.0 y = 1831.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	110 = { destroy_entity = 611125 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611125 x = 2917.0 y = 1831.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611126 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611126 x = 2684.0 y = 1830.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	556 = { destroy_entity = 611127 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611127 x = 2841.0 y = 1760.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	110 = { destroy_entity = 611128 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611128 x = 2950.0 y = 1734.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	555 = { destroy_entity = 611129 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611129 x = 2733.0 y = 1732.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	47 = { destroy_entity = 611130 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611130 x = 2430.0 y = 1726.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	130 = { destroy_entity = 611131 create_entity = { entity = ADISCORD_strongest_current_ice_weather_entity id = 611131 x = 2809.0 y = 1646.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	561 = { destroy_entity = 611132 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611132 x = 2587.0 y = 1706.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611133 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611133 x = 2670.0 y = 1645.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	99 = { destroy_entity = 611134 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611134 x = 2898.0 y = 1638.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611135 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611135 x = 2772.0 y = 1629.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	560 = { destroy_entity = 611136 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611136 x = 2581.0 y = 1581.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	7 = { destroy_entity = 611137 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611137 x = 2869.0 y = 1547.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	567 = { destroy_entity = 611138 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611138 x = 2789.0 y = 1488.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	564 = { destroy_entity = 611139 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611139 x = 2628.0 y = 1478.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	559 = { destroy_entity = 611140 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611140 x = 2533.0 y = 1471.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	21 = { destroy_entity = 611141 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611141 x = 2886.0 y = 1426.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	566 = { destroy_entity = 611142 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611142 x = 2722.0 y = 1399.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	167 = { destroy_entity = 611143 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611143 x = 2806.0 y = 1322.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	114 = { destroy_entity = 611144 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611144 x = 2901.0 y = 1314.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	179 = { destroy_entity = 611145 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611145 x = 2671.0 y = 1284.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	693 = { destroy_entity = 611146 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611146 x = 2746.0 y = 1200.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	132 = { destroy_entity = 611147 create_entity = { entity = ADISCORD_strongest_current_north_weather_entity id = 611147 x = 2890.0 y = 1188.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	25 = { destroy_entity = 611148 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611148 x = 2764.0 y = 897.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	502 = { destroy_entity = 611149 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611149 x = 2663.0 y = 870.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	26 = { destroy_entity = 611150 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611150 x = 2871.0 y = 814.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611151 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611151 x = 2737.0 y = 805.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611152 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611152 x = 2805.0 y = 735.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	328 = { destroy_entity = 611153 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611153 x = 2979.0 y = 732.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	75 = { destroy_entity = 611154 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611154 x = 2840.0 y = 636.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611155 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611155 x = 2651.0 y = 631.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	615 = { destroy_entity = 611156 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611156 x = 2538.0 y = 622.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	519 = { destroy_entity = 611157 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611157 x = 2430.0 y = 590.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	518 = { destroy_entity = 611158 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611158 x = 2731.0 y = 576.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	642 = { destroy_entity = 611159 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611159 x = 2817.0 y = 504.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	529 = { destroy_entity = 611160 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611160 x = 2403.0 y = 493.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	532 = { destroy_entity = 611161 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611161 x = 2630.0 y = 490.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	537 = { destroy_entity = 611162 create_entity = { entity = ADISCORD_strongest_current_south_weather_entity id = 611162 x = 2343.0 y = 418.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	643 = { destroy_entity = 611163 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611163 x = 2667.0 y = 380.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	537 = { destroy_entity = 611164 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611164 x = 2585.0 y = 328.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611165 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611165 x = 2751.0 y = 285.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611166 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611166 x = 2555.0 y = 230.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611167 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611167 x = 2645.0 y = 199.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611168 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611168 x = 2769.0 y = 191.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611169 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611169 x = 2475.0 y = 155.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611170 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611170 x = 2717.0 y = 106.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611171 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611171 x = 2552.0 y = 91.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	548 = { destroy_entity = 611172 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611172 x = 2468.0 y = 34.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611173 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611173 x = 2804.0 y = 26.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
-	670 = { destroy_entity = 611174 create_entity = { entity = ADISCORD_strongest_current_fog_weather_entity id = 611174 x = 2690.0 y = 12.0 z = 9.6 rotation = 0 scale = 1 min_zoom = 2500 } }
+	# Visual actors retired 2026-10-01: the current is painted into
+	# map/terrain/colormap_water_*.dds. This only clears actors left in old saves.
+	555 = { destroy_entity = 611000 }
+	555 = { destroy_entity = 611001 }
+	555 = { destroy_entity = 611002 }
+	555 = { destroy_entity = 611003 }
+	555 = { destroy_entity = 611004 }
+	555 = { destroy_entity = 611005 }
+	555 = { destroy_entity = 611006 }
+	555 = { destroy_entity = 611007 }
+	561 = { destroy_entity = 611008 }
+	558 = { destroy_entity = 611009 }
+	560 = { destroy_entity = 611010 }
+	560 = { destroy_entity = 611011 }
+	560 = { destroy_entity = 611012 }
+	560 = { destroy_entity = 611013 }
+	567 = { destroy_entity = 611014 }
+	567 = { destroy_entity = 611015 }
+	567 = { destroy_entity = 611016 }
+	567 = { destroy_entity = 611017 }
+	565 = { destroy_entity = 611018 }
+	591 = { destroy_entity = 611019 }
+	591 = { destroy_entity = 611020 }
+	590 = { destroy_entity = 611021 }
+	588 = { destroy_entity = 611022 }
+	589 = { destroy_entity = 611023 }
+	589 = { destroy_entity = 611024 }
+	128 = { destroy_entity = 611025 }
+	128 = { destroy_entity = 611026 }
+	693 = { destroy_entity = 611027 }
+	693 = { destroy_entity = 611028 }
+	694 = { destroy_entity = 611029 }
+	697 = { destroy_entity = 611030 }
+	697 = { destroy_entity = 611031 }
+	502 = { destroy_entity = 611032 }
+	502 = { destroy_entity = 611033 }
+	502 = { destroy_entity = 611034 }
+	502 = { destroy_entity = 611035 }
+	514 = { destroy_entity = 611036 }
+	518 = { destroy_entity = 611037 }
+	518 = { destroy_entity = 611038 }
+	518 = { destroy_entity = 611039 }
+	518 = { destroy_entity = 611040 }
+	201 = { destroy_entity = 611041 }
+	641 = { destroy_entity = 611042 }
+	518 = { destroy_entity = 611043 }
+	518 = { destroy_entity = 611044 }
+	637 = { destroy_entity = 611045 }
+	532 = { destroy_entity = 611046 }
+	532 = { destroy_entity = 611047 }
+	532 = { destroy_entity = 611048 }
+	537 = { destroy_entity = 611049 }
+	543 = { destroy_entity = 611050 }
+	543 = { destroy_entity = 611051 }
+	548 = { destroy_entity = 611052 }
+	548 = { destroy_entity = 611053 }
+	548 = { destroy_entity = 611054 }
+	670 = { destroy_entity = 611055 }
+	# Zone weather 611100-611174 (rain/snow/storm) + 611200-611274 (their clouds):
+	# vanilla HOI4 weather entities, permanent. Rapids 233 = lightning storm,
+	# Ice Gate 234 = snow, Northern Arm 235 / Southern Arm 236 / Fog Gate 237 = rain.
+	558 = { destroy_entity = 611100 }
+	558 = { destroy_entity = 611200 }
+	482 = { destroy_entity = 611101 }
+	482 = { destroy_entity = 611201 }
+	482 = { destroy_entity = 611102 }
+	482 = { destroy_entity = 611202 }
+	587 = { destroy_entity = 611103 }
+	587 = { destroy_entity = 611203 }
+	591 = { destroy_entity = 611104 }
+	591 = { destroy_entity = 611204 }
+	128 = { destroy_entity = 611105 }
+	128 = { destroy_entity = 611205 }
+	586 = { destroy_entity = 611106 }
+	586 = { destroy_entity = 611206 }
+	693 = { destroy_entity = 611107 }
+	693 = { destroy_entity = 611207 }
+	697 = { destroy_entity = 611108 }
+	697 = { destroy_entity = 611208 }
+	694 = { destroy_entity = 611109 }
+	694 = { destroy_entity = 611209 }
+	695 = { destroy_entity = 611110 }
+	695 = { destroy_entity = 611210 }
+	498 = { destroy_entity = 611111 }
+	498 = { destroy_entity = 611211 }
+	498 = { destroy_entity = 611112 }
+	498 = { destroy_entity = 611212 }
+	697 = { destroy_entity = 611113 }
+	697 = { destroy_entity = 611213 }
+	502 = { destroy_entity = 611114 }
+	502 = { destroy_entity = 611214 }
+	47 = { destroy_entity = 611115 }
+	47 = { destroy_entity = 611215 }
+	555 = { destroy_entity = 611116 }
+	555 = { destroy_entity = 611216 }
+	555 = { destroy_entity = 611117 }
+	555 = { destroy_entity = 611217 }
+	555 = { destroy_entity = 611118 }
+	555 = { destroy_entity = 611218 }
+	555 = { destroy_entity = 611119 }
+	555 = { destroy_entity = 611219 }
+	47 = { destroy_entity = 611120 }
+	47 = { destroy_entity = 611220 }
+	555 = { destroy_entity = 611121 }
+	555 = { destroy_entity = 611221 }
+	110 = { destroy_entity = 611122 }
+	110 = { destroy_entity = 611222 }
+	555 = { destroy_entity = 611123 }
+	555 = { destroy_entity = 611223 }
+	555 = { destroy_entity = 611124 }
+	555 = { destroy_entity = 611224 }
+	110 = { destroy_entity = 611125 }
+	110 = { destroy_entity = 611225 }
+	555 = { destroy_entity = 611126 }
+	555 = { destroy_entity = 611226 }
+	556 = { destroy_entity = 611127 }
+	556 = { destroy_entity = 611227 }
+	110 = { destroy_entity = 611128 }
+	110 = { destroy_entity = 611228 }
+	555 = { destroy_entity = 611129 }
+	555 = { destroy_entity = 611229 }
+	47 = { destroy_entity = 611130 }
+	47 = { destroy_entity = 611230 }
+	130 = { destroy_entity = 611131 }
+	130 = { destroy_entity = 611231 }
+	561 = { destroy_entity = 611132 }
+	561 = { destroy_entity = 611232 }
+	567 = { destroy_entity = 611133 }
+	567 = { destroy_entity = 611233 }
+	99 = { destroy_entity = 611134 }
+	99 = { destroy_entity = 611234 }
+	567 = { destroy_entity = 611135 }
+	567 = { destroy_entity = 611235 }
+	560 = { destroy_entity = 611136 }
+	560 = { destroy_entity = 611236 }
+	7 = { destroy_entity = 611137 }
+	7 = { destroy_entity = 611237 }
+	567 = { destroy_entity = 611138 }
+	567 = { destroy_entity = 611238 }
+	564 = { destroy_entity = 611139 }
+	564 = { destroy_entity = 611239 }
+	559 = { destroy_entity = 611140 }
+	559 = { destroy_entity = 611240 }
+	21 = { destroy_entity = 611141 }
+	21 = { destroy_entity = 611241 }
+	566 = { destroy_entity = 611142 }
+	566 = { destroy_entity = 611242 }
+	167 = { destroy_entity = 611143 }
+	167 = { destroy_entity = 611243 }
+	114 = { destroy_entity = 611144 }
+	114 = { destroy_entity = 611244 }
+	179 = { destroy_entity = 611145 }
+	179 = { destroy_entity = 611245 }
+	693 = { destroy_entity = 611146 }
+	693 = { destroy_entity = 611246 }
+	132 = { destroy_entity = 611147 }
+	132 = { destroy_entity = 611247 }
+	25 = { destroy_entity = 611148 }
+	25 = { destroy_entity = 611248 }
+	502 = { destroy_entity = 611149 }
+	502 = { destroy_entity = 611249 }
+	26 = { destroy_entity = 611150 }
+	26 = { destroy_entity = 611250 }
+	518 = { destroy_entity = 611151 }
+	518 = { destroy_entity = 611251 }
+	518 = { destroy_entity = 611152 }
+	518 = { destroy_entity = 611252 }
+	328 = { destroy_entity = 611153 }
+	328 = { destroy_entity = 611253 }
+	75 = { destroy_entity = 611154 }
+	75 = { destroy_entity = 611254 }
+	518 = { destroy_entity = 611155 }
+	518 = { destroy_entity = 611255 }
+	615 = { destroy_entity = 611156 }
+	615 = { destroy_entity = 611256 }
+	519 = { destroy_entity = 611157 }
+	519 = { destroy_entity = 611257 }
+	518 = { destroy_entity = 611158 }
+	518 = { destroy_entity = 611258 }
+	642 = { destroy_entity = 611159 }
+	642 = { destroy_entity = 611259 }
+	529 = { destroy_entity = 611160 }
+	529 = { destroy_entity = 611260 }
+	532 = { destroy_entity = 611161 }
+	532 = { destroy_entity = 611261 }
+	537 = { destroy_entity = 611162 }
+	537 = { destroy_entity = 611262 }
+	643 = { destroy_entity = 611163 }
+	643 = { destroy_entity = 611263 }
+	537 = { destroy_entity = 611164 }
+	537 = { destroy_entity = 611264 }
+	670 = { destroy_entity = 611165 }
+	670 = { destroy_entity = 611265 }
+	548 = { destroy_entity = 611166 }
+	548 = { destroy_entity = 611266 }
+	548 = { destroy_entity = 611167 }
+	548 = { destroy_entity = 611267 }
+	670 = { destroy_entity = 611168 }
+	670 = { destroy_entity = 611268 }
+	548 = { destroy_entity = 611169 }
+	548 = { destroy_entity = 611269 }
+	670 = { destroy_entity = 611170 }
+	670 = { destroy_entity = 611270 }
+	548 = { destroy_entity = 611171 }
+	548 = { destroy_entity = 611271 }
+	548 = { destroy_entity = 611172 }
+	548 = { destroy_entity = 611272 }
+	670 = { destroy_entity = 611173 }
+	670 = { destroy_entity = 611273 }
+	670 = { destroy_entity = 611174 }
+	670 = { destroy_entity = 611274 }
 }

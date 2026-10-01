@@ -448,7 +448,7 @@ SHL_begin_training = {
 				check_variable = { var = SHL_furnace_training value = 0 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 		add_political_power = -25
@@ -538,11 +538,13 @@ SHL_refresh_furnaces = {
 	SHL_reconcile_obligation = yes
 	set_variable = { var = SHL_running_count value = 0 }
 	set_variable = { var = SHL_house_votes value = 0 }
-	set_variable = { var = SHL_wear_1 value = 287.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_1 value = 287.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_1 value = 287.SHL_furnace_owner }
 	set_variable = { var = SHL_status_1 value = 2 }
 	287 = {
+		PREV = {
+			set_variable = { var = SHL_wear_1 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_1 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_1 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_1 value = 0 } }
@@ -559,11 +561,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_2 value = 288.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_2 value = 288.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_2 value = 288.SHL_furnace_owner }
 	set_variable = { var = SHL_status_2 value = 2 }
 	288 = {
+		PREV = {
+			set_variable = { var = SHL_wear_2 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_2 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_2 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_2 value = 0 } }
@@ -580,11 +584,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_3 value = 289.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_3 value = 289.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_3 value = 289.SHL_furnace_owner }
 	set_variable = { var = SHL_status_3 value = 2 }
 	289 = {
+		PREV = {
+			set_variable = { var = SHL_wear_3 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_3 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_3 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_3 value = 0 } }
@@ -601,11 +607,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_4 value = 290.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_4 value = 290.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_4 value = 290.SHL_furnace_owner }
 	set_variable = { var = SHL_status_4 value = 2 }
 	290 = {
+		PREV = {
+			set_variable = { var = SHL_wear_4 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_4 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_4 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_4 value = 0 } }
@@ -622,11 +630,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_5 value = 291.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_5 value = 291.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_5 value = 291.SHL_furnace_owner }
 	set_variable = { var = SHL_status_5 value = 2 }
 	291 = {
+		PREV = {
+			set_variable = { var = SHL_wear_5 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_5 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_5 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_5 value = 0 } }
@@ -643,11 +653,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_6 value = 292.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_6 value = 292.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_6 value = 292.SHL_furnace_owner }
 	set_variable = { var = SHL_status_6 value = 2 }
 	292 = {
+		PREV = {
+			set_variable = { var = SHL_wear_6 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_6 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_6 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_6 value = 0 } }
@@ -664,11 +676,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_7 value = 293.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_7 value = 293.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_7 value = 293.SHL_furnace_owner }
 	set_variable = { var = SHL_status_7 value = 2 }
 	293 = {
+		PREV = {
+			set_variable = { var = SHL_wear_7 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_7 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_7 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_7 value = 0 } }
@@ -685,11 +699,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_8 value = 294.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_8 value = 294.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_8 value = 294.SHL_furnace_owner }
 	set_variable = { var = SHL_status_8 value = 2 }
 	294 = {
+		PREV = {
+			set_variable = { var = SHL_wear_8 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_8 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_8 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_8 value = 0 } }
@@ -706,11 +722,13 @@ SHL_refresh_furnaces = {
 			}
 		}
 	}
-	set_variable = { var = SHL_wear_9 value = 295.SHL_furnace_wear }
-	set_variable = { var = SHL_stock_9 value = 295.SHL_furnace_stock }
-	set_variable = { var = SHL_owner_9 value = 295.SHL_furnace_owner }
 	set_variable = { var = SHL_status_9 value = 2 }
 	295 = {
+		PREV = {
+			set_variable = { var = SHL_wear_9 value = PREV.SHL_furnace_wear }
+			set_variable = { var = SHL_stock_9 value = PREV.SHL_furnace_stock }
+			set_variable = { var = SHL_owner_9 value = PREV.SHL_furnace_owner }
+		}
 		if = {
 			limit = { SHL_furnace_site_controlled = yes }
 			SHL = { set_variable = { var = SHL_status_9 value = 0 } }
@@ -774,7 +792,7 @@ SHL_begin_engineers = {
 			has_completed_focus = SHL_engineer_society
 			check_variable = { var = SHL_project_stage value = 0 compare = equals }
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 		add_political_power = -25
@@ -967,7 +985,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_1 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_1 }
 		set_variable = { var = SHL_selected_status value = SHL_status_1 }
-		set_variable = { var = SHL_selected_training value = 287.SHL_furnace_training }
+		287 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 2 compare = equals } }
@@ -975,7 +997,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_2 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_2 }
 		set_variable = { var = SHL_selected_status value = SHL_status_2 }
-		set_variable = { var = SHL_selected_training value = 288.SHL_furnace_training }
+		288 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 3 compare = equals } }
@@ -983,7 +1009,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_3 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_3 }
 		set_variable = { var = SHL_selected_status value = SHL_status_3 }
-		set_variable = { var = SHL_selected_training value = 289.SHL_furnace_training }
+		289 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 4 compare = equals } }
@@ -991,7 +1021,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_4 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_4 }
 		set_variable = { var = SHL_selected_status value = SHL_status_4 }
-		set_variable = { var = SHL_selected_training value = 290.SHL_furnace_training }
+		290 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 5 compare = equals } }
@@ -999,7 +1033,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_5 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_5 }
 		set_variable = { var = SHL_selected_status value = SHL_status_5 }
-		set_variable = { var = SHL_selected_training value = 291.SHL_furnace_training }
+		291 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 6 compare = equals } }
@@ -1007,7 +1045,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_6 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_6 }
 		set_variable = { var = SHL_selected_status value = SHL_status_6 }
-		set_variable = { var = SHL_selected_training value = 292.SHL_furnace_training }
+		292 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 7 compare = equals } }
@@ -1015,7 +1057,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_7 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_7 }
 		set_variable = { var = SHL_selected_status value = SHL_status_7 }
-		set_variable = { var = SHL_selected_training value = 293.SHL_furnace_training }
+		293 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 8 compare = equals } }
@@ -1023,7 +1069,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_8 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_8 }
 		set_variable = { var = SHL_selected_status value = SHL_status_8 }
-		set_variable = { var = SHL_selected_training value = 294.SHL_furnace_training }
+		294 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_selected_furnace value = 9 compare = equals } }
@@ -1031,7 +1081,11 @@ SHL_refresh_selected_furnace = {
 		set_variable = { var = SHL_selected_stock value = SHL_stock_9 }
 		set_variable = { var = SHL_selected_owner value = SHL_owner_9 }
 		set_variable = { var = SHL_selected_status value = SHL_status_9 }
-		set_variable = { var = SHL_selected_training value = 295.SHL_furnace_training }
+		295 = {
+			PREV = {
+				set_variable = { var = SHL_selected_training value = PREV.SHL_furnace_training }
+			}
+		}
 	}
 	set_variable = { var = SHL_selected_period_cost value = 1 }
 	set_variable = { var = SHL_selected_period_wear value = 6 }
@@ -1765,7 +1819,7 @@ SHL_begin_guard_order = {
 			SHL_country_operable = yes
 			NOT = { has_variable = SHL_guard_deposit }
 			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
-			has_political_power = 25
+			NOT = { has_political_power < 25 }
 			NOT = { has_manpower < 3000 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
@@ -2270,7 +2324,7 @@ SHL_mazar_pay_first = {
 		limit = {
 			check_variable = { var = SHL_mazar_state value = 1 compare = equals }
 			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
-			has_political_power = 30
+			NOT = { has_political_power < 30 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
 		add_political_power = -30
@@ -2308,7 +2362,7 @@ SHL_mazar_buyout = {
 		limit = {
 			check_variable = { var = SHL_mazar_state value = 5 compare = equals }
 			check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
-			has_political_power = 50
+			NOT = { has_political_power < 50 }
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
 		add_political_power = -50

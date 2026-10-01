@@ -132,6 +132,34 @@ ADISCORD_vorkerland_rom_tru_category = {
 	}
 }
 
+# --- rus_crisis_category ---
+RUS_last_empire_crisis = {
+	icon = generic_prepare_civil_war
+	allowed = { OR = { tag = RUS tag = VAL tag = STS } }
+	visible = {
+		OR = {
+			AND = {
+				OR = { tag = RUS tag = event_target:RUS_crisis_hegemon }
+				RUS = {
+					check_variable = { var = RUS_crisis_phase value = 0 compare = greater_than }
+					check_variable = { var = RUS_crisis_phase value = 3 compare = less_than }
+				}
+			}
+			AND = {
+				has_country_flag = RUS_crisis_settlement_rights
+				OR = {
+					SLA = { exists = yes has_country_flag = RUS_crisis_fragment }
+					RZA = { exists = yes has_country_flag = RUS_crisis_fragment }
+					MLR = { exists = yes has_country_flag = RUS_crisis_fragment }
+					ERT = { exists = yes has_country_flag = RUS_crisis_fragment }
+					IRT = { exists = yes has_country_flag = RUS_crisis_fragment }
+					SCA = { exists = yes has_country_flag = RUS_crisis_fragment }
+				}
+			}
+		}
+	}
+}
+
 # --- rus_last_empire_categories ---
 ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	icon = generic_prepare_civil_war

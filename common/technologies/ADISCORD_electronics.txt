@@ -256,6 +256,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_electromechanical_relays = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.01
 		production_factory_efficiency_gain_factor = 0.01
 		path = {
@@ -283,6 +284,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_recovered_data_archives = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.015
 		planning_speed = 0.01
 		path = {
@@ -310,6 +312,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_recovered_semiconductors = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.02
 		production_factory_efficiency_gain_factor = 0.02
 		path = {
@@ -337,6 +340,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_hardened_computers = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.025
 		encryption_factor = 0.02
 		path = {
@@ -368,6 +372,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_error_correcting_field_computers = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.03
 		encryption_factor = 0.035
 		supply_consumption_factor = -0.015
@@ -400,6 +405,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_predictive_logistics = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.025
 		supply_consumption_factor = -0.03
 		encryption_factor = 0.03
@@ -436,6 +442,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_operational_ai_assistants = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.025
 		coordination_bonus = 0.035
 		factory_energy_consumption = 0.06
@@ -468,6 +475,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_strategic_digital_twins = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.03
 		planning_speed = 0.03
 		production_factory_efficiency_gain_factor = 0.03
@@ -504,6 +512,7 @@ technologies = {
 	}
 
 	ADISCORD_tech_strategic_ai_coordination = {
+		special_project_specialization = { specialization_land }
 		research_speed_factor = 0.04
 		coordination_bonus = 0.05
 		production_factory_efficiency_gain_factor = 0.04

@@ -329,7 +329,7 @@ defined_text = {
 defined_text = {
 	name = SHLGetPP25
 	text = {
-		trigger = { has_political_power = 25 }
+		trigger = { NOT = { has_political_power < 25 } }
 		localization_key = SHL_pp25
 	}
 	text = {
@@ -384,7 +384,7 @@ defined_text = {
 defined_text = {
 	name = SHLGetPP50
 	text = {
-		trigger = { has_political_power = 50 }
+		trigger = { NOT = { has_political_power < 50 } }
 		localization_key = SHL_pp50
 	}
 	text = {

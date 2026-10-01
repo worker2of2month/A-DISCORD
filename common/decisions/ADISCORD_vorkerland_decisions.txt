@@ -2568,6 +2568,118 @@ ADISCORD_vorkerland_rom_tru_category = {
 	}
 }
 
+# --- rus_crisis_decisions ---
+RUS_last_empire_crisis = {
+	RUS_crisis_invasion_countdown = {
+		icon = generic_attack
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = {
+			tag = RUS
+			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		}
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 90
+		cancel_trigger = {
+			OR = {
+				RUS = { NOT = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
+				RUS_crisis_target_valid = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
+				RUS = { RUS_crisis_close = yes }
+			}
+		}
+		timeout_effect = { RUS = { RUS_crisis_launch = yes } }
+	}
+
+	RUS_crisis_defence_countdown = {
+		icon = generic_attack
+		allowed = { OR = { tag = VAL tag = STS } }
+		activation = { always = no }
+		visible = {
+			tag = event_target:RUS_crisis_hegemon
+			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		}
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 90
+		cancel_trigger = {
+			OR = {
+				RUS = { NOT = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
+				RUS_crisis_target_valid = no
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
+				RUS = { RUS_crisis_close = yes }
+			}
+		}
+		timeout_effect = { RUS = { RUS_crisis_launch = yes } }
+	}
+
+	RUS_crisis_establish_special_zone = {
+		icon = generic_political_pressure
+		allowed = { OR = { tag = VAL tag = STS } }
+		targets = { SLA RZA MLR ERT IRT SCA }
+		target_root_trigger = { has_country_flag = RUS_crisis_settlement_rights }
+		visible = {
+			has_country_flag = RUS_crisis_settlement_rights
+			FROM = {
+				exists = yes
+				has_country_flag = RUS_crisis_fragment
+				NOT = { is_subject_of = ROOT }
+			}
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = RUS_crisis_fragment_available_tt
+					RUS_crisis_fragment_available = yes
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						has_country_flag = RUS_crisis_settlement_rights
+						is_subject = no
+						has_capitulated = no
+						has_war = no
+						FROM = { RUS_crisis_fragment_available = yes }
+					}
+				}
+				set_autonomy = {
+					target = FROM
+					autonomy_state = autonomy_vorkerland_sanitary_gate
+					freedom_level = 0.0
+					end_wars = no
+					end_civil_wars = no
+				}
+				hidden_effect = {
+					FROM = {
+						clr_country_flag = RUS_crisis_fragment
+						ADISCORD_economy_mark_dirty = yes
+					}
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+}
+
 # --- rus_last_empire_decisions ---
 ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	RUS_campaign_sla = {

@@ -9,8 +9,8 @@ focus_tree = {
 	}
 	continuous_focus_position = { x = 100 y = 555555 }
 
-	# Compact AI-facing campaign: arm the aimaqs, wait for the dirty zone,
-	# then open priced neighbour wars and the last-empire proclamation.
+	# The northern wars establish the empire; the final campaign targets
+	# whichever neighbouring hegemon has completed its own struggle.
 
 	focus = {
 		id = RUS_summon_the_aimaqs
@@ -199,6 +199,178 @@ focus_tree = {
 				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
 			}
 			unlock_decision_tooltip = RUS_proclaim_the_last_empire
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	# The preparations take 77 days in sequence; the invasion warning lasts 90.
+
+	focus = {
+		id = RUS_imperial_general_staff
+		icon = GFX_goal_generic_national_unity
+		x = 0
+		y = 1
+		relative_position_id = RUS_seat_the_khan_chancery
+		cost = 2
+		prerequisite = { focus = RUS_seat_the_khan_chancery }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+		}
+		completion_reward = {
+			army_experience = 20
+			add_command_power = 15
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_western_supply_lines
+		icon = GFX_goal_generic_construct_infrastructure
+		x = -2
+		y = 1
+		relative_position_id = RUS_imperial_general_staff
+		cost = 3
+		prerequisite = { focus = RUS_imperial_general_staff }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 30 producer = RUS }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 200 producer = RUS }
+			if = {
+				limit = {
+					owns_state = 66
+					controls_state = 66
+					owns_state = 49
+					controls_state = 49
+				}
+				build_railway = { level = 3 fallback = yes start_state = 66 target_state = 49 }
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_imperial_arsenals
+		icon = GFX_goal_generic_construct_military
+		x = 0
+		y = 1
+		relative_position_id = RUS_imperial_general_staff
+		cost = 3
+		prerequisite = { focus = RUS_imperial_general_staff }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		completion_reward = {
+			capital_scope = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_aimaq_reserve
+		icon = GFX_goal_generic_army_motorized
+		x = 2
+		y = 1
+		relative_position_id = RUS_imperial_general_staff
+		cost = 3
+		prerequisite = { focus = RUS_imperial_general_staff }
+		available = {
+			is_subject = no
+			has_capitulated = no
+		}
+		completion_reward = {
+			add_manpower = 10000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = RUS }
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_break_the_hegemon
+		icon = GFX_goal_generic_major_war
+		x = 0
+		y = 1
+		relative_position_id = RUS_imperial_arsenals
+		cost = 3
+		prerequisite = { focus = RUS_imperial_arsenals }
+		prerequisite = { focus = RUS_western_supply_lines }
+		prerequisite = { focus = RUS_aimaq_reserve }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_war_active_tt
+				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+			}
+		}
+		bypass = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 25
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_register_conquered_lands
+		icon = GFX_goal_generic_demand_territory
+		x = 0
+		y = 1
+		relative_position_id = RUS_break_the_hegemon
+		cost = 5
+		prerequisite = { focus = RUS_break_the_hegemon }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_won_tt
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		completion_reward = {
+			every_owned_state = {
+				limit = { has_state_flag = RUS_crisis_conquered_state }
+				add_compliance = 20
+				hidden_effect = { clr_state_flag = RUS_crisis_conquered_state }
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 120 }
+	}
+
+	focus = {
+		id = RUS_empire_without_rivals
+		icon = GFX_goal_generic_political_pressure
+		x = 0
+		y = 1
+		relative_position_id = RUS_register_conquered_lands
+		cost = 5
+		prerequisite = { focus = RUS_register_conquered_lands }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_won_tt
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		completion_reward = {
+			add_research_slot = 1
 		}
 		ai_will_do = { base = 120 }
 	}

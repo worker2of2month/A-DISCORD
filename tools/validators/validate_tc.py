@@ -549,13 +549,22 @@ def check_special_project_leftovers(limit):
     patterns = [
         re.compile(r"\b(?:PROJECT|EXTRA_PROJECT)\s*=\s*sp_[A-Za-z0-9_]+"),
         re.compile(r"\bsp:[A-Za-z0-9_]+"),
-        re.compile(r"\bspecial_project_specialization\b"),
         re.compile(r"\bis_special_project_(?:completed|tech)\b"),
     ]
     for path in iter_files("common", "history", "events"):
         text = strip_comments(read_text(path))
         for lineno, line in enumerate(text.splitlines(), 1):
-            if any(pattern.search(line) for pattern in patterns):
+            specialization = "special_project_specialization" in line
+            supported_specialization = (
+                path.parent == ROOT / "common" / "technologies"
+                and re.fullmatch(
+                    r"\s*special_project_specialization\s*=\s*\{\s*specialization_land\s*\}\s*",
+                    line,
+                )
+            )
+            if any(pattern.search(line) for pattern in patterns) or (
+                specialization and not supported_specialization
+            ):
                 issues.append(f"{rel(path)}:{lineno}: {line.strip()[:160]}")
     return issues[:limit], len(issues)
 

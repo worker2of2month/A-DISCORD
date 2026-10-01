@@ -1,1 +1,28 @@
-# Intentionally empty: masks incompatible vanilla 1.19 file for A-Discord total conversion.
+ADISCORD_sp_combat_robots = {
+	specialization = specialization_land
+	icon = GFX_ADISCORD_tech_neural_command_cores_medium
+	blueprint_image = GFX_generic_tank_blueprint_background
+	available = {
+		FROM = {
+			has_tech = ADISCORD_tech_hardened_computers
+			has_tech = ADISCORD_tech_automated_assembly
+		}
+	}
+	breakthrough_cost = {
+		specialization_land = 2
+	}
+	prototype_time = sp_time.prototype.long
+	complexity = sp_complexity.large
+	resource_cost = {
+		resources = {
+			steel = 8
+			rare_components = 4
+			rare_alloys = 2
+		}
+	}
+	project_output = {
+		enable_equipments = { ADISCORD_combat_robot_equipment_1 }
+		enable_subunits = { ADISCORD_combat_robots }
+	}
+	ai_will_do = { base = 1 }
+}

@@ -24,3 +24,23 @@ soundeffect = {
 	max_audible = 1
 	max_audible_behaviour = fail
 }
+
+category = {
+	name = "Voices"
+	soundeffects = {
+		ADISCORD_crimson_metal_scrape
+	}
+}
+
+soundeffect = {
+	name = "ADISCORD_crimson_metal_scrape"
+	sounds = {
+		sound = "ADISCORD_crimson_metal_scrape_1"
+		sound = "ADISCORD_crimson_metal_scrape_2"
+	}
+	volume = 0.80
+	max_audible = 1
+	max_audible_behaviour = fail
+	is3d = no
+	loop = no
+}

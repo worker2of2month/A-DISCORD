@@ -9,7 +9,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.7.a
-		default_option = yes
 		custom_effect_tooltip = SHL_masters_wait_tt
 		hidden_effect = {
 			if = {
@@ -47,7 +46,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.8.a
-		default_option = yes
 		custom_effect_tooltip = SHL_suppliers_wait_tt
 		hidden_effect = {
 			if = {
@@ -60,14 +58,14 @@ country_event = {
 		name = ADISCORD_SHL.8.b
 		trigger = {
 			NOT = { has_completed_focus = SHL_houses_railway }
-			has_political_power = 15
+			NOT = { has_political_power < 15 }
 		}
 		custom_effect_tooltip = SHL_suppliers_pay_tt
 		hidden_effect = {
 			if = {
 				limit = {
 					NOT = { has_completed_focus = SHL_houses_railway }
-					has_political_power = 15
+					NOT = { has_political_power < 15 }
 				}
 				add_political_power = -15
 				clr_country_flag = SHL_supplier_premium
@@ -96,7 +94,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.2.a
-		default_option = yes
 	}
 }
 
@@ -109,7 +106,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.3.a
-		default_option = yes
 	}
 }
 
@@ -122,7 +118,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.4.a
-		default_option = yes
 	}
 }
 
@@ -138,7 +133,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.5.a
-		default_option = yes
 	}
 }
 
@@ -151,7 +145,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.6.a
-		default_option = yes
 		custom_effect_tooltip = SHL_pressure_wait_tt
 		hidden_effect = {
 			if = {
@@ -195,18 +188,17 @@ country_event = {
 		has_country_flag = SHL_strike_active
 	}
 	option = {
+		name = ADISCORD_SHL.20.b
+		custom_effect_tooltip = SHL_strike_wait_tt
+		hidden_effect = { activate_mission = SHL_strike_mission }
+		ai_chance = { base = 30 }
+	}
+	option = {
 		name = ADISCORD_SHL.20.a
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals } }
 		custom_effect_tooltip = SHL_strike_concede_tt
 		hidden_effect = { SHL_strike_concede = yes }
 		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_SHL.20.b
-		default_option = yes
-		custom_effect_tooltip = SHL_strike_wait_tt
-		hidden_effect = { activate_mission = SHL_strike_mission }
-		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.20.c
@@ -235,6 +227,18 @@ country_event = {
 		has_country_flag = SHL_strike_active
 	}
 	option = {
+		name = ADISCORD_SHL.21.b
+		add_stability = -0.08
+		add_war_support = 0.05
+		add_timed_idea = {
+			idea = SHL_martial_law
+			days = 180
+		}
+		custom_effect_tooltip = SHL_martial_law_tt
+		hidden_effect = { SHL_declare_martial_law = yes }
+		ai_chance = { base = 50 }
+	}
+	option = {
 		name = ADISCORD_SHL.21.a
 		trigger = { NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } } }
 		custom_effect_tooltip = SHL_commune_course_tt
@@ -247,19 +251,6 @@ country_event = {
 			}
 		}
 	}
-	option = {
-		name = ADISCORD_SHL.21.b
-		default_option = yes
-		add_stability = -0.08
-		add_war_support = 0.05
-		add_timed_idea = {
-			idea = SHL_martial_law
-			days = 180
-		}
-		custom_effect_tooltip = SHL_martial_law_tt
-		hidden_effect = { SHL_declare_martial_law = yes }
-		ai_chance = { base = 50 }
-	}
 }
 
 country_event = {
@@ -271,7 +262,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.22.a
-		default_option = yes
 	}
 }
 
@@ -286,19 +276,18 @@ country_event = {
 		has_country_flag = SHL_conspiracy_active
 	}
 	option = {
+		name = ADISCORD_SHL.30.b
+		custom_effect_tooltip = SHL_conspiracy_wait_tt
+		hidden_effect = { activate_mission = SHL_conspiracy_mission }
+		ai_chance = { base = 30 }
+	}
+	option = {
 		name = ADISCORD_SHL.30.a
-		trigger = { has_political_power = 40 }
+		trigger = { NOT = { has_political_power < 40 } }
 		add_political_power = -40
 		custom_effect_tooltip = SHL_conspiracy_guarantees_tt
 		hidden_effect = { SHL_conspiracy_guarantees = yes }
 		ai_chance = { base = 40 }
-	}
-	option = {
-		name = ADISCORD_SHL.30.b
-		default_option = yes
-		custom_effect_tooltip = SHL_conspiracy_wait_tt
-		hidden_effect = { activate_mission = SHL_conspiracy_mission }
-		ai_chance = { base = 30 }
 	}
 	option = {
 		name = ADISCORD_SHL.30.c
@@ -321,14 +310,7 @@ country_event = {
 		has_country_flag = SHL_conspiracy_active
 	}
 	option = {
-		name = ADISCORD_SHL.31.a
-		custom_effect_tooltip = SHL_regency_course_tt
-		hidden_effect = { SHL_commit_regency_course = yes }
-		ai_chance = { base = 20 }
-	}
-	option = {
 		name = ADISCORD_SHL.31.b
-		default_option = yes
 		add_stability = -0.10
 		add_timed_idea = {
 			idea = SHL_broken_conclave
@@ -337,6 +319,12 @@ country_event = {
 		custom_effect_tooltip = SHL_resist_crests_tt
 		hidden_effect = { SHL_resist_crests = yes }
 		ai_chance = { base = 30 }
+	}
+	option = {
+		name = ADISCORD_SHL.31.a
+		custom_effect_tooltip = SHL_regency_course_tt
+		hidden_effect = { SHL_commit_regency_course = yes }
+		ai_chance = { base = 20 }
 	}
 }
 
@@ -349,7 +337,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.32.a
-		default_option = yes
 	}
 }
 
@@ -364,6 +351,17 @@ country_event = {
 		has_country_flag = SHL_accident_pending
 	}
 	option = {
+		name = ADISCORD_SHL.40.b
+		custom_effect_tooltip = SHL_accident_site_tt
+		custom_effect_tooltip = SHL_accident_masters_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_unrest value = 15 }
+			subtract_from_variable = { var = SHL_house_pressure value = 5 }
+			SHL_resolve_accident = yes
+		}
+		ai_chance = { base = 20 }
+	}
+	option = {
 		name = ADISCORD_SHL.40.a
 		custom_effect_tooltip = SHL_accident_site_tt
 		custom_effect_tooltip = SHL_accident_house_tt
@@ -376,20 +374,8 @@ country_event = {
 		ai_chance = { base = 30 }
 	}
 	option = {
-		name = ADISCORD_SHL.40.b
-		default_option = yes
-		custom_effect_tooltip = SHL_accident_site_tt
-		custom_effect_tooltip = SHL_accident_masters_tt
-		hidden_effect = {
-			add_to_variable = { var = SHL_unrest value = 15 }
-			subtract_from_variable = { var = SHL_house_pressure value = 5 }
-			SHL_resolve_accident = yes
-		}
-		ai_chance = { base = 20 }
-	}
-	option = {
 		name = ADISCORD_SHL.40.c
-		trigger = { has_political_power = 35 }
+		trigger = { NOT = { has_political_power < 35 } }
 		add_political_power = -35
 		custom_effect_tooltip = SHL_accident_site_tt
 		custom_effect_tooltip = SHL_accident_commission_tt
@@ -416,7 +402,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.50.a
-		default_option = yes
 		custom_effect_tooltip = SHL_water_crisis_tt
 	}
 }
@@ -431,7 +416,6 @@ country_event = {
 	trigger = { tag = KYZ }
 	option = {
 		name = ADISCORD_SHL.52.a
-		default_option = yes
 		custom_effect_tooltip = SHL_kyz_accepts_treaty_tt
 		hidden_effect = { SHL_sign_water_treaty = yes }
 		ai_chance = { base = 80 }
@@ -458,7 +442,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.53.a
-		default_option = yes
 	}
 }
 
@@ -471,7 +454,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.54.a
-		default_option = yes
 	}
 }
 
@@ -485,7 +467,6 @@ country_event = {
 	trigger = { tag = KYZ }
 	option = {
 		name = ADISCORD_SHL.55.a
-		default_option = yes
 		custom_effect_tooltip = SHL_kyz_accepts_brotherhood_tt
 		hidden_effect = { SHL_sign_water_brotherhood = yes }
 		ai_chance = { factor = 90 }
@@ -520,7 +501,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.56.a
-		default_option = yes
 		custom_effect_tooltip = SHL_armistice_tt
 		hidden_effect = { SHL_kyz_war_armistice = yes }
 	}
@@ -535,7 +515,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.57.a
-		default_option = yes
 	}
 }
 
@@ -548,7 +527,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.58.a
-		default_option = yes
 	}
 }
 
@@ -565,7 +543,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.60.a
-		default_option = yes
 		custom_effect_tooltip = SHL_veyr_crisis_tt
 	}
 }
@@ -580,7 +557,6 @@ country_event = {
 	trigger = { tag = GLP }
 	option = {
 		name = ADISCORD_SHL.61.a
-		default_option = yes
 		custom_effect_tooltip = SHL_glp_accepts_union_tt
 		hidden_effect = { SHL_sign_veyr_union = yes }
 		ai_chance = { base = 80 }
@@ -607,7 +583,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.62.a
-		default_option = yes
 	}
 }
 
@@ -620,7 +595,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.63.a
-		default_option = yes
 	}
 }
 
@@ -640,7 +614,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.65.a
-		default_option = yes
 		custom_effect_tooltip = SHL_armistice_tt
 		hidden_effect = { SHL_glp_war_armistice = yes }
 	}
@@ -655,7 +628,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.66.a
-		default_option = yes
 	}
 }
 
@@ -668,7 +640,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.67.a
-		default_option = yes
 	}
 }
 
@@ -687,10 +658,16 @@ country_event = {
 		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
 	}
 	option = {
+		name = ADISCORD_SHL.70.b
+		custom_effect_tooltip = SHL_mazar_refuse_tt
+		hidden_effect = { SHL_mazar_refuse = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
 		name = ADISCORD_SHL.70.a
 		trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
-			has_political_power = 30
+			NOT = { has_political_power < 30 }
 		}
 		custom_effect_tooltip = SHL_mazar_pay_first_tt
 		hidden_effect = { SHL_mazar_pay_first = yes }
@@ -701,13 +678,6 @@ country_event = {
 				num_divisions > 7
 			}
 		}
-	}
-	option = {
-		name = ADISCORD_SHL.70.b
-		default_option = yes
-		custom_effect_tooltip = SHL_mazar_refuse_tt
-		hidden_effect = { SHL_mazar_refuse = yes }
-		ai_chance = { base = 30 }
 	}
 }
 
@@ -720,7 +690,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.71.a
-		default_option = yes
 	}
 }
 
@@ -740,7 +709,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.72.a
-		default_option = yes
 		custom_effect_tooltip = SHL_armistice_tt
 		hidden_effect = { SHL_mzr_war_armistice = yes }
 	}
@@ -755,7 +723,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.73.a
-		default_option = yes
 	}
 	option = {
 		name = ADISCORD_SHL.73.b
@@ -788,7 +755,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.74.a
-		default_option = yes
 	}
 }
 
@@ -803,6 +769,12 @@ country_event = {
 		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
 	}
 	option = {
+		name = ADISCORD_SHL.75.b
+		custom_effect_tooltip = SHL_mazar_refuse_tt
+		hidden_effect = { SHL_mazar_refuse = yes }
+		ai_chance = { base = 30 }
+	}
+	option = {
 		name = ADISCORD_SHL.75.a
 		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals } }
 		custom_effect_tooltip = SHL_mazar_pay_final_tt
@@ -814,13 +786,6 @@ country_event = {
 				num_divisions > 7
 			}
 		}
-	}
-	option = {
-		name = ADISCORD_SHL.75.b
-		default_option = yes
-		custom_effect_tooltip = SHL_mazar_refuse_tt
-		hidden_effect = { SHL_mazar_refuse = yes }
-		ai_chance = { base = 30 }
 	}
 }
 
@@ -838,7 +803,6 @@ country_event = {
 	trigger = { tag = KYZ }
 	option = {
 		name = ADISCORD_SHL.90.a
-		default_option = yes
 		custom_effect_tooltip = SHL_partner_joins_tt
 		if = {
 			limit = {
@@ -871,7 +835,6 @@ country_event = {
 	trigger = { tag = GLP }
 	option = {
 		name = ADISCORD_SHL.91.a
-		default_option = yes
 		custom_effect_tooltip = SHL_partner_joins_tt
 		if = {
 			limit = {
@@ -904,7 +867,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.92.a
-		default_option = yes
 	}
 }
 
@@ -917,7 +879,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.93.a
-		default_option = yes
 	}
 }
 
@@ -942,7 +903,6 @@ country_event = {
 	trigger = { SHL_country_operable = yes }
 	option = {
 		name = ADISCORD_SHL.100.a
-		default_option = yes
 	}
 }
 
@@ -959,7 +919,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.101.a
-		default_option = yes
 		trigger = { has_variable = SHL_obligation_overdue }
 		custom_effect_tooltip = SHL_close_obligation_tt
 		hidden_effect = {
@@ -1005,7 +964,6 @@ country_event = {
 	}
 	option = {
 		name = ADISCORD_SHL.110.a
-		default_option = yes
 		custom_effect_tooltip = SHL_mazar_warning_tt
 	}
 }
@@ -1019,7 +977,6 @@ country_event = {
 	trigger = { tag = MZR }
 	option = {
 		name = ADISCORD_SHL.111.a
-		default_option = yes
 	}
 }
 
@@ -1031,15 +988,7 @@ country_event = {
 	is_triggered_only = yes
 	trigger = { tag = MZR }
 	option = {
-		name = ADISCORD_SHL.112.a
-		trigger = { SHL = { SHL_can_offer_cistern_charter = yes } }
-		custom_effect_tooltip = SHL_cistern_accept_tt
-		hidden_effect = { SHL_accept_cistern_charter = yes }
-		ai_chance = { factor = 90 }
-	}
-	option = {
 		name = ADISCORD_SHL.112.b
-		default_option = yes
 		hidden_effect = {
 			SHL = {
 				clr_country_flag = SHL_cistern_charter_pending
@@ -1047,6 +996,13 @@ country_event = {
 			}
 		}
 		ai_chance = { factor = 10 }
+	}
+	option = {
+		name = ADISCORD_SHL.112.a
+		trigger = { SHL = { SHL_can_offer_cistern_charter = yes } }
+		custom_effect_tooltip = SHL_cistern_accept_tt
+		hidden_effect = { SHL_accept_cistern_charter = yes }
+		ai_chance = { factor = 90 }
 	}
 }
 
@@ -1059,7 +1015,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.113.a
-		default_option = yes
 	}
 }
 
@@ -1072,7 +1027,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.114.a
-		default_option = yes
 	}
 }
 
@@ -1085,7 +1039,6 @@ country_event = {
 	trigger = { tag = SHL }
 	option = {
 		name = ADISCORD_SHL.115.a
-		default_option = yes
 	}
 }
 
@@ -1096,6 +1049,9 @@ country_event = {
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = { SHL_country_operable = yes }
+	option = {
+		name = ADISCORD_SHL.120.c
+	}
 	option = {
 		name = ADISCORD_SHL.120.a
 		trigger = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
@@ -1111,10 +1067,6 @@ country_event = {
 		trigger = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		add_political_power = 20
 	}
-	option = {
-		name = ADISCORD_SHL.120.c
-		default_option = yes
-	}
 }
 
 country_event = {
@@ -1128,6 +1080,9 @@ country_event = {
 		has_idea = SHL_unregistered_quarters
 	}
 	option = {
+		name = ADISCORD_SHL.121.b
+	}
+	option = {
 		name = ADISCORD_SHL.121.a
 		trigger = {
 			has_idea = SHL_unregistered_quarters
@@ -1135,10 +1090,6 @@ country_event = {
 		}
 		custom_effect_tooltip = SHL_recognise_registers_tt
 		hidden_effect = { SHL_recognise_quarter_registers = yes }
-	}
-	option = {
-		name = ADISCORD_SHL.121.b
-		default_option = yes
 	}
 }
 
@@ -1151,7 +1102,6 @@ country_event = {
 	trigger = { SHL_country_operable = yes }
 	option = {
 		name = ADISCORD_SHL.122.a
-		default_option = yes
 	}
 }
 
@@ -1164,6 +1114,5 @@ country_event = {
 	trigger = { SHL_country_operable = yes }
 	option = {
 		name = ADISCORD_SHL.123.a
-		default_option = yes
 	}
 }

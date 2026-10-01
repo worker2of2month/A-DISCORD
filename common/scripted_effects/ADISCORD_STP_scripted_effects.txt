@@ -9249,10 +9249,6 @@ STP_pw_party_sync_revolution_subject = {
 			set_cosmetic_tag = NOD_STP_revolution
 			if = {
 				limit = { NOT = { has_country_leader = { character = NOD_Edgar_Renner } } }
-				if = {
-					limit = { NOT = { has_character = NOD_Edgar_Renner } }
-					recruit_character = NOD_Edgar_Renner
-				}
 				set_politics = {
 					ruling_party = hedonism
 					elections_allowed = no

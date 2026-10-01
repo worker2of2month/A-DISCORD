@@ -203,67 +203,87 @@ DEDICATED_SEA_PROVINCES = {
             16030,
         }
     ),
-    # Strongest Current corridor: every navigable sea province whose unit-stack
-    # position lies between the author-drawn edges x = 2466.9 - 0.0221 * z
-    # (west) and x = 2806.9 + 0.0827 * z (east). Each zone is the part of the
-    # corridor cut from one macro region; the Southern Arm also takes the
-    # enclosed Southern Inner Sea inlets 13156 13415 13608 13988 14328 14451
-    # 14815 14960 14974 15791 15996. Listed explicitly so later province edits
-    # cannot silently move the barrier.
+    # Strongest Current: every navigable sea province whose unit-stack position
+    # lies within 80 map px of the current line the author drew on 2026-10-01,
+    # plus every province that line passes through and the pockets of sea the
+    # zones would otherwise cut off from their macro region. The line is a trunk from
+    # the north pole to the southern continent that forks into a southern and
+    # a south-eastern arm (STRONGEST_CURRENT_LINE below).
+    # Each zone is the part cut from one macro region. Listed explicitly so
+    # later province edits cannot silently move the barrier.
     # Rapids, from Central Seas (32).
     233: frozenset(
         {
-            13114, 13146, 13214, 13242, 13249, 13301, 13312, 13316, 13320, 13345, 13350, 13541,
-            13586, 13615, 13631, 13762, 13831, 13863, 13963, 14067, 14174, 14175, 14187, 14240,
-            14262, 14354, 14372, 14438, 14458, 14504, 14547, 14553, 14595, 14597, 14600, 14639,
-            14820, 14906, 15070, 15120, 15121, 15224, 15253, 15256, 15265, 15294, 15317, 15335,
-            15358, 15362, 15367, 15517, 15522, 15551, 15569, 15683, 15729, 15768, 15779, 15784,
-            15787, 15896, 15970, 16207, 16214, 16227,
+            13114, 13214, 13242, 13301, 13316, 13345, 13541, 13615, 13762, 13831, 13899, 14067,
+            14173, 14174, 14175, 14187, 14240, 14354, 14438, 14547, 14595, 14597, 14639, 14906,
+            15070, 15121, 15224, 15265, 15317, 15335, 15358, 15367, 15569, 15729, 15768, 15779,
+            15784, 15896, 15970, 16207, 16214, 16227,
         }
     ),
     # Ice Gate, from the Northern Polar Ocean (26).
     234: frozenset(
         {
-            13070, 13076, 13090, 13208, 13215, 13255, 13271, 13293, 13304, 13329, 13356, 13395,
-            13403, 13408, 13446, 13499, 13514, 13605, 13613, 13655, 13670, 13722, 13724, 13869,
-            13875, 13876, 13902, 13906, 13938, 13989, 14106, 14164, 14189, 14216, 14233, 14251,
-            14263, 14286, 14331, 14423, 14497, 14529, 14562, 14652, 14700, 14708, 14726, 14756,
-            14986, 15008, 15110, 15178, 15182, 15301, 15359, 15364, 15411, 15487, 15660, 15662,
-            15807, 15825, 15844, 15890, 15893, 15911, 15917, 15959, 16020, 16150, 16198,
+            13070, 13076, 13304, 13395, 13403, 13446, 13499, 13605, 13875, 13876, 13938, 13989,
+            14164, 14189, 14263, 14286, 14331, 14497, 14562, 14708, 15110, 15301, 15487, 15890,
+            15893, 15911, 15917, 16020,
         }
     ),
     # Northern Arm, from the Northern Inner Sea (29).
     235: frozenset(
         {
-            13206, 13210, 13233, 13275, 13288, 13444, 13472, 13487, 13583, 13584, 13663, 13799,
-            13903, 13942, 14024, 14062, 14098, 14115, 14193, 14230, 14252, 14434, 14446, 14447,
-            14607, 14613, 14711, 14764, 14789, 14811, 14823, 14862, 14880, 14896, 14940, 14965,
-            14969, 15018, 15086, 15088, 15166, 15170, 15242, 15252, 15254, 15281, 15322, 15351,
-            15396, 15453, 15502, 15623, 15689, 15695, 15758, 15871, 15910, 15913, 15930, 15941,
-            15950, 16011, 16024, 16036, 16107, 16128, 16133, 16152,
+            13472, 13583, 13663, 13903, 14098, 14230, 14252, 14764, 14880, 14896, 14940, 14965,
+            15018, 15088, 15170, 15242, 15252, 15254, 15322, 15396, 15502, 15623, 15695, 15910,
+            15913, 15930, 15950, 16011, 16107,
         }
     ),
-    # Southern Arm, from the Southern Inner Sea (35).
+    # Southern Arm, from the Southern Inner Sea (35), with the inlets it encloses.
     236: frozenset(
         {
-            13069, 13133, 13156, 13174, 13199, 13303, 13401, 13414, 13415, 13456, 13474, 13490,
-            13494, 13608, 13886, 13973, 13988, 14182, 14328, 14387, 14404, 14451, 14475, 14486,
-            14517, 14641, 14653, 14668, 14675, 14686, 14748, 14762, 14815, 14960, 14974, 15001,
-            15139, 15260, 15261, 15293, 15315, 15345, 15352, 15389, 15446, 15501, 15527, 15626,
-            15778, 15791, 15936, 15995, 15996, 16026, 16045, 16057, 16203, 16205,
+            13069, 13133, 13156, 13174, 13199, 13203, 13303, 13355, 13401, 13414, 13415, 13456,
+            13474, 13490, 13494, 13608, 13886, 13973, 13988, 14182, 14328, 14387, 14404, 14451,
+            14475, 14486, 14517, 14641, 14653, 14668, 14675, 14686, 14725, 14748, 14762, 14815,
+            14960, 14974, 15001, 15139, 15260, 15261, 15293, 15315, 15345, 15352, 15389, 15446,
+            15501, 15527, 15626, 15778, 15791, 15936, 15995, 15996, 16026, 16045, 16057, 16203,
+            16205,
         }
     ),
-    # Fog Gate, from the Southern Ocean (38).
+    # Fog Gate, from the Southern Ocean (38): both southern arms and the bay they enclose.
     237: frozenset(
         {
-            13102, 13310, 13358, 13371, 13404, 13432, 13587, 13807, 13836, 13905, 14308, 14358,
-            14383, 14398, 14457, 14548, 14563, 14572, 14605, 14890, 15012, 15158, 15225, 15250,
-            15357, 15375, 15394, 15422, 15480, 15482, 15598, 15606, 15620, 15775, 15776, 15794,
-            15866, 15874, 15928, 15994, 16004, 16060, 16166, 16190, 16210,
+            13096, 13102, 13128, 13145, 13151, 13244, 13273, 13310, 13358, 13432, 13529, 13649,
+            13807, 13820, 13844, 13858, 13861, 13905, 14033, 14148, 14160, 14214, 14293, 14304,
+            14358, 14383, 14393, 14457, 14549, 14563, 14572, 14605, 14663, 14717, 14803, 14889,
+            14890, 14908, 14912, 14922, 15012, 15074, 15142, 15158, 15250, 15357, 15375, 15422,
+            15425, 15445, 15467, 15471, 15480, 15593, 15598, 15606, 15620, 15644, 15653, 15656,
+            15747, 15775, 15776, 15794, 15815, 15928, 15961, 15994, 16004, 16060, 16064, 16166,
+            16190, 16210, 16211,
         }
     ),
 }
 ALL_SEA_REGIONS = (*SEA_REGIONS, *DEDICATED_SEA_REGIONS)
+# Reference only: the Strongest Current line drawn by the author on 2026-10-01,
+# in map pixels with y counted from the top. DEDICATED_SEA_PROVINCES[233..237]
+# and the painted current in map/terrain/colormap_water_*.dds follow it.
+MAP_HEIGHT = 2048
+STRONGEST_CURRENT_LINE = {
+    "trunk": (
+        (2823, -89), (2823, 11), (2823, 75), (2823, 140), (2826, 204), (2828, 268),
+        (2831, 332), (2832, 396), (2832, 460), (2832, 524), (2832, 588), (2827, 652),
+        (2794, 703), (2749, 747), (2698, 782), (2641, 802), (2583, 830), (2538, 880),
+        (2516, 937), (2507, 1000), (2557, 1041), (2621, 1058), (2678, 1092), (2711, 1143),
+        (2738, 1200), (2782, 1248), (2824, 1292), (2841, 1355), (2840, 1418), (2817, 1475),
+        (2770, 1512), (2715, 1545), (2679, 1595), (2657, 1652),
+    ),
+    "southern_arm": (
+        (2657, 1652), (2654, 1715), (2653, 1778), (2650, 1840), (2651, 1903), (2677, 1960),
+        (2709, 2014), (2794, 2144),
+    ),
+    "south_eastern_arm": (
+        (2657, 1652), (2669, 1716), (2704, 1770), (2739, 1823), (2795, 1845), (2859, 1852),
+        (2922, 1851), (2985, 1848), (3048, 1854), (3098, 1888), (3149, 1926), (3199, 1960),
+        (3247, 1998), (3364, 2101),
+    ),
+}
 # Strongest Current zones are under 100 provinces but their storm weather is
 # the point of the barrier, so their weather effects are drawn at "big" size.
 BIG_WEATHER_REGIONS = frozenset({233, 234, 235, 236, 237})
@@ -1397,38 +1417,35 @@ def phenomenon(
             if month in (4, 5, 6, 7, 8)
             else (0.50, 0.40, 0.25, 0.0, 0.0, 0.0, 0.0)
         )
-    # Strongest Current zones: thunderstorms (rain_heavy) nearly all year and
-    # almost no clear weather; cold zones mix them with blizzards.
+    # Strongest Current zones: thunderstorms (rain_heavy) nearly all year,
+    # almost no clear weather and only a trace of plain rain, so the storm is
+    # what players see. Cold zones mix the storms with blizzards.
     if climate == "current_ice":
         if winter:
-            return (0.10, 0.05, 0.40, 0.60, 0.60, 0.0, 0.0)
+            return (0.08, 0.02, 0.60, 0.45, 0.60, 0.0, 0.0)
         if shoulder:
-            return (0.10, 0.15, 0.60, 0.45, 0.45, 0.0, 0.0)
-        return (0.10, 0.20, 0.85, 0.25, 0.20, 0.0, 0.0)
+            return (0.08, 0.03, 0.85, 0.30, 0.40, 0.0, 0.0)
+        return (0.06, 0.03, 1.00, 0.15, 0.15, 0.0, 0.0)
     if climate == "current_north":
         if winter:
-            return (0.08, 0.30, 0.90, 0.35, 0.20, 0.0, 0.0)
-        return (0.08, 0.40, 0.95, 0.05, 0.02, 0.0, 0.0)
+            return (0.05, 0.03, 1.00, 0.30, 0.25, 0.0, 0.0)
+        return (0.04, 0.03, 1.00, 0.04, 0.02, 0.0, 0.0)
     if climate == "current_rapids":
         return (
-            0.05,
-            0.40,
+            0.03,
+            0.03,
             1.00,
-            0.10 if winter else 0.0,
+            0.08 if winter else 0.0,
             0.05 if winter else 0.0,
             0.0,
             0.0,
         )
     if climate == "current_south":
-        return (
-            (0.05, 0.35, 1.00, 0.0, 0.0, 0.0, 0.0)
-            if month in (4, 5, 6, 7, 8)
-            else (0.08, 0.40, 0.95, 0.0, 0.0, 0.0, 0.0)
-        )
+        return (0.03, 0.03, 1.00, 0.0, 0.0, 0.0, 0.0)
     if climate == "current_fog":
-        # Clausewitz has no fog state: steady drizzle stands in for it, broken
-        # by frequent thunderstorms.
-        return (0.08, 0.80, 0.70, 0.0, 0.0, 0.0, 0.0)
+        # Clausewitz has no fog state: a little drizzle stands in for it under
+        # the storms.
+        return (0.05, 0.15, 1.00, 0.0, 0.0, 0.0, 0.0)
     if climate == "polar":
         if winter:
             return (0.32, 0.05, 0.01, 0.55, 0.30, 0.35, 0.0)
@@ -2229,6 +2246,49 @@ def representative_positions(
     return [ordered[len(ordered) // 3], ordered[(2 * len(ordered)) // 3]]
 
 
+def distance_to_current_line(x: float, z: float) -> float:
+    """Map-pixel distance from a unit-stack position to STRONGEST_CURRENT_LINE."""
+    y = MAP_HEIGHT - z
+    best = math.inf
+    for points in STRONGEST_CURRENT_LINE.values():
+        for (ax, ay), (bx, by) in zip(points, points[1:]):
+            dx, dy = bx - ax, by - ay
+            length = dx * dx + dy * dy
+            t = 0.0 if length == 0 else max(0.0, min(1.0, ((x - ax) * dx + (y - ay) * dy) / length))
+            best = min(best, math.hypot(x - (ax + t * dx), y - (ay + t * dy)))
+    return best
+
+
+def current_weather_positions(
+    provinces: set[int], positions: dict[int, tuple[float, float, float]]
+) -> list[tuple[float, float, float]]:
+    """Spread storm markers along a Strongest Current zone.
+
+    One marker per eight provinces, two to six per zone, taken at even steps
+    along the zone's longer axis so the storm covers the whole current.
+    Only provinces within 80 px of the drawn line are used when there are any.
+    """
+    available = sorted(
+        (positions[province_id] for province_id in provinces if province_id in positions),
+        key=lambda point: (point[2], point[0]),
+    )
+    # Skip the enclosed pockets: storms belong over the current itself.
+    near_line = [
+        point for point in available if distance_to_current_line(point[0], point[2]) <= 80.0
+    ]
+    available = near_line or available
+    if not available:
+        raise ValueError("Strongest Current zone has no unit-stack positions")
+    x_span = max(point[0] for point in available) - min(point[0] for point in available)
+    z_span = max(point[2] for point in available) - min(point[2] for point in available)
+    axis = 0 if x_span > z_span else 2
+    ordered = sorted(available, key=lambda point: (point[axis], point[2 - axis]))
+    count = max(2, min(6, len(ordered) // 8))
+    return [
+        ordered[(2 * step + 1) * len(ordered) // (2 * count)] for step in range(count)
+    ]
+
+
 def weather_size(region_id: int, provinces: set[int]) -> str:
     if region_id in BIG_WEATHER_REGIONS or len(provinces) >= 100:
         return "big"
@@ -2415,9 +2475,15 @@ def build() -> None:
     weather_lines = []
     for region_id in sorted(region_provinces):
         size = weather_size(region_id, region_provinces[region_id])
-        for x, height, z in representative_positions(
-            region_provinces[region_id], province_positions, adjacency
-        ):
+        if region_id in BIG_WEATHER_REGIONS:
+            markers = current_weather_positions(
+                region_provinces[region_id], province_positions
+            )
+        else:
+            markers = representative_positions(
+                region_provinces[region_id], province_positions, adjacency
+            )
+        for x, height, z in markers:
             weather_lines.append(f"{region_id};{x:.2f};{height:.2f};{z:.2f};{size}")
     WEATHER_POSITIONS.write_text(
         "\n".join(weather_lines) + "\n", encoding="utf-8", newline="\n"

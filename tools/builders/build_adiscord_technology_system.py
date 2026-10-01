@@ -8417,6 +8417,8 @@ def render_technology(branch: Branch, index: int) -> str:
     year = branch.years[index]
     graph = BRANCH_GRAPHS[branch.key]
     lines = [f"\t{tech.id} = {{"]
+    if branch.key in {"production", "computing"}:
+        lines.append("\t\tspecial_project_specialization = { specialization_land }")
     allow = ALLOW.get(tech.id)
     if allow:
         lines.append("\t\tallow = {")
@@ -8816,7 +8818,7 @@ def write_gfx() -> None:
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
                     f"\t\ttextureFile = \"{texture_file}\"\n"
-                    + ("\t\tnoOfFrames = 2\n\t\tscale = 0.9\n" if branch.key == "power_shields" else "")
+                    + ("\t\tnoOfFrames = 2\n" if branch.key == "power_shields" else "")
                     + "\t}\n"
                 )
     content = (

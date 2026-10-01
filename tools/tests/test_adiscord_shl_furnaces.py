@@ -93,6 +93,8 @@ class ScriptMachine:
         except (ValueError, TypeError):
             if "." in value:
                 owner, name = value.split(".", 1)
+                if owner.isdigit():
+                    raise AssertionError("Numeric state variable prefixes are not native syntax")
                 if owner == "FROM":
                     owner = self.target_scope
                 elif owner == "PREV":
@@ -188,7 +190,7 @@ class ScriptMachine:
             if e.key == "has_capitulated":
                 return self.capitulated == (e.value == "yes")
             if e.key == "has_political_power":
-                return self.values["political_power"] >= float(e.value)
+                raise AssertionError("Political power requires a native < or > comparison")
             if e.key == "has_idea":
                 return e.value in self.ideas
             if e.key == "has_equipment":
@@ -222,6 +224,7 @@ class ScriptMachine:
                 comparison = [item.value for item in items[index:index + 3]]
                 native = {
                     "has_stability": self.stability,
+                    "has_political_power": self.values["political_power"],
                     "num_divisions": self.divisions,
                     "has_manpower": self.manpower,
                     "infrastructure": self.infrastructure,
@@ -447,6 +450,52 @@ class FurnaceAccountingTests(unittest.TestCase):
         self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 1000)
         self.assertEqual(m.values["political_power"], 200)
         self.assertEqual(m.variables["287"].get("SHL_operation", 0), 0)
+
+    def test_training_requires_the_full_political_power_price(self):
+        for power, allowed in ((24.99, False), (25.0, True), (25.01, True)):
+            with self.subTest(power=power):
+                self.setUp()
+                m = self.machine
+                m.values["political_power"] = power
+                decision = decision_definition("SHL_training_furnace")
+                self.assertEqual(m.matches(block(decision, "custom_cost_trigger"), "SHL"), allowed)
+                m.run("SHL_begin_training", target="287")
+                self.assertAlmostEqual(m.values["political_power"], power - (25 if allowed else 0))
+                self.assertEqual(m.variables["SHL"]["ADISCORD_economy_treasury"], 900 if allowed else 1000)
+                self.assertEqual(m.variables["287"].get("SHL_operation", 0), 3 if allowed else 0)
+
+    def test_furnace_overview_reads_each_states_values_without_crossing_scopes(self):
+        m = self.machine
+        for index, state in enumerate(range(287, 296), 1):
+            m.variables[str(state)].update({
+                "SHL_furnace_wear": index * 3,
+                "SHL_furnace_stock": index + 2,
+                "SHL_furnace_owner": index % 2,
+                "SHL_furnace_training": index % 2,
+            })
+        m.run("SHL_refresh_furnaces")
+        for index, state in enumerate(range(287, 296), 1):
+            with self.subTest(state=state):
+                for field in ("wear", "stock", "owner"):
+                    self.assertEqual(m.variables["SHL"][f"SHL_{field}_{index}"],
+                                     m.variables[str(state)][f"SHL_furnace_{field}"])
+                m.variables["SHL"]["SHL_selected_furnace"] = index
+                m.run("SHL_refresh_selected_furnace")
+                self.assertEqual(m.variables["SHL"]["SHL_selected_training"], index % 2)
+
+    def test_event_timeout_choices_are_first_and_use_native_option_fields(self):
+        source = (ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8")
+        self.assertNotIn("default_option", source)
+        defaults = {20: "b", 21: "b", 30: "b", 31: "b", 40: "b", 70: "b",
+                    75: "b", 112: "b", 120: "c", 121: "b"}
+        for entry in parse_clausewitz(source):
+            if entry.key != "country_event":
+                continue
+            identifier = scalar(entry.value, "id")
+            number = int(identifier.rsplit(".", 1)[1])
+            if number in defaults:
+                options = [e.value for e in entry.value if e.key == "option"]
+                self.assertEqual(scalar(options[0], "name"), f"{identifier}.{defaults[number]}")
 
     def test_lost_region_refunds_without_delivering(self):
         m = self.machine
@@ -1783,7 +1832,7 @@ class SouthernCampaignTests(unittest.TestCase):
         self.m.run("SHL_request_cistern_charter")
         events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
         event = next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == "ADISCORD_SHL.112")
-        default = next(e.value for e in event if e.key == "option" and scalar(e.value, "default_option") == "yes")
+        default = next(e.value for e in event if e.key == "option")
         self.m.execute(block(default, "hidden_effect"), "MZR")
         self.assertEqual(self.m.ownership["269"], "SHL")
         self.assertNotIn("SHL_cistern_charter_pending", self.m.flags["SHL"])
@@ -1903,8 +1952,8 @@ class ShahrabadCabinetTests(unittest.TestCase):
         self.assertEqual(c["ADISCORD_economy_treasury"], 500)
         self.assertNotIn("SHL_unregistered_quarters", self.m.ideas)
         options = [e.value for e in self.event("ADISCORD_SHL.121") if e.key == "option"]
-        self.assertFalse(self.m.matches(block(options[0], "trigger"), "SHL"))
-        default = next(option for option in options if scalar(option, "default_option") == "yes")
+        self.assertFalse(self.m.matches(block(options[1], "trigger"), "SHL"))
+        default = options[0]
         self.assertTrue(self.m.matches(block(default, "trigger"), "SHL"))
 
     def test_initial_story_clock_does_not_need_focuses_and_open_cabinet_has_safe_exit(self):
@@ -1918,10 +1967,10 @@ class ShahrabadCabinetTests(unittest.TestCase):
         self.assertEqual(m.event_days["ADISCORD_SHL.121"], 70)
         self.country()["SHL_political_course"] = 5
         options = [entry.value for entry in self.event("ADISCORD_SHL.120") if entry.key == "option"]
-        for option in options[:2]:
+        for option in options[1:]:
             self.assertFalse(self.m.matches(block(option, "trigger"), "SHL"))
-        self.assertEqual(scalar(options[2], "default_option"), "yes")
-        self.assertTrue(self.m.matches(block(options[2], "trigger"), "SHL"))
+        self.assertEqual(scalar(options[0], "name"), "ADISCORD_SHL.120.c")
+        self.assertTrue(self.m.matches(block(options[0], "trigger"), "SHL"))
 
     def test_first_guard_story_requires_delivery_and_remains_unique_across_orders(self):
         for _ in range(2):

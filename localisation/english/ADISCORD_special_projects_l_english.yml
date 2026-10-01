@@ -1,0 +1,11 @@
+﻿l_english:
+ ADISCORD_sp_combat_robots:0 "Autonomous Combat Robots"
+ ADISCORD_sp_combat_robots_desc:0 "An armoured walking machine with autonomous fire control. Unlocks a separate combat robot production line and robotic battalions; ordinary infantry weapons cannot replace the robots."
+ ADISCORD_combat_robots:0 "Combat Robots"
+ ADISCORD_combat_robots_desc:0 "A battalion of 100 combat robots and 250 operators, technicians and logistics personnel. Requires separately manufactured robots and 20 support equipment kits."
+ ADISCORD_combat_robot_equipment:0 "Combat Robots"
+ ADISCORD_combat_robot_equipment_short:0 "Combat Robots"
+ ADISCORD_combat_robot_equipment_desc:0 "Autonomous armoured machines with integrated weapons and control electronics. Manufactured separately for robotic battalions using rare components and alloys."
+ ADISCORD_combat_robot_equipment_1:0 "CR-61 Guardian"
+ ADISCORD_combat_robot_equipment_1_short:0 "CR-61"
+ ADISCORD_combat_robot_equipment_1_desc:0 "A production combat robot with an armoured chassis, twin automatic weapons and a protected control core. Human personnel provide maintenance, targeting and logistics."

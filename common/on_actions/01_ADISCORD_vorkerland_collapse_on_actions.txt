@@ -69,12 +69,42 @@ on_actions = {
 	}
 	on_monthly_RUS = {
 		effect = {
+			RUS_crisis_check_start = yes
 			ADISCORD_vorkerland_check_khan_border_war = yes
 			ADISCORD_vorkerland_check_rus_dirty_campaign = yes
 		}
 	}
 	on_war_relation_added = {
 		effect = {
+			if = {
+				limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } } }
+				if = {
+					limit = {
+						ROOT = { tag = RUS }
+						FROM = {
+							OR = {
+								tag = event_target:RUS_crisis_hegemon
+								is_in_faction_with = event_target:RUS_crisis_hegemon
+								is_subject_of = event_target:RUS_crisis_hegemon
+							}
+						}
+					}
+					FROM = { RUS_crisis_register_defender = yes }
+				}
+				else_if = {
+					limit = {
+						FROM = { tag = RUS }
+						ROOT = {
+							OR = {
+								tag = event_target:RUS_crisis_hegemon
+								is_in_faction_with = event_target:RUS_crisis_hegemon
+								is_subject_of = event_target:RUS_crisis_hegemon
+							}
+						}
+					}
+					ROOT = { RUS_crisis_register_defender = yes }
+				}
+			}
 			# New fronts need a scripted ally join even while the claimant is already at war.
 			ROOT = {
 				if = {

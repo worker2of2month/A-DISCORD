@@ -1809,6 +1809,82 @@ ADISCORD_vorkerland_has_live_solarino_war = {
 }
 
 # --- rus_last_empire_triggers ---
+
+# COUNTRY. Victory and current sovereignty are separate requirements.
+RUS_crisis_is_hegemon = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	OR = {
+		AND = {
+			tag = VAL
+			VAL_campaign_objectives_met = yes
+		}
+		AND = {
+			tag = STS
+			has_country_flag = STP_heg_kefreyt_final_won
+			STP_heg_northern_final_resolved = yes
+		}
+	}
+}
+
+RUS_crisis_can_begin = {
+	tag = RUS
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+	NOT = { has_variable = RUS_crisis_phase }
+}
+
+# The victory gate is used only when choosing a target. Occupation during
+# the ensuing war must not invalidate the campaign against that target.
+RUS_crisis_target_valid = {
+	event_target:RUS_crisis_hegemon = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { is_in_faction_with = RUS }
+	}
+	RUS = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
+}
+
+RUS_crisis_all_defenders_defeated = {
+	check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+	NOT = {
+		any_country = {
+			has_country_flag = RUS_crisis_defender
+			has_capitulated = no
+			NOT = { has_country_flag = RUS_crisis_capitulation_current }
+			NOT = { is_subject_of = RUS }
+		}
+	}
+}
+
+# COUNTRY FROM of the victor's decision. Only newly restored fragments carry
+# this right; an unrelated surviving republic cannot be subordinated here.
+RUS_crisis_fragment_available = {
+	exists = yes
+	has_country_flag = RUS_crisis_fragment
+	is_subject = no
+	is_in_faction = no
+	has_capitulated = no
+	has_war = no
+}
+
+# Native diplomacy callbacks keep ROOT and FROM; ignore other countries' wars.
+RUS_crisis_callback_relevant = {
+	OR = {
+		ROOT = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
+		FROM = { OR = { tag = RUS has_country_flag = RUS_crisis_defender } }
+	}
+}
+
 ADISCORD_vorkerland_rus_dirty_campaign_idle = {
 	tag = RUS
 	is_subject = no

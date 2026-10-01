@@ -10024,6 +10024,371 @@ ADISCORD_vorkerland_refresh_war_economy_dynamic_state = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+# --- rus_crisis_effects ---
+# RUS owns the phase: 1 warning, 2 war, 3 imperial victory, 4 dissolution,
+# 5 closed by an outside outcome. The target and roster survive ordinary saves.
+RUS_crisis_check_start = {
+	if = {
+		limit = { RUS_crisis_can_begin = yes }
+		if = {
+			limit = { VAL = { RUS_crisis_is_hegemon = yes } }
+			VAL = { save_global_event_target_as = RUS_crisis_hegemon }
+			RUS_crisis_begin = yes
+		}
+		else_if = {
+			limit = { STS = { RUS_crisis_is_hegemon = yes } }
+			STS = { save_global_event_target_as = RUS_crisis_hegemon }
+			RUS_crisis_begin = yes
+		}
+	}
+}
+
+RUS_crisis_begin = {
+	if = {
+		limit = {
+			RUS_crisis_can_begin = yes
+			RUS_crisis_target_valid = yes
+		}
+		set_variable = { var = RUS_crisis_phase value = 1 }
+		activate_mission = RUS_crisis_invasion_countdown
+		event_target:RUS_crisis_hegemon = {
+			activate_mission = RUS_crisis_defence_countdown
+			country_event = { id = ADISCORD_rus_crisis.1 }
+		}
+		country_event = { id = ADISCORD_rus_crisis.2 }
+	}
+}
+
+# COUNTRY defender. The roster is captured before declaring war because native
+# war callbacks may immediately call allies. Naturally major countries keep it.
+RUS_crisis_register_defender = {
+	if = {
+		limit = { NOT = { has_country_flag = RUS_crisis_defender } }
+		set_country_flag = RUS_crisis_defender
+		add_to_array = { array = global.RUS_crisis_defenders value = THIS }
+		if = {
+			limit = { is_major = no }
+			set_country_flag = RUS_crisis_added_major
+			set_major = yes
+		}
+	}
+}
+
+RUS_crisis_launch = {
+	if = {
+		limit = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		if = {
+			limit = { RUS_crisis_target_valid = yes }
+			set_variable = { var = RUS_crisis_phase value = 2 }
+			clear_array = global.RUS_crisis_defenders
+			event_target:RUS_crisis_hegemon = { RUS_crisis_register_defender = yes }
+			every_country = {
+				limit = {
+					exists = yes
+					has_capitulated = no
+					NOT = { tag = RUS }
+					NOT = { is_subject_of = RUS }
+					OR = {
+						is_in_faction_with = event_target:RUS_crisis_hegemon
+						is_subject_of = event_target:RUS_crisis_hegemon
+					}
+				}
+				RUS_crisis_register_defender = yes
+			}
+			declare_war_on = { target = event_target:RUS_crisis_hegemon type = annex_everything }
+			for_each_scope_loop = {
+				array = global.RUS_crisis_defenders
+				if = {
+					limit = { NOT = { has_war_with = RUS } }
+					add_to_war = {
+						targeted_alliance = event_target:RUS_crisis_hegemon
+						enemy = RUS
+						hostility_reason = asked_to_join
+						single_target_only = yes
+					}
+				}
+			}
+			event_target:RUS_crisis_hegemon = { country_event = { id = ADISCORD_rus_crisis.3 } }
+		}
+		else = { RUS_crisis_close = yes }
+	}
+}
+
+RUS_crisis_clear_roster = {
+	for_each_scope_loop = {
+		array = global.RUS_crisis_defenders
+		clr_country_flag = RUS_crisis_defender
+		if = {
+			limit = { has_country_flag = RUS_crisis_added_major }
+			set_major = no
+			clr_country_flag = RUS_crisis_added_major
+		}
+	}
+	clear_array = global.RUS_crisis_defenders
+}
+
+RUS_crisis_close = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_crisis_phase value = 0 compare = greater_than }
+			check_variable = { var = RUS_crisis_phase value = 3 compare = less_than }
+		}
+		set_variable = { var = RUS_crisis_phase value = 5 }
+		RUS_crisis_clear_roster = yes
+		event_target:RUS_crisis_hegemon = {
+			if = {
+				limit = { exists = yes }
+				country_event = { id = ADISCORD_rus_crisis.6 }
+			}
+		}
+	}
+}
+
+# Run after peace/annex/puppet callbacks have settled. This delayed check does
+# not recreate a war ended by another settlement.
+RUS_crisis_check_external_end = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+			OR = {
+				exists = no
+				is_subject = yes
+				event_target:RUS_crisis_hegemon = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				any_country = {
+					has_country_flag = RUS_crisis_defender
+					has_capitulated = no
+					NOT = { has_war_with = RUS }
+					NOT = { is_subject_of = RUS }
+				}
+				NOT = {
+					any_country = {
+						has_country_flag = RUS_crisis_defender
+						has_war_with = RUS
+					}
+				}
+			}
+		}
+		RUS_crisis_close = yes
+	}
+}
+
+# Native capitulation checks include the current callback before the engine's
+# has_capitulated update. A liberated member blocks victory again.
+RUS_crisis_resolve_capitulation = {
+	if = {
+		limit = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+		if = {
+			limit = {
+				OR = {
+					has_capitulated = yes
+					has_country_flag = RUS_crisis_capitulation_current
+				}
+			}
+			RUS_crisis_dissolve_empire = yes
+		}
+		else_if = {
+			limit = { RUS_crisis_all_defenders_defeated = yes }
+			RUS_crisis_annex_hegemony = yes
+		}
+	}
+}
+
+RUS_crisis_annex_hegemony = {
+	set_variable = { var = RUS_crisis_phase value = 3 }
+	# Preserve states and countries before white peace removes faction relations.
+	clear_temp_array = RUS_crisis_conquests
+	for_each_scope_loop = {
+		array = global.RUS_crisis_defenders
+		every_owned_state = {
+			add_to_temp_array = { array = RUS_crisis_conquests value = THIS }
+		}
+	}
+	for_each_scope_loop = {
+		array = global.RUS_crisis_defenders
+		if = {
+			limit = { has_war_with = RUS }
+			RUS = { white_peace = PREV }
+		}
+		RUS = { annex_country = { target = PREV transfer_troops = no } }
+	}
+	for_each_scope_loop = {
+		array = RUS_crisis_conquests
+		set_state_flag = RUS_crisis_conquered_state
+		set_state_owner_to = RUS
+		set_state_controller_to = RUS
+	}
+	clear_temp_array = RUS_crisis_conquests
+	RUS_crisis_clear_roster = yes
+	ADISCORD_economy_mark_dirty = yes
+	country_event = { id = ADISCORD_rus_crisis.5 }
+}
+
+# STATE from the captured RUS ownership snapshot. Successor cores define the partition;
+# bunker and any unassigned imperial land follow the Starolesye administration.
+RUS_crisis_restore_fragment_state = {
+	if = {
+		limit = { is_core_of = RZA }
+		RZA = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = RZA
+		set_state_controller_to = RZA
+	}
+	else_if = {
+		limit = { is_core_of = MLR }
+		MLR = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = MLR
+		set_state_controller_to = MLR
+	}
+	else_if = {
+		limit = { is_core_of = ERT }
+		ERT = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = ERT
+		set_state_controller_to = ERT
+	}
+	else_if = {
+		limit = { is_core_of = IRT }
+		IRT = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = IRT
+		set_state_controller_to = IRT
+	}
+	else_if = {
+		limit = { is_core_of = SCA }
+		SCA = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = SCA
+		set_state_controller_to = SCA
+	}
+	else = {
+		SLA = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		add_core_of = SLA
+		set_state_owner_to = SLA
+		set_state_controller_to = SLA
+	}
+	remove_core_of = RUS
+	remove_claim_by = RUS
+}
+
+# COUNTRY fragment. Existing independent neighbours do not enter this cleanup.
+RUS_crisis_prepare_restored_fragment = {
+	if = {
+		limit = {
+			exists = yes
+			has_country_flag = RUS_crisis_fragment
+		}
+		if = {
+			limit = { is_subject = yes }
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_crisis_dissolve_empire = {
+	set_variable = { var = RUS_crisis_phase value = 4 }
+	# Only the selected hegemon receives this choice, even if an ally took the capital.
+	event_target:RUS_crisis_hegemon = {
+		set_country_flag = RUS_crisis_settlement_rights
+		country_event = { id = ADISCORD_rus_crisis.4 }
+	}
+	for_each_scope_loop = {
+		array = global.RUS_crisis_defenders
+		if = {
+			limit = { has_war_with = RUS }
+			white_peace = RUS
+		}
+	}
+	every_subject_country = {
+		if = {
+			limit = { OR = { tag = SLA tag = RZA tag = MLR tag = ERT tag = IRT tag = SCA } }
+			set_country_flag = RUS_crisis_fragment
+		}
+		every_enemy_country = {
+			limit = { has_country_flag = RUS_crisis_defender }
+			white_peace = PREV
+		}
+		RUS = {
+			set_autonomy = {
+				target = PREV
+				autonomy_state = autonomy_free
+				end_wars = no
+				end_civil_wars = no
+			}
+		}
+	}
+	retire_character = RUS_Mark_Rustan
+	remove_ideas = RUS_last_empire_spirit
+	remove_ideas = RUS_national_spirit
+	ADISCORD_vorkerland_rus_abort_dirty_campaign = yes
+	# Snapshot owned territory before the last transfer removes the RUS country.
+	clear_temp_array = RUS_crisis_imperial_states
+	every_owned_state = {
+		add_to_temp_array = { array = RUS_crisis_imperial_states value = THIS }
+	}
+	# Consume the defeated army before returning the captured state snapshot.
+	# The temporary occupier gains no land outside that snapshot.
+	event_target:RUS_crisis_hegemon = {
+		annex_country = { target = RUS transfer_troops = no }
+	}
+	for_each_scope_loop = {
+		array = RUS_crisis_imperial_states
+		RUS_crisis_restore_fragment_state = yes
+	}
+	clear_temp_array = RUS_crisis_imperial_states
+
+	SLA = { RUS_crisis_prepare_restored_fragment = yes }
+	RZA = { RUS_crisis_prepare_restored_fragment = yes }
+	MLR = { RUS_crisis_prepare_restored_fragment = yes }
+	ERT = { RUS_crisis_prepare_restored_fragment = yes }
+	IRT = { RUS_crisis_prepare_restored_fragment = yes }
+	SCA = { RUS_crisis_prepare_restored_fragment = yes }
+	RUS_crisis_clear_roster = yes
+}
+
+
 # --- rus_last_empire_effects ---
 ADISCORD_vorkerland_rus_core_dirty_sla = {
 	49 = { add_core_of = RUS add_claim_by = RUS }
@@ -10464,6 +10829,7 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		}
 		ADISCORD_economy_mark_dirty = yes
 		ADISCORD_vorkerland_show_last_empire_superevent = yes
+		RUS_crisis_check_start = yes
 	}
 }
 

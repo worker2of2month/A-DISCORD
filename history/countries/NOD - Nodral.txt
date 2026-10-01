@@ -8,6 +8,7 @@ oob = "NOD"
 ####### Characters
 
 recruit_character = NOD_Tobis_Bentlix
+recruit_character = NOD_Edgar_Renner
 
 ####### Faction
 

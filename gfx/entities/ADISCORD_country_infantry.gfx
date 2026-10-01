@@ -1,6 +1,6 @@
 objectTypes = {
 	pdxmesh = {
-		name = "ADISCORD_assault_infantry_mesh"
+		name = "ADISCORD_combat_robots_mesh"
 		file = "gfx/models/units/ADISCORD_regulars/VAL_crimson_sentinel.mesh"
 		scale = 1.0
 		animation = {

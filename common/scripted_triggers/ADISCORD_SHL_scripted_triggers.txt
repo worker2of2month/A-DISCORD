@@ -407,7 +407,7 @@ SHL_can_house_campaign_aid = {
 		is_owned_by = SHL
 		is_controlled_by = SHL
 	}
-	has_political_power = 25
+	NOT = { has_political_power < 25 }
 }
 
 SHL_can_city_campaign_aid = {

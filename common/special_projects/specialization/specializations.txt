@@ -1,6 +1,5 @@
-# A-Discord keeps special-project projects disabled, but the engine still needs
-# the four canonical specialization records because facilities and generated
-# scientists reference them at runtime.
+# Canonical specializations are also referenced by facilities and scientists.
+# Authored projects use the land specialization.
 
 specialization_nuclear = {
 	blueprint_image = GFX_generic_plane_blueprint_background
