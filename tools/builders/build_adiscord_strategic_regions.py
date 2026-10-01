@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 import re
 from collections import Counter, deque
@@ -1948,6 +1949,14 @@ def _roman(value: int) -> str:
 
 
 def load_generated_outer_regions() -> tuple[Region, ...]:
+    western_manifest = json.loads(
+        (ROOT / "tools/data/adiscord_western_states.json").read_text(encoding="utf-8")
+    )
+    western_regions = [
+        Region(row["id"], row["slug"], row["name"], row["climate"], tuple(row["states"]))
+        for row in western_manifest["strategic_regions"]
+    ]
+    reserved_ids = set(range(69, 90))
     generated_states: dict[int, set[int]] = {}
     climate_by_state: dict[int, str] = {}
     preferred_names: dict[int, str] = {}
@@ -1981,6 +1990,11 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
                     f"{path.name}: remainder state lacks a strategic-name marker"
                 )
             preferred_names[state_id] = preferred_name_match.group(1).strip()
+            if str(state_id) in western_manifest.get("source_partitions", {}):
+                original = western_manifest["source_partitions"][str(state_id)]
+                generated_states[state_id] = set(original["provinces"])
+                climate_by_state[state_id] = original["climate"]
+                preferred_names[state_id] = original["strategic_name"]
 
     if not generated_states:
         return ()
@@ -2012,6 +2026,8 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
     climate_zones: dict[tuple[str, int], set[int]] = {}
     for state_id, climate_key in climate_by_state.items():
         landmass = climate_key.split("_", 1)[0]
+        if landmass == "left":
+            continue
         if landmass not in ("left", "right", "world"):
             raise ValueError(
                 f"state {state_id}: cannot infer landmass from climate key {climate_key}"
@@ -2150,11 +2166,16 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
 
     file_indices: Counter[str] = Counter()
     regions: list[Region] = []
-    for region_id, (
+    next_region_id = 43
+    for (
         (_landmass, cluster, climate_key),
         base_name,
         display_name,
-    ) in enumerate(zip(cluster_rows, base_names, display_names), 43):
+    ) in zip(cluster_rows, base_names, display_names):
+        while next_region_id in reserved_ids:
+            next_region_id += 1
+        region_id = next_region_id
+        next_region_id += 1
         slug, _old_name, climate = OUTER_REGION_SPECS[climate_key]
         file_indices[base_name] += 1
         file_suffix = (
@@ -2171,7 +2192,10 @@ def load_generated_outer_regions() -> tuple[Region, ...]:
                 tuple(sorted(cluster)),
             )
         )
-    return tuple(regions)
+    western_ids = {region.region_id for region in western_regions}
+    regions = [region for region in regions if region.region_id not in western_ids]
+    regions.extend(region for region in western_regions if region.region_id >= 43)
+    return tuple(sorted(regions, key=lambda region: region.region_id))
 
 
 REGIONS = (*BASE_REGIONS, *load_generated_outer_regions())
@@ -2326,7 +2350,12 @@ def validate_manifest(states: dict[int, set[int]]) -> None:
         raise ValueError(f"states without a strategic region: {missing}")
 
 
-def build() -> None:
+def build(*, western_only: bool = False) -> None:
+    western_ids = {3, 4} | {
+        row["id"] for row in json.loads(
+            (ROOT / "tools/data/adiscord_western_states.json").read_text(encoding="utf-8")
+        )["strategic_regions"]
+    }
     states = load_states()
     validate_manifest(states)
     province_types, color_to_province = load_province_definitions()
@@ -2352,6 +2381,8 @@ def build() -> None:
         for region in (*REGIONS, *ALL_SEA_REGIONS)
     }
     for path in REGION_DIR.glob("*.txt"):
+        if western_only and int(path.name.split("-", 1)[0]) not in western_ids:
+            continue
         if path.name in expected_filenames:
             continue
         text = path.read_text(encoding="utf-8-sig", errors="strict")
@@ -2428,6 +2459,8 @@ def build() -> None:
 
     sea_by_id = {region.region_id: region for region in ALL_SEA_REGIONS}
     for region_id, region in sorted(sea_by_id.items()):
+        if western_only:
+            continue
         provinces = region_provinces.get(region_id, set())
         if not provinces:
             raise ValueError(f"sea strategic region {region_id} is empty")
@@ -2447,6 +2480,8 @@ def build() -> None:
         path.write_text(content, encoding="utf-8", newline="\n")
 
     for region in REGIONS:
+        if western_only and region.region_id not in western_ids:
+            continue
         provinces = region_provinces[region.region_id]
         content = (
             f"{GENERATED_MARKER}\n"
@@ -2468,12 +2503,31 @@ def build() -> None:
         localisation_lines.append(
             f' STRATEGICREGION_{region.region_id}: "{region.russian_name}"'
         )
-    LOCALISATION.write_text(
-        "\n".join(localisation_lines) + "\n", encoding="utf-8", newline="\n"
-    )
+    if western_only:
+        source = LOCALISATION.read_text(encoding="utf-8-sig")
+        for region in REGIONS:
+            if region.region_id in western_ids:
+                source = re.sub(
+                    rf'(?m)^(\s*STRATEGICREGION_{region.region_id}\s*:\s*)"[^"\r\n]*"',
+                    lambda match: match[1] + '"' + region.russian_name + '"',
+                    source,
+                )
+        LOCALISATION.write_text(source, encoding="utf-8-sig", newline="\n")
+    else:
+        LOCALISATION.write_text(
+            "\n".join(localisation_lines) + "\n", encoding="utf-8", newline="\n"
+        )
 
     weather_lines = []
+    retained_weather = {}
+    if western_only:
+        for line in WEATHER_POSITIONS.read_text(encoding="utf-8").splitlines():
+            region_id = int(line.split(";", 1)[0])
+            retained_weather.setdefault(region_id, []).append(line)
     for region_id in sorted(region_provinces):
+        if western_only and region_id not in western_ids:
+            weather_lines.extend(retained_weather[region_id])
+            continue
         size = weather_size(region_id, region_provinces[region_id])
         if region_id in BIG_WEATHER_REGIONS:
             markers = current_weather_positions(
@@ -2514,6 +2568,11 @@ def main() -> int:
         action="store_true",
         help="check or apply only reviewed English names",
     )
+    parser.add_argument(
+        "--western-only",
+        action="store_true",
+        help="write only western regions and their weather positions",
+    )
     args = parser.parse_args()
     if args.english_localisation:
         from tools.lib.localisation import sync_builder_english_localisation
@@ -2522,7 +2581,7 @@ def main() -> int:
             ROOT, "tools.builders.build_adiscord_strategic_regions", apply=args.apply
         )
     if args.apply:
-        build()
+        build(western_only=args.western_only)
         return 0
     from tools.validators.validate_adiscord_strategic_regions import (
         main as validate_main,

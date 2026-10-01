@@ -403,14 +403,28 @@ def load_unitstack_positions(root: Path = ROOT) -> dict[int, tuple[str, str, str
 
 def ensure_exclusion_boundary_spawn_positions(root: Path = ROOT) -> int:
     """Restore construction anchors left behind by the EXZ realignment."""
+    return ensure_state_spawn_positions(root, EXCLUSION_BOUNDARY_SPAWN_STATES)
+
+
+def ensure_state_spawn_positions(root: Path, state_ids: set[int]) -> int:
+    """Complete native construction anchors after a province repartition."""
     path = root / "map" / "buildings.txt"
     lines = path.read_text(encoding="utf-8-sig", errors="strict").splitlines()
     state_by_province = load_state_by_province(root)
     positions = load_unitstack_positions(root)
     provinces_by_state: dict[int, list[int]] = {}
-    for province_id, state_id in state_by_province.items():
-        if state_id in EXCLUSION_BOUNDARY_SPAWN_STATES and province_id in positions:
-            provinces_by_state.setdefault(state_id, []).append(province_id)
+    province_by_color = load_province_by_color(root)
+    with Image.open(root / "map/provinces.bmp") as source:
+        image = source.convert("RGB")
+        for province_id, (x, height, z) in list(positions.items()):
+            px = _pixel_coordinate(x, image.width)
+            pz = _pixel_coordinate(z, image.height)
+            actual = province_by_color.get(image.getpixel((px, image.height - 1 - pz)))
+            state_id = state_by_province.get(actual)
+            if state_id in state_ids:
+                # Integer anchors agree under native truncation and rounding.
+                positions[province_id] = (f"{px:.2f}", height, f"{pz:.2f}")
+                provinces_by_state.setdefault(state_id, []).append(province_id)
     counts: dict[tuple[int, str], int] = {}
     for line in lines:
         fields = line.split(";")
@@ -419,7 +433,7 @@ def ensure_exclusion_boundary_spawn_positions(root: Path = ROOT) -> int:
             counts[key] = counts.get(key, 0) + 1
 
     added = 0
-    for state_id in sorted(EXCLUSION_BOUNDARY_SPAWN_STATES):
+    for state_id in sorted(state_ids):
         candidates = sorted(provinces_by_state.get(state_id, ()))
         if not candidates:
             raise RuntimeError(
@@ -437,7 +451,7 @@ def ensure_exclusion_boundary_spawn_positions(root: Path = ROOT) -> int:
                 if line not in lines:
                     lines.append(line)
                     added += 1
-                counts[key] = counts.get(key, 0) + 1
+                    counts[key] = counts.get(key, 0) + 1
 
     if added:
         path.write_bytes("\r\n".join(lines).encode("utf-8"))
@@ -607,11 +621,19 @@ def main() -> int:
     if args.apply:
         mismatches = synchronize_buildings(ROOT, apply=True)
         added = ensure_exclusion_boundary_spawn_positions(ROOT)
+        western_manifest = json.loads(
+            (ROOT / "tools/data/adiscord_western_states.json").read_text(encoding="utf-8")
+        )
+        western_ids = set(map(int, western_manifest["states"])) | set(
+            map(int, western_manifest.get("donors", {}))
+        )
+        western_added = ensure_state_spawn_positions(ROOT, western_ids)
         port_lines, missing_ports = coastal_port_plan(ROOT)
         if missing_ports:
             BUILDINGS_PATH.write_bytes("\r\n".join(port_lines).encode("utf-8"))
         print(f"Corrected {len(mismatches)} map-building state mismatches.")
         print(f"Added {added} Exclusion Zone boundary spawn anchors.")
+        print(f"Added {western_added} western boundary spawn anchors.")
         print(f"Added {len(missing_ports)} coastal port anchors.")
     issues = validate()
     if issues:

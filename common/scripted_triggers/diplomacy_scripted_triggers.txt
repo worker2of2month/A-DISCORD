@@ -14,12 +14,28 @@
 #
 # Existing allies may be called to war; unsolicited war entry remains scripted.
 DIPLOMACY_CALL_ALLY_ENABLE_TRIGGER = {
+	ADISCORD_western_diplomacy_pair_open = yes
 	custom_trigger_tooltip = {
 		tooltip = STP_cw_northern_call_blocked_tt
 		NOT = { STP_cw_northern_call_blocked = yes }
 	}
 }
 DIPLOMACY_JOIN_ALLY_ENABLE_TRIGGER = { always = no }
+
+# Use native enable hooks for embargo and cancellation actions.
+DIPLOMACY_WAR_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_EMBARGO_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_REVOKE_EMBARGO_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_CANCEL_FOREIGN_MANPOWER_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_CANCEL_GENERATE_WARGOAL_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_LEND_LEASE_CANCEL_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+
+DIPLOMACY_LEND_LEASE_EXISTING_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
 
 # This specifically overrides the rule check as to whether or not you can guarantee other ideologies
 DIPLOMACY_GUARANTEE_ENABLE_TRIGGER_OVERRIDES_GAME = {

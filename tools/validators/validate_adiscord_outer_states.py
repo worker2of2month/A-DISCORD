@@ -26,6 +26,8 @@ try:
         load_source_pool,
         parse_state,
         select_landmasses,
+        western_source,
+        check_western_outputs,
     )
     from tools.builders.build_adiscord_strategic_regions import (
         OUTER_REGION_SPECS,
@@ -46,6 +48,8 @@ except ModuleNotFoundError:
         load_source_pool,
         parse_state,
         select_landmasses,
+        western_source,
+        check_western_outputs,
     )
     from builders.build_adiscord_strategic_regions import (
         OUTER_REGION_SPECS,
@@ -57,6 +61,61 @@ from tools.validators.validate_adiscord_northern_countries import (
 )
 
 
+def western_geography_issues(adjacency, data) -> list[str]:
+    """Require a connected mainland core and explicitly bounded island groups."""
+    errors = []
+    source = western_source()
+    mainland = set().union(*(
+        set(row["provinces"])
+        for state_id, row in source["source_partitions"].items()
+        if 474 <= int(state_id) <= 550
+    ))
+    assigned = set()
+    for state_id, row in source["states"].items():
+        provinces = set(row["provinces"])
+        if not provinces or provinces & assigned:
+            errors.append(f"western state {state_id}: empty or overlapping geometry")
+        assigned.update(provinces)
+        core = provinces & mainland
+        if row["island_group"]:
+            if core:
+                errors.append(f"western state {state_id}: island group contains mainland")
+        elif not core or len(connected_components(core, adjacency)) != 1:
+            errors.append(f"western state {state_id}: mainland core is not connected")
+        islands = [set(component) for component in row["island_components"]]
+        actual = connected_components(provinces - mainland, adjacency)
+        if {frozenset(c) for c in actual} != {frozenset(c) for c in islands}:
+            errors.append(f"western state {state_id}: unexpected island membership")
+        if row["island_group"]:
+            centers = [cluster_statistics(component, data) for component in islands]
+            for a in centers:
+                for b in centers:
+                    distance = (float(a["x"]) - float(b["x"])) ** 2 + (
+                        float(a["y"]) - float(b["y"])
+                    ) ** 2
+                    if distance > 650 ** 2:
+                        errors.append(
+                            f"western state {state_id}: island group spans over 650 pixels"
+                        )
+                        break
+        else:
+            for component in islands:
+                distance = min(
+                    (data[p].x - data[q].x) ** 2 + (data[p].y - data[q].y) ** 2
+                    for p in component for q in core
+                )
+                if distance > 220 ** 2:
+                    errors.append(f"western state {state_id}: island is too far from its coast")
+    expected = set().union(
+        *(set(row["provinces"]) for row in source["source_partitions"].values())
+    )
+    for row in source.get("donors", {}).values():
+        expected.update(set(row["original_provinces"]) - set(row["provinces"]))
+    if assigned != expected:
+        errors.append("western mainland/island province coverage changed")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     source_pool, _outer, _source, generated_paths = load_source_pool()
@@ -64,7 +123,11 @@ def main() -> int:
     data = build_province_data(province_types, color_to_province)
     adjacency = load_province_adjacency(province_types, color_to_province)
     left, right, _right_components = select_landmasses(source_pool, adjacency, data)
-    expected = left | right
+    expected = right | set().union(*(
+        set(row["provinces"])
+        for state_id, row in western_source()["states"].items()
+        if 474 <= int(state_id) <= 550
+    ))
 
     generated: dict[int, tuple[set[int], str, str]] = {}
     assigned: set[int] = set()
@@ -99,18 +162,12 @@ def main() -> int:
                     f"state {state_id}: northern-right shell is not populated"
                 )
         else:
-            for forbidden in (
-                r"\bowner\s*=",
-                r"\badd_core_of\s*=",
-                r"\bvictory_points\s*=",
-                r"\bbuildings\s*=\s*\{",
-            ):
-                if re.search(forbidden, source):
-                    errors.append(
-                        f"state {state_id}: neutral shell contains {forbidden}"
-                    )
+            owner = western_source()["states"][str(state_id)]["owner"]
+            for field in ("owner", "add_core_of"):
+                if not re.search(rf"\b{field}\s*=\s*{owner}\b", source):
+                    errors.append(f"state {state_id}: expected {field} = {owner}")
             if not re.search(r"(?m)^\s*manpower\s*=\s*1\s*$", source):
-                errors.append(f"state {state_id}: neutral shell manpower must be 1")
+                errors.append(f"state {state_id}: provisional manpower must be 1")
             if not re.search(
                 r"(?m)^\s*state_category\s*=\s*(rural|wasteland)\s*$", source
             ):
@@ -126,11 +183,7 @@ def main() -> int:
         climate_counts[climate] += 1
 
         components = connected_components(provinces, adjacency)
-        if landmass == "left" and len(components) != 1:
-            errors.append(
-                f"state {state_id}: coarse left-continent state has {len(components)} components"
-            )
-        elif landmass == "right" and len(components) > 1:
+        if landmass == "right" and len(components) > 1:
             centres = [cluster_statistics(component, data) for component in components]
             widest = max(
                 (
@@ -167,6 +220,8 @@ def main() -> int:
     errors.extend(
         f"northern countries: {issue}" for issue in validate_northern_countries()
     )
+    errors.extend(check_western_outputs())
+    errors.extend(western_geography_issues(adjacency, data))
 
     if not LOCALISATION.exists():
         errors.append("missing generated outer-state localisation")
@@ -203,7 +258,7 @@ def main() -> int:
         return 1
     print(
         f"Outer-state validation passed: {len(generated)} generated states "
-        f"({landmass_counts['right']} populated northern-right, {landmass_counts['left']} neutral coarse-left) "
+        f"({landmass_counts['right']} populated northern-right, {landmass_counts['left']} western country states) "
         f"across {len(climate_counts)} climate groups."
     )
     return 0

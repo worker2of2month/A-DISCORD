@@ -15,7 +15,9 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 try:
     from tools.builders.build_adiscord_outer_states import (
         build_province_data,
+        check_western_outputs,
         parse_state,
+        western_source,
     )
     from tools.builders.build_adiscord_remainder_states import (
         BASE_STATE_LOCALISATION,
@@ -34,7 +36,12 @@ try:
         load_province_definitions,
     )
 except ModuleNotFoundError:
-    from builders.build_adiscord_outer_states import build_province_data, parse_state
+    from builders.build_adiscord_outer_states import (
+        build_province_data,
+        check_western_outputs,
+        parse_state,
+        western_source,
+    )
     from builders.build_adiscord_remainder_states import (
         BASE_STATE_LOCALISATION,
         EXPECTED_PROVINCE_COUNT,
@@ -55,7 +62,6 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parents[2]
 STATE_DIR = ROOT / "history" / "states"
-
 
 def load_localisation(path: Path, errors: list[str]) -> dict[int, str]:
     if not path.exists():
@@ -106,7 +112,9 @@ def main() -> int:
             name_match.group(1).strip(),
         )
 
-        if re.search(r"\b(owner|add_core_of|victory_points|buildings)\s*=", text):
+        if str(state_id) not in western_source()["states"] and re.search(
+            r"\b(owner|add_core_of|victory_points|buildings)\s*=", text
+        ):
             errors.append(
                 f"{path.relative_to(ROOT)}: neutral shell has ownership/core/content history"
             )
@@ -120,9 +128,14 @@ def main() -> int:
         errors.append(
             f"remainder state IDs are not contiguous from {FIRST_NEW_STATE_ID}"
         )
-    if len(all_provinces) != EXPECTED_PROVINCE_COUNT:
+    source_provinces = set().union(*(
+        set(western_source()["source_partitions"][str(state_id)]["provinces"])
+        if str(state_id) in western_source()["states"] else row[1]
+        for state_id, row in rows.items()
+    ))
+    if len(source_provinces) != EXPECTED_PROVINCE_COUNT:
         errors.append(
-            f"remainder coverage changed: expected {EXPECTED_PROVINCE_COUNT} provinces, found {len(all_provinces)}"
+            f"remainder source coverage changed: expected {EXPECTED_PROVINCE_COUNT} provinces, found {len(source_provinces)}"
         )
 
     province_types, color_to_province = load_province_definitions()
@@ -133,6 +146,8 @@ def main() -> int:
     for state_id, (path, provinces, climate_key, strategic_name) in sorted(
         rows.items()
     ):
+        if str(state_id) in western_source()["states"]:
+            continue
         if not provinces:
             errors.append(f"state {state_id}: empty")
             continue
@@ -184,13 +199,17 @@ def main() -> int:
     if duplicates:
         errors.append(f"duplicate remainder state names {duplicates[:20]}")
 
+    errors.extend(check_western_outputs())
+    from tools.validators.validate_adiscord_outer_states import western_geography_issues
+
+    errors.extend(western_geography_issues(adjacency, data))
     if errors:
         print(f"Remainder-state validation failed: {len(errors)} error(s)")
         for error in errors:
             print(f"- {error}")
         return 1
     print(
-        f"Remainder-state validation passed: {len(rows)} connected states, "
+        f"Remainder-state validation passed: {len(rows)} generated states, "
         f"{len(all_provinces)} provinces, {len(LATITUDE_EDGES) + 1} latitude bands."
     )
     return 0

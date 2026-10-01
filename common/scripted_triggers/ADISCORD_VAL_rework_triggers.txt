@@ -2016,8 +2016,16 @@ VAL_wasteland_administration_ready = {
 VAL_wasteland_capitulation_managed = {
 	has_war_with = VAL
 	VAL = { exists = yes has_capitulated = no is_subject = no }
-	FROM = { OR = { tag = VAL is_subject_of = VAL } }
-	capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+	# A parallel local war can make its attacker the native winner (FROM).
+	# Kefreyt's occupation still decides the settlement, so FROM alone must not
+	# hand the whole country, including Kefreyt's captured land, to that party.
+	OR = {
+		capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+		AND = {
+			FROM = { NOT = { tag = VAL } NOT = { is_subject_of = VAL } }
+			any_owned_state = { controller = { OR = { tag = VAL is_subject_of = VAL } } }
+		}
+	}
 	OR = {
 		AND = {
 			tag = ERT

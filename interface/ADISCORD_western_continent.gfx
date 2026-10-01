@@ -1,0 +1,15 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_ADISCORD_Reservation_Wallpaper"
+		textureFile = "gfx/interface/ADISCORD_western_continent/reservation_wallpaper.dds"
+	}
+
+	frameAnimatedSpriteType = {
+		name = "GFX_ADISCORD_Reservation_Terminal"
+		textureFile = "gfx/interface/ADISCORD_western_continent/reservation_terminal.dds"
+		noOfFrames = 17
+		animation_rate_fps = 1
+		looping = yes
+		play_on_show = yes
+	}
+}

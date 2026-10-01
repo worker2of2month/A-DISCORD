@@ -566,6 +566,11 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}
 	if = {
+		limit = { tag = RSV }
+		# Intentional common-only assignment.
+		ADISCORD_grant_technology_profile_common = yes
+	}
+	if = {
 		limit = { tag = RUS }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}

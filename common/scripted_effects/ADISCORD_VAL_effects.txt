@@ -2343,6 +2343,24 @@ VAL_settle_wasteland_capitulation = {
 			}
 		}
 	}
+	# The same capitulation ends the defeated country's other wars. Kefreyt's
+	# claim is settled first; each third party then keeps only the defeated
+	# country's states it occupies, so no war is left open against a shell.
+	every_owned_state = {
+		limit = {
+			CONTROLLER = {
+				exists = yes
+				has_war_with = event_target:VAL_wasteland_defeated
+				NOT = { tag = VAL }
+				NOT = { is_subject_of = VAL }
+			}
+		}
+		CONTROLLER = { transfer_state = PREV }
+	}
+	every_enemy_country = {
+		limit = { NOT = { tag = VAL } NOT = { is_subject_of = VAL } }
+		white_peace = event_target:VAL_wasteland_defeated
+	}
 	VAL = { ADISCORD_economy_mark_dirty = yes }
 	WCA = { if = { limit = { exists = yes } ADISCORD_economy_mark_dirty = yes } }
 }

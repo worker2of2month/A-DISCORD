@@ -4,8 +4,8 @@
 The detailed northern/right and provisional left-continent shells are handled
 by ``build_adiscord_outer_states.py``.  This pass only handles what remains in
 state 23.  Provinces are first separated by latitude band and then by physical
-connectivity, so no generated state joins islands or continents that are not
-actual neighbours.
+connectivity. Western IDs retain their original allocation in that pool while
+their final geometry and names come from the authored western manifest.
 
 State 23 is retained as one real connected shell; the other shells use IDs
 551 and above.  Re-running the tool folds its own marked files back into the
@@ -27,6 +27,8 @@ from tools.builders.build_adiscord_outer_states import (
     cluster_statistics,
     format_provinces,
     parse_state,
+    render_western_id,
+    western_source,
 )
 from tools.builders.build_adiscord_strategic_regions import (
     connected_components,
@@ -181,6 +183,10 @@ def load_source_pool() -> tuple[set[int], str, list[Path]]:
         if not source.startswith(GENERATED_MARKER):
             continue
         state_id, provinces, _source = parse_state(path)
+        # The procedural planner retains its fixed source partition and IDs;
+        # the western manifest replaces only the final rendered geography.
+        if str(state_id) in western_source().get("source_partitions", {}):
+            provinces = set(western_source()["source_partitions"][str(state_id)]["provinces"])
         if state_id < FIRST_NEW_STATE_ID:
             raise RuntimeError(
                 f"{path.name}: remainder marker on reserved state id {state_id}"
@@ -335,6 +341,8 @@ def plan_states(
 
 
 def render_state(state: PlannedState, data: dict[int, ProvinceData]) -> str:
+    if str(state.state_id) in western_source()["states"]:
+        return render_western_id(state.state_id)
     stats = cluster_statistics(state.provinces, data)
     band = band_for_y(float(stats["y"]))
     category = (
@@ -424,7 +432,10 @@ def apply_plan(
     replace_generated_localisation_block(
         LOCALISATION,
         "tools.builders.build_adiscord_remainder_states",
-        {f"STATE_{state.state_id}": state.name for state in generated},
+        {
+            f"STATE_{state.state_id}": western_source()["states"].get(str(state.state_id), {}).get("name", state.name)
+            for state in generated
+        },
     )
     state_23 = next(state for state in planned if state.state_id == 23)
     update_state_23_localisation(state_23.name)

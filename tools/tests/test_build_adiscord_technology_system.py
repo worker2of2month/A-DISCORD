@@ -1130,7 +1130,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 for tag, profiles in generator.STARTING_COUNTRY_TECH_PROFILES.items()
                 if not profiles
             },
-            {"EXZ", "PWR"},
+            {"EXZ", "PWR", "RSV"},
         )
         for tag, entry in payload["countries"].items():
             self.assertGreaterEqual(len(entry["rationale"]), 24, tag)

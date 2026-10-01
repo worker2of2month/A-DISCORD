@@ -2,14 +2,30 @@ ADISCORD_vorkerland_dirty_zone_visible = {
 	original_tag = EXZ
 }
 
+ADISCORD_western_reservation_visible = {
+	original_tag = RSV
+}
+
+ADISCORD_western_closed_country = {
+	ADISCORD_western_reservation_visible = yes
+}
+
 # Used by the engine's diplomatic-action validity hooks. Both the selected
-# target and the action initiator are checked so EXZ cannot send or receive
-# ordinary diplomacy, including international-market access requests.
+# target and the action initiator are checked for the closed territories.
 ADISCORD_diplomacy_not_dirty_zone_pair = {
 	NOT = {
 		OR = {
 			original_tag = EXZ
 			FROM = { original_tag = EXZ }
+			ADISCORD_western_closed_country = yes
+			FROM = { ADISCORD_western_closed_country = yes }
 		}
 	}
+}
+
+# Enable hooks use ROOT for the initiator, unlike validity hooks whose
+# current country is the target and FROM is the initiator.
+ADISCORD_western_diplomacy_pair_open = {
+	ROOT = { ADISCORD_western_closed_country = no }
+	FROM = { ADISCORD_western_closed_country = no }
 }

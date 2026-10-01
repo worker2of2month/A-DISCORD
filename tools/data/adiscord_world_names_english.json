@@ -810,8 +810,8 @@
           "english": "Gelden Plain"
         },
         "STATE_532": {
-          "russian": "Южные Валленские острова",
-          "english": "Southern Vallen Islands"
+          "russian": "Южное Валленское предгорье",
+          "english": "Southern Vallen Foothills"
         },
         "STATE_533": {
           "russian": "Северная Кадвенская равнина",
@@ -895,268 +895,268 @@
       "marker": "tools.builders.build_adiscord_remainder_states",
       "entries": {
         "STATE_551": {
-          "russian": "Северо-восточный Бельнор",
-          "english": "Northeastern Belnor"
+          "russian": "Западный Скейльский архипелаг",
+          "english": "Western Skeil Archipelago"
         },
         "STATE_552": {
-          "russian": "Южный Бельнор",
-          "english": "Southern Belnor"
+          "russian": "Северный Скейльский архипелаг",
+          "english": "Northern Skeil Archipelago"
         },
         "STATE_553": {
-          "russian": "Юго-западный Бельнор",
-          "english": "Southwestern Belnor"
+          "russian": "Восточный Скейльский архипелаг",
+          "english": "Eastern Skeil Archipelago"
         },
         "STATE_554": {
-          "russian": "Северный Бельнор",
-          "english": "Northern Belnor"
+          "russian": "Авернское побережье",
+          "english": "Avern Coast"
         },
         "STATE_555": {
-          "russian": "Северо-западный Бельнор",
-          "english": "Northwestern Belnor"
+          "russian": "Фарденский остров",
+          "english": "Farden Island"
         },
         "STATE_556": {
-          "russian": "Юго-восточный Бельнор",
-          "english": "Southeastern Belnor"
+          "russian": "Альдорское побережье",
+          "english": "Aldor Coast"
         },
         "STATE_557": {
-          "russian": "Северо-западный Фарден",
-          "english": "Northwestern Farden"
+          "russian": "Арвекское побережье",
+          "english": "Arvek Coast"
         },
         "STATE_558": {
-          "russian": "Северный Фарден",
-          "english": "Northern Farden"
+          "russian": "Белранское побережье",
+          "english": "Belran Coast"
         },
         "STATE_559": {
-          "russian": "Крайний юго-западный Фарден",
-          "english": "Outer Southwestern Farden"
+          "russian": "Борденское побережье",
+          "english": "Borden Coast"
         },
         "STATE_560": {
-          "russian": "Дальний западный Фарден",
-          "english": "Far Western Farden"
+          "russian": "Бреварское побережье",
+          "english": "Brevar Coast"
         },
         "STATE_561": {
-          "russian": "Крайний северо-западный Фарден",
-          "english": "Outer Northwestern Farden"
+          "russian": "Вельтарская равнина",
+          "english": "Veltar Plain"
         },
         "STATE_562": {
-          "russian": "Дальний юго-восточный Фарден",
-          "english": "Far Southeastern Farden"
+          "russian": "Гарленское побережье",
+          "english": "Garlen Coast"
         },
         "STATE_563": {
-          "russian": "Дальний северо-восточный Фарден",
-          "english": "Far Northeastern Farden"
+          "russian": "Гевранское побережье",
+          "english": "Gevran Coast"
         },
         "STATE_564": {
-          "russian": "Дальний восточный Фарден",
-          "english": "Far Eastern Farden"
+          "russian": "Гольденское побережье",
+          "english": "Golden Coast"
         },
         "STATE_565": {
-          "russian": "Юго-западный Фарден",
-          "english": "Southwestern Farden"
+          "russian": "Дарвенское побережье",
+          "english": "Darven Coast"
         },
         "STATE_566": {
-          "russian": "Южный Фарден",
-          "english": "Southern Farden"
+          "russian": "Дельварская равнина",
+          "english": "Delvar Plain"
         },
         "STATE_567": {
-          "russian": "Западный Фарден",
-          "english": "Western Farden"
+          "russian": "Гальнорский архипелаг",
+          "english": "Galnor Archipelago"
         },
         "STATE_568": {
-          "russian": "Северо-западный Ирвен",
-          "english": "Northwestern Irven"
+          "russian": "Доргенское побережье",
+          "english": "Dorgen Coast"
         },
         "STATE_569": {
-          "russian": "Северный Ирвен",
-          "english": "Northern Irven"
+          "russian": "Эльварское побережье",
+          "english": "Elvar Coast"
         },
         "STATE_570": {
-          "russian": "Западный Ирвен",
-          "english": "Western Irven"
+          "russian": "Эрденская равнина",
+          "english": "Erden Plain"
         },
         "STATE_571": {
-          "russian": "Юго-восточный Ирвен",
-          "english": "Southeastern Irven"
+          "russian": "Жавренская равнина",
+          "english": "Zhavren Plain"
         },
         "STATE_572": {
-          "russian": "Северо-восточный Ирвен",
-          "english": "Northeastern Irven"
+          "russian": "Зелларское побережье",
+          "english": "Zellar Coast"
         },
         "STATE_573": {
-          "russian": "Юго-западный Ирвен",
-          "english": "Southwestern Irven"
+          "russian": "Зорвенское побережье",
+          "english": "Zorven Coast"
         },
         "STATE_574": {
-          "russian": "Восточный Ирвен",
-          "english": "Eastern Irven"
+          "russian": "Иверанское побережье",
+          "english": "Iveran Coast"
         },
         "STATE_575": {
-          "russian": "Дальний юго-восточный Кальден",
-          "english": "Far Southeastern Kalden"
+          "russian": "Западная островная дуга",
+          "english": "Western Island Arc"
         },
         "STATE_576": {
-          "russian": "Южный Кальден",
-          "english": "Southern Kalden"
+          "russian": "Ильденское побережье",
+          "english": "Ilden Coast"
         },
         "STATE_577": {
-          "russian": "Юго-восточный Кальден",
-          "english": "Southeastern Kalden"
+          "russian": "Кавренское побережье",
+          "english": "Kavren Coast"
         },
         "STATE_578": {
-          "russian": "Юго-западный Кальден",
-          "english": "Southwestern Kalden"
+          "russian": "Келланская равнина",
+          "english": "Kellan Plain"
         },
         "STATE_579": {
-          "russian": "Дальний восточный Кальден",
-          "english": "Far Eastern Kalden"
+          "russian": "Кердорская равнина",
+          "english": "Kerdor Plain"
         },
         "STATE_580": {
-          "russian": "Дальний северо-восточный Кальден",
-          "english": "Far Northeastern Kalden"
+          "russian": "Лавренская равнина",
+          "english": "Lavren Plain"
         },
         "STATE_581": {
-          "russian": "Крайний юго-западный Кальден",
-          "english": "Outer Southwestern Kalden"
+          "russian": "Левардская равнина",
+          "english": "Levard Plain"
         },
         "STATE_582": {
-          "russian": "Крайний западный Кальден",
-          "english": "Outer Western Kalden"
+          "russian": "Лирвенское побережье",
+          "english": "Lirven Coast"
         },
         "STATE_583": {
-          "russian": "Крайний восточный Кальден",
-          "english": "Outer Eastern Kalden"
+          "russian": "Острова внутреннего моря",
+          "english": "Inner Sea Islands"
         },
         "STATE_584": {
-          "russian": "Дальний юго-западный Кальден",
-          "english": "Far Southwestern Kalden"
+          "russian": "Лорденское побережье",
+          "english": "Lorden Coast"
         },
         "STATE_585": {
-          "russian": "Восточный Кальден",
-          "english": "Eastern Kalden"
+          "russian": "Мавернское побережье",
+          "english": "Mavern Coast"
         },
         "STATE_586": {
-          "russian": "Северо-восточный Кальден",
-          "english": "Northeastern Kalden"
+          "russian": "Восточная островная дуга",
+          "english": "Eastern Island Arc"
         },
         "STATE_587": {
-          "russian": "Северо-западный Кальден",
-          "english": "Northwestern Kalden"
+          "russian": "Мейдарское побережье",
+          "english": "Meydar Coast"
         },
         "STATE_588": {
-          "russian": "Дальний западный Кальден",
-          "english": "Far Western Kalden"
+          "russian": "Мелранская равнина",
+          "english": "Melran Plain"
         },
         "STATE_589": {
-          "russian": "Западный Кальден",
-          "english": "Western Kalden"
+          "russian": "Невардская равнина",
+          "english": "Nevard Plain"
         },
         "STATE_590": {
-          "russian": "Северный Кальден",
-          "english": "Northern Kalden"
+          "russian": "Нелвенская равнина",
+          "english": "Nelven Plain"
         },
         "STATE_591": {
-          "russian": "Крайний северо-западный Кальден",
-          "english": "Outer Northwestern Kalden"
+          "russian": "Нордарское побережье",
+          "english": "Nordar Coast"
         },
         "STATE_592": {
-          "russian": "Дальний северо-западный Кальден",
-          "english": "Far Northwestern Kalden"
+          "russian": "Ольвенская равнина",
+          "english": "Olven Plain"
         },
         "STATE_593": {
           "russian": "Морвен",
           "english": "Morven"
         },
         "STATE_594": {
-          "russian": "Восточный Неллар",
-          "english": "Eastern Nellar"
+          "russian": "Орланское побережье",
+          "english": "Orlan Coast"
         },
         "STATE_595": {
-          "russian": "Южный Неллар",
-          "english": "Southern Nellar"
+          "russian": "Пелдарское побережье",
+          "english": "Peldar Coast"
         },
         "STATE_596": {
-          "russian": "Западный Неллар",
-          "english": "Western Nellar"
+          "russian": "Перванское побережье",
+          "english": "Pervan Coast"
         },
         "STATE_597": {
-          "russian": "Центральный Неллар",
-          "english": "Central Nellar"
+          "russian": "Равденская равнина",
+          "english": "Ravden Plain"
         },
         "STATE_598": {
-          "russian": "Северный Неллар",
-          "english": "Northern Nellar"
+          "russian": "Рейвенское побережье",
+          "english": "Reyven Coast"
         },
         "STATE_599": {
-          "russian": "Дальний северо-восточный Ольден",
-          "english": "Far Northeastern Olden"
+          "russian": "Рендарское побережье",
+          "english": "Rendar Coast"
         },
         "STATE_600": {
-          "russian": "Юго-западный Ольден",
-          "english": "Southwestern Olden"
+          "russian": "Салвенское побережье",
+          "english": "Salven Coast"
         },
         "STATE_601": {
-          "russian": "Дальний юго-восточный Ольден",
-          "english": "Far Southeastern Olden"
+          "russian": "Севардское побережье",
+          "english": "Sevard Coast"
         },
         "STATE_602": {
-          "russian": "Северный Ольден",
-          "english": "Northern Olden"
+          "russian": "Южный островной порог",
+          "english": "Southern Island Threshold"
         },
         "STATE_603": {
-          "russian": "Крайний западный Ольден",
-          "english": "Outer Western Olden"
+          "russian": "Селланское побережье",
+          "english": "Sellan Coast"
         },
         "STATE_604": {
-          "russian": "Восточный Ольден",
-          "english": "Eastern Olden"
+          "russian": "Тавренская равнина",
+          "english": "Tavren Plain"
         },
         "STATE_605": {
-          "russian": "Крайний юго-западный Ольден",
-          "english": "Outer Southwestern Olden"
+          "russian": "Таллерская равнина",
+          "english": "Taller Plain"
         },
         "STATE_606": {
-          "russian": "Дальний западный Ольден",
-          "english": "Far Western Olden"
+          "russian": "Тейварское побережье",
+          "english": "Teyvar Coast"
         },
         "STATE_607": {
-          "russian": "Северо-восточный Ольден",
-          "english": "Northeastern Olden"
+          "russian": "Терланское побережье",
+          "english": "Terlan Coast"
         },
         "STATE_608": {
-          "russian": "Крайний восточный Ольден",
-          "english": "Outer Eastern Olden"
+          "russian": "Ульварское побережье",
+          "english": "Ulvar Coast"
         },
         "STATE_609": {
-          "russian": "Дальний восточный Ольден",
-          "english": "Far Eastern Olden"
+          "russian": "Фалленское побережье",
+          "english": "Fallen Coast"
         },
         "STATE_610": {
-          "russian": "Дальний юго-западный Ольден",
-          "english": "Far Southwestern Olden"
+          "russian": "Фейварское побережье",
+          "english": "Feyvar Coast"
         },
         "STATE_611": {
-          "russian": "Западный Ольден",
-          "english": "Western Olden"
+          "russian": "Южная Хелланская равнина",
+          "english": "Southern Khellan Plain"
         },
         "STATE_612": {
-          "russian": "Дальний северо-западный Ольден",
-          "english": "Far Northwestern Olden"
+          "russian": "Целварское побережье",
+          "english": "Tselvar Coast"
         },
         "STATE_613": {
-          "russian": "Северо-западный Ольден",
-          "english": "Northwestern Olden"
+          "russian": "Южная Черденская равнина",
+          "english": "Southern Cherden Plain"
         },
         "STATE_614": {
-          "russian": "Крайний северо-западный Ольден",
-          "english": "Outer Northwestern Olden"
+          "russian": "Западная Шавренская равнина",
+          "english": "Western Shavren Plain"
         },
         "STATE_615": {
-          "russian": "Юго-восточный Ольден",
-          "english": "Southeastern Olden"
+          "russian": "Шелдарское побережье",
+          "english": "Sheldar Coast"
         },
         "STATE_616": {
-          "russian": "Южный Ольден",
-          "english": "Southern Olden"
+          "russian": "Эвардское побережье",
+          "english": "Evard Coast"
         },
         "STATE_617": {
           "russian": "Северо-восточный Перрин",
@@ -1203,68 +1203,68 @@
           "english": "Western Raven"
         },
         "STATE_628": {
-          "russian": "Юго-западный Селдар",
-          "english": "Southwestern Seldar"
+          "russian": "Западная прибрежная цепь",
+          "english": "Western Coastal Chain"
         },
         "STATE_629": {
-          "russian": "Южный Селдар",
-          "english": "Southern Seldar"
+          "russian": "Эльденское побережье",
+          "english": "Elden Coast"
         },
         "STATE_630": {
-          "russian": "Юго-восточный Селдар",
-          "english": "Southeastern Seldar"
+          "russian": "Ярвенское побережье",
+          "english": "Yarven Coast"
         },
         "STATE_631": {
-          "russian": "Северо-восточный Селдар",
-          "english": "Northeastern Seldar"
+          "russian": "Северная Альверская равнина",
+          "english": "Northern Alver Plain"
         },
         "STATE_632": {
-          "russian": "Северный Селдар",
-          "english": "Northern Seldar"
+          "russian": "Берданское побережье",
+          "english": "Berdan Coast"
         },
         "STATE_633": {
-          "russian": "Северо-западный Селдар",
-          "english": "Northwestern Seldar"
+          "russian": "Вегларское побережье",
+          "english": "Veglar Coast"
         },
         "STATE_634": {
-          "russian": "Северный Терен",
-          "english": "Northern Teren"
+          "russian": "Гальвенское побережье",
+          "english": "Galven Coast"
         },
         "STATE_635": {
-          "russian": "Юго-восточный Терен",
-          "english": "Southeastern Teren"
+          "russian": "Восточная Дейранская равнина",
+          "english": "Eastern Deyran Plain"
         },
         "STATE_636": {
-          "russian": "Северо-восточный Терен",
-          "english": "Northeastern Teren"
+          "russian": "Западная Зейларская равнина",
+          "english": "Western Zeylar Plain"
         },
         "STATE_637": {
-          "russian": "Центральный Терен",
-          "english": "Central Teren"
+          "russian": "Северная Кольвенская равнина",
+          "english": "Northern Kolven Plain"
         },
         "STATE_638": {
-          "russian": "Южный Терен",
-          "english": "Southern Teren"
+          "russian": "Восточная Марденская равнина",
+          "english": "Eastern Marden Plain"
         },
         "STATE_639": {
-          "russian": "Восточный Терен",
-          "english": "Eastern Teren"
+          "russian": "Северная Найвенская равнина",
+          "english": "Northern Nayven Plain"
         },
         "STATE_640": {
-          "russian": "Юго-западный Терен",
-          "english": "Southwestern Teren"
+          "russian": "Пейларское побережье",
+          "english": "Peylar Coast"
         },
         "STATE_641": {
-          "russian": "Северо-западный Терен",
-          "english": "Northwestern Teren"
+          "russian": "Росвенское побережье",
+          "english": "Rosven Coast"
         },
         "STATE_642": {
-          "russian": "Западный Терен",
-          "english": "Western Teren"
+          "russian": "Сайдарское побережье",
+          "english": "Saydar Coast"
         },
         "STATE_643": {
-          "russian": "Северо-восточный Ульвен",
-          "english": "Northeastern Ulven"
+          "russian": "Юго-восточный архипелаг",
+          "english": "Southeastern Archipelago"
         },
         "STATE_644": {
           "russian": "Северо-западный Ульвен",
@@ -1343,40 +1343,40 @@
           "english": "Outer Western Falor"
         },
         "STATE_663": {
-          "russian": "Хаврен",
-          "english": "Khavren"
+          "russian": "Северная Тейренская равнина",
+          "english": "Northern Teyren Plain"
         },
         "STATE_664": {
-          "russian": "Юго-восточный Цельмар",
-          "english": "Southeastern Tselmar"
+          "russian": "Фольварское побережье",
+          "english": "Folvar Coast"
         },
         "STATE_665": {
-          "russian": "Восточный Цельмар",
-          "english": "Eastern Tselmar"
+          "russian": "Хейденское побережье",
+          "english": "Kheyden Coast"
         },
         "STATE_666": {
-          "russian": "Западный Цельмар",
-          "english": "Western Tselmar"
+          "russian": "Эймарское побережье",
+          "english": "Eymar Coast"
         },
         "STATE_667": {
-          "russian": "Северный Цельмар",
-          "english": "Northern Tselmar"
+          "russian": "Западная Ялденская равнина",
+          "english": "Western Yalden Plain"
         },
         "STATE_668": {
-          "russian": "Северо-восточный Цельмар",
-          "english": "Northeastern Tselmar"
+          "russian": "Бейварское побережье",
+          "english": "Beyvar Coast"
         },
         "STATE_669": {
-          "russian": "Юго-западный Цельмар",
-          "english": "Southwestern Tselmar"
+          "russian": "Гельденское побережье",
+          "english": "Gelden Coast"
         },
         "STATE_670": {
-          "russian": "Северо-западный Цельмар",
-          "english": "Northwestern Tselmar"
+          "russian": "Западная Дальвенская равнина",
+          "english": "Western Dalven Plain"
         },
         "STATE_671": {
-          "russian": "Крайний северо-западный Шарден",
-          "english": "Outer Northwestern Sharden"
+          "russian": "Северная Кейларская равнина",
+          "english": "Northern Keylar Plain"
         },
         "STATE_672": {
           "russian": "Дальний юго-западный Шарден",
@@ -2007,292 +2007,292 @@
           "english": "Western Kelvor Plains"
         },
         "STRATEGICREGION_69": {
-          "russian": "Скейльская тундра",
-          "english": "Skeyl Tundra"
+          "russian": "Авернское побережье",
+          "english": "Avern Coast"
         },
         "STRATEGICREGION_70": {
-          "russian": "Западная Брейнская тайга",
-          "english": "Western Breyn Taiga"
+          "russian": "Фейварское побережье",
+          "english": "Feyvar Coast"
         },
         "STRATEGICREGION_71": {
+          "russian": "Бреварское побережье",
+          "english": "Brevar Coast"
+        },
+        "STRATEGICREGION_72": {
+          "russian": "Альдорское побережье",
+          "english": "Aldor Coast"
+        },
+        "STRATEGICREGION_73": {
+          "russian": "Гельденское побережье",
+          "english": "Gelden Coast"
+        },
+        "STRATEGICREGION_74": {
+          "russian": "Перванское побережье",
+          "english": "Pervan Coast"
+        },
+        "STRATEGICREGION_75": {
+          "russian": "Борденское побережье",
+          "english": "Borden Coast"
+        },
+        "STRATEGICREGION_76": {
+          "russian": "Восточная Мелвенская равнина",
+          "english": "Eastern Melven Plain"
+        },
+        "STRATEGICREGION_77": {
+          "russian": "Западная Реймарская равнина",
+          "english": "Western Reymar Plain"
+        },
+        "STRATEGICREGION_78": {
+          "russian": "Западная Брейнская равнина",
+          "english": "Western Breyn Plain"
+        },
+        "STRATEGICREGION_79": {
+          "russian": "Западное Кастельское побережье",
+          "english": "Western Kastel Coast"
+        },
+        "STRATEGICREGION_80": {
+          "russian": "Арвекское побережье",
+          "english": "Arvek Coast"
+        },
+        "STRATEGICREGION_81": {
+          "russian": "Иверанское побережье",
+          "english": "Iveran Coast"
+        },
+        "STRATEGICREGION_82": {
+          "russian": "Дарвенское побережье",
+          "english": "Darven Coast"
+        },
+        "STRATEGICREGION_83": {
+          "russian": "Северная Альбинская равнина",
+          "english": "Northern Albin Plain"
+        },
+        "STRATEGICREGION_84": {
+          "russian": "Эймарская равнина",
+          "english": "Eymar Plain"
+        },
+        "STRATEGICREGION_85": {
+          "russian": "Пейларское побережье",
+          "english": "Peylar Coast"
+        },
+        "STRATEGICREGION_86": {
+          "russian": "Ярвенская равнина",
+          "english": "Yarven Plain"
+        },
+        "STRATEGICREGION_87": {
+          "russian": "Ильденское побережье",
+          "english": "Ilden Coast"
+        },
+        "STRATEGICREGION_88": {
+          "russian": "Восточное Кастельское побережье",
+          "english": "Eastern Kastel Coast"
+        },
+        "STRATEGICREGION_89": {
+          "russian": "Шавренская равнина",
+          "english": "Shavren Plain"
+        },
+        "STRATEGICREGION_90": {
+          "russian": "Фарденский остров",
+          "english": "Farden Island"
+        },
+        "STRATEGICREGION_91": {
+          "russian": "Западное Сайленское побережье",
+          "english": "Western Saylen Coast"
+        },
+        "STRATEGICREGION_92": {
+          "russian": "Западный Скейльский архипелаг",
+          "english": "Western Skeil Archipelago"
+        },
+        "STRATEGICREGION_93": {
+          "russian": "Восточный Скейльский архипелаг",
+          "english": "Eastern Skeil Archipelago"
+        },
+        "STRATEGICREGION_94": {
+          "russian": "Северный Скейльский архипелаг",
+          "english": "Northern Skeil Archipelago"
+        },
+        "STRATEGICREGION_95": {
+          "russian": "Хелланская равнина",
+          "english": "Khellan Plain"
+        },
+        "STRATEGICREGION_96": {
+          "russian": "Лирвенское побережье",
+          "english": "Lirven Coast"
+        },
+        "STRATEGICREGION_97": {
+          "russian": "Восточное Элларское побережье",
+          "english": "Eastern Ellar Coast"
+        },
+        "STRATEGICREGION_98": {
+          "russian": "Лавренская равнина",
+          "english": "Lavren Plain"
+        },
+        "STRATEGICREGION_99": {
+          "russian": "Белранское побережье",
+          "english": "Belran Coast"
+        },
+        "STRATEGICREGION_100": {
+          "russian": "Эльварское побережье",
+          "english": "Elvar Coast"
+        },
+        "STRATEGICREGION_101": {
+          "russian": "Гальнорский архипелаг",
+          "english": "Galnor Archipelago"
+        },
+        "STRATEGICREGION_102": {
+          "russian": "Северная Даленская равнина",
+          "english": "Northern Dalen Plain"
+        },
+        "STRATEGICREGION_103": {
+          "russian": "Росвенская равнина",
+          "english": "Rosven Plain"
+        },
+        "STRATEGICREGION_104": {
+          "russian": "Кольвенская равнина",
+          "english": "Kolven Plain"
+        },
+        "STRATEGICREGION_105": {
+          "russian": "Северо-западная Кастельская равнина",
+          "english": "Northwestern Kastel Plain"
+        },
+        "STRATEGICREGION_106": {
+          "russian": "Северная Кадвенская равнина",
+          "english": "Northern Kadven Plain"
+        },
+        "STRATEGICREGION_107": {
+          "russian": "Берданская равнина",
+          "english": "Berdan Plain"
+        },
+        "STRATEGICREGION_108": {
+          "russian": "Дельварская равнина",
+          "english": "Delvar Plain"
+        },
+        "STRATEGICREGION_109": {
+          "russian": "Альверская равнина",
+          "english": "Alver Plain"
+        },
+        "STRATEGICREGION_110": {
+          "russian": "Южная Валленская равнина",
+          "english": "Southern Vallen Plain"
+        },
+        "STRATEGICREGION_111": {
+          "russian": "Гольденское побережье",
+          "english": "Golden Coast"
+        },
+        "STRATEGICREGION_112": {
+          "russian": "Восточная Марденская равнина",
+          "english": "Eastern Marden Plain"
+        },
+        "STRATEGICREGION_113": {
           "russian": "Дорвейское побережье",
           "english": "Dorvey Coast"
         },
-        "STRATEGICREGION_72": {
-          "russian": "Северная Левенская тайга",
-          "english": "Northern Leven Taiga"
-        },
-        "STRATEGICREGION_73": {
-          "russian": "Восточная Брейнская тайга",
-          "english": "Eastern Breyn Taiga"
-        },
-        "STRATEGICREGION_74": {
-          "russian": "Южная Левенская тайга",
-          "english": "Southern Leven Taiga"
-        },
-        "STRATEGICREGION_75": {
-          "russian": "Западная Верненская тайга",
-          "english": "Western Vernen Taiga"
-        },
-        "STRATEGICREGION_76": {
-          "russian": "Восточная Верненская тайга",
-          "english": "Eastern Vernen Taiga"
-        },
-        "STRATEGICREGION_77": {
-          "russian": "Даленская тайга",
-          "english": "Dalen Taiga"
-        },
-        "STRATEGICREGION_78": {
-          "russian": "Восточная Мелвенская тайга",
-          "english": "Eastern Melven Taiga"
-        },
-        "STRATEGICREGION_79": {
-          "russian": "Западная Мелвенская тайга",
-          "english": "Western Melven Taiga"
-        },
-        "STRATEGICREGION_80": {
-          "russian": "Северные Альбинские равнины",
-          "english": "Northern Albin Plains"
-        },
-        "STRATEGICREGION_81": {
-          "russian": "Центральные Альбинские равнины",
-          "english": "Central Albin Plains"
-        },
-        "STRATEGICREGION_82": {
-          "russian": "Северные Меретские равнины",
-          "english": "Northern Meret Plains"
-        },
-        "STRATEGICREGION_83": {
-          "russian": "Южные Альбинские равнины",
-          "english": "Southern Albin Plains"
-        },
-        "STRATEGICREGION_84": {
-          "russian": "Восточные Реймарские равнины",
-          "english": "Eastern Reymar Plains"
-        },
-        "STRATEGICREGION_85": {
-          "russian": "Северные Валленские равнины",
-          "english": "Northern Vallen Plains"
-        },
-        "STRATEGICREGION_86": {
-          "russian": "Западные Реймарские равнины",
-          "english": "Western Reymar Plains"
-        },
-        "STRATEGICREGION_87": {
-          "russian": "Южные Меретские равнины",
-          "english": "Southern Meret Plains"
-        },
-        "STRATEGICREGION_88": {
-          "russian": "Южные Валленские равнины",
-          "english": "Southern Vallen Plains"
-        },
-        "STRATEGICREGION_89": {
-          "russian": "Кастельские степи",
-          "english": "Kastel Steppe"
-        },
-        "STRATEGICREGION_90": {
-          "russian": "Северо-западный Бельнор",
-          "english": "Northwestern Belnor"
-        },
-        "STRATEGICREGION_91": {
-          "russian": "Северный Бельнор",
-          "english": "Northern Belnor"
-        },
-        "STRATEGICREGION_92": {
-          "russian": "Северо-восточный Бельнор",
-          "english": "Northeastern Belnor"
-        },
-        "STRATEGICREGION_93": {
-          "russian": "Юго-западный Бельнор",
-          "english": "Southwestern Belnor"
-        },
-        "STRATEGICREGION_94": {
-          "russian": "Южный Бельнор",
-          "english": "Southern Belnor"
-        },
-        "STRATEGICREGION_95": {
-          "russian": "Юго-восточный Бельнор",
-          "english": "Southeastern Belnor"
-        },
-        "STRATEGICREGION_96": {
-          "russian": "Крайний северо-западный Фарден",
-          "english": "Outer Northwestern Farden"
-        },
-        "STRATEGICREGION_97": {
-          "russian": "Северо-западный Фарден",
-          "english": "Northwestern Farden"
-        },
-        "STRATEGICREGION_98": {
-          "russian": "Северный Фарден",
-          "english": "Northern Farden"
-        },
-        "STRATEGICREGION_99": {
-          "russian": "Дальний северо-восточный Фарден",
-          "english": "Far Northeastern Farden"
-        },
-        "STRATEGICREGION_100": {
-          "russian": "Дальний западный Фарден",
-          "english": "Far Western Farden"
-        },
-        "STRATEGICREGION_101": {
-          "russian": "Западный Фарден",
-          "english": "Western Farden"
-        },
-        "STRATEGICREGION_102": {
-          "russian": "Дальний восточный Фарден",
-          "english": "Far Eastern Farden"
-        },
-        "STRATEGICREGION_103": {
-          "russian": "Крайний юго-западный Фарден",
-          "english": "Outer Southwestern Farden"
-        },
-        "STRATEGICREGION_104": {
-          "russian": "Юго-западный Фарден",
-          "english": "Southwestern Farden"
-        },
-        "STRATEGICREGION_105": {
-          "russian": "Южный Фарден",
-          "english": "Southern Farden"
-        },
-        "STRATEGICREGION_106": {
-          "russian": "Дальний юго-восточный Фарден",
-          "english": "Far Southeastern Farden"
-        },
-        "STRATEGICREGION_107": {
-          "russian": "Северо-западный Ирвен",
-          "english": "Northwestern Irven"
-        },
-        "STRATEGICREGION_108": {
-          "russian": "Северный Ирвен",
-          "english": "Northern Irven"
-        },
-        "STRATEGICREGION_109": {
-          "russian": "Крайний северо-западный Кальден",
-          "english": "Outer Northwestern Kalden"
-        },
-        "STRATEGICREGION_110": {
-          "russian": "Северо-восточный Ирвен",
-          "english": "Northeastern Irven"
-        },
-        "STRATEGICREGION_111": {
-          "russian": "Западный Ирвен",
-          "english": "Western Irven"
-        },
-        "STRATEGICREGION_112": {
-          "russian": "Дальний северо-западный Кальден",
-          "english": "Far Northwestern Kalden"
-        },
-        "STRATEGICREGION_113": {
-          "russian": "Восточный Ирвен",
-          "english": "Eastern Irven"
-        },
         "STRATEGICREGION_114": {
-          "russian": "Северо-западный Кальден",
-          "english": "Northwestern Kalden"
+          "russian": "Бейварская равнина",
+          "english": "Beyvar Plain"
         },
         "STRATEGICREGION_115": {
-          "russian": "Северный Кальден",
-          "english": "Northern Kalden"
+          "russian": "Гарленское побережье",
+          "english": "Garlen Coast"
         },
         "STRATEGICREGION_116": {
-          "russian": "Юго-западный Ирвен",
-          "english": "Southwestern Irven"
+          "russian": "Эрденская равнина",
+          "english": "Erden Plain"
         },
         "STRATEGICREGION_117": {
-          "russian": "Дальний северо-восточный Кальден",
-          "english": "Far Northeastern Kalden"
+          "russian": "Западная Мелвенская равнина",
+          "english": "Western Melven Plain"
         },
         "STRATEGICREGION_118": {
-          "russian": "Северо-восточный Кальден",
-          "english": "Northeastern Kalden"
+          "russian": "Восточная островная дуга",
+          "english": "Eastern Island Arc"
         },
         "STRATEGICREGION_119": {
-          "russian": "Крайний западный Кальден",
-          "english": "Outer Western Kalden"
+          "russian": "Кердорская равнина",
+          "english": "Kerdor Plain"
         },
         "STRATEGICREGION_120": {
-          "russian": "Дальний западный Кальден",
-          "english": "Far Western Kalden"
+          "russian": "Ольвенская равнина",
+          "english": "Olven Plain"
         },
         "STRATEGICREGION_121": {
-          "russian": "Западный Кальден",
-          "english": "Western Kalden"
+          "russian": "Шелдарская равнина",
+          "english": "Sheldar Plain"
         },
         "STRATEGICREGION_122": {
-          "russian": "Юго-восточный Ирвен",
-          "english": "Southeastern Irven"
+          "russian": "Южное Валленское предгорье",
+          "english": "Southern Vallen Foothills"
         },
         "STRATEGICREGION_123": {
-          "russian": "Восточный Кальден",
-          "english": "Eastern Kalden"
+          "russian": "Зелларское побережье",
+          "english": "Zellar Coast"
         },
         "STRATEGICREGION_124": {
-          "russian": "Крайний восточный Кальден",
-          "english": "Outer Eastern Kalden"
+          "russian": "Острова внутреннего моря",
+          "english": "Inner Sea Islands"
         },
         "STRATEGICREGION_125": {
-          "russian": "Дальний восточный Кальден",
-          "english": "Far Eastern Kalden"
+          "russian": "Южное Валленское побережье",
+          "english": "Southern Vallen Coast"
         },
         "STRATEGICREGION_126": {
-          "russian": "Дальний юго-западный Кальден",
-          "english": "Far Southwestern Kalden"
+          "russian": "Вельтарская равнина",
+          "english": "Veltar Plain"
         },
         "STRATEGICREGION_127": {
-          "russian": "Крайний юго-западный Кальден",
-          "english": "Outer Southwestern Kalden"
+          "russian": "Западная Кастельская равнина",
+          "english": "Western Kastel Plain"
         },
         "STRATEGICREGION_128": {
-          "russian": "Юго-западный Кальден",
-          "english": "Southwestern Kalden"
+          "russian": "Ульварское побережье",
+          "english": "Ulvar Coast"
         },
         "STRATEGICREGION_129": {
-          "russian": "Южный Кальден",
-          "english": "Southern Kalden"
+          "russian": "Северо-западное Элларское побережье",
+          "english": "Northwestern Ellar Coast"
         },
         "STRATEGICREGION_130": {
-          "russian": "Юго-восточный Кальден",
-          "english": "Southeastern Kalden"
+          "russian": "Черденская равнина",
+          "english": "Cherden Plain"
         },
         "STRATEGICREGION_131": {
-          "russian": "Дальний юго-восточный Кальден",
-          "english": "Far Southeastern Kalden"
+          "russian": "Западная островная дуга",
+          "english": "Western Island Arc"
         },
         "STRATEGICREGION_132": {
           "russian": "Морвен",
           "english": "Morven"
         },
         "STRATEGICREGION_133": {
-          "russian": "Крайний северо-западный Ольден",
-          "english": "Outer Northwestern Olden"
+          "russian": "Гевранское побережье",
+          "english": "Gevran Coast"
         },
         "STRATEGICREGION_134": {
-          "russian": "Дальний северо-западный Ольден",
-          "english": "Far Northwestern Olden"
+          "russian": "Юго-западное Скейльское побережье",
+          "english": "Southwestern Skeyl Coast"
         },
         "STRATEGICREGION_135": {
-          "russian": "Северный Неллар",
-          "english": "Northern Nellar"
+          "russian": "Южная Черденская равнина",
+          "english": "Southern Cherden Plain"
         },
         "STRATEGICREGION_136": {
-          "russian": "Северо-западный Ольден",
-          "english": "Northwestern Olden"
+          "russian": "Хейденская равнина",
+          "english": "Kheyden Plain"
         },
         "STRATEGICREGION_137": {
-          "russian": "Западный Неллар",
-          "english": "Western Nellar"
+          "russian": "Гальвенская равнина",
+          "english": "Galven Plain"
         },
         "STRATEGICREGION_138": {
-          "russian": "Северо-восточный Ольден",
-          "english": "Northeastern Olden"
+          "russian": "Северо-западная Кадвенская равнина",
+          "english": "Northwestern Kadven Plain"
         },
         "STRATEGICREGION_139": {
-          "russian": "Северный Ольден",
-          "english": "Northern Olden"
+          "russian": "Южный островной порог",
+          "english": "Southern Island Threshold"
         },
         "STRATEGICREGION_140": {
-          "russian": "Центральный Неллар",
-          "english": "Central Nellar"
+          "russian": "Мелранская равнина",
+          "english": "Melran Plain"
         },
         "STRATEGICREGION_141": {
           "russian": "Северо-западный Равен",
@@ -2303,40 +2303,40 @@
           "english": "Northern Raven"
         },
         "STRATEGICREGION_143": {
-          "russian": "Дальний северо-восточный Ольден",
-          "english": "Far Northeastern Olden"
+          "russian": "Восточная Меретская равнина",
+          "english": "Eastern Meret Plain"
         },
         "STRATEGICREGION_144": {
-          "russian": "Крайний западный Ольден",
-          "english": "Outer Western Olden"
+          "russian": "Доргенское побережье",
+          "english": "Dorgen Coast"
         },
         "STRATEGICREGION_145": {
-          "russian": "Дальний западный Ольден",
-          "english": "Far Western Olden"
+          "russian": "Тавренская равнина",
+          "english": "Tavren Plain"
         },
         "STRATEGICREGION_146": {
-          "russian": "Западный Ольден",
-          "english": "Western Olden"
+          "russian": "Юго-восточное Альбинское побережье",
+          "english": "Southeastern Albin Coast"
         },
         "STRATEGICREGION_147": {
-          "russian": "Восточный Ольден",
-          "english": "Eastern Olden"
+          "russian": "Лорденское побережье",
+          "english": "Lorden Coast"
         },
         "STRATEGICREGION_148": {
-          "russian": "Дальний восточный Ольден",
-          "english": "Far Eastern Olden"
+          "russian": "Нелвенская равнина",
+          "english": "Nelven Plain"
         },
         "STRATEGICREGION_149": {
-          "russian": "Крайний восточный Ольден",
-          "english": "Outer Eastern Olden"
+          "russian": "Западная Меретская равнина",
+          "english": "Western Meret Plain"
         },
         "STRATEGICREGION_150": {
-          "russian": "Крайний юго-западный Ольден",
-          "english": "Outer Southwestern Olden"
+          "russian": "Кастельская равнина",
+          "english": "Kastel Plain"
         },
         "STRATEGICREGION_151": {
-          "russian": "Дальний юго-западный Ольден",
-          "english": "Far Southwestern Olden"
+          "russian": "Зейларская равнина",
+          "english": "Zeylar Plain"
         },
         "STRATEGICREGION_152": {
           "russian": "Северо-западный Перрин",
@@ -2367,8 +2367,8 @@
           "english": "Eastern Raven"
         },
         "STRATEGICREGION_159": {
-          "russian": "Юго-западный Ольден",
-          "english": "Southwestern Olden"
+          "russian": "Северо-восточная Альбинская равнина",
+          "english": "Northeastern Albin Plain"
         },
         "STRATEGICREGION_160": {
           "russian": "Юго-западный Равен",
@@ -2379,40 +2379,40 @@
           "english": "Southern Raven"
         },
         "STRATEGICREGION_162": {
-          "russian": "Восточный Неллар",
-          "english": "Eastern Nellar"
+          "russian": "Юго-восточная Альбинская равнина",
+          "english": "Southeastern Albin Plain"
         },
         "STRATEGICREGION_163": {
-          "russian": "Южный Ольден",
-          "english": "Southern Olden"
+          "russian": "Дейранская равнина",
+          "english": "Deyran Plain"
         },
         "STRATEGICREGION_164": {
-          "russian": "Юго-восточный Ольден",
-          "english": "Southeastern Olden"
+          "russian": "Ялденская равнина",
+          "english": "Yalden Plain"
         },
         "STRATEGICREGION_165": {
-          "russian": "Южный Неллар",
-          "english": "Southern Nellar"
+          "russian": "Западная Левенская равнина",
+          "english": "Western Leven Plain"
         },
         "STRATEGICREGION_166": {
-          "russian": "Дальний юго-восточный Ольден",
-          "english": "Far Southeastern Olden"
+          "russian": "Южная Левенская равнина",
+          "english": "Southern Leven Plain"
         },
         "STRATEGICREGION_167": {
           "russian": "Юго-восточный Равен",
           "english": "Southeastern Raven"
         },
         "STRATEGICREGION_168": {
-          "russian": "Северо-западный Терен",
-          "english": "Northwestern Teren"
+          "russian": "Восточная Реймарская равнина",
+          "english": "Eastern Reymar Plain"
         },
         "STRATEGICREGION_169": {
-          "russian": "Северный Терен",
-          "english": "Northern Teren"
+          "russian": "Тейренская равнина",
+          "english": "Teyren Plain"
         },
         "STRATEGICREGION_170": {
-          "russian": "Северо-восточный Терен",
-          "english": "Northeastern Teren"
+          "russian": "Остерская равнина",
+          "english": "Oster Plain"
         },
         "STRATEGICREGION_171": {
           "russian": "Крайний северо-западный Фалор",
@@ -2431,40 +2431,40 @@
           "english": "Outer Western Falor"
         },
         "STRATEGICREGION_175": {
-          "russian": "Северо-западный Селдар",
-          "english": "Northwestern Seldar"
+          "russian": "Дальвенская равнина",
+          "english": "Dalven Plain"
         },
         "STRATEGICREGION_176": {
-          "russian": "Западный Терен",
-          "english": "Western Teren"
+          "russian": "Валленская равнина",
+          "english": "Vallen Plain"
         },
         "STRATEGICREGION_177": {
-          "russian": "Центральный Терен",
-          "english": "Central Teren"
+          "russian": "Альбинская равнина",
+          "english": "Albin Plain"
         },
         "STRATEGICREGION_178": {
           "russian": "Западный Фалор",
           "english": "Western Falor"
         },
         "STRATEGICREGION_179": {
-          "russian": "Северный Селдар",
-          "english": "Northern Seldar"
+          "russian": "Эвардская равнина",
+          "english": "Evard Plain"
         },
         "STRATEGICREGION_180": {
           "russian": "Восточный Фалор",
           "english": "Eastern Falor"
         },
         "STRATEGICREGION_181": {
-          "russian": "Восточный Терен",
-          "english": "Eastern Teren"
+          "russian": "Северо-восточная Элларская равнина",
+          "english": "Northeastern Ellar Plain"
         },
         "STRATEGICREGION_182": {
-          "russian": "Юго-западный Терен",
-          "english": "Southwestern Teren"
+          "russian": "Юго-восточное Сельвенское побережье",
+          "english": "Southeastern Selven Coast"
         },
         "STRATEGICREGION_183": {
-          "russian": "Северо-восточный Селдар",
-          "english": "Northeastern Seldar"
+          "russian": "Салвенское побережье",
+          "english": "Salven Coast"
         },
         "STRATEGICREGION_184": {
           "russian": "Крайний восточный Фалор",
@@ -2479,24 +2479,24 @@
           "english": "Southern Falor"
         },
         "STRATEGICREGION_187": {
-          "russian": "Южный Терен",
-          "english": "Southern Teren"
+          "russian": "Эльденская равнина",
+          "english": "Elden Plain"
         },
         "STRATEGICREGION_188": {
           "russian": "Дальний юго-восточный Фалор",
           "english": "Far Southeastern Falor"
         },
         "STRATEGICREGION_189": {
-          "russian": "Юго-западный Селдар",
-          "english": "Southwestern Seldar"
+          "russian": "Западная прибрежная цепь",
+          "english": "Western Coastal Chain"
         },
         "STRATEGICREGION_190": {
           "russian": "Крайний северо-западный Ульвен",
           "english": "Outer Northwestern Ulven"
         },
         "STRATEGICREGION_191": {
-          "russian": "Северо-восточный Ульвен",
-          "english": "Northeastern Ulven"
+          "russian": "Юго-восточный архипелаг",
+          "english": "Southeastern Archipelago"
         },
         "STRATEGICREGION_192": {
           "russian": "Северо-западный Ульвен",
@@ -2519,8 +2519,8 @@
           "english": "Outer Eastern Ulven"
         },
         "STRATEGICREGION_197": {
-          "russian": "Южный Селдар",
-          "english": "Southern Seldar"
+          "russian": "Юго-восточное Лорнское побережье",
+          "english": "Southeastern Lorn Coast"
         },
         "STRATEGICREGION_198": {
           "russian": "Дальний юго-западный Ульвен",
@@ -2531,20 +2531,20 @@
           "english": "Southern Ulven"
         },
         "STRATEGICREGION_200": {
-          "russian": "Юго-восточный Терен",
-          "english": "Southeastern Teren"
+          "russian": "Севардское побережье",
+          "english": "Sevard Coast"
         },
         "STRATEGICREGION_201": {
           "russian": "Дальний юго-восточный Ульвен",
           "english": "Far Southeastern Ulven"
         },
         "STRATEGICREGION_202": {
-          "russian": "Юго-восточный Селдар",
-          "english": "Southeastern Seldar"
+          "russian": "Зорвенское побережье",
+          "english": "Zorven Coast"
         },
         "STRATEGICREGION_203": {
-          "russian": "Крайний северо-западный Шарден",
-          "english": "Outer Northwestern Sharden"
+          "russian": "Северо-западная Меретская равнина",
+          "english": "Northwestern Meret Plain"
         },
         "STRATEGICREGION_204": {
           "russian": "Северо-западный Эвенор",
@@ -2555,24 +2555,24 @@
           "english": "Far Northwestern Sharden"
         },
         "STRATEGICREGION_206": {
-          "russian": "Хаврен",
-          "english": "Khavren"
+          "russian": "Восточное Сельвенское побережье",
+          "english": "Eastern Selven Coast"
         },
         "STRATEGICREGION_207": {
-          "russian": "Северный Цельмар",
-          "english": "Northern Tselmar"
+          "russian": "Северная Брейнская равнина",
+          "english": "Northern Breyn Plain"
         },
         "STRATEGICREGION_208": {
-          "russian": "Северо-западный Цельмар",
-          "english": "Northwestern Tselmar"
+          "russian": "Целварская равнина",
+          "english": "Tselvar Plain"
         },
         "STRATEGICREGION_209": {
-          "russian": "Северо-восточный Цельмар",
-          "english": "Northeastern Tselmar"
+          "russian": "Северо-западная Даленская равнина",
+          "english": "Northwestern Dalen Plain"
         },
         "STRATEGICREGION_210": {
-          "russian": "Западный Цельмар",
-          "english": "Western Tselmar"
+          "russian": "Северо-восточное Дорвейское побережье",
+          "english": "Northeastern Dorvey Coast"
         },
         "STRATEGICREGION_211": {
           "russian": "Северо-восточный Эвенор",
@@ -2583,12 +2583,12 @@
           "english": "Southwestern Evenor"
         },
         "STRATEGICREGION_213": {
-          "russian": "Восточный Цельмар",
-          "english": "Eastern Tselmar"
+          "russian": "Северо-восточное Кадвенское побережье",
+          "english": "Northeastern Kadven Coast"
         },
         "STRATEGICREGION_214": {
-          "russian": "Юго-западный Цельмар",
-          "english": "Southwestern Tselmar"
+          "russian": "Юго-восточная Левенская равнина",
+          "english": "Southeastern Leven Plain"
         },
         "STRATEGICREGION_215": {
           "russian": "Северный Шарден",
@@ -2639,8 +2639,8 @@
           "english": "Far Southeastern Sharden"
         },
         "STRATEGICREGION_227": {
-          "russian": "Юго-восточный Цельмар",
-          "english": "Southeastern Tselmar"
+          "russian": "Западная Сайленская равнина",
+          "english": "Western Saylen Plain"
         },
         "STRATEGICREGION_228": {
           "russian": "Западное Антолльское море",

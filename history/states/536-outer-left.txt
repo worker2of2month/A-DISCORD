@@ -4,10 +4,14 @@ state = {
 	id = 536
 	name = "STATE_536"
 	manpower = 1
-	state_category = rural
+	state_category = wasteland
+	history = {
+		owner = RSV
+		add_core_of = RSV
+	}
 	provinces = {
-		350 1233 1542 1637 2021 2134 2589 2608 2681 2975 4832 5843 6086 6251 6872 7064
-		7237 7647 7896 7962 8883 9278 9401 9779 10035 11748 11892 12412 12826 12942 13016
+		221 1542 2021 2681 2975 3539 5267 5843 6086 6872 7064 7237 7368 7896 9401 9779
+		10035 11029 11117 11748 12826
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 0.0

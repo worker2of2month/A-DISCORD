@@ -183,6 +183,37 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         )[1].split("has_completed_focus = VAL_Return_Southern_Tsaygen", 1)[0]
         self.assertIn("VAL = { transfer_state = 169 }", older_result)
 
+    def test_parallel_local_war_cannot_take_kefreyts_capitulation(self) -> None:
+        # ERT can capitulate while it also fights SCA. The native winner (FROM)
+        # may then be SCA, which must not annex the land Kefreyt occupied.
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        managed = named_block(triggers, "VAL_wasteland_capitulation_managed")
+        self.assertNotIn(
+            "\tFROM = { OR = { tag = VAL is_subject_of = VAL } }", managed
+        )
+        self.assertIn(
+            "capital_scope = { controller = { OR = { tag = VAL is_subject_of = VAL } } }",
+            managed,
+        )
+        self.assertIn("FROM = { NOT = { tag = VAL } NOT = { is_subject_of = VAL } }", managed)
+        self.assertIn(
+            "any_owned_state = { controller = { OR = { tag = VAL is_subject_of = VAL } } }",
+            managed,
+        )
+
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        settle = named_block(effects, "VAL_settle_wasteland_capitulation")
+        last_claim = settle.rfind("transfer_state = 207")
+        third_party = settle.find("has_war_with = event_target:VAL_wasteland_defeated")
+        self.assertGreater(third_party, last_claim)
+        tail = settle[third_party:]
+        self.assertIn("CONTROLLER = { transfer_state = PREV }", tail)
+        self.assertIn(
+            "limit = { NOT = { tag = VAL } NOT = { is_subject_of = VAL } }\n"
+            "\t\twhite_peace = event_target:VAL_wasteland_defeated",
+            tail,
+        )
+
     def test_late_ultimatum_is_a_fallback_not_the_primary_claim(self) -> None:
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         demand = named_block(decisions, "VAL_frontier_demand_ERT")

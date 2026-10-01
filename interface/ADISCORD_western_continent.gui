@@ -1,0 +1,166 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_Reservation_Diplomacy_Container"
+		position = { x = 0 y = 0 }
+		size = { width = 680 height = 100%% }
+		clipping = yes
+
+		background = {
+			name = "ADISCORD_Reservation_Background"
+			quadTextureSprite = "GFX_ADISCORD_constructions_window_bg"
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Reservation_Header"
+			position = { x = 12 y = 0 }
+			size = { width = 656 height = 53 }
+			clipping = yes
+
+			background = {
+				name = "ADISCORD_Reservation_Header_Background"
+				quadTextureSprite = "GFX_ADISCORD_decisions_category_header_bg"
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Header_Title"
+				position = { x = 18 y = 15 }
+				font = "hoi_20b"
+				text = "ADISCORD_RESERVATION_SCREEN_TITLE"
+				maxWidth = 370
+				maxHeight = 24
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Header_Status"
+				position = { x = 438 y = 16 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_RESERVATION_SCREEN_STATUS"
+				maxWidth = 180
+				maxHeight = 20
+				format = right
+				fixedsize = yes
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Reservation_Wallpaper_Container"
+			position = { x = 76 y = 61 }
+			size = { width = 528 height = 278 }
+
+			iconType = {
+				name = "ADISCORD_Reservation_Wallpaper"
+				spriteType = "GFX_ADISCORD_Reservation_Wallpaper"
+				position = { x = 0 y = 0 }
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Reservation_Protocol"
+			position = { x = 12 y = 347 }
+			size = { width = 656 height = 104 }
+
+			background = {
+				name = "ADISCORD_Reservation_Protocol_Background"
+				quadTextureSprite = "GFX_ADISCORD_constructions_panel_bg"
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Protocol_Title"
+				position = { x = 18 y = 10 }
+				font = "hoi_18mbs"
+				text = "ADISCORD_RESERVATION_PROTOCOL_TITLE"
+				maxWidth = 620
+				maxHeight = 24
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Protocol_Description"
+				position = { x = 18 y = 38 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_RESERVATION_PROTOCOL_DESC"
+				maxWidth = 620
+				maxHeight = 56
+				fixedsize = yes
+			}
+		}
+
+		containerWindowType = {
+			name = "ADISCORD_Reservation_Signal_Panel"
+			position = { x = 12 y = 459 }
+			size = { width = 656 height = -56 }
+
+			background = {
+				name = "ADISCORD_Reservation_Signal_Background"
+				quadTextureSprite = "GFX_ADISCORD_constructions_queue_bg"
+			}
+
+			containerWindowType = {
+				name = "ADISCORD_Reservation_Terminal_Frame"
+				position = { x = 387 y = 8 }
+				size = { width = 256 height = 528 }
+
+				background = {
+					name = "ADISCORD_Reservation_Terminal_Frame_Background"
+					quadTextureSprite = "GFX_tiled_window_1b_border_adiscord"
+				}
+
+				containerWindowType = {
+					name = "ADISCORD_Reservation_Animation_Clip"
+					position = { x = 8 y = 8 }
+					size = { width = 240 height = 512 }
+					clipping = yes
+
+					iconType = {
+						name = "terminal_display"
+						position = { x = 0 y = 0 }
+						quadTextureSprite = "GFX_ADISCORD_Reservation_Terminal"
+					}
+				}
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Signal_Title"
+				position = { x = 20 y = 18 }
+				font = "hoi_20b"
+				text = "ADISCORD_RESERVATION_SIGNAL_TITLE"
+				maxWidth = 355
+				maxHeight = 24
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Signal_Status"
+				position = { x = 20 y = 54 }
+				font = "hoi_18mbs"
+				text = "ADISCORD_RESERVATION_SIGNAL_STATUS"
+				maxWidth = 355
+				maxHeight = 120
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Signal_Explanation"
+				position = { x = 20 y = 112 }
+				font = "hoi_16mbs"
+				text = "ADISCORD_RESERVATION_SIGNAL_DESC"
+				maxWidth = 355
+				maxHeight = 200
+				fixedsize = yes
+			}
+
+			instantTextboxType = {
+				name = "ADISCORD_Reservation_Lock_Status"
+				position = { x = 20 y = -42 }
+				Orientation = "LOWER_LEFT"
+				font = "hoi_18mbs"
+				text = "ADISCORD_RESERVATION_LOCK_STATUS"
+				maxWidth = 616
+				maxHeight = 26
+				format = center
+				fixedsize = yes
+			}
+		}
+	}
+}

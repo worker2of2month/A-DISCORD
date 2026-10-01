@@ -20,6 +20,7 @@
     "minimap",
     "decision_ui_assets",
     "diplomacy_ui_assets",
+    "western_diplomacy_assets",
     "production_ui_assets",
     "logistics_ui_assets",
     "focus_ui_assets",
@@ -190,6 +191,7 @@
       "owner_module": "tools.builders.build_adiscord_map_buildings",
       "output_globs": ["map/buildings.txt"],
       "source_inputs": [
+        "tools/data/adiscord_western_states.json",
         "tools/data/adiscord_southern_cities.json",
         "tools/builders/build_adiscord_map_buildings.py",
         "tools/builders/build_adiscord_coastal_geography.py",
@@ -357,6 +359,9 @@
       "id": "outer_states",
       "owner_module": "tools.builders.build_adiscord_outer_states",
       "output_globs": [
+        "history/states/47-*.txt",
+        "history/states/77-*.txt",
+        "history/states/*-outer-remainder.txt",
         "history/states/23-*.txt",
         "history/states/3[3-9]?-outer-*.txt",
         "history/states/4??-outer-*.txt",
@@ -366,6 +371,7 @@
         "map/buildings.txt"
       ],
       "source_inputs": [
+        "tools/data/adiscord_western_states.json",
         "history/states/23-*.txt",
         "tools/lib/localisation.py",
         "map/definition.csv",
@@ -389,6 +395,7 @@
         "map/buildings.txt"
       ],
       "source_inputs": [
+        "tools/data/adiscord_western_states.json",
         "history/states/23-*.txt",
         "tools/lib/localisation.py",
         "map/definition.csv",
@@ -411,6 +418,7 @@
         "map/weatherpositions.txt"
       ],
       "source_inputs": [
+        "tools/data/adiscord_western_states.json",
         "history/states/*.txt",
         "map/definition.csv",
         "map/provinces.bmp",
@@ -924,6 +932,40 @@
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_production_ui_assets", "--apply"],
+      "may_delete_outputs": false,
+      "ownership_mode": "exclusive"
+    },
+    {
+      "id": "western_diplomacy_assets",
+      "owner_module": "tools.builders.build_adiscord_western_diplomacy_assets",
+      "output_globs": [
+        "gfx/interface/ADISCORD_western_continent/reservation_wallpaper.dds",
+        "gfx/interface/ADISCORD_western_continent/reservation_terminal.dds",
+        "gfx/flags/RSV.tga",
+        "gfx/flags/medium/RSV.tga",
+        "gfx/flags/small/RSV.tga"
+      ],
+      "source_inputs": [
+        "tools/assets/source/ADISCORD_reservation_reference.png",
+        "gfx/fonts/vt323_22.fnt",
+        "gfx/fonts/vt323_22.tga",
+        "gfx/flags/EXZ.tga",
+        "gfx/flags/medium/EXZ.tga",
+        "gfx/flags/small/EXZ.tga"
+      ],
+      "check_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_western_diplomacy_assets"
+      ],
+      "apply_command": [
+        "{python}",
+        "-B",
+        "-m",
+        "tools.builders.build_adiscord_western_diplomacy_assets",
+        "--apply"
+      ],
       "may_delete_outputs": false,
       "ownership_mode": "exclusive"
     },

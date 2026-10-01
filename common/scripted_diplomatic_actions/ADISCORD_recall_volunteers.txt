@@ -9,6 +9,8 @@ scripted_diplomatic_actions = {
 		visible = {
 			NOT = { original_tag = EXZ }
 			ROOT = { NOT = { original_tag = EXZ } }
+			ADISCORD_western_closed_country = no
+			ROOT = { ADISCORD_western_closed_country = no }
 		}
 
 		selectable = {
