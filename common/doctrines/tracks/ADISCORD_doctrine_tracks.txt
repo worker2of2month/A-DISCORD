@@ -80,6 +80,7 @@ ADISCORD_air_vtol_deep_strike = {
 		equipment = {
 			cas
 			tactical_bomber
+			naval_bomber
 		}
 	}
 }
@@ -120,7 +121,6 @@ ADISCORD_naval_surface_control = {
 		multiplier = 2.5
 		equipment = {
 			capital_ship
-			carrier
 			screen_ship
 		}
 	}

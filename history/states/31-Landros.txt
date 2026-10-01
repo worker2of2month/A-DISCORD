@@ -4,7 +4,7 @@ state={
 	provinces={
 		5736 16354 16378 16452
 	}
-	manpower=180000
+	manpower=8000000
 	buildings_max_level_factor=1.000
 
 	resources = {
@@ -13,6 +13,11 @@ state={
 
 	history = {
 		owner = BLD
+		buildings = {
+			infrastructure = 4
+			industrial_complex = 3
+			arms_factory = 2
+		}
 		add_core_of = BLD
 
 		victory_points = { 16452 25 }

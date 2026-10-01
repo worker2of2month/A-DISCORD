@@ -131,6 +131,34 @@ class NodrulNorthernFrontTests(unittest.TestCase):
                     self.assertNotIn(f"tag = {other}", block)
                     self.assertNotIn(f"id = {other}", block)
 
+    def test_coalition_counterattacks_after_nod_push_is_spent(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        block = named_block(source, "STP_cw_northern_coalition_counteroffensive")
+
+        self.assertTrue(block, "missing coalition counteroffensive profile")
+        self.assertIn(
+            "allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF } }",
+            block,
+        )
+        self.assertIn("enable = { STP_cw_northern_counteroffensive_open = yes }", block)
+        self.assertIn("abort_when_not_enabled = yes", block)
+        self.assertIn("type = front_control tag = NOD", block)
+        self.assertIn("type = conquer id = NOD", block)
+        self.assertIn("type = role_ratio id = militias value = -60", block)
+        militia = named_block(source, "STP_cw_border_territorial_armies")
+        self.assertIn("NOT = { STP_cw_northern_counteroffensive_open = yes }", militia)
+
+        triggers = (
+            ROOT / "common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"
+        ).read_text(encoding="utf-8-sig")
+        gate = named_block(triggers, "STP_cw_northern_counteroffensive_open")
+        self.assertIn("has_war_with = NOD", gate)
+        self.assertIn("has_country_flag = NOD_cw_northern_exhaustion_applied", gate)
+        self.assertIn(
+            "check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }",
+            gate,
+        )
+
     def test_stelander_intervention_uses_same_field_army_concentration_contract(
         self,
     ) -> None:

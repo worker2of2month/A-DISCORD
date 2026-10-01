@@ -3125,6 +3125,56 @@ BRANCHES = (
         ),
     ),
     research_branch(
+        "power_shields",
+        "ADISCORD_infantry.txt",
+        ("infantry_folder",),
+        "Щитовой спецназ",
+        "Shield Special Forces",
+        "special_forces",
+        (
+            (
+                "kefreyt_shield_special_forces",
+                "Силовые щиты",
+                "Power Shields",
+                "tech_special_forces",
+                2163,
+                (),
+            ),
+            (
+                "shield_assault_drills",
+                "Взаимодействие щитовых групп",
+                "Shield Team Drills",
+                "tech_special_forces",
+                2166,
+                ("ADISCORD_urban_breacher = { defense = 0.04 breakthrough = 0.04 max_organisation = 1 }",),
+            ),
+            (
+                "compact_shield_generators",
+                "Компактные генераторы щитов",
+                "Compact Shield Generators",
+                "tech_special_forces",
+                2169,
+                (),
+            ),
+            (
+                "shield_field_maintenance",
+                "Полевое обслуживание щитов",
+                "Shield Field Maintenance",
+                "tech_maintenance_company",
+                2172,
+                ("ADISCORD_urban_breacher = { supply_consumption = -0.04 default_morale = 0.03 }",),
+            ),
+            (
+                "adaptive_power_shields",
+                "Адаптивные силовые щиты",
+                "Adaptive Power Shields",
+                "tech_special_forces",
+                2175,
+                (),
+            ),
+        ),
+    ),
+    research_branch(
         "special_forces",
         "ADISCORD_infantry.txt",
         ("infantry_folder",),
@@ -5487,6 +5537,7 @@ MAIN_BRANCH_KEYS_BY_FOLDER = {
         'small_arms',
         'squad_weapons',
         'special_forces',
+        'power_shields',
     ],
     "support_folder": [
         'combat_medicine',
@@ -6079,6 +6130,9 @@ FORBIDDEN_IDS = {
 
 
 ENABLE_EQUIPMENT = {
+    "ADISCORD_tech_kefreyt_shield_special_forces": ("ADISCORD_power_shield_equipment_1",),
+    "ADISCORD_tech_compact_shield_generators": ("ADISCORD_power_shield_equipment_2",),
+    "ADISCORD_tech_adaptive_power_shields": ("ADISCORD_power_shield_equipment_3",),
     "ADISCORD_tech_postwar_weapon_standardization": ("infantry_equipment_0",),
     "ADISCORD_tech_refurbished_receivers": ("ADISCORD_infantry_equipment_2156",),
     "ADISCORD_tech_sealed_receiver_assemblies": ("ADISCORD_infantry_equipment_2163",),
@@ -6338,6 +6392,7 @@ COMMON_STARTING_ROOTS = tuple(
             "combat_medicine",
             "synthetic_rubber",
             "synthetic_oil",
+            "power_shields",
         }
         for tech in BRANCH_BY_KEY[branch_key].techs[:4 if branch_key == "small_arms" else 1]
     )
@@ -6615,6 +6670,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
 
 
 ENABLE_SUBUNITS = {
+    "ADISCORD_tech_kefreyt_shield_special_forces": ("ADISCORD_urban_breacher",),
     "ADISCORD_tech_belt_fed_recovery": ("ADISCORD_regimental_fire_support",),
     "ADISCORD_tech_portable_at_cells": ("ADISCORD_regimental_anti_tank",),
     "ADISCORD_tech_radar_laying": ("ADISCORD_regimental_anti_air",),
@@ -6825,8 +6881,41 @@ def n(value: float) -> str:
     return f"{value:.3f}".rstrip("0").rstrip(".")
 
 
+# Weapon teams scale with formation doctrine and equipment density. Rifle-only
+# formations retain a smaller training benefit without acquiring crew weapons.
+SQUAD_WEAPON_TRAINING_SCALE = {
+    "ADISCORD_militia": 0.20,
+    "ADISCORD_territorial": 0.35,
+    "infantry": 1.0,
+    "ADISCORD_assault_infantry": 1.0,
+    "ADISCORD_urban_breacher": 0.75,
+    "ADISCORD_mechanized_infantry": 1.0,
+    "ADISCORD_marine_infantry": 1.0,
+    "mountaineers": 1.0,
+    "hq_infantry": 0.35,
+    "hq_paratrooper": 0.35,
+    "ADISCORD_regimental_fire_support": 1.0,
+}
+
+
 def effects_for(branch: Branch, tier: int) -> tuple[str, ...]:
-    return branch.techs[tier].effects
+    effects = branch.techs[tier].effects
+    if branch.key != "squad_weapons":
+        return effects
+    result: list[str] = []
+    for effect in effects:
+        match = re.fullmatch(r"category_all_infantry = \{ (.+) \}", effect)
+        if not match:
+            result.append(effect)
+            continue
+        modifiers = re.findall(r"(\w+) = (-?[0-9.]+)", match[1])
+        for unit, scale in SQUAD_WEAPON_TRAINING_SCALE.items():
+            payload = " ".join(
+                f"{name} = {n(float(value) * scale)}"
+                for name, value in modifiers
+            )
+            result.append(f"{unit} = {{ {payload} }}")
+    return tuple(result)
 
 
 NAVAL_AIR_WEAPON_EFFECTS = {
@@ -7344,6 +7433,26 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "kefreyt_shield_special_forces": (
+        "Открывает щитовые батальоны и производство первого поколения силовых щитов",
+        "Unlocks shield battalions and first-generation power shield production",
+    ),
+    "shield_assault_drills": (
+        "Согласованные действия щитовых групп улучшают оборону, прорыв и организацию щитовиков",
+        "Coordinated shield teams improve shield infantry defense, breakthrough and organization",
+    ),
+    "compact_shield_generators": (
+        "Компактные генераторы усиливают защиту и повышают надёжность силовых щитов",
+        "Compact generators improve shield protection and reliability",
+    ),
+    "shield_field_maintenance": (
+        "Полевые мастерские снижают расход снабжения и ускоряют восстановление организации щитовиков",
+        "Field workshops reduce shield infantry supply consumption and improve organization recovery",
+    ),
+    "adaptive_power_shields": (
+        "Адаптивные генераторы дают дополнительную защиту ценой большего расхода редких сплавов",
+        "Adaptive generators provide additional protection at a higher rare-alloy production cost",
+    ),
     "synthetic_rubber_plants": (
         "Нефтехимические заводы выпускают синтетическую резину и сопутствующее топливо",
         "Petrochemical plants produce synthetic rubber and fuel as a by-product",
@@ -7757,6 +7866,18 @@ TECHNICAL_TECH_DESCRIPTIONS.update(
 
 def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> list[str]:
     notes: list[str] = []
+    if branch.key == "power_shields":
+        notes.append(
+            "Щитовые батальоны требуют 20 силовых щитов; производство расходует редкие компоненты и редкие сплавы."
+            if is_ru else
+            "Shield battalions require 20 power shields; production consumes rare components and rare alloys."
+        )
+    if branch.key == "squad_weapons":
+        notes.append(
+            "Подготовка расчётов: ополчение 20%, территориалы и штабная пехота 35%, щитовики 75%, остальные оснащённые части 100% эффекта."
+            if is_ru else
+            "Crew training: militia 20%, territorial and HQ infantry 35%, shield troops 75%, other equipped formations 100% of the effect."
+        )
     if branch.key in {"synthetic_rubber", "synthetic_oil"}:
         tech_id = branch.techs[index].id
         for _, level in ENABLE_BUILDINGS.get(tech_id, ()):
@@ -8633,6 +8754,11 @@ def write_starting_technology_profile_manifest() -> None:
 
 
 CUSTOM_TECH_TEXTURES = {
+    "kefreyt_shield_special_forces": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
+    "shield_assault_drills": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
+    "compact_shield_generators": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
+    "shield_field_maintenance": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
+    "adaptive_power_shields": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
     "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds",
     "recovered_shaped_charge_cells": "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds",
     "disposable_launcher_standards": "gfx/interface/technologies/ADISCORD_antitank_02_satchel_charge.dds",
@@ -8684,7 +8810,8 @@ def write_gfx() -> None:
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
                     f"\t\ttextureFile = \"{texture_file}\"\n"
-                    "\t}\n"
+                    + ("\t\tnoOfFrames = 2\n\t\tscale = 0.9\n" if branch.key == "power_shields" else "")
+                    + "\t}\n"
                 )
     content = (
         "spriteTypes = {\n" + "\n".join(entries) + technology_tree_gfx_entries() + "}\n"
@@ -8752,6 +8879,10 @@ ACCESS_REQUIREMENT_LOCALISATION = {
 # These are generated alongside the technology tree so newly unlocked series
 # cannot silently fall back to raw technical IDs.
 LAND_EQUIPMENT_LOCALISATION = {
+    "ADISCORD_power_shield_equipment": ("Силовые щиты", "Power Shields", "Силовые щиты", "Power Shields", "Силовой щит для щитового спецназа; требует редких компонентов и редких сплавов.", "Power shields for shield infantry; require rare components and rare alloys."),
+    "ADISCORD_power_shield_equipment_1": ("Силовые щиты 2163", "Power Shields 2163", "Силовые щиты", "Power Shields", "Силовой щит для щитового спецназа; требует редких компонентов и редких сплавов.", "Power shields for shield infantry; require rare components and rare alloys."),
+    "ADISCORD_power_shield_equipment_2": ("Силовые щиты 2169", "Power Shields 2169", "Силовые щиты", "Power Shields", "Силовой щит для щитового спецназа; требует редких компонентов и редких сплавов.", "Power shields for shield infantry; require rare components and rare alloys."),
+    "ADISCORD_power_shield_equipment_3": ("Силовые щиты 2175", "Power Shields 2175", "Силовые щиты", "Power Shields", "Силовой щит для щитового спецназа; требует редких компонентов и редких сплавов.", "Power shields for shield infantry; require rare components and rare alloys."),
     "motorized_equipment": (
         "Грузовые автомобили",
         "Cargo Trucks",
@@ -8916,6 +9047,10 @@ LAND_EQUIPMENT_LOCALISATION = {
 
 
 INFANTRY_FAMILY_LOCALISATION = {
+    "ADISCORD_territorial_desc": (
+        "Лёгкая стрелковая линия без группового оружия: дешевле оснащение и снабжение, слабее наступление и устойчивость в затяжном бою.",
+        "Light rifle formations without crew-served weapons: cheaper equipment and supply, weaker offensives and endurance in sustained combat.",
+    ),
     "infantry_equipment": ("Личное стрелковое оружие", "Personal Small Arms"),
     "infantry_equipment_short": ("Личное оружие", "Personal Weapons"),
     "infantry_equipment_desc": (
@@ -9188,7 +9323,7 @@ def generated_localisation(language: str) -> list[str]:
         if equipment_id.startswith("ADISCORD_squad_weapons_equipment_"):
             name = ("Групповое оружие " if is_ru else "Crew-served weapons ") + name
             short = ("Групп. " if is_ru else "Crew ") + short
-        else:
+        elif not equipment_id.startswith("ADISCORD_power_shield_equipment"):
             name = ("Личное оружие " if is_ru else "Personal weapon ") + name
             short = ("Личн. " if is_ru else "Personal ") + short
         lines.extend(

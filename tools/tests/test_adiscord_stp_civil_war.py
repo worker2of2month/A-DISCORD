@@ -301,6 +301,22 @@ class CivilWarContracts(unittest.TestCase):
             block(self.effects, "STP_cw_settle_northern_defeat"),
         )
 
+    def test_northern_defeat_accepts_core_breach_without_cussington(self):
+        trigger = block(self.triggers, "NOD_cw_can_accept_northern_defeat")
+        self.assertRegex(
+            trigger,
+            r"OR = \{\s*NOT = \{ surrender_progress < 0\.7 \}[^}]*?"
+            r"NOD_cw_northern_core_breached = yes\s*\}",
+        )
+        breach = block(self.triggers, "NOD_cw_northern_core_breached")
+        self.assertIn("17 = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }", breach)
+        for state in ("12", "13"):
+            self.assertIn(
+                state + " = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }",
+                breach,
+            )
+        self.assertNotIn("30 =", breach)
+
     def test_arsenal_batch_checks_cash_boundary_and_pays_only_once(self):
         council = ast_block(
             entries("common/decisions/ADISCORD_STP_decisions.txt"), "STP_cw_war_council"
@@ -9072,7 +9088,7 @@ class CivilWarAirMandateContracts(unittest.TestCase):
 
 
 class NorthernStatusQuoTests(unittest.TestCase):
-    def test_status_quo_requires_301_days_ai_and_no_priority_outcome(self):
+    def test_status_quo_requires_451_days_ai_and_no_priority_outcome(self):
         guard = ast_block(
             entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt"),
             "NOD_cw_can_accept_northern_status_quo",
@@ -9085,7 +9101,7 @@ class NorthernStatusQuoTests(unittest.TestCase):
             ("NOD", "has_capitulated", "no"): True,
             ("NOD", "variable", "STP_cw_northern_campaign_status"): 1,
             ("NOD", "has_country_flag", "NOD_cw_northern_war_started"): True,
-            ("NOD", "flag_days", "NOD_cw_northern_war_started"): 301,
+            ("NOD", "flag_days", "NOD_cw_northern_war_started"): 451,
         }
         for tag in ("YPR", "COF", "TFF"):
             facts[("NOD", "has_war_with", tag)] = True
@@ -9095,10 +9111,11 @@ class NorthernStatusQuoTests(unittest.TestCase):
         self.assertTrue(matches_conditions(guard, facts, "NOD"))
         for days, expected in (
             (0, False),
-            (299, False),
-            (300, False),
-            (301, True),
-            (500, True),
+            (301, False),
+            (449, False),
+            (450, False),
+            (451, True),
+            (600, True),
         ):
             self.assertEqual(
                 matches_conditions(

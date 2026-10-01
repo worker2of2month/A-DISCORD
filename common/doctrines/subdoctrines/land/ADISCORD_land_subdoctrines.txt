@@ -12,6 +12,7 @@ ADISCORD_doctrine_mass_recruitment_bureaus = {
 		ADISCORD_doctrine_assault_detachments
 		ADISCORD_doctrine_mobile_line_groups
 		ADISCORD_doctrine_dispersed_militia_system
+		ADISCORD_doctrine_territorial_defense
 	}
 	ai_will_do = {
 		base = 1
@@ -52,12 +53,13 @@ ADISCORD_doctrine_assault_detachments = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_remote_weapon_tripods
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
 		ADISCORD_doctrine_mobile_line_groups
 		ADISCORD_doctrine_dispersed_militia_system
+		ADISCORD_doctrine_territorial_defense
 	}
 	ai_will_do = {
 		base = 1
@@ -99,12 +101,13 @@ ADISCORD_doctrine_mobile_line_groups = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_armored_carrier_program
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
 		ADISCORD_doctrine_assault_detachments
 		ADISCORD_doctrine_dispersed_militia_system
+		ADISCORD_doctrine_territorial_defense
 	}
 	ai_will_do = {
 		base = 1
@@ -151,12 +154,13 @@ ADISCORD_doctrine_dispersed_militia_system = {
 		ADISCORD_doctrine_mass_recruitment_bureaus
 		ADISCORD_doctrine_assault_detachments
 		ADISCORD_doctrine_mobile_line_groups
+		ADISCORD_doctrine_territorial_defense
 	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.5 num_of_military_factories < 8 }
 	}
-	category_all_infantry = { defense = 0.04 }
+	ADISCORD_militia = { defense = 0.04 }
 	dig_in_speed_factor = 0.02
 	rewards = {
 		ADISCORD_doctrine_dispersed_militia_system_local_guides = {
@@ -199,6 +203,7 @@ ADISCORD_doctrine_platform_battlegroups = {
 		ADISCORD_doctrine_armored_spearhead_command
 		ADISCORD_doctrine_infantry_tank_integration
 		ADISCORD_doctrine_autonomous_armored_screen
+		ADISCORD_doctrine_recon_raiding_columns
 	}
 	ai_will_do = {
 		base = 1
@@ -238,12 +243,16 @@ ADISCORD_doctrine_armored_spearhead_command = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		always = yes
+		OR = {
+			has_tech = ADISCORD_tech_heavy_platform_cores
+			has_tech = ADISCORD_tech_active_mass_balancing_suspension
+		}
 	}
 	xor = {
 		ADISCORD_doctrine_platform_battlegroups
 		ADISCORD_doctrine_infantry_tank_integration
 		ADISCORD_doctrine_autonomous_armored_screen
+		ADISCORD_doctrine_recon_raiding_columns
 	}
 	ai_will_do = {
 		base = 1
@@ -290,6 +299,7 @@ ADISCORD_doctrine_infantry_tank_integration = {
 		ADISCORD_doctrine_platform_battlegroups
 		ADISCORD_doctrine_armored_spearhead_command
 		ADISCORD_doctrine_autonomous_armored_screen
+		ADISCORD_doctrine_recon_raiding_columns
 	}
 	ai_will_do = {
 		base = 1
@@ -337,6 +347,7 @@ ADISCORD_doctrine_autonomous_armored_screen = {
 		ADISCORD_doctrine_platform_battlegroups
 		ADISCORD_doctrine_armored_spearhead_command
 		ADISCORD_doctrine_infantry_tank_integration
+		ADISCORD_doctrine_recon_raiding_columns
 	}
 	ai_will_do = {
 		base = 1
@@ -739,6 +750,128 @@ ADISCORD_doctrine_resilient_logistics_command = {
 			supply_consumption_factor = -0.025
 			land_reinforce_rate = 0.01
 			category_support_battalions = { default_morale = 0.03 }
+		}
+	}
+}
+
+ADISCORD_doctrine_territorial_defense = {
+	track = ADISCORD_land_mass_restoration
+	name = ADISCORD_doctrine_territorial_defense
+	description = ADISCORD_doctrine_territorial_defense_desc
+	icon = GFX_doctrine_defensive_postures_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		always = yes
+	}
+	xor = {
+		ADISCORD_doctrine_mass_recruitment_bureaus
+		ADISCORD_doctrine_assault_detachments
+		ADISCORD_doctrine_mobile_line_groups
+		ADISCORD_doctrine_dispersed_militia_system
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.6
+			num_of_military_factories < 8
+		}
+	}
+	ADISCORD_territorial = {
+		defense = 0.02
+		max_organisation = 1
+	}
+	rewards = {
+		ADISCORD_doctrine_territorial_defense_prepared_positions = {
+			mastery = 30
+			ADISCORD_territorial = {
+				defense = 0.02
+			}
+		}
+		ADISCORD_doctrine_territorial_defense_district_reserves = {
+			mastery = 40
+			ADISCORD_territorial = {
+				max_organisation = 2
+			}
+		}
+		ADISCORD_doctrine_territorial_defense_local_depots = {
+			mastery = 50
+			ADISCORD_territorial = {
+				supply_consumption = -0.03
+			}
+		}
+		ADISCORD_doctrine_territorial_defense_interlocking_positions = {
+			mastery = 60
+			ADISCORD_territorial = {
+				defense = 0.04
+			}
+		}
+		ADISCORD_doctrine_territorial_defense_defense_in_depth = {
+			mastery = 70
+			ADISCORD_territorial = {
+				defense = 0.06
+			}
+		}
+	}
+}
+
+ADISCORD_doctrine_recon_raiding_columns = {
+	track = ADISCORD_land_platform_centric
+	name = ADISCORD_doctrine_recon_raiding_columns
+	description = ADISCORD_doctrine_recon_raiding_columns_desc
+	icon = GFX_doctrine_armored_cavalry_medium
+	xp_cost = 70
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_drone_recon_swarms
+	}
+	xor = {
+		ADISCORD_doctrine_platform_battlegroups
+		ADISCORD_doctrine_armored_spearhead_command
+		ADISCORD_doctrine_infantry_tank_integration
+		ADISCORD_doctrine_autonomous_armored_screen
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			num_of_military_factories < 10
+		}
+	}
+	ADISCORD_recon_platform = {
+		recon = 0.5
+		forest = { movement = 0.02 }
+	}
+	rewards = {
+		ADISCORD_doctrine_recon_raiding_columns_route_scouts = {
+			mastery = 30
+			ADISCORD_recon_platform = {
+				recon = 0.5
+			}
+		}
+		ADISCORD_doctrine_recon_raiding_columns_rapid_columns = {
+			mastery = 40
+			ADISCORD_recon_platform = {
+				plains = { movement = 0.04 }
+			}
+		}
+		ADISCORD_doctrine_recon_raiding_columns_field_workshops = {
+			mastery = 50
+			ADISCORD_recon_platform = {
+				reliability = 0.02
+			}
+		}
+		ADISCORD_doctrine_recon_raiding_columns_mobile_contacts = {
+			mastery = 60
+			ADISCORD_recon_platform = {
+				hills = { movement = 0.04 }
+			}
+		}
+		ADISCORD_doctrine_recon_raiding_columns_sustained_patrols = {
+			mastery = 70
+			ADISCORD_recon_platform = {
+				reliability = 0.03
+			}
 		}
 	}
 }

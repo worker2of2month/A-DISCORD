@@ -293,7 +293,7 @@ VAL_refresh_contract_modifier = {
 		add_to_variable = { var = VAL_contract_defence_factor value = 0.03 }
 	}
 	if = {
-		limit = { has_tech = ADISCORD_tech_kefreyt_shield_special_forces }
+		limit = { has_country_flag = VAL_shield_special_forces_raised }
 		add_to_variable = { var = VAL_contract_special_forces_min value = 10 }
 	}
 	if = {
@@ -2654,6 +2654,7 @@ VAL_raise_shield_special_forces = {
 		if = {
 			limit = {
 				tag = VAL
+				date > 2162.12.31
 				has_capitulated = no
 				has_tech = ADISCORD_tech_casualty_evacuation
 				has_tech = ADISCORD_tech_forward_supply_hubs
@@ -2676,7 +2677,6 @@ VAL_raise_shield_special_forces = {
 				}
 			}
 
-			VAL_refresh_contract_modifier = yes
 
 			# Create the recruitable template if it does not exist.
 			if = {
@@ -2737,6 +2737,7 @@ VAL_raise_shield_special_forces = {
 				set_country_flag = VAL_shield_special_forces_raised
 			}
 
+			VAL_refresh_contract_modifier = yes
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

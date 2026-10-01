@@ -11,6 +11,7 @@ ADISCORD_special_forces_mountain_companies = {
 	xor = {
 		ADISCORD_special_forces_contaminated_zone_teams
 		ADISCORD_special_forces_urban_assault_groups
+		ADISCORD_special_forces_shield_formations
 	}
 	ai_will_do = {
 		base = 1
@@ -54,6 +55,7 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 	xor = {
 		ADISCORD_special_forces_mountain_companies
 		ADISCORD_special_forces_urban_assault_groups
+		ADISCORD_special_forces_shield_formations
 	}
 	ai_will_do = {
 		base = 1
@@ -94,17 +96,18 @@ ADISCORD_special_forces_urban_assault_groups = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_remote_weapon_tripods
 	}
 	xor = {
 		ADISCORD_special_forces_mountain_companies
 		ADISCORD_special_forces_contaminated_zone_teams
+		ADISCORD_special_forces_shield_formations
 	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.7 has_war = yes }
 	}
-	category_special_forces = { breakthrough = 0.04 soft_attack = 0.03 }
+	ADISCORD_assault_infantry = { breakthrough = 0.04 soft_attack = 0.03 }
 	rewards = {
 		ADISCORD_special_forces_urban_assault_groups_building_recon = {
 			mastery = 30
@@ -112,11 +115,11 @@ ADISCORD_special_forces_urban_assault_groups = {
 		}
 		ADISCORD_special_forces_urban_assault_groups_breach_cells = {
 			mastery = 40
-			category_special_forces = { breakthrough = 0.04 }
+			ADISCORD_assault_infantry = { breakthrough = 0.04 }
 		}
 		ADISCORD_special_forces_urban_assault_groups_vertical_clearance = {
 			mastery = 50
-			category_special_forces = { soft_attack = 0.04 }
+			ADISCORD_assault_infantry = { soft_attack = 0.04 }
 		}
 		ADISCORD_special_forces_urban_assault_groups_isolated_strongpoints = {
 			mastery = 60
@@ -124,7 +127,7 @@ ADISCORD_special_forces_urban_assault_groups = {
 		}
 		ADISCORD_special_forces_urban_assault_groups_urban_assault = {
 			mastery = 70
-			category_special_forces = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }
+			ADISCORD_assault_infantry = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }
 		}
 	}
 }
@@ -142,6 +145,7 @@ ADISCORD_special_forces_deep_recon_cells = {
 	xor = {
 		ADISCORD_special_forces_vertical_insertion
 		ADISCORD_special_forces_autonomous_raiders
+		ADISCORD_special_forces_marine_landings
 	}
 	ai_will_do = {
 		base = 1
@@ -183,17 +187,19 @@ ADISCORD_special_forces_vertical_insertion = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_vertical_assault_training
+		has_dlc = "Thunder at Our Gates"
 	}
 	xor = {
 		ADISCORD_special_forces_deep_recon_cells
 		ADISCORD_special_forces_autonomous_raiders
+		ADISCORD_special_forces_marine_landings
 	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 2 has_tech = ADISCORD_tech_vertical_envelopment_control }
 	}
-	category_special_forces = { breakthrough = 0.04 }
+	hq_paratrooper = { breakthrough = 0.04 }
 	planning_speed = 0.02
 	rewards = {
 		ADISCORD_special_forces_vertical_insertion_landing_beacons = {
@@ -202,7 +208,7 @@ ADISCORD_special_forces_vertical_insertion = {
 		}
 		ADISCORD_special_forces_vertical_insertion_airmobile_supply = {
 			mastery = 40
-			category_special_forces = { supply_consumption = -0.02 }
+			hq_paratrooper = { default_morale = 0.03 }
 		}
 		ADISCORD_special_forces_vertical_insertion_rapid_concentration = {
 			mastery = 50
@@ -210,11 +216,11 @@ ADISCORD_special_forces_vertical_insertion = {
 		}
 		ADISCORD_special_forces_vertical_insertion_assault_landing = {
 			mastery = 60
-			category_special_forces = { breakthrough = 0.05 }
+			hq_paratrooper = { breakthrough = 0.05 }
 		}
 		ADISCORD_special_forces_vertical_insertion_vertical_envelopment = {
 			mastery = 70
-			category_special_forces = { breakthrough = 0.06 maximum_speed = 0.03 }
+			hq_paratrooper = { breakthrough = 0.06 maximum_speed = 0.03 }
 			planning_speed = 0.03
 		}
 	}
@@ -233,6 +239,7 @@ ADISCORD_special_forces_autonomous_raiders = {
 	xor = {
 		ADISCORD_special_forces_deep_recon_cells
 		ADISCORD_special_forces_vertical_insertion
+		ADISCORD_special_forces_marine_landings
 	}
 	ai_will_do = {
 		base = 1
@@ -260,6 +267,125 @@ ADISCORD_special_forces_autonomous_raiders = {
 			mastery = 70
 			category_special_forces = { soft_attack = 0.05 breakthrough = 0.05 max_organisation = 3 }
 			coordination_bonus = 0.015
+		}
+	}
+}
+
+ADISCORD_special_forces_shield_formations = {
+	track = ADISCORD_special_forces_adaptation
+	name = ADISCORD_special_forces_shield_formations
+	description = ADISCORD_special_forces_shield_formations_desc
+	icon = GFX_ADISCORD_tech_kefreyt_shield_special_forces_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+	}
+	xor = {
+		ADISCORD_special_forces_mountain_companies
+		ADISCORD_special_forces_contaminated_zone_teams
+		ADISCORD_special_forces_urban_assault_groups
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.7
+			has_war = yes
+		}
+	}
+	ADISCORD_urban_breacher = {
+		breakthrough = 0.03
+		defense = 0.02
+	}
+	rewards = {
+		ADISCORD_special_forces_shield_formations_paired_sections = {
+			mastery = 30
+			ADISCORD_urban_breacher = {
+				max_organisation = 2
+			}
+		}
+		ADISCORD_special_forces_shield_formations_covered_crossings = {
+			mastery = 40
+			ADISCORD_urban_breacher = {
+				urban = { attack = 0.06 }
+			}
+		}
+		ADISCORD_special_forces_shield_formations_generator_rotation = {
+			mastery = 50
+			ADISCORD_urban_breacher = {
+				supply_consumption = -0.03
+			}
+		}
+		ADISCORD_special_forces_shield_formations_shield_line = {
+			mastery = 60
+			ADISCORD_urban_breacher = {
+				defense = 0.06
+			}
+		}
+		ADISCORD_special_forces_shield_formations_protected_breach = {
+			mastery = 70
+			ADISCORD_urban_breacher = {
+				breakthrough = 0.09
+			}
+		}
+	}
+}
+
+ADISCORD_special_forces_marine_landings = {
+	track = ADISCORD_special_forces_insertion
+	name = ADISCORD_special_forces_marine_landings
+	description = ADISCORD_special_forces_marine_landings_desc
+	icon = GFX_marines_commandoes_medium
+	xp_cost = 60
+	xp_type = army
+	available = {
+		has_tech = ADISCORD_tech_kefreyt_marine_corps
+	}
+	xor = {
+		ADISCORD_special_forces_deep_recon_cells
+		ADISCORD_special_forces_vertical_insertion
+		ADISCORD_special_forces_autonomous_raiders
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.7
+			has_war = yes
+		}
+	}
+	ADISCORD_marine_infantry = {
+		max_organisation = 1
+	}
+	rewards = {
+		ADISCORD_special_forces_marine_landings_first_wave = {
+			mastery = 30
+			ADISCORD_marine_infantry = {
+				amphibious = { attack = 0.04 }
+			}
+		}
+		ADISCORD_special_forces_marine_landings_river_crossings = {
+			mastery = 40
+			ADISCORD_marine_infantry = {
+				river = { attack = 0.04 }
+			}
+		}
+		ADISCORD_special_forces_marine_landings_beach_supply = {
+			mastery = 50
+			ADISCORD_marine_infantry = {
+				supply_consumption = -0.04
+			}
+		}
+		ADISCORD_special_forces_marine_landings_landing_reserves = {
+			mastery = 60
+			ADISCORD_marine_infantry = {
+				max_organisation = 2
+			}
+		}
+		ADISCORD_special_forces_marine_landings_secured_beachhead = {
+			mastery = 70
+			ADISCORD_marine_infantry = {
+				amphibious = { attack = 0.04 }
+			}
 		}
 	}
 }

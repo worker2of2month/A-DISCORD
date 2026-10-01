@@ -11786,6 +11786,23 @@ STP_ch_leader_2 = {
 	}
 }
 
+# Veil as head of state: leader portrait, and he leaves the generals list.
+STP_ch_apply_veil_leader = {
+	if = {
+		limit = { has_character = STP_August_Veil }
+		set_portraits = {
+			character = STP_August_Veil
+			civilian = { large = GFX_portrait_STP_August_Veil_leader }
+			army = { large = GFX_portrait_STP_August_Veil_leader }
+		}
+		if = {
+			limit = { NOT = { has_country_flag = STP_ch_veil_left_army } }
+			remove_unit_leader_role = { character = STP_August_Veil }
+			set_country_flag = STP_ch_veil_left_army
+		}
+	}
+}
+
 STP_ch_leader_3 = {
 	if = {
 		limit = {
@@ -11803,6 +11820,7 @@ STP_ch_leader_3 = {
 			character = STP_August_Veil
 			ideology = hedonism_ideology
 		}
+		STP_ch_apply_veil_leader = yes
 	}
 	else = {
 		create_country_leader = {
@@ -11977,6 +11995,7 @@ STP_ch_restore_independent_leader = {
 				character = STP_August_Veil
 				ideology = hedonism_ideology
 			}
+			STP_ch_apply_veil_leader = yes
 		}
 		else = {
 			STP_ch_leader_3 = yes
@@ -13568,4 +13587,68 @@ STP_cw_reserve_northern_major = {
 }
 STP_cw_release_northern_major = {
 	if = { limit = { has_country_flag = STP_cw_northern_added_major } set_major = no clr_country_flag = STP_cw_northern_added_major }
+}
+
+# The postwar recipient recruits normally from a funded six-battalion kit.
+STP_pw_open_shield_corps = {
+	if = {
+		limit = {
+			hidden_trigger = {
+				OR = {
+					tag = STP
+					tag = STS
+				}
+				has_country_flag = STP_cw_postwar
+				date > 2162.12.31
+				NOT = { has_idea = STP_pw_shield_corps }
+			}
+		}
+		set_technology = {
+			ADISCORD_tech_kefreyt_shield_special_forces = 1
+			popup = no
+		}
+		custom_effect_tooltip = STP_pw_shield_corps_template_tt
+		hidden_effect = {
+			if = {
+				limit = { NOT = { has_template = "Stelander Shield Brigade" } }
+				division_template = {
+					name = "Stelander Shield Brigade"
+					template_counter = 3
+					is_locked = no
+					regiments = {
+						ADISCORD_urban_breacher = { x = 0 y = 0 }
+						ADISCORD_urban_breacher = { x = 0 y = 1 }
+						ADISCORD_urban_breacher = { x = 0 y = 2 }
+						ADISCORD_urban_breacher = { x = 1 y = 0 }
+						ADISCORD_urban_breacher = { x = 1 y = 1 }
+						ADISCORD_urban_breacher = { x = 1 y = 2 }
+					}
+					support = {
+						engineer = { x = 0 y = 0 }
+					}
+				}
+			}
+		}
+		add_ideas = STP_pw_shield_corps
+		add_equipment_to_stockpile = {
+			type = ADISCORD_power_shield_equipment_1
+			amount = 120
+			producer = ROOT
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment_0
+			amount = 5670
+			producer = ROOT
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 108
+			producer = ROOT
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 210
+			producer = ROOT
+		}
+	}
 }

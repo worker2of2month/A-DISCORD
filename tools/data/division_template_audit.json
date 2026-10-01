@@ -101,10 +101,10 @@
       ],
       "support": [],
       "computed": {
-        "organization": 52.75,
-        "manpower": 2000,
+        "organization": 48.75,
+        "manpower": 2000.0,
         "equipment": {
-          "infantry_equipment": 1800
+          "infantry_equipment": 1800.0
         },
         "supply": 0.1
       },
@@ -161,10 +161,10 @@
       ],
       "support": [],
       "computed": {
-        "organization": 52.75,
-        "manpower": 6000,
+        "organization": 48.75,
+        "manpower": 6000.0,
         "equipment": {
-          "infantry_equipment": 5400
+          "infantry_equipment": 5400.0
         },
         "supply": 0.3
       },
@@ -11307,10 +11307,10 @@
       ],
       "support": [],
       "computed": {
-        "organization": 52.75,
-        "manpower": 6000,
+        "organization": 48.75,
+        "manpower": 6000.0,
         "equipment": {
-          "infantry_equipment": 5400
+          "infantry_equipment": 5400.0
         },
         "supply": 0.3
       },
@@ -11630,9 +11630,10 @@
         }
       ],
       "computed": {
-        "organization": 51.25,
+        "organization": 45.535714285714285,
         "manpower": 11300.0,
         "equipment": {
+          "ADISCORD_power_shield_equipment": 200.0,
           "ADISCORD_squad_weapons_equipment": 180.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 10170.0,
@@ -11641,6 +11642,7 @@
         "supply": 1.8499999999999999
       },
       "equipment_availability": {
+        "ADISCORD_power_shield_equipment": true,
         "ADISCORD_squad_weapons_equipment": true,
         "artillery_equipment": true,
         "infantry_equipment": true,
@@ -11674,16 +11676,18 @@
       ],
       "support": [],
       "computed": {
-        "organization": 66.75,
-        "manpower": 1000,
+        "organization": 58.75,
+        "manpower": 1000.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 18,
-          "infantry_equipment": 900,
-          "support_equipment": 30
+          "ADISCORD_power_shield_equipment": 20.0,
+          "ADISCORD_squad_weapons_equipment": 18.0,
+          "infantry_equipment": 900.0,
+          "support_equipment": 30.0
         },
         "supply": 0.16
       },
       "equipment_availability": {
+        "ADISCORD_power_shield_equipment": true,
         "ADISCORD_squad_weapons_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
@@ -11741,12 +11745,12 @@
       ],
       "support": [],
       "computed": {
-        "organization": 48.75,
-        "manpower": 6600,
+        "organization": 52.75,
+        "manpower": 6600.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 144,
-          "infantry_equipment": 5940,
-          "support_equipment": 180
+          "ADISCORD_squad_weapons_equipment": 144.0,
+          "infantry_equipment": 5940.0,
+          "support_equipment": 180.0
         },
         "supply": 0.6
       },
@@ -11851,6 +11855,81 @@
       "replacement_path": {
         "kind": "retain",
         "target": "script_shl_furnace_levy"
+      }
+    },
+    {
+      "key": "stp_postwar_shield_brigade",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_STP_scripted_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Stelander Shield Brigade",
+      "display_name": "Stelander Shield Brigade",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 0,
+          "y": 2
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_urban_breacher",
+          "x": 1,
+          "y": 2
+        }
+      ],
+      "support": [
+        {
+          "type": "engineer",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "computed": {
+        "organization": 53.214285714285715,
+        "manpower": 6300.0,
+        "equipment": {
+          "ADISCORD_power_shield_equipment": 120.0,
+          "ADISCORD_squad_weapons_equipment": 108.0,
+          "infantry_equipment": 5670.0,
+          "support_equipment": 210.0
+        },
+        "supply": 0.9800000000000001
+      },
+      "equipment_availability": {
+        "ADISCORD_power_shield_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "infantry_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "stp_postwar_shield_brigade"
+      },
+      "definition_metadata": {
+        "is_locked": false
       }
     }
   ],

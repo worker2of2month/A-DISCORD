@@ -544,6 +544,15 @@ ideas = {
 			}
 		}
 
+		STP_pw_shield_corps = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				special_forces_min = 6
+			}
+		}
+
 		STP_pw_stelander_mountaineers = {
 			picture = ADISCORD_law_military_cadre_army
 			allowed = { always = no }

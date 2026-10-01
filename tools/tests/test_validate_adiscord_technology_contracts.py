@@ -10,6 +10,10 @@ from unittest.mock import patch
 
 from tools.validators import validate_adiscord_tech_doctrine as validator
 from tools.builders import build_adiscord_doctrine_system as doctrines
+from tools.validators.validate_adiscord_division_templates import (
+    _collect_subunits,
+    parse_clausewitz,
+)
 
 
 class DoctrineContractTests(unittest.TestCase):
@@ -24,8 +28,8 @@ class DoctrineContractTests(unittest.TestCase):
     def test_each_branch_offers_distinct_grand_doctrines(self) -> None:
         for folder, count in (
             ("land", 4),
-            ("air", 3),
-            ("naval", 3),
+            ("air", 4),
+            ("naval", 4),
             ("special_forces", 2),
         ):
             choices = [g for g in doctrines.GRANDS if g["folder"] == folder]
@@ -105,6 +109,176 @@ class DoctrineContractTests(unittest.TestCase):
         )
         self.assertTrue(
             any("incorrect mastery costs" in issue for issue in issues), issues
+        )
+
+    def test_capability_in_ai_weight_cannot_replace_school_gate(self) -> None:
+        grand, tracks, sub, blocks = validator.collect_doctrine_keys()
+        key = "ADISCORD_air_doctrine_maritime_strike"
+        gate = "has_tech = ADISCORD_tech_twin_engine_aircraft"
+        blocks[key] = blocks[key].replace(gate, "always = yes", 1)
+        blocks[key] = blocks[key].replace("base = 1", f"base = 1\n{gate}", 1)
+        issues = validator.check_generated_doctrine_structure(grand, tracks, sub, blocks)
+        self.assertTrue(any(key in issue and "gate" in issue for issue in issues), issues)
+
+    def test_validator_rejects_cross_track_exclusion(self) -> None:
+        grand, tracks, sub, blocks = validator.collect_doctrine_keys()
+        key = "ADISCORD_special_forces_shield_formations"
+        blocks[key] = blocks[key].replace(
+            "xor = {", "xor = {\nADISCORD_special_forces_marine_landings", 1
+        )
+        issues = validator.check_generated_doctrine_structure(grand, tracks, sub, blocks)
+        self.assertTrue(any("incorrect competing schools" in issue for issue in issues))
+
+    def test_every_actual_aircraft_type_can_earn_mastery(self) -> None:
+        air_types = set()
+        source = (validator.ROOT / "common/units/ADISCORD_air_units.txt").read_text(encoding="utf-8")
+        for container in parse_clausewitz(source):
+            for unit in container.value:
+                for entry in unit.value:
+                    if entry.key == "type":
+                        if isinstance(entry.value, list):
+                            air_types.update(item.value for item in entry.value)
+                        else:
+                            air_types.add(entry.value)
+        mastery_types = {
+            value for track in doctrines.TRACKS
+            if track.key.startswith("ADISCORD_air_") for value in track.mastery_values
+        }
+        self.assertEqual(air_types - mastery_types, set())
+
+    def test_special_force_unlocks_and_dlc_are_explicit(self) -> None:
+        schools = {s.profile: s for s in doctrines.SCHOOLS}
+        _, tech_blocks = validator.collect_technologies()
+        for profile, unit in (
+            ("sf_shield", "ADISCORD_urban_breacher"),
+            ("sf_marine", "ADISCORD_marine_infantry"),
+            ("sf_vertical", "hq_paratrooper"),
+            ("sf_urban", "ADISCORD_assault_infantry"),
+            ("recon_raiding", "ADISCORD_recon_platform"),
+        ):
+            tech = re.search(r"has_tech = (\w+)", schools[profile].gate)[1]
+            unlock = re.search(r"\benable_subunits\s*=\s*\{", tech_blocks[tech])
+            self.assertIsNotNone(unlock, tech)
+            self.assertIn(unit, validator.extract_block(tech_blocks[tech], unlock.start()))
+        self.assertIn('has_dlc = "Thunder at Our Gates"', schools["sf_vertical"].gate)
+
+    def test_role_schools_pay_the_intended_units_only(self) -> None:
+        recipients = {
+            "territorial": "ADISCORD_territorial",
+            "recon_raiding": "ADISCORD_recon_platform",
+            "air_strategic": "category_tac_bomber",
+            "air_maritime": "category_nav_bomber",
+            "naval_hunters": "ADISCORD_coastal_patrol_vessel",
+            "naval_surface_raiders": "heavy_cruiser",
+            "sf_shield": "ADISCORD_urban_breacher",
+            "sf_marine": "ADISCORD_marine_infantry",
+        }
+        for school in doctrines.SCHOOLS:
+            if school.profile not in recipients:
+                continue
+            effects = school.root_effects + tuple(
+                effect for stage in doctrines.REWARD_PROFILES[school.profile]
+                for effect in stage[3]
+            )
+            for effect in effects:
+                self.assertEqual(
+                    {entry.key for entry in parse_clausewitz(effect)},
+                    {recipients[school.profile]}, school.key,
+                )
+
+    def test_special_force_specialists_do_not_buff_unrelated_special_forces(self) -> None:
+        for school in doctrines.SCHOOLS:
+            if school.profile not in ("sf_urban", "sf_vertical", "sf_shield", "sf_marine"):
+                continue
+            self.assertNotIn("category_special_forces", doctrines.render_school(school, ()))
+
+    def test_naval_rewards_do_not_depend_on_absent_carriers_or_mines(self) -> None:
+        source = doctrines.render_schools("sea") + doctrines.render_grands()
+        for modifier in (
+            "navy_carrier_air_agility_factor", "naval_mine_hit_chance",
+            "naval_mines_effect_reduction", "mines_sweeping_by_fleets_factor",
+        ):
+            self.assertFalse(modifier + " =" in source, modifier)
+        self.assertNotIn("carrier", doctrines.TRACKS[8].mastery_values)
+
+    @staticmethod
+    def _unit_bonus(entries, scopes: set[str], stat: str) -> float:
+        total = 0.0
+        for entry in entries:
+            if not scopes and entry.key == stat and isinstance(entry.value, str):
+                total += float(entry.value)
+            elif entry.key in scopes and isinstance(entry.value, list):
+                total += sum(
+                    float(item.value) for item in entry.value
+                    if item.key == stat and isinstance(item.value, str)
+                )
+            elif entry.key in ("rewards", "milestones"):
+                for reward in entry.value:
+                    total += DoctrineContractTests._unit_bonus(reward.value, scopes, stat)
+        return total
+
+    @classmethod
+    def _maximum_bonus(cls, scopes: set[str], stat: str, folders: tuple[str, ...]) -> float:
+        grands = {
+            entry.key: entry.value for entry in parse_clausewitz(doctrines.render_grands())
+        }
+        schools = {
+            school.key: parse_clausewitz(doctrines.render_school(school, ()))[0].value
+            for school in doctrines.SCHOOLS
+        }
+        # One grand per folder and one school per track, all five rewards unlocked.
+        # Each stat has its own maximizing build; these maxima are not one build.
+        maximum = 0.0
+        for folder in folders:
+            choices = [g for g in doctrines.GRANDS if g["folder"] == folder]
+            maximum += max(cls._unit_bonus(grands[g["key"]], scopes, stat) for g in choices)
+            for track in choices[0]["tracks"]:
+                maximum += max(
+                    cls._unit_bonus(schools[s.key], scopes, stat)
+                    for s in doctrines.SCHOOLS if s.track == track
+                )
+        return maximum
+
+    def test_legal_full_mastery_builds_keep_infantry_role_bonus_limits(self) -> None:
+        units, issues = _collect_subunits(validator.ROOT)
+        self.assertEqual(issues, [])
+        for unit, stat, ceiling in (
+            ("ADISCORD_assault_infantry", "soft_attack", 0.40),
+            ("ADISCORD_assault_infantry", "breakthrough", 0.60),
+            ("ADISCORD_urban_breacher", "soft_attack", 0.25),
+            ("ADISCORD_urban_breacher", "breakthrough", 0.40),
+            ("ADISCORD_marine_infantry", "soft_attack", 0.25),
+            ("ADISCORD_marine_infantry", "breakthrough", 0.40),
+            ("ADISCORD_territorial", "defense", 0.40),
+            ("ADISCORD_territorial", "max_organisation", 20),
+        ):
+            scopes = units[unit].categories | {unit}
+            maximum = self._maximum_bonus(scopes, stat, ("land", "special_forces"))
+            with self.subTest(unit=unit, stat=stat):
+                self.assertLessEqual(maximum, ceiling + 1e-9)
+
+    def test_legal_air_and_naval_builds_keep_specialist_bonus_limits(self) -> None:
+        units, issues = _collect_subunits(validator.ROOT)
+        self.assertEqual(issues, [])
+        for unit, stat, ceiling in (
+            ("ADISCORD_tactical_bomber", "strategic_attack", 0.30),
+            ("ADISCORD_tactical_bomber", "air_range", 0.16),
+            ("nav_bomber", "naval_strike_attack", 0.12),
+            ("nav_bomber", "naval_strike_targetting", 0.12),
+            ("ADISCORD_coastal_patrol_vessel", "sub_attack", 0.15),
+            ("ADISCORD_coastal_patrol_vessel", "sub_detection", 0.15),
+            ("heavy_cruiser", "hg_attack", 0.10),
+            ("heavy_cruiser", "naval_speed", 0.08),
+        ):
+            scopes = units[unit].categories | {unit}
+            maximum = self._maximum_bonus(scopes, stat, ("air", "naval"))
+            with self.subTest(unit=unit, stat=stat):
+                self.assertLessEqual(maximum, ceiling + 1e-9)
+                self.assertGreater(maximum, 0)
+        # Aircraft stats and the country strike factor can coexist across folders.
+        self.assertLessEqual(
+            self._maximum_bonus(set(), "naval_strike_attack_factor", ("air", "naval")),
+            0.11 + 1e-9,
         )
 
 

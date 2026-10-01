@@ -32,31 +32,33 @@ sub_units = {
 		}
 		combat_width = 2
 		max_strength = 30
-		max_organisation = 66
+		max_organisation = 58
 		default_morale = 0.40
 		manpower = 1000
 		training_time = 180
 		suppression = 1.4
 		weight = 0.8
 		supply_consumption = 0.16
-		defense = 0.30
-		breakthrough = 1.00
-		soft_attack = 0.45
+		defense = 0.15
+		breakthrough = 0.60
+		soft_attack = 0.15
 		essential = {
 			infantry_equipment
 			support_equipment
+			ADISCORD_power_shield_equipment
 		}
 		need = {
 			infantry_equipment = 900
 			ADISCORD_squad_weapons_equipment = 18
 			support_equipment = 30
+			ADISCORD_power_shield_equipment = 20
 		}
 		urban = {
-			attack = 0.35
+			attack = 0.25
 			defence = 0.20
 		}
 		fort = {
-			attack = 0.25
+			attack = 0.20
 		}
 		mountain = {
 			attack = -0.15
@@ -100,10 +102,10 @@ sub_units = {
 		}
 	}
 
-	# Rifle line for paid civil-war brigades: infantry combat stats, militia logistics.
+	# Rifle-only formations trade sustained offensive power for lighter logistics.
 	ADISCORD_territorial = {
 		abbreviation = "TER"
-		sprite = infantry
+		sprite = ADISCORD_territorial
 		map_icon_category = infantry
 		priority = 580
 		ai_priority = 180
@@ -119,13 +121,15 @@ sub_units = {
 		}
 		combat_width = 2
 		max_strength = 24
-		max_organisation = 52
+		max_organisation = 48
 		default_morale = 0.28
 		manpower = 1000
 		training_time = 70
 		suppression = 1.3
 		weight = 0.5
 		supply_consumption = 0.05
+		soft_attack = -0.08
+		breakthrough = -0.15
 		need = {
 			infantry_equipment = 900
 		}
@@ -183,7 +187,7 @@ sub_units = {
 		}
 		combat_width = 2
 		max_strength = 27
-		max_organisation = 48
+		max_organisation = 52
 		default_morale = 0.32
 		manpower = 1100
 		training_time = 120
@@ -191,8 +195,8 @@ sub_units = {
 		weight = 0.6
 		supply_consumption = 0.10
 		defense = -0.10
-		breakthrough = 0.42
-		soft_attack = 0.25
+		breakthrough = 0.50
+		soft_attack = 0.30
 		essential = {
 			infantry_equipment
 			ADISCORD_squad_weapons_equipment

@@ -51,7 +51,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 7790 height = 2990 min = { width = 100%% height = 100%% } }
+				size = { width = 7790 height = 3220 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -507,8 +507,25 @@ guiTypes = {
 				format = "LEFT"
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_special_forces"
+				name = "ADISCORD_branch_power_shields"
 				position = { x = 150 y = 2370 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_POWER_SHIELDS"
+				maxWidth = 900
+				maxHeight = 24
+				format = left
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_kefreyt_shield_special_forces_tree"
+				position = { x = 150 y = 2400 }
+				size = { width = 7560 height = 140 }
+				slotsize = { width = 70 height = 70 }
+				format = "LEFT"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_special_forces"
+				position = { x = 150 y = 2600 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SPECIAL_FORCES"
 				maxWidth = 900
@@ -518,7 +535,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_fieldcraft_manuals_tree"
-				position = { x = 150 y = 2400 }
+				position = { x = 150 y = 2630 }
 				size = { width = 7560 height = 420 }
 				slotsize = { width = 70 height = 70 }
 				format = "LEFT"

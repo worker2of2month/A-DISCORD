@@ -403,6 +403,32 @@
 		}
 	}
 
+	focus = {
+		id = STP_pw_republic_shield_corps
+		icon = GFX_goal_generic_special_forces
+		x = 26
+		y = 6
+		cost = 5
+		allow_branch = {
+			has_country_flag = STP_cw_postwar
+			tag = STS
+		}
+		prerequisite = { focus = STP_pw_republic_officer_school }
+		available = {
+			date > 2162.12.31
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			STP_pw_open_shield_corps = yes
+		}
+		ai_will_do = { base = 3 }
+	}
+
 # @section politics
 	focus = {
 		id = STP_pc_after_victory

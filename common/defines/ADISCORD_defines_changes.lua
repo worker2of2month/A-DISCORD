@@ -544,8 +544,10 @@ NDefines.NGraphics.COUNTRY_FLAG_STRIPE_TEX_MAX_HEIGHT = 16384
 NDefines.NGraphics.COUNTRY_FLAG_LARGE_STRIPE_MAX_WIDTH = 41
 NDefines.NGraphics.COUNTRY_FLAG_LARGE_STRIPE_MAX_HEIGHT = 16384
 
-NDefines.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_TOP = 100.0
-NDefines.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_BOTTOM = 100.0
+-- The northern relief extends beyond the rail; retain room for its full height.
+NDefines_Graphics.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_TOP = 135.0
+NDefines_Graphics.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_BOTTOM = 102.0
+NDefines_Graphics.NFrontend.CAMERA_MAX_HEIGHT = 2780.0
 NDefines.NGraphics.CAMERA_ZOOM_KEY_SCALE = 0.01
 NDefines.NGraphics.CAMERA_ZOOM_SPEED_DISTANCE_MULT = 25.0
 

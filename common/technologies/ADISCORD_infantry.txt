@@ -953,7 +953,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_belt_fed_recovery = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.005
+			defense = 0.008
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.008
+			defense = 0.014
+		}
+		infantry = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.018
+			defense = 0.03
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
+		mountaineers = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
+		hq_infantry = {
+			soft_attack = 0.008
+			defense = 0.014
+		}
+		hq_paratrooper = {
+			soft_attack = 0.008
+			defense = 0.014
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.024
 			defense = 0.04
 		}
@@ -984,7 +1024,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_squad_grenade_launchers = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.008
+			hard_attack = 0.005
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.014
+			hard_attack = 0.009
+		}
+		infantry = {
+			soft_attack = 0.041
+			hard_attack = 0.025
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.041
+			hard_attack = 0.025
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.031
+			hard_attack = 0.019
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.041
+			hard_attack = 0.025
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.041
+			hard_attack = 0.025
+		}
+		mountaineers = {
+			soft_attack = 0.041
+			hard_attack = 0.025
+		}
+		hq_infantry = {
+			soft_attack = 0.014
+			hard_attack = 0.009
+		}
+		hq_paratrooper = {
+			soft_attack = 0.014
+			hard_attack = 0.009
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.041
 			hard_attack = 0.025
 		}
@@ -1018,7 +1098,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_portable_at_cells = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			breakthrough = 0.009
+			ap_attack = 0.005
+		}
+		ADISCORD_territorial = {
+			breakthrough = 0.015
+			ap_attack = 0.009
+		}
+		infantry = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
+		ADISCORD_assault_infantry = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
+		ADISCORD_urban_breacher = {
+			breakthrough = 0.032
+			ap_attack = 0.019
+		}
+		ADISCORD_mechanized_infantry = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
+		ADISCORD_marine_infantry = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
+		mountaineers = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
+		hq_infantry = {
+			breakthrough = 0.015
+			ap_attack = 0.009
+		}
+		hq_paratrooper = {
+			breakthrough = 0.015
+			ap_attack = 0.009
+		}
+		ADISCORD_regimental_fire_support = {
 			breakthrough = 0.043
 			ap_attack = 0.025
 		}
@@ -1049,7 +1169,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_recoilless_squad_launchers = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.009
+			hard_attack = 0.005
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.015
+			hard_attack = 0.009
+		}
+		infantry = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.033
+			hard_attack = 0.019
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
+		mountaineers = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
+		hq_infantry = {
+			soft_attack = 0.015
+			hard_attack = 0.009
+		}
+		hq_paratrooper = {
+			soft_attack = 0.015
+			hard_attack = 0.009
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.044
 			hard_attack = 0.026
 		}
@@ -1079,7 +1239,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_field_ew_units = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			max_organisation = 0.18
+			default_morale = 0.005
+		}
+		ADISCORD_territorial = {
+			max_organisation = 0.316
+			default_morale = 0.009
+		}
+		infantry = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
+		ADISCORD_assault_infantry = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
+		ADISCORD_urban_breacher = {
+			max_organisation = 0.676
+			default_morale = 0.02
+		}
+		ADISCORD_mechanized_infantry = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
+		ADISCORD_marine_infantry = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
+		mountaineers = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
+		hq_infantry = {
+			max_organisation = 0.316
+			default_morale = 0.009
+		}
+		hq_paratrooper = {
+			max_organisation = 0.316
+			default_morale = 0.009
+		}
+		ADISCORD_regimental_fire_support = {
 			max_organisation = 0.902
 			default_morale = 0.027
 		}
@@ -1109,7 +1309,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_programmable_grenade_fuzes = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.009
+			hard_attack = 0.005
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.016
+			hard_attack = 0.009
+		}
+		infantry = {
+			soft_attack = 0.046
+			hard_attack = 0.027
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.046
+			hard_attack = 0.027
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.035
+			hard_attack = 0.02
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.046
+			hard_attack = 0.027
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.046
+			hard_attack = 0.027
+		}
+		mountaineers = {
+			soft_attack = 0.046
+			hard_attack = 0.027
+		}
+		hq_infantry = {
+			soft_attack = 0.016
+			hard_attack = 0.009
+		}
+		hq_paratrooper = {
+			soft_attack = 0.016
+			hard_attack = 0.009
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.046
 			hard_attack = 0.027
 		}
@@ -1165,7 +1405,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_drone_guided_support_fire = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			max_organisation = 0.211
+			default_morale = 0.006
+		}
+		ADISCORD_territorial = {
+			max_organisation = 0.369
+			default_morale = 0.01
+		}
+		infantry = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
+		ADISCORD_assault_infantry = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
+		ADISCORD_urban_breacher = {
+			max_organisation = 0.79
+			default_morale = 0.022
+		}
+		ADISCORD_mechanized_infantry = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
+		ADISCORD_marine_infantry = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
+		mountaineers = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
+		hq_infantry = {
+			max_organisation = 0.369
+			default_morale = 0.01
+		}
+		hq_paratrooper = {
+			max_organisation = 0.369
+			default_morale = 0.01
+		}
+		ADISCORD_regimental_fire_support = {
 			max_organisation = 1.053
 			default_morale = 0.029
 		}
@@ -1194,7 +1474,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_networked_command_terminals = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			max_organisation = 0.218
+			default_morale = 0.006
+		}
+		ADISCORD_territorial = {
+			max_organisation = 0.382
+			default_morale = 0.01
+		}
+		infantry = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
+		ADISCORD_assault_infantry = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
+		ADISCORD_urban_breacher = {
+			max_organisation = 0.818
+			default_morale = 0.022
+		}
+		ADISCORD_mechanized_infantry = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
+		ADISCORD_marine_infantry = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
+		mountaineers = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
+		hq_infantry = {
+			max_organisation = 0.382
+			default_morale = 0.01
+		}
+		hq_paratrooper = {
+			max_organisation = 0.382
+			default_morale = 0.01
+		}
+		ADISCORD_regimental_fire_support = {
 			max_organisation = 1.091
 			default_morale = 0.03
 		}
@@ -1223,7 +1543,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_remote_weapon_tripods = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.011
+			defense = 0.006
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.019
+			defense = 0.01
+		}
+		infantry = {
+			soft_attack = 0.053
+			defense = 0.03
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.053
+			defense = 0.03
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.04
+			defense = 0.022
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.053
+			defense = 0.03
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.053
+			defense = 0.03
+		}
+		mountaineers = {
+			soft_attack = 0.053
+			defense = 0.03
+		}
+		hq_infantry = {
+			soft_attack = 0.019
+			defense = 0.01
+		}
+		hq_paratrooper = {
+			soft_attack = 0.019
+			defense = 0.01
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.053
 			defense = 0.03
 		}
@@ -1285,7 +1645,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_support_weapons = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.011
+			breakthrough = 0.006
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.02
+			breakthrough = 0.011
+		}
+		infantry = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.042
+			breakthrough = 0.024
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
+		mountaineers = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
+		hq_infantry = {
+			soft_attack = 0.02
+			breakthrough = 0.011
+		}
+		hq_paratrooper = {
+			soft_attack = 0.02
+			breakthrough = 0.011
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.056
 			breakthrough = 0.032
 		}
@@ -1327,7 +1727,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_autonomous_mortar_sections = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.012
+			breakthrough = 0.007
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.02
+			breakthrough = 0.012
+		}
+		infantry = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.044
+			breakthrough = 0.025
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
+		mountaineers = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
+		hq_infantry = {
+			soft_attack = 0.02
+			breakthrough = 0.012
+		}
+		hq_paratrooper = {
+			soft_attack = 0.02
+			breakthrough = 0.012
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.058
 			breakthrough = 0.033
 		}
@@ -1356,7 +1796,47 @@ technologies = {
 	}
 
 	ADISCORD_tech_robotic_heavy_weapon_teams = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.012
+			defense = 0.007
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.021
+			defense = 0.012
+		}
+		infantry = {
+			soft_attack = 0.061
+			defense = 0.035
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.061
+			defense = 0.035
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.046
+			defense = 0.026
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.061
+			defense = 0.035
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.061
+			defense = 0.035
+		}
+		mountaineers = {
+			soft_attack = 0.061
+			defense = 0.035
+		}
+		hq_infantry = {
+			soft_attack = 0.021
+			defense = 0.012
+		}
+		hq_paratrooper = {
+			soft_attack = 0.021
+			defense = 0.012
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.061
 			defense = 0.035
 		}
@@ -1386,7 +1866,57 @@ technologies = {
 	}
 
 	ADISCORD_tech_swarm_fireteams = {
-		category_all_infantry = {
+		ADISCORD_militia = {
+			soft_attack = 0.019
+			defense = 0.019
+			max_organisation = 0.426
+		}
+		ADISCORD_territorial = {
+			soft_attack = 0.033
+			defense = 0.033
+			max_organisation = 0.746
+		}
+		infantry = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
+		}
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
+		}
+		ADISCORD_urban_breacher = {
+			soft_attack = 0.07
+			defense = 0.07
+			max_organisation = 1.598
+		}
+		ADISCORD_mechanized_infantry = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
+		}
+		ADISCORD_marine_infantry = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
+		}
+		mountaineers = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
+		}
+		hq_infantry = {
+			soft_attack = 0.033
+			defense = 0.033
+			max_organisation = 0.746
+		}
+		hq_paratrooper = {
+			soft_attack = 0.033
+			defense = 0.033
+			max_organisation = 0.746
+		}
+		ADISCORD_regimental_fire_support = {
 			soft_attack = 0.093
 			defense = 0.093
 			max_organisation = 2.131
@@ -2457,6 +2987,100 @@ technologies = {
 				factor = 0.30
 				ADISCORD_economy_ai_is_crisis = yes
 			}
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_kefreyt_shield_special_forces = {
+		path = {
+			leads_to_tech = ADISCORD_tech_shield_assault_drills
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_power_shield_equipment_1 }
+		enable_subunits = { ADISCORD_urban_breacher }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 30 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_shield_assault_drills = {
+		ADISCORD_urban_breacher = {
+			defense = 0.04
+			breakthrough = 0.04
+			max_organisation = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_compact_shield_generators
+			research_cost_coeff = 1
+		}
+		research_cost = 1.415
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 54 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_compact_shield_generators = {
+		path = {
+			leads_to_tech = ADISCORD_tech_shield_field_maintenance
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_power_shield_equipment_2 }
+		research_cost = 2.05
+		start_year = 2169
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 72 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_shield_field_maintenance = {
+		ADISCORD_urban_breacher = {
+			supply_consumption = -0.04
+			default_morale = 0.03
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_adaptive_power_shields
+			research_cost_coeff = 1
+		}
+		research_cost = 1.58
+		start_year = 2172
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 90 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_adaptive_power_shields = {
+		enable_equipments = { ADISCORD_power_shield_equipment_3 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 102 }
+		}
+		ai_will_do = {
+			factor = 18.9
 		}
 		categories = { infantry_weapons support_tech }
 	}

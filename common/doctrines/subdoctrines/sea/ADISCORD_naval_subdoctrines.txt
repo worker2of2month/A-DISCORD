@@ -11,13 +11,14 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 	xor = {
 		ADISCORD_naval_doctrine_convoy_shield_doctrine
 		ADISCORD_naval_doctrine_mine_warfare_command
+		ADISCORD_naval_doctrine_hunter_patrols
 	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.6 has_war = yes }
 	}
 	screening_efficiency = 0.04
-	mines_sweeping_by_fleets_factor = 0.05
+	ADISCORD_coastal_patrol_vessel = { default_morale = 0.03 }
 	rewards = {
 		coastal_watch_posts = {
 			mastery = 30
@@ -25,7 +26,7 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 		}
 		minefield_drills = {
 			mastery = 40
-			mines_sweeping_by_fleets_factor = 0.06
+			ADISCORD_coastal_patrol_vessel = { reliability = 0.03 }
 		}
 		screen_coordination = {
 			mastery = 50
@@ -39,7 +40,7 @@ ADISCORD_naval_doctrine_littoral_security_network = {
 			mastery = 70
 			screening_efficiency = 0.04
 			naval_detection = 0.04
-			mines_sweeping_by_fleets_factor = 0.06
+			ADISCORD_coastal_patrol_vessel = { naval_range = 0.03 }
 		}
 	}
 }
@@ -57,6 +58,7 @@ ADISCORD_naval_doctrine_convoy_shield_doctrine = {
 	xor = {
 		ADISCORD_naval_doctrine_littoral_security_network
 		ADISCORD_naval_doctrine_mine_warfare_command
+		ADISCORD_naval_doctrine_hunter_patrols
 	}
 	ai_will_do = {
 		base = 1
@@ -93,30 +95,30 @@ ADISCORD_naval_doctrine_mine_warfare_command = {
 	track = ADISCORD_naval_littoral_security
 	name = ADISCORD_naval_doctrine_mine_warfare_command
 	description = ADISCORD_naval_doctrine_mine_warfare_command_desc
-	icon = GFX_basic_naval_mines_medium
+	icon = GFX_doctrine_escort_patrols_medium
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_coastal_patrols
 	}
 	xor = {
 		ADISCORD_naval_doctrine_littoral_security_network
 		ADISCORD_naval_doctrine_convoy_shield_doctrine
+		ADISCORD_naval_doctrine_hunter_patrols
 	}
 	ai_will_do = {
 		base = 1
 		modifier = { factor = 1.7 has_war = yes }
 	}
-	naval_mine_hit_chance = 0.03
-	naval_mines_effect_reduction = 0.03
+	ADISCORD_coastal_patrol_vessel = { naval_speed = 0.03 }
 	rewards = {
 		ADISCORD_naval_doctrine_mine_warfare_command_surveyed_channels = {
 			mastery = 30
-			naval_mines_effect_reduction = 0.04
+			ADISCORD_coastal_patrol_vessel = { naval_range = 0.04 }
 		}
 		ADISCORD_naval_doctrine_mine_warfare_command_rapid_laying = {
 			mastery = 40
-			naval_mine_hit_chance = 0.03
+			ADISCORD_coastal_patrol_vessel = { surface_visibility = -0.04 }
 		}
 		ADISCORD_naval_doctrine_mine_warfare_command_remote_minefields = {
 			mastery = 50
@@ -124,12 +126,12 @@ ADISCORD_naval_doctrine_mine_warfare_command = {
 		}
 		ADISCORD_naval_doctrine_mine_warfare_command_sweeper_escorts = {
 			mastery = 60
-			mines_sweeping_by_fleets_factor = 0.05
+			naval_retreat_speed = 0.04
 		}
 		ADISCORD_naval_doctrine_mine_warfare_command_controlled_waters = {
 			mastery = 70
-			naval_mine_hit_chance = 0.05
-			naval_mines_effect_reduction = 0.05
+			ADISCORD_coastal_patrol_vessel = { naval_speed = 0.04 }
+			naval_detection = 0.04
 		}
 	}
 }
@@ -138,26 +140,27 @@ ADISCORD_naval_doctrine_drone_carrier_groups = {
 	track = ADISCORD_naval_surface_control
 	name = ADISCORD_naval_doctrine_drone_carrier_groups
 	description = ADISCORD_naval_doctrine_drone_carrier_groups_desc
-	icon = GFX_doctrine_carrier_battlegroups_medium
+	icon = GFX_doctrine_base_strike_medium
 	xp_cost = 45
 	xp_type = navy
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_twin_engine_aircraft
 	}
 	xor = {
 		ADISCORD_naval_doctrine_missile_surface_groups
 		ADISCORD_naval_doctrine_coastal_fire_support
+		ADISCORD_naval_doctrine_surface_raiders
 	}
 	ai_will_do = {
 		base = 1
-		modifier = { factor = 2 has_tech = ADISCORD_tech_drone_carrier_deck_systems }
+		modifier = { factor = 2 has_tech = ADISCORD_tech_coastal_patrols }
 	}
-	navy_carrier_air_agility_factor = 0.04
+	naval_detection = 0.03
 	naval_strike_attack_factor = 0.03
 	rewards = {
 		deck_control_drones = {
 			mastery = 30
-			navy_carrier_air_agility_factor = 0.03
+			category_nav_bomber = { air_defence = 0.04 }
 		}
 		strike_coordination = {
 			mastery = 40
@@ -174,7 +177,7 @@ ADISCORD_naval_doctrine_drone_carrier_groups = {
 		ADISCORD_naval_doctrine_drone_carrier_groups_carrier_mesh = {
 			mastery = 70
 			naval_strike_attack_factor = 0.05
-			navy_carrier_air_agility_factor = 0.04
+			category_nav_bomber = { naval_strike_targetting = 0.04 }
 		}
 	}
 }
@@ -192,6 +195,7 @@ ADISCORD_naval_doctrine_missile_surface_groups = {
 	xor = {
 		ADISCORD_naval_doctrine_drone_carrier_groups
 		ADISCORD_naval_doctrine_coastal_fire_support
+		ADISCORD_naval_doctrine_surface_raiders
 	}
 	ai_will_do = {
 		base = 1
@@ -237,6 +241,7 @@ ADISCORD_naval_doctrine_coastal_fire_support = {
 	xor = {
 		ADISCORD_naval_doctrine_drone_carrier_groups
 		ADISCORD_naval_doctrine_missile_surface_groups
+		ADISCORD_naval_doctrine_surface_raiders
 	}
 	ai_will_do = {
 		base = 1
@@ -401,6 +406,126 @@ ADISCORD_naval_doctrine_seabed_hunter_network = {
 			mastery = 70
 			naval_detection = 0.05
 			navy_submarine_attack_factor = 0.04
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_hunter_patrols = {
+	track = ADISCORD_naval_littoral_security
+	name = ADISCORD_naval_doctrine_hunter_patrols
+	description = ADISCORD_naval_doctrine_hunter_patrols_desc
+	icon = GFX_doctrine_escort_patrols_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_coastal_patrols
+	}
+	xor = {
+		ADISCORD_naval_doctrine_littoral_security_network
+		ADISCORD_naval_doctrine_convoy_shield_doctrine
+		ADISCORD_naval_doctrine_mine_warfare_command
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.6
+			has_war = yes
+		}
+	}
+	ADISCORD_coastal_patrol_vessel = {
+		sub_detection = 0.05
+	}
+	rewards = {
+		ADISCORD_naval_doctrine_hunter_patrols_watch_rotations = {
+			mastery = 30
+			ADISCORD_coastal_patrol_vessel = {
+				max_organisation = 3
+			}
+		}
+		ADISCORD_naval_doctrine_hunter_patrols_depth_patterns = {
+			mastery = 40
+			ADISCORD_coastal_patrol_vessel = {
+				sub_attack = 0.05
+			}
+		}
+		ADISCORD_naval_doctrine_hunter_patrols_listening_lines = {
+			mastery = 50
+			ADISCORD_coastal_patrol_vessel = {
+				sub_detection = 0.05
+			}
+		}
+		ADISCORD_naval_doctrine_hunter_patrols_contact_pursuit = {
+			mastery = 60
+			ADISCORD_coastal_patrol_vessel = {
+				sub_attack = 0.05
+			}
+		}
+		ADISCORD_naval_doctrine_hunter_patrols_hunter_groups = {
+			mastery = 70
+			ADISCORD_coastal_patrol_vessel = {
+				sub_attack = 0.05
+				sub_detection = 0.05
+			}
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_surface_raiders = {
+	track = ADISCORD_naval_surface_control
+	name = ADISCORD_naval_doctrine_surface_raiders
+	description = ADISCORD_naval_doctrine_surface_raiders_desc
+	icon = GFX_doctrine_convoy_interdiction_medium
+	xp_cost = 45
+	xp_type = navy
+	available = {
+		has_tech = ADISCORD_tech_modular_hull_standards
+	}
+	xor = {
+		ADISCORD_naval_doctrine_drone_carrier_groups
+		ADISCORD_naval_doctrine_missile_surface_groups
+		ADISCORD_naval_doctrine_coastal_fire_support
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			has_war = yes
+		}
+	}
+	heavy_cruiser = {
+		naval_speed = 0.02
+	}
+	rewards = {
+		ADISCORD_naval_doctrine_surface_raiders_concealed_approach = {
+			mastery = 30
+			heavy_cruiser = {
+				surface_visibility = -0.04
+			}
+		}
+		ADISCORD_naval_doctrine_surface_raiders_distant_routes = {
+			mastery = 40
+			heavy_cruiser = {
+				naval_range = 0.04
+			}
+		}
+		ADISCORD_naval_doctrine_surface_raiders_running_engagement = {
+			mastery = 50
+			heavy_cruiser = {
+				naval_speed = 0.03
+			}
+		}
+		ADISCORD_naval_doctrine_surface_raiders_break_contact = {
+			mastery = 60
+			heavy_cruiser = {
+				surface_visibility = -0.04
+			}
+		}
+		ADISCORD_naval_doctrine_surface_raiders_ocean_raiders = {
+			mastery = 70
+			heavy_cruiser = {
+				naval_speed = 0.03
+				naval_range = 0.04
+			}
 		}
 	}
 }

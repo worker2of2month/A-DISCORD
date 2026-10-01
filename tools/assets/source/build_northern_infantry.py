@@ -1,4 +1,4 @@
-"""Build northern infantry models. preview before installing with --apply.
+"""Build regional infantry models. Preview before installing with --apply.
 
 Blender: --background --python this_file -- --build --output PATH
 Python: this_file --output PATH (stages the preview package)
@@ -21,6 +21,14 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[3]
 GAME = Path('Z:/SteamLibrary/steamapps/common/Hearts of Iron IV')
 ARAB_TAGS = ('AZH', 'GLP', 'KDR', 'KYZ', 'MZR', 'RHM', 'SDR', 'SLF')
+RETINUE_STYLES = {
+    'BJK': {'coat': (0.20, 0.025, 0.15), 'trim': (0.64, 0.39, 0.10), 'helmet': 'crown'},
+    'BLD': {'coat': (0.085, 0.045, 0.18), 'trim': (0.48, 0.51, 0.55), 'helmet': 'ridge'},
+    'BHG': {'coat': (0.24, 0.065, 0.095), 'trim': (0.53, 0.32, 0.14), 'helmet': 'nasal'},
+    'BGT': {'coat': (0.038, 0.035, 0.065), 'trim': (0.63, 0.58, 0.45), 'helmet': 'order'},
+    'BBV': {'coat': (0.115, 0.085, 0.052), 'trim': (0.34, 0.025, 0.10), 'helmet': 'brim'},
+    'BCM': {'coat': (0.075, 0.085, 0.11), 'trim': (0.51, 0.43, 0.29), 'helmet': 'ridge'},
+}
 CONFIG = {
     'COF': ROOT / 'gfx/models/units/APH_afg_militia.mesh',
     'YPR': GAME / 'gfx/models/units/eastern_european_infantry.mesh',
@@ -30,6 +38,10 @@ CONFIG = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
+    **{
+        tag: ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh'
+        for tag in RETINUE_STYLES
+    },
 }
 NORMALS = {
     'COF': ROOT / 'gfx/models/units/APH_afg_militia_normal.dds',
@@ -39,6 +51,10 @@ NORMALS = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
+    **{
+        tag: ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds'
+        for tag in RETINUE_STYLES
+    },
 }
 START = '# BEGIN ADISCORD northern infantry\n'
 END = '# END ADISCORD northern infantry\n'
@@ -112,11 +128,13 @@ def bindings():
         re.search(r'name\s*=\s*"([^"]+)"', b)[1]: b for b in blocks(gfx, 'pdxmesh')
     }
     meshes, entities = [], []
+    retinue_meshes, retinue_entities = [], []
     # ARB is one shared mesh; country aliases below keep the engine's normal
     # <TAG>_infantry_entity lookup without duplicating binary assets.
     output_tags = tuple(CONFIG) + ARAB_TAGS
     for tag in output_tags:
         source_tag = 'ARB' if tag in ARAB_TAGS else tag
+        country_entities = retinue_entities if tag in RETINUE_STYLES else entities
         for pose in ('rifle', 'mg'):
             source = templates[
                 'STP_shabrat_' + ('mg_' if pose == 'mg' else '') + 'infantry_mesh'
@@ -133,7 +151,10 @@ def bindings():
                 source,
                 count=1,
             )
-            meshes.append(source)
+            if tag in RETINUE_STYLES:
+                retinue_meshes.append('\t' + source)
+            else:
+                meshes.append(source)
         for level in range(8):
             suffix = '' if level == 0 else '_' + str(level + 1)
             pose = 'rifle' if level == 0 else 'mg'
@@ -142,11 +163,11 @@ def bindings():
                 fields = [f'clone = "{parent}"', f'name = "{name}"']
                 if pdxmesh:
                     fields.append(f'pdxmesh = "{pdxmesh}"')
-                if tag in ('RUS', 'SHL'):
+                if tag in ('RUS', 'SHL') or tag in RETINUE_STYLES:
                     return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}'
                 return 'entity = { ' + ' '.join(fields) + ' }'
 
-            entities.append(
+            country_entities.append(
                 entity(
                     f'STP_infantry{suffix}_entity',
                     f'{tag}_infantry{suffix}_entity',
@@ -154,7 +175,7 @@ def bindings():
                 )
             )
             for role in ('ADISCORD_militia', 'ADISCORD_territorial', 'mountaineers'):
-                entities.append(
+                country_entities.append(
                     entity(
                         f'{tag}_infantry{suffix}_entity', f'{tag}_{role}{suffix}_entity'
                     )
@@ -163,6 +184,7 @@ def bindings():
                 'YPR': ('YPR_VAL_administration',),
                 'TFF': ('TFF_frontier_defense_confederation',),
                 'RUS': ('RUS_last_empire',),
+                'BJK': ('BJK_STP_revolution',),
             }.get(tag, ()):
                 for role in (
                     'infantry',
@@ -170,17 +192,19 @@ def bindings():
                     'ADISCORD_territorial',
                     'mountaineers',
                 ):
-                    entities.append(
+                    country_entities.append(
                         entity(
                             f'{tag}_{role}{suffix}_entity',
                             f'{cosmetic}_{role}{suffix}_entity',
                         )
                     )
+    mesh_text = '\n'.join(meshes) + '\n\n' + '\n\n'.join(retinue_meshes)
+    entity_text = '\n'.join(entities) + '\n\n' + '\n\n'.join(retinue_entities)
     return {
         gfx_path: (
-            gfx + '\n' + START + 'objectTypes = {\n' + '\n'.join(meshes) + '\n}\n' + END
+            gfx + '\n' + START + 'objectTypes = {\n' + mesh_text + '\n}\n' + END
         ).encode(),
-        asset_path: (asset + '\n' + START + '\n'.join(entities) + '\n' + END).encode(),
+        asset_path: (asset + '\n' + START + entity_text + '\n' + END).encode(),
     }
 
 
@@ -596,8 +620,8 @@ def build(output):
     )
 
 
-def imperial_carrier(body, mesh, cloth, trim, brass):
-    """Fit segmented armour to the donor surface and interpolate its skin."""
+def fitted_panel_factory(body, mesh):
+    """Fit panels to the donor and interpolate weights across torso joints."""
     from mathutils import Vector
     from mathutils.bvhtree import BVHTree
     from mathutils.interpolate import poly_3d_calc
@@ -606,16 +630,17 @@ def imperial_carrier(body, mesh, cloth, trim, brass):
         [v.co for v in body.data.vertices],
         [list(p.vertices) for p in body.data.polygons],
     )
-    armour = cloth('Charcoal armour', (0.072, 0.083, 0.087))
-    webbing = cloth('Carrier webbing', (0.10, 0.075, 0.047))
 
-    def panel(name, cx, cz, width, height, material, back=False, offset=0.055):
+    def panel(name, cx, cz, width, height, material, back=False, offset=0.055, slant=0.0):
         vertices = []
         weights = []
         segments = 6
         for row in range(segments + 1):
             for col in range(segments + 1):
-                x = cx + (col / segments - 0.5) * width
+                x = (
+                    cx + (col / segments - 0.5) * width
+                    + (row / segments - 0.5) * slant
+                )
                 z = cz + (row / segments - 0.5) * height
                 origin = Vector((x, 3 if back else -3, z))
                 direction = Vector((0, -1 if back else 1, 0))
@@ -657,6 +682,14 @@ def imperial_carrier(body, mesh, cloth, trim, brass):
                 group.add([i], weight, 'REPLACE')
         return obj
 
+    return panel
+
+
+def imperial_carrier(body, mesh, cloth, trim, brass):
+    """Fit segmented armour to the donor surface and interpolate its skin."""
+    panel = fitted_panel_factory(body, mesh)
+    armour = cloth('Charcoal armour', (0.072, 0.083, 0.087))
+    webbing = cloth('Carrier webbing', (0.10, 0.075, 0.047))
     for back in (False, True):
         side = 'Rear' if back else 'Front'
         for x in (-0.42, 0.42):
@@ -666,6 +699,92 @@ def imperial_carrier(body, mesh, cloth, trim, brass):
         panel(side + ' central brass clasp', 0, 5.48, 0.055, 0.23, brass, back, 0.12)
     panel('Burgundy breast tab', -0.53, 5.61, 0.16, 0.35, trim)
     panel('Brass breast tab edge', -0.53, 5.68, 0.12, 0.045, brass, offset=0.07)
+
+
+def retinue_kit(tag, body, mesh, cloth, canvas, trim):
+    """Short fitted armour leaves weapon grips and native leg motion free."""
+    from infantry_polish import cloth_bag, helmet_shell
+
+    style = RETINUE_STYLES[tag]
+    panel = fitted_panel_factory(body, mesh)
+    steel = cloth('Retinue dark steel', (0.16, 0.18, 0.20))
+    leather = cloth('Retinue leather', (0.095, 0.045, 0.021))
+    heraldry = cloth('House colours', style['coat'])
+    helmet = helmet_shell(mesh, steel, trim, tag)
+    # The narrow raised comb and flared brim distinguish houses at map scale.
+    if style['helmet'] in ('crown', 'ridge', 'order'):
+        for vertex in helmet.data.vertices:
+            radius_squared = (
+                (vertex.co.x / 0.428) ** 2
+                + ((vertex.co.y + 0.065) / 0.530) ** 2
+            )
+            # The comb tapers to zero at the unchanged shell-to-rim seam.
+            taper = max(0, 1 - radius_squared)
+            vertex.co.z += 0.16 * taper * math.exp(-((vertex.co.x / 0.12) ** 2))
+    if style['helmet'] == 'brim':
+        vertices = [
+            (0.46 * radius * math.cos(a), -0.065 + 0.56 * radius * math.sin(a), z)
+            for radius, z in ((1, 6.96), (1.48, 6.86))
+            for a in (math.tau * i / 40 for i in range(40))
+        ]
+        mesh(
+            'Border kettle brim', vertices,
+            [(i, (i + 1) % 40, (i + 1) % 40 + 40, i + 40) for i in range(40)],
+            steel, 'head',
+        )
+    if style['helmet'] in ('nasal', 'order'):
+        mesh(
+            'Nasal guard',
+            [
+                (-0.035, -0.61, 6.98), (0.035, -0.61, 6.98),
+                (0.03, -0.60, 6.59), (-0.03, -0.60, 6.59),
+            ],
+            [(0, 1, 2, 3)], trim, 'head',
+        )
+    if style['helmet'] == 'crown':
+        vertices = []
+        for upper in (False, True):
+            for i in range(40):
+                a = math.tau * i / 40
+                z = 7.00 + (0.08 + 0.08 * (i % 8 == 0) if upper else 0)
+                vertices.append((0.445 * math.cos(a), -0.065 + 0.54 * math.sin(a), z))
+        mesh(
+            'Royal helmet circlet', vertices,
+            [(i, (i + 1) % 40, (i + 1) % 40 + 40, i + 40) for i in range(40)],
+            trim, 'head',
+        )
+    for back in (False, True):
+        side = 'Rear' if back else 'Front'
+        for x in (-0.42, 0.42):
+            panel(side + ' leather harness', x, 5.25, 0.14, 1.20, leather, back)
+        if tag == 'BBV':
+            for z in (4.80, 5.07, 5.34):
+                panel(side + ' brigandine strip', 0, z, 0.80, 0.22, leather, back, 0.085)
+        else:
+            panel(side + ' retinue cuirass', 0, 5.18, 0.94, 1.0, steel, back, 0.09)
+            panel(side + ' cuirass lower rim', 0, 4.71, 0.95, 0.065, trim, back, 0.11)
+        if tag == 'BCM':
+            panel(
+                side + ' diagonal baldric', 0, 5.20, 0.18, 1.10,
+                trim, back, 0.135, slant=0.65,
+            )
+        else:
+            panel(side + ' house tabard', 0, 5.18, 0.26, 1.04, heraldry, back, 0.125)
+        if tag not in ('BGT', 'BCM'):
+            panel(side + ' heraldic bar', 0, 5.36, 0.21, 0.065, trim, back, 0.145)
+        if tag == 'BGT':
+            panel(side + ' order vertical', 0, 5.28, 0.065, 0.38, trim, back, 0.145)
+            for x in (-0.10125, 0.10125):
+                panel(side + ' order arm', x, 5.30, 0.1375, 0.065, trim, back, 0.145)
+        if tag in ('BJK', 'BLD'):
+            for x in (-0.34, 0.34):
+                panel(side + ' short waist plate', x, 4.36, 0.28, 0.32, steel, back, 0.09)
+    for part, kind, vertices, faces in cloth_bag(0.45, 0.30, 0.53):
+        mesh(
+            'Retinue cartridge pouch ' + part,
+            [(x + 0.68, y + 0.37, z + 4.22) for x, y, z in vertices], faces,
+            canvas if kind == 'canvas' else leather, 'Hip',
+        )
 
 
 def build_field(tag, output):
@@ -713,7 +832,7 @@ def build_field(tag, output):
     body.name = tag + '_body'
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
-    if tag in ('TFF', 'YPR', 'RUS', 'NAM'):
+    if tag in ('TFF', 'YPR', 'RUS', 'NAM') or tag in RETINUE_STYLES:
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -738,7 +857,7 @@ def build_field(tag, output):
                 and len(component) < 100
             ):
                 small_kit.update(component)
-        if tag in ('TFF', 'RUS', 'NAM'):
+        if tag in ('TFF', 'RUS', 'NAM') or tag in RETINUE_STYLES:
             assert cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
@@ -816,7 +935,13 @@ def build_field(tag, output):
         return material
 
     olive = (0.155, 0.178, 0.105)
-    if tag in ('SHL', 'ARB'):
+    if tag in RETINUE_STYLES:
+        jacket_color = RETINUE_STYLES[tag]['coat']
+        trouser_color = tuple(c * 0.45 for c in jacket_color)
+        canvas_color = (0.16, 0.10, 0.045)
+        wool_color = (0.04, 0.045, 0.052)
+        scarf_color = RETINUE_STYLES[tag]['trim']
+    elif tag in ('SHL', 'ARB'):
         jacket_color = (0.36, 0.22, 0.09)
         trouser_color = (0.22, 0.19, 0.12)
         canvas_color = (0.48, 0.33, 0.16)
@@ -869,7 +994,7 @@ def build_field(tag, output):
             ) / len(face.loop_indices)
             pants = (
                 uv.x < 0.44 and uv.y < 0.45
-                if tag in ('TFF', 'RUS', 'NAM')
+                if tag in ('TFF', 'RUS', 'NAM') or tag in RETINUE_STYLES
                 else z < 3.55
             )
             face.material_index = 2 if pants else 1
@@ -888,7 +1013,9 @@ def build_field(tag, output):
         gear.append(obj)
         return obj
 
-    if tag == 'YPR':
+    if tag in RETINUE_STYLES:
+        retinue_kit(tag, body, mesh, cloth, canvas, scarf)
+    elif tag == 'YPR':
         for part, kind, vertices, faces in cloth_bag(0.95, 0.34, 0.92, (-0.22, 0.22)):
             mesh(
                 'Field pack ' + part,
@@ -1132,6 +1259,11 @@ def verify(output, tags, walk=False):
         path = (
             output / 'package/gfx/models/units/ADISCORD_regulars' / f'{tag}_field.mesh'
         )
+        inputs = [path, *sorted(path.parent.glob(f'{tag}_field_*.dds'))]
+        input_hashes = {
+            source: hashlib.sha256(source.read_bytes()).hexdigest()
+            for source in inputs
+        }
         tree = pdx_data.read_meshfile(str(path))
         assert [(n.tag, n.attrib) for n in tree.find('locator')] == [
             (n.tag, n.attrib) for n in donor.find('locator')
@@ -1255,7 +1387,10 @@ def verify(output, tags, walk=False):
                         < 20
                     )
             poses[pose] = frames
-            if pose in ('idle_rifle', 'moving_rifle'):
+            render_pose = pose in ('idle_rifle', 'moving_rifle') or (
+                tag in RETINUE_STYLES and pose in ('idle_mg', 'attack_stand_mg')
+            )
+            if render_pose:
                 scene.frame_set(frames[1])
                 scene.render.filepath = str(output / f'{tag}_{pose}.png')
                 bpy.ops.render.render(write_still=True)
@@ -1277,7 +1412,7 @@ def verify(output, tags, walk=False):
                         .to_track_quat('-Z', 'Y')
                         .to_euler()
                     )
-                elif walk:
+                elif walk and pose == 'moving_rifle':
                     scene.cycles.samples = 12
                     scene.render.resolution_percentage = 65
                     for index in range(12):
@@ -1288,11 +1423,16 @@ def verify(output, tags, walk=False):
                         bpy.ops.render.render(write_still=True)
                     scene.cycles.samples = 24
                     scene.render.resolution_percentage = 100
+        # A preview validates the imported files, not a package replaced mid-render.
+        assert input_hashes == {
+            source: hashlib.sha256(source.read_bytes()).hexdigest()
+            for source in inputs
+        }, tag + ': package changed during verification; re-run --verify'
         report[tag] = {
-            'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+            'sha256': input_hashes[path],
             'textures': {
-                p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-                for p in path.parent.glob(f'{tag}_field_*.dds')
+                source.name: input_hashes[source]
+                for source in inputs if source.suffix == '.dds'
             },
             'shapes': shapes,
             'poses': poses,
@@ -1304,11 +1444,12 @@ def verify(output, tags, walk=False):
     print(json.dumps(report, indent=2))
 
 
-def package(output, apply=False, check=False):
+def package(output, apply=False, check=False, tags=None):
     import io
     import struct
     from PIL import Image
 
+    tags = tuple(CONFIG) if tags is None else tuple(tags)
     files = bindings()
     dest = ROOT / 'gfx/models/units/ADISCORD_regulars'
 
@@ -1340,7 +1481,7 @@ def package(output, apply=False, check=False):
         struct.pack_into('<I', header, 108, 0x401008)
         return bytes(header) + b''.join(level[128:] for level in levels)
 
-    for tag in CONFIG:
+    for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
         for part in ('body', 'gear'):
             files[dest / f'{tag}_field_{part}_diffuse.dds'] = dds(
@@ -1362,7 +1503,7 @@ def package(output, apply=False, check=False):
     ]
     if apply:
         verified = json.loads((output / 'verification.json').read_text())
-        for tag in CONFIG:
+        for tag in tags:
             assert (
                 verified[tag]['sha256']
                 == hashlib.sha256(files[dest / f'{tag}_field.mesh']).hexdigest()
@@ -1422,4 +1563,4 @@ if __name__ == '__main__':
         for tag in args.tags:
             finalize_mesh(args.output.resolve() / f'{tag}_field.mesh')
     else:
-        package(args.output.resolve(), args.apply, args.check)
+        package(args.output.resolve(), args.apply, args.check, args.tags)

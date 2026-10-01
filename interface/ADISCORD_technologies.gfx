@@ -1035,6 +1035,41 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_kefreyt_shield_special_forces_medium"
+		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
+		noOfFrames = 2
+		scale = 0.9
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_shield_assault_drills_medium"
+		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
+		noOfFrames = 2
+		scale = 0.9
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_compact_shield_generators_medium"
+		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
+		noOfFrames = 2
+		scale = 0.9
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_shield_field_maintenance_medium"
+		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
+		noOfFrames = 2
+		scale = 0.9
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_adaptive_power_shields_medium"
+		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
+		noOfFrames = 2
+		scale = 0.9
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_fieldcraft_manuals_medium"
 		textureFile = "gfx/interface/technologies/night_vision.dds"
 	}

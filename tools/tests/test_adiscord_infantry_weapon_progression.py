@@ -50,6 +50,57 @@ def custom_entity_name(prefix: str, level: int) -> str:
 
 
 class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
+    def test_bezhaysk_and_starting_vassals_keep_models_and_weapons_at_every_tier(self) -> None:
+        history = (ROOT / "history/countries/BJK - Besjaysk.txt").read_text(
+            encoding="utf-8"
+        )
+        tags = {"BJK", *re.findall(r"\btarget\s*=\s*([A-Z]{3})", history)}
+        self.assertEqual(tags, {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"})
+        entities = entity_blocks(COUNTRY_ASSET)
+        asset = COUNTRY_ASSET.read_text(encoding="utf-8")
+        gfx = (ROOT / "gfx/entities/ADISCORD_country_infantry.gfx").read_text(
+            encoding="utf-8"
+        )
+        for tag in sorted(tags):
+            for pose in ("rifle", "mg"):
+                name = f"ADISCORD_{tag}_field_{pose}_mesh"
+                candidates = []
+                for match in re.finditer(r"\bpdxmesh\s*=\s*\{", gfx):
+                    block = validator.extract_block(gfx, match.start())
+                    if f'name = "{name}"' in block:
+                        candidates.append(block)
+                self.assertEqual(len(candidates), 1, name)
+                file = re.search(r'\bfile\s*=\s*"([^"]+)"', candidates[0])[1]
+                self.assertEqual(Path(file).name, f"{tag}_field.mesh")
+                self.assertTrue((ROOT / file).is_file(), file)
+            for level in range(8):
+                infantry = custom_entity_name(tag + "_infantry", level)
+                parent = custom_entity_name("STP_infantry", level)
+                with self.subTest(tag=tag, level=level):
+                    body = entities[infantry]
+                    pose = "rifle" if level == 0 else "mg"
+                    self.assertIn(f'clone = "{parent}"', body)
+                    self.assertIn(f'pdxmesh = "ADISCORD_{tag}_field_{pose}_mesh"', body)
+                    self.assertLess(asset.index(f'name = "{parent}"'), asset.index(body))
+                    for _, _, weapon_pose in ATTACHMENTS:
+                        weapon = f"ADISCORD_infantry_weapon_{level}_{weapon_pose}_entity"
+                        self.assertIn(f'"{weapon}"', entities[parent])
+                    for role in ("infantry", "ADISCORD_militia", "ADISCORD_territorial", "mountaineers"):
+                        name = custom_entity_name(f"{tag}_{role}", level)
+                        self.assertEqual(asset.count(f'name = "{name}"'), 1, name)
+                        if role != "infantry":
+                            self.assertIn(f'clone = "{infantry}"', entities[name])
+                        if tag == "BJK":
+                            cosmetic = custom_entity_name(f"BJK_STP_revolution_{role}", level)
+                            self.assertIn(f'clone = "{name}"', entities[cosmetic])
+
+    def test_regional_infantry_bindings_are_current(self) -> None:
+        from tools.assets.source.build_northern_infantry import bindings
+
+        for path, generated in bindings().items():
+            with self.subTest(path=path.name):
+                self.assertEqual(path.read_text(encoding="utf-8"), generated.decode("utf-8"))
+
     def test_territorial_models_survive_regular_infantry_regeneration(self) -> None:
         from tools.assets.source.STP_regulars.package_regulars import bindings
 
@@ -140,6 +191,12 @@ class GlobalInfantryWeaponProgressionTests(unittest.TestCase):
             "COF",
             "YPR",
             "TFF",
+            "BJK",
+            "BLD",
+            "BHG",
+            "BGT",
+            "BBV",
+            "BCM",
         ):
             for level in range(8):
                 expected[custom_entity_name(prefix + "_infantry", level)] = (

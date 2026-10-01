@@ -148,6 +148,7 @@ ADISCORD_air_doctrine_vtol_assault_groups = {
 	xor = {
 		ADISCORD_air_doctrine_persistent_close_support
 		ADISCORD_air_doctrine_theater_air_mobility
+		ADISCORD_air_doctrine_maritime_strike
 	}
 	ai_will_do = {
 		base = 1
@@ -196,6 +197,7 @@ ADISCORD_air_doctrine_persistent_close_support = {
 	xor = {
 		ADISCORD_air_doctrine_vtol_assault_groups
 		ADISCORD_air_doctrine_theater_air_mobility
+		ADISCORD_air_doctrine_maritime_strike
 	}
 	ai_will_do = {
 		base = 1
@@ -241,6 +243,7 @@ ADISCORD_air_doctrine_theater_air_mobility = {
 	xor = {
 		ADISCORD_air_doctrine_vtol_assault_groups
 		ADISCORD_air_doctrine_persistent_close_support
+		ADISCORD_air_doctrine_maritime_strike
 	}
 	ai_will_do = {
 		base = 1
@@ -287,6 +290,7 @@ ADISCORD_air_doctrine_interceptor_grids = {
 	xor = {
 		ADISCORD_air_doctrine_layered_missile_defense
 		ADISCORD_air_doctrine_electronic_suppression
+		ADISCORD_air_doctrine_strategic_interdiction
 	}
 	ai_will_do = {
 		base = 1
@@ -335,6 +339,7 @@ ADISCORD_air_doctrine_layered_missile_defense = {
 	xor = {
 		ADISCORD_air_doctrine_interceptor_grids
 		ADISCORD_air_doctrine_electronic_suppression
+		ADISCORD_air_doctrine_strategic_interdiction
 	}
 	ai_will_do = {
 		base = 1
@@ -380,6 +385,7 @@ ADISCORD_air_doctrine_electronic_suppression = {
 	xor = {
 		ADISCORD_air_doctrine_interceptor_grids
 		ADISCORD_air_doctrine_layered_missile_defense
+		ADISCORD_air_doctrine_strategic_interdiction
 	}
 	ai_will_do = {
 		base = 1
@@ -409,6 +415,124 @@ ADISCORD_air_doctrine_electronic_suppression = {
 			encryption_factor = 0.04
 			decryption_factor = 0.04
 			air_intercept_efficiency = 0.03
+		}
+	}
+}
+
+ADISCORD_air_doctrine_strategic_interdiction = {
+	track = ADISCORD_air_strategic_denial
+	name = ADISCORD_air_doctrine_strategic_interdiction
+	description = ADISCORD_air_doctrine_strategic_interdiction_desc
+	icon = GFX_bomber_ace_initiative_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_twin_engine_aircraft
+	}
+	xor = {
+		ADISCORD_air_doctrine_interceptor_grids
+		ADISCORD_air_doctrine_layered_missile_defense
+		ADISCORD_air_doctrine_electronic_suppression
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.7
+			num_of_military_factories > 12
+		}
+	}
+	category_tac_bomber = {
+		strategic_attack = 0.03
+	}
+	rewards = {
+		ADISCORD_air_doctrine_strategic_interdiction_route_planning = {
+			mastery = 30
+			category_tac_bomber = {
+				air_range = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_strategic_interdiction_defensive_formations = {
+			mastery = 40
+			category_tac_bomber = {
+				air_defence = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_strategic_interdiction_target_catalogues = {
+			mastery = 50
+			category_tac_bomber = {
+				strategic_attack = 0.05
+			}
+		}
+		ADISCORD_air_doctrine_strategic_interdiction_staging_airfields = {
+			mastery = 60
+			category_tac_bomber = {
+				air_range = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_strategic_interdiction_industrial_campaign = {
+			mastery = 70
+			category_tac_bomber = {
+				strategic_attack = 0.07
+			}
+		}
+	}
+}
+
+ADISCORD_air_doctrine_maritime_strike = {
+	track = ADISCORD_air_vtol_deep_strike
+	name = ADISCORD_air_doctrine_maritime_strike
+	description = ADISCORD_air_doctrine_maritime_strike_desc
+	icon = GFX_doctrine_base_strike_medium
+	xp_cost = 55
+	xp_type = air
+	available = {
+		has_tech = ADISCORD_tech_twin_engine_aircraft
+	}
+	xor = {
+		ADISCORD_air_doctrine_vtol_assault_groups
+		ADISCORD_air_doctrine_persistent_close_support
+		ADISCORD_air_doctrine_theater_air_mobility
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 1.5
+			has_war = yes
+		}
+	}
+	category_nav_bomber = {
+		naval_strike_targetting = 0.04
+	}
+	rewards = {
+		ADISCORD_air_doctrine_maritime_strike_sea_routes = {
+			mastery = 30
+			category_nav_bomber = {
+				air_range = 0.05
+			}
+		}
+		ADISCORD_air_doctrine_maritime_strike_attack_runs = {
+			mastery = 40
+			category_nav_bomber = {
+				naval_strike_attack = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_maritime_strike_moving_targets = {
+			mastery = 50
+			category_nav_bomber = {
+				naval_strike_targetting = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_maritime_strike_dispersed_approach = {
+			mastery = 60
+			category_nav_bomber = {
+				air_defence = 0.04
+			}
+		}
+		ADISCORD_air_doctrine_maritime_strike_coordinated_strike = {
+			mastery = 70
+			category_nav_bomber = {
+				naval_strike_attack = 0.08
+			}
 		}
 	}
 }

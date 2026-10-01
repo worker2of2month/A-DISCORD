@@ -2598,4 +2598,1172 @@ entity = { clone = "STP_infantry_8_entity" name = "SLF_infantry_8_entity" pdxmes
 entity = { clone = "SLF_infantry_8_entity" name = "SLF_ADISCORD_militia_8_entity" }
 entity = { clone = "SLF_infantry_8_entity" name = "SLF_ADISCORD_territorial_8_entity" }
 entity = { clone = "SLF_infantry_8_entity" name = "SLF_mountaineers_8_entity" }
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BJK_infantry_entity"
+	pdxmesh = "ADISCORD_BJK_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_entity"
+	name = "BJK_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_entity"
+	name = "BJK_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_entity"
+	name = "BJK_mountaineers_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_entity"
+	name = "BJK_STP_revolution_infantry_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_entity"
+	name = "BJK_STP_revolution_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BJK_infantry_2_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_2_entity"
+	name = "BJK_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_2_entity"
+	name = "BJK_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_2_entity"
+	name = "BJK_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_2_entity"
+	name = "BJK_STP_revolution_infantry_2_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_2_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_2_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_2_entity"
+	name = "BJK_STP_revolution_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BJK_infantry_3_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_3_entity"
+	name = "BJK_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_3_entity"
+	name = "BJK_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_3_entity"
+	name = "BJK_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_3_entity"
+	name = "BJK_STP_revolution_infantry_3_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_3_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_3_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_3_entity"
+	name = "BJK_STP_revolution_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BJK_infantry_4_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_4_entity"
+	name = "BJK_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_4_entity"
+	name = "BJK_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_4_entity"
+	name = "BJK_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_4_entity"
+	name = "BJK_STP_revolution_infantry_4_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_4_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_4_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_4_entity"
+	name = "BJK_STP_revolution_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BJK_infantry_5_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_5_entity"
+	name = "BJK_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_5_entity"
+	name = "BJK_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_5_entity"
+	name = "BJK_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_5_entity"
+	name = "BJK_STP_revolution_infantry_5_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_5_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_5_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_5_entity"
+	name = "BJK_STP_revolution_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BJK_infantry_6_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_6_entity"
+	name = "BJK_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_6_entity"
+	name = "BJK_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_6_entity"
+	name = "BJK_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_6_entity"
+	name = "BJK_STP_revolution_infantry_6_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_6_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_6_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_6_entity"
+	name = "BJK_STP_revolution_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BJK_infantry_7_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_7_entity"
+	name = "BJK_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_7_entity"
+	name = "BJK_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_7_entity"
+	name = "BJK_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_7_entity"
+	name = "BJK_STP_revolution_infantry_7_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_7_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_7_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_7_entity"
+	name = "BJK_STP_revolution_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BJK_infantry_8_entity"
+	pdxmesh = "ADISCORD_BJK_field_mg_mesh"
+}
+
+entity = {
+	clone = "BJK_infantry_8_entity"
+	name = "BJK_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_8_entity"
+	name = "BJK_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_8_entity"
+	name = "BJK_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "BJK_infantry_8_entity"
+	name = "BJK_STP_revolution_infantry_8_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_militia_8_entity"
+	name = "BJK_STP_revolution_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BJK_ADISCORD_territorial_8_entity"
+	name = "BJK_STP_revolution_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BJK_mountaineers_8_entity"
+	name = "BJK_STP_revolution_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BLD_infantry_entity"
+	pdxmesh = "ADISCORD_BLD_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_entity"
+	name = "BLD_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_entity"
+	name = "BLD_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_entity"
+	name = "BLD_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BLD_infantry_2_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_2_entity"
+	name = "BLD_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_2_entity"
+	name = "BLD_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_2_entity"
+	name = "BLD_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BLD_infantry_3_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_3_entity"
+	name = "BLD_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_3_entity"
+	name = "BLD_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_3_entity"
+	name = "BLD_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BLD_infantry_4_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_4_entity"
+	name = "BLD_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_4_entity"
+	name = "BLD_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_4_entity"
+	name = "BLD_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BLD_infantry_5_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_5_entity"
+	name = "BLD_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_5_entity"
+	name = "BLD_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_5_entity"
+	name = "BLD_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BLD_infantry_6_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_6_entity"
+	name = "BLD_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_6_entity"
+	name = "BLD_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_6_entity"
+	name = "BLD_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BLD_infantry_7_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_7_entity"
+	name = "BLD_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_7_entity"
+	name = "BLD_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_7_entity"
+	name = "BLD_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BLD_infantry_8_entity"
+	pdxmesh = "ADISCORD_BLD_field_mg_mesh"
+}
+
+entity = {
+	clone = "BLD_infantry_8_entity"
+	name = "BLD_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_8_entity"
+	name = "BLD_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BLD_infantry_8_entity"
+	name = "BLD_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BHG_infantry_entity"
+	pdxmesh = "ADISCORD_BHG_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_entity"
+	name = "BHG_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_entity"
+	name = "BHG_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_entity"
+	name = "BHG_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BHG_infantry_2_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_2_entity"
+	name = "BHG_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_2_entity"
+	name = "BHG_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_2_entity"
+	name = "BHG_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BHG_infantry_3_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_3_entity"
+	name = "BHG_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_3_entity"
+	name = "BHG_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_3_entity"
+	name = "BHG_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BHG_infantry_4_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_4_entity"
+	name = "BHG_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_4_entity"
+	name = "BHG_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_4_entity"
+	name = "BHG_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BHG_infantry_5_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_5_entity"
+	name = "BHG_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_5_entity"
+	name = "BHG_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_5_entity"
+	name = "BHG_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BHG_infantry_6_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_6_entity"
+	name = "BHG_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_6_entity"
+	name = "BHG_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_6_entity"
+	name = "BHG_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BHG_infantry_7_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_7_entity"
+	name = "BHG_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_7_entity"
+	name = "BHG_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_7_entity"
+	name = "BHG_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BHG_infantry_8_entity"
+	pdxmesh = "ADISCORD_BHG_field_mg_mesh"
+}
+
+entity = {
+	clone = "BHG_infantry_8_entity"
+	name = "BHG_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_8_entity"
+	name = "BHG_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BHG_infantry_8_entity"
+	name = "BHG_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BGT_infantry_entity"
+	pdxmesh = "ADISCORD_BGT_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_entity"
+	name = "BGT_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_entity"
+	name = "BGT_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_entity"
+	name = "BGT_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BGT_infantry_2_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_2_entity"
+	name = "BGT_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_2_entity"
+	name = "BGT_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_2_entity"
+	name = "BGT_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BGT_infantry_3_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_3_entity"
+	name = "BGT_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_3_entity"
+	name = "BGT_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_3_entity"
+	name = "BGT_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BGT_infantry_4_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_4_entity"
+	name = "BGT_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_4_entity"
+	name = "BGT_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_4_entity"
+	name = "BGT_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BGT_infantry_5_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_5_entity"
+	name = "BGT_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_5_entity"
+	name = "BGT_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_5_entity"
+	name = "BGT_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BGT_infantry_6_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_6_entity"
+	name = "BGT_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_6_entity"
+	name = "BGT_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_6_entity"
+	name = "BGT_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BGT_infantry_7_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_7_entity"
+	name = "BGT_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_7_entity"
+	name = "BGT_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_7_entity"
+	name = "BGT_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BGT_infantry_8_entity"
+	pdxmesh = "ADISCORD_BGT_field_mg_mesh"
+}
+
+entity = {
+	clone = "BGT_infantry_8_entity"
+	name = "BGT_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_8_entity"
+	name = "BGT_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BGT_infantry_8_entity"
+	name = "BGT_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BBV_infantry_entity"
+	pdxmesh = "ADISCORD_BBV_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_entity"
+	name = "BBV_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_entity"
+	name = "BBV_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_entity"
+	name = "BBV_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BBV_infantry_2_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_2_entity"
+	name = "BBV_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_2_entity"
+	name = "BBV_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_2_entity"
+	name = "BBV_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BBV_infantry_3_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_3_entity"
+	name = "BBV_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_3_entity"
+	name = "BBV_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_3_entity"
+	name = "BBV_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BBV_infantry_4_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_4_entity"
+	name = "BBV_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_4_entity"
+	name = "BBV_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_4_entity"
+	name = "BBV_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BBV_infantry_5_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_5_entity"
+	name = "BBV_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_5_entity"
+	name = "BBV_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_5_entity"
+	name = "BBV_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BBV_infantry_6_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_6_entity"
+	name = "BBV_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_6_entity"
+	name = "BBV_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_6_entity"
+	name = "BBV_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BBV_infantry_7_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_7_entity"
+	name = "BBV_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_7_entity"
+	name = "BBV_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_7_entity"
+	name = "BBV_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BBV_infantry_8_entity"
+	pdxmesh = "ADISCORD_BBV_field_mg_mesh"
+}
+
+entity = {
+	clone = "BBV_infantry_8_entity"
+	name = "BBV_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_8_entity"
+	name = "BBV_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BBV_infantry_8_entity"
+	name = "BBV_mountaineers_8_entity"
+}
+
+entity = {
+	clone = "STP_infantry_entity"
+	name = "BCM_infantry_entity"
+	pdxmesh = "ADISCORD_BCM_field_rifle_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_entity"
+	name = "BCM_ADISCORD_militia_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_entity"
+	name = "BCM_ADISCORD_territorial_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_entity"
+	name = "BCM_mountaineers_entity"
+}
+
+entity = {
+	clone = "STP_infantry_2_entity"
+	name = "BCM_infantry_2_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_2_entity"
+	name = "BCM_ADISCORD_militia_2_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_2_entity"
+	name = "BCM_ADISCORD_territorial_2_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_2_entity"
+	name = "BCM_mountaineers_2_entity"
+}
+
+entity = {
+	clone = "STP_infantry_3_entity"
+	name = "BCM_infantry_3_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_3_entity"
+	name = "BCM_ADISCORD_militia_3_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_3_entity"
+	name = "BCM_ADISCORD_territorial_3_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_3_entity"
+	name = "BCM_mountaineers_3_entity"
+}
+
+entity = {
+	clone = "STP_infantry_4_entity"
+	name = "BCM_infantry_4_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_4_entity"
+	name = "BCM_ADISCORD_militia_4_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_4_entity"
+	name = "BCM_ADISCORD_territorial_4_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_4_entity"
+	name = "BCM_mountaineers_4_entity"
+}
+
+entity = {
+	clone = "STP_infantry_5_entity"
+	name = "BCM_infantry_5_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_5_entity"
+	name = "BCM_ADISCORD_militia_5_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_5_entity"
+	name = "BCM_ADISCORD_territorial_5_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_5_entity"
+	name = "BCM_mountaineers_5_entity"
+}
+
+entity = {
+	clone = "STP_infantry_6_entity"
+	name = "BCM_infantry_6_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_6_entity"
+	name = "BCM_ADISCORD_militia_6_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_6_entity"
+	name = "BCM_ADISCORD_territorial_6_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_6_entity"
+	name = "BCM_mountaineers_6_entity"
+}
+
+entity = {
+	clone = "STP_infantry_7_entity"
+	name = "BCM_infantry_7_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_7_entity"
+	name = "BCM_ADISCORD_militia_7_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_7_entity"
+	name = "BCM_ADISCORD_territorial_7_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_7_entity"
+	name = "BCM_mountaineers_7_entity"
+}
+
+entity = {
+	clone = "STP_infantry_8_entity"
+	name = "BCM_infantry_8_entity"
+	pdxmesh = "ADISCORD_BCM_field_mg_mesh"
+}
+
+entity = {
+	clone = "BCM_infantry_8_entity"
+	name = "BCM_ADISCORD_militia_8_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_8_entity"
+	name = "BCM_ADISCORD_territorial_8_entity"
+}
+
+entity = {
+	clone = "BCM_infantry_8_entity"
+	name = "BCM_mountaineers_8_entity"
+}
 # END ADISCORD northern infantry

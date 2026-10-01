@@ -4,7 +4,7 @@ state={
 	provinces={
 		16439 16443 16446 16449 16451
 	}
-	manpower=850000
+	manpower=5000000
 	buildings_max_level_factor=1.000
 	state_category = large_town
 
@@ -15,6 +15,11 @@ state={
 
 	history = {
 		owner = BJK
+		buildings = {
+			infrastructure = 3
+			industrial_complex = 2
+			arms_factory = 1
+		}
 		add_core_of = BJK
 
 		victory_points = { 16451 15 }

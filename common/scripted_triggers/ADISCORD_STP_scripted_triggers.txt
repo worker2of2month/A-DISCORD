@@ -733,8 +733,35 @@ NOD_cw_can_accept_northern_defeat = {
 	has_war_with = YPR
 	has_war_with = COF
 	has_war_with = TFF
-	NOT = { surrender_progress < 0.7 }
 	has_country_flag = { flag = NOD_cw_northern_war_started days > 89 }
+	OR = {
+		NOT = { surrender_progress < 0.7 }
+		# Cussington alone carries ~60 of NOD's ~100 VP, so 70% is otherwise
+		# reachable only after the capital falls. A breach into the core counts.
+		NOD_cw_northern_core_breached = yes
+	}
+}
+
+# NOD scope. The coalition holds Esnos (17) and has broken into Treya (13) or
+# Kaclana (12): the road to Cussington is open.
+NOD_cw_northern_core_breached = {
+	17 = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }
+	OR = {
+		13 = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }
+		12 = { controller = { OR = { tag = YPR tag = COF tag = TFF } } }
+	}
+}
+
+# Coalition member scope. Once NOD's opening offensive has run out, the
+# coalition stops holding the line and pushes towards Cussington.
+STP_cw_northern_counteroffensive_open = {
+	OR = { tag = YPR tag = COF tag = TFF }
+	has_capitulated = no
+	has_war_with = NOD
+	NOD = {
+		check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
+		has_country_flag = NOD_cw_northern_exhaustion_applied
+	}
 }
 
 # NOD scope. The opening offensive counts as successful once NOD holds at least
@@ -760,6 +787,8 @@ NOD_cw_northern_push_succeeded = {
 }
 
 # NOD: an AI ceasefire cannot supersede a military settlement or a player campaign.
+# It is a late fallback; the core-breach defeat and the coalition counteroffensive
+# should normally decide the war first.
 NOD_cw_can_accept_northern_status_quo = {
 	tag = NOD
 	is_ai = yes
@@ -767,7 +796,7 @@ NOD_cw_can_accept_northern_status_quo = {
 	is_subject = no
 	has_capitulated = no
 	check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
-	has_country_flag = { flag = NOD_cw_northern_war_started days > 300 }
+	has_country_flag = { flag = NOD_cw_northern_war_started days > 450 }
 	has_war_with = YPR
 	has_war_with = COF
 	has_war_with = TFF

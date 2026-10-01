@@ -3,7 +3,9 @@ ADISCORD_doctrine_restoration_general_staff = {
 	name = ADISCORD_doctrine_restoration_general_staff
 	description = ADISCORD_doctrine_restoration_general_staff_desc
 	icon = GFX_doctrine_grand_battleplan_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 75
 	xp_type = army
 	ai_will_do = {
@@ -45,7 +47,9 @@ ADISCORD_air_doctrine_restored_air_command = {
 	name = ADISCORD_air_doctrine_restored_air_command
 	description = ADISCORD_air_doctrine_restored_air_command_desc
 	icon = GFX_doctrine_direct_ground_support_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 70
 	xp_type = air
 	ai_will_do = {
@@ -80,7 +84,9 @@ ADISCORD_naval_doctrine_littoral_command = {
 	name = ADISCORD_naval_doctrine_littoral_command
 	description = ADISCORD_naval_doctrine_littoral_command_desc
 	icon = GFX_doctrine_convoy_sailing_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 50
 	xp_type = navy
 	ai_will_do = {
@@ -115,7 +121,9 @@ ADISCORD_doctrine_raiding_columns = {
 	name = ADISCORD_doctrine_raiding_columns
 	description = ADISCORD_doctrine_raiding_columns_desc
 	icon = GFX_doctrine_armored_spearhead_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 75
 	xp_type = army
 	ai_will_do = {
@@ -156,7 +164,9 @@ ADISCORD_doctrine_remote_engagement = {
 	name = ADISCORD_doctrine_remote_engagement
 	description = ADISCORD_doctrine_remote_engagement_desc
 	icon = GFX_doctrine_fire_concentration_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 75
 	xp_type = army
 	ai_will_do = {
@@ -197,7 +207,9 @@ ADISCORD_doctrine_autonomous_strongpoints = {
 	name = ADISCORD_doctrine_autonomous_strongpoints
 	description = ADISCORD_doctrine_autonomous_strongpoints_desc
 	icon = GFX_doctrine_defensive_postures_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 75
 	xp_type = army
 	ai_will_do = {
@@ -239,7 +251,9 @@ ADISCORD_air_doctrine_distributed_interception = {
 	name = ADISCORD_air_doctrine_distributed_interception
 	description = ADISCORD_air_doctrine_distributed_interception_desc
 	icon = GFX_doctrine_forward_interception_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 70
 	xp_type = air
 	ai_will_do = {
@@ -274,7 +288,9 @@ ADISCORD_air_doctrine_strike_windows = {
 	name = ADISCORD_air_doctrine_strike_windows
 	description = ADISCORD_air_doctrine_strike_windows_desc
 	icon = GFX_doctrine_direct_ground_support_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 70
 	xp_type = air
 	ai_will_do = {
@@ -309,7 +325,9 @@ ADISCORD_naval_doctrine_coastal_watch = {
 	name = ADISCORD_naval_doctrine_coastal_watch
 	description = ADISCORD_naval_doctrine_coastal_watch_desc
 	icon = GFX_doctrine_escort_patrols_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 50
 	xp_type = navy
 	ai_will_do = {
@@ -344,7 +362,9 @@ ADISCORD_naval_doctrine_supply_interdiction = {
 	name = ADISCORD_naval_doctrine_supply_interdiction
 	description = ADISCORD_naval_doctrine_supply_interdiction_desc
 	icon = GFX_doctrine_wolfpacks_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 50
 	xp_type = navy
 	ai_will_do = {
@@ -378,7 +398,9 @@ ADISCORD_special_forces_mass_formations = {
 	name = ADISCORD_special_forces_mass_formations
 	description = ADISCORD_special_forces_mass_formations_desc
 	icon = GFX_doctrine_special_forces_1_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 70
 	xp_type = army
 	ai_will_do = {
@@ -408,7 +430,9 @@ ADISCORD_special_forces_precision_cadres = {
 	name = ADISCORD_special_forces_precision_cadres
 	description = ADISCORD_special_forces_precision_cadres_desc
 	icon = GFX_doctrine_special_forces_2_medium
-	available = { always = yes }
+	available = {
+		always = yes
+	}
 	xp_cost = 70
 	xp_type = army
 	ai_will_do = {
@@ -429,6 +453,97 @@ ADISCORD_special_forces_precision_cadres = {
 		{
 			category_special_forces = { defense = 0.04 soft_attack = 0.03 }
 			special_forces_no_supply_grace = 8
+		}
+	}
+}
+
+ADISCORD_air_doctrine_strategic_campaign = {
+	folder = air
+	name = ADISCORD_air_doctrine_strategic_campaign
+	description = ADISCORD_air_doctrine_strategic_campaign_desc
+	icon = GFX_bomber_ace_initiative_medium
+	available = {
+		has_tech = ADISCORD_tech_twin_engine_aircraft
+	}
+	xp_cost = 70
+	xp_type = air
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 2
+			num_of_military_factories > 16
+		}
+	}
+	tracks = {
+		ADISCORD_air_drone_swarm
+		ADISCORD_air_vtol_deep_strike
+		ADISCORD_air_strategic_denial
+	}
+	category_tac_bomber = {
+		strategic_attack = 0.05
+	}
+	milestones = {
+		{
+			category_fighter = {
+				air_range = 0.06
+			}
+		}
+		{
+			category_tac_bomber = {
+				air_range = 0.06
+				air_defence = 0.04
+			}
+		}
+		{
+			category_tac_bomber = {
+				strategic_attack = 0.08
+			}
+		}
+	}
+}
+
+ADISCORD_naval_doctrine_battlefleet = {
+	folder = naval
+	name = ADISCORD_naval_doctrine_battlefleet
+	description = ADISCORD_naval_doctrine_battlefleet_desc
+	icon = GFX_doctrine_floating_fortress_medium
+	available = {
+		has_tech = ADISCORD_tech_modular_hull_standards
+	}
+	xp_cost = 50
+	xp_type = navy
+	ai_will_do = {
+		base = 1
+		modifier = {
+			factor = 2
+			num_of_military_factories > 12
+		}
+	}
+	tracks = {
+		ADISCORD_naval_littoral_security
+		ADISCORD_naval_surface_control
+		ADISCORD_naval_subsurface_warfare
+	}
+	heavy_cruiser = {
+		max_organisation = 3
+	}
+	milestones = {
+		{
+			ADISCORD_coastal_patrol_vessel = {
+				max_organisation = 3
+			}
+		}
+		{
+			heavy_cruiser = {
+				hg_attack = 0.06
+			}
+			screening_efficiency = 0.04
+		}
+		{
+			heavy_cruiser = {
+				hg_attack = 0.04
+			}
+			naval_coordination = 0.02
 		}
 	}
 }

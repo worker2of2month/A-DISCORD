@@ -396,3 +396,21 @@ ADISCORD_ai_rifle_replacements = {
 	abort_when_not_enabled = yes
 	ai_strategy = { type = equipment_production_factor id = infantry value = 100 }
 }
+
+# Prioritise replenishment only after shield formations create real demand.
+ADISCORD_power_shield_replenishment = {
+	enable = {
+		is_ai = yes
+		has_tech = ADISCORD_tech_kefreyt_shield_special_forces
+		stockpile_ratio = {
+			archetype = ADISCORD_power_shield_equipment
+			ratio < 0.10
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_variant_production_factor
+		id = ADISCORD_power_shield_equipment
+		value = 30
+	}
+}

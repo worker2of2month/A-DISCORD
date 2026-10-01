@@ -123,7 +123,7 @@ TRACKS = (
         "GFX_doctrine_decor_air",
         7.0,
         "equipment",
-        ("cas", "tactical_bomber"),
+        ("cas", "tactical_bomber", "naval_bomber"),
     ),
     Track(
         "ADISCORD_air_strategic_denial",
@@ -156,7 +156,7 @@ TRACKS = (
         "GFX_doctrine_decor_naval",
         2.5,
         "equipment",
-        ("capital_ship", "carrier", "screen_ship"),
+        ("capital_ship", "screen_ship"),
     ),
     Track(
         "ADISCORD_naval_subsurface_warfare",
@@ -1098,9 +1098,9 @@ REWARD_PROFILES.update(
             ),
             reward(
                 "mine_drills",
-                "Минно-тральные учения",
-                "Mine-countermeasure Drills",
-                "mines_sweeping_by_fleets_factor = 0.06",
+                "Учения аварийных команд",
+                "Damage-control Drills",
+                "ADISCORD_coastal_patrol_vessel = { reliability = 0.03 }",
             ),
             reward(
                 "screen_coordination",
@@ -1120,7 +1120,7 @@ REWARD_PROFILES.update(
                 "Integrated Littoral Network",
                 "screening_efficiency = 0.04",
                 "naval_detection = 0.04",
-                "mines_sweeping_by_fleets_factor = 0.06",
+                "ADISCORD_coastal_patrol_vessel = { naval_range = 0.03 }",
             ),
         ),
         "naval_escort": (
@@ -1161,40 +1161,40 @@ REWARD_PROFILES.update(
                 "surveyed_channels",
                 "Промеренные фарватеры",
                 "Surveyed Channels",
-                "naval_mines_effect_reduction = 0.04",
+                "ADISCORD_coastal_patrol_vessel = { naval_range = 0.04 }",
             ),
             reward(
                 "rapid_laying",
-                "Быстрая постановка заграждений",
-                "Rapid Mine Laying",
-                "naval_mine_hit_chance = 0.03",
+                "Скрытые подходы",
+                "Concealed Approaches",
+                "ADISCORD_coastal_patrol_vessel = { surface_visibility = -0.04 }",
             ),
             reward(
                 "remote_minefields",
-                "Дистанционные минные поля",
-                "Remote Minefields",
+                "Общая картина побережья",
+                "Shared Coastal Picture",
                 "naval_coordination = 0.01",
             ),
             reward(
                 "sweeper_escorts",
-                "Охранение тральщиков",
-                "Minesweeper Escorts",
-                "mines_sweeping_by_fleets_factor = 0.05",
+                "Прикрытый отход",
+                "Covered Withdrawal",
+                "naval_retreat_speed = 0.04",
             ),
             reward(
                 "controlled_waters",
                 "Контролируемые воды",
                 "Controlled Waters",
-                "naval_mine_hit_chance = 0.05",
-                "naval_mines_effect_reduction = 0.05",
+                "ADISCORD_coastal_patrol_vessel = { naval_speed = 0.04 }",
+                "naval_detection = 0.04",
             ),
         ),
         "naval_carrier": (
             reward(
                 "deck_drones",
-                "Дроны палубного управления",
-                "Deck-control Drones",
-                "navy_carrier_air_agility_factor = 0.03",
+                "Морские воздушные дозоры",
+                "Maritime Air Patrols",
+                "category_nav_bomber = { air_defence = 0.04 }",
             ),
             reward(
                 "strike_coordination",
@@ -1204,22 +1204,22 @@ REWARD_PROFILES.update(
             ),
             reward(
                 "drone_maintenance",
-                "Обслуживание палубных дронов",
-                "Drone Maintenance",
+                "Береговое обслуживание",
+                "Shore Maintenance",
                 "air_accidents_factor = -0.02",
             ),
             reward(
                 "distributed_decks",
-                "Распределённые палубные группы",
-                "Distributed Deck Groups",
+                "Распределённые ударные группы",
+                "Distributed Strike Groups",
                 "naval_coordination = 0.015",
             ),
             reward(
                 "carrier_mesh",
-                "Сетевая авианосная группа",
-                "Networked Carrier Group",
+                "Общее морское целеуказание",
+                "Shared Maritime Targeting",
                 "naval_strike_attack_factor = 0.05",
-                "navy_carrier_air_agility_factor = 0.04",
+                "category_nav_bomber = { naval_strike_targetting = 0.04 }",
             ),
         ),
         "naval_missile": (
@@ -1464,13 +1464,13 @@ REWARD_PROFILES.update(
                 "breach_cells",
                 "Ячейки пролома",
                 "Breach Cells",
-                "category_special_forces = { breakthrough = 0.04 }",
+                "ADISCORD_assault_infantry = { breakthrough = 0.04 }",
             ),
             reward(
                 "vertical_clearance",
                 "Вертикальная зачистка",
                 "Vertical Clearance",
-                "category_special_forces = { soft_attack = 0.04 }",
+                "ADISCORD_assault_infantry = { soft_attack = 0.04 }",
             ),
             reward(
                 "isolated_strongpoints",
@@ -1482,7 +1482,7 @@ REWARD_PROFILES.update(
                 "urban_assault",
                 "Городская штурмовая группа",
                 "Urban Assault Group",
-                "category_special_forces = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }",
+                "ADISCORD_assault_infantry = { breakthrough = 0.06 soft_attack = 0.06 max_organisation = 2 }",
             ),
         ),
         "sf_recon": (
@@ -1528,9 +1528,9 @@ REWARD_PROFILES.update(
             ),
             reward(
                 "airmobile_supply",
-                "Аэромобильное снабжение",
-                "Airmobile Supply",
-                "category_special_forces = { supply_consumption = -0.02 }",
+                "Ротация штабных групп",
+                "Headquarters Rotation",
+                "hq_paratrooper = { default_morale = 0.03 }",
             ),
             reward(
                 "rapid_concentration",
@@ -1542,13 +1542,13 @@ REWARD_PROFILES.update(
                 "assault_landing",
                 "Штурмовая высадка",
                 "Assault Landing",
-                "category_special_forces = { breakthrough = 0.05 }",
+                "hq_paratrooper = { breakthrough = 0.05 }",
             ),
             reward(
                 "vertical_envelopment",
                 "Вертикальный охват",
                 "Vertical Envelopment",
-                "category_special_forces = { breakthrough = 0.06 maximum_speed = 0.03 }",
+                "hq_paratrooper = { breakthrough = 0.06 maximum_speed = 0.03 }",
                 "planning_speed = 0.03",
             ),
         ),
@@ -1589,8 +1589,114 @@ REWARD_PROFILES.update(
 )
 
 
+def scoped(scope: str, *effects: str) -> str:
+    body = "\n".join("\t" + line for effect in effects for line in effect.splitlines())
+    return f"{scope} = {{\n{body}\n}}"
+
+
+REWARD_PROFILES.update(
+    {
+        "territorial": (
+            reward("prepared_positions", "Подготовленные позиции", "Prepared Positions",
+                   scoped("ADISCORD_territorial", "defense = 0.02")),
+            reward("district_reserves", "Окружные резервы", "District Reserves",
+                   scoped("ADISCORD_territorial", "max_organisation = 2")),
+            reward("local_depots", "Местные склады", "Local Depots",
+                   scoped("ADISCORD_territorial", "supply_consumption = -0.03")),
+            reward("interlocking_positions", "Взаимная поддержка позиций", "Interlocking Positions",
+                   scoped("ADISCORD_territorial", "defense = 0.04")),
+            reward("defense_in_depth", "Оборона в глубину", "Defense in Depth",
+                   scoped("ADISCORD_territorial", "defense = 0.06")),
+        ),
+        "recon_raiding": (
+            reward("route_scouts", "Разведка маршрутов", "Route Scouts",
+                   scoped("ADISCORD_recon_platform", "recon = 0.5")),
+            reward("rapid_columns", "Быстрые колонны", "Rapid Columns",
+                   scoped("ADISCORD_recon_platform", "plains = { movement = 0.04 }")),
+            reward("field_workshops", "Полевые мастерские", "Field Workshops",
+                   scoped("ADISCORD_recon_platform", "reliability = 0.02")),
+            reward("mobile_contacts", "Манёвренное соприкосновение", "Mobile Contacts",
+                   scoped("ADISCORD_recon_platform", "hills = { movement = 0.04 }")),
+            reward("sustained_patrols", "Длительные патрули", "Sustained Patrols",
+                   scoped("ADISCORD_recon_platform", "reliability = 0.03")),
+        ),
+        "air_strategic": (
+            reward("route_planning", "Расчёт дальних маршрутов", "Long-range Routing",
+                   scoped("category_tac_bomber", "air_range = 0.04")),
+            reward("defensive_formations", "Защитный строй", "Defensive Formations",
+                   scoped("category_tac_bomber", "air_defence = 0.04")),
+            reward("target_catalogues", "Каталоги промышленных целей", "Industrial Target Catalogues",
+                   scoped("category_tac_bomber", "strategic_attack = 0.05")),
+            reward("staging_airfields", "Аэродромы подскока", "Staging Airfields",
+                   scoped("category_tac_bomber", "air_range = 0.04")),
+            reward("industrial_campaign", "Удары по промышленным узлам", "Industrial Campaign",
+                   scoped("category_tac_bomber", "strategic_attack = 0.07")),
+        ),
+        "air_maritime": (
+            reward("sea_routes", "Маршруты над морем", "Overwater Routes",
+                   scoped("category_nav_bomber", "air_range = 0.05")),
+            reward("attack_runs", "Боевые заходы", "Attack Runs",
+                   scoped("category_nav_bomber", "naval_strike_attack = 0.04")),
+            reward("moving_targets", "Сопровождение морских целей", "Tracking Naval Targets",
+                   scoped("category_nav_bomber", "naval_strike_targetting = 0.04")),
+            reward("dispersed_approach", "Рассредоточенный подход", "Dispersed Approach",
+                   scoped("category_nav_bomber", "air_defence = 0.04")),
+            reward("coordinated_strike", "Согласованный морской удар", "Coordinated Naval Strike",
+                   scoped("category_nav_bomber", "naval_strike_attack = 0.08")),
+        ),
+        "naval_hunters": (
+            reward("watch_rotations", "Смены наблюдения", "Watch Rotations",
+                   scoped("ADISCORD_coastal_patrol_vessel", "max_organisation = 3")),
+            reward("depth_patterns", "Глубинные атаки", "Depth Attack Patterns",
+                   scoped("ADISCORD_coastal_patrol_vessel", "sub_attack = 0.05")),
+            reward("listening_lines", "Линии прослушивания", "Listening Lines",
+                   scoped("ADISCORD_coastal_patrol_vessel", "sub_detection = 0.05")),
+            reward("contact_pursuit", "Преследование контакта", "Contact Pursuit",
+                   scoped("ADISCORD_coastal_patrol_vessel", "sub_attack = 0.05")),
+            reward("hunter_groups", "Поисково-ударные группы", "Hunter Groups",
+                   scoped("ADISCORD_coastal_patrol_vessel", "sub_attack = 0.05", "sub_detection = 0.05")),
+        ),
+        "naval_surface_raiders": (
+            reward("concealed_approach", "Скрытный подход", "Concealed Approach",
+                   scoped("heavy_cruiser", "surface_visibility = -0.04")),
+            reward("distant_routes", "Дальние маршруты", "Distant Routes",
+                   scoped("heavy_cruiser", "naval_range = 0.04")),
+            reward("running_engagement", "Бой на ходу", "Running Engagement",
+                   scoped("heavy_cruiser", "naval_speed = 0.03")),
+            reward("break_contact", "Отрыв от преследования", "Break Contact",
+                   scoped("heavy_cruiser", "surface_visibility = -0.04")),
+            reward("ocean_raiders", "Океанские рейдеры", "Ocean Raiders",
+                   scoped("heavy_cruiser", "naval_speed = 0.03", "naval_range = 0.04")),
+        ),
+        "sf_shield": (
+            reward("paired_sections", "Парные секции", "Paired Sections",
+                   scoped("ADISCORD_urban_breacher", "max_organisation = 2")),
+            reward("covered_crossings", "Прикрытые переходы", "Covered Crossings",
+                   scoped("ADISCORD_urban_breacher", "urban = { attack = 0.06 }")),
+            reward("generator_rotation", "Ротация генераторов", "Generator Rotation",
+                   scoped("ADISCORD_urban_breacher", "supply_consumption = -0.03")),
+            reward("shield_line", "Щитовая линия", "Shield Line",
+                   scoped("ADISCORD_urban_breacher", "defense = 0.06")),
+            reward("protected_breach", "Прикрытый прорыв", "Protected Breach",
+                   scoped("ADISCORD_urban_breacher", "breakthrough = 0.09")),
+        ),
+        "sf_marine": (
+            reward("first_wave", "Первая волна", "First Wave",
+                   scoped("ADISCORD_marine_infantry", "amphibious = { attack = 0.04 }")),
+            reward("river_crossings", "Речные переправы", "River Crossings",
+                   scoped("ADISCORD_marine_infantry", "river = { attack = 0.04 }")),
+            reward("beach_supply", "Снабжение плацдарма", "Beachhead Supply",
+                   scoped("ADISCORD_marine_infantry", "supply_consumption = -0.04")),
+            reward("landing_reserves", "Резервы высадки", "Landing Reserves",
+                   scoped("ADISCORD_marine_infantry", "max_organisation = 2")),
+            reward("secured_beachhead", "Закреплённый плацдарм", "Secured Beachhead",
+                   scoped("ADISCORD_marine_infantry", "amphibious = { attack = 0.04 }")),
+        ),
+    }
+)
+
+
 SCHOOLS = (
-    # Land: four competing schools for every operational track.
     School(
         "ADISCORD_doctrine_mass_recruitment_bureaus",
         "land",
@@ -1624,7 +1730,7 @@ SCHOOLS = (
         "Специализированные штурмовые группы вскрывают укреплённый участок и передают прорыв линейным частям.",
         "Specialized assault groups open fortified sectors for exploitation by line formations.",
         "GFX_doctrine_assault_infantry_medium",
-        "always = yes",
+        "has_tech = ADISCORD_tech_remote_weapon_tripods",
         (
             "ADISCORD_assault_infantry = { breakthrough = 0.03 }",
             "planning_speed = 0.02",
@@ -1641,7 +1747,7 @@ SCHOOLS = (
         "Моторизованные резервы закрывают прорывы и поддерживают темп наступления без перехода к тяжёлой броне.",
         "Motorized reserves close breaches and sustain operational tempo without relying on heavy armor.",
         "GFX_doctrine_mobile_infantry_medium",
-        "always = yes",
+        "has_tech = ADISCORD_tech_armored_carrier_program",
         (
             "ADISCORD_mechanized_infantry = { maximum_speed = 0.02 }",
             "org_loss_when_moving = -0.01",
@@ -1659,7 +1765,7 @@ SCHOOLS = (
         "Local cadres, hidden stocks, and simple defense plans let a weak industry hold territory.",
         "GFX_doctrine_defensive_postures_medium",
         "always = yes",
-        ("category_all_infantry = { defense = 0.04 }", "dig_in_speed_factor = 0.02"),
+        ("ADISCORD_militia = { defense = 0.04 }", "dig_in_speed_factor = 0.02"),
         "militia",
         ("modifier = { factor = 1.5 num_of_military_factories < 8 }",),
     ),
@@ -1693,7 +1799,7 @@ SCHOOLS = (
         "Тяжёлые платформы последовательно вскрывают укрепления, пока разведка выбирает подходы, а ремонтные экипажи возвращают повреждённые машины в строй.",
         "Heavy platforms break successive defensive positions while recon selects approaches and recovery crews return damaged vehicles to service.",
         "GFX_doctrine_armored_cavalry_medium",
-        "always = yes",
+        "OR = {\n\thas_tech = ADISCORD_tech_heavy_platform_cores\n\thas_tech = ADISCORD_tech_active_mass_balancing_suspension\n}",
         ("ADISCORD_heavy_platform = { breakthrough = 0.06 }", "max_planning = 0.01"),
         "heavy_breach",
         ("modifier = { factor = 1.5 num_of_military_factories > 12 }",),
@@ -1889,7 +1995,7 @@ SCHOOLS = (
             "modifier = { factor = 1.7 has_tech = ADISCORD_tech_hardened_logistics_nodes }",
         ),
     ),
-    # Air: three choices for each mastery track.
+    # Air: competing schools share the same combat-mastery tracks.
     School(
         "ADISCORD_air_doctrine_swarm_recon",
         "air",
@@ -2055,7 +2161,7 @@ SCHOOLS = (
         "Watch posts, minesweepers, and small combatants form a resilient coastal security network.",
         "GFX_doctrine_escort_patrols_medium",
         "always = yes",
-        ("screening_efficiency = 0.04", "mines_sweeping_by_fleets_factor = 0.05"),
+        ("screening_efficiency = 0.04", "ADISCORD_coastal_patrol_vessel = { default_morale = 0.03 }"),
         "naval_littoral",
         ("modifier = { factor = 1.6 has_war = yes }",),
         ("coastal_watch_posts", "minefield_drills", "screen_coordination"),
@@ -2079,13 +2185,13 @@ SCHOOLS = (
         "ADISCORD_naval_doctrine_mine_warfare_command",
         "sea",
         "ADISCORD_naval_littoral_security",
-        "Командование минной войны",
-        "Mine Warfare Command",
-        "Управляемые заграждения закрывают подходы, а специализированные силы сохраняют собственные фарватеры.",
-        "Controlled minefields close enemy approaches while specialist forces preserve friendly channels.",
-        "GFX_basic_naval_mines_medium",
-        "always = yes",
-        ("naval_mine_hit_chance = 0.03", "naval_mines_effect_reduction = 0.03"),
+        "Прибрежное маневрирование",
+        "Coastal Maneuver",
+        "Патрульные суда используют изученные фарватеры, скрытые подходы и быстрый выход из опасного боя.",
+        "Patrol vessels use surveyed channels, concealed approaches and rapid disengagement from dangerous battles.",
+        "GFX_doctrine_escort_patrols_medium",
+        "has_tech = ADISCORD_tech_coastal_patrols",
+        ("ADISCORD_coastal_patrol_vessel = { naval_speed = 0.03 }",),
         "naval_mines",
         ("modifier = { factor = 1.7 has_war = yes }",),
     ),
@@ -2093,16 +2199,16 @@ SCHOOLS = (
         "ADISCORD_naval_doctrine_drone_carrier_groups",
         "sea",
         "ADISCORD_naval_surface_control",
-        "Дроновые авианосные группы",
-        "Drone Carrier Groups",
-        "Палубные беспилотники дают флоту разведку, удар и противовоздушное прикрытие без крупного авиакрыла.",
-        "Carrier drones provide fleet reconnaissance, strike, and air cover without a large crewed air wing.",
-        "GFX_doctrine_carrier_battlegroups_medium",
-        "always = yes",
-        ("navy_carrier_air_agility_factor = 0.04", "naval_strike_attack_factor = 0.03"),
+        "Совместные морские удары",
+        "Joint Maritime Strikes",
+        "Флот передаёт цели береговой морской авиации. Согласованные налёты и корабельные манёвры позволяют наносить общий удар.",
+        "The fleet passes targets to land-based naval aircraft. Coordinated air raids and ship maneuvers combine into joint strikes.",
+        "GFX_doctrine_base_strike_medium",
+        "has_tech = ADISCORD_tech_twin_engine_aircraft",
+        ("naval_detection = 0.03", "naval_strike_attack_factor = 0.03"),
         "naval_carrier",
         (
-            "modifier = { factor = 2 has_tech = ADISCORD_tech_drone_carrier_deck_systems }",
+            "modifier = { factor = 2 has_tech = ADISCORD_tech_coastal_patrols }",
         ),
         ("deck_control_drones", "strike_coordination", "drone_maintenance"),
     ),
@@ -2185,7 +2291,7 @@ SCHOOLS = (
         "naval_seabed",
         ("modifier = { factor = 2 has_tech = ADISCORD_tech_autonomous_submarines }",),
     ),
-    # Special forces: two mastery tracks, three operational schools each.
+    # Special forces: adaptation and insertion are separate choices.
     School(
         "ADISCORD_special_forces_mountain_companies",
         "special_forces",
@@ -2225,8 +2331,8 @@ SCHOOLS = (
         "Малые штурмовые группы последовательно изолируют и зачищают вертикально организованную застройку.",
         "Small assault groups isolate and clear vertically organized urban terrain in sequence.",
         "GFX_marines_commandoes_medium",
-        "always = yes",
-        ("category_special_forces = { breakthrough = 0.04 soft_attack = 0.03 }",),
+        "has_tech = ADISCORD_tech_remote_weapon_tripods",
+        ("ADISCORD_assault_infantry = { breakthrough = 0.04 soft_attack = 0.03 }",),
         "sf_urban",
         ("modifier = { factor = 1.7 has_war = yes }",),
     ),
@@ -2250,13 +2356,13 @@ SCHOOLS = (
         "ADISCORD_special_forces_vertical_insertion",
         "special_forces",
         "ADISCORD_special_forces_insertion",
-        "Вертикальное введение",
-        "Vertical Insertion",
-        "Воздушная мобильность доставляет штурмовые группы сразу к узлам снабжения и управления.",
-        "Air mobility delivers assault teams directly onto supply and command nodes.",
+        "Передовые десантные штабы",
+        "Forward Airborne Headquarters",
+        "Передовые десантные штабы поддерживают темп действий и снабжение оторванных от фронта групп. Школа улучшает сами штабные подразделения.",
+        "Forward airborne headquarters sustain the tempo and supply of isolated groups. The school improves the headquarters units themselves.",
         "GFX_special_forces_paratroopers_medium",
-        "always = yes",
-        ("category_special_forces = { breakthrough = 0.04 }", "planning_speed = 0.02"),
+        "has_tech = ADISCORD_tech_vertical_assault_training\nhas_dlc = \"Thunder at Our Gates\"",
+        ("hq_paratrooper = { breakthrough = 0.04 }", "planning_speed = 0.02"),
         "sf_vertical",
         (
             "modifier = { factor = 2 has_tech = ADISCORD_tech_vertical_envelopment_control }",
@@ -2281,6 +2387,82 @@ SCHOOLS = (
         ),
     ),
 )
+
+SCHOOLS += (
+    School(
+        "ADISCORD_doctrine_territorial_defense", "land", "ADISCORD_land_mass_restoration",
+        "Территориальная оборона", "Territorial Defense",
+        "Территориальная пехота опирается на подготовленные позиции, местные склады и окружные резервы. Школа помогает удерживать фронт при скромном снабжении.",
+        "Territorial infantry relies on prepared positions, local depots and district reserves to hold the front with limited supply.",
+        "GFX_doctrine_defensive_postures_medium", "always = yes",
+        (scoped("ADISCORD_territorial", "defense = 0.02", "max_organisation = 1"),),
+        "territorial", (scoped("modifier", "factor = 1.6", "num_of_military_factories < 8"),),
+    ),
+    School(
+        "ADISCORD_doctrine_recon_raiding_columns", "land", "ADISCORD_land_platform_centric",
+        "Лёгкие разведывательные колонны", "Light Reconnaissance Columns",
+        "Разведывательные платформы находят обходы и сохраняют подвижность вдали от мастерских. Скорость и наблюдение важнее лобового прорыва.",
+        "Reconnaissance platforms find bypasses and remain mobile far from workshops. Speed and observation take priority over frontal assaults.",
+        "GFX_doctrine_armored_cavalry_medium", "has_tech = ADISCORD_tech_drone_recon_swarms",
+        (scoped("ADISCORD_recon_platform", "recon = 0.5", "forest = { movement = 0.02 }"),),
+        "recon_raiding", (scoped("modifier", "factor = 1.5", "num_of_military_factories < 10"),),
+    ),
+    School(
+        "ADISCORD_air_doctrine_strategic_interdiction", "air", "ADISCORD_air_strategic_denial",
+        "Стратегическое воздушное наступление", "Strategic Air Offensive",
+        "Бомбардировщики ведут длительную кампанию против промышленных узлов. Дальние маршруты и защитный строй позволяют повторять налёты.",
+        "Bombers conduct a sustained campaign against industrial centers. Long-range routing and defensive formations support repeated raids.",
+        "GFX_bomber_ace_initiative_medium", "has_tech = ADISCORD_tech_twin_engine_aircraft",
+        (scoped("category_tac_bomber", "strategic_attack = 0.03"),),
+        "air_strategic", (scoped("modifier", "factor = 1.7", "num_of_military_factories > 12"),),
+    ),
+    School(
+        "ADISCORD_air_doctrine_maritime_strike", "air", "ADISCORD_air_vtol_deep_strike",
+        "Морская ударная авиация", "Maritime Strike Aviation",
+        "Морская авиация поражает корабли с береговых аэродромов. Поиск движущихся целей и согласованные заходы повышают результативность каждого вылета.",
+        "Land-based naval aircraft attack ships. Tracking moving targets and coordinating attack runs improves each sortie.",
+        "GFX_doctrine_base_strike_medium", "has_tech = ADISCORD_tech_twin_engine_aircraft",
+        (scoped("category_nav_bomber", "naval_strike_targetting = 0.04"),),
+        "air_maritime", (scoped("modifier", "factor = 1.5", "has_war = yes"),),
+    ),
+    School(
+        "ADISCORD_naval_doctrine_hunter_patrols", "sea", "ADISCORD_naval_littoral_security",
+        "Противолодочные патрули", "Antisubmarine Patrols",
+        "Патрульные суда объединяют непрерывное наблюдение с преследованием подводных контактов. Школа усиливает поиск и глубинные атаки малых кораблей.",
+        "Patrol vessels combine continuous observation with pursuit of submarine contacts. The school improves detection and depth attacks by small ships.",
+        "GFX_doctrine_escort_patrols_medium", "has_tech = ADISCORD_tech_coastal_patrols",
+        (scoped("ADISCORD_coastal_patrol_vessel", "sub_detection = 0.05"),),
+        "naval_hunters", (scoped("modifier", "factor = 1.6", "has_war = yes"),),
+    ),
+    School(
+        "ADISCORD_naval_doctrine_surface_raiders", "sea", "ADISCORD_naval_surface_control",
+        "Надводные рейдеры", "Surface Raiders",
+        "Крейсеры действуют на дальних коммуникациях, выбирают удобный бой и уходят от превосходящего противника. Школа улучшает дальность, скорость и скрытность крейсеров.",
+        "Cruisers operate on distant sea lanes, choose favorable engagements and evade superior forces. The school improves cruiser range, speed and concealment.",
+        "GFX_doctrine_convoy_interdiction_medium", "has_tech = ADISCORD_tech_modular_hull_standards",
+        (scoped("heavy_cruiser", "naval_speed = 0.02"),),
+        "naval_surface_raiders", (scoped("modifier", "factor = 1.5", "has_war = yes"),),
+    ),
+    School(
+        "ADISCORD_special_forces_shield_formations", "special_forces", "ADISCORD_special_forces_adaptation",
+        "Щитовые штурмовые порядки", "Shield Assault Formations",
+        "Щитовики чередуют прикрытие и продвижение в застройке. Парные секции и ротация генераторов помогают удерживать линию и проводить защищённый прорыв.",
+        "Shield infantry alternates cover and movement through urban terrain. Paired sections and generator rotation support holding the line and protected breakthroughs.",
+        "GFX_ADISCORD_tech_kefreyt_shield_special_forces_medium", "has_tech = ADISCORD_tech_kefreyt_shield_special_forces",
+        (scoped("ADISCORD_urban_breacher", "breakthrough = 0.03", "defense = 0.02"),),
+        "sf_shield", (scoped("modifier", "factor = 1.7", "has_war = yes"),),
+    ),
+    School(
+        "ADISCORD_special_forces_marine_landings", "special_forces", "ADISCORD_special_forces_insertion",
+        "Морские плацдармы", "Marine Beachheads",
+        "Морская пехота последовательно высаживает волны, удерживает переправы и снабжает плацдарм. Школа усиливает морские и речные атаки самих морпехов.",
+        "Marines land in successive waves, hold crossings and supply the beachhead. The school improves the marines' own amphibious and river attacks.",
+        "GFX_marines_commandoes_medium", "has_tech = ADISCORD_tech_kefreyt_marine_corps",
+        (scoped("ADISCORD_marine_infantry", "max_organisation = 1"),),
+        "sf_marine", (scoped("modifier", "factor = 1.7", "has_war = yes"),),
+    ),
+)
+
 
 DOMAIN_PATHS = {
     "land": ROOT / "common/doctrines/subdoctrines/land/ADISCORD_land_subdoctrines.txt",
@@ -2642,9 +2824,53 @@ GRANDS = (
 )
 
 
+GRANDS += (
+    {
+        "key": "ADISCORD_air_doctrine_strategic_campaign",
+        "folder": "air",
+        "ru": "Стратегическая воздушная кампания",
+        "en": "Strategic Air Campaign",
+        "desc_ru": "Бомбардировщики последовательно выводят из строя промышленность противника. Дальнее сопровождение и подготовка повторных налётов поддерживают продолжительную воздушную кампанию. Главные получатели — бомбардировщики и истребители сопровождения.",
+        "desc_en": "Bombers progressively disable enemy industry. Long-range escorts and repeated raids sustain an extended air campaign. Bombers and escort fighters receive the main benefits.",
+        "icon": "GFX_bomber_ace_initiative_medium",
+        "gate": "has_tech = ADISCORD_tech_twin_engine_aircraft",
+        "xp": 70,
+        "type": "air",
+        "tracks": tuple(track.key for track in TRACKS[4:7]),
+        "effects": (scoped("category_tac_bomber", "strategic_attack = 0.05"),),
+        "ai": (scoped("modifier", "factor = 2", "num_of_military_factories > 16"),),
+        "milestones": (
+            (scoped("category_fighter", "air_range = 0.06"),),
+            (scoped("category_tac_bomber", "air_range = 0.06", "air_defence = 0.04"),),
+            (scoped("category_tac_bomber", "strategic_attack = 0.08"),),
+        ),
+    },
+    {
+        "key": "ADISCORD_naval_doctrine_battlefleet",
+        "folder": "naval",
+        "ru": "Линейный флот",
+        "en": "Battle Fleet",
+        "desc_ru": "Крейсеры образуют ударную линию, а патрульные суда удерживают охранение. Согласованные артиллерийские залпы и устойчивые боевые порядки позволяют оспаривать контроль над морем в открытом бою.",
+        "desc_en": "Cruisers form the battle line while patrol vessels maintain the screen. Coordinated gunnery and durable formations contest sea control in open battle.",
+        "icon": "GFX_doctrine_floating_fortress_medium",
+        "gate": "has_tech = ADISCORD_tech_modular_hull_standards",
+        "xp": 50,
+        "type": "navy",
+        "tracks": tuple(track.key for track in TRACKS[7:10]),
+        "effects": (scoped("heavy_cruiser", "max_organisation = 3"),),
+        "ai": (scoped("modifier", "factor = 2", "num_of_military_factories > 12"),),
+        "milestones": (
+            (scoped("ADISCORD_coastal_patrol_vessel", "max_organisation = 3"),),
+            (scoped("heavy_cruiser", "hg_attack = 0.06"), "screening_efficiency = 0.04"),
+            (scoped("heavy_cruiser", "hg_attack = 0.04"), "naval_coordination = 0.02"),
+        ),
+    },
+)
+
+
 def indent(lines: tuple[str, ...] | list[str], tabs: int) -> list[str]:
     prefix = "\t" * tabs
-    return [prefix + line for line in lines]
+    return [prefix + line for block in lines for line in block.splitlines()]
 
 
 def render_folders() -> str:
@@ -2720,22 +2946,24 @@ def render_grands() -> str:
             f"\tname = {grand['key']}",
             f"\tdescription = {grand['key']}_desc",
             f"\ticon = {grand['icon']}",
-            "\tavailable = { always = yes }",
+            "\tavailable = {",
+            *indent([grand.get("gate", "always = yes")], 2),
+            "\t}",
             f"\txp_cost = {grand['xp']}",
             f"\txp_type = {grand['type']}",
             "\tai_will_do = {",
             "\t\tbase = 1",
-            *[f"\t\t{line}" for line in grand["ai"]],
+            *indent(grand["ai"], 2),
             "\t}",
             "\ttracks = {",
             *[f"\t\t{track}" for track in grand["tracks"]],
             "\t}",
-            *[f"\t{effect}" for effect in grand["effects"]],
+            *indent(grand["effects"], 1),
             "\tmilestones = {",
         ]
         for milestone in grand["milestones"]:
             lines.append("\t\t{")
-            lines.extend(f"\t\t\t{effect}" for effect in milestone)
+            lines.extend(indent(milestone, 3))
             lines.append("\t\t}")
         lines.extend(("\t}", "}"))
         blocks.append("\n".join(lines))
@@ -2763,20 +2991,20 @@ def render_school(school: School, siblings: tuple[str, ...]) -> str:
         f"\txp_cost = {xp_cost}",
         f"\txp_type = {xp_type}",
         "\tavailable = {",
-        f"\t\t{school.gate}",
+        *indent([school.gate], 2),
         "\t}",
     ]
     if siblings:
         lines.extend(("\txor = {", *[f"\t\t{key}" for key in siblings], "\t}"))
     lines.extend(("\tai_will_do = {", "\t\tbase = 1"))
-    lines.extend(f"\t\t{line}" for line in school.ai)
+    lines.extend(indent(school.ai, 2))
     lines.append("\t}")
-    lines.extend(f"\t{effect}" for effect in school.root_effects)
+    lines.extend(indent(school.root_effects, 1))
     lines.append("\trewards = {")
     for index, (slug, _ru, _en, effects) in enumerate(stages):
         rid = reward_id(school, index, slug)
         lines.extend((f"\t\t{rid} = {{", f"\t\t\tmastery = {MASTERY_COSTS[index]}"))
-        lines.extend(f"\t\t\t{effect}" for effect in effects)
+        lines.extend(indent(effects, 3))
         lines.append("\t\t}")
     lines.extend(("\t}", "}"))
     return "\n".join(lines)
@@ -2872,8 +3100,8 @@ def validate_manifest() -> None:
         for slug, ru, en, effects in stages:
             reward(slug, ru, en, *effects)
     school_ids = [school.key for school in SCHOOLS]
-    if len(school_ids) != 40 or len(set(school_ids)) != 40:
-        raise ValueError(f"Expected 40 unique schools, got {len(set(school_ids))}")
+    if len(school_ids) != 48 or len(set(school_ids)) != 48:
+        raise ValueError(f"Expected 48 unique schools, got {len(set(school_ids))}")
     track_ids = {track.key for track in TRACKS}
     missing_tracks = sorted({school.track for school in SCHOOLS} - track_ids)
     if missing_tracks:

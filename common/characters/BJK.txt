@@ -27,7 +27,7 @@ characters = {
 		name = BLD_Duke_Vincent
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_8
+				large = GFX_portrait_BLD_Duke_Vincent
 			}
 		}
 		country_leader = {
@@ -55,7 +55,7 @@ characters = {
 		name = BGT_Graf_Johan
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_2
+				large = GFX_portrait_BGT_Father_Garatust
 			}
 		}
 		country_leader = {
@@ -69,7 +69,7 @@ characters = {
 		name = BCM_Graf_Josef
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_7
+				large = GFX_portrait_BCM_Graf_Josef
 			}
 		}
 		country_leader = {
@@ -83,7 +83,7 @@ characters = {
 		name = BBV_Baron_Karl
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Forul_Generic_9
+				large = GFX_portrait_BBV_Baron_Karl
 			}
 		}
 		country_leader = {

@@ -146,6 +146,10 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
 	}
 	spriteType = {
+		name = "GFX_portrait_STP_August_Veil_leader"
+		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil_leader.png"
+	}
+	spriteType = {
 		name = "GFX_portrait_STP_Pavel_Lanskoy"
 		texturefile = "gfx/leaders/STP/portrait_STP_Pavel_Lanskoy.png"
 	}
@@ -377,6 +381,22 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_BJK_Graison"
 		texturefile = "gfx/leaders/BJK/portrait_BJK_Graison.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_BLD_Duke_Vincent"
+		texturefile = "gfx/leaders/BJK/portrait_BLD_Duke_Vincent.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_BGT_Father_Garatust"
+		texturefile = "gfx/leaders/BJK/portrait_BGT_Father_Garatust.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_BCM_Graf_Josef"
+		texturefile = "gfx/leaders/BJK/portrait_BCM_Graf_Josef.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_BBV_Baron_Karl"
+		texturefile = "gfx/leaders/BJK/portrait_BBV_Baron_Karl.png"
 	}
 	###APH
 	spriteType = {

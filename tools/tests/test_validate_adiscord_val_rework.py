@@ -1070,8 +1070,7 @@ class ValStelanderContractTests(unittest.TestCase):
         for authority in (10, 35, 60, 80, 95):
             base = recalculate(authority, set())
             shield = recalculate(
-                authority, set(),
-                technologies={"ADISCORD_tech_kefreyt_shield_special_forces"},
+                authority, {"VAL_shield_special_forces_raised"},
             )
             self.assertEqual(
                 shield["VAL_contract_special_forces_min"]
@@ -1080,8 +1079,7 @@ class ValStelanderContractTests(unittest.TestCase):
             )
             self.assertEqual(
                 recalculate(
-                    authority, set(), shield,
-                    technologies={"ADISCORD_tech_kefreyt_shield_special_forces"},
+                    authority, {"VAL_shield_special_forces_raised"}, shield,
                 ),
                 shield,
             )

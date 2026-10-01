@@ -1,0 +1,184 @@
+"""Build national shield silhouettes from the existing native shield rig.
+
+The original mesh, textures and animations remain authoritative. Only rigid
+shield geometry and atlas assignments change; hands, bones and muzzle stay put.
+"""
+
+from pathlib import Path
+import argparse
+import copy
+import math
+import re
+import sys
+import tempfile
+import types
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[3]
+MODEL = ROOT / "gfx/models/units/ADISCORD_urban_breacher"
+SOURCE = MODEL / "urban_breacher.mesh"
+TAGS = ("STP", "STS")
+
+
+def native_reader():
+    addon = (
+        Path.home()
+        / "AppData/Roaming/Blender Foundation/Blender/5.2/extensions/user_default/io_pdx_mesh"
+    )
+    package = types.ModuleType("io_pdx_mesh")
+    package.__path__ = [str(addon)]
+    sys.modules.setdefault("io_pdx_mesh", package)
+    from io_pdx_mesh import pdx_data
+
+    return pdx_data
+
+
+def atlas_tile(uv):
+    return (int(uv[0] * 3), int((1 - uv[1]) * 3))
+
+
+def move_tile(uv, source, target):
+    return [uv[0] + (target[0] - source[0]) / 3, uv[1] - (target[1] - source[1]) / 3]
+
+
+def national_mesh(source, tag):
+    tree = copy.deepcopy(source)
+    gear = tree.find("object")[1].find("mesh")
+    points = gear.attrib["p"]
+    normals = gear.attrib["n"]
+    tangents = gear.attrib["ta"]
+    uv = gear.attrib["u0"]
+    skin = gear.find("skin").attrib
+    # Root_node_1 carries the complete rigid shield in all thirteen clips.
+    # The rear grip is the fixed pivot, keeping the animated hand contact.
+    pivot = (-2.17, 3.75, -0.65)
+    scales = (1.04, 1.0, 0.90) if tag == "STP" else (0.86, 1.0, 1.24)
+    changed = 0
+    for vertex in range(len(points) // 3):
+        bone = skin["ix"][vertex * 4]
+        weight = skin["w"][vertex * 4]
+        tile = atlas_tile(uv[vertex * 2:vertex * 2 + 2])
+        if bone == 31:
+            assert weight == 1.0
+            for axis, scale in enumerate(scales):
+                offset = vertex * 3 + axis
+                points[offset] = pivot[axis] + (points[offset] - pivot[axis]) * scale
+                normals[offset] /= scale
+                tangents[vertex * 4 + axis] *= scale
+            for values, stride in ((normals, 3), (tangents, 4)):
+                offset = vertex * stride
+                length = math.sqrt(sum(value * value for value in values[offset:offset + 3]))
+                if length:
+                    values[offset:offset + 3] = [value / length for value in values[offset:offset + 3]]
+            # Reuse existing atlas paint: red guard fittings / cyan field fittings.
+            if tile == (1, 1):
+                target = (2, 1) if tag == "STP" else (0, 2)
+                uv[vertex * 2:vertex * 2 + 2] = move_tile(uv[vertex * 2:vertex * 2 + 2], tile, target)
+            changed += 1
+        elif bone == 16 and tile == (1, 1):
+            target = (2, 2) if tag == "STP" else (1, 2)
+            uv[vertex * 2:vertex * 2 + 2] = move_tile(uv[vertex * 2:vertex * 2 + 2], tile, target)
+    assert changed > 1000
+    bounds = gear.find("aabb")
+    bounds.attrib["min"] = [min(points[axis::3]) for axis in range(3)]
+    bounds.attrib["max"] = [max(points[axis::3]) for axis in range(3)]
+    center = [(low + high) / 2 for low, high in zip(bounds.attrib["min"], bounds.attrib["max"])]
+    radius = max(
+        math.sqrt(sum((points[index + axis] - center[axis]) ** 2 for axis in range(3)))
+        for index in range(0, len(points), 3)
+    )
+    gear.attrib["boundingsphere"] = center + [radius]
+    return tree
+
+
+def validate_mesh(source, result):
+    assert ET.tostring(source.find("locator")) == ET.tostring(result.find("locator"))
+    for original, changed in zip(source.find("object"), result.find("object"), strict=True):
+        assert ET.tostring(original.find("skeleton")) == ET.tostring(changed.find("skeleton"))
+        for before, after in zip(original.findall("mesh"), changed.findall("mesh"), strict=True):
+            assert ET.tostring(before.find("skin")) == ET.tostring(after.find("skin"))
+            assert before.attrib["tri"] == after.attrib["tri"]
+            assert len(before.attrib["p"]) == len(after.attrib["p"])
+            assert all(math.isfinite(value) for value in after.attrib["p"])
+            bones = len(changed.find("skeleton"))
+            assert all(0 <= index < bones for index in after.find("skin").attrib["ix"])
+
+
+def outputs():
+    reader = native_reader()
+    source = reader.read_meshfile(str(SOURCE))
+    result = {}
+    with tempfile.TemporaryDirectory(prefix="adiscord-shields-") as directory:
+        for tag in TAGS:
+            mesh = national_mesh(source, tag)
+            validate_mesh(source, mesh)
+            target = Path(directory) / f"{tag}_shield.mesh"
+            reader.write_meshfile(str(target), mesh)
+            validate_mesh(source, reader.read_meshfile(str(target)))
+            result[MODEL / target.name] = target.read_bytes()
+    header = "# Generated by tools/assets/source/build_shield_infantry.py.\n"
+    original = (ROOT / "gfx/entities/ADISCORD_urban_breacher.gfx").read_text(encoding="utf-8")
+    clips = re.findall(r'animation = \{ id = "([^"]+)" type = "([^"]+)" \}', original)
+    assert len(clips) == 13
+    gfx = [header, "objectTypes = {"]
+    asset = [header]
+    for tag in TAGS:
+        gfx.extend((
+            "\tpdxmesh = {",
+            f'\t\tname = "ADISCORD_{tag}_shield_mesh"',
+            f'\t\tfile = "gfx/models/units/ADISCORD_urban_breacher/{tag}_shield.mesh"',
+            "\t\tscale = 1.0",
+        ))
+        for name, animation in clips:
+            gfx.extend((
+                "\t\tanimation = {",
+                f'\t\t\tid = "{name}"',
+                f'\t\t\ttype = "{animation}"',
+                "\t\t}",
+            ))
+        gfx.append("\t}")
+        for level in range(8):
+            suffix = "" if level == 0 else f"_{level + 1}"
+            asset.extend((
+                "entity = {",
+                '\tclone = "ADISCORD_urban_breacher_entity"',
+                f'\tname = "{tag}_ADISCORD_urban_breacher{suffix}_entity"',
+                f'\tpdxmesh = "ADISCORD_{tag}_shield_mesh"',
+                "}",
+                "",
+            ))
+    # All other countries retain the existing complete shield rig at every tier.
+    for level in range(1, 8):
+        asset.extend((
+            "entity = {",
+            '\tclone = "ADISCORD_urban_breacher_entity"',
+            f'\tname = "ADISCORD_urban_breacher_{level + 1}_entity"',
+            "}",
+            "",
+        ))
+    gfx.extend(("}", ""))
+    result[ROOT / "gfx/entities/ADISCORD_shield_infantry.gfx"] = "\n".join(gfx).encode()
+    result[ROOT / "gfx/entities/zz_ADISCORD_shield_infantry.asset"] = "\n".join(asset).encode()
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument("--apply", action="store_true")
+    action.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    generated = outputs()
+    changed = [
+        path for path, data in generated.items()
+        if not path.exists() or path.read_bytes() != data
+    ]
+    if args.apply:
+        for path in changed:
+            path.write_bytes(generated[path])
+    print(f"Shield model files {'updated' if args.apply else 'different'}: {len(changed)}")
+    return int(bool(changed) and not args.apply)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

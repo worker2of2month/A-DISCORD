@@ -30,6 +30,7 @@ try:
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
         SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
+        SQUAD_WEAPON_TRAINING_SCALE as GENERATED_SQUAD_TRAINING_SCALE,
         STARTING_COUNTRY_TECH_PROFILES as GENERATED_STARTING_COUNTRY_TECH_PROFILES,
         STARTING_TECH_PROFILES as GENERATED_STARTING_TECH_PROFILES,
         TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
@@ -39,6 +40,7 @@ try:
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
         render_folder as render_generated_technology_folder,
+        effects_for as generated_effects_for,
     )
     from tools.builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -70,6 +72,7 @@ except ModuleNotFoundError:
         LANE_SLOT_MULTIPLIER as GENERATED_LANE_SLOT_MULTIPLIER,
         MAIN_BRANCH_KEYS_BY_FOLDER as GENERATED_MAIN_BRANCH_KEYS_BY_FOLDER,
         SIDE_PROGRAMME_KEYS as GENERATED_SIDE_PROGRAMME_KEYS,
+        SQUAD_WEAPON_TRAINING_SCALE as GENERATED_SQUAD_TRAINING_SCALE,
         STARTING_COUNTRY_TECH_PROFILES as GENERATED_STARTING_COUNTRY_TECH_PROFILES,
         STARTING_TECH_PROFILES as GENERATED_STARTING_TECH_PROFILES,
         TECHNOLOGY_ID_MIGRATIONS as GENERATED_TECHNOLOGY_ID_MIGRATIONS,
@@ -79,6 +82,7 @@ except ModuleNotFoundError:
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
         render_folder as render_generated_technology_folder,
+        effects_for as generated_effects_for,
     )
     from builders.build_adiscord_doctrine_system import (
         GRANDS as GENERATED_GRANDS,
@@ -1043,6 +1047,14 @@ def check_generated_doctrine_structure(
             issues.append(
                 f"grand doctrine {grand_spec['key']} references unavailable sprite {grand_spec['icon']}"
             )
+        block = doctrine_blocks.get(grand_spec["key"], "")
+        gate_match = re.search(r"\bavailable\s*=\s*\{", block)
+        actual_gate = (
+            re.sub(r"\s+", " ", extract_block(block, gate_match.start()))
+            if gate_match else ""
+        )
+        if re.sub(r"\s+", " ", grand_spec.get("gate", "always = yes")) not in actual_gate:
+            issues.append(f"grand doctrine {grand_spec['key']} lost its capability gate")
 
     schools_per_track: dict[str, int] = {}
     for school in GENERATED_SCHOOLS:
@@ -1059,13 +1071,26 @@ def check_generated_doctrine_structure(
             issues.append(
                 f"doctrine school {school.key} is not assigned to {school.track}"
             )
-        if (
-            "available = {" not in block
-            or re.sub(r"\s+", " ", school.gate) not in compact
-        ):
+        gate_match = re.search(r"\bavailable\s*=\s*\{", block)
+        actual_gate = (
+            re.sub(r"\s+", " ", extract_block(block, gate_match.start()))
+            if gate_match else ""
+        )
+        if re.sub(r"\s+", " ", school.gate) not in actual_gate:
             issues.append(
                 f"doctrine school {school.key} lost its technology/capability gate"
             )
+        xor_match = re.search(r"\bxor\s*=\s*\{", block)
+        actual_siblings = (
+            set(re.findall(r"\bADISCORD_\w+", extract_block(block, xor_match.start())))
+            if xor_match else set()
+        )
+        expected_siblings = {
+            other.key for other in GENERATED_SCHOOLS
+            if other.track == school.track and other.key != school.key
+        }
+        if actual_siblings != expected_siblings:
+            issues.append(f"doctrine school {school.key} has incorrect competing schools")
         if "ai_will_do = {" not in block:
             issues.append(f"doctrine school {school.key} has no AI selection logic")
         for effect in school.root_effects:
@@ -1104,18 +1129,18 @@ def check_generated_doctrine_structure(
                     issues.append(f"doctrine reward {rid} lost effect {effect}")
 
     expected_per_track = {
-        "ADISCORD_land_mass_restoration": 4,
-        "ADISCORD_land_platform_centric": 4,
+        "ADISCORD_land_mass_restoration": 5,
+        "ADISCORD_land_platform_centric": 5,
         "ADISCORD_land_networked_operations": 4,
         "ADISCORD_land_fortress_state": 4,
         "ADISCORD_air_drone_swarm": 3,
-        "ADISCORD_air_vtol_deep_strike": 3,
-        "ADISCORD_air_strategic_denial": 3,
-        "ADISCORD_naval_littoral_security": 3,
-        "ADISCORD_naval_surface_control": 3,
+        "ADISCORD_air_vtol_deep_strike": 4,
+        "ADISCORD_air_strategic_denial": 4,
+        "ADISCORD_naval_littoral_security": 4,
+        "ADISCORD_naval_surface_control": 4,
         "ADISCORD_naval_subsurface_warfare": 3,
-        "ADISCORD_special_forces_adaptation": 3,
-        "ADISCORD_special_forces_insertion": 3,
+        "ADISCORD_special_forces_adaptation": 4,
+        "ADISCORD_special_forces_insertion": 4,
     }
     if schools_per_track != expected_per_track:
         issues.append(
@@ -3199,6 +3224,45 @@ def check_braces() -> list[str]:
     return issues
 
 
+def collapse_squad_training_modifiers(text, branch, index, subunits):
+    """Count distributed training once only when every native role matches."""
+    if branch.key != "squad_weapons":
+        return text, []
+    expected_effects = generated_effects_for(branch, index)
+    expected_units = {
+        effect.split(" =", 1)[0] for effect in expected_effects
+        if effect.split(" =", 1)[0] in GENERATED_SQUAD_TRAINING_SCALE
+    }
+    actual_units = {
+        name for name in re.findall(r"\b(\w+)\s*=\s*\{", text)
+        if name in subunits or name.startswith("category_")
+    }
+    if actual_units != expected_units:
+        return text, [f"{branch.techs[index].id} has invalid distributed training scopes"]
+    replacements = []
+    for expected in expected_effects:
+        unit = expected.split(" =", 1)[0]
+        if unit not in GENERATED_SQUAD_TRAINING_SCALE:
+            continue
+        matches = list(re.finditer(r"\b" + re.escape(unit) + r"\s*=\s*\{", text))
+        actual = ""
+        if len(matches) == 1:
+            match = matches[0]
+            payload = extract_block(text, match.start())
+            actual = text[match.start():match.end() + len(payload) + 1]
+        if re.sub(r"\s+", "", actual) != re.sub(r"\s+", "", expected):
+            return text, [f"{branch.techs[index].id} has invalid distributed training for {unit}"]
+        replacements.append(actual)
+    for actual in replacements:
+        text = text.replace(actual, "", 1)
+    if replacements:
+        text += "\n".join(
+            effect for effect in branch.techs[index].effects
+            if effect.startswith("category_all_infantry =")
+        )
+    return text, []
+
+
 def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     costs: list[float] = []
@@ -3234,9 +3298,13 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
             for bonus in re.finditer(r"\badd_equipment_bonus\s*=\s*\{", block):
                 if bonus.start() >= len(effect_prefix):
                     persistent_effects += extract_block(block, bonus.start())
+            counted_effects, training_issues = collapse_squad_training_modifiers(
+                persistent_effects, branch, index, subunits
+            )
+            issues.extend(training_issues)
             effect_count = len(
                 re.findall(
-                    r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", persistent_effects
+                    r"\b[A-Za-z0-9_]+\s*=\s*-?[0-9]+(?:\.[0-9]+)?\b", counted_effects
                 )
             )
             family_upgrade = any(
@@ -3807,19 +3875,24 @@ def main() -> int:
         "tech_special_forces",
     )
     sprite_scales = {}
+    sprite_frames = {}
     gfx_text = read_text(ROOT / "interface/ADISCORD_technologies.gfx")
     for match in re.finditer(r"SpriteType\s*=\s*\{", gfx_text):
         block = extract_block(gfx_text, match.start())
         name = re.search(r'name = "([^"]+)"', block)
         scale = re.search(r"\bscale = ([0-9.]+)", block)
+        frames = re.search(r"\bnoOfFrames = (\d+)", block)
         if name and scale:
             sprite_scales[name.group(1)] = float(scale.group(1))
+        if name and frames:
+            sprite_frames[name.group(1)] = max(1, int(frames.group(1)))
     for branch in GENERATED_BRANCHES:
         for tech_spec in branch.techs:
             sprite = f"GFX_{tech_spec.id}_medium"
             texture = sprites.get(sprite, "")
             dimensions = texture_dimensions(texture)
             if dimensions:
+                dimensions = (dimensions[0] / sprite_frames.get(sprite, 1), dimensions[1])
                 dimensions = tuple(
                     size * sprite_scales.get(sprite, 1) for size in dimensions
                 )

@@ -284,9 +284,26 @@ STP_cw_mountain_army = {
 
 STP_cw_border_territorial_armies = {
 	allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF original_tag = VAL } }
-	enable = { has_war = yes }
+	enable = {
+		has_war = yes
+		NOT = { STP_cw_northern_counteroffensive_open = yes }
+	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = role_ratio id = militias value = 100 }
+}
+
+# After NOD's opening push runs out, the coalition goes over to the offensive
+# instead of digging in until the 450-day status-quo fallback.
+STP_cw_northern_coalition_counteroffensive = {
+	allowed = { OR = { original_tag = YPR original_tag = COF original_tag = TFF } }
+	enable = { STP_cw_northern_counteroffensive_open = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = infantry value = 60 }
+	ai_strategy = { type = role_ratio id = militias value = -60 }
+	ai_strategy = { type = consider_weak id = NOD value = 100 }
+	ai_strategy = { type = front_unit_request tag = NOD value = 180 }
+	ai_strategy = { type = front_control tag = NOD ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = no }
+	ai_strategy = { type = conquer id = NOD value = 200 }
 }
 
 NOD_cw_northern_offensive_army = {
