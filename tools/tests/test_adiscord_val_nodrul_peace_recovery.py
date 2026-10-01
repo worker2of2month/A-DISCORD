@@ -1,5 +1,6 @@
 from pathlib import Path
 import unittest
+from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -9,6 +10,102 @@ TRIGGERS = ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
 DECISIONS = ROOT / "common/decisions/ADISCORD_VAL_decisions.txt"
 EVENTS = ROOT / "events/ADISCORD_VAL_contract_events.txt"
 VAL_ON_ACTIONS = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
+
+
+class FinalSettlementFixture:
+    """Run the production finalizer with native capitulation visibility delayed."""
+
+    def __init__(self, first, last):
+        self.tags = ("VAL", "NOD", "STP", "STS", "YPR")
+        self.flags = {tag: set() for tag in self.tags}
+        self.flags[first].add("VAL_final_defeat_pending")
+        self.flags[last].update(("VAL_final_defeat_pending", "VAL_final_capitulation_immediate"))
+        self.flags[last].add("VAL_coalition_capitulation_current")
+        self.capitulated = {first}
+        self.members = {first, last}
+        self.installed = []
+        self.reserved = False
+        self.effects = {e.key: e.value for e in parse_clausewitz(EFFECTS.read_text(encoding="utf-8"))}
+        self.triggers = {e.key: e.value for e in parse_clausewitz(TRIGGERS.read_text(encoding="utf-8"))}
+        self.root = last
+        self.previous = None
+        self.neutral = set()
+
+    def matches(self, entries, scope):
+        def match(entry):
+            key, value = entry.key, entry.value
+            if key in ("AND", "limit"):
+                return self.matches(value, scope)
+            if key == "OR":
+                return any(self.matches([item], scope) for item in value)
+            if key == "NOT":
+                return not any(self.matches([item], scope) for item in value)
+            if key in self.tags or key == "ROOT":
+                return self.matches(value, self.root if key == "ROOT" else key)
+            if key in self.triggers:
+                return self.matches(self.triggers[key], scope) == (value == "yes")
+            if key == "has_country_flag":
+                return value in self.flags[scope]
+            if key == "is_debug":
+                return value == "no"
+            if key == "tag":
+                return scope == (self.root if value == "ROOT" else value)
+            if key == "any_other_country":
+                previous = self.previous
+                self.previous = scope
+                result = any(t != scope and self.matches(value, t) for t in self.tags)
+                self.previous = previous
+                return result
+            if key == "exists":
+                return (scope in self.members or scope == "VAL") == (value == "yes")
+            if key == "has_capitulated":
+                return (scope in self.capitulated) == (value == "yes")
+            if key == "is_subject":
+                return (scope in self.installed) == (value == "yes")
+            if key == "is_in_faction_with":
+                target = self.previous if value == "PREV" else value
+                return scope in self.members and target in self.members
+            if key == "has_war_with":
+                return scope in self.members and scope not in self.neutral and value == "VAL"
+            raise AssertionError(f"Unmodelled settlement predicate: {key}")
+        return all(match(entry) for entry in entries)
+
+    def execute(self, entries, scope):
+        branch_taken = False
+        for entry in entries:
+            key, value = entry.key, entry.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    branch_taken = False
+                limit = next((item.value for item in value if item.key == "limit"), [])
+                if not branch_taken and self.matches(limit, scope):
+                    branch_taken = True
+                    self.execute([item for item in value if item.key != "limit"], scope)
+            elif key in self.tags or key == "ROOT":
+                self.execute(value, self.root if key == "ROOT" else key)
+            elif key == "set_country_flag":
+                self.flags[scope].add(value)
+            elif key == "clr_country_flag":
+                self.flags[scope].discard(value)
+            elif key == "set_global_flag":
+                assert value == "skip_default_capitulation"
+                self.reserved = True
+            elif key in ("VAL_install_stelander_administration", "VAL_install_nodrul_administration"):
+                self.installed.append(scope)
+            elif key == "VAL_transfer_party_controlled_ainholm_to_frontier":
+                assert "VAL_final_party_controlled_ainholm" not in self.flags["STP"]
+            elif key == "VAL_finalize_reserved_settlements":
+                self.execute(self.effects[key], scope)
+            else:
+                raise AssertionError(f"Unmodelled settlement effect: {key}")
+
+    def late_callback(self):
+        text = ON_ACTIONS.read_text(encoding="utf-8")
+        late = text.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split("# END kefreyt:on_capitulation", 1)[0]
+        entries = parse_clausewitz(late)
+        start = next(i for i, entry in enumerate(entries) if "VAL_final_defeat_pending" in repr(entry))
+        end = next(i for i, entry in enumerate(entries) if entry.key == "VAL_queue_frontier_reconciliation")
+        self.execute(entries[start:end], self.root)
 
 
 def named_block(text: str, name: str) -> str:
@@ -32,20 +129,52 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         cls.source = EFFECTS.read_text(encoding="utf-8")
         cls.reconcile = named_block(cls.source, "VAL_final_crisis_reconcile")
 
-    def test_old_pre_stelander_final_war_is_closed(self) -> None:
-        self.assertIn("VAL_stelander_dominated = no", self.reconcile)
-        self.assertIn(
-            "NOD = { has_country_flag = VAL_final_war_member }", self.reconcile
-        )
-        self.assertIn(
-            "NOD = { NOT = { has_country_flag = VAL_frontier_guarantor } }",
-            self.reconcile,
-        )
-        self.assertIn(
-            "NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }",
-            self.reconcile,
-        )
-        self.assertIn("white_peace = VAL", self.reconcile)
+    def test_late_callback_settles_both_allies_before_clearing_current_receipt(self):
+        for first, last in (("STP", "NOD"), ("NOD", "STP"), ("STS", "NOD"), ("NOD", "STS")):
+            with self.subTest(first=first, last=last):
+                fixture = FinalSettlementFixture(first, last)
+                fixture.late_callback()
+                self.assertCountEqual(fixture.installed, (first, last))
+                self.assertTrue(fixture.reserved)
+                self.assertNotIn("VAL_final_capitulation_immediate", fixture.flags[last])
+
+    def test_liberated_ally_blocks_settlement_after_its_receipt_expires(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.capitulated.clear()
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, [])
+        self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+        self.assertIn("VAL_final_defeat_pending", fixture.flags["NOD"])
+
+    def test_liberated_ally_cannot_reuse_a_stale_unexpired_receipt(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.capitulated.clear()
+        fixture.flags["STP"].add("VAL_final_capitulation_immediate")
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, [])
+        self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+
+    def test_unbeaten_stelander_does_not_force_an_old_save_armistice(self):
+        self.assertNotIn("Save-safe repair", self.reconcile)
+        self.assertNotIn("white_peace = VAL", self.reconcile)
+
+    def test_additional_faction_ally_blocks_until_its_own_last_callback(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.members.add("YPR")
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, [])
+        fixture.capitulated.add("NOD")
+        fixture.root = "YPR"
+        fixture.flags["YPR"].add("VAL_coalition_capitulation_current")
+        fixture.late_callback()
+        self.assertCountEqual(fixture.installed, ("STP", "NOD"))
+
+    def test_neutral_faction_ally_does_not_block(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.members.add("YPR")
+        fixture.neutral.add("YPR")
+        fixture.late_callback()
+        self.assertCountEqual(fixture.installed, ("STP", "NOD"))
 
     def test_missed_final_capitulation_is_recovered(self) -> None:
         self.assertIn("VAL_stelander_dominated = yes", self.reconcile)
@@ -277,7 +406,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         victory = named_block(triggers, "VAL_northern_coalition_campaign_victory_ready")
         for tag in ("YPR", "COF", "TFF"):
             self.assertIn(
-                f"{tag} = {{ has_country_flag = VAL_northern_coalition_capitulation_reserved }}",
+                f"{tag} = {{ tag = ROOT has_country_flag = VAL_northern_coalition_capitulation_reserved }}",
                 victory,
             )
         immediate_start = router.index(

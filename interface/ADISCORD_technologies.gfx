@@ -210,6 +210,66 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_synthetic_rubber_plants_medium"
+		textureFile = "gfx/interface/technologies/synth_oil_experiments.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_emulsion_polymerization_medium"
+		textureFile = "gfx/interface/technologies/rubber_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_rubber_production_lines_medium"
+		textureFile = "gfx/interface/technologies/improved_oil_plant.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_selective_polymer_catalysts_medium"
+		textureFile = "gfx/interface/technologies/improved_rubber_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_integrated_rubber_complexes_medium"
+		textureFile = "gfx/interface/technologies/advanced_oil_plant.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_closed_cycle_polymerization_medium"
+		textureFile = "gfx/interface/technologies/advanced_rubber_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_synthetic_oil_synthesis_medium"
+		textureFile = "gfx/interface/technologies/oil_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_synthetic_feedstock_purification_medium"
+		textureFile = "gfx/interface/technologies/improved_oil_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_catalytic_oil_synthesis_medium"
+		textureFile = "gfx/interface/technologies/oil_plant.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_synthetic_fuel_hydrocracking_medium"
+		textureFile = "gfx/interface/technologies/advanced_oil_processing.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_closed_cycle_oil_synthesis_medium"
+		textureFile = "gfx/interface/technologies/advanced_oil_plant.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_synthetic_fuel_process_control_medium"
+		textureFile = "gfx/interface/technologies/modern_oil_processing.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_treasury_accounting_medium"
 		textureFile = "gfx/interface/technologies/mechanical_computing.dds"
 	}

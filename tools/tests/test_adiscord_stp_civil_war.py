@@ -4707,7 +4707,8 @@ class NorthernCampaignContracts(unittest.TestCase):
                 )
                 value = self.expand(definitions[key], parameters)
                 result.append(
-                    Entry("AND" if entry.value != "no" else "NOT", value, entry.line)
+                    Entry("AND", value, entry.line) if entry.value != "no" else
+                    Entry("NOT", [Entry("AND", value, entry.line)], entry.line)
                 )
             else:
                 result.append(Entry(key, value, entry.line, entry.quoted))
@@ -5870,6 +5871,8 @@ class NorthernCampaignContracts(unittest.TestCase):
             ] = True
             for ally in ("YPR", "COF", "TFF"):
                 facts[(member, "is_in_faction_with", ally)] = True
+        for member in ("YPR", "COF", "TFF"):
+            facts[(member, "is_major", "no")] = True
         writes = []
         definitions = {e.key: e.value for e in self.effects}
         immediate = ast_block(

@@ -10,7 +10,7 @@ focus_tree = {
 			original_tag = SHL
 		}
 	}
-	continuous_focus_position = { x = 0 y = 1200 }
+	continuous_focus_position = { x = 100 y = 555555 }
 
 	focus = {
 		id = SHL_law_of_continuous_fire
@@ -403,11 +403,11 @@ focus_tree = {
 		id = SHL_new_house
 		icon = GFX_goal_generic_political_pressure
 		x = 6
-		y = 12
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_conclave_rules
 		}
 		mutually_exclusive = {
 			focus = SHL_open_conclave
@@ -419,7 +419,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 30
+			unlock_decision_tooltip = SHL_export_contract
+			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -428,7 +429,7 @@ focus_tree = {
 		id = SHL_house_compromise
 		icon = GFX_goal_generic_political_pressure
 		x = 6
-		y = 13
+		y = 7
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -455,6 +456,9 @@ focus_tree = {
 		prerequisite = {
 			focus = SHL_house_compromise
 		}
+		prerequisite = {
+			focus = SHL_tenth_voice
+		}
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
@@ -470,12 +474,12 @@ focus_tree = {
 	focus = {
 		id = SHL_open_conclave
 		icon = GFX_goal_generic_political_pressure
-		x = 12
-		y = 12
+		x = 16
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_conclave_rules
 		}
 		mutually_exclusive = {
 			focus = SHL_new_house
@@ -483,15 +487,12 @@ focus_tree = {
 		}
 		available = {
 			SHL_country_operable = yes
-			custom_trigger_tooltip = {
-				tooltip = SHL_civic_mandate_tt
-				check_variable = { var = SHL_city_support value = 30 compare = greater_than_or_equals }
-			}
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 30
+			unlock_decision_tooltip = SHL_civic_order
+			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
 		ai_will_do = { base = 10 }
 	}
@@ -499,8 +500,8 @@ focus_tree = {
 	focus = {
 		id = SHL_city_charters
 		icon = GFX_goal_generic_political_pressure
-		x = 12
-		y = 13
+		x = 16
+		y = 7
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -527,8 +528,15 @@ focus_tree = {
 		prerequisite = {
 			focus = SHL_city_charters
 		}
+		prerequisite = {
+			focus = SHL_tenth_voice
+		}
 		available = {
 			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_civic_mandate_tt
+				check_variable = { var = SHL_city_support value = 30 compare = greater_than_or_equals }
+			}
 			check_variable = { var = SHL_political_course value = 0 compare = equals }
 		}
 		cancel_if_invalid = yes
@@ -543,11 +551,11 @@ focus_tree = {
 		id = SHL_nur_directorate
 		icon = GFX_goal_generic_political_pressure
 		x = 18
-		y = 12
+		y = 6
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
-			focus = SHL_tenth_voice
+			focus = SHL_conclave_rules
 		}
 		mutually_exclusive = {
 			focus = SHL_new_house
@@ -559,7 +567,8 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 30
+			unlock_decision_tooltip = SHL_war_orders
+			hidden_effect = { country_event = { id = ADISCORD_SHL.100 days = 1 } }
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -568,7 +577,7 @@ focus_tree = {
 		id = SHL_common_dispatch
 		icon = GFX_goal_generic_political_pressure
 		x = 18
-		y = 13
+		y = 7
 		cost = 4
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
@@ -594,6 +603,9 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_common_dispatch
+		}
+		prerequisite = {
+			focus = SHL_tenth_voice
 		}
 		available = {
 			SHL_country_operable = yes
@@ -969,6 +981,12 @@ focus_tree = {
 		prerequisite = {
 			focus = SHL_golden_gate_cartel
 		}
+		bypass = {
+			OR = {
+				NOT = { GLP = { exists = yes } }
+				is_in_faction_with = GLP
+			}
+		}
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
@@ -1004,9 +1022,15 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_house_guards
+		}
+		prerequisite = {
 			focus = SHL_veyr_partnership
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_export_furnaces_tt
+				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 1 compare = equals }
 		}
@@ -1023,7 +1047,7 @@ focus_tree = {
 					}
 				}
 				custom_effect_tooltip = SHL_golden_gate_offer_tt
-				hidden_effect = { GLP = { country_event = { id = ADISCORD_SHL.91 } } }
+				hidden_effect = { SHL_request_golden_alliance = yes }
 			}
 		}
 		ai_will_do = { base = 1 }
@@ -1065,6 +1089,12 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_council_of_cities
+		}
+		bypass = {
+			OR = {
+				NOT = { KYZ = { exists = yes } }
+				is_in_faction_with = KYZ
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -1130,9 +1160,15 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		prerequisite = {
 			focus = SHL_fire_and_water
+		}
+		prerequisite = {
 			focus = SHL_workers_brigades
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_export_furnaces_tt
+				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 2 compare = equals }
 		}
@@ -1149,12 +1185,7 @@ focus_tree = {
 					check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 				}
 				custom_effect_tooltip = SHL_southern_compact_offer_tt
-				hidden_effect = {
-					KYZ = {
-						ADISCORD_release_non_participating_minor_optimization = yes
-						country_event = { id = ADISCORD_SHL.90 }
-					}
-				}
+				hidden_effect = { SHL_request_southern_alliance = yes }
 			}
 		}
 		ai_will_do = { base = 10 }
@@ -1215,7 +1246,11 @@ focus_tree = {
 			284 = { add_claim_by = SHL }
 			285 = { add_claim_by = SHL }
 			286 = { add_claim_by = SHL }
-			unlock_decision_tooltip = SHL_seize_qanats
+			if = {
+				limit = { check_variable = { var = SHL_water_crisis value = 1 compare = equals } }
+				unlock_decision_tooltip = SHL_seize_qanats
+			}
+			unlock_decision_tooltip = SHL_civic_order
 		}
 		ai_will_do = { base = 1 }
 	}
@@ -1240,7 +1275,15 @@ focus_tree = {
 			298 = { add_claim_by = SHL }
 			299 = { add_claim_by = SHL }
 			708 = { add_claim_by = SHL }
-			unlock_decision_tooltip = SHL_ultimatum_veyr
+			if = {
+				limit = { check_variable = { var = SHL_veyr_crisis value = 1 compare = equals } }
+				unlock_decision_tooltip = SHL_ultimatum_veyr
+			}
+			add_equipment_to_stockpile = {
+				type = convoy_1
+				amount = 20
+				producer = SHL
+			}
 			custom_effect_tooltip = SHL_key_to_sea_tt
 		}
 		ai_will_do = { base = 1 }
@@ -1255,10 +1298,30 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_MANPOWER }
 		prerequisite = {
 			focus = SHL_right_to_water
+		}
+		prerequisite = {
 			focus = SHL_key_to_sea
 		}
 		available = {
 			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_industrial_independence_tt
+				OR = {
+					check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
+					AND = {
+						check_variable = { var = SHL_water_crisis value = 0 compare = equals }
+						SHL_kyz_counterpart = no
+					}
+				}
+				OR = {
+					check_variable = { var = SHL_veyr_crisis value = 2 compare = greater_than_or_equals }
+					AND = {
+						check_variable = { var = SHL_veyr_crisis value = 0 compare = equals }
+						SHL_glp_counterpart = no
+					}
+				}
+				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+			}
 			check_variable = { var = SHL_political_course value = 3 compare = equals }
 		}
 		cancel_if_invalid = yes
@@ -1283,6 +1346,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_debt_shift
 			add_political_power = 50
 			add_stability = 0.05
 		}
@@ -1357,7 +1421,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = SHL_debt_shift
+			unlock_decision_tooltip = SHL_foreclose_furnace
 		}
 		ai_will_do = { base = 5 }
 	}
@@ -1372,9 +1436,20 @@ focus_tree = {
 		allow_branch = { has_country_flag = SHL_regency_path }
 		prerequisite = {
 			focus = SHL_private_armies
+		}
+		prerequisite = {
 			focus = SHL_debt_shifts
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_regency_independent_tt
+				check_variable = { var = SHL_house_votes value = 7 compare = greater_than_or_equals }
+				NOT = { check_variable = { var = SHL_obligation_kind value = 4 compare = equals } }
+			}
+			custom_trigger_tooltip = {
+				tooltip = SHL_export_furnaces_tt
+				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
 		}
@@ -1427,6 +1502,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = SHL_common_cauldron
 			custom_effect_tooltip = SHL_furnaces_to_workers_tt
 			hidden_effect = { SHL_give_furnaces_to_workers = yes }
 		}
@@ -1467,6 +1543,12 @@ focus_tree = {
 		prerequisite = {
 			focus = SHL_furnaces_to_workers
 		}
+		bypass = {
+			OR = {
+				NOT = { KYZ = { exists = yes } }
+				is_in_faction_with = KYZ
+			}
+		}
 		available = {
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
@@ -1504,9 +1586,15 @@ focus_tree = {
 		allow_branch = { has_country_flag = SHL_commune_path }
 		prerequisite = {
 			focus = SHL_common_smelting
+		}
+		prerequisite = {
 			focus = SHL_qanat_brotherhood
 		}
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_export_furnaces_tt
+				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+			}
 			SHL_country_operable = yes
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
 		}
@@ -1523,12 +1611,7 @@ focus_tree = {
 					check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 				}
 				custom_effect_tooltip = SHL_southern_compact_offer_tt
-				hidden_effect = {
-					KYZ = {
-						ADISCORD_release_non_participating_minor_optimization = yes
-						country_event = { id = ADISCORD_SHL.90 }
-					}
-				}
+				hidden_effect = { SHL_request_southern_alliance = yes }
 			}
 		}
 		ai_will_do = { base = 5 }

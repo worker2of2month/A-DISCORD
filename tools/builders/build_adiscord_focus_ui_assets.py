@@ -55,6 +55,24 @@ def render_gui() -> str:
     ):
         text = replace_counted(text, old, f"GFX_ADISCORD_focus_{new}", count)
 
+    # The palette is empty. Keep native children addressable while clipping
+    # their contents to a zero-sized, non-rendering container.
+    text = replace_gui_block(
+        text,
+        "containerWindowType",
+        "continuous_focus_window",
+        (
+            (
+                r"size = \{ width = 770 height = 380 \}"
+                r"\s+margin = \{ top = 13 left = 0 bottom = 13 right = 13\}"
+                r"\s+drag_scroll = \{ left middle \}\s+clipping = no",
+                "size = { width = 0 height = 0 }\n"
+                '\t\t\t\t\tdontRender = ""\n'
+                "\t\t\t\t\tclipping = yes",
+            ),
+        ),
+    )
+
     # These children are looked up by the native focus handler. Keep them as
     # direct children; the text widgets own their independent scroll viewports.
     for name in ("national_focus_detail_view", "coninuous_focus_detail_view"):
@@ -218,8 +236,14 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument("--gui-only", action="store_true", help="Check or write only the GUI layout")
     args = parser.parse_args()
-    return apply_or_check(expected_outputs(), args.apply, "National-focus UI")
+    outputs = (
+        {GUI_OUTPUT: render_gui().encode("utf-8")}
+        if args.gui_only
+        else expected_outputs()
+    )
+    return apply_or_check(outputs, args.apply, "National-focus UI")
 
 
 if __name__ == "__main__":

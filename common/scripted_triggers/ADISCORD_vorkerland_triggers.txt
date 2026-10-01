@@ -1870,37 +1870,37 @@ ADISCORD_vorkerland_rus_current_target_capitulated = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals }
 			country_exists = SLA
 			has_war_with = SLA
-			SLA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } }
+			SLA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SLA } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals }
 			country_exists = RZA
 			has_war_with = RZA
-			RZA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } }
+			RZA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = RZA } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals }
 			country_exists = MLR
 			has_war_with = MLR
-			MLR = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } }
+			MLR = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = MLR } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals }
 			country_exists = ERT
 			has_war_with = ERT
-			ERT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } }
+			ERT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ERT } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals }
 			country_exists = IRT
 			has_war_with = IRT
-			IRT = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } }
+			IRT = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = IRT } } } }
 		}
 		AND = {
 			check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals }
 			country_exists = SCA
 			has_war_with = SCA
-			SCA = { has_capitulated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } }
+			SCA = { ADISCORD_vorkerland_rus_target_defeated = yes capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = SCA } } } }
 		}
 	}
 }
@@ -2225,3 +2225,11 @@ ADISCORD_vorkerland_vad_ai_solar_preparation = {
 
 
 # The capitulated country's allies can continue the same war and liberate it.
+
+# COUNTRY target: only the accepted native loser can precede engine capitulation state.
+ADISCORD_vorkerland_rus_target_defeated = {
+	OR = {
+		has_capitulated = yes
+		AND = { tag = ROOT has_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
+	}
+}

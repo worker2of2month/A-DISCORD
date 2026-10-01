@@ -7727,55 +7727,20 @@ class ValExpandedCampaignTests(unittest.TestCase):
         facts["NOD", "has_capitulated", "yes"] = False
         self.assertFalse(self.match("VAL_final_settlement_ready", facts, "NOD"))
 
-    def test_final_settlement_accepts_transient_immediate_capitulation_without_root_scope(
-        self,
-    ):
-        for tag in ("STP", "STS", "NOD"):
-            facts = {
-                (tag, "has_country_flag", "VAL_final_defeat_pending"): True,
-                (tag, "has_country_flag", "VAL_final_capitulation_immediate"): True,
-                ("VAL", "exists", "yes"): True,
-                ("VAL", "has_capitulated", "no"): True,
-                ("VAL", "is_subject", "no"): True,
-            }
-            self.assertTrue(self.match("VAL_final_settlement_ready", facts, tag))
-            self.assertTrue(
-                self.match("VAL_final_settlement_ready", facts, tag, root="VAL")
-            )
-
-        trigger = named_block_spans(
-            (
-                ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
-            ).read_text(encoding="utf-8"),
-            "VAL_final_settlement_ready",
-        )[0].text
-        finalizer = named_block_spans(
-            EFFECTS_PATH.read_text(encoding="utf-8"),
-            "VAL_finalize_reserved_settlements",
-        )[0].text
-        self.assertNotIn(
-            "tag = ROOT has_country_flag = VAL_final_capitulation_immediate", trigger
-        )
-        self.assertNotIn(
-            "tag = ROOT has_country_flag = VAL_final_capitulation_immediate", finalizer
-        )
+    def test_transient_receipt_is_valid_only_for_the_native_loser(self):
+        from tools.tests.test_adiscord_val_nodrul_peace_recovery import FinalSettlementFixture
+        fixture = FinalSettlementFixture("STP", "NOD")
+        self.assertTrue(fixture.matches(fixture.triggers["VAL_final_settlement_ready"], "NOD"))
+        fixture.root = "VAL"
+        self.assertFalse(fixture.matches(fixture.triggers["VAL_final_settlement_ready"], "NOD"))
 
     def test_last_ally_immediate_capitulation_unblocks_reserved_country(self):
-        facts = {
-            ("STP", "tag", "STP"): True,
-            ("STP", "has_country_flag", "VAL_final_defeat_pending"): True,
-            ("STP", "has_capitulated", "yes"): True,
-            ("VAL", "exists", "yes"): True,
-            ("VAL", "has_capitulated", "no"): True,
-            ("VAL", "is_subject", "no"): True,
-            ("NOD", "exists", "yes"): True,
-            ("NOD", "is_in_faction_with", "STP"): True,
-            ("NOD", "has_war_with", "VAL"): True,
-            ("NOD", "has_capitulated", "no"): True,
-        }
-        self.assertFalse(self.match("VAL_final_settlement_ready", facts, "STP"))
-        facts["NOD", "has_country_flag", "VAL_final_capitulation_immediate"] = True
-        self.assertTrue(self.match("VAL_final_settlement_ready", facts, "STP"))
+        from tools.tests.test_adiscord_val_nodrul_peace_recovery import FinalSettlementFixture
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.flags["NOD"].clear()
+        self.assertFalse(fixture.matches(fixture.triggers["VAL_final_settlement_ready"], "STP"))
+        fixture.flags["NOD"].add("VAL_final_capitulation_immediate")
+        self.assertTrue(fixture.matches(fixture.triggers["VAL_final_settlement_ready"], "STP"))
 
     def test_final_settlement_runs_before_native_conference(self):
         source = (
@@ -7788,7 +7753,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             immediate.index("set_country_flag = VAL_final_defeat_pending"),
             immediate.index("VAL_finalize_reserved_settlements = yes"),
         )
-        self.assertIn("flag = VAL_final_capitulation_immediate days = 1", immediate)
+        self.assertIn("flag = VAL_final_capitulation_immediate value = 1 days = 1", immediate)
         late = source.split("# BEGIN kefreyt:on_capitulation\n", 1)[1].split(
             "# END kefreyt:on_capitulation", 1
         )[0]

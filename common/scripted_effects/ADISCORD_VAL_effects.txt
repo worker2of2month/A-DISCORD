@@ -5608,146 +5608,149 @@ VAL_install_stelander_administration = {
 # before installing its new administration; only its captured states move.
 VAL_restore_stelander_conquered_administrations = {
 	if = {
-		limit = { STS = { exists = yes } NOD = { exists = yes has_capitulated = no } }
-		NOD = { VAL_install_nodrul_administration = yes }
-	}
+		limit = { event_target:VAL_settlement_country = { tag = STS } }
+		if = {
+			limit = { STS = { exists = yes } NOD = { exists = yes is_subject_of = STS } }
+			NOD = { VAL_install_nodrul_administration = yes }
+		}
 
-	if = {
-		limit = { BJK = { exists = no } STS = { any_owned_state = { is_core_of = BJK } } }
-		STS = {
-			release_autonomy = { target = BJK autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BJK = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BJK
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BJK = { exists = no } STS = { any_owned_state = { is_core_of = BJK } } }
+			STS = {
+				release_autonomy = { target = BJK autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BJK = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BJK
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { BLD = { exists = no } STS = { any_owned_state = { is_core_of = BLD } } }
-		STS = {
-			release_autonomy = { target = BLD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BLD = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BLD
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BLD = { exists = no } STS = { any_owned_state = { is_core_of = BLD } } }
+			STS = {
+				release_autonomy = { target = BLD autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BLD = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BLD
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { BHG = { exists = no } STS = { any_owned_state = { is_core_of = BHG } } }
-		STS = {
-			release_autonomy = { target = BHG autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BHG = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BHG
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BHG = { exists = no } STS = { any_owned_state = { is_core_of = BHG } } }
+			STS = {
+				release_autonomy = { target = BHG autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BHG = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BHG
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { BGT = { exists = no } STS = { any_owned_state = { is_core_of = BGT } } }
-		STS = {
-			release_autonomy = { target = BGT autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BGT = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BGT
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BGT = { exists = no } STS = { any_owned_state = { is_core_of = BGT } } }
+			STS = {
+				release_autonomy = { target = BGT autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BGT = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BGT
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { BBV = { exists = no } STS = { any_owned_state = { is_core_of = BBV } } }
-		STS = {
-			release_autonomy = { target = BBV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BBV = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BBV
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BBV = { exists = no } STS = { any_owned_state = { is_core_of = BBV } } }
+			STS = {
+				release_autonomy = { target = BBV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BBV = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BBV
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { BCM = { exists = no } STS = { any_owned_state = { is_core_of = BCM } } }
-		STS = {
-			release_autonomy = { target = BCM autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { BCM = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = BCM
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { BCM = { exists = no } STS = { any_owned_state = { is_core_of = BCM } } }
+			STS = {
+				release_autonomy = { target = BCM autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { BCM = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = BCM
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
-	if = {
-		limit = { YPR = { exists = no } STS = { any_owned_state = { is_core_of = YPR } } }
-		STS = {
-			release_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
-		}
 		if = {
-			limit = { YPR = { exists = yes is_subject_of = STS } }
-			set_autonomy = {
-				target = YPR
-				autonomy_state = autonomy_VAL_contract_administration
-				freedom_level = 0.10
-				end_wars = no
-				end_civil_wars = no
+			limit = { YPR = { exists = no } STS = { any_owned_state = { is_core_of = YPR } } }
+			STS = {
+				release_autonomy = { target = YPR autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 }
+			}
+			if = {
+				limit = { YPR = { exists = yes is_subject_of = STS } }
+				set_autonomy = {
+					target = YPR
+					autonomy_state = autonomy_VAL_contract_administration
+					freedom_level = 0.10
+					end_wars = no
+					end_civil_wars = no
+				}
 			}
 		}
-	}
 
-	4 = { if = { limit = { is_owned_by = STS } add_core_of = BGT BGT = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BGT } } }
-	5 = { if = { limit = { is_owned_by = STS } add_core_of = BHG BHG = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BHG } } }
-	6 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
-	7 = { if = { limit = { is_owned_by = STS } add_core_of = BBV BBV = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BBV } } }
-	8 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	9 = { if = { limit = { is_owned_by = STS } add_core_of = BCM BCM = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BCM } } }
-	15 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	16 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	19 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	20 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	21 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	22 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
-	31 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
-	41 = { if = { limit = { is_owned_by = STS } add_core_of = BJK BJK = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BJK } } }
+		4 = { if = { limit = { is_owned_by = STS } add_core_of = BGT BGT = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BGT } } }
+		5 = { if = { limit = { is_owned_by = STS } add_core_of = BHG BHG = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BHG } } }
+		6 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
+		7 = { if = { limit = { is_owned_by = STS } add_core_of = BBV BBV = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BBV } } }
+		8 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		9 = { if = { limit = { is_owned_by = STS } add_core_of = BCM BCM = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BCM } } }
+		15 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		16 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		19 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		20 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		21 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		22 = { if = { limit = { is_owned_by = STS } add_core_of = YPR YPR = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = YPR } } }
+		31 = { if = { limit = { is_owned_by = STS } add_core_of = BLD BLD = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BLD } } }
+		41 = { if = { limit = { is_owned_by = STS } add_core_of = BJK BJK = { transfer_state = PREV } if = { limit = { is_controlled_by = STS } set_state_controller_to = BJK } } }
 
-	BJK = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	BGT = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	BHG = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	BLD = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	BBV = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	BCM = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	YPR = { if = { limit = { is_subject_of = VAL } VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
-	ADISCORD_economy_mark_dirty = yes
+		BJK = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		BGT = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		BHG = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		BLD = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		BBV = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		BCM = { if = { limit = { is_subject_of = VAL } set_country_flag = ADISCORD_bezhaysk_val_administration VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		YPR = { if = { limit = { is_subject_of = VAL } VAL_initialize_partition_administration = yes ADISCORD_release_non_participating_minor_optimization = yes } }
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # Retry at peace or through the existing frontier decisions if a third party
@@ -5952,10 +5955,10 @@ VAL_settle_nod_overlord_sts_victory = {
 			if = { limit = { has_war_with = STS } white_peace = STS }
 			VAL_install_nodrul_administration = yes
 		}
-		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled value = 1 days = 2 }
 		NOD = {
 			clr_country_flag = VAL_nod_overlord_sts_war_active
-			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled value = 1 days = 2 }
 		}
 	}
 }
@@ -5976,10 +5979,10 @@ VAL_settle_nod_overlord_sts_defeat = {
 			}
 			STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
 		}
-		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+		set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled value = 1 days = 2 }
 		NOD = {
 			clr_country_flag = VAL_nod_overlord_sts_war_active
-			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled days = 2 }
+			set_country_flag = { flag = VAL_nod_overlord_sts_peace_handled value = 1 days = 2 }
 		}
 		set_autonomy = {
 			target = STS
@@ -6035,6 +6038,9 @@ VAL_reconcile_northern_coalition_campaign = {
 				has_capitulated = yes
 				is_subject = yes
 				has_country_flag = VAL_stelander_defeated
+				YPR = { VAL_northern_coalition_member_withdrawn = yes }
+				COF = { VAL_northern_coalition_member_withdrawn = yes }
+				TFF = { VAL_northern_coalition_member_withdrawn = yes }
 				AND = {
 					NOT = { has_war_with = YPR }
 					NOT = { has_war_with = COF }
@@ -6202,6 +6208,7 @@ VAL_settle_northern_coalition_victory = {
 			has_country_flag = VAL_northern_coalition_campaign_active
 			VAL_northern_coalition_campaign_victory_ready = yes
 		}
+		clr_country_flag = VAL_northern_coalition_campaign_active
 		YPR = {
 			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
 			if = {
@@ -6804,7 +6811,7 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
+			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
 			clr_country_flag = VAL_final_defeat_pending
 			clr_country_flag = VAL_final_party_controlled_ainholm
 		}
@@ -6816,7 +6823,7 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
+			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
 			clr_country_flag = VAL_final_defeat_pending
 		}
 	}
@@ -6827,7 +6834,7 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no NOT = { has_country_flag = VAL_final_capitulation_immediate } }
+			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
 			clr_country_flag = VAL_final_defeat_pending
 		}
 	}
@@ -6883,9 +6890,11 @@ VAL_debug_force_nodrul_victory = {
 		NOD = {
 			set_country_flag = VAL_final_war_member
 			set_country_flag = VAL_final_defeat_pending
-			set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+			set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
 		}
+		set_country_flag = VAL_debug_settlement_in_progress
 		VAL_finalize_reserved_settlements = yes
+		clr_country_flag = VAL_debug_settlement_in_progress
 		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
 	}
 }
@@ -6915,7 +6924,7 @@ VAL_debug_force_current_war_victory = {
 				limit = { exists = yes has_war_with = VAL }
 				set_country_flag = VAL_final_war_member
 				set_country_flag = VAL_final_defeat_pending
-				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+				set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
 			}
 		}
 		STS = {
@@ -6923,7 +6932,7 @@ VAL_debug_force_current_war_victory = {
 				limit = { exists = yes has_war_with = VAL }
 				set_country_flag = VAL_final_war_member
 				set_country_flag = VAL_final_defeat_pending
-				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+				set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
 			}
 		}
 		NOD = {
@@ -6931,10 +6940,12 @@ VAL_debug_force_current_war_victory = {
 				limit = { exists = yes has_war_with = VAL }
 				set_country_flag = VAL_final_war_member
 				set_country_flag = VAL_final_defeat_pending
-				set_country_flag = { flag = VAL_final_capitulation_immediate days = 1 }
+				set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
 			}
 		}
+		set_country_flag = VAL_debug_settlement_in_progress
 		VAL_finalize_reserved_settlements = yes
+		clr_country_flag = VAL_debug_settlement_in_progress
 		STP = { clr_country_flag = VAL_final_capitulation_immediate }
 		STS = { clr_country_flag = VAL_final_capitulation_immediate }
 		NOD = { clr_country_flag = VAL_final_capitulation_immediate }
@@ -7403,26 +7414,6 @@ VAL_final_crisis_close = {
 }
 
 VAL_final_crisis_reconcile = {
-	# Save-safe repair for campaigns created before the Stelander-first gate.
-	# An old final NOD war must not become an untracked permanent war after load.
-	if = {
-		limit = {
-			has_war_with = NOD
-			VAL_stelander_dominated = no
-			OR = {
-				check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
-				NOD = { has_country_flag = VAL_final_war_member }
-			}
-			NOD = { NOT = { has_country_flag = VAL_frontier_guarantor } }
-			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
-		}
-		NOD = { if = { limit = { has_war_with = VAL } white_peace = VAL } }
-		if = {
-			limit = { check_variable = { var = VAL_final_crisis_phase value = 0 compare = greater_than } }
-			VAL_final_crisis_close = yes
-		}
-	}
-
 	# A Party victory can leave NOD nested under the STP administration.
 	# A phase-2 campaign without a live war relation must rebuild the direct target.
 	if = {

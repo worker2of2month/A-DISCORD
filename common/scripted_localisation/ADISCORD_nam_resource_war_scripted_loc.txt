@@ -1,0 +1,114 @@
+defined_text = {
+	name = NAMGetCost_pp_75
+	text = {
+		trigger = { NOT = { has_political_power < 75 } }
+		localization_key = NAM_amount_pp_75
+	}
+	text = {
+		localization_key = NAM_amount_pp_75_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_treasury_500
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals } }
+		localization_key = NAM_amount_treasury_500
+	}
+	text = {
+		localization_key = NAM_amount_treasury_500_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_pp_25
+	text = {
+		trigger = { NOT = { has_political_power < 25 } }
+		localization_key = NAM_amount_pp_25
+	}
+	text = {
+		localization_key = NAM_amount_pp_25_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_fuel_5000
+	text = {
+		trigger = { NOT = { has_fuel < 5000 } }
+		localization_key = NAM_amount_fuel_5000
+	}
+	text = {
+		localization_key = NAM_amount_fuel_5000_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_pp_35
+	text = {
+		trigger = { NOT = { has_political_power < 35 } }
+		localization_key = NAM_amount_pp_35
+	}
+	text = {
+		localization_key = NAM_amount_pp_35_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_fuel_3000
+	text = {
+		trigger = { NOT = { has_fuel < 3000 } }
+		localization_key = NAM_amount_fuel_3000
+	}
+	text = {
+		localization_key = NAM_amount_fuel_3000_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCost_treasury_250
+	text = {
+		trigger = { check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals } }
+		localization_key = NAM_amount_treasury_250
+	}
+	text = {
+		localization_key = NAM_amount_treasury_250_blocked
+	}
+}
+
+defined_text = {
+	name = NAMGetCompactStatus
+	text = {
+		trigger = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		localization_key = NAM_compact_war_closed
+	}
+	text = {
+		trigger = {
+			ADISCORD_nam_resource_war_active = yes
+			has_country_flag = NAM_compact_ratified
+			NAM_compact_effective = yes
+		}
+		localization_key = NAM_compact_ratified_status
+	}
+	text = {
+		trigger = {
+			ADISCORD_nam_resource_war_active = yes
+			has_country_flag = NAM_compact_ratified
+		}
+		localization_key = NAM_compact_interrupted_status
+	}
+	text = {
+		trigger = { ADISCORD_nam_resource_war_active = yes }
+		localization_key = NAM_compact_wartime_unavailable
+	}
+	text = {
+		trigger = { NAM_compact_effective = yes }
+		localization_key = NAM_compact_ready
+	}
+	text = {
+		trigger = { has_country_flag = NAM_district_compact }
+		localization_key = NAM_compact_maturing
+	}
+	text = {
+		localization_key = NAM_compact_absent
+	}
+}

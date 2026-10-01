@@ -1017,18 +1017,14 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_carbon_feedstock_cracking
 			research_cost_coeff = 1
 		}
-		enable_building = {
-			building = synthetic_refinery
-			level = 1
-		}
-		research_cost = 2.05
+		research_cost = 1.515
 		start_year = 2166
 		folder = {
 			name = industry_folder
 			position = { x = -3 y = 16 }
 		}
 		ai_will_do = {
-			factor = 33.6
+			factor = 28
 			modifier = {
 				factor = 1.35
 				ADISCORD_economy_ai_is_crisis = yes
@@ -1044,31 +1040,22 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_strategic_element_reclamation
 			research_cost_coeff = 1
 		}
-		enable_building = {
-			building = synthetic_refinery
-			level = 2
-		}
 		on_research_complete = {
 			modify_building_resources = {
 				building = ADISCORD_electrolysis_complex
 				resource = aluminium
 				amount = 2
 			}
-			modify_building_resources = {
-				building = synthetic_refinery
-				resource = rubber
-				amount = 1
-			}
 		}
 		show_effect_as_desc = yes
-		research_cost = 2.05
+		research_cost = 1.75
 		start_year = 2169
 		folder = {
 			name = industry_folder
 			position = { x = 3 y = 18 }
 		}
 		ai_will_do = {
-			factor = 33.6
+			factor = 28
 			modifier = {
 				factor = 1.35
 				ADISCORD_economy_ai_is_crisis = yes
@@ -1115,18 +1102,14 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_strategic_material_recovery
 			research_cost_coeff = 1
 		}
-		enable_building = {
-			building = synthetic_refinery
-			level = 3
-		}
-		research_cost = 2.05
+		research_cost = 1.68
 		start_year = 2172
 		folder = {
 			name = industry_folder
 			position = { x = -3 y = 22 }
 		}
 		ai_will_do = {
-			factor = 33.6
+			factor = 28
 			modifier = {
 				factor = 1.35
 				ADISCORD_economy_ai_is_crisis = yes
@@ -1147,11 +1130,6 @@ technologies = {
 				building = ADISCORD_electrolysis_complex
 				resource = aluminium
 				amount = 1
-			}
-			modify_building_resources = {
-				building = synthetic_refinery
-				resource = rubber
-				amount = 2
 			}
 		}
 		show_effect_as_desc = yes
@@ -1186,6 +1164,364 @@ technologies = {
 			modifier = {
 				factor = 1.35
 				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_rubber_plants = {
+		path = {
+			leads_to_tech = ADISCORD_tech_emulsion_polymerization
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 42
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_emulsion_polymerization = {
+		path = {
+			leads_to_tech = ADISCORD_tech_rubber_production_lines
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_rubber_production_lines = {
+		path = {
+			leads_to_tech = ADISCORD_tech_selective_polymer_catalysts
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 2
+		}
+		research_cost = 2.05
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_selective_polymer_catalysts = {
+		path = {
+			leads_to_tech = ADISCORD_tech_integrated_rubber_complexes
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_integrated_rubber_complexes = {
+		path = {
+			leads_to_tech = ADISCORD_tech_closed_cycle_polymerization
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 3
+		}
+		research_cost = 2.05
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_closed_cycle_polymerization = {
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.763
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_feedstock_purification
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_synthetic_rubber_plants = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2161
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_feedstock_purification = {
+		fuel_gain_factor_from_states = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_catalytic_oil_synthesis
+			research_cost_coeff = 1
+		}
+		research_cost = 1.433
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_catalytic_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_fuel_hydrocracking
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_fuel_hydrocracking = {
+		fuel_gain_factor_from_states = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_closed_cycle_oil_synthesis
+			research_cost_coeff = 1
+		}
+		research_cost = 1.598
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_closed_cycle_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_fuel_process_control
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_fuel_process_control = {
+		fuel_gain_factor_from_states = 0.10
+		research_cost = 1.763
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
 			}
 		}
 		categories = { industry synth_resources }

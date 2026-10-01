@@ -103,6 +103,10 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	}
 
 	67 = { add_claim_by = EFL add_claim_by = AZH }
+	# Every principal must fall before native faction peace can end the campaign.
+	NAM = { ADISCORD_nam_resource_war_reserve_major = yes }
+	EFL = { ADISCORD_nam_resource_war_reserve_major = yes }
+	AZH = { ADISCORD_nam_resource_war_reserve_major = yes }
 	EFL = { declare_war_on = { target = NAM type = annex_everything } }
 	AZH = {
 		add_to_war = {
@@ -114,10 +118,19 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	}
 
 	NAM = {
-		random_list = {
-			50 = { country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 } }
-			50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }
+		if = {
+			limit = { NAM_compact_effective = yes }
+			set_country_flag = NAM_compact_ratified
+			set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 		}
+		else = {
+			random_list = {
+				50 = { country_event = { id = ADISCORD_nam_resource_war.2 days = 45 random_days = 30 } }
+				50 = { set_global_flag = ADISCORD_nam_resource_war_SLF_defeated }
+			}
+		}
+		activate_mission = NAM_defend_fields
+		country_event = { id = ADISCORD_nam_resource_war.11 hours = 1 }
 		country_event = { id = ADISCORD_nam_resource_war.50 days = 420 }
 		news_event = { id = ADISCORD_nam_resource_news.1 hours = 1 }
 		ADISCORD_nam_show_resource_war_superevent = yes
@@ -198,6 +211,7 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 		limit = {
 			ADISCORD_nam_resource_war_active = yes
 			688 = { is_owned_by = NAM }
+			NAM = { NOT = { has_country_flag = NAM_compact_ratified } }
 		}
 		SLF = {
 			transfer_state = 688
@@ -219,7 +233,11 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 }
 
 ADISCORD_nam_resource_war_clear_temporary_support = {
+	NAM = { ADISCORD_nam_resource_war_release_major = yes }
+	EFL = { ADISCORD_nam_resource_war_release_major = yes }
+	AZH = { ADISCORD_nam_resource_war_release_major = yes }
 	NAM = {
+		NAM_close_war_programmes = yes
 		remove_ideas = ADISCORD_nam_extraction_defence_corps
 		remove_ideas = ADISCORD_nam_last_line_administration
 	}
@@ -409,13 +427,11 @@ ADISCORD_nam_resource_war_check_nam_victory = {
 
 ADISCORD_nam_resource_war_mark_eflor_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_EFL_defeated
-	if = { limit = { NAM = { has_war_with = EFL } } NAM = { white_peace = EFL } }
 	ADISCORD_nam_resource_war_check_nam_victory = yes
 }
 
 ADISCORD_nam_resource_war_mark_azhar_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_AZH_defeated
-	if = { limit = { NAM = { has_war_with = AZH } } NAM = { white_peace = AZH } }
 	ADISCORD_nam_resource_war_check_nam_victory = yes
 }
 
@@ -472,5 +488,78 @@ ADISCORD_nam_show_resource_war_superevent = {
 	}
 	else = {
 		country_event = { id = ADISCORD_superevent.7 }
+	}
+}
+
+# The signed compact stores the uninterrupted work of the local administration.
+NAM_invalidate_lost_compact = {
+	if = {
+		limit = {
+			has_country_flag = NAM_district_compact
+			OR = {
+				NOT = { owns_state = 688 }
+				NOT = { controls_state = 688 }
+			}
+		}
+		clr_country_flag = NAM_district_compact
+	}
+}
+
+NAM_receive_250 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = {
+		var = ADISCORD_economy_treasury
+		value = 250
+	}
+	add_to_variable = {
+		var = ADISCORD_economy_current_month_action_income
+		value = 250
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# The mission displays the deadline; event 50 owns the treaty and remains its only dispatcher.
+NAM_close_war_programmes = {
+	clr_country_flag = NAM_compact_ratified
+	remove_mission = NAM_defend_fields
+	remove_ideas = NAM_wartime_entrenchment
+	remove_ideas = NAM_counterstroke_staff
+	remove_ideas = NAM_rebel_depot_maps
+}
+
+# COUNTRY principal. Preserve major status owned by another campaign.
+ADISCORD_nam_resource_war_reserve_major = {
+	if = {
+		limit = { is_major = no }
+		set_country_flag = ADISCORD_nam_resource_war_added_major
+		set_major = yes
+	}
+}
+
+ADISCORD_nam_resource_war_release_major = {
+	if = {
+		limit = { has_country_flag = ADISCORD_nam_resource_war_added_major }
+		set_major = no
+		clr_country_flag = ADISCORD_nam_resource_war_added_major
+	}
+}
+
+# External annexation, subjugation or peace invalidates the authored contest.
+ADISCORD_nam_resource_war_close_external = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_active = yes
+			OR = {
+				NAM = { OR = { exists = no is_subject = yes } }
+				EFL = { OR = { exists = no is_subject = yes } }
+				AZH = { OR = { exists = no is_subject = yes } }
+				NAM = { NOT = { has_war_with = EFL } NOT = { has_war_with = AZH } }
+			}
+		}
+		set_global_flag = ADISCORD_nam_resource_war_resolved
+		clr_global_flag = ADISCORD_nam_resource_war_started
+		ADISCORD_nam_resource_war_end_all_wars = yes
+		ADISCORD_nam_resource_war_clear_temporary_support = yes
+		VAL = { VAL_cancel_nam_concession = yes VAL_settle_resource_aid = yes }
 	}
 }

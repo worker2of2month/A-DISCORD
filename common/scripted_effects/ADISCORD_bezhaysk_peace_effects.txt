@@ -3,68 +3,121 @@
 # Only members that are still tied to BJK and fighting the winner are annexed.
 
 ADISCORD_bezhaysk_settle_sts_victory = {
+	# Snapshot every recipient before faction changes or white peace alter the coalition.
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 	if = {
 		limit = { BLD = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
+	}
+	if = {
+		limit = { BHG = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
+	}
+	if = {
+		limit = { BGT = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
+	}
+	if = {
+		limit = { BBV = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
+	}
+	if = {
+		limit = { BCM = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
+	}
+	if = {
+		limit = { BJK = { exists = yes } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK }
+	}
+	if = {
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD } }
 		if = { limit = { has_war_with = BLD } white_peace = BLD }
 		annex_country = { target = BLD transfer_troops = no }
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG } }
 		if = { limit = { has_war_with = BHG } white_peace = BHG }
 		annex_country = { target = BHG transfer_troops = no }
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT } }
 		if = { limit = { has_war_with = BGT } white_peace = BGT }
 		annex_country = { target = BGT transfer_troops = no }
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV } }
 		if = { limit = { has_war_with = BBV } white_peace = BBV }
 		annex_country = { target = BBV transfer_troops = no }
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STS OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM } }
 		if = { limit = { has_war_with = BCM } white_peace = BCM }
 		annex_country = { target = BCM transfer_troops = no }
 	}
 	if = {
-		limit = { BJK = { exists = yes } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK } }
 		if = { limit = { has_war_with = BJK } white_peace = BJK }
 		annex_country = { target = BJK transfer_troops = no }
 	}
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	ADISCORD_economy_mark_dirty = yes
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 }
 
 ADISCORD_bezhaysk_settle_stp_victory = {
+	# Snapshot every recipient before faction changes or white peace alter the coalition.
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 	if = {
 		limit = { BLD = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
+	}
+	if = {
+		limit = { BHG = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
+	}
+	if = {
+		limit = { BGT = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
+	}
+	if = {
+		limit = { BBV = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
+	}
+	if = {
+		limit = { BCM = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
+	}
+	if = {
+		limit = { BJK = { exists = yes } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK }
+	}
+	if = {
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD } }
 		if = { limit = { has_war_with = BLD } white_peace = BLD }
 		annex_country = { target = BLD transfer_troops = no }
 	}
 	if = {
-		limit = { BHG = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG } }
 		if = { limit = { has_war_with = BHG } white_peace = BHG }
 		annex_country = { target = BHG transfer_troops = no }
 	}
 	if = {
-		limit = { BGT = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT } }
 		if = { limit = { has_war_with = BGT } white_peace = BGT }
 		annex_country = { target = BGT transfer_troops = no }
 	}
 	if = {
-		limit = { BBV = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV } }
 		if = { limit = { has_war_with = BBV } white_peace = BBV }
 		annex_country = { target = BBV transfer_troops = no }
 	}
 	if = {
-		limit = { BCM = { exists = yes has_war_with = STP OR = { is_subject_of = BJK is_in_faction_with = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM } }
 		if = { limit = { has_war_with = BCM } white_peace = BCM }
 		annex_country = { target = BCM transfer_troops = no }
 	}
 	if = {
-		limit = { BJK = { exists = yes } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK } }
 		if = { limit = { has_war_with = BJK } white_peace = BJK }
 		annex_country = { target = BJK transfer_troops = no }
 	}
@@ -72,11 +125,38 @@ ADISCORD_bezhaysk_settle_stp_victory = {
 	set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	set_country_flag = STP_pw_party_bezhaysk_victory
 	ADISCORD_economy_mark_dirty = yes
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 }
 
 # Kefreyt keeps the historical feudal map instead of painting the entire realm.
 # Every surviving Bezhaysk holding becomes a contract administration.
 ADISCORD_bezhaysk_settle_val_victory = {
+	# Snapshot every recipient before faction changes or white peace alter the coalition.
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
+	if = {
+		limit = { BLD = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
+	}
+	if = {
+		limit = { BHG = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
+	}
+	if = {
+		limit = { BGT = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
+	}
+	if = {
+		limit = { BBV = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
+	}
+	if = {
+		limit = { BCM = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
+	}
+	if = {
+		limit = { BJK = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK }
+	}
 	# BJK leads the starting feudal faction. Remove that alliance before changing
 	# individual overlords so no administration keeps a stale faction relation.
 	BJK = {
@@ -86,7 +166,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BLD = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD } }
 		BLD = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BLD = { is_subject = yes } }
@@ -109,7 +189,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BHG = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG } }
 		BHG = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BHG = { is_subject = yes } }
@@ -132,7 +212,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BGT = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT } }
 		BGT = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BGT = { is_subject = yes } }
@@ -155,7 +235,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BBV = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV } }
 		BBV = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BBV = { is_subject = yes } }
@@ -178,7 +258,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BCM = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM } }
 		BCM = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BCM = { is_subject = yes } }
@@ -201,7 +281,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 		}
 	}
 	if = {
-		limit = { BJK = { exists = yes OR = { has_war_with = VAL is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK } }
 		BJK = { every_enemy_country = { limit = { OR = { tag = VAL is_subject_of = VAL } } white_peace = PREV } }
 		if = {
 			limit = { BJK = { is_subject = yes } }
@@ -226,6 +306,7 @@ ADISCORD_bezhaysk_settle_val_victory = {
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	ADISCORD_economy_mark_dirty = yes
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 }
 
 
@@ -241,6 +322,82 @@ ADISCORD_bezhaysk_settle_val_victory = {
 # Historical feudal borders stay intact. Capital control is evaluated before
 # white peace so the occupation line cannot disappear before the award is chosen.
 ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
+	# Snapshot every recipient before faction changes or white peace alter the coalition.
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
+	clear_temp_array = ADISCORD_bezhaysk_settlement_nod_awards
+	clear_temp_array = ADISCORD_bezhaysk_settlement_val_awards
+	if = {
+		limit = { BLD = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD }
+		if = {
+			limit = { 31 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BLD }
+		}
+		else_if = {
+			limit = { 31 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BLD }
+		}
+	}
+	if = {
+		limit = { BHG = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG }
+		if = {
+			limit = { 5 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BHG }
+		}
+		else_if = {
+			limit = { 5 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BHG }
+		}
+	}
+	if = {
+		limit = { BGT = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT }
+		if = {
+			limit = { 4 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BGT }
+		}
+		else_if = {
+			limit = { 4 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BGT }
+		}
+	}
+	if = {
+		limit = { BBV = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV }
+		if = {
+			limit = { 7 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BBV }
+		}
+		else_if = {
+			limit = { 7 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BBV }
+		}
+	}
+	if = {
+		limit = { BCM = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM }
+		if = {
+			limit = { 9 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BCM }
+		}
+		else_if = {
+			limit = { 9 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BCM }
+		}
+	}
+	if = {
+		limit = { BJK = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK }
+		if = {
+			limit = { 41 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BJK }
+		}
+		else_if = {
+			limit = { 41 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			add_to_temp_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BJK }
+		}
+	}
 	# BJK leads the starting feudal faction. Remove that alliance before changing
 	# individual overlords so no administration keeps a stale faction relation.
 	BJK = {
@@ -258,9 +415,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	}
 	if = {
-		limit = { BLD = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BLD } }
 		if = {
-			limit = { 31 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BLD } }
 			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
 			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
 			if = {
@@ -285,7 +442,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 31 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BLD } }
 			if = { limit = { BLD = { has_war_with = NOD } } BLD = { white_peace = NOD } }
 			if = { limit = { BLD = { has_war_with = VAL } } BLD = { white_peace = VAL } }
 			if = {
@@ -362,9 +519,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		}
 	}
 	if = {
-		limit = { BHG = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BHG } }
 		if = {
-			limit = { 5 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BHG } }
 			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
 			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
 			if = {
@@ -389,7 +546,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 5 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BHG } }
 			if = { limit = { BHG = { has_war_with = NOD } } BHG = { white_peace = NOD } }
 			if = { limit = { BHG = { has_war_with = VAL } } BHG = { white_peace = VAL } }
 			if = {
@@ -466,9 +623,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		}
 	}
 	if = {
-		limit = { BGT = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BGT } }
 		if = {
-			limit = { 4 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BGT } }
 			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
 			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
 			if = {
@@ -493,7 +650,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 4 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BGT } }
 			if = { limit = { BGT = { has_war_with = NOD } } BGT = { white_peace = NOD } }
 			if = { limit = { BGT = { has_war_with = VAL } } BGT = { white_peace = VAL } }
 			if = {
@@ -570,9 +727,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		}
 	}
 	if = {
-		limit = { BBV = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BBV } }
 		if = {
-			limit = { 7 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BBV } }
 			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
 			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
 			if = {
@@ -597,7 +754,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 7 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BBV } }
 			if = { limit = { BBV = { has_war_with = NOD } } BBV = { white_peace = NOD } }
 			if = { limit = { BBV = { has_war_with = VAL } } BBV = { white_peace = VAL } }
 			if = {
@@ -674,9 +831,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		}
 	}
 	if = {
-		limit = { BCM = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BCM } }
 		if = {
-			limit = { 9 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BCM } }
 			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
 			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
 			if = {
@@ -701,7 +858,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 9 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BCM } }
 			if = { limit = { BCM = { has_war_with = NOD } } BCM = { white_peace = NOD } }
 			if = { limit = { BCM = { has_war_with = VAL } } BCM = { white_peace = VAL } }
 			if = {
@@ -778,9 +935,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		}
 	}
 	if = {
-		limit = { BJK = { exists = yes OR = { has_war_with = VAL has_war_with = NOD is_subject_of = BJK is_in_faction_with = BJK tag = BJK } } }
+		limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK } }
 		if = {
-			limit = { 41 = { controller = { OR = { tag = NOD is_subject_of = NOD } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_nod_awards value = BJK } }
 			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
 			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
 			if = {
@@ -805,7 +962,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 		else_if = {
-			limit = { 41 = { controller = { OR = { tag = VAL is_subject_of = VAL } } } }
+			limit = { is_in_array = { array = ADISCORD_bezhaysk_settlement_val_awards value = BJK } }
 			if = { limit = { BJK = { has_war_with = NOD } } BJK = { white_peace = NOD } }
 			if = { limit = { BJK = { has_war_with = VAL } } BJK = { white_peace = VAL } }
 			if = {
@@ -886,6 +1043,9 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 	NOD = { ADISCORD_economy_mark_dirty = yes }
+	clear_temp_array = ADISCORD_bezhaysk_settlement_members
+	clear_temp_array = ADISCORD_bezhaysk_settlement_nod_awards
+	clear_temp_array = ADISCORD_bezhaysk_settlement_val_awards
 }
 
 

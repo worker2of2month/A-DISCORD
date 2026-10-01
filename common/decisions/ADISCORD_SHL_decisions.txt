@@ -921,15 +921,23 @@ SHL_quarters_and_borders = {
 	}
 
 	SHL_war_orders = {
-		icon = generic_production
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			OR = {
-				has_completed_focus = SHL_mobilise_furnaces
-				has_completed_focus = SHL_war_directorate
-			}
+			SHL_arsenal_access = yes
+			FROM = { SHL_selected_target = yes }
 		}
 		available = {
-			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_obligation_idle_tt
+				SHL_obligation_idle = yes
+			}
+			FROM = {
+				SHL_obligation_site_ready = yes
+
+			}
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
 		cost = 0
@@ -937,26 +945,20 @@ SHL_quarters_and_borders = {
 		custom_cost_trigger = {
 			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
 		}
-		days_re_enable = 28
+		days_re_enable = 1
 		fire_only_once = no
 		complete_effect = {
-			hidden_effect = { subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 } }
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = 1500
-				producer = SHL
-			}
-			add_equipment_to_stockpile = {
-				type = ADISCORD_squad_weapons_equipment_0
-				amount = 10
-				producer = SHL
+			custom_effect_tooltip = SHL_arsenal_order_tt
+			hidden_effect = {
+				SHL_begin_arsenal_order = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = {
-			base = 0
+			base = 5
 			modifier = {
-				add = 20
-				has_war = yes
+				factor = 0
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
 			}
 		}
 	}
@@ -1192,94 +1194,375 @@ SHL_quarters_and_borders = {
 	# ----- Course programmes -----
 
 	SHL_export_contract = {
-		icon = generic_economy
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = SHL_golden_gate_cartel
-			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			SHL_export_access = yes
+			FROM = { SHL_selected_target = yes }
 		}
 		available = {
-			SHL_country_operable = yes
 			custom_trigger_tooltip = {
-				tooltip = SHL_export_furnaces_tt
-				check_variable = { var = SHL_running_count value = 6 compare = greater_than_or_equals }
+				tooltip = SHL_obligation_idle_tt
+				SHL_obligation_idle = yes
+			}
+			FROM = {
+				SHL_obligation_site_ready = yes
+				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
 			}
 		}
 		cost = 0
-		days_re_enable = 35
+		days_re_enable = 1
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_export_contract_tt
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 120 }
-				add_to_variable = { var = SHL_unrest value = 3 }
-				subtract_from_variable = { var = SHL_house_pressure value = 5 }
-				SHL_clamp_tensions = yes
-				ADISCORD_economy_clamp_treasury = yes
+				SHL_begin_export = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
+			}
+		}
 	}
 
 	SHL_debt_shift = {
-		icon = generic_economy
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = SHL_debt_shifts
+			has_completed_focus = SHL_regency_council
 			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			FROM = { SHL_selected_target = yes }
 		}
-		available = { SHL_country_operable = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_obligation_idle_tt
+				SHL_obligation_idle = yes
+			}
+			FROM = {
+				SHL_obligation_site_ready = yes
+				check_variable = { var = SHL_furnace_owner value = 0 compare = equals }
+			}
+		}
 		cost = 0
-		days_re_enable = 28
+		days_re_enable = 1
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_debt_shift_tt
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
-				add_to_variable = { var = SHL_unrest value = 8 }
-				SHL_clamp_tensions = yes
-				ADISCORD_economy_clamp_treasury = yes
+				SHL_begin_pledge = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = {
-			base = 20
+			base = 5
 			modifier = {
 				factor = 0
-				check_variable = { var = SHL_unrest value = 50 compare = greater_than_or_equals }
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
 			}
 		}
 	}
 
 	SHL_common_cauldron = {
-		icon = generic_consumer_goods
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
 		visible = {
-			has_completed_focus = SHL_common_smelting
+			has_completed_focus = SHL_furnaces_to_workers
 			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			FROM = { SHL_selected_target = yes }
 		}
 		available = {
-			SHL_country_operable = yes
-			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_obligation_idle_tt
+				SHL_obligation_idle = yes
+			}
+			FROM = {
+				SHL_obligation_site_ready = yes
+				check_variable = { var = SHL_furnace_owner value = 1 compare = equals }
+			}
 		}
 		cost = 0
-		custom_cost_text = SHL_cost_80
-		custom_cost_trigger = {
-			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
-		}
-		days_re_enable = 28
+		days_re_enable = 1
 		fire_only_once = no
 		complete_effect = {
 			custom_effect_tooltip = SHL_common_cauldron_tt
 			hidden_effect = {
-				subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
-				subtract_from_variable = { var = SHL_unrest value = 12 }
-				add_to_variable = { var = SHL_city_support value = 5 }
-				SHL_clamp_tensions = yes
+				SHL_begin_relief = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
+			}
+		}
+	}
+
+	SHL_civic_order = {
+		icon = generic_construction
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			SHL_civic_access = yes
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_obligation_idle_tt
+				SHL_obligation_idle = yes
+			}
+			FROM = {
+				SHL_obligation_site_ready = yes
+				infrastructure < 5
+			}
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_120
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_re_enable = 1
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_civic_order_tt
+			hidden_effect = {
+				SHL_begin_civic_order = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
+			}
+		}
+	}
+
+	SHL_relief_recipient = {
+		icon = generic_construction
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { FROM = { is_owned_by = ROOT } }
+		visible = {
+			check_variable = { var = SHL_obligation_kind value = 5 compare = equals }
+			NOT = { has_variable = SHL_obligation_recipient }
+			FROM = { SHL_selected_target = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = SHL_relief_ready_tt
+					SHL_relief_site_ready = yes
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = SHL_relief_delivery_tt
+			hidden_effect = {
+				SHL_choose_relief_recipient = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	SHL_close_obligation = {
+		icon = generic_political_pressure
+		visible = { has_variable = SHL_obligation_kind }
+		available = { SHL_country_operable = yes }
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = SHL_close_obligation_tt
+			hidden_effect = {
+				SHL_cancel_obligation = yes
+				SHL_refresh_furnaces = yes
 			}
 		}
 		ai_will_do = {
 			base = 0
 			modifier = {
-				add = 20
-				check_variable = { var = SHL_unrest value = 40 compare = greater_than_or_equals }
+				add = 100
+				check_variable = { var = SHL_cycle_number value = SHL_obligation_deadline compare = greater_than }
+				check_variable = { var = SHL_obligation_progress value = 0 compare = equals }
+				NOT = { check_variable = { var = SHL_obligation_kind value = 4 compare = equals } }
 			}
 		}
+	}
+
+	SHL_foreclose_furnace = {
+		icon = generic_political_pressure
+		visible = {
+			has_completed_focus = SHL_debt_shifts
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			check_variable = { var = SHL_obligation_kind value = 4 compare = equals }
+		}
+		available = {
+			SHL_country_operable = yes
+			OR = {
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 287 compare = equals }
+					287 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 288 compare = equals }
+					288 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 289 compare = equals }
+					289 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 290 compare = equals }
+					290 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 291 compare = equals }
+					291 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 292 compare = equals }
+					292 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 293 compare = equals }
+					293 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 294 compare = equals }
+					294 = { SHL_furnace_site_controlled = yes }
+				}
+				AND = {
+					check_variable = { var = SHL_obligation_site value = 295 compare = equals }
+					295 = { SHL_furnace_site_controlled = yes }
+				}
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = SHL_foreclose_furnace_tt
+			hidden_effect = { SHL_foreclose_pledge = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	SHL_renew_golden_offer = {
+		icon = generic_diplomatic_treaty
+		visible = {
+			has_completed_focus = SHL_conclave_of_ten
+			has_country_flag = SHL_veyr_partner
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			GLP = { exists = yes }
+			NOT = { is_in_faction_with = GLP }
+		}
+		available = {
+			SHL_can_lead_alliance = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_alliance_offer_free_tt
+				NOT = { has_country_flag = SHL_golden_alliance_pending }
+			}
+			GLP = {
+				is_subject = no
+				is_in_faction = no
+				NOT = { has_war_with = SHL }
+			}
+		}
+		cost = 0
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_renew_alliance_offer_tt
+			hidden_effect = { SHL_request_golden_alliance = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	SHL_renew_southern_offer = {
+		icon = generic_diplomatic_treaty
+		visible = {
+			OR = {
+				has_completed_focus = SHL_southern_compact
+				has_completed_focus = SHL_commune_of_fire
+			}
+			OR = {
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+				check_variable = { var = SHL_political_course value = 5 compare = equals }
+			}
+			KYZ = { exists = yes }
+			NOT = { is_in_faction_with = KYZ }
+		}
+		available = {
+			SHL_can_lead_alliance = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_alliance_offer_free_tt
+				NOT = { has_country_flag = SHL_southern_alliance_pending }
+			}
+			KYZ = {
+				is_subject = no
+				is_in_faction = no
+				NOT = { has_war_with = SHL }
+			}
+		}
+		cost = 0
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_renew_alliance_offer_tt
+			hidden_effect = { SHL_request_southern_alliance = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	SHL_renew_veyr_partnership = {
+		icon = generic_diplomatic_treaty
+		visible = {
+			has_completed_focus = SHL_veyr_partnership
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			GLP = { exists = yes }
+			NOT = { has_country_flag = SHL_veyr_partner }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_alliance_offer_free_tt
+				NOT = { has_country_flag = SHL_veyr_offer_pending }
+			}
+			GLP = { NOT = { has_war_with = SHL } }
+		}
+		cost = 0
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_veyr_partnership_tt
+			hidden_effect = {
+				set_country_flag = SHL_veyr_offer_pending
+				GLP = {
+					ADISCORD_release_non_participating_minor_optimization = yes
+					country_event = { id = ADISCORD_SHL.61 }
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
 	}
 }

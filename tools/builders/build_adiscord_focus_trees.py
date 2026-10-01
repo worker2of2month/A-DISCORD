@@ -13,6 +13,7 @@ ROOT = repository_root()
 SOURCE_ROOT = ROOT / "focus_trees"
 OUTPUT_ROOT = ROOT / "common/national_focus"
 SOURCES = {
+    "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
     "VAL/main/focuses.txt": "ADISCORD_national_focus_VAL.txt",
@@ -95,9 +96,12 @@ def main() -> int:
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true")
     actions.add_argument("--apply", action="store_true")
+    parser.add_argument("--source", choices=tuple(SOURCES), help="Check or write only this authored tree")
     args = parser.parse_args()
     stale = []
     for path, data in expected_outputs().items():
+        if args.source and path.name != SOURCES[args.source]:
+            continue
         if path.is_file() and path.read_bytes() == data:
             continue
         stale.append(path)

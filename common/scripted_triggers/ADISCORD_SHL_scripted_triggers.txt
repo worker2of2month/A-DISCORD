@@ -217,3 +217,110 @@ SHL_mazar_repeat_ready = {
 	check_variable = { var = SHL_cycle_number value = SHL_mazar_repeat_cycle compare = greater_than_or_equals }
 	SHL_mazar_can_threaten = yes
 }
+
+# Obligations occupy one national ledger; routine servicing keeps its own receipt.
+SHL_obligation_idle = {
+	SHL_country_operable = yes
+	NOT = { has_variable = SHL_obligation_kind }
+}
+
+SHL_obligation_site_ready = {
+	SHL_furnace_site_controlled = yes
+	check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+}
+
+SHL_export_access = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 1 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_new_house
+		}
+	}
+}
+
+SHL_civic_access = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_open_conclave
+		}
+		AND = {
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			OR = {
+				has_completed_focus = SHL_right_to_water
+				has_completed_focus = SHL_key_to_sea
+			}
+		}
+	}
+}
+
+SHL_arsenal_access = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+		has_completed_focus = SHL_mobilise_furnaces
+		has_completed_focus = SHL_war_directorate
+		AND = {
+			has_completed_focus = SHL_nur_directorate
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+	}
+}
+
+SHL_obligation_here = {
+	OR = {
+		AND = {
+			state = 287
+			SHL = { check_variable = { var = SHL_obligation_site value = 287 compare = equals } }
+		}
+		AND = {
+			state = 288
+			SHL = { check_variable = { var = SHL_obligation_site value = 288 compare = equals } }
+		}
+		AND = {
+			state = 289
+			SHL = { check_variable = { var = SHL_obligation_site value = 289 compare = equals } }
+		}
+		AND = {
+			state = 290
+			SHL = { check_variable = { var = SHL_obligation_site value = 290 compare = equals } }
+		}
+		AND = {
+			state = 291
+			SHL = { check_variable = { var = SHL_obligation_site value = 291 compare = equals } }
+		}
+		AND = {
+			state = 292
+			SHL = { check_variable = { var = SHL_obligation_site value = 292 compare = equals } }
+		}
+		AND = {
+			state = 293
+			SHL = { check_variable = { var = SHL_obligation_site value = 293 compare = equals } }
+		}
+		AND = {
+			state = 294
+			SHL = { check_variable = { var = SHL_obligation_site value = 294 compare = equals } }
+		}
+		AND = {
+			state = 295
+			SHL = { check_variable = { var = SHL_obligation_site value = 295 compare = equals } }
+		}
+	}
+}
+
+SHL_relief_site_ready = {
+	SHL_furnace_site_idle = yes
+	NOT = { SHL_obligation_here = yes }
+	check_variable = { var = SHL_furnace_owner value = 1 compare = equals }
+	OR = {
+		AND = {
+			check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+			check_variable = { var = SHL_furnace_wear value = 30 compare = greater_than_or_equals }
+		}
+		AND = {
+			check_variable = { var = SHL_furnace_running value = 0 compare = equals }
+			check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+		}
+	}
+}

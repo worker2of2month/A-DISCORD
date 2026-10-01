@@ -5,6 +5,38 @@
   ],
   "events": [
     {
+      "id": "ADISCORD_nam_resource_war.10",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 10,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.11",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 11,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.12",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 12,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_resource_war.13",
+      "namespace": "ADISCORD_nam_resource_war",
+      "number": 13,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_resource_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_cw.208",
       "namespace": "ADISCORD_STP_cw",
       "number": 208,
@@ -4346,6 +4378,22 @@
       "number": 93,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.100",
+      "namespace": "ADISCORD_SHL",
+      "number": 100,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.101",
+      "namespace": "ADISCORD_SHL",
+      "number": 101,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
       "status": "active"
     }
   ]

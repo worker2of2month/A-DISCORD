@@ -16,6 +16,7 @@ ORDER = {
         'kefreyt',
         'frontier',
         'bezhaysk',
+        'nam',
         'northern_reservation',
     ],
     'on_capitulation': [
@@ -33,6 +34,8 @@ ORDER = {
         'livonn',
     ],
     'on_peace': [
+        'nam',
+        'shahrabad',
         'vorkerland_collapse',
         'rin',
         'vorkerland_diplomacy',
@@ -40,7 +43,8 @@ ORDER = {
         'stelander',
     ],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
-    'on_annex': ['stelander', 'kefreyt', 'shahrabad'],
+    'on_annex': ['nam', 'stelander', 'kefreyt', 'shahrabad'],
+    'on_puppet': ['nam', 'shahrabad'],
     'on_state_control_changed': ['livonn', 'frontier'],
 }
 

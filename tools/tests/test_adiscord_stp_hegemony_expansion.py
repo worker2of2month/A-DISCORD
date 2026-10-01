@@ -255,7 +255,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         for key in ("nod", "ypr", "tff", "val"):
             self.assertIn(f"STP_heg_establish_{key}_administration = {{", decisions)
             self.assertIn(f"STP_heg_annex_{key}_administration = {{", decisions)
-        self.assertEqual(decisions.count("days_remove = 90"), 4)
+        self.assertEqual(named_block(decisions, "STP_hegemony_administration").count("days_remove = 90"), 4)
         self.assertEqual(
             named_block(decisions, "STP_hegemony_administration").count("cost = 100"), 4
         )
@@ -264,7 +264,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         )
 
     def test_defeat_receipts_gate_new_administrations(self) -> None:
-        on_actions = read("common/on_actions/11_ADISCORD_STP_hegemony_on_actions.txt")
+        on_actions = read("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt")
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
         self.assertIn("has_country_flag = STP_heg_northern_final_started", on_actions)
         self.assertIn("has_country_flag = STP_heg_kefreyt_final_started", on_actions)
@@ -285,13 +285,13 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         triggers = read("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")
 
         bezhaysk = re.search(
-            r"(?ms)id = STP_pw_take_bezhaysk\\b.*?(?=\\n\\tfocus = \\{)", focuses
+            r"(?ms)id = STP_pw_take_bezhaysk\b.*?(?=\n\tfocus = \{)", focuses
         )
         nodrul = re.search(
-            r"(?ms)id = STP_pc_heg_nod_break\\b.*?(?=\\n\\tfocus = \\{)", focuses
+            r"(?ms)id = STP_pc_heg_nod_break\b.*?(?=\n\tfocus = \{)", focuses
         )
         kefreyt = re.search(
-            r"(?ms)id = STP_pc_heg_val_audit\\b.*?(?=\\n\\tfocus = \\{)", focuses
+            r"(?ms)id = STP_pc_heg_val_audit\b.*?(?=\n\tfocus = \{)", focuses
         )
         self.assertIsNotNone(bezhaysk)
         self.assertIsNotNone(nodrul)

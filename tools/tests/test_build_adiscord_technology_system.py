@@ -22,6 +22,141 @@ STARTING_PROFILE_MANIFEST = (
 
 
 class CompactTechnologyTreeContractTests(unittest.TestCase):
+    def test_synthetic_branches_require_research_and_progress_independently(self):
+        rubber = generator.BRANCH_BY_KEY["synthetic_rubber"]
+        oil = generator.BRANCH_BY_KEY["synthetic_oil"]
+        self.assertEqual(rubber.years, (2160, 2163, 2166, 2169, 2172, 2175))
+        self.assertEqual(oil.years, (2161, 2163, 2166, 2169, 2172, 2175))
+        for branch in (rubber, oil):
+            self.assertEqual(branch.folders, ("industry_folder",))
+            for index, tech in enumerate(branch.techs):
+                for profile in generator.STARTING_TECH_PROFILES.values():
+                    self.assertNotIn(tech.id, profile)
+                self.assertNotIn(tech.id, generator.ALLOW)
+                self.assertEqual(generator.xor_siblings(branch, index), ())
+                required = set(generator.technology_prerequisite_closure((tech.id,)))
+                expected = {item.id for item in branch.techs[:index + 1]}
+                if branch is oil:
+                    expected.add(rubber.techs[0].id)
+                self.assertEqual(required, expected)
+        root = generator.render_technology(oil, 0)
+        self.assertIn(f"{rubber.techs[0].id} = 1", root)
+
+    def test_synthetic_output_is_native_and_does_not_stack_with_old_unlocks(self):
+        buildings = validator.collect_building_blocks()
+        plant = buildings["synthetic_refinery"]
+        self.assertRegex(plant, r"\bbase_cost\s*=\s*14500\b")
+        self.assertRegex(plant, r"\blocal_resources_rubber\s*=\s*1\b")
+        self.assertRegex(plant, r"\bfuel_gain_from_states\s*=\s*2\.0\b")
+        self.assertRegex(plant, r"\bstate_max\s*=\s*3\b")
+        caps = {}
+        yields = {"rubber": {}, "oil": {}}
+        for tech_id, entries in generator.ENABLE_BUILDINGS.items():
+            for building, level in entries:
+                if building == "synthetic_refinery":
+                    branch, index = generator.TECH_POSITION_BY_ID[tech_id]
+                    self.assertEqual(branch.key, "synthetic_rubber")
+                    caps[branch.years[index]] = level
+        for tech_id, entries in generator.BUILDING_RESOURCE_UPGRADES.items():
+            for building, resource, amount in entries:
+                if building != "synthetic_refinery":
+                    continue
+                branch, index = generator.TECH_POSITION_BY_ID[tech_id]
+                self.assertEqual(branch.key, f"synthetic_{resource}")
+                yields[resource][branch.years[index]] = amount
+                rendered = generator.render_technology(branch, index)
+                self.assertEqual(rendered.count("on_research_complete = {"), 1)
+                self.assertEqual(rendered.count("modify_building_resources = {"), 1)
+                self.assertIn(f"resource = {resource}", rendered)
+                self.assertIn("show_effect_as_desc = yes", rendered)
+                self.assertNotIn("every_state", rendered)
+                self.assertNotIn("add_resource", rendered)
+        self.assertEqual(caps, {2160: 1, 2166: 2, 2172: 3})
+        self.assertEqual(yields["rubber"], {2163: 1, 2169: 1, 2175: 1})
+        self.assertEqual(yields["oil"], {2161: 1, 2166: 1, 2172: 1})
+        for tech_id, amount in (
+            ("ADISCORD_tech_rare_earth_solvent_loops", 2),
+            ("ADISCORD_tech_strategic_element_reclamation", 1),
+        ):
+            self.assertEqual(
+                generator.BUILDING_RESOURCE_UPGRADES[tech_id],
+                (("ADISCORD_electrolysis_complex", "aluminium", amount),),
+            )
+
+    def test_synthetic_fuel_upgrades_do_not_masquerade_as_oil(self):
+        oil = generator.BRANCH_BY_KEY["synthetic_oil"]
+        total = Decimal(0)
+        for index, tech in enumerate(oil.techs):
+            rendered = generator.render_technology(oil, index)
+            if index % 2:
+                self.assertNotIn("modify_building_resources", rendered)
+                values = re.findall(r"\bfuel_gain_factor_from_states = ([\d.]+)", rendered)
+                self.assertEqual(len(values), 1)
+                total += Decimal(values[0])
+            else:
+                self.assertIn("resource = oil", rendered)
+                self.assertNotIn("fuel_gain_factor", rendered)
+        self.assertEqual(total, Decimal("0.30"))
+
+    def test_synthetic_ui_and_ai_explain_and_bound_the_investment(self):
+        gui = generator.render_folder("industry_folder")
+        for branch_key in ("synthetic_rubber", "synthetic_oil"):
+            branch = generator.BRANCH_BY_KEY[branch_key]
+            self.assertIn(f'name = "ADISCORD_branch_{branch_key}"', gui)
+            self.assertIn(f'name = "{branch.techs[0].id}_tree"', gui)
+            for index, tech in enumerate(branch.techs):
+                self.assertIn(f"year_{branch_key}_{branch.years[index]}", gui)
+                self.assertIn(tech.key, generator.TECHNICAL_TECH_DESCRIPTIONS)
+                self.assertEqual(generator.icon_for_technology(branch, index), tech.icon)
+                ai = "\n".join(generator.ai_will_do_for(branch, index))
+                self.assertIn("factor = 0.30 ADISCORD_economy_ai_is_crisis = yes", ai)
+                self.assertIn("num_of_civilian_factories < 5", ai)
+                self.assertNotIn("factor = 1.35 ADISCORD_economy_ai_is_crisis", ai)
+                self.assertGreaterEqual(generator.research_cost_for(branch, index, (), ()), 1.35)
+                for is_ru in (False, True):
+                    notes = " ".join(generator.technology_description_notes(branch, index, is_ru))
+                    if tech.id in generator.ENABLE_BUILDINGS:
+                        level = generator.ENABLE_BUILDINGS[tech.id][0][1]
+                        self.assertIn(str(level), notes)
+                    if tech.id in generator.BUILDING_RESOURCE_UPGRADES:
+                        self.assertIn("+1", notes)
+                        resource = generator.BUILDING_RESOURCE_UPGRADES[tech.id][0][1]
+                        self.assertIn(f"£resources_strip|{3 if resource == 'rubber' else 1}", notes)
+
+    def test_synthetic_validator_rejects_missing_zero_and_wrong_output(self):
+        _, blocks = validator.collect_technologies()
+        synthetic_ids = {
+            tech.id
+            for branch in generator.BRANCHES
+            if branch.key in {"synthetic_rubber", "synthetic_oil"}
+            for tech in branch.techs
+        }
+        initial = validator.check_post_2160_research_balance(blocks)
+        self.assertFalse([issue for issue in initial if any(key in issue for key in synthetic_ids)])
+        for tech_id in synthetic_ids:
+            original = blocks[tech_id]
+            if tech_id in generator.BUILDING_RESOURCE_UPGRADES:
+                marker = original.index("on_research_complete = {")
+                callback = validator.extract_block(original, marker)
+                invalid = (
+                    original.replace(callback, ""),
+                    original.replace("amount = 1", "amount = 0"),
+                    original.replace("amount = 1", "amount = 9"),
+                    original.replace("amount = 1", "amount = 1.5"),
+                    original.replace("modify_building_resources", "unused_resource_reward"),
+                )
+            elif "fuel_gain_factor_from_states" in original:
+                invalid = (
+                    re.sub(r"fuel_gain_factor_from_states = [0-9.]+", "", original),
+                    re.sub(r"fuel_gain_factor_from_states = [0-9.]+", "fuel_gain_factor_from_states = 0", original),
+                )
+            else:
+                continue
+            for mutated in invalid:
+                with self.subTest(technology=tech_id, mutation=mutated):
+                    issues = validator.check_post_2160_research_balance({**blocks, tech_id: mutated})
+                    self.assertTrue(any(tech_id in issue and "numeric gameplay effects" in issue for issue in issues))
+
     def test_small_arms_requires_three_modifications_between_models(self):
         branch = generator.BRANCH_BY_KEY["small_arms"]
         graph = generator.BRANCH_GRAPHS[branch.key]

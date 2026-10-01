@@ -820,12 +820,24 @@ country_event = {
 		name = ADISCORD_SHL.90.a
 		default_option = yes
 		custom_effect_tooltip = SHL_partner_joins_tt
+		if = {
+			limit = {
+				SHL = { has_war_with = MZR }
+				NOT = { has_war_with = MZR }
+			}
+			custom_effect_tooltip = SHL_partner_joins_mazar_tt
+		}
 		hidden_effect = { SHL_join_southern_compact = yes }
 		ai_chance = { base = 85 }
 	}
 	option = {
 		name = ADISCORD_SHL.90.b
-		hidden_effect = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
+		hidden_effect = {
+			SHL = {
+				clr_country_flag = SHL_southern_alliance_pending
+				country_event = { id = ADISCORD_SHL.93 }
+			}
+		}
 		ai_chance = { base = 15 }
 	}
 }
@@ -841,12 +853,24 @@ country_event = {
 		name = ADISCORD_SHL.91.a
 		default_option = yes
 		custom_effect_tooltip = SHL_partner_joins_tt
+		if = {
+			limit = {
+				SHL = { has_war_with = MZR }
+				NOT = { has_war_with = MZR }
+			}
+			custom_effect_tooltip = SHL_partner_joins_mazar_tt
+		}
 		hidden_effect = { SHL_join_golden_gate = yes }
 		ai_chance = { base = 85 }
 	}
 	option = {
 		name = ADISCORD_SHL.91.b
-		hidden_effect = { SHL = { country_event = { id = ADISCORD_SHL.93 } } }
+		hidden_effect = {
+			SHL = {
+				clr_country_flag = SHL_golden_alliance_pending
+				country_event = { id = ADISCORD_SHL.93 }
+			}
+		}
 		ai_chance = { base = 15 }
 	}
 }
@@ -874,5 +898,77 @@ country_event = {
 	option = {
 		name = ADISCORD_SHL.93.a
 		default_option = yes
+	}
+}
+
+# The first order explains a political programme before constitutional ratification.
+country_event = {
+	id = ADISCORD_SHL.100
+	title = ADISCORD_SHL.100.t
+	desc = {
+		trigger = { has_completed_focus = SHL_new_house }
+		text = ADISCORD_SHL.100.house
+	}
+	desc = {
+		trigger = { has_completed_focus = SHL_open_conclave }
+		text = ADISCORD_SHL.100.city
+	}
+	desc = {
+		trigger = { has_completed_focus = SHL_nur_directorate }
+		text = ADISCORD_SHL.100.state
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { SHL_country_operable = yes }
+	option = {
+		name = ADISCORD_SHL.100.a
+		default_option = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.101
+	title = ADISCORD_SHL.101.t
+	desc = ADISCORD_SHL.101.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		SHL_country_operable = yes
+		check_variable = { var = SHL_obligation_kind value = 1 compare = equals }
+		has_variable = SHL_obligation_overdue
+	}
+	option = {
+		name = ADISCORD_SHL.101.a
+		default_option = yes
+		trigger = { has_variable = SHL_obligation_overdue }
+		custom_effect_tooltip = SHL_close_obligation_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { var = SHL_obligation_kind value = 1 compare = equals }
+					has_variable = SHL_obligation_overdue
+				}
+				SHL_cancel_obligation = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+	}
+	option = {
+		name = ADISCORD_SHL.101.b
+		trigger = {
+			check_variable = { var = SHL_obligation_kind value = 1 compare = equals }
+			has_variable = SHL_obligation_overdue
+			NOT = { has_variable = SHL_obligation_extended }
+		}
+		custom_effect_tooltip = SHL_extend_export_tt
+		hidden_effect = {
+			SHL_extend_export = yes
+			SHL_refresh_furnaces = yes
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ADISCORD_SHL.101.c
+		trigger = { NOT = { has_variable = SHL_obligation_overdue } }
 	}
 }

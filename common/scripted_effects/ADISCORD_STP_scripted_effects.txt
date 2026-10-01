@@ -1059,31 +1059,11 @@ STP_cw_release_tff_to_northern_war = {
 		limit = {
 			check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals }
 			has_war_with = YPR
-			YPR = { exists = yes has_capitulated = no is_in_faction_with = TFF }
-			TFF = { exists = yes has_capitulated = no NOT = { has_war_with = NOD } }
-			OR = {
-				VAL = { has_war_with = NOD }
-				NOT = {
-					OR = {
-						AND = {
-							STS = {
-								exists = yes
-								has_capitulated = no
-								has_war_with = NOD
-								has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-							}
-						}
-						AND = {
-							VAL = { exists = yes has_country_flag = VAL_campaign_mobilizing }
-							has_country_flag = VAL_campaign_target
-						}
-					}
-				}
-			}
+			YPR = { exists = yes is_in_faction_with = TFF }
+			TFF = { exists = yes is_subject = no has_capitulated = no NOT = { has_war_with = NOD } }
+			STP_cw_tff_entry_deferred = no
 		}
-		TFF = {
-			add_to_war = { targeted_alliance = YPR enemy = NOD hostility_reason = asked_to_join single_target_only = yes }
-		}
+		TFF = { add_to_war = { targeted_alliance = YPR enemy = NOD hostility_reason = asked_to_join single_target_only = yes } }
 	}
 }
 
@@ -1145,11 +1125,11 @@ STP_cw_start_northern_war = {
 			create_faction_from_template = { template = faction_template_ADISCORD_standard name = STP_northern_defence_alliance }
 			add_to_faction = COF
 			add_to_faction = TFF
-			set_major = yes
+			STP_cw_reserve_northern_major = yes
 			clear_variable = STP_cw_capitulation_occupier
 		}
-		COF = { set_major = yes clear_variable = STP_cw_capitulation_occupier }
-		TFF = { set_major = yes clear_variable = STP_cw_capitulation_occupier }
+		COF = { STP_cw_reserve_northern_major = yes clear_variable = STP_cw_capitulation_occupier }
+		TFF = { STP_cw_reserve_northern_major = yes clear_variable = STP_cw_capitulation_occupier }
 		if = {
 			limit = { YPR = { is_in_faction_with = COF is_in_faction_with = TFF } }
 			declare_war_on = { target = YPR type = take_state_focus generator = { 20 } }
@@ -1161,8 +1141,11 @@ STP_cw_start_northern_war = {
 		if = {
 			limit = { has_war_with = YPR has_war_with = COF }
 			set_variable = { var = STP_cw_northern_campaign_status value = 1 }
-			set_country_flag = NOD_cw_northern_war_started
 			STP_cw_release_tff_to_northern_war = yes
+		}
+		if = {
+			limit = { STP_cw_northern_entry_complete = yes }
+			set_country_flag = NOD_cw_northern_war_started
 			if = { limit = { NOT = { has_idea = NOD_cw_northern_offensive } } add_timed_idea = { idea = NOD_cw_northern_offensive days = 85 } }
 			activate_mission = NOD_cw_northern_push
 			# Northern deployment can permit an uprising before the election deadline.
@@ -1173,14 +1156,14 @@ STP_cw_start_northern_war = {
 		}
 		else = {
 			# Cancel the wars opened by this incomplete coalition entry.
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
 			if = { limit = { has_war_with = YPR } white_peace = YPR }
 			if = { limit = { has_war_with = COF } white_peace = COF }
 			if = { limit = { has_war_with = TFF } white_peace = TFF }
 			STP_cw_dismantle_northern_alliance = yes
-			YPR = { set_major = no }
-			COF = { set_major = no }
-			TFF = { set_major = no }
-			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			YPR = { STP_cw_release_northern_major = yes }
+			COF = { STP_cw_release_northern_major = yes }
+			TFF = { STP_cw_release_northern_major = yes }
 			STP = { country_event = { id = ADISCORD_STP_preparation.14 } }
 		}
 	}
@@ -4123,9 +4106,9 @@ STP_cw_abort_northern_campaign_external_defeat = {
 			clr_country_flag = NOD_cw_northern_war_started
 			STP_cw_end_northern_colonial_war = yes
 			STP_cw_dismantle_northern_alliance = yes
-			YPR = { set_major = no }
-			COF = { set_major = no }
-			TFF = { set_major = no }
+			YPR = { STP_cw_release_northern_major = yes }
+			COF = { STP_cw_release_northern_major = yes }
+			TFF = { STP_cw_release_northern_major = yes }
 			VAL = {
 				if = {
 					limit = { exists = yes }
@@ -4392,7 +4375,7 @@ STP_cw_settle_union_victory = {
 
 STP_cw_settle_nod_victory = {
 	if = {
-		limit = { STP = { exists = yes } STS = { exists = yes } STS = { has_capitulated = yes } NOD = { has_country_flag = NOD_cw_entered } }
+		limit = { STP = { exists = yes } STS = { exists = yes } STS = { OR = { has_capitulated = yes AND = { tag = ROOT has_country_flag = STP_cw_nod_victory_current } } } NOD = { has_country_flag = NOD_cw_entered } }
 		STP_cw_close_nod_after_party_victory = yes
 		VAL = {
 			if = {
@@ -4462,9 +4445,9 @@ STP_cw_settle_northern_victory = {
 		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
 		STP_cw_dismantle_northern_alliance = yes
-		YPR = { set_major = no }
-		COF = { set_major = no }
-		TFF = { set_major = no }
+		YPR = { STP_cw_release_northern_major = yes }
+		COF = { STP_cw_release_northern_major = yes }
+		TFF = { STP_cw_release_northern_major = yes }
 		if = {
 			limit = { YPR = { exists = yes is_subject = no STP_cw_ypr_has_only_historical_states = yes } }
 			puppet = { target = YPR end_wars = no end_civil_wars = no }
@@ -4500,9 +4483,9 @@ STP_cw_settle_northern_defeat = {
 		if = { limit = { has_war_with = TFF } white_peace = TFF }
 		clr_country_flag = NOD_cw_northern_war_started
 		STP_cw_end_northern_colonial_war = yes
-		YPR = { set_major = no }
-		COF = { set_major = no }
-		TFF = { set_major = no }
+		YPR = { STP_cw_release_northern_major = yes }
+		COF = { STP_cw_release_northern_major = yes }
+		TFF = { STP_cw_release_northern_major = yes }
 		if = {
 			limit = { YPR = { exists = yes is_subject = no } }
 			if = { limit = { 17 = { is_owned_by = NOD } } YPR = { transfer_state = 17 } }
@@ -4529,9 +4512,9 @@ STP_cw_settle_northern_status_quo = {
 		remove_mission = NOD_cw_northern_push
 		remove_ideas = NOD_cw_northern_offensive
 		remove_ideas = NOD_cw_stalled_army
-		YPR = { set_major = no }
-		COF = { set_major = no }
-		TFF = { set_major = no }
+		YPR = { STP_cw_release_northern_major = yes }
+		COF = { STP_cw_release_northern_major = yes }
+		TFF = { STP_cw_release_northern_major = yes }
 		activate_mission = NOD_cw_northern_redeployment
 		news_event = { id = ADISCORD_STP_cw.83 }
 		VAL = { if = { limit = { exists = yes } VAL_northern_aid_daily = yes } }
@@ -4543,16 +4526,11 @@ STP_cw_settle_northern_status_quo = {
 STP_cw_poll_northern_campaign = {
 	if = {
 		limit = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
+		STP_cw_release_tff_to_northern_war = yes
 		if = { limit = { OR = { STP_cw_northern_campaign_won = yes STP_cw_northern_conference_won = yes } } STP_cw_settle_northern_victory = yes }
 		else_if = {
 			limit = {
-				NOT = {
-					AND = {
-						has_war_with = YPR
-						has_war_with = COF
-						has_war_with = TFF
-					}
-				}
+				STP_cw_northern_entry_complete = no
 			}
 			# A foreign peace or annexation cannot count as the coalition's military defeat.
 			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
@@ -4563,9 +4541,9 @@ STP_cw_poll_northern_campaign = {
 			clr_country_flag = NOD_cw_northern_war_started
 			STP_cw_end_northern_colonial_war = yes
 			VAL = { if = { limit = { exists = yes } VAL_northern_aid_daily = yes } }
-			YPR = { set_major = no }
-			COF = { set_major = no }
-			TFF = { set_major = no }
+			YPR = { STP_cw_release_northern_major = yes }
+			COF = { STP_cw_release_northern_major = yes }
+			TFF = { STP_cw_release_northern_major = yes }
 			news_event = { id = ADISCORD_STP_cw.83 }
 			log = "[STP_NORTH] Northern campaign closed after external peace; no scripted territorial award"
 		}
@@ -7518,7 +7496,7 @@ STP_ps_begin_return = {
 }
 STP_ps_settle_return = {
 	# Actual NOD victory, never a paid project's completion.
-	if = { limit = { tag = NOD has_country_flag = STP_ps_return_campaign STP = { exists = no } STS = { has_capitulated = yes } }
+	if = { limit = { tag = NOD has_country_flag = STP_ps_return_campaign STP = { exists = no } STS = { OR = { has_capitulated = yes AND = { tag = ROOT has_country_flag = STP_ps_return_capitulation_current } } } }
 		STP_ps_close_exile = yes
 		STS = { if = { limit = { has_war_with = NOD } white_peace = NOD }
 			every_owned_state = { limit = { is_core_of = STP } STP = { transfer_state = PREV } }
@@ -13582,4 +13560,12 @@ STP_pe_clear = {
 	remove_ideas = STP_pe_security_course_b_idea
 	remove_ideas = STP_pe_regent_course_a_idea
 	remove_ideas = STP_pe_regent_course_b_idea
+}
+
+# COUNTRY northern participant. Release only major status owned by this campaign.
+STP_cw_reserve_northern_major = {
+	if = { limit = { is_major = no } set_country_flag = STP_cw_northern_added_major set_major = yes }
+}
+STP_cw_release_northern_major = {
+	if = { limit = { has_country_flag = STP_cw_northern_added_major } set_major = no clr_country_flag = STP_cw_northern_added_major }
 }

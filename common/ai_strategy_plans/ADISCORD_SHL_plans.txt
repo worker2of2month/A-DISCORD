@@ -16,6 +16,8 @@ SHL_furnaces_plan = {
 		SHL_repair_without_extinction
 		SHL_reserve_for_next_shift
 		SHL_conclave_rules
+		SHL_open_conclave
+		SHL_city_charters
 		SHL_common_industrial_account
 		SHL_engineer_society
 		SHL_right_to_land
@@ -25,8 +27,6 @@ SHL_furnaces_plan = {
 		SHL_build_tenth_complex
 		SHL_first_pour_focus
 		SHL_tenth_voice
-		SHL_open_conclave
-		SHL_city_charters
 		SHL_rights_without_fire
 		SHL_railway_guard
 		SHL_factory_militia

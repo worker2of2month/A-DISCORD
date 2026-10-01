@@ -112,8 +112,30 @@ identify which treaty or map-reveal script transferred ownership.
 
 ## Automated verification
 
+Current native defeat receipts belong only to callback ROOT. They are reset at
+the next immediate callback and consumed after the last country handler. A
+liberated ally with an unexpired receipt must block settlement again. Bezhaysk
+participants and capital awards are captured before the first technical peace.
+NAM and SHL reserve major status only when their campaign added it, and native
+peace, annexation and subjugation clean up an externally interrupted campaign.
+
+Also test both NOD/Stelander defeat orders, a surviving northern cobelligerent,
+TFF joining NOD's northern war after YPR has capitulated, and failed TFF entry.
+Deliberate frontier deferral must keep the northern campaign active. A foreign
+puppet or independent participant leaving VAL's northern war cancels that
+scripted campaign without territorial awards or ending the remaining wars.
+Existing major status must survive every terminal path. RUS's six target wars,
+NOD's Stelander victory and the exile return must accept the current native
+defeat even before `has_capitulated` becomes visible.
+
+`test_adiscord_peace_coalition_lifecycle` executes these production effects and
+triggers with delayed capitulation and destructive peace side effects. Its
+fixtures reject unknown instructions; presentation and economy effects are
+explicit stubs. This is a script contract check, not native runtime acceptance.
+
 ```bash
 python -B -m unittest tools.tests.test_scripted_peace_on_actions \
+  tools.tests.test_adiscord_peace_coalition_lifecycle \
   tools.tests.test_validate_adiscord_val_rework.ValFrontierCampaignTests \
   tools.tests.test_adiscord_nod_capitulation_reservation \
   tools.tests.test_vorkerland_claimant_cleanup

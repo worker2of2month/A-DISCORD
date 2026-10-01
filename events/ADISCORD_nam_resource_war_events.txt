@@ -44,7 +44,11 @@ country_event = {
 	picture = GFX_event_adiscord_vorkerland_explosion
 	is_triggered_only = yes
 
-	trigger = { ADISCORD_nam_resource_war_active = yes }
+	trigger = {
+		ADISCORD_nam_resource_war_active = yes
+		NAM = { NOT = { has_country_flag = NAM_compact_ratified } }
+		688 = { is_owned_by = NAM }
+	}
 
 	immediate = { ADISCORD_nam_resource_war_start_mainland_rebellion = yes }
 
@@ -146,4 +150,129 @@ news_event = {
 	fire_only_once = no
 	is_triggered_only = yes
 	option = { name = ADISCORD_nam_resource_news.7.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.10
+	title = ADISCORD_nam_resource_war.10.t
+	desc = {
+		trigger = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started }
+		text = ADISCORD_nam_resource_war.10.d
+	}
+	desc = {
+		trigger = { NOT = { has_global_flag = ADISCORD_vorkerland_collapse_wars_started } }
+		text = ADISCORD_nam_resource_war.10.before
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+
+	}
+
+	option = {
+		name = ADISCORD_nam_resource_war.10.a
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_completed_focus = NAM_recognition }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 250
+				compare = greater_than_or_equals
+			}
+		}
+		if = {
+
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NOT = { has_completed_focus = NAM_recognition }
+					check_variable = {
+						var = ADISCORD_economy_treasury
+						value = 250
+						compare = greater_than_or_equals
+					}
+				}
+			}
+			custom_effect_tooltip = NAM_spend_250_tt
+			hidden_effect = { ADISCORD_economy_spend_250 = yes }
+			add_stability = 0.03
+		}
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.10.b
+		trigger = {
+			NAM_country_operable = yes
+			NOT = { has_completed_focus = NAM_recognition }
+		}
+		if = {
+
+			limit = {
+				hidden_trigger = {
+					NAM_country_operable = yes
+					NOT = { has_completed_focus = NAM_recognition }
+				}
+			}
+			add_timed_idea = {
+				idea = NAM_wage_arrears
+				days = 90
+			}
+		}
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = ADISCORD_nam_resource_war.close
+		trigger = {
+			OR = {
+				NAM_country_operable = no
+				has_completed_focus = NAM_recognition
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.11
+	title = ADISCORD_nam_resource_war.11.t
+	desc = ADISCORD_nam_resource_war.11.d
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+		ADISCORD_nam_resource_war_active = yes
+	}
+	option = { name = ADISCORD_nam_resource_war.11.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.12
+	title = ADISCORD_nam_resource_war.12.t
+	desc = ADISCORD_nam_resource_war.12.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+
+	}
+	option = { name = ADISCORD_nam_resource_war.12.a }
+}
+
+country_event = {
+	id = ADISCORD_nam_resource_war.13
+	title = ADISCORD_nam_resource_war.13.t
+	desc = ADISCORD_nam_resource_war.13.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = NAM
+
+	}
+	option = { name = ADISCORD_nam_resource_war.13.a }
 }

@@ -3,6 +3,15 @@ on_actions = {
 		effect = {
 			if = {
 				limit = {
+					OR = {
+						ROOT = { tag = NAM }
+						FROM = { tag = NAM }
+					}
+				}
+				NAM = { NAM_invalidate_lost_compact = yes }
+			}
+			if = {
+				limit = {
 					ADISCORD_nam_resource_war_active = yes
 					OR = {
 						ROOT = { tag = NAM }

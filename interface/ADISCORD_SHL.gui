@@ -2,7 +2,7 @@ guiTypes = {
 	containerWindowType = {
 		name = "ADISCORD_SHL_furnaces_window"
 		position = { x = 0 y = 0 }
-		size = { width = 460 height = 508 }
+		size = { width = 460 height = 570 }
 		instantTextBoxType = {
 			name = "SHL_panel_title"
 			position = { x = 8 y = 4 }
@@ -361,6 +361,15 @@ guiTypes = {
 			font = "hoi_16mbs"
 			maxWidth = 444
 			maxHeight = 66
+			format = center
+		}
+		instantTextBoxType = {
+			name = "SHL_panel_ledger"
+			position = { x = 8 y = 510 }
+			text = "SHL_panel_ledger"
+			font = "hoi_16mbs"
+			maxWidth = 444
+			maxHeight = 54
 			format = center
 		}
 	}

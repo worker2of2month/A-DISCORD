@@ -521,3 +521,114 @@ defined_text = {
 		localization_key = SHL_status_mazar_quiet
 	}
 }
+
+defined_text = {
+	name = SHLGetOrderSite
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 287 compare = equals } }
+		localization_key = STATE_287
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 288 compare = equals } }
+		localization_key = STATE_288
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 289 compare = equals } }
+		localization_key = STATE_289
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 290 compare = equals } }
+		localization_key = STATE_290
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 291 compare = equals } }
+		localization_key = STATE_291
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 292 compare = equals } }
+		localization_key = STATE_292
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 293 compare = equals } }
+		localization_key = STATE_293
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 294 compare = equals } }
+		localization_key = STATE_294
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_site value = 295 compare = equals } }
+		localization_key = STATE_295
+	}
+	text = { localization_key = SHL_ledger_choose }
+}
+
+defined_text = {
+	name = SHLGetReliefSite
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 287 compare = equals } }
+		localization_key = STATE_287
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 288 compare = equals } }
+		localization_key = STATE_288
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 289 compare = equals } }
+		localization_key = STATE_289
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 290 compare = equals } }
+		localization_key = STATE_290
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 291 compare = equals } }
+		localization_key = STATE_291
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 292 compare = equals } }
+		localization_key = STATE_292
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 293 compare = equals } }
+		localization_key = STATE_293
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 294 compare = equals } }
+		localization_key = STATE_294
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_recipient value = 295 compare = equals } }
+		localization_key = STATE_295
+	}
+	text = { localization_key = SHL_ledger_choose }
+}
+
+defined_text = {
+	name = SHLGetOrderLedger
+	text = {
+		trigger = { has_variable = SHL_obligation_overdue }
+		localization_key = SHL_ledger_overdue
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 1 compare = equals } }
+		localization_key = SHL_ledger_export
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 2 compare = equals } }
+		localization_key = SHL_ledger_civic
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 3 compare = equals } }
+		localization_key = SHL_ledger_arsenal
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 4 compare = equals } }
+		localization_key = SHL_ledger_pledge
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 5 compare = equals } }
+		localization_key = SHL_ledger_relief
+	}
+	text = { localization_key = SHL_ledger_idle }
+}

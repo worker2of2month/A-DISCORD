@@ -1525,7 +1525,7 @@ def check_resource_building_architecture(tech_blocks: dict[str, str]) -> list[st
             effect = extract_block(block, match.start())
             building_match = re.search(r"\bbuilding\s*=\s*([A-Za-z0-9_]+)", effect)
             resource_match = re.search(r"\bresource\s*=\s*([A-Za-z0-9_]+)", effect)
-            amount_match = re.search(r"\bamount\s*=\s*(-?\d+)", effect)
+            amount_match = re.search(r"\bamount\s*=\s*(-?\d+)(?=\s|\})", effect)
             if building_match and resource_match and amount_match:
                 actual.add(
                     (
@@ -3247,9 +3247,30 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 )
             )
             weapon_modification = branch.key == "small_arms" and tech.id not in unlocks
-            minimum_effects = (
-                0 if tech.id in unlocks else (1 if family_upgrade or weapon_modification else 2)
+            # A permanent plant-output upgrade is a complete production reward.
+            # Read the actual callback so a missing or zero payload cannot pass.
+            resource_upgrade = False
+            for callback in re.finditer(r"\bon_research_complete\s*=\s*\{", block):
+                completion = extract_block(block, callback.start())
+                for upgrade in re.finditer(r"\bmodify_building_resources\s*=\s*\{", completion):
+                    payload = extract_block(completion, upgrade.start())
+                    building = re.search(r"\bbuilding\s*=\s*(\w+)", payload)
+                    resource = re.search(r"\bresource\s*=\s*(\w+)", payload)
+                    amount = re.search(r"\bamount\s*=\s*(-?\d+)(?=\s|\})", payload)
+                    if building and resource and amount and int(amount[1]) > 0:
+                        reward = (building[1], resource[1], int(amount[1]))
+                        if reward in GENERATED_BUILDING_RESOURCE_UPGRADES.get(tech.id, ()):
+                            resource_upgrade = True
+            fuel_output = re.search(
+                r"\bfuel_gain_factor_from_states\s*=\s*(-?[0-9.]+)", effect_prefix
             )
+            substantial_fuel_upgrade = fuel_output is not None and float(fuel_output[1]) >= 0.10
+            if tech.id in unlocks or resource_upgrade:
+                minimum_effects = 0
+            elif family_upgrade or weapon_modification or substantial_fuel_upgrade:
+                minimum_effects = 1
+            else:
+                minimum_effects = 2
             if year >= 2160 and effect_count < minimum_effects:
                 issues.append(
                     f"post-2160 technology {tech.id} has only {effect_count} numeric gameplay effects"

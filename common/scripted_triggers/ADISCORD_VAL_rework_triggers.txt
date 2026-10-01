@@ -919,9 +919,30 @@ VAL_can_attack_northern_coalition = {
 	}
 }
 
+VAL_northern_coalition_member_withdrawn = {
+	exists = yes
+	NOT = { is_subject_of = VAL }
+	OR = {
+		is_subject = yes
+		AND = {
+			NOT = { has_war_with = VAL }
+			has_capitulated = no
+			NOT = {
+				AND = {
+					tag = ROOT
+					has_country_flag = VAL_northern_coalition_capitulation_reserved
+				}
+			}
+		}
+	}
+}
+
 VAL_northern_coalition_campaign_victory_ready = {
 	tag = VAL
 	has_country_flag = VAL_northern_coalition_campaign_active
+	NOT = { YPR = { VAL_northern_coalition_member_withdrawn = yes } }
+	NOT = { COF = { VAL_northern_coalition_member_withdrawn = yes } }
+	NOT = { TFF = { VAL_northern_coalition_member_withdrawn = yes } }
 	# The immediate capitulation hook executes before ROOT exposes has_capitulated.
 	# Treat its short reservation as an authoritative transient defeat receipt so
 	# the scripted settlement can terminate the war before a native conference.
@@ -929,19 +950,19 @@ VAL_northern_coalition_campaign_victory_ready = {
 		NOT = { YPR = { exists = yes } }
 		YPR = { has_capitulated = yes }
 		YPR = { is_subject_of = VAL }
-		YPR = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+		YPR = { tag = ROOT has_country_flag = VAL_northern_coalition_capitulation_reserved }
 	}
 	OR = {
 		NOT = { COF = { exists = yes } }
 		COF = { has_capitulated = yes }
 		COF = { is_subject_of = VAL }
-		COF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+		COF = { tag = ROOT has_country_flag = VAL_northern_coalition_capitulation_reserved }
 	}
 	OR = {
 		NOT = { TFF = { exists = yes } }
 		TFF = { has_capitulated = yes }
 		TFF = { is_subject_of = VAL }
-		TFF = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+		TFF = { tag = ROOT has_country_flag = VAL_northern_coalition_capitulation_reserved }
 	}
 }
 
@@ -1198,8 +1219,22 @@ VAL_only_occidian_states = {
 }
 
 # COUNTRY: a defeated member remains reserved until its active allies fall.
+VAL_final_current_receipt = {
+	has_country_flag = VAL_final_capitulation_immediate
+	OR = {
+		tag = ROOT
+		AND = { is_debug = yes VAL = { has_country_flag = VAL_debug_settlement_in_progress } }
+	}
+}
+
 VAL_final_faction_ally_still_fighting = {
 	OR = {
+		any_other_country = {
+			is_in_faction_with = PREV
+			has_war_with = VAL
+			has_capitulated = no
+			NOT = { OR = { AND = { tag = ROOT has_country_flag = VAL_coalition_capitulation_current } VAL_final_current_receipt = yes } }
+		}
 		AND = {
 			tag = STP
 			OR = {
@@ -1208,14 +1243,14 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 				STS = {
 					exists = yes
 					OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 			}
 		}
@@ -1227,14 +1262,14 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 				STP = {
 					exists = yes
 					OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 			}
 		}
@@ -1246,14 +1281,14 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 				STS = {
 					exists = yes
 					OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { has_country_flag = VAL_final_capitulation_immediate }
+					NOT = { VAL_final_current_receipt = yes }
 				}
 			}
 		}
@@ -1266,7 +1301,7 @@ VAL_final_settlement_ready = {
 	# flips has_capitulated. Other members are checked only inside this theatre.
 	OR = {
 		has_capitulated = yes
-		has_country_flag = VAL_final_capitulation_immediate
+		VAL_final_current_receipt = yes
 	}
 	VAL = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { VAL_final_faction_ally_still_fighting = yes }

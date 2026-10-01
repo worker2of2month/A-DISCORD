@@ -1407,6 +1407,7 @@
       "id": "focus_trees",
       "owner_module": "tools.builders.build_adiscord_focus_trees",
       "output_globs": [
+        "common/national_focus/ADISCORD_NAM_focus.txt",
         "common/national_focus/ADISCORD_national_focus_RUS.txt",
         "common/national_focus/ADISCORD_national_focus_VAL.txt",
         "common/national_focus/ADISCORD_national_focus_bookmark.txt",

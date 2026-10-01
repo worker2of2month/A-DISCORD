@@ -78,5 +78,244 @@ ideas = {
 				local_resources_factor = 0.10
 			}
 		}
+
+		NAM_directorate = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = 0.15
+				stability_factor = 0.06
+				research_speed_factor = -0.02
+				industrial_capacity_factory = 0.04
+				ADISCORD_economy_tax_collection_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = 0.04
+			}
+		}
+
+		NAM_councils = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = 0.06
+				stability_factor = 0.1
+				research_speed_factor = 0.02
+				ADISCORD_economy_tax_collection_factor = -0.02
+				ADISCORD_economy_admin_expense_factor = -0.03
+			}
+		}
+
+		NAM_service_republic = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = 0.18
+				stability_factor = 0.08
+				industrial_capacity_factory = 0.06
+				ADISCORD_economy_tax_collection_factor = 0.08
+				ADISCORD_economy_admin_expense_factor = 0.02
+			}
+		}
+
+		NAM_charter_republic = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = 0.1
+				stability_factor = 0.12
+				research_speed_factor = 0.04
+				ADISCORD_economy_tax_collection_factor = -0.02
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		NAM_export_offices = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+			}
+		}
+
+		NAM_refining_network = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				fuel_gain_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		NAM_static_doctrine = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				max_dig_in = 1
+				supply_consumption_factor = -0.04
+				army_speed_factor = -0.03
+			}
+		}
+
+		NAM_mobile_doctrine = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				army_speed_factor = 0.05
+				planning_speed = 0.1
+				supply_consumption_factor = 0.03
+			}
+		}
+
+		NAM_escort_service = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				convoy_escort_efficiency = 0.1
+			}
+		}
+
+		NAM_overseas_service = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				resistance_growth = -0.05
+				compliance_gain = 0.02
+				ADISCORD_economy_admin_expense_factor = 0.03
+			}
+		}
+
+		NAM_wartime_entrenchment = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			cancel = { ADISCORD_nam_resource_war_active = no }
+			modifier = {
+				max_dig_in = 1
+			}
+		}
+
+		NAM_counterstroke_staff = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			cancel = { ADISCORD_nam_resource_war_active = no }
+			modifier = {
+				army_attack_factor = 0.05
+				planning_speed = 0.1
+			}
+		}
+
+		NAM_rebel_depot_maps = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			cancel = { NOT = { has_war_with = SLF } }
+			modifier = {
+			}
+			targeted_modifier = {
+				tag = SLF
+				attack_bonus_against = 0.08
+			}
+		}
+
+		NAM_civil_dividend = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_industrial_complex_factor = 0.08
+				industrial_capacity_factory = -0.03
+				ADISCORD_economy_admin_expense_factor = -0.03
+			}
+		}
+
+		NAM_armed_peace = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				production_speed_industrial_complex_factor = -0.05
+			}
+		}
+
+		NAM_wage_arrears = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				stability_factor = -0.03
+				industrial_capacity_factory = -0.03
+			}
+		}
+
+		NAM_housing_programme = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
 	}
 }

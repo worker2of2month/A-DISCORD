@@ -228,9 +228,8 @@ class TFFCapitulationSettlementTests(unittest.TestCase):
     def test_second_war_requires_actual_nod_capture_and_excludes_first_campaign(self):
         from tools.tests.test_adiscord_stp_preparation import block, matches_conditions
 
-        branch = block(
-            block(block(self.hooks, "on_capitulation_immediate"), "effect"), "if"
-        )
+        branch = next(e.value for e in block(block(self.hooks, "on_capitulation_immediate"), "effect")
+                      if e.key == "if" and "ADISCORD_TFF_become_nod_subject" in repr(e))
         facts = {
             ("TFF", "is_subject", "no"): True,
             ("TFF", "has_war_with", "NOD"): True,
@@ -263,7 +262,7 @@ class TFFCapitulationSettlementTests(unittest.TestCase):
         )
 
         immediate = block(block(self.hooks, "on_capitulation_immediate"), "effect")
-        receipt = next(e.value for e in walk(immediate) if e.key == "set_country_flag")
+        receipt = next(e.value for e in walk(immediate) if e.key == "set_country_flag" and isinstance(e.value, list) and scalar(e.value, "flag") == "TFF_nod_capitulation_reserved")
         marker = scalar(receipt, "flag")
         self.assertEqual(scalar(receipt, "days"), "1")
         late = self.resolved(block(block(self.hooks, "on_capitulation"), "effect"))

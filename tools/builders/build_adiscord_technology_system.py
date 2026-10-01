@@ -1486,6 +1486,122 @@ BRANCHES = (
         ),
     ),
     research_branch(
+        "synthetic_rubber",
+        "ADISCORD_industry.txt",
+        ("industry_folder",),
+        "Синт. резина",
+        "Synthetic Rubber",
+        "resources",
+        (
+            (
+                "synthetic_rubber_plants",
+                "Заводы синтетической резины",
+                "Synthetic Rubber Plants",
+                "synth_oil_experiments",
+                2160,
+                (),
+            ),
+            (
+                "emulsion_polymerization",
+                "Эмульсионная полимеризация",
+                "Emulsion Polymerization",
+                "rubber_processing",
+                2163,
+                (),
+            ),
+            (
+                "rubber_production_lines",
+                "Расширение резинового производства",
+                "Rubber Production Expansion",
+                "improved_oil_plant",
+                2166,
+                (),
+            ),
+            (
+                "selective_polymer_catalysts",
+                "Селективные катализаторы полимеризации",
+                "Selective Polymerization Catalysts",
+                "improved_rubber_processing",
+                2169,
+                (),
+            ),
+            (
+                "integrated_rubber_complexes",
+                "Нефтехимические комплексы",
+                "Integrated Petrochemical Complexes",
+                "advanced_oil_plant",
+                2172,
+                (),
+            ),
+            (
+                "closed_cycle_polymerization",
+                "Замкнутый цикл полимеризации",
+                "Closed-Cycle Polymerization",
+                "advanced_rubber_processing",
+                2175,
+                (),
+            ),
+        ),
+    ),
+    research_branch(
+        "synthetic_oil",
+        "ADISCORD_industry.txt",
+        ("industry_folder",),
+        "Синт. нефть",
+        "Synthetic Oil",
+        "resources",
+        (
+            (
+                "synthetic_oil_synthesis",
+                "Синтез жидких углеводородов",
+                "Liquid Hydrocarbon Synthesis",
+                "oil_processing",
+                2161,
+                (),
+            ),
+            (
+                "synthetic_feedstock_purification",
+                "Очистка синтетического сырья",
+                "Synthetic Feedstock Purification",
+                "improved_oil_processing",
+                2163,
+                ("fuel_gain_factor_from_states = 0.10",),
+            ),
+            (
+                "catalytic_oil_synthesis",
+                "Каталитический синтез нефти",
+                "Catalytic Oil Synthesis",
+                "oil_plant",
+                2166,
+                (),
+            ),
+            (
+                "synthetic_fuel_hydrocracking",
+                "Гидрокрекинг синтетического топлива",
+                "Synthetic Fuel Hydrocracking",
+                "advanced_oil_processing",
+                2169,
+                ("fuel_gain_factor_from_states = 0.10",),
+            ),
+            (
+                "closed_cycle_oil_synthesis",
+                "Замкнутый цикл синтеза нефти",
+                "Closed-Cycle Oil Synthesis",
+                "advanced_oil_plant",
+                2172,
+                (),
+            ),
+            (
+                "synthetic_fuel_process_control",
+                "Автоматическое управление переработкой",
+                "Automated Refining Control",
+                "modern_oil_processing",
+                2175,
+                ("fuel_gain_factor_from_states = 0.10",),
+            ),
+        ),
+    ),
+    research_branch(
         "public_finance",
         "ADISCORD_industry.txt",
         ('industry_folder',),
@@ -5360,6 +5476,8 @@ MAIN_BRANCH_KEYS_BY_FOLDER = {
         'public_finance',
         'reconstruction',
         'resources',
+        'synthetic_rubber',
+        'synthetic_oil',
     ],
     "electronics_folder": ['computing', 'power', 'signals'],
     "infantry_folder": [
@@ -6124,6 +6242,7 @@ ENABLE_EQUIPMENT = {
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
+    "ADISCORD_tech_synthetic_oil_synthesis": ("ADISCORD_tech_synthetic_rubber_plants",),
     "ADISCORD_tech_casualty_evacuation": ('ADISCORD_tech_combat_engineering_sections',),
     "ADISCORD_tech_battle_damage_survey_teams": (
         'ADISCORD_tech_standardized_field_tool_chests',
@@ -6213,7 +6332,13 @@ COMMON_STARTING_ROOTS = tuple(
         for branch_key in branch_keys
         # These programmes begin with research during the campaign. Making
         # their UI headings prominent must not grant their roots at startup.
-        if branch_key not in {"officer_training", "bomber_maritime", "combat_medicine"}
+        if branch_key not in {
+            "officer_training",
+            "bomber_maritime",
+            "combat_medicine",
+            "synthetic_rubber",
+            "synthetic_oil",
+        }
         for tech in BRANCH_BY_KEY[branch_key].techs[:4 if branch_key == "small_arms" else 1]
     )
 )
@@ -6551,11 +6676,11 @@ ENABLE_BUILDINGS = {
     "ADISCORD_tech_microbial_tailings_leaching": (
         ("ADISCORD_metallurgical_complex", 1),
     ),
-    # Rubber and fuel infrastructure lost when common/technologies was replaced.
+    # Storage and the absolute regional caps of petrochemical plants.
     "ADISCORD_tech_grid_rationing": (("fuel_silo", 3),),
-    "ADISCORD_tech_synthetic_resource_cycles": (("synthetic_refinery", 1),),
-    "ADISCORD_tech_rare_earth_solvent_loops": (("synthetic_refinery", 2),),
-    "ADISCORD_tech_carbon_feedstock_cracking": (("synthetic_refinery", 3),),
+    "ADISCORD_tech_synthetic_rubber_plants": (("synthetic_refinery", 1),),
+    "ADISCORD_tech_rubber_production_lines": (("synthetic_refinery", 2),),
+    "ADISCORD_tech_integrated_rubber_complexes": (("synthetic_refinery", 3),),
     # Air defence and detection caps.
     "ADISCORD_tech_radar_laying": (("anti_air_building", 1),),
     "ADISCORD_tech_point_defense_aa": (("anti_air_building", 3),),
@@ -6591,11 +6716,27 @@ BUILDING_RESOURCE_UPGRADES = {
     ),
     "ADISCORD_tech_rare_earth_solvent_loops": (
         ("ADISCORD_electrolysis_complex", "aluminium", 2),
-        ("synthetic_refinery", "rubber", 1),
     ),
     "ADISCORD_tech_strategic_element_reclamation": (
         ("ADISCORD_electrolysis_complex", "aluminium", 1),
-        ("synthetic_refinery", "rubber", 2),
+    ),
+    "ADISCORD_tech_emulsion_polymerization": (
+        ("synthetic_refinery", "rubber", 1),
+    ),
+    "ADISCORD_tech_selective_polymer_catalysts": (
+        ("synthetic_refinery", "rubber", 1),
+    ),
+    "ADISCORD_tech_closed_cycle_polymerization": (
+        ("synthetic_refinery", "rubber", 1),
+    ),
+    "ADISCORD_tech_synthetic_oil_synthesis": (
+        ("synthetic_refinery", "oil", 1),
+    ),
+    "ADISCORD_tech_catalytic_oil_synthesis": (
+        ("synthetic_refinery", "oil", 1),
+    ),
+    "ADISCORD_tech_closed_cycle_oil_synthesis": (
+        ("synthetic_refinery", "oil", 1),
     ),
     "ADISCORD_tech_automated_deep_mining": (
         ("ADISCORD_strategic_mining_complex", "tungsten", 1),
@@ -7203,6 +7344,54 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "synthetic_rubber_plants": (
+        "Нефтехимические заводы выпускают синтетическую резину и сопутствующее топливо",
+        "Petrochemical plants produce synthetic rubber and fuel as a by-product",
+    ),
+    "emulsion_polymerization": (
+        "Устойчивая эмульсия повышает выход резины при полимеризации",
+        "A stable emulsion increases rubber yield during polymerization",
+    ),
+    "rubber_production_lines": (
+        "Дополнительные производственные линии позволяют расширять нефтехимические площадки",
+        "Additional production lines allow petrochemical sites to expand",
+    ),
+    "selective_polymer_catalysts": (
+        "Селективные катализаторы уменьшают потери сырья при выпуске резины",
+        "Selective catalysts reduce feedstock losses in rubber production",
+    ),
+    "integrated_rubber_complexes": (
+        "Общие коммуникации и переработка побочных продуктов позволяют расширить нефтехимические комплексы",
+        "Shared utilities and by-product processing allow larger petrochemical complexes",
+    ),
+    "closed_cycle_polymerization": (
+        "Возврат непрореагировавшего сырья повышает выпуск резины",
+        "Recovering unreacted feedstock increases rubber output",
+    ),
+    "synthetic_oil_synthesis": (
+        "Открывает выпуск нефти на нефтехимических заводах. Требует технологию «Заводы синтетической резины»; число заводов в регионе расширяется в резиновой ветке",
+        "Enables oil output at petrochemical plants. Requires Synthetic Rubber Plants; regional plant capacity is expanded in the rubber branch",
+    ),
+    "synthetic_feedstock_purification": (
+        "Очистка сырья увеличивает прямой выпуск топлива заводами; количество нефти не меняется",
+        "Feedstock purification increases direct fuel output from refineries without changing oil output",
+    ),
+    "catalytic_oil_synthesis": (
+        "Улучшенные катализаторы повышают выпуск синтетической нефти",
+        "Improved catalysts increase synthetic oil output",
+    ),
+    "synthetic_fuel_hydrocracking": (
+        "Гидрокрекинг повышает прямой выпуск топлива заводами; количество нефти не меняется",
+        "Hydrocracking increases direct fuel output from refineries without changing oil output",
+    ),
+    "closed_cycle_oil_synthesis": (
+        "Повторная переработка остаточных фракций повышает выпуск синтетической нефти",
+        "Reprocessing residual fractions increases synthetic oil output",
+    ),
+    "synthetic_fuel_process_control": (
+        "Точное управление переработкой повышает прямой выпуск топлива заводами; количество нефти не меняется",
+        "Precise process control increases direct fuel output from refineries without changing oil output",
+    ),
     "rifling_alignment": (
         "Точная соосность канала ствола уменьшает рассеивание пуль",
         "Precise bore alignment reduces bullet dispersion",
@@ -7510,8 +7699,8 @@ BUILDING_DISPLAY_NAMES = {
         "Power Generation Complex",
     ),
     "synthetic_refinery": (
-        "завод синтетических материалов",
-        "Synthetic Materials Plant",
+        "нефтехимический завод",
+        "Petrochemical Plant",
     ),
     "fuel_silo": ("топливное хранилище", "Fuel Silo"),
     "anti_air_building": ("региональную ПВО", "State Anti-Air"),
@@ -7568,6 +7757,22 @@ TECHNICAL_TECH_DESCRIPTIONS.update(
 
 def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> list[str]:
     notes: list[str] = []
+    if branch.key in {"synthetic_rubber", "synthetic_oil"}:
+        tech_id = branch.techs[index].id
+        for _, level in ENABLE_BUILDINGS.get(tech_id, ()):
+            notes.append(
+                f"Нефтехимические заводы: до {level} в регионе."
+                if is_ru
+                else f"Petrochemical plants: up to {level} per state."
+            )
+        for _, resource, amount in BUILDING_RESOURCE_UPGRADES.get(tech_id, ()):
+            frame = {"rubber": 3, "oil": 1}[resource]
+            notes.append(
+                f"§G+{amount}§! £resources_strip|{frame} с каждого действующего и будущего завода."
+                if is_ru
+                else f"§G+{amount}§! £resources_strip|{frame} from each existing and future plant."
+            )
+        return notes
     if branch.key == "small_arms" and index % 4:
         model = branch.techs[index - index % 4]
         equipment = ENABLE_EQUIPMENT[model.id][0]
@@ -7756,7 +7961,14 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
 
     entries = [f"factor = {n(base)}"]
     profile = branch.profile
-    if profile in {"construction", "resources", "civil", "rail"} and not (
+    if branch.key in {"synthetic_rubber", "synthetic_oil"}:
+        entries.extend(
+            (
+                "modifier = { factor = 0.30 ADISCORD_economy_ai_is_crisis = yes }",
+                "modifier = { factor = 0.25 num_of_civilian_factories < 5 }",
+            )
+        )
+    elif profile in {"construction", "resources", "civil", "rail"} and not (
         branch.key == "reconstruction" and year > 2160
     ):
         entries.append(

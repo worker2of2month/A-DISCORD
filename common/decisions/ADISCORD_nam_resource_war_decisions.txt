@@ -48,3 +48,476 @@ ADISCORD_nam_prewar_defence_category = {
 		ai_will_do = { base = 1000 }
 	}
 }
+
+NAM_national_programmes = {
+	NAM_sign_compact = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_district_guarantees
+			NOT = { has_country_flag = NAM_district_compact }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_started }
+			NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_compact_signable_tt
+				NAM_can_sign_compact = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_75_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 500
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						custom_trigger_tooltip = {
+							tooltip = NAM_compact_signable_tt
+							NAM_can_sign_compact = yes
+						}
+						NOT = { has_political_power < 75 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 500
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -75
+				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				custom_effect_tooltip = NAM_compact_paid_tt
+				hidden_effect = { set_country_flag = NAM_district_compact }
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	NAM_export_fuel = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_export_quays
+		}
+		available = {
+			NAM_country_operable = yes
+			owns_state = 700
+			controls_state = 700
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_25_0_5000
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_fuel < 5000 }
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						owns_state = 700
+						controls_state = 700
+						NOT = { has_political_power < 25 }
+						NOT = { has_fuel < 5000 }
+					}
+				}
+				add_political_power = -25
+				add_fuel = -5000
+				custom_effect_tooltip = NAM_receive_250_tt
+				hidden_effect = { NAM_receive_250 = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	NAM_workshop_batch = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_domestic_refining
+		}
+		available = {
+			NAM_country_operable = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_0_3000
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { has_fuel < 3000 }
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						NOT = { has_political_power < 35 }
+						NOT = { has_fuel < 3000 }
+					}
+				}
+				add_political_power = -35
+				add_fuel = -3000
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 120
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_supply_order = {
+		icon = generic_industry
+		visible = {
+			OR = {
+				has_completed_focus = NAM_quartermaster
+				has_completed_focus = NAM_emergency_writ
+			}
+		}
+		available = {
+			NAM_country_operable = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_25_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 500
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						NOT = { has_political_power < 25 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 500
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -25
+				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_emergency_arsenal = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_emergency_writ
+		}
+		available = {
+			NAM_country_operable = yes
+			ADISCORD_nam_resource_war_active = yes
+			has_war = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 500
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						ADISCORD_nam_resource_war_active = yes
+						has_war = yes
+						NOT = { has_political_power < 35 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 500
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -35
+				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 2000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 100
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_counterinsurgency = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_emergency_writ
+		}
+		available = {
+			NAM_country_operable = yes
+			ADISCORD_nam_resource_war_active = yes
+			has_war_with = SLF
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_75_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 75 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 500
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = yes
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						ADISCORD_nam_resource_war_active = yes
+						has_war_with = SLF
+						NOT = { has_political_power < 75 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 500
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -75
+				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				add_timed_idea = {
+					idea = NAM_rebel_depot_maps
+					days = 60
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1000
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 80
+		}
+	}
+
+	NAM_relief_batch = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_relief_columns
+		}
+		available = {
+			NAM_country_operable = yes
+			ADISCORD_nam_resource_war_active = yes
+			has_war = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_0_3000
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			NOT = { has_fuel < 3000 }
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						ADISCORD_nam_resource_war_active = yes
+						has_war = yes
+						NOT = { has_political_power < 35 }
+						NOT = { has_fuel < 3000 }
+					}
+				}
+				add_political_power = -35
+				add_fuel = -3000
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 800
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 60
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	NAM_veteran_housing = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_civil_dividend
+		}
+		available = {
+			NAM_country_operable = yes
+			has_war = no
+			NOT = { has_idea = NAM_housing_programme }
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_250_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 250
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						has_war = no
+						NOT = { has_idea = NAM_housing_programme }
+						NOT = { has_political_power < 35 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 250
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -35
+				hidden_effect = { ADISCORD_economy_spend_250 = yes }
+				add_timed_idea = {
+					idea = NAM_housing_programme
+					days = 60
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_postwar_rearmament = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_armed_peace
+		}
+		available = {
+			NAM_country_operable = yes
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_35_500_0
+		custom_cost_trigger = {
+			NOT = { has_political_power < 35 }
+			check_variable = {
+				var = ADISCORD_economy_treasury
+				value = 500
+				compare = greater_than_or_equals
+			}
+		}
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			if = {
+
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						NOT = { has_political_power < 35 }
+						check_variable = {
+							var = ADISCORD_economy_treasury
+							value = 500
+							compare = greater_than_or_equals
+						}
+					}
+				}
+				add_political_power = -35
+				hidden_effect = { ADISCORD_economy_spend_500 = yes }
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 2000
+					producer = NAM
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 80
+					producer = NAM
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	NAM_defend_fields = {
+		icon = generic_fortify_the_borders
+		is_good = no
+		activation = { always = no }
+		available = { hidden_trigger = { always = no } }
+		visible = { ADISCORD_nam_resource_war_active = yes }
+		days_mission_timeout = 420
+		selectable_mission = no
+		fire_only_once = yes
+		timeout_effect = { }
+		cancel_trigger = { ADISCORD_nam_resource_war_active = no }
+	}
+}

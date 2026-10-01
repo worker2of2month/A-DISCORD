@@ -7,3 +7,15 @@ ADISCORD_nam_prewar_defence_category = {
 		NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
 	}
 }
+
+NAM_national_programmes = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	visible = {
+		OR = {
+			has_completed_focus = NAM_inventory
+			ADISCORD_nam_resource_war_active = yes
+			has_global_flag = ADISCORD_nam_resource_war_nam_victory
+		}
+	}
+}
