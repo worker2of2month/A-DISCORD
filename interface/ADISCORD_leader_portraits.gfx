@@ -177,6 +177,17 @@ spriteTypes = {
 		name = "GFX_portrait_STP_Military_Collegium"
 		texturefile = "gfx/leaders/STP/portrait_STP_Military_Collegium.png"
 	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_Arkady_Velsky"
+		texturefile = "gfx/leaders/STP/portrait_STP_Arkady_Velsky.png"
+	}
+
+	spriteType = {
+		name = "GFX_portrait_STP_Arkady_Velsky_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Arkady_Velsky.png"
+	}
+
 	###SRP
 	spriteType = {
 		name = "GFX_portrait_SRP_Federal_Council"

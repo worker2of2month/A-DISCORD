@@ -236,8 +236,8 @@ characters = {
 		name = STP_Arkady_Velsky
 		portraits = {
 			army = {
-				large = GFX_Portrait_STP_Generic_navy_1
-				small = GFX_Portrait_STP_Generic_navy_1_small
+				large = GFX_portrait_STP_Arkady_Velsky
+				small = GFX_portrait_STP_Arkady_Velsky_small
 			}
 		}
 		navy_leader = {
