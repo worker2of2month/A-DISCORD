@@ -1,4 +1,5 @@
 ﻿l_russian:
+ STP_Arkady_Velsky:0 "Аркадий Вельский"
  STP_party_minister_change_allowed_tt:0 "Партийных министров на пути Шабрата можно менять только после начала гражданской войны или по особому разрешению."
  # Focus filters
  FOCUS_FILTER_STP_PREPARATION_SLOTS:0 "Ячейки подготовки"

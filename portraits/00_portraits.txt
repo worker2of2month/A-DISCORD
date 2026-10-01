@@ -92,6 +92,43 @@ continent = {
 	}
 }
 
+# Explicit pools keep both Stelander claimants from using continental portraits.
+STP = {
+	navy = {
+		male = {
+			"GFX_Portrait_STP_Generic_navy_1"
+		}
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_STP_Generic_land_1"
+			"GFX_Portrait_STP_Generic_land_2"
+			"GFX_Portrait_STP_Generic_land_3"
+			"GFX_Portrait_STP_Generic_land_4"
+			"GFX_Portrait_STP_Generic_land_5"
+		}
+	}
+}
+
+STS = {
+	navy = {
+		male = {
+			"GFX_Portrait_STP_Generic_navy_1"
+		}
+	}
+
+	army = {
+		male = {
+			"GFX_Portrait_STP_Generic_land_1"
+			"GFX_Portrait_STP_Generic_land_2"
+			"GFX_Portrait_STP_Generic_land_3"
+			"GFX_Portrait_STP_Generic_land_4"
+			"GFX_Portrait_STP_Generic_land_5"
+		}
+	}
+}
+
 # Shared Vorkerland military portrait pool. Random unit leaders are selected
 # from portraits/*.txt by country tag; graphical_culture_2d does not control it.
 WRK = {

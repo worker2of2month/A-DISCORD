@@ -16,6 +16,7 @@ recruit_character = STP_Edmund_Ravel
 recruit_character = STP_Viktor_Marent
 recruit_character = STP_Severin_Drake
 recruit_character = STP_August_Veil
+recruit_character = STP_Arkady_Velsky
 
 # Dormant claimants remain on the party's STP through the authored split.
 recruit_character = STP_Cyan_Crowe

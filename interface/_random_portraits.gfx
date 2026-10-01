@@ -157,6 +157,68 @@ spriteTypes = {
 	}
 
 
+	### STELANDER
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_1"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_1_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_2"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_2.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_2_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_2.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_3"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_3.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_3_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_3.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_4"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_4.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_4_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_4.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_5"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_5.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_land_5_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_5.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_navy_1"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_navy_1.png"
+	}
+
+	spriteType = {
+		name = "GFX_Portrait_STP_Generic_navy_1_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_generic_navy_1.png"
+	}
+
 	### VORKERLAND
 
 	spriteType = {

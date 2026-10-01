@@ -232,6 +232,25 @@ characters = {
 		}
 	}
 
+	STP_Arkady_Velsky = {
+		name = STP_Arkady_Velsky
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_navy_1
+				small = GFX_Portrait_STP_Generic_navy_1_small
+			}
+		}
+		navy_leader = {
+			traits = { }
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			maneuvering_skill = 1
+			coordination_skill = 1
+			legacy_id = -1
+		}
+	}
+
 	STP_ilya_gornin = {
 		name = STP_ilya_gornin
 		portraits = {
@@ -262,33 +281,33 @@ characters = {
 
 	STP_Pavel_Gromin = {
 		name = STP_Pavel_Gromin
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_1 } }
 	}
 
 	STP_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_8 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_2 } }
 	}
 
 	STP_Oleg_Vershin = {
 		name = STP_Oleg_Vershin
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_9 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_4 } }
 	}
 
 	# Each claimant owns dormant staff; the shared receipt permits one roster.
 	STS_Pavel_Gromin = {
 		name = STP_Pavel_Gromin
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_7 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_1 } }
 	}
 
 	STS_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_8 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_2 } }
 	}
 
 	STS_Oleg_Vershin = {
 		name = STP_Oleg_Vershin
-		portraits = { army = { large = GFX_Portrait_Forul_Generic_9 } }
+		portraits = { army = { large = GFX_Portrait_STP_Generic_land_4 } }
 	}
 
 	STP_Pavel_Lanskoy = {
