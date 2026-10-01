@@ -1334,4 +1334,74 @@ leader_traits = {
 		experience_gain_army = 0.10
 		supply_consumption_factor = -0.05
 	}
+
+	minister_trait_SHL_cabinet_secretary = {
+		random = no
+		political_power_gain = 0.05
+		stability_factor = 0.02
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_city_chair = {
+		random = no
+		stability_factor = 0.04
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_state_dispatcher = {
+		random = no
+		production_factory_efficiency_gain_factor = 0.05
+		political_power_gain = 0.02
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_house_regent = {
+		random = no
+		political_power_gain = 0.06
+		consumer_goods_factor = 0.01
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_shift_delegate = {
+		random = no
+		industrial_capacity_factory = 0.03
+		stability_factor = 0.01
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_guard_coordinator = {
+		random = no
+		army_org_factor = 0.03
+		training_time_army_factor = -0.03
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_furnace_accountant = {
+		random = no
+		production_factory_efficiency_gain_factor = 0.04
+		production_speed_industrial_complex_factor = 0.03
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_shift_physician = {
+		random = no
+		casualty_trickleback = 0.05
+		mobilization_speed = 0.03
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_master_instructor = {
+		random = no
+		research_speed_factor = 0.02
+		training_time_army_factor = -0.03
+		ai_will_do = { factor = 1 }
+	}
+
+	minister_trait_SHL_rail_observer = {
+		random = no
+		decryption_factor = 0.03
+		encryption_factor = 0.03
+		ai_will_do = { factor = 1 }
+	}
+
 }

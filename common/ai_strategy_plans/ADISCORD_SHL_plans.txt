@@ -10,14 +10,21 @@ SHL_furnaces_plan = {
 	ai_national_focuses = {
 		SHL_law_of_continuous_fire
 		SHL_census_of_nine
-		SHL_houses_railway
-		SHL_school_of_masters
-		SHL_careful_smelting
-		SHL_repair_without_extinction
+		SHL_railway_guard
+		SHL_factory_militia
+		SHL_campaign_logistics
+		SHL_southern_watch
 		SHL_reserve_for_next_shift
 		SHL_conclave_rules
 		SHL_open_conclave
 		SHL_city_charters
+		SHL_city_war_mandate
+		SHL_no_more_rations
+		SHL_houses_railway
+		SHL_school_of_masters
+		SHL_careful_smelting
+		SHL_repair_without_extinction
+		SHL_mobilise_furnaces
 		SHL_common_industrial_account
 		SHL_engineer_society
 		SHL_right_to_land
@@ -28,19 +35,17 @@ SHL_furnaces_plan = {
 		SHL_first_pour_focus
 		SHL_tenth_voice
 		SHL_rights_without_fire
-		SHL_railway_guard
-		SHL_factory_militia
 		SHL_quarter_listening
 		SHL_heralds_table
 		SHL_shift_arbitration
-		SHL_southern_watch
 		SHL_water_question
 		SHL_veyr_duties
-		SHL_mobilise_furnaces
 		SHL_council_of_cities
 		SHL_fire_and_water
 		SHL_workers_brigades
 		SHL_southern_compact
+		SHL_peace_has_a_price
+		SHL_southern_horizon
 		SHL_factory_air_defence
 		SHL_industrial_evacuation
 	}

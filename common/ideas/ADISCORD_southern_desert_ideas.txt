@@ -88,6 +88,73 @@ ideas = {
 				attrition = -0.04
 			}
 		}
+		SHL_restored_house_guard = {
+			picture = generic_fortify_the_borders
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { army_org_factor = 0.05 }
+		}
+
+		SHL_unregistered_quarters = {
+			picture = generic_manpower_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.03
+				conscription_factor = -0.05
+			}
+		}
+
+		SHL_hereditary_seats = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.10
+				consumer_goods_factor = 0.03
+			}
+		}
+		SHL_divided_guard = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = -0.05
+				planning_speed = -0.15
+			}
+		}
+		SHL_external_freight = {
+			picture = generic_build_infrastructure
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = 0.08
+			}
+		}
+		SHL_prepared_columns = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.15
+				army_org_regain = 0.08
+			}
+		}
+		SHL_forced_columns = {
+			picture = generic_oppression
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				supply_consumption_factor = 0.10
+			}
+		}
 		# Shahrabad crisis, war and course spirits. Timed spirits carry their
 		# own duration; course spirits are permanent results of a finale.
 		SHL_martial_law = {

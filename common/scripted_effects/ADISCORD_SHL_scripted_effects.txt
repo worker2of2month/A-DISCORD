@@ -105,6 +105,9 @@ SHL_initialize_furnaces = {
 		SHL_refresh_furnaces = yes
 		SHL_schedule_cycle = yes
 		country_event = { id = ADISCORD_SHL.2 days = 2 }
+		country_event = { id = ADISCORD_SHL.110 days = 168 }
+		country_event = { id = ADISCORD_SHL.120 days = 14 }
+		country_event = { id = ADISCORD_SHL.121 days = 70 }
 	}
 }
 
@@ -531,6 +534,7 @@ SHL_cancel_operation = {
 }
 
 SHL_refresh_furnaces = {
+	SHL_refresh_starting_institutions = yes
 	SHL_reconcile_obligation = yes
 	set_variable = { var = SHL_running_count value = 0 }
 	set_variable = { var = SHL_house_votes value = 0 }
@@ -1085,6 +1089,7 @@ SHL_commit_house_course = {
 	if = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 1 }
+		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
 		add_to_variable = { var = SHL_unrest value = 10 }
 		subtract_from_variable = { var = SHL_house_pressure value = 15 }
@@ -1115,6 +1120,7 @@ SHL_commit_city_course = {
 	if = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 2 }
+		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0.03 }
 		add_to_variable = { var = SHL_house_pressure value = 15 }
 		SHL_clamp_tensions = yes
@@ -1180,6 +1186,7 @@ SHL_commit_state_course = {
 	if = {
 		limit = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
 		set_variable = { var = SHL_political_course value = 3 }
+		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_pp_gain value = 0.10 }
 		add_to_variable = { var = SHL_house_pressure value = 20 }
 		SHL_clamp_tensions = yes
@@ -1394,6 +1401,7 @@ SHL_update_tensions = {
 }
 
 SHL_check_crises = {
+	SHL_close_lost_mazar_threat = yes
 	if = {
 		limit = { SHL_strike_ready = yes }
 		set_country_flag = SHL_strike_active
@@ -1556,6 +1564,7 @@ SHL_commit_regency_course = {
 			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 		}
 		set_variable = { var = SHL_political_course value = 4 }
+		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0.10 }
 		set_country_flag = SHL_regency_path
@@ -1583,6 +1592,7 @@ SHL_commit_commune_course = {
 			NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
 		}
 		set_variable = { var = SHL_political_course value = 5 }
+		SHL_form_course_cabinet = yes
 		set_variable = { var = SHL_course_stability value = 0.05 }
 		set_variable = { var = SHL_treasury_capacity_bonus value = 0 }
 		set_country_flag = SHL_commune_path
@@ -1785,13 +1795,18 @@ SHL_finish_guard_order = {
 		if = {
 			limit = {
 				SHL_country_operable = yes
-				294 = {
+				699 = {
 					is_owned_by = SHL
 					is_controlled_by = SHL
 				}
 			}
 			SHL_ensure_levy_template = yes
-			294 = { SHL_create_levy = yes }
+			699 = { SHL_create_levy = yes }
+			if = {
+				limit = { NOT = { has_country_flag = SHL_first_guard_reported } }
+				set_country_flag = SHL_first_guard_reported
+				country_event = { id = ADISCORD_SHL.122 }
+			}
 			SHL_clear_guard_receipt = yes
 		}
 		else = { SHL_cancel_guard_order = yes }
@@ -1802,7 +1817,7 @@ SHL_finish_guard_order = {
 # brigades or the private guards supply the recruits and their rifles.
 SHL_raise_paid_levies_2 = {
 	SHL_ensure_levy_template = yes
-	294 = {
+	699 = {
 		if = {
 			limit = {
 				is_owned_by = SHL
@@ -1816,7 +1831,7 @@ SHL_raise_paid_levies_2 = {
 
 SHL_raise_paid_levies_3 = {
 	SHL_raise_paid_levies_2 = yes
-	294 = {
+	699 = {
 		if = {
 			limit = {
 				is_owned_by = SHL
@@ -1966,6 +1981,7 @@ SHL_start_kyz_war = {
 		286 = { SHL_kyz_raise_qanat_guard = yes }
 		set_variable = { var = SHL_war_kyz value = 1 }
 		set_country_flag = SHL_war_kyz_clock
+		SHL_use_campaign_reserve = yes
 		declare_war_on = {
 			target = KYZ
 			type = take_state_focus
@@ -1982,6 +1998,7 @@ SHL_close_kyz_war = {
 	}
 	set_variable = { var = SHL_war_kyz value = 0 }
 	clr_country_flag = SHL_war_kyz_clock
+	SHL_clean_campaign = yes
 }
 
 # STATE scope; transfers only land KYZ still owns.
@@ -2162,6 +2179,7 @@ SHL_start_glp_war = {
 		708 = { SHL_glp_raise_prismatic_guard = yes }
 		set_variable = { var = SHL_war_glp value = 1 }
 		set_country_flag = SHL_war_glp_clock
+		SHL_use_campaign_reserve = yes
 		if = {
 			limit = { has_completed_focus = SHL_key_to_sea }
 			set_country_flag = SHL_war_glp_sea_goal
@@ -2190,6 +2208,7 @@ SHL_close_glp_war = {
 	}
 	set_variable = { var = SHL_war_glp value = 0 }
 	clr_country_flag = SHL_war_glp_clock
+	SHL_clean_campaign = yes
 }
 
 # STATE scope; transfers only land GLP still owns.
@@ -2269,6 +2288,9 @@ SHL_mazar_pay_final = {
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
 		set_variable = { var = SHL_mazar_state value = 3 }
+		set_variable = { var = SHL_mzr_outcome value = 6 }
+		SHL_cancel_mzr_mobilization = yes
+		SHL_clean_campaign = yes
 	}
 }
 
@@ -2291,6 +2313,9 @@ SHL_mazar_buyout = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
 		add_political_power = -50
 		set_variable = { var = SHL_mazar_state value = 3 }
+		set_variable = { var = SHL_mzr_outcome value = 6 }
+		SHL_cancel_mzr_mobilization = yes
+		SHL_clean_campaign = yes
 		if = {
 			limit = { has_active_mission = SHL_mazar_deadline }
 			remove_mission = SHL_mazar_deadline
@@ -2330,6 +2355,7 @@ SHL_start_mzr_war = {
 		set_variable = { var = SHL_mazar_state value = 4 }
 		set_variable = { var = SHL_war_mzr value = 1 }
 		set_country_flag = SHL_war_mzr_clock
+		SHL_use_campaign_reserve = yes
 		SHL = { SHL_reserve_mzr_principal = yes }
 		MZR = { SHL_reserve_mzr_principal = yes }
 		MZR = {
@@ -2356,11 +2382,21 @@ SHL_start_mzr_war = {
 				}
 			}
 		}
-		MZR = {
+		if = {
+			limit = { has_country_flag = SHL_mzr_offensive }
 			declare_war_on = {
-				target = SHL
+				target = MZR
 				type = take_state_focus
-				generator = { 707 }
+				generator = { 269 273 }
+			}
+		}
+		else = {
+		MZR = {
+				declare_war_on = {
+					target = SHL
+					type = take_state_focus
+					generator = { 707 }
+				}
 			}
 		}
 		KYZ = {
@@ -2422,6 +2458,8 @@ SHL_close_mzr_war = {
 	set_variable = { var = SHL_war_mzr value = 0 }
 	set_variable = { var = SHL_mazar_state value = 3 }
 	clr_country_flag = SHL_war_mzr_clock
+	clr_country_flag = SHL_mzr_offensive
+	SHL_clean_campaign = yes
 	SHL = { SHL_release_mzr_principal = yes }
 	MZR = { SHL_release_mzr_principal = yes }
 }
@@ -2456,6 +2494,7 @@ SHL_mzr_war_victory = {
 	if = {
 		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
 		SHL_close_mzr_war = yes
+		set_variable = { var = SHL_mzr_outcome value = 1 }
 		269 = { SHL_take_state_from_mzr = yes }
 		273 = { SHL_take_state_from_mzr = yes }
 		add_timed_idea = { idea = SHL_victory_over_ration days = 365 }
@@ -2469,6 +2508,7 @@ SHL_mzr_war_defeat = {
 	if = {
 		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
 		SHL_close_mzr_war = yes
+		set_variable = { var = SHL_mzr_outcome value = 4 }
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_treasury value = 0 compare = greater_than } }
 			set_variable = { var = SHL_mazar_requisition value = ADISCORD_economy_treasury }
@@ -2485,6 +2525,7 @@ SHL_mzr_war_armistice = {
 	if = {
 		limit = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
 		SHL_close_mzr_war = yes
+		set_variable = { var = SHL_mzr_outcome value = 5 }
 		SHL_refresh_furnaces = yes
 	}
 }
@@ -2817,6 +2858,10 @@ SHL_choose_relief_recipient = {
 SHL_reconcile_obligation = {
 	if = {
 		limit = { has_variable = SHL_obligation_kind }
+		if = {
+			limit = { check_variable = { var = SHL_obligation_kind value = 6 compare = equals } }
+			set_variable = { var = SHL_obligation_course value = SHL_political_course }
+		}
 		# Ratification preserves the provisional programme and its paid work.
 		if = {
 			limit = {
@@ -2912,7 +2957,10 @@ SHL_check_obligation_owner = {
 		limit = {
 			OR = {
 				NOT = { is_owned_by = SHL }
-				NOT = { check_variable = { var = SHL_furnace_owner value = SHL.SHL_obligation_owner compare = equals } }
+				AND = {
+					SHL = { NOT = { check_variable = { var = SHL_obligation_kind value = 6 compare = equals } } }
+					NOT = { check_variable = { var = SHL_furnace_owner value = SHL.SHL_obligation_owner compare = equals } }
+				}
 			}
 		}
 		SHL = { SHL_cancel_obligation = yes }
@@ -3139,6 +3187,20 @@ SHL_complete_obligation = {
 		if = {
 			limit = { check_variable = { var = SHL_obligation_recipient value = 295 compare = equals } }
 			295 = { SHL_deliver_relief = yes }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_obligation_kind value = 6 compare = equals } }
+		set_variable = { var = SHL_campaign_reserve value = 1 }
+		if = {
+			limit = {
+				OR = {
+					has_war_with = KYZ
+					has_war_with = GLP
+					has_war_with = MZR
+				}
+			}
+			SHL_use_campaign_reserve = yes
 		}
 	}
 	if = {
@@ -3417,5 +3479,569 @@ SHL_close_external_mzr_war = {
 		}
 		set_variable = { var = SHL_war_mzr value = 0 }
 		SHL_close_mzr_war = yes
+		set_variable = { var = SHL_mzr_outcome value = 5 }
+	}
+}
+
+# Starting institutions are removed through their actual reforms, never a timer.
+SHL_refresh_starting_institutions = {
+	if = {
+		limit = {
+			has_idea = SHL_hereditary_seats
+			OR = {
+				has_completed_focus = SHL_admit_tenth_house
+				has_completed_focus = SHL_rights_without_fire
+				has_completed_focus = SHL_state_furnaces
+				has_completed_focus = SHL_restore_privileges
+				has_completed_focus = SHL_furnaces_to_workers
+			}
+		}
+		remove_ideas = SHL_hereditary_seats
+		ADISCORD_economy_mark_dirty = yes
+	}
+	if = {
+		limit = {
+			has_idea = SHL_external_freight
+			has_completed_focus = SHL_own_transport
+			OR = {
+				check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
+				SHL_kyz_counterpart = no
+			}
+			OR = {
+				check_variable = { var = SHL_veyr_crisis value = 2 compare = greater_than_or_equals }
+				SHL_glp_counterpart = no
+			}
+		}
+		remove_ideas = SHL_external_freight
+	}
+}
+
+SHL_begin_campaign_convoy = {
+	if = {
+		limit = {
+			SHL_can_prepare_columns = yes
+			FROM = { SHL_obligation_site_ready = yes }
+		}
+		SHL_open_obligation = yes
+		set_variable = { var = SHL_obligation_kind value = 6 }
+		set_variable = { var = SHL_obligation_deposit value = 120 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+	}
+}
+
+# The convoy is consumed by one war only. Unused material can be demobilised.
+SHL_use_campaign_reserve = {
+	if = {
+		limit = { has_variable = SHL_campaign_reserve }
+		clear_variable = SHL_campaign_reserve
+		add_timed_idea = { idea = SHL_prepared_columns days = 90 }
+	}
+	if = {
+		limit = { has_country_flag = SHL_forced_march_ready }
+		clr_country_flag = SHL_forced_march_ready
+		add_timed_idea = { idea = SHL_forced_columns days = 45 }
+	}
+}
+
+SHL_demobilise_convoy = {
+	if = {
+		limit = { has_variable = SHL_campaign_reserve }
+		clear_variable = SHL_campaign_reserve
+		clr_country_flag = SHL_forced_march_ready
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 1500
+			producer = SHL
+		}
+	}
+}
+
+SHL_begin_mzr_mobilization = {
+	if = {
+		limit = { SHL_can_march_on_mazar = yes }
+		set_country_flag = SHL_mzr_mobilizing
+		MZR = { country_event = { id = ADISCORD_SHL.111 } }
+	}
+}
+
+SHL_finish_mzr_mobilization = {
+	if = {
+		limit = { has_country_flag = SHL_mzr_mobilizing }
+		clr_country_flag = SHL_mzr_mobilizing
+		if = {
+			limit = {
+				SHL_can_march_on_mazar = yes
+			}
+			set_variable = { var = SHL_mazar_state value = 5 }
+			if = {
+				limit = { has_active_mission = SHL_mazar_deadline }
+				remove_mission = SHL_mazar_deadline
+			}
+			set_country_flag = SHL_mzr_offensive
+			SHL_start_mzr_war = yes
+		}
+		else = { add_political_power = 50 }
+	}
+}
+
+SHL_clean_campaign = {
+	if = {
+		limit = {
+			NOT = { has_war_with = KYZ }
+			NOT = { has_war_with = GLP }
+			NOT = { has_war_with = MZR }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_obligation_kind value = 6 compare = equals } }
+			SHL_cancel_obligation = yes
+		}
+		clr_country_flag = SHL_forced_march_ready
+		remove_ideas = SHL_prepared_columns
+		remove_ideas = SHL_forced_columns
+		clr_country_flag = SHL_campaign_assistance_used
+		SHL_cancel_mzr_mobilization = yes
+	}
+}
+
+SHL_cancel_mzr_mobilization = {
+	if = {
+		limit = { has_country_flag = SHL_mzr_mobilizing }
+		clr_country_flag = SHL_mzr_mobilizing
+		add_political_power = 50
+	}
+}
+
+SHL_take_house_campaign_aid = {
+	if = {
+		limit = { SHL_can_house_campaign_aid = yes }
+		add_political_power = -25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_debt value = 500 }
+		set_country_flag = SHL_campaign_assistance_used
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_take_city_campaign_aid = {
+	if = {
+		limit = { SHL_can_city_campaign_aid = yes }
+		subtract_from_variable = { var = SHL_city_support value = 15 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_manpower = -6000
+		SHL_raise_paid_levies_2 = yes
+		set_country_flag = SHL_campaign_assistance_used
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_take_directorate_campaign_aid = {
+	if = {
+		limit = { SHL_can_directorate_campaign_aid = yes }
+		subtract_from_variable = { var = SHL_reserve_stock value = 2 }
+		add_to_variable = { var = SHL_unrest value = 8 }
+		set_country_flag = SHL_forced_march_ready
+		set_country_flag = SHL_campaign_assistance_used
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_take_regent_campaign_aid = {
+	if = {
+		limit = { SHL_can_regent_campaign_aid = yes }
+		add_to_variable = { var = SHL_obligation_liability value = 180 }
+		add_to_variable = { var = SHL_unrest value = 15 }
+		add_manpower = -6000
+		SHL_raise_paid_levies_2 = yes
+		set_country_flag = SHL_campaign_assistance_used
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_take_commune_campaign_aid = {
+	if = {
+		limit = { SHL_can_commune_campaign_aid = yes }
+		add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
+		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = -16 }
+		add_manpower = -3000
+		SHL_ensure_levy_template = yes
+		699 = { SHL_create_levy = yes }
+		subtract_from_variable = { var = SHL_unrest value = 12 }
+		set_country_flag = SHL_campaign_assistance_used
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+SHL_restore_cistern_regions = {
+	MZR = { transfer_state = 269 }
+	269 = { set_state_controller_to = MZR }
+	MZR = { transfer_state = 273 }
+	273 = { set_state_controller_to = MZR }
+}
+
+SHL_take_cistern_concession = {
+	if = {
+		limit = {
+			SHL_can_settle_cisterns = yes
+			OR = {
+				SHL_house_mandate_current = yes
+				SHL_regent_mandate_current = yes
+			}
+		}
+		SHL_restore_cistern_regions = yes
+		set_variable = { var = SHL_mzr_outcome value = 2 }
+		clr_country_flag = SHL_cistern_charter_pending
+		set_variable = { var = SHL_concession_balance value = 450 }
+		if = {
+			limit = { check_variable = { var = SHL_obligation_kind value = 4 compare = equals } }
+			set_variable = { var = SHL_concession_payment value = SHL_obligation_liability }
+			clamp_variable = { var = SHL_concession_payment min = 0 max = 450 }
+			subtract_from_variable = { var = SHL_obligation_liability value = SHL_concession_payment }
+			subtract_from_variable = { var = SHL_concession_balance value = SHL_concession_payment }
+			if = {
+				limit = { check_variable = { var = SHL_obligation_liability value = 0 compare = less_than_or_equals } }
+				SHL_clear_obligation = yes
+			}
+			clear_variable = SHL_concession_payment
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_concession_balance }
+		clear_variable = SHL_concession_balance
+		ADISCORD_economy_mark_dirty = yes
+		SHL_refresh_furnaces = yes
+	}
+}
+
+SHL_request_cistern_charter = {
+	if = {
+		limit = {
+			SHL_can_offer_cistern_charter = yes
+			NOT = { has_country_flag = SHL_cistern_charter_pending }
+		}
+		set_country_flag = SHL_cistern_charter_pending
+		MZR = { country_event = { id = ADISCORD_SHL.112 } }
+	}
+}
+
+# MZR scope after its own answer. A changed course closes the offer without land transfer.
+SHL_accept_cistern_charter = {
+	SHL = {
+		if = {
+			limit = {
+				has_country_flag = SHL_cistern_charter_pending
+				SHL_can_offer_cistern_charter = yes
+			}
+			SHL_restore_cistern_regions = yes
+			set_variable = { var = SHL_mzr_outcome value = 3 }
+			if = {
+				limit = { is_in_faction = no }
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = SHL_southern_compact_faction
+				}
+			}
+			add_to_faction = MZR
+			country_event = { id = ADISCORD_SHL.113 }
+		}
+		else = { country_event = { id = ADISCORD_SHL.114 } }
+		clr_country_flag = SHL_cistern_charter_pending
+	}
+}
+
+SHL_record_south_site = {
+	if = {
+		limit = { state = 269 }
+		SHL = { set_variable = { var = SHL_south_site value = 269 } }
+	}
+	if = {
+		limit = { state = 273 }
+		SHL = { set_variable = { var = SHL_south_site value = 273 } }
+	}
+	if = {
+		limit = { state = 707 }
+		SHL = { set_variable = { var = SHL_south_site value = 707 } }
+	}
+	if = {
+		limit = { state = 287 }
+		SHL = { set_variable = { var = SHL_south_site value = 287 } }
+	}
+	if = {
+		limit = { state = 288 }
+		SHL = { set_variable = { var = SHL_south_site value = 288 } }
+	}
+	if = {
+		limit = { state = 289 }
+		SHL = { set_variable = { var = SHL_south_site value = 289 } }
+	}
+	if = {
+		limit = { state = 290 }
+		SHL = { set_variable = { var = SHL_south_site value = 290 } }
+	}
+	if = {
+		limit = { state = 291 }
+		SHL = { set_variable = { var = SHL_south_site value = 291 } }
+	}
+	if = {
+		limit = { state = 292 }
+		SHL = { set_variable = { var = SHL_south_site value = 292 } }
+	}
+	if = {
+		limit = { state = 293 }
+		SHL = { set_variable = { var = SHL_south_site value = 293 } }
+	}
+	if = {
+		limit = { state = 294 }
+		SHL = { set_variable = { var = SHL_south_site value = 294 } }
+	}
+	if = {
+		limit = { state = 295 }
+		SHL = { set_variable = { var = SHL_south_site value = 295 } }
+	}
+}
+
+SHL_begin_southern_programme = {
+	if = {
+		limit = {
+			SHL_south_country_ready = yes
+			NOT = { has_variable = SHL_south_deposit }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			FROM = { SHL_south_site_has_result = yes }
+			OR = {
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+				AND = {
+					NOT = { has_manpower < 3000 }
+					NOT = { has_equipment = { infantry_equipment < 2700 } }
+					NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 16 } }
+				}
+			}
+		}
+		FROM = { SHL_record_south_site = yes }
+		set_variable = { var = SHL_south_course value = SHL_political_course }
+		set_variable = { var = SHL_south_deposit value = 200 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		if = {
+			limit = { check_variable = { var = SHL_south_course value = 5 compare = equals } }
+			add_manpower = -3000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -2700 }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = -16 }
+		}
+	}
+}
+
+SHL_clear_south_receipt = {
+	clear_variable = SHL_south_deposit
+	clear_variable = SHL_south_site
+	clear_variable = SHL_south_course
+}
+
+SHL_cancel_southern_programme = {
+	if = {
+		limit = { has_variable = SHL_south_deposit }
+		add_to_variable = { var = ADISCORD_economy_treasury value = SHL_south_deposit }
+		if = {
+			limit = { check_variable = { var = SHL_south_course value = 5 compare = equals } }
+			add_manpower = 3000
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 2700 producer = SHL }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 16 producer = SHL }
+		}
+		SHL_clear_south_receipt = yes
+	}
+}
+
+# STATE scope, reached only for the saved receipt's target.
+SHL_deliver_southern_programme = {
+	if = {
+		limit = { SHL_south_site_has_result = yes }
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_south_course value = 1 compare = equals } } }
+			if = {
+				limit = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+			}
+			else = { owner = { add_equipment_to_stockpile = { type = infantry_equipment amount = 2700 producer = SHL } } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_south_course value = 2 compare = equals } } }
+			if = {
+				limit = { infrastructure < 5 }
+				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+			}
+			else = { owner = { add_manpower = 2000 } }
+			if = {
+				limit = { is_owned_by = SHL }
+				add_core_of = SHL
+			}
+			SHL = { add_to_variable = { var = SHL_city_support value = 10 } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_south_course value = 3 compare = equals } } }
+			if = {
+				limit = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+			}
+			else = { owner = { add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 32 producer = SHL } } }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_south_course value = 4 compare = equals } } }
+			set_variable = { var = SHL_furnace_owner value = 0 }
+			set_variable = { var = SHL_furnace_training value = 2 }
+			subtract_from_variable = { var = SHL_furnace_wear value = 30 }
+			clamp_variable = { var = SHL_furnace_wear min = 0 max = 100 }
+			SHL = { add_ideas = SHL_restored_house_guard }
+			SHL = {
+				subtract_from_variable = { var = SHL_house_pressure value = 15 }
+				add_to_variable = { var = SHL_unrest value = 10 }
+			}
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_south_course value = 5 compare = equals } } }
+			if = {
+				limit = { infrastructure < 5 }
+				add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+			}
+			owner = {
+				SHL_ensure_levy_template = yes
+				PREV = { SHL_create_levy = yes }
+			}
+		}
+		SHL = {
+			set_variable = { var = SHL_southern_programme value = SHL_south_course }
+			SHL_clear_south_receipt = yes
+			SHL_refresh_furnaces = yes
+			SHL_clamp_tensions = yes
+		}
+	}
+}
+
+SHL_finish_southern_programme = {
+	if = {
+		limit = {
+			has_variable = SHL_south_deposit
+			SHL_south_country_ready = yes
+			check_variable = { var = SHL_south_course value = SHL_political_course compare = equals }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 269 compare = equals } }
+			269 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 273 compare = equals } }
+			273 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 707 compare = equals } }
+			707 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 287 compare = equals } }
+			287 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 288 compare = equals } }
+			288 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 289 compare = equals } }
+			289 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 290 compare = equals } }
+			290 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 291 compare = equals } }
+			291 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 292 compare = equals } }
+			292 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 293 compare = equals } }
+			293 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 294 compare = equals } }
+			294 = { SHL_deliver_southern_programme = yes }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_south_site value = 295 compare = equals } }
+			295 = { SHL_deliver_southern_programme = yes }
+		}
+	}
+	SHL_cancel_southern_programme = yes
+}
+
+# A foreign war postpones the demand; loss of its political or territorial basis ends it.
+SHL_close_lost_mazar_threat = {
+	if = {
+		limit = {
+			NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+			NOT = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+			NOT = { has_war_with = MZR }
+			OR = {
+				MZR = { exists = no }
+				MZR = { is_subject = yes }
+				MZR = { is_in_faction_with = SHL }
+				NOT = { 269 = { is_owned_by = MZR } }
+				NOT = { 273 = { is_owned_by = MZR } }
+				NOT = { 707 = { is_owned_by = SHL } }
+			}
+		}
+		set_variable = { var = SHL_mazar_state value = 3 }
+		set_variable = { var = SHL_mzr_outcome value = 7 }
+		if = {
+			limit = { has_active_mission = SHL_mazar_deadline }
+			remove_mission = SHL_mazar_deadline
+		}
+		SHL_cancel_mzr_mobilization = yes
+		SHL_clean_campaign = yes
+	}
+}
+
+# Cabinet replacement follows the ratified course; other departments keep their staff.
+SHL_form_course_cabinet = {
+	remove_ideas = minister_SHL_Amin_Rashad
+	remove_ideas = minister_SHL_Mariam_Arbin
+	remove_ideas = minister_SHL_Rauf_Darban
+	remove_ideas = minister_SHL_Darius_Safir
+	remove_ideas = minister_SHL_Salima_Darzi
+	if = {
+		limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		add_ideas = minister_SHL_Mariam_Arbin
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		add_ideas = minister_SHL_Rauf_Darban
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		add_ideas = minister_SHL_Darius_Safir
+	}
+	else_if = {
+		limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		add_ideas = minister_SHL_Salima_Darzi
+	}
+	else = { add_ideas = minister_SHL_Amin_Rashad }
+	ADISCORD_economy_mark_dirty = yes
+	country_event = { id = ADISCORD_SHL.123 }
+}
+
+SHL_recognise_quarter_registers = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			has_idea = SHL_unregistered_quarters
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 80 }
+		remove_ideas = SHL_unregistered_quarters
+		add_to_variable = { var = SHL_city_support value = 8 }
+		add_to_variable = { var = SHL_house_pressure value = 5 }
+		SHL_clamp_tensions = yes
+		ADISCORD_economy_mark_dirty = yes
 	}
 }

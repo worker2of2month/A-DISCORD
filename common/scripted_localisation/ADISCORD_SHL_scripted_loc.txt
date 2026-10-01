@@ -630,5 +630,211 @@ defined_text = {
 		trigger = { check_variable = { var = SHL_obligation_kind value = 5 compare = equals } }
 		localization_key = SHL_ledger_relief
 	}
+	text = {
+		trigger = { check_variable = { var = SHL_obligation_kind value = 6 compare = equals } }
+		localization_key = SHL_ledger_convoy
+	}
 	text = { localization_key = SHL_ledger_idle }
+}
+
+defined_text = {
+	name = SHLGetCampaignReserve
+	text = {
+		trigger = { has_variable = SHL_campaign_reserve }
+		localization_key = SHL_campaign_reserve_ready
+	}
+	text = { localization_key = SHL_campaign_reserve_empty }
+}
+
+defined_text = {
+	name = SHLGetCampaignMP6000
+	text = {
+		trigger = { NOT = { has_manpower < 6000 } }
+		localization_key = SHL_campaign_price_MP6000
+	}
+	text = { localization_key = SHL_campaign_price_MP6000_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignRifles2700
+	text = {
+		trigger = { NOT = { has_equipment = { infantry_equipment < 2700 } } }
+		localization_key = SHL_campaign_price_Rifles2700
+	}
+	text = { localization_key = SHL_campaign_price_Rifles2700_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignRifles1500
+	text = {
+		trigger = { NOT = { has_equipment = { infantry_equipment < 1500 } } }
+		localization_key = SHL_campaign_price_Rifles1500
+	}
+	text = { localization_key = SHL_campaign_price_Rifles1500_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignSquad16
+	text = {
+		trigger = { NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 16 } } }
+		localization_key = SHL_campaign_price_Squad16
+	}
+	text = { localization_key = SHL_campaign_price_Squad16_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignSquad10
+	text = {
+		trigger = { NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 10 } } }
+		localization_key = SHL_campaign_price_Squad10
+	}
+	text = { localization_key = SHL_campaign_price_Squad10_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignPackets
+	text = {
+		trigger = { check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals } }
+		localization_key = SHL_campaign_price_Packets
+	}
+	text = { localization_key = SHL_campaign_price_Packets_low }
+}
+
+defined_text = {
+	name = SHLGetCampaignCity
+	text = {
+		trigger = { check_variable = { var = SHL_city_support value = 15 compare = greater_than_or_equals } }
+		localization_key = SHL_campaign_price_City
+	}
+	text = { localization_key = SHL_campaign_price_City_low }
+}
+
+defined_text = {
+	name = SHLGetSouthExtraPrice
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_south_extra_price
+	}
+	text = { localization_key = SHL_south_no_extra_price }
+}
+
+defined_text = {
+	name = SHLGetSouthProgramme
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		localization_key = SHL_south_house
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		localization_key = SHL_south_city
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		localization_key = SHL_south_directorate
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		localization_key = SHL_south_regent
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_south_commune
+	}
+	text = { localization_key = SHL_south_unratified }
+}
+
+defined_text = {
+	name = SHLGetSouthernEpilogue
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		localization_key = SHL_epilogue_house
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		localization_key = SHL_epilogue_city
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		localization_key = SHL_epilogue_directorate
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		localization_key = SHL_epilogue_regent
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_epilogue_commune
+	}
+	text = { localization_key = SHL_south_unratified }
+}
+
+defined_text = {
+	name = SHLGetSouthProgress
+	text = {
+		trigger = { has_variable = SHL_south_deposit }
+		localization_key = SHL_south_pending
+	}
+	text = {
+		trigger = { has_variable = SHL_southern_programme }
+		localization_key = SHL_south_complete
+	}
+	text = { localization_key = SHL_south_open }
+}
+
+defined_text = {
+	name = SHLGetCampaignOutcome
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 7 compare = equals } }
+		localization_key = SHL_campaign_no_threat
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 1 compare = equals } }
+		localization_key = SHL_campaign_victory
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 2 compare = equals } }
+		localization_key = SHL_campaign_concession
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 3 compare = equals } }
+		localization_key = SHL_campaign_charter
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 4 compare = equals } }
+		localization_key = SHL_campaign_defeat
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 5 compare = equals } }
+		localization_key = SHL_campaign_armistice
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_mzr_outcome value = 6 compare = equals } }
+		localization_key = SHL_campaign_payment
+	}
+	text = { localization_key = SHL_campaign_unsettled }
+}
+
+defined_text = {
+	name = SHLGetCabinetStory
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		localization_key = SHL_cabinet_story_house
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		localization_key = SHL_cabinet_story_city
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		localization_key = SHL_cabinet_story_state
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		localization_key = SHL_cabinet_story_regent
+	}
+	text = {
+		trigger = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		localization_key = SHL_cabinet_story_commune
+	}
+	text = { localization_key = SHL_cabinet_story_unratified }
 }

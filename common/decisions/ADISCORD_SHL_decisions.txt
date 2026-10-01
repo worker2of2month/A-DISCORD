@@ -45,7 +45,10 @@ SHL_conclave = {
 		}
 		available = {
 			FROM = {
-				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				custom_trigger_tooltip = {
+				tooltip = SHL_site_available_tt
+				SHL_furnace_site_idle = yes
+			}
 				check_variable = { var = SHL_furnace_stock value = 2 compare = less_than_or_equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 25 compare = greater_than_or_equals }
@@ -81,7 +84,10 @@ SHL_conclave = {
 		}
 		available = {
 			FROM = {
-				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				custom_trigger_tooltip = {
+				tooltip = SHL_site_available_tt
+				SHL_furnace_site_idle = yes
+			}
 				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
@@ -122,7 +128,10 @@ SHL_conclave = {
 		}
 		available = {
 			FROM = {
-				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				custom_trigger_tooltip = {
+				tooltip = SHL_site_available_tt
+				SHL_furnace_site_idle = yes
+			}
 				check_variable = { var = SHL_furnace_training value = 0 compare = equals }
 			}
 			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
@@ -160,7 +169,10 @@ SHL_conclave = {
 		}
 		available = {
 			FROM = {
-				custom_trigger_tooltip = { tooltip = SHL_site_available_tt SHL_furnace_site_idle = yes }
+				custom_trigger_tooltip = {
+				tooltip = SHL_site_available_tt
+				SHL_furnace_site_idle = yes
+			}
 				custom_trigger_tooltip = { tooltip = SHL_owner_settled_tt has_variable = SHL_restart_settled }
 				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
 				check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
@@ -694,6 +706,23 @@ SHL_tenth_project = {
 }
 
 SHL_quarters_and_borders = {
+	SHL_register_quarters = {
+		icon = generic_political_discourse
+		visible = { has_idea = SHL_unregistered_quarters }
+		available = { SHL_country_operable = yes }
+		cost = 0
+		custom_cost_text = SHL_cost_80
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 80 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = SHL_registers_result_tt
+			hidden_effect = { SHL_recognise_quarter_registers = yes }
+		}
+		ai_will_do = { base = 20 }
+	}
+
 	# ----- Quarters and crests -----
 
 	SHL_soup_kitchens = {
@@ -867,7 +896,7 @@ SHL_quarters_and_borders = {
 				tooltip = SHL_guard_slot_tt
 				NOT = { has_variable = SHL_guard_deposit }
 			}
-			294 = {
+			699 = {
 				is_owned_by = SHL
 				is_controlled_by = SHL
 			}
@@ -893,7 +922,7 @@ SHL_quarters_and_borders = {
 		cancel_trigger = {
 			OR = {
 				has_capitulated = yes
-				294 = {
+				699 = {
 					NOT = {
 						AND = {
 							is_owned_by = SHL
@@ -1565,4 +1594,346 @@ SHL_quarters_and_borders = {
 		}
 		ai_will_do = { base = 10 }
 	}
+
+	# ----- The southern campaign -----
+	SHL_forge_campaign_convoy = {
+		icon = generic_industry
+		state_target = yes
+		targets = { 287 288 289 290 291 292 293 294 295 }
+		target_trigger = { SHL_selected_target = yes }
+		visible = { has_completed_focus = SHL_campaign_logistics }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_convoy_slot_tt
+				SHL_can_prepare_columns = yes
+			}
+			FROM = { SHL_obligation_site_ready = yes }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_120
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals } }
+		complete_effect = {
+			custom_effect_tooltip = SHL_campaign_convoy_tt
+			hidden_effect = {
+				SHL_begin_campaign_convoy = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_demobilise_campaign_convoy = {
+		icon = generic_industry
+		visible = { has_variable = SHL_campaign_reserve }
+		available = { SHL_country_operable = yes }
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = SHL_demobilise_convoy_tt
+			hidden_effect = { SHL_demobilise_convoy = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+				has_war = no
+			}
+		}
+	}
+
+	SHL_march_on_mazar = {
+		icon = generic_operation
+		visible = {
+			has_completed_focus = SHL_no_more_rations
+			NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_march_ready_tt
+				SHL_can_march_on_mazar = yes
+			}
+		}
+		cost = 50
+		days_remove = 28
+		complete_effect = {
+			custom_effect_tooltip = SHL_march_on_mazar_tt
+			hidden_effect = { SHL_begin_mzr_mobilization = yes }
+		}
+		remove_effect = { hidden_effect = { SHL_finish_mzr_mobilization = yes } }
+		cancel_trigger = {
+			OR = {
+				SHL_country_operable = no
+				has_war = yes
+				SHL_mazar_can_threaten = no
+				check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+			}
+		}
+		cancel_effect = { hidden_effect = { SHL_cancel_mzr_mobilization = yes } }
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				num_divisions > 6
+				has_variable = SHL_campaign_reserve
+			}
+		}
+	}
+
+	SHL_secure_cistern_corridor = {
+		icon = generic_operation
+		visible = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_cistern_objectives_tt
+				SHL_mzr_objectives_held = yes
+			}
+		}
+		cost = 0
+		days_remove = 14
+		complete_effect = { custom_effect_tooltip = SHL_secure_cistern_corridor_tt }
+		cancel_trigger = { SHL_mzr_objectives_held = no }
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { SHL_mzr_objectives_held = yes }
+					SHL_mzr_war_victory = yes
+				}
+			}
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	SHL_house_campaign_aid = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_house_war_mandate
+			SHL_house_mandate_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_house_aid_ready_tt
+				SHL_can_house_campaign_aid = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_pp25
+		custom_cost_trigger = {
+			has_political_power = 25
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_house_aid_tt
+			hidden_effect = { SHL_take_house_campaign_aid = yes }
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_city_campaign_aid = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_city_war_mandate
+			SHL_city_mandate_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_city_aid_ready_tt
+				SHL_can_city_campaign_aid = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_city_aid
+		custom_cost_trigger = {
+			check_variable = { var = SHL_city_support value = 15 compare = greater_than_or_equals }
+			NOT = { has_manpower < 6000 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_city_aid_tt
+			hidden_effect = { SHL_take_city_campaign_aid = yes }
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_directorate_campaign_aid = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_directorate_war_mandate
+			SHL_directorate_mandate_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_directorate_aid_ready_tt
+				SHL_can_directorate_campaign_aid = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_directorate_aid
+		custom_cost_trigger = {
+			has_variable = SHL_campaign_reserve
+			check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals }
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_directorate_aid_tt
+			hidden_effect = { SHL_take_directorate_campaign_aid = yes }
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_regent_campaign_aid = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_regent_war_mandate
+			SHL_regent_mandate_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_regent_aid_ready_tt
+				SHL_can_regent_campaign_aid = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_regent_aid
+		custom_cost_trigger = {
+			check_variable = { var = SHL_obligation_kind value = 4 compare = equals }
+			NOT = { has_manpower < 6000 }
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_regent_aid_tt
+			hidden_effect = { SHL_take_regent_campaign_aid = yes }
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_commune_campaign_aid = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_commune_war_mandate
+			SHL_commune_mandate_current = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_commune_aid_ready_tt
+				SHL_can_commune_campaign_aid = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_commune_aid
+		custom_cost_trigger = {
+			NOT = { has_equipment = { infantry_equipment < 2700 } }
+			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 16 } }
+			NOT = { has_manpower < 3000 }
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHL_commune_aid_tt
+			hidden_effect = { SHL_take_commune_campaign_aid = yes }
+		}
+		ai_will_do = { base = 15 }
+	}
+
+	SHL_offer_cistern_charter = {
+		icon = generic_political_discourse
+		visible = {
+			check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+			OR = {
+				SHL_city_mandate_current = yes
+				SHL_commune_mandate_current = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_cistern_charter_ready_tt
+				SHL_can_offer_cistern_charter = yes
+				NOT = { has_country_flag = SHL_cistern_charter_pending }
+			}
+		}
+		cost = 0
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = SHL_cistern_charter_tt
+			hidden_effect = { SHL_request_cistern_charter = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
+
+	SHL_reconstruct_south = {
+		icon = generic_construction
+		state_target = yes
+		targets = { 269 273 707 287 288 289 290 291 292 293 294 295 }
+		visible = {
+			has_completed_focus = SHL_peace_has_a_price
+			NOT = { has_variable = SHL_southern_programme }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_programme_ready_tt
+				SHL_south_country_ready = yes
+				NOT = { has_variable = SHL_south_deposit }
+				FROM = { SHL_south_site_has_result = yes }
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_south
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			OR = {
+				NOT = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+				AND = {
+					NOT = { has_manpower < 3000 }
+					NOT = { has_equipment = { infantry_equipment < 2700 } }
+					NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 16 } }
+				}
+			}
+		}
+		days_remove = 56
+		complete_effect = {
+			custom_effect_tooltip = SHL_south_programme_tt
+			hidden_effect = { SHL_begin_southern_programme = yes }
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { SHL_south_receipt_here = yes } }
+					SHL_finish_southern_programme = yes
+				}
+			}
+		}
+		cancel_trigger = {
+			OR = {
+				SHL_south_country_ready = no
+				NOT = { check_variable = { var = SHL_south_course value = SHL_political_course compare = equals } }
+				FROM = { SHL_south_site_current = no }
+			}
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { FROM = { SHL_south_receipt_here = yes } }
+					SHL_cancel_southern_programme = yes
+				}
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+	SHL_cistern_concession = {
+		icon = generic_political_discourse
+		visible = {
+			check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+			OR = {
+				SHL_house_mandate_current = yes
+				SHL_regent_mandate_current = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_cistern_concession_ready_tt
+				SHL_can_settle_cisterns = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = SHL_cistern_concession_tt
+			hidden_effect = { SHL_take_cistern_concession = yes }
+		}
+		ai_will_do = { base = 30 }
+	}
+
 }

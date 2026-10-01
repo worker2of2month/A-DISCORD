@@ -298,6 +298,19 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			if = {
+				limit = {
+					OR = {
+						check_variable = { var = SHL_water_crisis value = 2 compare = greater_than_or_equals }
+						SHL_kyz_counterpart = no
+					}
+					OR = {
+						check_variable = { var = SHL_veyr_crisis value = 2 compare = greater_than_or_equals }
+						SHL_glp_counterpart = no
+					}
+				}
+				remove_ideas = SHL_external_freight
+			}
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 5 producer = SHL }
 			hidden_effect = { clr_country_flag = SHL_transport_dispute }
 		}
@@ -320,6 +333,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_unregistered_quarters
 			add_stability = 0.03
 			custom_effect_tooltip = SHL_workers_charter_tt
 			hidden_effect = {
@@ -462,6 +476,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_house_tt
 			hidden_effect = { SHL_commit_house_course = yes }
 		}
@@ -538,6 +553,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_city_tt
 			hidden_effect = { SHL_commit_city_course = yes }
 		}
@@ -610,6 +626,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_course_state_tt
 			hidden_effect = { SHL_commit_state_course = yes }
 		}
@@ -800,6 +817,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_divided_guard
 			add_ideas = SHL_southern_watch_idea
 		}
 		ai_will_do = { base = 5 }
@@ -1367,6 +1385,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_hereditary_seats
 			custom_effect_tooltip = SHL_restore_privileges_tt
 			hidden_effect = { SHL_restore_house_privileges = yes }
 		}
@@ -1499,6 +1518,7 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
+			remove_ideas = SHL_hereditary_seats
 			unlock_decision_tooltip = SHL_common_cauldron
 			custom_effect_tooltip = SHL_furnaces_to_workers_tt
 			hidden_effect = { SHL_give_furnaces_to_workers = yes }
@@ -1614,4 +1634,174 @@ focus_tree = {
 		ai_will_do = { base = 5 }
 	}
 
+	focus = {
+		id = SHL_house_war_mandate
+		icon = GFX_goal_generic_trade
+		x = 6
+		y = 8
+		cost = 2
+		prerequisite = { focus = SHL_house_compromise }
+		available = {
+			SHL_country_operable = yes
+			SHL_house_mandate_current = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_house_campaign_aid
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_city_war_mandate
+		icon = GFX_goal_generic_major_alliance
+		x = 16
+		y = 8
+		cost = 2
+		prerequisite = { focus = SHL_city_charters }
+		available = {
+			SHL_country_operable = yes
+			SHL_city_mandate_current = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_city_campaign_aid
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_directorate_war_mandate
+		icon = GFX_goal_generic_army_doctrines
+		x = 20
+		y = 8
+		cost = 2
+		prerequisite = { focus = SHL_common_dispatch }
+		available = {
+			SHL_country_operable = yes
+			SHL_directorate_mandate_current = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_directorate_campaign_aid
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_regent_war_mandate
+		icon = GFX_goal_generic_political_pressure
+		x = 27
+		y = 14
+		cost = 2
+		prerequisite = { focus = SHL_restore_privileges }
+		available = {
+			SHL_country_operable = yes
+			SHL_regent_mandate_current = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_regent_campaign_aid
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_commune_war_mandate
+		icon = GFX_goal_generic_small_arms
+		x = -2
+		y = 14
+		cost = 2
+		prerequisite = { focus = SHL_furnaces_to_workers }
+		available = {
+			SHL_country_operable = yes
+			SHL_commune_mandate_current = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_commune_campaign_aid
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_campaign_logistics
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 22
+		y = 5
+		cost = 2
+		prerequisite = { focus = SHL_factory_militia }
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_forge_campaign_convoy
+			unlock_decision_tooltip = SHL_demobilise_campaign_convoy
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_no_more_rations
+		icon = GFX_goal_generic_demand_territory
+		x = 24
+		y = 6
+		cost = 2
+		prerequisite = { focus = SHL_southern_watch }
+		bypass = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+		available = {
+			SHL_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_march_on_mazar
+			unlock_decision_tooltip = SHL_secure_cistern_corridor
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_peace_has_a_price
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 24
+		y = 7
+		cost = 2
+		prerequisite = { focus = SHL_no_more_rations }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			unlock_decision_tooltip = SHL_reconstruct_south
+			unlock_decision_tooltip = SHL_offer_cistern_charter
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_southern_horizon
+		icon = GFX_goal_generic_major_alliance
+		x = 24
+		y = 8
+		cost = 2
+		prerequisite = { focus = SHL_peace_has_a_price }
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_southern_programme_complete_tt
+				check_variable = { var = SHL_southern_programme value = 1 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_stability = 0.05
+			hidden_effect = { country_event = { id = ADISCORD_SHL.115 } }
+		}
+		ai_will_do = { base = 5 }
+	}
 }

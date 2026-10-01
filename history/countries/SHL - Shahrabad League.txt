@@ -1,4 +1,4 @@
-capital = 294
+capital = 699
 oob = "SHL"
 
 recruit_character = SHL_Jalil_Nur
@@ -20,4 +20,17 @@ set_popularities = {
 set_stability = 0.54
 set_war_support = 0.27
 set_research_slots = 2
-add_ideas = { SHL_nine_furnaces_compact }
+add_ideas = {
+	SHL_nine_furnaces_compact
+	SHL_hereditary_seats
+	SHL_divided_guard
+	SHL_external_freight
+	SHL_unregistered_quarters
+	minister_SHL_Amin_Rashad
+	minister_SHL_Arman_Teymur
+	minister_SHL_Leyla_Nadiri
+	minister_SHL_Samira_Hadi
+	minister_SHL_Farid_Mehr
+	minister_SHL_Bahram_Kaveh
+	minister_SHL_Ramin_Farzan
+}

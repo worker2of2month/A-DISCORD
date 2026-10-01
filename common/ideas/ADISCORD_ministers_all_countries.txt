@@ -1,5 +1,96 @@
 ideas = {
 	political_advisor_head_of_state = {
+
+		minister_SHL_Salima_Darzi = {
+			name = minister_SHL_Salima_Darzi
+			picture = generic_political_advisor_female_europe
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_political_course value = 5 compare = equals }
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_shift_delegate }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SHL_Darius_Safir = {
+			name = minister_SHL_Darius_Safir
+			picture = generic_political_advisor_arab_3
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_political_course value = 4 compare = equals }
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_house_regent }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SHL_Rauf_Darban = {
+			name = minister_SHL_Rauf_Darban
+			picture = generic_political_advisor_arab_2
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_political_course value = 3 compare = equals }
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_state_dispatcher }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SHL_Mariam_Arbin = {
+			name = minister_SHL_Mariam_Arbin
+			picture = generic_political_advisor_female_arab
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_city_chair }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
+
+		minister_SHL_Amin_Rashad = {
+			name = minister_SHL_Amin_Rashad
+			picture = generic_political_advisor_arab_1
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+				check_variable = { var = SHL_political_course value = 1 compare = less_than_or_equals }
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_cabinet_secretary }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
+
 		minister_VAL_Valerian_Kraith = {
 			name = minister_VAL_Valerian_Kraith
 			default = no
@@ -273,6 +364,23 @@ ideas = {
 	}
 
 	political_advisor_minister_of_defense = {
+
+		minister_SHL_Arman_Teymur = {
+			name = minister_SHL_Arman_Teymur
+			picture = generic_political_advisor_arab_1
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_guard_coordinator }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
 		minister_STP_Tarik_Menebhi = {
 			name = minister_STP_Tarik_Menebhi
 			default = no
@@ -557,6 +665,23 @@ ideas = {
 	}
 
 	political_advisor_minister_of_economy = {
+
+		minister_SHL_Leyla_Nadiri = {
+			name = minister_SHL_Leyla_Nadiri
+			picture = generic_political_advisor_female_arab
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_furnace_accountant }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
 		minister_STP_Camus_Onyx = {
 			name = minister_STP_Camus_Onyx
 			default = no
@@ -841,6 +966,23 @@ ideas = {
 	}
 
 	political_advisor_minister_of_health = {
+
+		minister_SHL_Samira_Hadi = {
+			name = minister_SHL_Samira_Hadi
+			picture = generic_political_advisor_female_europe
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_shift_physician }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
 		minister_STP_Lorian_Vell = {
 			name = minister_STP_Lorian_Vell
 			default = no
@@ -1125,6 +1267,23 @@ ideas = {
 	}
 
 	political_advisor_minister_of_education = {
+
+		minister_SHL_Farid_Mehr = {
+			name = minister_SHL_Farid_Mehr
+			picture = generic_political_advisor_arab_2
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_master_instructor }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
 		minister_STP_Vesper_Monray = {
 			name = minister_STP_Vesper_Monray
 			default = no
@@ -1409,6 +1568,23 @@ ideas = {
 	}
 
 	political_advisor_chief_of_intelligence = {
+
+		minister_SHL_Bahram_Kaveh = {
+			name = minister_SHL_Bahram_Kaveh
+			picture = generic_political_advisor_arab_3
+			cost = 75
+			allowed = { tag = SHL }
+			visible = { tag = SHL }
+			available = {
+				SHL_country_operable = yes
+			}
+			allowed_to_remove = { SHL_country_operable = yes }
+			traits = { minister_trait_SHL_rail_observer }
+			cancel_if_invalid = no
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			ai_will_do = { factor = 1 }
+		}
 		minister_STP_Cyan_Crowe = {
 			name = minister_STP_Cyan_Crowe
 			default = no
@@ -3860,8 +4036,8 @@ ideas = {
 			removal_cost = -1
 			allowed = { tag = SHL }
 			visible = { tag = SHL }
-			available = { STP_party_minister_change_allowed = yes }
-			allowed_to_remove = { STP_party_minister_change_allowed = yes }
+			available = { SHL_country_operable = yes }
+			allowed_to_remove = { SHL_country_operable = yes }
 			traits = { minister_trait_foreign_minister }
 			modifier = {
 				political_power_gain = 0.05

@@ -19,6 +19,34 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 from tools.validators import validate_adiscord_new_states as validator
 
 
+class ShahrabadPopulationTests(unittest.TestCase):
+    def test_all_starting_states_sum_to_twenty_million_and_plan_is_current(self):
+        actual = {}
+        for path in (builder.ROOT / "history/states").glob("*.txt"):
+            source = path.read_text(encoding="utf-8-sig")
+            if re.search(r"\bowner\s*=\s*SHL\b", source):
+                state_id = int(re.search(r"\bid\s*=\s*(\d+)", source)[1])
+                actual[state_id] = int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1])
+        self.assertEqual(actual, builder.SHL_POPULATION)
+        self.assertEqual(sum(actual.values()), 20_000_000)
+        self.assertEqual(actual[699], 4_000_000)
+        for path, expected in builder.shahrabad_population_plan().items():
+            self.assertEqual(path.read_bytes(), expected)
+
+    def test_other_generation_modes_preserve_demographic_profile(self):
+        for state_id in range(287, 297):
+            self.assertEqual(builder.population(state_id, "SHL"), builder.SHL_POPULATION[state_id])
+        for plan in (builder.coastal_city_state_plan(), builder.southern_settlement_plan()):
+            for path, payload in plan.items():
+                if path.parent.name != "states":
+                    continue
+                source = payload.decode("utf-8-sig")
+                match = re.search(r"\bid\s*=\s*(\d+)", source)
+                if match is not None and int(match[1]) in builder.SHL_POPULATION:
+                    state_id = int(match[1])
+                    self.assertEqual(int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]), builder.SHL_POPULATION[state_id])
+
+
 class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):
     def setUp(self) -> None:
         validator.ERRORS.clear()

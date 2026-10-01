@@ -844,7 +844,7 @@ def validate_countries() -> None:
             "KYZ_voice_of_the_communes",
         ),
         "SHL": (
-            294,
+            699,
             1198,
             "SHL_Jalil_Nur",
             "SHL_nine_furnaces_compact",

@@ -189,26 +189,14 @@ SHL_mazar_can_threaten = {
 		has_war = no
 		NOT = { is_in_faction_with = SHL }
 	}
-	OR = {
-		269 = { is_owned_by = MZR }
-		273 = { is_owned_by = MZR }
-	}
+	269 = { is_owned_by = MZR }
+	273 = { is_owned_by = MZR }
 }
 
-# Mazar tests a weak Shahrabad first and stops waiting after 24 cycles.
+# The sixth-cycle warning precedes the tenth-cycle demand by four cycles.
 SHL_mazar_demand_ready = {
 	check_variable = { var = SHL_mazar_state value = 0 compare = equals }
-	OR = {
-		check_variable = { var = SHL_cycle_number value = 24 compare = greater_than_or_equals }
-		AND = {
-			check_variable = { var = SHL_cycle_number value = 16 compare = greater_than_or_equals }
-			OR = {
-				check_variable = { var = SHL_running_count value = 6 compare = less_than_or_equals }
-				has_war = yes
-				has_stability < 0.35
-			}
-		}
-	}
+	check_variable = { var = SHL_cycle_number value = 10 compare = greater_than_or_equals }
 	SHL_mazar_can_threaten = yes
 }
 
@@ -321,6 +309,374 @@ SHL_relief_site_ready = {
 		AND = {
 			check_variable = { var = SHL_furnace_running value = 0 compare = equals }
 			check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
+		}
+	}
+}
+
+SHL_campaign_open = {
+	SHL_country_operable = yes
+	OR = {
+		SHL_can_seize_qanats = yes
+		SHL_can_strike_veyr = yes
+		check_variable = { var = SHL_mazar_state value = 0 compare = equals }
+		check_variable = { var = SHL_mazar_state value = 1 compare = equals }
+		check_variable = { var = SHL_mazar_state value = 2 compare = equals }
+		check_variable = { var = SHL_mazar_state value = 5 compare = equals }
+		check_variable = { var = SHL_war_mzr value = 1 compare = equals }
+		check_variable = { var = SHL_war_kyz value = 1 compare = equals }
+		check_variable = { var = SHL_war_glp value = 1 compare = equals }
+	}
+}
+
+SHL_can_prepare_columns = {
+	SHL_campaign_open = yes
+	has_completed_focus = SHL_campaign_logistics
+	SHL_obligation_idle = yes
+	NOT = { has_variable = SHL_campaign_reserve }
+	check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+}
+
+SHL_can_march_on_mazar = {
+	SHL_country_operable = yes
+	is_subject = no
+	has_war = no
+	has_completed_focus = SHL_no_more_rations
+	NOT = { has_country_flag = SHL_mzr_mobilizing }
+	NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+	NOT = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+	SHL_mazar_can_threaten = yes
+}
+
+SHL_mzr_objectives_held = {
+	SHL_country_operable = yes
+	check_variable = { var = SHL_war_mzr value = 1 compare = equals }
+	has_war_with = MZR
+	269 = { SHL_cistern_coalition_control = yes }
+	273 = { SHL_cistern_coalition_control = yes }
+	707 = {
+		is_owned_by = SHL
+		SHL_cistern_coalition_control = yes
+	}
+}
+
+SHL_house_mandate_current = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 1 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_house_compromise
+		}
+	}
+}
+
+SHL_city_mandate_current = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 2 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_city_charters
+		}
+	}
+}
+
+SHL_directorate_mandate_current = {
+	OR = {
+		check_variable = { var = SHL_political_course value = 3 compare = equals }
+		AND = {
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+			has_completed_focus = SHL_common_dispatch
+		}
+	}
+}
+
+SHL_regent_mandate_current = {
+	check_variable = { var = SHL_political_course value = 4 compare = equals }
+}
+
+SHL_commune_mandate_current = {
+	check_variable = { var = SHL_political_course value = 5 compare = equals }
+}
+
+SHL_can_house_campaign_aid = {
+	SHL_country_operable = yes
+	SHL_campaign_open = yes
+	SHL_house_mandate_current = yes
+	has_completed_focus = SHL_house_war_mandate
+	NOT = { has_country_flag = SHL_campaign_assistance_used }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	has_political_power = 25
+}
+
+SHL_can_city_campaign_aid = {
+	SHL_country_operable = yes
+	SHL_campaign_open = yes
+	SHL_city_mandate_current = yes
+	has_completed_focus = SHL_city_war_mandate
+	NOT = { has_country_flag = SHL_campaign_assistance_used }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	check_variable = { var = SHL_city_support value = 35 compare = greater_than_or_equals }
+	NOT = { has_manpower < 6000 }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+}
+
+SHL_can_directorate_campaign_aid = {
+	SHL_country_operable = yes
+	SHL_campaign_open = yes
+	SHL_directorate_mandate_current = yes
+	has_completed_focus = SHL_directorate_war_mandate
+	NOT = { has_country_flag = SHL_campaign_assistance_used }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	has_variable = SHL_campaign_reserve
+	check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals }
+}
+
+SHL_can_regent_campaign_aid = {
+	SHL_country_operable = yes
+	SHL_campaign_open = yes
+	SHL_regent_mandate_current = yes
+	has_completed_focus = SHL_regent_war_mandate
+	NOT = { has_country_flag = SHL_campaign_assistance_used }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	check_variable = { var = SHL_obligation_kind value = 4 compare = equals }
+	NOT = { has_manpower < 6000 }
+}
+
+SHL_can_commune_campaign_aid = {
+	SHL_country_operable = yes
+	SHL_campaign_open = yes
+	SHL_commune_mandate_current = yes
+	has_completed_focus = SHL_commune_war_mandate
+	NOT = { has_country_flag = SHL_campaign_assistance_used }
+	699 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	NOT = { has_equipment = { infantry_equipment < 2700 } }
+	NOT = { has_equipment = { ADISCORD_squad_weapons_equipment_0 < 16 } }
+	NOT = { has_manpower < 3000 }
+}
+
+SHL_can_settle_cisterns = {
+	SHL_country_operable = yes
+	has_war = no
+	check_variable = { var = SHL_mzr_outcome value = 1 compare = equals }
+	NOT = { has_variable = SHL_south_deposit }
+	NOT = { has_variable = SHL_southern_programme }
+	269 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	273 = {
+		is_owned_by = SHL
+		is_controlled_by = SHL
+	}
+	MZR = {
+		exists = yes
+		is_subject = no
+		NOT = { has_war_with = SHL }
+	}
+}
+
+SHL_can_offer_cistern_charter = {
+	SHL_can_settle_cisterns = yes
+	SHL_can_lead_alliance = yes
+	OR = {
+		SHL_city_mandate_current = yes
+		SHL_commune_mandate_current = yes
+	}
+	MZR = { is_in_faction = no }
+}
+
+SHL_south_country_ready = {
+	SHL_country_operable = yes
+	has_completed_focus = SHL_peace_has_a_price
+	has_war = no
+	check_variable = { var = SHL_mazar_state value = 3 compare = equals }
+	NOT = { has_variable = SHL_southern_programme }
+}
+
+SHL_south_site_current = {
+	OR = {
+		AND = {
+			is_owned_by = SHL
+			is_controlled_by = SHL
+		}
+		AND = {
+			is_owned_by = MZR
+			is_controlled_by = MZR
+			MZR = { is_in_faction_with = SHL }
+			SHL = {
+				check_variable = { var = SHL_mzr_outcome value = 3 compare = equals }
+				OR = {
+					check_variable = { var = SHL_political_course value = 2 compare = equals }
+					check_variable = { var = SHL_political_course value = 5 compare = equals }
+				}
+			}
+		}
+	}
+}
+
+SHL_south_site_has_result = {
+	SHL_south_site_current = yes
+	OR = {
+		AND = {
+			SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+			OR = {
+				state = 269
+				state = 273
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+			OR = {
+				state = 269
+				state = 273
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+			OR = {
+				state = 269
+				state = 273
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			check_variable = { var = SHL_furnace_running value = 1 compare = equals }
+		}
+		AND = {
+			SHL = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			OR = {
+				state = 269
+				state = 273
+				state = 707
+				state = 287
+				state = 288
+				state = 289
+				state = 290
+				state = 291
+				state = 292
+				state = 293
+				state = 294
+				state = 295
+			}
+		}
+	}
+}
+
+# STATE scope: match the receipt before accepting a targeted callback.
+SHL_south_receipt_here = {
+	OR = {
+		AND = {
+			state = 269
+			SHL = { check_variable = { var = SHL_south_site value = 269 compare = equals } }
+		}
+		AND = {
+			state = 273
+			SHL = { check_variable = { var = SHL_south_site value = 273 compare = equals } }
+		}
+		AND = {
+			state = 707
+			SHL = { check_variable = { var = SHL_south_site value = 707 compare = equals } }
+		}
+		AND = {
+			state = 287
+			SHL = { check_variable = { var = SHL_south_site value = 287 compare = equals } }
+		}
+		AND = {
+			state = 288
+			SHL = { check_variable = { var = SHL_south_site value = 288 compare = equals } }
+		}
+		AND = {
+			state = 289
+			SHL = { check_variable = { var = SHL_south_site value = 289 compare = equals } }
+		}
+		AND = {
+			state = 290
+			SHL = { check_variable = { var = SHL_south_site value = 290 compare = equals } }
+		}
+		AND = {
+			state = 291
+			SHL = { check_variable = { var = SHL_south_site value = 291 compare = equals } }
+		}
+		AND = {
+			state = 292
+			SHL = { check_variable = { var = SHL_south_site value = 292 compare = equals } }
+		}
+		AND = {
+			state = 293
+			SHL = { check_variable = { var = SHL_south_site value = 293 compare = equals } }
+		}
+		AND = {
+			state = 294
+			SHL = { check_variable = { var = SHL_south_site value = 294 compare = equals } }
+		}
+		AND = {
+			state = 295
+			SHL = { check_variable = { var = SHL_south_site value = 295 compare = equals } }
+		}
+	}
+}
+
+# STATE scope: only countries fighting beside SHL may secure an objective.
+SHL_cistern_coalition_control = {
+	OR = {
+		is_controlled_by = SHL
+		AND = {
+			is_controlled_by = KYZ
+			KYZ = {
+				is_in_faction_with = SHL
+				has_war_with = MZR
+			}
+		}
+		AND = {
+			is_controlled_by = GLP
+			GLP = {
+				is_in_faction_with = SHL
+				has_war_with = MZR
+			}
 		}
 	}
 }

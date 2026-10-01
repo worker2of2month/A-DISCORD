@@ -99,6 +99,20 @@ SDR_STATES = (243, 250, 251, 259, 260, 261, 262, 263)
 MZR_STATES = (264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275)
 KYZ_STATES = tuple(range(276, 287))
 SHL_STATES = (287, 288, 289, 290, 291, 292, 293, 294, 295, 296)
+SHL_POPULATION = {
+    287: 1_800_000,
+    288: 2_400_000,
+    289: 1_100_000,
+    290: 800_000,
+    291: 1_600_000,
+    292: 800_000,
+    293: 1_000_000,
+    294: 2_200_000,
+    295: 1_500_000,
+    296: 1_300_000,
+    699: 4_000_000,
+    707: 1_500_000,
+}
 GLP_STATES = (297, 298, 299, 300, 301, 302, 304, 305)
 
 STARTING_OWNERS = {
@@ -925,6 +939,8 @@ def state_path(state_id: int) -> Path:
 
 
 def population(state_id: int, owner: str) -> int:
+    if state_id in SHL_POPULATION:
+        return SHL_POPULATION[state_id]
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
         return SOUTHERN_CAPITAL_DISTRICTS[state_id][1]
     if state_id in STATE_PROFILES:
@@ -1773,6 +1789,7 @@ def southern_settlement_plan() -> dict[Path, bytes]:
     for state_id in sorted(set(SOUTHERN_CITY_POINTS) | {243, 250, 264, 295, 296}):
         outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
     for capital, (district, _city_population, rural_population, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items():
+        rural_population = SHL_POPULATION.get(district, rural_population)
         city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == capital)
         provinces = tuple(sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())}))
         path = STATE_DIR / f"{district}-Southern-District.txt"
@@ -1828,10 +1845,36 @@ def update_southern_settlements(apply: bool) -> int:
     return int(bool(changed))
 
 
+def shahrabad_population_plan() -> dict[Path, bytes]:
+    """Own SHL demographic values without rewriting settlements or buildings."""
+    outputs = {}
+    for state_id, residents in SHL_POPULATION.items():
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        if not re.search(r"\bowner\s*=\s*SHL\b", source):
+            raise RuntimeError(f"state {state_id}: expected SHL homeland")
+        outputs[path] = set_scalar(source, "manpower", str(residents)).encode("utf-8")
+    return outputs
+
+
+def update_shahrabad_population(apply: bool) -> int:
+    outputs = shahrabad_population_plan()
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply:
+        if any(path.read_bytes() != data for path, data in shahrabad_population_plan().items()):
+            raise RuntimeError("Shahrabad population is not idempotent")
+        return 0
+    return int(bool(changed))
+
+
 def coastal_city_state_plan() -> dict[Path, bytes]:
     """Split painted urban centres without adding population or factories."""
     outputs = {}
-    residuals = {290: (29_510, 9_510, 0.5), 689: (120_000, 40_000, 1.0), 691: (280_000, 190_000, 1.5)}
+    residuals = {290: (29_510, SHL_POPULATION[290], 0.5), 689: (120_000, 40_000, 1.0), 691: (280_000, 190_000, 1.5)}
     for state_id in (284, 290, 688, 689, 691):
         path = state_path(state_id)
         source = path.read_text(encoding="utf-8-sig")
@@ -1844,7 +1887,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
         if state_id in residuals:
             original, population, supplies = residuals[state_id]
             current = int(re.search(r"\bmanpower\s*=\s*(\d+)", source).group(1))
-            if current not in (original, population):
+            if state_id not in SHL_POPULATION and current not in (original, population):
                 raise RuntimeError(f"state {state_id}: population changed outside the city split")
             source = re.sub(r"\bmanpower\s*=\s*\d+", f"manpower = {population}", source)
             source = re.sub(r"\blocal_supplies\s*=\s*[\d.]+", f"local_supplies = {supplies:.1f}", source)
@@ -1856,7 +1899,7 @@ def coastal_city_state_plan() -> dict[Path, bytes]:
                 source = re.sub(r"(?m)^\s*2038\s*=\s*\{\s*naval_base\s*=\s*1\s*\}\s*\n", "", source)
         outputs[path] = source.encode("utf-8")
     profiles = {
-        699: ("699-Khazar.txt", "SHL", 20_000, 2, 1.0, 0, 0),
+        699: ("699-Khazar.txt", "SHL", SHL_POPULATION[699], 2, 1.0, 0, 0),
         700: ("700-South-Harbour.txt", "NAM", 80_000, 3, 2.5, 1, 2),
         701: ("701-Middle-Loren-City.txt", "EFL", 90_000, 3, 2.0, 1, 0),
     }
@@ -2079,6 +2122,8 @@ def main() -> int:
     actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
     actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
     actions.add_argument("--check-coastal-cities", action="store_true")
+    actions.add_argument("--check-shahrabad-population", action="store_true")
+    actions.add_argument("--apply-shahrabad-population", action="store_true")
     actions.add_argument("--apply-coastal-cities", action="store_true")
     actions.add_argument("--check-southern-settlements", action="store_true")
     actions.add_argument("--apply-southern-settlements", action="store_true")
@@ -2087,6 +2132,8 @@ def main() -> int:
     actions.add_argument("--check-regional-settlements", action="store_true")
     actions.add_argument("--apply-regional-settlements", action="store_true")
     args = parser.parse_args()
+    if args.check_shahrabad_population or args.apply_shahrabad_population:
+        return update_shahrabad_population(args.apply_shahrabad_population)
     if args.check_regional_settlements or args.apply_regional_settlements:
         return update_regional_settlements(args.apply_regional_settlements)
     if args.check_stelander_islands or args.apply_stelander_islands:
@@ -2144,7 +2191,8 @@ def main() -> int:
 
     island_drift = update_stelander_islands(False)
     regional_drift = update_regional_settlements(False)
-    return max(island_drift, regional_drift, validate_main())
+    shahrabad_drift = update_shahrabad_population(False)
+    return max(island_drift, regional_drift, shahrabad_drift, validate_main())
 
 
 if __name__ == "__main__":
