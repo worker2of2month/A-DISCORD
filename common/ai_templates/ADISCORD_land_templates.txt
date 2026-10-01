@@ -233,6 +233,29 @@ ADISCORD_mountaineer_templates = {
 	blocked_for = { EXZ }
 	role = mountaineers
 	upgrade_prio = { base = 2 }
+	ADISCORD_hazard_detachment = {
+		enable = {
+			has_tech = ADISCORD_tech_radiation_patrols
+			OR = {
+				tag = SLA
+				tag = RZA
+				tag = MLR
+				tag = ERT
+				tag = IRT
+				tag = SCA
+			}
+			NOT = { has_equipment = { infantry_equipment < 2700 } }
+			NOT = { has_equipment = { support_equipment < 60 } }
+			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 36 } }
+		}
+		reinforce_prio = 1
+		upgrade_prio = { base = 12 }
+		can_upgrade_in_field = { always = no }
+		target_template = {
+			regiments = { ADISCORD_hazard_infantry = 3 }
+		}
+	}
+
 	STP_cw_mountain_brigade = {
 		enable = {
 			STP_cw_mountain_war_active = yes

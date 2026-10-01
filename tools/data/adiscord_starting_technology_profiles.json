@@ -333,6 +333,18 @@
         "ADISCORD_tech_salvage_standards"
       ]
     },
+    "hazard_infantry": {
+      "seeds": [
+        "ADISCORD_tech_sealed_combat_suits",
+        "ADISCORD_tech_radiation_patrols"
+      ],
+      "technologies": [
+        "ADISCORD_tech_composite_protection_kits",
+        "ADISCORD_tech_fieldcraft_manuals",
+        "ADISCORD_tech_radiation_patrols",
+        "ADISCORD_tech_sealed_combat_suits"
+      ]
+    },
     "late_2183": {
       "seeds": [
         "ADISCORD_tech_precision_metrology_recovery",
@@ -1003,15 +1015,15 @@
       "rationale": "Besjaysk core survives as a small fragment rather than a modern institutional state.",
       "evidence": {
         "states": 1,
-        "civilian_factories": 0,
-        "military_factories": 0,
+        "civilian_factories": 2,
+        "military_factories": 1,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 0,
+        "infrastructure_levels": 3,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 2,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -1067,15 +1079,15 @@
       "rationale": "Dispersed Besjaysk fragment with no starting factories or advanced service base.",
       "evidence": {
         "states": 2,
-        "civilian_factories": 0,
-        "military_factories": 0,
+        "civilian_factories": 3,
+        "military_factories": 2,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 0,
+        "infrastructure_levels": 4,
         "research_slots": 2,
         "convoys": 0,
-        "oob_divisions": 1,
+        "oob_divisions": 3,
         "starting_doctrines": []
       },
       "technologies_2160": [

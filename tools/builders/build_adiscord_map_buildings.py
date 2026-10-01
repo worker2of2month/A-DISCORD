@@ -299,6 +299,7 @@ def synchronize_buildings(
             lines[mismatch.line - 1] = ";".join(fields)
         lines, _height_changes = mountain_building_heights(root, lines)
         lines = interior_dam_anchor(lines)
+        lines = bezhaysk_castle_clearance(lines)
         # Nudge writes this file with CRLF and no final newline. The engine
         # treats a terminal empty row as a malformed building definition, so
         # preserve both details when regenerating the file.
@@ -315,6 +316,30 @@ def interior_dam_anchor(lines: list[str]) -> list[str]:
         if fields[:2] == ["53", "dam_spawn"]:
             fields[2], fields[4] = "3751.00", "947.00"
             line = ";".join(fields)
+        result.append(line)
+    return result
+
+
+def bezhaysk_castle_clearance(lines: list[str]) -> list[str]:
+    """Keep native building visuals outside the permanent Grayson castle footprint."""
+    placements = {
+        ("supply_node", "3782.00", "968.00"): ("3783.00", "11.30", "971.10"),
+        ("anti_air_building", "3782.00", "968.00"): ("3788.00", "11.00", "970.00"),
+        ("industrial_complex", "3783.00", "970.00"): ("3788.00", "11.00", "974.00"),
+        ("arms_factory", "3784.00", "967.00"): ("3787.00", "10.80", "964.00"),
+        ("air_base", "3786.00", "967.00"): ("3788.00", "11.00", "966.00"),
+        ("bunker", "3785.00", "968.00"): ("3783.00", "11.10", "965.00"),
+        ("nuclear_reactor_spawn", "3784.00", "966.00"): ("3788.00", "11.00", "965.00"),
+        ("special_project_facility_spawn", "3785.00", "967.00"): ("3786.80", "11.00", "965.50"),
+    }
+    result = []
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[0] == "41":
+            position = placements.get((fields[1], fields[2], fields[4]))
+            if position is not None:
+                fields[2:5] = position
+                line = ";".join(fields)
         result.append(line)
     return result
 
@@ -548,6 +573,8 @@ def validate(root: Path = ROOT) -> list[str]:
     issues.extend(required_spawn_issues(lines, state_ids))
     if interior_dam_anchor(lines) != lines:
         issues.append("state 53 dam_spawn must use its interior integer anchor")
+    if bezhaysk_castle_clearance(lines) != lines:
+        issues.append("state 41 building visuals overlap the Grayson castle footprint")
     _planned_heights, height_changes = mountain_building_heights(root, lines)
     issues.extend(
         f"map/buildings.txt:{line}: building height differs from the mountain surface"

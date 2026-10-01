@@ -49,6 +49,33 @@ ADISCORD_vorkerland_collapse_field_army = {
 	ai_strategy = { type = dont_defend_ally_borders value = 1 }
 }
 
+ADISCORD_vorkerland_hazard_forces = {
+	allowed = {
+		OR = {
+			tag = SLA
+			tag = RZA
+			tag = MLR
+			tag = ERT
+			tag = IRT
+			tag = SCA
+		}
+	}
+	enable = {
+		has_tech = ADISCORD_tech_radiation_patrols
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 6
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 10
+	}
+}
+
 # Main claimants keep enough political authority available for the authored
 # wartime decisions. Individual decisions still decide their own availability
 # and weight; this block never invokes their effects directly.

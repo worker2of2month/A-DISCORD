@@ -228,6 +228,16 @@ ADISCORD_grant_technology_profile_fragment_low_tech = {
 	}
 }
 
+ADISCORD_grant_technology_profile_hazard_infantry = {
+	set_technology = {
+		ADISCORD_tech_composite_protection_kits = 1
+		ADISCORD_tech_fieldcraft_manuals = 1
+		ADISCORD_tech_radiation_patrols = 1
+		ADISCORD_tech_sealed_combat_suits = 1
+		popup = no
+	}
+}
+
 ADISCORD_grant_technology_profile_late_2183 = {
 	set_technology = {
 		ADISCORD_tech_bolt_head_fitting = 1

@@ -263,9 +263,10 @@ def geometry():
     g.hip_roof(-6, -.2, FLOOR + 3.0, 5.0, 6.1, 2.2)
     g.box((-6, -3.1, FLOOR + 1.1), (1.15, .12, 2.2), 4)
     # The plinth has a central opening for steps down to the surrounding terrain.
+    tread = 2.5 / 9
     for i in range(9):
         top = FLOOR * (i + 1) / 9
-        g.box((0, -10.85 + i * .3, top / 2), (4.6, .3, top), 6)
+        g.box((0, -11 + (i + .5) * tread, top / 2), (4.6, tread, top), 6)
     return g
 
 

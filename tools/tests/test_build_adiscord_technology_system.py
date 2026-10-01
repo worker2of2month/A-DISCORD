@@ -2041,5 +2041,127 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertIn("abort_when_not_enabled = yes", policy)
         self.assertNotIn("equipment_production_min_factories", policy)
 
+class HazardInfantryTests(unittest.TestCase):
+    TAGS = ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA")
+    UNIT = "ADISCORD_hazard_infantry"
+    read = staticmethod(InfantryRoleAndShieldTests.read)
+    block = staticmethod(InfantryRoleAndShieldTests.block)
+
+    def test_research_unlock_and_profile_include_real_prerequisites(self):
+        tech = "ADISCORD_tech_radiation_patrols"
+        self.assertIn(self.UNIT, generator.ENABLE_SUBUNITS[tech])
+        profile = set(generator.STARTING_TECH_PROFILES["hazard_infantry"])
+        self.assertIn(tech, profile)
+        self.assertIn("ADISCORD_tech_sealed_combat_suits", profile)
+        self.assertEqual(profile, set(generator.technology_prerequisite_closure(profile)))
+        self.assertNotIn(tech, generator.STARTING_TECH_PROFILES["common"])
+        source = self.read("common/scripted_effects/ADISCORD_technology_baseline_effects.txt")
+        effect = self.block(source, "ADISCORD_grant_technology_profile_hazard_infantry")
+        for prerequisite in profile:
+            self.assertIn(prerequisite + " = 1", effect)
+
+    def test_specialist_is_costly_and_has_only_supported_local_terrain_bonuses(self):
+        source = self.read("common/units/ADISCORD_land_units.txt")
+        unit = self.block(source, self.UNIT)
+        terrain = self.block(unit, "contaminated")
+        self.assertIn("special_forces = yes", unit)
+        self.assertIn("active = no", unit)
+        self.assertIn("manpower = 1000", unit)
+        self.assertIn("training_time = 150", unit)
+        self.assertIn("support_equipment", self.block(unit, "essential"))
+        self.assertEqual(set(re.findall(r"\b(\w+)\s*=", terrain)), {"attack", "defence", "movement"})
+        for stat, minimum in (("attack", 0.5), ("defence", 0.4), ("movement", 0.6)):
+            self.assertGreaterEqual(float(re.search(rf"\b{stat} = ([0-9.]+)", terrain)[1]), minimum)
+        self.assertNotIn("reliability_factor", unit)
+        self.assertNotIn("attrition =", unit)
+        self.assertNotIn("armor_value", unit)
+
+    def test_each_zone_country_gets_technology_before_its_only_starting_division(self):
+        from tools.validators import validate_adiscord_division_templates as templates
+        units, issues = templates._collect_subunits(ROOT)
+        self.assertEqual(issues, [])
+        definitions, references, _ = templates.collect_templates_and_references(ROOT)
+        source = self.read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        for tag in self.TAGS:
+            with self.subTest(tag=tag):
+                effect = self.block(source, f"ADISCORD_vorkerland_setup_{tag.lower()}")
+                profile = "ADISCORD_grant_technology_profile_hazard_infantry = yes"
+                oob = f'load_oob = "{tag}_vorkerland_collapse"'
+                self.assertLess(effect.index("ADISCORD_grant_2150_technology_baseline"), effect.index(profile))
+                self.assertLess(effect.index(profile), effect.index(oob))
+                filename = f"history/units/{tag}_vorkerland_collapse.txt"
+                deployed = [r for r in references if r.path == filename and r.kind == "oob"]
+                self.assertEqual(len(deployed), 1)
+                mixed = next(t for t in definitions if t.path == filename and t.name == deployed[0].name)
+                battalions = [slot.unit for slot in mixed.slots]
+                self.assertEqual(battalions.count(self.UNIT), 2)
+                self.assertEqual(battalions.count("ADISCORD_militia"), 1)
+                self.assertEqual(sum(units[u].manpower for u in battalions), 3000)
+                available = [t for t in definitions if t.path == filename and t.name == "CBRN Protection Detachment"]
+                self.assertEqual(len(available), 1)
+                self.assertEqual([s.unit for s in available[0].slots], [self.UNIT] * 3)
+                # Issued reserves cover the new 30% equipment shortfall and leave spares.
+                self.assertRegex(effect, r"type = support_equipment_1\s+amount = 40")
+                self.assertRegex(effect, r"type = ADISCORD_squad_weapons_equipment_0\s+amount = 24")
+        placeholder = self.read("history/countries/EXZ - Exclusion Zone.txt")
+        self.assertNotIn("hazard_infantry", placeholder)
+        self.assertNotIn("load_oob", placeholder)
+
+    def test_new_and_replaced_oob_templates_have_consistent_audits(self):
+        from tools.validators import validate_adiscord_division_templates as templates
+        issues = templates.validate(ROOT)
+        relevant = [issue for issue in issues if any(
+            f"{tag}_vorkerland_collapse" in issue or f"oob_{tag.lower()}_" in issue
+            for tag in self.TAGS
+        )]
+        self.assertEqual(relevant, [])
+
+    def test_model_has_native_bindings_at_every_weapon_level(self):
+        from tools.assets.source import build_northern_infantry as models
+        asset = self.read("gfx/entities/zz_ADISCORD_country_infantry.asset")
+        gfx = self.read("gfx/entities/ADISCORD_country_infantry.gfx")
+        entities = {
+            re.search(r'name\s*=\s*"([^"]+)"', block)[1]: block
+            for block in models.blocks(asset, "entity")
+        }
+        for level in range(8):
+            suffix = "" if level == 0 else f"_{level + 1}"
+            key = self.UNIT + suffix + "_entity"
+            self.assertEqual(asset.count(f'name = "{key}"'), 1)
+            body = entities[key]
+            self.assertIn(f'ADISCORD_infantry_weapon_{level}_right_entity', body)
+            self.assertEqual(len(list(models.blocks(body, "attach"))), 4)
+            if level > 1:
+                self.assertIn('clone = "ADISCORD_hazard_infantry_2_entity"', body)
+                body += entities[self.UNIT + "_2_entity"]
+            else:
+                self.assertNotIn("clone =", body)
+            for token in ("cigarette", "lighter", 'animation = "long_idle'):
+                self.assertNotIn(token, body)
+            for state in ("attack", "defend", "support_attack", "move", "retreat", "death", "idle", "training"):
+                self.assertIn(f'name = "{state}"', body)
+        for pose in ("rifle", "mg"):
+            key = f"ADISCORD_HAZ_field_{pose}_mesh"
+            self.assertEqual(gfx.count(f'name = "{key}"'), 1)
+        self.assertNotIn('name = "HAZ_infantry_entity"', asset)
+        for path, content in models.bindings().items():
+            self.assertEqual(path.read_bytes(), content)
+        self.assertTrue((ROOT / "tools/assets/source/ADISCORD_hazard_infantry.blend").is_file())
+
+    def test_badges_and_localisation_load_in_every_size(self):
+        from PIL import Image
+        sprites = validator.collect_sprite_names()
+        for size, dimensions in (("medium", (152, 42)), ("medium_white", (60, 12)), ("small", (60, 12))):
+            path = ROOT / sprites[f"GFX_unit_{self.UNIT}_icon_{size}"]
+            with Image.open(path) as icon:
+                self.assertEqual(icon.size, dimensions)
+        for language in ("russian", "english"):
+            path = ROOT / f"localisation/{language}/ADISCORD_technology_doctrine_l_{language}.yml"
+            self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
+            text = path.read_text(encoding="utf-8-sig")
+            for suffix in ("", "_desc"):
+                self.assertEqual(len(re.findall(rf'^ {self.UNIT}{suffix}:0 "[^"\r\n]+"$', text, re.M)), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

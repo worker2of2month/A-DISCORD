@@ -590,8 +590,19 @@ ADISCORD_vorkerland_setup_sla = {
 		build_railway = { level = 2 fallback = yes start_state = 49 target_state = 191 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SLA_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = SLA
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = SLA
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = SLA }
 	}
 	log = "[ADISCORD Vorkerland] SLA setup completed"
@@ -617,8 +628,19 @@ ADISCORD_vorkerland_setup_rza = {
 		build_railway = { level = 2 fallback = yes start_state = 177 target_state = 220 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "RZA_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = RZA
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = RZA
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = RZA }
 	}
 	log = "[ADISCORD Vorkerland] RZA setup completed"
@@ -641,8 +663,19 @@ ADISCORD_vorkerland_setup_mlr = {
 		build_railway = { level = 2 fallback = yes start_state = 152 target_state = 189 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "MLR_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = MLR
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = MLR
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = MLR }
 	}
 	log = "[ADISCORD Vorkerland] MLR setup completed"
@@ -664,8 +697,19 @@ ADISCORD_vorkerland_setup_ert = {
 		build_railway = { level = 2 fallback = yes start_state = 169 target_state = 171 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "ERT_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = ERT
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = ERT
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = ERT }
 	}
 	log = "[ADISCORD Vorkerland] ERT setup completed"
@@ -688,8 +732,19 @@ ADISCORD_vorkerland_setup_irt = {
 		build_railway = { level = 2 fallback = yes start_state = 181 target_state = 178 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "IRT_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = IRT
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = IRT
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = IRT }
 	}
 	log = "[ADISCORD Vorkerland] IRT setup completed"
@@ -713,8 +768,19 @@ ADISCORD_vorkerland_setup_sca = {
 		build_railway = { level = 2 fallback = yes start_state = 173 target_state = 211 }
 		ADISCORD_grant_2150_technology_baseline = yes
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+		ADISCORD_grant_technology_profile_hazard_infantry = yes
 		ADISCORD_economy_initialize_country = yes
 		load_oob = "SCA_vorkerland_collapse"
+		add_equipment_to_stockpile = {
+			type = support_equipment_1
+			amount = 40
+			producer = SCA
+		}
+		add_equipment_to_stockpile = {
+			type = ADISCORD_squad_weapons_equipment_0
+			amount = 24
+			producer = SCA
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 800 producer = SCA }
 	}
 	log = "[ADISCORD Vorkerland] SCA setup completed"

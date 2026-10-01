@@ -154,6 +154,7 @@ class DoctrineContractTests(unittest.TestCase):
             ("sf_marine", "ADISCORD_marine_infantry"),
             ("sf_vertical", "hq_paratrooper"),
             ("sf_urban", "ADISCORD_assault_infantry"),
+            ("sf_contaminated", "ADISCORD_hazard_infantry"),
             ("recon_raiding", "ADISCORD_recon_platform"),
         ):
             tech = re.search(r"has_tech = (\w+)", schools[profile].gate)[1]
@@ -172,6 +173,7 @@ class DoctrineContractTests(unittest.TestCase):
             "naval_surface_raiders": "heavy_cruiser",
             "sf_shield": "ADISCORD_urban_breacher",
             "sf_marine": "ADISCORD_marine_infantry",
+            "sf_contaminated": "ADISCORD_hazard_infantry",
         }
         for school in doctrines.SCHOOLS:
             if school.profile not in recipients:

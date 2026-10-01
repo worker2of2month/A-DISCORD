@@ -973,6 +973,10 @@ technologies = {
 			soft_attack = 0.018
 			defense = 0.03
 		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.024
+			defense = 0.04
+		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.024
 			defense = 0.04
@@ -1043,6 +1047,10 @@ technologies = {
 		ADISCORD_urban_breacher = {
 			soft_attack = 0.031
 			hard_attack = 0.019
+		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.041
+			hard_attack = 0.025
 		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.041
@@ -1118,6 +1126,10 @@ technologies = {
 			breakthrough = 0.032
 			ap_attack = 0.019
 		}
+		ADISCORD_hazard_infantry = {
+			breakthrough = 0.043
+			ap_attack = 0.025
+		}
 		ADISCORD_mechanized_infantry = {
 			breakthrough = 0.043
 			ap_attack = 0.025
@@ -1189,6 +1201,10 @@ technologies = {
 			soft_attack = 0.033
 			hard_attack = 0.019
 		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.044
+			hard_attack = 0.026
+		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.044
 			hard_attack = 0.026
@@ -1259,6 +1275,10 @@ technologies = {
 			max_organisation = 0.676
 			default_morale = 0.02
 		}
+		ADISCORD_hazard_infantry = {
+			max_organisation = 0.902
+			default_morale = 0.027
+		}
 		ADISCORD_mechanized_infantry = {
 			max_organisation = 0.902
 			default_morale = 0.027
@@ -1328,6 +1348,10 @@ technologies = {
 		ADISCORD_urban_breacher = {
 			soft_attack = 0.035
 			hard_attack = 0.02
+		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.046
+			hard_attack = 0.027
 		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.046
@@ -1425,6 +1449,10 @@ technologies = {
 			max_organisation = 0.79
 			default_morale = 0.022
 		}
+		ADISCORD_hazard_infantry = {
+			max_organisation = 1.053
+			default_morale = 0.029
+		}
 		ADISCORD_mechanized_infantry = {
 			max_organisation = 1.053
 			default_morale = 0.029
@@ -1494,6 +1522,10 @@ technologies = {
 			max_organisation = 0.818
 			default_morale = 0.022
 		}
+		ADISCORD_hazard_infantry = {
+			max_organisation = 1.091
+			default_morale = 0.03
+		}
 		ADISCORD_mechanized_infantry = {
 			max_organisation = 1.091
 			default_morale = 0.03
@@ -1562,6 +1594,10 @@ technologies = {
 		ADISCORD_urban_breacher = {
 			soft_attack = 0.04
 			defense = 0.022
+		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.053
+			defense = 0.03
 		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.053
@@ -1665,6 +1701,10 @@ technologies = {
 			soft_attack = 0.042
 			breakthrough = 0.024
 		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.056
+			breakthrough = 0.032
+		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.056
 			breakthrough = 0.032
@@ -1747,6 +1787,10 @@ technologies = {
 			soft_attack = 0.044
 			breakthrough = 0.025
 		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.058
+			breakthrough = 0.033
+		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.058
 			breakthrough = 0.033
@@ -1815,6 +1859,10 @@ technologies = {
 		ADISCORD_urban_breacher = {
 			soft_attack = 0.046
 			defense = 0.026
+		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.061
+			defense = 0.035
 		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.061
@@ -1890,6 +1938,11 @@ technologies = {
 			soft_attack = 0.07
 			defense = 0.07
 			max_organisation = 1.598
+		}
+		ADISCORD_hazard_infantry = {
+			soft_attack = 0.093
+			defense = 0.093
+			max_organisation = 2.131
 		}
 		ADISCORD_mechanized_infantry = {
 			soft_attack = 0.093
@@ -3144,6 +3197,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_combat_recon_drones
 			research_cost_coeff = 1
 		}
+		enable_subunits = { ADISCORD_hazard_infantry }
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
@@ -3151,7 +3205,7 @@ technologies = {
 			position = { x = 2 y = 15 }
 		}
 		ai_will_do = {
-			factor = 17.5
+			factor = 23.625
 		}
 		categories = { infantry_weapons support_tech }
 	}

@@ -204,6 +204,11 @@ def reward(
     return slug, ru, en, effects
 
 
+def scoped(scope: str, *effects: str) -> str:
+    body = "\n".join("\t" + line for effect in effects for line in effect.splitlines())
+    return f"{scope} = {{\n{body}\n}}"
+
+
 REWARD_PROFILES = {
     "mass": (
         reward(
@@ -1425,32 +1430,31 @@ REWARD_PROFILES.update(
                 "sealed_patrols",
                 "Герметичные патрули",
                 "Sealed Patrols",
-                "attrition = -0.015",
+                "ADISCORD_hazard_infantry = { reliability = 0.04 }",
             ),
             reward(
                 "dose_rotation",
                 "Ротация по дозовой нагрузке",
                 "Exposure Rotation",
-                "category_special_forces = { default_morale = 0.03 }",
+                "ADISCORD_hazard_infantry = { default_morale = 0.03 }",
             ),
             reward(
                 "ruin_navigation",
                 "Навигация в мёртвых зонах",
                 "Dead-zone Navigation",
-                "category_special_forces = { maximum_speed = 0.02 }",
+                "ADISCORD_hazard_infantry = { contaminated = { movement = 0.10 } }",
             ),
             reward(
                 "protected_supply",
                 "Защищённое снабжение",
                 "Protected Supply",
-                "category_special_forces = { supply_consumption = -0.02 }",
+                "ADISCORD_hazard_infantry = { supply_consumption = -0.02 }",
             ),
             reward(
                 "dead_zone_raiders",
                 "Рейдеры мёртвых зон",
                 "Dead-zone Raiders",
-                "attrition = -0.025",
-                "category_special_forces = { breakthrough = 0.05 defense = 0.05 }",
+                scoped("ADISCORD_hazard_infantry", scoped("contaminated", "attack = 0.10", "defence = 0.10")),
             ),
         ),
         "sf_urban": (
@@ -1587,11 +1591,6 @@ REWARD_PROFILES.update(
         ),
     }
 )
-
-
-def scoped(scope: str, *effects: str) -> str:
-    body = "\n".join("\t" + line for effect in effects for line in effect.splitlines())
-    return f"{scope} = {{\n{body}\n}}"
 
 
 REWARD_PROFILES.update(
@@ -2312,11 +2311,11 @@ SCHOOLS = (
         "ADISCORD_special_forces_adaptation",
         "Группы заражённых зон",
         "Contaminated-zone Teams",
-        "Герметичное снаряжение и дозовая ротация позволяют выполнять задачи в химически и радиационно опасной местности.",
-        "Sealed equipment and exposure rotation sustain missions in chemically and radiologically hazardous terrain.",
+        "Спецназ РХБ-защиты обслуживает фильтры, меняет группы по дозовой нагрузке и прокладывает маршруты через заражённую местность.",
+        "CBRN special forces maintain filters, rotate teams by exposure and establish routes through contaminated terrain.",
         "GFX_doctrine_special_forces_1_medium",
-        "always = yes",
-        ("attrition = -0.015", "category_special_forces = { default_morale = 0.02 }"),
+        "has_tech = ADISCORD_tech_radiation_patrols",
+        ("ADISCORD_hazard_infantry = { default_morale = 0.02 }",),
         "sf_contaminated",
         (
             "modifier = { factor = 1.8 has_tech = ADISCORD_tech_adaptive_radiation_shielding }",

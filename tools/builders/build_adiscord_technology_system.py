@@ -6455,6 +6455,10 @@ STARTING_TECH_PROFILE_SEEDS = {
         "ADISCORD_tech_refurbished_receivers",
         "ADISCORD_tech_restored_truck_fleets",
     ),
+    "hazard_infantry": (
+        "ADISCORD_tech_sealed_combat_suits",
+        "ADISCORD_tech_radiation_patrols",
+    ),
     # The late bookmark receives a bounded recovered-generation package, not
     # every technology whose nominal date is earlier than 2183.
     "late_2183": (
@@ -6670,6 +6674,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
 
 
 ENABLE_SUBUNITS = {
+    "ADISCORD_tech_radiation_patrols": ("ADISCORD_hazard_infantry",),
     "ADISCORD_tech_kefreyt_shield_special_forces": ("ADISCORD_urban_breacher",),
     "ADISCORD_tech_belt_fed_recovery": ("ADISCORD_regimental_fire_support",),
     "ADISCORD_tech_portable_at_cells": ("ADISCORD_regimental_anti_tank",),
@@ -6889,6 +6894,7 @@ SQUAD_WEAPON_TRAINING_SCALE = {
     "infantry": 1.0,
     "ADISCORD_assault_infantry": 1.0,
     "ADISCORD_urban_breacher": 0.75,
+    "ADISCORD_hazard_infantry": 1.0,
     "ADISCORD_mechanized_infantry": 1.0,
     "ADISCORD_marine_infantry": 1.0,
     "mountaineers": 1.0,
@@ -7670,8 +7676,8 @@ TECHNICAL_TECH_DESCRIPTIONS = {
         "Mobile surgical teams provide urgent care at forward medical posts",
     ),
     "radiation_patrols": (
-        "Защитное снаряжение и приборы контроля заражения позволяют готовить разведывательные выходы в опасную местность",
-        "Protective equipment and contamination monitors support reconnaissance preparations for hazardous areas",
+        "Противогазы, защитные костюмы и дозиметры позволяют готовить спецназ РХБ-защиты для боя и разведки на заражённой местности",
+        "Respirators, protective suits and dosimeters enable CBRN special forces trained to fight and reconnoiter contaminated terrain",
     ),
     "postwar_weapon_standardization": (
         "Восстановленные нарезные станки и измерительный контроль обеспечивают повторяемую геометрию канала ствола, шаг нарезов и соосность патронника",
@@ -9047,6 +9053,11 @@ LAND_EQUIPMENT_LOCALISATION = {
 
 
 INFANTRY_FAMILY_LOCALISATION = {
+    "ADISCORD_hazard_infantry": ("Спецназ РХБ-защиты", "CBRN Special Forces"),
+    "ADISCORD_hazard_infantry_desc": (
+        "Бойцы в противогазах и защитных костюмах уверенно сражаются и передвигаются на заражённой местности. Маски, фильтры и дозиметры входят во вспомогательное снаряжение. Длительная подготовка и лимит спецвойск ограничивают развёртывание; опасная местность по-прежнему изнашивает оснащение.",
+        "Troops in respirators and protective suits fight and move effectively in contaminated terrain. Support equipment includes masks, filters and dosimeters. Long training and the special forces cap limit deployment; hazardous terrain still wears down their equipment.",
+    ),
     "ADISCORD_territorial_desc": (
         "Лёгкая стрелковая линия без группового оружия: дешевле оснащение и снабжение, слабее наступление и устойчивость в затяжном бою.",
         "Light rifle formations without crew-served weapons: cheaper equipment and supply, weaker offensives and endurance in sustained combat.",

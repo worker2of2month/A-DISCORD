@@ -13,6 +13,7 @@ UNITS = {
     "territorial": "irregular_infantry",
     "assault_infantry": "assault_engineer",
     "marine_infantry": "marine",
+    "hazard_infantry": "infantry",
 }
 SIZES = (
     ("gfx/interface/counters/divisions_large", "unit_", "_icon"),

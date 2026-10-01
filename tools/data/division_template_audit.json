@@ -2,7 +2,7 @@
   "schema_version": 1,
   "inventory_baseline": {
     "candidate_active_oobs": 99,
-    "candidate_oob_templates": 172,
+    "candidate_oob_templates": 178,
     "candidate_script_templates": 16,
     "candidate_oob_references": 453,
     "candidate_create_unit_references": 37,
@@ -3004,12 +3004,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -3021,20 +3021,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_ert_vorkerland_collapse_ert_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_ert_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/ERT_vorkerland_collapse.txt",
+        "owner": "ERT"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_ert_hazard_detachment"
       }
     },
     {
@@ -3327,12 +3380,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -3344,20 +3397,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_irt_vorkerland_collapse_irt_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_irt_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/IRT_vorkerland_collapse.txt",
+        "owner": "IRT"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_irt_hazard_detachment"
       }
     },
     {
@@ -4000,12 +4106,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -4017,20 +4123,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_mlr_vorkerland_collapse_mlr_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_mlr_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/MLR_vorkerland_collapse.txt",
+        "owner": "MLR"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_mlr_hazard_detachment"
       }
     },
     {
@@ -6455,12 +6614,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -6472,20 +6631,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_rza_vorkerland_collapse_rza_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_rza_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/RZA_vorkerland_collapse.txt",
+        "owner": "RZA"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_rza_hazard_detachment"
       }
     },
     {
@@ -6500,12 +6712,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -6517,20 +6729,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sca_vorkerland_collapse_sca_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_sca_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SCA_vorkerland_collapse.txt",
+        "owner": "SCA"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_sca_hazard_detachment"
       }
     },
     {
@@ -6691,12 +6956,12 @@
       "legacy_names": [],
       "regiments": [
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 0
         },
         {
-          "type": "ADISCORD_militia",
+          "type": "ADISCORD_hazard_infantry",
           "x": 0,
           "y": 1
         },
@@ -6708,20 +6973,73 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.75,
+        "organization": 52.75,
         "manpower": 3000,
         "equipment": {
-          "infantry_equipment": 2700
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 24,
+          "support_equipment": 40
         },
-        "supply": 0.12
+        "supply": 0.2
       },
       "equipment_availability": {
-        "infantry_equipment": true
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
       },
-      "ai_role": "emergency_militia",
+      "ai_role": "line",
       "replacement_path": {
         "kind": "retain",
         "target": "oob_sla_vorkerland_collapse_sla_collapse_militia"
+      }
+    },
+    {
+      "key": "oob_sla_hazard_detachment",
+      "source": {
+        "kind": "oob",
+        "path": "history/units/SLA_vorkerland_collapse.txt",
+        "owner": "SLA"
+      },
+      "technical_name": "CBRN Protection Detachment",
+      "display_name": "CBRN Protection Detachment",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "ADISCORD_hazard_infantry",
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 58.75,
+        "manpower": 3000,
+        "equipment": {
+          "infantry_equipment": 2700,
+          "ADISCORD_squad_weapons_equipment": 36,
+          "support_equipment": 60
+        },
+        "supply": 0.24
+      },
+      "equipment_availability": {
+        "infantry_equipment": true,
+        "ADISCORD_squad_weapons_equipment": true,
+        "support_equipment": true
+      },
+      "ai_role": "line",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "oob_sla_hazard_detachment"
       }
     },
     {

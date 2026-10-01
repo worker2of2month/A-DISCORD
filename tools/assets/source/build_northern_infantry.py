@@ -38,6 +38,7 @@ CONFIG = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry.mesh',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
+    'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh',
     **{
         tag: ROOT / 'gfx/models/units/STP_infantry_hedonist.mesh'
         for tag in RETINUE_STYLES
@@ -51,6 +52,7 @@ NORMALS = {
     'SHL': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'ARB': ROOT / 'gfx/models/units/APH_irregular_infantry_normal.dds',
     'NAM': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
+    'HAZ': ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds',
     **{
         tag: ROOT / 'gfx/models/units/STP_infantry_hedonist__normal.dds'
         for tag in RETINUE_STYLES
@@ -104,6 +106,65 @@ def finalize_mesh(path):
         data = path.read_bytes()
         path.write_bytes(data[: data.index(marker)] + locators)
     print(path.name, 'zero-weight indices repaired:', changed)
+
+
+def hazard_entity(level):
+    """Keep combat and weapon states without unsealing the respirator at idle."""
+    suffix = '' if level == 0 else '_' + str(level + 1)
+    lines = ['entity = {']
+    if level > 1:
+        lines.append('\tclone = "ADISCORD_hazard_infantry_2_entity"')
+    lines.append(f'\tname = "ADISCORD_hazard_infantry{suffix}_entity"')
+    if level < 2:
+        pose = 'rifle' if level == 0 else 'mg'
+        lines.extend((
+            f'\tpdxmesh = "ADISCORD_HAZ_field_{pose}_mesh"',
+            '\tdefault_state = "idle"',
+        ))
+        states = (
+            ('attack', f'charge_{pose}', 2),
+            ('attack', f'charge_{pose}_shoot', 1),
+            ('defend', 'attack', 1),
+            ('support_attack', 'support_attack', 1),
+            ('move', 'move', 1),
+            ('move', 'march_move', 1),
+            ('retreat', 'retreat', 1),
+            ('death', 'death', 1),
+            ('idle', 'idle', 1),
+            ('training', 'training', 1),
+        )
+        for name, animation, chance in states:
+            lines.extend((
+                '\tstate = {',
+                f'\t\tname = "{name}"',
+                f'\t\tanimation = "{animation}"',
+                '\t\tanimation_blend_time = 0.3',
+                '\t\tanimation_speed = 1.0',
+                f'\t\tchance = {chance}',
+            ))
+            if name == 'attack':
+                lines.extend(('\t\tlooping = no', '\t\tnext_state = "attack"'))
+                if chance == 2:
+                    weapon = 'rifle2' if level == 0 else 'rifle1'
+                    lines.append(f'\t\tpropagate_state = {{ {weapon} = "idle" }}')
+            if name == 'move':
+                lines.append('\t\tevent = { sound = { soundeffect = "infantry_move_animation" } }')
+            lines.append('\t}')
+        lines.append('\tscale = 0.8')
+    for name, node, pose in (
+        ('rifle1', 'Right_Hand_node', 'right'),
+        ('rifle2', 'Left_Hand_node', 'left'),
+        ('rifle4', 'Root_node_2', 'right'),
+        ('rifle3', 'mid_back_node', 'long_idle'),
+    ):
+        lines.extend((
+            '\tattach = {',
+            f'\t\tname = "{name}"',
+            f'\t\t{node} = "ADISCORD_infantry_weapon_{level}_{pose}_entity"',
+            '\t}',
+        ))
+    lines.append('}')
+    return '\n'.join(lines)
 
 
 def bindings():
@@ -163,9 +224,13 @@ def bindings():
                 fields = [f'clone = "{parent}"', f'name = "{name}"']
                 if pdxmesh:
                     fields.append(f'pdxmesh = "{pdxmesh}"')
-                if tag in ('RUS', 'SHL') or tag in RETINUE_STYLES:
+                if tag in ('RUS', 'SHL', 'HAZ') or tag in RETINUE_STYLES:
                     return 'entity = {\n\t' + '\n\t'.join(fields) + '\n}'
                 return 'entity = { ' + ' '.join(fields) + ' }'
+
+            if tag == 'HAZ':
+                country_entities.append(hazard_entity(level))
+                continue
 
             country_entities.append(
                 entity(
@@ -787,6 +852,200 @@ def retinue_kit(tag, body, mesh, cloth, canvas, trim):
         )
 
 
+def hazard_kit(body, mesh, cloth, suit, canvas, rubber):
+    """Rigid mask follows the head; the soft collar follows the upper torso."""
+    import bpy
+    from infantry_polish import cloth_bag
+
+    metal = cloth('Blackened respirator fittings', (0.038, 0.048, 0.046))
+    glass = cloth('Smoked optical glass', (0.025, 0.065, 0.074))
+    highlight = cloth('Glass edge reflection', (0.11, 0.19, 0.20))
+    warning = cloth('Identification yellow', (0.63, 0.45, 0.075))
+
+    def shell(name, center, radii, material, bone='head', rings=12, segments=24):
+        vertices = []
+        for row in range(rings + 1):
+            latitude = math.pi * row / rings
+            for column in range(segments):
+                angle = math.tau * column / segments
+                vertices.append((
+                    center[0] + radii[0] * math.sin(latitude) * math.cos(angle),
+                    center[1] + radii[1] * math.sin(latitude) * math.sin(angle),
+                    center[2] + radii[2] * math.cos(latitude),
+                ))
+        faces = [
+            (row * segments + i, row * segments + (i + 1) % segments,
+             (row + 1) * segments + (i + 1) % segments, (row + 1) * segments + i)
+            for row in range(rings) for i in range(segments)
+        ]
+        return mesh(name, vertices, faces, material, bone)
+
+    def cylinder(name, center, radius, depth, material, bone='head', axis='y', tilt=0, segments=24):
+        vertices = []
+        for distance, scale in ((-depth / 2, 0.88), (-depth * 0.38, 1),
+                                (depth * 0.38, 1), (depth / 2, 0.88)):
+            for i in range(segments):
+                angle = math.tau * i / segments
+                a, b = radius * scale * math.cos(angle), radius * scale * math.sin(angle)
+                point = (a, distance, b) if axis == 'y' else (a, b, distance)
+                if tilt:
+                    x, y, z = point
+                    point = (x * math.cos(tilt) - y * math.sin(tilt),
+                             x * math.sin(tilt) + y * math.cos(tilt), z)
+                vertices.append(tuple(c + v for c, v in zip(center, point)))
+        faces = [
+            (row * segments + i, row * segments + (i + 1) % segments,
+             (row + 1) * segments + (i + 1) % segments, (row + 1) * segments + i)
+            for row in range(3) for i in range(segments)
+        ]
+        faces.extend((tuple(reversed(range(segments))), tuple(range(3 * segments, 4 * segments))))
+        return mesh(name, vertices, faces, material, bone)
+
+    def eyepiece(side):
+        outline = [
+            (0.062, 6.85), (0.125, 6.94), (0.30, 6.94), (0.385, 6.88),
+            (0.41, 6.70), (0.365, 6.56), (0.25, 6.59), (0.12, 6.72),
+        ]
+        for _ in range(2):
+            rounded = []
+            for a, b in zip(outline, outline[1:] + outline[:1]):
+                rounded.extend((
+                    tuple(0.75 * x + 0.25 * y for x, y in zip(a, b)),
+                    tuple(0.25 * x + 0.75 * y for x, y in zip(a, b)),
+                ))
+            outline = rounded
+        cx = sum(x for x, z in outline) / len(outline)
+        cz = sum(z for x, z in outline) / len(outline)
+        lens_scale = 0.88
+        outline = [
+            (cx + (x - cx) * lens_scale, cz + (z - cz) * lens_scale)
+            for x, z in outline
+        ]
+
+        def surface(name, levels, material):
+            vertices = []
+            for scale, depth in levels:
+                for x, z in outline:
+                    px = cx + (x - cx) * scale
+                    vertices.append((side * px, depth + 0.42 * (px - cx), cz + (z - cz) * scale))
+            count = len(outline)
+            faces = [
+                (row * count + i, row * count + (i + 1) % count,
+                 (row + 1) * count + (i + 1) % count, (row + 1) * count + i)
+                for row in range(len(levels) - 1) for i in range(count)
+            ]
+            if levels[-1][0] < 0.1:
+                faces.append(tuple(range((len(levels) - 1) * count, len(vertices))))
+            mesh(name, vertices, faces, material, 'head')
+
+        surface('Contoured rubber eye seal', ((1.14, -0.675), (1.10, -0.725), (0.99, -0.754)), rubber)
+        surface('Eyepiece retaining ring', ((1.025, -0.748), (0.98, -0.769), (0.90, -0.773)), metal)
+        surface('Convex smoked eyepiece', ((0.905, -0.769), (0.67, -0.790), (0.05, -0.807)), glass)
+        # A narrow baked reflection remains legible in the native diffuse atlas.
+        vertices = [
+            (side * (cx + (x - cx) * lens_scale),
+             -0.779 + 0.42 * (x - cx) * lens_scale, cz + (z - cz) * lens_scale)
+            for x, z in ((0.15, 6.893), (0.29, 6.898), (0.30, 6.886), (0.16, 6.882))
+        ]
+        mesh('Lens upper reflection', vertices, [(0, 1, 2, 3)], highlight, 'head')
+
+    hood_rings = (
+        (6.12, 0.35, 0.39), (6.30, 0.41, 0.46), (6.55, 0.455, 0.515),
+        (6.79, 0.45, 0.515), (6.98, 0.405, 0.455),
+        (7.08, 0.32, 0.365), (7.13, 0.19, 0.23), (7.14, 0.02, 0.03),
+    )
+    vertices = []
+    segments = 40
+    for row, (height, width, depth) in enumerate(hood_rings):
+        for i in range(segments):
+            angle = math.tau * i / segments
+            fold = 0.014 * math.cos(6 * angle + row * 0.45)
+            vertices.append((
+                (width + fold) * math.cos(angle),
+                -0.045 + (depth + fold) * math.sin(angle),
+                height + 0.006 * math.sin(3 * angle),
+            ))
+    faces = [
+        (row * segments + i, row * segments + (i + 1) % segments,
+         (row + 1) * segments + (i + 1) % segments, (row + 1) * segments + i)
+        for row in range(len(hood_rings) - 1) for i in range(segments)
+    ]
+    faces.append(tuple(range((len(hood_rings) - 1) * segments, len(vertices))))
+    mesh('Fitted protective hood', vertices, faces, suit, 'head')
+    shell('Soft protective collar', (0, -0.045, 6.05), (0.47, 0.44, 0.30), suit, 'back_mid')
+    vertices = []
+    for width, height, depth in ((0.455, 0.46, -0.43), (0.44, 0.43, -0.58), (0.405, 0.405, -0.65)):
+        for i in range(segments):
+            angle = math.tau * i / segments
+            vertices.append((width * math.sin(angle), depth + 0.14 * abs(math.sin(angle)),
+                             6.63 + height * math.cos(angle)))
+    faces = [
+        (row * segments + i, row * segments + (i + 1) % segments,
+         (row + 1) * segments + (i + 1) % segments, (row + 1) * segments + i)
+        for row in range(2) for i in range(segments)
+    ]
+    mesh('Hood face opening welt', vertices, faces, suit, 'head')
+    mask_objects = set(bpy.context.scene.objects)
+    shell('Full face respirator', (0, -0.48, 6.62), (0.39, 0.28, 0.45), rubber)
+    shell('Moulded nose bridge', (0, -0.688, 6.60), (0.115, 0.16, 0.205), rubber, rings=10, segments=24)
+    for side in (-1, 1):
+        eyepiece(side)
+        tilt = side * 0.46
+
+        def filter_part(name, distance, radius, depth, material):
+            center = (side * 0.36 - distance * math.sin(tilt),
+                      -0.56 + distance * math.cos(tilt), 6.36)
+            cylinder(name, center, radius, depth, material, tilt=tilt)
+
+        filter_part('Filter threaded coupling', 0.05, 0.128, 0.12, rubber)
+        filter_part('Black side filter canister', -0.06, 0.198, 0.22, metal)
+        for distance in (-0.15, -0.10, 0.025):
+            filter_part('Canister reinforcing bead', distance, 0.202, 0.025, rubber)
+        filter_part('Recessed filter intake', -0.177, 0.108, 0.025, rubber)
+        filter_part('Intake central fitting', -0.196, 0.048, 0.015, metal)
+        for i in range(8):
+            angle = math.tau * i / 8
+            vertices = []
+            for radius, offset in ((0.119, -0.03), (0.182, -0.03), (0.182, 0.03), (0.119, 0.03)):
+                x = radius * math.cos(angle + offset)
+                z = radius * math.sin(angle + offset)
+                vertices.append((side * 0.36 + x * math.cos(tilt) + 0.18 * math.sin(tilt),
+                                 -0.56 + x * math.sin(tilt) - 0.18 * math.cos(tilt), 6.36 + z))
+            mesh('Filter radial reinforcement', vertices, [(0, 1, 2, 3)], rubber, 'head')
+    cylinder('Exhalation valve housing', (0, -0.806, 6.38), 0.159, 0.095, metal)
+    cylinder('Recessed valve grille', (0, -0.858, 6.38), 0.130, 0.018, rubber)
+    cylinder('Valve diaphragm cap', (0, -0.873, 6.38), 0.049, 0.025, metal)
+    for i in range(12):
+        angle = math.tau * i / 12
+        cylinder('Valve intake port', (0.098 * math.cos(angle), -0.874, 6.38 + 0.098 * math.sin(angle)),
+                 0.010, 0.009, metal, segments=8)
+    for obj in set(bpy.context.scene.objects) - mask_objects:
+        for vertex in obj.data.vertices:
+            vertex.co.y += 0.085
+
+    for part, kind, vertices, faces in cloth_bag(0.92, 0.38, 1.12, (-0.23, 0.23)):
+        mesh('Filter reserve pack ' + part,
+             [(x, y + 0.78, z + 5.10) for x, y, z in vertices],
+             faces, canvas if kind == 'canvas' else rubber)
+    for side in (-1, 1):
+        cylinder('Decontamination flask', (side * 0.59, 0.73, 4.97),
+                 0.14, 0.68, metal, 'back_mid', axis='z')
+    panel = fitted_panel_factory(body, mesh)
+    panel('Sealed chest pocket', -0.25, 5.34, 0.34, 0.50, canvas)
+    panel('Personal dosimeter', 0.25, 5.50, 0.22, 0.30, rubber, offset=0.09)
+    panel('Dosimeter display', 0.25, 5.56, 0.13, 0.07, glass, offset=0.105)
+    panel('Hazard identification strip', -0.25, 5.45, 0.24, 0.06, warning, offset=0.085)
+    cylinder('Hazard badge', (0, 0.99, 5.38), 0.20, 0.02, warning, 'back_mid')
+    for angle in (0, math.tau / 3, 2 * math.tau / 3):
+        vertices = []
+        for radius in (0.075, 0.17):
+            for step in range(9):
+                a = angle + math.pi / 3 * step / 8
+                vertices.append((radius * math.cos(a), 1.008, 5.38 + radius * math.sin(a)))
+        mesh('Hazard badge trefoil', vertices,
+             [(i, i + 1, i + 10, i + 9) for i in range(8)], rubber)
+
+
 def build_field(tag, output):
     """Keep the donor garment topology and skin while replacing its field kit."""
     import bpy
@@ -832,7 +1091,7 @@ def build_field(tag, output):
     body.name = tag + '_body'
     # Whole islands keep native leather pouches separate from cloth tinting.
     small_kit = set()
-    if tag in ('TFF', 'YPR', 'RUS', 'NAM') or tag in RETINUE_STYLES:
+    if tag in ('TFF', 'YPR', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES:
         keys = [tuple(round(x, 4) for x in v.co) for v in body.data.vertices]
         adjacent = {k: set() for k in keys}
         for face in body.data.polygons:
@@ -857,7 +1116,7 @@ def build_field(tag, output):
                 and len(component) < 100
             ):
                 small_kit.update(component)
-        if tag in ('TFF', 'RUS', 'NAM') or tag in RETINUE_STYLES:
+        if tag in ('TFF', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES:
             assert cap
             bm = bmesh.new()
             bm.from_mesh(body.data)
@@ -868,6 +1127,10 @@ def build_field(tag, output):
             )
             bm.to_mesh(body.data)
             bm.free()
+    if tag == 'HAZ':
+        for vertex in body.data.vertices:
+            if vertex.co.z > 6.7:
+                vertex.co.z = 6.7 + (vertex.co.z - 6.7) * 0.65
     original = body.data.materials[0]
 
     def cloth(name, color, detail=False):
@@ -953,6 +1216,12 @@ def build_field(tag, output):
         canvas_color = (0.11, 0.075, 0.045)
         wool_color = (0.026, 0.033, 0.042)
         scarf_color = (0.24, 0.022, 0.035)
+    elif tag == 'HAZ':
+        jacket_color = (0.14, 0.20, 0.105)
+        trouser_color = (0.12, 0.17, 0.085)
+        canvas_color = (0.065, 0.085, 0.060)
+        wool_color = (0.017, 0.022, 0.020)
+        scarf_color = (0.18, 0.23, 0.115)
     elif tag == 'NAM':
         jacket_color = (0.055, 0.095, 0.105)
         trouser_color = (0.035, 0.048, 0.052)
@@ -972,11 +1241,15 @@ def build_field(tag, output):
     scarf = cloth('Frontier wool scarf', scarf_color)
     for mat in (jacket, trousers, canvas):
         body.data.materials.append(mat)
+    if tag == 'HAZ':
+        body.data.materials.append(wool)
     for face in body.data.polygons:
         x, y, z = face.center
         # Bare head, hands and original boot leather keep their authored atlas.
         skin = (z > 6.13 and abs(x) < 0.44) or (abs(x) > 2.30 and 3.9 < z < 4.85)
-        if tag == 'YPR' and z > 6.80:
+        if tag == 'HAZ' and skin:
+            face.material_index = 4
+        elif tag == 'YPR' and z > 6.80:
             face.material_index = 3
         elif (
             skin
@@ -994,7 +1267,7 @@ def build_field(tag, output):
             ) / len(face.loop_indices)
             pants = (
                 uv.x < 0.44 and uv.y < 0.45
-                if tag in ('TFF', 'RUS', 'NAM') or tag in RETINUE_STYLES
+                if tag in ('TFF', 'RUS', 'NAM', 'HAZ') or tag in RETINUE_STYLES
                 else z < 3.55
             )
             face.material_index = 2 if pants else 1
@@ -1013,7 +1286,9 @@ def build_field(tag, output):
         gear.append(obj)
         return obj
 
-    if tag in RETINUE_STYLES:
+    if tag == 'HAZ':
+        hazard_kit(body, mesh, cloth, jacket, canvas, wool)
+    elif tag in RETINUE_STYLES:
         retinue_kit(tag, body, mesh, cloth, canvas, scarf)
     elif tag == 'YPR':
         for part, kind, vertices, faces in cloth_bag(0.95, 0.34, 0.92, (-0.22, 0.22)):
@@ -1170,9 +1445,11 @@ def build_field(tag, output):
     bpy.ops.object.join()
     equipment = bpy.context.object
     equipment.name = tag + '_gear'
-    solid = equipment.modifiers.new('Fabric thickness', 'SOLIDIFY')
-    solid.thickness = 0.008
-    bpy.ops.object.modifier_apply(modifier=solid.name)
+    # The respirator and canisters already have closed shells.
+    if tag != 'HAZ':
+        solid = equipment.modifiers.new('Fabric thickness', 'SOLIDIFY')
+        solid.thickness = 0.008
+        bpy.ops.object.modifier_apply(modifier=solid.name)
     bpy.ops.object.mode_set(mode='EDIT')
     bpy.ops.mesh.select_all(action='SELECT')
     bpy.ops.uv.smart_project(island_margin=0.015)
@@ -1220,6 +1497,8 @@ def build_field(tag, output):
         data[: data.index(marker)] + donor_data[donor_data.index(marker) :]
     )
     finalize_mesh(path)
+    if tag == 'HAZ':
+        bpy.ops.file.pack_all()
     bpy.ops.wm.save_as_mainfile(filepath=str(output / f'{tag}.blend'))
 
 
@@ -1398,6 +1677,28 @@ def verify(output, tags, walk=False):
                     bpy.ops.wm.save_as_mainfile(
                         filepath=str(output / f'{tag}_preview.blend')
                     )
+                    if tag == 'HAZ':
+                        scene.render.resolution_x = 512
+                        scene.render.resolution_y = 512
+                        scene.render.film_transparent = True
+                        head = rigs[0].pose.bones['head']
+                        head_transform = (
+                            rigs[0].matrix_world @ head.matrix
+                            @ head.bone.matrix_local.inverted()
+                        )
+                        camera.location = head_transform @ Vector((0, -20, 6.68))
+                        target = head_transform @ Vector((0, -0.05, 6.60))
+                        camera.rotation_euler = (
+                            (target - camera.location)
+                            .to_track_quat('-Z', 'Y').to_euler()
+                        )
+                        camera.data.ortho_scale = 1.55
+                        scene.render.filepath = str(output / 'HAZ_badge.png')
+                        bpy.ops.render.render(write_still=True)
+                        scene.render.resolution_x = 650
+                        scene.render.resolution_y = 800
+                        scene.render.film_transparent = False
+                        camera.data.ortho_scale = 8.7
                     camera.location = (-9, 20, 9)
                     camera.rotation_euler = (
                         (Vector((0, 0, 3.7)) - camera.location)
@@ -1481,6 +1782,15 @@ def package(output, apply=False, check=False, tags=None):
         struct.pack_into('<I', header, 108, 0x401008)
         return bytes(header) + b''.join(level[128:] for level in levels)
 
+    if 'HAZ' in tags:
+        files[ROOT / 'tools/assets/source/ADISCORD_hazard_infantry.blend'] = (
+            output / 'HAZ.blend'
+        ).read_bytes()
+        badge = output / 'HAZ_badge.png'
+        if apply:
+            assert badge.is_file(), 'HAZ: run --verify to render the unit badge'
+        if badge.is_file():
+            files[ROOT / 'tools/assets/source/ADISCORD_hazard_infantry.png'] = badge.read_bytes()
     for tag in tags:
         files[dest / f'{tag}_field.mesh'] = (output / f'{tag}_field.mesh').read_bytes()
         for part in ('body', 'gear'):

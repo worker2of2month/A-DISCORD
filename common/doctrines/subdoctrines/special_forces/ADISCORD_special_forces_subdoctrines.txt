@@ -50,7 +50,7 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		always = yes
+		has_tech = ADISCORD_tech_radiation_patrols
 	}
 	xor = {
 		ADISCORD_special_forces_mountain_companies
@@ -61,29 +61,32 @@ ADISCORD_special_forces_contaminated_zone_teams = {
 		base = 1
 		modifier = { factor = 1.8 has_tech = ADISCORD_tech_adaptive_radiation_shielding }
 	}
-	attrition = -0.015
-	category_special_forces = { default_morale = 0.02 }
+	ADISCORD_hazard_infantry = { default_morale = 0.02 }
 	rewards = {
 		ADISCORD_special_forces_contaminated_zone_teams_sealed_patrols = {
 			mastery = 30
-			attrition = -0.015
+			ADISCORD_hazard_infantry = { reliability = 0.04 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_dose_rotation = {
 			mastery = 40
-			category_special_forces = { default_morale = 0.03 }
+			ADISCORD_hazard_infantry = { default_morale = 0.03 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_ruin_navigation = {
 			mastery = 50
-			category_special_forces = { maximum_speed = 0.02 }
+			ADISCORD_hazard_infantry = { contaminated = { movement = 0.10 } }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_protected_supply = {
 			mastery = 60
-			category_special_forces = { supply_consumption = -0.02 }
+			ADISCORD_hazard_infantry = { supply_consumption = -0.02 }
 		}
 		ADISCORD_special_forces_contaminated_zone_teams_dead_zone_raiders = {
 			mastery = 70
-			attrition = -0.025
-			category_special_forces = { breakthrough = 0.05 defense = 0.05 }
+			ADISCORD_hazard_infantry = {
+				contaminated = {
+					attack = 0.10
+					defence = 0.10
+				}
+			}
 		}
 	}
 }
