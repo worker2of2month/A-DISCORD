@@ -16,6 +16,8 @@ DECISIONS = Path("common/decisions/ADISCORD_rin_oath_crisis_decisions.txt")
 CATEGORIES = Path("common/decisions/categories/ADISCORD_rin_oath_crisis_categories.txt")
 EFFECTS = Path("common/scripted_effects/ADISCORD_rin_oath_crisis_effects.txt")
 TRIGGERS = Path("common/scripted_triggers/ADISCORD_rin_oath_crisis_triggers.txt")
+# Carry RIN cores but start under TRU; the RIN armistice must not take them.
+TRU_START_STATES = (146, 150)
 ON_ACTIONS = Path("common/on_actions/02_ADISCORD_rin_oath_crisis_on_actions.txt")
 IDEAS = Path("common/ideas/ADISCORD_inner_frontier_ideas.txt")
 CHARACTERS = Path("common/characters/ADISCORD_inner_frontier_characters.txt")
@@ -271,7 +273,7 @@ def collect_issues() -> list[str]:
         issues.append("fresh schedule guard does not confirm that RIN exists")
     if "ADISCORD_rin_oath_crisis_legacy_needs_schedule" in triggers + on_actions:
         issues.append("retired RIN startup migration trigger remains reachable")
-    for state_id in (134, 146, 147, 148, 149, 150):
+    for state_id in (134, 147, 148, 149):
         if f"owns_state = {state_id}" not in partition_valid:
             issues.append(
                 f"partition runtime assertion does not check ownership of state {state_id}"
@@ -361,10 +363,15 @@ def collect_issues() -> list[str]:
         int(value)
         for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north_partition)
     ]
-    if all_transfers != [146, 148, 149, 150, 134, 147]:
+    if all_transfers != [148, 149, 134, 147]:
         issues.append(
-            f"partition transfer order/set is {all_transfers}, expected south 146/148/149/150 then north 134/147"
+            f"partition transfer order/set is {all_transfers}, expected south 148/149 then north 134/147"
         )
+    for state_id in TRU_START_STATES:
+        if f"owns_state = {state_id}" in partition_valid:
+            issues.append(
+                f"partition runtime assertion still requires TRU start state {state_id}"
+            )
     if north_transfers != [134, 147]:
         issues.append(
             f"northern partition transfer set is {north_transfers}, expected 134/147"
@@ -373,7 +380,7 @@ def collect_issues() -> list[str]:
         issues.append(
             "partition repair resolves the ambiguous original RIN tag instead of southern ROOT"
         )
-    for state_id in (146, 148, 149, 150):
+    for state_id in (148, 149):
         token = f"{state_id} = {{ set_state_controller_to = event_target:ADISCORD_rin_southern_charter }}"
         if token not in apply_partition:
             issues.append(
@@ -485,11 +492,17 @@ def collect_issues() -> list[str]:
         issues.append(
             "RIN places the support-only artillery subunit in a regiment column"
         )
-    for state_id in (134, 146, 147, 148, 149, 150):
+    for state_id in (134, 147, 148, 149):
         state = state_history(state_id)
         if "owner = RIN" not in state or "add_core_of = RIN" not in state:
             issues.append(
                 f"state {state_id} no longer starts as a RIN core and possession"
+            )
+    for state_id in TRU_START_STATES:
+        state = state_history(state_id)
+        if "owner = TRU" not in state or "add_core_of = RIN" not in state:
+            issues.append(
+                f"state {state_id} no longer starts as a TRU possession with a RIN core"
             )
     for state_id in (134, 147):
         if "add_claim_by = MON" not in state_history(state_id):

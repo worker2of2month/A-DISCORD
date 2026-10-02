@@ -180,14 +180,12 @@ ADISCORD_rin_apply_partition_armistice = {
 
 	# White peace can convert the occupied civil-war front into ownership. Restore
 	# the authored border explicitly and its controller cache in the same pass.
-	transfer_state = 146
+	# States 146/150 start under TRU (RIN keeps only cores there), so the
+	# armistice must never hand them to the southern charter.
 	transfer_state = 148
 	transfer_state = 149
-	transfer_state = 150
-	146 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
 	148 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
 	149 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
-	150 = { set_state_controller_to = event_target:ADISCORD_rin_southern_charter }
 	event_target:ADISCORD_rin_northern_court = {
 		remove_mission = ADISCORD_rin_palatin_breakup_mission
 		remove_ideas = RIN_two_oaths

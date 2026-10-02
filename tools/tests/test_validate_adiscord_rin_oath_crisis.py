@@ -202,14 +202,18 @@ class RinOathCrisisContractTests(unittest.TestCase):
         north_transfers = [
             int(value) for value in re.findall(r"\btransfer_state\s*=\s*(\d+)", north)
         ]
-        self.assertEqual(all_transfers, [146, 148, 149, 150, 134, 147])
+        self.assertEqual(all_transfers, [148, 149, 134, 147])
         self.assertEqual(north_transfers, [134, 147])
         self.assertNotIn("\n\tRIN = {", apply)
-        for state in (146, 148, 149, 150):
+        for state in (148, 149):
             self.assertIn(
                 f"{state} = {{ set_state_controller_to = event_target:ADISCORD_rin_southern_charter }}",
                 apply,
             )
+        # 146/150 start under TRU; the armistice must not move them to RIN.
+        for state in (146, 150):
+            self.assertNotIn(f"transfer_state = {state}", apply)
+            self.assertNotIn(f"{state} = {{ set_state_controller_to", apply)
         for state in (134, 147):
             self.assertIn(
                 f"{state} = {{ set_state_controller_to = event_target:ADISCORD_rin_northern_court }}",

@@ -39,16 +39,12 @@ ADISCORD_rin_partition_armistice_is_valid = {
 	NOT = { has_idea = RIN_southern_charter_mobilization }
 	NOT = { has_idea = RIN_northern_crown_columns }
 	NOT = { has_idea = RIN_crown_palatin }
-	owns_state = 146
 	owns_state = 148
 	owns_state = 149
-	owns_state = 150
 	NOT = { owns_state = 134 }
 	NOT = { owns_state = 147 }
-	controls_state = 146
 	controls_state = 148
 	controls_state = 149
-	controls_state = 150
 	event_target:ADISCORD_rin_northern_court = {
 		exists = yes
 		has_country_flag = ADISCORD_rin_northern_crown_side
@@ -62,10 +58,8 @@ ADISCORD_rin_partition_armistice_is_valid = {
 		NOT = { has_idea = RIN_charter_compact }
 		owns_state = 134
 		owns_state = 147
-		NOT = { owns_state = 146 }
 		NOT = { owns_state = 148 }
 		NOT = { owns_state = 149 }
-		NOT = { owns_state = 150 }
 		controls_state = 134
 		controls_state = 147
 		is_subject_of = MON
