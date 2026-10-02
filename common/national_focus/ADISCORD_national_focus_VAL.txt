@@ -44,7 +44,7 @@ focus_tree = {
 		y = 0
 		cost = 3
 		available_if_capitulated = yes
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 30 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_authority_5_tt
 			add_political_power = 25
@@ -68,7 +68,7 @@ focus_tree = {
 		y = 1
 		cost = 3
 		prerequisite = { focus = VAL_The_Contract_State }
-		ai_will_do = { base = 15 }
+		ai_will_do = { base = 15 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			VAL_Valera_Solgalov = { add_country_leader_trait = { ideology = contractual_etatism trait = The_Weaponry_Baron } }
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
@@ -93,7 +93,7 @@ focus_tree = {
 		y = 2
 		cost = 2
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
-		ai_will_do = { base = 10 }
+		ai_will_do = { base = 10 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Price_Of_Loyalty_tt
 			add_power_balance_value = { id = VAL_command_balance value = 0.1 }
@@ -118,7 +118,7 @@ focus_tree = {
 		y = 2
 		cost = 3
 		prerequisite = { focus = VAL_The_Weaponry_Baron }
-		ai_will_do = { base = 10 }
+		ai_will_do = { base = 10 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Count_The_Captains_tt
 			add_power_balance_value = { id = VAL_command_balance value = -0.15 }
@@ -144,7 +144,7 @@ focus_tree = {
 		cost = 3
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
 		prerequisite = { focus = VAL_Count_The_Captains }
-		ai_will_do = { base = 10 }
+		ai_will_do = { base = 10 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_One_Ledger_One_Banner_tt
 			add_war_support = 0.05
@@ -173,7 +173,7 @@ focus_tree = {
 		y = 1
 		cost = 5
 		prerequisite = { focus = VAL_The_Contract_State }
-		ai_will_do = { base = 18 }
+		ai_will_do = { base = 18 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Factories_Like_Cathedrals_tt
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 producer = VAL }
@@ -201,6 +201,7 @@ focus_tree = {
 		mutually_exclusive = { focus = VAL_Brokered_Steel }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			add_tech_bonus = {
@@ -229,6 +230,7 @@ focus_tree = {
 		mutually_exclusive = { focus = VAL_Ballistics_Schools }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Brokered_Steel_tt
@@ -257,6 +259,7 @@ focus_tree = {
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 14990 } }
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_authority_5_tt
@@ -291,7 +294,7 @@ focus_tree = {
 		y = 1
 		cost = 4
 		prerequisite = { focus = VAL_The_Contract_State }
-		ai_will_do = { base = 1 modifier = { factor = 30 has_manpower < 30000 } }
+		ai_will_do = { base = 1 modifier = { factor = 30 has_manpower < 30000 } modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_The_Mercenary_State_tt
 			VAL_apply_contract_army_1 = yes
@@ -352,6 +355,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_The_Mercenary_State }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			ADISCORD_economy_receive_15 = yes
@@ -380,6 +384,7 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			activate_advisor = VAL_Voron_army_chief
@@ -407,6 +412,7 @@ focus_tree = {
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 2 has_equipment = { infantry_equipment < 14990 } }
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			activate_advisor = VAL_Stahl_army_chief
@@ -435,6 +441,7 @@ focus_tree = {
 		ai_will_do = {
 			base = 1
 			modifier = { factor = 3 NOT = { has_equipment = { infantry_equipment < 20000 } } }
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			activate_advisor = VAL_Gromov_army_chief
@@ -460,7 +467,7 @@ focus_tree = {
 			focus = VAL_Stahls_Schedules
 			focus = VAL_Gromovs_Assault_Tables
 		}
-		ai_will_do = { base = 1 }
+		ai_will_do = { base = 1 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			activate_advisor = VAL_Morn_theorist
 			custom_effect_tooltip = VAL_focus_progression_VAL_Morns_Supply_Trains_tt
@@ -601,7 +608,7 @@ focus_tree = {
 		y = 4
 		cost = 3
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 20 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 		completion_reward = {
 			add_timed_idea = {
 				idea = VAL_northern_roads_drive
@@ -625,6 +632,7 @@ focus_tree = {
 		mutually_exclusive = { focus = VAL_October_Of_2160 }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Trading_Partners_tt
@@ -650,6 +658,7 @@ focus_tree = {
 		mutually_exclusive = { focus = VAL_Trading_Partners }
 		ai_will_do = {
 			base = 1
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_October_Of_2160_tt
@@ -711,7 +720,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -770,7 +779,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 2 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -797,7 +806,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 2 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -827,7 +836,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 2 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -856,7 +865,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 2 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -887,7 +896,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 modifier = { factor = 0.5 has_equipment = { infantry_equipment < 100000 } } }
+		ai_will_do = { base = 2 modifier = { factor = 0.5 has_equipment = { infantry_equipment < 100000 } } modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -930,7 +939,7 @@ focus_tree = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
-		ai_will_do = { base = 16 }
+		ai_will_do = { base = 16 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -946,7 +955,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } }
+		ai_will_do = { base = 3 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -979,7 +988,7 @@ focus_tree = {
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = { base = 2 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1019,7 +1028,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 30 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1035,7 +1044,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 60000 producer = VAL }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 20 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1242,7 +1251,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1266,7 +1275,7 @@ focus_tree = {
 			add_war_support = 0.03
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } }
+		ai_will_do = { base = 2 modifier = { factor = 2 has_war = yes } modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1311,7 +1320,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -1341,7 +1350,7 @@ focus_tree = {
 			country_event = { id = val_rework.10 }
 			ADISCORD_economy_receive_100 = yes
 		}
-		ai_will_do = { base = 60 }
+		ai_will_do = { base = 60 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1358,7 +1367,7 @@ focus_tree = {
 			add_tech_bonus = { name = VAL_frontier_industry_bonus bonus = 0.5 uses = 1 category = industry }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 50 }
+		ai_will_do = { base = 50 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -1407,7 +1416,7 @@ focus_tree = {
 			ADISCORD_economy_receive_15 = yes
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1434,7 +1443,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1462,7 +1471,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1493,7 +1502,7 @@ focus_tree = {
 				VAL_change_contract_authority = yes
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -1592,7 +1601,7 @@ focus_tree = {
 			hidden_effect = { VAL_apply_contract_industry_1 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 4 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } }
+		ai_will_do = { base = 4 modifier = { factor = 2 has_equipment = { infantry_equipment < 100000 } } modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1655,7 +1664,7 @@ focus_tree = {
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 3 }
+		ai_will_do = { base = 3 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1691,7 +1700,7 @@ focus_tree = {
 			hidden_effect = { VAL_apply_contract_industry_2 = yes }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 30 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1715,7 +1724,7 @@ focus_tree = {
 			add_political_power = 25
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 25 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1777,7 +1786,7 @@ focus_tree = {
 			}
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 40 }
+		ai_will_do = { base = 40 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -1849,7 +1858,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 600 producer = VAL }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1873,7 +1882,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = VAL }
 			hidden_effect = { country_event = { id = val_rework.123 hours = 1 } }
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = { base = 4 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -1911,7 +1920,7 @@ focus_tree = {
 				VAL_refresh_contract_modifier = yes
 			}
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 5 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	#############################################
@@ -2040,6 +2049,7 @@ focus_tree = {
 		# the AI should close the opening act before spending time on side branches.
 		ai_will_do = {
 			base = 1000
+			modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished }
 		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Contracts_Outlive_Kings_tt
@@ -2628,7 +2638,7 @@ focus_tree = {
 			add_political_power = 75
 			add_intel = { target = NOD army_intel = 15 }
 		}
-		ai_will_do = { base = 40 }
+		ai_will_do = { base = 40 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 	focus = {
 		id = VAL_frontier_logistics
@@ -2652,7 +2662,7 @@ focus_tree = {
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
-		ai_will_do = { base = 35 }
+		ai_will_do = { base = 35 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 	focus = {
 		id = VAL_frontier_commissioners
@@ -2679,7 +2689,7 @@ focus_tree = {
 			}
 			custom_effect_tooltip = VAL_frontier_commissioners_tt
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 25 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 	focus = {
 		id = VAL_frontier_provincial_offices
@@ -2706,7 +2716,7 @@ focus_tree = {
 			}
 			custom_effect_tooltip = VAL_frontier_provinces_tt
 		}
-		ai_will_do = { base = 25 }
+		ai_will_do = { base = 25 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 	focus = {
 		id = VAL_Return_Southern_Tsaygen
@@ -2852,7 +2862,7 @@ focus_tree = {
 
 			add_political_power = 75
 		}
-		ai_will_do = { base = 45 }
+		ai_will_do = { base = 45 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 	focus = {
 		id = VAL_frontier_treaty_offices
@@ -2890,7 +2900,7 @@ focus_tree = {
 			}
 			add_stability = 0.05
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = { base = 20 modifier = { factor = 3 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {
@@ -2967,7 +2977,7 @@ focus_tree = {
 		prerequisite = { focus = VAL_frontier_treaty_offices }
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Stelander_Ultimatum_tt unlock_decision_tooltip = VAL_stelander_ultimatum unlock_decision_tooltip = VAL_campaign_against_stelander }
-		ai_will_do = { base = 20 }
+		ai_will_do = { base = 20 modifier = { factor = 5 has_global_flag = STP_cw_union_wars_finished } }
 	}
 
 	focus = {

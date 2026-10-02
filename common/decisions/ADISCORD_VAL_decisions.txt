@@ -662,7 +662,7 @@ VAL_military_operations = {
 			}
 			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing FROM = { clr_country_flag = VAL_campaign_target } }
 		}
-		ai_will_do = { base = 30 }
+		ai_will_do = { base = 60 }
 	}
 
 	VAL_stelander_ultimatum = {
@@ -695,7 +695,7 @@ VAL_military_operations = {
 				}
 			}
 		}
-		ai_will_do = { base = 10 }
+		ai_will_do = { base = 50 }
 	}
 }
 
