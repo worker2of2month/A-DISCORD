@@ -110,3 +110,13 @@ BJK_STP_revolution = {
 	color = rgb { 150 128 80 }
 	color_ui = rgb { 150 128 80 }
 }
+
+RUS_black_banner_empire = {
+	color = rgb { 54 62 66 }
+	color_ui = rgb { 54 62 66 }
+}
+
+RUS_restoration_state = {
+	color = rgb { 118 133 105 }
+	color_ui = rgb { 118 133 105 }
+}

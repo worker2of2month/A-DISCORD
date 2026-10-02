@@ -16,4 +16,12 @@ spriteTypes = {
 		name = "GFX_terrain_vorkernsberg_winter"
 		textureFile = "gfx/interface/terrains/vorkernsberg_winter.dds"
 	}
+	spriteType = {
+		name = "GFX_terrain_reactor_zone"
+		textureFile = "gfx/interface/terrains/reactor_zone.dds"
+	}
+	spriteType = {
+		name = "GFX_terrain_reactor_zone_winter"
+		textureFile = "gfx/interface/terrains/reactor_zone.dds"
+	}
 }

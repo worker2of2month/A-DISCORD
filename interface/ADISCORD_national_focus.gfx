@@ -1480,6 +1480,36 @@ spriteTypes = {
 		name = "GFX_focus_VAL_Marine_Contract_Corps"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Marine_Contract_Corps.png"
 	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Vorkerland_Contracts_Burn"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Vorkerland_Contracts_Burn.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Land_Register"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Land_Register.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Workshops"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Workshops.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Reclamation_Industrial_Sites"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Reclamation_Industrial_Sites.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Brokered_Steel"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Brokered_Steel.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_VAL_Return_To_World_Market"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Return_To_World_Market.png"
+	}
 	spriteType = {
 		name = "GFX_focus_VAL_Price_Of_Loyalty"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Price_Of_Loyalty.png"

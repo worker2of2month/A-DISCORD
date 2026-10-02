@@ -101,7 +101,7 @@ class SupereventContractTests(unittest.TestCase):
         self.assertIn("NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }", empire)
         self.assertLess(empire.index("set_cosmetic_tag"), empire.index("ADISCORD_vorkerland_show_last_empire_superevent"))
         events = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
-        for event_id, request in ((7, 10), (8, 11), (9, 12), (10, 13)):
+        for event_id, request in ((7, 10), (8, 11), (9, 12), (10, 13), (11, 14), (12, 15)):
             event = _event_block(events, f"ADISCORD_superevent.{event_id}")
             self.assertIn(f"ADISCORD_superevent_request = {request}", event)
             self.assertIn("ADISCORD_superevent_enqueue = yes", event)
@@ -184,7 +184,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 10, 11, 9, 1, 12, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -279,6 +279,8 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_rus_last_empire",
                 "superevent_val_commonwealth",
                 "superevent_stelander_great",
+                "superevent_rus_black_banner",
+                "superevent_rus_restoration",
             ),
         )
 

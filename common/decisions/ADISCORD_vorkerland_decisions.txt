@@ -2877,6 +2877,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		}
 		available = {
 			custom_trigger_tooltip = {
+				tooltip = RUS_political_course_chosen_tt
+				RUS_political_course_chosen = yes
+			}
+			custom_trigger_tooltip = {
 				tooltip = RUS_proclaim_the_last_empire_available_tt
 				ADISCORD_vorkerland_rus_can_proclaim_last_empire = yes
 			}
@@ -2890,6 +2894,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		complete_effect = {
 			effect_tooltip = {
 				swap_ideas = { remove_idea = RUS_national_spirit add_idea = RUS_last_empire_spirit }
+				add_ideas = RUS_army_empire_delta
 			}
 			custom_effect_tooltip = RUS_last_empire_cosmetic_tt
 			hidden_effect = { ADISCORD_vorkerland_rus_proclaim_last_empire = yes }
@@ -4373,7 +4378,6 @@ RUS_development_programmes = {
 					add_to_variable = { var = RUS_bunker_food_capacity_bonus value = 20 }
 					RUS_bunker_refresh = yes
 				}
-				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
 		ai_will_do = { base = 2 }
@@ -4610,4 +4614,165 @@ RUS_public_campaigns = {
 		}
 	}
 
+}
+
+# --- rus_balance_of_power ---
+RUS_state_balance_category = {
+	RUS_bop_relief = {
+		icon = generic_industry
+		visible = { has_power_balance = { id = RUS_state_balance } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bop_relief_room_tt
+				power_balance_value = { id = RUS_state_balance value > -0.85 }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bop_relief_cost
+		custom_cost_trigger = { RUS_bop_relief_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						RUS_bop_relief_available = yes
+						RUS_bop_relief_affordable = yes
+					}
+				}
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = RUS_bunker_food value = 20 }
+					RUS_bunker_refresh = yes
+				}
+				add_stability = 0.02
+				add_power_balance_value = { id = RUS_state_balance value = -0.15 }
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_bunker_food value = 70 compare = greater_than_or_equals }
+				power_balance_value = { id = RUS_state_balance value > -0.60 }
+				NOT = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+			}
+		}
+	}
+
+	RUS_bop_reserve = {
+		icon = generic_prepare_civil_war
+		visible = { has_power_balance = { id = RUS_state_balance } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bop_reserve_room_tt
+				power_balance_value = { id = RUS_state_balance value < 0.85 }
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bop_reserve_cost
+		custom_cost_trigger = { RUS_bop_reserve_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						RUS_bop_reserve_available = yes
+						RUS_bop_reserve_affordable = yes
+					}
+				}
+				hidden_effect = {
+					add_political_power = -30
+					subtract_from_variable = { var = RUS_bunker_food value = 30 }
+					RUS_bunker_refresh = yes
+				}
+				add_manpower = 1000
+				add_power_balance_value = { id = RUS_state_balance value = 0.15 }
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 2
+				check_variable = { var = RUS_bunker_food value = 80 compare = greater_than_or_equals }
+				power_balance_value = { id = RUS_state_balance value < 0.60 }
+				OR = {
+					has_war = yes
+					has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
+				}
+			}
+		}
+	}
+
+	RUS_bop_mediation = {
+		icon = generic_political_pressure
+		visible = { has_power_balance = { id = RUS_state_balance } }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_state_balance_government_tt
+				RUS_state_balance_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bop_mediation_needed_tt
+				OR = {
+					power_balance_value = { id = RUS_state_balance value < -0.10 }
+					power_balance_value = { id = RUS_state_balance value > 0.10 }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bop_mediation_cost
+		custom_cost_trigger = { RUS_bop_mediation_affordable = yes }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						RUS_bop_mediation_available = yes
+						RUS_bop_mediation_affordable = yes
+					}
+				}
+				hidden_effect = {
+					add_political_power = -40
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+					if = {
+						limit = { power_balance_value = { id = RUS_state_balance value < 0 } }
+						add_power_balance_value = { id = RUS_state_balance value = 0.15 }
+					}
+					else = { add_power_balance_value = { id = RUS_state_balance value = -0.15 } }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				custom_effect_tooltip = RUS_bop_mediation_result_tt
+			}
+		}
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1
+				OR = {
+					power_balance_value = { id = RUS_state_balance value < -0.60 }
+					power_balance_value = { id = RUS_state_balance value > 0.60 }
+				}
+			}
+		}
+	}
 }

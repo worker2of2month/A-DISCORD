@@ -72,4 +72,14 @@ spriteTypes = {
 		name = "GFX_superevent_stelander_great"
 		textureFile = "gfx/interface/superevents/STP/superevent_party_victory.png"
 	}
+
+	spriteType = {
+		name = "GFX_superevent_rus_black_banner"
+		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+	}
+
+	spriteType = {
+		name = "GFX_superevent_rus_restoration"
+		textureFile = "gfx/interface/superevents/RUS/last empire.png"
+	}
 }

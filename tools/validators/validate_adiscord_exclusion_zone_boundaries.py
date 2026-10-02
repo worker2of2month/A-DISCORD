@@ -21,6 +21,7 @@ try:
         ROOT,
         SUCCESSOR_CORES,
         plan_boundaries,
+        reactor_terrain_output,
         state_path,
     )
     from tools.builders.build_adiscord_northern_countries import load_definition
@@ -39,6 +40,7 @@ except ModuleNotFoundError:
         ROOT,
         SUCCESSOR_CORES,
         plan_boundaries,
+        reactor_terrain_output,
         state_path,
     )
     from builders.build_adiscord_northern_countries import load_definition
@@ -51,6 +53,8 @@ except ModuleNotFoundError:
 
 def validate() -> list[str]:
     issues: list[str] = []
+    if (ROOT / "map/definition.csv").read_bytes() != reactor_terrain_output():
+        issues.append("reactor terrain is not synchronized with state 125")
     planned, original_exz, final_owners = plan_boundaries()
     _colors, details = load_definition()
     for state_id, expected_provinces in sorted(planned.items()):
@@ -81,7 +85,7 @@ def validate() -> list[str]:
             terrains = {
                 details[province_id]["terrain"] for province_id in actual_provinces
             }
-            allowed = {"contaminated", "mountain"}
+            allowed = {"contaminated", "reactor_zone", "mountain"}
             if state_id in CITY_EXCEPTION_STATES:
                 allowed.add("urban")
             if state_id in GEOGRAPHIC_EXCEPTION_STATES:

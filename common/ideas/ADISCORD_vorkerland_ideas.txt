@@ -2824,8 +2824,8 @@ ideas = {
 			}
 		}
 
-		RUS_patient_doctrine = {
-			picture = generic_army_war_college
+		RUS_patient_doctrine_delta = {
+			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -2835,8 +2835,8 @@ ideas = {
 			}
 		}
 
-		RUS_swift_doctrine = {
-			picture = generic_army_war_college
+		RUS_swift_doctrine_delta = {
+			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
@@ -2846,13 +2846,48 @@ ideas = {
 			}
 		}
 
-		RUS_professional_service = {
-			picture = generic_army_war_college
+		RUS_professional_service_delta = {
+			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
-				army_org_factor = 0.03
+				army_org_factor = 0.01
 				training_time_army_factor = -0.05
+			}
+		}
+
+		RUS_army_organization_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { army_org_factor = 0.01 }
+		}
+
+		RUS_army_empire_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.02
+				conscription_factor = 0.02
+				ADISCORD_country_development_army_growth_factor = 0.03
+			}
+		}
+
+		RUS_khan_course_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { army_org_factor = 0.03 }
+		}
+
+		RUS_army_course_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.05
+				planning_speed = 0.03
 			}
 		}
 

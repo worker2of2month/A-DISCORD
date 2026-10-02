@@ -202,6 +202,14 @@ RUS_development_programmes = {
 	priority = 25
 }
 
+# --- rus_balance_of_power ---
+RUS_state_balance_category = {
+	icon = generic_political_pressure
+	allowed = { tag = RUS }
+	visible = { has_power_balance = { id = RUS_state_balance } }
+	visible_when_empty = yes
+}
+
 # --- rus_public_campaigns ---
 RUS_public_campaigns = {
 	icon = generic_political_pressure

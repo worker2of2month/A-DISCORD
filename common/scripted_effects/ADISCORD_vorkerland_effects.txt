@@ -4260,6 +4260,14 @@ ADISCORD_superevent_enqueue = {
 					AND = { check_variable = { ADISCORD_superevent_request = 11 } has_global_flag = superevent_rus_last_empire }
 					AND = { check_variable = { ADISCORD_superevent_request = 12 } has_global_flag = superevent_val_commonwealth }
 					AND = { check_variable = { ADISCORD_superevent_request = 13 } has_global_flag = superevent_stelander_great }
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 15 }
+						has_global_flag = superevent_rus_restoration
+					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 14 }
+						has_global_flag = superevent_rus_black_banner
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4285,6 +4293,8 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_rus_last_empire
 					has_global_flag = superevent_val_commonwealth
 					has_global_flag = superevent_stelander_great
+					has_global_flag = superevent_rus_restoration
+					has_global_flag = superevent_rus_black_banner
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4341,6 +4351,14 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 13 } }
 			set_global_flag = superevent_stelander_great
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 14 } }
+			set_global_flag = superevent_rus_black_banner
+		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 15 } }
+			set_global_flag = superevent_rus_restoration
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
@@ -4353,6 +4371,8 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_rus_last_empire
 	clr_global_flag = superevent_val_commonwealth
 	clr_global_flag = superevent_stelander_great
+	clr_global_flag = superevent_rus_restoration
+	clr_global_flag = superevent_rus_black_banner
 	clr_global_flag = superevent_vorkerland_civilwar
 	clr_global_flag = superevent_vorkerland_dirty_opening
 	clr_global_flag = superevent_vorkerland_worker_victory
@@ -10334,12 +10354,36 @@ RUS_crisis_prepare_restored_fragment = {
 	}
 }
 
+RUS_retire_current_ruler = {
+	if = {
+		limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+		retire_character = RUS_Varlam_Oskol
+	}
+	else_if = {
+		limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+		retire_character = RUS_Pavel_Niva
+	}
+	else_if = {
+		limit = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
+		retire_character = RUS_Mark_Rustan
+	}
+}
+
 RUS_crisis_dissolve_empire = {
 	set_variable = { var = RUS_crisis_phase value = 4 }
 	RUS_campaign_shutdown = yes
 	# Only the selected hegemon receives this choice, even if an ally took the capital.
 	event_target:RUS_crisis_hegemon = {
 		set_country_flag = RUS_crisis_settlement_rights
+		set_variable = { var = RUS_crisis_defeated_course value = 1 }
+		if = {
+			limit = { RUS = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } } }
+			set_variable = { var = RUS_crisis_defeated_course value = 2 }
+		}
+		else_if = {
+			limit = { RUS = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } } }
+			set_variable = { var = RUS_crisis_defeated_course value = 3 }
+		}
 		country_event = { id = ADISCORD_rus_crisis.4 }
 	}
 	for_each_scope_loop = {
@@ -10367,7 +10411,7 @@ RUS_crisis_dissolve_empire = {
 			}
 		}
 	}
-	retire_character = RUS_Mark_Rustan
+	RUS_retire_current_ruler = yes
 	remove_ideas = RUS_last_empire_spirit
 	remove_ideas = RUS_national_spirit
 	ADISCORD_vorkerland_rus_abort_dirty_campaign = yes
@@ -10802,12 +10846,97 @@ ADISCORD_vorkerland_check_rus_dirty_campaign = {
 	}
 }
 
+# Political succession changes the government inside RUS. Construction
+# receipts, propaganda slots and the imperial threat keep their current state.
+RUS_choose_khan_course = {
+	if = {
+		limit = {
+			RUS_political_choice_open = yes
+			NOT = { has_completed_focus = RUS_army_mandate }
+			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
+		}
+		set_politics = {
+			ruling_party = anarchism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = RUS_Mark_Rustan
+			ideology = anarchism_ideology
+		}
+		RUS_black_army_refresh = yes
+		RUS_bunker_refresh = yes
+		country_event = { id = ADISCORD_rus_campaign.12 }
+	}
+}
+
+RUS_choose_army_course = {
+	if = {
+		limit = {
+			RUS_political_choice_open = yes
+			NOT = { has_completed_focus = RUS_reaffirm_khan }
+			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
+			NOT = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+		}
+		if = {
+			limit = { NOT = { has_character = RUS_Varlam_Oskol } }
+			recruit_character = RUS_Varlam_Oskol
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = RUS_Varlam_Oskol
+			ideology = etatism_ideology
+		}
+		add_power_balance_value = {
+			id = RUS_state_balance
+			value = 0.30
+		}
+		RUS_black_army_refresh = yes
+		RUS_bunker_refresh = yes
+		country_event = { id = ADISCORD_rus_campaign.13 }
+	}
+}
+
+RUS_choose_reconstruction_course = {
+	if = {
+		limit = {
+			RUS_political_choice_open = yes
+			NOT = { has_completed_focus = RUS_reaffirm_khan }
+			NOT = { has_completed_focus = RUS_army_mandate }
+			NOT = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+		}
+		if = {
+			limit = { NOT = { has_character = RUS_Pavel_Niva } }
+			recruit_character = RUS_Pavel_Niva
+		}
+		set_politics = {
+			ruling_party = pragmatism
+			elections_allowed = no
+		}
+		promote_character = {
+			character = RUS_Pavel_Niva
+			ideology = pragmatism_ideology
+		}
+		add_power_balance_value = {
+			id = RUS_state_balance
+			value = -0.30
+		}
+		RUS_black_army_refresh = yes
+		RUS_bunker_refresh = yes
+		country_event = { id = ADISCORD_rus_campaign.14 }
+	}
+}
+
 ADISCORD_vorkerland_rus_proclaim_last_empire = {
 	if = {
 		limit = {
 			tag = RUS
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 			ADISCORD_vorkerland_rus_has_empire_territory = yes
+			RUS_khan_governing = yes
+			RUS_political_course_chosen = yes
 		}
 		set_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
 		clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
@@ -10820,21 +10949,38 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 			limit = { NOT = { has_idea = RUS_last_empire_spirit } }
 			add_ideas = RUS_last_empire_spirit
 		}
-		set_cosmetic_tag = RUS_last_empire
-		set_politics = { ruling_party = chauvinism elections_allowed = no }
-		add_country_leader_role = {
-			character = RUS_Mark_Rustan
-			promote_leader = yes
-			country_leader = { ideology = chauvinism_ideology expire = "2200.1.1.1" }
+		if = {
+			limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+			set_cosmetic_tag = RUS_black_banner_empire
+			set_politics = {
+				ruling_party = etatism
+				elections_allowed = no
+			}
 		}
-		set_portraits = {
-			character = RUS_Mark_Rustan
-			civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
+		else_if = {
+			limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+			set_cosmetic_tag = RUS_restoration_state
+			set_politics = {
+				ruling_party = pragmatism
+				elections_allowed = no
+			}
 		}
-		set_country_leader_portrait = {
-			ideology = chauvinism
-			portrait = GFX_portrait_RUS_Mark_Rustan_dictator
+		else = {
+			set_cosmetic_tag = RUS_last_empire
+			set_politics = {
+				ruling_party = anarchism
+				elections_allowed = no
+			}
+			set_portraits = {
+				character = RUS_Mark_Rustan
+				civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
+			}
+			set_country_leader_portrait = {
+				ideology = anarchism
+				portrait = GFX_portrait_RUS_Mark_Rustan_dictator
+			}
 		}
+		RUS_black_army_empire_reform = yes
 		ADISCORD_economy_mark_dirty = yes
 		ADISCORD_vorkerland_show_last_empire_superevent = yes
 		RUS_crisis_check_start = yes
@@ -10848,14 +10994,42 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 
 ADISCORD_vorkerland_show_last_empire_superevent = {
 	if = {
-		limit = { any_country = { is_ai = no } }
-		random_country = {
-			limit = { is_ai = no }
-			country_event = { id = ADISCORD_superevent.8 }
+		limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+		if = {
+			limit = { any_country = { is_ai = no } }
+			random_country = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent.11 }
+			}
+		}
+		else = {
+			country_event = { id = ADISCORD_superevent.11 }
+		}
+	}
+	else_if = {
+		limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+		if = {
+			limit = { any_country = { is_ai = no } }
+			random_country = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent.12 }
+			}
+		}
+		else = {
+			country_event = { id = ADISCORD_superevent.12 }
 		}
 	}
 	else = {
-		country_event = { id = ADISCORD_superevent.8 }
+		if = {
+			limit = { any_country = { is_ai = no } }
+			random_country = {
+				limit = { is_ai = no }
+				country_event = { id = ADISCORD_superevent.8 }
+			}
+		}
+		else = {
+			country_event = { id = ADISCORD_superevent.8 }
+		}
 	}
 }
 
@@ -10888,6 +11062,8 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_rus_last_empire days > 6 }
 					has_global_flag = { flag = superevent_val_commonwealth days > 6 }
 					has_global_flag = { flag = superevent_stelander_great days > 6 }
+					has_global_flag = { flag = superevent_rus_restoration days > 6 }
+					has_global_flag = { flag = superevent_rus_black_banner days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -10904,6 +11080,14 @@ ADISCORD_superevent_observer_tick = {
 			if = { limit = { has_global_flag = { flag = superevent_rus_last_empire days > 6 } } clr_global_flag = superevent_rus_last_empire }
 			if = { limit = { has_global_flag = { flag = superevent_val_commonwealth days > 6 } } clr_global_flag = superevent_val_commonwealth }
 			if = { limit = { has_global_flag = { flag = superevent_stelander_great days > 6 } } clr_global_flag = superevent_stelander_great }
+			if = {
+				limit = { has_global_flag = { flag = superevent_rus_restoration days > 6 } }
+				clr_global_flag = superevent_rus_restoration
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_rus_black_banner days > 6 } }
+				clr_global_flag = superevent_rus_black_banner
+			}
 			ADISCORD_superevent_dispatch_next = yes
 		}
 	}
@@ -11909,6 +12093,27 @@ RUS_bunker_refresh = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
+RUS_black_army_refresh = {
+	if = {
+		limit = {
+			tag = RUS
+			has_country_flag = RUS_bunker_initialized
+			NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+			NOT = { has_dynamic_modifier = { modifier = RUS_black_army } }
+		}
+		add_dynamic_modifier = { modifier = RUS_black_army }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# The proclamation's one-time guard owns this delta; later ruler changes only refresh.
+RUS_black_army_empire_reform = {
+	add_to_variable = { var = RUS_army_org value = 0.02 }
+	add_to_variable = { var = RUS_army_recruitment value = 0.02 }
+	add_to_variable = { var = RUS_army_growth value = 0.03 }
+	RUS_black_army_refresh = yes
+}
+
 RUS_campaign_initialize = {
 	if = {
 		limit = {
@@ -11917,6 +12122,7 @@ RUS_campaign_initialize = {
 		}
 		clr_country_flag = RUS_campaign_start_pending
 		set_country_flag = RUS_bunker_initialized
+		set_power_balance = { id = RUS_state_balance set_value = 0 }
 		add_political_power = 20
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
@@ -11937,12 +12143,25 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_bunker_upgrade_3 value = 0 }
 		set_variable = { var = RUS_bunker_upgrade_4 value = 0 }
 		set_variable = { var = RUS_bunker_upgrade_5 value = 0 }
+		set_variable = { var = RUS_army_org value = 0.08 }
+		set_variable = { var = RUS_army_recruitment value = 0.06 }
+		set_variable = { var = RUS_army_growth value = 0.05 }
+		set_variable = { var = RUS_army_defence value = 0 }
+		set_variable = { var = RUS_army_supply value = 0 }
+		set_variable = { var = RUS_army_speed value = 0 }
+		set_variable = { var = RUS_army_planning value = 0 }
+		set_variable = { var = RUS_army_training value = 0 }
+		RUS_black_army_refresh = yes
 		RUS_bunker_refresh = yes
 		country_event = { id = ADISCORD_rus_campaign.1 days = 2 }
 	}
 }
 
 RUS_campaign_shutdown = {
+	if = {
+		limit = { has_power_balance = { id = RUS_state_balance } }
+		remove_power_balance = { id = RUS_state_balance }
+	}
 	RUS_public_campaigns_shutdown = yes
 	RUS_bunker_refund = yes
 	remove_ideas = RUS_council_mandate
@@ -11950,12 +12169,13 @@ RUS_campaign_shutdown = {
 	remove_ideas = RUS_paid_administration
 	remove_ideas = RUS_open_city_policy
 	remove_ideas = RUS_sealed_throne_policy
-	remove_ideas = RUS_patient_doctrine
-	remove_ideas = RUS_swift_doctrine
-	remove_ideas = RUS_professional_service
 	remove_ideas = RUS_defensive_preparation_spirit
 	remove_ideas = RUS_mobile_preparation_spirit
 	remove_ideas = RUS_public_works_spirit
+	if = {
+		limit = { has_dynamic_modifier = { modifier = RUS_black_army } }
+		remove_dynamic_modifier = { modifier = RUS_black_army }
+	}
 	if = {
 		limit = {
 			has_dynamic_modifier = { modifier = RUS_bunker_complex }
@@ -12169,11 +12389,54 @@ RUS_bunker_upgrade_5_finish = {
 RUS_bunker_weekly_supply = {
 	if = {
 		limit = {
-			RUS_bunker_operational = yes
+			has_country_flag = RUS_bunker_initialized
 		}
-		add_to_variable = { var = RUS_bunker_food value = RUS_bunker_food_balance }
-		clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
-		RUS_bunker_refresh = yes
+		if = {
+			limit = { RUS_bunker_operational = yes }
+			# A returning country needs current production before this week's delivery.
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = RUS_bunker_complex } } }
+				RUS_bunker_refresh = yes
+			}
+			set_temp_variable = { var = RUS_bunker_food_before_tick value = RUS_bunker_food }
+			add_to_variable = { var = RUS_bunker_food value = RUS_bunker_food_balance }
+			clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
+			if = {
+				limit = { check_variable = { var = RUS_bunker_food value = RUS_bunker_food_capacity compare = greater_than } }
+				set_variable = { var = RUS_bunker_food value = RUS_bunker_food_capacity }
+			}
+			set_variable = { var = RUS_bunker_food_space value = RUS_bunker_food_capacity }
+			subtract_from_variable = { var = RUS_bunker_food_space value = RUS_bunker_food }
+			# Stock changes affect national bonuses only when fitted rooms enter or leave hunger.
+			if = {
+				limit = {
+					check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than }
+					OR = {
+						AND = {
+							check_variable = { var = RUS_bunker_food_before_tick value = 0 compare = equals }
+							check_variable = { var = RUS_bunker_food value = 0 compare = greater_than }
+						}
+						AND = {
+							check_variable = { var = RUS_bunker_food_before_tick value = 0 compare = greater_than }
+							check_variable = { var = RUS_bunker_food value = 0 compare = equals }
+						}
+					}
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		else_if = {
+			# Ownership and ruler changes need bounded cleanup even without a control callback.
+			limit = {
+				OR = {
+					has_dynamic_modifier = { modifier = RUS_bunker_complex }
+					has_variable = RUS_bunker_project
+					check_variable = { var = RUS_bunker_food_output value = 0 compare = greater_than }
+					check_variable = { var = RUS_bunker_food_use value = 0 compare = greater_than }
+				}
+			}
+			RUS_bunker_refresh = yes
+		}
 	}
 }
 

@@ -1464,7 +1464,7 @@
 1463;242;145;204;land;false;plains;7
 1464;243;236;147;land;false;plains;7
 1465;54;194;248;land;true;forest;2
-1466;148;146;245;land;false;contaminated;2
+1466;148;146;245;land;false;reactor_zone;2
 1467;78;28;244;land;false;plains;7
 1468;77;193;243;land;false;plains;7
 1469;211;138;77;land;false;plains;7
@@ -1803,7 +1803,7 @@
 1802;250;158;251;land;false;desert;3
 1803;254;127;213;land;false;forest;7
 1804;255;58;160;land;false;plains;7
-1805;224;255;248;land;false;contaminated;2
+1805;224;255;248;land;false;reactor_zone;2
 1806;246;168;69;land;true;plains;7
 1807;179;149;253;land;false;plains;7
 1808;218;91;45;land;false;plains;7
@@ -2746,7 +2746,7 @@
 2745;135;217;41;land;false;forest;7
 2746;244;145;207;land;false;plains;7
 2747;136;238;227;land;false;plains;7
-2748;42;254;34;land;false;contaminated;2
+2748;42;254;34;land;false;reactor_zone;2
 2749;255;148;188;land;false;plains;7
 2750;25;246;54;land;false;plains;7
 2751;245;107;98;land;false;mountain;2
@@ -2962,7 +2962,7 @@
 2961;246;132;243;land;false;plains;7
 2962;245;124;141;land;false;desert;3
 2963;244;37;34;land;true;forest;7
-2964;183;206;250;land;false;contaminated;2
+2964;183;206;250;land;false;reactor_zone;2
 2965;235;105;125;land;false;hills;1
 2966;236;248;255;land;false;hills;3
 2967;249;218;254;land;false;plains;7
@@ -2972,7 +2972,7 @@
 2971;242;212;255;land;true;hills;7
 2972;239;58;31;land;true;plains;7
 2973;230;254;226;land;true;plains;7
-2974;89;217;96;land;false;contaminated;2
+2974;89;217;96;land;false;reactor_zone;2
 2975;211;238;115;land;false;plains;7
 2976;172;249;170;land;false;plains;7
 2977;255;209;197;land;false;hills;2
@@ -3098,7 +3098,7 @@
 3097;246;253;255;land;false;mountain;3
 3098;141;214;75;land;true;plains;7
 3099;181;254;158;land;true;plains;7
-3100;242;128;211;land;false;contaminated;2
+3100;242;128;211;land;false;reactor_zone;2
 3101;234;157;112;land;false;mountain;7
 3102;251;255;244;land;false;hills;7
 3103;192;124;238;land;false;contaminated;2
@@ -4066,7 +4066,7 @@
 4065;171;248;190;land;false;plains;7
 4066;184;70;215;land;false;desert;3
 4067;131;235;177;land;false;hills;1
-4068;88;179;229;land;false;contaminated;2
+4068;88;179;229;land;false;reactor_zone;2
 4069;238;251;176;land;false;plains;7
 4070;236;255;254;land;false;plains;7
 4071;145;89;250;land;true;plains;7
@@ -4322,7 +4322,7 @@
 4321;238;253;169;land;false;desert;5
 4322;183;254;225;land;true;marsh;7
 4323;172;187;251;land;false;plains;7
-4324;209;127;70;land;false;contaminated;2
+4324;209;127;70;land;false;reactor_zone;2
 4325;227;114;115;land;false;plains;7
 4326;152;161;252;land;true;plains;7
 4327;241;205;135;land;false;plains;7
@@ -5027,7 +5027,7 @@
 5026;84;223;189;land;false;plains;7
 5027;247;151;195;land;false;plains;7
 5028;229;245;255;land;true;forest;7
-5029;182;195;255;land;false;contaminated;2
+5029;182;195;255;land;false;reactor_zone;2
 5030;99;113;249;land;false;plains;7
 5031;236;241;255;land;false;plains;7
 5032;206;119;234;land;false;contaminated;2
@@ -5163,7 +5163,7 @@
 5162;84;227;193;land;true;desert;6
 5163;215;183;252;land;false;plains;6
 5164;203;146;53;land;false;plains;7
-5165;238;181;131;land;false;contaminated;2
+5165;238;181;131;land;false;reactor_zone;2
 5166;252;249;255;land;false;plains;7
 5167;252;188;209;land;false;plains;7
 5168;211;206;254;land;false;plains;7
@@ -5198,7 +5198,7 @@
 5197;182;255;146;land;false;plains;7
 5198;252;88;134;land;false;plains;7
 5199;120;238;39;land;false;plains;7
-5200;41;249;33;land;false;contaminated;2
+5200;41;249;33;land;false;reactor_zone;2
 5201;253;255;248;land;false;plains;7
 5202;178;185;250;land;false;plains;7
 5203;226;165;99;land;true;plains;6
@@ -5226,7 +5226,7 @@
 5225;247;172;220;land;false;plains;5
 5226;254;224;216;land;true;plains;7
 5227;238;255;228;land;false;plains;6
-5228;255;216;212;land;false;contaminated;2
+5228;255;216;212;land;false;reactor_zone;2
 5229;42;252;29;land;false;plains;7
 5230;237;157;45;land;false;plains;7
 5231;244;196;252;land;true;plains;7
@@ -5381,7 +5381,7 @@
 5380;240;78;245;land;false;plains;5
 5381;75;205;247;land;false;plains;7
 5382;132;185;236;land;false;plains;7
-5383;253;94;222;land;false;contaminated;2
+5383;253;94;222;land;false;reactor_zone;2
 5384;249;172;158;land;false;plains;7
 5385;249;58;139;land;false;plains;7
 5386;255;228;229;land;false;plains;7
@@ -6271,7 +6271,7 @@
 6270;19;86;236;land;false;plains;7
 6271;212;167;254;land;false;forest;6
 6272;246;140;75;land;true;plains;7
-6273;194;245;252;land;false;contaminated;2
+6273;194;245;252;land;false;reactor_zone;2
 6274;246;243;255;land;false;plains;7
 6275;75;228;85;land;false;plains;7
 6276;123;243;195;land;false;plains;7
@@ -6528,7 +6528,7 @@
 6527;136;53;206;land;false;hills;7
 6528;246;225;152;land;false;plains;7
 6529;254;229;206;land;false;plains;7
-6530;170;242;150;land;false;contaminated;2
+6530;170;242;150;land;false;reactor_zone;2
 6531;155;252;159;land;false;hills;7
 6532;233;249;181;land;false;plains;7
 6533;242;146;212;land;true;plains;7
@@ -6948,7 +6948,7 @@
 6947;245;107;176;land;false;forest;7
 6948;243;233;142;land;false;plains;7
 6949;92;185;241;land;false;plains;7
-6950;37;255;96;land;false;contaminated;2
+6950;37;255;96;land;false;reactor_zone;2
 6951;44;80;223;land;false;plains;7
 6952;255;220;236;land;false;plains;7
 6953;247;255;224;land;false;plains;7
@@ -7024,7 +7024,7 @@
 7023;225;178;254;land;true;marsh;7
 7024;68;219;202;land;false;plains;7
 7025;124;215;49;land;false;plains;7
-7026;250;235;174;land;false;contaminated;2
+7026;250;235;174;land;false;reactor_zone;2
 7027;215;78;170;land;false;plains;7
 7028;177;235;251;land;false;plains;7
 7029;157;253;237;land;false;plains;7
@@ -7842,7 +7842,7 @@
 7841;227;255;178;land;true;plains;7
 7842;221;254;250;land;false;plains;7
 7843;172;238;131;land;false;hills;7
-7844;60;214;52;land;false;contaminated;2
+7844;60;214;52;land;false;reactor_zone;2
 7845;245;249;171;land;false;forest;7
 7846;56;210;190;land;false;plains;7
 7847;234;86;129;land;false;plains;7
@@ -10512,7 +10512,7 @@
 10511;255;227;247;land;false;forest;5
 10512;233;117;184;land;true;plains;7
 10513;241;62;109;land;false;desert;3
-10514;168;253;187;land;false;contaminated;2
+10514;168;253;187;land;false;reactor_zone;2
 10515;252;199;16;land;false;contaminated;2
 10516;215;160;244;land;true;plains;7
 10517;180;82;236;land;false;hills;7
@@ -11803,7 +11803,7 @@
 11802;254;72;122;land;false;contaminated;2
 11803;187;254;241;land;false;marsh;7
 11804;249;177;153;land;false;plains;7
-11805;131;252;174;land;false;contaminated;2
+11805;131;252;174;land;false;reactor_zone;2
 11806;227;83;138;land;false;desert;3
 11807;153;199;252;land;false;plains;3
 11808;186;54;244;land;true;plains;7
@@ -11910,7 +11910,7 @@
 11909;122;136;240;land;true;marsh;7
 11910;255;254;248;land;false;plains;7
 11911;193;179;251;land;false;plains;7
-11912;253;197;246;land;false;contaminated;2
+11912;253;197;246;land;false;reactor_zone;2
 11913;111;247;110;land;false;contaminated;2
 11914;206;229;252;land;false;plains;7
 11915;111;149;246;land;true;plains;7
@@ -11935,7 +11935,7 @@
 11934;168;220;253;land;false;desert;3
 11935;112;234;136;land;false;plains;7
 11936;236;247;128;land;false;plains;7
-11937;226;237;61;land;false;contaminated;2
+11937;226;237;61;land;false;reactor_zone;2
 11938;122;139;245;land;false;desert;3
 11939;23;255;223;land;true;plains;7
 11940;118;238;177;land;false;plains;7

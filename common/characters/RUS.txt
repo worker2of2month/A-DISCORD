@@ -22,4 +22,37 @@ characters = {
 			id = -1
 		}
 	}
+
+	RUS_Varlam_Oskol = {
+		name = RUS_Varlam_Oskol
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_2 }
+			army = { large = GFX_Portrait_Forul_Generic_2 }
+		}
+		country_leader = {
+			ideology = etatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+		corps_commander = {
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 3
+			legacy_id = -1
+		}
+	}
+
+	RUS_Pavel_Niva = {
+		name = RUS_Pavel_Niva
+		portraits = {
+			civilian = { large = GFX_Portrait_Forul_Generic_7 }
+		}
+		country_leader = {
+			ideology = pragmatism_ideology
+			expire = "2200.1.1.1"
+			id = -1
+		}
+	}
 }

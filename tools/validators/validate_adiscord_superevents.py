@@ -58,6 +58,8 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.8",
     "ADISCORD_superevent.9",
     "ADISCORD_superevent.10",
+    "ADISCORD_superevent.11",
+    "ADISCORD_superevent.12",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -122,6 +124,16 @@ PRESENTATIONS = (
     ),
     SupereventPresentation(
         "superevent_stelander_great", "superevent_stelander_party_victory_sound_e"
+    ),
+    SupereventPresentation(
+        "superevent_rus_black_banner",
+        "superevent_rus_last_empire_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_rus_restoration",
+        "superevent_rus_last_empire_sound_e",
+        legacy_music_asset=False,
     ),
 )
 

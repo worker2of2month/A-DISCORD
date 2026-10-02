@@ -209,7 +209,7 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
     for state_id in original_exz:
         for province_id in source[state_id]:
             terrain = details[province_id]["terrain"]
-            if terrain in {"contaminated", "mountain"} or (
+            if terrain in {"contaminated", "reactor_zone", "mountain"} or (
                 terrain == "urban" and state_id in CITY_EXCEPTION_STATES
             ):
                 planned[state_id].add(province_id)
@@ -342,7 +342,7 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
             )
         if final_owners.get(state_id) == "EXZ":
             terrains = {details[province_id]["terrain"] for province_id in provinces}
-            allowed = {"contaminated", "mountain"}
+            allowed = {"contaminated", "reactor_zone", "mountain"}
             if state_id in CITY_EXCEPTION_STATES:
                 allowed.add("urban")
             if state_id in GEOGRAPHIC_EXCEPTION_STATES:
@@ -403,6 +403,27 @@ def render_state(state_id: int, provinces: set[int], owner: str) -> str:
     return source if source.endswith("\n") else source + "\n"
 
 
+def reactor_terrain_output() -> bytes:
+    """Assign the sealed state's terrain without touching other CSV fields."""
+    source = state_path(125).read_text(encoding="utf-8")
+    block = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", source)
+    if block is None or "impassable = yes" not in source:
+        raise RuntimeError("state 125 must define the impassable reactor zone")
+    provinces = set(map(int, re.findall(r"\d+", block.group(1))))
+    definition = ROOT / "map" / "definition.csv"
+    rows = definition.read_bytes().decode("utf-8").splitlines(keepends=True)
+    found = set()
+    for index, row in enumerate(rows):
+        fields = row.split(";")
+        if fields[0].isdigit() and int(fields[0]) in provinces:
+            fields[6] = "reactor_zone"
+            rows[index] = ";".join(fields)
+            found.add(int(fields[0]))
+    if found != provinces:
+        raise RuntimeError("reactor zone contains undefined provinces")
+    return "".join(rows).encode("utf-8")
+
+
 def apply() -> None:
     planned, _original_exz, final_owners = plan_boundaries()
     current_owners = load_current_owners()
@@ -418,6 +439,7 @@ def apply() -> None:
             newline="\n",
         )
     print(f"Realigned {len(planned)} states around the Exclusion Zone.")
+    (ROOT / "map" / "definition.csv").write_bytes(reactor_terrain_output())
     print(
         "Run tools/build_adiscord_northern_countries.py --apply next to refresh dependent northern data."
     )
@@ -453,7 +475,20 @@ def main() -> int:
         action="store_true",
         help="write the planned state boundaries and owners",
     )
+    parser.add_argument(
+        "--reactor-terrain-only",
+        action="store_true",
+        help="check or apply only the impassable reactor state's terrain",
+    )
     args = parser.parse_args()
+    if args.reactor_terrain_only:
+        path = ROOT / "map" / "definition.csv"
+        expected = reactor_terrain_output()
+        if args.apply:
+            path.write_bytes(expected)
+        current = path.read_bytes() == expected
+        print("Reactor terrain: " + ("synchronized" if current else "requires regeneration"))
+        return 0 if current else 1
     if args.apply:
         print_summary()
         apply()

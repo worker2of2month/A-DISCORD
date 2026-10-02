@@ -2170,6 +2170,8 @@ ADISCORD_vorkerland_rus_has_empire_territory = {
 
 ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
 	tag = RUS
+	RUS_khan_governing = yes
+	RUS_political_course_chosen = yes
 	has_completed_focus = RUS_seat_the_khan_chancery
 	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 	ADISCORD_vorkerland_rus_has_empire_territory = yes
@@ -2313,10 +2315,27 @@ ADISCORD_vorkerland_rus_target_defeated = {
 # --- rus_campaign_triggers ---
 RUS_khan_governing = {
 	tag = RUS
-	has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+	OR = {
+		has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+		has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
+		has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes }
+	}
 	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
 	has_capitulated = no
 	is_subject = no
+}
+
+RUS_political_choice_open = {
+	RUS_khan_governing = yes
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+}
+
+RUS_political_course_chosen = {
+	OR = {
+		has_completed_focus = RUS_reaffirm_khan
+		has_completed_focus = RUS_army_mandate
+		has_completed_focus = RUS_reconstruction_cabinet
+	}
 }
 
 RUS_bunker_operational = {
@@ -2732,4 +2751,45 @@ RUS_subterranean_supply_contract_available = {
 RUS_public_campaigns_operational = {
 	RUS_khan_governing = yes
 	has_completed_focus = RUS_khan_broadcast_service
+}
+
+# --- rus_balance_of_power ---
+RUS_state_balance_operational = {
+	RUS_khan_governing = yes
+	has_power_balance = { id = RUS_state_balance }
+}
+
+RUS_bop_relief_available = {
+	RUS_state_balance_operational = yes
+	RUS_bunker_operational = yes
+	power_balance_value = { id = RUS_state_balance value > -0.85 }
+}
+
+RUS_bop_relief_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = RUS_bunker_food value = 20 compare = greater_than_or_equals }
+}
+
+RUS_bop_reserve_available = {
+	RUS_state_balance_operational = yes
+	RUS_bunker_operational = yes
+	power_balance_value = { id = RUS_state_balance value < 0.85 }
+}
+
+RUS_bop_reserve_affordable = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = RUS_bunker_food value = 30 compare = greater_than_or_equals }
+}
+
+RUS_bop_mediation_available = {
+	RUS_state_balance_operational = yes
+	OR = {
+		power_balance_value = { id = RUS_state_balance value < -0.10 }
+		power_balance_value = { id = RUS_state_balance value > 0.10 }
+	}
+}
+
+RUS_bop_mediation_affordable = {
+	NOT = { has_political_power < 40 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
 }

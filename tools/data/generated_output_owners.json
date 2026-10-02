@@ -96,6 +96,7 @@
       "id": "exclusion_zone_boundaries",
       "owner_module": "tools.builders.build_adiscord_exclusion_zone_boundaries",
       "output_globs": [
+        "map/definition.csv",
         "history/states/49-*.txt",
         "history/states/5[0-1]-*.txt",
         "history/states/125-*.txt",
@@ -128,7 +129,7 @@
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_exclusion_zone_boundaries", "--apply"],
       "may_delete_outputs": false,
       "ownership_mode": "layered",
-      "overlap_explanation": "Boundary realignment rewrites province and ownership blocks inside state files created and populated by the state and northern-country builders."
+      "overlap_explanation": "Boundary realignment rewrites province and ownership blocks inside state files created and populated by the state and northern-country builders. Owns definition.csv terrain field 6 for the impassable reactor state 125, preserving every other field and row."
     },
     {
       "id": "inner_frontier_countries",

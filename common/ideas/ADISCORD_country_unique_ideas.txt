@@ -16,12 +16,9 @@ ideas = {
 			modifier = {
 				stability_factor = -0.05
 				war_support_factor = 0.08
-				army_org_factor = 0.08
-				conscription_factor = 0.06
 				political_power_gain = -0.05
 				ADISCORD_economy_tax_collection_factor = -0.05
 				ADISCORD_economy_state_overload_gain_factor = 0.05
-				ADISCORD_country_development_army_growth_factor = 0.05
 			}
 		}
 
@@ -41,12 +38,9 @@ ideas = {
 			modifier = {
 				stability_factor = 0.08
 				war_support_factor = 0.12
-				army_org_factor = 0.10
-				conscription_factor = 0.08
 				political_power_gain = 0.05
 				ADISCORD_economy_tax_collection_factor = 0.05
 				ADISCORD_economy_state_overload_gain_factor = -0.05
-				ADISCORD_country_development_army_growth_factor = 0.08
 			}
 		}
 

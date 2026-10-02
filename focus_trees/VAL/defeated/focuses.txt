@@ -225,7 +225,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Repair_The_Workshops
-		icon = GFX_focus_generic_industry_3
+		icon = GFX_focus_VAL_Reclamation_Workshops
 		x = 4
 		y = 4
 		cost = 5
@@ -243,7 +243,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Restore_Freight_Routes
-		icon = GFX_focus_generic_reinforcing_the_supply_network
+		icon = GFX_focus_VAL_Brokered_Steel
 		x = 4
 		y = 5
 		cost = 4
@@ -268,7 +268,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Veterans_Register
-		icon = GFX_focus_generic_limited_social_mobilization
+		icon = GFX_focus_STP_pw_party_veteran_reserve
 		x = 16
 		y = 4
 		cost = 4
@@ -321,7 +321,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_defeat_Technical_Institute
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = 8
 		y = 8
 		cost = 6

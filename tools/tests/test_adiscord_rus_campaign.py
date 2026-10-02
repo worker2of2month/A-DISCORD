@@ -46,6 +46,13 @@ class BunkerWorld:
         self.active = set()
         self.events = []
         self.ruler = "RUS_Mark_Rustan"
+        self.characters = {self.ruler}
+        self.ideology = "anarchism"
+        self.bop_id = None
+        self.bop = 0.0
+        self.army_experience = 0.0
+        self.manpower = 0.0
+        self.stability = 0.0
         self.subject = False
         self.capitulated = False
         self.war = True
@@ -101,6 +108,15 @@ class BunkerWorld:
             elif key == "has_country_leader":
                 assert scalar(value, "ruling_only") == "yes"
                 result = self.ruler == scalar(value, "character")
+            elif key == "has_character":
+                result = value in self.characters
+            elif key == "has_power_balance":
+                assert isinstance(value, list), value
+                result = self.bop_id == scalar(value, "id")
+            elif key == "power_balance_value":
+                comparison = [row.value for row in value if not row.key]
+                assert len(comparison) == 3 and comparison[0] == "value", value
+                result = self.bop_id == scalar(value, "id") and self.compare(self.bop, comparison[1], self.value(comparison[2]))
             elif key in ("is_subject", "has_capitulated"):
                 result = {"is_subject": self.subject, "has_capitulated": self.capitulated}[key] == (value == "yes")
             elif key == "has_war":
@@ -174,6 +190,33 @@ class BunkerWorld:
                 self.variables[name] = min(float(scalar(value, "max")), max(float(scalar(value, "min")), self.value(name)))
             elif key == "add_political_power":
                 self.pp += self.value(value)
+            elif key == "army_experience":
+                self.army_experience += self.value(value)
+            elif key == "add_manpower":
+                self.manpower += self.value(value)
+            elif key == "add_stability":
+                self.stability = max(0, min(1, self.stability + self.value(value)))
+            elif key == "recruit_character":
+                self.characters.add(value)
+            elif key == "set_politics":
+                self.ideology = scalar(value, "ruling_party")
+            elif key == "set_power_balance":
+                self.bop_id = scalar(value, "id")
+                self.bop = self.value(scalar(value, "set_value"))
+            elif key == "add_power_balance_value":
+                assert self.bop_id == scalar(value, "id"), value
+                self.bop = max(-1, min(1, self.bop + self.value(scalar(value, "value"))))
+            elif key == "remove_power_balance":
+                assert self.bop_id == scalar(value, "id"), value
+                self.bop_id = None
+            elif key == "promote_character":
+                character = scalar(value, "character")
+                assert character in self.characters, character
+                self.ruler = character
+            elif key == "retire_character":
+                self.characters.discard(value)
+                if self.ruler == value:
+                    self.ruler = None
             elif key == "add_equipment_to_stockpile":
                 equipment = scalar(value, "type")
                 if equipment == "infantry_equipment_0":
@@ -252,8 +295,8 @@ class RusCampaignTests(unittest.TestCase):
     def world(self):
         return BunkerWorld(self)
 
-    def test_generation_and_one_hundred_focuses(self):
-        self.assertEqual(len(self.focuses), 100)
+    def test_generation_and_one_hundred_nine_focuses(self):
+        self.assertEqual(len(self.focuses), 109)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -448,7 +491,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertGreater(max(refreshes), max(material), name)
 
     def test_all_policy_routes_reach_all_common_capstones(self):
-        pairs = (("aimaq_council", "seal_chancery"), ("patient_war", "swift_columns"), ("bunker_open_city", "bunker_sealed_throne"), ("surface_contracts", "underground_fund"))
+        pairs = (("reaffirm_khan", "army_mandate", "reconstruction_cabinet"), ("aimaq_council", "seal_chancery"), ("patient_war", "swift_columns"), ("bunker_open_city", "bunker_sealed_throne"), ("surface_contracts", "underground_fund"))
         for choices in product(*pairs):
             blocked = {"RUS_" + other for pair, chosen in zip(pairs, choices) for other in pair if other != chosen}
             while True:
@@ -1056,16 +1099,16 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_cost_variants_encoding_and_story_limits(self):
         for name, rows in self.decisions.items():
-            self.assertIn(name, self.loc)
-            self.assertIn(name + "_desc", self.loc)
+            self.assertTrue(name in self.loc, name)
+            self.assertTrue(name + "_desc" in self.loc, name + "_desc")
             key = next((e.value for e in rows if e.key == "custom_cost_text"), None)
             if key:
                 self.assertEqual(scalar(rows, "cost"), "0")
                 for suffix in ("", "_blocked", "_tooltip"):
-                    self.assertIn(key + suffix, self.loc)
+                    self.assertTrue(key + suffix in self.loc, key + suffix)
         for name in self.focuses:
-            self.assertIn(name, self.loc)
-            self.assertIn(name + "_desc", self.loc)
+            self.assertTrue(name in self.loc, name)
+            self.assertTrue(name + "_desc" in self.loc, name + "_desc")
         raw = (ROOT / f"localisation/russian/{BASE}_l_russian.yml").read_bytes()
         self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
         for key, value in self.loc.items():
@@ -1079,7 +1122,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_public_story_events_have_no_mandatory_choice_settlement(self):
         events = [e.value for e in parse(f"events/{BASE}_events.txt") if e.key == "country_event" and scalar(e.value, "id").startswith("ADISCORD_rus_campaign.")]
-        self.assertEqual(len(events), 11)
+        self.assertEqual(len(events), 14)
         registry = json.loads(read("tools/data/adiscord_event_ids.json"))["events"]
         for event in events:
             name = scalar(event, "id")
@@ -1102,6 +1145,527 @@ class RusCampaignTests(unittest.TestCase):
         self.assertFalse(any(e.key == "RUS_bunker_refresh" for e in walk(block(on, "on_monthly_RUS"))))
         self.assertTrue(any(e.key == "RUS_campaign_shutdown" for e in self.effects["RUS_crisis_dissolve_empire"]))
         self.assertFalse(any(e.key.startswith("RUS_bunker") for e in walk(self.effects["RUS_crisis_check_start"])))
+
+    def test_bop_decisions_charge_exact_prices_and_reject_fractional_shortages(self):
+        decisions = {entry.key: entry.value for entry in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_category")}
+        prices = {"RUS_bop_relief": (25, "RUS_bunker_food", 20), "RUS_bop_reserve": (30, "RUS_bunker_food", 30), "RUS_bop_mediation": (40, "ADISCORD_economy_treasury", 200)}
+        for name, (pp, resource, amount) in prices.items():
+            rows = decisions[name]
+            world = self.world()
+            world.decisions = decisions
+            world.pp = pp
+            world.variables[resource] = amount
+            world.bop = 0.45
+            self.assertTrue(world.matches(block(rows, "custom_cost_trigger")), name)
+            for shortage in ("pp", "resource"):
+                rejected = deepcopy(world)
+                if shortage == "pp":
+                    rejected.pp -= 0.01
+                else:
+                    rejected.variables[resource] -= 0.01
+                before = deepcopy(rejected.variables), rejected.pp, rejected.stability, rejected.manpower, rejected.bop, rejected.dirty
+                self.assertFalse(rejected.matches(block(rows, "custom_cost_trigger")), (name, shortage))
+                rejected.execute(block(rows, "complete_effect"))
+                self.assertEqual((rejected.variables, rejected.pp, rejected.stability, rejected.manpower, rejected.bop, rejected.dirty), before, (name, shortage))
+            spent = world.value("ADISCORD_economy_current_month_action_costs")
+            world.begin(name)
+            self.assertEqual(world.pp, 0, name)
+            self.assertEqual(world.value(resource), 0, name)
+            self.assertAlmostEqual(world.bop, 0.60 if name == "RUS_bop_reserve" else 0.30, msg=name)
+            self.assertEqual(world.stability, 0.02 if name == "RUS_bop_relief" else 0, name)
+            self.assertEqual(world.manpower, 1000 if name == "RUS_bop_reserve" else 0, name)
+            self.assertEqual(world.value("ADISCORD_economy_current_month_action_costs") - spent, 200 if name == "RUS_bop_mediation" else 0, name)
+            self.assertEqual(scalar(rows, "cost"), "0", name)
+            self.assertEqual(scalar(rows, "days_re_enable"), "90", name)
+
+    def test_bop_food_orders_refresh_hunger_without_touching_construction_receipt(self):
+        decisions = {entry.key: entry.value for entry in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_category")}
+        for name, food in (("RUS_bop_relief", 20), ("RUS_bop_reserve", 30)):
+            world = self.world()
+            world.variables.update({"RUS_bunker_depth": 1, "RUS_bunker_depth_limit": 3, "RUS_bunker_layer_1": 1, "RUS_bunker_food": food})
+            world.run("RUS_bunker_refresh")
+            org = world.value("RUS_bunker_army_org_factor")
+            stability = world.value("RUS_bunker_stability_factor")
+            world.begin("RUS_bunker_excavate")
+            receipt = {key: value for key, value in world.variables.items() if key.startswith("RUS_bunker_escrow_") or key in ("RUS_bunker_project", "RUS_bunker_project_depth")}
+            equipment = deepcopy(world.equipment)
+            cash = world.value("ADISCORD_economy_treasury")
+            world.decisions = {**world.decisions, **decisions}
+            world.begin(name)
+            self.assertEqual(world.value("RUS_bunker_food"), 0, name)
+            self.assertAlmostEqual(world.value("RUS_bunker_army_org_factor"), org - 0.05, msg=name)
+            self.assertAlmostEqual(world.value("RUS_bunker_stability_factor"), stability - 0.05, msg=name)
+            self.assertIn("RUS_bunker_excavate", world.active, name)
+            self.assertEqual(world.equipment, equipment, name)
+            self.assertEqual(world.value("ADISCORD_economy_treasury"), cash, name)
+            self.assertEqual({key: world.variables[key] for key in receipt}, receipt, name)
+
+    def test_bop_directions_and_eligibility_respect_exact_boundaries(self):
+        decisions = {entry.key: entry.value for entry in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_state_balance_category")}
+        boundaries = {"RUS_bop_relief": ((-0.85, False), (-0.8499, True)), "RUS_bop_reserve": ((0.85, False), (0.8499, True)), "RUS_bop_mediation": ((-0.10, False), (0.10, False), (-0.1001, True), (0.1001, True))}
+        for name, cases in boundaries.items():
+            for value, available in cases:
+                world = self.world()
+                world.bop = value
+                rows = decisions[name]
+                self.assertEqual(world.matches(block(rows, "available")), available, (name, value))
+                before = world.balances(), deepcopy(world.variables), world.bop
+                world.execute(block(rows, "complete_effect"))
+                if not available:
+                    self.assertEqual((world.balances(), world.variables, world.bop), before, (name, value))
+                elif name == "RUS_bop_mediation":
+                    self.assertLess(abs(world.bop), abs(value))
+                    self.assertLessEqual(abs(world.bop), 0.10)
+        for name, rows in decisions.items():
+            for failure in ("bop", "subject", "capitulated", "ruler", "phase"):
+                world = self.world()
+                world.bop = 0.45
+                if failure == "bop":
+                    world.bop_id = None
+                elif failure in ("subject", "capitulated"):
+                    setattr(world, failure, True)
+                elif failure == "ruler":
+                    world.ruler = "unrelated_ruler"
+                else:
+                    world.variables["RUS_crisis_phase"] = 4
+                self.assertFalse(world.matches(block(rows, "available")), (name, failure))
+                before = world.balances(), deepcopy(world.variables), world.bop
+                world.execute(block(rows, "complete_effect"))
+                self.assertEqual((world.balances(), world.variables, world.bop), before, (name, failure))
+
+    def test_bop_ranges_cover_full_domain_and_initializer_preserves_current_value(self):
+        balance = block(parse("common/bop/RUS.txt"), "RUS_state_balance")
+        ranges = [entry.value for entry in walk(balance) if entry.key == "range"]
+        intervals = sorted((float(scalar(rows, "min")), float(scalar(rows, "max"))) for rows in ranges)
+        self.assertEqual(intervals, [(-1.0, -0.6), (-0.6, -0.1), (-0.1, 0.1), (0.1, 0.6), (0.6, 1.0)])
+        for rows in ranges:
+            for callback in ("on_activate", "on_deactivate"):
+                self.assertTrue(any(entry.key == "ADISCORD_economy_mark_dirty" for entry in block(rows, callback)), (scalar(rows, "id"), callback))
+        world = self.world()
+        self.assertEqual(world.bop_id, "RUS_state_balance")
+        self.assertEqual(world.bop, 0)
+        world.bop = 0.45
+        loaded = deepcopy(world)
+        loaded.run("RUS_campaign_initialize")
+        self.assertEqual(loaded.bop, 0.45)
+        guarded = [entry.value for entry in self.effects["RUS_campaign_shutdown"] if entry.key == "if" and any(row.key == "remove_power_balance" for row in entry.value)]
+        self.assertEqual(len(guarded), 1)
+        self.assertEqual(scalar(block(block(guarded[0], "limit"), "has_power_balance"), "id"), "RUS_state_balance")
+        loaded.variables["RUS_crisis_phase"] = 4
+        loaded.run("RUS_campaign_shutdown")
+        loaded.run("RUS_campaign_shutdown")
+        self.assertIsNone(loaded.bop_id)
+
+    def test_black_army_initial_vector_replaces_static_military_bonuses(self):
+        world = self.world()
+        mapping = {
+            "army_org_factor": "RUS_army_org",
+            "conscription_factor": "RUS_army_recruitment",
+            "ADISCORD_country_development_army_growth_factor": "RUS_army_growth",
+            "army_defence_factor": "RUS_army_defence",
+            "supply_consumption_factor": "RUS_army_supply",
+            "army_speed_factor": "RUS_army_speed",
+            "planning_speed": "RUS_army_planning",
+            "training_time_army_factor": "RUS_army_training",
+        }
+        modifier = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        actual = {entry.key: entry.value for entry in modifier if entry.key not in ("icon", "enable", "custom_modifier_tooltip")}
+        self.assertEqual(actual, mapping)
+        expected = {"RUS_army_org": 0.08, "RUS_army_recruitment": 0.06, "RUS_army_growth": 0.05}
+        for variable in mapping.values():
+            self.assertAlmostEqual(world.value(variable), expected.get(variable, 0), msg=variable)
+        self.assertIn("RUS_black_army", world.modifiers)
+        static = block(block(parse("common/ideas/ADISCORD_country_unique_ideas.txt"), "ideas"), "country")
+        for name in ("RUS_national_spirit", "RUS_last_empire_spirit"):
+            values = {entry.key for entry in block(block(static, name), "modifier")}
+            self.assertFalse(values & mapping.keys(), name)
+
+    def test_black_army_organization_progresses_in_three_material_stages(self):
+        world = self.world()
+        names = ("RUS_muster_books", "RUS_reserve_rotations", "RUS_army_of_the_khanate")
+        rifles = world.equipment["infantry_equipment"]
+        for index, name in enumerate(names, 1):
+            world.execute(block(self.focuses[name], "completion_reward"))
+            self.assertAlmostEqual(world.value("RUS_army_org"), 0.08 + index * 0.01, msg=name)
+        self.assertEqual(world.army_experience, 15)
+        self.assertEqual(world.manpower, 4000)
+        self.assertEqual(world.equipment["infantry_equipment"] - rifles, 9000)
+        self.assertAlmostEqual(world.value("RUS_army_training"), -0.05)
+        self.assertFalse(any(name.endswith("_delta") for name in world.ideas))
+        self.assertNotIn("RUS_professional_service", world.ideas)
+
+    def test_black_army_doctrines_keep_their_exact_previous_vectors(self):
+        cases = {
+            "RUS_patient_war": {"RUS_army_defence": 0.04, "RUS_army_supply": -0.05, "RUS_army_speed": -0.03},
+            "RUS_swift_columns": {"RUS_army_speed": 0.05, "RUS_army_planning": 0.08, "RUS_army_supply": 0.04},
+        }
+        for name, expected in cases.items():
+            world = self.world()
+            before = {key: value for key, value in world.variables.items() if key.startswith("RUS_army_")}
+            world.execute(block(self.focuses[name], "completion_reward"))
+            for variable, value in before.items():
+                self.assertAlmostEqual(world.value(variable) - value, expected.get(variable, 0), msg=(name, variable))
+            self.assertFalse(world.ideas)
+        for name in ("RUS_patient_doctrine", "RUS_swift_doctrine", "RUS_professional_service"):
+            self.assertNotIn(name, self.ideas)
+
+    def test_black_army_dummy_previews_mirror_real_focus_deltas(self):
+        mapping = {
+            "army_org_factor": "RUS_army_org",
+            "army_defence_factor": "RUS_army_defence",
+            "supply_consumption_factor": "RUS_army_supply",
+            "army_speed_factor": "RUS_army_speed",
+            "planning_speed": "RUS_army_planning",
+            "training_time_army_factor": "RUS_army_training",
+        }
+        cases = {
+            "RUS_muster_books": "RUS_army_organization_delta",
+            "RUS_reserve_rotations": "RUS_army_organization_delta",
+            "RUS_army_of_the_khanate": "RUS_professional_service_delta",
+            "RUS_patient_war": "RUS_patient_doctrine_delta",
+            "RUS_swift_columns": "RUS_swift_doctrine_delta",
+            "RUS_khan_common_banner": "RUS_khan_course_delta",
+            "RUS_army_black_banner": "RUS_army_course_delta",
+        }
+        for focus, idea in cases.items():
+            world = self.world()
+            before = {variable: world.value(variable) for variable in mapping.values()}
+            reward = block(self.focuses[focus], "completion_reward")
+            self.assertTrue(any(entry.key == "add_ideas" and entry.value == idea for entry in walk(block(reward, "effect_tooltip"))), focus)
+            world.execute(reward)
+            preview = {entry.key: float(entry.value) for entry in block(self.ideas[idea], "modifier")}
+            self.assertLessEqual(preview.keys(), mapping.keys(), focus)
+            for key, variable in mapping.items():
+                self.assertAlmostEqual(world.value(variable) - before[variable], preview.get(key, 0), msg=(focus, key))
+            self.assertNotIn(idea, world.ideas)
+        self.assertEqual({entry.key: float(entry.value) for entry in block(self.ideas["RUS_khan_course_delta"], "modifier")}, {"army_org_factor": 0.03})
+        self.assertEqual({entry.key: float(entry.value) for entry in block(self.ideas["RUS_army_course_delta"], "modifier")}, {"army_defence_factor": 0.05, "planning_speed": 0.03})
+
+    def test_black_army_proclamation_delta_has_one_guarded_caller(self):
+        helper = "RUS_black_army_empire_reform"
+        callers = [name for name, body in self.effects.items() for entry in walk(body) if entry.key == helper]
+        self.assertEqual(callers, ["ADISCORD_vorkerland_rus_proclaim_last_empire"])
+        self.assertFalse(any(entry.key == helper for rows in self.focuses.values() for entry in walk(rows)))
+        self.assertFalse(any(entry.key == helper for entry in walk(parse(f"common/decisions/{BASE}_decisions.txt"))))
+        guarded = block(self.effects[callers[0]], "if")
+        limit = block(guarded, "limit")
+        self.assertTrue(any(entry.key == "has_country_flag" and entry.value == "ADISCORD_vorkerland_rus_last_empire_proclaimed" for entry in walk(block(limit, "NOT"))))
+        world = self.world()
+        world.triggers = dict(world.triggers)
+        world.triggers["ADISCORD_vorkerland_rus_has_empire_territory"] = parse_clausewitz("always = yes")
+        world.focuses.difference_update({"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet"})
+        self.assertFalse(world.matches(limit))
+        world.focuses.add("RUS_reaffirm_khan")
+        self.assertTrue(world.matches(limit))
+        before = dict(world.variables)
+        world.execute([entry for entry in guarded if entry.key == "set_country_flag"])
+        world.run(helper)
+        self.assertFalse(world.matches(limit))
+        mapping = {"army_org_factor": "RUS_army_org", "conscription_factor": "RUS_army_recruitment", "ADISCORD_country_development_army_growth_factor": "RUS_army_growth"}
+        preview = {entry.key: float(entry.value) for entry in block(self.ideas["RUS_army_empire_delta"], "modifier")}
+        self.assertEqual(preview, {"army_org_factor": 0.02, "conscription_factor": 0.02, "ADISCORD_country_development_army_growth_factor": 0.03})
+        for key, variable in mapping.items():
+            self.assertAlmostEqual(world.value(variable) - before[variable], preview[key])
+        for variable, value in before.items():
+            if variable.startswith("RUS_army_") and variable not in mapping.values():
+                self.assertEqual(world.value(variable), value, variable)
+
+    def test_black_army_survives_bunker_loss_and_country_subordination(self):
+        army = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        for changed in ("owner", "controller", "subject", "capitulated"):
+            world = self.world()
+            before = {key: value for key, value in world.variables.items() if key.startswith("RUS_army_")}
+            setattr(world, changed, changed in ("subject", "capitulated"))
+            world.run("RUS_bunker_weekly_supply")
+            self.assertNotIn("RUS_bunker_complex", world.modifiers, changed)
+            self.assertIn("RUS_black_army", world.modifiers, changed)
+            self.assertTrue(world.matches(block(army, "enable")), changed)
+            self.assertEqual({key: world.value(key) for key in before}, before, changed)
+
+    def test_black_army_legal_rulers_and_terminal_cleanup_are_independent(self):
+        dynamic = parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt")
+        army = block(block(dynamic, "RUS_black_army"), "enable")
+        bunker = block(block(dynamic, "RUS_bunker_complex"), "enable")
+        world = self.world()
+        baseline = dict(world.variables)
+        for ruler in ("RUS_Mark_Rustan", "RUS_Varlam_Oskol", "RUS_Pavel_Niva"):
+            world.ruler = ruler
+            self.assertTrue(world.matches(army), ruler)
+            self.assertTrue(world.matches(bunker), ruler)
+            world.run("RUS_black_army_refresh")
+            self.assertEqual(world.variables, baseline, ruler)
+        world.ruler = "unrelated_ruler"
+        self.assertFalse(world.matches(army))
+        self.assertFalse(world.matches(bunker))
+        world.ruler = "RUS_Mark_Rustan"
+        world.variables["RUS_crisis_phase"] = 4
+        self.assertFalse(world.matches(army))
+        self.assertFalse(world.matches(bunker))
+        shutdown = self.effects["RUS_campaign_shutdown"]
+        for modifier in ("RUS_black_army", "RUS_bunker_complex"):
+            owners = [entry.value for entry in shutdown if entry.key == "if" and any(row.key == "remove_dynamic_modifier" and scalar(row.value, "modifier") == modifier for row in entry.value)]
+            self.assertEqual(len(owners), 1, modifier)
+            self.assertTrue(any(row.key == "has_dynamic_modifier" and scalar(row.value, "modifier") == modifier for row in walk(block(owners[0], "limit"))), modifier)
+        world.run("RUS_campaign_shutdown")
+        world.run("RUS_campaign_shutdown")
+        world.run("RUS_black_army_refresh")
+        self.assertFalse(world.modifiers)
+
+    def test_black_army_current_state_survives_repeated_initialization(self):
+        world = self.world()
+        world.execute(block(self.focuses["RUS_muster_books"], "completion_reward"))
+        world.execute(block(self.focuses["RUS_patient_war"], "completion_reward"))
+        world.run("RUS_black_army_empire_reform")
+        world.begin("RUS_bunker_excavate")
+        loaded = deepcopy(world)
+        before = deepcopy(loaded.variables), loaded.balances(), set(loaded.modifiers), set(loaded.active)
+        loaded.run("RUS_campaign_initialize")
+        loaded.run("RUS_campaign_initialize")
+        self.assertEqual((loaded.variables, loaded.balances(), loaded.modifiers, loaded.active), before)
+        loaded.run("RUS_bunker_weekly_supply")
+        for key, value in before[0].items():
+            if key.startswith("RUS_army_"):
+                self.assertEqual(loaded.value(key), value, key)
+
+    def test_black_army_delta_ideas_are_only_referenced_inside_previews(self):
+        names = {
+            "RUS_patient_doctrine_delta", "RUS_swift_doctrine_delta",
+            "RUS_professional_service_delta", "RUS_army_organization_delta",
+            "RUS_army_empire_delta", "RUS_khan_course_delta", "RUS_army_course_delta",
+        }
+        previews = set()
+
+        def inspect(rows, preview=False):
+            for entry in rows:
+                if entry.key in ("add_ideas", "add_timed_idea"):
+                    values = {str(entry.value)} if not isinstance(entry.value, list) else {row.value for row in entry.value if isinstance(row.value, str)}
+                    used = values & names
+                    self.assertTrue(not used or preview, used)
+                    previews.update(used)
+                if isinstance(entry.value, list):
+                    inspect(entry.value, preview or entry.key == "effect_tooltip")
+
+        for body in (*self.effects.values(), *self.focuses.values(), parse(f"common/decisions/{BASE}_decisions.txt")):
+            inspect(body)
+        self.assertEqual(previews, names)
+        for name in names:
+            self.assertEqual(scalar(block(self.ideas[name], "allowed"), "always"), "no", name)
+
+    def test_weekly_supply_steady_state_preserves_modifiers_and_economy_cache(self):
+        world = self.world()
+        dirty = world.dirty
+        modifiers = set(world.modifiers)
+        calls = []
+        original = world.run
+
+        def tracked(effect):
+            calls.append(effect)
+            original(effect)
+
+        world.run = tracked
+        for _ in range(52):
+            world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food"), 100)
+        self.assertEqual(world.value("RUS_bunker_food_space"), 0)
+        self.assertEqual(world.modifiers, modifiers)
+        self.assertEqual(world.dirty, dirty)
+        self.assertNotIn("RUS_bunker_refresh", calls)
+
+    def test_weekly_supply_refreshes_exact_hunger_boundaries(self):
+        world = self.world()
+        world.variables.update({
+            "RUS_bunker_depth": 3,
+            "RUS_bunker_generators": 2,
+            "RUS_bunker_layer_1": 1,
+            "RUS_bunker_layer_2": 2,
+            "RUS_bunker_layer_3": 1,
+            "RUS_bunker_food": 1,
+        })
+        world.run("RUS_bunker_refresh")
+        org = world.value("RUS_bunker_army_org_factor")
+        stability = world.value("RUS_bunker_stability_factor")
+        dirty = world.dirty
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food"), 0)
+        self.assertAlmostEqual(world.value("RUS_bunker_army_org_factor"), org - 0.05)
+        self.assertAlmostEqual(world.value("RUS_bunker_stability_factor"), stability - 0.05)
+        self.assertEqual(world.dirty, dirty + 1)
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.dirty, dirty + 1)
+        self.assertEqual(world.value("RUS_bunker_food"), 0)
+        world.variables["RUS_bunker_food_output_bonus"] = 2
+        world.run("RUS_bunker_refresh")
+        dirty = world.dirty
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food"), 1)
+        self.assertAlmostEqual(world.value("RUS_bunker_army_org_factor"), org)
+        self.assertAlmostEqual(world.value("RUS_bunker_stability_factor"), stability)
+        self.assertEqual(world.dirty, dirty + 1)
+
+    def test_weekly_supply_cleans_unreported_loss_and_refunds_once(self):
+        for changed in ("owner", "controller", "ruler", "subject", "capitulated"):
+            world = self.world()
+            balances = world.balances()
+            world.begin("RUS_bunker_excavate")
+            food = world.value("RUS_bunker_food")
+            if changed == "ruler":
+                world.ruler = "another_ruler"
+            else:
+                setattr(world, changed, changed in ("subject", "capitulated"))
+            world.run("RUS_bunker_weekly_supply")
+            self.assertEqual(world.balances(), balances, changed)
+            self.assertEqual(world.value("RUS_bunker_food"), food, changed)
+            self.assertEqual(world.value("RUS_bunker_food_output"), 0, changed)
+            self.assertEqual(world.value("RUS_bunker_food_use"), 0, changed)
+            self.assertNotIn("RUS_bunker_complex", world.modifiers, changed)
+            self.assertNotIn("RUS_bunker_project", world.variables, changed)
+            self.assertFalse(world.active, changed)
+            dirty = world.dirty
+            world.run("RUS_bunker_weekly_supply")
+            world.finish("RUS_bunker_excavate")
+            self.assertEqual(world.balances(), balances, changed)
+            self.assertEqual(world.dirty, dirty, changed)
+            self.assertEqual(world.value("RUS_bunker_food"), food, changed)
+
+    def test_weekly_supply_restores_production_before_delivery(self):
+        world = self.world()
+        world.variables["RUS_bunker_depth"] = 1
+        world.variables["RUS_bunker_layer_1"] = 1
+        world.run("RUS_bunker_refresh")
+        food = world.value("RUS_bunker_food")
+        world.owner = False
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food_balance"), 0)
+        world.owner = True
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food"), food + 1)
+        self.assertEqual(world.value("RUS_bunker_food_output"), 2)
+        self.assertEqual(world.value("RUS_bunker_food_use"), 1)
+        self.assertEqual(world.value("RUS_bunker_food_space"), 100 - food - 1)
+        self.assertIn("RUS_bunker_complex", world.modifiers)
+
+    def test_weekly_supply_preserves_live_project_receipt_and_current_save_state(self):
+        world = self.world()
+        world.begin("RUS_bunker_excavate")
+        paid = world.balances()
+        receipt = {key: value for key, value in world.variables.items() if key.startswith("RUS_bunker_escrow_") or key in ("RUS_bunker_project", "RUS_bunker_project_depth")}
+        active = set(world.active)
+        world.run("RUS_bunker_weekly_supply")
+        resumed = deepcopy(world)
+        resumed.run("RUS_bunker_weekly_supply")
+        self.assertEqual(resumed.balances(), paid)
+        self.assertEqual(resumed.active, active)
+        for key, value in receipt.items():
+            self.assertEqual(resumed.variables[key], value, key)
+        resumed.finish("RUS_bunker_excavate")
+        self.assertEqual(resumed.value("RUS_bunker_depth"), 1)
+        self.assertNotIn("RUS_bunker_project", resumed.variables)
+        self.assertEqual(resumed.balances(), paid)
+
+    def test_weekly_supply_clears_offline_aggregates_after_modifier_removal(self):
+        world = self.world()
+        food = world.value("RUS_bunker_food")
+        world.variables["RUS_crisis_phase"] = 4
+        world.run("RUS_campaign_shutdown")
+        self.assertNotIn("RUS_bunker_complex", world.modifiers)
+        self.assertGreater(world.value("RUS_bunker_food_output"), 0)
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.value("RUS_bunker_food_output"), 0)
+        self.assertEqual(world.value("RUS_bunker_food_use"), 0)
+        self.assertEqual(world.value("RUS_bunker_food_balance"), 0)
+        self.assertEqual(world.value("RUS_bunker_food"), food)
+        dirty = world.dirty
+        world.run("RUS_bunker_weekly_supply")
+        self.assertEqual(world.dirty, dirty)
+
+    def test_political_handoffs_preserve_paid_orders_and_current_balance(self):
+        choices = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet"}
+        routes = (
+            ("RUS_reaffirm_khan", "RUS_Mark_Rustan", "anarchism", 0),
+            ("RUS_army_mandate", "RUS_Varlam_Oskol", "etatism", 0.30),
+            ("RUS_reconstruction_cabinet", "RUS_Pavel_Niva", "pragmatism", -0.30),
+        )
+        for focus, leader, ideology, movement in routes:
+            world = self.world()
+            world.focuses -= choices
+            world.bop = 0.10
+            world.variables["RUS_crisis_phase"] = 1
+            world.variables["RUS_crisis_days"] = 61
+            world.begin("RUS_bunker_excavate")
+            receipt = {key: value for key, value in world.variables.items() if key.startswith("RUS_bunker_escrow_") or key in ("RUS_bunker_project", "RUS_bunker_project_depth")}
+            paid = world.balances()
+            active = set(world.active)
+            army = {key: value for key, value in world.variables.items() if key.startswith("RUS_army_")}
+            food = world.value("RUS_bunker_food")
+            world.execute(block(self.focuses[focus], "completion_reward"))
+            world.focuses.add(focus)
+            self.assertEqual((world.ruler, world.ideology), (leader, ideology))
+            self.assertAlmostEqual(world.bop, 0.10 + movement)
+            self.assertTrue(world.matches(world.triggers["RUS_khan_governing"]))
+            self.assertEqual(world.balances(), paid)
+            self.assertEqual(world.active, active)
+            self.assertEqual(world.value("RUS_bunker_food"), food)
+            self.assertEqual(world.value("RUS_crisis_days"), 61)
+            for key, value in receipt.items():
+                self.assertEqual(world.variables[key], value, (focus, key))
+            for key, value in army.items():
+                self.assertEqual(world.variables[key], value, (focus, key))
+            world.finish("RUS_bunker_excavate")
+            self.assertEqual(world.value("RUS_bunker_depth"), 1)
+            self.assertEqual(world.balances(), paid)
+
+    def test_political_choices_cannot_switch_or_shift_balance_twice(self):
+        choices = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet"}
+        for chosen in choices:
+            world = self.world()
+            world.focuses -= choices
+            reward = block(self.focuses[chosen], "completion_reward")
+            world.execute(reward)
+            world.focuses.add(chosen)
+            ruler, bop, events = world.ruler, world.bop, list(world.events)
+            for other in choices - {chosen}:
+                world.execute(block(self.focuses[other], "completion_reward"))
+            self.assertEqual((world.ruler, world.bop, world.events), (ruler, bop, events))
+            if chosen != "RUS_reaffirm_khan":
+                world.execute(reward)
+                self.assertEqual((world.ruler, world.bop, world.events), (ruler, bop, events))
+            world.flags.add("ADISCORD_vorkerland_rus_last_empire_proclaimed")
+            self.assertFalse(world.matches(world.triggers["RUS_political_choice_open"]))
+            world.execute(reward)
+            self.assertEqual((world.ruler, world.bop, world.events), (ruler, bop, events))
+
+    def test_explicit_course_gates_proclamation_but_not_its_continuations(self):
+        choices = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet"}
+        world = self.world()
+        world.focuses -= choices
+        self.assertFalse(world.matches(world.triggers["RUS_political_course_chosen"]))
+        for chosen, continuation in (("RUS_reaffirm_khan", "RUS_khan_common_banner"), ("RUS_army_mandate", "RUS_army_black_banner"), ("RUS_reconstruction_cabinet", "RUS_reconstruction_compact")):
+            world.focuses = {chosen}
+            self.assertTrue(world.matches(world.triggers["RUS_political_course_chosen"]))
+            world.flags.add("ADISCORD_vorkerland_rus_last_empire_proclaimed")
+            self.assertTrue(world.matches(block(self.focuses[continuation], "available")))
+        proclaim = self.effects["ADISCORD_vorkerland_rus_proclaim_last_empire"]
+        native_decision = next(entry.value for entry in walk(parse(f"common/decisions/{BASE}_decisions.txt")) if entry.key == "RUS_proclaim_the_last_empire")
+        for rows in (proclaim, native_decision):
+            self.assertTrue(any(entry.key == "RUS_political_course_chosen" for entry in walk(rows)))
+        self.assertFalse(any(entry.value == "chauvinism" for entry in walk(proclaim) if isinstance(entry.value, str)))
+        self.assertEqual({entry.value for entry in walk(proclaim) if entry.key == "set_cosmetic_tag"}, {"RUS_last_empire", "RUS_black_banner_empire", "RUS_restoration_state"})
+
+    def test_empire_defeat_retires_actual_ruler_and_keeps_narrative_receipt(self):
+        leaders = {"RUS_Mark_Rustan", "RUS_Varlam_Oskol", "RUS_Pavel_Niva"}
+        for leader in leaders:
+            world = self.world()
+            world.characters = set(leaders)
+            world.ruler = leader
+            world.run("RUS_retire_current_ruler")
+            self.assertIsNone(world.ruler)
+            self.assertEqual(world.characters, leaders - {leader})
+        defeat = self.effects["RUS_crisis_dissolve_empire"]
+        self.assertTrue(any(entry.key == "RUS_retire_current_ruler" for entry in defeat))
+        winner = next(entry.value for entry in defeat if entry.key == "event_target:RUS_crisis_hegemon")
+        self.assertEqual(scalar(winner[-1].value, "id"), "ADISCORD_rus_crisis.4")
+        receipts = [entry.value for entry in walk(winner) if entry.key == "set_variable" and scalar(entry.value, "var") == "RUS_crisis_defeated_course"]
+        self.assertEqual({scalar(rows, "value") for rows in receipts}, {"1", "2", "3"})
 
     def test_ai_order_has_no_duplicates_and_keeps_crisis_preparations_together(self):
         plan = block(parse(f"common/ai_strategy_plans/{BASE}_plans.txt"), "ADISCORD_vorkerland_rus_last_empire_plan")

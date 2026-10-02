@@ -2135,6 +2135,9 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_bunker_power_school
 		RUS_arm_the_border_hosts
 		RUS_count_the_hearths
+		RUS_reaffirm_khan
+		RUS_khan_service_oath
+		RUS_khan_common_banner
 		RUS_khan_broadcast_service
 		RUS_aimaq_council
 		RUS_local_service_committees

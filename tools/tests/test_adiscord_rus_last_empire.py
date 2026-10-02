@@ -95,16 +95,39 @@ def localisation_entries(text: str) -> dict[str, str]:
 
 
 class RusLastEmpireTests(unittest.TestCase):
-    def test_proclamation_keeps_khan_in_new_ruling_party_with_dictator_portrait(self):
-        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+    def test_proclamation_preserves_each_selected_ruler_and_ideology(self):
+        from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
 
-        effect = named_block(
-            read(EFFECT_FILE), "ADISCORD_vorkerland_rus_proclaim_last_empire"
+        effect = block(
+            entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+            "ADISCORD_vorkerland_rus_proclaim_last_empire",
         )
-        self.assertIn("character = RUS_Mark_Rustan", effect)
-        self.assertIn("ideology = chauvinism_ideology", effect)
-        self.assertIn("set_portraits", effect)
-        self.assertIn("GFX_portrait_RUS_Mark_Rustan_dictator", effect)
+        payload = block(effect, "if")
+        branches = [
+            entry.value
+            for entry in payload
+            if isinstance(entry.value, list)
+            and any(child.key == "set_cosmetic_tag" for child in entry.value)
+        ]
+        expected = (
+            ("RUS_Varlam_Oskol", "etatism", "RUS_black_banner_empire"),
+            ("RUS_Pavel_Niva", "pragmatism", "RUS_restoration_state"),
+            ("RUS_Mark_Rustan", "anarchism", "RUS_last_empire"),
+        )
+        self.assertEqual(len(branches), len(expected))
+        for index, (branch, (ruler, ideology, cosmetic)) in enumerate(zip(branches, expected)):
+            with self.subTest(ruler=ruler):
+                if index < 2:
+                    leader = block(block(branch, "limit"), "has_country_leader")
+                    self.assertEqual(scalar(leader, "character"), ruler)
+                    self.assertEqual(scalar(leader, "ruling_only"), "yes")
+                self.assertEqual(scalar(block(branch, "set_politics"), "ruling_party"), ideology)
+                self.assertEqual(scalar(branch, "set_cosmetic_tag"), cosmetic)
+                self.assertFalse(any(entry.key in ("promote_character", "retire_character", "add_country_leader_role") for entry in branch))
+        portraits = block(branches[-1], "set_portraits")
+        self.assertEqual(scalar(portraits, "character"), "RUS_Mark_Rustan")
+        self.assertEqual(scalar(block(portraits, "civilian"), "large"), "GFX_portrait_RUS_Mark_Rustan_dictator")
+        self.assertEqual(scalar(block(branches[-1], "set_country_leader_portrait"), "ideology"), "anarchism")
         self.assertIn(
             "GFX_portrait_RUS_Mark_Rustan_dictator",
             read(ROOT / "interface/ADISCORD_leader_portraits.gfx"),
@@ -232,14 +255,15 @@ class RusLastEmpireTests(unittest.TestCase):
         self.assertIn("is_ai = yes", body)
 
     def test_decisions_are_scripted_wars_with_one_campaign_escrow(self) -> None:
+        from tools.validators.validate_adiscord_vorkerland_collapse import named_block
+
         decisions = read(DECISION_FILE)
         categories = read(CATEGORY_FILE)
         self.assertIn("ADISCORD_vorkerland_rus_dirty_campaign_category", categories)
         self.assertIn("allowed = { tag = RUS }", categories)
         for decision_id in RUS_DECISIONS:
             self.assertIn(f"{decision_id} = {{", decisions)
-            block_start = decisions.index(f"\t{decision_id} = {{")
-            block = decisions[block_start : block_start + 900]
+            block = named_block(decisions, decision_id)
             self.assertIn("allowed = { tag = RUS }", block)
             self.assertIn("ai_will_do", block)
         self.assertNotIn(
@@ -813,7 +837,7 @@ class RusCrisisFixture:
     assertion about native callback timing or game UI behaviour.
     """
 
-    def __init__(self, hegemon="VAL"):
+    def __init__(self, hegemon="VAL", ruler="RUS_Mark_Rustan"):
         from tools.tests.test_adiscord_stp_preparation import entries
 
         self.effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")}
@@ -856,7 +880,9 @@ class RusCrisisFixture:
         self.active_decisions = set()
         self.annexed = []
         self.retired = []
-        self.dynamic_modifiers = set()
+        self.rulers = {"RUS": ruler}
+        self.power_balances = {"RUS": "RUS_state_balance"}
+        self.dynamic_modifiers = {("RUS", "RUS_black_army"), ("RUS", "RUS_bunker_complex")}
         self.autonomy = {}
         self.outside_predicates = {}
         self.root = "RUS"
@@ -912,6 +938,13 @@ class RusCrisisFixture:
                 return (current, value) in self.variables
             if key == "has_dynamic_modifier":
                 return (current, scalar(value, "modifier")) in self.dynamic_modifiers
+            if key == "has_power_balance":
+                assert isinstance(value, list), value
+                return self.power_balances.get(current) == scalar(value, "id")
+            if key == "has_country_leader":
+                assert isinstance(value, list), value
+                assert scalar(value, "ruling_only") == "yes", value
+                return self.rulers.get(current) == scalar(value, "character")
             if key == "has_country_flag":
                 return value in self.flags[current]
             if key == "has_decision":
@@ -1007,7 +1040,11 @@ class RusCrisisFixture:
             elif key == "remove_decision":
                 self.active_decisions.discard((current, value))
             elif key == "remove_dynamic_modifier":
-                self.dynamic_modifiers.discard((current, scalar(value, "modifier")))
+                self.dynamic_modifiers.remove((current, scalar(value, "modifier")))
+            elif key == "remove_power_balance":
+                assert isinstance(value, list), value
+                assert self.power_balances.get(current) == scalar(value, "id"), value
+                del self.power_balances[current]
             elif key == "set_country_flag":
                 flag = scalar(value, "flag") if isinstance(value, list) else value
                 self.flags[current].add(flag)
@@ -1061,7 +1098,9 @@ class RusCrisisFixture:
             elif key == "leave_faction":
                 self.factions.pop(current, None)
             elif key == "retire_character":
+                assert self.rulers.get(current) == value, (current, value)
                 self.retired.append(value)
+                del self.rulers[current]
             elif key in ("remove_ideas", "remove_claim_by", "custom_effect_tooltip", "unlock_decision_tooltip"):
                 continue
             else:
@@ -1187,24 +1226,34 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(len(world.annexed), 2)
 
     def test_khan_defeat_restores_only_imperial_lands_for_either_winner(self):
+        rulers = ("RUS_Mark_Rustan", "RUS_Varlam_Oskol", "RUS_Pavel_Niva")
         for hegemon in ("VAL", "STS"):
-            with self.subTest(hegemon=hegemon):
-                world = RusCrisisFixture(hegemon)
-                world.capitulated.add("RUS")
-                world.run("RUS_crisis_resolve_capitulation")
-                self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 4)
-                self.assertNotIn("RUS", world.owners.values())
-                self.assertIn("RUS_Mark_Rustan", world.retired)
-                self.assertEqual(world.owners["66"], "SLA")
-                self.assertEqual(world.owners["330"], "IRT")
-                self.assertEqual(world.owners["168"], "VAL")
-                self.assertEqual(world.owners["40"], "WKR")
-                self.assertIn("RUS_crisis_settlement_rights", world.flags[hegemon])
-                other = "STS" if hegemon == "VAL" else "VAL"
-                self.assertNotIn("RUS_crisis_settlement_rights", world.flags[other])
-                self.assertFalse(world.subjects)
-                for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
-                    self.assertIn("RUS_crisis_fragment", world.flags[tag])
+            for course, ruler in enumerate(rulers, 1):
+                with self.subTest(hegemon=hegemon, ruler=ruler):
+                    world = RusCrisisFixture(hegemon, ruler)
+                    world.capitulated.add("RUS")
+                    world.run("RUS_crisis_resolve_capitulation")
+                    self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 4)
+                    self.assertEqual(world.variables[hegemon, "RUS_crisis_defeated_course"], course)
+                    self.assertNotIn("RUS", world.owners.values())
+                    self.assertEqual(world.retired, [ruler])
+                    self.assertNotIn("RUS", world.rulers)
+                    self.assertNotIn("RUS", world.power_balances)
+                    self.assertFalse(world.dynamic_modifiers)
+                    self.assertEqual(world.owners["66"], "SLA")
+                    self.assertEqual(world.owners["330"], "IRT")
+                    self.assertEqual(world.owners["168"], "VAL")
+                    self.assertEqual(world.owners["40"], "WKR")
+                    self.assertIn("RUS_crisis_settlement_rights", world.flags[hegemon])
+                    other = "STS" if hegemon == "VAL" else "VAL"
+                    self.assertNotIn("RUS_crisis_settlement_rights", world.flags[other])
+                    self.assertNotIn((other, "RUS_crisis_defeated_course"), world.variables)
+                    self.assertFalse(world.subjects)
+                    for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
+                        self.assertIn("RUS_crisis_fragment", world.flags[tag])
+                    snapshot = dict(world.owners), list(world.retired), list(world.events)
+                    world.run("RUS_crisis_resolve_capitulation")
+                    self.assertEqual((world.owners, world.retired, world.events), snapshot)
 
     def test_full_authored_partition_keeps_every_peripheral_state_and_val_claim(self):
         from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
@@ -1323,7 +1372,7 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             lines = [line for line in source.splitlines() if line.strip()]
             for line in lines:
-                self.assertRegex(line, r'^ [A-Za-z0-9_.]+: "(?:[^"\\]|\\.)*"$')
+                self.assertRegex(line, r'^ [A-Za-z0-9_.]+:(?:\d+)? "(?:[^"\\]|\\.)*"$')
                 rendered = line.split('"', 1)[1].rsplit('"', 1)[0].replace("\\n", "\n")
                 self.assertLessEqual(len(rendered), 3000)
                 self.assertLessEqual(len(rendered.encode("utf-8")), 5500)

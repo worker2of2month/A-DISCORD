@@ -130,7 +130,7 @@
 
 	focus = {
 		id = STP_pw_republic_restore_roads
-		icon = GFX_goal_generic_construct_infrastructure
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
 		x = 6
 		y = 5
 		cost = 3
@@ -174,7 +174,7 @@
 
 	focus = {
 		id = STP_pw_republic_civil_workshops
-		icon = GFX_goal_generic_production2
+		icon = GFX_focus_VAL_Reclamation_Workshops
 		x = 5
 		y = 7
 		cost = 5
@@ -2448,7 +2448,7 @@
 
 	focus = {
 		id = STP_pc_economy_repair_workshops
-		icon = GFX_goal_generic_construct_civilian
+		icon = GFX_focus_VAL_Reclamation_Workshops
 		x = 31
 		y = 6
 		cost = 4
@@ -2728,7 +2728,7 @@
 
 	focus = {
 		id = STP_pc_investment_precision_industry
-		icon = GFX_goal_generic_scientific_exchange
+		icon = GFX_focus_VAL_Reclamation_Industrial_Sites
 		x = 32
 		y = 11
 		cost = 5

@@ -152,8 +152,9 @@ ADISCORD_vorkerland_legitimacy_dynamic = {
 
 # --- rus_bunker_modifier ---
 RUS_bunker_complex = {
-	icon = GFX_idea_generic_production_bonus
+	icon = GFX_idea_ADISCORD_logistics_centralized_depots
 	enable = { RUS_bunker_operational = yes }
+	custom_modifier_tooltip = RUS_bunker_system_state_tt
 	attrition = RUS_bunker_attrition
 	army_defence_factor = RUS_bunker_army_defence_factor
 	army_org_factor = RUS_bunker_army_org_factor
@@ -167,4 +168,27 @@ RUS_bunker_complex = {
 	stability_factor = RUS_bunker_stability_factor
 	surrender_limit = RUS_bunker_surrender_limit
 	training_time_army_factor = RUS_bunker_training_time_army_factor
+}
+
+RUS_black_army = {
+	icon = GFX_idea_ADISCORD_military_organization_cadre_army
+	enable = {
+		tag = RUS
+		has_country_flag = RUS_bunker_initialized
+		NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+		OR = {
+			has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+			has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
+			has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes }
+		}
+	}
+	custom_modifier_tooltip = RUS_black_army_state_tt
+	army_org_factor = RUS_army_org
+	conscription_factor = RUS_army_recruitment
+	ADISCORD_country_development_army_growth_factor = RUS_army_growth
+	army_defence_factor = RUS_army_defence
+	supply_consumption_factor = RUS_army_supply
+	army_speed_factor = RUS_army_speed
+	planning_speed = RUS_army_planning
+	training_time_army_factor = RUS_army_training
 }

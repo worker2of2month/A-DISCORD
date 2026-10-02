@@ -300,6 +300,7 @@ def synchronize_buildings(
         lines, _height_changes = mountain_building_heights(root, lines)
         lines = interior_dam_anchor(lines)
         lines = bezhaysk_castle_clearance(lines)
+        lines = khan_bunker_clearance(lines)
         # Nudge writes this file with CRLF and no final newline. The engine
         # treats a terminal empty row as a malformed building definition, so
         # preserve both details when regenerating the file.
@@ -340,6 +341,18 @@ def bezhaysk_castle_clearance(lines: list[str]) -> list[str]:
             if position is not None:
                 fields[2:5] = position
                 line = ";".join(fields)
+        result.append(line)
+    return result
+
+
+def khan_bunker_clearance(lines: list[str]) -> list[str]:
+    """Keep the generic fort south of the permanent Khan bunker landmark."""
+    result = []
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[:2] == ["66", "bunker"]:
+            fields[2:5] = ["3482.00", "13.80", "942.00"]
+            line = ";".join(fields)
         result.append(line)
     return result
 
@@ -589,6 +602,8 @@ def validate(root: Path = ROOT) -> list[str]:
         issues.append("state 53 dam_spawn must use its interior integer anchor")
     if bezhaysk_castle_clearance(lines) != lines:
         issues.append("state 41 building visuals overlap the Grayson castle footprint")
+    if khan_bunker_clearance(lines) != lines:
+        issues.append("state 66 generic fort overlaps the Khan bunker footprint")
     _planned_heights, height_changes = mountain_building_heights(root, lines)
     issues.extend(
         f"map/buildings.txt:{line}: building height differs from the mountain surface"

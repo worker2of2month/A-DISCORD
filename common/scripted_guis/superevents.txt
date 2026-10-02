@@ -211,4 +211,36 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_rus_black_banner = {
+		window_name = "superevent_rus_black_banner"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_rus_black_banner
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_rus_black_banner
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_rus_restoration = {
+		window_name = "superevent_rus_restoration"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_rus_restoration
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_rus_restoration
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

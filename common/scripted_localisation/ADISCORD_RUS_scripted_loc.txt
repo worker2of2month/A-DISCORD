@@ -1,4 +1,34 @@
 defined_text = {
+	name = GetRUSArmyDoctrine
+	text = {
+		trigger = { has_completed_focus = RUS_patient_war }
+		localization_key = RUS_army_doctrine_patient
+	}
+	text = {
+		trigger = { has_completed_focus = RUS_swift_columns }
+		localization_key = RUS_army_doctrine_swift
+	}
+	text = { localization_key = RUS_army_doctrine_undecided }
+}
+
+defined_text = {
+	name = GetRUSArmyOrganization
+	text = {
+		trigger = { has_completed_focus = RUS_army_of_the_khanate }
+		localization_key = RUS_army_organization_regular
+	}
+	text = {
+		trigger = { has_completed_focus = RUS_reserve_rotations }
+		localization_key = RUS_army_organization_reserves
+	}
+	text = {
+		trigger = { has_completed_focus = RUS_muster_books }
+		localization_key = RUS_army_organization_registers
+	}
+	text = { localization_key = RUS_army_organization_hosts }
+}
+
+defined_text = {
 	name = GetRUSBunker1pp
 	text = {
 		trigger = {

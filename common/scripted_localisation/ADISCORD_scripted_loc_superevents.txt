@@ -124,6 +124,14 @@ defined_text = {
 		localization_key = superevent_stelander_great_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_rus_black_banner }
+		localization_key = superevent_rus_black_banner_quote
+	}
+	text = {
+		trigger = { has_global_flag = superevent_rus_restoration }
+		localization_key = superevent_rus_restoration_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -254,6 +262,14 @@ defined_text = {
 		localization_key = superevent_stelander_great_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_rus_black_banner }
+		localization_key = superevent_rus_black_banner_title
+	}
+	text = {
+		trigger = { has_global_flag = superevent_rus_restoration }
+		localization_key = superevent_rus_restoration_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -382,6 +398,14 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_stelander_great }
 		localization_key = superevent_stelander_great_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_rus_black_banner }
+		localization_key = superevent_rus_black_banner_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_rus_restoration }
+		localization_key = superevent_rus_restoration_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment
