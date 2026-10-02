@@ -1520,8 +1520,8 @@ ADISCORD_vorkerland_prepare_initial_combatants = {
 		add_ideas = ADISCORD_vorkerland_vad_imperial_chancery
 		add_ideas = ADISCORD_vorkerland_last_stand
 		ADISCORD_vorkerland_initialize_civil_war_exhaustion = yes
-		add_manpower = 22000
-		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 10000 producer = VAD }
+		add_manpower = 32000
+		add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 15000 producer = VAD }
 		add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 60 producer = VAD }
 		add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = VAD }
 		add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 24 producer = VAD }

@@ -179,6 +179,59 @@ class VorkerlandClaimantSpiritProgressionTests(unittest.TestCase):
                 self.assertIn(f"remove_ideas = {old}", block)
                 self.assertIn(f"add_ideas = {new}", block)
 
+    def test_vad_government_upgrades_preserve_chancery_combat_bonuses(self) -> None:
+        ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
+        focuses = read("common/national_focus/ADISCORD_Vorkerland_civil_war.txt")
+        prefix = "ADISCORD_vorkerland_vad_"
+        transitions = (
+            (
+                "VAD_turn_the_chancery_into_a_war_cabinet",
+                "imperial_chancery",
+                "restoration_war_cabinet",
+            ),
+            (
+                "VAD_sign_the_dual_authority_protocol",
+                "imperial_chancery",
+                "dual_authority_protocol",
+            ),
+            (
+                "VAD_issue_prefectural_field_decrees",
+                "restoration_war_cabinet",
+                "restoration_war_cabinet_2",
+            ),
+            (
+                "VAD_seat_front_commissars",
+                "dual_authority_protocol",
+                "dual_authority_protocol_2",
+            ),
+        )
+        for focus_id, old, new in transitions:
+            with self.subTest(focus=focus_id):
+                focus_start = re.search(
+                    rf"\bfocus\s*=\s*\{{\s*id\s*=\s*{focus_id}\b", focuses
+                )
+                self.assertIsNotNone(focus_start)
+                focus = named_block(focuses[focus_start.start() :], "focus")
+                reward = named_block(focus, "completion_reward")
+                self.assertIn(f"remove_ideas = {prefix}{old}", reward)
+                self.assertIn(f"add_ideas = {prefix}{new}", reward)
+                modifiers = []
+                for spirit in (old, new):
+                    block = named_block(named_block(ideas, prefix + spirit), "modifier")
+                    modifiers.append({
+                        key: float(value)
+                        for key, value in re.findall(r"(\w+)\s*=\s*(-?[\d.]+)", block)
+                    })
+                for key in ("army_attack_factor", "army_defence_factor", "army_org_factor"):
+                    self.assertGreaterEqual(
+                        modifiers[1].get(key, 0), modifiers[0].get(key, 0), key
+                    )
+                if new == "restoration_war_cabinet_2":
+                    self.assertGreater(
+                        modifiers[1].get("army_attack_factor", 0),
+                        modifiers[0].get("army_attack_factor", 0),
+                    )
+
     def test_outbreak_runs_the_versioned_repair_without_startup_migration(self) -> None:
         events = source_section(
             read("events/ADISCORD_vorkerland_events.txt"), 'collapse_events'
