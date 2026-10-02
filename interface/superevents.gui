@@ -302,7 +302,7 @@ guiTypes = {
 		click_to_front = no
 		clipping = no
 		hide_sound = click_close
-		show_sound = superevent_stelander_party_victory_sound_e
+		show_sound = superevent_stelander_great_sound_e
 
 		iconType = { name = "superevent_stelander_great" quadTextureSprite = "GFX_superevent_stelander_great" position = { x = 0 y = 0 } alwaystransparent = yes }
 		background = { name = "background" quadTextureSprite = "GFX_supereventframe" }

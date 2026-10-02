@@ -39,6 +39,11 @@ sound = {
 }
 
 sound = {
+	name = "superevent_stelander_great_sound"
+	file = "superevents/superevent_stelander_great_sound.wav"
+}
+
+sound = {
 	name = "superevent_stelander_shabrat_victory_sound"
 	file = "superevents/superevent_stelander_shabrat_victory_sound.wav"
 }

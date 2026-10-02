@@ -117,13 +117,34 @@ spriteTypes = {
 		name = "GFX_portrait_STP_Roland_Keitel"
 		texturefile = "gfx/leaders/STP/portrait_STP_Roland_Keitel.png"
 	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Roland_Keitel_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Roland_Keitel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_portrait_STP_Maurice_Dallon"
 		texturefile = "gfx/leaders/STP/portrait_STP_Maurice_Dallon.png"
 	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Maurice_Dallon_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Maurice_Dallon.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_portrait_STP_Leonid_Barchel"
 		texturefile = "gfx/leaders/STP/portrait_STP_Leonid_Barchel.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Leonid_Barchel_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Leonid_Barchel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_portrait_STP_Gleb_Korsh"
@@ -133,17 +154,45 @@ spriteTypes = {
 		name = "GFX_portrait_STP_Edmund_Ravel"
 		texturefile = "gfx/leaders/STP/portrait_STP_Edmund_Ravel.png"
 	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Edmund_Ravel_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Edmund_Ravel.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_portrait_STP_Viktor_Marent"
 		texturefile = "gfx/leaders/STP/portrait_STP_Viktor_Marent.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Viktor_Marent_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Viktor_Marent.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_portrait_STP_Severin_Drake"
 		texturefile = "gfx/leaders/STP/portrait_STP_Severin_Drake.png"
 	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_Severin_Drake_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_Severin_Drake.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_portrait_STP_August_Veil"
 		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_portrait_STP_August_Veil_small"
+		texturefile = "gfx/leaders/STP/portrait_STP_August_Veil.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_portrait_STP_August_Veil_leader"
@@ -187,9 +236,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_Arkady_Velsky.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_portrait_STP_Arkady_Velsky_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_Arkady_Velsky.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	###SRP

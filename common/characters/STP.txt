@@ -96,6 +96,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Roland_Keitel
+				small = GFX_portrait_STP_Roland_Keitel_small
 			}
 		}
 		corps_commander = {
@@ -114,6 +115,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Maurice_Dallon
+				small = GFX_portrait_STP_Maurice_Dallon_small
 			}
 		}
 		corps_commander = {
@@ -132,6 +134,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Leonid_Barchel
+				small = GFX_portrait_STP_Leonid_Barchel_small
 			}
 			civilian = {
 				large = GFX_portrait_STP_Leonid_Barchel
@@ -162,6 +165,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Edmund_Ravel
+				small = GFX_portrait_STP_Edmund_Ravel_small
 			}
 		}
 		corps_commander = {
@@ -180,6 +184,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Viktor_Marent
+				small = GFX_portrait_STP_Viktor_Marent_small
 			}
 		}
 		corps_commander = {
@@ -198,6 +203,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Severin_Drake
+				small = GFX_portrait_STP_Severin_Drake_small
 			}
 		}
 		field_marshal = {
@@ -219,6 +225,7 @@ characters = {
 			}
 			army = {
 				large = GFX_portrait_STP_August_Veil
+				small = GFX_portrait_STP_August_Veil_small
 			}
 		}
 		field_marshal = {
