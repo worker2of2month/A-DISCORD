@@ -1,7 +1,7 @@
 """Parsed RUS accounting and campaign contracts; not native-engine simulation."""
 
 from copy import deepcopy
-from itertools import product
+from itertools import permutations, product
 from pathlib import Path
 import json
 import re
@@ -522,6 +522,41 @@ class RusCampaignTests(unittest.TestCase):
         for name in self.focuses:
             resolve(name)
         self.assertEqual(len(set(positions.values())), len(positions))
+
+    def test_parallel_programmes_allow_reordering_but_require_all_work(self):
+        cases = (
+            (("school_of_scribes", "roadside_clinics"), "a_country_of_names", 2, 77),
+            (("district_ledger", "courier_stations", "district_paramedics"), "covenant_of_service", 3, 91),
+            (("field_evacuation_service", "rifle_inspection_board", "artillery_observers"), "staff_field_exercise", 6, 91),
+            (("recovery_depots", "interchangeable_parts", "second_arsenal_shift"), "strategic_freight_reserve", 3, 105),
+            (("register_conquered_lands", "empire_without_rivals", "postwar_roads", "imperial_academy"), "tomorrow_above_ground", 6, 154),
+        )
+
+        def ready(name, done):
+            return all(
+                any(child.value in done for child in group.value)
+                for group in self.focuses[name]
+                if group.key == "prerequisite"
+            )
+
+        for programmes, capstone, expected_orders, expected_days in cases:
+            members = tuple("RUS_" + name for name in programmes)
+            final = "RUS_" + capstone
+            with self.subTest(capstone=final):
+                valid_orders = 0
+                for order in permutations(members):
+                    done = set(self.focuses) - set(members) - {final}
+                    for name in order:
+                        self.assertFalse(ready(final, done), (final, order, name))
+                        if not ready(name, done):
+                            break
+                        done.add(name)
+                    else:
+                        self.assertTrue(ready(final, done), (final, order))
+                        valid_orders += 1
+                self.assertEqual(valid_orders, expected_orders)
+                days = sum(float(scalar(self.focuses[name], "cost")) * 7 for name in (*members, final))
+                self.assertEqual(days, expected_days)
 
     def test_opening_is_reachable_without_world_crisis(self):
         for name in ("RUS_bunker_survey", "RUS_surface_workshops", "RUS_count_the_hearths", "RUS_muster_books"):
@@ -1065,7 +1100,7 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_terminal_shutdown_refunds_and_clears_policies(self):
         world = self.world()
-        world.ideas = {name for name in self.ideas if name.startswith("RUS_") and not name.endswith("_delta")}
+        world.ideas = {name for name in self.ideas if name.startswith("RUS_") and not name.endswith(("_delta", "_bookmark"))}
         before = world.balances()
         world.begin("RUS_bunker_excavate")
         world.variables["RUS_crisis_phase"] = 4
@@ -1279,6 +1314,27 @@ class RusCampaignTests(unittest.TestCase):
         for name in ("RUS_national_spirit", "RUS_last_empire_spirit"):
             values = {entry.key for entry in block(block(static, name), "modifier")}
             self.assertFalse(values & mapping.keys(), name)
+
+    def test_bookmark_previews_match_startup_and_are_never_installed(self):
+        world = BunkerWorld(self, fresh=True)
+        bookmark = block(block(parse("common/bookmarks/the_gathering_storm.txt"), "bookmarks"), "bookmark")
+        displayed = {entry.value for entry in block(block(bookmark, "RUS"), "ideas")}
+        previews = {"RUS_black_army_bookmark", "RUS_bunker_complex_bookmark"}
+        self.assertEqual(displayed, previews | {"RUS_national_spirit"})
+        dynamic = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
+        initial = {row.key: world.value(row.value) for row in dynamic if isinstance(row.value, str) and row.value.startswith("RUS_army_") and world.value(row.value)}
+        preview = {row.key: float(row.value) for row in block(self.ideas["RUS_black_army_bookmark"], "modifier")}
+        self.assertEqual(preview, initial)
+        self.assertFalse(any(row.key == "modifier" for row in self.ideas["RUS_bunker_complex_bookmark"]))
+        for name in previews:
+            self.assertEqual(scalar(block(self.ideas[name], "allowed"), "always"), "no")
+            self.assertNotIn(name, world.ideas)
+        definitions = {f"common/ideas/{BASE}_ideas.txt", "common/bookmarks/the_gathering_storm.txt"}
+        for folder in ("common", "history", "events", "focus_trees"):
+            for path in (ROOT / folder).rglob("*.txt"):
+                if path.relative_to(ROOT).as_posix() not in definitions:
+                    text = path.read_text(encoding="utf-8-sig")
+                    self.assertFalse(any(name in text for name in previews), str(path))
 
     def test_black_army_organization_progresses_in_three_material_stages(self):
         world = self.world()

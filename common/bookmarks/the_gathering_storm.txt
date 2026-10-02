@@ -57,6 +57,11 @@ bookmarks = {
 			minor = yes
 			history = "RUS_BOOKMARK_DESC"
 			ideology = anarchism
+			ideas = {
+				RUS_national_spirit
+				RUS_black_army_bookmark
+				RUS_bunker_complex_bookmark
+			}
 		}
 
 		effect = {
