@@ -228,7 +228,7 @@ class RusLastEmpireTests(unittest.TestCase):
         start = plan.index("ADISCORD_vorkerland_rus_last_empire_plan = {")
         body = plan[start:]
         ordered = tuple(re.findall(r"(?m)^\s*(RUS_[A-Za-z0-9_]+)\s*$", body))
-        self.assertEqual(ordered, RUS_FOCUS_IDS)
+        self.assertEqual(tuple(name for name in ordered if name in RUS_FOCUS_IDS), RUS_FOCUS_IDS)
         self.assertIn("is_ai = yes", body)
 
     def test_decisions_are_scripted_wars_with_one_campaign_escrow(self) -> None:
@@ -817,6 +817,11 @@ class RusCrisisFixture:
         from tools.tests.test_adiscord_stp_preparation import entries
 
         self.effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")}
+        self.effects.update({
+            e.key: e.value
+            for e in entries("common/scripted_effects/ADISCORD_shared_action_effects.txt")
+            if e.key == "ADISCORD_campaign_slot_release"
+        })
         self.triggers = {
             e.key: e.value
             for e in entries("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
@@ -848,8 +853,10 @@ class RusCrisisFixture:
         self.wars = {frozenset(("RUS", tag)) for tag in (hegemon, "NOD")}
         self.events = []
         self.missions = []
+        self.active_decisions = set()
         self.annexed = []
         self.retired = []
+        self.dynamic_modifiers = set()
         self.autonomy = {}
         self.outside_predicates = {}
         self.root = "RUS"
@@ -903,8 +910,12 @@ class RusCrisisFixture:
                 }[scalar(value, "compare")]
             if key == "has_variable":
                 return (current, value) in self.variables
+            if key == "has_dynamic_modifier":
+                return (current, scalar(value, "modifier")) in self.dynamic_modifiers
             if key == "has_country_flag":
                 return value in self.flags[current]
+            if key == "has_decision":
+                return (current, value) in self.active_decisions
             if key == "has_state_flag":
                 return value in self.state_flags.get(current, set())
             if key == "has_capitulated":
@@ -990,6 +1001,13 @@ class RusCrisisFixture:
                 self.arrays.setdefault(scalar(value, "array"), []).append(self.resolve(scalar(value, "value"), stack))
             elif key == "set_variable":
                 self.variables[current, scalar(value, "var")] = float(scalar(value, "value"))
+            elif key == "add_to_variable":
+                variable = (current, scalar(value, "var"))
+                self.variables[variable] = self.variables.get(variable, 0) + float(scalar(value, "value"))
+            elif key == "remove_decision":
+                self.active_decisions.discard((current, value))
+            elif key == "remove_dynamic_modifier":
+                self.dynamic_modifiers.discard((current, scalar(value, "modifier")))
             elif key == "set_country_flag":
                 flag = scalar(value, "flag") if isinstance(value, list) else value
                 self.flags[current].add(flag)
@@ -1298,7 +1316,9 @@ class RusCrisisContracts(unittest.TestCase):
     def test_new_localisation_is_single_line_bom_and_complete(self):
         for language in ("russian", "english"):
             path = ROOT / f"localisation/{language}/ADISCORD_vorkerland_l_{language}.yml"
-            source = read(path).split("# --- rus_crisis_l_" + language + " ---", 1)[1]
+            from tools.lib.paths import source_section
+            source = source_section(read(path), "rus_crisis_l_" + language)
+            source = source.split("\n", 1)[1]
             if language == "russian":
                 self.assertTrue(path.read_bytes().startswith(b"\xef\xbb\xbf"))
             lines = [line for line in source.splitlines() if line.strip()]

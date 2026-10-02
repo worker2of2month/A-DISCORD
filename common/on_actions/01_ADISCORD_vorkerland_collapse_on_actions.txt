@@ -67,6 +67,9 @@ on_actions = {
 			}
 		}
 	}
+	on_weekly_RUS = {
+		effect = { RUS_bunker_weekly_supply = yes }
+	}
 	on_monthly_RUS = {
 		effect = {
 			RUS_crisis_check_start = yes
@@ -176,6 +179,16 @@ on_actions = {
 	}
 	on_puppet = {
 		effect = {
+			if = {
+				limit = {
+					RUS = { has_country_flag = RUS_bunker_initialized }
+					OR = {
+						ROOT = { tag = RUS }
+						FROM = { tag = RUS }
+					}
+				}
+				RUS = { RUS_bunker_refresh = yes }
+			}
 			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
 			if = {
 				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
@@ -216,6 +229,13 @@ on_actions = {
 	}
 	on_release_as_free = {
 		effect = {
+			if = {
+				limit = {
+					tag = RUS
+					has_country_flag = RUS_bunker_initialized
+				}
+				RUS_bunker_refresh = yes
+			}
 			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
 			if = {
 				limit = { ADISCORD_vorkerland_release_requires_interception = yes }
@@ -231,6 +251,13 @@ on_actions = {
 	}
 	on_state_control_changed = {
 		effect = {
+			if = {
+				limit = {
+					FROM.FROM = { state = 66 }
+					RUS = { has_country_flag = RUS_bunker_initialized }
+				}
+				RUS = { RUS_bunker_refresh = yes }
+			}
 			# Iconic objectives. Each fires once per campaign; the global array is
 			# the guard, so the literal id in the limit must match the id passed to
 			# the effect. Tier 1 are the four claimant capitals and the Unity Tower,
@@ -379,6 +406,30 @@ on_actions = {
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed
+			}
+		}
+	}
+
+	on_subject_free = {
+		effect = {
+			if = {
+				limit = {
+					tag = RUS
+					has_country_flag = RUS_bunker_initialized
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+	}
+
+	on_uncapitulation = {
+		effect = {
+			if = {
+				limit = {
+					tag = RUS
+					has_country_flag = RUS_bunker_initialized
+				}
+				RUS_bunker_refresh = yes
 			}
 		}
 	}

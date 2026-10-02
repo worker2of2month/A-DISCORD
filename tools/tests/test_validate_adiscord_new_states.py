@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import re
 import unittest
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
 
 from tools.builders import build_adiscord_new_states as builder
 from tools.lib.adiscord_vorkerland_theatre_manifest import (
@@ -360,6 +363,32 @@ class NorthernStartingStateContracts(unittest.TestCase):
                 for error in self.core.ERRORS
             )
         )
+
+
+class NudgeMetadataTests(unittest.TestCase):
+    def test_shell_recovery_preserves_membership_and_economy(self):
+        for state_id in (241, 282, 290, 688, 689, 690):
+            with self.subTest(state=state_id), tempfile.TemporaryDirectory() as directory:
+                original_path = builder.state_path(state_id)
+                original = original_path.read_text(encoding="utf-8")
+                opening, closing = builder.named_block(original, "history")
+                start = original.rfind("history", 0, opening)
+                shell = original[:start] + original[closing + 1:]
+                target = Path(directory) / original_path.name
+                target.write_text(shell, encoding="utf-8")
+                with patch.object(builder, "STATE_DIR", Path(directory)):
+                    planned = builder.state_metadata_plan({state_id})[target]
+                    self.assertEqual(planned.decode("utf-8"), original)
+                    target.write_bytes(planned)
+                    self.assertEqual(builder.state_metadata_plan({state_id})[target], planned)
+
+    def test_metadata_rejects_manifest_that_would_change_new_borders(self):
+        path = builder.state_path(241)
+        original = path.read_bytes()
+        with patch.dict(builder.EXTRA_PROVINCES_BY_STATE, {241: (99999,)}):
+            with self.assertRaisesRegex(RuntimeError, "would change province membership"):
+                builder.state_metadata_plan({241})
+        self.assertEqual(path.read_bytes(), original)
 
 
 if __name__ == "__main__":

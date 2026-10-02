@@ -2309,3 +2309,427 @@ ADISCORD_vorkerland_rus_target_defeated = {
 		AND = { tag = ROOT has_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
 	}
 }
+
+# --- rus_campaign_triggers ---
+RUS_khan_governing = {
+	tag = RUS
+	has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
+	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+	has_capitulated = no
+	is_subject = no
+}
+
+RUS_bunker_operational = {
+	RUS_khan_governing = yes
+	owns_state = 66
+	controls_state = 66
+	has_country_flag = RUS_bunker_initialized
+}
+
+RUS_bunker_slot_free = {
+	NOT = { has_variable = RUS_bunker_project }
+}
+
+RUS_bunker_excavate_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 40 compare = greater_than_or_equals }
+}
+
+RUS_bunker_excavate_affordable = {
+	NOT = { has_political_power < 20 }
+	check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 20 } }
+}
+
+RUS_bunker_rush_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 55 compare = greater_than_or_equals }
+}
+
+RUS_bunker_rush_affordable = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_guard_requirements = {
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_guard_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 25 } }
+}
+
+RUS_bunker_shelter_requirements = {
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_shelter_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 25 } }
+}
+
+RUS_bunker_water_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_water_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_signals_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_signals_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 30 } }
+}
+
+RUS_bunker_workshop_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_free_power value = 3 compare = greater_than_or_equals }
+}
+
+RUS_bunker_workshop_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_granary_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_granary_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_clinic_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_clinic_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+RUS_bunker_laboratory_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_free_power value = 3 compare = greater_than_or_equals }
+}
+
+RUS_bunker_laboratory_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 350 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 40 } }
+}
+
+RUS_bunker_archive_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_archive_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 45 } }
+}
+
+RUS_bunker_command_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_free_power value = 2 compare = greater_than_or_equals }
+}
+
+RUS_bunker_command_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 45 } }
+}
+
+RUS_bunker_generator_requirements = {
+	always = yes
+}
+
+RUS_bunker_generator_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 35 } }
+}
+
+RUS_bunker_reinforce_requirements = {
+	check_variable = { var = RUS_bunker_integrity value = 60 compare = less_than_or_equals }
+}
+
+RUS_bunker_reinforce_affordable = {
+	NOT = { has_political_power < 15 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	NOT = { has_equipment = { support_equipment < 15 } }
+}
+
+RUS_engineering_order_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 180 compare = greater_than_or_equals }
+}
+
+RUS_rifle_order_affordable = {
+	NOT = { has_political_power < 30 }
+	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+}
+
+RUS_market_surplus_affordable = {
+	NOT = { has_political_power < 15 }
+	check_variable = { var = ADISCORD_economy_treasury value = 0 compare = greater_than_or_equals }
+	NOT = { has_equipment = { infantry_equipment < 2500 } }
+}
+
+
+RUS_bunker_upgrade_1_requirements = {
+	has_completed_focus = RUS_bunker_airlocks
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_1 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_1_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_2_requirements = {
+	has_completed_focus = RUS_bunker_utilities
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_2 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_2_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_3_requirements = {
+	has_completed_focus = RUS_bunker_working_heart
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_3 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_3_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_4_requirements = {
+	has_completed_focus = RUS_bunker_science_wing
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_4 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 1 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_4_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_upgrade_5_requirements = {
+	has_completed_focus = RUS_bunker_memory_vault
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+	check_variable = { var = RUS_bunker_upgrade_5 value = 0 compare = equals }
+	check_variable = { var = RUS_bunker_free_power value = 0 compare = greater_than_or_equals }
+}
+
+RUS_bunker_upgrade_5_affordable = {
+	RUS_bunker_generator_affordable = yes
+}
+
+RUS_bunker_resupply_affordable = {
+	NOT = { has_political_power < 15 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+RUS_bunker_resupply_available = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food_space value = 40 compare = greater_than_or_equals }
+	RUS_bunker_resupply_affordable = yes
+}
+
+
+RUS_bunker_guard_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+	RUS_bunker_guard_requirements = yes
+	RUS_bunker_guard_affordable = yes
+}
+
+RUS_bunker_shelter_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+	RUS_bunker_shelter_requirements = yes
+	RUS_bunker_shelter_affordable = yes
+}
+
+RUS_bunker_upgrade_1_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_1_requirements = yes
+	RUS_bunker_upgrade_1_affordable = yes
+}
+
+RUS_bunker_water_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+	RUS_bunker_water_requirements = yes
+	RUS_bunker_water_affordable = yes
+}
+
+RUS_bunker_signals_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+	RUS_bunker_signals_requirements = yes
+	RUS_bunker_signals_affordable = yes
+}
+
+RUS_bunker_upgrade_2_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_2_requirements = yes
+	RUS_bunker_upgrade_2_affordable = yes
+}
+
+RUS_bunker_workshop_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+	RUS_bunker_workshop_requirements = yes
+	RUS_bunker_workshop_affordable = yes
+}
+
+RUS_bunker_granary_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+	RUS_bunker_granary_requirements = yes
+	RUS_bunker_granary_affordable = yes
+}
+
+RUS_bunker_upgrade_3_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_3_requirements = yes
+	RUS_bunker_upgrade_3_affordable = yes
+}
+
+RUS_bunker_clinic_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+	RUS_bunker_clinic_requirements = yes
+	RUS_bunker_clinic_affordable = yes
+}
+
+RUS_bunker_laboratory_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+	RUS_bunker_laboratory_requirements = yes
+	RUS_bunker_laboratory_affordable = yes
+}
+
+RUS_bunker_upgrade_4_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_4_requirements = yes
+	RUS_bunker_upgrade_4_affordable = yes
+}
+
+RUS_bunker_archive_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+	RUS_bunker_archive_requirements = yes
+	RUS_bunker_archive_affordable = yes
+}
+
+RUS_bunker_command_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+	check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+	RUS_bunker_command_requirements = yes
+	RUS_bunker_command_affordable = yes
+}
+
+RUS_bunker_upgrade_5_ui_available = {
+	RUS_bunker_operational = yes
+	RUS_bunker_slot_free = yes
+	RUS_bunker_upgrade_5_requirements = yes
+	RUS_bunker_upgrade_5_affordable = yes
+}
+
+RUS_defensive_preparation_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_entrenched_reserves
+	NOT = { has_idea = RUS_defensive_preparation_spirit }
+}
+
+RUS_mobile_preparation_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_mobile_supply_columns
+	NOT = { has_idea = RUS_mobile_preparation_spirit }
+}
+
+RUS_aimaq_public_works_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_local_service_committees
+	NOT = { has_idea = RUS_public_works_spirit }
+}
+
+RUS_chancery_reconstruction_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_inspection_chamber
+	66 = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
+}
+
+RUS_surface_industrial_contract_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_surface_contracts
+	66 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+}
+
+RUS_subterranean_supply_contract_available = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_underground_fund
+	check_variable = { var = RUS_bunker_autonomy_contracts value = 2 compare = less_than }
+}
+
+# --- rus_public_campaigns ---
+RUS_public_campaigns_operational = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_khan_broadcast_service
+}

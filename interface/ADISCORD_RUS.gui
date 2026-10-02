@@ -1,0 +1,559 @@
+guiTypes = {
+	containerWindowType = {
+		name = "ADISCORD_RUS_bunker_window"
+		position = { x = 0 y = 0 }
+		size = { width = 460 height = 484 }
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_title"
+			position = { x = 8 y = 2 }
+			text = "RUS_bunker_panel_title"
+			font = "hoi_20b"
+			maxWidth = 440
+			maxHeight = 24
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_metric_power"
+			position = { x = 8 y = 31 }
+			text = "RUS_bunker_metric_power"
+			font = "hoi_16mbs"
+			maxWidth = 105
+			maxHeight = 43
+			pdx_tooltip = "RUS_bunker_metric_power_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_metric_food"
+			position = { x = 120 y = 31 }
+			text = "RUS_bunker_metric_food"
+			font = "hoi_16mbs"
+			maxWidth = 105
+			maxHeight = 43
+			pdx_tooltip = "RUS_bunker_metric_food_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_metric_integrity"
+			position = { x = 232 y = 31 }
+			text = "RUS_bunker_metric_integrity"
+			font = "hoi_16mbs"
+			maxWidth = 105
+			maxHeight = 43
+			pdx_tooltip = "RUS_bunker_metric_integrity_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_metric_depth"
+			position = { x = 344 y = 31 }
+			text = "RUS_bunker_metric_depth"
+			font = "hoi_16mbs"
+			maxWidth = 105
+			maxHeight = 43
+			pdx_tooltip = "RUS_bunker_metric_depth_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_work"
+			position = { x = 8 y = 85 }
+			text = "RUS_bunker_panel_work"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 27
+			pdx_tooltip = "RUS_bunker_queue_ui_tt"
+		}
+		buttonType = {
+			name = "RUS_bunker_excavate_button"
+			position = { x = 234 y = 80 }
+			size = { x = 216 y = 32 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_excavate_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_excavate_button_label"
+			position = { x = 243 y = 88 }
+			text = "RUS_bunker_excavate_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 198
+			maxHeight = 23
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_floor_1"
+			position = { x = 8 y = 122 }
+			size = { x = 216 y = 54 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_select_1_tt"
+		}
+		iconType = {
+			name = "RUS_bunker_floor_1_picture"
+			position = { x = 12 y = 126 }
+			spriteType = "GFX_RUS_bunker_layer_1"
+			scale = 0.18
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_floor_1"
+			position = { x = 103 y = 130 }
+			text = "RUS_bunker_panel_floor_1"
+			font = "hoi_16mbs"
+			maxWidth = 116
+			maxHeight = 36
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "RUS_bunker_selected_picture_1"
+			position = { x = 235 y = 122 }
+			spriteType = "GFX_RUS_bunker_layer_1"
+			scale = 0.46
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_details_1"
+			position = { x = 236 y = 247 }
+			text = "RUS_bunker_details_1"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 34
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_guard_button"
+			position = { x = 234 y = 288 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_guard_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_guard_button_label"
+			position = { x = 242 y = 292 }
+			text = "RUS_bunker_guard_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_shelter_button"
+			position = { x = 234 y = 334 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_shelter_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_shelter_button_label"
+			position = { x = 242 y = 338 }
+			text = "RUS_bunker_shelter_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_upgrade_1_button"
+			position = { x = 234 y = 380 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_upgrade_1_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_upgrade_1_button_label"
+			position = { x = 242 y = 384 }
+			text = "RUS_bunker_upgrade_1_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_floor_2"
+			position = { x = 8 y = 182 }
+			size = { x = 216 y = 54 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_select_2_tt"
+		}
+		iconType = {
+			name = "RUS_bunker_floor_2_picture"
+			position = { x = 12 y = 186 }
+			spriteType = "GFX_RUS_bunker_layer_2"
+			scale = 0.18
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_floor_2"
+			position = { x = 103 y = 190 }
+			text = "RUS_bunker_panel_floor_2"
+			font = "hoi_16mbs"
+			maxWidth = 116
+			maxHeight = 36
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "RUS_bunker_selected_picture_2"
+			position = { x = 235 y = 122 }
+			spriteType = "GFX_RUS_bunker_layer_2"
+			scale = 0.46
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_details_2"
+			position = { x = 236 y = 247 }
+			text = "RUS_bunker_details_2"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 34
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_water_button"
+			position = { x = 234 y = 288 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_water_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_water_button_label"
+			position = { x = 242 y = 292 }
+			text = "RUS_bunker_water_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_signals_button"
+			position = { x = 234 y = 334 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_signals_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_signals_button_label"
+			position = { x = 242 y = 338 }
+			text = "RUS_bunker_signals_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_upgrade_2_button"
+			position = { x = 234 y = 380 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_upgrade_2_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_upgrade_2_button_label"
+			position = { x = 242 y = 384 }
+			text = "RUS_bunker_upgrade_2_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_floor_3"
+			position = { x = 8 y = 242 }
+			size = { x = 216 y = 54 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_select_3_tt"
+		}
+		iconType = {
+			name = "RUS_bunker_floor_3_picture"
+			position = { x = 12 y = 246 }
+			spriteType = "GFX_RUS_bunker_layer_3"
+			scale = 0.18
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_floor_3"
+			position = { x = 103 y = 250 }
+			text = "RUS_bunker_panel_floor_3"
+			font = "hoi_16mbs"
+			maxWidth = 116
+			maxHeight = 36
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "RUS_bunker_selected_picture_3"
+			position = { x = 235 y = 122 }
+			spriteType = "GFX_RUS_bunker_layer_3"
+			scale = 0.46
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_details_3"
+			position = { x = 236 y = 247 }
+			text = "RUS_bunker_details_3"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 34
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_workshop_button"
+			position = { x = 234 y = 288 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_workshop_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_workshop_button_label"
+			position = { x = 242 y = 292 }
+			text = "RUS_bunker_workshop_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_granary_button"
+			position = { x = 234 y = 334 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_granary_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_granary_button_label"
+			position = { x = 242 y = 338 }
+			text = "RUS_bunker_granary_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_upgrade_3_button"
+			position = { x = 234 y = 380 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_upgrade_3_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_upgrade_3_button_label"
+			position = { x = 242 y = 384 }
+			text = "RUS_bunker_upgrade_3_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_floor_4"
+			position = { x = 8 y = 302 }
+			size = { x = 216 y = 54 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_select_4_tt"
+		}
+		iconType = {
+			name = "RUS_bunker_floor_4_picture"
+			position = { x = 12 y = 306 }
+			spriteType = "GFX_RUS_bunker_layer_4"
+			scale = 0.18
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_floor_4"
+			position = { x = 103 y = 310 }
+			text = "RUS_bunker_panel_floor_4"
+			font = "hoi_16mbs"
+			maxWidth = 116
+			maxHeight = 36
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "RUS_bunker_selected_picture_4"
+			position = { x = 235 y = 122 }
+			spriteType = "GFX_RUS_bunker_layer_4"
+			scale = 0.46
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_details_4"
+			position = { x = 236 y = 247 }
+			text = "RUS_bunker_details_4"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 34
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_clinic_button"
+			position = { x = 234 y = 288 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_clinic_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_clinic_button_label"
+			position = { x = 242 y = 292 }
+			text = "RUS_bunker_clinic_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_laboratory_button"
+			position = { x = 234 y = 334 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_laboratory_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_laboratory_button_label"
+			position = { x = 242 y = 338 }
+			text = "RUS_bunker_laboratory_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_upgrade_4_button"
+			position = { x = 234 y = 380 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_upgrade_4_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_upgrade_4_button_label"
+			position = { x = 242 y = 384 }
+			text = "RUS_bunker_upgrade_4_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_floor_5"
+			position = { x = 8 y = 362 }
+			size = { x = 216 y = 54 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_select_5_tt"
+		}
+		iconType = {
+			name = "RUS_bunker_floor_5_picture"
+			position = { x = 12 y = 366 }
+			spriteType = "GFX_RUS_bunker_layer_5"
+			scale = 0.18
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_floor_5"
+			position = { x = 103 y = 370 }
+			text = "RUS_bunker_panel_floor_5"
+			font = "hoi_16mbs"
+			maxWidth = 116
+			maxHeight = 36
+			alwaystransparent = yes
+		}
+		iconType = {
+			name = "RUS_bunker_selected_picture_5"
+			position = { x = 235 y = 122 }
+			spriteType = "GFX_RUS_bunker_layer_5"
+			scale = 0.46
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_details_5"
+			position = { x = 236 y = 247 }
+			text = "RUS_bunker_details_5"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 34
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_archive_button"
+			position = { x = 234 y = 288 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_archive_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_archive_button_label"
+			position = { x = 242 y = 292 }
+			text = "RUS_bunker_archive_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_command_button"
+			position = { x = 234 y = 334 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_command_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_command_button_label"
+			position = { x = 242 y = 338 }
+			text = "RUS_bunker_command_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_upgrade_5_button"
+			position = { x = 234 y = 380 }
+			size = { x = 216 y = 40 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_upgrade_5_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_upgrade_5_button_label"
+			position = { x = 242 y = 384 }
+			text = "RUS_bunker_upgrade_5_button_label"
+			font = "hoi_16mbs"
+			maxWidth = 201
+			maxHeight = 33
+			alwaystransparent = yes
+		}
+		buttonType = {
+			name = "RUS_bunker_resupply_button"
+			position = { x = 8 y = 432 }
+			size = { x = 216 y = 44 }
+			quadTextureSprite = "GFX_RUS_bunker_button"
+			clicksound = click_default
+			pdx_tooltip = "RUS_bunker_food_ui_tt"
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_resupply_label"
+			position = { x = 16 y = 436 }
+			text = "RUS_bunker_resupply_label"
+			font = "hoi_16mbs"
+			maxWidth = 199
+			maxHeight = 35
+			alwaystransparent = yes
+		}
+		instantTextBoxType = {
+			name = "RUS_bunker_panel_condition"
+			position = { x = 236 y = 432 }
+			text = "RUS_bunker_panel_condition"
+			font = "hoi_16mbs"
+			maxWidth = 214
+			maxHeight = 48
+			pdx_tooltip = "RUS_bunker_status_ui_tt"
+		}
+	}
+}

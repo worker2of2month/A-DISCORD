@@ -1341,7 +1341,20 @@ VAL_frontier_partner_available = {
 VAL_tff_principles_context = {
 	VAL_frontier_partner_available = yes
 	VAL = { NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_nod_frontier_agreement } }
-	NOD = { exists = yes has_capitulated = no is_subject = no NOT = { has_country_flag = VAL_nodrul_administration_pending } }
+	NOD = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		# Scripted peace preserves NOD and can clear native capitulation.
+		NOT = {
+			check_variable = { var = STP_cw_northern_campaign_status value = 3 compare = equals }
+			has_country_flag = NOD_cw_defeated
+			has_country_flag = STP_pc_defeated_by_sts
+			has_country_flag = STP_heg_defeated_by_sts
+			has_country_flag = VAL_final_defeat_pending
+			has_country_flag = VAL_nodrul_administration_pending
+		}
+	}
 	DCA = { exists = no }
 	TFF = { NOT = { is_in_faction_with = NOD } }
 }

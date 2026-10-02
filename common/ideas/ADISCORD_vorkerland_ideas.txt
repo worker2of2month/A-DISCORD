@@ -2688,7 +2688,205 @@ ideas = {
 		}
 
 
+# --- rus_campaign_ideas ---
+		RUS_bunker_guard_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+				training_time_army_factor = -0.03
+			}
+		}
+
+		RUS_bunker_shelter_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+			}
+		}
+
+		RUS_bunker_water_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				attrition = -0.04
+			}
+		}
+
+		RUS_bunker_signals_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				planning_speed = 0.08
+			}
+		}
+
+		RUS_bunker_workshop_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.06
+			}
+		}
+
+		RUS_bunker_granary_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.025
+			}
+		}
+
+		RUS_bunker_clinic_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				casualty_trickleback = 0.04
+			}
+		}
+
+		RUS_bunker_laboratory_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.04
+			}
+		}
+
+		RUS_bunker_archive_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.15
+			}
+		}
+
+		RUS_bunker_command_delta = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				max_planning_factor = 0.04
+				army_defence_factor = 0.03
+			}
+		}
+
+		RUS_council_mandate = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				political_power_gain = 0.1
+				mobilization_speed = -0.05
+			}
+		}
+
+		RUS_chancery_mandate = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				political_power_gain = 0.2
+				mobilization_speed = 0.1
+				stability_factor = -0.03
+			}
+		}
+
+		RUS_paid_administration = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.05
+			}
+		}
+
+		RUS_open_city_policy = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				research_speed_factor = 0.03
+				surrender_limit = -0.02
+			}
+		}
+
+		RUS_sealed_throne_policy = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.04
+				surrender_limit = 0.03
+				stability_factor = -0.03
+			}
+		}
+
+		RUS_patient_doctrine = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.04
+				supply_consumption_factor = -0.05
+				army_speed_factor = -0.03
+			}
+		}
+
+		RUS_swift_doctrine = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_speed_factor = 0.05
+				planning_speed = 0.08
+				supply_consumption_factor = 0.04
+			}
+		}
+
+		RUS_professional_service = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.03
+				training_time_army_factor = -0.05
+			}
+		}
+
+		RUS_defensive_preparation_spirit = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				max_dig_in_factor = 0.10
+				army_defence_factor = 0.03
+			}
+		}
+
+		RUS_public_works_spirit = {
+			picture = generic_central_management
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		RUS_mobile_preparation_spirit = {
+			picture = generic_army_war_college
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				supply_consumption_factor = -0.05
+				army_speed_factor = 0.05
+			}
+		}
+
 # --- end ---
+
 	}
 
 	# Mechanical civil-war normalization is deliberately invisible in the UI.

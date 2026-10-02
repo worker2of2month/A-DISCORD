@@ -116,6 +116,11 @@ on_actions = {
 					}
 					ADISCORD_economy_initialize_country = yes
 				}
+				# The construction grant follows the guarded economy baseline.
+				RUS = {
+					ADISCORD_economy_initialize_country = yes
+					RUS_campaign_initialize = yes
+				}
 				# The fresh-campaign guard also prevents reopening the briefing on reload.
 				STP = {
 					if = {

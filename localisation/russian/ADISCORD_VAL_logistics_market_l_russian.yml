@@ -136,7 +136,7 @@
 
  VAL_recruit_local_volunteers:0 "Вербовать местных добровольцев"
 
- VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости — полный возврат."
+ VAL_recruit_local_volunteers_desc:0 "Призыв остаётся на уровне 1,25%. Дополнительный договорной резерв равен 2% исходного населения семи регионов Кефрейта и не возобновляется. Каждый набор: £population_texticon §Y5 тыс.§! местных добровольцев, 35 дней, §Y75§! £political_power_texticon и £infantry_equipment_texticon §Y5000§! единиц пехотного снаряжения. При капитуляции или потере независимости - полный возврат."
 
  VAL_refugee_training_cost:0 "§Y10000§! £population_texticon  §Y75§! £pol_power  §Y5000§! £infantry_equipment_texticon"
  VAL_refugee_training_cost_blocked:0 "§R10000§! £population_texticon  §R75§! £pol_power  §R5000§! £infantry_equipment_texticon"

@@ -283,7 +283,7 @@ class CoastalSeaRegionTests(unittest.TestCase):
             260: 72000,
             275: 145000,
             283: 112000,
-            294: 128000,
+            294: states.SHL_POPULATION[294] + states.SHL_POPULATION[707],
             300: 118000,
         }
         memberships = builder.load_states()
@@ -309,13 +309,14 @@ class CoastalSeaRegionTests(unittest.TestCase):
                     rf"\b{building}\s*=\s*(\d+)", city_source + rural_source
                 )
                 self.assertEqual(sum(map(int, levels)), amount)
-            self.assertEqual(len(memberships[capital]), 1)
             self.assertEqual(
                 len(builder.connected_components(memberships[district], self.physical)),
                 1,
             )
             province, value = states.SOUTHERN_CITY_POINTS[capital]
-            self.assertEqual(memberships[capital], {province})
+            self.assertIn(province, memberships[capital])
+            self.assertEqual(memberships[district], set(provinces))
+            self.assertTrue(memberships[capital].isdisjoint(memberships[district]))
             self.assertRegex(
                 city_source, rf"victory_points\s*=\s*\{{\s*{province}\s+{value}\s*\}}"
             )

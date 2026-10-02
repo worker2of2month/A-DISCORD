@@ -1480,4 +1480,8 @@ spriteTypes = {
 		name = "GFX_focus_VAL_Marine_Contract_Corps"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Marine_Contract_Corps.png"
 	}
+	spriteType = {
+		name = "GFX_focus_VAL_Price_Of_Loyalty"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Price_Of_Loyalty.png"
+	}
 }

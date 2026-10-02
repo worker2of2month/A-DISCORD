@@ -1,0 +1,34 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_RUS_bunker_layer_1"
+		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_1.dds"
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_layer_2"
+		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_2.dds"
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_layer_3"
+		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_3.dds"
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_layer_4"
+		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_4.dds"
+	}
+
+	spriteType = {
+		name = "GFX_RUS_bunker_layer_5"
+		texturefile = "gfx/interface/ADISCORD_RUS/bunker_layer_5.dds"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_RUS_bunker_button"
+		size = { x = 60 y = 23 }
+		textureFile = "gfx/interface/tiles/tiling_sort_button.dds"
+		borderSize = { x = 20 y = 12 }
+		tilingCenter = yes
+	}
+}

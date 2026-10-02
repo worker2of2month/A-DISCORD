@@ -23,6 +23,7 @@ APPROVAL_SOURCE = (
     ROOT / "gfx/interface/decisions/source/decision_approval_seal_source.png"
 )
 OUTPUT_DIR = ROOT / "gfx/interface/decisions/ui"
+RUS_BUNKER_DIR = ROOT / "gfx/interface/ADISCORD_RUS"
 
 WINDOW_TILE = OUTPUT_DIR / "ADISCORD_decisions_window_tile.dds"
 TITLE_BG = OUTPUT_DIR / "ADISCORD_decisions_title_bg.dds"
@@ -316,6 +317,21 @@ def _dds_bytes(image: Image.Image) -> bytes:
     return stream.getvalue()
 
 
+def _rus_bunker_outputs() -> dict[Path, bytes]:
+    """Package the five room illustrations at a shared native GUI resolution."""
+    outputs = {}
+    for layer in range(1, 6):
+        source_path = RUS_BUNKER_DIR / "source" / f"bunker_layer_{layer}.png"
+        with Image.open(source_path) as source:
+            image = source.convert("RGBA").resize(
+                (464, 256), Image.Resampling.LANCZOS
+            )
+        stream = BytesIO()
+        image.save(stream, format="DDS", pixel_format="DXT5")
+        outputs[RUS_BUNKER_DIR / f"bunker_layer_{layer}.dds"] = stream.getvalue()
+    return outputs
+
+
 def expected_outputs() -> dict[Path, bytes]:
     return {
         WINDOW_TILE: _dds_bytes(_window_tile()),
@@ -330,6 +346,7 @@ def expected_outputs() -> dict[Path, bytes]:
         PROGRESS_GOOD: _dds_bytes(_segmented_progress((111, 126, 61, 255))),
         PROGRESS_BAD: _dds_bytes(_segmented_progress((132, 52, 45, 255))),
         SELECT_ICON: _dds_bytes(_approval_strip()),
+        **_rus_bunker_outputs(),
     }
 
 
@@ -362,10 +379,15 @@ def main() -> int:
     actions.add_argument(
         "--apply", action="store_true", help="write generated DDS outputs"
     )
+    parser.add_argument(
+        "--rus-bunker-only",
+        action="store_true",
+        help="check or build only RUS room illustrations",
+    )
     args = parser.parse_args()
 
     try:
-        outputs = expected_outputs()
+        outputs = _rus_bunker_outputs() if args.rus_bunker_only else expected_outputs()
     except (OSError, RuntimeError) as exc:
         print(f"ERROR: {exc}")
         return 1
@@ -376,9 +398,12 @@ def main() -> int:
         for issue in issues:
             print(f"ERROR: {issue}")
         return 1
-    print(
-        "A-Discord decisions UI assets are current (dossier surfaces, three-state rows, and segmented progress)."
-    )
+    if args.rus_bunker_only:
+        print("A-Discord RUS bunker room assets are current (five illustrations).")
+    else:
+        print(
+            "A-Discord decisions UI assets are current (dossier surfaces, rows, progress, and RUS bunker rooms)."
+        )
     return 0
 
 

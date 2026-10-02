@@ -10,13 +10,13 @@ state = {
 	history = {
 		owner = KYZ
 		add_core_of = KYZ
+		victory_points = { 6233 1 }
 		buildings = {
 			infrastructure = 2
 		}
-		victory_points = { 6233 1 }
 	}
 	provinces = {
-		2542 3756 6233 6445 8237 8348 10988 12594
+		2319 2542 2779 3756 6233 6445 8237 8348 10988 12594
 	}
 	buildings_max_level_factor = 1.000
 	local_supplies = 1.5

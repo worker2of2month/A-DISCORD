@@ -262,7 +262,7 @@ characters = {
 		name = STP_ilya_gornin
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_1
+				large = GFX_portrait_STP_Ilya_Gornin
 			}
 		}
 		country_leader = {
@@ -276,7 +276,7 @@ characters = {
 		name = STP_vera_tikh
 		portraits = {
 			civilian = {
-				large = GFX_Portrait_Europe_Generic_2
+				large = GFX_portrait_STP_Vera_Tikh
 			}
 		}
 		country_leader = {

@@ -294,7 +294,7 @@
  VAL_Different_Views_On_Freedom_desc:0 "For the Frontier, freedom begins with the right to refuse an order. Kefreyt sees independence through signatures, obligations and the price of breaking a contract. Before discussing a joint campaign, we must decide whether to recognise our neighbour's claims to Yuboria or offer only the share we are willing to surrender."
 
  # Frontier principles and northern partition
- VAL_tff_freedom_choice_ready_tt:0 "Kefreyt and $TFF$ are independent, have not capitulated and are not at war with each other. $TFF$ is not in a faction with $NOD$. $NOD$ exists, is independent, has not capitulated and has no administration settlement pending. $DCA$ does not exist. The Frontier policy is not chosen, and no partition offer is pending or agreement signed."
+ VAL_tff_freedom_choice_ready_tt:0 "Kefreyt and $TFF$ are independent, have not capitulated and are not at war with each other. $TFF$ is not in a faction with $NOD$. $NOD$ exists, is independent, has not capitulated, has not been defeated in the northern or Stelander campaign and has no postwar settlement pending. $DCA$ does not exist. The Frontier policy is not chosen, and no partition offer is pending or agreement signed."
  VAL_tff_freedom_focus_tt:0 "Choose the terms of cooperation with the Frontier: recognise its claims to both Yuborian administrations, or reserve Duchebia for Kefreyt. The Frontier answers independently. Agreed principles ease later negotiations for a joint war; the campaign still requires a separate treaty after Northern Settlement."
  VAL_tff_compromise_policy_tt:0 "Our later military offer will promise Iskhait and Duchebia to the Frontier. If it accepts these principles, its government will be more willing to agree to a joint campaign. No territory changes hands and no war entry occurs before a separate military treaty."
  VAL_tff_firm_policy_tt:0 "Our later military offer will promise only Iskhait to the Frontier. Duchebia remains under Kefreyt if the Frontier accepts this partition. These terms are harder to negotiate. Without a military agreement, demands for both administrations may still follow victory."
@@ -671,7 +671,7 @@
  VAL_frontier_workshop_refund_tt:0 "The full deposit for the unfinished factory is returned to Kefreyt."
  VAL_frontier_workshop_idle_tt: "This district has no workshop project already paid for."
  VAL_foreign_sales:0 "Contract Board"
- VAL_foreign_sales_desc:0 "§YCONTRACT BOARD§!\nContract Authority: §Y[?VAL_contract_authority|0]/100§! — §Y[VALGetContractAuthorityBand]§!\nExport desk: [VALContractBoardExportStatus]\nMilitary desk: [VALContractBoardMilitaryStatus]\nTrade-office income: £ADISCORD_economy_treasury_texticon §G+[?VAL_contract_market_weekly_income|0]§! / week.\n\n§YNEXT ACTION§!\n[VALContractBoardNextAction]\n\nForeign offers are listed below. Only currently relevant contract families are shown; active deliveries and refunds move to §Y$VAL_contract_obligations$§!."
+ VAL_foreign_sales_desc:0 "§YCONTRACT BOARD§!\nContract Authority: §Y[?VAL_contract_authority|0]/100§! - §Y[VALGetContractAuthorityBand]§!\nExport desk: [VALContractBoardExportStatus]\nMilitary desk: [VALContractBoardMilitaryStatus]\nTrade-office income: £ADISCORD_economy_treasury_texticon §G+[?VAL_contract_market_weekly_income|0]§! / week.\n\n§YNEXT ACTION§!\n[VALContractBoardNextAction]\n\nForeign offers are listed below. Only currently relevant contract families are shown; active deliveries and refunds move to §Y$VAL_contract_obligations$§!."
  VAL_contract_board_export_free:0 "§Gavailable§!"
  VAL_contract_board_export_busy:0 "§Rall desks occupied§!"
  VAL_contract_board_military_free:0 "§Gavailable§!"
@@ -1796,7 +1796,7 @@ VAL_reclamation_industry_available_tt:0 "We own and control the region, all thre
 
  VAL_ready_decision_result_tt:0 "Choose a one-off delivery size and send the buyer an offer."
 
- VAL_hire_value_unknown:0 "—"
+ VAL_hire_value_unknown:0 "-"
 
  VAL_hire_value_200:0 "200"
 

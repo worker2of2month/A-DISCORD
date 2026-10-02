@@ -24,9 +24,9 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 
 VORKERLAND_GENERATED_STATES = set(range(306, 329)) - {326}
 NAM_SVETLOGORSK_STATE_ID = 688
-NAM_SVETLOGORSK_PROVINCES = {689, 3127, 4025, 8635, 9211, 10967, 16721}
+NAM_SVETLOGORSK_PROVINCES = {689, 1710, 3127, 4025, 8635, 9211, 10967, 16721}
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2299, 7618, 7639, 8358}
+NAM_RESIDUAL_CITY_PROVINCES = {176, 2038, 2231, 2299, 7618, 7639, 8358}
 NAM_DRYRIVER_STATE_ID = 690
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
@@ -365,10 +365,10 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
         self.assertIn(67, self.physical_state_adjacency[svetlogorsk])
         self.assertIn(70, self.physical_state_adjacency[svetlogorsk])
         self.assertEqual(
-            self.physical_state_adjacency[svetlogorsk] - {67, 70, 690}, set()
+            self.physical_state_adjacency[svetlogorsk] - {67, 70, 689, 690}, set()
         )
-        self.assertEqual(self.physical_state_adjacency[residual], {69, 690, 700})
-        self.assertNotIn(residual, self.physical_state_adjacency[svetlogorsk])
+        self.assertEqual(self.physical_state_adjacency[residual], {69, 688, 690, 700})
+        self.assertIn(residual, self.physical_state_adjacency[svetlogorsk])
 
     def test_svetlogorsk_split_preserves_nam_population_and_industry(self) -> None:
         mainland = state_source(67)
@@ -739,11 +739,11 @@ class VorkerlandNamStateBalanceTests(unittest.TestCase):
 
     def test_nam_resource_war_has_distributed_named_victory_points(self) -> None:
         expected = {
-            67: {1710: 2, 6099: 3},
+            67: {6099: 3},
             68: {259: 5, 6150: 2},
             69: {367: 5, 8234: 2},
             70: {2986: 2, 6495: 4},
-            688: {16721: 3},
+            688: {16721: 3, 1710: 2},
             689: {},
             690: {8058: 2, 9016: 2},
             691: {8057: 3},

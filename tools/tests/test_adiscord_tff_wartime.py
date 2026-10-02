@@ -610,6 +610,58 @@ class TFFFreedomNegotiationTests(unittest.TestCase):
             )
         )
 
+    def test_scripted_nod_defeat_blocks_focus_and_open_negotiations(self):
+        from tools.tests.test_adiscord_stp_preparation import (
+            entries, block, scalar, matches_conditions,
+        )
+
+        tree = block(
+            entries("common/national_focus/ADISCORD_national_focus_VAL.txt"),
+            "focus_tree",
+        )
+        focus = next(
+            e.value for e in tree
+            if e.key == "focus"
+            and scalar(e.value, "id") == "VAL_Different_Views_On_Freedom"
+        )
+        defeats = [
+            (("NOD", "variable", "STP_cw_northern_campaign_status"), 3),
+            *[
+                (("NOD", "has_country_flag", flag), True)
+                for flag in (
+                    "NOD_cw_defeated", "STP_pc_defeated_by_sts",
+                    "STP_heg_defeated_by_sts", "VAL_final_defeat_pending",
+                    "VAL_nodrul_administration_pending",
+                )
+            ],
+        ]
+        for key, value in defeats:
+            with self.subTest(result=key):
+                self.setUp()
+                self.facts[key] = value
+                self.assertFalse(matches_conditions(
+                    self.expanded(block(focus, "available")), self.facts, "VAL"
+                ))
+                for choice in ("firm", "compromise"):
+                    self.execute(self.option(
+                        "val_contract.380", "val_contract.380." + choice
+                    ))
+                self.assertFalse(self.facts.get(
+                    ("VAL", "has_country_flag", "VAL_tff_freedom_policy"), False
+                ))
+                self.flag("VAL", "VAL_tff_freedom_policy", 1)
+                self.flag("VAL", "VAL_tff_principles_pending")
+                self.execute(
+                    self.option("val_contract.381", "val_contract.381.accept"), "TFF"
+                )
+                self.assertFalse(self.facts.get(
+                    ("VAL", "has_country_flag", "VAL_tff_principles_accepted"), False
+                ))
+                self.assertFalse(self.facts[
+                    "VAL", "has_country_flag", "VAL_tff_principles_pending"
+                ])
+                self.assertEqual(self.outputs, [])
+
     def test_issued_quote_cannot_be_replaced_and_closes_old_principles_offer(self):
         self.assertTrue("VAL_open_nod_frontier_offer" in self.effects)
         for policy in (0, 1, 2):

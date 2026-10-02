@@ -14,16 +14,26 @@ focus_tree = {
 
 	focus = {
 		id = RUS_summon_the_aimaqs
-		icon = GFX_goal_generic_political_pressure
+		icon = GFX_focus_VAL_Count_The_Captains
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		x = 4
+		x = 10
 		y = 0
 		cost = 5
-		available_if_capitulated = yes
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
 		completion_reward = {
-			add_political_power = 50
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 50
+				producer = RUS
+			}
+			add_political_power = 25
 			add_war_support = 0.05
-			add_stability = 0.02
 			custom_effect_tooltip = RUS_summon_the_aimaqs_tt
 		}
 		ai_will_do = { base = 12 }
@@ -31,13 +41,19 @@ focus_tree = {
 
 	focus = {
 		id = RUS_arm_the_border_hosts
-		icon = GFX_goal_generic_allies_build_infantry
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		search_filters = { FOCUS_FILTER_MANPOWER FOCUS_FILTER_ARMY_XP }
-		x = 0
-		y = 1
-		relative_position_id = RUS_summon_the_aimaqs
+		x = 10
+		y = 17
 		cost = 5
 		prerequisite = { focus = RUS_summon_the_aimaqs }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 20000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 24000 producer = RUS }
@@ -63,13 +79,19 @@ focus_tree = {
 
 	focus = {
 		id = RUS_watch_the_western_scar
-		icon = GFX_goal_generic_construct_military
+		icon = GFX_focus_STP_cw_northern_dossier
 		search_filters = { FOCUS_FILTER_WAR_SUPPORT }
-		x = 0
-		y = 1
-		relative_position_id = RUS_arm_the_border_hosts
+		x = 10
+		y = 18
 		cost = 5
 		prerequisite = { focus = RUS_arm_the_border_hosts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.05
 			add_command_power = 10
@@ -80,20 +102,24 @@ focus_tree = {
 
 	focus = {
 		id = RUS_claim_the_opened_zone
-		icon = GFX_goal_generic_occupy_states_ongoing_war
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = RUS_watch_the_western_scar
+		x = 10
+		y = 19
 		cost = 5
 		prerequisite = { focus = RUS_watch_the_western_scar }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_claim_the_opened_zone_available_tt
 				has_global_flag = ADISCORD_vorkerland_dirty_opened
 			}
 		}
 		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 25
 			add_war_support = 0.03
@@ -109,14 +135,17 @@ focus_tree = {
 
 	focus = {
 		id = RUS_drive_starolesye_back
-		icon = GFX_goal_generic_major_war
+		icon = GFX_focus_STP_ps_joint_staff
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
-		x = 0
-		y = 1
-		relative_position_id = RUS_claim_the_opened_zone
+		x = 10
+		y = 20
 		cost = 5
 		prerequisite = { focus = RUS_claim_the_opened_zone }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_drive_starolesye_back_available_tt
 				OR = {
@@ -132,6 +161,7 @@ focus_tree = {
 				NOT = { country_exists = SLA }
 			}
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 8000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = RUS }
@@ -146,14 +176,17 @@ focus_tree = {
 
 	focus = {
 		id = RUS_press_the_closed_zone
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_STP_ps_permanent_security
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
-		x = 0
-		y = 1
-		relative_position_id = RUS_drive_starolesye_back
+		x = 10
+		y = 21
 		cost = 5
 		prerequisite = { focus = RUS_drive_starolesye_back }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_press_the_closed_zone_available_tt
 				OR = {
@@ -164,6 +197,7 @@ focus_tree = {
 			}
 		}
 		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 20
 			add_command_power = 15
@@ -178,20 +212,24 @@ focus_tree = {
 
 	focus = {
 		id = RUS_seat_the_khan_chancery
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_STP_cw_protocol_office
 		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
-		x = 0
-		y = 1
-		relative_position_id = RUS_press_the_closed_zone
+		x = 10
+		y = 22
 		cost = 5
 		prerequisite = { focus = RUS_press_the_closed_zone }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = RUS_seat_the_khan_chancery_available_tt
 				check_variable = { ADISCORD_vorkerland_rus_dirty_neighbors_taken > 1 }
 			}
 		}
 		bypass = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_political_power = 50
 			add_stability = 0.05
@@ -207,13 +245,16 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_general_staff
-		icon = GFX_goal_generic_national_unity
-		x = 0
-		y = 1
-		relative_position_id = RUS_seat_the_khan_chancery
+		icon = GFX_focus_STP_ps_joint_staff
+		x = 10
+		y = 23
 		cost = 2
 		prerequisite = { focus = RUS_seat_the_khan_chancery }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -221,6 +262,7 @@ focus_tree = {
 				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
 			}
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 20
 			add_command_power = 15
@@ -230,16 +272,20 @@ focus_tree = {
 
 	focus = {
 		id = RUS_western_supply_lines
-		icon = GFX_goal_generic_construct_infrastructure
-		x = -2
-		y = 1
-		relative_position_id = RUS_imperial_general_staff
+		icon = GFX_focus_STP_party_war_transport
+		x = 8
+		y = 24
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 30 producer = RUS }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 200 producer = RUS }
@@ -258,16 +304,20 @@ focus_tree = {
 
 	focus = {
 		id = RUS_imperial_arsenals
-		icon = GFX_goal_generic_construct_military
-		x = 0
-		y = 1
-		relative_position_id = RUS_imperial_general_staff
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		x = 10
+		y = 24
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			capital_scope = {
 				add_extra_state_shared_building_slots = 1
@@ -277,22 +327,27 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 120 }
 	}
 
 	focus = {
 		id = RUS_aimaq_reserve
-		icon = GFX_goal_generic_army_motorized
-		x = 2
-		y = 1
-		relative_position_id = RUS_imperial_general_staff
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		x = 12
+		y = 24
 		cost = 3
 		prerequisite = { focus = RUS_imperial_general_staff }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_manpower = 10000
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = RUS }
@@ -302,15 +357,18 @@ focus_tree = {
 
 	focus = {
 		id = RUS_break_the_hegemon
-		icon = GFX_goal_generic_major_war
-		x = 0
-		y = 1
-		relative_position_id = RUS_imperial_arsenals
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		x = 10
+		y = 25
 		cost = 3
 		prerequisite = { focus = RUS_imperial_arsenals }
 		prerequisite = { focus = RUS_western_supply_lines }
 		prerequisite = { focus = RUS_aimaq_reserve }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -319,6 +377,7 @@ focus_tree = {
 			}
 		}
 		bypass = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
+		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 25
 			add_command_power = 25
@@ -328,13 +387,16 @@ focus_tree = {
 
 	focus = {
 		id = RUS_register_conquered_lands
-		icon = GFX_goal_generic_demand_territory
-		x = 0
-		y = 1
-		relative_position_id = RUS_break_the_hegemon
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		x = 10
+		y = 26
 		cost = 5
 		prerequisite = { focus = RUS_break_the_hegemon }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -342,6 +404,7 @@ focus_tree = {
 				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
 			}
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			every_owned_state = {
 				limit = { has_state_flag = RUS_crisis_conquered_state }
@@ -355,13 +418,16 @@ focus_tree = {
 
 	focus = {
 		id = RUS_empire_without_rivals
-		icon = GFX_goal_generic_political_pressure
-		x = 0
-		y = 1
-		relative_position_id = RUS_register_conquered_lands
+		icon = GFX_focus_VAL_Count_The_Captains
+		x = 10
+		y = 27
 		cost = 5
 		prerequisite = { focus = RUS_register_conquered_lands }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
 			is_subject = no
 			has_capitulated = no
 			custom_trigger_tooltip = {
@@ -369,9 +435,2450 @@ focus_tree = {
 				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
 			}
 		}
+		cancel_if_invalid = yes
 		completion_reward = {
 			add_research_slot = 1
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 120 }
+	}
+
+	# Civil government, surface economy, underground capital and army reform.
+
+	focus = {
+		id = RUS_count_the_hearths
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 1
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_summon_the_aimaqs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_manpower = 1000
+			add_stability = 0.03
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.2 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_aimaq_council
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 6
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_count_the_hearths
+		}
+		mutually_exclusive = { focus = RUS_seal_chancery }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_council_mandate
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_seal_chancery
+		icon = GFX_focus_STP_cw_protocol_office
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_count_the_hearths
+		}
+		mutually_exclusive = { focus = RUS_aimaq_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_chancery_mandate
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_written_oaths
+		icon = GFX_focus_STP_cw_quiet_registers
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_aimaq_council
+			focus = RUS_seal_chancery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_pay_the_officials
+		icon = GFX_focus_STP_2160_budget
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 7
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_written_oaths
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_paid_administration
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_winter_granaries
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 7
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_pay_the_officials
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_stability = 0.03
+			unlock_decision_tooltip = RUS_market_surplus
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_district_courts
+		icon = GFX_focus_STP_cw_protocol_office
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 11
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_pay_the_officials
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_manpower = 1000
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_school_of_scribes
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 9
+		y = 9
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_winter_granaries
+		}
+		prerequisite = {
+			focus = RUS_district_courts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_research_slot = 1
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_roadside_clinics
+		icon = GFX_focus_VAL_Field_Surgeons
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 10
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_school_of_scribes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_manpower = 2000
+			add_stability = 0.03
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_a_country_of_names
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 11
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_roadside_clinics
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_manpower = 1500
+			add_stability = 0.03
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.4 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_surface_workshops
+		icon = GFX_focus_STP_cw_port_budget
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 1
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_summon_the_aimaqs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = RUS }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_salvage_inventory
+		icon = GFX_focus_VAL_Reclamation_Survey
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_surface_workshops
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_treasury_400_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_engineering_order
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_machine_school
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 21
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_salvage_inventory
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = { name = RUS_machine_school bonus = 0.5 uses = 1 category = industry }
+			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_power_grid
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_machine_school
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_freight_yards
+		icon = GFX_focus_STP_party_war_transport
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 19
+		y = 7
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_power_grid
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 15 producer = RUS }
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 80 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_standard_calibres
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 23
+		y = 7
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_power_grid
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			unlock_decision_tooltip = RUS_rifle_order
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_civilian_shift
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 19
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_freight_yards
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_precision_lathes
+		icon = GFX_focus_STP_pw_party_defence_combine
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 23
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_standard_calibres
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = { name = RUS_precision_lathes bonus = 0.5 uses = 2 category = industry }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_industrial_belt
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 9
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_civilian_shift
+		}
+		prerequisite = {
+			focus = RUS_precision_lathes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			custom_effect_tooltip = RUS_treasury_300_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_engineers_collegium
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 21
+		y = 10
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_industrial_belt
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_research_slot = 1
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.5 } }
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_survey
+		icon = GFX_focus_VAL_Reclamation_Survey
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 31
+		y = 1
+		cost = 1
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_summon_the_aimaqs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_treasury_500_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 500 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 500 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = RUS }
+			hidden_effect = { RUS_bunker_refresh = yes }
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.6 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_airlocks
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 2
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_survey
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_airlocks_capacity_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 20
+				}
+				add_to_variable = {
+					var = RUS_bunker_food
+					value = 20
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_power_school
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 33
+		y = 2
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_survey
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_generator
+			add_equipment_to_stockpile = { type = support_equipment amount = 35 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_shift_work
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 4
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_airlocks
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_rush
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_deep_gallery
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 31
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_shift_work
+		}
+		prerequisite = {
+			focus = RUS_bunker_power_school
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_depth_3_tt
+			hidden_effect = { set_variable = { var = RUS_bunker_depth_limit value = 3 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_utilities
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 7
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_deep_gallery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_water
+			unlock_decision_tooltip = RUS_bunker_signals
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_working_heart
+		icon = GFX_focus_STP_pw_party_defence_combine
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 33
+		y = 7
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_deep_gallery
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_workshop
+			unlock_decision_tooltip = RUS_bunker_granary
+			custom_effect_tooltip = RUS_treasury_200_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_lower_horizons
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 31
+		y = 9
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_utilities
+		}
+		prerequisite = {
+			focus = RUS_bunker_working_heart
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_three_tt
+				check_variable = { var = RUS_bunker_fitted value = 3 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_integrity value = 40 compare = greater_than_or_equals }
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_depth_5_tt
+			hidden_effect = { set_variable = { var = RUS_bunker_depth_limit value = 5 } }
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.7 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_science_wing
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 29
+		y = 10
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_lower_horizons
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_clinic
+			unlock_decision_tooltip = RUS_bunker_laboratory
+			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_memory_vault
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 33
+		y = 10
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_lower_horizons
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_bunker_archive
+			unlock_decision_tooltip = RUS_bunker_command
+			add_command_power = 15
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_commission
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 31
+		y = 11
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_science_wing
+		}
+		prerequisite = {
+			focus = RUS_bunker_memory_vault
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_five_tt
+				check_variable = { var = RUS_bunker_fitted value = 5 compare = equals }
+				check_variable = { var = RUS_bunker_integrity value = 60 compare = greater_than_or_equals }
+				RUS_bunker_slot_free = yes
+				RUS_bunker_operational = yes
+			}
+		}
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = RUS_bunker_commission_reserve_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 20
+				}
+				add_to_variable = {
+					var = RUS_bunker_food
+					value = 20
+				}
+				RUS_bunker_refresh = yes
+			}
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.8 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_open_city
+		icon = GFX_focus_VAL_Dead_Villages_Still_Count
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 29
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_commission
+		}
+		mutually_exclusive = { focus = RUS_bunker_sealed_throne }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_open_city_policy
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.9 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_sealed_throne
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 33
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_commission
+		}
+		mutually_exclusive = { focus = RUS_bunker_open_city }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_sealed_throne_policy
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.10 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_muster_books
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 1
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_summon_the_aimaqs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			army_experience = 15
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_quartermaster_service
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -2
+		y = 2
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_muster_books
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = motorized_equipment amount = 120 producer = RUS }
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 10 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_patient_war
+		icon = GFX_focus_STP_ps_permanent_security
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -4
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_quartermaster_service
+		}
+		mutually_exclusive = { focus = RUS_swift_columns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_patient_doctrine
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_swift_columns
+		icon = GFX_focus_STP_party_war_transport
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_quartermaster_service
+		}
+		mutually_exclusive = { focus = RUS_patient_war }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_swift_doctrine
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_officer_courses
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 7
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_patient_war
+			focus = RUS_swift_columns
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			army_experience = 25
+			add_command_power = 15
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_field_sappers
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -4
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_officer_courses
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			army_experience = 10
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_artillery_tables
+		icon = GFX_focus_STP_ps_joint_staff
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_officer_courses
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 80 producer = RUS }
+			army_experience = 10
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_reserve_rotations
+		icon = GFX_focus_STP_pw_party_veteran_reserve
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		x = -2
+		y = 9
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_field_sappers
+		}
+		prerequisite = {
+			focus = RUS_artillery_tables
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_manpower = 4000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = RUS }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_anti_air_posts
+		icon = GFX_focus_STP_ps_permanent_security
+		search_filters = { FOCUS_FILTER_AIR_XP }
+		x = -2
+		y = 10
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_reserve_rotations
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_building_construction = {
+					type = anti_air_building
+					level = 2
+					instant_build = yes
+				}
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_army_of_the_khanate
+		icon = GFX_focus_VAL_Army_Of_The_Ledger
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 11
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_anti_air_posts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_ideas = RUS_professional_service
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_postwar_roads
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 8
+		y = 28
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_empire_without_rivals
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_won_tt
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_stability = 0.03
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_imperial_academy
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 12
+		y = 28
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_empire_without_rivals
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_won_tt
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = { name = RUS_imperial_academy bonus = 0.75 uses = 2 category = industry }
+			army_experience = 30
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_tomorrow_above_ground
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 10
+		y = 29
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_postwar_roads
+		}
+		prerequisite = {
+			focus = RUS_imperial_academy
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_won_tt
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+			}
+		}
+		completion_reward = {
+			add_stability = 0.05
+			custom_effect_tooltip = RUS_treasury_600_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.11 } }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_district_ledger
+		icon = GFX_focus_STP_cw_quiet_registers
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_a_country_of_names
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+			add_tech_bonus = {
+				name = RUS_district_ledger
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_courier_stations
+		icon = GFX_focus_VAL_Market_Roads_North
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 13
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_district_ledger
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 60
+				producer = RUS
+			}
+			add_command_power = 10
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_district_paramedics
+		icon = GFX_focus_VAL_Field_Surgeons
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 9
+		y = 14
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_courier_stations
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+			add_tech_bonus = {
+				name = RUS_district_paramedics
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_covenant_of_service
+		icon = GFX_focus_STP_pw_party_family_pensions
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 9
+		y = 15
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_district_paramedics
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_stability = 0.05
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_recovery_depots
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 11
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_engineers_collegium
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 50
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_interchangeable_parts
+		icon = GFX_focus_STP_pw_party_defence_combine
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 21
+		y = 12
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_recovery_depots
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_interchangeable_parts
+				bonus = 0.5
+				uses = 2
+				category = industry
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_second_arsenal_shift
+		icon = GFX_focus_STP_pw_party_defence_combine
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 13
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_interchangeable_parts
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_strategic_freight_reserve
+		icon = GFX_focus_STP_party_war_transport
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 21
+		y = 14
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_second_arsenal_shift
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 12
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 100
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_field_evacuation_service
+		icon = GFX_focus_VAL_Field_Surgeons
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 12
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_army_of_the_khanate
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 6
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_rifle_inspection_board
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = -2
+		y = 13
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_field_evacuation_service
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_rifle_inspection_board
+				bonus = 0.5
+				uses = 1
+				category = infantry_weapons
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_0
+				amount = 2000
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_artillery_observers
+		icon = GFX_focus_STP_ps_joint_staff
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 14
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_rifle_inspection_board
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = artillery_equipment_1
+				amount = 60
+				producer = RUS
+			}
+			army_experience = 15
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_staff_field_exercise
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -2
+		y = 15
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_artillery_observers
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			army_experience = 30
+			add_command_power = 25
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_closed_cycle
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 13
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_open_city
+			focus = RUS_bunker_sealed_throne
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_food_output_focus_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_output_bonus
+					value = 2
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_reserve_turbine
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 33
+		y = 13
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_open_city
+			focus = RUS_bunker_sealed_throne
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_power_focus_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_power_bonus
+					value = 2
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_cold_stores
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 14
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_closed_cycle
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_food_capacity_focus_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 40
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_machine_depot
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 33
+		y = 14
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_reserve_turbine
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 120
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_emergency_rations
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 29
+		y = 15
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_cold_stores
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_food_reserve_focus_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 20
+				}
+				add_to_variable = {
+					var = RUS_bunker_food
+					value = 40
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_bunker_systems_college
+		icon = GFX_focus_STP_pw_party_civilian_retraining
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 33
+		y = 15
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = {
+			focus = RUS_bunker_machine_depot
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_bunker_systems_college
+				bonus = 0.5
+				uses = 2
+				category = industry
+			}
+		}
+		ai_will_do = { base = 6 }
+	}
+
+	focus = {
+		id = RUS_entrenched_reserves
+		icon = GFX_focus_STP_ps_permanent_security
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = -4
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_patient_war }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_defensive_preparation
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_fortress_engineers
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = -4
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_entrenched_reserves }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = RUS
+			}
+			add_tech_bonus = {
+				name = RUS_fortress_engineers
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_railway_coverage
+		icon = GFX_focus_STP_party_war_transport
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = -4
+		y = 6
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_fortress_engineers }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 10
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_mobile_supply_columns
+		icon = GFX_focus_STP_party_war_transport
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		x = 0
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_swift_columns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_mobile_preparation
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_motor_pool_dispatch
+		icon = GFX_focus_VAL_Reclamation_Survey
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 0
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_mobile_supply_columns }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 100
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_combined_arms_trials
+		icon = GFX_focus_STP_ps_joint_staff
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 0
+		y = 6
+		cost = 4
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_motor_pool_dispatch }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_tech_bonus = {
+				name = RUS_combined_arms_trials
+				bonus = 0.5
+				uses = 2
+				category = support_tech
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_local_service_committees
+		icon = GFX_focus_VAL_Count_The_Captains
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 6
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_aimaq_council }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_aimaq_public_works
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_assembly_budget
+		icon = GFX_focus_STP_2160_budget
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 6
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_local_service_committees }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_treasury_400_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_regional_self_help
+		icon = GFX_focus_VAL_Field_Surgeons
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		x = 6
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_assembly_budget }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 80
+				producer = RUS
+			}
+			add_tech_bonus = {
+				name = RUS_regional_self_help
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_inspection_chamber
+		icon = GFX_focus_STP_party_personnel_commissions
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_seal_chancery }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = { add_extra_state_shared_building_slots = 1 }
+			unlock_decision_tooltip = RUS_chancery_reconstruction
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_single_supply_register
+		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 12
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_inspection_chamber }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = RUS
+			}
+			custom_effect_tooltip = RUS_treasury_300_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_provincial_commissioners
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 12
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_single_supply_register }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 80
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 6
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_surface_contracts
+		icon = GFX_focus_VAL_Factories_Like_Cathedrals
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 19
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_salvage_inventory }
+		mutually_exclusive = { focus = RUS_underground_fund }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			66 = { add_extra_state_shared_building_slots = 1 }
+			unlock_decision_tooltip = RUS_surface_industrial_contract
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_open_freight_exchange
+		icon = GFX_focus_VAL_Market_Roads_North
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 19
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_surface_contracts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 8
+				producer = RUS
+			}
+			add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 80
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_underground_fund
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 23
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_salvage_inventory }
+		mutually_exclusive = { focus = RUS_surface_contracts }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			unlock_decision_tooltip = RUS_subterranean_supply_contract
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_autonomous_workshops
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 23
+		y = 4
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_underground_fund }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_autonomous_workshops_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_power_bonus
+					value = 1
+				}
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 20
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_layer_service_school
+		icon = GFX_focus_VAL_Reclamation_Road_Crews
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 27
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_airlocks }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 100
+				producer = RUS
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_reserve_shaft
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 27
+		y = 5
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_shift_work }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_reserve_shaft_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_power_bonus
+					value = 1
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_water_recycling
+		icon = GFX_focus_VAL_Reclamation_Clean_Water
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 27
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_utilities }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_water_recycling_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_output_bonus
+					value = 1
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_bunker_contingency_reservoir
+		icon = GFX_focus_VAL_Bread_From_Barracks
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		x = 35
+		y = 8
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_bunker_working_heart }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			owns_state = 66
+			controls_state = 66
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_bunker_contingency_reservoir_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = RUS_bunker_food_capacity_bonus
+					value = 20
+				}
+				add_to_variable = {
+					var = RUS_bunker_food
+					value = 20
+				}
+				RUS_bunker_refresh = yes
+			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_khan_broadcast_service
+		icon = GFX_focus_STP_party_presidium_broadcast
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		x = 15
+		y = 2
+		cost = 2
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_count_the_hearths }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_public_campaign_first_slot_tt
+			unlock_decision_tooltip = RUS_campaign_voice_of_the_aimaqs
+			unlock_decision_tooltip = RUS_campaign_bread_and_shelter
+			unlock_decision_tooltip = RUS_campaign_rifles_protect_home
+			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
+			unlock_decision_tooltip = RUS_campaign_surface_trade
+			unlock_decision_tooltip = RUS_campaign_last_order
+			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_parallel_public_addresses
+		icon = GFX_focus_STP_cw_press_office
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 15
+		y = 3
+		cost = 3
+		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_khan_broadcast_service }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		completion_reward = {
+			custom_effect_tooltip = RUS_public_campaign_second_slot_tt
+			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
+		}
+		ai_will_do = { base = 6 }
 	}
 }

@@ -10336,6 +10336,7 @@ RUS_crisis_prepare_restored_fragment = {
 
 RUS_crisis_dissolve_empire = {
 	set_variable = { var = RUS_crisis_phase value = 4 }
+	RUS_campaign_shutdown = yes
 	# Only the selected hegemon receives this choice, even if an ally took the capital.
 	event_target:RUS_crisis_hegemon = {
 		set_country_flag = RUS_crisis_settlement_rights
@@ -10905,5 +10906,1448 @@ ADISCORD_superevent_observer_tick = {
 			if = { limit = { has_global_flag = { flag = superevent_stelander_great days > 6 } } clr_global_flag = superevent_stelander_great }
 			ADISCORD_superevent_dispatch_next = yes
 		}
+	}
+}
+
+# --- rus_campaign_effects ---
+RUS_bunker_clear_receipt = {
+	clear_variable = RUS_bunker_project
+	clear_variable = RUS_bunker_project_depth
+	clear_variable = RUS_bunker_escrow_pp
+	clear_variable = RUS_bunker_escrow_cash
+	clear_variable = RUS_bunker_escrow_equipment
+}
+
+RUS_bunker_excavate_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+			RUS_bunker_excavate_requirements = yes
+			RUS_bunker_excavate_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 1 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 20 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 150 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 20 }
+		add_political_power = -20
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -20 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_excavate_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+				RUS_bunker_excavate_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			add_to_variable = { var = RUS_bunker_depth value = 1 }
+			subtract_from_variable = { var = RUS_bunker_integrity value = 20 }
+			country_event = { id = ADISCORD_rus_campaign.3 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_rush_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			has_completed_focus = RUS_bunker_shift_work
+			check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+			RUS_bunker_rush_requirements = yes
+			RUS_bunker_rush_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 2 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 30 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 200 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 30 }
+		add_political_power = -30
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_rush_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				has_completed_focus = RUS_bunker_shift_work
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_depth_limit compare = less_than }
+				RUS_bunker_rush_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			add_to_variable = { var = RUS_bunker_depth value = 1 }
+			subtract_from_variable = { var = RUS_bunker_integrity value = 35 }
+			country_event = { id = ADISCORD_rus_campaign.3 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_guard_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+			RUS_bunker_guard_requirements = yes
+			RUS_bunker_guard_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 11 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 200 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 25 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -25 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_guard_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+				RUS_bunker_guard_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_1 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_shelter_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+			RUS_bunker_shelter_requirements = yes
+			RUS_bunker_shelter_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 12 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 200 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 25 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -25 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_shelter_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+				RUS_bunker_shelter_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_1 value = 2 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_water_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+			RUS_bunker_water_requirements = yes
+			RUS_bunker_water_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 13 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 30 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_water_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+				RUS_bunker_water_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_2 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_signals_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+			RUS_bunker_signals_requirements = yes
+			RUS_bunker_signals_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 14 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 30 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -30 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_signals_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 2 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+				RUS_bunker_signals_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_2 value = 2 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_workshop_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+			RUS_bunker_workshop_requirements = yes
+			RUS_bunker_workshop_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 15 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 300 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_workshop_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+				RUS_bunker_workshop_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_3 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_granary_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+			RUS_bunker_granary_requirements = yes
+			RUS_bunker_granary_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 16 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 300 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_granary_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 3 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+				RUS_bunker_granary_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_3 value = 2 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_clinic_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+			RUS_bunker_clinic_requirements = yes
+			RUS_bunker_clinic_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 17 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 350 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 40 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 350 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_clinic_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+				RUS_bunker_clinic_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_4 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_laboratory_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+			RUS_bunker_laboratory_requirements = yes
+			RUS_bunker_laboratory_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 18 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 350 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 40 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 350 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 350 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -40 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_laboratory_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 4 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+				RUS_bunker_laboratory_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_4 value = 2 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_archive_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+			RUS_bunker_archive_requirements = yes
+			RUS_bunker_archive_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 19 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 400 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 45 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -45 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_archive_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+				RUS_bunker_archive_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_5 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_command_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+			RUS_bunker_command_requirements = yes
+			RUS_bunker_command_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 20 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 400 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 45 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -45 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_command_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				check_variable = { var = RUS_bunker_depth value = 5 compare = greater_than_or_equals }
+				check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+				RUS_bunker_command_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_layer_5 value = 2 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_generator_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			has_completed_focus = RUS_bunker_power_school
+			check_variable = { var = RUS_bunker_generators value = 2 compare = less_than }
+			RUS_bunker_generator_requirements = yes
+			RUS_bunker_generator_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 30 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_generator_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				has_completed_focus = RUS_bunker_power_school
+				check_variable = { var = RUS_bunker_generators value = 2 compare = less_than }
+				RUS_bunker_generator_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			add_to_variable = { var = RUS_bunker_generators value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_reinforce_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			always = yes
+			RUS_bunker_reinforce_requirements = yes
+			RUS_bunker_reinforce_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 31 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 15 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 100 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 15 }
+		add_political_power = -15
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -15 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_reinforce_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				always = yes
+				RUS_bunker_reinforce_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			add_to_variable = { var = RUS_bunker_integrity value = 40 }
+			clamp_variable = { var = RUS_bunker_integrity min = 0 max = 100 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_refund = {
+	if = {
+		limit = {
+			has_variable = RUS_bunker_project
+		}
+		set_temp_variable = { var = RUS_bunker_refund_pp value = RUS_bunker_escrow_pp }
+		set_temp_variable = { var = RUS_bunker_refund_cash value = RUS_bunker_escrow_cash }
+		set_temp_variable = { var = RUS_bunker_refund_equipment value = RUS_bunker_escrow_equipment }
+		RUS_bunker_clear_receipt = yes
+		# Clear the receipt before removing native timers; a late callback cannot settle it twice.
+		if = {
+			limit = {
+				has_decision = RUS_bunker_excavate
+			}
+			remove_decision = RUS_bunker_excavate
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_rush
+			}
+			remove_decision = RUS_bunker_rush
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_guard
+			}
+			remove_decision = RUS_bunker_guard
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_shelter
+			}
+			remove_decision = RUS_bunker_shelter
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_water
+			}
+			remove_decision = RUS_bunker_water
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_signals
+			}
+			remove_decision = RUS_bunker_signals
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_workshop
+			}
+			remove_decision = RUS_bunker_workshop
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_granary
+			}
+			remove_decision = RUS_bunker_granary
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_clinic
+			}
+			remove_decision = RUS_bunker_clinic
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_laboratory
+			}
+			remove_decision = RUS_bunker_laboratory
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_archive
+			}
+			remove_decision = RUS_bunker_archive
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_command
+			}
+			remove_decision = RUS_bunker_command
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_generator
+			}
+			remove_decision = RUS_bunker_generator
+		}
+		if = {
+			limit = {
+				has_decision = RUS_bunker_reinforce
+			}
+			remove_decision = RUS_bunker_reinforce
+		}
+		if = {
+			limit = { has_decision = RUS_bunker_upgrade_1 }
+			remove_decision = RUS_bunker_upgrade_1
+		}
+		if = {
+			limit = { has_decision = RUS_bunker_upgrade_2 }
+			remove_decision = RUS_bunker_upgrade_2
+		}
+		if = {
+			limit = { has_decision = RUS_bunker_upgrade_3 }
+			remove_decision = RUS_bunker_upgrade_3
+		}
+		if = {
+			limit = { has_decision = RUS_bunker_upgrade_4 }
+			remove_decision = RUS_bunker_upgrade_4
+		}
+		if = {
+			limit = { has_decision = RUS_bunker_upgrade_5 }
+			remove_decision = RUS_bunker_upgrade_5
+		}
+		add_political_power = RUS_bunker_refund_pp
+		add_equipment_to_stockpile = { type = support_equipment amount = RUS_bunker_refund_equipment }
+		add_to_variable = { var = ADISCORD_economy_treasury value = RUS_bunker_refund_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_bunker_refund_cash }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_refresh = {
+	set_variable = { var = RUS_bunker_power value = 4 }
+	set_temp_variable = { var = RUS_bunker_power_add value = RUS_bunker_generators }
+	multiply_temp_variable = { var = RUS_bunker_power_add value = 4 }
+	add_to_variable = { var = RUS_bunker_power value = RUS_bunker_power_add }
+	add_to_variable = { var = RUS_bunker_power value = RUS_bunker_power_bonus }
+	set_variable = { var = RUS_bunker_used_power value = 0 }
+	set_variable = { var = RUS_bunker_fitted value = 0 }
+	set_variable = { var = RUS_bunker_attrition value = 0 }
+	set_variable = { var = RUS_bunker_army_defence_factor value = 0 }
+	set_variable = { var = RUS_bunker_army_org_factor value = 0 }
+	set_variable = { var = RUS_bunker_casualty_trickleback value = 0 }
+	set_variable = { var = RUS_bunker_consumer_goods_factor value = 0 }
+	set_variable = { var = RUS_bunker_industrial_capacity_factory value = 0 }
+	set_variable = { var = RUS_bunker_max_planning_factor value = 0 }
+	set_variable = { var = RUS_bunker_planning_speed value = 0 }
+	set_variable = { var = RUS_bunker_political_power_gain value = 0 }
+	set_variable = { var = RUS_bunker_research_speed_factor value = 0 }
+	set_variable = { var = RUS_bunker_stability_factor value = 0 }
+	set_variable = { var = RUS_bunker_surrender_limit value = 0 }
+	set_variable = { var = RUS_bunker_training_time_army_factor value = 0 }
+	set_variable = { var = RUS_bunker_surrender_limit value = RUS_bunker_depth }
+	multiply_variable = { var = RUS_bunker_surrender_limit value = 0.01 }
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 2 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_army_org_factor value = 0.03 }
+		add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.03 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_stability_factor value = 0.04 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_attrition value = -0.04 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 2 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_planning_speed value = 0.08 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 3 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.06 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.025 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 2 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.04 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 3 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.04 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.15 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 2 }
+		add_to_variable = { var = RUS_bunker_fitted value = 1 }
+		add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.04 }
+		add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.03 }
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_upgrade_1 value = 1 compare = equals }
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_army_org_factor value = 0.015 }
+			add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.015 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_stability_factor value = 0.02 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_upgrade_2 value = 1 compare = equals }
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_attrition value = -0.02 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_planning_speed value = 0.04 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_upgrade_3 value = 1 compare = equals }
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.03 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.0125 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_upgrade_4 value = 1 compare = equals }
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+		}
+		add_to_variable = { var = RUS_bunker_used_power value = 1 }
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.02 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.02 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_upgrade_5 value = 1 compare = equals }
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_political_power_gain value = 0.075 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.02 }
+			add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.015 }
+		}
+	}
+	set_variable = { var = RUS_bunker_free_power value = RUS_bunker_power }
+	subtract_from_variable = { var = RUS_bunker_free_power value = RUS_bunker_used_power }
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than }
+		}
+		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = -0.05 }
+		add_to_variable = { var = RUS_bunker_army_org_factor value = -0.05 }
+	}
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_dynamic_modifier = { modifier = RUS_bunker_complex } }
+			}
+			add_dynamic_modifier = { modifier = RUS_bunker_complex }
+		}
+	}
+	else = {
+		RUS_bunker_refund = yes
+		if = {
+			limit = {
+				has_dynamic_modifier = { modifier = RUS_bunker_complex }
+			}
+			remove_dynamic_modifier = { modifier = RUS_bunker_complex }
+		}
+	}
+	set_variable = { var = RUS_bunker_food_capacity value = 100 }
+	add_to_variable = { var = RUS_bunker_food_capacity value = RUS_bunker_food_capacity_bonus }
+	if = {
+		limit = { check_variable = { var = RUS_bunker_food value = RUS_bunker_food_capacity compare = greater_than } }
+		set_variable = { var = RUS_bunker_food value = RUS_bunker_food_capacity }
+	}
+	set_variable = { var = RUS_bunker_food_output value = 0 }
+	set_variable = { var = RUS_bunker_food_use value = 0 }
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+		}
+		set_variable = { var = RUS_bunker_food_output value = 2 }
+		add_to_variable = { var = RUS_bunker_food_output value = RUS_bunker_food_output_bonus }
+		set_variable = { var = RUS_bunker_food_use value = RUS_bunker_fitted }
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals } }
+			add_to_variable = { var = RUS_bunker_food_output value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
+			add_to_variable = { var = RUS_bunker_food_output value = 5 }
+			if = {
+				limit = { check_variable = { var = RUS_bunker_upgrade_3 value = 1 compare = equals } }
+				add_to_variable = { var = RUS_bunker_food_output value = 2 }
+			}
+		}
+	}
+	set_variable = { var = RUS_bunker_food_balance value = RUS_bunker_food_output }
+	subtract_from_variable = { var = RUS_bunker_food_balance value = RUS_bunker_food_use }
+	set_variable = { var = RUS_bunker_food_space value = RUS_bunker_food_capacity }
+	subtract_from_variable = { var = RUS_bunker_food_space value = RUS_bunker_food }
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than }
+			check_variable = { var = RUS_bunker_food value = 0 compare = equals }
+		}
+		add_to_variable = { var = RUS_bunker_army_org_factor value = -0.05 }
+		add_to_variable = { var = RUS_bunker_stability_factor value = -0.05 }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+RUS_campaign_initialize = {
+	if = {
+		limit = {
+			has_country_flag = RUS_campaign_start_pending
+			NOT = { has_country_flag = RUS_bunker_initialized }
+		}
+		clr_country_flag = RUS_campaign_start_pending
+		set_country_flag = RUS_bunker_initialized
+		add_political_power = 20
+		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		add_equipment_to_stockpile = { type = support_equipment amount = 20 producer = RUS }
+		set_variable = { var = RUS_bunker_depth value = 0 }
+		set_variable = { var = RUS_bunker_depth_limit value = 1 }
+		set_variable = { var = RUS_bunker_integrity value = 100 }
+		set_variable = { var = RUS_bunker_generators value = 0 }
+		set_variable = { var = RUS_bunker_layer_1 value = 0 }
+		set_variable = { var = RUS_bunker_layer_2 value = 0 }
+		set_variable = { var = RUS_bunker_layer_3 value = 0 }
+		set_variable = { var = RUS_bunker_layer_4 value = 0 }
+		set_variable = { var = RUS_bunker_layer_5 value = 0 }
+		set_variable = { var = RUS_bunker_selected_layer value = 1 }
+		set_variable = { var = RUS_bunker_food value = 60 }
+		set_variable = { var = RUS_bunker_upgrade_1 value = 0 }
+		set_variable = { var = RUS_bunker_upgrade_2 value = 0 }
+		set_variable = { var = RUS_bunker_upgrade_3 value = 0 }
+		set_variable = { var = RUS_bunker_upgrade_4 value = 0 }
+		set_variable = { var = RUS_bunker_upgrade_5 value = 0 }
+		RUS_bunker_refresh = yes
+		country_event = { id = ADISCORD_rus_campaign.1 days = 2 }
+	}
+}
+
+RUS_campaign_shutdown = {
+	RUS_public_campaigns_shutdown = yes
+	RUS_bunker_refund = yes
+	remove_ideas = RUS_council_mandate
+	remove_ideas = RUS_chancery_mandate
+	remove_ideas = RUS_paid_administration
+	remove_ideas = RUS_open_city_policy
+	remove_ideas = RUS_sealed_throne_policy
+	remove_ideas = RUS_patient_doctrine
+	remove_ideas = RUS_swift_doctrine
+	remove_ideas = RUS_professional_service
+	remove_ideas = RUS_defensive_preparation_spirit
+	remove_ideas = RUS_mobile_preparation_spirit
+	remove_ideas = RUS_public_works_spirit
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = RUS_bunker_complex }
+		}
+		remove_dynamic_modifier = { modifier = RUS_bunker_complex }
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+
+RUS_bunker_upgrade_1_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			RUS_bunker_upgrade_1_requirements = yes
+			RUS_bunker_upgrade_1_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 40 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_upgrade_1_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				RUS_bunker_upgrade_1_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_upgrade_1 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_upgrade_2_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			RUS_bunker_upgrade_2_requirements = yes
+			RUS_bunker_upgrade_2_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 41 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_upgrade_2_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				RUS_bunker_upgrade_2_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_upgrade_2 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_upgrade_3_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			RUS_bunker_upgrade_3_requirements = yes
+			RUS_bunker_upgrade_3_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 42 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_upgrade_3_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				RUS_bunker_upgrade_3_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_upgrade_3 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_upgrade_4_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			RUS_bunker_upgrade_4_requirements = yes
+			RUS_bunker_upgrade_4_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 43 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_upgrade_4_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				RUS_bunker_upgrade_4_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_upgrade_4 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_upgrade_5_start = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+			RUS_bunker_slot_free = yes
+			RUS_bunker_upgrade_5_requirements = yes
+			RUS_bunker_upgrade_5_affordable = yes
+		}
+		set_variable = { var = RUS_bunker_project value = 44 }
+		set_variable = { var = RUS_bunker_project_depth value = RUS_bunker_depth }
+		set_variable = { var = RUS_bunker_escrow_pp value = 25 }
+		set_variable = { var = RUS_bunker_escrow_cash value = 250 }
+		set_variable = { var = RUS_bunker_escrow_equipment value = 35 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 250 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 250 }
+		add_equipment_to_stockpile = { type = support_equipment amount = -35 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_bunker_upgrade_5_finish = {
+	if = {
+		limit = {
+			check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+		}
+		if = {
+			limit = {
+				RUS_bunker_operational = yes
+				check_variable = { var = RUS_bunker_depth value = RUS_bunker_project_depth compare = equals }
+				RUS_bunker_upgrade_5_requirements = yes
+			}
+			RUS_bunker_clear_receipt = yes
+			set_variable = { var = RUS_bunker_upgrade_5 value = 1 }
+			RUS_bunker_refresh = yes
+		}
+		else = { RUS_bunker_refund = yes }
+	}
+}
+
+RUS_bunker_weekly_supply = {
+	if = {
+		limit = {
+			RUS_bunker_operational = yes
+		}
+		add_to_variable = { var = RUS_bunker_food value = RUS_bunker_food_balance }
+		clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
+		RUS_bunker_refresh = yes
+	}
+}
+
+RUS_bunker_resupply = {
+	if = {
+		limit = { RUS_bunker_resupply_available = yes }
+		add_political_power = -15
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		add_to_variable = { var = RUS_bunker_food value = 40 }
+		RUS_bunker_refresh = yes
+	}
+}
+
+# --- rus_public_campaigns ---
+# Each running campaign owns one receipt in the shared pool; terminal callbacks
+# clear it before releasing the slot so cancellation and shutdown can overlap.
+RUS_campaign_voice_of_the_aimaqs_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held }
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held
+	}
+}
+
+RUS_campaign_voice_of_the_aimaqs_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held }
+		clr_country_flag = RUS_campaign_voice_of_the_aimaqs_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
+RUS_campaign_bread_and_shelter_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_bread_and_shelter_slot_held }
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_bread_and_shelter_slot_held
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_bread_and_shelter_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_bread_and_shelter_slot_held }
+		clr_country_flag = RUS_campaign_bread_and_shelter_slot_held
+		ADISCORD_campaign_slot_release = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_rifles_protect_home_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_rifles_protect_home_slot_held }
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_rifles_protect_home_slot_held
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_rifles_protect_home_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_rifles_protect_home_slot_held }
+		clr_country_flag = RUS_campaign_rifles_protect_home_slot_held
+		ADISCORD_campaign_slot_release = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_the_khan_keeps_his_word_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held }
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held
+	}
+}
+
+RUS_campaign_the_khan_keeps_his_word_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held }
+		clr_country_flag = RUS_campaign_the_khan_keeps_his_word_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
+RUS_campaign_surface_trade_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_surface_trade_slot_held }
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_surface_trade_slot_held
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_surface_trade_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_surface_trade_slot_held }
+		clr_country_flag = RUS_campaign_surface_trade_slot_held
+		ADISCORD_campaign_slot_release = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_campaign_last_order_start = {
+	if = {
+		limit = {
+			RUS_public_campaigns_operational = yes
+			ADISCORD_has_campaign_slot = yes
+			NOT = { has_country_flag = RUS_campaign_last_order_slot_held }
+			has_war = yes
+		}
+		ADISCORD_campaign_slot_consume = yes
+		set_country_flag = RUS_campaign_last_order_slot_held
+	}
+}
+
+RUS_campaign_last_order_settle = {
+	if = {
+		limit = { has_country_flag = RUS_campaign_last_order_slot_held }
+		clr_country_flag = RUS_campaign_last_order_slot_held
+		ADISCORD_campaign_slot_release = yes
+	}
+}
+
+RUS_public_campaigns_shutdown = {
+	# Native remove_decision does not execute remove_effect; settle the receipt first.
+	RUS_campaign_voice_of_the_aimaqs_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_voice_of_the_aimaqs }
+		remove_decision = RUS_campaign_voice_of_the_aimaqs
+	}
+	RUS_campaign_bread_and_shelter_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_bread_and_shelter }
+		remove_decision = RUS_campaign_bread_and_shelter
+	}
+	RUS_campaign_rifles_protect_home_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_rifles_protect_home }
+		remove_decision = RUS_campaign_rifles_protect_home
+	}
+	RUS_campaign_the_khan_keeps_his_word_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_the_khan_keeps_his_word }
+		remove_decision = RUS_campaign_the_khan_keeps_his_word
+	}
+	RUS_campaign_surface_trade_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_surface_trade }
+		remove_decision = RUS_campaign_surface_trade
+	}
+	RUS_campaign_last_order_settle = yes
+	if = {
+		limit = { has_decision = RUS_campaign_last_order }
+		remove_decision = RUS_campaign_last_order
 	}
 }

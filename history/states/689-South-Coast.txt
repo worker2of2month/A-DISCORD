@@ -7,7 +7,7 @@ state={
 		chromium = 5
 	}
 	provinces={
-		176 2038 2299 7618 7639 8358
+		176 2038 2231 2299 7618 7639 8358
 	}
 	manpower = 40000
 	buildings_max_level_factor = 1.000

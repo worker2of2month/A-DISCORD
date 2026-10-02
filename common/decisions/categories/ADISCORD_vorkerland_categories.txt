@@ -173,3 +173,40 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 	}
 }
+
+# --- rus_bunker_category ---
+RUS_bunker_construction = {
+	icon = generic_industry
+	allowed = { tag = RUS }
+	visible = {
+		has_country_flag = RUS_bunker_initialized
+	}
+	visible_when_empty = yes
+	priority = 26
+	scripted_gui = ADISCORD_RUS_bunker_panel
+}
+
+RUS_development_programmes = {
+	icon = generic_industry
+	allowed = { tag = RUS }
+	visible = {
+		OR = {
+			has_completed_focus = RUS_entrenched_reserves
+			has_completed_focus = RUS_mobile_supply_columns
+			has_completed_focus = RUS_local_service_committees
+			has_completed_focus = RUS_inspection_chamber
+			has_completed_focus = RUS_surface_contracts
+			has_completed_focus = RUS_underground_fund
+		}
+	}
+	priority = 25
+}
+
+# --- rus_public_campaigns ---
+RUS_public_campaigns = {
+	icon = generic_political_pressure
+	allowed = { tag = RUS }
+	visible = { has_completed_focus = RUS_khan_broadcast_service }
+	visible_when_empty = yes
+	priority = 24
+}

@@ -41,6 +41,24 @@ bookmarks = {
 			}
 		}
 
+		"NAM" = {
+			minor = yes
+			history = "NAM_BOOKMARK_DESC"
+			ideology = etatism
+		}
+
+		"SHL" = {
+			minor = yes
+			history = "SHL_BOOKMARK_DESC"
+			ideology = hedonism
+		}
+
+		"RUS" = {
+			minor = yes
+			history = "RUS_BOOKMARK_DESC"
+			ideology = anarchism
+		}
+
 		effect = {
 			randomize_weather = 22345 # <- Obligatory in every bookmark !
 			#123 = { rain_light = yes }

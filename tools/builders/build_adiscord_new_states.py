@@ -34,9 +34,9 @@ ROOT = repository_root()
 STATE_DIR = ROOT / "history" / "states"
 
 NAM_SVETLOGORSK_STATE_ID = 688
-NAM_SVETLOGORSK_PROVINCES = (689, 3127, 4025, 8635, 9211, 10967, 16721)
+NAM_SVETLOGORSK_PROVINCES = (689, 1710, 3127, 4025, 8635, 9211, 10967, 16721)
 NAM_RESIDUAL_CITY_STATE_ID = 689
-NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2299, 7618, 7639, 8358)
+NAM_RESIDUAL_CITY_PROVINCES = (176, 2038, 2231, 2299, 7618, 7639, 8358)
 NAM_DRYRIVER_STATE_ID = 690
 EFL_MIDDLE_LOREN_STATE_ID = 691
 AZH_BLACK_COAST_STATE_ID = 692
@@ -62,11 +62,8 @@ NAM_MAINLAND_AFTER_CITY_SPLIT_PROVINCES = tuple(
         - set(NAM_RESIDUAL_CITY_PROVINCES)
     )
 )
-NAM_RESOURCE_BASIN_PROVINCES = (
-    334, 1710, 2935, 4287, 4321, 4912, 6099, 7324, 8351,
-    8445, 8888, 9116, 10909, 11069, 11696, 11942, 12480, 12668,
-)
-NAM_DRYRIVER_PROVINCES = (461, 1015, 2231, 6961, 8058, 9016, 9641, 11926, 12982)
+NAM_RESOURCE_BASIN_PROVINCES = (334, 4287, 4912, 6099, 7324, 8351, 8445, 8888, 9116, 10909, 11069, 11696, 11942, 12668)
+NAM_DRYRIVER_PROVINCES = (461, 1015, 2935, 4321, 6961, 8058, 9016, 9641, 11926, 12480, 12982)
 EFL_UPPER_LOREN_PROVINCES = (
     259, 324, 865, 1658, 1950, 2254, 2734, 2822, 3089, 3226,
     3977, 4014, 4096, 4175, 4237, 4339, 4717, 5651, 5766, 6150,
@@ -182,13 +179,13 @@ SOUTHERN_CITY_POINTS = {entry["state"]: (entry["province"], entry["value"]) for 
 for centres in (CAPITALS, SECONDARY_CENTRES, MINOR_VPS):
     centres.update({state: point for state, point in SOUTHERN_CITY_POINTS.items() if state in centres})
 SOUTHERN_CAPITAL_DISTRICTS = {
-    241: (702, 90000, 45000, (971, 1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
-    253: (703, 70000, 35000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966)),
-    260: (704, 48000, 24000, (197, 1396, 1571, 1784, 3967, 5123, 5590, 6040, 7727, 9572, 9817, 12495, 12578)),
-    275: (705, 97000, 48000, (193, 196, 2249, 2303, 2947, 3767, 4397, 5458, 6904, 9006, 9830, 10551, 10796, 11177, 11348)),
-    283: (706, 75000, 37000, (1349, 1534, 1555, 4186, 4804, 5921, 6571, 9302, 10920, 10998, 12033)),
-    294: (707, 85000, 43000, (1198, 2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903)),
-    300: (708, 79000, 39000, (492, 1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 10937, 11478, 11938, 12043, 12321, 12583)),
+    241: (702, 90000, 45000, (1295, 2374, 2523, 4093, 5262, 5348, 5711, 6343, 7512, 8280, 9141, 10293, 10755)),
+    253: (703, 70000, 35000, (443, 812, 1450, 2317, 3065, 3135, 5957, 6403, 7006, 7273, 8164, 8843, 9398, 9739, 11092, 12188, 12966, 16754, 16755, 16756)),
+    260: (704, 48000, 24000, (1396, 1784, 3967, 5123, 5590, 6040, 9572, 9817, 12578)),
+    275: (705, 97000, 48000, (2249, 2303, 4397, 5458, 6904, 9006, 9830, 11177, 11348)),
+    283: (706, 75000, 37000, (1534, 1555, 4186, 4804, 5921, 6571, 6685, 9184, 9302, 10206, 10920, 10998, 12033)),
+    294: (707, 85000, 43000, (1198, 2407, 3042, 3284, 4949, 6218, 7306, 8216, 9056, 9294, 9508, 9600, 10264, 12903, 16793)),
+    300: (708, 79000, 39000, (1169, 3222, 4782, 5595, 6011, 7073, 8056, 9672, 9950, 11478, 12043, 12583)),
 }
 
 # Sparse deposits give every southern country something to extract and trade
@@ -721,11 +718,11 @@ AFRELA_LEGACY_VICTORY_POINTS = {
 }
 
 NAM_LEGACY_VICTORY_POINTS = {
-    67: ((1710, 2), (6099, 3)),
+    67: ((6099, 3),),
     68: ((259, 5), (6150, 2)),
     69: ((367, 5), (8234, 2)),
     70: ((2986, 2), (6495, 4)),
-    NAM_SVETLOGORSK_STATE_ID: ((16721, 3),),
+    NAM_SVETLOGORSK_STATE_ID: ((16721, 3), (1710, 2)),
     NAM_RESIDUAL_CITY_STATE_ID: (),
     NAM_DRYRIVER_STATE_ID: ((8058, 2), (9016, 2)),
     EFL_MIDDLE_LOREN_STATE_ID: ((8057, 3),),
@@ -854,7 +851,7 @@ COASTAL_CITY_POINTS = {
     700: ((16716, 5),),
     701: ((16717, 5),),
     284: ((16720, 3),),
-    688: ((16721, 3),),
+    688: ((16721, 3), (1710, 2)),
 }
 COASTAL_CITY_NAMES = {
     16713: "Хазар",
@@ -919,7 +916,7 @@ EXTRA_PROVINCES_BY_STATE = {
     265: (2244, 3528),
     270: (6833,),
     273: (3918, 10526),
-    275: (196,),
+    282: (196,),
     279: (8121,),
     288: (10490,),
     291: (946,),
@@ -1027,10 +1024,6 @@ def render_state(state_id: int, owner: str) -> str:
     provinces = sorted(set(provinces) | set(EXTRA_PROVINCES_BY_STATE.get(state_id, ())))
     if state_id in SOUTHERN_CITY_POINTS:
         provinces = sorted(set(provinces) | {SOUTHERN_CITY_POINTS[state_id][0]})
-        city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == state_id)
-        provinces = sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())})
-    if state_id in SOUTHERN_CAPITAL_DISTRICTS:
-        provinces = [SOUTHERN_CITY_POINTS[state_id][0]]
     if not provinces:
         raise RuntimeError(f"state {state_id}: empty provinces block")
 
@@ -1084,6 +1077,8 @@ def render_state(state_id: int, owner: str) -> str:
     )
     if state_id in SOUTHERN_CAPITAL_DISTRICTS:
         local_supplies = 2.0
+    if state_id == 290:
+        local_supplies = 0.5
     resource_block = []
     if state_id in ALL_STATE_RESOURCES:
         resource_block = ["\tresources = {"]
@@ -1318,7 +1313,7 @@ def set_history_building_level(source: str, building: str, level: int) -> str:
     return source[:history_open] + history + source[history_close + 1:]
 
 
-def write_resource_war_state(
+def render_resource_war_state(
     state_id: int,
     filename: str,
     provinces: tuple[int, ...],
@@ -1327,8 +1322,8 @@ def write_resource_war_state(
     resources: dict[str, int] | None,
     victory_points: tuple[tuple[int, int], ...],
     province_buildings: tuple[tuple[int, str, int], ...] = (),
-) -> None:
-    """Write one generated NAM-war state from its explicit, reviewed manifest."""
+) -> str:
+    """Render one generated NAM-war state from its explicit manifest."""
     target = STATE_DIR / filename
     matches = sorted(STATE_DIR.glob(f"{state_id}-*.txt"))
     if matches and matches != [target]:
@@ -1385,7 +1380,24 @@ def write_resource_war_state(
         for province_id, building, level in province_buildings
     )
     lines.extend(["\t\t}", "\t}", "}", ""])
-    target.write_text("\n".join(lines), encoding="utf-8", newline="\n")
+    return "\n".join(lines)
+
+
+def write_resource_war_state(
+    state_id: int,
+    filename: str,
+    provinces: tuple[int, ...],
+    owner: str,
+    profile: dict[str, object],
+    resources: dict[str, int] | None,
+    victory_points: tuple[tuple[int, int], ...],
+    province_buildings: tuple[tuple[int, str, int], ...] = (),
+) -> None:
+    source = render_resource_war_state(
+        state_id, filename, provinces, owner, profile, resources,
+        victory_points, province_buildings,
+    )
+    (STATE_DIR / filename).write_text(source, encoding="utf-8", newline="\n")
 
 
 def split_svetlogorsk_from_nam() -> None:
@@ -1790,8 +1802,6 @@ def southern_settlement_plan() -> dict[Path, bytes]:
         outputs[state_path(state_id)] = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
     for capital, (district, _city_population, rural_population, provinces) in SOUTHERN_CAPITAL_DISTRICTS.items():
         rural_population = SHL_POPULATION.get(district, rural_population)
-        city = next(entry for entry in SOUTHERN_CITIES if entry["state"] == capital)
-        provinces = tuple(sorted(set(provinces) | {sector["province"] for sector in city.get("sectors", ())}))
         path = STATE_DIR / f"{district}-Southern-District.txt"
         existing = tuple(STATE_DIR.glob(f"{district}-*.txt"))
         if existing and existing != (path,):
@@ -2075,6 +2085,49 @@ def update_val_resources(apply_changes: bool = False) -> int:
     return int(bool(changed) and not apply_changes)
 
 
+def state_metadata_plan(state_ids: set[int]) -> dict[Path, bytes]:
+    """Restore generated metadata without changing Nudge province membership."""
+    outputs = {}
+    districts = {profile[0] for profile in SOUTHERN_CAPITAL_DISTRICTS.values()}
+    for state_id in sorted(state_ids):
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        opening, closing = named_block(source, "provinces")
+        provinces = tuple(map(int, re.findall(r"\d+", source[opening:closing])))
+        if state_id in STARTING_OWNERS:
+            result = render_state(state_id, STARTING_OWNERS[state_id]).encode("utf-8")
+        elif state_id in districts:
+            result = southern_settlement_plan()[path]
+        elif state_id in NAM_MAINLAND_STATE_RESOURCES:
+            province_buildings = ((689, "naval_base", 2),) if state_id == 688 else ()
+            result = render_resource_war_state(
+                state_id, path.name, provinces, "NAM", NAM_STATE_PROFILES[state_id],
+                NAM_MAINLAND_STATE_RESOURCES[state_id], NAM_LEGACY_VICTORY_POINTS[state_id],
+                province_buildings,
+            ).encode("utf-8")
+        else:
+            raise RuntimeError(f"state {state_id}: no metadata profile")
+        rendered = result.decode("utf-8")
+        opening, closing = named_block(rendered, "provinces")
+        planned = tuple(map(int, re.findall(r"\d+", rendered[opening:closing])))
+        if set(planned) != set(provinces):
+            raise RuntimeError(f"state {state_id}: metadata generation would change province membership")
+        outputs[path] = result
+    return outputs
+
+
+def update_state_metadata(state_ids: set[int], apply: bool) -> int:
+    outputs = state_metadata_plan(state_ids)
+    changed = [path for path, data in outputs.items() if path.read_bytes() != data]
+    for path in changed:
+        print(f"{'WRITE' if apply else 'STALE'} {path.relative_to(ROOT)}")
+        if apply:
+            path.write_bytes(outputs[path])
+    if apply and any(path.read_bytes() != data for path, data in state_metadata_plan(state_ids).items()):
+        raise RuntimeError("state metadata generation is not idempotent")
+    return int(bool(changed) and not apply)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
     actions = parser.add_mutually_exclusive_group()
@@ -2131,7 +2184,14 @@ def main() -> int:
     actions.add_argument("--apply-stelander-islands", action="store_true")
     actions.add_argument("--check-regional-settlements", action="store_true")
     actions.add_argument("--apply-regional-settlements", action="store_true")
+    actions.add_argument("--check-state-metadata", action="append", type=int, metavar="STATE_ID")
+    actions.add_argument("--apply-state-metadata", action="append", type=int, metavar="STATE_ID")
     args = parser.parse_args()
+    if args.check_state_metadata or args.apply_state_metadata:
+        return update_state_metadata(
+            set(args.check_state_metadata or args.apply_state_metadata),
+            bool(args.apply_state_metadata),
+        )
     if args.check_shahrabad_population or args.apply_shahrabad_population:
         return update_shahrabad_population(args.apply_shahrabad_population)
     if args.check_regional_settlements or args.apply_regional_settlements:

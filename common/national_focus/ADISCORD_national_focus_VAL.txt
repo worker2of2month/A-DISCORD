@@ -87,7 +87,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Price_Of_Loyalty
-		icon = GFX_goal_generic_demand_territory
+		icon = GFX_focus_VAL_Price_Of_Loyalty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 18
 		y = 2

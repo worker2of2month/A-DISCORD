@@ -2126,8 +2126,31 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 
 	ai_national_focuses = {
 		RUS_summon_the_aimaqs
+		RUS_bunker_survey
+		RUS_surface_workshops
+		RUS_salvage_inventory
+		RUS_surface_contracts
+		RUS_bunker_airlocks
+		RUS_bunker_layer_service_school
+		RUS_bunker_power_school
 		RUS_arm_the_border_hosts
+		RUS_count_the_hearths
+		RUS_khan_broadcast_service
+		RUS_aimaq_council
+		RUS_local_service_committees
+		RUS_assembly_budget
+		RUS_written_oaths
+		RUS_parallel_public_addresses
+		RUS_machine_school
+		RUS_power_grid
 		RUS_watch_the_western_scar
+		RUS_bunker_shift_work
+		RUS_bunker_reserve_shaft
+		RUS_bunker_deep_gallery
+		RUS_bunker_utilities
+		RUS_bunker_water_recycling
+		RUS_bunker_working_heart
+		RUS_bunker_contingency_reservoir
 		RUS_claim_the_opened_zone
 		RUS_drive_starolesye_back
 		RUS_press_the_closed_zone
@@ -2136,9 +2159,61 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 		RUS_western_supply_lines
 		RUS_imperial_arsenals
 		RUS_aimaq_reserve
+		RUS_muster_books
+		RUS_quartermaster_service
+		RUS_patient_war
+		RUS_entrenched_reserves
+		RUS_fortress_engineers
+		RUS_officer_courses
+		RUS_railway_coverage
+		RUS_pay_the_officials
+		RUS_winter_granaries
+		RUS_district_courts
+		RUS_regional_self_help
+		RUS_school_of_scribes
+		RUS_freight_yards
+		RUS_open_freight_exchange
+		RUS_standard_calibres
+		RUS_civilian_shift
+		RUS_precision_lathes
+		RUS_industrial_belt
+		RUS_engineers_collegium
+		RUS_bunker_lower_horizons
+		RUS_bunker_science_wing
+		RUS_bunker_memory_vault
+		RUS_field_sappers
+		RUS_artillery_tables
+		RUS_reserve_rotations
+		RUS_anti_air_posts
+		RUS_army_of_the_khanate
+		RUS_roadside_clinics
+		RUS_a_country_of_names
 		RUS_break_the_hegemon
 		RUS_register_conquered_lands
 		RUS_empire_without_rivals
+		RUS_bunker_commission
+		RUS_bunker_open_city
+		RUS_postwar_roads
+		RUS_imperial_academy
+		RUS_tomorrow_above_ground
+		RUS_district_ledger
+		RUS_courier_stations
+		RUS_district_paramedics
+		RUS_covenant_of_service
+		RUS_recovery_depots
+		RUS_interchangeable_parts
+		RUS_second_arsenal_shift
+		RUS_strategic_freight_reserve
+		RUS_field_evacuation_service
+		RUS_rifle_inspection_board
+		RUS_artillery_observers
+		RUS_staff_field_exercise
+		RUS_bunker_closed_cycle
+		RUS_bunker_reserve_turbine
+		RUS_bunker_cold_stores
+		RUS_bunker_machine_depot
+		RUS_bunker_emergency_rations
+		RUS_bunker_systems_college
 	}
 
 	weight = { factor = 5 }

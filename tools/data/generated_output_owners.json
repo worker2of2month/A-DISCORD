@@ -987,11 +987,13 @@
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_bg.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_good.dds",
         "gfx/interface/decisions/ui/ADISCORD_decisions_progress_bad.dds",
-        "gfx/interface/decisions/ui/ADISCORD_decisions_select_icon_strip.dds"
+        "gfx/interface/decisions/ui/ADISCORD_decisions_select_icon_strip.dds",
+        "gfx/interface/ADISCORD_RUS/bunker_layer_*.dds"
       ],
       "source_inputs": [
         "gfx/interface/decisions/source/decisions_surface_source.png",
-        "gfx/interface/decisions/source/decision_approval_seal_source.png"
+        "gfx/interface/decisions/source/decision_approval_seal_source.png",
+        "gfx/interface/ADISCORD_RUS/source/bunker_layer_*.png"
       ],
       "check_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_decision_ui_assets"],
       "apply_command": ["{python}", "-B", "-m", "tools.builders.build_adiscord_decision_ui_assets", "--apply"],

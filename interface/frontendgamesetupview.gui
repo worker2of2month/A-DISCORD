@@ -174,7 +174,6 @@ guiTypes = {
 	containerWindowType = {
 		name = "country_entry_medium"
 
-
 		iconType = {
 			name = "country_flag"
 			quadTextureSprite ="GFX_shield_medium"
@@ -196,6 +195,29 @@ guiTypes = {
 			spriteType = "GFX_unplayed_content_notification"
 			alwaystransparent = yes
 		}
+
+		instantTextBoxType = {
+			name = "country_name"
+			position = { x = 0 y = 99 }
+			font = "hoi_18mbs"
+			maxWidth = 138
+			maxHeight = 22
+			fixedsize = yes
+			format = center
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "development_status"
+			position = { x = 0 y = 122 }
+			font = "hoi_16mbs"
+			text = "ADISCORD_BOOKMARK_WIP"
+			maxWidth = 138
+			maxHeight = 20
+			fixedsize = yes
+			format = center
+			alwaystransparent = yes
+		}
 	}
 
 	### country entry
@@ -205,7 +227,7 @@ guiTypes = {
 		iconType = {
 			name = "country_flag"
 			quadTextureSprite ="GFX_flag_small2"
-			position = { x = 9 y = 8 }
+			position = { x = 444 y = 8 }
 			Orientation = "UPPER_LEFT"
 			alwaystransparent = yes
 		}
@@ -213,14 +235,26 @@ guiTypes = {
 		buttonType = {
 			name = "country"
 			quadTextureSprite = "GFX_mini_country_selector"
-			position = { x=0 y =0 }
+			position = { x=435 y =0 }
 			clicksound = click_checkbox
 		}
 
 		iconType = {
 			name = "new_content"
-			position = { x = 42 y = 0 }
+			position = { x = 480 y = 0 }
 			spriteType = "GFX_unplayed_content_notification"
+			alwaystransparent = yes
+		}
+
+		instantTextBoxType = {
+			name = "development_status"
+			position = { x = 435 y = 45 }
+			font = "hoi_16mbs"
+			text = "ADISCORD_BOOKMARK_WIP"
+			maxWidth = 59
+			maxHeight = 20
+			fixedsize = yes
+			format = center
 			alwaystransparent = yes
 		}
 	}
@@ -751,12 +785,12 @@ guiTypes = {
 
 		containerWindowType = {
 			name ="countries_medium"
-			position = { x = 15 y = 330 }
-			size = { width = -15 height = 120}
+			position = { x = 15 y = 360 }
+			size = { width = -15 height = 150 }
 
 			gridboxType = {
 				name ="countries_grid"
-				position = { x = 0 y = 0 }
+				position = { x = 275 y = 0 }
 				size = { width = 100% height = 100% }
 				slotsize = { width = 150 height = 0 }
 				add_horizontal = yes

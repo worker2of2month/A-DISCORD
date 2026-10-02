@@ -33,3 +33,5 @@ add_ideas = {
 }
 
 set_research_slots = 1
+
+set_country_flag = RUS_campaign_start_pending

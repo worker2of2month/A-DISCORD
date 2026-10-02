@@ -244,6 +244,14 @@ spriteTypes = {
 		tilingCenter = no
 	}
 
+	spriteType = {
+		name = "GFX_portrait_STP_Ilya_Gornin"
+		texturefile = "gfx/leaders/STP/portrait_STP_Ilya_Gornin.png"
+	}
+	spriteType = {
+		name = "GFX_portrait_STP_Vera_Tikh"
+		texturefile = "gfx/leaders/STP/portrait_STP_Vera_Tikh.png"
+	}
 	###SRP
 	spriteType = {
 		name = "GFX_portrait_SRP_Federal_Council"
