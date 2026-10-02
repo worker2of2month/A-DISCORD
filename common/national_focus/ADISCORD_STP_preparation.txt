@@ -2105,7 +2105,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_ps_radio_network
-		icon = GFX_focus_STP_pw_party_civilian_retraining
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		x = 12
 		y = 1
 		relative_position_id = STP_Govern_In_His_Name

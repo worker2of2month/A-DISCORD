@@ -2156,7 +2156,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pw_party_new_republic
-		icon = GFX_focus_STP_EMERGENCY_PRESIDIUM
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		x = 0
 		y = 2
 		cost = 3
@@ -8708,7 +8708,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_party_security_network
-		icon = GFX_focus_STP_cw_counter_network
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		x = -1
 		y = 5
 		cost = 2
@@ -11997,7 +11997,7 @@ focus_tree = {
 
 	focus = {
 		id = STP_pe_security_ending_b
-		icon = GFX_focus_STP_ps_permanent_security
+		icon = GFX_focus_ADISCORD_Wall_Of_Screens
 		x = 5
 		y = 11
 		cost = 3

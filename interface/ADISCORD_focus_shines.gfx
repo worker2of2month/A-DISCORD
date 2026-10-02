@@ -550,6 +550,25 @@ spriteTypes = {
 	}
 
 	SpriteType = {
+		name = "GFX_focus_ADISCORD_Wall_Of_Screens_shine"
+		texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_Wall_Of_Screens.png"
+		effectFile = "gfx/FX/buttonstate.lua"
+		animation = {
+			animationmaskfile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_Wall_Of_Screens.png"
+			animationtexturefile = "gfx/interface/goals/shine_overlay.dds"
+			animationrotation = -90.0
+			animationlooping = no
+			animationtime = 0.75
+			animationdelay = 0
+			animationblendmode = "add"
+			animationtype = "scrolling"
+			animationrotationoffset = { x = 0.0 y = 0.0 }
+			animationtexturescale = { x = 1.0 y = 3.0 }
+		}
+		legacy_lazy_load = no
+	}
+
+	SpriteType = {
 		name = "GFX_focus_STP_cw_arm_the_north_shine"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_arm_the_north.png"
 		effectFile = "gfx/FX/buttonstate.lua"

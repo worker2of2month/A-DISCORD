@@ -109,6 +109,10 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_All_In.png"
 	}
 	spriteType = {
+		name = "GFX_focus_ADISCORD_Wall_Of_Screens"
+		texturefile = "gfx/interface/goals/_shared/GFX_focus_ADISCORD_Wall_Of_Screens.png"
+	}
+	spriteType = {
 		name = "GFX_focus_STP_cw_arm_the_north"
 		texturefile = "gfx/interface/goals/STP/shabrat/GFX_focus_STP_cw_arm_the_north.png"
 	}
