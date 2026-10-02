@@ -264,6 +264,24 @@ def collect_issues(root: Path = ROOT) -> list[str]:
                 f"missing or duplicate scripted-GUI presentation {name}: "
                 f"found {scripted_names.count(name)}"
             )
+        bindings = blocks(scripted_gui, rf"^\s*{re.escape(name)}\s*=\s*\{{")
+        if len(bindings) == 1:
+            binding = bindings[0]
+            if not re.search(rf'\bwindow_name\s*=\s*"{re.escape(name)}"', binding):
+                issues.append(f"scripted GUI {name}: missing window binding")
+            if not re.search(r"\bcontext_type\s*=\s*player_context\b", binding):
+                issues.append(f"scripted GUI {name}: missing player context")
+            visible = blocks(binding, r"^\s*visible\s*=\s*\{")
+            if len(visible) != 1 or not re.search(
+                rf"\bhas_global_flag\s*=\s*{re.escape(name)}\b", visible[0]
+            ):
+                issues.append(f"scripted GUI {name}: missing visibility flag")
+            buttons = blocks(binding, r"^\s*superevents_button_click\s*=\s*\{")
+            close = buttons[0] if len(buttons) == 1 else ""
+            clear_flag = re.search(rf"\bclr_global_flag\s*=\s*{re.escape(name)}\b", close)
+            dispatch = re.search(r"\bADISCORD_superevent_dispatch_next\s*=\s*yes\b", close)
+            if not clear_flag or not dispatch or clear_flag.start() > dispatch.start():
+                issues.append(f"scripted GUI {name}: close must clear its flag before dispatch")
         if gui_names.count(name) != 1:
             issues.append(
                 f"missing or duplicate GUI window {name}: found {gui_names.count(name)}"
