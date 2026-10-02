@@ -190,3 +190,8 @@ music = {
 	song = "ADISCORD_3teeth_pit_of_fire"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_3teeth_atrophy_of_these_hope_remix"
+	chance = { base = 10 }
+}
