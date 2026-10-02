@@ -95,6 +95,10 @@
   superevent_val_commonwealth_quote: "The commonwealth is the people's affair.\n\n- Cicero, On the Republic"
   superevent_val_commonwealth_comment: "Solgalov binds the contract administrations into one order"
 
+  superevent_stelander_great_title: "Great Stelander Proclaimed!"
+  superevent_stelander_great_quote: "$superevent_stelander_party_victory_quote$"
+  superevent_stelander_great_comment: "The northern governments answer to one centre"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

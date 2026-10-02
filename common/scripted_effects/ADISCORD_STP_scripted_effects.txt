@@ -9054,11 +9054,15 @@ STP_pw_party_settle_northern_march_defeat = {
 STP_pw_party_proclaim_great_stelander = {
 	if = {
 		limit = {
+			tag = STP
 			STP_pw_party_northern_march_resolved = yes
 			is_subject = no
+			has_war = no
+			NOT = { has_cosmetic_tag = STP_great_stelander }
 		}
 		set_cosmetic_tag = STP_great_stelander
 		every_subject_country = { STP_pw_party_sync_revolution_subject = yes }
+		country_event = { id = ADISCORD_superevent.10 }
 		news_event = { id = ADISCORD_STP_pc.52 hours = 1 }
 	}
 }

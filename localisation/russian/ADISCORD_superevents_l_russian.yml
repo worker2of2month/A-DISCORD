@@ -91,6 +91,10 @@
   superevent_val_commonwealth_quote: "Республика есть дело народа.\n\n- Цицерон, «О государстве»"
   superevent_val_commonwealth_comment: "Солгалов связал договорные администрации в единый порядок"
 
+  superevent_stelander_great_title: "Провозглашён Великий Стеландер!"
+  superevent_stelander_great_quote: "$superevent_stelander_party_victory_quote$"
+  superevent_stelander_great_comment: "Северные правительства подчинены единому центру"
+
   superevent_inactive_title: ""
   superevent_inactive_quote: ""
   superevent_inactive_comment: ""

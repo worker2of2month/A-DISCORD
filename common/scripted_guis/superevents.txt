@@ -194,4 +194,21 @@ scripted_gui = {
 			}
 		}
 	}
+
+
+	superevent_stelander_great = {
+		window_name = "superevent_stelander_great"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_stelander_great
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_stelander_great
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

@@ -3445,6 +3445,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_superevent.10",
+      "namespace": "ADISCORD_superevent",
+      "number": 10,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_STP_pc.46",
       "namespace": "ADISCORD_STP_pc",
       "number": 46,

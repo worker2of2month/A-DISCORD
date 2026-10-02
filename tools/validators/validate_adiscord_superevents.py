@@ -57,6 +57,7 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.7",
     "ADISCORD_superevent.8",
     "ADISCORD_superevent.9",
+    "ADISCORD_superevent.10",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -118,6 +119,9 @@ PRESENTATIONS = (
         "superevent_val_commonwealth",
         "superevent_val_commonwealth_sound_e",
         legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_stelander_great", "superevent_stelander_party_victory_sound_e"
     ),
 )
 

@@ -120,6 +120,10 @@ defined_text = {
 		localization_key = superevent_val_commonwealth_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_stelander_great }
+		localization_key = superevent_stelander_great_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -246,6 +250,10 @@ defined_text = {
 		localization_key = superevent_val_commonwealth_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_stelander_great }
+		localization_key = superevent_stelander_great_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -370,6 +378,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_val_commonwealth }
 		localization_key = superevent_val_commonwealth_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_stelander_great }
+		localization_key = superevent_stelander_great_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment
