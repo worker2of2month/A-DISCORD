@@ -1,7 +1,15 @@
 # One mission per template. Composition keys are subunits, not their map sprites.
 ADISCORD_cruiser_strike = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = {
 		factor = 1
@@ -21,7 +29,15 @@ ADISCORD_cruiser_strike = {
 
 ADISCORD_submarine_raiding = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = {
 		factor = 1
@@ -39,7 +55,15 @@ ADISCORD_submarine_raiding = {
 
 ADISCORD_coastal_patrol = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { naval_patrol }
@@ -53,7 +77,15 @@ ADISCORD_coastal_patrol = {
 
 ADISCORD_coastal_strike = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = { factor = 1 }
 	keep_updated = yes
@@ -68,7 +100,15 @@ ADISCORD_coastal_strike = {
 
 ADISCORD_coastal_escort = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { convoy_escort }
@@ -82,7 +122,15 @@ ADISCORD_coastal_escort = {
 
 ADISCORD_coastal_raiding = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = { factor = 1 }
 	keep_updated = yes
@@ -97,7 +145,15 @@ ADISCORD_coastal_raiding = {
 
 ADISCORD_coastal_invasion_support = {
 	allowed = {
-		OR = { original_tag = STP original_tag = STS original_tag = NOD original_tag = VAL }
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
 	}
 	ai_will_do = { factor = 5 }
 	mission = { naval_invasion_support }

@@ -115,7 +115,8 @@ class RuntimeHotpathOptimizationTests(unittest.TestCase):
         self.assertIsNone(re.search(r"(?m)^\s*on_daily\s*=", source))
         daily = named_block(source, "on_daily_STP")
         self.assertNotIn("STP_cw_check_union_wars_finished = yes", daily)
-        self.assertIsNone(re.search(r"(?m)^\s*on_daily_STS\s*=", source))
+        daily_sts = named_block(source, "on_daily_STS")
+        self.assertEqual(daily_sts.count("STP_hw_stall_tick = yes"), 1)
 
     def test_new_campaign_phase_initializes_postwar_without_weekly_repair(self):
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")

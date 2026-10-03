@@ -853,11 +853,16 @@ class StartingCoastalFleetTests(unittest.TestCase):
         source = parse_clausewitz(read("common/ai_strategy/default.txt"))
         policy = block(source, "ADISCORD_coastal_invasion_planning")
         allowed = block(policy, "allowed")
-        for tag in ("VAL", "NOD", "STP", "STS", "NAM"):
+        for tag in (
+            "AZH", "CHD", "COF", "EFL", "EVR", "EYR", "FLR", "IIA", "IVN",
+            "LUR", "MRV", "NAM", "NOD", "OLR", "PIO", "PRR", "RIV", "RVN",
+            "SFR", "SLI", "STP", "STS", "TFF", "ULV", "VAL", "WIT", "YPR",
+        ):
             facts = {(tag, "original_tag", tag): True}
-            self.assertEqual(
-                matches_conditions(allowed, facts, tag), tag in ("VAL", "NOD", "STP")
-            )
+            self.assertTrue(matches_conditions(allowed, facts, tag), tag)
+        self.assertFalse(
+            matches_conditions(allowed, {("RUS", "original_tag", "RUS"): True}, "RUS")
+        )
         self.assertEqual(scalar(policy, "abort_when_not_enabled"), "yes")
         strategy = next(
             e.value
@@ -883,6 +888,7 @@ class StartingCoastalFleetTests(unittest.TestCase):
         )
         for condition in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
             self.assertIn(condition, enable)
+        self.assertIn("any_owned_state", enable)
 
     def test_patrol_platform_is_available_before_startup_technology_grants(
         self,

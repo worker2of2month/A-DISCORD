@@ -583,6 +583,11 @@ ADISCORD_produce_artillery_low_stock = {
     def test_naval_ai_goal_replacement_retains_required_objectives(self) -> None:
         descriptor = validator.read_text(validator.ROOT / "descriptor.mod")
         self.assertRegex(descriptor, r'replace_path\s*=\s*"common/ai_navy/goals"')
+        naval_roster = {
+            "AZH", "CHD", "COF", "EFL", "EVR", "EYR", "FLR", "IIA", "IVN",
+            "LUR", "MRV", "NAM", "NOD", "OLR", "PIO", "PRR", "RIV", "RVN",
+            "SFR", "SLI", "STP", "STS", "TFF", "ULV", "VAL", "WIT", "YPR",
+        }
         registered = set()
         for path in (validator.ROOT / "common/country_tags").glob("*.txt"):
             registered.update(
@@ -609,7 +614,7 @@ ADISCORD_produce_artillery_low_stock = {
                 allowed = validator.top_level_blocks(goal, "available_for")
                 self.assertEqual(len(allowed), 1, name)
                 self.assertTrue(
-                    {"STP", "STS", "NOD", "VAL"} <= set(allowed[0].split()), name
+                    naval_roster <= set(allowed[0].split()), name
                 )
                 objective = re.search(r"\bobjective_type\s*=\s*(\w+)", goal)
                 self.assertIsNotNone(objective, name)
@@ -679,13 +684,18 @@ ADISCORD_produce_artillery_low_stock = {
                 re.findall(r"(?m)^\s*([A-Z0-9]{3})\s*=", validator.read_text(path))
             )
         subunits = validator.collect_defined_subunits()
+        naval_roster = {
+            "AZH", "CHD", "COF", "EFL", "EVR", "EYR", "FLR", "IIA", "IVN",
+            "LUR", "MRV", "NAM", "NOD", "OLR", "PIO", "PRR", "RIV", "RVN",
+            "SFR", "SLI", "STP", "STS", "TFF", "ULV", "VAL", "WIT", "YPR",
+        }
         missions, minimums = {}, {}
         for name, template in sources["taskforce"].items():
             allowed = validator.top_level_blocks(template, "allowed")[0]
             filters = validator.top_level_blocks(allowed, "OR")
             self.assertEqual(len(filters), 1, name)
             tags = set(re.findall(r"\boriginal_tag\s*=\s*(\w+)", filters[0]))
-            self.assertTrue({"STP", "STS", "NOD", "VAL"} <= tags, name)
+            self.assertTrue(naval_roster <= tags, name)
             self.assertFalse(tags - registered, name)
             missions[name] = set(
                 validator.top_level_blocks(template, "mission")[0].split()

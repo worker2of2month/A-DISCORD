@@ -179,13 +179,20 @@ for _tag in ("GLP", "KYZ"):
 # The feudal bloc wakes on war entry or when an authored settlement installs
 # an administration without requiring that minor to have joined the war.
 BEZHAYSK_TAGS = {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}
+BEZHAYSK_SHARED_FILES = {
+    Path("common/on_actions/04_ADISCORD_operations_map_on_actions.txt"),
+    Path("common/scripted_effects/ADISCORD_VAL_effects.txt"),
+    Path("common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_scripted_triggers_generic.txt"),
+}
 for _tag in BEZHAYSK_TAGS:
     EVENT_AWAKENED_PARTICIPATION[_tag] = {
         Path("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"),
         Path("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt"),
-    }
+    } | BEZHAYSK_SHARED_FILES
 EVENT_AWAKENED_PARTICIPATION["BJK"].update(
     {
+        Path("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
         Path("common/decisions/ADISCORD_STP_decisions.txt"),
         Path("common/national_focus/ADISCORD_STP_preparation.txt"),
         Path("common/national_focus/ADISCORD_STP_civil_war.txt"),

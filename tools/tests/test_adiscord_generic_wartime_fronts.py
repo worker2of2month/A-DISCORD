@@ -102,6 +102,24 @@ class GenericWartimeFrontTests(unittest.TestCase):
         self.assertNotIn("type = put_unit_buffers", profile)
         self.assertNotIn("type = role_ratio id = garrison", profile)
 
+    def test_generic_front_control_executes_balanced_attacks(self) -> None:
+        source = AI_PATH.read_text(encoding="utf-8-sig")
+        profile = named_block(source, "ADISCORD_active_enemy_front_control")
+        self.assertTrue(profile, "missing generic executable front policy")
+        enable = named_block(profile, "enable")
+        for guard in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
+            self.assertIn(guard, enable)
+        control = named_block(profile, "ai_strategy")
+        target = named_block(control, "country_trigger")
+        self.assertIn("has_war_with = FROM", target)
+        self.assertIn("fighting_army_strength_ratio", target)
+        self.assertIn("execution_type = balanced", control)
+        self.assertIn("execute_order = yes", control)
+        self.assertIn("manual_attack = no", control)
+        priority = re.search(r"\bpriority\s*=\s*(\d+)", control)
+        self.assertIsNotNone(priority)
+        self.assertLess(int(priority.group(1)), 1000)
+
 
 class FrontAllocationLifecycleTests(unittest.TestCase):
     """Evaluate the actual shared predicates; this does not simulate engine movement."""

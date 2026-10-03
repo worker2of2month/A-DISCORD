@@ -240,7 +240,17 @@ ADISCORD_convoy_buffer = {
 # Land-front demand must leave room for coastal operations. The target predicate
 # is evaluated in the enemy country, with FROM referring to the planner.
 ADISCORD_coastal_invasion_planning = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_war = yes
@@ -248,6 +258,7 @@ ADISCORD_coastal_invasion_planning = {
 		has_tech = ADISCORD_tech_restored_dockyards
 		num_divisions > 7
 		has_navy_size = { size > 19 type = convoy }
+		any_owned_state = { is_coastal = yes naval_base > 0 }
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = naval_invasion_focus value = 10 }
@@ -260,7 +271,17 @@ ADISCORD_coastal_invasion_planning = {
 }
 
 ADISCORD_coastal_dockyard_capacity = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_capitulated = no
@@ -275,7 +296,17 @@ ADISCORD_coastal_dockyard_capacity = {
 # The convoy buffer reserves one dockyard below 100 transports. A country with
 # only one dockyard must finish that reserve before maintaining its patrol fleet.
 ADISCORD_coastal_patrol_replacement = {
-	allowed = { OR = { original_tag = VAL original_tag = NOD original_tag = STP } }
+	allowed = {
+		OR = {
+			original_tag = AZH original_tag = CHD original_tag = COF original_tag = EFL
+			original_tag = EVR original_tag = EYR original_tag = FLR original_tag = IIA
+			original_tag = IVN original_tag = LUR original_tag = MRV original_tag = NAM
+			original_tag = NOD original_tag = OLR original_tag = PIO original_tag = PRR
+			original_tag = RIV original_tag = RVN original_tag = SFR original_tag = SLI
+			original_tag = STP original_tag = STS original_tag = TFF original_tag = ULV
+			original_tag = VAL original_tag = WIT original_tag = YPR
+		}
+	}
 	enable = {
 		is_ai = yes
 		has_capitulated = no
@@ -306,6 +337,32 @@ ADISCORD_active_enemy_front_concentration = {
 			has_war_with = FROM
 		}
 		value = 50
+	}
+}
+
+# Give ordinary wars an executable balanced plan. Country-specific campaigns
+# keep precedence through their higher priorities; the stronger-enemy profile
+# below remains the only plan for fronts that need deliberate attacks.
+ADISCORD_active_enemy_front_control = {
+	enable = {
+		is_ai = yes
+		has_war = yes
+		has_capitulated = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_war_with = FROM
+			NOT = { fighting_army_strength_ratio = { tag = FROM ratio > 1.5 } }
+		}
+		ratio = 0.01
+		priority = 800
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
 	}
 }
 
