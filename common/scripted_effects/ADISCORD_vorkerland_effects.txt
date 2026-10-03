@@ -822,7 +822,12 @@ ADISCORD_vorkerland_start_khan_border_war = {
 		49 = { add_claim_by = RUS }
 		176 = { add_claim_by = RUS }
 		RUS = {
+			add_manpower = 30000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 18000 producer = RUS }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 120 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 180 producer = RUS }
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 350 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 100 producer = RUS }
 			add_equipment_to_stockpile = { type = support_equipment_1 amount = 100 producer = RUS }
 			declare_war_on = { target = SLA type = annex_everything }
 		}
@@ -1121,9 +1126,11 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 ADISCORD_vorkerland_ensure_limited_conscription = {
 	if = {
 		limit = {
+			NOT = { has_idea = limited_conscription }
 			OR = {
 				has_idea = disarmed_nation
 				has_idea = volunteer_only
+				tag = RUS
 			}
 		}
 		add_ideas = limited_conscription
@@ -10877,10 +10884,6 @@ RUS_choose_army_course = {
 			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
 			NOT = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
 		}
-		if = {
-			limit = { NOT = { has_character = RUS_Varlam_Oskol } }
-			recruit_character = RUS_Varlam_Oskol
-		}
 		set_politics = {
 			ruling_party = etatism
 			elections_allowed = no
@@ -10906,10 +10909,6 @@ RUS_choose_reconstruction_course = {
 			NOT = { has_completed_focus = RUS_reaffirm_khan }
 			NOT = { has_completed_focus = RUS_army_mandate }
 			NOT = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
-		}
-		if = {
-			limit = { NOT = { has_character = RUS_Pavel_Niva } }
-			recruit_character = RUS_Pavel_Niva
 		}
 		set_politics = {
 			ruling_party = pragmatism
@@ -11870,8 +11869,8 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_army_org_factor value = 0.03 }
-		add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.03 }
+		add_to_variable = { var = RUS_bunker_army_org_factor value = 0.12 }
+		add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.08 }
 	}
 	if = {
 		limit = {
@@ -11879,7 +11878,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_stability_factor value = 0.04 }
+		add_to_variable = { var = RUS_bunker_stability_factor value = 0.08 }
 	}
 	if = {
 		limit = {
@@ -11887,7 +11886,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_attrition value = -0.04 }
+		add_to_variable = { var = RUS_bunker_attrition value = -0.10 }
 	}
 	if = {
 		limit = {
@@ -11895,7 +11894,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_planning_speed value = 0.08 }
+		add_to_variable = { var = RUS_bunker_planning_speed value = 0.12 }
 	}
 	if = {
 		limit = {
@@ -11903,7 +11902,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 3 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.06 }
+		add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.15 }
 	}
 	if = {
 		limit = {
@@ -11911,7 +11910,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.025 }
+		add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.05 }
 	}
 	if = {
 		limit = {
@@ -11919,7 +11918,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.04 }
+		add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.12 }
 	}
 	if = {
 		limit = {
@@ -11927,7 +11926,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 3 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.04 }
+		add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.10 }
 	}
 	if = {
 		limit = {
@@ -11935,7 +11934,7 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.15 }
+		add_to_variable = { var = RUS_bunker_political_power_gain value = 0.20 }
 	}
 	if = {
 		limit = {
@@ -11943,8 +11942,8 @@ RUS_bunker_refresh = {
 		}
 		add_to_variable = { var = RUS_bunker_used_power value = 2 }
 		add_to_variable = { var = RUS_bunker_fitted value = 1 }
-		add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.04 }
-		add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.03 }
+		add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.08 }
+		add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.08 }
 	}
 	if = {
 		limit = {
@@ -11953,12 +11952,12 @@ RUS_bunker_refresh = {
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_army_org_factor value = 0.015 }
-			add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.015 }
+			add_to_variable = { var = RUS_bunker_army_org_factor value = 0.08 }
+			add_to_variable = { var = RUS_bunker_training_time_army_factor value = -0.05 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_stability_factor value = 0.02 }
+			add_to_variable = { var = RUS_bunker_stability_factor value = 0.05 }
 		}
 	}
 	if = {
@@ -11968,11 +11967,11 @@ RUS_bunker_refresh = {
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_attrition value = -0.02 }
+			add_to_variable = { var = RUS_bunker_attrition value = -0.05 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_planning_speed value = 0.04 }
+			add_to_variable = { var = RUS_bunker_planning_speed value = 0.08 }
 		}
 	}
 	if = {
@@ -11983,11 +11982,11 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.03 }
+			add_to_variable = { var = RUS_bunker_industrial_capacity_factory value = 0.10 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.0125 }
+			add_to_variable = { var = RUS_bunker_consumer_goods_factor value = -0.03 }
 		}
 	}
 	if = {
@@ -11998,11 +11997,11 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_used_power value = 1 }
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.02 }
+			add_to_variable = { var = RUS_bunker_casualty_trickleback value = 0.08 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.02 }
+			add_to_variable = { var = RUS_bunker_research_speed_factor value = 0.08 }
 		}
 	}
 	if = {
@@ -12012,12 +12011,12 @@ RUS_bunker_refresh = {
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals } }
-			add_to_variable = { var = RUS_bunker_political_power_gain value = 0.075 }
+			add_to_variable = { var = RUS_bunker_political_power_gain value = 0.10 }
 		}
 		if = {
 			limit = { check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals } }
-			add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.02 }
-			add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.015 }
+			add_to_variable = { var = RUS_bunker_max_planning_factor value = 0.07 }
+			add_to_variable = { var = RUS_bunker_army_defence_factor value = 0.07 }
 		}
 	}
 	set_variable = { var = RUS_bunker_free_power value = RUS_bunker_power }
@@ -12122,6 +12121,13 @@ RUS_campaign_initialize = {
 		}
 		clr_country_flag = RUS_campaign_start_pending
 		set_country_flag = RUS_bunker_initialized
+		ADISCORD_vorkerland_ensure_limited_conscription = yes
+		ADISCORD_vorkerland_rus_core_dirty_sla = yes
+		ADISCORD_vorkerland_rus_core_dirty_rza = yes
+		ADISCORD_vorkerland_rus_core_dirty_mlr = yes
+		ADISCORD_vorkerland_rus_core_dirty_ert = yes
+		ADISCORD_vorkerland_rus_core_dirty_irt = yes
+		ADISCORD_vorkerland_rus_core_dirty_sca = yes
 		set_power_balance = { id = RUS_state_balance set_value = 0 }
 		add_political_power = 20
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
@@ -12144,6 +12150,7 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_bunker_upgrade_4 value = 0 }
 		set_variable = { var = RUS_bunker_upgrade_5 value = 0 }
 		set_variable = { var = RUS_army_org value = 0.08 }
+		set_variable = { var = RUS_army_attack value = 0.05 }
 		set_variable = { var = RUS_army_recruitment value = 0.06 }
 		set_variable = { var = RUS_army_growth value = 0.05 }
 		set_variable = { var = RUS_army_defence value = 0 }
@@ -12423,6 +12430,20 @@ RUS_bunker_weekly_supply = {
 					}
 				}
 				RUS_bunker_refresh = yes
+			}
+			if = {
+				limit = { check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals } }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4 producer = RUS }
+				add_equipment_to_stockpile = { type = support_equipment amount = 1 producer = RUS }
+			}
+			if = {
+				limit = { check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals } }
+				add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 10 producer = RUS }
+				add_equipment_to_stockpile = { type = support_equipment amount = 2 producer = RUS }
+			}
+			if = {
+				limit = { has_completed_focus = RUS_anti_air_posts }
+				add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 2 producer = RUS }
 			}
 		}
 		else_if = {

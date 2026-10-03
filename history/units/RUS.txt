@@ -23,6 +23,9 @@ division_template = {
 	}
 	support = {
 		engineer = { x = 0 y = 0 }
+		anti_air = { x = 0 y = 1 }
+		artillery = { x = 1 y = 0 }
+		anti_tank = { x = 1 y = 1 }
 	}
 }
 
@@ -64,13 +67,56 @@ units = {
 	}
 }
 
-##### No notable air forces #####
+air_wings = {
+	16531 = {
+		ADISCORD_fighter_airframe_2163 = { owner = "RUS" amount = 120 }
+	}
+}
 
 instant_effect = {
+	# Rifles cover the two understrength starting brigades and leave a reserve
+	# for the first mobilization focus; squad weapons and support are supplied
+	# separately because the local arsenals cannot produce them at campaign start.
+	add_equipment_to_stockpile = {
+		type = infantry_equipment_0
+		amount = 12000
+		producer = RUS
+	}
+	add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 50 producer = RUS }
+	add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 100 producer = RUS }
+	add_equipment_to_stockpile = {
+		type = ADISCORD_anti_air_equipment_2163
+		amount = 80
+		producer = RUS
+	}
 	add_equipment_production = {
 		equipment = { type = infantry_equipment_0 creator = "RUS" }
 		requested_factories = 1
 		progress = 0.60
 		efficiency = 70
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_squad_weapons_equipment_0 creator = "RUS" }
+		requested_factories = 1
+		progress = 0.30
+		efficiency = 50
+	}
+	add_equipment_production = {
+		equipment = { type = artillery_equipment_1 creator = "RUS" }
+		requested_factories = 1
+		progress = 0.20
+		efficiency = 40
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_anti_tank_equipment_2163 creator = "RUS" }
+		requested_factories = 1
+		progress = 0.20
+		efficiency = 40
+	}
+	add_equipment_production = {
+		equipment = { type = ADISCORD_fighter_airframe_2163 creator = "RUS" }
+		requested_factories = 1
+		progress = 0.20
+		efficiency = 40
 	}
 }

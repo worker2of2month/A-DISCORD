@@ -58,9 +58,12 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 20000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 24000 producer = RUS }
-			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			add_manpower = 30000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 36000 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 192 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 180 producer = RUS }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 120 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 180 producer = RUS }
 			add_equipment_to_stockpile = { type = train_equipment_1 amount = 20 producer = RUS }
 			add_equipment_to_stockpile = { type = motorized_equipment amount = 150 producer = RUS }
 			army_experience = 10
@@ -70,7 +73,7 @@ focus_tree = {
 				create_unit = {
 					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.12 start_equipment_factor = 0.75"
 					owner = RUS
-					count = 2
+					count = 3
 				}
 			}
 		}
@@ -264,15 +267,13 @@ focus_tree = {
 			}
 			is_subject = no
 			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = RUS_empire_proclaimed_tt
-				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
-			}
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 20
 			add_command_power = 15
+			add_political_power = 35
+			unlock_decision_tooltip = RUS_campaign_last_order
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -356,8 +357,19 @@ focus_tree = {
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			add_manpower = 10000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = RUS }
+			add_manpower = 20000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 20000 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 240 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 160 producer = RUS }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 180 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
+			capital_scope = {
+				create_unit = {
+					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					owner = RUS
+					count = 5
+				}
+			}
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -388,6 +400,20 @@ focus_tree = {
 		completion_reward = {
 			army_experience = 25
 			add_command_power = 25
+			add_manpower = 30000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 40000 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 300 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 200 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 240 producer = RUS }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 300 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 420 producer = RUS }
+			capital_scope = {
+				create_unit = {
+					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.18 start_equipment_factor = 0.75"
+					owner = RUS
+					count = 6
+				}
+			}
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -570,6 +596,8 @@ focus_tree = {
 				producer = RUS
 			}
 			add_stability = 0.03
+			add_political_power = 40
+			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -749,6 +777,8 @@ focus_tree = {
 				}
 			}
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = RUS }
+			add_political_power = 35
+			unlock_decision_tooltip = RUS_campaign_surface_trade
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 8 }
@@ -1437,11 +1467,15 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			add_political_power = 30
 			army_experience = 15
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 4000 producer = RUS }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 12000 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 96 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = RUS }
+			unlock_decision_tooltip = RUS_campaign_rifles_protect_home
 			effect_tooltip = { add_ideas = RUS_army_organization_delta }
 			hidden_effect = {
-				add_to_variable = { var = RUS_army_org value = 0.01 }
+				add_to_variable = { var = RUS_army_org value = 0.02 }
 				RUS_black_army_refresh = yes
 			}
 		}
@@ -1493,7 +1527,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = RUS_patient_doctrine_delta }
 			hidden_effect = {
-				add_to_variable = { var = RUS_army_defence value = 0.04 }
+				add_to_variable = { var = RUS_army_defence value = 0.07 }
 				add_to_variable = { var = RUS_army_supply value = -0.05 }
 				add_to_variable = { var = RUS_army_speed value = -0.03 }
 				RUS_black_army_refresh = yes
@@ -1523,9 +1557,9 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = RUS_swift_doctrine_delta }
 			hidden_effect = {
-				add_to_variable = { var = RUS_army_speed value = 0.05 }
-				add_to_variable = { var = RUS_army_planning value = 0.08 }
-				add_to_variable = { var = RUS_army_supply value = 0.04 }
+				add_to_variable = { var = RUS_army_speed value = 0.08 }
+				add_to_variable = { var = RUS_army_planning value = 0.12 }
+				add_to_variable = { var = RUS_army_supply value = 0.06 }
 				RUS_black_army_refresh = yes
 			}
 		}
@@ -1626,11 +1660,22 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_manpower = 4000
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5000 producer = RUS }
+			add_manpower = 16000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 20000 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 240 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 160 producer = RUS }
+			add_equipment_to_stockpile = { type = artillery_equipment_1 amount = 180 producer = RUS }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_tank_equipment_2163 amount = 260 producer = RUS }
+			capital_scope = {
+				create_unit = {
+					division = "division_template = \"Rusnian Rifle Brigade\" start_experience_factor = 0.16 start_equipment_factor = 0.75"
+					owner = RUS
+					count = 5
+				}
+			}
 			effect_tooltip = { add_ideas = RUS_army_organization_delta }
 			hidden_effect = {
-				add_to_variable = { var = RUS_army_org value = 0.01 }
+				add_to_variable = { var = RUS_army_org value = 0.02 }
 				RUS_black_army_refresh = yes
 			}
 		}
@@ -1664,6 +1709,7 @@ focus_tree = {
 					instant_build = yes
 				}
 			}
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 180 producer = RUS }
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -1688,8 +1734,8 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { add_ideas = RUS_professional_service_delta }
 			hidden_effect = {
-				add_to_variable = { var = RUS_army_org value = 0.01 }
-				add_to_variable = { var = RUS_army_training value = -0.05 }
+				add_to_variable = { var = RUS_army_org value = 0.03 }
+				add_to_variable = { var = RUS_army_training value = -0.08 }
 				RUS_black_army_refresh = yes
 			}
 		}
@@ -2904,12 +2950,9 @@ focus_tree = {
 		}
 		completion_reward = {
 			custom_effect_tooltip = RUS_public_campaign_first_slot_tt
+			add_political_power = 35
 			unlock_decision_tooltip = RUS_campaign_voice_of_the_aimaqs
 			unlock_decision_tooltip = RUS_campaign_bread_and_shelter
-			unlock_decision_tooltip = RUS_campaign_rifles_protect_home
-			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
-			unlock_decision_tooltip = RUS_campaign_surface_trade
-			unlock_decision_tooltip = RUS_campaign_last_order
 			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 		}
 		ai_will_do = { base = 8 }

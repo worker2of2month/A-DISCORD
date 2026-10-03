@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import shutil
 import unittest
 import tempfile
 from pathlib import Path
@@ -20,6 +21,69 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
     VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
 )
 from tools.validators import validate_adiscord_new_states as validator
+
+
+EXPECTED_DIRTY_REPUBLIC_POPULATION = {
+    49: 650_000,
+    51: 380_000,
+    125: 120_000,
+    152: 650_000,
+    153: 300_000,
+    154: 250_000,
+    155: 300_000,
+    165: 140_000,
+    166: 140_000,
+    167: 200_000,
+    168: 160_000,
+    169: 650_000,
+    171: 200_000,
+    172: 140_000,
+    173: 650_000,
+    176: 220_000,
+    177: 650_000,
+    178: 140_000,
+    180: 140_000,
+    181: 650_000,
+    182: 170_000,
+    183: 140_000,
+    184: 170_000,
+    185: 110_000,
+    187: 200_000,
+    188: 170_000,
+    189: 200_000,
+    190: 170_000,
+    191: 220_000,
+    192: 170_000,
+    193: 250_000,
+    203: 140_000,
+    204: 110_000,
+    205: 140_000,
+    206: 110_000,
+    207: 140_000,
+    208: 140_000,
+    209: 140_000,
+    210: 170_000,
+    211: 200_000,
+    212: 170_000,
+    213: 250_000,
+    214: 110_000,
+    215: 170_000,
+    216: 140_000,
+    217: 170_000,
+    219: 170_000,
+    220: 200_000,
+    221: 140_000,
+    222: 200_000,
+    224: 220_000,
+}
+
+
+def _without_population(source: str) -> str:
+    return re.sub(
+        r"(?m)^(\s*manpower\s*=\s*)\d+(\s*)$",
+        r"\1<population>\2",
+        source,
+    )
 
 
 class ShahrabadPopulationTests(unittest.TestCase):
@@ -48,6 +112,74 @@ class ShahrabadPopulationTests(unittest.TestCase):
                 if match is not None and int(match[1]) in builder.SHL_POPULATION:
                     state_id = int(match[1])
                     self.assertEqual(int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]), builder.SHL_POPULATION[state_id])
+
+
+class DirtyRepublicPopulationTests(unittest.TestCase):
+    def test_profile_population_and_non_population_metadata_are_exact(self):
+        self.assertEqual(
+            set(builder.DIRTY_REPUBLIC_STATE_PROFILES),
+            set(EXPECTED_DIRTY_REPUBLIC_POPULATION),
+        )
+        self.assertEqual(sum(EXPECTED_DIRTY_REPUBLIC_POPULATION.values()), 11_930_000)
+        self.assertEqual(
+            builder.DIRTY_REPUBLIC_STATE_PROFILES[125]["population"], 120_000
+        )
+        self.assertEqual(
+            builder.DIRTY_REPUBLIC_STATE_PROFILES[168]["population"], 160_000
+        )
+        for state_id, expected_population in EXPECTED_DIRTY_REPUBLIC_POPULATION.items():
+            with self.subTest(state=state_id):
+                profile = builder.DIRTY_REPUBLIC_STATE_PROFILES[state_id]
+                source = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+                self.assertEqual(profile["population"], expected_population)
+                self.assertEqual(
+                    int(re.search(r"\bmanpower\s*=\s*(\d+)", source)[1]),
+                    expected_population,
+                )
+                self.assertEqual(
+                    re.search(r"\bstate_category\s*=\s*(\w+)", source)[1],
+                    profile["category"],
+                )
+                self.assertEqual(
+                    float(re.search(r"\blocal_supplies\s*=\s*([\d.]+)", source)[1]),
+                    profile["supplies"],
+                )
+                for field, building in (("infrastructure", "infrastructure"),
+                                        ("civilian", "industrial_complex"),
+                                        ("military", "arms_factory"),
+                                        ("air_base", "air_base")):
+                    expected_level = int(profile.get(field, 0))
+                    levels = [
+                        int(value)
+                        for value in re.findall(
+                            rf"(?m)^\s*{building}\s*=\s*(\d+)\s*$", source
+                        )
+                    ]
+                    self.assertEqual(sum(levels), expected_level, field)
+                self.assertEqual(
+                    ("impassable = yes" in source),
+                    state_id in builder.IMPASSABLE_LEGACY_STATE_IDS,
+                )
+
+    def test_profile_regeneration_changes_only_population(self):
+        state_ids = set(EXPECTED_DIRTY_REPUBLIC_POPULATION)
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            originals = {}
+            for state_id in state_ids:
+                source_path = builder.state_path(state_id)
+                destination = target / source_path.name
+                shutil.copy2(source_path, destination)
+                originals[state_id] = source_path.read_text(encoding="utf-8-sig")
+            with patch.object(builder, "STATE_DIR", target):
+                builder.apply_legacy_state_profiles(state_ids)
+            for state_id, original in originals.items():
+                generated = (target / builder.state_path(state_id).name).read_text(
+                    encoding="utf-8-sig"
+                )
+                self.assertEqual(
+                    _without_population(generated), _without_population(original)
+                )
 
 
 class VorkerlandNewStateOutcomeContractTests(unittest.TestCase):

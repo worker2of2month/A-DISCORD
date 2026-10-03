@@ -2881,6 +2881,11 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 				RUS_political_course_chosen = yes
 			}
 			custom_trigger_tooltip = {
+				tooltip = RUS_proclaim_the_last_empire_prepared_tt
+				has_completed_focus = RUS_aimaq_reserve
+				has_completed_focus = RUS_arm_the_border_hosts
+			}
+			custom_trigger_tooltip = {
 				tooltip = RUS_proclaim_the_last_empire_available_tt
 				ADISCORD_vorkerland_rus_can_proclaim_last_empire = yes
 			}
@@ -4405,7 +4410,8 @@ RUS_public_campaigns = {
 		days_remove = 45
 		days_re_enable = 75
 		modifier = {
-			stability_weekly = 0.002
+			stability_weekly = 0.004
+			political_power_gain = 0.03
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_voice_of_the_aimaqs_start = yes }
@@ -4443,8 +4449,8 @@ RUS_public_campaigns = {
 		days_remove = 60
 		days_re_enable = 80
 		modifier = {
-			consumer_goods_factor = -0.03
-			stability_weekly = 0.001
+			consumer_goods_factor = -0.06
+			stability_weekly = 0.002
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_bread_and_shelter_start = yes }
@@ -4466,7 +4472,7 @@ RUS_public_campaigns = {
 	RUS_campaign_rifles_protect_home = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_khan_broadcast_service }
+		visible = { has_completed_focus = RUS_muster_books }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4482,8 +4488,9 @@ RUS_public_campaigns = {
 		days_remove = 50
 		days_re_enable = 70
 		modifier = {
-			industrial_capacity_factory = 0.05
-			war_support_weekly = 0.001
+			industrial_capacity_factory = 0.10
+			war_support_weekly = 0.003
+			army_org_factor = 0.03
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_rifles_protect_home_start = yes }
@@ -4505,7 +4512,7 @@ RUS_public_campaigns = {
 	RUS_campaign_the_khan_keeps_his_word = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_khan_broadcast_service }
+		visible = { has_completed_focus = RUS_written_oaths }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4521,7 +4528,8 @@ RUS_public_campaigns = {
 		days_remove = 60
 		days_re_enable = 90
 		modifier = {
-			stability_weekly = 0.003
+			stability_weekly = 0.005
+			political_power_gain = 0.05
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_the_khan_keeps_his_word_start = yes }
@@ -4543,7 +4551,7 @@ RUS_public_campaigns = {
 	RUS_campaign_surface_trade = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_khan_broadcast_service }
+		visible = { has_completed_focus = RUS_surface_workshops }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4559,8 +4567,8 @@ RUS_public_campaigns = {
 		days_remove = 45
 		days_re_enable = 70
 		modifier = {
-			ADISCORD_economy_trade_income_factor = 0.08
-			production_speed_buildings_factor = 0.05
+			ADISCORD_economy_trade_income_factor = 0.15
+			production_speed_buildings_factor = 0.10
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_surface_trade_start = yes }
@@ -4578,7 +4586,7 @@ RUS_public_campaigns = {
 	RUS_campaign_last_order = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = RUS }
-		visible = { has_completed_focus = RUS_khan_broadcast_service }
+		visible = { has_completed_focus = RUS_imperial_general_staff }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_khan_governing_tt
@@ -4595,8 +4603,9 @@ RUS_public_campaigns = {
 		days_remove = 35
 		days_re_enable = 70
 		modifier = {
-			war_support_weekly = 0.002
-			army_attack_factor = 0.03
+			war_support_weekly = 0.004
+			army_attack_factor = 0.08
+			army_org_factor = 0.05
 		}
 		complete_effect = {
 			hidden_effect = { RUS_campaign_last_order_start = yes }

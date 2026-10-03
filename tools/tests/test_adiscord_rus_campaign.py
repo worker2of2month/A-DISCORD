@@ -46,11 +46,14 @@ class BunkerWorld:
         self.active = set()
         self.events = []
         self.ruler = "RUS_Mark_Rustan"
-        self.characters = {self.ruler}
+        self.characters = {self.ruler, "RUS_Varlam_Oskol", "RUS_Pavel_Niva"}
+        self.cores = set()
+        self.claims = set()
         self.ideology = "anarchism"
         self.bop_id = None
         self.bop = 0.0
         self.army_experience = 0.0
+        self.command_power = 0.0
         self.manpower = 0.0
         self.stability = 0.0
         self.subject = False
@@ -58,9 +61,10 @@ class BunkerWorld:
         self.war = True
         self.owner = True
         self.controller = True
+        self.divisions = 2
         self.dirty = 0
-        self.buildings = {"infrastructure": 2, "arms_factory": 1, "industrial_complex": 0}
-        self.building_slots = 5
+        self.buildings = {"infrastructure": 2, "arms_factory": 5, "industrial_complex": 0}
+        self.building_slots = 6
         self.run("RUS_campaign_initialize")
 
     def value(self, token):
@@ -137,6 +141,9 @@ class BunkerWorld:
                 result = value in self.ideas
             elif key == "66":
                 result = self.matches(value)
+            elif key == "every_state":
+                state_id = next((child.value for child in value if child.key == "limit" for child in child.value if child.key == "id"), None)
+                result = state_id is not None
             elif key == "free_building_slots":
                 occupied = self.buildings["arms_factory"] + self.buildings["industrial_complex"]
                 result = self.building_slots - occupied >= int(scalar(value, "size"))
@@ -165,10 +172,30 @@ class BunkerWorld:
                 self.execute(value)
             elif key == "66":
                 self.execute(value)
+            elif key == "capital_scope":
+                self.execute(value)
+            elif key == "create_unit":
+                self.divisions += int(scalar(value, "count"))
+            elif key.isdigit():
+                for child in value:
+                    if child.key == "add_core_of":
+                        self.cores.add((key, child.value))
+                    elif child.key == "add_claim_by":
+                        self.claims.add((key, child.value))
+            elif key == "every_state":
+                state_id = next((child.value for child in value if child.key == "limit" for child in child.value if child.key == "id"), None)
+                if state_id is not None:
+                    for child in value:
+                        if child.key == "add_core_of":
+                            self.cores.add((state_id, child.value))
+                        elif child.key == "add_claim_by":
+                            self.claims.add((state_id, child.value))
             elif key == "add_building_construction":
                 self.buildings[scalar(value, "type")] += int(scalar(value, "level"))
             elif key == "add_timed_idea":
                 self.ideas.add(scalar(value, "idea"))
+            elif key == "ADISCORD_vorkerland_ensure_limited_conscription":
+                self.ideas.add("limited_conscription")
             elif key in ("effect_tooltip", "custom_effect_tooltip", "unlock_decision_tooltip"):
                 continue
             elif key in ("set_variable", "add_to_variable", "subtract_from_variable", "multiply_variable", "set_temp_variable", "multiply_temp_variable"):
@@ -192,6 +219,8 @@ class BunkerWorld:
                 self.pp += self.value(value)
             elif key == "army_experience":
                 self.army_experience += self.value(value)
+            elif key == "add_command_power":
+                self.command_power += self.value(value)
             elif key == "add_manpower":
                 self.manpower += self.value(value)
             elif key == "add_stability":
@@ -300,7 +329,131 @@ class RusCampaignTests(unittest.TestCase):
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
-    def test_propaganda_focuses_grant_two_shared_slots_and_unlock_six_campaigns(self):
+    def test_pre_crisis_muster_reaches_ten_ready_brigades_before_proclamation(self):
+        world = self.world()
+        self.assertIn(("49", "RUS"), world.cores)
+        self.assertIn(("205", "RUS"), world.cores)
+        world.execute(block(self.focuses["RUS_arm_the_border_hosts"], "completion_reward"))
+        world.execute(block(self.focuses["RUS_aimaq_reserve"], "completion_reward"))
+        self.assertEqual(world.divisions, 10)
+        self.assertGreaterEqual(world.equipment["infantry_equipment"], 10000)
+        border = self.effects["ADISCORD_vorkerland_start_khan_border_war"]
+        def reward_stockpile(focus, equipment):
+            return sum(
+                float(scalar(entry.value, "amount"))
+                for entry in walk(block(self.focuses[focus], "completion_reward"))
+                if entry.key == "add_equipment_to_stockpile"
+                and scalar(entry.value, "type") == equipment
+            )
+        def effect_stockpile(equipment):
+            return sum(
+                float(scalar(entry.value, "amount"))
+                for entry in walk(border)
+                if entry.key == "add_equipment_to_stockpile"
+                and scalar(entry.value, "type") == equipment
+            )
+        full_brigade = 6 * 900 + 4 * 270
+        phase1_rifles = 12000 + effect_stockpile("infantry_equipment_0") + reward_stockpile("RUS_arm_the_border_hosts", "infantry_equipment_0") + reward_stockpile("RUS_aimaq_reserve", "infantry_equipment_0")
+        phase1_squad = effect_stockpile("ADISCORD_squad_weapons_equipment_0") + reward_stockpile("RUS_arm_the_border_hosts", "ADISCORD_squad_weapons_equipment_0") + reward_stockpile("RUS_aimaq_reserve", "ADISCORD_squad_weapons_equipment_0")
+        phase1_aa = 80 + effect_stockpile("ADISCORD_anti_air_equipment_2163") + reward_stockpile("RUS_aimaq_reserve", "ADISCORD_anti_air_equipment_2163")
+        phase1_support = 20 + effect_stockpile("support_equipment_1") + reward_stockpile("RUS_arm_the_border_hosts", "support_equipment")
+        phase1_artillery = 50 + effect_stockpile("artillery_equipment_1") + reward_stockpile("RUS_arm_the_border_hosts", "artillery_equipment_1") + reward_stockpile("RUS_aimaq_reserve", "artillery_equipment_1")
+        phase1_anti_tank = 100 + effect_stockpile("ADISCORD_anti_tank_equipment_2163") + reward_stockpile("RUS_arm_the_border_hosts", "ADISCORD_anti_tank_equipment_2163") + reward_stockpile("RUS_aimaq_reserve", "ADISCORD_anti_tank_equipment_2163")
+        self.assertGreaterEqual(phase1_rifles, 2 * full_brigade * 0.32 + 8 * full_brigade * 0.75)
+        self.assertGreaterEqual(phase1_squad, 2 * 48 * 0.32 + 8 * 48 * 0.75)
+        self.assertGreaterEqual(phase1_aa, 2 * 20 * 0.32 + 8 * 20 * 0.75)
+        self.assertGreaterEqual(phase1_support, 2 * 30 * 0.32 + 8 * 30 * 0.75)
+        self.assertGreaterEqual(phase1_artillery, 2 * 12 * 0.32 + 8 * 12 * 0.75)
+        self.assertGreaterEqual(phase1_anti_tank, 2 * 24 * 0.32 + 8 * 24 * 0.75)
+        self.assertGreaterEqual(1532123 + 30000 + 20000, world.divisions * (6 * 1000 + 4 * 300))
+        history_units = read("history/units/RUS.txt")
+        self.assertRegex(history_units, r"type = infantry_equipment_0\s+amount = 12000")
+        self.assertIn("anti_air = { x = 0 y = 1 }", history_units)
+        self.assertIn("artillery = { x = 1 y = 0 }", history_units)
+        self.assertIn("anti_tank = { x = 1 y = 1 }", history_units)
+        self.assertRegex(read("history/states/66-Khan-Bunker.txt"), r"arms_factory\s*=\s*5")
+        decision = next(entry.value for entry in walk(parse(f"common/decisions/{BASE}_decisions.txt")) if entry.key == "RUS_proclaim_the_last_empire")
+        prepared = {(entry.key, entry.value) for entry in walk(block(decision, "available")) if entry.key == "has_completed_focus"}
+        self.assertIn(("has_completed_focus", "RUS_aimaq_reserve"), prepared)
+        self.assertIn(("has_completed_focus", "RUS_arm_the_border_hosts"), prepared)
+
+    def test_full_crisis_muster_budget_covers_support_and_air_defence(self):
+        history_units = read("history/units/RUS.txt")
+        instant = history_units.split("add_equipment_production", 1)[0]
+
+        def history_amount(equipment):
+            match = re.search(rf"type = {re.escape(equipment)}\s+amount = (\d+)", instant)
+            return float(match.group(1)) if match else 0
+
+        border = self.effects["ADISCORD_vorkerland_start_khan_border_war"]
+
+        def stockpile(rows, equipment):
+            return sum(
+                float(scalar(entry.value, "amount"))
+                for entry in walk(rows)
+                if entry.key == "add_equipment_to_stockpile"
+                and scalar(entry.value, "type") == equipment
+            )
+
+        focus_names = (
+            "RUS_arm_the_border_hosts",
+            "RUS_aimaq_reserve",
+            "RUS_reserve_rotations",
+            "RUS_break_the_hegemon",
+        )
+        new_brigades = 0
+        focus_stock = {}
+        for name in focus_names:
+            reward = block(self.focuses[name], "completion_reward")
+            new_brigades += int(scalar(next(entry.value for entry in walk(reward) if entry.key == "create_unit"), "count"))
+            for equipment in (
+                "infantry_equipment_0",
+                "ADISCORD_squad_weapons_equipment_0",
+                "ADISCORD_anti_air_equipment_2163",
+                "artillery_equipment_1",
+                "ADISCORD_anti_tank_equipment_2163",
+                "support_equipment",
+            ):
+                focus_stock[equipment] = focus_stock.get(equipment, 0) + stockpile(reward, equipment)
+
+        declared = {
+            "infantry_equipment_0": history_amount("infantry_equipment_0") + stockpile(border, "infantry_equipment_0") + focus_stock.get("infantry_equipment_0", 0),
+            "ADISCORD_squad_weapons_equipment_0": stockpile(border, "ADISCORD_squad_weapons_equipment_0") + focus_stock.get("ADISCORD_squad_weapons_equipment_0", 0),
+            "ADISCORD_anti_air_equipment_2163": history_amount("ADISCORD_anti_air_equipment_2163") + stockpile(border, "ADISCORD_anti_air_equipment_2163") + focus_stock.get("ADISCORD_anti_air_equipment_2163", 0),
+            "artillery_equipment_1": history_amount("artillery_equipment_1") + stockpile(border, "artillery_equipment_1") + focus_stock.get("artillery_equipment_1", 0),
+            "ADISCORD_anti_tank_equipment_2163": history_amount("ADISCORD_anti_tank_equipment_2163") + stockpile(border, "ADISCORD_anti_tank_equipment_2163") + focus_stock.get("ADISCORD_anti_tank_equipment_2163", 0),
+            "support_equipment": 20 + stockpile(border, "support_equipment_1") + focus_stock.get("support_equipment", 0),
+        }
+        per_brigade = {
+            "infantry_equipment_0": 6480,
+            "ADISCORD_squad_weapons_equipment_0": 48,
+            "ADISCORD_anti_air_equipment_2163": 20,
+            "artillery_equipment_1": 12,
+            "ADISCORD_anti_tank_equipment_2163": 24,
+            "support_equipment": 30,
+        }
+        for equipment, need in per_brigade.items():
+            required = 2 * 0.32 * need + new_brigades * 0.75 * need
+            self.assertGreaterEqual(declared[equipment], required, equipment)
+        self.assertEqual(new_brigades, 19)
+        self.assertIn("air_wings = {", history_units)
+        self.assertIn('ADISCORD_fighter_airframe_2163 = { owner = "RUS" amount = 120 }', history_units)
+        self.assertRegex(history_units, r"type = ADISCORD_fighter_airframe_2163 creator = \"RUS\"")
+        self.assertRegex(read("history/states/66-Khan-Bunker.txt"), r"air_base\s*=\s*2")
+        weekly_supply = self.effects["RUS_bunker_weekly_supply"]
+        self.assertTrue(
+            any(entry.key == "has_completed_focus" and entry.value == "RUS_anti_air_posts" for entry in walk(weekly_supply))
+        )
+        self.assertTrue(
+            any(
+                entry.key == "add_equipment_to_stockpile"
+                and scalar(entry.value, "type") == "ADISCORD_anti_air_equipment_2163"
+                and scalar(entry.value, "amount") == "2"
+                for entry in walk(weekly_supply)
+            )
+        )
+
+    def test_propaganda_is_distributed_across_political_military_and_economic_focuses(self):
         world = self.world()
         self.assertEqual(len(self.campaigns), 6)
         for index, focus in enumerate(("RUS_khan_broadcast_service", "RUS_parallel_public_addresses"), 1):
@@ -310,9 +463,37 @@ class RusCampaignTests(unittest.TestCase):
             before = world.pp
             world.execute(reward)
             self.assertEqual(world.value("ADISCORD_available_campaign_slots"), index)
-            self.assertEqual(world.pp, before)
-        unlocks = {entry.value for entry in walk(block(self.focuses["RUS_khan_broadcast_service"], "completion_reward")) if entry.key == "unlock_decision_tooltip"}
-        self.assertEqual(unlocks, self.campaigns.keys())
+            expected_delta = 35 if focus == "RUS_khan_broadcast_service" else 0
+            self.assertEqual(world.pp, before + expected_delta)
+        unlock_sources = {
+            "RUS_campaign_voice_of_the_aimaqs": "RUS_khan_broadcast_service",
+            "RUS_campaign_bread_and_shelter": "RUS_khan_broadcast_service",
+            "RUS_campaign_rifles_protect_home": "RUS_muster_books",
+            "RUS_campaign_the_khan_keeps_his_word": "RUS_written_oaths",
+            "RUS_campaign_surface_trade": "RUS_surface_workshops",
+            "RUS_campaign_last_order": "RUS_imperial_general_staff",
+        }
+        self.assertEqual(set(unlock_sources), set(self.campaigns))
+        for campaign, focus in unlock_sources.items():
+            reward = block(self.focuses[focus], "completion_reward")
+            self.assertIn(campaign, {entry.value for entry in walk(reward) if entry.key == "unlock_decision_tooltip"})
+            self.assertTrue(any(entry.key == "has_completed_focus" and entry.value == focus for entry in walk(block(self.campaigns[campaign], "visible"))))
+        for focus, expected_pp in {
+            "RUS_khan_broadcast_service": 35,
+            "RUS_muster_books": 30,
+            "RUS_written_oaths": 40,
+            "RUS_surface_workshops": 35,
+            "RUS_imperial_general_staff": 35,
+        }.items():
+            reward = block(self.focuses[focus], "completion_reward")
+            self.assertIn(
+                expected_pp,
+                {
+                    int(entry.value)
+                    for entry in walk(reward)
+                    if entry.key == "add_political_power"
+                },
+            )
 
     def test_propaganda_consumes_and_releases_only_its_own_slots(self):
         for name, rows in self.campaigns.items():
@@ -416,7 +597,7 @@ class RusCampaignTests(unittest.TestCase):
             if suffix == "aimaq_public_works":
                 self.assertEqual(world.buildings["infrastructure"], 3)
             elif suffix == "chancery_reconstruction":
-                self.assertEqual(world.buildings["arms_factory"], 2)
+                self.assertEqual(world.buildings["arms_factory"], 6)
             elif suffix == "surface_industrial_contract":
                 self.assertEqual(world.buildings["industrial_complex"], 1)
             elif suffix == "subterranean_supply_contract":
@@ -442,7 +623,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertEqual((world.balances(), world.variables, world.buildings), before, (name, changed))
             self.assertGreater(int(scalar(rows, "days_re_enable")), 0)
         limits = {
-            "RUS_chancery_reconstruction": ("arms_factory", 5),
+            "RUS_chancery_reconstruction": ("arms_factory", 6),
             "RUS_surface_industrial_contract": ("industrial_complex", 5),
         }
         for name, (building, value) in limits.items():
@@ -576,6 +757,11 @@ class RusCampaignTests(unittest.TestCase):
         before = world.balances(), deepcopy(world.variables)
         world.run("RUS_campaign_initialize")
         self.assertEqual((world.balances(), world.variables), before)
+
+    def test_fresh_start_has_recruitable_law_before_reserves(self):
+        world = BunkerWorld(self, fresh=True)
+        self.assertIn("limited_conscription", world.ideas)
+        self.assertEqual(world.pp, 20)
 
     def test_new_campaign_init_never_resets_paid_or_completed_state(self):
         world = self.world()
@@ -1295,6 +1481,7 @@ class RusCampaignTests(unittest.TestCase):
         world = self.world()
         mapping = {
             "army_org_factor": "RUS_army_org",
+            "army_attack_factor": "RUS_army_attack",
             "conscription_factor": "RUS_army_recruitment",
             "ADISCORD_country_development_army_growth_factor": "RUS_army_growth",
             "army_defence_factor": "RUS_army_defence",
@@ -1306,7 +1493,7 @@ class RusCampaignTests(unittest.TestCase):
         modifier = block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_black_army")
         actual = {entry.key: entry.value for entry in modifier if entry.key not in ("icon", "enable", "custom_modifier_tooltip")}
         self.assertEqual(actual, mapping)
-        expected = {"RUS_army_org": 0.08, "RUS_army_recruitment": 0.06, "RUS_army_growth": 0.05}
+        expected = {"RUS_army_org": 0.08, "RUS_army_attack": 0.05, "RUS_army_recruitment": 0.06, "RUS_army_growth": 0.05}
         for variable in mapping.values():
             self.assertAlmostEqual(world.value(variable), expected.get(variable, 0), msg=variable)
         self.assertIn("RUS_black_army", world.modifiers)
@@ -1342,18 +1529,19 @@ class RusCampaignTests(unittest.TestCase):
         rifles = world.equipment["infantry_equipment"]
         for index, name in enumerate(names, 1):
             world.execute(block(self.focuses[name], "completion_reward"))
-            self.assertAlmostEqual(world.value("RUS_army_org"), 0.08 + index * 0.01, msg=name)
+            expected = (0.10, 0.12, 0.15)[index - 1]
+            self.assertAlmostEqual(world.value("RUS_army_org"), expected, msg=name)
         self.assertEqual(world.army_experience, 15)
-        self.assertEqual(world.manpower, 4000)
-        self.assertEqual(world.equipment["infantry_equipment"] - rifles, 9000)
-        self.assertAlmostEqual(world.value("RUS_army_training"), -0.05)
+        self.assertEqual(world.manpower, 16000)
+        self.assertEqual(world.equipment["infantry_equipment"] - rifles, 32000)
+        self.assertAlmostEqual(world.value("RUS_army_training"), -0.08)
         self.assertFalse(any(name.endswith("_delta") for name in world.ideas))
         self.assertNotIn("RUS_professional_service", world.ideas)
 
     def test_black_army_doctrines_keep_their_exact_previous_vectors(self):
         cases = {
-            "RUS_patient_war": {"RUS_army_defence": 0.04, "RUS_army_supply": -0.05, "RUS_army_speed": -0.03},
-            "RUS_swift_columns": {"RUS_army_speed": 0.05, "RUS_army_planning": 0.08, "RUS_army_supply": 0.04},
+            "RUS_patient_war": {"RUS_army_defence": 0.07, "RUS_army_supply": -0.05, "RUS_army_speed": -0.03},
+            "RUS_swift_columns": {"RUS_army_speed": 0.08, "RUS_army_planning": 0.12, "RUS_army_supply": 0.06},
         }
         for name, expected in cases.items():
             world = self.world()
@@ -1361,13 +1549,14 @@ class RusCampaignTests(unittest.TestCase):
             world.execute(block(self.focuses[name], "completion_reward"))
             for variable, value in before.items():
                 self.assertAlmostEqual(world.value(variable) - value, expected.get(variable, 0), msg=(name, variable))
-            self.assertFalse(world.ideas)
+            self.assertEqual(world.ideas, {"limited_conscription"})
         for name in ("RUS_patient_doctrine", "RUS_swift_doctrine", "RUS_professional_service"):
             self.assertNotIn(name, self.ideas)
 
     def test_black_army_dummy_previews_mirror_real_focus_deltas(self):
         mapping = {
             "army_org_factor": "RUS_army_org",
+            "army_attack_factor": "RUS_army_attack",
             "army_defence_factor": "RUS_army_defence",
             "supply_consumption_factor": "RUS_army_supply",
             "army_speed_factor": "RUS_army_speed",

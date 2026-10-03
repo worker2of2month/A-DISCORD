@@ -184,6 +184,7 @@ RUS_black_army = {
 	}
 	custom_modifier_tooltip = RUS_black_army_state_tt
 	army_org_factor = RUS_army_org
+	army_attack_factor = RUS_army_attack
 	conscription_factor = RUS_army_recruitment
 	ADISCORD_country_development_army_growth_factor = RUS_army_growth
 	army_defence_factor = RUS_army_defence

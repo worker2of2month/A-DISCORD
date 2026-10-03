@@ -6487,20 +6487,41 @@
           "type": "engineer",
           "x": 0,
           "y": 0
+        },
+        {
+          "type": "anti_air",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "type": "artillery",
+          "x": 1,
+          "y": 0
+        },
+        {
+          "type": "anti_tank",
+          "x": 1,
+          "y": 1
         }
       ],
       "computed": {
-        "organization": 50.642857,
-        "manpower": 6300,
+        "organization": 35.45,
+        "manpower": 7200,
         "equipment": {
           "ADISCORD_squad_weapons_equipment": 48,
-          "infantry_equipment": 5670,
+          "anti_air_equipment": 20,
+          "anti_tank_equipment": 24,
+          "artillery_equipment": 12,
+          "infantry_equipment": 6480,
           "support_equipment": 30
         },
-        "supply": 0.38
+        "supply": 0.72
       },
       "equipment_availability": {
         "ADISCORD_squad_weapons_equipment": true,
+        "anti_air_equipment": true,
+        "anti_tank_equipment": true,
+        "artillery_equipment": true,
         "infantry_equipment": true,
         "support_equipment": true
       },
