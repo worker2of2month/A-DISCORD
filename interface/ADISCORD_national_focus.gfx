@@ -1,5 +1,35 @@
 spriteTypes = {
 	spriteType = {
+		name = "GFX_focus_STP_party_industrial_board"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_industrial_board.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_research_council"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_research_council.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_technical_institutes"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_technical_institutes.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_pw_party_domestic_pattern"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_pw_party_domestic_pattern.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_ch_service_act"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_ch_service_act.png"
+	}
+
+	spriteType = {
+		name = "GFX_focus_STP_party_port_contracts"
+		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_port_contracts.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_STP_party_war_directorate"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_party_war_directorate.png"
 	}
