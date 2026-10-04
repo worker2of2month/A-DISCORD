@@ -26,8 +26,14 @@ characters = {
 	RUS_Varlam_Oskol = {
 		name = RUS_Varlam_Oskol
 		portraits = {
-			civilian = { large = GFX_Portrait_Forul_Generic_2 }
-			army = { large = GFX_Portrait_Forul_Generic_2 }
+			civilian = {
+				large = GFX_Portrait_Forul_Generic_2
+				small = GFX_Portrait_Forul_Generic_2_small
+			}
+			army = {
+				large = GFX_Portrait_Forul_Generic_2
+				small = GFX_Portrait_Forul_Generic_2_small
+			}
 		}
 		country_leader = {
 			ideology = etatism_ideology

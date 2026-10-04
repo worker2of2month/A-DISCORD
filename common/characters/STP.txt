@@ -14,9 +14,11 @@ characters = {
 		portraits = {
 			civilian = {
 				large = GFX_portrait_STP_Maksim_Shabrat
+				small = GFX_portrait_STP_Maksim_Shabrat_small
 			}
 			army = {
 				large = GFX_portrait_STP_Maksim_Shabrat
+				small = GFX_portrait_STP_Maksim_Shabrat_small
 			}
 		}
 		country_leader = {
@@ -41,9 +43,11 @@ characters = {
 		portraits = {
 			civilian = {
 				large = GFX_portrait_STP_Grigory_Sotnikov
+				small = GFX_portrait_STP_Grigory_Sotnikov_small
 			}
 			army = {
 				large = GFX_portrait_STP_Grigory_Sotnikov
+				small = GFX_portrait_STP_Grigory_Sotnikov_small
 			}
 		}
 		country_leader = {
@@ -138,6 +142,7 @@ characters = {
 			}
 			civilian = {
 				large = GFX_portrait_STP_Leonid_Barchel
+				small = GFX_portrait_STP_Leonid_Barchel_small
 			}
 		}
 		corps_commander = {
@@ -156,6 +161,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_STP_Gleb_Korsh
+				small = GFX_portrait_STP_Gleb_Korsh_small
 			}
 		}
 	}
@@ -222,6 +228,7 @@ characters = {
 		portraits = {
 			civilian = {
 				large = GFX_portrait_STP_August_Veil
+				small = GFX_portrait_STP_August_Veil_small
 			}
 			army = {
 				large = GFX_portrait_STP_August_Veil
@@ -288,33 +295,63 @@ characters = {
 
 	STP_Pavel_Gromin = {
 		name = STP_Pavel_Gromin
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_1 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_1
+				small = GFX_Portrait_STP_Generic_land_1_small
+			}
+		}
 	}
 
 	STP_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_2 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_2
+				small = GFX_Portrait_STP_Generic_land_2_small
+			}
+		}
 	}
 
 	STP_Oleg_Vershin = {
 		name = STP_Oleg_Vershin
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_4 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_4
+				small = GFX_Portrait_STP_Generic_land_4_small
+			}
+		}
 	}
 
 	# Each claimant owns dormant staff; the shared receipt permits one roster.
 	STS_Pavel_Gromin = {
 		name = STP_Pavel_Gromin
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_1 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_1
+				small = GFX_Portrait_STP_Generic_land_1_small
+			}
+		}
 	}
 
 	STS_Elena_Vetrova = {
 		name = STP_Elena_Vetrova
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_2 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_2
+				small = GFX_Portrait_STP_Generic_land_2_small
+			}
+		}
 	}
 
 	STS_Oleg_Vershin = {
 		name = STP_Oleg_Vershin
-		portraits = { army = { large = GFX_Portrait_STP_Generic_land_4 } }
+		portraits = {
+			army = {
+				large = GFX_Portrait_STP_Generic_land_4
+				small = GFX_Portrait_STP_Generic_land_4_small
+			}
+		}
 	}
 
 	STP_Pavel_Lanskoy = {

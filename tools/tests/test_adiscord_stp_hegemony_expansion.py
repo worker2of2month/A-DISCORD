@@ -4,6 +4,8 @@ import re
 import unittest
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_peace_coalition_lifecycle import TreatyFixture
+from tools.tests.test_adiscord_stp_preparation import scalar
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -335,6 +337,232 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         )
         positions = [plan.index(item) for item in sequence]
         self.assertEqual(positions, sorted(positions))
+
+
+class ShabratTreatyFixture(TreatyFixture):
+    """Execute territorial/subject effects; model unrelated politics explicitly."""
+
+    def __init__(self, opponent="VAL", course=1):
+        super().__init__()
+        self.countries += ["CIN", "OSF", "APH", "NKA", "SLI"]
+        self.flags.update({tag: set() for tag in self.countries})
+        self.root = "STS"
+        self.owners = {str(state): "VAL" for state in range(58, 66)}
+        self.owners["709"] = "VAL"
+        self.controllers = dict(self.owners)
+        self.cores = {
+            str(state): {tag}
+            for tag, states in (("CIN", (58, 59, 60)), ("OSF", (61, 62, 63)), ("APH", (64, 65)))
+            for state in states
+        }
+        self.cores["709"] = {"SLI"}
+        self.existing = {"STS", "NOD", "VAL", "ZZZ"}
+        self.completed = set()
+        self.autonomy = {}
+        self.capitulated = set()
+        self.variables["STS", "STP_pc_cap_side"] = 1 if opponent == "VAL" else 2
+        self.variables["STS", "STP_pc_course"] = course
+        self.wars = {frozenset(("STS", opponent)), frozenset(("VAL", "ZZZ"))}
+        self.flags["STS"].add("STP_cw_postwar")
+        self.stubs.update({
+            "ADISCORD_economy_initialize_country",
+            "ADISCORD_economy_update_postwar_demobilization",
+            "VAL_enforce_stelander_defeat",
+            "STP_pc_clear_settlement",
+        })
+        self.load("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        self.load("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt", True)
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key in ("AND", "hidden_trigger"):
+                result = self.matches(value, stack)
+            elif key == "OR":
+                result = any(self.matches([child], stack) for child in value)
+            elif key == "NOT":
+                result = not any(self.matches([child], stack) for child in value)
+            elif key == "state":
+                result = current == value
+            elif key == "has_completed_focus":
+                result = (current, value) in self.completed
+            elif key == "is_owned_by":
+                result = self.owners.get(current) == value
+            elif key == "is_core_of":
+                result = value in self.cores.get(current, set())
+            elif key == "owner":
+                result = self.matches(value, stack + [self.owners[current]])
+            elif key == "any_owned_state":
+                result = any(
+                    owner == current and self.matches(value, stack + [state])
+                    for state, owner in self.owners.items()
+                )
+            else:
+                result = super().matches([entry], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        current = stack[-1]
+        taken = False
+        for entry in rows:
+            key, value = entry.key, entry.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                gate = next((e.value for e in value if e.key == "limit"), [])
+                if not taken and self.matches(gate, stack):
+                    taken = True
+                    self.execute([e for e in value if e.key != "limit"], stack)
+            elif key in ("every_state", "every_owned_state", "every_subject_country"):
+                scopes = list(self.countries if key == "every_subject_country" else self.owners)
+                gate = next((e.value for e in value if e.key == "limit"), [])
+                for scope in scopes:
+                    if key == "every_owned_state" and self.owners[scope] != current:
+                        continue
+                    if key == "every_subject_country" and self.subjects.get(scope) != current:
+                        continue
+                    if self.matches(gate, stack + [scope]):
+                        self.execute([e for e in value if e.key != "limit"], stack + [scope])
+            elif key == "overlord":
+                self.execute(value, stack + [self.subjects[current]])
+            elif key == "set_autonomy":
+                target = self.resolve(scalar(value, "target"), stack)
+                tier = scalar(value, "autonomy_state")
+                if tier == "autonomy_free":
+                    self.subjects.pop(target, None)
+                    self.autonomy.pop(target, None)
+                else:
+                    assert frozenset((current, target)) not in self.wars
+                    self.subjects[target] = current
+                    self.autonomy[target] = tier
+            elif key == "white_peace":
+                target = self.resolve(value, stack)
+                self.wars.discard(frozenset((current, target)))
+                self.capitulated.discard(target)
+                # Occupation evidence disappears before subjects/territory are awarded.
+                self.controllers = dict(self.owners)
+            elif key in ("transfer_state", "transfer_state_to"):
+                state = self.resolve(value, stack) if key == "transfer_state" else current
+                recipient = current if key == "transfer_state" else self.resolve(value, stack)
+                self.owners[state] = recipient
+                self.existing.add(recipient)
+            elif key == "set_state_controller_to":
+                self.controllers[current] = value
+            elif key == "add_core_of":
+                self.cores.setdefault(current, set()).add(value)
+            elif key == "clear_variable":
+                self.variables.pop((current, value), None)
+            elif key == "VAL_enter_stelander_defeat":
+                self.flags[current].add("VAL_stelander_defeated")
+                # Closing the frontier campaign can already reset occupation.
+                self.controllers = dict(self.owners)
+            elif key == "STP_nod_settle_border_treaty":
+                self.flags[current].add("STP_pc_defeated_by_sts")
+                self.wars.discard(frozenset(("STS", current)))
+                self.calls.append((key, current))
+            else:
+                super().execute([entry], stack)
+
+    def settle(self, opponent="VAL"):
+        self.variables["STS", "STP_pc_cap_side"] = 1 if opponent == "VAL" else 2
+        self.execute(self.effects["STP_pc_begin_settlement"])
+
+
+class ShabratRepeatedPeaceTests(unittest.TestCase):
+    def test_first_then_second_victory_changes_the_surviving_overlord(self):
+        for opponent, receipt in (("NOD", "STP_pc_defeated_by_sts"), ("VAL", "VAL_stelander_defeated")):
+            with self.subTest(opponent=opponent):
+                fixture = ShabratTreatyFixture(opponent)
+                fixture.settle(opponent)
+                self.assertNotIn(opponent, fixture.subjects)
+                self.assertIn(receipt, fixture.flags[opponent])
+                fixture.wars.add(frozenset(("STS", opponent)))
+                fixture.settle(opponent)
+                self.assertEqual(fixture.subjects[opponent], "STS")
+                self.assertEqual(fixture.autonomy[opponent], "autonomy_STP_provisional_administration")
+                self.assertIn(frozenset(("VAL", "ZZZ")), fixture.wars)
+
+    def test_refused_demand_campaign_does_not_fall_back_to_limited_peace(self):
+        for opponent in ("NOD", "VAL"):
+            with self.subTest(opponent=opponent):
+                fixture = ShabratTreatyFixture(opponent)
+                fixture.completed.add(("STS", f"STP_pc_heg_{opponent.lower()}_force"))
+                fixture.settle(opponent)
+                self.assertEqual(fixture.subjects[opponent], "STS")
+                self.assertNotIn(("STP_nod_settle_border_treaty", "NOD"), fixture.calls)
+
+    def test_liberation_victory_does_not_impose_hegemony(self):
+        for opponent, receipt in (("NOD", "STP_pc_defeated_by_sts"), ("VAL", "VAL_stelander_defeated")):
+            fixture = ShabratTreatyFixture(opponent, course=2)
+            fixture.flags[opponent].add(receipt)
+            fixture.settle(opponent)
+            self.assertNotIn(opponent, fixture.subjects)
+
+    def test_council_revanche_in_hegemony_preserves_val_as_a_subject(self):
+        fixture = ShabratTreatyFixture()
+        fixture.flags["VAL"].update(("VAL_stelander_defeated", "VAL_council_revanche_active"))
+        fixture.settle()
+        self.assertEqual(fixture.subjects["VAL"], "STS")
+        self.assertNotIn("VAL", fixture.annexed)
+        self.assertNotIn("VAL_council_revanche_active", fixture.flags["VAL"])
+
+    def test_first_peace_returns_islands_and_restores_annexed_tribes(self):
+        fixture = ShabratTreatyFixture()
+        fixture.settle()
+        self.assertEqual(fixture.owners["709"], "STS")
+        self.assertEqual(fixture.controllers["709"], "STS")
+        for state, cores in fixture.cores.items():
+            if state == "709":
+                continue
+            tribe = next(iter(cores))
+            self.assertEqual(fixture.owners[state], tribe)
+            self.assertEqual(fixture.subjects[tribe], "STS")
+        self.assertTrue(all(not values for values in fixture.arrays.values()))
+        owners, subjects = dict(fixture.owners), dict(fixture.subjects)
+        fixture.execute(fixture.effects["STP_pc_settle_val_northern_conquests"])
+        self.assertEqual(fixture.owners, owners)
+        self.assertEqual(fixture.subjects, subjects)
+
+    def test_existing_common_administration_receives_captured_resource_belt(self):
+        fixture = ShabratTreatyFixture()
+        fixture.existing.add("NKA")
+        fixture.subjects["NKA"] = "VAL"
+        for state in ("58", "62", "63", "64", "65"):
+            fixture.owners[state] = "NKA"
+        fixture.settle()
+        self.assertEqual(fixture.subjects["NKA"], "STS")
+        self.assertTrue(all(fixture.owners[str(state)] == "NKA" for state in range(58, 66)))
+        self.assertTrue(all(tag not in fixture.existing for tag in ("CIN", "OSF", "APH")))
+
+    def test_existing_tribal_subjects_keep_foreign_land_and_unrelated_wars(self):
+        fixture = ShabratTreatyFixture()
+        fixture.existing.add("CIN")
+        fixture.subjects["CIN"] = "VAL"
+        fixture.owners["999"] = "CIN"
+        fixture.controllers["999"] = "ZZZ"
+        fixture.wars.add(frozenset(("CIN", "ZZZ")))
+        fixture.settle()
+        self.assertEqual(fixture.subjects["CIN"], "STS")
+        self.assertEqual(fixture.owners["999"], "CIN")
+        self.assertIn(frozenset(("CIN", "ZZZ")), fixture.wars)
+
+    def test_independent_tribes_foreign_land_and_occupation_are_excluded(self):
+        fixture = ShabratTreatyFixture()
+        fixture.existing.add("CIN")
+        fixture.owners["58"] = "CIN"
+        fixture.controllers["61"] = "ZZZ"
+        fixture.owners["64"] = "ZZZ"
+        fixture.owners["709"] = "SLI"
+        fixture.settle()
+        self.assertNotIn("CIN", fixture.subjects)
+        self.assertEqual(fixture.owners["59"], "VAL")
+        self.assertEqual(fixture.owners["61"], "VAL")
+        self.assertEqual(fixture.owners["64"], "ZZZ")
+        self.assertEqual(fixture.owners["709"], "SLI")
 
 
 if __name__ == "__main__":

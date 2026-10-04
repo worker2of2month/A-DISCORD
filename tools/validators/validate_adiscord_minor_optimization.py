@@ -176,6 +176,18 @@ SHAHRABAD_NEIGHBOUR_FILES = {
 for _tag in ("GLP", "KYZ"):
     EVENT_AWAKENED_PARTICIPATION[_tag] = set(SHAHRABAD_NEIGHBOUR_FILES)
 
+# The War for the South and its consolidation focuses wake every dormant desert
+# state before its offer, side choice, alliance or war entry.
+SOUTH_FINAL_WAR_FILES = {
+    Path("common/national_focus/ADISCORD_NAM_focus.txt"),
+    Path("common/national_focus/ADISCORD_SHL_focus.txt"),
+    Path("common/scripted_effects/ADISCORD_south_final_war_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_south_final_war_triggers.txt"),
+    Path("events/ADISCORD_south_final_war_events.txt"),
+}
+for _tag in ("GLP", "KDR", "KYZ", "SDR", "WEF"):
+    EVENT_AWAKENED_PARTICIPATION.setdefault(_tag, set()).update(SOUTH_FINAL_WAR_FILES)
+
 # The feudal bloc wakes on war entry or when an authored settlement installs
 # an administration without requiring that minor to have joined the war.
 BEZHAYSK_TAGS = {"BJK", "BLD", "BHG", "BGT", "BBV", "BCM"}

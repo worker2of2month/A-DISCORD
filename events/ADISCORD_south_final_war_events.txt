@@ -1,0 +1,597 @@
+add_namespace = ADISCORD_south
+
+# Each champion learns the purpose of its own war.
+country_event = {
+	id = ADISCORD_south.1
+	title = ADISCORD_south.1.t
+	desc = {
+		text = ADISCORD_south.1.d_shl_houses
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_shl_cities
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_shl_directorate
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_shl_regency
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_shl_commune
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_shl_conclave
+		trigger = {
+			tag = SHL
+			check_variable = { var = SHL_political_course value = 0 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_nam_namestniks
+		trigger = {
+			tag = NAM
+			has_completed_focus = NAM_service_state
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_nam_charter
+		trigger = {
+			tag = NAM
+			has_completed_focus = NAM_federal_charter
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_nam_directorate
+		trigger = {
+			tag = NAM
+			NOT = { has_completed_focus = NAM_service_state }
+			NOT = { has_completed_focus = NAM_federal_charter }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.1.d_restitution
+		trigger = {
+			NOT = { tag = SHL }
+			NOT = { tag = NAM }
+		}
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { ADISCORD_south_final_active = yes }
+
+	option = {
+		name = ADISCORD_south.1.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_south.2
+	title = ADISCORD_south.2.t
+	desc = {
+		text = ADISCORD_south.2.d_nam
+		trigger = { ADISCORD_south_north_is_nam = yes }
+	}
+	desc = {
+		text = ADISCORD_south.2.d_restitution
+		trigger = { NOT = { ADISCORD_south_north_is_nam = yes } }
+	}
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.2.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_south.3
+	title = ADISCORD_south.3.t
+	desc = ADISCORD_south.3.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.3.a
+	}
+}
+
+# A regional state without a champion's subject or faction tie chooses its side.
+# There is no neutral answer: the desert states are the only land routes.
+country_event = {
+	id = ADISCORD_south.10
+	title = ADISCORD_south.10.t
+	desc = ADISCORD_south.10.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_south_final_active = yes
+		ADISCORD_south_needs_side_choice = yes
+	}
+
+	option = {
+		name = ADISCORD_south.10.a
+		custom_effect_tooltip = ADISCORD_south_join_shl_tt
+		hidden_effect = {
+			ADISCORD_south_join_shl_side = yes
+			ADISCORD_south_faction_partners_follow = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 40
+				OR = {
+					tag = EFL
+					tag = AZH
+				}
+				ADISCORD_south_north_is_nam = yes
+			}
+			modifier = {
+				add = 40
+				tag = WEF
+				EFL = { has_country_flag = ADISCORD_south_north_leader }
+			}
+			modifier = {
+				add = 40
+				tag = KDR
+				SHL = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			}
+			modifier = {
+				add = 40
+				tag = GLP
+				SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+			}
+			modifier = {
+				add = 40
+				tag = KYZ
+				SHL = {
+					OR = {
+						check_variable = { var = SHL_political_course value = 2 compare = equals }
+						check_variable = { var = SHL_political_course value = 5 compare = equals }
+					}
+				}
+			}
+			modifier = {
+				add = 30
+				tag = RHM
+				SHL = {
+					OR = {
+						check_variable = { var = SHL_political_course value = 2 compare = equals }
+						check_variable = { var = SHL_political_course value = 5 compare = equals }
+					}
+				}
+			}
+			modifier = {
+				add = 15
+				is_neighbor_of = SHL
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_south.10.b
+		custom_effect_tooltip = ADISCORD_south_join_north_tt
+		hidden_effect = {
+			ADISCORD_south_join_north_side = yes
+			ADISCORD_south_faction_partners_follow = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 30
+				tag = WEF
+				ADISCORD_south_north_is_nam = yes
+			}
+			modifier = {
+				add = 30
+				tag = MZR
+			}
+			modifier = {
+				add = 30
+				tag = KDR
+				SHL = { NOT = { check_variable = { var = SHL_political_course value = 4 compare = equals } } }
+			}
+			modifier = {
+				add = 30
+				OR = {
+					tag = RHM
+					tag = SDR
+				}
+				NAM = {
+					has_country_flag = ADISCORD_south_north_leader
+					has_completed_focus = NAM_federal_charter
+				}
+			}
+			modifier = {
+				add = 30
+				tag = AZH
+				EFL = { has_country_flag = ADISCORD_south_north_leader }
+			}
+			modifier = {
+				add = 15
+				OR = {
+					AND = {
+						NAM = { has_country_flag = ADISCORD_south_north_leader }
+						is_neighbor_of = NAM
+					}
+					AND = {
+						EFL = { has_country_flag = ADISCORD_south_north_leader }
+						is_neighbor_of = EFL
+					}
+					AND = {
+						AZH = { has_country_flag = ADISCORD_south_north_leader }
+						is_neighbor_of = AZH
+					}
+				}
+			}
+		}
+	}
+}
+
+# Campaign deadline. The age of the campaign flag ignores a previous campaign's callback.
+country_event = {
+	id = ADISCORD_south.20
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_south_final_active = yes
+		has_global_flag = {
+			flag = ADISCORD_south_final_started
+			days > 898
+		}
+	}
+
+	immediate = {
+		ADISCORD_south_final_resolve_by_control = yes
+	}
+}
+
+# Terms are applied one day after peace, once factions have been dissolved.
+country_event = {
+	id = ADISCORD_south.30
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_south_apply_settlement = yes
+	}
+}
+
+news_event = {
+	id = ADISCORD_south.31
+	title = {
+		text = ADISCORD_south.31.t_shl
+		trigger = { has_global_flag = ADISCORD_south_hegemon_SHL }
+	}
+	title = {
+		text = ADISCORD_south.31.t_nam
+		trigger = { has_global_flag = ADISCORD_south_hegemon_NAM }
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_unopposed
+		trigger = { has_global_flag = ADISCORD_south_unopposed }
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_houses
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_cities
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_directorate
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_regency
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_commune
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_shl_conclave
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			NOT = { has_global_flag = ADISCORD_south_unopposed }
+			SHL = { check_variable = { var = SHL_political_course value = 0 compare = equals } }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_nam_namestniks
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			check_variable = { var = global.ADISCORD_south_subject_type value = 3 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_nam_charter
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			check_variable = { var = global.ADISCORD_south_subject_type value = 4 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.31.d_nam_directorate
+		trigger = {
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			check_variable = { var = global.ADISCORD_south_subject_type value = 0 compare = equals }
+		}
+	}
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.31.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_south.32
+	title = ADISCORD_south.32.t
+	desc = ADISCORD_south.32.d
+	picture = GFX_news_event_adiscord_peace_negotiations
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.32.a
+	}
+}
+
+# Consolidation offer. ROOT is the target, FROM the champion whose focus sent it.
+# Options clear the pending offer themselves, so a stale answer cannot block it.
+country_event = {
+	id = ADISCORD_south.40
+	title = {
+		text = ADISCORD_south.40.t_submit
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals } }
+	}
+	title = {
+		text = ADISCORD_south.40.t_annex
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+	}
+	title = {
+		text = ADISCORD_south.40.t_alliance
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.40.d_submit_shl
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			FROM = {
+				tag = SHL
+				NOT = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_submit_shl_charter
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			FROM = {
+				tag = SHL
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_submit_nam_namestnik
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			FROM = {
+				tag = NAM
+				NOT = { has_completed_focus = NAM_federal_charter }
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_submit_nam_charter
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 1 compare = equals }
+			FROM = {
+				tag = NAM
+				has_completed_focus = NAM_federal_charter
+			}
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_annex
+		trigger = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_south.40.d_alliance_shl
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			FROM = { tag = SHL }
+		}
+	}
+	desc = {
+		text = ADISCORD_south.40.d_alliance_nam
+		trigger = {
+			check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			FROM = { tag = NAM }
+		}
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.40.a
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			custom_effect_tooltip = ADISCORD_south_offer_alliance_accept_tt
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+			custom_effect_tooltip = ADISCORD_south_offer_annex_accept_tt
+		}
+		else = {
+			custom_effect_tooltip = ADISCORD_south_offer_submit_accept_tt
+		}
+		hidden_effect = {
+			FROM = { country_event = { id = ADISCORD_south.42 hours = 1 } }
+			ADISCORD_south_accept_offer = yes
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				add = 40
+				strength_ratio = { tag = FROM ratio < 0.5 }
+			}
+			modifier = {
+				add = 20
+				strength_ratio = { tag = FROM ratio < 1 }
+			}
+			modifier = {
+				add = 30
+				has_country_flag = ADISCORD_south_indebted_to_SHL
+				FROM = { tag = SHL }
+			}
+			modifier = {
+				add = 40
+				check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals }
+			}
+			modifier = {
+				add = 20
+				FROM = {
+					tag = NAM
+					has_completed_focus = NAM_civil_dividend
+				}
+			}
+			modifier = {
+				factor = 0.5
+				check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals }
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_south.40.b
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			custom_effect_tooltip = ADISCORD_south_offer_alliance_refuse_tt
+		}
+		else = {
+			custom_effect_tooltip = ADISCORD_south_offer_war_refuse_tt
+		}
+		hidden_effect = {
+			FROM = { country_event = { id = ADISCORD_south.43 hours = 1 } }
+			ADISCORD_south_refuse_offer = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				factor = 0.5
+				FROM = {
+					tag = NAM
+					has_completed_focus = NAM_armed_peace
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_south.41
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_south_finalize_submission = yes
+	}
+}
+
+# Answers to the champion. FROM is the country that answered.
+country_event = {
+	id = ADISCORD_south.42
+	title = ADISCORD_south.42.t
+	desc = ADISCORD_south.42.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.42.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_south.43
+	title = ADISCORD_south.43.t
+	desc = ADISCORD_south.43.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.43.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_south.44
+	title = ADISCORD_south.44.t
+	desc = ADISCORD_south.44.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.44.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_south.45
+	title = ADISCORD_south.45.t
+	desc = ADISCORD_south.45.d
+	picture = GFX_news_event_adiscord_armed_uprising
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_south.45.a
+	}
+}

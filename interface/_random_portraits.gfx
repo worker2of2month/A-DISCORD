@@ -1,40 +1,136 @@
 spriteTypes = {
 
+	corneredTileSpriteType = {
+		name = "GFX_portrait_unknown_small"
+		texturefile = "gfx/leaders/leader_unknown.dds"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_unknown_female_small"
+		texturefile = "gfx/leaders/leader_unknown_female.dds"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_operative_unknown_small"
+		texturefile = "gfx/leaders/operative_unknown.dds"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_1"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_1_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_1.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_2"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_2_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_2.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_3"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_3_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_3.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_4"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_4_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_4.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_5"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_5_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_5.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_6"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_6_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_6.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_7"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_7_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_7.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_8"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
 	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_8_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_8.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
 	spriteType = {
 		name = "GFX_Portrait_Forul_Generic_9"
 		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_Portrait_Forul_Generic_9_small"
+		texturefile = "gfx/leaders/Forul/Portrait_Forul_Generic_9.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -164,9 +260,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_1.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_land_1_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_1.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -174,9 +273,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_2.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_land_2_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_2.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -184,9 +286,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_3.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_land_3_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_3.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -194,9 +299,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_4.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_land_4_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_4.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -204,9 +312,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_5.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_land_5_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_land_5.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
@@ -214,9 +325,12 @@ spriteTypes = {
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_navy_1.png"
 	}
 
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_STP_Generic_navy_1_small"
 		texturefile = "gfx/leaders/STP/portrait_STP_generic_navy_1.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	### VORKERLAND
@@ -225,26 +339,35 @@ spriteTypes = {
 		name = "GFX_Portrait_WRK_Generic_land_1"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
 	}
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_1_small"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_1.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_2"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
 	}
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_2_small"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_2.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 
 	spriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_3"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
 	}
-	spriteType = {
+	corneredTileSpriteType = {
 		name = "GFX_Portrait_WRK_Generic_land_3_small"
 		texturefile = "gfx/leaders/WRK/default/portrait_WRK_generic_land_3.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
 	}
 }

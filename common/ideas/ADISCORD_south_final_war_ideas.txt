@@ -1,0 +1,111 @@
+ideas = {
+	country = {
+		# Shahrabad: one campaign spirit per political course.
+		ADISCORD_south_shl_house_contracts = {
+			picture = CHI_china_merchant_group
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.10
+				land_reinforce_rate = 0.02
+				consumer_goods_factor = 0.05
+			}
+		}
+
+		ADISCORD_south_shl_city_levies = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				conscription = 0.01
+				army_defence_factor = 0.08
+				stability_factor = 0.05
+			}
+		}
+
+		ADISCORD_south_shl_last_pour = {
+			picture = generic_production_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.10
+				army_attack_factor = 0.05
+				stability_factor = -0.05
+			}
+		}
+
+		ADISCORD_south_shl_promised_fiefs = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_org_factor = 0.05
+				war_support_factor = 0.05
+				political_power_gain = -0.15
+			}
+		}
+
+		ADISCORD_south_shl_oil_uprising = {
+			picture = generic_war_preparation
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				conscription = 0.015
+				army_morale_factor = 0.10
+				production_speed_buildings_factor = -0.05
+			}
+		}
+
+		ADISCORD_south_shl_campaign_repelled = {
+			picture = generic_war_preparation
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = -0.05
+				war_support_factor = -0.10
+			}
+		}
+
+		# Svetlogorye: the namestnik ladder or the oil charter.
+		ADISCORD_south_nam_emergency_writs = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				conscription = 0.01
+				army_defence_factor = 0.05
+				political_power_gain = -0.10
+			}
+		}
+
+		ADISCORD_south_nam_charter_levies = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				stability_factor = 0.05
+				war_support_factor = 0.05
+				fuel_gain_factor = 0.15
+			}
+		}
+
+		# The Restitution Alliance can hold Svetlogorye's former lands, not unify the south.
+		ADISCORD_south_restitution_line = {
+			picture = generic_fortify_the_borders
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_defence_factor = 0.10
+				war_support_factor = 0.05
+			}
+		}
+	}
+}

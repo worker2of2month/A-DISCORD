@@ -1,0 +1,1122 @@
+# Southern final war. Side numbers: 1 = Shahrabad, 2 = the northern champion.
+# Settlement terms: 1 = annexation, 2 = subjects. Subject types follow the
+# winner's path: 0 ordinary puppet, 1 house concession for the defeated leader,
+# 2 compact charter, 3 namestnik office, 4 oil charter.
+
+# ----- Crisis clock -----
+
+# GLOBAL. Each settled consolidation campaign; pressure accumulates before the
+# clock opens and stops once the final campaign has begun.
+ADISCORD_south_crisis_add_campaign = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+		}
+		add_to_variable = { var = global.ADISCORD_south_crisis value = 15 }
+		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
+	}
+}
+
+# COUNTRY SHL. Called once per 28-day furnace cycle, the only periodic driver.
+ADISCORD_south_crisis_cycle = {
+	if = {
+		limit = {
+			ADISCORD_south_crisis_open = yes
+			NOT = { ADISCORD_south_north_candidate_exists = yes }
+			SHL = { ADISCORD_south_champion_viable = yes }
+		}
+		set_global_flag = ADISCORD_south_final_resolved
+		set_global_flag = ADISCORD_south_hegemon_SHL
+		set_global_flag = ADISCORD_south_unopposed
+		set_global_variable = { var = ADISCORD_south_winner_side value = 1 }
+		news_event = { id = ADISCORD_south.31 hours = 1 }
+	}
+	else_if = {
+		limit = { ADISCORD_south_crisis_open = yes }
+		add_to_variable = { var = global.ADISCORD_south_crisis value = 4 }
+		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_south_crisis_warned }
+				check_variable = { var = global.ADISCORD_south_crisis value = 50 compare = greater_than_or_equals }
+			}
+			set_global_flag = ADISCORD_south_crisis_warned
+			news_event = { id = ADISCORD_south.3 hours = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = global.ADISCORD_south_crisis value = 100 compare = greater_than_or_equals }
+				ADISCORD_south_final_can_start = yes
+			}
+			ADISCORD_south_final_war_start = yes
+		}
+	}
+}
+
+# ----- Campaign start -----
+
+# GLOBAL. Svetlogorye leads while sovereign; otherwise the Restitution Alliance.
+ADISCORD_south_select_north_leader = {
+	NAM = { clr_country_flag = ADISCORD_south_north_leader }
+	EFL = { clr_country_flag = ADISCORD_south_north_leader }
+	AZH = { clr_country_flag = ADISCORD_south_north_leader }
+	if = {
+		limit = { NAM = { ADISCORD_south_champion_viable = yes } }
+		NAM = { set_country_flag = ADISCORD_south_north_leader }
+	}
+	else_if = {
+		limit = { EFL = { ADISCORD_south_champion_viable = yes } }
+		EFL = { set_country_flag = ADISCORD_south_north_leader }
+	}
+	else_if = {
+		limit = { AZH = { ADISCORD_south_champion_viable = yes } }
+		AZH = { set_country_flag = ADISCORD_south_north_leader }
+	}
+}
+
+# COUNTRY declarer: SHL, or the country selected as the northern leader. The
+# crisis clock calls this in SHL scope.
+ADISCORD_south_final_war_start = {
+	if = {
+		limit = { ADISCORD_south_final_can_start = yes }
+		set_global_flag = ADISCORD_south_final_started
+		ADISCORD_south_select_north_leader = yes
+		if = {
+			limit = { tag = SHL }
+			set_global_variable = { var = ADISCORD_south_declarer_side value = 1 }
+		}
+		else = {
+			set_global_variable = { var = ADISCORD_south_declarer_side value = 2 }
+		}
+		ADISCORD_south_wake_regional_countries = yes
+
+		SHL = {
+			ADISCORD_south_prepare_champion = yes
+			set_variable = { var = ADISCORD_south_side value = 1 }
+		}
+		NAM = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_prepare_champion = yes
+				set_variable = { var = ADISCORD_south_side value = 2 }
+			}
+		}
+		EFL = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_prepare_champion = yes
+				set_variable = { var = ADISCORD_south_side value = 2 }
+			}
+		}
+		AZH = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_prepare_champion = yes
+				set_variable = { var = ADISCORD_south_side value = 2 }
+			}
+		}
+
+		if = {
+			limit = { tag = SHL }
+			ADISCORD_south_shl_declare_on_north = yes
+		}
+		else = {
+			declare_war_on = { target = SHL type = annex_everything }
+		}
+
+		ADISCORD_south_assign_bound_sides = yes
+		ADISCORD_south_offer_side_choices = yes
+		ADISCORD_south_raise_oil_uprising = yes
+
+		SHL = {
+			ADISCORD_south_add_path_spirit = yes
+			# The deadline compares the age of the campaign flag, so a relaunch
+			# cannot be settled by the previous campaign's callback.
+			country_event = { id = ADISCORD_south.20 days = 900 }
+			country_event = { id = ADISCORD_south.1 hours = 1 }
+			news_event = { id = ADISCORD_south.2 hours = 2 }
+		}
+		NAM = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_add_path_spirit = yes
+				country_event = { id = ADISCORD_south.1 hours = 1 }
+			}
+		}
+		EFL = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_add_path_spirit = yes
+				country_event = { id = ADISCORD_south.1 hours = 1 }
+			}
+		}
+		AZH = {
+			if = {
+				limit = { has_country_flag = ADISCORD_south_north_leader }
+				ADISCORD_south_add_path_spirit = yes
+				country_event = { id = ADISCORD_south.1 hours = 1 }
+			}
+		}
+	}
+}
+
+# COUNTRY SHL.
+ADISCORD_south_shl_declare_on_north = {
+	if = {
+		limit = { NAM = { has_country_flag = ADISCORD_south_north_leader } }
+		declare_war_on = { target = NAM type = annex_everything }
+	}
+	else_if = {
+		limit = { EFL = { has_country_flag = ADISCORD_south_north_leader } }
+		declare_war_on = { target = EFL type = annex_everything }
+	}
+	else_if = {
+		limit = { AZH = { has_country_flag = ADISCORD_south_north_leader } }
+		declare_war_on = { target = AZH type = annex_everything }
+	}
+}
+
+# GLOBAL. Suppressed minors are released before any event, alliance or war.
+ADISCORD_south_wake_regional_countries = {
+	EFL = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	AZH = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	WEF = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	KDR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	RHM = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	SDR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	MZR = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	KYZ = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+	GLP = { if = { limit = { exists = yes } ADISCORD_release_non_participating_minor_optimization = yes } }
+}
+
+# COUNTRY champion. Leads its own faction and holds mandatory-major status only
+# for this campaign, so the native peace waits for the champion's defeat.
+ADISCORD_south_prepare_champion = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	if = {
+		limit = {
+			is_in_faction = yes
+			is_faction_leader = no
+		}
+		leave_faction = yes
+	}
+	if = {
+		limit = { is_in_faction = no }
+		if = {
+			limit = { tag = SHL }
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_south_shl_faction
+			}
+		}
+		else = {
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_south_north_faction
+			}
+		}
+	}
+	if = {
+		limit = { is_major = no }
+		set_country_flag = ADISCORD_south_added_major
+		set_major = yes
+	}
+}
+
+# GLOBAL. Subjects and faction partners enter with their champion.
+ADISCORD_south_assign_bound_sides = {
+	EFL = { ADISCORD_south_bind_to_champion = yes }
+	AZH = { ADISCORD_south_bind_to_champion = yes }
+	WEF = { ADISCORD_south_bind_to_champion = yes }
+	KDR = { ADISCORD_south_bind_to_champion = yes }
+	RHM = { ADISCORD_south_bind_to_champion = yes }
+	SDR = { ADISCORD_south_bind_to_champion = yes }
+	MZR = { ADISCORD_south_bind_to_champion = yes }
+	KYZ = { ADISCORD_south_bind_to_champion = yes }
+	GLP = { ADISCORD_south_bind_to_champion = yes }
+}
+
+# COUNTRY regional participant.
+ADISCORD_south_bind_to_champion = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { has_variable = ADISCORD_south_side }
+			OR = {
+				is_subject_of = SHL
+				is_in_faction_with = SHL
+				ADISCORD_south_fights_north_leader = yes
+			}
+		}
+		ADISCORD_south_join_shl_side = yes
+	}
+	else_if = {
+		limit = {
+			exists = yes
+			NOT = { has_variable = ADISCORD_south_side }
+			OR = {
+				ADISCORD_south_bound_to_north = yes
+				has_war_with = SHL
+			}
+		}
+		ADISCORD_south_join_north_side = yes
+	}
+}
+
+# GLOBAL. Every remaining sovereign regional state must choose; neutrality would
+# cut the only land routes between the champions.
+ADISCORD_south_offer_side_choices = {
+	EFL = { ADISCORD_south_offer_side_choice = yes }
+	AZH = { ADISCORD_south_offer_side_choice = yes }
+	WEF = { ADISCORD_south_offer_side_choice = yes }
+	KDR = { ADISCORD_south_offer_side_choice = yes }
+	RHM = { ADISCORD_south_offer_side_choice = yes }
+	SDR = { ADISCORD_south_offer_side_choice = yes }
+	MZR = { ADISCORD_south_offer_side_choice = yes }
+	KYZ = { ADISCORD_south_offer_side_choice = yes }
+	GLP = { ADISCORD_south_offer_side_choice = yes }
+}
+
+# COUNTRY regional participant.
+ADISCORD_south_offer_side_choice = {
+	if = {
+		limit = { ADISCORD_south_needs_side_choice = yes }
+		country_event = { id = ADISCORD_south.10 hours = 6 }
+	}
+}
+
+# COUNTRY. Joins Shahrabad's faction when free and enters the current war.
+ADISCORD_south_join_shl_side = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	set_variable = { var = ADISCORD_south_side value = 1 }
+	if = {
+		limit = {
+			is_in_faction = no
+			is_subject = no
+		}
+		SHL = { add_to_faction = PREV }
+	}
+	if = {
+		limit = {
+			NAM = { has_country_flag = ADISCORD_south_north_leader }
+			NOT = { has_war_with = NAM }
+		}
+		add_to_war = {
+			targeted_alliance = SHL
+			enemy = NAM
+			hostility_reason = asked_to_join
+		}
+	}
+	else_if = {
+		limit = {
+			EFL = { has_country_flag = ADISCORD_south_north_leader }
+			NOT = { has_war_with = EFL }
+		}
+		add_to_war = {
+			targeted_alliance = SHL
+			enemy = EFL
+			hostility_reason = asked_to_join
+		}
+	}
+	else_if = {
+		limit = {
+			AZH = { has_country_flag = ADISCORD_south_north_leader }
+			NOT = { has_war_with = AZH }
+		}
+		add_to_war = {
+			targeted_alliance = SHL
+			enemy = AZH
+			hostility_reason = asked_to_join
+		}
+	}
+}
+
+# COUNTRY. Joins the northern leader's faction when free and enters the war.
+ADISCORD_south_join_north_side = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	set_variable = { var = ADISCORD_south_side value = 2 }
+	if = {
+		limit = { NAM = { has_country_flag = ADISCORD_south_north_leader } }
+		if = {
+			limit = {
+				is_in_faction = no
+				is_subject = no
+			}
+			NAM = { add_to_faction = PREV }
+		}
+		if = {
+			limit = { NOT = { has_war_with = SHL } }
+			add_to_war = {
+				targeted_alliance = NAM
+				enemy = SHL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	else_if = {
+		limit = { EFL = { has_country_flag = ADISCORD_south_north_leader } }
+		if = {
+			limit = {
+				is_in_faction = no
+				is_subject = no
+			}
+			EFL = { add_to_faction = PREV }
+		}
+		if = {
+			limit = { NOT = { has_war_with = SHL } }
+			add_to_war = {
+				targeted_alliance = EFL
+				enemy = SHL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+	else_if = {
+		limit = { AZH = { has_country_flag = ADISCORD_south_north_leader } }
+		if = {
+			limit = {
+				is_in_faction = no
+				is_subject = no
+			}
+			AZH = { add_to_faction = PREV }
+		}
+		if = {
+			limit = { NOT = { has_war_with = SHL } }
+			add_to_war = {
+				targeted_alliance = AZH
+				enemy = SHL
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+}
+
+# COUNTRY chooser (event ROOT). Its regional faction partners follow its choice.
+ADISCORD_south_faction_partners_follow = {
+	EFL = { ADISCORD_south_follow_root = yes }
+	AZH = { ADISCORD_south_follow_root = yes }
+	WEF = { ADISCORD_south_follow_root = yes }
+	KDR = { ADISCORD_south_follow_root = yes }
+	RHM = { ADISCORD_south_follow_root = yes }
+	SDR = { ADISCORD_south_follow_root = yes }
+	MZR = { ADISCORD_south_follow_root = yes }
+	KYZ = { ADISCORD_south_follow_root = yes }
+	GLP = { ADISCORD_south_follow_root = yes }
+}
+
+ADISCORD_south_follow_root = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { tag = ROOT }
+			NOT = { has_variable = ADISCORD_south_side }
+			is_in_faction_with = ROOT
+		}
+		if = {
+			limit = { ROOT = { ADISCORD_south_on_shl_side = yes } }
+			ADISCORD_south_join_shl_side = yes
+		}
+		else_if = {
+			limit = { ROOT = { ADISCORD_south_on_north_side = yes } }
+			ADISCORD_south_join_north_side = yes
+		}
+	}
+}
+
+# ----- Path spirits -----
+
+# COUNTRY champion. The path chooses the war, not only its name.
+ADISCORD_south_add_path_spirit = {
+	if = {
+		limit = { tag = SHL }
+		if = {
+			limit = { check_variable = { var = SHL_political_course value = 1 compare = equals } }
+			add_ideas = ADISCORD_south_shl_house_contracts
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+			add_ideas = ADISCORD_south_shl_city_levies
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_political_course value = 3 compare = equals } }
+			add_ideas = ADISCORD_south_shl_last_pour
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			add_ideas = ADISCORD_south_shl_promised_fiefs
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			add_ideas = ADISCORD_south_shl_oil_uprising
+		}
+	}
+	else_if = {
+		limit = { tag = NAM }
+		if = {
+			limit = { has_completed_focus = NAM_service_state }
+			add_ideas = ADISCORD_south_nam_emergency_writs
+		}
+		else_if = {
+			limit = { has_completed_focus = NAM_federal_charter }
+			add_ideas = ADISCORD_south_nam_charter_levies
+		}
+	}
+	else = {
+		add_ideas = ADISCORD_south_restitution_line
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY. Every terminal path removes the campaign spirits.
+ADISCORD_south_remove_path_spirit = {
+	remove_ideas = ADISCORD_south_shl_house_contracts
+	remove_ideas = ADISCORD_south_shl_city_levies
+	remove_ideas = ADISCORD_south_shl_last_pour
+	remove_ideas = ADISCORD_south_shl_promised_fiefs
+	remove_ideas = ADISCORD_south_shl_oil_uprising
+	remove_ideas = ADISCORD_south_nam_emergency_writs
+	remove_ideas = ADISCORD_south_nam_charter_levies
+	remove_ideas = ADISCORD_south_restitution_line
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# ----- Settlement -----
+
+# GLOBAL. Shahrabad wins the south.
+ADISCORD_south_final_resolve_shl_victory = {
+	if = {
+		limit = { ADISCORD_south_final_active = yes }
+		# The resolved flag precedes white peace so on_peace cannot re-enter.
+		set_global_flag = ADISCORD_south_final_resolved
+		set_global_flag = ADISCORD_south_hegemon_SHL
+		set_global_variable = { var = ADISCORD_south_winner_side value = 1 }
+		set_global_variable = { var = ADISCORD_south_terms value = 1 }
+		set_global_variable = { var = ADISCORD_south_subject_type value = 0 }
+		if = {
+			limit = { SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } } }
+			set_global_variable = { var = ADISCORD_south_terms value = 2 }
+			set_global_variable = { var = ADISCORD_south_subject_type value = 1 }
+		}
+		else_if = {
+			limit = { SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } } }
+			set_global_variable = { var = ADISCORD_south_terms value = 2 }
+			set_global_variable = { var = ADISCORD_south_subject_type value = 2 }
+		}
+		ADISCORD_south_end_final_wars = yes
+		ADISCORD_south_mark_losers = yes
+		ADISCORD_south_close_campaign_state = yes
+		SHL = {
+			country_event = { id = ADISCORD_south.30 days = 1 }
+			news_event = { id = ADISCORD_south.31 hours = 2 }
+		}
+	}
+}
+
+# GLOBAL. The northern side wins. Only Svetlogorye can claim the south; the
+# Restitution Alliance only repels the campaign.
+ADISCORD_south_final_resolve_north_victory = {
+	if = {
+		limit = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_north_is_nam = yes
+		}
+		set_global_flag = ADISCORD_south_final_resolved
+		set_global_flag = ADISCORD_south_hegemon_NAM
+		set_global_variable = { var = ADISCORD_south_winner_side value = 2 }
+		set_global_variable = { var = ADISCORD_south_terms value = 2 }
+		set_global_variable = { var = ADISCORD_south_subject_type value = 0 }
+		if = {
+			limit = { NAM = { has_completed_focus = NAM_service_state } }
+			set_global_variable = { var = ADISCORD_south_subject_type value = 3 }
+		}
+		else_if = {
+			limit = { NAM = { has_completed_focus = NAM_federal_charter } }
+			set_global_variable = { var = ADISCORD_south_subject_type value = 4 }
+		}
+		ADISCORD_south_end_final_wars = yes
+		ADISCORD_south_mark_losers = yes
+		ADISCORD_south_close_campaign_state = yes
+		NAM = {
+			country_event = { id = ADISCORD_south.30 days = 1 }
+			news_event = { id = ADISCORD_south.31 hours = 2 }
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_south_final_active = yes }
+		ADISCORD_south_final_repel = yes
+	}
+}
+
+# GLOBAL. The Restitution Alliance holds; Shahrabad may march again after the
+# crisis refills from half.
+ADISCORD_south_final_repel = {
+	clr_global_flag = ADISCORD_south_final_started
+	set_global_variable = { var = ADISCORD_south_crisis value = 50 }
+	ADISCORD_south_end_final_wars = yes
+	ADISCORD_south_close_campaign_state = yes
+	ADISCORD_south_clear_participants = yes
+	SHL = {
+		if = {
+			limit = { exists = yes }
+			add_timed_idea = { idea = ADISCORD_south_shl_campaign_repelled days = 365 }
+			ADISCORD_economy_mark_dirty = yes
+			news_event = { id = ADISCORD_south.32 hours = 2 }
+		}
+	}
+}
+
+# GLOBAL. Neither champion survives as a sovereign leader.
+ADISCORD_south_final_resolve_without_hegemon = {
+	set_global_flag = ADISCORD_south_final_resolved
+	ADISCORD_south_end_final_wars = yes
+	ADISCORD_south_close_campaign_state = yes
+	ADISCORD_south_clear_participants = yes
+}
+
+# GLOBAL. Deadline or external end: control of the capitals, the oil belt and
+# the furnace district decides. The defending side keeps a tie.
+ADISCORD_south_final_resolve_by_control = {
+	if = {
+		limit = {
+			NOT = { SHL = { ADISCORD_south_champion_viable = yes } }
+			NOT = { ADISCORD_south_north_leader_exists = yes }
+		}
+		ADISCORD_south_final_resolve_without_hegemon = yes
+	}
+	else_if = {
+		limit = { NOT = { SHL = { ADISCORD_south_champion_viable = yes } } }
+		ADISCORD_south_final_resolve_north_victory = yes
+	}
+	else_if = {
+		limit = { NOT = { ADISCORD_south_north_leader_exists = yes } }
+		ADISCORD_south_final_resolve_shl_victory = yes
+	}
+	else = {
+		set_temp_variable = { var = ADISCORD_south_shl_hold value = 0 }
+		set_temp_variable = { var = ADISCORD_south_north_hold value = 0 }
+		67 = { ADISCORD_south_count_key_state = yes }
+		688 = { ADISCORD_south_count_key_state = yes }
+		699 = { ADISCORD_south_count_key_state = yes }
+		707 = { ADISCORD_south_count_key_state = yes }
+		NAM = {
+			if = {
+				limit = { ADISCORD_south_north_leader_viable = yes }
+				capital_scope = { ADISCORD_south_count_key_state = yes }
+			}
+		}
+		EFL = {
+			if = {
+				limit = { ADISCORD_south_north_leader_viable = yes }
+				capital_scope = { ADISCORD_south_count_key_state = yes }
+			}
+		}
+		AZH = {
+			if = {
+				limit = { ADISCORD_south_north_leader_viable = yes }
+				capital_scope = { ADISCORD_south_count_key_state = yes }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_shl_hold value = ADISCORD_south_north_hold compare = greater_than } }
+			ADISCORD_south_final_resolve_shl_victory = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_north_hold value = ADISCORD_south_shl_hold compare = greater_than } }
+			ADISCORD_south_final_resolve_north_victory = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_south_declarer_side value = 1 compare = equals } }
+			ADISCORD_south_final_resolve_north_victory = yes
+		}
+		else = {
+			ADISCORD_south_final_resolve_shl_victory = yes
+		}
+	}
+}
+
+# STATE. Adds one point to the temporary hold of the side controlling it.
+ADISCORD_south_count_key_state = {
+	if = {
+		limit = { ADISCORD_south_state_held_by_shl_side = yes }
+		add_to_temp_variable = { var = ADISCORD_south_shl_hold value = 1 }
+	}
+	else_if = {
+		limit = { ADISCORD_south_state_held_by_north_side = yes }
+		add_to_temp_variable = { var = ADISCORD_south_north_hold value = 1 }
+	}
+}
+
+# GLOBAL. Called from on_peace and on_annex for wars ended outside the settlement.
+ADISCORD_south_final_close_external = {
+	if = {
+		limit = {
+			ADISCORD_south_final_active = yes
+			ADISCORD_south_final_broken = yes
+		}
+		ADISCORD_south_final_resolve_by_control = yes
+	}
+}
+
+# GLOBAL. Ends only the wars between the two sides of this campaign.
+ADISCORD_south_end_final_wars = {
+	NAM = { ADISCORD_south_end_member_wars = yes }
+	SHL = { ADISCORD_south_end_member_wars = yes }
+	EFL = { ADISCORD_south_end_member_wars = yes }
+	AZH = { ADISCORD_south_end_member_wars = yes }
+	WEF = { ADISCORD_south_end_member_wars = yes }
+	KDR = { ADISCORD_south_end_member_wars = yes }
+	RHM = { ADISCORD_south_end_member_wars = yes }
+	SDR = { ADISCORD_south_end_member_wars = yes }
+	MZR = { ADISCORD_south_end_member_wars = yes }
+	KYZ = { ADISCORD_south_end_member_wars = yes }
+	GLP = { ADISCORD_south_end_member_wars = yes }
+}
+
+# COUNTRY. A northern participant makes peace with every Shahrabad participant.
+ADISCORD_south_end_member_wars = {
+	if = {
+		limit = {
+			exists = yes
+			ADISCORD_south_on_north_side = yes
+		}
+		every_enemy_country = {
+			limit = { ADISCORD_south_on_shl_side = yes }
+			white_peace = PREV
+		}
+	}
+}
+
+# GLOBAL. Losers leave factions and foreign subjection before the delayed
+# settlement, which gives the native faction cache one day to update.
+ADISCORD_south_mark_losers = {
+	NAM = { ADISCORD_south_mark_loser = yes }
+	SHL = { ADISCORD_south_mark_loser = yes }
+	EFL = { ADISCORD_south_mark_loser = yes }
+	AZH = { ADISCORD_south_mark_loser = yes }
+	WEF = { ADISCORD_south_mark_loser = yes }
+	KDR = { ADISCORD_south_mark_loser = yes }
+	RHM = { ADISCORD_south_mark_loser = yes }
+	SDR = { ADISCORD_south_mark_loser = yes }
+	MZR = { ADISCORD_south_mark_loser = yes }
+	KYZ = { ADISCORD_south_mark_loser = yes }
+	GLP = { ADISCORD_south_mark_loser = yes }
+}
+
+# COUNTRY.
+ADISCORD_south_mark_loser = {
+	if = {
+		limit = {
+			exists = yes
+			has_variable = ADISCORD_south_side
+			NOT = { check_variable = { var = ADISCORD_south_side value = global.ADISCORD_south_winner_side compare = equals } }
+		}
+		set_country_flag = ADISCORD_south_settlement_pending
+		if = {
+			limit = { is_subject = yes }
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
+			dismantle_faction = yes
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+	}
+}
+
+# GLOBAL. Campaign-only status ends on every terminal path.
+ADISCORD_south_close_campaign_state = {
+	clr_global_flag = ADISCORD_south_final_started
+	NAM = { ADISCORD_south_close_member_state = yes }
+	SHL = { ADISCORD_south_close_member_state = yes }
+	EFL = { ADISCORD_south_close_member_state = yes }
+	AZH = { ADISCORD_south_close_member_state = yes }
+}
+
+# COUNTRY champion candidate.
+ADISCORD_south_close_member_state = {
+	if = {
+		limit = { has_country_flag = ADISCORD_south_added_major }
+		set_major = no
+		clr_country_flag = ADISCORD_south_added_major
+	}
+	if = {
+		limit = { exists = yes }
+		ADISCORD_south_remove_path_spirit = yes
+	}
+}
+
+# GLOBAL.
+ADISCORD_south_clear_participants = {
+	NAM = { ADISCORD_south_clear_participant = yes }
+	SHL = { ADISCORD_south_clear_participant = yes }
+	EFL = { ADISCORD_south_clear_participant = yes }
+	AZH = { ADISCORD_south_clear_participant = yes }
+	WEF = { ADISCORD_south_clear_participant = yes }
+	KDR = { ADISCORD_south_clear_participant = yes }
+	RHM = { ADISCORD_south_clear_participant = yes }
+	SDR = { ADISCORD_south_clear_participant = yes }
+	MZR = { ADISCORD_south_clear_participant = yes }
+	KYZ = { ADISCORD_south_clear_participant = yes }
+	GLP = { ADISCORD_south_clear_participant = yes }
+}
+
+# COUNTRY.
+ADISCORD_south_clear_participant = {
+	clear_variable = ADISCORD_south_side
+	clr_country_flag = ADISCORD_south_north_leader
+	clr_country_flag = ADISCORD_south_settlement_pending
+}
+
+# COUNTRY winner (event ROOT). Applies the stored terms one day after peace.
+ADISCORD_south_apply_settlement = {
+	NAM = { ADISCORD_south_settle_member = yes }
+	SHL = { ADISCORD_south_settle_member = yes }
+	EFL = { ADISCORD_south_settle_member = yes }
+	AZH = { ADISCORD_south_settle_member = yes }
+	WEF = { ADISCORD_south_settle_member = yes }
+	KDR = { ADISCORD_south_settle_member = yes }
+	RHM = { ADISCORD_south_settle_member = yes }
+	SDR = { ADISCORD_south_settle_member = yes }
+	MZR = { ADISCORD_south_settle_member = yes }
+	KYZ = { ADISCORD_south_settle_member = yes }
+	GLP = { ADISCORD_south_settle_member = yes }
+	# The Svetlogorsk uprising never survives as a country.
+	if = {
+		limit = { SLF = { exists = yes } }
+		annex_country = { target = SLF transfer_troops = no }
+	}
+	ADISCORD_south_clear_participants = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY defeated participant; ROOT is the winner.
+ADISCORD_south_settle_member = {
+	if = {
+		limit = {
+			exists = yes
+			has_country_flag = ADISCORD_south_settlement_pending
+		}
+		if = {
+			limit = { has_war_with = ROOT }
+			white_peace = ROOT
+		}
+		if = {
+			limit = { check_variable = { var = global.ADISCORD_south_terms value = 1 compare = equals } }
+			ROOT = { annex_country = { target = PREV transfer_troops = no } }
+		}
+		else = {
+			ROOT = {
+				puppet = {
+					target = PREV
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			ADISCORD_south_apply_subject_type = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# COUNTRY new subject; ROOT is the overlord.
+ADISCORD_south_apply_subject_type = {
+	if = {
+		limit = {
+			check_variable = { var = global.ADISCORD_south_subject_type value = 1 compare = equals }
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_SHL_oil_concession freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 2 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_SHL_compact_charter freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 3 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_NAM_namestnik_office freedom_level = 0.05 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_south_subject_type value = 4 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_NAM_oil_charter freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+	}
+	else = {
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no } }
+	}
+}
+
+# ----- Consolidation campaigns -----
+# Offer kinds stored on the target: 1 = submission (refusal means war),
+# 2 = annexation demand (refusal means war), 3 = alliance invitation.
+
+# GLOBAL. A neighbour submitted, joined a champion, or was annexed after refusing.
+ADISCORD_south_crisis_add_settlement = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_global_flag = ADISCORD_south_final_resolved }
+		}
+		add_to_variable = { var = global.ADISCORD_south_crisis value = 10 }
+		clamp_variable = { var = global.ADISCORD_south_crisis min = 0 max = 100 }
+	}
+}
+
+# COUNTRY target; ROOT is the demanding champion (the focus owner), which
+# becomes FROM of the offer event.
+ADISCORD_south_demand_submission = {
+	if = {
+		limit = { ADISCORD_south_campaign_target_valid = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_variable = { var = ADISCORD_south_offer_kind value = 1 }
+		country_event = { id = ADISCORD_south.40 hours = 6 }
+	}
+}
+
+ADISCORD_south_demand_annexation = {
+	if = {
+		limit = { ADISCORD_south_campaign_target_valid = yes }
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_variable = { var = ADISCORD_south_offer_kind value = 2 }
+		country_event = { id = ADISCORD_south.40 hours = 6 }
+	}
+}
+
+ADISCORD_south_offer_alliance = {
+	if = {
+		limit = {
+			ADISCORD_south_campaign_target_valid = yes
+			is_in_faction = no
+		}
+		ADISCORD_release_non_participating_minor_optimization = yes
+		set_variable = { var = ADISCORD_south_offer_kind value = 3 }
+		country_event = { id = ADISCORD_south.40 hours = 6 }
+	}
+}
+
+# COUNTRY target (event ROOT); FROM is the champion. Both sides are rechecked
+# because the answer may come long after the demand.
+ADISCORD_south_accept_offer = {
+	if = {
+		limit = {
+			FROM = { ADISCORD_south_champion_viable = yes }
+			NOT = { has_war_with = FROM }
+			NOT = { ADISCORD_south_final_active = yes }
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			if = {
+				limit = {
+					is_in_faction = no
+					FROM = {
+						OR = {
+							is_in_faction = no
+							is_faction_leader = yes
+						}
+					}
+				}
+				FROM = {
+					ADISCORD_south_ensure_campaign_faction = yes
+					add_to_faction = PREV
+				}
+				ADISCORD_south_crisis_add_settlement = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_south_offer_kind value = 2 compare = equals } }
+			clear_variable = ADISCORD_south_offer_kind
+			ADISCORD_south_crisis_add_settlement = yes
+			FROM = { annex_country = { target = PREV transfer_troops = yes } }
+		}
+		else = {
+			# Subjugation waits one day after the faction exit for the native faction cache.
+			if = {
+				limit = {
+					is_in_faction = yes
+					is_faction_leader = yes
+				}
+				dismantle_faction = yes
+			}
+			else_if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
+			if = {
+				limit = { FROM = { tag = SHL } }
+				set_country_flag = ADISCORD_south_submits_to_SHL
+			}
+			else = {
+				set_country_flag = ADISCORD_south_submits_to_NAM
+			}
+			country_event = { id = ADISCORD_south.41 days = 1 }
+			ADISCORD_south_crisis_add_settlement = yes
+		}
+	}
+	clear_variable = ADISCORD_south_offer_kind
+}
+
+# COUNTRY target (event ROOT); FROM is the champion.
+ADISCORD_south_refuse_offer = {
+	if = {
+		limit = {
+			NOT = { check_variable = { var = ADISCORD_south_offer_kind value = 3 compare = equals } }
+			FROM = { ADISCORD_south_champion_viable = yes }
+			NOT = { has_war_with = FROM }
+			NOT = { ADISCORD_south_final_active = yes }
+		}
+		set_country_flag = ADISCORD_south_campaign_target
+		FROM = { declare_war_on = { target = PREV type = annex_everything } }
+	}
+	clear_variable = ADISCORD_south_offer_kind
+}
+
+# COUNTRY target, one day after accepting submission.
+ADISCORD_south_finalize_submission = {
+	if = {
+		limit = {
+			has_country_flag = ADISCORD_south_submits_to_SHL
+			is_subject = no
+			SHL = { ADISCORD_south_champion_viable = yes }
+		}
+		SHL = {
+			puppet = {
+				target = PREV
+				end_wars = no
+				end_civil_wars = no
+			}
+			if = {
+				limit = { check_variable = { var = SHL_political_course value = 2 compare = equals } }
+				set_autonomy = { target = PREV autonomy_state = autonomy_SHL_compact_charter freedom_level = 0.40 end_wars = no end_civil_wars = no }
+			}
+			else = {
+				set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = ADISCORD_south_submits_to_NAM
+			is_subject = no
+			NAM = { ADISCORD_south_champion_viable = yes }
+		}
+		NAM = {
+			puppet = {
+				target = PREV
+				end_wars = no
+				end_civil_wars = no
+			}
+			if = {
+				limit = { has_completed_focus = NAM_service_state }
+				set_autonomy = { target = PREV autonomy_state = autonomy_NAM_namestnik_office freedom_level = 0.05 end_wars = no end_civil_wars = no }
+			}
+			else_if = {
+				limit = { has_completed_focus = NAM_federal_charter }
+				set_autonomy = { target = PREV autonomy_state = autonomy_NAM_oil_charter freedom_level = 0.40 end_wars = no end_civil_wars = no }
+			}
+			else = {
+				set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no }
+			}
+		}
+	}
+	clr_country_flag = ADISCORD_south_submits_to_SHL
+	clr_country_flag = ADISCORD_south_submits_to_NAM
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY champion. Invitations need a faction led by the champion.
+ADISCORD_south_ensure_campaign_faction = {
+	if = {
+		limit = { is_in_faction = no }
+		if = {
+			limit = { tag = SHL }
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_south_shl_faction
+			}
+		}
+		else = {
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_south_north_faction
+			}
+		}
+	}
+}
+
+# GLOBAL. Called from on_annex: ROOT annexes FROM. A refusing target counts once
+# when its own champion annexes it.
+ADISCORD_south_note_campaign_annexation = {
+	if = {
+		limit = {
+			FROM = { has_country_flag = ADISCORD_south_campaign_target }
+			ROOT = {
+				OR = {
+					tag = SHL
+					tag = NAM
+				}
+			}
+		}
+		FROM = { clr_country_flag = ADISCORD_south_campaign_target }
+		ADISCORD_south_crisis_add_settlement = yes
+	}
+}
+
+# ----- Commune underground -----
+
+# GLOBAL. Called at the final war start. A signed Svetlogorsk district compact
+# leaves the underground without support; half of the delivered rifles return.
+ADISCORD_south_raise_oil_uprising = {
+	if = {
+		limit = {
+			SHL = { has_country_flag = ADISCORD_south_underground_armed }
+			NAM = {
+				has_country_flag = ADISCORD_south_north_leader
+				owns_state = 688
+				controls_state = 688
+			}
+			NOT = { country_exists = SLF }
+		}
+		SHL = { clr_country_flag = ADISCORD_south_underground_armed }
+		if = {
+			limit = { NAM = { has_country_flag = NAM_district_compact } }
+			SHL = {
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = SHL }
+				country_event = { id = ADISCORD_south.44 hours = 2 }
+			}
+		}
+		else = {
+			SLF = { transfer_state = 688 }
+			688 = {
+				add_core_of = SLF
+				set_state_controller_to = SLF
+			}
+			SLF = {
+				set_capital = { state = 688 }
+				add_ideas = ADISCORD_nam_insurgent_columns
+				add_war_support = 0.20
+				load_oob = "SLF_nam_resource_war"
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 3000 producer = SHL }
+				add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = SLF }
+				set_variable = { var = ADISCORD_south_side value = 1 }
+				add_to_war = {
+					targeted_alliance = SHL
+					enemy = NAM
+					hostility_reason = asked_to_join
+				}
+				news_event = { id = ADISCORD_south.45 hours = 2 }
+			}
+		}
+	}
+}

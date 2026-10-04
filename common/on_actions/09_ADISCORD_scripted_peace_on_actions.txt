@@ -1616,6 +1616,27 @@ on_actions = {
 			}
 			# END shahrabad:on_capitulation
 
+			# BEGIN south_final:on_capitulation
+			# A champion's defeat settles the whole southern campaign; other
+			# participants stay occupied until that settlement.
+			if = {
+				limit = {
+					ADISCORD_south_final_active = yes
+					ROOT = { has_variable = ADISCORD_south_side }
+					FROM = { has_variable = ADISCORD_south_side }
+				}
+				set_global_flag = skip_default_capitulation
+				if = {
+					limit = { ROOT = { tag = SHL } }
+					ADISCORD_south_final_resolve_north_victory = yes
+				}
+				else_if = {
+					limit = { ROOT = { has_country_flag = ADISCORD_south_north_leader } }
+					ADISCORD_south_final_resolve_shl_victory = yes
+				}
+			}
+			# END south_final:on_capitulation
+
 			# BEGIN vorkerland_diplomacy:on_capitulation
 			if = {
 				limit = {
@@ -1790,6 +1811,9 @@ on_actions = {
 			# BEGIN shahrabad:on_peace
 			SHL = { SHL_close_external_mzr_war = yes }
 			# END shahrabad:on_peace
+			# BEGIN south_final:on_peace
+			ADISCORD_south_final_close_external = yes
+			# END south_final:on_peace
 			if = {
 				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
 				log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
@@ -1939,6 +1963,9 @@ on_actions = {
 			# BEGIN shahrabad:on_puppet
 			SHL = { SHL_close_external_mzr_war = yes }
 			# END shahrabad:on_puppet
+			# BEGIN south_final:on_puppet
+			ADISCORD_south_final_close_external = yes
+			# END south_final:on_puppet
 		}
 	}
 	on_annex = {
@@ -1973,6 +2000,10 @@ on_actions = {
 				FROM = { SHL_abort_annexed_operations = yes }
 			}
 			# END shahrabad:on_annex
+			# BEGIN south_final:on_annex
+			ADISCORD_south_final_close_external = yes
+			ADISCORD_south_note_campaign_annexation = yes
+			# END south_final:on_annex
 		}
 	}
 	on_state_control_changed = {

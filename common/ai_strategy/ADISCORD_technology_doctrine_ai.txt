@@ -487,3 +487,27 @@ ADISCORD_ai_drone_school_force_mix = {
 	ai_strategy = { type = equipment_production_factor id = fighter value = 6 }
 	ai_strategy = { type = equipment_production_factor id = cas value = 6 }
 }
+
+ADISCORD_ai_carrier_air_groups = {
+	enable = {
+		is_ai = yes
+		has_tech = ADISCORD_tech_carrier_hull_2155
+		has_navy_size = {
+			size > 0
+			unit = carrier
+		}
+		num_of_military_factories > 11
+		ADISCORD_economy_ai_can_fund_advanced_forces = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = unit_ratio
+		id = cv_fighter
+		value = 10
+	}
+	ai_strategy = {
+		type = unit_ratio
+		id = cv_naval_bomber
+		value = 10
+	}
+}

@@ -25,12 +25,22 @@ This is an authored bounded treaty, not a reason to annex all ERT for VAL or to
 repaint the exclusion zone. STP/STS versus VAL, the Occidian package (including
 45), the northern 17/18 settlement and NAM's partition keep their existing rules.
 
-Shabrat's final hegemony victories over NOD and VAL impose their existing
-provisional administrations immediately after technical white peace. The
-surviving country must be an STS subject; a defeat receipt alone is insufficient.
-Full integration remains the existing paid 90-day decision. Verify the subject
-relationship after each final victory, including Kefreyt's Last Contract, and
-confirm that an earlier limited war does not impose this final settlement.
+Shabrat's hegemony imposes provisional administrations after a repeated victory
+over NOD or VAL, or victory in the campaign unlocked by a refused dependency
+demand. The first limited peace leaves the defeated government independent.
+Kefreyt's first peace returns the Stelander Islands (709) when owned by VAL or
+its subject, alongside the existing mainland package. Its captured northern
+subjects change overlord to STS. Annexed tribal land in 58-65 restores the original
+tribes, or joins the existing transferred NKA, including the captured resource
+belt. Independent tribes, foreign-owned land and third-party occupation are
+excluded from this northern award. Snapshot occupation before technical peace.
+
+The late final wars retain their provisional administrations. In the hegemony
+route, the defeated Kefreyt council also survives its revanche as a subject.
+The surviving country must be an STS subject; a defeat receipt alone is
+insufficient. Full integration remains the existing paid 90-day decision.
+Verify both first/second-war sequences, refused-demand campaigns, the islands,
+separate tribes and NKA, unrelated wars, and the distinct liberation outcome.
 
 ## In-game controls
 
@@ -118,6 +128,11 @@ liberated ally with an unexpired receipt must block settlement again. Bezhaysk
 participants and capital awards are captured before the first technical peace.
 NAM and SHL reserve major status only when their campaign added it, and native
 peace, annexation and subjugation clean up an externally interrupted campaign.
+The southern final war also reserves major status for both champions only for
+that campaign. A champion's capitulation settles every participant; other
+defeated participants stay occupied until that settlement. Native peace,
+annexation or subjugation outside it resolves the campaign by control of the
+key districts, and the Restitution Alliance only repels it.
 
 Also test both NOD/Stelander defeat orders, a surviving northern cobelligerent,
 TFF joining NOD's northern war after YPR has capitulated, and failed TFF entry.
@@ -138,7 +153,8 @@ python -B -m unittest tools.tests.test_scripted_peace_on_actions \
   tools.tests.test_adiscord_peace_coalition_lifecycle \
   tools.tests.test_validate_adiscord_val_rework.ValFrontierCampaignTests \
   tools.tests.test_adiscord_nod_capitulation_reservation \
-  tools.tests.test_vorkerland_claimant_cleanup
+  tools.tests.test_vorkerland_claimant_cleanup \
+  tools.tests.test_adiscord_south_final_war
 python -B -m unittest discover -s tools/tests
 python -B tools/validate_tc.py --limit 300
 git diff --check

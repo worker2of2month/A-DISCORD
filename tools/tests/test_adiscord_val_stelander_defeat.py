@@ -134,14 +134,19 @@ class ValStelanderDefeatTests(unittest.TestCase):
             self.assertIn(token, body)
 
     def test_shabrat_victory_enters_defeat_state_before_white_peace(self):
+        from tools.tests.test_adiscord_stp_hegemony_expansion import named_block
+
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
-        start = effects.index("STP_pc_begin_settlement = {")
-        body = effects[start : effects.index("\nSTP_pc_clear_settlement = {", start)]
-        branch = body[body.index("STP_pc_this_opponent value = 1") :]
-        self.assertIn("VAL = { VAL_enter_stelander_defeat = yes }", branch)
+        settlement = named_block(effects, "STP_pc_begin_settlement")
+        self.assertIn("STP_pc_settle_val_northern_conquests = yes", settlement)
+        branch = named_block(effects, "STP_pc_settle_val_northern_conquests")
         self.assertLess(
             branch.index("VAL = { VAL_enter_stelander_defeat = yes }"),
             branch.index("white_peace = VAL"),
+        )
+        self.assertLess(
+            branch.index("array = STP_pc_val_northern_subjects"),
+            branch.index("VAL = { VAL_enter_stelander_defeat = yes }"),
         )
 
     def test_defeated_kefreyt_cannot_reopen_old_campaigns(self):
@@ -274,7 +279,7 @@ class ValStelanderDefeatTests(unittest.TestCase):
                 revanche,
             )
             self.assertEqual(
-                any(e.key == "VAL_enter_stelander_defeat" for _, e in effects),
+                any(e.key == "STP_pc_settle_val_northern_conquests" for _, e in effects),
                 not revanche,
             )
 

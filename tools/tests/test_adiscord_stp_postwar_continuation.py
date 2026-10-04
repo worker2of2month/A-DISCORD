@@ -1233,6 +1233,7 @@ class PostwarContinuationContracts(unittest.TestCase):
             "state = 42",
             "state = 52",
             "state = 55",
+            "state = 709",
             "is_owned_by = VAL",
             "is_subject_of = VAL",
             "transfer_state_to = STS",
@@ -1247,7 +1248,11 @@ class PostwarContinuationContracts(unittest.TestCase):
         win = begin_text[begin_text.index("STP_pc_this_opponent value = 1") :]
         self.assertLess(
             win.index("STP_pc_recover_stelander_cores_from_val = yes"),
-            win.index("white_peace = VAL"),
+            win.index("STP_pc_settle_val_northern_conquests = yes"),
+        )
+        northern = ast_block(effects, "STP_pc_settle_val_northern_conquests")
+        self.assertTrue(
+            any(e.key == "white_peace" and e.value == "VAL" for e in prep_walk(northern))
         )
 
     def test_settlement_records_liberation_wins_without_a_terms_card(self) -> None:

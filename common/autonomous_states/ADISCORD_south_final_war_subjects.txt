@@ -1,0 +1,131 @@
+# Southern final war subjects. Each tier is assigned only by the scripted
+# settlement and does not move along the ordinary puppet ladder.
+
+# Shahrabad houses: the defeated northern leader pays the cartel in oil and money.
+autonomy_state = {
+	id = autonomy_SHL_oil_concession
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.05
+	use_overlord_color = yes
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = no
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_SHL_oil_concession
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.10
+		extra_trade_to_overlord_factor = 0.90
+		overlord_trade_cost_factor = -0.50
+		cic_to_overlord_factor = 0.25
+	}
+
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}
+
+# Open Conclave: a self-governing member of the Southern Compact.
+autonomy_state = {
+	id = autonomy_SHL_compact_charter
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.30
+	use_overlord_color = no
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = no
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_SHL_compact_charter
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.15
+		extra_trade_to_overlord_factor = 0.30
+		cic_to_overlord_factor = 0.05
+	}
+
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}
+
+# Namestnik ladder: a sealed office answering to Svetlogorye.
+autonomy_state = {
+	id = autonomy_NAM_namestnik_office
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.05
+	use_overlord_color = yes
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = yes
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_NAM_namestnik_office
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.40
+		extra_trade_to_overlord_factor = 0.85
+		overlord_trade_cost_factor = -0.40
+		cic_to_overlord_factor = 0.20
+		mic_to_overlord_factor = 0.35
+		master_ideology_drift = 0.08
+	}
+
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	ai_overlord_wants_garrison = { always = yes }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}
+
+# Oil charter: a member keeping its own administration under Svetlogorsk fuel.
+autonomy_state = {
+	id = autonomy_NAM_oil_charter
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.30
+	use_overlord_color = no
+
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = no
+		can_be_spymaster = no
+	}
+
+	allowed_levels_filter = {
+		autonomy_NAM_oil_charter
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.15
+		extra_trade_to_overlord_factor = 0.40
+		cic_to_overlord_factor = 0.05
+	}
+
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}

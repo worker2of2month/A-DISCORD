@@ -133,6 +133,7 @@ SHL_run_cycle = {
 			SHL_update_tensions = yes
 			SHL_check_obligation_deadline = yes
 			SHL_check_crises = yes
+			ADISCORD_south_crisis_cycle = yes
 		}
 		# A capitulated country keeps its clock; stale callbacks cannot advance it.
 		if = {
@@ -2076,6 +2077,7 @@ SHL_kyz_war_victory = {
 		set_variable = { var = SHL_water_quota value = 0 }
 		add_timed_idea = { idea = SHL_captured_qanats days = 365 }
 		SHL_refresh_furnaces = yes
+		ADISCORD_south_crisis_add_campaign = yes
 		country_event = { id = ADISCORD_SHL.57 }
 	}
 }
@@ -2288,6 +2290,7 @@ SHL_glp_war_victory = {
 		clr_country_flag = SHL_war_glp_sea_goal
 		set_variable = { var = SHL_veyr_crisis value = 4 }
 		SHL_refresh_furnaces = yes
+		ADISCORD_south_crisis_add_campaign = yes
 		country_event = { id = ADISCORD_SHL.66 }
 	}
 }
@@ -2553,6 +2556,7 @@ SHL_mzr_war_victory = {
 		273 = { SHL_take_state_from_mzr = yes }
 		add_timed_idea = { idea = SHL_victory_over_ration days = 365 }
 		SHL_refresh_furnaces = yes
+		ADISCORD_south_crisis_add_campaign = yes
 		country_event = { id = ADISCORD_SHL.73 }
 	}
 }

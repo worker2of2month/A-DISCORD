@@ -1,0 +1,109 @@
+defined_text = {
+	name = ADISCORDSouthNorthSide
+	# During the war the flagged leader; before it, the first viable candidate.
+	text = {
+		trigger = {
+			OR = {
+				NAM = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					NAM = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_nam
+	}
+	text = {
+		trigger = {
+			OR = {
+				EFL = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					EFL = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_efl
+	}
+	text = {
+		trigger = {
+			OR = {
+				AZH = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					AZH = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_azh
+	}
+	text = {
+		localization_key = ADISCORD_south_north_side_unknown
+	}
+}
+
+defined_text = {
+	name = ADISCORDSouthNorthSidePlain
+	# Event paper variant without colour codes.
+	text = {
+		trigger = {
+			OR = {
+				NAM = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					NAM = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_nam_plain
+	}
+	text = {
+		trigger = {
+			OR = {
+				EFL = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					EFL = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_efl_plain
+	}
+	text = {
+		trigger = {
+			OR = {
+				AZH = { has_country_flag = ADISCORD_south_north_leader }
+				AND = {
+					NOT = { ADISCORD_south_final_active = yes }
+					AZH = { ADISCORD_south_champion_viable = yes }
+				}
+			}
+		}
+		localization_key = ADISCORD_south_north_side_azh_plain
+	}
+	text = {
+		localization_key = ADISCORD_south_north_side_unknown_plain
+	}
+}
+
+defined_text = {
+	name = ADISCORDSouthStatus
+	text = {
+		trigger = { ADISCORD_south_final_active = yes }
+		localization_key = ADISCORD_south_status_war
+	}
+	text = {
+		trigger = {
+			ADISCORD_south_crisis_open = yes
+			NOT = { ADISCORD_south_north_candidate_exists = yes }
+		}
+		localization_key = ADISCORD_south_status_no_rival
+	}
+	text = {
+		trigger = { ADISCORD_south_crisis_open = yes }
+		localization_key = ADISCORD_south_status_crisis
+	}
+	text = {
+		localization_key = ADISCORD_south_status_closed
+	}
+}

@@ -1,6 +1,7 @@
 """Source-executed staff lifecycle and live availability contracts, not an HOI4 playtest."""
 
 from pathlib import Path
+import os
 import re
 import unittest
 from functools import lru_cache
@@ -224,6 +225,94 @@ class World:
                 self.execute(self.scripts[k])
             else:
                 raise AssertionError('unsupported staff effect: ' + k)
+
+
+class StaffPortraitTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.sprites = {}
+        for path in (ROOT / 'interface').glob('*.gfx'):
+            for entry in walk(parse_clausewitz(path.read_text(encoding='utf-8-sig'))):
+                if not isinstance(entry.value, list):
+                    continue
+                names = [item.value for item in entry.value if item.key == 'name']
+                if names and 'portrait' in names[0].lower():
+                    cls.sprites.setdefault(names[0], []).append(entry)
+
+        cls.staff = {}
+        for path in (ROOT / 'common/characters').glob('*.txt'):
+            characters = block(parse_clausewitz(path.read_text(encoding='utf-8-sig')), 'characters')
+            for character in characters:
+                portraits = optional_block(character.value, 'portraits')
+                military = any(
+                    entry.key in ('advisor', 'corps_commander', 'field_marshal', 'navy_leader')
+                    for entry in character.value
+                )
+                if military or any(role.key in ('army', 'navy') for role in portraits):
+                    cls.staff[character.key] = portraits
+
+    def assert_compact_portrait(self, name):
+        from PIL import Image
+
+        self.assertIn(name, self.sprites)
+        definitions = self.sprites[name]
+        self.assertEqual(len(definitions), 1, name)
+        sprite = definitions[0]
+        texture = ROOT / scalar(sprite.value, 'texturefile')
+        if not texture.exists():
+            relative = scalar(sprite.value, 'texturefile')
+            self.assertRegex(
+                relative,
+                r'^gfx/(?:interface/ideas/idea_europe_generic_'
+                r'(?:[1-3]|land_[1-5]|land_13|navy_[1-3])|'
+                r'leaders/(?:leader_unknown(?:_female)?|operative_unknown))\.dds$',
+            )
+            game_root = os.environ.get('HOI4_GAME_DIR')
+            if not game_root:
+                self.skipTest('Set HOI4_GAME_DIR to check inherited vanilla textures')
+            texture = Path(game_root) / relative
+        with Image.open(texture) as image:
+            image.load()
+            width, height = image.size
+        if sprite.key == 'corneredTileSpriteType':
+            size = block(sprite.value, 'size')
+            width, height = int(scalar(size, 'x')), int(scalar(size, 'y'))
+            self.assertEqual(scalar(sprite.value, 'tilingCenter'), 'no')
+        self.assertGreater(width, 0, name)
+        self.assertGreater(height, 0, name)
+        self.assertLessEqual(width, 65, name)
+        self.assertLessEqual(height, 67, name)
+
+    def test_staff_portraits_have_compact_sprites_for_every_role(self):
+        for character, portraits in self.staff.items():
+            for role in portraits:
+                with self.subTest(character=character, role=role.key):
+                    self.assert_compact_portrait(scalar(role.value, 'small'))
+
+    def test_random_pools_and_small_aliases_do_not_use_full_size_sprites(self):
+        names = {name for name in self.sprites if name.lower().endswith('_small')}
+        for entry in walk(parse('portraits/00_portraits.txt')):
+            if isinstance(entry.value, str) and entry.value.startswith('GFX_'):
+                names.add(entry.value + '_small')
+        for name in sorted(names):
+            with self.subTest(sprite=name):
+                self.assert_compact_portrait(name)
+
+    def test_staff_portrait_changes_include_compact_variants(self):
+        for path in (ROOT / 'common/scripted_effects').glob('*.txt'):
+            source = path.read_text(encoding='utf-8-sig')
+            if 'set_portraits' not in source:
+                continue
+            for entry in walk(parse_clausewitz(source)):
+                if entry.key != 'set_portraits':
+                    continue
+                characters = [item.value for item in entry.value if item.key == 'character']
+                if not characters or characters[0] not in self.staff:
+                    continue
+                for role in entry.value:
+                    if role.key in ('army', 'navy', 'civilian'):
+                        with self.subTest(character=characters[0], role=role.key):
+                            self.assert_compact_portrait(scalar(role.value, 'small'))
 
 
 class PlayableStaffTests(unittest.TestCase):

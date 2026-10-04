@@ -1108,4 +1108,202 @@ focus_tree = {
 			base = 5
 		}
 	}
+
+	# War for the South: the namestnik ladder or the oil charter.
+	focus = {
+		id = NAM_south_black_basin
+		icon = GFX_goal_generic_more_territorial_claims
+		x = 4
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_law_after_war }
+		mutually_exclusive = { focus = NAM_south_oil_for_water }
+		bypass = {
+			AZH = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_south_black_basin_tt
+			hidden_effect = {
+				AZH = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_south_desert_offices
+		icon = GFX_goal_generic_political_pressure
+		x = 4
+		y = 12
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_south_black_basin }
+		bypass = {
+			KDR = { ADISCORD_south_campaign_target_settled = yes }
+			EFL = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_south_desert_offices_tt
+			hidden_effect = {
+				KDR = { ADISCORD_south_demand_submission = yes }
+				EFL = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_south_oil_for_water
+		icon = GFX_goal_generic_trade
+		x = 8
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_law_after_war }
+		mutually_exclusive = { focus = NAM_south_black_basin }
+		bypass = {
+			WEF = { ADISCORD_south_campaign_target_settled = yes }
+			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			AZH = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_south_oil_for_water_tt
+			hidden_effect = {
+				WEF = { ADISCORD_south_offer_alliance = yes }
+				RHM = { ADISCORD_south_offer_alliance = yes }
+				SDR = { ADISCORD_south_offer_alliance = yes }
+				AZH = { ADISCORD_south_offer_alliance = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_south_fenn_guarantee
+		icon = GFX_goal_generic_major_alliance
+		x = 8
+		y = 12
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_south_oil_for_water }
+		bypass = {
+			EFL = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_south_fenn_guarantee_tt
+			hidden_effect = {
+				EFL = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_south_seal_over_furnaces
+		icon = GFX_goal_generic_demand_territory
+		x = 5
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_svetlogorye }
+		prerequisite = { focus = NAM_south_desert_offices }
+		mutually_exclusive = { focus = NAM_south_oil_charter }
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_war = no
+			has_completed_focus = NAM_service_state
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_nam_emergency_writs }
+			custom_effect_tooltip = NAM_south_seal_over_furnaces_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_south_oil_charter
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = 9
+		y = 13
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = { focus = NAM_svetlogorye }
+		prerequisite = { focus = NAM_south_fenn_guarantee }
+		mutually_exclusive = { focus = NAM_south_seal_over_furnaces }
+		available = {
+			NAM_country_operable = yes
+			is_subject = no
+			has_war = no
+			has_completed_focus = NAM_federal_charter
+			custom_trigger_tooltip = {
+				tooltip = NAM_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_nam_charter_levies }
+			custom_effect_tooltip = NAM_south_oil_charter_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
 }

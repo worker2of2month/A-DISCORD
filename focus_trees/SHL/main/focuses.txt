@@ -1804,4 +1804,572 @@ focus_tree = {
 		}
 		ai_will_do = { base = 5 }
 	}
+
+	# ----- War for the South: each course opens its own final campaign -----
+
+	focus = {
+		id = SHL_south_debt_network
+		icon = GFX_goal_generic_trade
+		x = 6
+		y = 18
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INTERNATIONAL_TRADE }
+		prerequisite = {
+			focus = SHL_conclave_of_ten
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_debt_network_tt
+			hidden_effect = {
+				subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+				ADISCORD_economy_mark_dirty = yes
+				RHM = { if = { limit = { exists = yes } set_country_flag = ADISCORD_south_indebted_to_SHL } }
+				SDR = { if = { limit = { exists = yes } set_country_flag = ADISCORD_south_indebted_to_SHL } }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_trade_protectorates
+		icon = GFX_goal_generic_dangerous_deal
+		x = 6
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_south_debt_network
+		}
+		bypass = {
+			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			SDR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_trade_protectorates_tt
+			hidden_effect = {
+				RHM = { ADISCORD_south_demand_submission = yes }
+				SDR = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_great_road
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 6
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_south_trade_protectorates
+		}
+		bypass = {
+			KDR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			234 = { add_claim_by = SHL }
+			240 = { add_claim_by = SHL }
+			custom_effect_tooltip = SHL_south_great_road_tt
+			hidden_effect = {
+				KDR = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_wells_charters
+		icon = GFX_focus_generic_diplomatic_treaty
+		x = 12
+		y = 18
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_southern_compact
+		}
+		bypass = {
+			RHM = { ADISCORD_south_campaign_target_settled = yes }
+			MZR = { ADISCORD_south_campaign_target_settled = yes }
+			SDR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_wells_charters_tt
+			hidden_effect = {
+				RHM = { ADISCORD_south_offer_alliance = yes }
+				MZR = { ADISCORD_south_offer_alliance = yes }
+				SDR = { ADISCORD_south_offer_alliance = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_compact_staff
+		icon = GFX_focus_generic_limited_social_mobilization
+		x = 12
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_MANPOWER }
+		prerequisite = {
+			focus = SHL_south_wells_charters
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_manpower < 6000 }
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_manpower = -6000
+			custom_effect_tooltip = SHL_south_compact_staff_tt
+			hidden_effect = { SHL_raise_paid_levies_2 = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_free_road
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 12
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_south_compact_staff
+		}
+		bypass = {
+			KDR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_free_road_tt
+			hidden_effect = {
+				KDR = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_water_and_sea
+		icon = GFX_goal_generic_more_territorial_claims
+		x = 18
+		y = 18
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_iron_shahrabad
+		}
+		bypass = {
+			KYZ = { ADISCORD_south_campaign_target_settled = yes }
+			GLP = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_water_and_sea_tt
+			hidden_effect = {
+				KYZ = { ADISCORD_south_demand_annexation = yes }
+				GLP = { ADISCORD_south_demand_annexation = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_last_ration
+		icon = GFX_goal_generic_demand_territory
+		x = 18
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_south_water_and_sea
+		}
+		bypass = {
+			MZR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_last_ration_tt
+			hidden_effect = {
+				MZR = { ADISCORD_south_demand_annexation = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_iron_march
+		icon = GFX_goal_generic_army_doctrines
+		x = 18
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		prerequisite = {
+			focus = SHL_south_last_ration
+		}
+		bypass = {
+			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			RHM = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_iron_march_tt
+			hidden_effect = {
+				SDR = { ADISCORD_south_demand_annexation = yes }
+				RHM = { ADISCORD_south_demand_annexation = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_throne_and_crests
+		icon = GFX_goal_generic_major_alliance
+		x = 24
+		y = 16
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_hereditary_republic
+		}
+		bypass = {
+			KDR = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_throne_and_crests_tt
+			hidden_effect = {
+				KDR = { ADISCORD_south_offer_alliance = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_toll_debtors
+		icon = GFX_goal_generic_political_pressure
+		x = 24
+		y = 17
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_south_throne_and_crests
+		}
+		bypass = {
+			SDR = { ADISCORD_south_campaign_target_settled = yes }
+			RHM = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_toll_debtors_tt
+			hidden_effect = {
+				SDR = { ADISCORD_south_demand_submission = yes }
+				RHM = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_veyr_debt
+		icon = GFX_goal_generic_trade
+		x = 24
+		y = 18
+		cost = 4
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_south_toll_debtors
+		}
+		bypass = {
+			GLP = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			has_war = no
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_veyr_debt_tt
+			hidden_effect = {
+				GLP = { ADISCORD_south_demand_submission = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_councils_abroad
+		icon = GFX_focus_generic_self_management
+		x = 1
+		y = 16
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_commune_of_fire
+		}
+		bypass = {
+			MZR = { ADISCORD_south_campaign_target_settled = yes }
+			GLP = { ADISCORD_south_campaign_target_settled = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = SHL_south_councils_abroad_tt
+			hidden_effect = {
+				MZR = { ADISCORD_south_offer_alliance = yes }
+				GLP = { ADISCORD_south_offer_alliance = yes }
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_oil_underground
+		icon = GFX_goal_generic_small_arms
+		x = 1
+		y = 17
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_south_councils_abroad
+		}
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			NOT = { has_global_flag = ADISCORD_south_final_started }
+			NOT = { has_equipment = { infantry_equipment < 3000 } }
+			NAM = { exists = yes }
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -3000
+			}
+			custom_effect_tooltip = SHL_south_oil_underground_tt
+			hidden_effect = { set_country_flag = ADISCORD_south_underground_armed }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_oil_for_furnaces
+		icon = GFX_goal_generic_forceful_treaty
+		x = 6
+		y = 21
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_south_great_road
+		}
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_political_course value = 1 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_shl_house_contracts }
+			custom_effect_tooltip = SHL_south_oil_for_furnaces_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_war_of_charters
+		icon = GFX_goal_generic_military_sphere
+		x = 12
+		y = 21
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_south_free_road
+		}
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_political_course value = 2 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_shl_city_levies }
+			custom_effect_tooltip = SHL_south_war_of_charters_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_last_pour
+		icon = GFX_goal_generic_major_war
+		x = 18
+		y = 21
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		prerequisite = {
+			focus = SHL_south_iron_march
+		}
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_shl_last_pour }
+			custom_effect_tooltip = SHL_south_last_pour_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_war_of_arms
+		icon = GFX_goal_generic_territory_or_war
+		x = 24
+		y = 19
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { has_country_flag = SHL_regency_path }
+		prerequisite = {
+			focus = SHL_south_veyr_debt
+		}
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_political_course value = 4 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_shl_promised_fiefs }
+			custom_effect_tooltip = SHL_south_war_of_arms_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	focus = {
+		id = SHL_south_oil_uprising
+		icon = GFX_goal_support_communism
+		x = 1
+		y = 18
+		cost = 5
+		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
+		allow_branch = { has_country_flag = SHL_commune_path }
+		prerequisite = {
+			focus = SHL_south_oil_underground
+		}
+		available = {
+			SHL_country_operable = yes
+			has_war = no
+			check_variable = { var = SHL_political_course value = 5 compare = equals }
+			custom_trigger_tooltip = {
+				tooltip = SHL_south_final_ready_tt
+				ADISCORD_south_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_south_shl_oil_uprising }
+			custom_effect_tooltip = SHL_south_oil_uprising_tt
+			hidden_effect = { ADISCORD_south_final_war_start = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
 }

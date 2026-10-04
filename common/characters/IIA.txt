@@ -2,10 +2,13 @@ characters = {
 	IIA_Artem_Severin = {
 		name = IIA_Artem_Severin
 		portraits = {
-			civilian = { large = GFX_portrait_IIA_Artem_Severin }
+			civilian = {
+				large = GFX_portrait_IIA_Artem_Severin
+				small = GFX_portrait_IIA_Artem_Severin_small
+			}
 			army = {
 				large = GFX_portrait_IIA_Artem_Severin
-				small = GFX_Portrait_Europe_Generic_land_2_small
+				small = GFX_portrait_IIA_Artem_Severin_small
 			}
 		}
 		country_leader = {

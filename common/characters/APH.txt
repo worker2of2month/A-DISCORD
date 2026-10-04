@@ -18,6 +18,7 @@ characters = {
 		portraits = {
 			army = {
 				large = GFX_portrait_APH_Gorak_Bonecleaver
+				small = GFX_portrait_APH_Gorak_Bonecleaver_small
 			}
 		}
 		corps_commander = {

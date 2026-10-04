@@ -334,6 +334,7 @@ class ScriptMachine:
                 "set_politics", "add_popularity", "promote_character", "retire_character",
                 "mark_focus_tree_layout_dirty", "damage_building", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
+                "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
                 "add_claim_by",
             ):
                 self.calls.append((e.key, scope))
@@ -665,8 +666,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         tree = block(parse_clausewitz(path.read_text(encoding="utf-8")), "focus_tree")
         focuses = [e.value for e in tree if e.key == "focus"]
         ids = [scalar(f, "id") for f in focuses]
-        self.assertEqual(len(ids), 71)
-        self.assertEqual(len(set(ids)), 71)
+        self.assertEqual(len(ids), 90)
+        self.assertEqual(len(set(ids)), 90)
         cells = [(scalar(f, "x"), scalar(f, "y")) for f in focuses]
         self.assertEqual(len(cells), len(set(cells)))
         for focus in focuses:

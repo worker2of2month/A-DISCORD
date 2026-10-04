@@ -4485,6 +4485,118 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_south.1",
+      "namespace": "ADISCORD_south",
+      "number": 1,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.2",
+      "namespace": "ADISCORD_south",
+      "number": 2,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.3",
+      "namespace": "ADISCORD_south",
+      "number": 3,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.10",
+      "namespace": "ADISCORD_south",
+      "number": 10,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.20",
+      "namespace": "ADISCORD_south",
+      "number": 20,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.30",
+      "namespace": "ADISCORD_south",
+      "number": 30,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.31",
+      "namespace": "ADISCORD_south",
+      "number": 31,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.32",
+      "namespace": "ADISCORD_south",
+      "number": 32,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.40",
+      "namespace": "ADISCORD_south",
+      "number": 40,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.41",
+      "namespace": "ADISCORD_south",
+      "number": 41,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.42",
+      "namespace": "ADISCORD_south",
+      "number": 42,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.43",
+      "namespace": "ADISCORD_south",
+      "number": 43,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.44",
+      "namespace": "ADISCORD_south",
+      "number": 44,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_south.45",
+      "namespace": "ADISCORD_south",
+      "number": 45,
+      "owner": "events/ADISCORD_south_final_war_events.txt",
+      "subsystem": "south_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_rus_crisis.1",
       "namespace": "ADISCORD_rus_crisis",
       "number": 1,

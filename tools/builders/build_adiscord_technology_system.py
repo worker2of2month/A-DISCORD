@@ -113,6 +113,8 @@ HORIZONTAL_FOLDERS = frozenset(
         "infantry_folder",
         "armour_folder",
         "nsb_armour_folder",
+        "naval_folder",
+        "mtgnavalfolder",
     }
 )
 
@@ -896,6 +898,14 @@ APPLIED_DESCRIPTION_RU_BY_BRANCH["mechanized_mobility"] = (
 APPLIED_DESCRIPTION_EN_BY_BRANCH["mechanized_mobility"] = (
     "develops protected infantry transport, infantry fighting vehicles, and "
     "networked control of mechanized groups"
+)
+APPLIED_DESCRIPTION_RU_BY_BRANCH["amphibious_operations"] = (
+    "увеличивает число десантных планов и дивизий в одной высадке, "
+    "сокращает подготовку и улучшает высадку на вражеский берег"
+)
+APPLIED_DESCRIPTION_EN_BY_BRANCH["amphibious_operations"] = (
+    "expands simultaneous invasion plans and divisions per landing, "
+    "shortens preparation and improves landings on hostile shores"
 )
 APPLIED_PROGRAMME_KEYS = {programme["key"] for programme in APPLIED_PROGRAMMES}
 
@@ -5413,6 +5423,94 @@ BRANCHES = (
         ),
     ),
     research_branch(
+        "amphibious_operations",
+        "ADISCORD_naval.txt",
+        ("naval_folder", "mtgnavalsupportfolder"),
+        "Морской десант",
+        "Amphibious Operations",
+        "naval_support",
+        (
+            (
+                "amphibious_formation_organization",
+                "Организация десантных соединений",
+                "Amphibious Formation Organization",
+                "transport",
+                2160,
+                ("naval_invasion_division_cap = 2",),
+            ),
+            (
+                "amphibious_staff_sections",
+                "Штабы десантных операций",
+                "Amphibious Operation Staffs",
+                "marines_expeditionary_medium",
+                2161,
+                ("naval_invasion_plan_cap = 1",),
+            ),
+            (
+                "amphibious_embarkation_schedules",
+                "Графики десантной погрузки",
+                "Amphibious Embarkation Schedules",
+                "transport",
+                2162,
+                ("naval_invasion_prep_days = -5",),
+            ),
+            (
+                "amphibious_landing_craft",
+                "Десантные катера",
+                "Landing Craft",
+                "landing_craft",
+                2163,
+                ("amphibious_invasion = 0.05",),
+            ),
+            (
+                "amphibious_shore_parties",
+                "Береговые разгрузочные команды",
+                "Landing Shore Parties",
+                "marines_shore_parties_medium",
+                2164,
+                ("amphibious_invasion = 0.05",),
+            ),
+            (
+                "amphibious_loading_rehearsals",
+                "Отработка десантной погрузки",
+                "Amphibious Loading Rehearsals",
+                "marines_expeditionary_support_medium",
+                2166,
+                ("naval_invasion_prep_days = -5",),
+            ),
+            (
+                "amphibious_assault_landing_systems",
+                "Штурмовые высадочные средства",
+                "Assault Landing Systems",
+                "tank_landing_craft",
+                2169,
+                ("naval_invasion_penalty = -0.05",),
+            ),
+            (
+                "amphibious_wave_coordination",
+                "Координация десантных волн",
+                "Landing Wave Coordination",
+                "marines_expeditionary_support_medium",
+                2172,
+                (
+                    "naval_invasion_division_cap = 2",
+                    "naval_invasion_plan_cap = 1",
+                ),
+            ),
+            (
+                "amphibious_integrated_operations",
+                "Комплексные десантные операции",
+                "Integrated Amphibious Operations",
+                "tank_landing_craft",
+                2175,
+                (
+                    "naval_invasion_prep_days = -10",
+                    "amphibious_invasion = 0.05",
+                ),
+            ),
+        ),
+    ),
+    research_branch(
         "riverine_warfare",
         "ADISCORD_naval.txt",
         ('naval_folder', 'mtgnavalfolder', 'mtgnavalsupportfolder'),
@@ -5518,6 +5616,11 @@ NAVAL_HULL_CLASSES = {
     "carrier": ("Авианосцы", "Carriers", "Авианосец", "Carrier", "carrier", "surface_fleet"),
     "submarine": ("Подлодки", "Submarines", "Подводная лодка", "Submarine", "submarine", "subsurface"),
 }
+NAVAL_CARD_NAMES_RU = {
+    "light_cruiser": "Лёгк. крейсер",
+    "heavy_cruiser": "Тяж. крейсер",
+    "submarine": "Подлодка",
+}
 NAVAL_HULL_BRANCH_KEYS = frozenset(f"{kind}_hulls" for kind in NAVAL_HULL_CLASSES)
 NAVAL_HULL_ART = {
     f"ADISCORD_naval_{kind}_{year}": f"{era}_{kind}"
@@ -5526,37 +5629,130 @@ NAVAL_HULL_ART = {
 }
 
 
+# Side programmes improve the existing fleet independently of hull replacement.
+# Their IDs, effects and dates retain one authoritative definition above.
+NAVAL_SIDE_PROGRAMMES = {
+    "destroyer": (
+        ("variable_depth_sonar", "unmanned_mine_countermeasure_boats", "predictive_convoy_defense_network"),
+    ),
+    "light_cruiser": (
+        ("modular_escort_combat_systems", "autonomous_escorts"),
+        ("networked_task_groups",),
+    ),
+    "heavy_cruiser": (
+        ("missile_batteries", "modular_vertical_launch_cells"),
+    ),
+    "battleship": (
+        ("railgun_batteries", "distributed_horizon_targeting"),
+    ),
+    "carrier": (
+        tuple(f"cv_fighter_research_{year}" for year in NAVAL_HULL_YEARS),
+        tuple(f"cv_bomber_research_{year}" for year in NAVAL_HULL_YEARS),
+        ("drone_carrier_deck_systems",),
+    ),
+    "submarine": (
+        ("wake_homing_torpedo_seekers", "autonomous_submarines"),
+        ("air_independent_cells", "seabed_sensor_webs", "self_repairing_pressure_hulls"),
+    ),
+}
+NAVAL_UPGRADE_ICONS = {
+    "variable_depth_sonar": "improved_sonar",
+    "unmanned_mine_countermeasure_boats": "basic_naval_mines",
+    "predictive_convoy_defense_network": "improved_centimetric_radar",
+    "modular_escort_combat_systems": "basic_fire_control_system",
+    "autonomous_escorts": "advanced_fire_control_system",
+    "networked_task_groups": "improved_fire_control_system",
+    "missile_batteries": "ADISCORD_naval_missile_systems",
+    "modular_vertical_launch_cells": "ADISCORD_naval_missile_systems",
+    "railgun_batteries": "advanced_heavy_battery",
+    "distributed_horizon_targeting": "improved_centimetric_radar",
+    "drone_carrier_deck_systems": "naval_air_operations",
+    "wake_homing_torpedo_seekers": "homing_torpedo",
+    "autonomous_submarines": "advanced_sonar",
+    "air_independent_cells": "improved_submarine_snorkel",
+    "seabed_sensor_webs": "advanced_sonar",
+    "self_repairing_pressure_hulls": "damage_control_3",
+}
+
+NAVAL_MOVED_TECH_KEYS = {
+    key
+    for programmes in NAVAL_SIDE_PROGRAMMES.values()
+    for programme in programmes
+    for key in programme
+    if not key.startswith(("cv_fighter_research_", "cv_bomber_research_"))
+}
+NAVAL_UPGRADE_ORIGINS = {
+    tech.key: (branch, index)
+    for branch in BRANCHES
+    for index, tech in enumerate(branch.techs)
+    if tech.key in NAVAL_MOVED_TECH_KEYS
+}
+NAVAL_AIR_RESEARCH = {
+    f"{family}_research_{year}": (f"ADISCORD_{family}_{year}", icon)
+    for family, icons in (
+        ("cv_fighter", ("fighter1", "fighter2", "fighter3", "jet_fighter1")),
+        ("cv_bomber", ("naval_bomber1", "naval_bomber2", "naval_bomber3", "naval_bomber3")),
+    )
+    for year, icon in zip(NAVAL_HULL_YEARS, icons, strict=True)
+}
+
+
 def build_naval_hull_branches() -> tuple[Branch, ...]:
     branches = []
     for kind, (ru, en, model_ru, model_en, _, profile) in NAVAL_HULL_CLASSES.items():
-        branches.append(
-            Branch(
-                f"{kind}_hulls",
-                "ADISCORD_naval.txt",
-                ("naval_folder", "mtgnavalfolder"),
-                ru,
-                en,
-                profile,
-                tuple(
-                    Tech(
-                        f"{kind}_hull_{year}",
-                        f"{model_ru} обр. {year}",
-                        f"{model_en} Model {year}",
-                        f"ADISCORD_naval_{kind}_{year}",
-                    )
-                    for year in NAVAL_HULL_YEARS
+        rows = [
+            (
+                year,
+                Tech(
+                    f"{kind}_hull_{year}",
+                    f"{NAVAL_CARD_NAMES_RU.get(kind, model_ru)} {year}",
+                    f"{model_en} {year}",
+                    f"ADISCORD_naval_{kind}_{year}",
                 ),
-                NAVAL_HULL_YEARS,
             )
-        )
+            for year in NAVAL_HULL_YEARS
+        ]
+        for programme in NAVAL_SIDE_PROGRAMMES[kind]:
+            for key in programme:
+                if key in NAVAL_AIR_RESEARCH:
+                    year = int(key.rsplit("_", 1)[1])
+                    fighter = key.startswith("cv_fighter_")
+                    rows.append((year, Tech(
+                        key,
+                        f"Пал. {'истребитель' if fighter else 'торпедоносец'} {year}",
+                        f"Carrier {'Fighter' if fighter else 'Torpedo Bomber'} {year}",
+                        NAVAL_AIR_RESEARCH[key][1],
+                    )))
+                else:
+                    origin, index = NAVAL_UPGRADE_ORIGINS[key]
+                    rows.append((origin.years[index], origin.techs[index]))
+        # Hulls precede their same-year equipment packages in the native DAG.
+        rows.sort(key=lambda row: row[0])
+        branches.append(Branch(
+            f"{kind}_hulls", "ADISCORD_naval.txt",
+            ("naval_folder", "mtgnavalfolder"), ru, en, profile,
+            tuple(tech for _, tech in rows), tuple(year for year, _ in rows),
+        ))
     return tuple(branches)
 
 
+def retain_shared_naval_programme(branch: Branch) -> Branch:
+    rows = [
+        (tech, year)
+        for tech, year in zip(branch.techs, branch.years, strict=True)
+        if tech.key not in NAVAL_MOVED_TECH_KEYS
+    ]
+    folders = branch.folders
+    if branch.key in {"surface_fleet", "subsurface", "riverine_warfare"}:
+        folders = ("naval_folder", "mtgnavalsupportfolder")
+    return replace(
+        branch, folders=folders,
+        techs=tuple(tech for tech, _ in rows), years=tuple(year for _, year in rows),
+    )
+
+
 BRANCHES = build_naval_hull_branches() + tuple(
-    replace(branch, folders=("naval_folder", "mtgnavalsupportfolder"))
-    if branch.key in {"surface_fleet", "subsurface", "riverine_warfare"}
-    else branch
-    for branch in BRANCHES
+    retain_shared_naval_programme(branch) for branch in BRANCHES
 )
 
 
@@ -5609,7 +5805,7 @@ MAIN_BRANCH_KEYS_BY_FOLDER = {
     "air_techs_folder": ['air_support', 'bomber_maritime', 'fighter', 'strategic_air'],
     "naval_folder": [
         *(f"{kind}_hulls" for kind in NAVAL_HULL_CLASSES),
-        "naval_support", "subsurface", "surface_fleet",
+        "naval_support", "subsurface", "surface_fleet", "amphibious_operations",
     ],
 }
 
@@ -6082,9 +6278,38 @@ def programme_graph(branch: Branch) -> BranchGraph:
     return make_graph(lanes, edges, synthesis)
 
 
+def naval_programme_graph(branch: Branch) -> BranchGraph:
+    """Hull progression and optional refits share a root, not a final merge."""
+    kind = branch.key.removesuffix("_hulls")
+    indices = {tech.key: index for index, tech in enumerate(branch.techs)}
+    hulls = tuple(indices[f"{kind}_hull_{year}"] for year in NAVAL_HULL_YEARS)
+    lanes = [1] * len(branch.techs)
+    edges = chain_edges(hulls)
+    mandatory = []
+    for lane, programme in zip((0, 2, 3), NAVAL_SIDE_PROGRAMMES[kind]):
+        members = tuple(indices[key] for key in programme)
+        edges.extend(chain_edges(members))
+        for index in members:
+            lanes[index] = lane
+        first = members[0]
+        parent = hulls[0]
+        if kind == "carrier" and lane == 3:
+            parent = max(index for index in hulls if branch.years[index] <= branch.years[first])
+        edges.append((parent, first))
+        if kind == "carrier" and lane in {0, 2}:
+            # A later air group requires its preceding aircraft and the deck
+            # generation it operates from; neither prerequisite substitutes for the other.
+            for hull, aircraft in zip(hulls[1:], members[1:], strict=True):
+                edges.append((hull, aircraft))
+                mandatory.append(aircraft)
+    return make_graph(tuple(lanes), edges, tuple(mandatory))
+
+
 def graph_for_branch(branch: Branch) -> BranchGraph:
     count = len(branch.techs)
-    if branch.key in PROGRAMME_ROUTES:
+    if branch.key in NAVAL_HULL_BRANCH_KEYS:
+        graph = naval_programme_graph(branch)
+    elif branch.key in PROGRAMME_ROUTES:
         graph = programme_graph(branch)
     elif branch.key == "production":
         # Either tooling specialization opens the shared maintenance programme.
@@ -6321,9 +6546,12 @@ ENABLE_EQUIPMENT.update(
 for kind, (_, _, _, _, equipment, _) in NAVAL_HULL_CLASSES.items():
     for year in NAVAL_HULL_YEARS:
         unlocks = (f"ADISCORD_{equipment}_{year}",)
-        if kind == "carrier":
-            unlocks += (f"ADISCORD_cv_fighter_{year}", f"ADISCORD_cv_bomber_{year}")
         ENABLE_EQUIPMENT[f"ADISCORD_tech_{kind}_hull_{year}"] = unlocks
+
+ENABLE_EQUIPMENT.update({
+    f"ADISCORD_tech_{key}": (equipment,)
+    for key, (equipment, _) in NAVAL_AIR_RESEARCH.items()
+})
 
 ENABLE_EQUIPMENT["ADISCORD_tech_twin_engine_aircraft"] = (
     "ADISCORD_bomber_2160",
@@ -6338,6 +6566,10 @@ ENABLE_EQUIPMENT = {
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
+    "ADISCORD_tech_heavy_cruiser_hull_2163": ("ADISCORD_tech_light_cruiser_hull_2155",),
+    "ADISCORD_tech_battleship_hull_2163": ("ADISCORD_tech_heavy_cruiser_hull_2163",),
+    "ADISCORD_tech_carrier_hull_2163": ("ADISCORD_tech_heavy_cruiser_hull_2155",),
+    "ADISCORD_tech_amphibious_formation_organization": ("ADISCORD_tech_restored_dockyards",),
     "ADISCORD_tech_synthetic_oil_synthesis": ("ADISCORD_tech_synthetic_rubber_plants",),
     "ADISCORD_tech_casualty_evacuation": ('ADISCORD_tech_combat_engineering_sections',),
     "ADISCORD_tech_battle_damage_survey_teams": (
@@ -6435,6 +6667,7 @@ COMMON_STARTING_ROOTS = tuple(
             "synthetic_rubber",
             "synthetic_oil",
             "power_shields",
+            "amphibious_operations",
         }
         for tech in BRANCH_BY_KEY[branch_key].techs[:4 if branch_key == "small_arms" else 1]
     )
@@ -7235,6 +7468,9 @@ EQUIPMENT_UNLOCK_ICONS = {
 EQUIPMENT_UNLOCK_ICONS.update(
     {f"ADISCORD_tech_{key}": icon for key, (_, icon) in NAVAL_AIR_UNLOCKS.items()}
 )
+EQUIPMENT_UNLOCK_ICONS.update({
+    f"ADISCORD_tech_{key}": icon for key, (_, icon) in NAVAL_AIR_RESEARCH.items()
+})
 EQUIPMENT_UNLOCK_ICONS["ADISCORD_tech_twin_engine_aircraft"] = "tactical_bomber1"
 
 
@@ -7375,8 +7611,10 @@ WEAPON_CATEGORY_ICONS.update(
 
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
-    if branch.key in NAVAL_HULL_BRANCH_KEYS:
+    if tech.icon in NAVAL_HULL_ART:
         return tech.icon
+    if tech.key in NAVAL_UPGRADE_ICONS:
+        return NAVAL_UPGRADE_ICONS[tech.key]
     if tech.key in WEAPON_CATEGORY_ICONS:
         return WEAPON_CATEGORY_ICONS[tech.key]
     if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
@@ -7498,6 +7736,42 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "amphibious_formation_organization": (
+        "Единые нормы распределения транспорта и боевых частей позволяют включать больше дивизий в один план высадки",
+        "Common transport and troop allocation standards allow more divisions in a single landing plan",
+    ),
+    "amphibious_staff_sections": (
+        "Специализированные штабные группы обеспечивают подготовку дополнительного плана морского десанта одновременно с остальными",
+        "Dedicated staff sections prepare an additional naval invasion plan alongside existing operations",
+    ),
+    "amphibious_embarkation_schedules": (
+        "Согласованные графики прибытия частей и подачи конвоев сокращают подготовку морской десантной операции",
+        "Coordinated troop arrival and convoy schedules shorten naval invasion preparation",
+    ),
+    "amphibious_landing_craft": (
+        "Мелкосидящие катера с носовой аппарелью ускоряют доставку штурмовых групп с транспортов на берег",
+        "Shallow-draft craft with bow ramps speed the transfer of assault groups from transports to shore",
+    ),
+    "amphibious_shore_parties": (
+        "Береговые команды обозначают выходы с пляжей и направляют прибывающие подразделения, ускоряя высадку",
+        "Shore parties mark beach exits and direct arriving units to accelerate landings",
+    ),
+    "amphibious_loading_rehearsals": (
+        "Совместные тренировки войск и экипажей устраняют задержки при сборе и погрузке десанта",
+        "Joint troop and crew rehearsals reduce delays during landing-force assembly and embarkation",
+    ),
+    "amphibious_assault_landing_systems": (
+        "Защищённые высадочные средства и отработанные выходы на берег уменьшают боевой штраф при морском вторжении",
+        "Protected landing systems and rehearsed beach exits reduce the combat penalty during naval invasions",
+    ),
+    "amphibious_wave_coordination": (
+        "Общий график подхода десантных волн позволяет управлять дополнительным планом и большим числом дивизий в каждой высадке",
+        "A shared landing-wave schedule supports an additional plan and more divisions in each landing",
+    ),
+    "amphibious_integrated_operations": (
+        "Единое управление погрузкой, переходом и выходом на берег сокращает подготовку операции и ускоряет высадку войск",
+        "Integrated control of embarkation, transit and beach access shortens preparation and speeds troop landings",
+    ),
     "kefreyt_shield_special_forces": (
         "Открывает щитовые батальоны и производство первого поколения силовых щитов",
         "Unlocks shield battalions and first-generation power shield production",
@@ -7959,11 +8233,11 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
                 else f"§G+{amount}§! £resources_strip|{frame} from each existing and future plant."
             )
         return notes
-    if branch.key == "carrier_hulls":
+    if branch.key == "carrier_hulls" and "_hull_" in branch.techs[index].key:
         notes.append(
-            "Открывает также палубный истребитель и торпедоносец этого поколения. Самолёты нужно произвести на военных заводах и назначить в палубные авиакрылья."
+            "Палубные истребители и торпедоносцы исследуются в отдельных ответвлениях. Самолёты нужно произвести на военных заводах и назначить в палубные авиакрылья."
             if is_ru else
-            "Also unlocks this generation's carrier fighter and torpedo bomber. Produce aircraft in military factories and assign them to carrier air wings."
+            "Carrier fighters and torpedo bombers are researched in separate branches. Produce aircraft in military factories and assign them to carrier air wings."
         )
     if branch.key == "small_arms" and index % 4:
         model = branch.techs[index - index % 4]
@@ -8108,6 +8382,9 @@ def research_cost_for(
 
     tech = branch.techs[index]
     year = branch.years[index]
+    if tech.key in NAVAL_UPGRADE_ORIGINS and branch.key in NAVAL_HULL_BRANCH_KEYS:
+        origin, origin_index = NAVAL_UPGRADE_ORIGINS[tech.key]
+        return research_cost_for(origin, origin_index, dependencies, xor)
     if branch.profile.startswith("forbidden_"):
         return 2.60 + index * (0.18 if len(branch.techs) > 3 else 0.35)
     if branch.key == "small_arms" and tech.id not in ENABLE_EQUIPMENT:
@@ -8301,13 +8578,36 @@ def folder_grid_format(folder: str) -> str:
     return "LEFT" if folder in HORIZONTAL_FOLDERS else "UP"
 
 
+def technology_year_occurrence(branch: Branch, index: int) -> int:
+    """Parallel naval packages share a date column; dependent steps do not."""
+    if branch.key not in NAVAL_HULL_BRANCH_KEYS:
+        return branch.years[:index].count(branch.years[index])
+    graph = BRANCH_GRAPHS[branch.key]
+    depths = [0] * len(branch.techs)
+    for source, targets in enumerate(graph.successors):
+        for target in targets:
+            if branch.years[source] == branch.years[target]:
+                depths[target] = max(depths[target], depths[source] + 1)
+    return depths[index]
+
+
 def horizontal_year_columns(folder: str) -> tuple[tuple[int, int], ...]:
-    """Reserve separate cells for sequential modifications in the same year."""
-    branches = [branch for branch in BRANCHES if folder in branch.folders]
+    """Reserve columns for years and successive same-year research steps."""
+    timeline_folder = "naval_folder" if folder == "mtgnavalfolder" else folder
+    branches = [branch for branch in BRANCHES if timeline_folder in branch.folders]
+    if folder in {"naval_folder", "mtgnavalfolder"}:
+        years = sorted({year for branch in branches for year in branch.years})
+    else:
+        years = YEARS
     return tuple(
         (year, occurrence)
-        for year in YEARS
-        for occurrence in range(max(1, *(branch.years.count(year) for branch in branches)))
+        for year in years
+        for occurrence in range(max([
+            1,
+            *(technology_year_occurrence(branch, i) + 1
+              for branch in branches
+              for i, candidate in enumerate(branch.years) if candidate == year),
+        ]))
     )
 
 
@@ -8334,7 +8634,7 @@ def horizontal_visual_slots(branch: Branch) -> tuple[int, ...]:
             year,
             horizontal=True,
             folder=folder,
-            occurrence=branch.years[:index].count(year),
+            occurrence=technology_year_occurrence(branch, index),
         )
         for index, year in enumerate(branch.years)
     )
@@ -8847,7 +9147,9 @@ CUSTOM_TECH_TEXTURES = {
 
 def write_naval_hull_cards() -> None:
     """Fit native ship art into wide equipment nodes without fallback badges."""
-    for icon, source_icon in NAVAL_HULL_ART.items():
+    artwork_sources = {**NAVAL_HULL_ART, "ADISCORD_naval_missile_systems": "guided_missile_1"}
+    for icon, source_icon in artwork_sources.items():
+        size = (176, 72) if icon in NAVAL_HULL_ART else (72, 72)
         source = BASE_GAME / "gfx/interface/technologies" / f"{source_icon}.dds"
         target = ROOT / "gfx/interface/technologies" / f"{icon}.dds"
         with Image.open(source) as original:
@@ -8856,9 +9158,9 @@ def write_naval_hull_cards() -> None:
             if bounds is None:
                 raise ValueError(f"Empty naval artwork: {source}")
             artwork = artwork.crop(bounds)
-            artwork.thumbnail((172, 64), Image.Resampling.LANCZOS)
-            card = Image.new("RGBA", (176, 72))
-            card.alpha_composite(artwork, ((176 - artwork.width) // 2, (72 - artwork.height) // 2))
+            artwork.thumbnail((size[0] - 4, size[1] - 8), Image.Resampling.LANCZOS)
+            card = Image.new("RGBA", size)
+            card.alpha_composite(artwork, ((size[0] - artwork.width) // 2, (size[1] - artwork.height) // 2))
             card.save(target, format="DDS")
 
 
@@ -9387,6 +9689,7 @@ for kind, ru, en, description_ru, description_en in (
         NAVAL_AIR_EQUIPMENT_LOCALISATION[f"ADISCORD_{kind}_{year}"] = (
             f"{ru} обр. {year}", f"{en} Model {year}", description_ru + ".", description_en + ".",
         )
+        TECHNICAL_TECH_DESCRIPTIONS[f"{kind}_research_{year}"] = (description_ru, description_en)
 
 
 REGIMENTAL_SUPPORT_LOCALISATION = {
@@ -9817,6 +10120,15 @@ def write_gui() -> None:
         )
         start, end, _ = named_blocks[target]
         replacements.append((start, end, compact))
+    # Native naval cards reserve a 300px label area. These trees use the same
+    # 183px equipment cards and 70px connectors as the other generated folders.
+    naval_source_name = "techtree_infantry_folder_item"
+    naval_source = "\n".join(line.rstrip() for line in named_blocks[naval_source_name][2].splitlines())
+    for target in ("techtree_naval_folder_item", "techtree_mtgnavalfolder_item"):
+        card = naval_source.replace(naval_source_name, target, 1)
+        card = card.replace('font = "hoi_20bs"', 'font = "hoi_16mbs"')
+        start, end, _ = named_blocks[target]
+        replacements.append((start, end, card))
     for start, end, replacement in sorted(replacements, reverse=True):
         text = text[:start] + replacement + text[end:]
     text = apply_tree_skin(text)

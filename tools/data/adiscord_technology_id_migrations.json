@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "legacy_count": 625,
-  "current_count": 424,
+  "current_count": 441,
   "migrations": {
     "ADISCORD_tech_active_hearing_protection": {
       "status": "preserved",
@@ -101,7 +101,7 @@
     },
     "ADISCORD_tech_anechoic_tile_bonding": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_air_independent_cells"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_anticipatory_service_allocation": {
       "status": "replaced",
@@ -221,7 +221,7 @@
     },
     "ADISCORD_tech_autonomous_capital_ship_cores": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_distributed_horizon_targeting"
+      "replacement": "ADISCORD_tech_horizon_fleet_command"
     },
     "ADISCORD_tech_autonomous_cargo_gliders": {
       "status": "replaced",
@@ -325,7 +325,7 @@
     },
     "ADISCORD_tech_autonomous_replenishment_craft": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_escorts"
+      "replacement": "ADISCORD_tech_distributed_sea_control"
     },
     "ADISCORD_tech_autonomous_route_clearance_scouts": {
       "status": "replaced",
@@ -425,7 +425,7 @@
     },
     "ADISCORD_tech_capital_ship_integrated_electric_drive": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_modular_vertical_launch_cells"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_carbon_feedstock_cracking": {
       "status": "preserved",
@@ -521,7 +521,7 @@
     },
     "ADISCORD_tech_composite_armor_belts": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_task_groups"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_composite_protection_kits": {
       "status": "preserved",
@@ -533,11 +533,11 @@
     },
     "ADISCORD_tech_conformal_flank_sonars": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_wake_homing_torpedo_seekers"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_containerized_escort_missile_cells": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_variable_depth_sonar"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_contested_zone_navigation": {
       "status": "replaced",
@@ -565,7 +565,7 @@
     },
     "ADISCORD_tech_cooperative_convoy_tracking": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_unmanned_mine_countermeasure_boats"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_cooperative_engagement_links": {
       "status": "replaced",
@@ -577,7 +577,7 @@
     },
     "ADISCORD_tech_cooperative_fleet_missile_defense": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_task_groups"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_cooperative_mapping_relays": {
       "status": "replaced",
@@ -673,7 +673,7 @@
     },
     "ADISCORD_tech_directed_energy_broadside_defense": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_drone_carrier_deck_systems"
+      "replacement": "ADISCORD_tech_horizon_fleet_command"
     },
     "ADISCORD_tech_directed_energy_countermeasures": {
       "status": "replaced",
@@ -685,7 +685,7 @@
     },
     "ADISCORD_tech_directed_energy_point_defense": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_escorts"
+      "replacement": "ADISCORD_tech_distributed_sea_control"
     },
     "ADISCORD_tech_directional_mesh_relays": {
       "status": "replaced",
@@ -697,11 +697,11 @@
     },
     "ADISCORD_tech_distributed_abyssal_comm_relays": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_self_repairing_pressure_hulls"
+      "replacement": "ADISCORD_tech_deep_ocean_denial"
     },
     "ADISCORD_tech_distributed_acoustic_pickets": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_convoy_defense_network"
+      "replacement": "ADISCORD_tech_distributed_sea_control"
     },
     "ADISCORD_tech_distributed_ammunition_carriers": {
       "status": "replaced",
@@ -805,7 +805,7 @@
     },
     "ADISCORD_tech_drone_pickets": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_unmanned_mine_countermeasure_boats"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_drone_recon_swarms": {
       "status": "preserved",
@@ -893,11 +893,11 @@
     },
     "ADISCORD_tech_escort_datalinks": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_modular_escort_combat_systems"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_escort_integrated_electric_propulsion": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_variable_depth_sonar"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_evacuation_route_beacons": {
       "status": "replaced",
@@ -933,7 +933,7 @@
     },
     "ADISCORD_tech_fiber_optic_torpedo_control": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_seabed_sensor_webs"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_field_ew_units": {
       "status": "preserved",
@@ -1205,7 +1205,7 @@
     },
     "ADISCORD_tech_long_range_railgun_fire_control": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_railgun_batteries"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_low_observable_cruise_missile_skins": {
       "status": "replaced",
@@ -1237,7 +1237,7 @@
     },
     "ADISCORD_tech_magnetohydrodynamic_silent_drive": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_submarines"
+      "replacement": "ADISCORD_tech_deep_ocean_denial"
     },
     "ADISCORD_tech_man_portable_sensor_masts": {
       "status": "preserved",
@@ -1465,7 +1465,7 @@
     },
     "ADISCORD_tech_over_horizon_escort_radar": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_unmanned_mine_countermeasure_boats"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_over_the_horizon_fire_control": {
       "status": "preserved",
@@ -1513,7 +1513,7 @@
     },
     "ADISCORD_tech_phased_array_mast_complexes": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_missile_batteries"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_photonic_compute_arrays": {
       "status": "replaced",
@@ -1645,7 +1645,7 @@
     },
     "ADISCORD_tech_pressure_tolerant_lithium_cells": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_seabed_sensor_webs"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_programmable_airburst_shells": {
       "status": "replaced",
@@ -1677,7 +1677,7 @@
     },
     "ADISCORD_tech_pumpjet_propulsors": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_air_independent_cells"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_quantum_command_authentication": {
       "status": "replaced",
@@ -1685,7 +1685,7 @@
     },
     "ADISCORD_tech_quantum_magnetometer_arrays": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_self_repairing_pressure_hulls"
+      "replacement": "ADISCORD_tech_deep_ocean_denial"
     },
     "ADISCORD_tech_quiet_propulsion": {
       "status": "preserved",
@@ -2001,7 +2001,7 @@
     },
     "ADISCORD_tech_seabed_terrain_navigation": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_seabed_sensor_webs"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_sealed_combat_suits": {
       "status": "preserved",
@@ -2061,7 +2061,7 @@
     },
     "ADISCORD_tech_self_repairing_escort_hulls": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_predictive_convoy_defense_network"
+      "replacement": "ADISCORD_tech_distributed_sea_control"
     },
     "ADISCORD_tech_self_repairing_field_depots": {
       "status": "replaced",
@@ -2205,7 +2205,7 @@
     },
     "ADISCORD_tech_stabilized_naval_gun_directors": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_missile_batteries"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_standard_civil_codes": {
       "status": "replaced",
@@ -2301,7 +2301,7 @@
     },
     "ADISCORD_tech_supercavitating_interceptor_torpedoes": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_submarines"
+      "replacement": "ADISCORD_tech_deep_ocean_denial"
     },
     "ADISCORD_tech_superconducting_coil_barrels": {
       "status": "preserved",
@@ -2313,7 +2313,7 @@
     },
     "ADISCORD_tech_superconducting_railgun_turrets": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_railgun_batteries"
+      "replacement": "ADISCORD_tech_horizon_fleet_command"
     },
     "ADISCORD_tech_supercruise_turbofans": {
       "status": "replaced",
@@ -2397,7 +2397,7 @@
     },
     "ADISCORD_tech_towed_array_sonar": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_variable_depth_sonar"
+      "replacement": "ADISCORD_tech_convoy_routing"
     },
     "ADISCORD_tech_trauma_plates": {
       "status": "preserved",
@@ -2417,7 +2417,7 @@
     },
     "ADISCORD_tech_underwater_vehicle_deployment_bays": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_autonomous_submarines"
+      "replacement": "ADISCORD_tech_homing_torpedoes"
     },
     "ADISCORD_tech_unified_treasury_ledgers": {
       "status": "replaced",
@@ -2425,7 +2425,7 @@
     },
     "ADISCORD_tech_unmanned_damage_control_decks": {
       "status": "replaced",
-      "replacement": "ADISCORD_tech_networked_task_groups"
+      "replacement": "ADISCORD_tech_radar_gunnery"
     },
     "ADISCORD_tech_unmanned_forward_air_controllers": {
       "status": "replaced",

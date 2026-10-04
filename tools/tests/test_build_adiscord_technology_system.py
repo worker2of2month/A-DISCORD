@@ -21,6 +21,73 @@ STARTING_PROFILE_MANIFEST = (
 )
 
 
+class AmphibiousTechnologyTests(unittest.TestCase):
+    def test_progression_requires_research_and_preserves_transport_access(self):
+        branch = generator.BRANCH_BY_KEY["amphibious_operations"]
+        self.assertEqual(branch.years, (2160, 2161, 2162, 2163, 2164, 2166, 2169, 2172, 2175))
+        for index, tech in enumerate(branch.techs):
+            for profile in generator.STARTING_TECH_PROFILES.values():
+                self.assertNotIn(tech.id, profile)
+            required = set(generator.technology_prerequisite_closure((tech.id,)))
+            self.assertEqual(required, {
+                "ADISCORD_tech_restored_dockyards",
+                *(item.id for item in branch.techs[:index + 1]),
+            })
+            self.assertEqual(generator.xor_siblings(branch, index), ())
+            self.assertNotIn(tech.id, generator.ALLOW)
+        dockyards, index = generator.TECH_POSITION_BY_ID["ADISCORD_tech_restored_dockyards"]
+        self.assertIn("naval_invasion_capacity = 100", generator.render_technology(dockyards, index))
+
+    def test_rendered_rewards_preserve_approved_totals(self):
+        branch = generator.BRANCH_BY_KEY["amphibious_operations"]
+        totals = {}
+        for index, tech in enumerate(branch.techs):
+            rendered = generator.render_technology(branch, index)
+            prefix = re.split(r"(?m)^\s*(?:path|dependencies|research_cost)\s*=", rendered)[0]
+            for modifier, value in re.findall(r"\b(\w+) = (-?[0-9.]+)", prefix):
+                totals[modifier] = totals.get(modifier, Decimal(0)) + Decimal(value)
+            self.assertNotIn("on_research_complete", rendered)
+            self.assertIn(rendered, (ROOT / "common/technologies/ADISCORD_naval.txt").read_text(encoding="utf-8"))
+        self.assertEqual(totals, {
+            "naval_invasion_division_cap": Decimal(4),
+            "naval_invasion_plan_cap": Decimal(2),
+            "naval_invasion_prep_days": Decimal(-20),
+            "amphibious_invasion": Decimal("0.15"),
+            "naval_invasion_penalty": Decimal("-0.05"),
+        })
+
+    def test_branch_has_native_icons_localisation_and_both_naval_layouts(self):
+        branch = generator.BRANCH_BY_KEY["amphibious_operations"]
+        self.assertEqual(branch.folders, ("naval_folder", "mtgnavalsupportfolder"))
+        for folder in branch.folders:
+            gui = generator.render_folder(folder)
+            self.assertIn('name = "ADISCORD_branch_amphibious_operations"', gui)
+            self.assertIn(f'name = "{branch.techs[0].id}_tree"', gui)
+            for year in branch.years:
+                self.assertIn(f"year_amphibious_operations_{year}", gui)
+        for index, tech in enumerate(branch.techs):
+            self.assertEqual(generator.icon_for_technology(branch, index), tech.icon)
+            self.assertIn(tech.key, generator.TECHNICAL_TECH_DESCRIPTIONS)
+            for language in ("russian", "english"):
+                source = "\n".join(generator.generated_localisation(language))
+                self.assertRegex(source, rf'(?m)^ {tech.id}_desc:0 "[^"\n]+"$')
+
+    def test_validator_rejects_missing_zero_or_harmful_single_rewards(self):
+        branch = generator.BRANCH_BY_KEY["amphibious_operations"]
+        _, blocks = validator.collect_technologies()
+        issues = validator.check_post_2160_research_balance(blocks)
+        self.assertFalse([issue for issue in issues if "ADISCORD_tech_amphibious_" in issue])
+        for index, tech in enumerate(branch.techs[:7]):
+            rendered = generator.render_technology(branch, index)
+            effect = tech.effects[0]
+            modifier, value = effect.split(" = ")
+            for replacement in ("", f"{modifier} = 0", f"{modifier} = {-Decimal(value)}"):
+                with self.subTest(technology=tech.id, replacement=replacement):
+                    invalid = {**blocks, tech.id: rendered.replace(effect, replacement)}
+                    issues = validator.check_post_2160_research_balance(invalid)
+                    self.assertTrue(any(tech.id in issue and "numeric gameplay effects" in issue for issue in issues))
+
+
 class CompactTechnologyTreeContractTests(unittest.TestCase):
     def test_synthetic_branches_require_research_and_progress_independently(self):
         rubber = generator.BRANCH_BY_KEY["synthetic_rubber"]
@@ -356,7 +423,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                     self.assertEqual(
                         generator.technology_time_slot(branch, index),
                         generator.horizontal_year_columns(branch.folders[0]).index(
-                            (year, branch.years[:index].count(year))
+                            (year, generator.technology_year_occurrence(branch, index))
                         ) * 3,
                     )
 
@@ -370,7 +437,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 )
                 origin = re.search(r"position = \{ x = (-?\d+) y = (-?\d+) \}", grid)
                 for index, year in enumerate(branch.years):
-                    occurrence = branch.years[:index].count(year)
+                    occurrence = generator.technology_year_occurrence(branch, index)
                     label_id = (
                         (str(year) if occurrence == 0 else f"{year}_{occurrence}")
                         if horizontal else f"{branch.key}_{year}"
@@ -516,7 +583,7 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
 
     def test_naval_research_unlocks_multiple_producible_generations(self) -> None:
         blocks = validator.collect_equipment_blocks()
-        for key in ('naval_support', 'surface_fleet', 'subsurface'):
+        for key in generator.NAVAL_HULL_BRANCH_KEYS:
             branch = generator.BRANCH_BY_KEY[key]
             unlocked = {
                 equipment
@@ -528,6 +595,110 @@ class CompactTechnologyTreeContractTests(unittest.TestCase):
                 for equipment in unlocked:
                     self.assertIn(equipment, blocks)
                     self.assertNotRegex(blocks[equipment], r'active\s*=\s*yes')
+
+    def test_ship_classes_have_dedicated_native_art_and_one_unlock_per_hull(self):
+        from PIL import Image
+
+        equipment = validator.collect_equipment_blocks()
+        unlock_counts = {}
+        for unlocked in generator.ENABLE_EQUIPMENT.values():
+            for item in unlocked:
+                unlock_counts[item] = unlock_counts.get(item, 0) + 1
+        for kind, (_, _, _, _, family, _) in generator.NAVAL_HULL_CLASSES.items():
+            branch = generator.BRANCH_BY_KEY[f"{kind}_hulls"]
+            hulls = [(i, tech) for i, tech in enumerate(branch.techs) if "_hull_" in tech.key]
+            self.assertEqual(tuple(branch.years[i] for i, _ in hulls), (2155, 2163, 2170, 2175))
+            self.assertEqual(branch.folders, ("naval_folder", "mtgnavalfolder"))
+            for tier, (i, tech) in enumerate(hulls):
+                model = f"ADISCORD_{family}_{branch.years[i]}"
+                self.assertEqual(unlock_counts[model], 1, model)
+                self.assertIn(model, generator.ENABLE_EQUIPMENT[tech.id])
+                self.assertFalse(tech.effects, tech.id)
+                self.assertEqual(generator.icon_for_technology(branch, i), tech.icon)
+                self.assertIn(tech.icon, generator.NAVAL_HULL_ART)
+                with Image.open(ROOT / f"gfx/interface/technologies/{tech.icon}.dds") as image:
+                    self.assertEqual(image.size, (176, 72))
+                    self.assertIsNotNone(image.convert("RGBA").getchannel("A").getbbox())
+                if tier:
+                    self.assertIn(
+                        f"parent = ADISCORD_{family}_{generator.NAVAL_HULL_YEARS[tier - 1]}", equipment[model]
+                    )
+                self.assertIn(tech.id, generator.render_technology(branch, i))
+        for key in ("naval_support", "surface_fleet", "subsurface"):
+            branch = generator.BRANCH_BY_KEY[key]
+            self.assertIn("mtgnavalsupportfolder", branch.folders)
+            self.assertNotIn("mtgnavalfolder", branch.folders)
+            for tech in branch.techs:
+                self.assertNotIn(tech.id, generator.ENABLE_EQUIPMENT)
+
+    def test_carrier_generations_unlock_usable_air_groups(self):
+        equipment = validator.collect_equipment_blocks()
+        air_units = (ROOT / "common/units/ADISCORD_air_units.txt").read_text(encoding="utf-8")
+        enum = (ROOT / "common/script_enums.txt").read_text(encoding="utf-8")
+        for year in generator.NAVAL_HULL_YEARS:
+            unlocked = generator.ENABLE_EQUIPMENT[f"ADISCORD_tech_carrier_hull_{year}"]
+            self.assertEqual(unlocked, (f"ADISCORD_carrier_{year}",))
+            self.assertRegex(equipment[f"ADISCORD_carrier_{year}"], r"carrier_size = [4-9]|carrier_size = 10")
+            for family in ("cv_fighter", "cv_bomber"):
+                model = f"ADISCORD_{family}_{year}"
+                aircraft_tech = f"ADISCORD_tech_{family}_research_{year}"
+                self.assertEqual(generator.ENABLE_EQUIPMENT[aircraft_tech], (model,))
+                self.assertIn("carrier_capable = yes", equipment[model])
+                self.assertIn(model, enum)
+                self.assertIn(f"ADISCORD_{family}_archetype = 1", air_units)
+        self.assertIn("naval_strike_attack", equipment["ADISCORD_cv_bomber_2155"])
+        self.assertIn("ai_type = cv_naval_bomber", equipment["ADISCORD_cv_bomber_archetype"])
+        self.assertIn("air_superiority", equipment["ADISCORD_cv_fighter_2155"])
+        self.assertEqual(air_units.count("carrier_air_wing_size = 10"), 2)
+
+    def test_naval_programmes_branch_without_blocking_hull_replacement(self):
+        for kind, programmes in generator.NAVAL_SIDE_PROGRAMMES.items():
+            branch = generator.BRANCH_BY_KEY[f"{kind}_hulls"]
+            graph = generator.BRANCH_GRAPHS[branch.key]
+            indices = {tech.key: i for i, tech in enumerate(branch.techs)}
+            hulls = [indices[f"{kind}_hull_{year}"] for year in generator.NAVAL_HULL_YEARS]
+            self.assertGreater(len(set(graph.lanes)), 1)
+            self.assertGreater(len(graph.successors[hulls[0]]), 1)
+            self.assertEqual(sum(not targets for targets in graph.successors), int(kind != "carrier") + len(programmes))
+            for earlier, later in zip(hulls, hulls[1:]):
+                self.assertIn(later, graph.successors[earlier])
+                self.assertFalse(graph.dependencies[later])
+            for programme in programmes:
+                for earlier, later in zip(programme, programme[1:]):
+                    self.assertIn(indices[later], graph.successors[indices[earlier]])
+        self.assertEqual(
+            generator.horizontal_year_columns("naval_folder"),
+            generator.horizontal_year_columns("mtgnavalfolder"),
+        )
+
+    def test_naval_refits_preserve_their_original_effects_and_prices(self):
+        for key, (origin, old_index) in generator.NAVAL_UPGRADE_ORIGINS.items():
+            branch, index = generator.TECH_POSITION_BY_ID[f"ADISCORD_tech_{key}"]
+            self.assertEqual(branch.techs[index].effects, origin.techs[old_index].effects)
+            self.assertEqual(branch.years[index], origin.years[old_index])
+            self.assertEqual(
+                generator.research_cost_for(branch, index, (), ()),
+                generator.research_cost_for(origin, old_index, (), ()),
+            )
+        for year in generator.NAVAL_HULL_YEARS:
+            for family in ("cv_fighter", "cv_bomber"):
+                branch, index = generator.TECH_POSITION_BY_ID[f"ADISCORD_tech_{family}_research_{year}"]
+                graph = generator.BRANCH_GRAPHS[branch.key]
+                parents = [branch.techs[i].id for i, targets in enumerate(graph.successors) if index in targets]
+                self.assertIn(f"ADISCORD_tech_carrier_hull_{year}", parents)
+                if year != generator.NAVAL_HULL_YEARS[0]:
+                    self.assertEqual(len(graph.dependencies[index]), 2)
+
+    def test_new_ship_classes_are_not_granted_to_every_country(self):
+        common = set(generator.STARTING_TECH_PROFILES["common"])
+        naval = set(generator.STARTING_TECH_PROFILES["naval"])
+        for kind in generator.NAVAL_HULL_CLASSES:
+            root = f"ADISCORD_tech_{kind}_hull_2155"
+            self.assertNotIn(root, common)
+            self.assertEqual(root in naval, kind in {"destroyer", "heavy_cruiser", "submarine"})
+        gui = generator.render_folder("mtgnavalfolder")
+        self.assertEqual(gui.count("gridboxtype = {"), 6)
+        self.assertNotIn('name = "ADISCORD_branch_naval_support"', gui)
 
     def test_aircraft_research_opens_bomber_and_maritime_production(self) -> None:
         blocks = validator.collect_equipment_blocks()

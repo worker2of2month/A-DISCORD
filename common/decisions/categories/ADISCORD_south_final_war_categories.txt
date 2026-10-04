@@ -1,0 +1,28 @@
+ADISCORD_south_final_war_category = {
+	icon = generic_prepare_civil_war
+	allowed = {
+		OR = {
+			tag = SHL
+			tag = NAM
+			tag = EFL
+			tag = AZH
+		}
+	}
+	visible = {
+		OR = {
+			AND = {
+				ADISCORD_south_crisis_open = yes
+				OR = {
+					tag = SHL
+					tag = NAM
+				}
+			}
+			AND = {
+				ADISCORD_south_final_active = yes
+				has_variable = ADISCORD_south_side
+			}
+		}
+	}
+	visible_when_empty = yes
+	priority = 26
+}

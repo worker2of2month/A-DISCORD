@@ -16,6 +16,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 try:
     from tools.builders.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
+        NAVAL_SIDE_PROGRAMMES as GENERATED_NAVAL_SIDE_PROGRAMMES,
         BRANCHES as GENERATED_BRANCHES,
         ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
@@ -39,6 +40,7 @@ try:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        horizontal_year_columns as generated_horizontal_year_columns,
         render_folder as render_generated_technology_folder,
         effects_for as generated_effects_for,
     )
@@ -58,6 +60,7 @@ try:
 except ModuleNotFoundError:
     from builders.build_adiscord_technology_system import (
         BRANCH_GRAPHS as GENERATED_BRANCH_GRAPHS,
+        NAVAL_SIDE_PROGRAMMES as GENERATED_NAVAL_SIDE_PROGRAMMES,
         BRANCHES as GENERATED_BRANCHES,
         ACCESS_REQUIREMENT_LOCALISATION as GENERATED_ACCESS_REQUIREMENT_LOCALISATION,
         BUILDING_RESOURCE_UPGRADES as GENERATED_BUILDING_RESOURCE_UPGRADES,
@@ -81,6 +84,7 @@ except ModuleNotFoundError:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        horizontal_year_columns as generated_horizontal_year_columns,
         render_folder as render_generated_technology_folder,
         effects_for as generated_effects_for,
     )
@@ -2335,11 +2339,7 @@ def check_technology_ui_years() -> list[str]:
         for year in sorted(EXPECTED_TECH_UI_YEARS):
             count = len(re.findall(rf'\btext\s*=\s*"{year}"', folder_block))
             expected = (
-                max(
-                    1,
-                    *(branch.years.count(int(year)) for branch in GENERATED_BRANCHES
-                      if folder in branch.folders),
-                )
+                sum(int(year) == column_year for column_year, _ in generated_horizontal_year_columns(folder))
                 if folder in GENERATED_HORIZONTAL_FOLDERS
                 else sum(
                     int(year) in branch.years
@@ -3333,9 +3333,22 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 r"\bfuel_gain_factor_from_states\s*=\s*(-?[0-9.]+)", effect_prefix
             )
             substantial_fuel_upgrade = fuel_output is not None and float(fuel_output[1]) >= 0.10
+            # Capacity, preparation and landing improvements are complete naval
+            # rewards. Require a beneficial value in the emitted native payload.
+            invasion_upgrade = False
+            for modifier, direction, minimum in (
+                ("naval_invasion_division_cap", 1, 1),
+                ("naval_invasion_plan_cap", 1, 1),
+                ("naval_invasion_prep_days", -1, 1),
+                ("amphibious_invasion", 1, 0.05),
+                ("naval_invasion_penalty", -1, 0.03),
+            ):
+                value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", effect_prefix)
+                if value and float(value[1]) * direction >= minimum:
+                    invasion_upgrade = True
             if tech.id in unlocks or resource_upgrade:
                 minimum_effects = 0
-            elif family_upgrade or weapon_modification or substantial_fuel_upgrade:
+            elif family_upgrade or weapon_modification or substantial_fuel_upgrade or invasion_upgrade:
                 minimum_effects = 1
             else:
                 minimum_effects = 2
@@ -3469,7 +3482,11 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
                 parent_indices[target].append(source)
         leaves = sum(not targets for targets in graph.successors)
         xor_kind = GENERATED_XOR_KIND_BY_BRANCH.get(branch.key)
-        expected_leaves = 2 if xor_kind == "permanent" else 1
+        kind = branch.key.removesuffix("_hulls")
+        if kind in GENERATED_NAVAL_SIDE_PROGRAMMES:
+            expected_leaves = int(kind != "carrier") + len(GENERATED_NAVAL_SIDE_PROGRAMMES[kind])
+        else:
+            expected_leaves = 2 if xor_kind == "permanent" else 1
         if leaves != expected_leaves:
             issues.append(
                 f"{branch.key} graph has {leaves} programme endings; expected {expected_leaves}"
@@ -3526,6 +3543,11 @@ def check_technology_graph_quality(tech_blocks: dict[str, str]) -> list[str]:
             effect_body = body[: stop.start()] if stop else body
             signature = re.sub(r"-?[0-9]+(?:\.[0-9]+)?", "#", effect_body)
             signature = re.sub(r"\s+", " ", signature).strip()
+            # Distinct producible models are distinct rewards even when their
+            # research nodes have no fleet-wide stat modifiers.
+            unlock = re.search(r"\benable_equipments\s*=\s*\{([^{}]+)\}", body)
+            if unlock:
+                signature += " unlocks:" + " ".join(sorted(unlock.group(1).split()))
             if signature:
                 signatures.add(signature)
         if len(signatures) < minimum:
