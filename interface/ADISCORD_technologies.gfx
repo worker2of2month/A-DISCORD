@@ -1,5 +1,125 @@
 spriteTypes = {
 	SpriteType = {
+		name = "GFX_ADISCORD_tech_destroyer_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_destroyer_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_destroyer_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_destroyer_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_destroyer_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_destroyer_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_destroyer_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_destroyer_2175.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_light_cruiser_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_light_cruiser_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_light_cruiser_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_light_cruiser_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_light_cruiser_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_light_cruiser_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_light_cruiser_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_light_cruiser_2175.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_heavy_cruiser_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_heavy_cruiser_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_heavy_cruiser_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_heavy_cruiser_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_heavy_cruiser_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_heavy_cruiser_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_heavy_cruiser_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_heavy_cruiser_2175.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_battleship_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_battleship_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_battleship_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_battleship_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_battleship_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_battleship_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_battleship_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_battleship_2175.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_carrier_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_carrier_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_carrier_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_carrier_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_carrier_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_carrier_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_carrier_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_carrier_2175.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_submarine_hull_2155_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_submarine_2155.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_submarine_hull_2163_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_submarine_2163.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_submarine_hull_2170_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_submarine_2170.dds"
+	}
+
+	SpriteType = {
+		name = "GFX_ADISCORD_tech_submarine_hull_2175_medium"
+		textureFile = "gfx/interface/technologies/ADISCORD_naval_submarine_2175.dds"
+	}
+
+	SpriteType = {
 		name = "GFX_ADISCORD_tech_standardized_machine_tools_medium"
 		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}

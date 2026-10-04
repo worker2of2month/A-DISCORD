@@ -60,4 +60,30 @@ sub_units = {
 		}
 		land_air_wing_size = 100
 	}
+
+	cv_fighter = {
+		sprite = light_plane
+		priority = 1
+		active = yes
+		type = fighter
+		need = {
+			ADISCORD_cv_fighter_archetype = 1
+		}
+		categories = { category_fighter category_carrier_fighter }
+		carrier_air_wing_size = 10
+		land_air_wing_size = 100
+	}
+
+	cv_nav_bomber = {
+		sprite = light_plane
+		priority = 1
+		active = yes
+		type = naval_bomber
+		need = {
+			ADISCORD_cv_bomber_archetype = 1
+		}
+		categories = { category_nav_bomber category_carrier_nav_bomber }
+		carrier_air_wing_size = 10
+		land_air_wing_size = 100
+	}
 }

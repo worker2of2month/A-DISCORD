@@ -1,4 +1,764 @@
 technologies = {
+	ADISCORD_tech_destroyer_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_destroyer_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_escort_ship_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 16.875
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_destroyer_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_destroyer_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_escort_ship_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_destroyer_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_destroyer_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_escort_ship_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_destroyer_hull_2175 = {
+		enable_equipments = { ADISCORD_escort_ship_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_light_cruiser_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_light_cruiser_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_light_cruiser_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_light_cruiser_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_light_cruiser_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_light_cruiser_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_light_cruiser_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_light_cruiser_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_light_cruiser_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_light_cruiser_hull_2175 = {
+		enable_equipments = { ADISCORD_light_cruiser_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_heavy_cruiser_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_heavy_cruiser_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_cruiser_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_heavy_cruiser_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_heavy_cruiser_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_cruiser_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_heavy_cruiser_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_heavy_cruiser_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_cruiser_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_heavy_cruiser_hull_2175 = {
+		enable_equipments = { ADISCORD_cruiser_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_battleship_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_battleship_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_battleship_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_battleship_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_battleship_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_battleship_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_battleship_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_battleship_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_battleship_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_battleship_hull_2175 = {
+		enable_equipments = { ADISCORD_battleship_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_carrier_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_carrier_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_carrier_2155 ADISCORD_cv_fighter_2155 ADISCORD_cv_bomber_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 13.5
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_carrier_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_carrier_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_carrier_2163 ADISCORD_cv_fighter_2163 ADISCORD_cv_bomber_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_carrier_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_carrier_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_carrier_2170 ADISCORD_cv_fighter_2170 ADISCORD_cv_bomber_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_carrier_hull_2175 = {
+		enable_equipments = { ADISCORD_carrier_2175 ADISCORD_cv_fighter_2175 ADISCORD_cv_bomber_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 10.8
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+			modifier = {
+				factor = 0.10
+				num_of_naval_factories < 8
+			}
+			modifier = {
+				factor = 0.25
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_submarine_hull_2155 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_submarine_hull_2163
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_submarine_2155 }
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 0 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 15.188
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_submarine_hull_2163 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_submarine_hull_2170
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_submarine_2163 }
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 2 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 12.15
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_submarine_hull_2170 = {
+		path = {
+			leads_to_tech = ADISCORD_tech_submarine_hull_2175
+			research_cost_coeff = 1
+		}
+		enable_equipments = { ADISCORD_submarine_2170 }
+		research_cost = 2.05
+		start_year = 2170
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 4 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 12.15
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
+	ADISCORD_tech_submarine_hull_2175 = {
+		enable_equipments = { ADISCORD_submarine_2175 }
+		research_cost = 2.05
+		start_year = 2175
+		folder = {
+			name = mtgnavalfolder
+			position = { x = 0 y = 6 }
+		}
+		folder = {
+			name = naval_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 12.15
+			modifier = {
+				factor = 0.05
+				num_of_naval_factories < 1
+			}
+			modifier = {
+				factor = 1.35
+				num_of_naval_factories > 3
+			}
+		}
+		categories = { naval_equipment electronics }
+	}
+
 	ADISCORD_tech_restored_dockyards = {
 		convoy_escort_efficiency = 0.04
 		naval_detection = 0.024
@@ -38,7 +798,6 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_convoy_routing
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_escort_ship_2155 }
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
@@ -50,7 +809,7 @@ technologies = {
 			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
-			factor = 16.875
+			factor = 12.5
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -132,8 +891,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_unmanned_mine_countermeasure_boats
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_escort_ship_2163 }
-		research_cost = 2.05
+		research_cost = 1.433
 		start_year = 2163
 		folder = {
 			name = mtgnavalsupportfolder
@@ -144,7 +902,7 @@ technologies = {
 			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
-			factor = 13.5
+			factor = 10
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -195,8 +953,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_predictive_convoy_defense_network
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_escort_ship_2170 }
-		research_cost = 2.05
+		research_cost = 1.625
 		start_year = 2170
 		folder = {
 			name = mtgnavalsupportfolder
@@ -207,7 +964,7 @@ technologies = {
 			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
-			factor = 13.5
+			factor = 10
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -227,8 +984,7 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_distributed_sea_control
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_escort_ship_2175 }
-		research_cost = 2.05
+		research_cost = 1.763
 		start_year = 2175
 		folder = {
 			name = mtgnavalsupportfolder
@@ -239,7 +995,7 @@ technologies = {
 			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
-			factor = 13.5
+			factor = 10
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -290,7 +1046,7 @@ technologies = {
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 0 }
 		}
 		folder = {
@@ -318,11 +1074,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_radar_gunnery
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_cruiser_2155 }
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 2 }
 		}
 		folder = {
@@ -330,7 +1085,7 @@ technologies = {
 			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
-			factor = 13.5
+			factor = 10
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -354,7 +1109,7 @@ technologies = {
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 4 }
 		}
 		folder = {
@@ -386,7 +1141,7 @@ technologies = {
 		research_cost = 1.528
 		start_year = 2161
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 6 }
 		}
 		folder = {
@@ -414,11 +1169,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_networked_task_groups
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_cruiser_2163 }
-		research_cost = 2.05
+		research_cost = 1.583
 		start_year = 2163
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 8 }
 		}
 		folder = {
@@ -426,7 +1180,7 @@ technologies = {
 			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
-			factor = 10.8
+			factor = 8
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -449,7 +1203,7 @@ technologies = {
 		research_cost = 1.665
 		start_year = 2166
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 10 }
 		}
 		folder = {
@@ -477,11 +1231,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_drone_carrier_deck_systems
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_cruiser_2170 }
-		research_cost = 2.05
+		research_cost = 1.775
 		start_year = 2170
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 12 }
 		}
 		folder = {
@@ -489,7 +1242,7 @@ technologies = {
 			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
-			factor = 10.8
+			factor = 8
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -512,7 +1265,7 @@ technologies = {
 		research_cost = 1.83
 		start_year = 2172
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 14 }
 		}
 		folder = {
@@ -540,11 +1293,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_horizon_fleet_command
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_cruiser_2175 }
-		research_cost = 2.05
+		research_cost = 1.913
 		start_year = 2175
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 16 }
 		}
 		folder = {
@@ -552,7 +1304,7 @@ technologies = {
 			position = { x = 0 y = 16 }
 		}
 		ai_will_do = {
-			factor = 10.8
+			factor = 8
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -572,7 +1324,7 @@ technologies = {
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 18 }
 		}
 		folder = {
@@ -603,7 +1355,7 @@ technologies = {
 		research_cost = 0.55
 		start_year = 2150
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 0 }
 		}
 		folder = {
@@ -631,11 +1383,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_homing_torpedoes
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_submarine_2155 }
 		research_cost = 0.55
 		start_year = 2155
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 2 }
 		}
 		folder = {
@@ -643,7 +1394,7 @@ technologies = {
 			position = { x = 0 y = 2 }
 		}
 		ai_will_do = {
-			factor = 15.188
+			factor = 11.25
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -667,7 +1418,7 @@ technologies = {
 		research_cost = 0.55
 		start_year = 2158
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 4 }
 		}
 		folder = {
@@ -699,7 +1450,7 @@ technologies = {
 		research_cost = 1.427
 		start_year = 2161
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 6 }
 		}
 		folder = {
@@ -727,11 +1478,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_seabed_sensor_webs
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_submarine_2163 }
-		research_cost = 2.05
+		research_cost = 1.482
 		start_year = 2163
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 8 }
 		}
 		folder = {
@@ -739,7 +1489,7 @@ technologies = {
 			position = { x = 0 y = 8 }
 		}
 		ai_will_do = {
-			factor = 12.15
+			factor = 9
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -762,7 +1512,7 @@ technologies = {
 		research_cost = 1.565
 		start_year = 2166
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 10 }
 		}
 		folder = {
@@ -794,11 +1544,10 @@ technologies = {
 			ADISCORD_tech_seabed_sensor_webs = 1
 			ADISCORD_tech_operational_ai_assistants = 1
 		}
-		enable_equipments = { ADISCORD_submarine_2170 }
 		research_cost = 2.4
 		start_year = 2170
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 12 }
 		}
 		folder = {
@@ -806,7 +1555,7 @@ technologies = {
 			position = { x = 0 y = 12 }
 		}
 		ai_will_do = {
-			factor = 12.15
+			factor = 9
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -826,11 +1575,10 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_deep_ocean_denial
 			research_cost_coeff = 1
 		}
-		enable_equipments = { ADISCORD_submarine_2175 }
-		research_cost = 2.05
+		research_cost = 1.812
 		start_year = 2175
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 14 }
 		}
 		folder = {
@@ -838,7 +1586,7 @@ technologies = {
 			position = { x = 0 y = 14 }
 		}
 		ai_will_do = {
-			factor = 12.15
+			factor = 9
 			modifier = {
 				factor = 0.05
 				num_of_naval_factories < 1
@@ -858,7 +1606,7 @@ technologies = {
 		research_cost = 2.55
 		start_year = 2180
 		folder = {
-			name = mtgnavalfolder
+			name = mtgnavalsupportfolder
 			position = { x = 0 y = 16 }
 		}
 		folder = {
@@ -893,10 +1641,6 @@ technologies = {
 		research_cost = 1.405
 		start_year = 2162
 		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 0 }
-		}
-		folder = {
 			name = mtgnavalsupportfolder
 			position = { x = 0 y = 0 }
 		}
@@ -929,10 +1673,6 @@ technologies = {
 		research_cost = 1.598
 		start_year = 2169
 		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 2 }
-		}
-		folder = {
 			name = mtgnavalsupportfolder
 			position = { x = 0 y = 2 }
 		}
@@ -960,10 +1700,6 @@ technologies = {
 		convoy_escort_efficiency = 0.03
 		research_cost = 1.763
 		start_year = 2175
-		folder = {
-			name = mtgnavalfolder
-			position = { x = 0 y = 4 }
-		}
 		folder = {
 			name = mtgnavalsupportfolder
 			position = { x = 0 y = 4 }

@@ -904,6 +904,7 @@
         "common/technologies/ADISCORD_*.txt",
         "common/scripted_effects/ADISCORD_technology_baseline_effects.txt",
         "interface/ADISCORD_technologies.gfx",
+        "gfx/interface/technologies/ADISCORD_naval_*.dds",
         "interface/countrytechtreeview.gui",
         "localisation/*/ADISCORD_technology_doctrine_l_*.yml",
         "tools/data/adiscord_technology_id_migrations.json",

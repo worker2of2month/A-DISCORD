@@ -424,7 +424,8 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			STP_pw_open_shield_corps = yes
+			effect_tooltip = { STP_pw_open_shield_corps = yes }
+			hidden_effect = { STP_pw_open_shield_corps = yes }
 		}
 		ai_will_do = { base = 3 }
 	}

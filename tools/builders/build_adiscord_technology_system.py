@@ -5508,6 +5508,58 @@ BRANCHES = (
 )
 
 
+# Hull research is separate from fleet-wide equipment and operational upgrades.
+NAVAL_HULL_YEARS = (2155, 2163, 2170, 2175)
+NAVAL_HULL_CLASSES = {
+    "destroyer": ("Эсминцы", "Destroyers", "Эсминец", "Destroyer", "escort_ship", "naval_support"),
+    "light_cruiser": ("Лёгкие крейсеры", "Light Cruisers", "Лёгкий крейсер", "Light Cruiser", "light_cruiser", "surface_fleet"),
+    "heavy_cruiser": ("Тяжёлые крейсеры", "Heavy Cruisers", "Тяжёлый крейсер", "Heavy Cruiser", "cruiser", "surface_fleet"),
+    "battleship": ("Линкоры", "Battleships", "Линкор", "Battleship", "battleship", "surface_fleet"),
+    "carrier": ("Авианосцы", "Carriers", "Авианосец", "Carrier", "carrier", "surface_fleet"),
+    "submarine": ("Подлодки", "Submarines", "Подводная лодка", "Submarine", "submarine", "subsurface"),
+}
+NAVAL_HULL_BRANCH_KEYS = frozenset(f"{kind}_hulls" for kind in NAVAL_HULL_CLASSES)
+NAVAL_HULL_ART = {
+    f"ADISCORD_naval_{kind}_{year}": f"{era}_{kind}"
+    for kind in NAVAL_HULL_CLASSES
+    for year, era in zip(NAVAL_HULL_YEARS, ("basic", "improved", "advanced", "modern"), strict=True)
+}
+
+
+def build_naval_hull_branches() -> tuple[Branch, ...]:
+    branches = []
+    for kind, (ru, en, model_ru, model_en, _, profile) in NAVAL_HULL_CLASSES.items():
+        branches.append(
+            Branch(
+                f"{kind}_hulls",
+                "ADISCORD_naval.txt",
+                ("naval_folder", "mtgnavalfolder"),
+                ru,
+                en,
+                profile,
+                tuple(
+                    Tech(
+                        f"{kind}_hull_{year}",
+                        f"{model_ru} обр. {year}",
+                        f"{model_en} Model {year}",
+                        f"ADISCORD_naval_{kind}_{year}",
+                    )
+                    for year in NAVAL_HULL_YEARS
+                ),
+                NAVAL_HULL_YEARS,
+            )
+        )
+    return tuple(branches)
+
+
+BRANCHES = build_naval_hull_branches() + tuple(
+    replace(branch, folders=("naval_folder", "mtgnavalsupportfolder"))
+    if branch.key in {"surface_fleet", "subsurface", "riverine_warfare"}
+    else branch
+    for branch in BRANCHES
+)
+
+
 SIDE_PROGRAMME_KEYS = frozenset(
     [
         'air_mobility',
@@ -5555,7 +5607,10 @@ MAIN_BRANCH_KEYS_BY_FOLDER = {
         'recon_armor',
     ],
     "air_techs_folder": ['air_support', 'bomber_maritime', 'fighter', 'strategic_air'],
-    "naval_folder": ['naval_support', 'subsurface', 'surface_fleet'],
+    "naval_folder": [
+        *(f"{kind}_hulls" for kind in NAVAL_HULL_CLASSES),
+        "naval_support", "subsurface", "surface_fleet",
+    ],
 }
 
 
@@ -6242,27 +6297,6 @@ ENABLE_EQUIPMENT = {
 
 # Production milestones identify the equipment families used by scripted armies.
 NAVAL_AIR_UNLOCKS = {
-    "coastal_patrols": ("ADISCORD_escort_ship_2155", "basic_destroyer"),
-    "variable_depth_sonar": ("ADISCORD_escort_ship_2163", "improved_destroyer"),
-    "autonomous_escorts": ("ADISCORD_escort_ship_2170", "advanced_destroyer"),
-    "predictive_convoy_defense_network": (
-        "ADISCORD_escort_ship_2175",
-        "advanced_destroyer",
-    ),
-    "modular_hull_standards": ("ADISCORD_cruiser_2155", "basic_heavy_cruiser"),
-    "modular_vertical_launch_cells": (
-        "ADISCORD_cruiser_2163",
-        "improved_heavy_cruiser",
-    ),
-    "railgun_batteries": ("ADISCORD_cruiser_2170", "advanced_heavy_cruiser"),
-    "distributed_horizon_targeting": (
-        "ADISCORD_cruiser_2175",
-        "advanced_heavy_cruiser",
-    ),
-    "quiet_propulsion": ("ADISCORD_submarine_2155", "basic_submarine"),
-    "wake_homing_torpedo_seekers": ("ADISCORD_submarine_2163", "improved_submarine"),
-    "autonomous_submarines": ("ADISCORD_submarine_2170", "advanced_submarine"),
-    "self_repairing_pressure_hulls": ("ADISCORD_submarine_2175", "advanced_submarine"),
     "high_altitude_interceptors": ("ADISCORD_fighter_airframe_2161", "fighter2"),
     "thrust_vectoring": ("ADISCORD_fighter_airframe_2166", "jet_fighter1"),
     "loyal_wingmen": ("ADISCORD_fighter_airframe_2170", "jet_fighter2"),
@@ -6284,6 +6318,13 @@ ENABLE_EQUIPMENT.update(
         for key, (equipment, _) in NAVAL_AIR_UNLOCKS.items()
     }
 )
+for kind, (_, _, _, _, equipment, _) in NAVAL_HULL_CLASSES.items():
+    for year in NAVAL_HULL_YEARS:
+        unlocks = (f"ADISCORD_{equipment}_{year}",)
+        if kind == "carrier":
+            unlocks += (f"ADISCORD_cv_fighter_{year}", f"ADISCORD_cv_bomber_{year}")
+        ENABLE_EQUIPMENT[f"ADISCORD_tech_{kind}_hull_{year}"] = unlocks
+
 ENABLE_EQUIPMENT["ADISCORD_tech_twin_engine_aircraft"] = (
     "ADISCORD_bomber_2160",
     "ADISCORD_naval_aircraft_2160",
@@ -6387,7 +6428,7 @@ COMMON_STARTING_ROOTS = tuple(
         for branch_key in branch_keys
         # These programmes begin with research during the campaign. Making
         # their UI headings prominent must not grant their roots at startup.
-        if branch_key not in {
+        if branch_key not in NAVAL_HULL_BRANCH_KEYS and branch_key not in {
             "officer_training",
             "bomber_maritime",
             "combat_medicine",
@@ -6448,7 +6489,10 @@ STARTING_TECH_PROFILE_SEEDS = {
     ),
     "naval": tuple(
         tech_id
-        for branch_key in ("naval_support", "surface_fleet", "subsurface")
+        for branch_key in (
+            "naval_support", "surface_fleet", "subsurface",
+            "destroyer_hulls", "heavy_cruiser_hulls", "submarine_hulls",
+        )
         for tech_id in branch_technology_ids_through(branch_key, 2158)
     ),
     "fragment_low_tech": (
@@ -7331,6 +7375,8 @@ WEAPON_CATEGORY_ICONS.update(
 
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
+    if branch.key in NAVAL_HULL_BRANCH_KEYS:
+        return tech.icon
     if tech.key in WEAPON_CATEGORY_ICONS:
         return WEAPON_CATEGORY_ICONS[tech.key]
     if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
@@ -7913,6 +7959,12 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
                 else f"§G+{amount}§! £resources_strip|{frame} from each existing and future plant."
             )
         return notes
+    if branch.key == "carrier_hulls":
+        notes.append(
+            "Открывает также палубный истребитель и торпедоносец этого поколения. Самолёты нужно произвести на военных заводах и назначить в палубные авиакрылья."
+            if is_ru else
+            "Also unlocks this generation's carrier fighter and torpedo bomber. Produce aircraft in military factories and assign them to carrier air wings."
+        )
     if branch.key == "small_arms" and index % 4:
         model = branch.techs[index - index % 4]
         equipment = ENABLE_EQUIPMENT[model.id][0]
@@ -8155,6 +8207,9 @@ def ai_will_do_for(branch: Branch, index: int) -> tuple[str, ...]:
     if profile in {"naval_support", "surface_fleet", "subsurface"}:
         entries.append("modifier = { factor = 0.05 num_of_naval_factories < 1 }")
         entries.append("modifier = { factor = 1.35 num_of_naval_factories > 3 }")
+    if branch.key in {"battleship_hulls", "carrier_hulls"}:
+        entries.append("modifier = { factor = 0.10 num_of_naval_factories < 8 }")
+        entries.append("modifier = { factor = 0.25 ADISCORD_economy_ai_is_crisis = yes }")
     if branch.key == "power":
         entries.append("modifier = { factor = 1.75 energy_ratio < 0.80 }")
     if branch.key in {"signals", "computing"} and year <= 2167:
@@ -8790,6 +8845,23 @@ CUSTOM_TECH_TEXTURES = {
 }
 
 
+def write_naval_hull_cards() -> None:
+    """Fit native ship art into wide equipment nodes without fallback badges."""
+    for icon, source_icon in NAVAL_HULL_ART.items():
+        source = BASE_GAME / "gfx/interface/technologies" / f"{source_icon}.dds"
+        target = ROOT / "gfx/interface/technologies" / f"{icon}.dds"
+        with Image.open(source) as original:
+            artwork = original.convert("RGBA")
+            bounds = artwork.getchannel("A").getbbox()
+            if bounds is None:
+                raise ValueError(f"Empty naval artwork: {source}")
+            artwork = artwork.crop(bounds)
+            artwork.thumbnail((172, 64), Image.Resampling.LANCZOS)
+            card = Image.new("RGBA", (176, 72))
+            card.alpha_composite(artwork, ((176 - artwork.width) // 2, (72 - artwork.height) // 2))
+            card.save(target, format="DDS")
+
+
 def write_gfx() -> None:
     entries = []
     for branch in BRANCHES:
@@ -9284,6 +9356,39 @@ NAVAL_AIR_EQUIPMENT_LOCALISATION = {
     ),
 }
 
+NAVAL_HULL_DESCRIPTIONS = {
+    "destroyer": ("Быстрый корабль охранения для защиты конвоев, поиска подлодок и прикрытия крупных кораблей", "A fast screen for convoy protection, submarine hunting and capital-ship escort"),
+    "light_cruiser": ("Крейсер охранения с лёгкой артиллерией и усиленной ПВО; борется с вражеским эскортом", "A screening cruiser with light artillery and strong air defence, designed to defeat enemy screens"),
+    "heavy_cruiser": ("Крупный артиллерийский корабль для ударной группы; нуждается в охранении эсминцев и лёгких крейсеров", "A capital gunship for strike groups, requiring destroyer and light-cruiser screens"),
+    "battleship": ("Тяжёлый бронированный корабль с мощным главным калибром для боя с крупными кораблями и обстрела берега", "A heavily armoured capital ship with powerful main guns for surface combat and shore bombardment"),
+    "carrier": ("Плавучий аэродром для палубной авиации; нуждается в самолётах, кораблях охранения и прикрытии крупных кораблей", "A floating airfield requiring carrier aircraft, screens and capital-ship protection"),
+    "submarine": ("Скрытный торпедный корабль для перехвата конвоев и нападения на незащищённые соединения", "A stealthy torpedo boat for convoy interdiction and attacks on unprotected fleets"),
+}
+for kind, (_, _, model_ru, model_en, equipment, _) in NAVAL_HULL_CLASSES.items():
+    description_ru, description_en = NAVAL_HULL_DESCRIPTIONS[kind]
+    for year in NAVAL_HULL_YEARS:
+        NAVAL_AIR_EQUIPMENT_LOCALISATION[f"ADISCORD_{equipment}_{year}"] = (
+            f"{model_ru} обр. {year}", f"{model_en} Model {year}",
+            description_ru + ".", description_en + ".",
+        )
+        TECHNICAL_TECH_DESCRIPTIONS[f"{kind}_hull_{year}"] = (description_ru, description_en)
+    if kind in {"light_cruiser", "battleship", "carrier"}:
+        NAVAL_AIR_EQUIPMENT_LOCALISATION[f"ADISCORD_{equipment}_archetype"] = (
+            model_ru, model_en, description_ru + ".", description_en + ".",
+        )
+for kind, ru, en, description_ru, description_en in (
+    ("cv_fighter", "Палубный истребитель", "Carrier Fighter", "Защищает авианосное соединение и завоёвывает превосходство в воздухе", "Protects the carrier group and contests air superiority"),
+    ("cv_bomber", "Палубный торпедоносец", "Carrier Torpedo Bomber", "Наносит удары по кораблям с палубы авианосца", "Attacks enemy shipping from a carrier deck"),
+):
+    NAVAL_AIR_EQUIPMENT_LOCALISATION[f"ADISCORD_{kind}_archetype"] = (
+        ru, en, description_ru + ".", description_en + ".",
+    )
+    for year in NAVAL_HULL_YEARS:
+        NAVAL_AIR_EQUIPMENT_LOCALISATION[f"ADISCORD_{kind}_{year}"] = (
+            f"{ru} обр. {year}", f"{en} Model {year}", description_ru + ".", description_en + ".",
+        )
+
+
 REGIMENTAL_SUPPORT_LOCALISATION = {
     "ADISCORD_regimental_fire_support": (
         "Полковая огневая группа",
@@ -9744,6 +9849,7 @@ def apply() -> None:
         raise ValueError(f"Duplicate technology IDs: {duplicates}")
     write_technology_files()
     write_starting_technology_effect()
+    write_naval_hull_cards()
     write_gfx()
     write_localisation()
     write_gui()

@@ -695,6 +695,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 4 }
 		completion_reward = {
+			unlock_decision_tooltip = STP_pw_prog_district_grants
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_party_local_cadres_post_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_research_speed_factor value = 0.025 }
@@ -992,6 +993,7 @@
 
 			custom_effect_tooltip = STP_cw_treasury_1200_tt
 			STP_receive_1200 = yes
+			unlock_decision_tooltip = STP_pw_prog_trade_credit
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_commercial_recovery_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_ADISCORD_economy_overall_income_factor value = 0.05 }
@@ -1026,6 +1028,7 @@
 		completion_reward = {
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 12000 producer = ROOT }
 			add_equipment_to_stockpile = { type = artillery_equipment amount = 120 producer = ROOT }
+			unlock_decision_tooltip = STP_pw_prog_defence_orders
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_defence_combine_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_industrial_capacity_factory value = 0.045 }
@@ -1370,6 +1373,7 @@
 			add_stability = 0.05
 			add_war_support = 0.03
 			unlock_decision_tooltip = STP_pw_prog_insurance_fund
+			unlock_decision_tooltip = STP_pw_prog_public_works
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_party_dummy add_idea = STP_pw_party_social_guarantees_delta } }
 			hidden_effect = {
 				add_to_variable = { var = STP_pw_stability_factor value = 0.01 }
@@ -1402,7 +1406,8 @@
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
-			STP_pw_open_shield_corps = yes
+			effect_tooltip = { STP_pw_open_shield_corps = yes }
+			hidden_effect = { STP_pw_open_shield_corps = yes }
 		}
 		ai_will_do = { base = 3 }
 	}

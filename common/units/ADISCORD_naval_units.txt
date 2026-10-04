@@ -42,4 +42,52 @@ sub_units = {
 		critical_part_damage_chance_mult = 1
 		hit_profile_mult = 1.0
 	}
+
+	light_cruiser = {
+		sprite = light_cruiser
+		map_icon_category = ship
+		priority = 2
+		active = yes
+		type = { screen_ship }
+		need = {
+			ADISCORD_light_cruiser_archetype = 1
+		}
+		max_organisation = 40
+		supply_consumption = 0.2
+		critical_parts = { destroyed_ammo_storage broken_propeller on_fire rudder_jammed }
+		critical_part_damage_chance_mult = 1
+		hit_profile_mult = 1.0
+	}
+
+	battleship = {
+		sprite = battleship
+		map_icon_category = ship
+		priority = 2
+		active = yes
+		type = { capital_ship }
+		need = {
+			ADISCORD_battleship_archetype = 1
+		}
+		max_organisation = 40
+		supply_consumption = 0.2
+		critical_parts = { destroyed_ammo_storage broken_propeller on_fire rudder_jammed }
+		critical_part_damage_chance_mult = 1
+		hit_profile_mult = 1.0
+	}
+
+	carrier = {
+		sprite = carrier
+		map_icon_category = ship
+		priority = 10
+		active = yes
+		type = { carrier }
+		need = {
+			ADISCORD_carrier_archetype = 1
+		}
+		max_organisation = 40
+		supply_consumption = 0.8
+		critical_parts = { destroyed_ammo_storage broken_propeller on_fire damaged_flight_deck }
+		critical_part_damage_chance_mult = 1
+		hit_profile_mult = 1.0
+	}
 }

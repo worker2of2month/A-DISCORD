@@ -12,6 +12,10 @@ ADISCORD_economy_can_spend_250 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
 }
 
+ADISCORD_economy_can_spend_300 = {
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
 ADISCORD_economy_can_spend_500 = {
 	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 }

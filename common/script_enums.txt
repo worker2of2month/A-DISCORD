@@ -159,6 +159,31 @@ script_enum_equipment_bonus_type = {
 	ADISCORD_bomber_2164
 	ADISCORD_bomber_2172
 	ADISCORD_bomber_archetype
+	ADISCORD_light_cruiser_archetype
+	ADISCORD_light_cruiser_2155
+	ADISCORD_light_cruiser_2163
+	ADISCORD_light_cruiser_2170
+	ADISCORD_light_cruiser_2175
+	ADISCORD_battleship_archetype
+	ADISCORD_battleship_2155
+	ADISCORD_battleship_2163
+	ADISCORD_battleship_2170
+	ADISCORD_battleship_2175
+	ADISCORD_carrier_archetype
+	ADISCORD_carrier_2155
+	ADISCORD_carrier_2163
+	ADISCORD_carrier_2170
+	ADISCORD_carrier_2175
+	ADISCORD_cv_fighter_archetype
+	ADISCORD_cv_fighter_2155
+	ADISCORD_cv_fighter_2163
+	ADISCORD_cv_fighter_2170
+	ADISCORD_cv_fighter_2175
+	ADISCORD_cv_bomber_archetype
+	ADISCORD_cv_bomber_2155
+	ADISCORD_cv_bomber_2163
+	ADISCORD_cv_bomber_2170
+	ADISCORD_cv_bomber_2175
 	ADISCORD_cruiser_2155
 	ADISCORD_cruiser_2163
 	ADISCORD_cruiser_2170

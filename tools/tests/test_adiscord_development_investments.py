@@ -89,18 +89,8 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
         ):
             self.assertNotIn(legacy, self.generic_decisions)
 
-    def test_shared_programme_spirits_are_temporary_growth_multipliers(self) -> None:
-        specs = {
-            "ADISCORD_development_program_army": "ADISCORD_country_development_army_growth_factor = 1.00",
-            "ADISCORD_development_program_state": "ADISCORD_country_development_state_growth_factor = 1.00",
-            "ADISCORD_development_program_economic": "ADISCORD_country_development_economic_growth_factor = 1.00",
-            "ADISCORD_development_program_social_system": "ADISCORD_country_development_social_system_growth_factor = 1.00",
-        }
-        for idea_id, modifier in specs.items():
-            with self.subTest(idea=idea_id):
-                body = named_block(self.ideas, idea_id)
-                self.assertIn("allowed = { always = no }", body)
-                self.assertIn(modifier, body)
+    def test_programmes_use_fixed_progress_instead_of_temporary_spirits(self) -> None:
+        self.assertNotIn("ADISCORD_development_program_", self.ideas)
 
     def test_kefreyt_programmes_live_in_reclamation_and_unlock_along_left_branch(
         self,
@@ -109,32 +99,37 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
         specs = {
             "VAL_recovery_road_corps_program": (
                 "VAL_reclamation_road_crews",
-                "ADISCORD_development_program_state",
+                "ADISCORD_state_development_progress",
             ),
             "VAL_recovery_field_medicine_program": (
                 "VAL_Field_Surgeons",
-                "ADISCORD_development_program_social_system",
+                "ADISCORD_social_system_development_progress",
             ),
             "VAL_recovery_workshop_program": (
                 "VAL_reclamation_workshops",
-                "ADISCORD_development_program_economic",
+                "ADISCORD_economic_development_progress",
             ),
         }
-        for decision_id, (focus_id, idea_id) in specs.items():
+        for decision_id, (focus_id, progress_var) in specs.items():
             with self.subTest(decision=decision_id):
                 body = named_block(category, decision_id)
                 self.assertIn(f"has_completed_focus = {focus_id}", body)
                 self.assertIn(
-                    "custom_cost_trigger = { ADISCORD_economy_can_spend_100 = yes }",
+                    "custom_cost_trigger = { ADISCORD_economy_can_spend_500 = yes }",
                     body,
                 )
-                self.assertEqual(body.count("ADISCORD_economy_spend_100 = yes"), 1)
+                self.assertEqual(body.count("ADISCORD_economy_spend_500 = yes"), 1)
                 self.assertIn("days_remove = 120", body)
                 self.assertIn("days_re_enable = 60", body)
                 self.assertIn(
-                    f"add_timed_idea = {{ idea = {idea_id} days = 120 }}", body
+                    "custom_effect_tooltip = ADISCORD_development_program_result_35",
+                    body,
                 )
-                self.assertIn(f"remove_ideas = {idea_id}", body)
+                self.assertIn(
+                    f"add_to_variable = {{ var = {progress_var} value = 35 }}",
+                    body,
+                )
+                self.assertNotIn("add_timed_idea", body)
                 self.assertNotRegex(
                     body,
                     r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth",
@@ -152,35 +147,35 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
                 party,
                 "STP_party_staff_drills_program",
                 "STP_defense_budget",
-                "ADISCORD_development_program_army",
+                "ADISCORD_army_development_progress",
             ),
             (
                 party,
                 "STP_party_civil_service_program",
                 "STP_party_civil_register",
-                "ADISCORD_development_program_state",
+                "ADISCORD_state_development_progress",
             ),
             (
                 shabrat,
                 "STP_shabrat_staff_courses_program",
                 "STP_cw_officer_contacts",
-                "ADISCORD_development_program_army",
+                "ADISCORD_army_development_progress",
             ),
             (
                 shabrat,
                 "STP_shabrat_reconstruction_program",
                 "STP_cw_repair_niansas",
-                "ADISCORD_development_program_economic",
+                "ADISCORD_economic_development_progress",
             ),
         )
-        for owner, decision_id, focus_id, idea_id in specs:
+        for owner, decision_id, focus_id, progress_var in specs:
             with self.subTest(decision=decision_id):
                 body = named_block(owner, decision_id)
                 self.assertIn(
-                    "custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }",
+                    "custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }",
                     body,
                 )
-                self.assertEqual(body.count("ADISCORD_economy_spend_50 = yes"), 1)
+                self.assertEqual(body.count("ADISCORD_economy_spend_300 = yes"), 1)
                 self.assertIn("days_remove = 42", body)
                 self.assertIn("days_re_enable = 21", body)
                 self.assertIn(
@@ -188,9 +183,14 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
                     body,
                 )
                 self.assertIn(
-                    f"add_timed_idea = {{ idea = {idea_id} days = 42 }}", body
+                    "custom_effect_tooltip = ADISCORD_development_program_result_25",
+                    body,
                 )
-                self.assertIn(f"remove_ideas = {idea_id}", body)
+                self.assertIn(
+                    f"add_to_variable = {{ var = {progress_var} value = 25 }}",
+                    body,
+                )
+                self.assertNotIn("add_timed_idea", body)
                 self.assertNotRegex(
                     body,
                     r"ADISCORD_(?:increase|decrease)_\w+_development_monthly_growth",
@@ -204,7 +204,7 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8-sig")
             self.assertNotIn("ADISCORD_development_investments:", text)
             self.assertNotIn("ADISCORD_development_investment_cost_250:", text)
-            for price in (50, 100):
+            for price in (300, 500):
                 for suffix in ("", "_blocked", "_tooltip"):
                     key = f"ADISCORD_development_program_cost_{price}{suffix}"
                     match = re.search(rf'^ {re.escape(key)}:0? "([^"]+)"$', text, re.M)

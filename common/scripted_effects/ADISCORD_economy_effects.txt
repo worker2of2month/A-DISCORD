@@ -382,6 +382,10 @@ ADISCORD_economy_initialize_variables = {
 	if = { limit = { NOT = { has_variable = ADISCORD_business_center_count } } set_variable = { var = ADISCORD_business_center_count value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_science_center_count } } set_variable = { var = ADISCORD_science_center_count value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_industrial_cluster_count } } set_variable = { var = ADISCORD_industrial_cluster_count value = 0 } }
+	# Full-refresh source caches used by the population/technology budget bases.
+	# They stay at zero until the bounded owned-state pass publishes real values.
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_cached_core_population_k } } set_variable = { var = ADISCORD_economy_cached_core_population_k value = 0 } }
+	if = { limit = { NOT = { has_variable = ADISCORD_economy_cached_research_slots } } set_variable = { var = ADISCORD_economy_cached_research_slots value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_cluster_factory_output_percent } } set_variable = { var = ADISCORD_economy_cluster_factory_output_percent value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_cluster_factory_output_factor } } set_variable = { var = ADISCORD_economy_cluster_factory_output_factor value = 0 } }
 	if = { limit = { NOT = { has_variable = ADISCORD_economy_resource_endowment } } set_variable = { var = ADISCORD_economy_resource_endowment value = 0 } }
@@ -408,6 +412,8 @@ ADISCORD_economy_set_default_values = {
 	set_variable = { var = ADISCORD_economy_weekly_balance value = 0 }
 	set_variable = { var = ADISCORD_economy_weekly_source_cache_ready value = 0 }
 	set_variable = { var = ADISCORD_economy_weekly_ready value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_core_population_k value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_research_slots value = 0 }
 	set_variable = { var = ADISCORD_economy_safe_reserve value = 50 }
 	set_variable = { var = ADISCORD_economy_personal_income value = 0 }
 	set_variable = { var = ADISCORD_economy_business_income value = 0 }
@@ -1500,6 +1506,15 @@ ADISCORD_economy_calculate_social_expenses = {
 		if = { limit = { ADISCORD_economy_cached_has_welfare_social_insurance = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = 1.5 } }
 		if = { limit = { ADISCORD_economy_cached_has_welfare_universal_provision = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = 3.5 } }
 		if = { limit = { ADISCORD_economy_cached_has_welfare_rationed_support = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = -1.0 } }
+		# The Darkest Hour makes social spending population-scaled. Keep the
+		# population source in the bounded full-refresh cache so weekly accounting
+		# does not scan states; zero keeps old save/test fixtures on the old base.
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_cached_core_population_k value = 0 compare = greater_than } }
+			set_temp_variable = { var = ADISCORD_economy_social_population_temp value = ADISCORD_economy_cached_core_population_k }
+			divide_temp_variable = { var = ADISCORD_economy_social_population_temp value = 10000 }
+			add_to_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_social_population_temp }
+		}
 		# Player-controlled spending must have enough fiscal weight to remain
 		# meaningful after the exact 3/13 monthly-to-weekly settlement.
 		multiply_variable = { var = ADISCORD_economy_social_expenses value = 2.00 }
@@ -1529,6 +1544,14 @@ ADISCORD_economy_calculate_research_expenses = {
 		multiply_temp_variable = { var = ADISCORD_economy_research_building_temp value = 0.35 }
 		add_to_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_research_building_temp }
 		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.5 } }
+		# Research spending follows the number of research slots, as in The
+		# Darkest Hour. This is refreshed with the same bounded source pass.
+		if = {
+			limit = { check_variable = { var = ADISCORD_economy_cached_research_slots value = 0 compare = greater_than } }
+			set_temp_variable = { var = ADISCORD_economy_research_slots_temp value = ADISCORD_economy_cached_research_slots }
+			multiply_temp_variable = { var = ADISCORD_economy_research_slots_temp value = 0.50 }
+			add_to_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_research_slots_temp }
+		}
 		# Player-controlled spending must have enough fiscal weight to remain
 		# meaningful after the exact 3/13 monthly-to-weekly settlement.
 		multiply_variable = { var = ADISCORD_economy_research_expenses value = 2.00 }
@@ -3165,8 +3188,15 @@ ADISCORD_economy_stabilization_package = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
 		limit = { ADISCORD_economy_can_stabilize_macro = yes }
-		add_to_variable = { var = ADISCORD_economy_treasury value = -100 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		if = {
+			limit = { STP_uses_campaign_currency_scale = yes }
+			add_to_variable = { var = ADISCORD_economy_treasury value = -1200 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
+		}
+		else = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = -500 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+		}
 		add_to_variable = { var = ADISCORD_economy_inflation value = -12 }
 		add_to_variable = { var = ADISCORD_economy_fiscal_stress value = -15 }
 		add_to_variable = { var = ADISCORD_economy_deficit_pressure value = -20 }
@@ -3297,8 +3327,21 @@ ADISCORD_economy_recount_economic_buildings = {
 	set_temp_variable = { var = ADISCORD_economy_cluster_supported_factory_points_temp value = 0 }
 	set_variable = { var = ADISCORD_economy_resource_endowment value = 0 }
 	set_variable = { var = ADISCORD_economy_damaged_industry_score value = 0 }
+	# These two sources are deliberately published by the same bounded pass as
+	# the economic building counters; weekly accounting only reads the caches.
+	set_variable = { var = ADISCORD_economy_cached_core_population_k value = 0 }
+	set_variable = { var = ADISCORD_economy_cached_research_slots value = amount_research_slots }
 
 	every_owned_state = {
+		if = {
+			limit = { is_core_of = PREV }
+			PREV = {
+				add_to_variable = {
+					var = ADISCORD_economy_cached_core_population_k
+					value = state_population_k
+				}
+			}
+		}
 		# Actual state resources feed a compact strategic-endowment index. Each
 		# resource type contributes one point, with extra weight for large fields.
 		if = { limit = { check_variable = { resource@oil > 0 } } PREV = { add_to_variable = { var = ADISCORD_economy_resource_endowment value = 1 } } }
@@ -3610,7 +3653,12 @@ ADISCORD_economy_gui_try_restructure_debt = {
 ADISCORD_economy_gui_try_stabilization_package = {
 	ADISCORD_economy_initialize_country = yes
 	if = {
-		limit = { ADISCORD_economy_can_stabilize_macro = yes }
+		limit = {
+			OR = {
+				ADISCORD_economy_can_stabilize_macro = yes
+				ADISCORD_economy_can_stabilize_macro_crisis = yes
+			}
+		}
 		ADISCORD_economy_stabilization_package = yes
 		ADISCORD_economy_light_update = yes
 		ADISCORD_economy_update_gui = yes

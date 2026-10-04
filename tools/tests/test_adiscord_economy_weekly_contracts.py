@@ -10070,12 +10070,29 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 "price_shock",
                 "action_overload_residue",
             )
-            values.update({p + field: 30 for field in indicators})
-            values[p + "treasury"] = 100 if full else 0
+            values.update(
+                {p + field: 30 for field in indicators}
+                | {p + "current_month_action_costs": 0}
+            )
+            values[p + "treasury"] = 500 if full else 0
             fixture.run(p + "stabilization_package")
             self.assertEqual(values[p + "treasury"], 0)
+            self.assertEqual(values[p + "current_month_action_costs"], 500 if full else 0)
             for field, delta in zip(indicators, deltas):
                 self.assertEqual(values[p + field], 30 - delta)
+        fixture = EconomyScriptFixture(
+            facts={p + "can_stabilize_macro": True, "STP_uses_campaign_currency_scale": True},
+            stubs=stubs,
+        )
+        values = fixture.scopes["A"]
+        values.update(
+            {p + field: 30 for field in indicators}
+            | {p + "current_month_action_costs": 0}
+        )
+        values[p + "treasury"] = 1200
+        fixture.run(p + "stabilization_package")
+        self.assertEqual(values[p + "treasury"], 0)
+        self.assertEqual(values[p + "current_month_action_costs"], 1200)
 
     def test_larger_war_taxes_credit_only_room_and_keep_pressure_bounded(self):
         p = self.PREFIX
@@ -10405,7 +10422,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
     def test_financing_relief_never_creates_negative_pressures(self):
         for effect, gates, treasury in (
             ("repay_debt", {"has_treasury_50": True, "has_debt": True}, 50),
-            ("stabilization_package", {"can_stabilize_macro": True}, 100),
+            ("stabilization_package", {"can_stabilize_macro": True}, 500),
             (
                 "stabilization_package",
                 {"can_stabilize_macro": False, "can_stabilize_macro_crisis": True},

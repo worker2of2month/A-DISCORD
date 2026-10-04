@@ -28,6 +28,13 @@ PROVINCES_PATH = ROOT / "map" / "provinces.bmp"
 DEFINITION_PATH = ROOT / "map" / "definition.csv"
 STATE_DIR = ROOT / "history" / "states"
 SEA_POSITIONED_TYPES = {"floating_harbor"}
+PORT_ANCHOR_TYPES = {
+    "coastal_bunker",
+    "dockyard",
+    "naval_base_spawn",
+    "naval_headquarters",
+    "naval_supply_hub",
+}
 COASTAL_ADDITION_PROVINCES = frozenset(
     {6008, 7739, 2038, 7618, 16707, 16708, 16709, 16710, 16712, 16716, *range(16802, 16809)}
 )
@@ -301,6 +308,7 @@ def synchronize_buildings(
         lines = interior_dam_anchor(lines)
         lines = bezhaysk_castle_clearance(lines)
         lines = khan_bunker_clearance(lines)
+        lines = permanent_landmark_clearance(lines)
         # Nudge writes this file with CRLF and no final newline. The engine
         # treats a terminal empty row as a malformed building definition, so
         # preserve both details when regenerating the file.
@@ -353,6 +361,48 @@ def khan_bunker_clearance(lines: list[str]) -> list[str]:
         if len(fields) == 7 and fields[:2] == ["66", "bunker"]:
             fields[2:5] = ["3482.00", "13.80", "942.00"]
             line = ";".join(fields)
+        result.append(line)
+    return result
+
+
+def permanent_landmark_clearance(lines: list[str]) -> list[str]:
+    """Move vanilla building visuals away from large always-visible landmarks.
+
+    These are authored map anchors, so their replacement coordinates are kept
+    explicit and stable rather than being selected from whichever buildings
+    happen to be present in a generated file.  Every destination is in the
+    original state and uses an existing terrain anchor where possible.
+    """
+    # (state, landmark_x, landmark_z, radius, destination_x, destination_y,
+    # destination_z).  Destinations are in the same state and deliberately
+    # use already-authored land anchors from that state where possible.
+    zones = (
+        (41, 3782.49, 969.30, 8.0, "3791.00", "11.00", "969.00"),
+        (66, 3480.06, 946.54, 5.0, "3482.00", "13.80", "942.00"),
+        (49, 3487.83, 934.76, 10.0, "3473.00", "17.55", "970.00"),
+        (215, 3595.70, 767.51, 10.0, "3556.00", "10.95", "718.00"),
+        (51, 3492.22, 976.80, 10.0, "3374.00", "14.38", "934.00"),
+        (28, 3745.84, 940.78, 8.0, "3743.00", "10.30", "931.00"),
+        (125, 3530.00, 904.52, 12.0, "3501.00", "12.00", "877.00"),
+        (125, 3545.96, 903.63, 12.0, "3501.00", "12.00", "877.00"),
+        (125, 3536.24, 906.55, 12.0, "3503.00", "12.03", "890.00"),
+        (48, 3718.20, 913.50, 8.0, "3730.00", "10.25", "911.00"),
+        (699, 3977.10, 934.50, 10.0, "3970.00", "12.57", "926.00"),
+    )
+    result = []
+    for line in lines:
+        fields = line.split(";")
+        if len(fields) == 7 and fields[0].isdigit():
+            state_id = int(fields[0])
+            if fields[1] not in SEA_POSITIONED_TYPES | PORT_ANCHOR_TYPES:
+                x, z = float(fields[2]), float(fields[4])
+                for zone_state, landmark_x, landmark_z, radius, dx, dy, dz in zones:
+                    if zone_state == state_id and (
+                        (x - landmark_x) ** 2 + (z - landmark_z) ** 2
+                    ) <= radius**2:
+                        fields[2:5] = [dx, dy, dz]
+                        line = ";".join(fields)
+                        break
         result.append(line)
     return result
 
@@ -604,6 +654,8 @@ def validate(root: Path = ROOT) -> list[str]:
         issues.append("state 41 building visuals overlap the Grayson castle footprint")
     if khan_bunker_clearance(lines) != lines:
         issues.append("state 66 generic fort overlaps the Khan bunker footprint")
+    if permanent_landmark_clearance(lines) != lines:
+        issues.append("vanilla building visuals overlap a permanent landmark footprint")
     _planned_heights, height_changes = mountain_building_heights(root, lines)
     issues.extend(
         f"map/buildings.txt:{line}: building height differs from the mountain surface"

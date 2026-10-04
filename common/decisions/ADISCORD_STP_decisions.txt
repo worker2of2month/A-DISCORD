@@ -212,17 +212,16 @@ STP_elections_in_the_party = {
 			}
 		}
 		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_development_program_cost_50
+		custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_300
 		days_remove = 42
 		days_re_enable = 21
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			add_timed_idea = { idea = ADISCORD_development_program_army days = 42 }
+			ADISCORD_economy_spend_300 = yes
+			custom_effect_tooltip = ADISCORD_development_program_result_25
+			add_to_variable = { var = ADISCORD_army_development_progress value = 25 }
 		}
 		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
-		cancel_effect = { remove_ideas = ADISCORD_development_program_army }
-		remove_effect = { remove_ideas = ADISCORD_development_program_army }
 		ai_will_do = { base = 2 }
 	}
 
@@ -242,17 +241,16 @@ STP_elections_in_the_party = {
 			}
 		}
 		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_development_program_cost_50
+		custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_300
 		days_remove = 42
 		days_re_enable = 21
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			add_timed_idea = { idea = ADISCORD_development_program_state days = 42 }
+			ADISCORD_economy_spend_300 = yes
+			custom_effect_tooltip = ADISCORD_development_program_result_25
+			add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
 		}
 		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
-		cancel_effect = { remove_ideas = ADISCORD_development_program_state }
-		remove_effect = { remove_ideas = ADISCORD_development_program_state }
 		ai_will_do = { base = 2 }
 	}
 
@@ -2788,17 +2786,16 @@ STP_battle_for_stelander = {
 			}
 		}
 		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_development_program_cost_50
+		custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_300
 		days_remove = 42
 		days_re_enable = 21
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			add_timed_idea = { idea = ADISCORD_development_program_army days = 42 }
+			ADISCORD_economy_spend_300 = yes
+			custom_effect_tooltip = ADISCORD_development_program_result_25
+			add_to_variable = { var = ADISCORD_army_development_progress value = 25 }
 		}
 		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
-		cancel_effect = { remove_ideas = ADISCORD_development_program_army }
-		remove_effect = { remove_ideas = ADISCORD_development_program_army }
 		ai_will_do = { base = 2 }
 	}
 
@@ -2818,17 +2815,16 @@ STP_battle_for_stelander = {
 			}
 		}
 		cost = 0
-		custom_cost_trigger = { ADISCORD_economy_can_spend_50 = yes }
-		custom_cost_text = ADISCORD_development_program_cost_50
+		custom_cost_trigger = { ADISCORD_economy_can_spend_300 = yes }
+		custom_cost_text = ADISCORD_development_program_cost_300
 		days_remove = 42
 		days_re_enable = 21
 		complete_effect = {
-			ADISCORD_economy_spend_50 = yes
-			add_timed_idea = { idea = ADISCORD_development_program_economic days = 42 }
+			ADISCORD_economy_spend_300 = yes
+			custom_effect_tooltip = ADISCORD_development_program_result_25
+			add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
 		}
 		cancel_trigger = { OR = { has_global_flag = STP_cw_started NOT = { has_active_mission = STP_cw_election_window } } }
-		cancel_effect = { remove_ideas = ADISCORD_development_program_economic }
-		remove_effect = { remove_ideas = ADISCORD_development_program_economic }
 		ai_will_do = { base = 2 }
 	}
 
@@ -15188,6 +15184,120 @@ STP_pw_programme = {
 				add_to_variable = { var = ADISCORD_economy_treasury value = 1000 }
 				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 1000 }
 				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	STP_pw_prog_district_grants = {
+		icon = generic_political_pressure
+		allowed = { tag = STP }
+		visible = {
+			STP_pw_can_reconstruct = yes
+			has_completed_focus = STP_party_local_cadres
+		}
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_540
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+				custom_effect_tooltip = STP_pw_prog_district_grants_tt
+				add_stability = 0.02
+				add_political_power = 15
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	STP_pw_prog_trade_credit = {
+		icon = generic_trade
+		allowed = { tag = STP }
+		visible = {
+			STP_pw_can_reconstruct = yes
+			has_completed_focus = STP_pw_party_commercial_recovery
+		}
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_720
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 720 compare = greater_than_or_equals } }
+				custom_effect_tooltip = STP_pw_prog_trade_credit_tt
+				add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 250 producer = ROOT }
+				add_political_power = 20
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 720 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 720 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	STP_pw_prog_defence_orders = {
+		icon = generic_army_support
+		allowed = { tag = STP }
+		visible = {
+			STP_pw_can_reconstruct = yes
+			has_completed_focus = STP_pw_party_defence_combine
+		}
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_900
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals } }
+				custom_effect_tooltip = STP_pw_prog_defence_orders_tt
+				add_equipment_to_stockpile = { type = infantry_equipment amount = 6000 producer = ROOT }
+				add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = ROOT }
+				add_equipment_to_stockpile = { type = artillery_equipment amount = 60 producer = ROOT }
+				army_experience = 10
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = { base = 5 }
+	}
+	STP_pw_prog_public_works = {
+		icon = generic_construct_civilian
+		allowed = { tag = STP }
+		visible = {
+			STP_pw_can_reconstruct = yes
+			has_completed_focus = STP_pw_party_social_guarantees
+		}
+		available = { STP_pw_can_reconstruct = yes }
+		cost = 0
+		custom_cost_text = STP_pw_price_540
+		custom_cost_trigger = { check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			if = {
+				limit = { STP_pw_can_reconstruct = yes check_variable = { var = ADISCORD_economy_treasury value = 540 compare = greater_than_or_equals } }
+				custom_effect_tooltip = STP_pw_prog_public_works_tt
+				add_stability = 0.03
+				add_manpower = 3000
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 540 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 540 }
+					ADISCORD_economy_mark_dirty = yes
+				}
 			}
 		}
 		ai_will_do = { base = 5 }

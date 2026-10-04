@@ -28,6 +28,7 @@ focus_tree = {
 	### The reclamation programme stays detached at x <= 0 so its state work does not cross the core tree.
 	### Progressive focus reveal: the complete first act is visible as a roadmap.
 	### World-reactive and selected second-layer systems may use allow_branch.
+	### Important roadmap milestones stay static and show their gates through available/prerequisite.
 	### Post-capstone campaign routes stay statically visible and use ordinary
 	### prerequisites/availability so HOI4 cannot strand them behind layout caching.
 	### CENTRAL SPINE: THE CONTRACT THRONE
@@ -752,16 +753,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Paid_Loyalty
-		dynamic = yes
 		icon = GFX_goal_generic_demand_territory
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 18
 		y = 4
 		cost = 2
-		allow_branch = {
-			has_completed_focus = VAL_Price_Of_Loyalty
-		}
 		prerequisite = { focus = VAL_Price_Of_Loyalty }
+		available = {
+			has_completed_focus = VAL_Price_Of_Loyalty
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Paid_Loyalty_tt
 			add_stability = 0.03
@@ -781,16 +782,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Provincial_Brokers
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
 		y = 4
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Count_The_Captains
-		}
 		prerequisite = { focus = VAL_Count_The_Captains }
+		available = {
+			has_completed_focus = VAL_Count_The_Captains
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Provincial_Brokers_tt
 			add_political_power = 25
@@ -808,18 +809,18 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Closed_Ledgers
-		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 20
 		y = 5
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Paid_Loyalty
-			has_completed_focus = VAL_Provincial_Brokers
-		}
 		prerequisite = { focus = VAL_Paid_Loyalty }
 		prerequisite = { focus = VAL_Provincial_Brokers }
+		available = {
+			has_completed_focus = VAL_Paid_Loyalty
+			has_completed_focus = VAL_Provincial_Brokers
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Closed_Ledgers_tt
 			add_stability = 0.05
@@ -838,16 +839,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_State_Above_Captains
-		dynamic = yes
 		icon = GFX_focus_VAL_State_Above_Captains
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 18
 		y = 6
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Closed_Ledgers
-		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
+		available = {
+			has_completed_focus = VAL_Closed_Ledgers
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_State_Above_Captains_tt
 			add_power_balance_value = { id = VAL_command_balance value = 0.15 }
@@ -867,16 +868,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Quarterly_Contract_Norm
-		dynamic = yes
 		icon = GFX_goal_generic_production
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 22
 		y = 6
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Closed_Ledgers
-		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
+		available = {
+			has_completed_focus = VAL_Closed_Ledgers
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Quarterly_Contract_Norm_tt
 			unlock_decision_tooltip = VAL_pay_quarterly_contract_norm
@@ -902,16 +903,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contract_Accounting_Office
-		dynamic = yes
 		icon = GFX_focus_generic_stockpile_currency
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 2
 		y = 2
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Factories_Like_Cathedrals
-		}
 		prerequisite = { focus = VAL_Factories_Like_Cathedrals }
+		available = {
+			has_completed_focus = VAL_Factories_Like_Cathedrals
+
+		}
 		completion_reward = {
 			add_political_power = 30
 			effect_tooltip = {
@@ -1071,16 +1072,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Company_Rosters
-		dynamic = yes
 		icon = GFX_focus_STP_party_personnel_commissions
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 40
 		y = 2
 		cost = 2
-		allow_branch = {
-			has_completed_focus = VAL_The_Mercenary_State
-		}
 		prerequisite = { focus = VAL_The_Mercenary_State }
+		available = {
+			has_completed_focus = VAL_The_Mercenary_State
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Company_Rosters_tt
 			army_experience = 5
@@ -1228,16 +1229,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Field_Repair_Corps
-		dynamic = yes
 		icon = GFX_focus_generic_limited_social_mobilization
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 34
 		y = 5
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Morns_Supply_Trains
-		}
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
+		available = {
+			has_completed_focus = VAL_Morns_Supply_Trains
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Field_Repair_Corps_tt
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_field_repair_delta } }
@@ -1253,17 +1254,17 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reserve_Battalions
-		dynamic = yes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 38
 		y = 5
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Morns_Supply_Trains
-		}
 		prerequisite = { focus = VAL_Morns_Supply_Trains }
-		available = { has_capitulated = no any_owned_state = { is_controlled_by = PREV } }
+		available = {
+			has_capitulated = no any_owned_state = { is_controlled_by = PREV }
+			has_completed_focus = VAL_Morns_Supply_Trains
+
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Reserve_Battalions_tt
@@ -1277,18 +1278,18 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Contract_General_Staff
-		dynamic = yes
 		icon = GFX_goal_generic_army_doctrines
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY }
 		x = 36
 		y = 9
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Logistics_Command
-			has_completed_focus = VAL_Operational_Reserves
-		}
 		prerequisite = { focus = VAL_Logistics_Command }
 		prerequisite = { focus = VAL_Operational_Reserves }
+		available = {
+			has_completed_focus = VAL_Logistics_Command
+			has_completed_focus = VAL_Operational_Reserves
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Contract_General_Staff_tt
 			custom_effect_tooltip = VAL_qol_armor_bureau_tt
@@ -1373,16 +1374,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Ministry_Auditors
-		dynamic = yes
 		icon = GFX_focus_generic_secret_service_agency
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 14
 		y = 2
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Operational_Directorate
-		}
 		prerequisite = { focus = VAL_Operational_Directorate }
+		available = {
+			has_completed_focus = VAL_Operational_Directorate
+
+		}
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = VAL_contract_delta_dummy add_idea = VAL_ministry_auditors_delta } }
 			VAL_apply_contract_administration_1 = yes
@@ -1397,16 +1398,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Central_Payment_Office
-		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 22
 		y = 8
 		cost = 4
-		allow_branch = {
-			has_completed_focus = VAL_Quarterly_Contract_Norm
-		}
 		prerequisite = { focus = VAL_Quarterly_Contract_Norm }
+		available = {
+			has_completed_focus = VAL_Quarterly_Contract_Norm
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Central_Payment_Office_tt
 			VAL_apply_contract_administration_2 = yes
@@ -1418,16 +1419,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Provincial_Contract_Courts
-		dynamic = yes
 		icon = GFX_focus_generic_self_management
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 20
 		y = 7
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Closed_Ledgers
-		}
 		prerequisite = { focus = VAL_Closed_Ledgers }
+		available = {
+			has_completed_focus = VAL_Closed_Ledgers
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Provincial_Contract_Courts_tt
 			VAL_apply_contract_administration_2 = yes
@@ -1445,16 +1446,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Captains_Cannot_Veto
-		dynamic = yes
 		icon = GFX_goal_generic_political_pressure
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 18
 		y = 8
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_State_Above_Captains
-		}
 		prerequisite = { focus = VAL_State_Above_Captains }
+		available = {
+			has_completed_focus = VAL_State_Above_Captains
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Captains_Cannot_Veto_tt
 			add_stability = 0.03
@@ -1473,20 +1474,20 @@ focus_tree = {
 
 	focus = {
 		id = VAL_State_Contract
-		dynamic = yes
 		icon = GFX_goal_generic_national_unity
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
 		x = 20
 		y = 10
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Central_Payment_Office
-			has_completed_focus = VAL_Provincial_Contract_Courts
-			has_completed_focus = VAL_Captains_Cannot_Veto
-		}
 		prerequisite = { focus = VAL_Central_Payment_Office }
 		prerequisite = { focus = VAL_Provincial_Contract_Courts }
 		prerequisite = { focus = VAL_Captains_Cannot_Veto }
+		available = {
+			has_completed_focus = VAL_Central_Payment_Office
+			has_completed_focus = VAL_Provincial_Contract_Courts
+			has_completed_focus = VAL_Captains_Cannot_Veto
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_State_Contract_tt
 			VAL_reform_mercenary_payroll = yes
@@ -1508,16 +1509,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Wireless_Contract_Bureau
-		dynamic = yes
 		icon = GFX_goal_generic_propaganda
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY }
 		x = 30
 		y = 2
 		cost = 2
-		allow_branch = {
-			has_completed_focus = VAL_Ministry_Of_Contract_Memory
-		}
 		prerequisite = { focus = VAL_Ministry_Of_Contract_Memory }
+		available = {
+			has_completed_focus = VAL_Ministry_Of_Contract_Memory
+
+		}
 		completion_reward = {
 			add_ideas = VAL_contract_propaganda_office
 		}
@@ -1571,16 +1572,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Munitions_Board
-		dynamic = yes
 		icon = GFX_goal_generic_construct_mil_factory
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 2
 		y = 4
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Salvage_Every_Barrel
-		}
 		prerequisite = { focus = VAL_Salvage_Every_Barrel }
+		available = {
+			has_completed_focus = VAL_Salvage_Every_Barrel
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Munitions_Board_tt
 			add_equipment_to_stockpile = { type = infantry_equipment amount = 30000 producer = VAL }
@@ -1630,16 +1631,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Standard_Cartridges
-		dynamic = yes
 		icon = GFX_goal_generic_small_arms
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_ARMY }
 		x = 4
 		y = 5
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Standardize_Rifle_Lots
-		}
 		prerequisite = { focus = VAL_Standardize_Rifle_Lots }
+		available = {
+			has_completed_focus = VAL_Standardize_Rifle_Lots
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Standard_Cartridges_tt
 			add_tech_bonus = { name = VAL_standard_cartridges_bonus bonus = 1.0 uses = 1 category = infantry_weapons }
@@ -1666,16 +1667,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Three_Shift_Arsenals
-		dynamic = yes
 		icon = GFX_focus_generic_industry_3
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 4
 		y = 8
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Mobilize_Machine_Shops
-		}
 		prerequisite = { focus = VAL_Mobilize_Machine_Shops }
+		available = {
+			has_completed_focus = VAL_Mobilize_Machine_Shops
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Three_Shift_Arsenals_tt
 			VAL_advance_economic_recovery = yes
@@ -1702,18 +1703,18 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Reserve_Accounting
-		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 8
 		y = 8
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Arsenal_Reserve
-			has_completed_focus = VAL_Inventory_The_Empty_Yards
-		}
 		prerequisite = { focus = VAL_Arsenal_Reserve }
 		prerequisite = { focus = VAL_Inventory_The_Empty_Yards }
+		available = {
+			has_completed_focus = VAL_Arsenal_Reserve
+			has_completed_focus = VAL_Inventory_The_Empty_Yards
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Reserve_Accounting_tt
 			VAL_advance_economic_recovery = yes
@@ -1726,18 +1727,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Industrial_Mobilization_Plan
-		dynamic = yes
 		icon = GFX_goal_generic_production2
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		x = 6
 		y = 10
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Munitions_Board
-			OR = { has_completed_focus = VAL_Standard_Cartridges has_completed_focus = VAL_Brokered_Steel }
-			has_completed_focus = VAL_Three_Shift_Arsenals
-			has_completed_focus = VAL_Reserve_Accounting
-		}
 		prerequisite = { focus = VAL_Munitions_Board }
 		prerequisite = {
 			focus = VAL_Standard_Cartridges
@@ -1745,6 +1739,13 @@ focus_tree = {
 		}
 		prerequisite = { focus = VAL_Three_Shift_Arsenals }
 		prerequisite = { focus = VAL_Reserve_Accounting }
+		available = {
+			has_completed_focus = VAL_Munitions_Board
+			OR = { has_completed_focus = VAL_Standard_Cartridges has_completed_focus = VAL_Brokered_Steel }
+			has_completed_focus = VAL_Three_Shift_Arsenals
+			has_completed_focus = VAL_Reserve_Accounting
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Industrial_Mobilization_Plan_tt
 			VAL_reform_mercenary_payroll = yes
@@ -1792,16 +1793,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Company_Service_Code
-		dynamic = yes
 		icon = GFX_focus_generic_military_academy
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS FOCUS_FILTER_VAL_MANPOWER }
 		x = 40
 		y = 4
 		cost = 2
-		allow_branch = {
-			has_completed_focus = VAL_Company_Rosters
-		}
 		prerequisite = { focus = VAL_Company_Rosters }
+		available = {
+			has_completed_focus = VAL_Company_Rosters
+
+		}
 		completion_reward = {
 			unlock_decision_tooltip = VAL_recruit_local_volunteers
 			unlock_decision_tooltip = VAL_recruit_contract_reserves
@@ -1838,16 +1839,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Logistics_Command
-		dynamic = yes
 		icon = GFX_focus_STP_party_war_transport
 		search_filters = { FOCUS_FILTER_VAL_ARMY }
 		x = 34
 		y = 7
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Field_Repair_Corps
-		}
 		prerequisite = { focus = VAL_Field_Repair_Corps }
+		available = {
+			has_completed_focus = VAL_Field_Repair_Corps
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Logistics_Command_tt
 			VAL_apply_contract_army_2 = yes
@@ -1860,16 +1861,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Operational_Reserves
-		dynamic = yes
 		icon = GFX_goal_generic_position_armies
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 38
 		y = 7
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Reserve_Battalions
-		}
 		prerequisite = { focus = VAL_Reserve_Battalions }
+		available = {
+			has_completed_focus = VAL_Reserve_Battalions
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Operational_Reserves_tt
 			unlock_decision_tooltip = VAL_recall_contract_veterans
@@ -1884,16 +1885,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Army_Of_The_Ledger
-		dynamic = yes
 		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_MANPOWER }
 		x = 36
 		y = 10
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Contract_General_Staff
-		}
 		prerequisite = { focus = VAL_Contract_General_Staff }
+		available = {
+			has_completed_focus = VAL_Contract_General_Staff
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Army_Of_The_Ledger_tt
 			unlock_decision_tooltip = VAL_launch_national_recruitment
@@ -1926,16 +1927,16 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Foreign_Broker_Licences
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_DECISIONS }
 		x = 27
 		y = 8
 		cost = 2
-		allow_branch = {
-			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
-		}
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
+		available = {
+			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
+
+		}
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Foreign_Broker_Licences_tt
 			unlock_decision_tooltip = VAL_sell_surplus_arms_market
@@ -2070,13 +2071,11 @@ focus_tree = {
 	#############################################
 	focus = {
 		id = VAL_Stelander_Crisis_Opens
-		dynamic = yes
 		icon = GFX_goal_generic_major_war
 		search_filters = { FOCUS_FILTER_VAL_STELANDER }
 		x = 14
 		y = 7
 		cost = 2
-		allow_branch = { has_global_flag = STP_cw_started }
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = VAL_cw_crisis_active_tt
@@ -2099,7 +2098,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Arms_For_The_Burning
-		dynamic = yes
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_CONTRACTS FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 12
@@ -2135,7 +2133,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Seize_The_Northern_Passes
-		dynamic = yes
 		icon = GFX_goal_generic_allies_build_infantry
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 16
@@ -2165,7 +2162,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Keep_The_Arsenals
-		dynamic = yes
 		icon = GFX_goal_generic_position_armies
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_ECONOMY }
 		x = 14
@@ -2200,7 +2196,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_The_Steel_Contract
-		dynamic = yes
 		icon = GFX_goal_generic_construct_mil_factory
 		search_filters = { FOCUS_FILTER_VAL_STELANDER FOCUS_FILTER_VAL_AUTHORITY }
 		x = 14
@@ -2517,15 +2512,11 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Occidian_Claims_Commission
-		dynamic = yes
 		icon = GFX_goal_generic_demand_territory
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 12
 		y = 10
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_The_Steel_Contract
-		}
 		prerequisite = { focus = VAL_The_Steel_Contract }
 		available = {
 			custom_trigger_tooltip = {
@@ -2533,6 +2524,9 @@ focus_tree = {
 				VAL_occidia_secured = yes
 				NOT = { has_country_flag = VAL_cw_livonn_settlement_pending }
 			}
+
+			has_completed_focus = VAL_The_Steel_Contract
+
 		}
 		cancel_if_invalid = yes
 		completion_reward = {
@@ -2555,17 +2549,17 @@ focus_tree = {
 
 	focus = {
 		id = VAL_Occidian_Registries
-		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY }
 		x = 12
 		y = 11
 		cost = 5
-		allow_branch = {
-			has_completed_focus = VAL_Occidian_Claims_Commission
-		}
 		prerequisite = { focus = VAL_Occidian_Claims_Commission }
-		available = { custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes } }
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_occidian_administration_secured_tt VAL_occidian_administration_secured = yes }
+			has_completed_focus = VAL_Occidian_Claims_Commission
+
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Occidian_Registries_tt
@@ -2595,16 +2589,11 @@ focus_tree = {
 	# Northern expansion. Logistics, administration and claims have independent columns.
 	focus = {
 		id = VAL_frontier_conference
-		dynamic = yes
 		icon = GFX_goal_generic_positive_trade_relations
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
 		y = 14
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_One_Ledger_One_Banner
-			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
-		}
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		prerequisite = { focus = VAL_One_Ledger_One_Banner }
 		prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }
@@ -2628,6 +2617,10 @@ focus_tree = {
 				tooltip = VAL_frontier_postwar_ready_tt
 				VAL_frontier_postwar = yes
 			}
+
+			has_completed_focus = VAL_One_Ledger_One_Banner
+			OR = { has_completed_focus = VAL_Trading_Partners has_completed_focus = VAL_October_Of_2160 }
+
 		}
 
 		completion_reward = {
@@ -2639,7 +2632,6 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_logistics
-		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2663,7 +2655,6 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_commissioners
-		dynamic = yes
 		icon = GFX_focus_generic_diplomatic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_ECONOMY }
 		x = 23
@@ -2690,7 +2681,6 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_provincial_offices
-		dynamic = yes
 		icon = GFX_focus_generic_improve_the_administration
 		search_filters = { FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY }
 		x = 25
@@ -2773,6 +2763,9 @@ focus_tree = {
 				VAL_wasteland_charter_available = yes
 			}
 		}
+		# The administration may already exist after an authored capitulation settlement.
+		# Do not wait for a focus whose formation reward would be a no-op.
+		bypass = { VAL_wasteland_administration_ready = yes }
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_focus_progression_VAL_Wasteland_Charter_tt custom_effect_tooltip = VAL_wasteland_charter_tt hidden_effect = { VAL_form_wasteland_administration = yes } }
@@ -2834,7 +2827,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_frontier_security_plan
-		dynamic = yes
 		icon = GFX_focus_generic_mountain_fortification
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2863,7 +2855,6 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_frontier_treaty_offices
-		dynamic = yes
 		icon = GFX_focus_generic_treaty
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_RECOVERY FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_DECISIONS }
 		x = 24
@@ -2902,7 +2893,6 @@ focus_tree = {
 
 	focus = {
 		id = VAL_New_Supply_Base
-		dynamic = yes
 		icon = GFX_focus_generic_reinforcing_the_supply_network
 		search_filters = { FOCUS_FILTER_VAL_ARMY FOCUS_FILTER_VAL_ECONOMY }
 		x = 20
@@ -2929,7 +2919,6 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Northern_Settlement
-		dynamic = yes
 		icon = GFX_focus_destroy_nodrul
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION FOCUS_FILTER_VAL_DECISIONS }
 		x = 26
@@ -3238,18 +3227,17 @@ focus_tree = {
 
 	focus = {
 		id = VAL_econ_development_fund
-		dynamic = yes
 		icon = GFX_goal_generic_production2
 		x = 4
 		y = 11
 		cost = 3
-		allow_branch = {
-			has_completed_focus = VAL_Industrial_Mobilization_Plan
-		}
 		search_filters = { FOCUS_FILTER_VAL_ECONOMY }
 		available = {
 			is_subject = no
 			has_capitulated = no
+
+			has_completed_focus = VAL_Industrial_Mobilization_Plan
+
 		}
 		prerequisite = { focus = VAL_Industrial_Mobilization_Plan }
 		ai_will_do = { base = 12 }
@@ -3440,6 +3428,13 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		prerequisite = { focus = VAL_Contracts_Outlive_Kings }
 		available = { custom_trigger_tooltip = { tooltip = VAL_bezhaysk_operation_available_tt VAL_can_attack_bezhaysk = yes } }
+		# Bezhaysk can already be settled by the authored northern campaign.
+		bypass = {
+			OR = {
+				BJK = { exists = no }
+				BJK = { is_subject_of = VAL }
+			}
+		}
 		cancel_if_invalid = yes
 		completion_reward = {
 			custom_effect_tooltip = VAL_declares_war_bezhaysk_tt

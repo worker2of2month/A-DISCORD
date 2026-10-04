@@ -482,7 +482,16 @@ ADISCORD_economy_can_reduce_money_emission = {
 }
 
 ADISCORD_economy_can_stabilize_macro = {
-	ADISCORD_economy_has_treasury_100 = yes
+	OR = {
+		AND = {
+			NOT = { STP_uses_campaign_currency_scale = yes }
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		AND = {
+			STP_uses_campaign_currency_scale = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
+		}
+	}
 	OR = {
 		check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
 		check_variable = { var = ADISCORD_economy_fiscal_stress value = 25 compare = greater_than_or_equals }
@@ -497,7 +506,16 @@ ADISCORD_economy_can_stabilize_macro_crisis = {
 		ADISCORD_economy_ai_is_stressed = yes
 	}
 	check_variable = { var = ADISCORD_economy_inflation value = 15 compare = greater_than_or_equals }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
+	OR = {
+		AND = {
+			NOT = { STP_uses_campaign_currency_scale = yes }
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = less_than }
+		}
+		AND = {
+			STP_uses_campaign_currency_scale = yes
+			check_variable = { var = ADISCORD_economy_treasury value = 600 compare = less_than }
+		}
+	}
 }
 
 ADISCORD_economy_can_restructure_debt = {

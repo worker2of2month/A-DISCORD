@@ -107,7 +107,15 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 if dependency in known:
                     expected.setdefault(dependency, set()).add(focus_id)
 
-        self.assertGreaterEqual(len(expected), 35)
+        self.assertEqual(
+            set(expected),
+            {
+                "VAL_Operational_Directorate",
+                "VAL_Inventory_The_Empty_Yards",
+                "VAL_Resource_War_Contracts",
+                "VAL_Brokered_Steel",
+            },
+        )
         for dependency, targets in expected.items():
             key = f"VAL_focus_progression_{dependency}_tt"
             source = focus_block(self.focuses, dependency)
@@ -213,7 +221,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 f"{focus_id} must be visible as part of the opening roadmap",
             )
 
-    def test_second_layer_roots_reveal_in_meaningful_chunks(self) -> None:
+    def test_core_milestones_are_static_but_keep_their_gates(self) -> None:
         expected = {
             "VAL_Paid_Loyalty": "VAL_Price_Of_Loyalty",
             "VAL_Provincial_Brokers": "VAL_Count_The_Captains",
@@ -225,15 +233,13 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_Wireless_Contract_Bureau": "VAL_Ministry_Of_Contract_Memory",
             "VAL_Occidian_Claims_Commission": "VAL_The_Steel_Contract",
             "VAL_Occidian_Registries": "VAL_Occidian_Claims_Commission",
-            "VAL_Audit_Lost_Contracts": "VAL_Inventory_The_Empty_Yards",
             "VAL_econ_development_fund": "VAL_Industrial_Mobilization_Plan",
         }
         for focus_id, milestone in expected.items():
-            self.assertIn(
-                f"has_completed_focus = {milestone}",
-                allow(self.focuses, focus_id),
-                focus_id,
-            )
+            body = focus_block(self.focuses, focus_id)
+            self.assertNotIn("dynamic = yes", body, focus_id)
+            self.assertNotIn("allow_branch", body, focus_id)
+            self.assertIn(f"has_completed_focus = {milestone}", body, focus_id)
 
     def test_contracts_outlive_kings_is_a_visible_capstone(self) -> None:
         body = focus_block(self.focuses, "VAL_Contracts_Outlive_Kings")
@@ -248,10 +254,14 @@ class KefreytFocusStagingTests(unittest.TestCase):
         self.assertRegex(body, r"ai_will_do\s*=\s*\{[^}]*base\s*=\s*1000")
 
     def test_foreign_clearing_house_waits_for_the_northern_choice(self) -> None:
-        gate = allow(self.focuses, "VAL_Foreign_Broker_Licences")
-        self.assertIn("VAL_Trading_Partners", gate)
-        self.assertIn("VAL_October_Of_2160", gate)
-        self.assertIn("OR =", gate)
+        body = focus_block(self.focuses, "VAL_Foreign_Broker_Licences")
+        self.assertNotIn("dynamic = yes", body)
+        self.assertNotIn("allow_branch", body)
+        self.assertIn(
+            "prerequisite = { focus = VAL_Trading_Partners focus = VAL_October_Of_2160 }",
+            body,
+        )
+        self.assertIn("OR = { has_completed_focus = VAL_Trading_Partners", body)
 
     def test_frontier_chapter_reveals_as_one_roadmap(self) -> None:
         root = "VAL_frontier_conference"
@@ -264,7 +274,9 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "VAL_New_Supply_Base",
             "VAL_Northern_Settlement",
         )
-        gate = allow(self.focuses, root)
+        gate = focus_block(self.focuses, root)
+        self.assertNotIn("dynamic = yes", gate)
+        self.assertNotIn("allow_branch", gate)
         self.assertIn("has_completed_focus = VAL_One_Ledger_One_Banner", gate)
         self.assertIn("has_completed_focus = VAL_Trading_Partners", gate)
         self.assertIn("has_completed_focus = VAL_October_Of_2160", gate)
@@ -323,9 +335,10 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 )
 
     def test_world_reactive_branches_still_use_world_state(self) -> None:
-        stelander = allow(self.focuses, "VAL_Stelander_Crisis_Opens")
+        stelander = focus_block(self.focuses, "VAL_Stelander_Crisis_Opens")
+        self.assertNotIn("dynamic = yes", stelander)
+        self.assertNotIn("allow_branch", stelander)
         self.assertIn("has_global_flag = STP_cw_started", stelander)
-        self.assertNotIn("has_completed_focus =", stelander)
 
         resource = allow(self.focuses, "VAL_Resource_War_Contracts")
         self.assertIn("ADISCORD_nam_resource_war_active = yes", resource)
@@ -373,7 +386,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
             "prerequisite = { focus = VAL_Foreign_Broker_Licences }", southern
         )
 
-    def test_every_staged_allow_branch_focus_is_dynamic(self) -> None:
+    def test_only_world_reactive_roots_remain_dynamic(self) -> None:
         ids = focus_ids(self.focuses)
         staged = []
         for focus_id in ids:
@@ -386,18 +399,16 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 block,
                 f"{focus_id} can hide dynamically, so it must also be able to reappear dynamically",
             )
-        self.assertIn("VAL_frontier_conference", staged)
-        for focus_id in (
-            "VAL_frontier_logistics",
-            "VAL_frontier_commissioners",
-            "VAL_frontier_provincial_offices",
-            "VAL_frontier_security_plan",
-            "VAL_frontier_treaty_offices",
-            "VAL_New_Supply_Base",
-            "VAL_Northern_Settlement",
-        ):
-            self.assertNotIn(focus_id, staged)
-        self.assertGreaterEqual(len(staged), 35)
+        self.assertEqual(
+            set(staged),
+            {
+                "VAL_Vorkerland_Contracts_Burn",
+                "VAL_Audit_Lost_Contracts",
+                "VAL_Resource_War_Contracts",
+                "VAL_Support_The_Viceroy",
+                "VAL_Westerholm_Concessions",
+            },
+        )
 
     def test_frontier_chapter_has_no_old_save_migration(self) -> None:
         self.assertNotIn("ADISCORD_val_frontier_postpeace_fix_v1", self.on_actions)
@@ -426,8 +437,15 @@ class KefreytFocusStagingTests(unittest.TestCase):
             for entry in walk(gate.value)
             if entry.key == "has_completed_focus" and entry.value in focuses
         }
-        self.assertIn("VAL_Price_Of_Loyalty", parents)
-        self.assertIn("VAL_Arsenal_Reserve", parents)
+        self.assertEqual(
+            parents,
+            {
+                "VAL_Operational_Directorate",
+                "VAL_Inventory_The_Empty_Yards",
+                "VAL_Resource_War_Contracts",
+                "VAL_Brokered_Steel",
+            },
+        )
         callers = set()
         for focus_id, focus in focuses.items():
             reward = block(focus, "completion_reward")
@@ -451,7 +469,7 @@ class KefreytFocusStagingTests(unittest.TestCase):
                 and scalar(entry.value, "id") == "val_rework.123"
             ]
             self.assertEqual(hidden_calls, calls, focus_id)
-        self.assertEqual(callers, parents)
+        self.assertTrue(parents <= callers)
         self.assertNotIn("on_focus_completed", self.on_actions)
         self.assertNotIn("on_focus_complete =", self.on_actions)
 

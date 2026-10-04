@@ -2145,7 +2145,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1430 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 3230 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -2155,8 +2155,248 @@ guiTypes = {
 					alwaystransparent = yes
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_naval_folder_year_naval_support_2150"
+					name = "ADISCORD_naval_folder_year_destroyer_hulls_2155"
 					position = { x = 88 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_destroyer_hulls_2163"
+					position = { x = 88 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_destroyer_hulls_2170"
+					position = { x = 88 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_destroyer_hulls_2175"
+					position = { x = 88 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_light_cruiser_hulls_2155"
+					position = { x = 388 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_light_cruiser_hulls_2163"
+					position = { x = 388 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_light_cruiser_hulls_2170"
+					position = { x = 388 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_light_cruiser_hulls_2175"
+					position = { x = 388 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_heavy_cruiser_hulls_2155"
+					position = { x = 688 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_heavy_cruiser_hulls_2163"
+					position = { x = 688 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_heavy_cruiser_hulls_2170"
+					position = { x = 688 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_heavy_cruiser_hulls_2175"
+					position = { x = 688 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_battleship_hulls_2155"
+					position = { x = 988 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_battleship_hulls_2163"
+					position = { x = 988 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_battleship_hulls_2170"
+					position = { x = 988 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_battleship_hulls_2175"
+					position = { x = 988 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_carrier_hulls_2155"
+					position = { x = 1288 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_carrier_hulls_2163"
+					position = { x = 1288 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_carrier_hulls_2170"
+					position = { x = 1288 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_carrier_hulls_2175"
+					position = { x = 1288 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_submarine_hulls_2155"
+					position = { x = 1588 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_submarine_hulls_2163"
+					position = { x = 1588 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_submarine_hulls_2170"
+					position = { x = 1588 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_submarine_hulls_2175"
+					position = { x = 1588 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_naval_folder_year_naval_support_2150"
+					position = { x = 1888 y = 154 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 56
@@ -2166,7 +2406,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2155"
-					position = { x = 88 y = 294 }
+					position = { x = 1888 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -2176,7 +2416,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2158"
-					position = { x = 88 y = 434 }
+					position = { x = 1888 y = 434 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -2186,7 +2426,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2160"
-					position = { x = 88 y = 574 }
+					position = { x = 1888 y = 574 }
 					font = "hoi_18b"
 					text = "2160"
 					maxWidth = 56
@@ -2196,7 +2436,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2163"
-					position = { x = 88 y = 714 }
+					position = { x = 1888 y = 714 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -2206,7 +2446,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2168"
-					position = { x = 88 y = 854 }
+					position = { x = 1888 y = 854 }
 					font = "hoi_18b"
 					text = "2168"
 					maxWidth = 56
@@ -2216,7 +2456,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2170"
-					position = { x = 88 y = 994 }
+					position = { x = 1888 y = 994 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -2226,7 +2466,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2175"
-					position = { x = 88 y = 1134 }
+					position = { x = 1888 y = 1134 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2236,7 +2476,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_naval_support_2180"
-					position = { x = 88 y = 1274 }
+					position = { x = 1888 y = 1274 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 56
@@ -2246,7 +2486,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2150"
-					position = { x = 388 y = 154 }
+					position = { x = 2188 y = 154 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 56
@@ -2256,7 +2496,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2155"
-					position = { x = 388 y = 294 }
+					position = { x = 2188 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -2266,7 +2506,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2158"
-					position = { x = 388 y = 434 }
+					position = { x = 2188 y = 434 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -2276,7 +2516,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2161"
-					position = { x = 388 y = 574 }
+					position = { x = 2188 y = 574 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 56
@@ -2286,7 +2526,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2163"
-					position = { x = 388 y = 714 }
+					position = { x = 2188 y = 714 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -2296,7 +2536,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2166"
-					position = { x = 388 y = 854 }
+					position = { x = 2188 y = 854 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 56
@@ -2306,7 +2546,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2170"
-					position = { x = 388 y = 994 }
+					position = { x = 2188 y = 994 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -2316,7 +2556,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2172"
-					position = { x = 388 y = 1134 }
+					position = { x = 2188 y = 1134 }
 					font = "hoi_18b"
 					text = "2172"
 					maxWidth = 56
@@ -2326,7 +2566,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2175"
-					position = { x = 388 y = 1274 }
+					position = { x = 2188 y = 1274 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2336,7 +2576,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_surface_fleet_2180"
-					position = { x = 388 y = 1414 }
+					position = { x = 2188 y = 1414 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 56
@@ -2346,7 +2586,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2150"
-					position = { x = 688 y = 154 }
+					position = { x = 2488 y = 154 }
 					font = "hoi_18b"
 					text = "2150"
 					maxWidth = 56
@@ -2356,7 +2596,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2155"
-					position = { x = 688 y = 294 }
+					position = { x = 2488 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -2366,7 +2606,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2158"
-					position = { x = 688 y = 434 }
+					position = { x = 2488 y = 434 }
 					font = "hoi_18b"
 					text = "2158"
 					maxWidth = 56
@@ -2376,7 +2616,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2161"
-					position = { x = 688 y = 574 }
+					position = { x = 2488 y = 574 }
 					font = "hoi_18b"
 					text = "2161"
 					maxWidth = 56
@@ -2386,7 +2626,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2163"
-					position = { x = 688 y = 714 }
+					position = { x = 2488 y = 714 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -2396,7 +2636,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2166"
-					position = { x = 688 y = 854 }
+					position = { x = 2488 y = 854 }
 					font = "hoi_18b"
 					text = "2166"
 					maxWidth = 56
@@ -2406,7 +2646,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2170"
-					position = { x = 688 y = 994 }
+					position = { x = 2488 y = 994 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -2416,7 +2656,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2175"
-					position = { x = 688 y = 1134 }
+					position = { x = 2488 y = 1134 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2426,7 +2666,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_subsurface_2180"
-					position = { x = 688 y = 1274 }
+					position = { x = 2488 y = 1274 }
 					font = "hoi_18b"
 					text = "2180"
 					maxWidth = 56
@@ -2436,7 +2676,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_riverine_warfare_2162"
-					position = { x = 988 y = 154 }
+					position = { x = 2788 y = 154 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -2446,7 +2686,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_riverine_warfare_2169"
-					position = { x = 988 y = 294 }
+					position = { x = 2788 y = 294 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 56
@@ -2456,7 +2696,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_naval_folder_year_riverine_warfare_2175"
-					position = { x = 988 y = 434 }
+					position = { x = 2788 y = 434 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2466,8 +2706,110 @@ guiTypes = {
 				}
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_naval_support"
+				name = "ADISCORD_branch_destroyer_hulls"
 				position = { x = 150 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_DESTROYER_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_destroyer_hull_2155_tree"
+				position = { x = 150 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_light_cruiser_hulls"
+				position = { x = 450 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_LIGHT_CRUISER_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_light_cruiser_hull_2155_tree"
+				position = { x = 450 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_heavy_cruiser_hulls"
+				position = { x = 750 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_HEAVY_CRUISER_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_heavy_cruiser_hull_2155_tree"
+				position = { x = 750 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_battleship_hulls"
+				position = { x = 1050 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_BATTLESHIP_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_battleship_hull_2155_tree"
+				position = { x = 1050 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_carrier_hulls"
+				position = { x = 1350 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_CARRIER_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_carrier_hull_2155_tree"
+				position = { x = 1350 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_submarine_hulls"
+				position = { x = 1650 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_SUBMARINE_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_submarine_hull_2155_tree"
+				position = { x = 1650 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_naval_support"
+				position = { x = 1950 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_NAVAL_SUPPORT"
 				maxWidth = 210
@@ -2477,14 +2819,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_restored_dockyards_tree"
-				position = { x = 150 y = 130 }
+				position = { x = 1950 y = 130 }
 				size = { width = 210 height = 1260 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_surface_fleet"
-				position = { x = 450 y = 76 }
+				position = { x = 2250 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SURFACE_FLEET"
 				maxWidth = 210
@@ -2494,14 +2836,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_recovered_fire_control_tree"
-				position = { x = 450 y = 130 }
+				position = { x = 2250 y = 130 }
 				size = { width = 210 height = 1400 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_subsurface"
-				position = { x = 750 y = 76 }
+				position = { x = 2550 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_SUBSURFACE"
 				maxWidth = 210
@@ -2511,14 +2853,14 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_sonar_archives_tree"
-				position = { x = 750 y = 130 }
+				position = { x = 2550 y = 130 }
 				size = { width = 210 height = 1260 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
 				name = "ADISCORD_branch_riverine_warfare"
-				position = { x = 1050 y = 76 }
+				position = { x = 2850 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
 				maxWidth = 210
@@ -2528,7 +2870,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
-				position = { x = 1050 y = 130 }
+				position = { x = 2850 y = 130 }
 				size = { width = 210 height = 420 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
@@ -2548,7 +2890,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1180 height = 1630 min = { width = 100%% height = 100%% } }
+				size = { width = 2030 height = 790 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -2558,69 +2900,29 @@ guiTypes = {
 					alwaystransparent = yes
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2150"
+					name = "ADISCORD_mtgnavalfolder_year_destroyer_hulls_2155"
 					position = { x = 88 y = 154 }
 					font = "hoi_18b"
-					text = "2150"
+					text = "2155"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2155"
+					name = "ADISCORD_mtgnavalfolder_year_destroyer_hulls_2163"
 					position = { x = 88 y = 294 }
 					font = "hoi_18b"
-					text = "2155"
+					text = "2163"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2158"
+					name = "ADISCORD_mtgnavalfolder_year_destroyer_hulls_2170"
 					position = { x = 88 y = 434 }
 					font = "hoi_18b"
-					text = "2158"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2161"
-					position = { x = 88 y = 574 }
-					font = "hoi_18b"
-					text = "2161"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2163"
-					position = { x = 88 y = 714 }
-					font = "hoi_18b"
-					text = "2163"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2166"
-					position = { x = 88 y = 854 }
-					font = "hoi_18b"
-					text = "2166"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2170"
-					position = { x = 88 y = 994 }
-					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
 					maxHeight = 22
@@ -2628,18 +2930,8 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2172"
-					position = { x = 88 y = 1134 }
-					font = "hoi_18b"
-					text = "2172"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2175"
-					position = { x = 88 y = 1274 }
+					name = "ADISCORD_mtgnavalfolder_year_destroyer_hulls_2175"
+					position = { x = 88 y = 574 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2648,28 +2940,8 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_surface_fleet_2180"
-					position = { x = 88 y = 1414 }
-					font = "hoi_18b"
-					text = "2180"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2150"
+					name = "ADISCORD_mtgnavalfolder_year_light_cruiser_hulls_2155"
 					position = { x = 388 y = 154 }
-					font = "hoi_18b"
-					text = "2150"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2155"
-					position = { x = 388 y = 294 }
 					font = "hoi_18b"
 					text = "2155"
 					maxWidth = 56
@@ -2678,28 +2950,8 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2158"
-					position = { x = 388 y = 434 }
-					font = "hoi_18b"
-					text = "2158"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2161"
-					position = { x = 388 y = 574 }
-					font = "hoi_18b"
-					text = "2161"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2163"
-					position = { x = 388 y = 714 }
+					name = "ADISCORD_mtgnavalfolder_year_light_cruiser_hulls_2163"
+					position = { x = 388 y = 294 }
 					font = "hoi_18b"
 					text = "2163"
 					maxWidth = 56
@@ -2708,18 +2960,8 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2166"
-					position = { x = 388 y = 854 }
-					font = "hoi_18b"
-					text = "2166"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2170"
-					position = { x = 388 y = 994 }
+					name = "ADISCORD_mtgnavalfolder_year_light_cruiser_hulls_2170"
+					position = { x = 388 y = 434 }
 					font = "hoi_18b"
 					text = "2170"
 					maxWidth = 56
@@ -2728,8 +2970,8 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2175"
-					position = { x = 388 y = 1134 }
+					name = "ADISCORD_mtgnavalfolder_year_light_cruiser_hulls_2175"
+					position = { x = 388 y = 574 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2738,38 +2980,158 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_subsurface_2180"
-					position = { x = 388 y = 1274 }
-					font = "hoi_18b"
-					text = "2180"
-					maxWidth = 56
-					maxHeight = 22
-					format = left
-					Orientation = "UPPER_LEFT"
-				}
-				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_riverine_warfare_2162"
+					name = "ADISCORD_mtgnavalfolder_year_heavy_cruiser_hulls_2155"
 					position = { x = 688 y = 154 }
 					font = "hoi_18b"
-					text = "2162"
+					text = "2155"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_riverine_warfare_2169"
+					name = "ADISCORD_mtgnavalfolder_year_heavy_cruiser_hulls_2163"
 					position = { x = 688 y = 294 }
 					font = "hoi_18b"
-					text = "2169"
+					text = "2163"
 					maxWidth = 56
 					maxHeight = 22
 					format = left
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalfolder_year_riverine_warfare_2175"
+					name = "ADISCORD_mtgnavalfolder_year_heavy_cruiser_hulls_2170"
 					position = { x = 688 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_heavy_cruiser_hulls_2175"
+					position = { x = 688 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_battleship_hulls_2155"
+					position = { x = 988 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_battleship_hulls_2163"
+					position = { x = 988 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_battleship_hulls_2170"
+					position = { x = 988 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_battleship_hulls_2175"
+					position = { x = 988 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_carrier_hulls_2155"
+					position = { x = 1288 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_carrier_hulls_2163"
+					position = { x = 1288 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_carrier_hulls_2170"
+					position = { x = 1288 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_carrier_hulls_2175"
+					position = { x = 1288 y = 574 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_submarine_hulls_2155"
+					position = { x = 1588 y = 154 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_submarine_hulls_2163"
+					position = { x = 1588 y = 294 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_submarine_hulls_2170"
+					position = { x = 1588 y = 434 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalfolder_year_submarine_hulls_2175"
+					position = { x = 1588 y = 574 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2779,53 +3141,104 @@ guiTypes = {
 				}
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_surface_fleet"
+				name = "ADISCORD_branch_destroyer_hulls"
 				position = { x = 150 y = 76 }
 				font = "hoi_18b"
-				text = "ADISCORD_TECH_BRANCH_SURFACE_FLEET"
+				text = "ADISCORD_TECH_BRANCH_DESTROYER_HULLS"
 				maxWidth = 210
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
-				name = "ADISCORD_tech_recovered_fire_control_tree"
+				name = "ADISCORD_tech_destroyer_hull_2155_tree"
 				position = { x = 150 y = 130 }
-				size = { width = 210 height = 1400 }
+				size = { width = 210 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_subsurface"
+				name = "ADISCORD_branch_light_cruiser_hulls"
 				position = { x = 450 y = 76 }
 				font = "hoi_18b"
-				text = "ADISCORD_TECH_BRANCH_SUBSURFACE"
+				text = "ADISCORD_TECH_BRANCH_LIGHT_CRUISER_HULLS"
 				maxWidth = 210
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
-				name = "ADISCORD_tech_sonar_archives_tree"
+				name = "ADISCORD_tech_light_cruiser_hull_2155_tree"
 				position = { x = 450 y = 130 }
-				size = { width = 210 height = 1260 }
+				size = { width = 210 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_riverine_warfare"
+				name = "ADISCORD_branch_heavy_cruiser_hulls"
 				position = { x = 750 y = 76 }
 				font = "hoi_18b"
-				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
+				text = "ADISCORD_TECH_BRANCH_HEAVY_CRUISER_HULLS"
 				maxWidth = 210
 				maxHeight = 24
 				format = center
 				Orientation = "UPPER_LEFT"
 			}
 			gridboxtype = {
-				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
+				name = "ADISCORD_tech_heavy_cruiser_hull_2155_tree"
 				position = { x = 750 y = 130 }
-				size = { width = 210 height = 420 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_battleship_hulls"
+				position = { x = 1050 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_BATTLESHIP_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_battleship_hull_2155_tree"
+				position = { x = 1050 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_carrier_hulls"
+				position = { x = 1350 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_CARRIER_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_carrier_hull_2155_tree"
+				position = { x = 1350 y = 130 }
+				size = { width = 210 height = 560 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_submarine_hulls"
+				position = { x = 1650 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_SUBMARINE_HULLS"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_submarine_hull_2155_tree"
+				position = { x = 1650 y = 130 }
+				size = { width = 210 height = 560 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"
 			}
@@ -2844,7 +3257,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "techtree_stripes"
 				position = { x = 0 y = 0 }
-				size = { width = 1180 height = 1490 min = { width = 100%% height = 100%% } }
+				size = { width = 1430 height = 1630 min = { width = 100%% height = 100%% } }
 				clipping = no
 				background = { name = "Background" quadTextureSprite = "GFX_ADISCORD_technology_tree_stripes" }
 				iconType = {
@@ -2944,8 +3357,198 @@ guiTypes = {
 					Orientation = "UPPER_LEFT"
 				}
 				instantTextBoxType = {
-					name = "ADISCORD_mtgnavalsupportfolder_year_riverine_warfare_2162"
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2150"
 					position = { x = 388 y = 154 }
+					font = "hoi_18b"
+					text = "2150"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2155"
+					position = { x = 388 y = 294 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2158"
+					position = { x = 388 y = 434 }
+					font = "hoi_18b"
+					text = "2158"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2161"
+					position = { x = 388 y = 574 }
+					font = "hoi_18b"
+					text = "2161"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2163"
+					position = { x = 388 y = 714 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2166"
+					position = { x = 388 y = 854 }
+					font = "hoi_18b"
+					text = "2166"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2170"
+					position = { x = 388 y = 994 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2172"
+					position = { x = 388 y = 1134 }
+					font = "hoi_18b"
+					text = "2172"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2175"
+					position = { x = 388 y = 1274 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_surface_fleet_2180"
+					position = { x = 388 y = 1414 }
+					font = "hoi_18b"
+					text = "2180"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2150"
+					position = { x = 688 y = 154 }
+					font = "hoi_18b"
+					text = "2150"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2155"
+					position = { x = 688 y = 294 }
+					font = "hoi_18b"
+					text = "2155"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2158"
+					position = { x = 688 y = 434 }
+					font = "hoi_18b"
+					text = "2158"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2161"
+					position = { x = 688 y = 574 }
+					font = "hoi_18b"
+					text = "2161"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2163"
+					position = { x = 688 y = 714 }
+					font = "hoi_18b"
+					text = "2163"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2166"
+					position = { x = 688 y = 854 }
+					font = "hoi_18b"
+					text = "2166"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2170"
+					position = { x = 688 y = 994 }
+					font = "hoi_18b"
+					text = "2170"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2175"
+					position = { x = 688 y = 1134 }
+					font = "hoi_18b"
+					text = "2175"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_subsurface_2180"
+					position = { x = 688 y = 1274 }
+					font = "hoi_18b"
+					text = "2180"
+					maxWidth = 56
+					maxHeight = 22
+					format = left
+					Orientation = "UPPER_LEFT"
+				}
+				instantTextBoxType = {
+					name = "ADISCORD_mtgnavalsupportfolder_year_riverine_warfare_2162"
+					position = { x = 988 y = 154 }
 					font = "hoi_18b"
 					text = "2162"
 					maxWidth = 56
@@ -2955,7 +3558,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_mtgnavalsupportfolder_year_riverine_warfare_2169"
-					position = { x = 388 y = 294 }
+					position = { x = 988 y = 294 }
 					font = "hoi_18b"
 					text = "2169"
 					maxWidth = 56
@@ -2965,7 +3568,7 @@ guiTypes = {
 				}
 				instantTextBoxType = {
 					name = "ADISCORD_mtgnavalsupportfolder_year_riverine_warfare_2175"
-					position = { x = 388 y = 434 }
+					position = { x = 988 y = 434 }
 					font = "hoi_18b"
 					text = "2175"
 					maxWidth = 56
@@ -2992,8 +3595,42 @@ guiTypes = {
 				format = "UP"
 			}
 			instantTextBoxType = {
-				name = "ADISCORD_branch_riverine_warfare"
+				name = "ADISCORD_branch_surface_fleet"
 				position = { x = 450 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_SURFACE_FLEET"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_recovered_fire_control_tree"
+				position = { x = 450 y = 130 }
+				size = { width = 210 height = 1400 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_subsurface"
+				position = { x = 750 y = 76 }
+				font = "hoi_18b"
+				text = "ADISCORD_TECH_BRANCH_SUBSURFACE"
+				maxWidth = 210
+				maxHeight = 24
+				format = center
+				Orientation = "UPPER_LEFT"
+			}
+			gridboxtype = {
+				name = "ADISCORD_tech_sonar_archives_tree"
+				position = { x = 750 y = 130 }
+				size = { width = 210 height = 1260 }
+				slotsize = { width = 70 height = 70 }
+				format = "UP"
+			}
+			instantTextBoxType = {
+				name = "ADISCORD_branch_riverine_warfare"
+				position = { x = 1050 y = 76 }
 				font = "hoi_18b"
 				text = "ADISCORD_TECH_BRANCH_RIVERINE_WARFARE"
 				maxWidth = 210
@@ -3003,7 +3640,7 @@ guiTypes = {
 			}
 			gridboxtype = {
 				name = "ADISCORD_tech_shallow_water_navigation_tables_tree"
-				position = { x = 450 y = 130 }
+				position = { x = 1050 y = 130 }
 				size = { width = 210 height = 420 }
 				slotsize = { width = 70 height = 70 }
 				format = "UP"

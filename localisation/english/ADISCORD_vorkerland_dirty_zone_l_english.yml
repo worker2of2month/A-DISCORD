@@ -4,4 +4,4 @@
  ADISCORD_vorkerland_dirty_zone.1.a: "The Zone turns out to be inhabited."
 
  ADISCORD_debug_open_vorkerland_dirty_zone: "§RDEBUG:§! Open the Dirty Zone"
- ADISCORD_debug_open_vorkerland_dirty_zone_desc: "Skips the three-year wait and launches the normal Dirty Zone reveal through ADISCORD_vorkerland_collapse.85."
+ ADISCORD_debug_open_vorkerland_dirty_zone_desc: "Skips the three-year wait and launches the normal Dirty Zone reveal."

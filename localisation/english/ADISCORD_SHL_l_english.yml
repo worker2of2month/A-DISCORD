@@ -94,7 +94,7 @@
  SHL_common_fund_tt: "Common reserve: §G+2§! packs. Line owners will propose terms for construction access."
  SHL_workers_charter_tt: "Civic support: §G+10§!. Quarter unrest: §G-10§!. Crest pressure: §R+10§!."
  SHL_course_house_tt: "The tenth furnace gains a hereditary vote while operating. Treasury capacity: §G+10%§!. Crest pressure: §G-15§!. Quarter unrest: §R+10§!."
- SHL_course_city_tt: "SHL's furnaces pass to their cities. Representation no longer depends on continuous smelting. Stability: §G+3%§!. Crest pressure: §R+15§!."
+ SHL_course_city_tt: "Shahrabad's furnaces pass to their cities. Representation no longer depends on continuous smelting. Stability: §G+3%§!. Crest pressure: §R+15§!."
  SHL_course_state_tt: "Shahrabad's furnaces pass to the directorate. Industrial administration: §G+0.05§! £political_power_texticon per day. Crest pressure: §R+20§!."
  SHL_pressure_wait_tt: "Construction waits for transport access. Independent transport resolves the dispute without an access payment."
  SHL_pressure_pay_tt: "§Y40§! £ADISCORD_economy_treasury_texticon: settle transport access."
