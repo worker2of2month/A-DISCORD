@@ -563,3 +563,116 @@ ADISCORD_nam_resource_war_close_external = {
 		VAL = { VAL_cancel_nam_concession = yes VAL_settle_resource_aid = yes }
 	}
 }
+
+# COUNTRY NAM. Attach the focus aggregate on first use, then recalculate it.
+NAM_refresh_administration = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_administration_dynamic } } }
+		add_dynamic_modifier = { modifier = NAM_administration_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+NAM_refresh_garrison = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = NAM_garrison_dynamic } } }
+		add_dynamic_modifier = { modifier = NAM_garrison_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY NAM. Oil charter deliveries to regional members of Svetlogorye's faction.
+NAM_deliver_charter_fuel = {
+	EFL = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	AZH = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	WEF = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	KDR = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	RHM = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	SDR = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	MZR = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	KYZ = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+	GLP = {
+		if = {
+			limit = {
+				exists = yes
+				is_in_faction_with = NAM
+			}
+			add_fuel = 2500
+			add_stability = 0.03
+		}
+	}
+}

@@ -3716,8 +3716,9 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         for modifier in (
             "research_speed_factor = 0.08",
             "industrial_capacity_factory = 0.14",
-            "army_org_factor = 0.10",
-            "supply_consumption_factor = -0.12",
+            "army_org_factor = 0.04",
+            "army_attack_factor = 0.02",
+            "supply_consumption_factor = -0.08",
         ):
             self.assertIn(modifier, directorate)
         fanaticism = named_block(
@@ -3725,10 +3726,11 @@ class CharactersAndPoliticsTests(unittest.TestCase):
         )
         for modifier in (
             "war_support_factor = 0.12",
-            "army_org_regain = 0.10",
-            "army_attack_factor = 0.10",
+            "army_org_regain = 0.05",
         ):
             self.assertIn(modifier, fanaticism)
+        self.assertNotIn("army_attack_factor", fanaticism)
+        self.assertNotIn("breakthrough_factor", fanaticism)
         self.assertNotIn("surrender_limit", fanaticism)
         state_36 = read("history/states/36-36.txt")
         self.assertRegex(state_36, r"victory_points\s*=\s*\{\s*12227\s+10\s*\}")

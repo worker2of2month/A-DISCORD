@@ -52,7 +52,16 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			add_political_power = 40
-			add_stability = 0.02
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_open_ledgers_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = {
 			base = 20
@@ -74,9 +83,21 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			swap_ideas = {
-				remove_idea = NAM_national_spirit
-				add_idea = NAM_directorate
+			remove_ideas = NAM_national_spirit
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_vertical_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.15 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = -0.02 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.04 }
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.08 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.04 }
+				NAM_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -99,9 +120,20 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			swap_ideas = {
-				remove_idea = NAM_national_spirit
-				add_idea = NAM_councils
+			remove_ideas = NAM_national_spirit
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_districts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.06 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.1 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_tax_collection value = -0.02 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
+				NAM_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -149,7 +181,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = 0.04
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_public_payroll_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 			add_political_power = 25
 		}
 		ai_will_do = {
@@ -276,7 +317,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_export_offices
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_export_quays_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 			unlock_decision_tooltip = NAM_export_fuel
 		}
 		ai_will_do = {
@@ -299,7 +349,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_refining_network
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_domestic_refining_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 			unlock_decision_tooltip = NAM_workshop_batch
 		}
 		ai_will_do = {
@@ -454,7 +514,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_static_doctrine
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_field_guards_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_max_dig_in value = 1 }
+				add_to_variable = { var = NAM_gar_supply_consumption value = -0.04 }
+				add_to_variable = { var = NAM_gar_army_speed value = -0.03 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -476,7 +547,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_mobile_doctrine
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_mobile_columns_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_speed value = 0.05 }
+				add_to_variable = { var = NAM_gar_planning_speed value = 0.1 }
+				add_to_variable = { var = NAM_gar_supply_consumption value = 0.03 }
+				NAM_refresh_garrison = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -674,7 +756,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_escort_service
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_escort_school_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_convoy_escort value = 0.1 }
+				NAM_refresh_garrison = yes
+			}
 			navy_experience = 15
 		}
 		ai_will_do = {
@@ -696,7 +787,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_overseas_service
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_island_accounts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.02 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
+				NAM_refresh_administration = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -883,9 +985,19 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			swap_ideas = {
-				remove_idea = NAM_directorate
-				add_idea = NAM_service_republic
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_service_state_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.03 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.02 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.02 }
+				NAM_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -913,9 +1025,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			swap_ideas = {
-				remove_idea = NAM_councils
-				add_idea = NAM_charter_republic
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_federal_charter_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.04 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.02 }
+				NAM_refresh_administration = yes
 			}
 		}
 		ai_will_do = {
@@ -945,7 +1066,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_law_after_war_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 			add_political_power = 50
 		}
 		ai_will_do = {
@@ -1008,7 +1138,18 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_civil_dividend
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_civil_dividend_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.08 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = -0.03 }
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
+				NAM_refresh_administration = yes
+			}
 			unlock_decision_tooltip = NAM_veteran_housing
 		}
 		ai_will_do = {
@@ -1036,7 +1177,17 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_ideas = NAM_armed_peace
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_armed_peace_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.05 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = -0.05 }
+				NAM_refresh_administration = yes
+			}
 			unlock_decision_tooltip = NAM_postwar_rearmament
 		}
 		ai_will_do = {
@@ -1094,7 +1245,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		continue_if_invalid = no
 		completion_reward = {
-			add_stability = 0.05
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_svetlogorye_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
 			add_political_power = 75
 			country_event = {
 				id = ADISCORD_nam_resource_war.13
@@ -1103,6 +1263,443 @@ focus_tree = {
 		}
 		ai_will_do = {
 			base = 5
+		}
+	}
+
+	# Postwar political branches: the namestnik ladder and the oil charter.
+	focus = {
+		id = NAM_seal_registry
+		icon = GFX_goal_generic_political_pressure
+		x = 1
+		y = 10
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_service_state }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_seal_registry_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.1 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_district_audit
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_namestnik_garrisons
+		icon = GFX_goal_generic_army_doctrines
+		x = 0
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_seal_registry }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_namestnik_garrisons_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_defence value = 0.05 }
+				add_to_variable = { var = NAM_gar_army_org value = 0.03 }
+				add_to_variable = { var = NAM_gar_max_dig_in value = 1 }
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_oil_quotas
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 2
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_seal_registry }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_fuel = 4000
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_oil_quotas_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.1 }
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_of_seals
+		icon = GFX_goal_generic_national_unity
+		x = 1
+		y = 12
+		cost = 5
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_namestnik_garrisons }
+		prerequisite = { focus = NAM_oil_quotas }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_of_seals_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.03 }
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_district_council
+		icon = GFX_goal_generic_national_unity
+		x = 12
+		y = 10
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_federal_charter }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_district_council_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.04 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_oil_fund
+		icon = GFX_goal_generic_trade
+		x = 11
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_district_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_oil_fund_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.05 }
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_charter_fuel_aid
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_district_militia
+		icon = GFX_goal_generic_small_arms
+		x = 13
+		y = 11
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_district_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_district_militia_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_defence value = 0.04 }
+				add_to_variable = { var = NAM_gar_conscription value = 0.01 }
+				NAM_refresh_garrison = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_common_fuel_market
+		icon = GFX_goal_generic_production2
+		x = 12
+		y = 12
+		cost = 5
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_oil_fund }
+		prerequisite = { focus = NAM_district_militia }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_war = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_common_fuel_market_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# War for the South: front branch while Svetlogorye leads the north, then integration.
+	focus = {
+		id = NAM_south_war_council
+		icon = GFX_goal_generic_army_doctrines
+		x = 30
+		y = 4
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_command_power = 25
+			add_timed_idea = {
+				idea = NAM_south_war_council_idea
+				days = 180
+			}
+		}
+		ai_will_do = {
+			base = 200
+		}
+	}
+
+	focus = {
+		id = NAM_south_oil_tap
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 28
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_south_war_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			SHL = { add_fuel = -3000 }
+			unlock_decision_tooltip = NAM_south_cut_fuel
+		}
+		ai_will_do = {
+			base = 150
+		}
+	}
+
+	focus = {
+		id = NAM_south_field_fortresses
+		icon = GFX_goal_generic_construction
+		x = 32
+		y = 5
+		cost = 2
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_south_war_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			67 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = { type = bunker level = 2 instant_build = yes province = 6099 }
+				}
+			}
+			688 = {
+				if = {
+					limit = {
+						is_owned_by = NAM
+						is_controlled_by = NAM
+					}
+					add_building_construction = { type = bunker level = 2 instant_build = yes province = 16721 }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 150
+		}
+	}
+
+	focus = {
+		id = NAM_south_counteroffensive
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = 30
+		y = 6
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_MANPOWER }
+		prerequisite = { focus = NAM_south_oil_tap focus = NAM_south_field_fortresses }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			add_timed_idea = {
+				idea = NAM_south_counteroffensive_idea
+				days = 120
+			}
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 120
+		}
+	}
+
+	focus = {
+		id = NAM_south_heritage
+		icon = GFX_goal_generic_national_unity
+		x = 30
+		y = 8
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_STABILITY }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			has_global_flag = ADISCORD_south_hegemon_NAM
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_south_heritage_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_resistance_growth value = -0.05 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = ADISCORD_south_integrate_subject
+		}
+		ai_will_do = {
+			base = 50
 		}
 	}
 
@@ -1120,6 +1717,7 @@ focus_tree = {
 			AZH = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_service_state
@@ -1152,6 +1750,7 @@ focus_tree = {
 			EFL = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_service_state
@@ -1188,6 +1787,7 @@ focus_tree = {
 			AZH = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_federal_charter
@@ -1221,6 +1821,7 @@ focus_tree = {
 			EFL = { ADISCORD_south_campaign_target_settled = yes }
 		}
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_completed_focus = NAM_federal_charter
@@ -1249,8 +1850,10 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
 		prerequisite = { focus = NAM_south_desert_offices }
+		prerequisite = { focus = NAM_ladder_of_seals }
 		mutually_exclusive = { focus = NAM_south_oil_charter }
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_war = no
@@ -1281,8 +1884,10 @@ focus_tree = {
 		search_filters = { FOCUS_FILTER_ANNEXATION FOCUS_FILTER_WAR_SUPPORT }
 		prerequisite = { focus = NAM_svetlogorye }
 		prerequisite = { focus = NAM_south_fenn_guarantee }
+		prerequisite = { focus = NAM_common_fuel_market }
 		mutually_exclusive = { focus = NAM_south_seal_over_furnaces }
 		available = {
+			has_capitulated = no
 			NAM_country_operable = yes
 			is_subject = no
 			has_war = no

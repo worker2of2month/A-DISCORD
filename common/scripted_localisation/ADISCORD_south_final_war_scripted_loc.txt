@@ -104,6 +104,10 @@ defined_text = {
 		localization_key = ADISCORD_south_status_crisis
 	}
 	text = {
+		trigger = { has_global_flag = ADISCORD_south_final_resolved }
+		localization_key = ADISCORD_south_status_resolved
+	}
+	text = {
 		localization_key = ADISCORD_south_status_closed
 	}
 }

@@ -217,5 +217,83 @@ class SouthFinalWarContractTests(unittest.TestCase):
             self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
 
 
+class FocusAggregateTests(unittest.TestCase):
+    """TFR-style display pairs must show exactly the variable change a focus applies."""
+
+    DYNAMICS = (
+        ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_NAM.txt",
+        ROOT / "common/dynamic_modifiers/ADISCORD_dynamic_modifiers_SHL.txt",
+    )
+    IDEAS = (
+        ROOT / "common/ideas/ADISCORD_nam_resource_war_ideas.txt",
+        ROOT / "common/ideas/ADISCORD_southern_desert_ideas.txt",
+    )
+    TREES = (ROOT / "focus_trees/NAM/main/focuses.txt", ROOT / "focus_trees/SHL/main/focuses.txt")
+    REFRESH = {
+        "NAM_administration_dynamic": "NAM_refresh_administration",
+        "NAM_garrison_dynamic": "NAM_refresh_garrison",
+        "SHL_conclave_power_dynamic": "SHL_refresh_conclave_power",
+    }
+
+    def setUp(self):
+        self.fields = {}
+        for path in self.DYNAMICS:
+            for entry in parse_clausewitz(path.read_text(encoding="utf-8")):
+                if entry.key in self.REFRESH:
+                    self.fields[entry.key] = {e.value: e.key for e in entry.value if e.key not in ("icon", "enable")}
+        self.display = {}
+        for path in self.IDEAS:
+            root = next(e.value for e in parse_clausewitz(path.read_text(encoding="utf-8")) if e.key == "ideas")
+            for group in root:
+                for idea in group.value:
+                    name = next((e.value for e in idea.value if e.key == "name"), None)
+                    if name in self.REFRESH:
+                        modifier = next(e.value for e in idea.value if e.key == "modifier")
+                        allowed = next(e.value for e in idea.value if e.key == "allowed")
+                        self.assertEqual([(e.key, e.value) for e in allowed], [("always", "no")], idea.key)
+                        self.display[idea.key] = (name, {e.key: float(e.value) for e in modifier})
+
+    def test_every_display_delta_matches_the_applied_change(self):
+        checked = 0
+        for tree in self.TREES:
+            for identifier, focus in focus_blocks(tree).items():
+                reward = next(e.value for e in focus if e.key == "completion_reward")
+                swaps = [e.value for e in flatten(reward) if e.key == "swap_ideas"]
+                if not swaps:
+                    continue
+                swap = {e.key: e.value for e in swaps[0]}
+                base_name, base = self.display[swap["remove_idea"]]
+                delta_name, delta = self.display[swap["add_idea"]]
+                self.assertEqual(base, {}, identifier)
+                self.assertEqual(base_name, delta_name, identifier)
+                hidden = next(e.value for e in reward if e.key == "hidden_effect")
+                applied = {}
+                for entry in hidden:
+                    if entry.key == "add_to_variable":
+                        values = {e.key: e.value for e in entry.value}
+                        applied[self.fields[delta_name][values["var"]]] = float(values["value"])
+                self.assertEqual(applied, delta, identifier)
+                self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
+                checked += 1
+        self.assertEqual(checked, 40)
+
+    def test_display_ideas_are_never_installed(self):
+        names = set(self.display)
+        for tree in self.TREES:
+            text = tree.read_text(encoding="utf-8")
+            for name in names:
+                self.assertNotIn(f"add_ideas = {name}", text)
+                self.assertNotIn(f"add_timed_idea = {{ idea = {name}", text)
+
+    def test_refresh_attaches_and_updates_without_reset(self):
+        for name, refresh in self.REFRESH.items():
+            path = ROOT / ("common/scripted_effects/ADISCORD_nam_resource_war_effects.txt" if name.startswith("NAM") else "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt")
+            source = body(path, refresh)
+            self.assertIn(f"add_dynamic_modifier = {{ modifier = {name} }}", source)
+            self.assertIn("force_update_dynamic_modifier = yes", source)
+            self.assertIn("ADISCORD_economy_mark_dirty = yes", source)
+            self.assertNotIn("set_variable", source)
+
+
 if __name__ == "__main__":
     unittest.main()

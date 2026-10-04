@@ -110,7 +110,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_unique_layout_and_real_rewards(self):
         coordinates = set()
-        self.assertEqual(len(self.focuses), 40)
+        self.assertEqual(len(self.focuses), 59)
         filters = set()
         for name, focus in self.focuses.items():
             coordinate = (scalar(focus, "x"), scalar(focus, "y"))
@@ -320,6 +320,9 @@ class NamCampaignTests(unittest.TestCase):
     def test_institution_changes_invalidate_economy_without_polling(self):
         for name, idea in self.ideas.items():
             if not name.startswith("NAM_"):
+                continue
+            # Display-only aggregate deltas are never installed; their refresh owns invalidation.
+            if [(e.key, e.value) for e in block(idea, "allowed")] == [("always", "no")]:
                 continue
             for hook in ("on_add", "on_remove"):
                 self.assertIn("ADISCORD_economy_mark_dirty", [e.key for e in block(idea, hook)], name)

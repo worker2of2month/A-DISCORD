@@ -91,3 +91,45 @@ NAM_can_sign_compact = {
 	owns_state = 688
 	controls_state = 688
 }
+
+# COUNTRY NAM. At least one regional state belongs to Svetlogorye's faction.
+NAM_has_charter_member = {
+	OR = {
+		EFL = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		AZH = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		WEF = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		KDR = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		RHM = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		SDR = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		MZR = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		KYZ = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+		GLP = {
+			exists = yes
+			is_in_faction_with = NAM
+		}
+	}
+}

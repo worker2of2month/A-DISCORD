@@ -21,6 +21,14 @@ ADISCORD_south_final_war_category = {
 				ADISCORD_south_final_active = yes
 				has_variable = ADISCORD_south_side
 			}
+			AND = {
+				tag = SHL
+				has_global_flag = ADISCORD_south_hegemon_SHL
+			}
+			AND = {
+				tag = NAM
+				has_global_flag = ADISCORD_south_hegemon_NAM
+			}
 		}
 	}
 	visible_when_empty = yes

@@ -1085,7 +1085,6 @@ ADISCORD_vorkerland_prepare_conflict_country = {
 	}
 	else_if = {
 		limit = { tag = TVA }
-		add_ideas = ADISCORD_vorkerland_mobilized_periphery
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
 	}
@@ -1300,7 +1299,6 @@ ADISCORD_vorkerland_finalize_conflict_spirits = {
 	}
 	else_if = {
 		limit = { tag = TVA }
-		add_ideas = ADISCORD_vorkerland_mobilized_periphery
 		add_ideas = ADISCORD_vorkerland_tva_field_directorate
 		add_ideas = ADISCORD_vorkerland_tva_ideological_fanaticism
 		add_ideas = ADISCORD_vorkerland_last_stand

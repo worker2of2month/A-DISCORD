@@ -219,3 +219,19 @@ ADISCORD_south_campaign_target_settled = {
 		is_in_faction_with = ROOT
 	}
 }
+
+# COUNTRY. The southern suzerain has opened the integration of its subjects.
+ADISCORD_south_can_integrate = {
+	OR = {
+		AND = {
+			tag = SHL
+			has_global_flag = ADISCORD_south_hegemon_SHL
+			has_completed_focus = SHL_south_crown_of_the_south
+		}
+		AND = {
+			tag = NAM
+			has_global_flag = ADISCORD_south_hegemon_NAM
+			has_completed_focus = NAM_south_heritage
+		}
+	}
+}

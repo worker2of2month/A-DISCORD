@@ -520,4 +520,88 @@ NAM_national_programmes = {
 		timeout_effect = { }
 		cancel_trigger = { ADISCORD_nam_resource_war_active = no }
 	}
+
+	NAM_district_audit = {
+		icon = generic_political_pressure
+		visible = {
+			has_completed_focus = NAM_seal_registry
+		}
+		available = {
+			NAM_country_operable = yes
+			has_war = no
+		}
+		cost = 50
+		fire_only_once = no
+		days_remove = 30
+		days_re_enable = 90
+		remove_effect = {
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	NAM_charter_fuel_aid = {
+		icon = generic_industry
+		visible = {
+			has_completed_focus = NAM_oil_fund
+		}
+		available = {
+			NAM_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = NAM_charter_members_tt
+				NAM_has_charter_member = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = NAM_cost_25_0_5000
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			NOT = { has_fuel < 5000 }
+		}
+		fire_only_once = no
+		days_re_enable = 60
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						NAM_country_operable = yes
+						NAM_has_charter_member = yes
+						NOT = { has_political_power < 25 }
+						NOT = { has_fuel < 5000 }
+					}
+				}
+				add_political_power = -25
+				add_fuel = -5000
+				custom_effect_tooltip = NAM_charter_fuel_aid_tt
+				hidden_effect = { NAM_deliver_charter_fuel = yes }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	NAM_south_cut_fuel = {
+		icon = generic_operation
+		visible = {
+			has_completed_focus = NAM_south_oil_tap
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			NAM_country_operable = yes
+			has_war_with = SHL
+		}
+		cost = 30
+		fire_only_once = no
+		days_re_enable = 45
+		complete_effect = {
+			SHL = { add_fuel = -4000 }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
 }

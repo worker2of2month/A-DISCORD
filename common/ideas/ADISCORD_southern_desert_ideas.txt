@@ -220,73 +220,6 @@ ideas = {
 				army_org_regain = 0.05
 			}
 		}
-		SHL_southern_watch_idea = {
-			picture = generic_fortify_the_borders
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				army_defence_factor = 0.05
-				max_dig_in = 1
-			}
-		}
-		SHL_conclave_of_ten_idea = {
-			picture = IRQ_state_company_for_iron_and_steel
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.05
-				trade_opinion_factor = 0.10
-				political_power_gain = 0.05
-				stability_factor = 0.03
-			}
-		}
-		SHL_southern_compact_idea = {
-			picture = AFG_helmand_adopted_treaty
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				stability_factor = 0.06
-				army_defence_factor = 0.05
-				production_speed_infrastructure_factor = 0.10
-			}
-		}
-		SHL_iron_shahrabad_idea = {
-			picture = generic_production_bonus
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_speed_arms_factory_factor = 0.10
-				army_org_factor = 0.05
-				war_support_factor = 0.05
-			}
-		}
-		SHL_hereditary_republic_idea = {
-			picture = generic_constitutional_guarantees
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				production_factory_efficiency_gain_factor = 0.06
-				political_power_gain = 0.10
-				consumer_goods_factor = 0.02
-			}
-		}
-		SHL_commune_of_fire_idea = {
-			picture = STP_National_Strikes
-			allowed = { original_tag = SHL }
-			allowed_civil_war = { always = yes }
-			removal_cost = -1
-			modifier = {
-				stability_factor = 0.08
-				production_factory_max_efficiency_factor = 0.05
-				conscription_factor = 0.05
-				political_power_gain = -0.05
-			}
-		}
 		WEF_frontier_municipalism = {
 			picture = ger_rebuild_the_nation
 			allowed = { original_tag = WEF }
@@ -296,6 +229,187 @@ ideas = {
 				stability_factor = 0.07
 				political_power_gain = 0.05
 				production_speed_rail_way_factor = 0.10
+			}
+		}
+
+		SHL_south_desert_convoys_idea = {
+			picture = generic_production_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = { NOT = { ADISCORD_south_final_active = yes } }
+			modifier = {
+				supply_consumption_factor = -0.15
+			}
+		}
+
+		SHL_south_storm_idea = {
+			picture = generic_production_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			cancel = { NOT = { ADISCORD_south_final_active = yes } }
+			modifier = {
+				army_attack_factor = 0.10
+				planning_speed = 0.10
+			}
+		}
+
+		# Display-only pair for the Conclave power aggregate; never installed.
+		SHL_conclave_power_dummy_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		SHL_pow_common_industrial_account_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_conclave_rules_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_tenth_voice_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_house_compromise_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_city_charters_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_common_dispatch_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_shift_arbitration_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_southern_watch_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+				max_dig_in = 1
+			}
+		}
+
+		SHL_pow_conclave_of_ten_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.05
+				trade_opinion_factor = 0.1
+				political_power_gain = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_southern_compact_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.06
+				army_defence_factor = 0.05
+				production_speed_infrastructure_factor = 0.1
+			}
+		}
+
+		SHL_pow_iron_shahrabad_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.1
+				army_org_factor = 0.05
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_pow_hereditary_republic_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.06
+				political_power_gain = 0.1
+				consumer_goods_factor = 0.02
+			}
+		}
+
+		SHL_pow_commune_of_fire_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.08
+				production_factory_max_efficiency_factor = 0.05
+				conscription_factor = 0.05
+				political_power_gain = -0.05
+			}
+		}
+
+		SHL_pow_southern_horizon_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_south_crown_of_the_south_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
 			}
 		}
 	}

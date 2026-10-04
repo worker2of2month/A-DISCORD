@@ -1,0 +1,34 @@
+ADISCORD_south_final_war_category = {
+	# The suzerain absorbs a southern subject; the result is rechecked at the end.
+	ADISCORD_south_integrate_subject = {
+		icon = generic_political_discourse
+		allowed = {
+			OR = {
+				tag = SHL
+				tag = NAM
+			}
+		}
+		visible = {
+			ADISCORD_south_can_integrate = yes
+		}
+		targets = { NAM SHL EFL AZH WEF KDR RHM SDR MZR KYZ GLP }
+		target_trigger = {
+			FROM = { is_subject_of = ROOT }
+		}
+		available = {
+			has_war = no
+		}
+		cost = 75
+		days_remove = 120
+		remove_effect = {
+			if = {
+				limit = { FROM = { is_subject_of = ROOT } }
+				annex_country = { target = FROM transfer_troops = yes }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}

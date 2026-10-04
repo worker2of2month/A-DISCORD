@@ -1596,6 +1596,66 @@ SHL_quarters_and_borders = {
 	}
 
 	# ----- The southern campaign -----
+	SHL_south_war_pour = {
+		icon = ADISCORD_factory
+		visible = {
+			has_completed_focus = SHL_south_furnaces_to_front
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_120
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+		}
+		days_re_enable = 45
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_treasury value = 120 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = {
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 120 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment
+					amount = 1500
+					producer = SHL
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 40
+					producer = SHL
+				}
+			}
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	SHL_south_raid_oil = {
+		icon = generic_operation
+		visible = {
+			has_completed_focus = SHL_south_raid_oil_fields
+			ADISCORD_south_final_active = yes
+		}
+		available = {
+			SHL_country_operable = yes
+			ADISCORD_south_north_leader_fights = yes
+		}
+		cost = 40
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = SHL_south_raid_oil_tt
+			hidden_effect = { ADISCORD_south_raid_north_fuel = yes }
+		}
+		ai_will_do = { base = 20 }
+	}
+
 	SHL_forge_campaign_convoy = {
 		icon = ADISCORD_factory
 		state_target = yes

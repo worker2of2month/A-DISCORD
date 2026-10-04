@@ -1120,3 +1120,36 @@ ADISCORD_south_raise_oil_uprising = {
 		}
 	}
 }
+
+# ----- Front operations -----
+
+# GLOBAL. Shahrabad raid on the northern leader's fuel and the Northern Deposits.
+ADISCORD_south_raid_north_fuel = {
+	NAM = {
+		if = {
+			limit = { ADISCORD_south_north_leader_viable = yes }
+			add_fuel = -4000
+		}
+	}
+	EFL = {
+		if = {
+			limit = { ADISCORD_south_north_leader_viable = yes }
+			add_fuel = -4000
+		}
+	}
+	AZH = {
+		if = {
+			limit = { ADISCORD_south_north_leader_viable = yes }
+			add_fuel = -4000
+		}
+	}
+	67 = {
+		if = {
+			limit = { ADISCORD_south_state_held_by_north_side = yes }
+			damage_building = {
+				type = infrastructure
+				damage = 1
+			}
+		}
+	}
+}

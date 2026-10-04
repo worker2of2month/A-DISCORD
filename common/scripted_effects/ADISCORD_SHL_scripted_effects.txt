@@ -4103,3 +4103,13 @@ SHL_recognise_quarter_registers = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
+
+# COUNTRY SHL. Attach the focus aggregate on first use, then recalculate it.
+SHL_refresh_conclave_power = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = SHL_conclave_power_dynamic } } }
+		add_dynamic_modifier = { modifier = SHL_conclave_power_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}

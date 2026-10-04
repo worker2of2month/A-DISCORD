@@ -3196,8 +3196,9 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for modifier in (
         "research_speed_factor = 0.08",
         "industrial_capacity_factory = 0.14",
-        "army_org_factor = 0.10",
-        "supply_consumption_factor = -0.12",
+        "army_org_factor = 0.04",
+        "army_attack_factor = 0.02",
+        "supply_consumption_factor = -0.08",
     ):
         if modifier not in tva_directorate:
             issues.append(
@@ -3207,10 +3208,15 @@ def validate_events(root: Path, issues: list[str]) -> None:
     fanaticism = named_block(ideas, "ADISCORD_vorkerland_tva_ideological_fanaticism")
     for modifier in (
         "war_support_factor = 0.12",
-        "army_org_regain = 0.10",
+        "army_org_regain = 0.05",
     ):
         if modifier not in fanaticism:
             issues.append(f"Doctor Worx ideological fanaticism is missing {modifier}")
+    for modifier in ("army_attack_factor", "breakthrough_factor"):
+        if modifier in fanaticism:
+            issues.append(
+                f"Doctor Worx fanaticism must not add {modifier} on top of the directorate"
+            )
     if "surrender_limit" in fanaticism:
         issues.append(
             "Doctor Worx fanaticism must not stack surrender limit above shared last stand"
@@ -3230,13 +3236,13 @@ def validate_events(root: Path, issues: list[str]) -> None:
     for token in (
         "allowed = { tag = TVA }",
         "cost = 40",
-        "days_re_enable = 60",
+        "days_re_enable = 120",
         "36 = {",
         "owner = TVA",
         "owner = WPS",
         "owner = TGD",
         "add_manpower = 1800",
-        "amount = 300 producer = TVA",
+        "amount = 3000 producer = TVA",
     ):
         if token not in technical_battalions:
             issues.append(
@@ -3246,7 +3252,7 @@ def validate_events(root: Path, issues: list[str]) -> None:
         issues.append(
             "Doctor Worx technical battalions decision must create two home and two conditional allied units"
         )
-    if technical_battalions.count("amount = 120 producer = TVA") != 2:
+    if technical_battalions.count("amount = 1200 producer = TVA") != 2:
         issues.append(
             "Doctor Worx technical allies do not receive two finite rifle grants"
         )
@@ -3272,16 +3278,16 @@ def validate_events(root: Path, issues: list[str]) -> None:
         "every_neighbor_country =",
         "has_war_with = ROOT",
         "add_timed_idea = { idea = ADISCORD_vorkerland_tva_logistics_disruption days = 30 }",
-        "days_re_enable = 45",
+        "days_re_enable = 60",
     ):
         if token not in disruption:
             issues.append(f"Doctor Worx logistics disruption is missing {token}")
     disruption_idea = named_block(ideas, "ADISCORD_vorkerland_tva_logistics_disruption")
     for token in (
-        "supply_consumption_factor = 0.12",
-        "army_org_regain = -0.08",
-        "repair_speed_factor = -0.15",
-        "planning_speed = -0.10",
+        "supply_consumption_factor = 0.06",
+        "army_org_regain = -0.04",
+        "repair_speed_factor = -0.08",
+        "planning_speed = -0.05",
     ):
         if token not in disruption_idea:
             issues.append(f"Doctor Worx logistics disruption spirit is missing {token}")

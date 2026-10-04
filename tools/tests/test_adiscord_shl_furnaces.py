@@ -666,8 +666,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         tree = block(parse_clausewitz(path.read_text(encoding="utf-8")), "focus_tree")
         focuses = [e.value for e in tree if e.key == "focus"]
         ids = [scalar(f, "id") for f in focuses]
-        self.assertEqual(len(ids), 90)
-        self.assertEqual(len(set(ids)), 90)
+        self.assertEqual(len(ids), 95)
+        self.assertEqual(len(set(ids)), 95)
         cells = [(scalar(f, "x"), scalar(f, "y")) for f in focuses]
         self.assertEqual(len(cells), len(set(cells)))
         for focus in focuses:
@@ -1397,6 +1397,8 @@ class CrisisLayerTests(unittest.TestCase):
         keys |= set(re.findall(r"custom_cost_text = (\w+)", decisions))
         for language in ("russian", "english"):
             text = (ROOT / f"localisation/{language}/ADISCORD_SHL_l_{language}.yml").read_text(encoding="utf-8-sig")
+            # Shared southern final war keys stay in their own system file.
+            text += (ROOT / f"localisation/{language}/ADISCORD_south_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
             defined = set(re.findall(r"^ ([\w.]+):", text, re.M))
             self.assertEqual(sorted(keys - defined), [], language)
 

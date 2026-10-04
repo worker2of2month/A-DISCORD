@@ -108,6 +108,41 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         cleanup = named_block(self.effects, "ADISCORD_vorkerland_clear_claimant_war_modifiers")
         self.assertIn("remove_ideas = ADISCORD_vorkerland_central_initiative", cleanup)
 
+    def test_tva_permanent_spirits_do_not_outscale_peer_claimants(self):
+        ideas = read("common/ideas/ADISCORD_vorkerland_ideas.txt")
+
+        def modifier(idea, key):
+            block = named_block(named_block(ideas, idea), "modifier")
+            match = re.search(rf"\b{key}\s*=\s*(-?[\d.]+)", block)
+            return float(match.group(1)) if match else 0.0
+
+        tva = ("ADISCORD_vorkerland_tva_field_directorate_3",
+               "ADISCORD_vorkerland_tva_ideological_fanaticism")
+        vad = ("ADISCORD_vorkerland_vad_restoration_war_cabinet_2",)
+        for key in ("army_attack_factor", "army_org_factor", "breakthrough_factor"):
+            self.assertLessEqual(
+                sum(modifier(idea, key) for idea in tva),
+                sum(modifier(idea, key) for idea in vad) + 0.01,
+                key,
+            )
+        for function in ("ADISCORD_vorkerland_prepare_conflict_country",
+                         "ADISCORD_vorkerland_finalize_conflict_spirits"):
+            branch = re.search(
+                r"limit = \{ tag = TVA \}(.*?)\n\t\}", named_block(self.effects, function), re.S
+            )
+            self.assertIsNotNone(branch, function)
+            self.assertNotIn("ADISCORD_vorkerland_mobilized_periphery", branch.group(1))
+
+    def test_tva_repeatable_war_decisions_match_peer_cadence(self):
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        for decision, days in (
+            ("ADISCORD_vorkerland_tva_reroute_city_grid", 40),
+            ("ADISCORD_vorkerland_tva_deploy_field_laboratories", 45),
+            ("ADISCORD_vorkerland_tva_raise_technical_battalions", 120),
+            ("ADISCORD_vorkerland_tva_disrupt_enemy_logistics", 60),
+        ):
+            self.assertIn(f"days_re_enable = {days}", named_block(decisions, decision))
+
     def test_theatre_package_is_not_rewritten_as_a_balance_shortcut(self):
         manifest = read("tools/lib/adiscord_vorkerland_theatre_manifest.py")
         self.assertIn('"WKR": 62', manifest)

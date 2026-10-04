@@ -460,9 +460,9 @@ ADISCORD_vorkerland_collapse_category = {
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_tva_grid_rerouting } }
 		cost = 15
 		fire_only_once = no
-		days_re_enable = 35
+		days_re_enable = 40
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = TVA }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1200 producer = TVA }
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_grid_rerouting days = 28 }
 		}
 		ai_will_do = { factor = 400 }
@@ -475,7 +475,7 @@ ADISCORD_vorkerland_collapse_category = {
 		available = { has_war = yes NOT = { has_idea = ADISCORD_vorkerland_tva_field_laboratories } }
 		cost = 25
 		fire_only_once = no
-		days_re_enable = 40
+		days_re_enable = 45
 		complete_effect = {
 			army_experience = 5
 			add_timed_idea = { idea = ADISCORD_vorkerland_tva_field_laboratories days = 30 }
@@ -493,7 +493,7 @@ ADISCORD_vorkerland_collapse_category = {
 		available = { has_war = yes }
 		cost = 40
 		fire_only_once = no
-		days_re_enable = 60
+		days_re_enable = 120
 		complete_effect = {
 			add_manpower = 1800
 			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 3000 producer = TVA }
@@ -545,7 +545,7 @@ ADISCORD_vorkerland_collapse_category = {
 		}
 		cost = 30
 		fire_only_once = no
-		days_re_enable = 45
+		days_re_enable = 60
 		complete_effect = {
 			every_neighbor_country = {
 				limit = { has_war_with = ROOT }

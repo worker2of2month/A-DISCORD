@@ -7,3 +7,22 @@ SHL_conclave_industry = {
 	stability_factor = SHL_course_stability
 	ADISCORD_economy_treasury_capacity_factor = SHL_treasury_capacity_bonus
 }
+
+# Focus aggregate. Unlike the industry cache above, its variables only accumulate.
+SHL_conclave_power_dynamic = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { tag = SHL }
+	political_power_gain = SHL_pow_political_power_gain
+	stability_factor = SHL_pow_stability_factor
+	war_support_factor = SHL_pow_war_support
+	army_org_factor = SHL_pow_army_org
+	army_defence_factor = SHL_pow_army_defence
+	max_dig_in = SHL_pow_max_dig_in
+	production_factory_efficiency_gain_factor = SHL_pow_efficiency_gain
+	production_speed_arms_factory_factor = SHL_pow_arms_speed
+	production_speed_infrastructure_factor = SHL_pow_infrastructure_speed
+	trade_opinion_factor = SHL_pow_trade_opinion
+	consumer_goods_factor = SHL_pow_consumer_goods
+	production_factory_max_efficiency_factor = SHL_pow_max_efficiency
+	conscription_factor = SHL_pow_conscription_factor
+}
