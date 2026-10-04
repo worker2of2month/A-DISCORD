@@ -10093,6 +10093,16 @@ RUS_crisis_begin = {
 	}
 }
 
+# RUS with the selected country in FROM. Repeated clicks cannot replace the
+# target or restart either mission after the shared phase has been initialized.
+RUS_crisis_choose_hegemon = {
+	if = {
+		limit = { RUS_crisis_can_choose_hegemon = yes }
+		FROM = { save_global_event_target_as = RUS_crisis_hegemon }
+		RUS_crisis_begin = yes
+	}
+}
+
 # COUNTRY defender. The roster is captured before declaring war because native
 # war callbacks may immediately call allies. Naturally major countries keep it.
 RUS_crisis_register_defender = {
@@ -10320,6 +10330,28 @@ RUS_crisis_restore_fragment_state = {
 		set_state_owner_to = SCA
 		set_state_controller_to = SCA
 	}
+	else_if = {
+		limit = { is_core_of = VEL }
+		VEL = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = VEL
+		set_state_controller_to = VEL
+	}
+	else_if = {
+		limit = { is_core_of = RLY }
+		RLY = {
+			if = {
+				limit = { exists = no }
+				set_country_flag = RUS_crisis_fragment
+			}
+		}
+		set_state_owner_to = RLY
+		set_state_controller_to = RLY
+	}
 	else = {
 		SLA = {
 			if = {
@@ -10444,6 +10476,8 @@ RUS_crisis_dissolve_empire = {
 	ERT = { RUS_crisis_prepare_restored_fragment = yes }
 	IRT = { RUS_crisis_prepare_restored_fragment = yes }
 	SCA = { RUS_crisis_prepare_restored_fragment = yes }
+	VEL = { RUS_crisis_prepare_restored_fragment = yes }
+	RLY = { RUS_crisis_prepare_restored_fragment = yes }
 	RUS_crisis_clear_roster = yes
 }
 
@@ -10980,6 +11014,8 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 			}
 		}
 		RUS_black_army_empire_reform = yes
+		# Relyn must be able to prepare as soon as imperial frontier wars unlock.
+		RLY = { ADISCORD_release_non_participating_minor_optimization = yes }
 		ADISCORD_economy_mark_dirty = yes
 		ADISCORD_vorkerland_show_last_empire_superevent = yes
 		RUS_crisis_check_start = yes

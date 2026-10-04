@@ -139,6 +139,11 @@ RUS_last_empire_crisis = {
 	visible = {
 		OR = {
 			AND = {
+				tag = RUS
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+				NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
+			}
+			AND = {
 				OR = { tag = RUS tag = event_target:RUS_crisis_hegemon }
 				RUS = {
 					check_variable = { var = RUS_crisis_phase value = 0 compare = greater_than }
@@ -154,6 +159,8 @@ RUS_last_empire_crisis = {
 					ERT = { exists = yes has_country_flag = RUS_crisis_fragment }
 					IRT = { exists = yes has_country_flag = RUS_crisis_fragment }
 					SCA = { exists = yes has_country_flag = RUS_crisis_fragment }
+					VEL = { exists = yes has_country_flag = RUS_crisis_fragment }
+					RLY = { exists = yes has_country_flag = RUS_crisis_fragment }
 				}
 			}
 		}

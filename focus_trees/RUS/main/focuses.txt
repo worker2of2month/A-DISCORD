@@ -388,13 +388,22 @@ focus_tree = {
 			is_subject = no
 			has_capitulated = no
 			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_war_active_tt
-				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+				tooltip = RUS_empire_proclaimed_tt
+				has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_crisis_course_open_tt
+				OR = {
+					NOT = { has_variable = RUS_crisis_phase }
+					check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+					check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+				}
 			}
 		}
 		bypass = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
 		cancel_if_invalid = yes
 		completion_reward = {
+			unlock_decision_tooltip = RUS_crisis_challenge_hegemon
 			army_experience = 25
 			add_command_power = 25
 			add_manpower = 30000

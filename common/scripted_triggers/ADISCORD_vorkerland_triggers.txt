@@ -1838,6 +1838,67 @@ RUS_crisis_can_begin = {
 	NOT = { has_variable = RUS_crisis_phase }
 }
 
+# COUNTRY target. A player may challenge either independent regional power;
+# automatic selection still requires that country's completed northern campaign.
+RUS_crisis_potential_hegemon = {
+	hidden_trigger = {
+		OR = {
+			tag = VAL
+			tag = STS
+		}
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	NOT = { is_in_faction_with = RUS }
+}
+
+RUS_crisis_can_choose_hegemon = {
+	RUS_crisis_can_begin = yes
+	has_completed_focus = RUS_break_the_hegemon
+	FROM = { RUS_crisis_potential_hegemon = yes }
+}
+
+RUS_imperial_frontier_can_begin = {
+	hidden_trigger = { tag = RUS }
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	custom_trigger_tooltip = {
+		tooltip = RUS_empire_proclaimed_tt
+		has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+	}
+	custom_trigger_tooltip = {
+		tooltip = RUS_imperial_frontier_not_crisis_tt
+		NOT = {
+			OR = {
+				check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+				check_variable = { var = RUS_crisis_phase value = 4 compare = equals }
+			}
+		}
+	}
+}
+
+# COUNTRY FROM. The eastern and northeastern neighbours share this war route.
+RUS_imperial_frontier_target = {
+	hidden_trigger = {
+		OR = {
+			tag = VEL
+			tag = RLY
+			tag = IRT
+			tag = ERT
+			tag = SCA
+		}
+	}
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	is_in_faction = no
+	is_neighbor_of = RUS
+	NOT = { has_war_with = RUS }
+}
+
 # The victory gate is used only when choosing a target. Occupation during
 # the ensuing war must not invalidate the campaign against that target.
 RUS_crisis_target_valid = {

@@ -2570,6 +2570,71 @@ ADISCORD_vorkerland_rom_tru_category = {
 
 # --- rus_crisis_decisions ---
 RUS_last_empire_crisis = {
+	RUS_crisis_challenge_hegemon = {
+		icon = generic_attack
+		allowed = { tag = RUS }
+		targets = { VAL STS }
+		target_root_trigger = { has_completed_focus = RUS_break_the_hegemon }
+		visible = {
+			has_completed_focus = RUS_break_the_hegemon
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			NOT = { has_variable = RUS_crisis_phase }
+			FROM = { exists = yes }
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			FROM = { RUS_crisis_potential_hegemon = yes }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = RUS_crisis_challenge_hegemon_tt
+			hidden_effect = { RUS_crisis_choose_hegemon = yes }
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	RUS_imperial_frontier_campaign = {
+		icon = generic_attack
+		allowed = { tag = RUS }
+		targets = { VEL RLY IRT ERT SCA }
+		target_root_trigger = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+		visible = {
+			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
+			FROM = { exists = yes }
+		}
+		available = {
+			RUS_imperial_frontier_can_begin = yes
+			FROM = { RUS_imperial_frontier_target = yes }
+		}
+		cost = 50
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						RUS_imperial_frontier_can_begin = yes
+						FROM = { RUS_imperial_frontier_target = yes }
+					}
+				}
+				hidden_effect = {
+					FROM = { ADISCORD_release_non_participating_minor_optimization = yes }
+				}
+				declare_war_on = {
+					target = FROM
+					type = annex_everything
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				num_divisions < 2
+			}
+		}
+	}
+
 	RUS_crisis_invasion_countdown = {
 		icon = generic_attack
 		allowed = { tag = RUS }
@@ -2627,7 +2692,7 @@ RUS_last_empire_crisis = {
 	RUS_crisis_establish_special_zone = {
 		icon = generic_political_pressure
 		allowed = { OR = { tag = VAL tag = STS } }
-		targets = { SLA RZA MLR ERT IRT SCA }
+		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
 		target_root_trigger = { has_country_flag = RUS_crisis_settlement_rights }
 		visible = {
 			has_country_flag = RUS_crisis_settlement_rights

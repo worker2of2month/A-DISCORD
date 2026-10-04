@@ -163,6 +163,14 @@ EVENT_AWAKENED_PARTICIPATION = {
     for tag in ("MON", "RIN")
 }
 
+# Imperial proclamation wakes Relyn before RUS can choose a frontier war.
+EVENT_AWAKENED_PARTICIPATION["RLY"] = {
+    Path("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+    Path("common/decisions/categories/ADISCORD_vorkerland_categories.txt"),
+    Path("common/scripted_effects/ADISCORD_vorkerland_effects.txt"),
+    Path("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"),
+}
+
 # KYZ and GLP stay dormant until a Shahrabad crisis wakes them; the Shahrabad
 # effects release each country before its first event, alliance or war.
 SHAHRABAD_NEIGHBOUR_FILES = {
