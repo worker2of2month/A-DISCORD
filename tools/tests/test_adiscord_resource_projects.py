@@ -13,12 +13,20 @@ from tools.validators.validate_adiscord_division_templates import (
 ROOT = Path(__file__).resolve().parents[2]
 P = 'ADISCORD_economy_'
 PROJECTS = {
-    'precision_tooling': (1, 800, 6, 3, 90),
-    'automated_industry': (2, 1200, 8, 6, 120),
-    'national_computing': (3, 1500, 12, 4, 120),
-    'logistics_contract': (4, 600, 4, 6, 60),
-    'drone_contract': (5, 1000, 8, 4, 90),
-    'platform_contract': (6, 1800, 8, 12, 120),
+    'precision_tooling': (1, 500, 1, 2, 60),
+    'automated_industry': (2, 700, 3, 2, 90),
+    'national_computing': (3, 900, 4, 1, 90),
+    'logistics_contract': (4, 450, 1, 2, 45),
+    'drone_contract': (5, 600, 3, 1, 60),
+    'platform_contract': (6, 1000, 1, 3, 90),
+}
+# One own plant of each type (4 components, 3 alloys) covers any single programme.
+PLANT_OUTPUT = (4, 3)
+PROJECT_FACTORIES = 2
+CAPACITY = 'num_of_civilian_factories_available_for_projects'
+FOCUS_FILES = {
+    'VAL': 'common/national_focus/ADISCORD_national_focus_VAL.txt',
+    'STP': 'common/national_focus/ADISCORD_STP_civil_war.txt',
 }
 DECISIONS = ROOT / 'common/decisions/ADISCORD_economy_projects.txt'
 DYNAMIC = ROOT / 'common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.txt'
@@ -84,7 +92,7 @@ class ProjectFixture(EconomyScriptFixture):
                 P + 'treasury': treasury,
                 'resource@rare_components': components,
                 'resource@rare_alloys': alloys,
-                'num_of_available_civilian_factories': 10,
+                CAPACITY: 10,
                 'num_of_civilian_factories': 20,
             }
         )
@@ -188,12 +196,12 @@ class ProjectFixture(EconomyScriptFixture):
                 )
                 for r, q in zip(('rare_components', 'rare_alloys'), self.reserved):
                     self.scopes[scope]['resource@' + r] -= q
-                self.scopes[scope]['num_of_available_civilian_factories'] -= 3
+                self.scopes[scope][CAPACITY] -= PROJECT_FACTORIES
                 self.dynamic = True
             elif node.key == 'remove_dynamic_modifier':
                 for r, q in zip(('rare_components', 'rare_alloys'), self.reserved):
                     self.scopes[scope]['resource@' + r] += q
-                self.scopes[scope]['num_of_available_civilian_factories'] += 3
+                self.scopes[scope][CAPACITY] += PROJECT_FACTORIES
                 self.dynamic = False
             elif node.key == 'add_equipment_to_stockpile':
                 typ = direct(node.value, 'type')
@@ -251,9 +259,9 @@ class ResourceProjectTransactions(unittest.TestCase):
         f.run(P + 'start_precision_tooling')
         for name in PROJECTS:
             f.run(P + 'start_' + name)
-        self.assertEqual(f.scopes['A'][P + 'treasury'], 4200)
+        self.assertEqual(f.scopes['A'][P + 'treasury'], 4500)
         self.assertEqual(f.scopes['A'][P + 'project_id'], 1)
-        self.assertEqual(f.scopes['A'][P + 'project_deposit'], 800)
+        self.assertEqual(f.scopes['A'][P + 'project_deposit'], 500)
 
     def test_success_releases_inputs_once_and_installs_permanent_capability(self):
         for name in ('precision_tooling', 'automated_industry', 'national_computing'):
@@ -326,8 +334,8 @@ class ResourceProjectTransactions(unittest.TestCase):
                 'motorized_equipment_1': 300,
                 'armored_train_equipment_1': 20,
             },
-            'drone_contract': {'ADISCORD_recon_drone_carrier_2170': 60},
-            'platform_contract': {'ADISCORD_combat_platform_2170': 80},
+            'drone_contract': {'ADISCORD_recon_drone_carrier_2170': 200},
+            'platform_contract': {'ADISCORD_combat_platform_2170': 240},
         }
         for name, items in expected.items():
             f = ProjectFixture()
@@ -336,18 +344,27 @@ class ResourceProjectTransactions(unittest.TestCase):
             f.run(P + 'finish_' + name)
             self.assertEqual(f.equipment, items)
 
-    def test_civilian_factory_capacity_uses_the_exact_three_factory_price(self):
-        for available in (0, 2, 2.999, 3):
+    def test_civilian_factory_capacity_uses_the_exact_two_factory_price(self):
+        for available in (0, 1, 1.999, 2):
             f = ProjectFixture()
-            f.scopes['A']['num_of_available_civilian_factories'] = available
+            f.scopes['A'][CAPACITY] = available
             f.run(P + 'start_precision_tooling')
-            self.assertEqual(f.dynamic, available >= 3, available)
+            self.assertEqual(f.dynamic, available >= PROJECT_FACTORIES, available)
         f = ProjectFixture()
         f.run(P + 'start_precision_tooling')
-        f.scopes['A']['num_of_civilian_factories'] = 2.999
+        f.scopes['A']['num_of_civilian_factories'] = 1.999
         f.run(P + 'finish_precision_tooling')
         self.assertFalse(f.scopes['A'].get('idea@' + P + 'precision_tooling', False))
-        self.assertEqual(f.scopes['A'][P + 'treasury'], 4800)
+        self.assertEqual(f.scopes['A'][P + 'treasury'], 5000 - 500 * 0.25)
+
+    def test_one_plant_of_each_type_covers_any_single_programme(self):
+        for name, (_, _, components, alloys, _) in PROJECTS.items():
+            with self.subTest(project=name):
+                self.assertLessEqual(components, PLANT_OUTPUT[0])
+                self.assertLessEqual(alloys, PLANT_OUTPUT[1])
+                f = ProjectFixture(components=PLANT_OUTPUT[0], alloys=PLANT_OUTPUT[1])
+                f.run(P + 'start_' + name)
+                self.assertTrue(f.dynamic)
 
     def test_sts_success_and_zero_surplus_after_reservation_are_allowed(self):
         for name, (_, cost, components, alloys, _) in PROJECTS.items():
@@ -359,12 +376,10 @@ class ResourceProjectTransactions(unittest.TestCase):
                     for focus in f.focuses
                 }
                 f.scopes['A']['STP_cw_postwar'] = True
-                f.scopes['A']['num_of_available_civilian_factories'] = 3
+                f.scopes['A'][CAPACITY] = PROJECT_FACTORIES
                 f.run(P + 'start_' + name)
                 self.assertTrue(f.dynamic)
-                self.assertEqual(
-                    f.scopes['A']['num_of_available_civilian_factories'], 0
-                )
+                self.assertEqual(f.scopes['A'][CAPACITY], 0)
                 f.run(P + 'finish_' + name)
                 self.assertFalse(f.dynamic)
                 self.assertTrue(f.equipment or f.scopes['A'].get('idea@' + P + name))
@@ -408,6 +423,7 @@ class ResourceProjectTransactions(unittest.TestCase):
                     'queue_debt_notification',
                 )
             )
+            f.stubs.add('VAL_black_market_record_budget_loss')
             v = f.scopes['A']
             v.update(
                 {
@@ -419,11 +435,11 @@ class ResourceProjectTransactions(unittest.TestCase):
             f.run(P + 'start_national_computing')
             f.run(P + 'apply_weekly_balance')
             self.assertEqual(v[P + 'last_period_unexplained_delta'], 0)
-            self.assertEqual(v[P + 'treasury'], 3600)
+            self.assertEqual(v[P + 'treasury'], 4200)
             f.run(P + ('cancel_project' if cancel else 'finish_national_computing'))
             f.run(P + 'apply_weekly_balance')
             self.assertEqual(v[P + 'last_period_unexplained_delta'], 0)
-            self.assertEqual(v[P + 'treasury'], 3700 + (1125 if cancel else 0))
+            self.assertEqual(v[P + 'treasury'], 4300 + (675 if cancel else 0))
 
 
 class ResourceProjectSourceContracts(unittest.TestCase):
@@ -447,9 +463,10 @@ class ResourceProjectSourceContracts(unittest.TestCase):
                     r'(?m)^\s*' + key + suffix + r':\d*\s+"([^"\n]+)"', loc
                 )
                 self.assertIsNotNone(match, key + suffix)
-                self.assertIn(str(cost), match[1])
-                self.assertIn('компонент', match[1])
-                self.assertIn('сплав', match[1])
+                self.assertIn(f'{cost}§! £ADISCORD_economy_treasury_texticon', match[1])
+                self.assertIn(f'{c}§! £resources_strip|8', match[1])
+                self.assertIn(f'{a}§! £resources_strip|9', match[1])
+                self.assertIn(f'на {days} дней', match[1])
             self.assertIn('custom_cost_trigger', [n.key for n in nodes])
 
     def test_all_resource_costs_are_country_scoped_native_consumers(self):
@@ -462,7 +479,9 @@ class ResourceProjectSourceContracts(unittest.TestCase):
         self.assertEqual(
             direct(body, 'country_resource_cost_rare_alloys'), P + 'project_alloys'
         )
-        self.assertEqual(direct(body, 'civilian_factory_use'), '3')
+        self.assertEqual(
+            direct(body, 'civilian_factory_use'), str(PROJECT_FACTORIES)
+        )
         self.assertNotIn('add_resource', read(DECISIONS))
 
     def test_both_economic_branches_have_nine_reachable_nonoverlapping_focuses(self):
@@ -470,9 +489,8 @@ class ResourceProjectSourceContracts(unittest.TestCase):
             ('VAL', 'VAL_econ_', 'VAL_Industrial_Mobilization_Plan'),
             ('STP', 'STP_pc_investment_', 'STP_pc_economy_recovery_budget'),
         ):
-            source = read(
-                f'common/national_focus/ADISCORD_national_focus_{country}.txt'
-            )
+            source = read(FOCUS_FILES[country])
+            self.assertTrue(source, FOCUS_FILES[country])
             trees = [t for t in parse_clausewitz(source) if t.key == 'focus_tree']
             selected = [
                 f.value
@@ -519,7 +537,7 @@ class ResourceProjectSourceContracts(unittest.TestCase):
         self,
     ):
         for country in ('VAL', 'STP'):
-            src = read(f'common/national_focus/ADISCORD_national_focus_{country}.txt')
+            src = read(FOCUS_FILES[country])
             self.assertIn(P + 'has_completed_capital_project', src)
 
 

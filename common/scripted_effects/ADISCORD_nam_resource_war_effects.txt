@@ -676,3 +676,499 @@ NAM_deliver_charter_fuel = {
 		}
 	}
 }
+
+# ----- Pillars of power -----
+# Five groups hold Svetlogorye together. Support (0-100) times influence (sums to
+# 100) gives loyalty; NAM_loyalty_dynamic reads values derived only here.
+
+# COUNTRY NAM. One-time setup from the fresh-campaign startup.
+NAM_groups_initialize = {
+	if = {
+		limit = { NOT = { has_country_flag = NAM_groups_initialized } }
+		set_country_flag = NAM_groups_initialized
+		set_variable = { var = NAM_grp_nam_support value = 55 }
+		set_variable = { var = NAM_grp_nam_influence value = 30 }
+		set_variable = { var = NAM_grp_oil_support value = 40 }
+		set_variable = { var = NAM_grp_oil_influence value = 20 }
+		set_variable = { var = NAM_grp_dist_support value = 40 }
+		set_variable = { var = NAM_grp_dist_influence value = 20 }
+		set_variable = { var = NAM_grp_garr_support value = 50 }
+		set_variable = { var = NAM_grp_garr_influence value = 20 }
+		set_variable = { var = NAM_grp_trade_support value = 45 }
+		set_variable = { var = NAM_grp_trade_influence value = 10 }
+		NAM_groups_refresh = yes
+	}
+}
+
+# COUNTRY NAM. Called after every support or influence change and by the monthly drift.
+NAM_groups_refresh = {
+	if = {
+		limit = { has_country_flag = NAM_groups_initialized }
+		set_variable = { var = NAM_loyalty value = 0 }
+		clamp_variable = { var = NAM_grp_nam_support min = 0 max = 100 }
+		set_temp_variable = { var = NAM_grp_weighted value = NAM_grp_nam_support }
+		multiply_temp_variable = { var = NAM_grp_weighted value = NAM_grp_nam_influence }
+		divide_temp_variable = { var = NAM_grp_weighted value = 100 }
+		add_to_variable = { var = NAM_loyalty value = NAM_grp_weighted }
+		clamp_variable = { var = NAM_grp_oil_support min = 0 max = 100 }
+		set_temp_variable = { var = NAM_grp_weighted value = NAM_grp_oil_support }
+		multiply_temp_variable = { var = NAM_grp_weighted value = NAM_grp_oil_influence }
+		divide_temp_variable = { var = NAM_grp_weighted value = 100 }
+		add_to_variable = { var = NAM_loyalty value = NAM_grp_weighted }
+		clamp_variable = { var = NAM_grp_dist_support min = 0 max = 100 }
+		set_temp_variable = { var = NAM_grp_weighted value = NAM_grp_dist_support }
+		multiply_temp_variable = { var = NAM_grp_weighted value = NAM_grp_dist_influence }
+		divide_temp_variable = { var = NAM_grp_weighted value = 100 }
+		add_to_variable = { var = NAM_loyalty value = NAM_grp_weighted }
+		clamp_variable = { var = NAM_grp_garr_support min = 0 max = 100 }
+		set_temp_variable = { var = NAM_grp_weighted value = NAM_grp_garr_support }
+		multiply_temp_variable = { var = NAM_grp_weighted value = NAM_grp_garr_influence }
+		divide_temp_variable = { var = NAM_grp_weighted value = 100 }
+		add_to_variable = { var = NAM_loyalty value = NAM_grp_weighted }
+		clamp_variable = { var = NAM_grp_trade_support min = 0 max = 100 }
+		set_temp_variable = { var = NAM_grp_weighted value = NAM_grp_trade_support }
+		multiply_temp_variable = { var = NAM_grp_weighted value = NAM_grp_trade_influence }
+		divide_temp_variable = { var = NAM_grp_weighted value = 100 }
+		add_to_variable = { var = NAM_loyalty value = NAM_grp_weighted }
+		set_variable = { var = NAM_loy_political_power_gain value = NAM_loyalty }
+		subtract_from_variable = { var = NAM_loy_political_power_gain value = 50 }
+		divide_variable = { var = NAM_loy_political_power_gain value = 250 }
+		set_variable = { var = NAM_loy_stability_factor value = NAM_loyalty }
+		subtract_from_variable = { var = NAM_loy_stability_factor value = 50 }
+		divide_variable = { var = NAM_loy_stability_factor value = 500 }
+		set_variable = { var = NAM_loy_tax_collection value = 0 }
+		set_variable = { var = NAM_loy_fuel_gain_factor value = 0 }
+		set_variable = { var = NAM_loy_building_speed value = 0 }
+		set_variable = { var = NAM_loy_army_org value = 0 }
+		set_variable = { var = NAM_loy_trade_income value = 0 }
+		if = {
+			limit = { check_variable = { var = NAM_grp_nam_support value = 70 compare = greater_than_or_equals } }
+			add_to_variable = { var = NAM_loy_tax_collection value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_nam_support value = 25 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_loy_political_power_gain value = -0.1 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_oil_support value = 70 compare = greater_than_or_equals } }
+			add_to_variable = { var = NAM_loy_fuel_gain_factor value = 0.1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_oil_support value = 25 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_loy_fuel_gain_factor value = -0.15 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_dist_support value = 70 compare = greater_than_or_equals } }
+			add_to_variable = { var = NAM_loy_building_speed value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_dist_support value = 25 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_loy_stability_factor value = -0.05 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_garr_support value = 70 compare = greater_than_or_equals } }
+			add_to_variable = { var = NAM_loy_army_org value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_garr_support value = 25 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_loy_army_org value = -0.05 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_trade_support value = 70 compare = greater_than_or_equals } }
+			add_to_variable = { var = NAM_loy_trade_income value = 0.05 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_trade_support value = 25 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_loy_trade_income value = -0.05 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = NAM_loyalty_dynamic } } }
+			add_dynamic_modifier = { modifier = NAM_loyalty_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+		NAM_groups_check_events = yes
+	}
+}
+
+# COUNTRY NAM. At most one group event is open; each group has its own cooldown.
+NAM_groups_check_events = {
+	if = {
+		limit = { NOT = { has_country_flag = NAM_grp_event_pending } }
+		if = {
+			limit = {
+				check_variable = { var = NAM_grp_nam_support value = 20 compare = less_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_cd_nam }
+			}
+			set_country_flag = { flag = NAM_grp_cd_nam value = 1 days = 180 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 1 }
+			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_oil_support value = 20 compare = less_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_cd_oil }
+			}
+			set_country_flag = { flag = NAM_grp_cd_oil value = 1 days = 180 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 2 }
+			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_dist_support value = 20 compare = less_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_cd_dist }
+			}
+			set_country_flag = { flag = NAM_grp_cd_dist value = 1 days = 180 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 3 }
+			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_garr_support value = 20 compare = less_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_cd_garr }
+			}
+			set_country_flag = { flag = NAM_grp_cd_garr value = 1 days = 180 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 4 }
+			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_trade_support value = 20 compare = less_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_cd_trade }
+			}
+			set_country_flag = { flag = NAM_grp_cd_trade value = 1 days = 180 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 5 }
+			country_event = { id = ADISCORD_nam_groups.1 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_nam_support value = 85 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_dcd_nam }
+			}
+			set_country_flag = { flag = NAM_grp_dcd_nam value = 1 days = 240 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 1 }
+			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_oil_support value = 85 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_dcd_oil }
+			}
+			set_country_flag = { flag = NAM_grp_dcd_oil value = 1 days = 240 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 2 }
+			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_dist_support value = 85 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_dcd_dist }
+			}
+			set_country_flag = { flag = NAM_grp_dcd_dist value = 1 days = 240 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 3 }
+			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_garr_support value = 85 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_dcd_garr }
+			}
+			set_country_flag = { flag = NAM_grp_dcd_garr value = 1 days = 240 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 4 }
+			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { var = NAM_grp_trade_support value = 85 compare = greater_than_or_equals }
+				NOT = { has_country_flag = NAM_grp_dcd_trade }
+			}
+			set_country_flag = { flag = NAM_grp_dcd_trade value = 1 days = 240 }
+			set_country_flag = NAM_grp_event_pending
+			set_variable = { var = NAM_grp_event_group value = 5 }
+			country_event = { id = ADISCORD_nam_groups.2 hours = 6 }
+		}
+	}
+}
+
+# COUNTRY NAM. on_monthly_NAM: every group drifts one point towards 50.
+NAM_groups_monthly = {
+	if = {
+		limit = { has_country_flag = NAM_groups_initialized }
+		if = {
+			limit = { check_variable = { var = NAM_grp_nam_support value = 51 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = NAM_grp_nam_support value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_nam_support value = 49 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_grp_nam_support value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_oil_support value = 51 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = NAM_grp_oil_support value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_oil_support value = 49 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_grp_oil_support value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_dist_support value = 51 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = NAM_grp_dist_support value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_dist_support value = 49 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_grp_dist_support value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_garr_support value = 51 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = NAM_grp_garr_support value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_garr_support value = 49 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_grp_garr_support value = 1 }
+		}
+		if = {
+			limit = { check_variable = { var = NAM_grp_trade_support value = 51 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = NAM_grp_trade_support value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { var = NAM_grp_trade_support value = 49 compare = less_than_or_equals } }
+			add_to_variable = { var = NAM_grp_trade_support value = 1 }
+		}
+		NAM_groups_refresh = yes
+	}
+}
+
+# COUNTRY NAM. Event option helpers read NAM_grp_event_group.
+NAM_groups_event_concede = {
+	add_political_power = -50
+	if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
+		add_to_variable = { var = NAM_grp_nam_support value = 15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
+		add_to_variable = { var = NAM_grp_oil_support value = 15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
+		add_to_variable = { var = NAM_grp_dist_support value = 15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
+		add_to_variable = { var = NAM_grp_garr_support value = 15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
+		add_to_variable = { var = NAM_grp_trade_support value = 15 }
+	}
+	NAM_groups_close_event = yes
+}
+
+NAM_groups_event_rivals = {
+	add_stability = -0.02
+	if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
+		add_to_variable = { var = NAM_grp_dist_support value = 8 }
+		add_to_variable = { var = NAM_grp_nam_support value = -5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
+		add_to_variable = { var = NAM_grp_trade_support value = 8 }
+		add_to_variable = { var = NAM_grp_oil_support value = -5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
+		add_to_variable = { var = NAM_grp_nam_support value = 8 }
+		add_to_variable = { var = NAM_grp_dist_support value = -5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
+		add_to_variable = { var = NAM_grp_trade_support value = 8 }
+		add_to_variable = { var = NAM_grp_garr_support value = -5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
+		add_to_variable = { var = NAM_grp_oil_support value = 8 }
+		add_to_variable = { var = NAM_grp_trade_support value = -5 }
+	}
+	NAM_groups_close_event = yes
+}
+
+NAM_groups_event_wait = {
+	add_stability = -0.04
+	NAM_groups_close_event = yes
+}
+
+NAM_groups_event_accept_demand = {
+	if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
+		add_political_power = 75
+		add_to_variable = { var = NAM_grp_dist_support value = -10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
+		add_fuel = 5000
+		add_to_variable = { var = NAM_grp_trade_support value = -10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
+		add_stability = 0.03
+		add_to_variable = { var = NAM_grp_nam_support value = -10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
+		army_experience = 25
+		add_to_variable = { var = NAM_grp_trade_support value = -10 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
+		NAM_receive_250 = yes
+		add_to_variable = { var = NAM_grp_oil_support value = -10 }
+	}
+	NAM_groups_close_event = yes
+}
+
+NAM_groups_event_refuse_demand = {
+	if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 1 compare = equals } }
+		add_to_variable = { var = NAM_grp_nam_support value = -15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 2 compare = equals } }
+		add_to_variable = { var = NAM_grp_oil_support value = -15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 3 compare = equals } }
+		add_to_variable = { var = NAM_grp_dist_support value = -15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 4 compare = equals } }
+		add_to_variable = { var = NAM_grp_garr_support value = -15 }
+	}
+	else_if = {
+		limit = { check_variable = { var = NAM_grp_event_group value = 5 compare = equals } }
+		add_to_variable = { var = NAM_grp_trade_support value = -15 }
+	}
+	NAM_groups_close_event = yes
+}
+
+NAM_groups_close_event = {
+	clr_country_flag = NAM_grp_event_pending
+	NAM_groups_refresh = yes
+}
+
+# ----- Postwar programme -----
+# One programme per campaign: the ladder (patron: namestniks) or the charter
+# (patron: districts). Progress comes from its focuses and paid acceleration.
+
+NAM_programme_start = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = NAM_programme_active }
+			NOT = { has_country_flag = NAM_programme_finished }
+		}
+		set_country_flag = NAM_programme_active
+		set_variable = { var = NAM_prog_progress value = 0 }
+		country_event = { id = ADISCORD_nam_groups.3 hours = 1 }
+		country_event = { id = ADISCORD_nam_groups.10 days = 240 }
+	}
+}
+
+NAM_programme_add_20 = {
+	if = {
+		limit = { has_country_flag = NAM_programme_active }
+		add_to_variable = { var = NAM_prog_progress value = 20 }
+		clamp_variable = { var = NAM_prog_progress min = 0 max = 100 }
+	}
+}
+
+NAM_programme_add_15 = {
+	if = {
+		limit = { has_country_flag = NAM_programme_active }
+		add_to_variable = { var = NAM_prog_progress value = 15 }
+		clamp_variable = { var = NAM_prog_progress min = 0 max = 100 }
+	}
+}
+
+# COUNTRY NAM. Deadline settlement; the patron is 1 (namestniks) or 3 (districts).
+NAM_programme_resolve = {
+	if = {
+		limit = { has_country_flag = NAM_programme_active }
+		clr_country_flag = NAM_programme_active
+		set_country_flag = NAM_programme_finished
+		if = {
+			limit = { check_variable = { var = NAM_prog_progress value = 100 compare = greater_than_or_equals } }
+			set_country_flag = NAM_programme_succeeded
+			add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+			add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+			NAM_refresh_administration = yes
+			add_to_variable = { var = NAM_grp_oil_support value = 3 }
+			add_to_variable = { var = NAM_grp_garr_support value = 3 }
+			add_to_variable = { var = NAM_grp_trade_support value = 3 }
+			if = {
+				limit = { check_variable = { var = NAM_prog_patron value = 1 compare = equals } }
+				add_to_variable = { var = NAM_grp_nam_support value = 10 }
+				add_to_variable = { var = NAM_grp_dist_support value = 3 }
+			}
+			else = {
+				add_to_variable = { var = NAM_grp_dist_support value = 10 }
+				add_to_variable = { var = NAM_grp_nam_support value = 3 }
+			}
+		}
+		else = {
+			add_stability = -0.03
+			if = {
+				limit = { check_variable = { var = NAM_prog_patron value = 1 compare = equals } }
+				add_to_variable = { var = NAM_grp_nam_support value = -15 }
+			}
+			else = {
+				add_to_variable = { var = NAM_grp_dist_support value = -15 }
+			}
+		}
+		NAM_groups_refresh = yes
+	}
+}
+
+# COUNTRY NAM. A random incident at most once per draw; the cooldown and the
+# open-crisis flag keep incidents from piling up.
+NAM_crisis_draw = {
+	if = {
+		limit = {
+			NAM_country_operable = yes
+			NOT = { has_country_flag = NAM_crisis_cooldown }
+			NOT = { has_country_flag = NAM_crisis_open }
+		}
+		random_list = {
+			92 = { }
+			8 = {
+				modifier = {
+					factor = 0.5
+					has_completed_focus = NAM_crisis_doctrine
+				}
+				set_country_flag = NAM_crisis_open
+				set_country_flag = { flag = NAM_crisis_cooldown value = 1 days = 120 }
+				random_list = {
+					20 = { country_event = { id = ADISCORD_nam_crisis.1 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_nam_crisis.2 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_nam_crisis.3 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_nam_crisis.4 hours = 1 } }
+					20 = {
+						modifier = {
+							factor = 0
+							check_variable = { var = NAM_grp_garr_support value = 40 compare = greater_than_or_equals }
+						}
+						country_event = { id = ADISCORD_nam_crisis.5 hours = 1 }
+					}
+				}
+			}
+		}
+	}
+}

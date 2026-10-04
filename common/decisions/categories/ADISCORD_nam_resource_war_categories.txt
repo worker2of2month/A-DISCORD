@@ -19,3 +19,35 @@ NAM_national_programmes = {
 		}
 	}
 }
+
+NAM_public_campaigns = {
+	icon = ADISCORD_propaganda
+	allowed = { tag = NAM }
+	visible = {
+		has_completed_focus = NAM_open_ledgers
+	}
+	visible_when_empty = yes
+	priority = 20
+}
+
+NAM_supports = {
+	icon = generic_political_pressure
+	allowed = { tag = NAM }
+	visible = {
+		has_country_flag = NAM_groups_initialized
+	}
+	visible_when_empty = yes
+	priority = 21
+}
+
+NAM_treasury = {
+	icon = generic_industry
+	allowed = { tag = NAM }
+	visible = {
+		OR = {
+			has_completed_focus = NAM_treasury_chancellery
+			has_completed_focus = NAM_crisis_office
+		}
+	}
+	priority = 19
+}

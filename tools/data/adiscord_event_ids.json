@@ -1381,6 +1381,94 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_nam_groups.1",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 1,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.2",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 2,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.3",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 3,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.4",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 4,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.10",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 10,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_groups.11",
+      "namespace": "ADISCORD_nam_groups",
+      "number": 11,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "nam_pillars_of_power",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.1",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 1,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.2",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 2,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.3",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 3,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.4",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 4,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_nam_crisis.5",
+      "namespace": "ADISCORD_nam_crisis",
+      "number": 5,
+      "owner": "events/ADISCORD_nam_resource_war_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.1",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 1,
@@ -4482,6 +4570,78 @@
       "number": 123,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_fire.3",
+      "namespace": "ADISCORD_shl_fire",
+      "number": 3,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_fire_division",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_fire.4",
+      "namespace": "ADISCORD_shl_fire",
+      "number": 4,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_fire_division",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_fire.10",
+      "namespace": "ADISCORD_shl_fire",
+      "number": 10,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_fire_division",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_fire.11",
+      "namespace": "ADISCORD_shl_fire",
+      "number": 11,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_fire_division",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_crisis.1",
+      "namespace": "ADISCORD_shl_crisis",
+      "number": 1,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_crisis.2",
+      "namespace": "ADISCORD_shl_crisis",
+      "number": 2,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_crisis.3",
+      "namespace": "ADISCORD_shl_crisis",
+      "number": 3,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_crisis.4",
+      "namespace": "ADISCORD_shl_crisis",
+      "number": 4,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "random_crises",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_shl_crisis.5",
+      "namespace": "ADISCORD_shl_crisis",
+      "number": 5,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "random_crises",
       "status": "active"
     },
     {

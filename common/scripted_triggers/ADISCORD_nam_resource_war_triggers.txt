@@ -133,3 +133,15 @@ NAM_has_charter_member = {
 		}
 	}
 }
+
+# COUNTRY NAM. Wartime procurement serves the resource war and, while Svetlogorye
+# leads the north, the War for the South.
+NAM_wartime_programmes_open = {
+	OR = {
+		ADISCORD_nam_resource_war_active = yes
+		AND = {
+			ADISCORD_south_final_active = yes
+			has_country_flag = ADISCORD_south_north_leader
+		}
+	}
+}

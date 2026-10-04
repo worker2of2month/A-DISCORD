@@ -22,5 +22,11 @@ on_actions = {
 			}
 		}
 	}
-
+	# Pillars of power drift once a month; the hook serves one tag only.
+	on_monthly_NAM = {
+		effect = {
+			NAM_groups_monthly = yes
+			NAM_crisis_draw = yes
+		}
+	}
 }

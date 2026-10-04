@@ -23,3 +23,31 @@ SHL_quarters_and_borders = {
 	visible_when_empty = yes
 	priority = 23
 }
+
+SHL_public_campaigns = {
+	icon = ADISCORD_propaganda
+	allowed = { tag = SHL }
+	visible = { has_completed_focus = SHL_quarter_listening }
+	visible_when_empty = yes
+	priority = 22
+}
+
+SHL_fire_shares = {
+	icon = generic_industry
+	allowed = { tag = SHL }
+	visible = { has_country_flag = SHL_fire_initialized }
+	visible_when_empty = yes
+	priority = 21
+}
+
+SHL_treasury = {
+	icon = generic_industry
+	allowed = { tag = SHL }
+	visible = {
+		OR = {
+			has_completed_focus = SHL_conclave_treasury
+			has_completed_focus = SHL_incident_office
+		}
+	}
+	priority = 20
+}

@@ -1,0 +1,85 @@
+# War for the South: champions commit their armies against each other.
+
+ADISCORD_south_shl_front_nam = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_final_active = yes
+		NAM = { has_country_flag = ADISCORD_south_north_leader }
+		has_war_with = NAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+}
+
+ADISCORD_south_nam_front_shl = {
+	allowed = { tag = NAM }
+	enable = {
+		ADISCORD_south_final_active = yes
+		has_country_flag = ADISCORD_south_north_leader
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
+	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
+}
+
+ADISCORD_south_shl_front_efl = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_final_active = yes
+		EFL = { has_country_flag = ADISCORD_south_north_leader }
+		has_war_with = EFL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = EFL value = 100 }
+	ai_strategy = { type = front_control tag = EFL ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+}
+
+ADISCORD_south_efl_front_shl = {
+	allowed = { tag = EFL }
+	enable = {
+		ADISCORD_south_final_active = yes
+		has_country_flag = ADISCORD_south_north_leader
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
+	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+ADISCORD_south_shl_front_azh = {
+	allowed = { tag = SHL }
+	enable = {
+		ADISCORD_south_final_active = yes
+		AZH = { has_country_flag = ADISCORD_south_north_leader }
+		has_war_with = AZH
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = AZH value = 100 }
+	ai_strategy = { type = front_control tag = AZH ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+}
+
+ADISCORD_south_azh_front_shl = {
+	allowed = { tag = AZH }
+	enable = {
+		ADISCORD_south_final_active = yes
+		has_country_flag = ADISCORD_south_north_leader
+		has_war_with = SHL
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = SHL value = 100 }
+	ai_strategy = { type = front_control tag = SHL ratio = 0.01 priority = 1500 ordertype = front execution_type = careful execute_order = yes manual_attack = no }
+}
+
+# The Svetlogorsk uprising pushes from the inside of the oil belt.
+ADISCORD_south_uprising_front = {
+	allowed = { tag = SLF }
+	enable = {
+		ADISCORD_south_final_active = yes
+		has_war_with = NAM
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = NAM value = 100 }
+	ai_strategy = { type = front_control tag = NAM ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+}

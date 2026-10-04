@@ -105,6 +105,10 @@ on_actions = {
 				}
 				SHL = {
 					SHL_initialize_furnaces = yes
+					SHL_fire_initialize = yes
+				}
+				NAM = {
+					NAM_groups_initialize = yes
 				}
 				every_country = {
 					limit = {

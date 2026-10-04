@@ -16,6 +16,7 @@ NEIGHBOUR_STATES = {
 }
 EFFECT_PATH = ROOT / "common/scripted_effects/ADISCORD_SHL_scripted_effects.txt"
 TRIGGER_PATH = ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt"
+SOUTH_TRIGGER_PATH = ROOT / "common/scripted_triggers/ADISCORD_south_final_war_triggers.txt"
 
 
 def block(items, key):
@@ -44,6 +45,8 @@ class ScriptMachine:
     def __init__(self, effects, triggers):
         self.effects = {e.key: e.value for e in effects}
         self.triggers = {e.key: e.value for e in triggers}
+        # Shared southern triggers referenced by SHL campaign conditions.
+        self.triggers.update({e.key: e.value for e in parse_clausewitz(SOUTH_TRIGGER_PATH.read_text(encoding="utf-8"))})
         self.variables = defaultdict(dict)
         self.flags = defaultdict(set)
         self.global_flags = {"ADISCORD_fresh_campaign_contract_v1"}
@@ -335,6 +338,7 @@ class ScriptMachine:
                 "mark_focus_tree_layout_dirty", "damage_building", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
                 "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
+                "SHL_fire_cycle", "SHL_crisis_draw", "SHL_fire_refresh", "SHL_fire_transfer", "SHL_fire_align", "SHL_fire_settle",
                 "add_claim_by",
             ):
                 self.calls.append((e.key, scope))
@@ -666,8 +670,8 @@ class FurnaceAccountingTests(unittest.TestCase):
         tree = block(parse_clausewitz(path.read_text(encoding="utf-8")), "focus_tree")
         focuses = [e.value for e in tree if e.key == "focus"]
         ids = [scalar(f, "id") for f in focuses]
-        self.assertEqual(len(ids), 95)
-        self.assertEqual(len(set(ids)), 95)
+        self.assertEqual(len(ids), 168)
+        self.assertEqual(len(set(ids)), 168)
         cells = [(scalar(f, "x"), scalar(f, "y")) for f in focuses]
         self.assertEqual(len(cells), len(set(cells)))
         for focus in focuses:
@@ -2002,6 +2006,67 @@ class ShahrabadCabinetTests(unittest.TestCase):
                     self.assertNotIn("§Y", text)
                     self.assertNotIn("•", text)
 
+def walk_entries(items):
+    for entry in items:
+        yield entry
+        if isinstance(entry.value, list):
+            yield from walk_entries(entry.value)
+
+
+class FireDivisionTests(unittest.TestCase):
+    """Division of the fire: four revenue shares and the course programmes."""
+
+    SHARES = ("crest", "quart", "state", "front")
+    COURSES = ("houses", "cities", "directorate", "regency", "commune")
+
+    @classmethod
+    def setUpClass(cls):
+        tree = block(parse_clausewitz((ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")), "focus_tree")
+        cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
+        cls.effects = {e.key: e.value for e in parse_clausewitz(EFFECT_PATH.read_text(encoding="utf-8"))}
+
+    def test_start_and_every_course_target_divide_exactly_one_hundred(self):
+        start = {scalar(e.value, "var"): float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_fire_initialize"]) if e.key == "set_variable"}
+        self.assertEqual(sum(start.values()), 100)
+        values = [float(scalar(e.value, "value")) for e in walk_entries(self.effects["SHL_programme_start"]) if e.key == "set_variable" and scalar(e.value, "var").startswith("SHL_fire_target_")]
+        self.assertEqual(len(values), 20)
+        for index in range(0, 20, 4):
+            self.assertEqual(sum(values[index:index + 4]), 100)
+
+    def test_shares_change_only_through_the_owned_effects(self):
+        writers = ("add_to_variable", "subtract_from_variable", "set_variable")
+        for name, value in self.effects.items():
+            if name in ("SHL_fire_transfer", "SHL_fire_initialize", "SHL_fire_settle"):
+                continue
+            for entry in walk_entries(value):
+                if entry.key in writers and isinstance(entry.value, list):
+                    self.assertFalse(str(scalar(entry.value, "var")).startswith("SHL_share_"), name)
+        tree = (ROOT / "focus_trees/SHL/main/focuses.txt").read_text(encoding="utf-8")
+        self.assertNotIn("var = SHL_share_", tree)
+        self.assertEqual(tree.count("SHL_fire_transfer = yes"), tree.count("set_temp_variable = { var = SHL_fire_amount"))
+
+    def test_each_course_programme_route_reaches_exactly_one_hundred(self):
+        for course in self.COURSES:
+            prefix = f"SHL_{course}_prog_"
+            for side in ("a", "b"):
+                route = [prefix + step for step in (f"policy_{side}", f"work_{side}", "code", "commission", f"course_{side}")]
+                for name in route:
+                    text = repr(self.focuses[name])
+                    self.assertIn("SHL_programme_add_20", text, name)
+                    self.assertIn("SHL_fire_align", text, name)
+                ending = self.focuses[prefix + f"ending_{side}"]
+                self.assertIn("SHL_programme_finished", repr(block(ending, "available")))
+                self.assertIn("SHL_fire_settle", repr(block(ending, "completion_reward")))
+
+    def test_division_runs_on_the_furnace_cycle_without_new_hooks(self):
+        self.assertIn("SHL_fire_cycle", repr(self.effects["SHL_run_cycle"]))
+        startup = (ROOT / "common/on_actions/00_ADISCORD_on_actions.txt").read_text(encoding="utf-8")
+        self.assertIn("SHL_initialize_furnaces = yes\n\t\t\t\t\tSHL_fire_initialize = yes", startup)
+        hooks = "".join(path.read_text(encoding="utf-8-sig") for path in (ROOT / "common/on_actions").glob("*.txt"))
+        self.assertNotIn("on_monthly_SHL", hooks)
+        refresh = repr(self.effects["SHL_fire_refresh"])
+        self.assertIn("force_update_dynamic_modifier", refresh)
+        self.assertNotIn("every_country", refresh)
 
 if __name__ == "__main__":
     unittest.main()

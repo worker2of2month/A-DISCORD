@@ -26,3 +26,13 @@ SHL_conclave_power_dynamic = {
 	production_factory_max_efficiency_factor = SHL_pow_max_efficiency
 	conscription_factor = SHL_pow_conscription_factor
 }
+
+# Division of the fire. SHL_fire_refresh derives every field from the four shares.
+SHL_fire_dynamic = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { tag = SHL }
+	political_power_gain = SHL_fire_political_power
+	stability_factor = SHL_fire_stability
+	ADISCORD_economy_tax_collection_factor = SHL_fire_tax_collection
+	production_speed_arms_factory_factor = SHL_fire_arms_speed
+}

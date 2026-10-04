@@ -172,7 +172,7 @@ class KefreytRefugeeBalanceTests(unittest.TestCase):
         for name in ("precision_tooling", "automated_industry", "national_computing"):
             gate = named_block(triggers, "ADISCORD_economy_can_start_" + name)
             self.assertIn(
-                "NOT = { num_of_civilian_factories_available_for_projects < 3 }", gate
+                "NOT = { num_of_civilian_factories_available_for_projects < 2 }", gate
             )
 
     RECRUITMENT = (

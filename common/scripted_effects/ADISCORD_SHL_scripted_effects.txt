@@ -134,6 +134,8 @@ SHL_run_cycle = {
 			SHL_check_obligation_deadline = yes
 			SHL_check_crises = yes
 			ADISCORD_south_crisis_cycle = yes
+			SHL_fire_cycle = yes
+			SHL_crisis_draw = yes
 		}
 		# A capitulated country keeps its clock; stale callbacks cannot advance it.
 		if = {
@@ -4112,4 +4114,458 @@ SHL_refresh_conclave_power = {
 	}
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# ----- Division of the fire -----
+# Furnace revenue is divided between the houses, the quarters, the Conclave
+# treasury and the front. The four shares always sum to 100 and change only
+# through SHL_fire_transfer; the furnace cycle turns them into pressure, unrest
+# and rifles, and SHL_fire_dynamic reads values derived in SHL_fire_refresh.
+
+# COUNTRY SHL. One-time setup from the fresh-campaign startup.
+SHL_fire_initialize = {
+	if = {
+		limit = { NOT = { has_country_flag = SHL_fire_initialized } }
+		set_country_flag = SHL_fire_initialized
+		set_variable = { var = SHL_share_crest value = 45 }
+		set_variable = { var = SHL_share_quart value = 25 }
+		set_variable = { var = SHL_share_state value = 20 }
+		set_variable = { var = SHL_share_front value = 10 }
+		SHL_fire_refresh = yes
+	}
+}
+
+SHL_fire_refresh = {
+	if = {
+		limit = { has_country_flag = SHL_fire_initialized }
+		set_variable = { var = SHL_fire_political_power value = SHL_share_crest }
+		subtract_from_variable = { var = SHL_fire_political_power value = 30 }
+		divide_variable = { var = SHL_fire_political_power value = 250 }
+		set_variable = { var = SHL_fire_stability value = SHL_share_quart }
+		subtract_from_variable = { var = SHL_fire_stability value = 25 }
+		divide_variable = { var = SHL_fire_stability value = 250 }
+		set_variable = { var = SHL_fire_tax_collection value = SHL_share_state }
+		subtract_from_variable = { var = SHL_fire_tax_collection value = 20 }
+		divide_variable = { var = SHL_fire_tax_collection value = 200 }
+		set_variable = { var = SHL_fire_arms_speed value = SHL_share_front }
+		divide_variable = { var = SHL_fire_arms_speed value = 250 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = SHL_fire_dynamic } } }
+			add_dynamic_modifier = { modifier = SHL_fire_dynamic }
+		}
+		force_update_dynamic_modifier = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY SHL. Temporary inputs: SHL_fire_from, SHL_fire_to (1 houses, 2 quarters,
+# 3 treasury, 4 front) and SHL_fire_amount. The amount is limited by the source
+# share and by the 70-point ceiling of the receiver, so the sum stays 100.
+SHL_fire_transfer = {
+	if = {
+		limit = {
+			has_country_flag = SHL_fire_initialized
+			NOT = { check_variable = { var = SHL_fire_from value = SHL_fire_to compare = equals } }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_fire_from value = 1 compare = equals } }
+			if = {
+				limit = { check_variable = { var = SHL_share_crest value = SHL_fire_amount compare = less_than } }
+				set_temp_variable = { var = SHL_fire_amount value = SHL_share_crest }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_from value = 2 compare = equals } }
+			if = {
+				limit = { check_variable = { var = SHL_share_quart value = SHL_fire_amount compare = less_than } }
+				set_temp_variable = { var = SHL_fire_amount value = SHL_share_quart }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_from value = 3 compare = equals } }
+			if = {
+				limit = { check_variable = { var = SHL_share_state value = SHL_fire_amount compare = less_than } }
+				set_temp_variable = { var = SHL_fire_amount value = SHL_share_state }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_from value = 4 compare = equals } }
+			if = {
+				limit = { check_variable = { var = SHL_share_front value = SHL_fire_amount compare = less_than } }
+				set_temp_variable = { var = SHL_fire_amount value = SHL_share_front }
+			}
+		}
+		if = {
+			limit = { check_variable = { var = SHL_fire_to value = 1 compare = equals } }
+			set_temp_variable = { var = SHL_fire_room value = 70 }
+			subtract_from_temp_variable = { var = SHL_fire_room value = SHL_share_crest }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_to value = 2 compare = equals } }
+			set_temp_variable = { var = SHL_fire_room value = 70 }
+			subtract_from_temp_variable = { var = SHL_fire_room value = SHL_share_quart }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_to value = 3 compare = equals } }
+			set_temp_variable = { var = SHL_fire_room value = 70 }
+			subtract_from_temp_variable = { var = SHL_fire_room value = SHL_share_state }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_fire_to value = 4 compare = equals } }
+			set_temp_variable = { var = SHL_fire_room value = 70 }
+			subtract_from_temp_variable = { var = SHL_fire_room value = SHL_share_front }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_fire_room value = SHL_fire_amount compare = less_than } }
+			set_temp_variable = { var = SHL_fire_amount value = SHL_fire_room }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_fire_amount value = 0 compare = greater_than } }
+			if = {
+				limit = { check_variable = { var = SHL_fire_from value = 1 compare = equals } }
+				subtract_from_variable = { var = SHL_share_crest value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_from value = 2 compare = equals } }
+				subtract_from_variable = { var = SHL_share_quart value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_from value = 3 compare = equals } }
+				subtract_from_variable = { var = SHL_share_state value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_from value = 4 compare = equals } }
+				subtract_from_variable = { var = SHL_share_front value = SHL_fire_amount }
+			}
+			if = {
+				limit = { check_variable = { var = SHL_fire_to value = 1 compare = equals } }
+				add_to_variable = { var = SHL_share_crest value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_to value = 2 compare = equals } }
+				add_to_variable = { var = SHL_share_quart value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_to value = 3 compare = equals } }
+				add_to_variable = { var = SHL_share_state value = SHL_fire_amount }
+			}
+			else_if = {
+				limit = { check_variable = { var = SHL_fire_to value = 4 compare = equals } }
+				add_to_variable = { var = SHL_share_front value = SHL_fire_amount }
+			}
+		}
+		SHL_fire_refresh = yes
+	}
+}
+
+# COUNTRY SHL. Five points of the division go to this share from the largest other one.
+SHL_fire_give_to_crest = {
+	set_temp_variable = { var = SHL_fire_from value = 2 }
+	set_temp_variable = { var = SHL_fire_best value = SHL_share_quart }
+	if = {
+		limit = { check_variable = { var = SHL_share_state value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 3 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_state }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_share_front value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 4 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_front }
+	}
+	set_temp_variable = { var = SHL_fire_to value = 1 }
+	set_temp_variable = { var = SHL_fire_amount value = 5 }
+	SHL_fire_transfer = yes
+}
+
+# COUNTRY SHL. Five points of the division go to this share from the largest other one.
+SHL_fire_give_to_quart = {
+	set_temp_variable = { var = SHL_fire_from value = 1 }
+	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }
+	if = {
+		limit = { check_variable = { var = SHL_share_state value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 3 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_state }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_share_front value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 4 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_front }
+	}
+	set_temp_variable = { var = SHL_fire_to value = 2 }
+	set_temp_variable = { var = SHL_fire_amount value = 5 }
+	SHL_fire_transfer = yes
+}
+
+# COUNTRY SHL. Five points of the division go to this share from the largest other one.
+SHL_fire_give_to_state = {
+	set_temp_variable = { var = SHL_fire_from value = 1 }
+	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }
+	if = {
+		limit = { check_variable = { var = SHL_share_quart value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 2 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_quart }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_share_front value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 4 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_front }
+	}
+	set_temp_variable = { var = SHL_fire_to value = 3 }
+	set_temp_variable = { var = SHL_fire_amount value = 5 }
+	SHL_fire_transfer = yes
+}
+
+# COUNTRY SHL. Five points of the division go to this share from the largest other one.
+SHL_fire_give_to_front = {
+	set_temp_variable = { var = SHL_fire_from value = 1 }
+	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }
+	if = {
+		limit = { check_variable = { var = SHL_share_quart value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 2 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_quart }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_share_state value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 3 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_share_state }
+	}
+	set_temp_variable = { var = SHL_fire_to value = 4 }
+	set_temp_variable = { var = SHL_fire_amount value = 5 }
+	SHL_fire_transfer = yes
+}
+
+# COUNTRY SHL. Moves up to 8 points from the largest surplus to the largest
+# deficit against the current course target, in two steps of 4.
+SHL_fire_align = {
+	SHL_fire_align_step = yes
+	SHL_fire_align_step = yes
+}
+
+SHL_fire_align_step = {
+	set_temp_variable = { var = SHL_fire_gap_crest value = SHL_share_crest }
+	subtract_from_temp_variable = { var = SHL_fire_gap_crest value = SHL_fire_target_crest }
+	set_temp_variable = { var = SHL_fire_gap_quart value = SHL_share_quart }
+	subtract_from_temp_variable = { var = SHL_fire_gap_quart value = SHL_fire_target_quart }
+	set_temp_variable = { var = SHL_fire_gap_state value = SHL_share_state }
+	subtract_from_temp_variable = { var = SHL_fire_gap_state value = SHL_fire_target_state }
+	set_temp_variable = { var = SHL_fire_gap_front value = SHL_share_front }
+	subtract_from_temp_variable = { var = SHL_fire_gap_front value = SHL_fire_target_front }
+	set_temp_variable = { var = SHL_fire_from value = 1 }
+	set_temp_variable = { var = SHL_fire_best value = SHL_fire_gap_crest }
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_quart value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 2 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_fire_gap_quart }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_state value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 3 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_fire_gap_state }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_front value = SHL_fire_best compare = greater_than } }
+		set_temp_variable = { var = SHL_fire_from value = 4 }
+		set_temp_variable = { var = SHL_fire_best value = SHL_fire_gap_front }
+	}
+	set_temp_variable = { var = SHL_fire_to value = 1 }
+	set_temp_variable = { var = SHL_fire_worst value = SHL_fire_gap_crest }
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_quart value = SHL_fire_worst compare = less_than } }
+		set_temp_variable = { var = SHL_fire_to value = 2 }
+		set_temp_variable = { var = SHL_fire_worst value = SHL_fire_gap_quart }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_state value = SHL_fire_worst compare = less_than } }
+		set_temp_variable = { var = SHL_fire_to value = 3 }
+		set_temp_variable = { var = SHL_fire_worst value = SHL_fire_gap_state }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_fire_gap_front value = SHL_fire_worst compare = less_than } }
+		set_temp_variable = { var = SHL_fire_to value = 4 }
+		set_temp_variable = { var = SHL_fire_worst value = SHL_fire_gap_front }
+	}
+	set_temp_variable = { var = SHL_fire_amount value = 4 }
+	if = {
+		limit = { check_variable = { var = SHL_fire_best value = SHL_fire_amount compare = less_than } }
+		set_temp_variable = { var = SHL_fire_amount value = SHL_fire_best }
+	}
+	set_temp_variable = { var = SHL_fire_need value = SHL_fire_worst }
+	multiply_temp_variable = { var = SHL_fire_need value = -1 }
+	if = {
+		limit = { check_variable = { var = SHL_fire_need value = SHL_fire_amount compare = less_than } }
+		set_temp_variable = { var = SHL_fire_amount value = SHL_fire_need }
+	}
+	if = {
+		limit = { check_variable = { var = SHL_fire_amount value = 0 compare = greater_than } }
+		SHL_fire_transfer = yes
+	}
+}
+
+# COUNTRY SHL. An ending fixes the division at the course target.
+SHL_fire_settle = {
+	set_variable = { var = SHL_share_crest value = SHL_fire_target_crest }
+	set_variable = { var = SHL_share_quart value = SHL_fire_target_quart }
+	set_variable = { var = SHL_share_state value = SHL_fire_target_state }
+	set_variable = { var = SHL_share_front value = SHL_fire_target_front }
+	SHL_fire_refresh = yes
+}
+
+# COUNTRY SHL. Called by the 28-day furnace cycle.
+SHL_fire_cycle = {
+	if = {
+		limit = { has_country_flag = SHL_fire_initialized }
+		if = {
+			limit = { check_variable = { var = SHL_share_crest value = 30 compare = less_than } }
+			add_to_variable = { var = SHL_house_pressure value = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_share_crest value = 50 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = SHL_house_pressure value = 2 }
+		}
+		if = {
+			limit = { check_variable = { var = SHL_share_quart value = 20 compare = less_than } }
+			add_to_variable = { var = SHL_unrest value = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_share_quart value = 35 compare = greater_than_or_equals } }
+			subtract_from_variable = { var = SHL_unrest value = 2 }
+		}
+		SHL_clamp_tensions = yes
+		if = {
+			limit = { check_variable = { var = SHL_share_front value = 40 compare = greater_than_or_equals } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = SHL }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_share_front value = 25 compare = greater_than_or_equals } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 750 producer = SHL }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_share_front value = 10 compare = greater_than_or_equals } }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 300 producer = SHL }
+		}
+	}
+}
+
+SHL_receive_250 = {
+	ADISCORD_economy_initialize_country = yes
+	add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+	add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# ----- Course programmes -----
+# A new programme may follow a finished one, for instance after a course change;
+# endings require the finished programme of their own course.
+
+SHL_programme_start = {
+	if = {
+		limit = { NOT = { has_country_flag = SHL_programme_active } }
+		clr_country_flag = SHL_programme_finished
+		set_country_flag = SHL_programme_active
+		set_variable = { var = SHL_prog_progress value = 0 }
+		if = {
+			limit = { check_variable = { var = SHL_prog_course value = 1 compare = equals } }
+			set_variable = { var = SHL_fire_target_crest value = 55 }
+			set_variable = { var = SHL_fire_target_quart value = 20 }
+			set_variable = { var = SHL_fire_target_state value = 15 }
+			set_variable = { var = SHL_fire_target_front value = 10 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_prog_course value = 2 compare = equals } }
+			set_variable = { var = SHL_fire_target_crest value = 20 }
+			set_variable = { var = SHL_fire_target_quart value = 40 }
+			set_variable = { var = SHL_fire_target_state value = 30 }
+			set_variable = { var = SHL_fire_target_front value = 10 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_prog_course value = 3 compare = equals } }
+			set_variable = { var = SHL_fire_target_crest value = 15 }
+			set_variable = { var = SHL_fire_target_quart value = 25 }
+			set_variable = { var = SHL_fire_target_state value = 35 }
+			set_variable = { var = SHL_fire_target_front value = 25 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_prog_course value = 4 compare = equals } }
+			set_variable = { var = SHL_fire_target_crest value = 45 }
+			set_variable = { var = SHL_fire_target_quart value = 15 }
+			set_variable = { var = SHL_fire_target_state value = 10 }
+			set_variable = { var = SHL_fire_target_front value = 30 }
+		}
+		else_if = {
+			limit = { check_variable = { var = SHL_prog_course value = 5 compare = equals } }
+			set_variable = { var = SHL_fire_target_crest value = 5 }
+			set_variable = { var = SHL_fire_target_quart value = 50 }
+			set_variable = { var = SHL_fire_target_state value = 25 }
+			set_variable = { var = SHL_fire_target_front value = 20 }
+		}
+		country_event = { id = ADISCORD_shl_fire.3 hours = 1 }
+		country_event = { id = ADISCORD_shl_fire.10 days = 240 }
+	}
+}
+
+SHL_programme_add_20 = {
+	if = {
+		limit = { has_country_flag = SHL_programme_active }
+		add_to_variable = { var = SHL_prog_progress value = 20 }
+		clamp_variable = { var = SHL_prog_progress min = 0 max = 100 }
+	}
+}
+
+SHL_programme_add_15 = {
+	if = {
+		limit = { has_country_flag = SHL_programme_active }
+		add_to_variable = { var = SHL_prog_progress value = 15 }
+		clamp_variable = { var = SHL_prog_progress min = 0 max = 100 }
+	}
+}
+
+SHL_programme_resolve = {
+	if = {
+		limit = { has_country_flag = SHL_programme_active }
+		clr_country_flag = SHL_programme_active
+		set_country_flag = SHL_programme_finished
+		if = {
+			limit = { check_variable = { var = SHL_prog_progress value = 100 compare = greater_than_or_equals } }
+			add_to_variable = { var = SHL_pow_stability_factor value = 0.03 }
+			add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
+			SHL_refresh_conclave_power = yes
+			SHL_fire_align = yes
+		}
+		else = {
+			add_stability = -0.03
+			add_to_variable = { var = SHL_unrest value = 8 }
+			add_to_variable = { var = SHL_house_pressure value = 8 }
+			SHL_clamp_tensions = yes
+		}
+	}
+}
+
+# COUNTRY SHL. A random incident at most once per draw; the cooldown and the
+# open-crisis flag keep incidents from piling up.
+SHL_crisis_draw = {
+	if = {
+		limit = {
+			SHL_country_operable = yes
+			NOT = { has_country_flag = SHL_crisis_cooldown }
+			NOT = { has_country_flag = SHL_crisis_open }
+		}
+		random_list = {
+			92 = { }
+			8 = {
+				modifier = {
+					factor = 0.5
+					has_completed_focus = SHL_incident_statute
+				}
+				set_country_flag = SHL_crisis_open
+				set_country_flag = { flag = SHL_crisis_cooldown value = 1 days = 120 }
+				random_list = {
+					20 = { country_event = { id = ADISCORD_shl_crisis.1 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_shl_crisis.2 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_shl_crisis.3 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_shl_crisis.4 hours = 1 } }
+					20 = { country_event = { id = ADISCORD_shl_crisis.5 hours = 1 } }
+				}
+			}
+		}
+	}
 }

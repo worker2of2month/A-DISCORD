@@ -78,4 +78,93 @@ focus_tree = {
 		completion_reward = { }
 	}
 
+	focus = {
+		id = NAM_bookmark_hold_the_basin
+		icon = GFX_goal_generic_occupy_states_ongoing_war
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = NAM_bookmark_ladder_or_charter
+		icon = GFX_goal_generic_political_pressure
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = NAM_bookmark_seal_over_furnaces
+		icon = GFX_goal_generic_demand_territory
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = SHL_bookmark_continuous_fire
+		icon = GFX_goal_generic_construct_civ_factory
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = SHL_bookmark_five_courses
+		icon = GFX_goal_generic_trade
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = SHL_bookmark_war_for_the_south
+		icon = GFX_goal_generic_major_war
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = RUS_bookmark_underground_capital
+		icon = GFX_focus_VAL_Reclamation_Return_Home
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = RUS_bookmark_last_empire
+		icon = GFX_focus_STP_ps_permanent_security
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
+
+	focus = {
+		id = RUS_bookmark_heart_of_the_continent
+		icon = GFX_focus_STP_Turn_The_Young_Officers
+		x = -5
+		y = 1
+		cost = 5
+		available = { is_completed_by_event = yes }
+		completion_reward = { }
+	}
 }

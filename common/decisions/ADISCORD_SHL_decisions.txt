@@ -1997,3 +1997,732 @@ SHL_quarters_and_borders = {
 	}
 
 }
+
+# Shahrabad public campaigns. Slots come from the shared campaign pool.
+SHL_public_campaigns = {
+	SHL_campaign_fire_never_sleeps = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_quarter_listening
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_fire_never_sleeps_slot_held } }
+		}
+		cost = 35
+		days_remove = 50
+		days_re_enable = 75
+		modifier = {
+			production_factory_efficiency_gain_factor = 0.05
+			stability_weekly = 0.001
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_fire_never_sleeps_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_fire_never_sleeps_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_fire_never_sleeps_slot_held }
+					clr_country_flag = SHL_campaign_fire_never_sleeps_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_fire_never_sleeps_slot_held }
+					clr_country_flag = SHL_campaign_fire_never_sleeps_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	SHL_campaign_bread_from_furnaces = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_quarter_listening
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_bread_from_furnaces_slot_held } }
+		}
+		cost = 30
+		days_remove = 45
+		days_re_enable = 70
+		modifier = {
+			stability_weekly = 0.002
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_bread_from_furnaces_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_bread_from_furnaces_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_bread_from_furnaces_slot_held }
+					clr_country_flag = SHL_campaign_bread_from_furnaces_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = SHL_campaign_bread_from_furnaces_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_bread_from_furnaces_slot_held }
+					clr_country_flag = SHL_campaign_bread_from_furnaces_slot_held
+					ADISCORD_campaign_slot_release = yes
+					subtract_from_variable = { var = SHL_unrest value = 6 }
+					SHL_clamp_tensions = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 3
+				check_variable = { var = SHL_unrest value = 40 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	SHL_campaign_honour_of_crests = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_quarter_listening
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_honour_of_crests_slot_held } }
+		}
+		cost = 30
+		days_remove = 45
+		days_re_enable = 70
+		modifier = {
+			political_power_gain = 0.10
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_honour_of_crests_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_honour_of_crests_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_honour_of_crests_slot_held }
+					clr_country_flag = SHL_campaign_honour_of_crests_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = SHL_campaign_honour_of_crests_result_tt
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_honour_of_crests_slot_held }
+					clr_country_flag = SHL_campaign_honour_of_crests_slot_held
+					ADISCORD_campaign_slot_release = yes
+					subtract_from_variable = { var = SHL_house_pressure value = 6 }
+					SHL_clamp_tensions = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 3
+				check_variable = { var = SHL_house_pressure value = 40 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	SHL_campaign_golden_gates_open = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			OR = { check_variable = { var = SHL_political_course value = 1 compare = equals } check_variable = { var = SHL_political_course value = 4 compare = equals } }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_golden_gates_open_slot_held } }
+		}
+		cost = 25
+		days_remove = 50
+		days_re_enable = 70
+		modifier = {
+			ADISCORD_economy_trade_income_factor = 0.08
+			political_power_gain = 0.05
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_golden_gates_open_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_golden_gates_open_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_golden_gates_open_slot_held }
+					clr_country_flag = SHL_campaign_golden_gates_open_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_golden_gates_open_slot_held }
+					clr_country_flag = SHL_campaign_golden_gates_open_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	SHL_campaign_a_voice_for_every_shift = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			OR = { check_variable = { var = SHL_political_course value = 2 compare = equals } check_variable = { var = SHL_political_course value = 5 compare = equals } }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held } }
+		}
+		cost = 30
+		days_remove = 55
+		days_re_enable = 75
+		modifier = {
+			stability_weekly = 0.003
+			conscription_factor = 0.03
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held }
+					clr_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held }
+					clr_country_flag = SHL_campaign_a_voice_for_every_shift_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	SHL_campaign_iron_budget = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			check_variable = { var = SHL_political_course value = 3 compare = equals }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_iron_budget_slot_held } }
+		}
+		cost = 30
+		days_remove = 50
+		days_re_enable = 70
+		modifier = {
+			industrial_capacity_factory = 0.05
+			war_support_weekly = 0.002
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_iron_budget_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_iron_budget_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_iron_budget_slot_held }
+					clr_country_flag = SHL_campaign_iron_budget_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_iron_budget_slot_held }
+					clr_country_flag = SHL_campaign_iron_budget_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+		}
+	}
+
+	SHL_campaign_the_south_is_one = {
+		icon = ADISCORD_propaganda
+		allowed = { tag = SHL }
+		visible = {
+			has_completed_focus = SHL_quarter_listening
+			OR = { ADISCORD_south_crisis_open = yes ADISCORD_south_final_active = yes }
+		}
+		available = {
+			SHL_country_operable = yes
+			custom_trigger_tooltip = {
+				tooltip = SHL_campaign_slot_available_tt
+				ADISCORD_has_campaign_slot = yes
+			}
+			hidden_trigger = { NOT = { has_country_flag = SHL_campaign_the_south_is_one_slot_held } }
+		}
+		cost = 35
+		days_remove = 45
+		days_re_enable = 70
+		modifier = {
+			war_support_weekly = 0.003
+			army_org_factor = 0.03
+		}
+		# Each running campaign holds its own slot receipt; every exit returns it once.
+		complete_effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						ADISCORD_has_campaign_slot = yes
+						NOT = { has_country_flag = SHL_campaign_the_south_is_one_slot_held }
+					}
+					ADISCORD_campaign_slot_consume = yes
+					set_country_flag = SHL_campaign_the_south_is_one_slot_held
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		cancel_trigger = {
+			SHL_country_operable = no
+		}
+		cancel_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_the_south_is_one_slot_held }
+					clr_country_flag = SHL_campaign_the_south_is_one_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = SHL_campaign_the_south_is_one_slot_held }
+					clr_country_flag = SHL_campaign_the_south_is_one_slot_held
+					ADISCORD_campaign_slot_release = yes
+				}
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 3
+				has_war = yes
+			}
+		}
+	}
+}
+
+# Division of the fire and course programmes.
+SHL_fire_shares = {
+	SHL_fire_give_crest = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_supports_council }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_share_crest value = 70 compare = less_than }
+		}
+		cost = 15
+		days_re_enable = 28
+		complete_effect = {
+			custom_effect_tooltip = SHL_fire_give_crest_tt
+			hidden_effect = { SHL_fire_give_to_crest = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = SHL_house_pressure value = 50 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	SHL_fire_give_quart = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_supports_council }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_share_quart value = 70 compare = less_than }
+		}
+		cost = 15
+		days_re_enable = 28
+		complete_effect = {
+			custom_effect_tooltip = SHL_fire_give_quart_tt
+			hidden_effect = { SHL_fire_give_to_quart = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = SHL_unrest value = 50 compare = greater_than_or_equals }
+			}
+		}
+	}
+
+	SHL_fire_give_state = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_supports_council }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_share_state value = 70 compare = less_than }
+		}
+		cost = 15
+		days_re_enable = 28
+		complete_effect = {
+			custom_effect_tooltip = SHL_fire_give_state_tt
+			hidden_effect = { SHL_fire_give_to_state = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
+			}
+		}
+	}
+
+	SHL_fire_give_front = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_supports_council }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_share_front value = 70 compare = less_than }
+		}
+		cost = 15
+		days_re_enable = 28
+		complete_effect = {
+			custom_effect_tooltip = SHL_fire_give_front_tt
+			hidden_effect = { SHL_fire_give_to_front = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				has_war = yes
+			}
+		}
+	}
+
+	SHL_programme_push = {
+		icon = generic_construction
+		visible = { has_country_flag = SHL_programme_active }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_prog_progress value = 100 compare = less_than }
+		}
+		cost = 40
+		days_re_enable = 45
+		complete_effect = {
+			custom_effect_tooltip = SHL_programme_push_tt
+			hidden_effect = { SHL_programme_add_15 = yes }
+		}
+		ai_will_do = { base = 10 }
+	}
+}
+
+# Treasury of the Conclave: money for power, power for money and crisis reserves.
+SHL_treasury = {
+	SHL_furnace_bonds = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_conclave_treasury }
+		available = {
+			SHL_country_operable = yes
+			NOT = { has_idea = SHL_bond_payments }
+		}
+		cost = 0
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = SHL_receive_250_tt
+			hidden_effect = { SHL_receive_250 = yes }
+			add_timed_idea = {
+				idea = SHL_bond_payments
+				days = 120
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = less_than }
+			}
+		}
+	}
+
+	SHL_decree_levy = {
+		icon = generic_political_pressure
+		visible = {
+			has_completed_focus = SHL_conclave_treasury
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cost = 75
+		fire_only_once = no
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = SHL_receive_250_tt
+			hidden_effect = { SHL_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	SHL_hire_desert_guard = {
+		icon = generic_army_support
+		visible = {
+			has_completed_focus = SHL_desert_guard_contracts
+		}
+		available = {
+			SHL_country_operable = yes
+			699 = {
+				is_owned_by = SHL
+				is_controlled_by = SHL
+			}
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_t300
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 120
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = { ADISCORD_economy_spend_300 = yes }
+				custom_effect_tooltip = SHL_hire_desert_guard_tt
+				hidden_effect = {
+					SHL_ensure_levy_template = yes
+					699 = { SHL_create_levy = yes }
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	SHL_metal_dumping = {
+		icon = generic_industry
+		visible = { has_completed_focus = SHL_metal_market }
+		available = {
+			SHL_country_operable = yes
+			check_variable = { var = SHL_reserve_stock value = 2 compare = greater_than_or_equals }
+		}
+		cost = 0
+		days_re_enable = 90
+		complete_effect = {
+			custom_effect_tooltip = SHL_metal_dumping_tt
+			hidden_effect = {
+				subtract_from_variable = { var = SHL_reserve_stock value = 2 }
+				SHL_receive_250 = yes
+				SHL_refresh_furnaces = yes
+			}
+		}
+		ai_will_do = { base = 3 }
+	}
+
+	SHL_crisis_fund = {
+		icon = generic_construction
+		visible = {
+			has_completed_focus = SHL_emergency_treasury
+		}
+		available = {
+			SHL_country_operable = yes
+			NOT = { has_country_flag = SHL_crisis_fund }
+		}
+		cost = 0
+		custom_cost_text = SHL_cost_t250
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+		}
+		fire_only_once = no
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = {
+					hidden_trigger = {
+						check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+					}
+				}
+				hidden_effect = { ADISCORD_economy_spend_250 = yes }
+				custom_effect_tooltip = SHL_crisis_fund_tt
+				hidden_effect = { set_country_flag = SHL_crisis_fund }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	SHL_crisis_prevention = {
+		icon = generic_political_pressure
+		visible = {
+			has_completed_focus = SHL_incident_office
+		}
+		available = {
+			SHL_country_operable = yes
+		}
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = SHL_crisis_prevention_tt
+			hidden_effect = { set_country_flag = { flag = SHL_crisis_cooldown value = 1 days = 180 } }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+}

@@ -5212,11 +5212,11 @@ ADISCORD_economy_start_precision_tooling = {
 	if = {
 		limit = { ADISCORD_economy_can_start_precision_tooling = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 1 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 800 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 800 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 800 }
-		set_variable = { var = ADISCORD_economy_project_components value = 6 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 3 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 500 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
+		set_variable = { var = ADISCORD_economy_project_components value = 1 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 2 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5238,11 +5238,11 @@ ADISCORD_economy_start_automated_industry = {
 	if = {
 		limit = { ADISCORD_economy_can_start_automated_industry = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 2 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 1200 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1200 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1200 }
-		set_variable = { var = ADISCORD_economy_project_components value = 8 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 6 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 700 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 700 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 700 }
+		set_variable = { var = ADISCORD_economy_project_components value = 3 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 2 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5264,11 +5264,11 @@ ADISCORD_economy_start_national_computing = {
 	if = {
 		limit = { ADISCORD_economy_can_start_national_computing = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 3 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 1500 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1500 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1500 }
-		set_variable = { var = ADISCORD_economy_project_components value = 12 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 4 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 900 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 900 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 900 }
+		set_variable = { var = ADISCORD_economy_project_components value = 4 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 1 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5290,11 +5290,11 @@ ADISCORD_economy_start_logistics_contract = {
 	if = {
 		limit = { ADISCORD_economy_can_start_logistics_contract = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 4 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 600 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
-		set_variable = { var = ADISCORD_economy_project_components value = 4 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 6 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 450 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 450 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 450 }
+		set_variable = { var = ADISCORD_economy_project_components value = 1 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 2 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5317,11 +5317,11 @@ ADISCORD_economy_start_drone_contract = {
 	if = {
 		limit = { ADISCORD_economy_can_start_drone_contract = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 5 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 1000 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
-		set_variable = { var = ADISCORD_economy_project_components value = 8 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 4 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 600 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 600 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 600 }
+		set_variable = { var = ADISCORD_economy_project_components value = 3 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 1 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5332,7 +5332,7 @@ ADISCORD_economy_finish_drone_contract = {
 		limit = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
 		if = {
 			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_drone_contract_requirements = yes }
-			add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 60 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 200 producer = ROOT }
 			ADISCORD_economy_release_project = yes
 		}
 		else = { ADISCORD_economy_cancel_project = yes }
@@ -5343,11 +5343,11 @@ ADISCORD_economy_start_platform_contract = {
 	if = {
 		limit = { ADISCORD_economy_can_start_platform_contract = yes }
 		set_variable = { var = ADISCORD_economy_project_id value = 6 }
-		set_variable = { var = ADISCORD_economy_project_deposit value = 1800 }
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1800 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1800 }
-		set_variable = { var = ADISCORD_economy_project_components value = 8 }
-		set_variable = { var = ADISCORD_economy_project_alloys value = 12 }
+		set_variable = { var = ADISCORD_economy_project_deposit value = 1000 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		set_variable = { var = ADISCORD_economy_project_components value = 1 }
+		set_variable = { var = ADISCORD_economy_project_alloys value = 3 }
 		add_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
 		force_update_dynamic_modifier = yes
 		ADISCORD_economy_mark_dirty = yes
@@ -5358,7 +5358,7 @@ ADISCORD_economy_finish_platform_contract = {
 		limit = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
 		if = {
 			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_platform_contract_requirements = yes }
-			add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 80 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 240 producer = ROOT }
 			ADISCORD_economy_release_project = yes
 		}
 		else = { ADISCORD_economy_cancel_project = yes }

@@ -212,6 +212,25 @@ class SouthFinalWarContractTests(unittest.TestCase):
         self.assertIn("targeted_alliance = SHL", uprising)
         self.assertIn("NAM_district_compact", uprising)
 
+    def test_course_mandates_and_wartime_programmes_serve_the_final_war(self):
+        shl = body(ROOT / "common/scripted_triggers/ADISCORD_SHL_scripted_triggers.txt", "SHL_campaign_open")
+        self.assertIn("ADISCORD_south_final_active = yes", shl)
+        start = body(EFFECTS, "ADISCORD_south_final_war_start")
+        self.assertIn("SHL_use_campaign_reserve = yes", start)
+        self.assertIn("SHL_clean_campaign = yes", body(EFFECTS, "ADISCORD_south_close_campaign_state"))
+        nam = body(ROOT / "common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt", "NAM_wartime_programmes_open")
+        self.assertIn("ADISCORD_south_final_active = yes", nam)
+        self.assertIn("ADISCORD_south_north_leader", nam)
+        decisions = (ROOT / "common/decisions/ADISCORD_nam_resource_war_decisions.txt").read_text(encoding="utf-8")
+        self.assertEqual(decisions.count("NAM_wartime_programmes_open = yes"), 6)
+
+    def test_ai_commits_every_champion_pair(self):
+        source = (ROOT / "common/ai_strategy/ADISCORD_south_final_war_ai.txt").read_text(encoding="utf-8")
+        for leader in ("NAM", "EFL", "AZH"):
+            self.assertIn(f"ADISCORD_south_shl_front_{leader.lower()} = {{", source)
+            self.assertIn(f"ADISCORD_south_{leader.lower()}_front_shl = {{", source)
+        self.assertEqual(source.count("abort_when_not_enabled = yes"), 7)
+
     def test_effect_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS):
             self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
@@ -275,7 +294,7 @@ class FocusAggregateTests(unittest.TestCase):
                 self.assertEqual(applied, delta, identifier)
                 self.assertIn((self.REFRESH[delta_name], "yes"), [(e.key, e.value) for e in hidden], identifier)
                 checked += 1
-        self.assertEqual(checked, 40)
+        self.assertEqual(checked, 114)
 
     def test_display_ideas_are_never_installed(self):
         names = set(self.display)

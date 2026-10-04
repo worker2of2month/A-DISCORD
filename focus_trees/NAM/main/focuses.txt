@@ -62,6 +62,8 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
 				NAM_refresh_administration = yes
 			}
+			unlock_decision_tooltip = NAM_campaign_every_seal_counts
+			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 		}
 		ai_will_do = {
 			base = 20
@@ -99,6 +101,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_admin_expense value = 0.04 }
 				NAM_refresh_administration = yes
 			}
+			custom_effect_tooltip = NAM_grp_vertical_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 15 }
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 8
@@ -135,6 +143,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
 				NAM_refresh_administration = yes
 			}
+			custom_effect_tooltip = NAM_grp_districts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 15 }
+				add_to_variable = { var = NAM_grp_nam_support value = -10 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 8
@@ -161,6 +175,12 @@ focus_tree = {
 				producer = NAM
 			}
 			army_experience = 10
+			custom_effect_tooltip = NAM_grp_inspectors_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -192,6 +212,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			add_political_power = 25
+			custom_effect_tooltip = NAM_grp_public_payroll_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -216,6 +242,13 @@ focus_tree = {
 			unlock_decision_tooltip = NAM_emergency_arsenal
 			unlock_decision_tooltip = NAM_counterinsurgency
 			army_experience = 10
+			custom_effect_tooltip = NAM_grp_emergency_writ_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -245,6 +278,11 @@ focus_tree = {
 					}
 				}
 				unlock_decision_tooltip = NAM_sign_compact
+			}
+			custom_effect_tooltip = NAM_grp_district_guarantees_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 10 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -328,6 +366,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_export_fuel
+			custom_effect_tooltip = NAM_grp_export_quays_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_oil_support value = -5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -361,6 +405,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_workshop_batch
+			custom_effect_tooltip = NAM_grp_domestic_refining_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -388,6 +438,11 @@ focus_tree = {
 				amount = 15
 				producer = NAM
 			}
+			custom_effect_tooltip = NAM_grp_insured_cargoes_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -412,6 +467,11 @@ focus_tree = {
 				type = support_equipment
 				amount = 150
 				producer = NAM
+			}
+			custom_effect_tooltip = NAM_grp_machine_shops_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -445,6 +505,12 @@ focus_tree = {
 					level = 1
 					instant_build = yes
 				}
+			}
+			custom_effect_tooltip = NAM_grp_civilian_combine_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -493,6 +559,11 @@ focus_tree = {
 				producer = NAM
 			}
 			army_experience = 10
+			custom_effect_tooltip = NAM_grp_count_garrisons_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 15
@@ -526,6 +597,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_gar_army_speed value = -0.03 }
 				NAM_refresh_garrison = yes
 			}
+			custom_effect_tooltip = NAM_grp_field_guards_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -558,6 +635,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_gar_planning_speed value = 0.1 }
 				add_to_variable = { var = NAM_gar_supply_consumption value = 0.03 }
 				NAM_refresh_garrison = yes
+			}
+			custom_effect_tooltip = NAM_grp_mobile_columns_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = 4 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -647,6 +730,11 @@ focus_tree = {
 			if = {
 				limit = { NOT = { has_completed_focus = NAM_emergency_writ } }
 				unlock_decision_tooltip = NAM_supply_order
+			}
+			custom_effect_tooltip = NAM_grp_quartermaster_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -767,6 +855,11 @@ focus_tree = {
 				NAM_refresh_garrison = yes
 			}
 			navy_experience = 15
+			custom_effect_tooltip = NAM_grp_escort_school_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -959,6 +1052,15 @@ focus_tree = {
 				id = ADISCORD_nam_resource_war.12
 				hours = 1
 			}
+			custom_effect_tooltip = NAM_grp_recognition_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				add_to_variable = { var = NAM_grp_garr_support value = 5 }
+				add_to_variable = { var = NAM_grp_trade_support value = 5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 40
@@ -999,6 +1101,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.02 }
 				NAM_refresh_administration = yes
 			}
+			custom_effect_tooltip = NAM_grp_service_state_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 10 }
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1037,6 +1145,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
 				add_to_variable = { var = NAM_adm_admin_expense value = -0.02 }
 				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_federal_charter_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 10 }
+				add_to_variable = { var = NAM_grp_nam_support value = -10 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -1077,6 +1191,8 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			add_political_power = 50
+			custom_effect_tooltip = NAM_campaign_second_slot_tt
+			hidden_effect = { ADISCORD_campaign_slot_grant = yes }
 		}
 		ai_will_do = {
 			base = 5
@@ -1151,6 +1267,13 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_veteran_housing
+			custom_effect_tooltip = NAM_grp_civil_dividend_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 5 }
+				add_to_variable = { var = NAM_grp_garr_support value = -8 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1189,6 +1312,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_postwar_rearmament
+			custom_effect_tooltip = NAM_grp_armed_peace_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 10 }
+				add_to_variable = { var = NAM_grp_dist_support value = -5 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1266,6 +1395,1480 @@ focus_tree = {
 		}
 	}
 
+	# Treasury and incidents: paid programmes and protection against crises.
+	focus = {
+		id = NAM_treasury_chancellery
+		icon = GFX_goal_generic_trade
+		x = 44
+		y = 0
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_treasury_chancellery_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.02 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_oil_bonds
+			unlock_decision_tooltip = NAM_emergency_decrees
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_machine_imports
+		icon = GFX_goal_generic_construct_civ_factory
+		x = 42
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_treasury_chancellery }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_machine_imports_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_buy_machine_tools
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_fuel_inspectorate
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 46
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_treasury_chancellery }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_fuel_inspectorate_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			unlock_decision_tooltip = NAM_fuel_audit
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_patronage_fund
+		icon = GFX_goal_generic_political_pressure
+		x = 42
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_machine_imports }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_bribe_nam
+			unlock_decision_tooltip = NAM_bribe_oil
+			unlock_decision_tooltip = NAM_bribe_dist
+			unlock_decision_tooltip = NAM_bribe_garr
+			unlock_decision_tooltip = NAM_bribe_trade
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_emergency_fund
+		icon = GFX_goal_generic_trade
+		x = 46
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_fuel_inspectorate }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_crisis_fund
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_treasury_balance
+		icon = GFX_goal_generic_production2
+		x = 44
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_patronage_fund }
+		prerequisite = { focus = NAM_emergency_fund }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_treasury_balance_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_crisis_office
+		icon = GFX_goal_generic_political_pressure
+		x = 50
+		y = 0
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			unlock_decision_tooltip = NAM_crisis_prevention
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_field_firefighters
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 48
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_crisis_office }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_field_firefighters_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_customs_guard
+		icon = GFX_goal_generic_trade
+		x = 52
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_crisis_office }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_customs_guard_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_strike_mediators
+		icon = GFX_goal_generic_national_unity
+		x = 48
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_field_firefighters }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_strike_mediators_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_chancellery_purge
+		icon = GFX_goal_generic_political_pressure
+		x = 52
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_customs_guard }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_chancellery_purge_tt
+			custom_effect_tooltip = NAM_grp_chancellery_purge_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = -5 }
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_crisis_doctrine
+		icon = GFX_goal_generic_army_doctrines
+		x = 50
+		y = 3
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_strike_mediators }
+		prerequisite = { focus = NAM_chancellery_purge }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_crisis_doctrine_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_crisis_doctrine_tt
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# Pillars of power: the council opens concessions to the five groups.
+	focus = {
+		id = NAM_supports_council
+		icon = GFX_goal_generic_political_pressure
+		x = 38
+		y = 0
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_grp_supports_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 3 }
+				add_to_variable = { var = NAM_grp_oil_support value = 3 }
+				add_to_variable = { var = NAM_grp_dist_support value = 3 }
+				add_to_variable = { var = NAM_grp_garr_support value = 3 }
+				add_to_variable = { var = NAM_grp_trade_support value = 3 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_concede_nam
+			unlock_decision_tooltip = NAM_concede_oil
+			unlock_decision_tooltip = NAM_concede_dist
+			unlock_decision_tooltip = NAM_concede_garr
+			unlock_decision_tooltip = NAM_concede_trade
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_oil_compact
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 36
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_supports_council }
+		mutually_exclusive = { focus = NAM_supports_export_houses }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_grp_supports_oil_compact_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 12 }
+				add_to_variable = { var = NAM_grp_trade_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+			add_fuel = 2000
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_export_houses
+		icon = GFX_goal_generic_trade
+		x = 40
+		y = 1
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_supports_council }
+		mutually_exclusive = { focus = NAM_supports_oil_compact }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_grp_supports_export_houses_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 12 }
+				add_to_variable = { var = NAM_grp_oil_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_officer_corps
+		icon = GFX_goal_generic_army_doctrines
+		x = 36
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_supports_oil_compact focus = NAM_supports_export_houses }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_grp_supports_officer_corps_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 10 }
+				add_to_variable = { var = NAM_grp_dist_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+			army_experience = 15
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_district_voice
+		icon = GFX_goal_generic_national_unity
+		x = 40
+		y = 2
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_supports_oil_compact focus = NAM_supports_export_houses }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_supports_district_voice_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_supports_district_voice_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 10 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_supports_balance
+		icon = GFX_goal_generic_major_alliance
+		x = 38
+		y = 3
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_supports_officer_corps }
+		prerequisite = { focus = NAM_supports_district_voice }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_supports_balance_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_supports_balance_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 4 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				add_to_variable = { var = NAM_grp_dist_support value = 4 }
+				add_to_variable = { var = NAM_grp_garr_support value = 4 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	# Postwar programmes in the manner of the Stelander party leaders: a deadline,
+	# policy and course choices, and an ending that reshapes group influence.
+	focus = {
+		id = NAM_ladder_programme
+		icon = GFX_goal_generic_political_pressure
+		x = 2
+		y = 14
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_seal_registry }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+			NOT = { has_country_flag = NAM_programme_active }
+			NOT = { has_country_flag = NAM_programme_finished }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_programme_start_tt
+			hidden_effect = {
+				set_variable = { var = NAM_prog_patron value = 1 }
+				NAM_programme_start = yes
+			}
+			custom_effect_tooltip = NAM_grp_ladder_programme_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_programme_push
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_inspectorate
+		icon = GFX_goal_generic_army_doctrines
+		x = 0
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_ladder_programme }
+		mutually_exclusive = { focus = NAM_ladder_patronage }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_inspectorate_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_inspectorate_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 5 }
+				add_to_variable = { var = NAM_grp_dist_support value = 3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_patronage
+		icon = GFX_goal_generic_trade
+		x = 4
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_ladder_programme }
+		mutually_exclusive = { focus = NAM_ladder_inspectorate }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_patronage_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.05 }
+				add_to_variable = { var = NAM_adm_admin_expense value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_patronage_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 12 }
+				add_to_variable = { var = NAM_grp_dist_support value = -10 }
+				add_to_variable = { var = NAM_grp_oil_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_audit_courts
+		icon = GFX_goal_generic_national_unity
+		x = 0
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_ladder_inspectorate }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_audit_courts_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_audit_courts_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				add_to_variable = { var = NAM_grp_nam_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_tax_farms
+		icon = GFX_goal_generic_trade
+		x = 4
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_ladder_patronage }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_tax_farms_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_tax_collection value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_tax_farms_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 6 }
+				add_to_variable = { var = NAM_grp_oil_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+			custom_effect_tooltip = NAM_receive_250_tt
+			hidden_effect = { NAM_receive_250 = yes }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_unified_code
+		icon = GFX_goal_generic_political_pressure
+		x = 2
+		y = 17
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_ladder_audit_courts focus = NAM_ladder_tax_farms }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_unified_code_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.05 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_unified_code_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 2 }
+				add_to_variable = { var = NAM_grp_oil_support value = 2 }
+				add_to_variable = { var = NAM_grp_dist_support value = 2 }
+				add_to_variable = { var = NAM_grp_garr_support value = 2 }
+				add_to_variable = { var = NAM_grp_trade_support value = 2 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_commission
+		icon = GFX_goal_generic_army_doctrines
+		x = 2
+		y = 18
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_ladder_unified_code }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_commission_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = { country_event = { id = ADISCORD_nam_groups.4 hours = 1 } }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_course_iron
+		icon = GFX_goal_generic_army_doctrines
+		x = 0
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_ARMY_XP }
+		prerequisite = { focus = NAM_ladder_commission }
+		mutually_exclusive = { focus = NAM_ladder_course_service }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_garrison_dummy_idea
+					add_idea = NAM_gar_ladder_course_iron_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_gar_army_defence value = 0.03 }
+				add_to_variable = { var = NAM_gar_army_org value = 0.02 }
+				NAM_refresh_garrison = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_course_iron_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 8 }
+				add_to_variable = { var = NAM_grp_garr_support value = 6 }
+				add_to_variable = { var = NAM_grp_dist_support value = -8 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_course_service
+		icon = GFX_goal_generic_national_unity
+		x = 4
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_ladder_commission }
+		mutually_exclusive = { focus = NAM_ladder_course_iron }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_course_service_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.03 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_ladder_course_service_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_support value = 4 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_ending_iron
+		icon = GFX_goal_generic_political_pressure
+		x = 0
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_ladder_course_iron }
+		prerequisite = { focus = NAM_ladder_of_seals }
+		mutually_exclusive = { focus = NAM_ladder_ending_service }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+			custom_trigger_tooltip = {
+				tooltip = NAM_programme_finished_tt
+				has_country_flag = NAM_programme_finished
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_ending_iron_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_political_power_gain value = 0.1 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_ladder_ending_iron_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 10 }
+				add_to_variable = { var = NAM_grp_nam_influence value = 10 }
+				add_to_variable = { var = NAM_grp_dist_influence value = -5 }
+				add_to_variable = { var = NAM_grp_trade_influence value = -5 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				set_variable = { var = NAM_prog_ending value = 1 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_ladder_ending_service
+		icon = GFX_goal_generic_national_unity
+		x = 4
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_ladder_course_service }
+		prerequisite = { focus = NAM_ladder_of_seals }
+		mutually_exclusive = { focus = NAM_ladder_ending_iron }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_service_state
+			custom_trigger_tooltip = {
+				tooltip = NAM_programme_finished_tt
+				has_country_flag = NAM_programme_finished
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_ladder_ending_service_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.05 }
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_ladder_ending_service_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_influence value = 5 }
+				add_to_variable = { var = NAM_grp_oil_influence value = 5 }
+				add_to_variable = { var = NAM_grp_nam_influence value = -10 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				set_variable = { var = NAM_prog_ending value = 2 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_programme
+		icon = GFX_goal_generic_national_unity
+		x = 11
+		y = 14
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_district_council }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+			NOT = { has_country_flag = NAM_programme_active }
+			NOT = { has_country_flag = NAM_programme_finished }
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_programme_start_tt
+			hidden_effect = {
+				set_variable = { var = NAM_prog_patron value = 3 }
+				NAM_programme_start = yes
+			}
+			custom_effect_tooltip = NAM_grp_charter_programme_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 5 }
+				NAM_groups_refresh = yes
+			}
+			unlock_decision_tooltip = NAM_programme_push
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_assemblies
+		icon = GFX_goal_generic_national_unity
+		x = 9
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_charter_programme }
+		mutually_exclusive = { focus = NAM_charter_oil_partnership }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_assemblies_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.04 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_assemblies_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 10 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_oil_partnership
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 13
+		y = 15
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_charter_programme }
+		mutually_exclusive = { focus = NAM_charter_assemblies }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_oil_partnership_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_oil_partnership_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 10 }
+				add_to_variable = { var = NAM_grp_trade_support value = -4 }
+				NAM_groups_refresh = yes
+			}
+			add_fuel = 3000
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_local_budgets
+		icon = GFX_goal_generic_trade
+		x = 9
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_charter_assemblies }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_local_budgets_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_admin_expense value = -0.03 }
+				add_to_variable = { var = NAM_adm_civilian_speed value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_local_budgets_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_well_cooperatives
+		icon = GFX_goal_generic_production2
+		x = 13
+		y = 16
+		cost = 3
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_charter_oil_partnership }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_well_cooperatives_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_well_cooperatives_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				add_to_variable = { var = NAM_grp_garr_support value = -3 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_common_code
+		icon = GFX_goal_generic_political_pressure
+		x = 11
+		y = 17
+		cost = 3
+		search_filters = { FOCUS_FILTER_RESEARCH }
+		prerequisite = { focus = NAM_charter_local_budgets focus = NAM_charter_well_cooperatives }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_common_code_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_common_code_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 2 }
+				add_to_variable = { var = NAM_grp_oil_support value = 2 }
+				add_to_variable = { var = NAM_grp_dist_support value = 2 }
+				add_to_variable = { var = NAM_grp_garr_support value = 2 }
+				add_to_variable = { var = NAM_grp_trade_support value = 2 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_commission
+		icon = GFX_goal_generic_trade
+		x = 11
+		y = 18
+		cost = 3
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		prerequisite = { focus = NAM_charter_common_code }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_commission_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = { country_event = { id = ADISCORD_nam_groups.4 hours = 1 } }
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_course_federation
+		icon = GFX_goal_generic_national_unity
+		x = 9
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_charter_commission }
+		mutually_exclusive = { focus = NAM_charter_course_oil_union }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_course_federation_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.03 }
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.02 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_course_federation_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_nam_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_course_oil_union
+		icon = GFX_goal_generic_construct_infrastructure
+		x = 13
+		y = 19
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_charter_commission }
+		mutually_exclusive = { focus = NAM_charter_course_federation }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_course_oil_union_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_trade_income value = 0.05 }
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_programme_progress_20_tt
+			hidden_effect = { NAM_programme_add_20 = yes }
+			custom_effect_tooltip = NAM_grp_charter_course_oil_union_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				add_to_variable = { var = NAM_grp_dist_support value = -6 }
+				NAM_groups_refresh = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_ending_federation
+		icon = GFX_goal_generic_major_alliance
+		x = 9
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_STABILITY }
+		prerequisite = { focus = NAM_charter_course_federation }
+		prerequisite = { focus = NAM_common_fuel_market }
+		mutually_exclusive = { focus = NAM_charter_ending_oil_union }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+			custom_trigger_tooltip = {
+				tooltip = NAM_programme_finished_tt
+				has_country_flag = NAM_programme_finished
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_ending_federation_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_stability_factor value = 0.06 }
+				add_to_variable = { var = NAM_adm_compliance_gain value = 0.03 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_charter_ending_federation_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				add_to_variable = { var = NAM_grp_dist_influence value = 10 }
+				add_to_variable = { var = NAM_grp_nam_influence value = -10 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				set_variable = { var = NAM_prog_ending value = 3 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
+	focus = {
+		id = NAM_charter_ending_oil_union
+		icon = GFX_goal_generic_production2
+		x = 13
+		y = 20
+		cost = 4
+		search_filters = { FOCUS_FILTER_INDUSTRY }
+		prerequisite = { focus = NAM_charter_course_oil_union }
+		prerequisite = { focus = NAM_common_fuel_market }
+		mutually_exclusive = { focus = NAM_charter_ending_federation }
+		available = {
+			has_capitulated = no
+			NAM_country_operable = yes
+			is_subject = no
+			has_completed_focus = NAM_federal_charter
+			custom_trigger_tooltip = {
+				tooltip = NAM_programme_finished_tt
+				has_country_flag = NAM_programme_finished
+			}
+		}
+		cancel_if_invalid = yes
+		continue_if_invalid = no
+		completion_reward = {
+			effect_tooltip = {
+				swap_ideas = {
+					remove_idea = NAM_administration_dummy_idea
+					add_idea = NAM_adm_charter_ending_oil_union_idea
+				}
+			}
+			hidden_effect = {
+				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.1 }
+				add_to_variable = { var = NAM_adm_efficiency_gain value = 0.05 }
+				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_charter_ending_oil_union_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 8 }
+				add_to_variable = { var = NAM_grp_oil_influence value = 10 }
+				add_to_variable = { var = NAM_grp_nam_influence value = -10 }
+				NAM_groups_refresh = yes
+			}
+			hidden_effect = {
+				set_variable = { var = NAM_prog_ending value = 4 }
+				country_event = { id = ADISCORD_nam_groups.11 hours = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 5
+		}
+	}
+
 	# Postwar political branches: the namestnik ladder and the oil charter.
 	focus = {
 		id = NAM_seal_registry
@@ -1296,6 +2899,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_district_audit
+			custom_effect_tooltip = NAM_grp_seal_registry_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_nam_support value = 6 }
+				add_to_variable = { var = NAM_grp_dist_support value = -3 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1331,6 +2940,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_gar_max_dig_in value = 1 }
 				NAM_refresh_garrison = yes
 			}
+			custom_effect_tooltip = NAM_grp_namestnik_garrisons_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_garr_support value = 6 }
+				add_to_variable = { var = NAM_grp_nam_support value = 3 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1365,6 +2980,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_fuel_gain_factor value = 0.1 }
 				add_to_variable = { var = NAM_adm_industrial_capacity_factory value = 0.03 }
 				NAM_refresh_administration = yes
+			}
+			custom_effect_tooltip = NAM_grp_oil_quotas_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = -4 }
+				add_to_variable = { var = NAM_grp_nam_support value = 4 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {
@@ -1437,6 +3058,11 @@ focus_tree = {
 				add_to_variable = { var = NAM_adm_research_speed_factor value = 0.03 }
 				NAM_refresh_administration = yes
 			}
+			custom_effect_tooltip = NAM_grp_district_council_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 8 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1472,6 +3098,12 @@ focus_tree = {
 				NAM_refresh_administration = yes
 			}
 			unlock_decision_tooltip = NAM_charter_fuel_aid
+			custom_effect_tooltip = NAM_grp_oil_fund_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_oil_support value = 6 }
+				add_to_variable = { var = NAM_grp_trade_support value = 4 }
+				NAM_groups_refresh = yes
+			}
 		}
 		ai_will_do = {
 			base = 5
@@ -1505,6 +3137,12 @@ focus_tree = {
 				add_to_variable = { var = NAM_gar_army_defence value = 0.04 }
 				add_to_variable = { var = NAM_gar_conscription value = 0.01 }
 				NAM_refresh_garrison = yes
+			}
+			custom_effect_tooltip = NAM_grp_district_militia_tt
+			hidden_effect = {
+				add_to_variable = { var = NAM_grp_dist_support value = 4 }
+				add_to_variable = { var = NAM_grp_garr_support value = -2 }
+				NAM_groups_refresh = yes
 			}
 		}
 		ai_will_do = {

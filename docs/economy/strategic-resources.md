@@ -78,17 +78,22 @@ completed capital programme, not merely all preceding focuses.
 
 | Programme | Treasury | Components / alloys | Days | Delivered result |
 | --- | ---: | ---: | ---: | --- |
-| Precision tooling | 800 | 6 / 3 | 90 | +8% efficiency cap, +10% efficiency growth |
-| Industrial automation | 1200 | 8 / 6 | 120 | +8% factory output, +10% total income |
-| National computing | 1500 | 12 / 4 | 120 | +7% research, -10% administrative costs |
-| Supply service | 600 | 4 / 6 | 60 | 300 researched trucks, 20 researched armoured trains |
-| Reconnaissance order | 1000 | 8 / 4 | 90 | 60 researched drone-carrier vehicles |
-| Combat-platform order | 1800 | 8 / 12 | 120 | 80 researched combat platforms |
+| Precision tooling | 500 | 1 / 2 | 60 | +10% efficiency cap, +15% efficiency growth |
+| Industrial automation | 700 | 3 / 2 | 90 | +10% factory output, +10% total income |
+| National computing | 900 | 4 / 1 | 90 | +10% research, -15% administrative costs |
+| Supply service | 450 | 1 / 2 | 45 | 300 researched trucks, 20 researched armoured trains |
+| Reconnaissance order | 600 | 3 / 1 | 60 | 200 researched drone-carrier vehicles |
+| Combat-platform order | 1000 | 1 / 3 | 90 | 240 researched combat platforms |
+
+No programme needs more than 4 components or 3 alloys, so one own plant of
+each type, or the equivalent import, covers any single programme. Equipment
+orders return roughly three times their treasury price in production cost,
+compared with about two for an ordinary weapons sale.
 
 One programme occupies the national investment slot. Payment is recorded once
 in the existing treasury action ledger. The `project_id` identifies the active
 operation; `project_deposit` is its receipt. An active country-scoped dynamic
-modifier reserves three civilian factories and the specified continuous resource
+modifier reserves two civilian factories and the specified continuous resource
 flow with native `country_resource_cost_rare_components` and
 `country_resource_cost_rare_alloys`. Availability reads the current country
 `resource@` surplus, including trade and ordinary production. The resources are

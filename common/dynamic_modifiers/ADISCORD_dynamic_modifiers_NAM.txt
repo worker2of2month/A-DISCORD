@@ -28,3 +28,16 @@ NAM_garrison_dynamic = {
 	army_defence_factor = NAM_gar_army_defence
 	conscription = NAM_gar_conscription
 }
+
+# Pillars of power. NAM_groups_refresh derives every field from group support.
+NAM_loyalty_dynamic = {
+	icon = GFX_idea_NAM_national_spirit
+	enable = { tag = NAM }
+	political_power_gain = NAM_loy_political_power_gain
+	stability_factor = NAM_loy_stability_factor
+	ADISCORD_economy_tax_collection_factor = NAM_loy_tax_collection
+	fuel_gain_factor = NAM_loy_fuel_gain_factor
+	production_speed_buildings_factor = NAM_loy_building_speed
+	army_org_factor = NAM_loy_army_org
+	ADISCORD_economy_trade_income_factor = NAM_loy_trade_income
+}

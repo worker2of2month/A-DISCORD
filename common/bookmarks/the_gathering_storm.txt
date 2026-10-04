@@ -45,12 +45,32 @@ bookmarks = {
 			minor = yes
 			history = "NAM_BOOKMARK_DESC"
 			ideology = etatism
+			ideas = {
+				NAM_national_spirit
+			}
+			focuses = {
+				NAM_bookmark_hold_the_basin
+				NAM_bookmark_ladder_or_charter
+				NAM_bookmark_seal_over_furnaces
+			}
 		}
 
 		"SHL" = {
 			minor = yes
 			history = "SHL_BOOKMARK_DESC"
 			ideology = hedonism
+			ideas = {
+				SHL_nine_furnaces_compact
+				SHL_hereditary_seats
+				SHL_divided_guard
+				SHL_external_freight
+				SHL_unregistered_quarters
+			}
+			focuses = {
+				SHL_bookmark_continuous_fire
+				SHL_bookmark_five_courses
+				SHL_bookmark_war_for_the_south
+			}
 		}
 
 		"RUS" = {
@@ -61,6 +81,11 @@ bookmarks = {
 				RUS_national_spirit
 				RUS_black_army_bookmark
 				RUS_bunker_complex_bookmark
+			}
+			focuses = {
+				RUS_bookmark_underground_capital
+				RUS_bookmark_last_empire
+				RUS_bookmark_heart_of_the_continent
 			}
 		}
 

@@ -668,7 +668,7 @@ ADISCORD_economy_project_can_continue = {
 	ADISCORD_economy_projects_country_ready = yes
 	has_variable = ADISCORD_economy_project_id
 	has_dynamic_modifier = { modifier = ADISCORD_economy_project_allocation }
-	NOT = { num_of_civilian_factories < 3 }
+	NOT = { num_of_civilian_factories < 2 }
 	check_variable = { var = resource@rare_components value = 0 compare = greater_than_or_equals }
 	check_variable = { var = resource@rare_alloys value = 0 compare = greater_than_or_equals }
 }
@@ -685,10 +685,10 @@ ADISCORD_economy_precision_tooling_requirements = {
 ADISCORD_economy_can_start_precision_tooling = {
 	ADISCORD_economy_precision_tooling_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 800 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 6 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 3 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 1 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 2 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_automated_industry_requirements = {
@@ -700,10 +700,10 @@ ADISCORD_economy_automated_industry_requirements = {
 ADISCORD_economy_can_start_automated_industry = {
 	ADISCORD_economy_automated_industry_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1200 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 700 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 3 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 2 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_national_computing_requirements = {
@@ -715,10 +715,10 @@ ADISCORD_economy_national_computing_requirements = {
 ADISCORD_economy_can_start_national_computing = {
 	ADISCORD_economy_national_computing_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1500 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 12 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 900 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 4 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 1 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_logistics_contract_requirements = {
@@ -730,10 +730,10 @@ ADISCORD_economy_logistics_contract_requirements = {
 ADISCORD_economy_can_start_logistics_contract = {
 	ADISCORD_economy_logistics_contract_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 4 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 6 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 450 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 1 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 2 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_drone_contract_requirements = {
@@ -744,10 +744,10 @@ ADISCORD_economy_drone_contract_requirements = {
 ADISCORD_economy_can_start_drone_contract = {
 	ADISCORD_economy_drone_contract_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 4 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 600 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 3 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 1 compare = greater_than_or_equals }
 }
 
 ADISCORD_economy_platform_contract_requirements = {
@@ -758,10 +758,10 @@ ADISCORD_economy_platform_contract_requirements = {
 ADISCORD_economy_can_start_platform_contract = {
 	ADISCORD_economy_platform_contract_requirements = yes
 	NOT = { has_variable = ADISCORD_economy_project_id }
-	NOT = { num_of_civilian_factories_available_for_projects < 3 }
-	check_variable = { var = ADISCORD_economy_treasury value = 1800 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_components value = 8 compare = greater_than_or_equals }
-	check_variable = { var = resource@rare_alloys value = 12 compare = greater_than_or_equals }
+	NOT = { num_of_civilian_factories_available_for_projects < 2 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_components value = 1 compare = greater_than_or_equals }
+	check_variable = { var = resource@rare_alloys value = 3 compare = greater_than_or_equals }
 }
 
 # Live division count keeps the AI gate responsive between weekly budget snapshots.

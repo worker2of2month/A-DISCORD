@@ -412,5 +412,463 @@ ideas = {
 				political_power_gain = 0.05
 			}
 		}
+
+		SHL_pow_supports_masters_guild_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		SHL_pow_supports_balance_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_houses_prog_policy_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_houses_prog_policy_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				trade_opinion_factor = 0.1
+			}
+		}
+
+		SHL_pow_houses_prog_work_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_houses_prog_code_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_houses_prog_course_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				trade_opinion_factor = 0.1
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		SHL_pow_houses_prog_course_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_houses_prog_ending_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		SHL_pow_houses_prog_ending_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		SHL_pow_cities_prog_policy_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		SHL_pow_cities_prog_policy_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		SHL_pow_cities_prog_work_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		SHL_pow_cities_prog_work_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_cities_prog_code_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_cities_prog_course_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_infrastructure_factor = 0.1
+			}
+		}
+
+		SHL_pow_cities_prog_course_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_pow_cities_prog_ending_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.06
+			}
+		}
+
+		SHL_pow_cities_prog_ending_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.06
+			}
+		}
+
+		SHL_pow_directorate_prog_policy_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_directorate_prog_policy_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_speed_arms_factory_factor = 0.05
+			}
+		}
+
+		SHL_pow_directorate_prog_work_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		SHL_pow_directorate_prog_code_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_directorate_prog_course_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
+		SHL_pow_directorate_prog_course_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_pow_directorate_prog_ending_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.08
+			}
+		}
+
+		SHL_pow_directorate_prog_ending_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				army_defence_factor = 0.03
+			}
+		}
+
+		SHL_pow_regency_prog_policy_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.05
+			}
+		}
+
+		SHL_pow_regency_prog_work_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.03
+			}
+		}
+
+		SHL_pow_regency_prog_work_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_regency_prog_code_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_regency_prog_course_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		SHL_pow_regency_prog_course_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				trade_opinion_factor = 0.1
+			}
+		}
+
+		SHL_pow_regency_prog_ending_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.05
+				max_dig_in = 1
+			}
+		}
+
+		SHL_pow_regency_prog_ending_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+			}
+		}
+
+		SHL_pow_commune_prog_policy_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+			}
+		}
+
+		SHL_pow_commune_prog_policy_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.03
+			}
+		}
+
+		SHL_pow_commune_prog_work_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				consumer_goods_factor = -0.02
+			}
+		}
+
+		SHL_pow_commune_prog_work_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		SHL_pow_commune_prog_code_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		SHL_pow_commune_prog_course_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				conscription_factor = 0.05
+			}
+		}
+
+		SHL_pow_commune_prog_course_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.04
+			}
+		}
+
+		SHL_pow_commune_prog_ending_a_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.06
+				conscription_factor = 0.03
+			}
+		}
+
+		SHL_pow_commune_prog_ending_b_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_max_efficiency_factor = 0.06
+			}
+		}
+
+		SHL_bond_payments = {
+			picture = generic_production_bonus
+			allowed = { original_tag = SHL }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = -0.10
+			}
+		}
+
+		SHL_pow_conclave_treasury_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.03
+			}
+		}
+
+		SHL_pow_metal_market_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		SHL_pow_guard_barracks_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				army_org_factor = 0.02
+			}
+		}
+
+		SHL_pow_balanced_ledger_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		SHL_pow_incident_statute_idea = {
+			name = SHL_conclave_power_dynamic
+			picture = GFX_idea_generic_production_bonus
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
 	}
 }

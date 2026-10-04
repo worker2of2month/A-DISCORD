@@ -1116,3 +1116,386 @@ country_event = {
 		name = ADISCORD_SHL.123.a
 	}
 }
+
+add_namespace = ADISCORD_shl_fire
+
+country_event = {
+	id = ADISCORD_shl_fire.3
+	title = ADISCORD_shl_fire.3.t
+	desc = {
+		text = ADISCORD_shl_fire.3.d_houses
+		trigger = { check_variable = { var = SHL_prog_course value = 1 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.3.d_cities
+		trigger = { check_variable = { var = SHL_prog_course value = 2 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.3.d_directorate
+		trigger = { check_variable = { var = SHL_prog_course value = 3 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.3.d_regency
+		trigger = { check_variable = { var = SHL_prog_course value = 4 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.3.d_commune
+		trigger = { check_variable = { var = SHL_prog_course value = 5 compare = equals } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_fire.3.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_fire.4
+	title = ADISCORD_shl_fire.4.t
+	desc = ADISCORD_shl_fire.4.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_fire.4.a
+	}
+}
+
+# Programme deadline: the result is settled once, by the stored progress.
+country_event = {
+	id = ADISCORD_shl_fire.10
+	title = ADISCORD_shl_fire.10.t
+	desc = {
+		text = ADISCORD_shl_fire.10.d_success
+		trigger = { check_variable = { var = SHL_prog_progress value = 100 compare = greater_than_or_equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.10.d_failure
+		trigger = { check_variable = { var = SHL_prog_progress value = 100 compare = less_than } }
+	}
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = SHL_programme_active }
+
+	option = {
+		name = ADISCORD_shl_fire.10.a
+		if = {
+			limit = { check_variable = { var = SHL_prog_progress value = 100 compare = greater_than_or_equals } }
+			custom_effect_tooltip = SHL_programme_success_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_programme_failure_tt
+		}
+		hidden_effect = { SHL_programme_resolve = yes }
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_fire.11
+	title = ADISCORD_shl_fire.11.t
+	desc = {
+		text = ADISCORD_shl_fire.11.d_houses_prog_ending_a
+		trigger = { check_variable = { var = SHL_prog_ending value = 11 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_houses_prog_ending_b
+		trigger = { check_variable = { var = SHL_prog_ending value = 12 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_cities_prog_ending_a
+		trigger = { check_variable = { var = SHL_prog_ending value = 21 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_cities_prog_ending_b
+		trigger = { check_variable = { var = SHL_prog_ending value = 22 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_directorate_prog_ending_a
+		trigger = { check_variable = { var = SHL_prog_ending value = 31 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_directorate_prog_ending_b
+		trigger = { check_variable = { var = SHL_prog_ending value = 32 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_regency_prog_ending_a
+		trigger = { check_variable = { var = SHL_prog_ending value = 41 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_regency_prog_ending_b
+		trigger = { check_variable = { var = SHL_prog_ending value = 42 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_commune_prog_ending_a
+		trigger = { check_variable = { var = SHL_prog_ending value = 51 compare = equals } }
+	}
+	desc = {
+		text = ADISCORD_shl_fire.11.d_commune_prog_ending_b
+		trigger = { check_variable = { var = SHL_prog_ending value = 52 compare = equals } }
+	}
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_fire.11.a
+	}
+}
+
+# Random incidents: each option settles the crisis once and reopens the draw.
+add_namespace = ADISCORD_shl_crisis
+
+country_event = {
+	id = ADISCORD_shl_crisis.1
+	title = ADISCORD_shl_crisis.1.t
+	desc = ADISCORD_shl_crisis.1.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_crisis.1.a
+		trigger = {
+			OR = {
+				has_completed_focus = SHL_workshop_fire_brigades
+				check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			}
+		}
+		if = {
+			limit = { has_completed_focus = SHL_workshop_fire_brigades }
+			custom_effect_tooltip = SHL_crisis_free_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_crisis_pay_250_tt
+			hidden_effect = { ADISCORD_economy_spend_250 = yes }
+		}
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.1.b
+		custom_effect_tooltip = SHL_crisis_1_b_tt
+		add_stability = -0.02
+		hidden_effect = {
+			add_to_variable = { var = SHL_unrest value = 8 }
+			SHL_clamp_tensions = yes
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.1.z
+		trigger = {
+			has_country_flag = SHL_crisis_fund
+		}
+		custom_effect_tooltip = SHL_crisis_fund_used_tt
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_fund
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 80 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_crisis.2
+	title = ADISCORD_shl_crisis.2.t
+	desc = ADISCORD_shl_crisis.2.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_crisis.2.a
+		trigger = {
+			OR = {
+				has_completed_focus = SHL_caravan_escorts
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			}
+		}
+		if = {
+			limit = { has_completed_focus = SHL_caravan_escorts }
+			custom_effect_tooltip = SHL_crisis_free_tt
+		}
+		else = {
+			custom_effect_tooltip = SHL_crisis_pay_100_tt
+			hidden_effect = { ADISCORD_economy_spend_100 = yes }
+		}
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.2.b
+		custom_effect_tooltip = SHL_crisis_2_b_tt
+		hidden_effect = {
+			subtract_from_variable = { var = SHL_reserve_stock value = 2 }
+			clamp_variable = { var = SHL_reserve_stock min = 0 max = 1000 }
+			SHL_refresh_furnaces = yes
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.2.z
+		trigger = {
+			has_country_flag = SHL_crisis_fund
+		}
+		custom_effect_tooltip = SHL_crisis_fund_used_tt
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_fund
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 80 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_crisis.3
+	title = ADISCORD_shl_crisis.3.t
+	desc = ADISCORD_shl_crisis.3.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_crisis.3.a
+		trigger = {
+			OR = {
+				AND = {
+					has_completed_focus = SHL_shift_arbiters
+					check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+				}
+				check_variable = { var = ADISCORD_economy_treasury value = 250 compare = greater_than_or_equals }
+			}
+		}
+		if = {
+			limit = { has_completed_focus = SHL_shift_arbiters }
+			custom_effect_tooltip = SHL_crisis_pay_100_tt
+			hidden_effect = { ADISCORD_economy_spend_100 = yes }
+		}
+		else = {
+			custom_effect_tooltip = SHL_crisis_pay_250_tt
+			hidden_effect = { ADISCORD_economy_spend_250 = yes }
+		}
+		custom_effect_tooltip = SHL_crisis_3_a_tt
+		hidden_effect = {
+			subtract_from_variable = { var = SHL_unrest value = 5 }
+			SHL_clamp_tensions = yes
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.3.b
+		custom_effect_tooltip = SHL_crisis_3_b_tt
+		add_stability = -0.02
+		hidden_effect = {
+			add_to_variable = { var = SHL_unrest value = 10 }
+			subtract_from_variable = { var = SHL_house_pressure value = 3 }
+			SHL_clamp_tensions = yes
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.3.z
+		trigger = {
+			has_country_flag = SHL_crisis_fund
+		}
+		custom_effect_tooltip = SHL_crisis_fund_used_tt
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_fund
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 80 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_crisis.4
+	title = ADISCORD_shl_crisis.4.t
+	desc = ADISCORD_shl_crisis.4.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_crisis.4.a
+		if = {
+			limit = { has_completed_focus = SHL_counting_chamber }
+			add_political_power = -30
+		}
+		else = {
+			add_political_power = -60
+		}
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.4.b
+		custom_effect_tooltip = SHL_crisis_4_b_tt
+		hidden_effect = {
+			add_to_variable = { var = SHL_house_pressure value = 8 }
+			subtract_from_variable = { var = SHL_unrest value = 5 }
+			SHL_clamp_tensions = yes
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.4.z
+		trigger = {
+			has_country_flag = SHL_crisis_fund
+		}
+		custom_effect_tooltip = SHL_crisis_fund_used_tt
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_fund
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 80 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_shl_crisis.5
+	title = ADISCORD_shl_crisis.5.t
+	desc = ADISCORD_shl_crisis.5.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_shl_crisis.5.a
+		custom_effect_tooltip = SHL_crisis_5_a_tt
+		add_political_power = -40
+		hidden_effect = {
+			if = {
+				limit = { has_completed_focus = SHL_counting_chamber }
+				SHL_receive_250 = yes
+			}
+			else = {
+				ADISCORD_economy_receive_100 = yes
+			}
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = ADISCORD_shl_crisis.5.b
+		add_stability = -0.02
+		hidden_effect = {
+			clr_country_flag = SHL_crisis_open
+		}
+		ai_chance = { base = 50 }
+	}
+}

@@ -110,7 +110,7 @@ class NamCampaignTests(unittest.TestCase):
 
     def test_unique_layout_and_real_rewards(self):
         coordinates = set()
-        self.assertEqual(len(self.focuses), 59)
+        self.assertEqual(len(self.focuses), 99)
         filters = set()
         for name, focus in self.focuses.items():
             coordinate = (scalar(focus, "x"), scalar(focus, "y"))
@@ -329,6 +329,95 @@ class NamCampaignTests(unittest.TestCase):
         hooks = read("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt")
         self.assertNotIn("on_daily", hooks)
         self.assertNotIn("every_country", hooks)
+
+
+class NamPillarsTests(unittest.TestCase):
+    """Pillars of power: five weighted groups, programme progress and endings."""
+
+    GROUPS = ("nam", "oil", "dist", "garr", "trade")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tree = block(parsed("focus_trees/NAM/main/focuses.txt"), "focus_tree")
+        cls.focuses = {scalar(e.value, "id"): e.value for e in cls.tree if e.key == "focus"}
+        cls.effects = {e.key: e.value for e in parsed(f"common/scripted_effects/{BASE}_effects.txt")}
+
+    def changes(self, entries, kind):
+        result = {}
+        for entry in walk(entries):
+            if entry.key != "add_to_variable":
+                continue
+            name = scalar(entry.value, "var")
+            for group in self.GROUPS:
+                if name == f"NAM_grp_{group}_{kind}":
+                    result[group] = result.get(group, 0) + float(scalar(entry.value, "value"))
+        return result
+
+    def test_initial_influence_is_complete_and_endings_redistribute_it(self):
+        initial = {}
+        for entry in walk(self.effects["NAM_groups_initialize"]):
+            if entry.key == "set_variable" and scalar(entry.value, "var").endswith("_influence"):
+                initial[scalar(entry.value, "var")] = float(scalar(entry.value, "value"))
+        self.assertEqual(len(initial), 5)
+        self.assertEqual(sum(initial.values()), 100)
+        endings = [name for name in self.focuses if "_ending_" in name]
+        self.assertEqual(len(endings), 4)
+        for name in endings:
+            shift = self.changes(block(self.focuses[name], "completion_reward"), "influence")
+            self.assertTrue(shift, name)
+            self.assertEqual(sum(shift.values()), 0, name)
+            for group, value in shift.items():
+                self.assertGreaterEqual(initial[f"NAM_grp_{group}_influence"] + value, 0, name)
+
+    def test_each_programme_route_reaches_exactly_one_hundred(self):
+        for path in ("ladder", "charter"):
+            prefix = f"NAM_{path}_"
+            names = [n for n in self.focuses if n.startswith(prefix) and n != "NAM_ladder_of_seals"]
+            for first in (True, False):
+                completed, blocked = {f"{prefix}programme"}, set()
+                changed = True
+                while changed:
+                    changed = False
+                    for name in sorted(names, reverse=not first):
+                        if name in completed or name in blocked:
+                            continue
+                        groups = [e.value for e in self.focuses[name] if e.key == "prerequisite"]
+                        inside = [g for g in groups if all(child.value.startswith(prefix) for child in g)]
+                        if inside and all(any(child.value in completed for child in g) for g in inside):
+                            completed.add(name)
+                            for exclusive in (e.value for e in self.focuses[name] if e.key == "mutually_exclusive"):
+                                blocked |= {child.value for child in exclusive}
+                            changed = True
+                progress = sum(20 for n in completed if "NAM_programme_add_20" in repr(self.focuses[n]))
+                self.assertEqual(progress, 100, (path, first, sorted(completed)))
+
+    def test_every_support_shift_refreshes_and_is_localised(self):
+        texts = {language: read(f"localisation/{language}/{BASE}_l_{language}.yml") for language in ("russian", "english")}
+        shifted = 0
+        for name, focus in self.focuses.items():
+            reward = block(focus, "completion_reward")
+            if not self.changes(reward, "support"):
+                continue
+            shifted += 1
+            tooltips = [e.value for e in walk(reward) if e.key == "custom_effect_tooltip"]
+            self.assertIn(f"NAM_grp_{name[4:]}_tt", tooltips, name)
+            self.assertIn("NAM_groups_refresh", [e.key for e in walk(reward)], name)
+            for language, text in texts.items():
+                self.assertIn(f" NAM_grp_{name[4:]}_tt:", text, (language, name))
+        self.assertGreaterEqual(shifted, 50)
+
+    def test_refresh_covers_every_group_without_world_scans(self):
+        source = read(f"common/scripted_effects/{BASE}_effects.txt")
+        start = source.index("NAM_groups_refresh = {")
+        refresh = source[start:source.index("\n}\n", start)]
+        for group in self.GROUPS:
+            self.assertIn(f"NAM_grp_{group}_support", refresh)
+            self.assertIn(f"NAM_grp_{group}_influence", refresh)
+        self.assertIn("force_update_dynamic_modifier = yes", refresh)
+        self.assertNotIn("every_country", refresh)
+        hooks = read("common/on_actions/03_ADISCORD_nam_resource_war_on_actions.txt")
+        self.assertIn("on_monthly_NAM", hooks)
+        self.assertIn("NAM = {\n\t\t\t\t\tNAM_groups_initialize = yes", read("common/on_actions/00_ADISCORD_on_actions.txt"))
 
 
 if __name__ == "__main__":

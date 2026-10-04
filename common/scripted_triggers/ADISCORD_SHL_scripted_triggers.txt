@@ -313,9 +313,11 @@ SHL_relief_site_ready = {
 	}
 }
 
+# The War for the South reuses the course mandates and the campaign convoy.
 SHL_campaign_open = {
 	SHL_country_operable = yes
 	OR = {
+		ADISCORD_south_final_active = yes
 		SHL_can_seize_qanats = yes
 		SHL_can_strike_veyr = yes
 		check_variable = { var = SHL_mazar_state value = 0 compare = equals }

@@ -94,6 +94,7 @@ ADISCORD_south_final_war_start = {
 		SHL = {
 			ADISCORD_south_prepare_champion = yes
 			set_variable = { var = ADISCORD_south_side value = 1 }
+			SHL_use_campaign_reserve = yes
 		}
 		NAM = {
 			if = {
@@ -740,6 +741,13 @@ ADISCORD_south_mark_loser = {
 # GLOBAL. Campaign-only status ends on every terminal path.
 ADISCORD_south_close_campaign_state = {
 	clr_global_flag = ADISCORD_south_final_started
+	# Campaign columns and the used course mandate end with the war, as after a limited war.
+	SHL = {
+		if = {
+			limit = { exists = yes }
+			SHL_clean_campaign = yes
+		}
+	}
 	NAM = { ADISCORD_south_close_member_state = yes }
 	SHL = { ADISCORD_south_close_member_state = yes }
 	EFL = { ADISCORD_south_close_member_state = yes }

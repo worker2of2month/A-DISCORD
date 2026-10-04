@@ -454,5 +454,255 @@ ideas = {
 				resistance_growth = -0.05
 			}
 		}
+
+		NAM_adm_supports_district_voice_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		NAM_adm_supports_balance_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		NAM_adm_ladder_inspectorate_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				compliance_gain = 0.02
+			}
+		}
+
+		NAM_adm_ladder_patronage_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.05
+				ADISCORD_economy_admin_expense_factor = 0.03
+			}
+		}
+
+		NAM_adm_ladder_audit_courts_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+			}
+		}
+
+		NAM_adm_ladder_tax_farms_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.03
+			}
+		}
+
+		NAM_adm_ladder_unified_code_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				research_speed_factor = 0.02
+			}
+		}
+
+		NAM_gar_ladder_course_iron_idea = {
+			name = NAM_garrison_dynamic
+			picture = GFX_idea_generic_fortify_the_borders
+			allowed = { always = no }
+			modifier = {
+				army_defence_factor = 0.03
+				army_org_factor = 0.02
+			}
+		}
+
+		NAM_adm_ladder_course_service_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				research_speed_factor = 0.02
+			}
+		}
+
+		NAM_adm_ladder_ending_iron_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.1
+				compliance_gain = 0.03
+			}
+		}
+
+		NAM_adm_ladder_ending_service_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.05
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_charter_assemblies_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.04
+			}
+		}
+
+		NAM_adm_charter_oil_partnership_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				fuel_gain_factor = 0.05
+				production_factory_efficiency_gain_factor = 0.03
+			}
+		}
+
+		NAM_adm_charter_local_budgets_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.03
+				production_speed_industrial_complex_factor = 0.05
+			}
+		}
+
+		NAM_adm_charter_well_cooperatives_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.03
+			}
+		}
+
+		NAM_adm_charter_common_code_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		NAM_adm_charter_course_federation_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				compliance_gain = 0.03
+				stability_factor = 0.02
+			}
+		}
+
+		NAM_adm_charter_course_oil_union_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_trade_income_factor = 0.05
+				fuel_gain_factor = 0.05
+			}
+		}
+
+		NAM_adm_charter_ending_federation_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.06
+				compliance_gain = 0.03
+			}
+		}
+
+		NAM_adm_charter_ending_oil_union_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				fuel_gain_factor = 0.1
+				production_factory_efficiency_gain_factor = 0.05
+			}
+		}
+
+		NAM_bond_payments = {
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { original_tag = NAM }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+			modifier = {
+				political_power_gain = -0.10
+			}
+		}
+
+		NAM_adm_treasury_chancellery_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_admin_expense_factor = -0.02
+			}
+		}
+
+		NAM_adm_machine_imports_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_factory_efficiency_gain_factor = 0.02
+			}
+		}
+
+		NAM_adm_fuel_inspectorate_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				fuel_gain_factor = 0.05
+			}
+		}
+
+		NAM_adm_treasury_balance_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				ADISCORD_economy_tax_collection_factor = 0.05
+			}
+		}
+
+		NAM_adm_crisis_doctrine_idea = {
+			name = NAM_administration_dynamic
+			picture = GFX_idea_NAM_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
 	}
 }
