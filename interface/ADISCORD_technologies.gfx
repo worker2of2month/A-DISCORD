@@ -1282,8 +1282,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_shield_assault_drills_medium"
-		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
-		noOfFrames = 2
+		textureFile = "gfx/interface/technologies/tech_advanced_special_forces_training.dds"
 	}
 
 	SpriteType = {
@@ -1294,8 +1293,7 @@ spriteTypes = {
 
 	SpriteType = {
 		name = "GFX_ADISCORD_tech_shield_field_maintenance_medium"
-		textureFile = "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds"
-		noOfFrames = 2
+		textureFile = "gfx/interface/technologies/basic_machine_tools.dds"
 	}
 
 	SpriteType = {

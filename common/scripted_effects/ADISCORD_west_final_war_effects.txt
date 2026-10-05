@@ -1,0 +1,714 @@
+# Western final war. Side numbers: 1 = Vorkerland (WRK), 2 = Itora (IVN).
+# Settlement terms: 1 = annexation, 2 = subjects. Subject types follow the
+# winner's path: 0 ordinary puppet, 1 confederate republic, 2 technical
+# trusteeship, 3 guaranteed confederation, 4 emergency trusteeship.
+# Territorial transfer: 1 = northern corridor to Itora, 2 = Itoran frontier to WRK.
+
+# ----- Crisis clock -----
+
+# GLOBAL. A western focus raises the pressure before the final campaign begins.
+ADISCORD_west_crisis_add = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = ADISCORD_west_final_started }
+			NOT = { has_global_flag = ADISCORD_west_final_resolved }
+		}
+		add_to_variable = { var = global.ADISCORD_west_crisis value = 10 }
+		clamp_variable = { var = global.ADISCORD_west_crisis min = 0 max = 100 }
+	}
+}
+
+# COUNTRY WRK. Called from on_monthly_WRK, the only periodic driver.
+ADISCORD_west_crisis_month = {
+	if = {
+		limit = {
+			ADISCORD_west_crisis_open = yes
+			ADISCORD_west_champion_viable = yes
+			NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
+		}
+		set_global_flag = ADISCORD_west_final_resolved
+		set_global_flag = ADISCORD_west_hegemon_WRK
+		set_global_flag = ADISCORD_west_unopposed
+		set_global_variable = { var = ADISCORD_west_winner_side value = 1 }
+		news_event = { id = ADISCORD_west.31 hours = 1 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_crisis_open = yes }
+		add_to_variable = { var = global.ADISCORD_west_crisis value = 5 }
+		clamp_variable = { var = global.ADISCORD_west_crisis min = 0 max = 100 }
+		if = {
+			limit = {
+				NOT = { has_global_flag = ADISCORD_west_crisis_warned }
+				check_variable = { var = global.ADISCORD_west_crisis value = 50 compare = greater_than_or_equals }
+			}
+			set_global_flag = ADISCORD_west_crisis_warned
+			news_event = { id = ADISCORD_west.3 hours = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { var = global.ADISCORD_west_crisis value = 100 compare = greater_than_or_equals }
+				ADISCORD_west_final_can_start = yes
+			}
+			ADISCORD_west_final_war_start = yes
+		}
+	}
+}
+
+# ----- Campaign start -----
+
+# COUNTRY declarer: WRK or IVN.
+ADISCORD_west_final_war_start = {
+	if = {
+		limit = { ADISCORD_west_final_can_start = yes }
+		set_global_flag = ADISCORD_west_final_started
+		if = {
+			limit = { tag = WRK }
+			set_global_variable = { var = ADISCORD_west_declarer_side value = 1 }
+		}
+		else = {
+			set_global_variable = { var = ADISCORD_west_declarer_side value = 2 }
+		}
+		WRK = {
+			ADISCORD_west_prepare_champion = yes
+			set_variable = { var = ADISCORD_west_side value = 1 }
+		}
+		IVN = {
+			ADISCORD_west_prepare_champion = yes
+			set_variable = { var = ADISCORD_west_side value = 2 }
+		}
+		if = {
+			limit = { tag = WRK }
+			declare_war_on = { target = IVN type = annex_everything }
+		}
+		else = {
+			declare_war_on = { target = WRK type = annex_everything }
+		}
+
+		ADISCORD_west_assign_bound_sides = yes
+		ADISCORD_west_offer_side_choices = yes
+
+		WRK = {
+			ADISCORD_west_add_path_spirit = yes
+			# The deadline compares the age of the campaign flag, so a stale
+			# callback cannot settle a later campaign.
+			country_event = { id = ADISCORD_west.20 days = 720 }
+			country_event = { id = ADISCORD_west.1 hours = 1 }
+			news_event = { id = ADISCORD_west.2 hours = 2 }
+		}
+		IVN = {
+			ADISCORD_west_add_path_spirit = yes
+			country_event = { id = ADISCORD_west.1 hours = 1 }
+		}
+	}
+}
+
+# COUNTRY champion. Leads its own faction and holds mandatory-major status only
+# for this campaign, so the native peace waits for the champion's defeat.
+ADISCORD_west_prepare_champion = {
+	if = {
+		limit = {
+			is_in_faction = yes
+			is_faction_leader = no
+		}
+		leave_faction = yes
+	}
+	if = {
+		limit = { is_in_faction = no }
+		if = {
+			limit = { tag = WRK }
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_west_wrk_faction
+			}
+		}
+		else = {
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = ADISCORD_west_ivn_faction
+			}
+		}
+	}
+	if = {
+		limit = { is_major = no }
+		set_country_flag = ADISCORD_west_added_major
+		set_major = yes
+	}
+}
+
+# GLOBAL. Subjects and faction partners enter with their champion.
+ADISCORD_west_assign_bound_sides = {
+	WIT = { ADISCORD_west_bind_to_champion = yes }
+	IIA = { ADISCORD_west_bind_to_champion = yes }
+	IBA = { ADISCORD_west_bind_to_champion = yes }
+	IBL = { ADISCORD_west_bind_to_champion = yes }
+	PWR = { ADISCORD_west_bind_to_champion = yes }
+	PSD = { ADISCORD_west_bind_to_champion = yes }
+	ZAO = { ADISCORD_west_bind_to_champion = yes }
+	WPA = { ADISCORD_west_bind_to_champion = yes }
+	WPS = { ADISCORD_west_bind_to_champion = yes }
+	ROM = { ADISCORD_west_bind_to_champion = yes }
+	TRU = { ADISCORD_west_bind_to_champion = yes }
+}
+
+# COUNTRY regional participant.
+ADISCORD_west_bind_to_champion = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { has_variable = ADISCORD_west_side }
+			OR = {
+				is_subject_of = WRK
+				is_in_faction_with = WRK
+				has_war_with = IVN
+			}
+		}
+		ADISCORD_west_join_wrk_side = yes
+	}
+	else_if = {
+		limit = {
+			exists = yes
+			NOT = { has_variable = ADISCORD_west_side }
+			OR = {
+				is_subject_of = IVN
+				is_in_faction_with = IVN
+				has_war_with = WRK
+			}
+		}
+		ADISCORD_west_join_ivn_side = yes
+	}
+}
+
+# GLOBAL. Every remaining sovereign western state must choose; the corridor is
+# the only land route between the champions.
+ADISCORD_west_offer_side_choices = {
+	WIT = { ADISCORD_west_offer_side_choice = yes }
+	IIA = { ADISCORD_west_offer_side_choice = yes }
+	IBA = { ADISCORD_west_offer_side_choice = yes }
+	IBL = { ADISCORD_west_offer_side_choice = yes }
+	PWR = { ADISCORD_west_offer_side_choice = yes }
+	PSD = { ADISCORD_west_offer_side_choice = yes }
+	ZAO = { ADISCORD_west_offer_side_choice = yes }
+	WPA = { ADISCORD_west_offer_side_choice = yes }
+	WPS = { ADISCORD_west_offer_side_choice = yes }
+	ROM = { ADISCORD_west_offer_side_choice = yes }
+	TRU = { ADISCORD_west_offer_side_choice = yes }
+}
+
+# COUNTRY regional participant.
+ADISCORD_west_offer_side_choice = {
+	if = {
+		limit = { ADISCORD_west_needs_side_choice = yes }
+		country_event = { id = ADISCORD_west.10 hours = 6 }
+	}
+}
+
+# COUNTRY. Joins Vorkerland's faction when free and enters the current war.
+ADISCORD_west_join_wrk_side = {
+	set_variable = { var = ADISCORD_west_side value = 1 }
+	if = {
+		limit = {
+			is_in_faction = no
+			is_subject = no
+		}
+		WRK = { add_to_faction = PREV }
+	}
+	if = {
+		limit = { NOT = { has_war_with = IVN } }
+		add_to_war = {
+			targeted_alliance = WRK
+			enemy = IVN
+			hostility_reason = asked_to_join
+		}
+	}
+}
+
+# COUNTRY. Joins Itora's faction when free and enters the current war.
+ADISCORD_west_join_ivn_side = {
+	set_variable = { var = ADISCORD_west_side value = 2 }
+	if = {
+		limit = {
+			is_in_faction = no
+			is_subject = no
+		}
+		IVN = { add_to_faction = PREV }
+	}
+	if = {
+		limit = { NOT = { has_war_with = WRK } }
+		add_to_war = {
+			targeted_alliance = IVN
+			enemy = WRK
+			hostility_reason = asked_to_join
+		}
+	}
+}
+
+# COUNTRY chooser (event ROOT). Its regional faction partners follow its choice.
+ADISCORD_west_faction_partners_follow = {
+	WIT = { ADISCORD_west_follow_root = yes }
+	IIA = { ADISCORD_west_follow_root = yes }
+	IBA = { ADISCORD_west_follow_root = yes }
+	IBL = { ADISCORD_west_follow_root = yes }
+	PWR = { ADISCORD_west_follow_root = yes }
+	PSD = { ADISCORD_west_follow_root = yes }
+	ZAO = { ADISCORD_west_follow_root = yes }
+	WPA = { ADISCORD_west_follow_root = yes }
+	WPS = { ADISCORD_west_follow_root = yes }
+	ROM = { ADISCORD_west_follow_root = yes }
+	TRU = { ADISCORD_west_follow_root = yes }
+}
+
+ADISCORD_west_follow_root = {
+	if = {
+		limit = {
+			exists = yes
+			NOT = { tag = ROOT }
+			NOT = { has_variable = ADISCORD_west_side }
+			is_in_faction_with = ROOT
+		}
+		if = {
+			limit = { ROOT = { ADISCORD_west_on_wrk_side = yes } }
+			ADISCORD_west_join_wrk_side = yes
+		}
+		else_if = {
+			limit = { ROOT = { ADISCORD_west_on_ivn_side = yes } }
+			ADISCORD_west_join_ivn_side = yes
+		}
+	}
+}
+
+# ----- Path spirits -----
+
+# COUNTRY champion. The path chooses the war, not only its name.
+ADISCORD_west_add_path_spirit = {
+	if = {
+		limit = { tag = WRK }
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			add_ideas = ADISCORD_west_wrk_solidarity_committees
+		}
+		else_if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_route_joint }
+			add_ideas = ADISCORD_west_wrk_imperial_columns
+		}
+		else = {
+			add_ideas = ADISCORD_west_wrk_engineer_battalions
+		}
+	}
+	else_if = {
+		limit = { ADISCORD_west_ivn_shield_course = yes }
+		add_ideas = ADISCORD_west_ivn_humanist_shield
+	}
+	else_if = {
+		limit = { ADISCORD_west_ivn_emergency_course = yes }
+		add_ideas = ADISCORD_west_ivn_emergency_order
+	}
+	else = {
+		add_ideas = ADISCORD_west_ivn_committee_line
+	}
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY. Every terminal path removes the campaign spirits.
+ADISCORD_west_remove_path_spirit = {
+	remove_ideas = ADISCORD_west_wrk_solidarity_committees
+	remove_ideas = ADISCORD_west_wrk_imperial_columns
+	remove_ideas = ADISCORD_west_wrk_engineer_battalions
+	remove_ideas = ADISCORD_west_ivn_humanist_shield
+	remove_ideas = ADISCORD_west_ivn_emergency_order
+	remove_ideas = ADISCORD_west_ivn_committee_line
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# ----- Settlement -----
+
+# GLOBAL. Vorkerland wins the west.
+ADISCORD_west_final_resolve_wrk_victory = {
+	if = {
+		limit = { ADISCORD_west_final_active = yes }
+		# The resolved flag precedes white peace so on_peace cannot re-enter.
+		set_global_flag = ADISCORD_west_final_resolved
+		set_global_flag = ADISCORD_west_hegemon_WRK
+		set_global_variable = { var = ADISCORD_west_winner_side value = 1 }
+		set_global_variable = { var = ADISCORD_west_terms value = 2 }
+		set_global_variable = { var = ADISCORD_west_subject_type value = 0 }
+		set_global_variable = { var = ADISCORD_west_transfer value = 0 }
+		if = {
+			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_worker } }
+			set_global_variable = { var = ADISCORD_west_subject_type value = 1 }
+		}
+		else_if = {
+			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_joint } }
+			set_global_variable = { var = ADISCORD_west_terms value = 1 }
+		}
+		else = {
+			set_global_variable = { var = ADISCORD_west_subject_type value = 2 }
+			set_global_variable = { var = ADISCORD_west_transfer value = 2 }
+		}
+		ADISCORD_west_end_final_wars = yes
+		ADISCORD_west_mark_losers = yes
+		ADISCORD_west_close_campaign_state = yes
+		WRK = {
+			country_event = { id = ADISCORD_west.30 days = 1 }
+			news_event = { id = ADISCORD_west.31 hours = 2 }
+		}
+	}
+}
+
+# GLOBAL. Itora wins the west.
+ADISCORD_west_final_resolve_ivn_victory = {
+	if = {
+		limit = { ADISCORD_west_final_active = yes }
+		set_global_flag = ADISCORD_west_final_resolved
+		set_global_flag = ADISCORD_west_hegemon_IVN
+		set_global_variable = { var = ADISCORD_west_winner_side value = 2 }
+		set_global_variable = { var = ADISCORD_west_terms value = 2 }
+		set_global_variable = { var = ADISCORD_west_subject_type value = 0 }
+		set_global_variable = { var = ADISCORD_west_transfer value = 1 }
+		if = {
+			limit = { IVN = { ADISCORD_west_ivn_shield_course = yes } }
+			set_global_variable = { var = ADISCORD_west_subject_type value = 3 }
+		}
+		else_if = {
+			limit = { IVN = { ADISCORD_west_ivn_emergency_course = yes } }
+			set_global_variable = { var = ADISCORD_west_subject_type value = 4 }
+		}
+		ADISCORD_west_end_final_wars = yes
+		ADISCORD_west_mark_losers = yes
+		ADISCORD_west_close_campaign_state = yes
+		IVN = {
+			country_event = { id = ADISCORD_west.30 days = 1 }
+			news_event = { id = ADISCORD_west.31 hours = 2 }
+		}
+	}
+}
+
+# GLOBAL. Neither champion survives as a sovereign leader.
+ADISCORD_west_final_resolve_without_hegemon = {
+	set_global_flag = ADISCORD_west_final_resolved
+	ADISCORD_west_end_final_wars = yes
+	ADISCORD_west_close_campaign_state = yes
+	ADISCORD_west_clear_participants = yes
+}
+
+# GLOBAL. Deadline or external end: control of the Old March, the Itoran
+# frontier, the northern corridor and the Vorkerland capital decides. The
+# defending side keeps a tie.
+ADISCORD_west_final_resolve_by_control = {
+	if = {
+		limit = {
+			NOT = { WRK = { ADISCORD_west_champion_viable = yes } }
+			NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
+		}
+		ADISCORD_west_final_resolve_without_hegemon = yes
+	}
+	else_if = {
+		limit = { NOT = { WRK = { ADISCORD_west_champion_viable = yes } } }
+		ADISCORD_west_final_resolve_ivn_victory = yes
+	}
+	else_if = {
+		limit = { NOT = { IVN = { ADISCORD_west_champion_viable = yes } } }
+		ADISCORD_west_final_resolve_wrk_victory = yes
+	}
+	else = {
+		set_temp_variable = { var = ADISCORD_west_wrk_hold value = 0 }
+		set_temp_variable = { var = ADISCORD_west_ivn_hold value = 0 }
+		25 = { ADISCORD_west_count_key_state = yes }
+		92 = { ADISCORD_west_count_key_state = yes }
+		95 = { ADISCORD_west_count_key_state = yes }
+		96 = { ADISCORD_west_count_key_state = yes }
+		90 = { ADISCORD_west_count_key_state = yes }
+		91 = { ADISCORD_west_count_key_state = yes }
+		93 = { ADISCORD_west_count_key_state = yes }
+		94 = { ADISCORD_west_count_key_state = yes }
+		WRK = {
+			capital_scope = { ADISCORD_west_count_key_state = yes }
+		}
+		if = {
+			limit = { check_variable = { var = ADISCORD_west_wrk_hold value = ADISCORD_west_ivn_hold compare = greater_than } }
+			ADISCORD_west_final_resolve_wrk_victory = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = ADISCORD_west_ivn_hold value = ADISCORD_west_wrk_hold compare = greater_than } }
+			ADISCORD_west_final_resolve_ivn_victory = yes
+		}
+		else_if = {
+			limit = { check_variable = { var = global.ADISCORD_west_declarer_side value = 1 compare = equals } }
+			ADISCORD_west_final_resolve_ivn_victory = yes
+		}
+		else = {
+			ADISCORD_west_final_resolve_wrk_victory = yes
+		}
+	}
+}
+
+# STATE. Adds one point to the temporary hold of the side controlling it.
+ADISCORD_west_count_key_state = {
+	if = {
+		limit = { ADISCORD_west_state_held_by_wrk_side = yes }
+		add_to_temp_variable = { var = ADISCORD_west_wrk_hold value = 1 }
+	}
+	else_if = {
+		limit = { ADISCORD_west_state_held_by_ivn_side = yes }
+		add_to_temp_variable = { var = ADISCORD_west_ivn_hold value = 1 }
+	}
+}
+
+# GLOBAL. Called from on_peace, on_puppet and on_annex for wars ended outside
+# the settlement.
+ADISCORD_west_final_close_external = {
+	if = {
+		limit = {
+			ADISCORD_west_final_active = yes
+			ADISCORD_west_final_broken = yes
+		}
+		ADISCORD_west_final_resolve_by_control = yes
+	}
+}
+
+# GLOBAL. Ends only the wars between the two sides of this campaign.
+ADISCORD_west_end_final_wars = {
+	IVN = { ADISCORD_west_end_member_wars = yes }
+	WIT = { ADISCORD_west_end_member_wars = yes }
+	IIA = { ADISCORD_west_end_member_wars = yes }
+	IBA = { ADISCORD_west_end_member_wars = yes }
+	IBL = { ADISCORD_west_end_member_wars = yes }
+	PWR = { ADISCORD_west_end_member_wars = yes }
+	PSD = { ADISCORD_west_end_member_wars = yes }
+	ZAO = { ADISCORD_west_end_member_wars = yes }
+	WPA = { ADISCORD_west_end_member_wars = yes }
+	WPS = { ADISCORD_west_end_member_wars = yes }
+	ROM = { ADISCORD_west_end_member_wars = yes }
+	TRU = { ADISCORD_west_end_member_wars = yes }
+}
+
+# COUNTRY. An Itoran participant makes peace with every Vorkerland participant.
+ADISCORD_west_end_member_wars = {
+	if = {
+		limit = {
+			exists = yes
+			ADISCORD_west_on_ivn_side = yes
+		}
+		every_enemy_country = {
+			limit = { ADISCORD_west_on_wrk_side = yes }
+			white_peace = PREV
+		}
+	}
+}
+
+# GLOBAL. Losers leave factions and foreign subjection before the delayed
+# settlement, which gives the native faction cache one day to update.
+ADISCORD_west_mark_losers = {
+	WRK = { ADISCORD_west_mark_loser = yes }
+	IVN = { ADISCORD_west_mark_loser = yes }
+	WIT = { ADISCORD_west_mark_loser = yes }
+	IIA = { ADISCORD_west_mark_loser = yes }
+	IBA = { ADISCORD_west_mark_loser = yes }
+	IBL = { ADISCORD_west_mark_loser = yes }
+	PWR = { ADISCORD_west_mark_loser = yes }
+	PSD = { ADISCORD_west_mark_loser = yes }
+	ZAO = { ADISCORD_west_mark_loser = yes }
+	WPA = { ADISCORD_west_mark_loser = yes }
+	WPS = { ADISCORD_west_mark_loser = yes }
+	ROM = { ADISCORD_west_mark_loser = yes }
+	TRU = { ADISCORD_west_mark_loser = yes }
+}
+
+# COUNTRY.
+ADISCORD_west_mark_loser = {
+	if = {
+		limit = {
+			exists = yes
+			has_variable = ADISCORD_west_side
+			NOT = { check_variable = { var = ADISCORD_west_side value = global.ADISCORD_west_winner_side compare = equals } }
+		}
+		set_country_flag = ADISCORD_west_settlement_pending
+		if = {
+			limit = { is_subject = yes }
+			overlord = {
+				set_autonomy = {
+					target = PREV
+					autonomy_state = autonomy_free
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+				is_faction_leader = yes
+			}
+			dismantle_faction = yes
+		}
+		else_if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+	}
+}
+
+# GLOBAL. Campaign-only status ends on every terminal path.
+ADISCORD_west_close_campaign_state = {
+	clr_global_flag = ADISCORD_west_final_started
+	WRK = { ADISCORD_west_close_member_state = yes }
+	IVN = { ADISCORD_west_close_member_state = yes }
+}
+
+# COUNTRY champion.
+ADISCORD_west_close_member_state = {
+	if = {
+		limit = { has_country_flag = ADISCORD_west_added_major }
+		set_major = no
+		clr_country_flag = ADISCORD_west_added_major
+	}
+	if = {
+		limit = { exists = yes }
+		ADISCORD_west_remove_path_spirit = yes
+	}
+}
+
+# GLOBAL.
+ADISCORD_west_clear_participants = {
+	WRK = { ADISCORD_west_clear_participant = yes }
+	IVN = { ADISCORD_west_clear_participant = yes }
+	WIT = { ADISCORD_west_clear_participant = yes }
+	IIA = { ADISCORD_west_clear_participant = yes }
+	IBA = { ADISCORD_west_clear_participant = yes }
+	IBL = { ADISCORD_west_clear_participant = yes }
+	PWR = { ADISCORD_west_clear_participant = yes }
+	PSD = { ADISCORD_west_clear_participant = yes }
+	ZAO = { ADISCORD_west_clear_participant = yes }
+	WPA = { ADISCORD_west_clear_participant = yes }
+	WPS = { ADISCORD_west_clear_participant = yes }
+	ROM = { ADISCORD_west_clear_participant = yes }
+	TRU = { ADISCORD_west_clear_participant = yes }
+}
+
+# COUNTRY.
+ADISCORD_west_clear_participant = {
+	clear_variable = ADISCORD_west_side
+	clr_country_flag = ADISCORD_west_settlement_pending
+}
+
+# COUNTRY winner (event ROOT). Applies the stored terms one day after peace:
+# promised territory first, then the fate of every defeated participant.
+ADISCORD_west_apply_settlement = {
+	if = {
+		limit = { check_variable = { var = global.ADISCORD_west_transfer value = 1 compare = equals } }
+		90 = { ADISCORD_west_transfer_to_root = yes }
+		91 = { ADISCORD_west_transfer_to_root = yes }
+		93 = { ADISCORD_west_transfer_to_root = yes }
+		94 = { ADISCORD_west_transfer_to_root = yes }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_transfer value = 2 compare = equals } }
+		92 = { ADISCORD_west_transfer_to_root = yes }
+		95 = { ADISCORD_west_transfer_to_root = yes }
+		96 = { ADISCORD_west_transfer_to_root = yes }
+	}
+	WRK = { ADISCORD_west_settle_member = yes }
+	IVN = { ADISCORD_west_settle_member = yes }
+	WIT = { ADISCORD_west_settle_member = yes }
+	IIA = { ADISCORD_west_settle_member = yes }
+	IBA = { ADISCORD_west_settle_member = yes }
+	IBL = { ADISCORD_west_settle_member = yes }
+	PWR = { ADISCORD_west_settle_member = yes }
+	PSD = { ADISCORD_west_settle_member = yes }
+	ZAO = { ADISCORD_west_settle_member = yes }
+	WPA = { ADISCORD_west_settle_member = yes }
+	WPS = { ADISCORD_west_settle_member = yes }
+	ROM = { ADISCORD_west_settle_member = yes }
+	TRU = { ADISCORD_west_settle_member = yes }
+	ADISCORD_west_clear_participants = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# STATE; ROOT is the winner. Only land of a defeated participant changes hands.
+ADISCORD_west_transfer_to_root = {
+	if = {
+		limit = { owner = { has_country_flag = ADISCORD_west_settlement_pending } }
+		ROOT = { transfer_state = PREV }
+		add_core_of = ROOT
+	}
+}
+
+# COUNTRY defeated participant; ROOT is the winner.
+ADISCORD_west_settle_member = {
+	if = {
+		limit = {
+			exists = yes
+			has_country_flag = ADISCORD_west_settlement_pending
+		}
+		if = {
+			limit = { has_war_with = ROOT }
+			white_peace = ROOT
+		}
+		if = {
+			limit = { check_variable = { var = global.ADISCORD_west_terms value = 1 compare = equals } }
+			ROOT = { annex_country = { target = PREV transfer_troops = no } }
+		}
+		else = {
+			ROOT = {
+				puppet = {
+					target = PREV
+					end_wars = no
+					end_civil_wars = no
+				}
+			}
+			ADISCORD_west_apply_subject_type = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
+
+# COUNTRY new subject; ROOT is the overlord.
+ADISCORD_west_apply_subject_type = {
+	if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 1 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_WRK_confederate_republic freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 2 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_WRK_technical_trusteeship freedom_level = 0.10 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 3 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_IVN_guaranteed_confederation freedom_level = 0.40 end_wars = no end_civil_wars = no } }
+	}
+	else_if = {
+		limit = { check_variable = { var = global.ADISCORD_west_subject_type value = 4 compare = equals } }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_IVN_emergency_trusteeship freedom_level = 0.05 end_wars = no end_civil_wars = no } }
+	}
+	else = {
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_puppet freedom_level = 0.20 end_wars = no end_civil_wars = no } }
+	}
+}
+
+# ----- League of free republics -----
+
+# COUNTRY IVN. The humanist course invites the free western states into its
+# own faction. Joining stays a choice of the invited country.
+ADISCORD_west_invite_league = {
+	if = {
+		limit = { is_in_faction = no }
+		create_faction_from_template = {
+			template = faction_template_ADISCORD_standard
+			name = ADISCORD_west_ivn_faction
+		}
+	}
+	if = {
+		limit = { is_faction_leader = yes }
+		WIT = { ADISCORD_west_send_league_invitation = yes }
+		ROM = { ADISCORD_west_send_league_invitation = yes }
+		TRU = { ADISCORD_west_send_league_invitation = yes }
+	}
+}
+
+# COUNTRY invited state; ROOT is Itora. A pending answer blocks a second offer.
+ADISCORD_west_send_league_invitation = {
+	if = {
+		limit = { ADISCORD_west_league_target_valid = yes }
+		set_country_flag = ADISCORD_west_league_offer_pending
+		country_event = { id = ADISCORD_west.40 hours = 6 }
+	}
+}

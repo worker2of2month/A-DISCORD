@@ -211,6 +211,8 @@ ADISCORD_assault_templates = {
 	ADISCORD_mechanized_brigade = {
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
+			has_tech = ADISCORD_tech_standardized_field_tool_chests
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
 			num_of_military_factories > 6
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 			has_equipment = { ADISCORD_armored_carrier_archetype > 360 }
@@ -336,6 +338,8 @@ ADISCORD_tank_templates = {
 			OR = { tag = WKR tag = VAD tag = TVA }
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			has_tech = ADISCORD_tech_standardized_field_tool_chests
+			has_tech = ADISCORD_tech_frequency_hopping_field_sets
 			num_of_military_factories > 2
 			has_equipment = { ADISCORD_combat_platform_archetype > 100 }
 			has_equipment = { ADISCORD_armored_carrier_archetype > 200 }
@@ -361,6 +365,8 @@ ADISCORD_tank_templates = {
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			has_tech = ADISCORD_tech_drone_recon_swarms
+			has_tech = ADISCORD_tech_standardized_field_tool_chests
 			num_of_military_factories > 7
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 			has_equipment = { ADISCORD_combat_platform_archetype > 180 }
@@ -386,6 +392,9 @@ ADISCORD_tank_templates = {
 
 	ADISCORD_networked_tank_battlegroup = {
 		enable = {
+			has_tech = ADISCORD_tech_armored_carrier_program
+			has_tech = ADISCORD_tech_semi_autonomous_combat_modules
+			has_tech = ADISCORD_tech_drone_recon_swarms
 			has_tech = ADISCORD_tech_remote_repair_sections
 			has_tech = ADISCORD_tech_frequency_hopping_field_sets
 			num_of_military_factories > 10
@@ -418,6 +427,8 @@ ADISCORD_tank_templates = {
 		enable = {
 			has_tech = ADISCORD_tech_armored_carrier_program
 			has_tech = ADISCORD_tech_heavy_platform_cores
+			has_tech = ADISCORD_tech_standardized_field_tool_chests
+			has_tech = ADISCORD_tech_forward_supply_hubs
 			num_of_military_factories > 14
 			ADISCORD_economy_ai_is_healthy = yes
 			has_equipment = { ADISCORD_heavy_platform_archetype > 120 }

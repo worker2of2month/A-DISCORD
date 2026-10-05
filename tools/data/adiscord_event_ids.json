@@ -4939,6 +4939,86 @@
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevent",
       "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.1",
+      "namespace": "ADISCORD_west",
+      "number": 1,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.2",
+      "namespace": "ADISCORD_west",
+      "number": 2,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.3",
+      "namespace": "ADISCORD_west",
+      "number": 3,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.10",
+      "namespace": "ADISCORD_west",
+      "number": 10,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.20",
+      "namespace": "ADISCORD_west",
+      "number": 20,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.30",
+      "namespace": "ADISCORD_west",
+      "number": 30,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.31",
+      "namespace": "ADISCORD_west",
+      "number": 31,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.40",
+      "namespace": "ADISCORD_west",
+      "number": 40,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.41",
+      "namespace": "ADISCORD_west",
+      "number": 41,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.42",
+      "namespace": "ADISCORD_west",
+      "number": 42,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
     }
   ]
 }

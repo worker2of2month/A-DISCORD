@@ -133,6 +133,10 @@ that campaign. A champion's capitulation settles every participant; other
 defeated participants stay occupied until that settlement. Native peace,
 annexation or subjugation outside it resolves the campaign by control of the
 key districts, and the Restitution Alliance only repels it.
+The western final war follows the same contract for reunified WRK and IVN. Its
+`west_final` sections run after `south_final`; a champion's capitulation
+settles every participant, and an external end resolves it by control of the
+Old March, the Itoran frontier, the northern corridor and the WRK capital.
 
 Also test both NOD/Stelander defeat orders, a surviving northern cobelligerent,
 TFF joining NOD's northern war after YPR has capitulated, and failed TFF entry.
@@ -154,7 +158,8 @@ python -B -m unittest tools.tests.test_scripted_peace_on_actions \
   tools.tests.test_validate_adiscord_val_rework.ValFrontierCampaignTests \
   tools.tests.test_adiscord_nod_capitulation_reservation \
   tools.tests.test_vorkerland_claimant_cleanup \
-  tools.tests.test_adiscord_south_final_war
+  tools.tests.test_adiscord_south_final_war \
+  tools.tests.test_adiscord_west_final_war
 python -B -m unittest discover -s tools/tests
 python -B tools/validate_tc.py --limit 300
 git diff --check

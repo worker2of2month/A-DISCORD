@@ -57,6 +57,10 @@ sub_units = {
 			attack = 0.25
 			defence = 0.20
 		}
+		vorkernsberg = {
+			attack = 0.25
+			defence = 0.20
+		}
 		fort = {
 			attack = 0.20
 		}
@@ -254,6 +258,9 @@ sub_units = {
 		urban = {
 			attack = 0.10
 		}
+		vorkernsberg = {
+			attack = 0.10
+		}
 		fort = {
 			attack = 0.10
 		}
@@ -331,6 +338,7 @@ sub_units = {
 		jungle = { attack = -0.25 movement = -0.25 }
 		marsh = { attack = -0.15 movement = -0.20 }
 		urban = { attack = -0.10 }
+		vorkernsberg = { attack = -0.10 }
 		river = { attack = -0.20 movement = -0.20 }
 		amphibious = { attack = -0.45 }
 	}
@@ -729,6 +737,7 @@ sub_units = {
 		jungle = { attack = -0.35 movement = -0.35 }
 		marsh = { attack = -0.20 movement = -0.20 }
 		urban = { attack = -0.15 }
+		vorkernsberg = { attack = -0.15 }
 		river = { attack = -0.25 movement = -0.20 }
 		amphibious = { attack = -0.70 }
 	}
@@ -769,6 +778,11 @@ sub_units = {
 		jungle = { attack = -0.55 movement = -0.45 }
 		marsh = { attack = -0.35 movement = -0.30 }
 		urban = { attack = -0.35 defence = -0.15 movement = -0.25 }
+		vorkernsberg = {
+			attack = -0.35
+			defence = -0.15
+			movement = -0.25
+		}
 		river = { attack = -0.40 movement = -0.35 }
 		amphibious = { attack = -0.85 }
 		fort = { attack = 0.10 }
@@ -1177,6 +1191,9 @@ sub_units = {
 		defense = -0.65
 		breakthrough = -0.5
 		urban = {
+			attack = 0.03
+		}
+		vorkernsberg = {
 			attack = 0.03
 		}
 		fort = {

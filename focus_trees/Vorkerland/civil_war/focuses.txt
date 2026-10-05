@@ -7178,6 +7178,108 @@ focus_tree = {
 		ai_will_do = { base = 14 }
 	}
 
+	# War for the West: the worker route's campaign against Itora.
+	focus = {
+		id = WRK_worker_west_mandate_offices
+		icon = GFX_focus_WRK_worker_west_mandate_offices
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+			FOCUS_FILTER_WAR_SUPPORT
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_restore_unity_tower
+		cost = 3
+		prerequisite = { focus = WRK_worker_restore_unity_tower }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			custom_effect_tooltip = WRK_west_crisis_add_tt
+			hidden_effect = { ADISCORD_west_crisis_add = yes }
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_worker_west_solidarity_committees
+		icon = GFX_focus_WRK_worker_west_solidarity_committees
+		search_filters = {
+			FOCUS_FILTER_MANPOWER
+			FOCUS_FILTER_WAR_SUPPORT
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_worker_west_mandate_offices
+		cost = 3
+		prerequisite = { focus = WRK_worker_west_mandate_offices }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_war_support = 0.03
+			add_command_power = 10
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_worker_west_mandate_for_itora
+		icon = GFX_focus_WRK_worker_west_mandate_for_itora
+		search_filters = {
+			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_ANNEXATION
+		}
+		x = -1
+		y = 1
+		relative_position_id = WRK_worker_west_solidarity_committees
+		cost = 5
+		prerequisite = { focus = WRK_worker_west_solidarity_committees }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_west_final_ready_tt
+				ADISCORD_west_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_west_wrk_solidarity_committees }
+			custom_effect_tooltip = WRK_worker_west_war_tt
+			hidden_effect = { ADISCORD_west_final_war_start = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = WRK_worker_west_confederate_charter
+		icon = GFX_focus_WRK_worker_west_confederate_charter
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+			FOCUS_FILTER_STABILITY
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_worker_west_solidarity_committees
+		cost = 3
+		prerequisite = { focus = WRK_worker_west_solidarity_committees }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_worker }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_global_flag = ADISCORD_west_hegemon_WRK
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			add_stability = 0.03
+			unlock_decision_tooltip = ADISCORD_west_integrate_subject
+		}
+		ai_will_do = { base = 30 }
+	}
+
 	# ---------------------------------------------------------------------
 	# Postwar Joint route: council legitimacy and a disciplined district state.
 	# ---------------------------------------------------------------------
@@ -7564,6 +7666,107 @@ focus_tree = {
 		ai_will_do = { base = 14 }
 	}
 
+	# War for the West: the joint route's campaign against Itora.
+	focus = {
+		id = WRK_joint_west_frontier_commands
+		icon = GFX_focus_WRK_joint_west_frontier_commands
+		search_filters = {
+			FOCUS_FILTER_ARMY_XP
+			FOCUS_FILTER_WAR_SUPPORT
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_restore_unity_tower
+		cost = 3
+		prerequisite = { focus = WRK_joint_restore_unity_tower }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			army_experience = 10
+			custom_effect_tooltip = WRK_west_crisis_add_tt
+			hidden_effect = { ADISCORD_west_crisis_add = yes }
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_joint_west_imperial_columns
+		icon = GFX_focus_WRK_joint_west_imperial_columns
+		search_filters = {
+			FOCUS_FILTER_MANPOWER
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_joint_west_frontier_commands
+		cost = 3
+		prerequisite = { focus = WRK_joint_west_frontier_commands }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_command_power = 10
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 1500 producer = WRK }
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_joint_west_return_of_the_marches
+		icon = GFX_focus_WRK_joint_west_return_of_the_marches
+		search_filters = {
+			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_ANNEXATION
+		}
+		x = -1
+		y = 1
+		relative_position_id = WRK_joint_west_imperial_columns
+		cost = 5
+		prerequisite = { focus = WRK_joint_west_imperial_columns }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_west_final_ready_tt
+				ADISCORD_west_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_west_wrk_imperial_columns }
+			custom_effect_tooltip = WRK_joint_west_war_tt
+			hidden_effect = { ADISCORD_west_final_war_start = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = WRK_joint_west_imperial_settlement
+		icon = GFX_focus_WRK_joint_west_imperial_settlement
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+			FOCUS_FILTER_STABILITY
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_joint_west_imperial_columns
+		cost = 3
+		prerequisite = { focus = WRK_joint_west_imperial_columns }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_joint }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_global_flag = ADISCORD_west_hegemon_WRK
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			add_stability = 0.03
+			unlock_decision_tooltip = ADISCORD_west_integrate_subject
+		}
+		ai_will_do = { base = 30 }
+	}
+
 	# ---------------------------------------------------------------------
 	# Postwar Worx route: technical reconstruction, public engineering and a
 	# permanent technocratic settlement. Retired IDs remain inert and reserved.
@@ -7945,6 +8148,115 @@ focus_tree = {
 			ADISCORD_vorkerland_restore_unity_tower = yes
 		}
 		ai_will_do = { base = 14 }
+	}
+
+	# War for the West: the utilitarian route's campaign against Itora.
+	focus = {
+		id = WRK_utilitarian_west_corridor_survey
+		icon = GFX_focus_WRK_utilitarian_west_corridor_survey
+		search_filters = {
+			FOCUS_FILTER_INDUSTRY
+			FOCUS_FILTER_WAR_SUPPORT
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_utilitarian_restore_unity_tower
+		cost = 3
+		prerequisite = { focus = WRK_utilitarian_restore_unity_tower }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			capital_scope = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			custom_effect_tooltip = WRK_west_crisis_add_tt
+			hidden_effect = { ADISCORD_west_crisis_add = yes }
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_utilitarian_west_engineer_battalions
+		icon = GFX_focus_WRK_utilitarian_west_engineer_battalions
+		search_filters = {
+			FOCUS_FILTER_ARMY_XP
+			FOCUS_FILTER_INDUSTRY
+		}
+		x = 0
+		y = 1
+		relative_position_id = WRK_utilitarian_west_corridor_survey
+		cost = 3
+		prerequisite = { focus = WRK_utilitarian_west_corridor_survey }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		available = { has_global_flag = ADISCORD_vorkerland_phase_postwar_integration }
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = WRK }
+			add_equipment_to_stockpile = { type = artillery_equipment amount = 150 producer = WRK }
+		}
+		ai_will_do = { base = 14 }
+	}
+
+	focus = {
+		id = WRK_utilitarian_west_engineering_border
+		icon = GFX_focus_WRK_utilitarian_west_engineering_border
+		search_filters = {
+			FOCUS_FILTER_WAR_SUPPORT
+			FOCUS_FILTER_ANNEXATION
+		}
+		x = -1
+		y = 1
+		relative_position_id = WRK_utilitarian_west_engineer_battalions
+		cost = 5
+		prerequisite = { focus = WRK_utilitarian_west_engineer_battalions }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = WRK_west_final_ready_tt
+				ADISCORD_west_final_can_start = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			effect_tooltip = { add_ideas = ADISCORD_west_wrk_engineer_battalions }
+			custom_effect_tooltip = WRK_utilitarian_west_war_tt
+			hidden_effect = { ADISCORD_west_final_war_start = yes }
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = WRK_utilitarian_west_technical_trusteeship
+		icon = GFX_focus_WRK_utilitarian_west_technical_trusteeship
+		search_filters = {
+			FOCUS_FILTER_POLITICAL
+			FOCUS_FILTER_INDUSTRY
+		}
+		x = 1
+		y = 1
+		relative_position_id = WRK_utilitarian_west_engineer_battalions
+		cost = 3
+		prerequisite = { focus = WRK_utilitarian_west_engineer_battalions }
+		allow_branch = { tag = WRK has_global_flag = ADISCORD_vorkerland_phase_postwar_integration has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+		available = {
+			has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+			has_global_flag = ADISCORD_west_hegemon_WRK
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			add_political_power = 25
+			add_stability = 0.03
+			unlock_decision_tooltip = ADISCORD_west_integrate_subject
+		}
+		ai_will_do = { base = 30 }
 	}
 
 	# ---------------------------------------------------------------------

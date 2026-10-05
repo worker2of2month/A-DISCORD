@@ -1,0 +1,236 @@
+ideas = {
+	# Display-only aggregate previews. IVN_order_dynamic holds the real values.
+	country = {
+		IVN_order_dummy_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = { }
+		}
+
+		IVN_ord_committee_report_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_hospital_registers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.03
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_school_of_the_marches_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_social_insurance_offices_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_committee_mandate_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.03
+			}
+		}
+
+		IVN_ord_humanist_shield_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.05
+				stability_factor = 0.03
+			}
+		}
+
+		IVN_ord_emergency_order_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.01
+				army_attack_factor = 0.03
+				stability_factor = -0.03
+				war_support_factor = 0.05
+			}
+		}
+
+		IVN_ord_shield_territorial_defence_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.04
+			}
+		}
+
+		IVN_ord_shield_red_cross_corridors_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.04
+				stability_factor = 0.02
+			}
+		}
+
+		IVN_ord_emergency_war_ministry_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.04
+			}
+		}
+
+		IVN_ord_emergency_requisitions_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+				stability_factor = -0.02
+			}
+		}
+
+		IVN_ord_emergency_general_levy_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.015
+			}
+		}
+
+		IVN_ord_march_reconstruction_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		IVN_ord_old_march_railways_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				production_speed_buildings_factor = 0.05
+			}
+		}
+
+		IVN_ord_war_industry_plan_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				industrial_capacity_factory = 0.05
+			}
+		}
+
+		IVN_ord_frontier_fortifications_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_research_council_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				research_speed_factor = 0.03
+			}
+		}
+
+		IVN_ord_mountain_rangers_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_core_defence_factor = 0.03
+			}
+		}
+
+		IVN_ord_citizen_reserve_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				conscription = 0.005
+			}
+		}
+
+		IVN_ord_northern_corps_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				army_attack_factor = 0.03
+			}
+		}
+
+		IVN_ord_west_war_council_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+			}
+		}
+
+		IVN_ord_watch_the_unity_tower_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				stability_factor = 0.01
+			}
+		}
+
+		IVN_ord_norvane_mandate_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				political_power_gain = 0.05
+			}
+		}
+
+		IVN_ord_lessons_of_the_retreat_idea = {
+			name = IVN_order_dynamic
+			picture = GFX_idea_IVN_national_spirit
+			allowed = { always = no }
+			modifier = {
+				war_support_factor = 0.05
+				conscription = 0.005
+			}
+		}
+	}
+}

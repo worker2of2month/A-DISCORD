@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from tools.validators import validate_adiscord_tech_doctrine as validator
 from tools.builders import build_adiscord_doctrine_system as doctrines
+from tools.builders import build_adiscord_technology_system as technologies
 from tools.validators.validate_adiscord_division_templates import (
     _collect_subunits,
     parse_clausewitz,
@@ -194,14 +195,32 @@ class DoctrineContractTests(unittest.TestCase):
                 continue
             self.assertNotIn("category_special_forces", doctrines.render_school(school, ()))
 
-    def test_naval_rewards_do_not_depend_on_absent_carriers_or_mines(self) -> None:
+    def test_every_actual_ship_type_can_earn_mastery(self) -> None:
+        source = (
+            validator.ROOT / "common/units/ADISCORD_naval_units.txt"
+        ).read_text(encoding="utf-8")
+        ship_types = {
+            item.value
+            for container in parse_clausewitz(source)
+            for unit in container.value
+            for entry in unit.value if entry.key == "type"
+            for item in entry.value
+        }
+        mastery_types = {
+            value for track in doctrines.TRACKS
+            if track.key.startswith("ADISCORD_naval_")
+            for value in track.mastery_values
+        }
+        self.assertEqual(ship_types - mastery_types, set())
+        self.assertEqual(mastery_types - ship_types, set())
+
+    def test_naval_rewards_do_not_depend_on_absent_mines(self) -> None:
         source = doctrines.render_schools("sea") + doctrines.render_grands()
         for modifier in (
-            "navy_carrier_air_agility_factor", "naval_mine_hit_chance",
+            "naval_mine_hit_chance",
             "naval_mines_effect_reduction", "mines_sweeping_by_fleets_factor",
         ):
             self.assertFalse(modifier + " =" in source, modifier)
-        self.assertNotIn("carrier", doctrines.TRACKS[8].mastery_values)
 
     @staticmethod
     def _unit_bonus(entries, scopes: set[str], stat: str) -> float:
@@ -360,6 +379,45 @@ class TechnologyValidatorNegativeTests(unittest.TestCase):
                 r"(?m)^\s*ADISCORD_mechanized_infantry\s*=\s*\{",
             )
 
+    def test_ai_targets_require_research_for_every_inactive_subunit(self) -> None:
+        inactive_units = set()
+        for path in (validator.ROOT / "common/units").glob("*.txt"):
+            for container in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if container.key != "sub_units":
+                    continue
+                for unit in container.value:
+                    if any(item.key == "active" and item.value == "no" for item in unit.value):
+                        inactive_units.add(unit.key)
+        source = (
+            validator.ROOT / "common/ai_templates/ADISCORD_land_templates.txt"
+        ).read_text(encoding="utf-8")
+        for role in parse_clausewitz(source):
+            for template in role.value:
+                if not isinstance(template.value, list):
+                    continue
+                values = {entry.key: entry.value for entry in template.value}
+                if "target_template" not in values:
+                    continue
+                required_techs = tuple(
+                    entry.value for entry in values.get("enable", [])
+                    if entry.key == "has_tech"
+                )
+                closure = technologies.technology_prerequisite_closure(required_techs)
+                unlocked_units = {
+                    unit for tech in closure
+                    for unit in technologies.ENABLE_SUBUNITS.get(tech, ())
+                }
+                target_units = {
+                    entry.key for group in values["target_template"]
+                    for entry in group.value
+                }
+                with self.subTest(template=template.key):
+                    self.assertEqual(
+                        target_units & inactive_units - unlocked_units,
+                        set(),
+                        "AI target is available before its subunits are researched",
+                    )
+
     def test_missing_generated_dependency_is_reported(self) -> None:
         tech_id = "ADISCORD_tech_teleoperated_scout_carts"
         broken = dict(self.tech_blocks)
@@ -490,6 +548,45 @@ on_actions = {
             any(tech_id in issue and "energy" in issue for issue in issues),
             issues,
         )
+
+    def test_weapon_research_budget_accepts_meaningful_incremental_upgrades(self) -> None:
+        issues = validator.check_post_2160_research_balance(self.tech_blocks)
+        self.assertFalse(
+            [issue for issue in issues if "weapon modification" in issue or "small_arms" in issue],
+            issues,
+        )
+
+    def test_weapon_research_rejects_instant_and_malformed_costs(self) -> None:
+        branch = next(item for item in validator.GENERATED_BRANCHES if item.key == "small_arms")
+        for tech_id in (branch.techs[1].id, branch.techs[9].id):
+            for cost in ("0", "0.35", "1.19", "-1.2", "1.2.5", "1.2oops", "nan", "inf"):
+                with self.subTest(technology=tech_id, cost=cost):
+                    broken = dict(self.tech_blocks)
+                    broken[tech_id], replaced = re.subn(
+                        r"\bresearch_cost\s*=\s*[^\s{}#]+",
+                        f"research_cost = {cost}",
+                        broken[tech_id],
+                        count=1,
+                    )
+                    self.assertEqual(replaced, 1)
+                    issues = validator.check_post_2160_research_balance(broken)
+                    self.assertTrue(
+                        any(tech_id in issue and "cost" in issue for issue in issues),
+                        issues,
+                    )
+
+    def test_weapon_research_rejects_excessive_total_budget(self) -> None:
+        tech_id = "ADISCORD_tech_caseless_ammunition_trials"
+        broken = dict(self.tech_blocks)
+        broken[tech_id], replaced = re.subn(
+            r"\bresearch_cost\s*=\s*[^\s{}#]+",
+            "research_cost = 1.5",
+            broken[tech_id],
+            count=1,
+        )
+        self.assertEqual(replaced, 1)
+        issues = validator.check_post_2160_research_balance(broken)
+        self.assertTrue(any("small_arms research budget" in issue for issue in issues), issues)
 
     def test_ai_force_progression_accepts_reachable_field_baseline(self) -> None:
         check = getattr(validator, "ai_force_progression_contract_issues", None)

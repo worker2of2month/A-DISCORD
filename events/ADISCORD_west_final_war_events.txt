@@ -1,0 +1,358 @@
+add_namespace = ADISCORD_west
+
+# Each champion learns the purpose of its own war.
+country_event = {
+	id = ADISCORD_west.1
+	title = ADISCORD_west.1.t
+	desc = {
+		text = ADISCORD_west.1.d_wrk_worker
+		trigger = {
+			tag = WRK
+			has_country_flag = ADISCORD_vorkerland_route_worker
+		}
+	}
+	desc = {
+		text = ADISCORD_west.1.d_wrk_joint
+		trigger = {
+			tag = WRK
+			has_country_flag = ADISCORD_vorkerland_route_joint
+		}
+	}
+	desc = {
+		text = ADISCORD_west.1.d_wrk_utilitarian
+		trigger = {
+			tag = WRK
+			NOT = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			NOT = { has_country_flag = ADISCORD_vorkerland_route_joint }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.1.d_ivn_shield
+		trigger = {
+			tag = IVN
+			ADISCORD_west_ivn_shield_course = yes
+		}
+	}
+	desc = {
+		text = ADISCORD_west.1.d_ivn_emergency
+		trigger = {
+			tag = IVN
+			ADISCORD_west_ivn_emergency_course = yes
+		}
+	}
+	desc = {
+		text = ADISCORD_west.1.d_ivn_committee
+		trigger = {
+			tag = IVN
+			NOT = { ADISCORD_west_ivn_shield_course = yes }
+			NOT = { ADISCORD_west_ivn_emergency_course = yes }
+		}
+	}
+	picture = GFX_event_adiscord_military_headquarters
+	is_triggered_only = yes
+	trigger = { ADISCORD_west_final_active = yes }
+
+	option = {
+		name = ADISCORD_west.1.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_west.2
+	title = ADISCORD_west.2.t
+	desc = ADISCORD_west.2.d
+	picture = GFX_news_event_adiscord_army_formation
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.2.a
+	}
+}
+
+news_event = {
+	id = ADISCORD_west.3
+	title = ADISCORD_west.3.t
+	desc = ADISCORD_west.3.d
+	picture = GFX_news_event_adiscord_military_planning
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.3.a
+	}
+}
+
+# A western state without a champion's subject or faction tie chooses its side.
+# There is no neutral answer: the corridor is the only land route.
+country_event = {
+	id = ADISCORD_west.10
+	title = ADISCORD_west.10.t
+	desc = ADISCORD_west.10.d
+	picture = GFX_event_adiscord_military_planning
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_west_final_active = yes
+		ADISCORD_west_needs_side_choice = yes
+	}
+
+	option = {
+		name = ADISCORD_west.10.a
+		custom_effect_tooltip = ADISCORD_west_join_wrk_tt
+		hidden_effect = {
+			ADISCORD_west_join_wrk_side = yes
+			ADISCORD_west_faction_partners_follow = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 40
+				OR = {
+					tag = PWR
+					tag = ZAO
+					tag = PSD
+				}
+				WRK = { has_country_flag = ADISCORD_vorkerland_route_utilitarian }
+			}
+			modifier = {
+				add = 30
+				OR = {
+					tag = WPA
+					tag = WPS
+				}
+				WRK = { has_country_flag = ADISCORD_vorkerland_route_worker }
+			}
+			modifier = {
+				add = 20
+				is_neighbor_of = WRK
+			}
+			modifier = {
+				factor = 0.5
+				OR = {
+					tag = ROM
+					tag = TRU
+				}
+				has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_west.10.b
+		custom_effect_tooltip = ADISCORD_west_join_ivn_tt
+		hidden_effect = {
+			ADISCORD_west_join_ivn_side = yes
+			ADISCORD_west_faction_partners_follow = yes
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 50
+				OR = {
+					tag = ROM
+					tag = TRU
+				}
+				has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn
+			}
+			modifier = {
+				add = 40
+				OR = {
+					tag = WIT
+					tag = IBA
+					tag = IBL
+				}
+			}
+			modifier = {
+				add = 30
+				WRK = { has_country_flag = ADISCORD_vorkerland_route_joint }
+			}
+			modifier = {
+				add = 20
+				is_neighbor_of = IVN
+			}
+		}
+	}
+}
+
+# Campaign deadline. The age of the campaign flag ignores a previous campaign's callback.
+country_event = {
+	id = ADISCORD_west.20
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_west_final_active = yes
+		has_global_flag = {
+			flag = ADISCORD_west_final_started
+			days > 718
+		}
+	}
+
+	immediate = {
+		ADISCORD_west_final_resolve_by_control = yes
+	}
+}
+
+# Terms are applied one day after peace, once factions have been dissolved.
+country_event = {
+	id = ADISCORD_west.30
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		ADISCORD_west_apply_settlement = yes
+	}
+}
+
+news_event = {
+	id = ADISCORD_west.31
+	title = {
+		text = ADISCORD_west.31.t_wrk
+		trigger = { has_global_flag = ADISCORD_west_hegemon_WRK }
+	}
+	title = {
+		text = ADISCORD_west.31.t_ivn
+		trigger = { has_global_flag = ADISCORD_west_hegemon_IVN }
+	}
+	desc = {
+		text = ADISCORD_west.31.d_wrk_unopposed
+		trigger = { has_global_flag = ADISCORD_west_unopposed }
+	}
+	desc = {
+		text = ADISCORD_west.31.d_wrk_worker
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_WRK
+			NOT = { has_global_flag = ADISCORD_west_unopposed }
+			check_variable = { var = global.ADISCORD_west_subject_type value = 1 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.31.d_wrk_joint
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_WRK
+			NOT = { has_global_flag = ADISCORD_west_unopposed }
+			check_variable = { var = global.ADISCORD_west_terms value = 1 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.31.d_wrk_utilitarian
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_WRK
+			NOT = { has_global_flag = ADISCORD_west_unopposed }
+			check_variable = { var = global.ADISCORD_west_subject_type value = 2 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.31.d_ivn_shield
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_IVN
+			check_variable = { var = global.ADISCORD_west_subject_type value = 3 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.31.d_ivn_emergency
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_IVN
+			check_variable = { var = global.ADISCORD_west_subject_type value = 4 compare = equals }
+		}
+	}
+	desc = {
+		text = ADISCORD_west.31.d_ivn_committee
+		trigger = {
+			has_global_flag = ADISCORD_west_hegemon_IVN
+			check_variable = { var = global.ADISCORD_west_subject_type value = 0 compare = equals }
+		}
+	}
+	picture = GFX_news_event_adiscord_imperial_proclamation
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.31.a
+	}
+}
+
+# League invitation. ROOT is the invited state, FROM is Itora. The answer
+# rechecks both sides because the faction may have changed in the meantime.
+country_event = {
+	id = ADISCORD_west.40
+	title = ADISCORD_west.40.t
+	desc = ADISCORD_west.40.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.40.a
+		custom_effect_tooltip = ADISCORD_west_league_accept_tt
+		hidden_effect = {
+			clr_country_flag = ADISCORD_west_league_offer_pending
+			if = {
+				limit = {
+					is_subject = no
+					is_in_faction = no
+					FROM = {
+						exists = yes
+						is_faction_leader = yes
+						NOT = { has_war_with = ROOT }
+					}
+				}
+				FROM = {
+					add_to_faction = ROOT
+					country_event = { id = ADISCORD_west.41 hours = 1 }
+				}
+				ADISCORD_west_crisis_add = yes
+			}
+		}
+		ai_chance = {
+			base = 40
+			modifier = {
+				add = 40
+				has_global_flag = ADISCORD_vorkerland_free_republics_guaranteed_by_ivn
+				OR = {
+					tag = ROM
+					tag = TRU
+				}
+			}
+			modifier = {
+				add = 30
+				tag = WIT
+			}
+		}
+	}
+
+	option = {
+		name = ADISCORD_west.40.b
+		custom_effect_tooltip = ADISCORD_west_league_refuse_tt
+		hidden_effect = {
+			clr_country_flag = ADISCORD_west_league_offer_pending
+			FROM = { country_event = { id = ADISCORD_west.42 hours = 1 } }
+		}
+		ai_chance = {
+			base = 20
+		}
+	}
+}
+
+# Answers to Itora. FROM is the country that answered.
+country_event = {
+	id = ADISCORD_west.41
+	title = ADISCORD_west.41.t
+	desc = ADISCORD_west.41.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.41.a
+	}
+}
+
+country_event = {
+	id = ADISCORD_west.42
+	title = ADISCORD_west.42.t
+	desc = ADISCORD_west.42.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+
+	option = {
+		name = ADISCORD_west.42.a
+	}
+}

@@ -1,0 +1,33 @@
+# COUNTRY IVN. Refreshes the focus aggregate after a variable change.
+IVN_refresh_order = {
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = IVN_order_dynamic } } }
+		add_dynamic_modifier = { modifier = IVN_order_dynamic }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY IVN. The committee suspends elections. A retreat from the north may
+# already have installed the same etatist role, so the role is added once.
+IVN_adopt_emergency_order = {
+	if = {
+		limit = { NOT = { has_government = etatism } }
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+	}
+	if = {
+		limit = { NOT = { has_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added } }
+		add_country_leader_role = {
+			character = IVN_Vadim_Ivanchik
+			promote_leader = yes
+			country_leader = {
+				ideology = etatism_ideology
+				expire = "2200.1.1.1"
+			}
+		}
+		set_country_flag = ADISCORD_vorkerland_vadim_etatist_role_added
+	}
+}

@@ -1,0 +1,25 @@
+defined_text = {
+	name = ADISCORDWestStatus
+	text = {
+		trigger = { ADISCORD_west_final_active = yes }
+		localization_key = ADISCORD_west_status_war
+	}
+	text = {
+		trigger = {
+			ADISCORD_west_crisis_open = yes
+			NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
+		}
+		localization_key = ADISCORD_west_status_no_rival
+	}
+	text = {
+		trigger = { ADISCORD_west_crisis_open = yes }
+		localization_key = ADISCORD_west_status_crisis
+	}
+	text = {
+		trigger = { has_global_flag = ADISCORD_west_final_resolved }
+		localization_key = ADISCORD_west_status_resolved
+	}
+	text = {
+		localization_key = ADISCORD_west_status_closed
+	}
+}

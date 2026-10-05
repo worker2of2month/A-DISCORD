@@ -640,6 +640,10 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 	}
 	if = {
+		limit = { tag = SLI }
+		ADISCORD_grant_technology_profile_fragment_low_tech = yes
+	}
+	if = {
 		limit = { tag = SOL }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}

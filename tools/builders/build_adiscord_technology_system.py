@@ -3155,7 +3155,7 @@ BRANCHES = (
                 "shield_assault_drills",
                 "Взаимодействие щитовых групп",
                 "Shield Team Drills",
-                "tech_special_forces",
+                "tech_advanced_special_forces_training",
                 2166,
                 ("ADISCORD_urban_breacher = { defense = 0.04 breakthrough = 0.04 max_organisation = 1 }",),
             ),
@@ -3171,7 +3171,7 @@ BRANCHES = (
                 "shield_field_maintenance",
                 "Полевое обслуживание щитов",
                 "Shield Field Maintenance",
-                "tech_maintenance_company",
+                "basic_machine_tools",
                 2172,
                 ("ADISCORD_urban_breacher = { supply_consumption = -0.04 default_morale = 0.03 }",),
             ),
@@ -6832,6 +6832,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
     "SDR": ("fragment_low_tech",),
     "SHL": ("fragment_low_tech", "industrial"),
     "SKN": ("fragment_low_tech", "land"),
+    "SLI": ("fragment_low_tech",),
     "SOL": ("fragment_low_tech",),
     "STP": (
         "industrial",
@@ -6933,6 +6934,7 @@ STARTING_COUNTRY_TECH_PROFILE_RATIONALE = {
     "SDR": "Dry River patrol compact retains local logistics but no advanced industrial specialization.",
     "SHL": "Nine Furnaces compact has the southern region's clearest concentrated workshop base.",
     "SKN": "Military directorate devotes its fragmentary economy to a drilled reserve army.",
+    "SLI": "Island council maintains one civilian workshop and a small port without a standing army or heavy industry.",
     "SOL": "Small Vorkerland successor with no intact starting factory base.",
     "STP": "Major industrial state with dockyards, restored air and naval doctrines, and a large standing army.",
     "SVL": "One-island mining republic has basic workshops and militia organization but no advanced institutional base.",
@@ -9131,9 +9133,7 @@ def write_starting_technology_profile_manifest() -> None:
 
 CUSTOM_TECH_TEXTURES = {
     "kefreyt_shield_special_forces": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
-    "shield_assault_drills": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
     "compact_shield_generators": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
-    "shield_field_maintenance": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
     "adaptive_power_shields": "gfx/interface/counters/divisions_large/ADISCORD_urban_breacher_icon.dds",
     "recovered_medium_chassis": "gfx/interface/technologies/armor/ADISCORD_restored_main_battle_tank.dds",
     "recovered_shaped_charge_cells": "gfx/interface/technologies/ADISCORD_antitank_01_incendiary_bottle.dds",
@@ -9205,7 +9205,11 @@ def write_gfx() -> None:
                     "\tSpriteType = {\n"
                     f"\t\tname = \"{sprite}\"\n"
                     f"\t\ttextureFile = \"{texture_file}\"\n"
-                    + ("\t\tnoOfFrames = 2\n" if branch.key == "power_shields" else "")
+                    + (
+                        "\t\tnoOfFrames = 2\n"
+                        if branch.key == "power_shields" and custom_texture
+                        else ""
+                    )
                     + "\t}\n"
                 )
     content = (

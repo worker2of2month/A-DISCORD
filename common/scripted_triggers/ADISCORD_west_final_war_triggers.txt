@@ -1,0 +1,139 @@
+# Western final war: reunified Vorkerland against Itora.
+# Side numbers: 1 = Vorkerland (WRK), 2 = Itora (IVN).
+
+# GLOBAL. Only a verified reunified WRK can claim the west.
+ADISCORD_west_wrk_reunified = {
+	has_global_flag = ADISCORD_vorkerland_collapse_finished
+	WRK = {
+		exists = yes
+		has_country_flag = ADISCORD_vorkerland_central_unifier
+	}
+}
+
+# GLOBAL. The western clock runs from reunification to the final campaign.
+ADISCORD_west_crisis_open = {
+	has_global_flag = ADISCORD_fresh_campaign_contract_v1
+	ADISCORD_west_wrk_reunified = yes
+	NOT = { has_global_flag = ADISCORD_west_final_started }
+	NOT = { has_global_flag = ADISCORD_west_final_resolved }
+}
+
+ADISCORD_west_final_active = {
+	has_global_flag = ADISCORD_west_final_started
+	NOT = { has_global_flag = ADISCORD_west_final_resolved }
+}
+
+# COUNTRY. A sovereign country able to lead one side of the final war.
+ADISCORD_west_champion_viable = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+}
+
+# GLOBAL. The Itoran intervention keeps its own settlement; the final campaign waits for it.
+ADISCORD_west_final_can_start = {
+	ADISCORD_west_crisis_open = yes
+	WRK = { ADISCORD_west_champion_viable = yes }
+	IVN = {
+		ADISCORD_west_champion_viable = yes
+		NOT = { has_war_with = WRK }
+	}
+	NOT = { has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active }
+}
+
+# COUNTRY.
+ADISCORD_west_on_wrk_side = {
+	check_variable = { var = ADISCORD_west_side value = 1 compare = equals }
+}
+
+ADISCORD_west_on_ivn_side = {
+	check_variable = { var = ADISCORD_west_side value = 2 compare = equals }
+}
+
+# COUNTRY. One of the western states that must take a side.
+ADISCORD_west_regional_country = {
+	OR = {
+		tag = WIT
+		tag = IIA
+		tag = IBA
+		tag = IBL
+		tag = PWR
+		tag = PSD
+		tag = ZAO
+		tag = WPA
+		tag = WPS
+		tag = ROM
+		tag = TRU
+	}
+}
+
+# COUNTRY. Regional faction followers enter with their leader instead of
+# choosing alone; a member of an outside faction still chooses for itself.
+ADISCORD_west_needs_side_choice = {
+	exists = yes
+	is_subject = no
+	NOT = { has_variable = ADISCORD_west_side }
+	OR = {
+		is_in_faction = no
+		is_faction_leader = yes
+		faction_leader = { NOT = { ADISCORD_west_regional_country = yes } }
+	}
+}
+
+# GLOBAL. Either champion has lost its sovereignty or the two no longer fight.
+ADISCORD_west_final_broken = {
+	OR = {
+		NOT = { WRK = { ADISCORD_west_champion_viable = yes } }
+		NOT = { IVN = { ADISCORD_west_champion_viable = yes } }
+		NOT = { WRK = { has_war_with = IVN } }
+	}
+}
+
+# STATE. Controlled by a participant of the given side.
+ADISCORD_west_state_held_by_wrk_side = {
+	controller = { ADISCORD_west_on_wrk_side = yes }
+}
+
+ADISCORD_west_state_held_by_ivn_side = {
+	controller = { ADISCORD_west_on_ivn_side = yes }
+}
+
+# COUNTRY IVN. The two Itoran courses of the western question.
+ADISCORD_west_ivn_shield_course = {
+	has_completed_focus = IVN_humanist_shield
+}
+
+ADISCORD_west_ivn_emergency_course = {
+	has_completed_focus = IVN_emergency_order
+}
+
+# COUNTRY. The western suzerain has opened the integration of its subjects.
+ADISCORD_west_can_integrate = {
+	OR = {
+		AND = {
+			tag = IVN
+			has_global_flag = ADISCORD_west_hegemon_IVN
+			has_completed_focus = IVN_west_heritage
+		}
+		AND = {
+			tag = WRK
+			has_global_flag = ADISCORD_west_hegemon_WRK
+			OR = {
+				has_completed_focus = WRK_worker_west_confederate_charter
+				has_completed_focus = WRK_joint_west_imperial_settlement
+				has_completed_focus = WRK_utilitarian_west_technical_trusteeship
+			}
+		}
+	}
+}
+
+# COUNTRY invited state; ROOT is the inviting Itora.
+ADISCORD_west_league_target_valid = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	is_in_faction = no
+	NOT = { has_war_with = ROOT }
+	NOT = { has_country_flag = ADISCORD_west_league_offer_pending }
+	NOT = { has_global_flag = ADISCORD_west_final_started }
+}

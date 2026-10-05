@@ -1,0 +1,100 @@
+ideas = {
+	country = {
+		# Vorkerland: one campaign spirit per postwar route.
+		ADISCORD_west_wrk_solidarity_committees = {
+			picture = generic_constitutional_guarantees
+			allowed = { original_tag = WRK }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				war_support_factor = 0.10
+				stability_factor = 0.05
+				army_morale_factor = 0.05
+			}
+		}
+
+		ADISCORD_west_wrk_imperial_columns = {
+			picture = generic_war_preparation
+			allowed = { original_tag = WRK }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.08
+				conscription = 0.015
+				stability_factor = -0.05
+			}
+		}
+
+		ADISCORD_west_wrk_engineer_battalions = {
+			picture = generic_production_bonus
+			allowed = { original_tag = WRK }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				industrial_capacity_factory = 0.05
+				army_defence_factor = 0.05
+				supply_consumption_factor = -0.10
+			}
+		}
+
+		# Itora: the war follows the course chosen in its own tree.
+		ADISCORD_west_ivn_humanist_shield = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = IVN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_core_defence_factor = 0.12
+				stability_factor = 0.05
+				war_support_factor = 0.05
+			}
+		}
+
+		ADISCORD_west_ivn_emergency_order = {
+			picture = generic_war_preparation
+			allowed = { original_tag = IVN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				conscription = 0.02
+				army_attack_factor = 0.06
+				war_support_factor = 0.10
+				political_power_factor = -0.10
+			}
+		}
+
+		ADISCORD_west_ivn_committee_line = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = IVN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_core_defence_factor = 0.08
+				war_support_factor = 0.05
+			}
+		}
+
+		# Timed war measures bought through the western war decisions.
+		ADISCORD_west_wrk_corridor_push = {
+			picture = generic_war_preparation
+			allowed = { original_tag = WRK }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_attack_factor = 0.10
+				army_org_regain = 0.05
+			}
+		}
+
+		ADISCORD_west_ivn_march_defence = {
+			picture = generic_fortify_the_borders
+			allowed = { original_tag = IVN }
+			allowed_civil_war = { always = yes }
+			removal_cost = -1
+			modifier = {
+				army_core_defence_factor = 0.10
+				max_dig_in = 2
+			}
+		}
+	}
+}

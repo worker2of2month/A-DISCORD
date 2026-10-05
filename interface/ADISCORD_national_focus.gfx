@@ -40,6 +40,18 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_offices" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_solidarity_committees" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_for_itora" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_confederate_charter" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_frontier_commands" texturefile = "gfx/interface/goals/focus_generic_military_academy.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_columns" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_return_of_the_marches" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_settlement" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_corridor_survey" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineer_battalions" texturefile = "gfx/interface/goals/focus_generic_military_industry.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineering_border" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_technical_trusteeship" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
 
 	###STP
 	spriteType = {

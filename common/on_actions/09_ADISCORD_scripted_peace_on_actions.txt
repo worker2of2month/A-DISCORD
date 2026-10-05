@@ -1637,6 +1637,27 @@ on_actions = {
 			}
 			# END south_final:on_capitulation
 
+			# BEGIN west_final:on_capitulation
+			# A champion's defeat settles the whole western campaign; other
+			# participants stay occupied until that settlement.
+			if = {
+				limit = {
+					ADISCORD_west_final_active = yes
+					ROOT = { has_variable = ADISCORD_west_side }
+					FROM = { has_variable = ADISCORD_west_side }
+				}
+				set_global_flag = skip_default_capitulation
+				if = {
+					limit = { ROOT = { tag = WRK } }
+					ADISCORD_west_final_resolve_ivn_victory = yes
+				}
+				else_if = {
+					limit = { ROOT = { tag = IVN } }
+					ADISCORD_west_final_resolve_wrk_victory = yes
+				}
+			}
+			# END west_final:on_capitulation
+
 			# BEGIN vorkerland_diplomacy:on_capitulation
 			if = {
 				limit = {
@@ -1814,6 +1835,9 @@ on_actions = {
 			# BEGIN south_final:on_peace
 			ADISCORD_south_final_close_external = yes
 			# END south_final:on_peace
+			# BEGIN west_final:on_peace
+			ADISCORD_west_final_close_external = yes
+			# END west_final:on_peace
 			if = {
 				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
 				log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
@@ -1966,6 +1990,9 @@ on_actions = {
 			# BEGIN south_final:on_puppet
 			ADISCORD_south_final_close_external = yes
 			# END south_final:on_puppet
+			# BEGIN west_final:on_puppet
+			ADISCORD_west_final_close_external = yes
+			# END west_final:on_puppet
 		}
 	}
 	on_annex = {
@@ -2004,6 +2031,9 @@ on_actions = {
 			ADISCORD_south_final_close_external = yes
 			ADISCORD_south_note_campaign_annexation = yes
 			# END south_final:on_annex
+			# BEGIN west_final:on_annex
+			ADISCORD_west_final_close_external = yes
+			# END west_final:on_annex
 		}
 	}
 	on_state_control_changed = {

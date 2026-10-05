@@ -122,6 +122,7 @@ ADISCORD_naval_surface_control = {
 		equipment = {
 			capital_ship
 			screen_ship
+			carrier
 		}
 	}
 }

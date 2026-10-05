@@ -152,6 +152,18 @@ spriteTypes = {
 	spriteType = { name = "GFX_focus_WRK_worker_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_joint_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
 	spriteType = { name = "GFX_focus_WRK_utilitarian_restore_unity_tower_shine" texturefile = "gfx/interface/goals/focus_PLACEHOLDER.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_offices_shine" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_solidarity_committees_shine" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_mandate_for_itora_shine" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_west_confederate_charter_shine" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_frontier_commands_shine" texturefile = "gfx/interface/goals/focus_generic_military_academy.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_columns_shine" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_return_of_the_marches_shine" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_west_imperial_settlement_shine" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_corridor_survey_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineer_battalions_shine" texturefile = "gfx/interface/goals/focus_generic_military_industry.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_engineering_border_shine" texturefile = "gfx/interface/goals/focus_generic_army_doctrines_2.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_west_technical_trusteeship_shine" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
 	SpriteType = {
 		name = "GFX_focus_STP_GUARANTEE_MINISTERS_shine"
 		texturefile = "gfx/interface/goals/STP/party/GFX_focus_STP_GUARANTEE_MINISTERS.png"

@@ -15,6 +15,7 @@ OUTPUT_ROOT = ROOT / "common/national_focus"
 SOURCES = {
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
+    "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",
     "RUS/main/focuses.txt": "ADISCORD_national_focus_RUS.txt",
     "VAL/main/focuses.txt": "ADISCORD_national_focus_VAL.txt",
     "shared/bookmark/focuses.txt": "ADISCORD_national_focus_bookmark.txt",

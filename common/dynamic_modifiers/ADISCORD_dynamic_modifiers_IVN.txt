@@ -1,0 +1,14 @@
+# Itoran focus aggregate. Country variables hold the accumulated values.
+IVN_order_dynamic = {
+	icon = GFX_idea_IVN_national_spirit
+	enable = { tag = IVN }
+	stability_factor = IVN_ord_stability
+	political_power_gain = IVN_ord_political_power
+	research_speed_factor = IVN_ord_research
+	army_core_defence_factor = IVN_ord_core_defence
+	army_attack_factor = IVN_ord_attack
+	conscription = IVN_ord_conscription
+	war_support_factor = IVN_ord_war_support
+	industrial_capacity_factory = IVN_ord_factory_output
+	production_speed_buildings_factor = IVN_ord_construction
+}

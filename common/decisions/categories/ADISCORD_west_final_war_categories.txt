@@ -1,0 +1,28 @@
+ADISCORD_west_final_war_category = {
+	icon = generic_prepare_civil_war
+	allowed = {
+		OR = {
+			tag = WRK
+			tag = IVN
+		}
+	}
+	visible = {
+		OR = {
+			ADISCORD_west_crisis_open = yes
+			AND = {
+				ADISCORD_west_final_active = yes
+				has_variable = ADISCORD_west_side
+			}
+			AND = {
+				tag = WRK
+				has_global_flag = ADISCORD_west_hegemon_WRK
+			}
+			AND = {
+				tag = IVN
+				has_global_flag = ADISCORD_west_hegemon_IVN
+			}
+		}
+	}
+	visible_when_empty = yes
+	priority = 26
+}

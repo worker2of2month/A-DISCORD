@@ -311,6 +311,7 @@ ADISCORD_special_forces_shield_formations = {
 			mastery = 40
 			ADISCORD_urban_breacher = {
 				urban = { attack = 0.06 }
+				vorkernsberg = { attack = 0.06 }
 			}
 		}
 		ADISCORD_special_forces_shield_formations_generator_rotation = {

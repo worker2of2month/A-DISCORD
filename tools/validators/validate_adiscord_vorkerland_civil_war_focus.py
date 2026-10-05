@@ -773,6 +773,46 @@ POSTWAR_ROUTE_FOCUSES = {
     ),
 }
 
+# The War for the West follows each route's Unity Tower in a separate band.
+# Its drop-in sprites resolve to existing native goal art rather than the
+# shared fallback, so they stay outside the drop-in texture manifest; the
+# lifecycle order inserts them after each tower.
+WEST_ROUTE_FOCUSES = {
+    "ADISCORD_vorkerland_route_worker": (
+        "WRK_worker_west_mandate_offices",
+        "WRK_worker_west_solidarity_committees",
+        "WRK_worker_west_mandate_for_itora",
+        "WRK_worker_west_confederate_charter",
+    ),
+    "ADISCORD_vorkerland_route_joint": (
+        "WRK_joint_west_frontier_commands",
+        "WRK_joint_west_imperial_columns",
+        "WRK_joint_west_return_of_the_marches",
+        "WRK_joint_west_imperial_settlement",
+    ),
+    "ADISCORD_vorkerland_route_utilitarian": (
+        "WRK_utilitarian_west_corridor_survey",
+        "WRK_utilitarian_west_engineer_battalions",
+        "WRK_utilitarian_west_engineering_border",
+        "WRK_utilitarian_west_technical_trusteeship",
+    ),
+}
+WEST_FOCUS_IDS = tuple(
+    focus_id for focus_ids in WEST_ROUTE_FOCUSES.values() for focus_id in focus_ids
+)
+WEST_TOOLTIP_KEYS = (
+    "WRK_west_crisis_add_tt",
+    "WRK_west_final_ready_tt",
+    "WRK_worker_west_war_tt",
+    "WRK_joint_west_war_tt",
+    "WRK_utilitarian_west_war_tt",
+)
+WEST_BAND_BY_ROUTE = {
+    "ADISCORD_vorkerland_route_worker": "west_worker",
+    "ADISCORD_vorkerland_route_joint": "west_joint",
+    "ADISCORD_vorkerland_route_utilitarian": "west_utilitarian",
+}
+
 # Prewar and reunified WRK focuses use dedicated drop-in sprite names. The
 # texture is a shared vanilla fallback until dedicated art is actually present;
 # this keeps every declared sprite loadable without duplicating placeholder art.
@@ -986,6 +1026,15 @@ POSTWAR_ROUTE_TERMINALS = {
     "ADISCORD_vorkerland_route_joint": "WRK_joint_restore_unity_tower",
     "ADISCORD_vorkerland_route_utilitarian": "WRK_utilitarian_restore_unity_tower",
 }
+
+def lifecycle_order() -> tuple[str, ...]:
+    """The drop-in manifest with each western chain after its Unity Tower."""
+    order = list(FOCUS_IDS)
+    for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
+        index = order.index(POSTWAR_ROUTE_TERMINALS[route_flag]) + 1
+        order[index:index] = focus_ids
+    return tuple(order)
+
 
 POSTWAR_POLICY_CHOICE_PAIRS = (
     (
@@ -2473,6 +2522,9 @@ LAYOUT_BANDS = {
     "postwar_worker": ((0, 10), (21, 29)),
     "postwar_joint": ((12, 22), (21, 29)),
     "postwar_utilitarian": ((24, 34), (21, 29)),
+    "west_worker": ((0, 10), (29, 33)),
+    "west_joint": ((12, 22), (29, 33)),
+    "west_utilitarian": ((24, 34), (29, 33)),
 }
 
 POSTWAR_BAND_BY_ROUTE = {
@@ -2703,6 +2755,9 @@ def expected_localisation_keys() -> set[str]:
     return {
         *FOCUS_IDS,
         *(f"{focus_id}_desc" for focus_id in FOCUS_IDS),
+        *WEST_FOCUS_IDS,
+        *(f"{focus_id}_desc" for focus_id in WEST_FOCUS_IDS),
+        *WEST_TOOLTIP_KEYS,
         "ADISCORD_vorkerland_claimant_focus_phase_tt",
         "ADISCORD_vorkerland_central_showdown_phase_tt",
         "ADISCORD_vorkerland_wrk_preparations_carry_over_tt",
@@ -3140,9 +3195,9 @@ def collect_issues() -> list[str]:
         if not re.search(r"\badd\s*=\s*100\b", country):
             issues.append("country selector must add weight 100 for lifecycle tags")
 
-    if tuple(blocks) != FOCUS_IDS:
+    if tuple(blocks) != lifecycle_order():
         issues.append(
-            f"focus IDs/order differ from the 235-focus lifecycle manifest: {tuple(blocks)}"
+            f"focus IDs/order differ from the lifecycle manifest: {tuple(blocks)}"
         )
     if len(FOCUS_IDS) != 238:
         issues.append(
@@ -3333,6 +3388,9 @@ def collect_issues() -> list[str]:
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("postwar", route_flag)
+    for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
+        for focus_id in focus_ids:
+            category_by_focus[focus_id] = ("west", route_flag)
 
     for focus_id, block in blocks.items():
         if "cancel_if_invalid = yes" not in block:
@@ -3471,7 +3529,7 @@ def collect_issues() -> list[str]:
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one idempotent showdown bypass")
-        elif category == "postwar":
+        elif category in {"postwar", "west"}:
             if flags != {POSTWAR_PHASE}:
                 issues.append(
                     f"{focus_id} must be postwar-only, found phases {sorted(flags)}"
@@ -6046,6 +6104,9 @@ def _layout_band(focus_id: str, block: str) -> str:
     if flags == {PREWAR_PHASE}:
         return "prewar_VAD" if tag == "VAD" else "prewar_WRK"
     if flags == {POSTWAR_PHASE}:
+        for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
+            if focus_id in focus_ids:
+                return WEST_BAND_BY_ROUTE[route_flag]
         for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
             if focus_id in focus_ids:
                 return POSTWAR_BAND_BY_ROUTE[route_flag]

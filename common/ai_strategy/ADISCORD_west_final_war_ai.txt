@@ -1,0 +1,23 @@
+# War for the West: champions commit their armies against each other.
+
+ADISCORD_west_wrk_front_ivn = {
+	allowed = { tag = WRK }
+	enable = {
+		ADISCORD_west_final_active = yes
+		has_war_with = IVN
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = IVN value = 100 }
+	ai_strategy = { type = front_control tag = IVN ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+}
+
+ADISCORD_west_ivn_front_wrk = {
+	allowed = { tag = IVN }
+	enable = {
+		ADISCORD_west_final_active = yes
+		has_war_with = WRK
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = front_unit_request tag = WRK value = 100 }
+	ai_strategy = { type = front_control tag = WRK ratio = 0.01 priority = 1500 ordertype = front execution_type = balanced execute_order = yes manual_attack = yes }
+}

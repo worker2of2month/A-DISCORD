@@ -67,6 +67,16 @@ on_actions = {
 			}
 		}
 	}
+	# The reunified confederation drives the western clock. Before reunification
+	# the guard fails at once; IVN has no hook because its loss ends the question.
+	on_monthly_WRK = {
+		effect = {
+			if = {
+				limit = { ADISCORD_west_crisis_open = yes }
+				ADISCORD_west_crisis_month = yes
+			}
+		}
+	}
 	on_weekly_RUS = {
 		effect = { RUS_bunker_weekly_supply = yes }
 	}

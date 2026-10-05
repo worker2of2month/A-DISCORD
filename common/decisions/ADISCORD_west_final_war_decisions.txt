@@ -1,0 +1,82 @@
+ADISCORD_west_final_war_category = {
+	# A short offensive measure for Vorkerland's side of the corridor.
+	ADISCORD_west_wrk_corridor_offensive = {
+		icon = generic_army_support
+		allowed = { tag = WRK }
+		visible = {
+			ADISCORD_west_final_active = yes
+			ADISCORD_west_on_wrk_side = yes
+		}
+		available = {
+			has_war_with = IVN
+		}
+		cost = 75
+		days_re_enable = 120
+		complete_effect = {
+			add_timed_idea = {
+				idea = ADISCORD_west_wrk_corridor_push
+				days = 60
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# A short defensive measure for the Itoran marches.
+	ADISCORD_west_ivn_hold_the_marches = {
+		icon = generic_army_support
+		allowed = { tag = IVN }
+		visible = {
+			ADISCORD_west_final_active = yes
+			ADISCORD_west_on_ivn_side = yes
+		}
+		available = {
+			has_war_with = WRK
+		}
+		cost = 75
+		days_re_enable = 120
+		complete_effect = {
+			add_timed_idea = {
+				idea = ADISCORD_west_ivn_march_defence
+				days = 60
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	# The suzerain absorbs a western subject; the result is rechecked at the end.
+	ADISCORD_west_integrate_subject = {
+		icon = generic_political_discourse
+		allowed = {
+			OR = {
+				tag = WRK
+				tag = IVN
+			}
+		}
+		visible = {
+			ADISCORD_west_can_integrate = yes
+		}
+		targets = { WRK IVN WIT IIA IBA IBL PWR PSD ZAO WPA WPS ROM TRU }
+		target_trigger = {
+			FROM = { is_subject_of = ROOT }
+		}
+		available = {
+			has_war = no
+		}
+		cost = 75
+		days_remove = 120
+		remove_effect = {
+			if = {
+				limit = { FROM = { is_subject_of = ROOT } }
+				annex_country = { target = FROM transfer_troops = yes }
+				ADISCORD_economy_mark_dirty = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+}

@@ -3266,6 +3266,7 @@ def collapse_squad_training_modifiers(text, branch, index, subunits):
 def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     issues: list[str] = []
     costs: list[float] = []
+    small_arms_costs: list[float] = []
     equipment = collect_equipment_blocks()
     subunits = collect_defined_subunits()
     unlocks = (
@@ -3277,11 +3278,13 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
     for branch in GENERATED_BRANCHES:
         for index, tech in enumerate(branch.techs):
             block = tech_blocks.get(tech.id, "")
-            match = re.search(r"\bresearch_cost\s*=\s*([0-9.]+)", block)
-            if not match:
+            match = re.search(r"\bresearch_cost\s*=\s*([^\s{}#]+)", block)
+            if not match or not re.fullmatch(r"[0-9]+(?:\.[0-9]+)?", match[1]):
                 issues.append(f"{tech.id} has no numeric research_cost")
                 continue
             cost = float(match.group(1))
+            if branch.key == "small_arms":
+                small_arms_costs.append(cost)
             year = branch.years[index]
 
             # Count numeric leaf modifiers before paths/cost/UI/AI metadata.
@@ -3411,12 +3414,17 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                         f"forbidden technology {tech.id} is too cheap at {cost}"
                     )
                 continue
-            if year < 2160:
-                continue
             if weapon_modification:
-                # Three mandatory incremental upgrades share a generation's budget.
-                if not 0.30 <= cost <= 0.40:
-                    issues.append(f"weapon modification {tech.id} has invalid cost {cost}")
+                # A 50% discount, +50% research speed and 30 saved days must
+                # still leave two weeks of work for every mandatory upgrade.
+                remaining_days = cost * 110 * 0.5 / 1.5 - 30
+                if remaining_days < 14:
+                    issues.append(
+                        f"weapon modification {tech.id} has invalid cost {cost}; "
+                        f"only {remaining_days:.2f} research days remain after bonuses"
+                    )
+                continue
+            if year < 2160:
                 continue
             costs.append(cost)
             if tech.id in unlocks and cost < 2.0:
@@ -3424,6 +3432,11 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
             if index == len(branch.techs) - 1 and year >= 2180 and cost < 2.5:
                 issues.append(f"capstone {tech.id} is too cheap at {cost}")
 
+    small_arms_budget = sum(small_arms_costs)
+    if not 44 <= small_arms_budget <= 45:
+        issues.append(
+            f"small_arms research budget {small_arms_budget:.3f} is outside 44-45"
+        )
     if not costs:
         return issues + ["no post-2160 technology costs collected"]
     mean_cost = statistics.mean(costs)

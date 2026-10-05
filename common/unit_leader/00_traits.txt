@@ -1548,11 +1548,19 @@ leader_traits = {
 	urban_assault_specialist = {
 		type = corps_commander
 		gain_xp = {
-			is_fighting_in_terrain = urban
+			OR = {
+				is_fighting_in_terrain = urban
+				is_fighting_in_terrain = vorkernsberg
+			}
 		}
 		cost = 500
 		modifier = {
 			urban = {
+				movement = 0.05
+				attack = 0.1
+				defence = 0.1
+			}
+			vorkernsberg = {
 				movement = 0.05
 				attack = 0.1
 				defence = 0.1
@@ -1906,6 +1914,9 @@ leader_traits = {
 				movement = 0.1
 			}
 			urban = {
+				movement = 0.1
+			}
+			vorkernsberg = {
 				movement = 0.1
 			}
 			jungle = {

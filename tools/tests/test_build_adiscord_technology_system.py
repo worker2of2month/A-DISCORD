@@ -64,7 +64,12 @@ class AmphibiousTechnologyTests(unittest.TestCase):
             self.assertIn('name = "ADISCORD_branch_amphibious_operations"', gui)
             self.assertIn(f'name = "{branch.techs[0].id}_tree"', gui)
             for year in branch.years:
-                self.assertIn(f"year_amphibious_operations_{year}", gui)
+                label_id = (
+                    str(year)
+                    if folder in generator.HORIZONTAL_FOLDERS
+                    else f"amphibious_operations_{year}"
+                )
+                self.assertIn(f'name = "ADISCORD_{folder}_year_{label_id}"', gui)
         for index, tech in enumerate(branch.techs):
             self.assertEqual(generator.icon_for_technology(branch, index), tech.icon)
             self.assertIn(tech.key, generator.TECHNICAL_TECH_DESCRIPTIONS)
@@ -2106,6 +2111,71 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertGreater(stat("ADISCORD_urban_breacher", "breakthrough"), stat("ADISCORD_assault_infantry", "breakthrough"))
         self.assertGreater(stat("ADISCORD_urban_breacher", "supply_consumption"), stat("ADISCORD_assault_infantry", "supply_consumption"))
         self.assertGreater(stat("ADISCORD_urban_breacher", "training_time"), stat("ADISCORD_assault_infantry", "training_time"))
+
+    def test_city_terrain_preserves_assault_roles_and_armored_penalties(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = self.read("common/units/ADISCORD_land_units.txt")
+        units = parse_clausewitz(source)[0].value
+        expected = {
+            "ADISCORD_urban_breacher": {"attack": 0.25, "defence": 0.20},
+            "ADISCORD_assault_infantry": {"attack": 0.10},
+            "ADISCORD_mechanized_infantry": {"attack": -0.10},
+            "ADISCORD_combat_platform": {"attack": -0.15},
+            "ADISCORD_heavy_platform": {
+                "attack": -0.35,
+                "defence": -0.15,
+                "movement": -0.25,
+            },
+            "ADISCORD_regimental_pioneers": {"attack": 0.03},
+        }
+        for terrain in ("urban", "vorkernsberg"):
+            affected = {}
+            for unit in units:
+                modifiers = [entry for entry in unit.value if entry.key == terrain]
+                if not modifiers:
+                    continue
+                self.assertEqual(len(modifiers), 1, unit.key)
+                affected[unit.key] = {
+                    stat.key: float(stat.value) for stat in modifiers[0].value
+                }
+            self.assertEqual(affected, expected, terrain)
+        terrain_source = self.read("common/terrain/00_terrain.txt")
+        self.assertIn("attack = -0.7", self.block(terrain_source, "vorkernsberg"))
+        self.assertIn(";vorkernsberg;", self.read("map/definition.csv"))
+
+    def test_city_terrain_preserves_shield_doctrine_reward(self):
+        from tools.builders import build_adiscord_doctrine_system as doctrines
+
+        rendered = doctrines.render_schools("special_forces")
+        reward = self.block(
+            rendered,
+            "ADISCORD_special_forces_shield_formations_covered_crossings",
+        )
+        unit = self.block(reward, "ADISCORD_urban_breacher")
+        for terrain in ("urban", "vorkernsberg"):
+            self.assertEqual(
+                self.block(unit, terrain).strip(),
+                "attack = 0.06",
+            )
+
+    def test_city_terrain_counts_for_commander_experience_and_modifiers(self):
+        source = self.read("common/unit_leader/00_traits.txt")
+        specialist = self.block(source, "urban_assault_specialist")
+        gain_xp = self.block(specialist, "gain_xp")
+        alternatives = self.block(gain_xp, "OR")
+        self.assertEqual(
+            re.findall(r"is_fighting_in_terrain\s*=\s*(\w+)", alternatives),
+            ["urban", "vorkernsberg"],
+        )
+        for name, expected in (
+            ("urban_assault_specialist", {"movement": 0.05, "attack": 0.1, "defence": 0.1}),
+            ("expert_improviser", {"movement": 0.1}),
+        ):
+            modifier = self.block(self.block(source, name), "modifier")
+            for terrain in ("urban", "vorkernsberg"):
+                values = re.findall(r"(\w+)\s*=\s*(-?[0-9.]+)", self.block(modifier, terrain))
+                self.assertEqual({key: float(value) for key, value in values}, expected)
 
     def test_new_icon_frames_are_different_in_every_supported_size(self):
         from PIL import Image

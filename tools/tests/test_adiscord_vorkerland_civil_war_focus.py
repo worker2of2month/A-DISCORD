@@ -38,6 +38,7 @@ from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     FOCUS_DECISION_FILES,
     FOCUS_EXPANSION_IDEAS,
     FOCUS_EXPANSION_IDEAS_FILE,
+    lifecycle_order,
     FOCUS_FILE,
     FOCUS_IDS,
     IVANLAND_EXPEDITIONARY_IDEA,
@@ -187,7 +188,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
         self.assertNotIn("original_tag", selector)
 
     def test_manifest_has_two_hundred_seventeen_bounded_definitions(self) -> None:
-        self.assertEqual(tuple(self.blocks), FOCUS_IDS)
+        self.assertEqual(tuple(self.blocks), lifecycle_order())
         self.assertEqual(len(self.blocks), 235)
         self.assertEqual(len(DEPTH_FOCUSES), 63)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
