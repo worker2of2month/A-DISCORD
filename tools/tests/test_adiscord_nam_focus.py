@@ -12,7 +12,10 @@ from tools.tests.test_adiscord_stp_preparation import (
     block, scalar, walk, matches_conditions, selected_effects,
 )
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
-from tools.validators.validate_adiscord_nam_resource_war import balanced_braces
+from tools.validators.validate_adiscord_nam_resource_war import (
+    balanced_braces,
+    has_script_fragment,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = "ADISCORD_nam_resource_war"
@@ -27,6 +30,21 @@ def parsed(path):
 
 
 class NamCampaignTests(unittest.TestCase):
+    def test_settlement_fragment_accepts_multiline_script(self):
+        fragment = "688 = { remove_core_of = SLF add_core_of = NAM }"
+        source = (
+            "688 = {\n"
+            "\tremove_core_of = SLF\n"
+            "\t# Restore the national core after the uprising.\n"
+            "\tadd_core_of = NAM\n"
+            "}"
+        )
+        self.assertTrue(has_script_fragment(source, fragment))
+        self.assertFalse(has_script_fragment(source.replace("NAM", "EFL"), fragment))
+        self.assertFalse(
+            has_script_fragment("688 = { add_core_of = NAM remove_core_of = SLF }", fragment)
+        )
+
     @classmethod
     def setUpClass(cls):
         cls.tree = block(parsed("focus_trees/NAM/main/focuses.txt"), "focus_tree")

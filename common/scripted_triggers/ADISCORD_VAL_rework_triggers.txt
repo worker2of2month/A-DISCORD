@@ -1237,7 +1237,21 @@ VAL_only_occidian_states = {
 	}
 }
 
-# COUNTRY: a defeated member remains reserved until its active allies fall.
+# COUNTRY: the native defeat remains authoritative while this war continues.
+# Native liberation clears the receipt; a delayed has_capitulated update does not.
+VAL_final_defeat_reserved = {
+	has_country_flag = VAL_final_defeat_pending
+	exists = yes
+	has_war_with = VAL
+	OR = {
+		is_subject = no
+		is_subject_of = NOD
+		is_subject_of = STP
+		is_subject_of = STS
+	}
+}
+
+# COUNTRY: transient credit belongs only to the current native callback.
 VAL_final_current_receipt = {
 	has_country_flag = VAL_final_capitulation_immediate
 	OR = {
@@ -1257,7 +1271,13 @@ VAL_final_faction_ally_still_fighting = {
 			NOT = {
 				AND = { tag = AIN is_subject_of = NOD is_major = no }
 			}
-			NOT = { OR = { AND = { tag = ROOT has_country_flag = VAL_coalition_capitulation_current } VAL_final_current_receipt = yes } }
+			NOT = {
+				OR = {
+					AND = { tag = ROOT has_country_flag = VAL_coalition_capitulation_current }
+					VAL_final_current_receipt = yes
+					VAL_final_defeat_reserved = yes
+				}
+			}
 		}
 		AND = {
 			tag = STP
@@ -1267,14 +1287,24 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 				STS = {
 					exists = yes
 					OR = { is_in_faction_with = STP AND = { has_country_flag = VAL_final_war_member STP = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 			}
 		}
@@ -1286,14 +1316,24 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 				STP = {
 					exists = yes
 					OR = { is_in_faction_with = STS AND = { has_country_flag = VAL_final_war_member STS = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 			}
 		}
@@ -1305,14 +1345,24 @@ VAL_final_faction_ally_still_fighting = {
 					OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 				STS = {
 					exists = yes
 					OR = { is_in_faction_with = NOD AND = { has_country_flag = VAL_final_war_member NOD = { has_country_flag = VAL_final_war_member } } }
 					has_war_with = VAL
 					has_capitulated = no
-					NOT = { VAL_final_current_receipt = yes }
+					NOT = {
+						OR = {
+							VAL_final_current_receipt = yes
+							VAL_final_defeat_reserved = yes
+						}
+					}
 				}
 			}
 		}
@@ -1320,13 +1370,7 @@ VAL_final_faction_ally_still_fighting = {
 }
 
 VAL_final_settlement_ready = {
-	has_country_flag = VAL_final_defeat_pending
-	# The current immediate callback counts as defeated even before the engine
-	# flips has_capitulated. Other members are checked only inside this theatre.
-	OR = {
-		has_capitulated = yes
-		VAL_final_current_receipt = yes
-	}
+	VAL_final_defeat_reserved = yes
 	VAL = { exists = yes has_capitulated = no is_subject = no }
 	NOT = { VAL_final_faction_ally_still_fighting = yes }
 }
@@ -2102,36 +2146,50 @@ VAL_perimeter_settlement_ready = {
 	169 = { is_owned_by = ERT VAL_frontier_controlled = yes }
 }
 
-# COUNTRY VAL. SCA may hold southern-sector land taken from ERT in their local war.
-# Only a separate ERT campaign may run beside this declaration.
-VAL_southern_federation_war_available = {
+# COUNTRY. A closed-zone neighbour that took southern-sector land from ERT in
+# the local wars. Kefreyt may reclaim that land for the administration.
+VAL_is_southern_sector_holder = {
+	OR = {
+		tag = SCA
+		tag = IRT
+		tag = RZA
+		tag = MLR
+	}
+	exists = yes
+	any_owned_state = { VAL_is_southern_sector_state = yes }
+}
+
+# COUNTRY VAL. Sector wars may run beside the ERT campaign and each other, but
+# not beside an unrelated war.
+VAL_southern_sector_war_ready = {
 	has_capitulated = no
 	is_subject = no
 	VAL_wasteland_administration_ready = yes
-	NOT = { has_war_with = SCA }
-	NOT = { any_enemy_country = { NOT = { tag = ERT } } }
-	SCA = {
-		exists = yes
-		has_capitulated = no
-		is_subject = no
-		is_in_faction = no
-		any_owned_state = { VAL_is_southern_sector_state = yes }
-	}
-}
-
-# COUNTRY VAL. Every sector state SCA still owns is held by Kefreyt or its subject.
-VAL_southern_federation_sector_held = {
-	has_war_with = SCA
-	SCA = {
-		has_capitulated = no
-		NOT = {
-			any_owned_state = {
-				VAL_is_southern_sector_state = yes
-				NOT = { VAL_frontier_controlled = yes }
+	NOT = {
+		any_enemy_country = {
+			NOT = {
+				tag = ERT
+				tag = SCA
+				tag = IRT
+				tag = RZA
+				tag = MLR
 			}
 		}
 	}
 }
+
+# COUNTRY sector holder. Every sector state it still owns is held by Kefreyt or
+# its subject.
+VAL_southern_sector_holdings_secured = {
+	has_capitulated = no
+	NOT = {
+		any_owned_state = {
+			VAL_is_southern_sector_state = yes
+			NOT = { VAL_frontier_controlled = yes }
+		}
+	}
+}
+
 # COUNTRY capitulating opponent. Do not claim an unrelated victor's result.
 VAL_wasteland_capitulation_managed = {
 	has_war_with = VAL
@@ -2158,7 +2216,15 @@ VAL_wasteland_capitulation_managed = {
 			}
 		}
 		AND = { tag = IRT VAL = { has_completed_focus = VAL_Eastern_Expansion VAL_wasteland_administration_ready = yes } }
-		AND = { tag = SCA VAL = { has_completed_focus = VAL_Southern_Expansion } }
+		AND = {
+			OR = {
+				tag = SCA
+				tag = IRT
+				tag = RZA
+				tag = MLR
+			}
+			VAL = { has_completed_focus = VAL_Southern_Expansion }
+		}
 	}
 }
 

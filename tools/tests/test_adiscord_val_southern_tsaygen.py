@@ -227,7 +227,7 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         settle = named_block(effects, "VAL_settle_perimeter_war")
         self.assertLess(settle.index("transfer_state = 169"), settle.index("white_peace = ERT"))
 
-    def test_southern_federation_war_delivers_the_sector_to_the_administration(self) -> None:
+    def test_sector_holder_war_delivers_the_sector_to_the_administration(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         sector = named_block(triggers, "VAL_is_southern_sector_state")
         for state in (167, 170, 171, 184, 185, 203):
@@ -235,23 +235,30 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         # 169 is the administration's own bridgehead; 168 is Kefreyt's core.
         self.assertNotIn("state = 169", sector)
         self.assertNotIn("state = 168", sector)
-        gate = named_block(triggers, "VAL_southern_federation_war_available")
+        holder = named_block(triggers, "VAL_is_southern_sector_holder")
+        for tag in ("SCA", "IRT", "RZA", "MLR"):
+            self.assertIn(f"tag = {tag}", holder)
+        gate = named_block(triggers, "VAL_southern_sector_war_ready")
         self.assertIn("VAL_wasteland_administration_ready = yes", gate)
-        self.assertIn("NOT = { any_enemy_country = { NOT = { tag = ERT } } }", gate)
+        self.assertIn("any_enemy_country", gate)
         managed = named_block(triggers, "VAL_wasteland_capitulation_managed")
-        self.assertIn("tag = SCA VAL = { has_completed_focus = VAL_Southern_Expansion }", managed)
+        self.assertIn("VAL = { has_completed_focus = VAL_Southern_Expansion }", managed)
 
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         military = named_block(decisions, "VAL_military_operations")
-        war = named_block(military, "VAL_operation_southern_federation")
+        war = named_block(military, "VAL_operation_reclaim_southern_sector")
+        self.assertIn("targets = { SCA IRT RZA MLR }", war)
         self.assertIn(
-            "declare_war_on = { target = SCA type = take_state_focus generator = { 167 170 171 184 185 203 } }",
+            "declare_war_on = { target = FROM type = take_state_focus generator = { 167 170 171 184 185 203 } }",
             war,
         )
         self.assertIn("VAL_call_subjects_to_wars = yes", war)
+        secure = named_block(military, "VAL_operation_secure_southern_sector")
+        self.assertIn("FROM = { VAL_settle_southern_sector_war = yes }", secure)
+        # An eastern-belt war without sector land must not offer this peace.
         self.assertIn(
-            "VAL_settle_southern_federation_war = yes",
-            named_block(military, "VAL_operation_secure_southern_federation"),
+            "FROM = { any_owned_state = { VAL_is_southern_sector_state = yes } }",
+            named_block(secure, "visible"),
         )
         self.assertIn(
             "VAL_assign_southern_sector_to_administration = yes",
@@ -262,13 +269,26 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         transfer = named_block(effects, "VAL_transfer_southern_sector_state")
         self.assertIn("WCA = { transfer_state = PREV }", transfer)
         self.assertIn("VAL = { transfer_state = PREV }", transfer)
-        limited = named_block(effects, "VAL_settle_southern_federation_war")
+        limited = named_block(effects, "VAL_settle_southern_sector_war")
         self.assertLess(
             limited.index("VAL_transfer_southern_sector_state = yes"),
-            limited.index("white_peace = SCA"),
+            limited.index("white_peace = PREV"),
         )
         settle = named_block(effects, "VAL_settle_wasteland_capitulation")
-        self.assertIn("limit = { tag = SCA }", settle)
+        # The fixed sectors go to the puppet even where a third party occupies
+        # them; only the remaining land falls to the occupier in the tail.
+        southern = settle.split("has_completed_focus = VAL_Southern_Expansion", 1)[1]
+        southern = southern.split("has_completed_focus = VAL_frontier_return_irem", 1)[0]
+        self.assertIn("VAL_is_southern_sector_state = yes", southern)
+        self.assertIn("state = 169", southern)
+        self.assertNotIn("is_controlled_by", southern)
+        eastern = settle.split("has_completed_focus = VAL_Eastern_Expansion", 1)[1]
+        eastern = eastern.split("# Any holder other than ERT", 1)[0]
+        self.assertNotIn("is_controlled_by", eastern)
+        holders = settle.split("# Any holder other than ERT", 1)[1].split("# The same capitulation", 1)[0]
+        self.assertNotIn("is_controlled_by", holders)
+        # The eastern IRT settlement keeps its own focus gate.
+        self.assertIn("has_completed_focus = VAL_Eastern_Expansion", settle)
         self.assertNotIn("WCA = { transfer_state = 168 }", settle)
         southern = settle.split("has_completed_focus = VAL_Southern_Expansion", 1)[1]
         self.assertIn("VAL = { transfer_state = 168 }", southern.split("else_if", 1)[0])
@@ -285,13 +305,13 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
                 "VAL_operation_secure_perimeter_desc",
                 "VAL_perimeter_held_tt",
                 "VAL_secure_perimeter_tt",
-                "VAL_operation_southern_federation",
-                "VAL_operation_southern_federation_desc",
-                "VAL_declares_war_sca_south_tt",
-                "VAL_operation_secure_southern_federation",
-                "VAL_operation_secure_southern_federation_desc",
-                "VAL_southern_federation_sector_held_tt",
-                "VAL_secure_southern_federation_tt",
+                "VAL_operation_reclaim_southern_sector",
+                "VAL_operation_reclaim_southern_sector_desc",
+                "VAL_declares_war_southern_sector_tt",
+                "VAL_operation_secure_southern_sector",
+                "VAL_operation_secure_southern_sector_desc",
+                "VAL_southern_sector_holdings_secured_tt",
+                "VAL_secure_southern_sector_tt",
                 "VAL_operation_assign_southern_sector",
                 "VAL_operation_assign_southern_sector_desc",
                 "VAL_southern_sector_held_tt",

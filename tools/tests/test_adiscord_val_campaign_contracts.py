@@ -339,28 +339,30 @@ class ValCampaignContractsTests(unittest.TestCase):
             with self.subTest(change=change):
                 self.assertFalse(matches_conditions(gate, {**facts, **change}, "CIN"))
 
-    def test_southern_settlement_preserves_third_party_owner_and_controller(self):
+    def test_southern_settlement_preserves_third_party_owner_not_occupation(self):
+        # Kefreyt's fixed claim survives a third party's occupation; only a state
+        # that someone else already owns stays outside the settlement.
         settlement = block(entries(EFFECTS), "VAL_settle_wasteland_capitulation")
         south = [
             entry.value for entry in walk(settlement)
-            if entry.key == "168" and any(child.key == "WCA" for child in walk(entry.value))
+            if entry.key == "168" and any(child.key == "VAL" for child in walk(entry.value))
         ]
-        self.assertEqual(len(south), 1)
+        self.assertTrue(south)
         for owner in ("ERT", "VAL", "WCA", "OCA", "STP"):
             for controller in ("ERT", "VAL", "WCA", "OCA", "STP"):
                 with self.subTest(owner=owner, controller=controller):
                     facts = {
                         ("168", "owner"): owner,
                         ("168", "controller"): controller,
+                        ("168", "is_owned_by", "ERT"): owner == "ERT",
                         ("WCA", "is_subject_of", "VAL"): True,
                         ("OCA", "is_subject_of", "VAL"): True,
                     }
                     transfers = [
-                        entry for _, entry in selected_effects(south[0], facts, "168")
-                        if entry.key == "WCA"
+                        entry for scope, entry in selected_effects(south[0], facts, "168")
+                        if scope == "VAL" and entry.key == "transfer_state"
                     ]
-                    self.assertEqual(bool(transfers), owner != "STP" and controller != "STP")
-
+                    self.assertEqual(bool(transfers), owner == "ERT")
 
 if __name__ == "__main__":
     unittest.main()

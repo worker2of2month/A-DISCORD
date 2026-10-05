@@ -2,8 +2,15 @@ ADISCORD_nam_prewar_defence_category = {
 	ADISCORD_nam_fortify_extraction_line = {
 		icon = generic_fortify_the_borders
 		allowed = { tag = NAM }
-		visible = { controls_state = 67 controls_state = 690 }
-		available = { has_war = no controls_state = 67 controls_state = 690 }
+		visible = {
+			controls_state = 67
+			controls_state = 690
+		}
+		available = {
+			has_war = no
+			controls_state = 67
+			controls_state = 690
+		}
 		cost = 20
 		days_remove = 35
 		fire_only_once = yes
@@ -944,7 +951,10 @@ NAM_public_campaigns = {
 		allowed = { tag = NAM }
 		visible = {
 			has_completed_focus = NAM_recognition
-			OR = { ADISCORD_south_crisis_open = yes ADISCORD_south_final_active = yes }
+			OR = {
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_final_active = yes
+			}
 		}
 		available = {
 			NAM_country_operable = yes

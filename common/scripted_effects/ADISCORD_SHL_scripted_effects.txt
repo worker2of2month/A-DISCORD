@@ -831,7 +831,13 @@ SHL_begin_construction = {
 			has_completed_focus = SHL_build_tenth_complex
 			check_variable = { var = SHL_project_stage value = 2 compare = equals }
 			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
-			294 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+			294 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = no
+				}
+			}
 		}
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
 		set_variable = { var = SHL_project_deposit value = 300 }
@@ -941,7 +947,15 @@ SHL_finish_project = {
 			else_if = {
 				limit = { check_variable = { var = SHL_project_operation value = 3 compare = equals } }
 				if = {
-					limit = { 294 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } } }
+					limit = {
+						294 = {
+							free_building_slots = {
+								building = industrial_complex
+								size = 1
+								include_locked = no
+							}
+						}
+					}
 					294 = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
 					set_variable = { var = SHL_project_stage value = 3 }
 					SHL_clear_project_receipt = yes
@@ -1796,9 +1810,18 @@ SHL_ensure_levy_template = {
 			is_locked = yes
 			force_allow_recruiting = no
 			regiments = {
-				infantry = { x = 0 y = 0 }
-				infantry = { x = 0 y = 1 }
-				ADISCORD_militia = { x = 1 y = 0 }
+				infantry = {
+					x = 0
+					y = 0
+				}
+				infantry = {
+					x = 0
+					y = 1
+				}
+				ADISCORD_militia = {
+					x = 1
+					y = 0
+				}
 			}
 		}
 	}
@@ -2201,7 +2224,13 @@ SHL_finish_harbour = {
 			clear_variable = SHL_harbour_deposit
 			292 = {
 				if = {
-					limit = { free_building_slots = { building = dockyard size = 1 include_locked = no } }
+					limit = {
+						free_building_slots = {
+							building = dockyard
+							size = 1
+							include_locked = no
+						}
+					}
 					add_building_construction = {
 						type = dockyard
 						level = 1
@@ -3743,7 +3772,12 @@ SHL_close_external_mzr_war = {
 			OR = {
 				exists = no
 				is_subject = yes
-				MZR = { OR = { exists = no is_subject = yes } }
+				MZR = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
 				NOT = { has_war_with = MZR }
 			}
 		}
@@ -4139,7 +4173,13 @@ SHL_deliver_southern_programme = {
 		if = {
 			limit = { SHL = { check_variable = { var = SHL_south_course value = 1 compare = equals } } }
 			if = {
-				limit = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size = 1
+						include_locked = no
+					}
+				}
 				add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
 			}
 			else = { owner = { add_equipment_to_stockpile = { type = infantry_equipment amount = 2700 producer = SHL } } }
@@ -4160,7 +4200,13 @@ SHL_deliver_southern_programme = {
 		else_if = {
 			limit = { SHL = { check_variable = { var = SHL_south_course value = 3 compare = equals } } }
 			if = {
-				limit = { free_building_slots = { building = arms_factory size = 1 include_locked = no } }
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size = 1
+						include_locked = no
+					}
+				}
 				add_building_construction = { type = arms_factory level = 1 instant_build = yes }
 			}
 			else = { owner = { add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 32 producer = SHL } } }
@@ -4480,7 +4526,8 @@ SHL_fire_transfer = {
 	}
 }
 
-# COUNTRY SHL. Five points of the division go to this share from the largest other one.
+# COUNTRY SHL. The four allocation effects move five points from the largest
+# other share; SHL_fire_transfer applies the source and recipient limits.
 SHL_fire_give_to_crest = {
 	set_temp_variable = { var = SHL_fire_from value = 2 }
 	set_temp_variable = { var = SHL_fire_best value = SHL_share_quart }
@@ -4499,7 +4546,6 @@ SHL_fire_give_to_crest = {
 	SHL_fire_transfer = yes
 }
 
-# COUNTRY SHL. Five points of the division go to this share from the largest other one.
 SHL_fire_give_to_quart = {
 	set_temp_variable = { var = SHL_fire_from value = 1 }
 	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }
@@ -4518,7 +4564,6 @@ SHL_fire_give_to_quart = {
 	SHL_fire_transfer = yes
 }
 
-# COUNTRY SHL. Five points of the division go to this share from the largest other one.
 SHL_fire_give_to_state = {
 	set_temp_variable = { var = SHL_fire_from value = 1 }
 	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }
@@ -4537,7 +4582,6 @@ SHL_fire_give_to_state = {
 	SHL_fire_transfer = yes
 }
 
-# COUNTRY SHL. Five points of the division go to this share from the largest other one.
 SHL_fire_give_to_front = {
 	set_temp_variable = { var = SHL_fire_from value = 1 }
 	set_temp_variable = { var = SHL_fire_best value = SHL_share_crest }

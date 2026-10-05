@@ -475,14 +475,18 @@
  VAL_operation_secure_perimeter:0 "Operation: Secure the Perimeter"
  VAL_operation_secure_perimeter_desc:0 "The Eastern Republic is tied down in its own war with the Southern Federation and can neither capitulate nor negotiate. Kefreyt already holds [169.GetName] and imposes limited terms: the state passes to Kefreyt and the war for the Perimeter ends."
  VAL_perimeter_held_tt:0 "Kefreyt or its subject controls [169.GetName]"
- VAL_secure_perimeter_tt:0 "[169.GetName] passes to Kefreyt.\n$ERT$ makes white peace with Kefreyt and its subjects. Its war with $SCA$ continues."
- VAL_operation_southern_federation:0 "Operation: Southern Federation"
- VAL_operation_southern_federation_desc:0 "The Southern Federation has taken part of the southern sector from the Eastern Republic. The contract administration will not receive its states until Kefreyt takes them back by force."
- VAL_declares_war_sca_south_tt:0 "§RDeclares war on $SCA$ for the southern contract-administration states.§!\nIf $SCA$ capitulates, or through Operation: Secure the Southern Sector, every sector state owned by $SCA$ passes to $WCA$. The rest of $SCA$ is not affected."
- VAL_operation_secure_southern_federation:0 "Operation: Secure the Southern Sector"
- VAL_operation_secure_southern_federation_desc:0 "Kefreyt holds everything the Southern Federation kept in the southern sector. The limited war ends without waiting for the federation to capitulate."
- VAL_southern_federation_sector_held_tt:0 "Kefreyt or its subjects control every southern-sector state owned by $SCA$"
- VAL_secure_southern_federation_tt:0 "Southern-sector states owned by $SCA$ pass to $WCA$.\nSector states owned by Kefreyt are also handed to $WCA$.\n$SCA$ makes white peace with Kefreyt and its subjects."
+ VAL_secure_perimeter_tt:0 "[169.GetName] passes to Kefreyt.
+$ERT$ makes white peace with Kefreyt and its subjects. Its wars with its closed-zone neighbours continue."
+ VAL_operation_reclaim_southern_sector:0 "Operation: Reclaim the Southern Sector"
+ VAL_operation_reclaim_southern_sector_desc:0 "In the local wars, [FROM.GetName] took part of the southern sector from the Eastern Republic. The contract administration will not receive these states until Kefreyt takes them back by force."
+ VAL_declares_war_southern_sector_tt:0 "§RDeclares war on [FROM.GetName] for the southern contract-administration states.§!
+If the enemy capitulates, or through Operation: Secure the Southern Sector, every sector state it owns passes to $WCA$. The rest of its land is not affected."
+ VAL_operation_secure_southern_sector:0 "Operation: Secure the Southern Sector"
+ VAL_operation_secure_southern_sector_desc:0 "Kefreyt holds everything [FROM.GetName] kept in the southern sector. The limited war ends without waiting for the enemy to capitulate."
+ VAL_southern_sector_holdings_secured_tt:0 "Kefreyt or its subjects control every southern-sector state owned by [FROM.GetName]"
+ VAL_secure_southern_sector_tt:0 "Southern-sector states owned by [FROM.GetName] pass to $WCA$.
+Sector states owned by Kefreyt are also handed to $WCA$.
+[FROM.GetName] makes white peace with Kefreyt and its subjects."
  VAL_operation_assign_southern_sector:0 "Hand the Southern Sector to the Administration"
  VAL_operation_assign_southern_sector_desc:0 "Part of the southern sector came to Kefreyt directly. Under the charter, $WCA$ governs these states."
  VAL_southern_sector_held_tt:0 "Kefreyt owns and controls at least one southern-sector state"

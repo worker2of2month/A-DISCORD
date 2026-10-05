@@ -83,8 +83,15 @@ unrelated third-party victories. The treaty preserves EFL and AZH and their
 faction, awards only 691/701 to NAM, and adds its existing claim to 69.
 
 The final VAL capitulation receipt has an explicit nonzero value and remains
-valid through the late callback's settlement attempt. Native `has_capitulated`
-may still be false in both callbacks. An unfinished frontier offer does not
+valid through the late callback's settlement attempt. The accepted defeat in
+`VAL_final_defeat_pending` survives later reconciliation while that country
+remains in the same war: native `has_capitulated` may still be false. Native
+`on_uncapitulation` invalidates that defeat and any Ainholm occupation snapshot;
+external peace, annexation and foreign subjugation also invalidate it. A committed
+coalition settlement survives the technical peace and liberation callbacks it
+causes itself. `[VAL_PEACE]` records native entry, accepted defeat, liberation and
+administration installation in ordinary release logs.
+An unfinished frontier offer does not
 reserve a separate NOD defeat once VAL has no active war with the frontier targets.
 
 After NOD's northern victory, VAL can negotiate with an independent TFF before
@@ -130,9 +137,11 @@ identify which treaty or map-reveal script transferred ownership.
 
 ## Automated verification
 
-Current native defeat receipts belong only to callback ROOT. They are reset at
-the next immediate callback and consumed after the last country handler. A
-liberated ally with an unexpired receipt must block settlement again. Bezhaysk
+Transient native defeat receipts belong only to callback ROOT. They are reset at
+the next immediate callback and consumed after the last country handler. Kefreyt's
+accepted coalition defeats persist separately until settlement or a native
+liberation/exit; a delayed native status must not erase them. A liberated ally
+must block settlement again even when its transient receipt had not expired. Bezhaysk
 participants and capital awards are captured before the first technical peace.
 NAM and SHL reserve major status only when their campaign added it, and native
 peace, annexation and subjugation clean up an externally interrupted campaign.

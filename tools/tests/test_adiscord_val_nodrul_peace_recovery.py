@@ -63,7 +63,7 @@ class FinalSettlementFixture:
             if key == "has_capitulated":
                 return (scope in self.capitulated) == (value == "yes")
             if key == "is_subject":
-                return (scope in self.installed) == (value == "yes")
+                return (scope in self.installed or scope in self.subjects) == (value == "yes")
             if key == "is_subject_of":
                 return self.subjects.get(scope) == value
             if key == "is_major":
@@ -100,8 +100,10 @@ class FinalSettlementFixture:
                 self.installed.append(scope)
             elif key == "VAL_transfer_party_controlled_ainholm_to_frontier":
                 assert "VAL_final_party_controlled_ainholm" not in self.flags["STP"]
-            elif key == "VAL_finalize_reserved_settlements":
+            elif key in ("VAL_finalize_reserved_settlements", "VAL_clear_final_defeat_receipt"):
                 self.execute(self.effects[key], scope)
+            elif key == "log":
+                pass
             else:
                 raise AssertionError(f"Unmodelled settlement effect: {key}")
 
@@ -112,6 +114,17 @@ class FinalSettlementFixture:
         start = next(i for i, entry in enumerate(entries) if "VAL_final_defeat_pending" in repr(entry))
         end = next(i for i, entry in enumerate(entries) if entry.key == "VAL_queue_frontier_reconciliation")
         self.execute(entries[start:end], self.root)
+
+    def uncapitulate(self, country):
+        self.capitulated.discard(country)
+        text = ON_ACTIONS.read_text(encoding="utf-8")
+        hook = named_block(text, "on_uncapitulation")
+        entries = parse_clausewitz(hook)[0].value
+        effect = next(entry.value for entry in entries if entry.key == "effect")
+        previous_root = self.root
+        self.root = country
+        self.execute(effect, country)
+        self.root = previous_root
 
 
 def named_block(text: str, name: str) -> str:
@@ -146,7 +159,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
 
     def test_liberated_ally_blocks_settlement_after_its_receipt_expires(self):
         fixture = FinalSettlementFixture("STP", "NOD")
-        fixture.capitulated.clear()
+        fixture.uncapitulate("STP")
         fixture.late_callback()
         self.assertEqual(fixture.installed, [])
         self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
@@ -154,11 +167,67 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
 
     def test_liberated_ally_cannot_reuse_a_stale_unexpired_receipt(self):
         fixture = FinalSettlementFixture("STP", "NOD")
-        fixture.capitulated.clear()
         fixture.flags["STP"].add("VAL_final_capitulation_immediate")
+        fixture.uncapitulate("STP")
         fixture.late_callback()
         self.assertEqual(fixture.installed, [])
         self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+
+    def test_recorded_defeats_survive_delayed_native_status_for_both_members(self):
+        for first, last in (("STP", "NOD"), ("NOD", "STP"), ("STS", "NOD")):
+            with self.subTest(first=first, last=last):
+                fixture = FinalSettlementFixture(first, last)
+                fixture.capitulated.clear()
+                fixture.late_callback()
+                self.assertCountEqual(fixture.installed, (first, last))
+
+    def test_recorded_defeat_survives_reconciliation_while_an_ally_fights(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.capitulated.clear()
+        fixture.flags["NOD"].clear()
+        fixture.root = "VAL"
+        fixture.execute(fixture.effects["VAL_finalize_reserved_settlements"], "VAL")
+        self.assertEqual(fixture.installed, [])
+        self.assertIn("VAL_final_defeat_pending", fixture.flags["STP"])
+
+    def test_country_that_left_the_war_cannot_reuse_a_recorded_defeat(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.neutral.add("STP")
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, ["NOD"])
+        self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+
+    def test_foreign_subject_cannot_be_taken_with_an_old_defeat_receipt(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.subjects["STP"] = "YPR"
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, ["NOD"])
+        self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+
+    def test_native_liberation_preserves_an_already_committed_transaction(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.flags["STP"].update((
+            "VAL_final_settlement_commit",
+            "VAL_final_party_controlled_ainholm",
+        ))
+        fixture.uncapitulate("STP")
+        self.assertEqual(fixture.flags["STP"], {"VAL_final_settlement_commit"})
+
+    def test_external_peace_and_annexation_clear_only_the_affected_receipt(self):
+        source = ON_ACTIONS.read_text(encoding="utf-8")
+        for hook, scope in (("on_peace", "STP"), ("on_annex", "VAL")):
+            with self.subTest(hook=hook):
+                fixture = FinalSettlementFixture("STP", "NOD")
+                section = source.split(f"# BEGIN kefreyt:{hook}\n", 1)[1]
+                section = section.split(f"# END kefreyt:{hook}", 1)[0]
+                entries = parse_clausewitz(section)
+                if hook == "on_annex":
+                    self.assertEqual(entries[0].key, "FROM")
+                    entries = entries[0].value
+                    scope = "STP"
+                fixture.execute(entries[:1], scope)
+                self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
+                self.assertIn("VAL_final_defeat_pending", fixture.flags["NOD"])
 
     def test_unbeaten_stelander_does_not_force_an_old_save_armistice(self):
         self.assertNotIn("Save-safe repair", self.reconcile)
@@ -211,7 +280,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         fixture = FinalSettlementFixture("STP", "NOD")
         fixture.members.add("AIN")
         fixture.subjects["AIN"] = "NOD"
-        fixture.capitulated.clear()
+        fixture.uncapitulate("STP")
         fixture.late_callback()
         self.assertEqual(fixture.installed, [])
 

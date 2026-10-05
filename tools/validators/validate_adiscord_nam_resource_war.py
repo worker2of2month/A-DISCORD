@@ -90,6 +90,11 @@ def without_comments(source: str) -> str:
     return "\n".join(line.split("#", 1)[0] for line in source.splitlines())
 
 
+def has_script_fragment(source: str, fragment: str) -> bool:
+    pattern = r"\s+".join(re.escape(part) for part in fragment.split())
+    return re.search(pattern, without_comments(source)) is not None
+
+
 def state_source(state_id: int) -> str:
     candidates = list((ROOT / "history" / "states").glob(f"{state_id}-*.txt"))
     if len(candidates) != 1:
@@ -497,8 +502,10 @@ def main() -> int:
     )
     check(
         "NAM = { transfer_state = 68 }" not in effects
-        and "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }"
-        in effects,
+        and has_script_fragment(
+            effects,
+            "691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }",
+        ),
         "NAM victory must transfer the connected Eflorian border state 691",
     )
     check(
@@ -928,18 +935,24 @@ def main() -> int:
         "coalition settlement lacks the NAM residual-state safety annexation",
     )
     check(
-        "688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }"
-        in coalition_victory,
+        has_script_fragment(
+            coalition_victory,
+            "688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }",
+        ),
         "state 688 cleanup is incomplete",
     )
     check(
-        "689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }"
-        in coalition_victory,
+        has_script_fragment(
+            coalition_victory,
+            "689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
+        ),
         "state 689 cleanup is incomplete",
     )
     check(
-        "690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }"
-        in coalition_victory,
+        has_script_fragment(
+            coalition_victory,
+            "690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }",
+        ),
         "state 690 cleanup is incomplete",
     )
 
@@ -950,8 +963,10 @@ def main() -> int:
     )
     check(
         "transfer_state = 688" in nam_victory
-        and "688 = { remove_core_of = SLF add_core_of = NAM set_state_controller_to = NAM }"
-        in nam_victory,
+        and has_script_fragment(
+            nam_victory,
+            "688 = { remove_core_of = SLF add_core_of = NAM set_state_controller_to = NAM }",
+        ),
         "NAM victory does not restore state 688 and remove its temporary SLF core",
     )
 
@@ -978,7 +993,7 @@ def main() -> int:
         "declare_war_on = { target = NAM",
     ):
         check(
-            token in mainland_rebellion,
+            has_script_fragment(mainland_rebellion, token),
             f"mainland Svetlogorsk rebellion is missing {token}",
         )
     slf_spawn_scope = named_block(mainland_rebellion, "SLF")
@@ -1005,7 +1020,7 @@ def main() -> int:
     )
     slf_core_states = set(
         re.findall(
-            r"(?m)^\s*(\d+)\s*=\s*\{[^\n{}]*add_core_of\s*=\s*SLF",
+            r"(?m)^\s*(\d+)\s*=\s*\{[^{}]*add_core_of\s*=\s*SLF",
             mainland_rebellion,
         )
     )
@@ -1016,7 +1031,9 @@ def main() -> int:
     defeat = named_block(effects, "ADISCORD_nam_resource_war_mark_rebels_defeated")
     check(
         "NAM = { transfer_state = 688 }" in defeat
-        and "688 = { remove_core_of = SLF set_state_controller_to = NAM }" in defeat,
+        and has_script_fragment(
+            defeat, "688 = { remove_core_of = SLF set_state_controller_to = NAM }"
+        ),
         "defeated uprising must return state 688 and remove only its temporary SLF core",
     )
     for state_id in range(225, 232):

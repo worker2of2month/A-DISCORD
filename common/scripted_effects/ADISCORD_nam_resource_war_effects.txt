@@ -32,7 +32,10 @@ ADISCORD_nam_resource_war_start = {
 				limit = { is_subject = yes }
 				overlord = { set_autonomy = { target = NAM autonomy_state = autonomy_free } }
 			}
-			if = { limit = { is_in_faction = yes } leave_faction = yes }
+			if = {
+				limit = { is_in_faction = yes }
+				leave_faction = yes
+			}
 		}
 		clr_global_flag = ADISCORD_nam_resource_war_scheduled
 		ADISCORD_nam_resource_war_begin_hostilities = yes
@@ -43,7 +46,10 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	set_global_flag = ADISCORD_nam_resource_war_started
 	VAL = {
 		if = {
-			limit = { exists = yes has_focus_tree = VAL_focus }
+			limit = {
+				exists = yes
+				has_focus_tree = VAL_focus
+			}
 			mark_focus_tree_layout_dirty = yes
 			country_event = { id = ADISCORD_nam_resource_war.3 hours = 1 }
 		}
@@ -67,7 +73,10 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_equipment_to_stockpile = { type = artillery_equipment amount = 700 producer = NAM }
 	}
 	EFL = {
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.18
 		load_oob = "EFL_nam_resource_war"
@@ -76,7 +85,10 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_equipment_to_stockpile = { type = support_equipment amount = 350 producer = EFL }
 	}
 	AZH = {
-		if = { limit = { is_in_faction = yes } leave_faction = yes }
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
 		add_ideas = ADISCORD_nam_restitution_coalition
 		add_war_support = 0.22
 		load_oob = "AZH_nam_resource_war"
@@ -86,11 +98,23 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 	# Only states with a direct material interest mobilise expeditionary corps:
 	# Rahma wants capped fuel prices; Mazar wants priority access for water convoys.
 	if = {
-		limit = { RHM = { exists = yes is_subject = no has_war = no } }
+		limit = {
+			RHM = {
+				exists = yes
+				is_subject = no
+				has_war = no
+			}
+		}
 		RHM = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
 	}
 	if = {
-		limit = { MZR = { exists = yes is_subject = no has_war = no } }
+		limit = {
+			MZR = {
+				exists = yes
+				is_subject = no
+				has_war = no
+			}
+		}
 		MZR = { add_ideas = ADISCORD_nam_profitable_volunteer_contracts }
 	}
 
@@ -102,7 +126,10 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 		add_to_faction = AZH
 	}
 
-	67 = { add_claim_by = EFL add_claim_by = AZH }
+	67 = {
+		add_claim_by = EFL
+		add_claim_by = AZH
+	}
 	# Every principal must fall before native faction peace can end the campaign.
 	NAM = { ADISCORD_nam_resource_war_reserve_major = yes }
 	EFL = { ADISCORD_nam_resource_war_reserve_major = yes }
@@ -139,7 +166,15 @@ ADISCORD_nam_resource_war_begin_hostilities = {
 
 ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	set_global_flag = ADISCORD_nam_resource_war_resolved
-	VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
+	VAL = {
+		if = {
+			limit = {
+				exists = yes
+				has_focus_tree = VAL_focus
+			}
+			mark_focus_tree_layout_dirty = yes
+		}
+	}
 	set_global_flag = ADISCORD_nam_resource_war_peaceful_partition
 	clr_global_flag = ADISCORD_nam_resource_war_started
 	clr_global_flag = ADISCORD_nam_resource_war_scheduled
@@ -147,8 +182,18 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 	clr_global_flag = ADISCORD_nam_resource_war_AZH_defeated
 	clr_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 
-	EFL = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
-	AZH = { if = { limit = { is_in_faction = yes } leave_faction = yes } }
+	EFL = {
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+	}
+	AZH = {
+		if = {
+			limit = { is_in_faction = yes }
+			leave_faction = yes
+		}
+	}
 
 	EFL = {
 		create_faction_from_template = {
@@ -171,17 +216,50 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 		transfer_state = 690
 	}
 
-	67 = { add_core_of = EFL set_state_controller_to = EFL }
-	225 = { add_core_of = EFL set_state_controller_to = EFL }
-	228 = { add_core_of = EFL set_state_controller_to = EFL }
-	230 = { add_core_of = EFL set_state_controller_to = EFL }
-	231 = { add_core_of = EFL set_state_controller_to = EFL }
-	688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }
+	67 = {
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
+	225 = {
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
+	228 = {
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
+	230 = {
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
+	231 = {
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
+	688 = {
+		remove_core_of = SLF
+		remove_core_of = NAM
+		add_core_of = EFL
+		set_state_controller_to = EFL
+	}
 
-	226 = { add_core_of = AZH set_state_controller_to = AZH }
-	227 = { add_core_of = AZH set_state_controller_to = AZH }
-	229 = { add_core_of = AZH set_state_controller_to = AZH }
-	689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+	226 = {
+		add_core_of = AZH
+		set_state_controller_to = AZH
+	}
+	227 = {
+		add_core_of = AZH
+		set_state_controller_to = AZH
+	}
+	229 = {
+		add_core_of = AZH
+		set_state_controller_to = AZH
+	}
+	689 = {
+		remove_core_of = NAM
+		add_core_of = AZH
+		set_state_controller_to = AZH
+	}
 	700 = {
 		# A transfer with no previous controller can crash native province updates.
 		if = {
@@ -195,7 +273,11 @@ ADISCORD_nam_resource_war_resolve_peaceful_withdrawal = {
 			set_state_controller_to = AZH
 		}
 	}
-	690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+	690 = {
+		remove_core_of = NAM
+		add_core_of = AZH
+		set_state_controller_to = AZH
+	}
 
 	if = {
 		limit = { NAM = { exists = yes } }
@@ -224,7 +306,10 @@ ADISCORD_nam_resource_war_start_mainland_rebellion = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 220 producer = SLF }
 			declare_war_on = { target = NAM type = annex_everything }
 		}
-		688 = { add_core_of = SLF set_state_controller_to = SLF }
+		688 = {
+			add_core_of = SLF
+			set_state_controller_to = SLF
+		}
 		SLF = { news_event = { id = ADISCORD_nam_resource_news.5 hours = 1 } }
 	}
 	else = {
@@ -245,7 +330,10 @@ ADISCORD_nam_resource_war_clear_temporary_support = {
 	AZH = { remove_ideas = ADISCORD_nam_restitution_coalition }
 	RHM = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
 	MZR = { remove_ideas = ADISCORD_nam_profitable_volunteer_contracts }
-	if = { limit = { SLF = { exists = yes } } SLF = { remove_ideas = ADISCORD_nam_insurgent_columns } }
+	if = {
+		limit = { SLF = { exists = yes } }
+		SLF = { remove_ideas = ADISCORD_nam_insurgent_columns }
+	}
 }
 
 ADISCORD_nam_refresh_emergency_defence = {
@@ -295,16 +383,38 @@ ADISCORD_nam_refresh_emergency_defence = {
 }
 
 ADISCORD_nam_resource_war_end_all_wars = {
-	if = { limit = { NAM = { has_war_with = EFL } } NAM = { white_peace = EFL } }
-	if = { limit = { NAM = { has_war_with = AZH } } NAM = { white_peace = AZH } }
-	if = { limit = { SLF = { exists = yes has_war_with = NAM } } SLF = { white_peace = NAM } }
+	if = {
+		limit = { NAM = { has_war_with = EFL } }
+		NAM = { white_peace = EFL }
+	}
+	if = {
+		limit = { NAM = { has_war_with = AZH } }
+		NAM = { white_peace = AZH }
+	}
+	if = {
+		limit = {
+			SLF = {
+				exists = yes
+				has_war_with = NAM
+			}
+		}
+		SLF = { white_peace = NAM }
+	}
 }
 
 ADISCORD_nam_resource_war_resolve_coalition_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
-		VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
+		VAL = {
+			if = {
+				limit = {
+					exists = yes
+					has_focus_tree = VAL_focus
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
 		set_global_flag = ADISCORD_nam_resource_war_coalition_victory
 		VAL = { VAL_cancel_nam_concession = yes }
 		clr_global_flag = ADISCORD_nam_resource_war_started
@@ -322,12 +432,32 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 			transfer_state = 231
 			transfer_state = 688
 		}
-		67 = { add_core_of = EFL set_state_controller_to = EFL }
-		225 = { add_core_of = EFL set_state_controller_to = EFL }
-		228 = { add_core_of = EFL set_state_controller_to = EFL }
-		230 = { add_core_of = EFL set_state_controller_to = EFL }
-		231 = { add_core_of = EFL set_state_controller_to = EFL }
-		688 = { remove_core_of = SLF remove_core_of = NAM add_core_of = EFL set_state_controller_to = EFL }
+		67 = {
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
+		225 = {
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
+		228 = {
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
+		230 = {
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
+		231 = {
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
+		688 = {
+			remove_core_of = SLF
+			remove_core_of = NAM
+			add_core_of = EFL
+			set_state_controller_to = EFL
+		}
 
 		AZH = {
 			transfer_state = 226
@@ -336,10 +466,23 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 			transfer_state = 689
 			transfer_state = 690
 		}
-		226 = { add_core_of = AZH set_state_controller_to = AZH }
-		227 = { add_core_of = AZH set_state_controller_to = AZH }
-		229 = { add_core_of = AZH set_state_controller_to = AZH }
-		689 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+		226 = {
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
+		227 = {
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
+		229 = {
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
+		689 = {
+			remove_core_of = NAM
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
 		700 = {
 			if = {
 				limit = {
@@ -352,7 +495,11 @@ ADISCORD_nam_resource_war_resolve_coalition_victory = {
 				set_state_controller_to = AZH
 			}
 		}
-		690 = { remove_core_of = NAM add_core_of = AZH set_state_controller_to = AZH }
+		690 = {
+			remove_core_of = NAM
+			add_core_of = AZH
+			set_state_controller_to = AZH
+		}
 
 		if = {
 			limit = { NAM = { exists = yes } }
@@ -369,7 +516,15 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		set_global_flag = ADISCORD_nam_resource_war_resolved
-		VAL = { if = { limit = { exists = yes has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes } }
+		VAL = {
+			if = {
+				limit = {
+					exists = yes
+					has_focus_tree = VAL_focus
+				}
+				mark_focus_tree_layout_dirty = yes
+			}
+		}
 		set_global_flag = ADISCORD_nam_resource_war_nam_victory
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes
@@ -380,7 +535,11 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 			}
 			transfer_state = 688
 		}
-		688 = { remove_core_of = SLF add_core_of = NAM set_state_controller_to = NAM }
+		688 = {
+			remove_core_of = SLF
+			add_core_of = NAM
+			set_state_controller_to = NAM
+		}
 
 		# The Middle Loren district and its urban enclave are the annexation. State 691
 		# touches NAM's mainland; state 68 is separated by Eflorian territory and
@@ -389,7 +548,11 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 		NAM = {
 			transfer_state = 691
 		}
-		691 = { remove_core_of = EFL add_core_of = NAM set_state_controller_to = NAM }
+		691 = {
+			remove_core_of = EFL
+			add_core_of = NAM
+			set_state_controller_to = NAM
+		}
 		701 = {
 			# Keep ownership, cores and control under the same native validity gate.
 			if = {
@@ -410,7 +573,10 @@ ADISCORD_nam_resource_war_resolve_nam_victory = {
 			add_stability = 0.15
 		}
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
-		VAL = { VAL_deliver_nam_concession = yes VAL_settle_resource_aid = yes }
+		VAL = {
+			VAL_deliver_nam_concession = yes
+			VAL_settle_resource_aid = yes
+		}
 		NAM = { news_event = { id = ADISCORD_nam_resource_news.3 hours = 1 } }
 	}
 }
@@ -466,11 +632,17 @@ ADISCORD_nam_resource_war_mark_azhar_defeated = {
 ADISCORD_nam_resource_war_mark_rebels_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_SLF_defeated
 	NAM = { news_event = { id = ADISCORD_nam_resource_news.6 hours = 1 } }
-	if = { limit = { NAM = { has_war_with = SLF } } NAM = { white_peace = SLF } }
+	if = {
+		limit = { NAM = { has_war_with = SLF } }
+		NAM = { white_peace = SLF }
+	}
 	if = {
 		limit = { 688 = { is_owned_by = SLF } }
 		NAM = { transfer_state = 688 }
-		688 = { remove_core_of = SLF set_state_controller_to = NAM }
+		688 = {
+			remove_core_of = SLF
+			set_state_controller_to = NAM
+		}
 	}
 	ADISCORD_nam_resource_war_check_nam_victory = yes
 }
@@ -479,7 +651,12 @@ ADISCORD_nam_resource_war_timeout_resolution = {
 	if = {
 		limit = { ADISCORD_nam_resource_war_active = yes }
 		if = {
-			limit = { NAM = { exists = yes controls_state = 67 } }
+			limit = {
+				NAM = {
+					exists = yes
+					controls_state = 67
+				}
+			}
 			ADISCORD_nam_resource_war_resolve_nam_victory = yes
 		}
 		else = {
@@ -578,17 +755,38 @@ ADISCORD_nam_resource_war_close_external = {
 		limit = {
 			ADISCORD_nam_resource_war_active = yes
 			OR = {
-				NAM = { OR = { exists = no is_subject = yes } }
-				EFL = { OR = { exists = no is_subject = yes } }
-				AZH = { OR = { exists = no is_subject = yes } }
-				NAM = { NOT = { has_war_with = EFL } NOT = { has_war_with = AZH } }
+				NAM = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				EFL = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				AZH = {
+					OR = {
+						exists = no
+						is_subject = yes
+					}
+				}
+				NAM = {
+					NOT = { has_war_with = EFL }
+					NOT = { has_war_with = AZH }
+				}
 			}
 		}
 		set_global_flag = ADISCORD_nam_resource_war_resolved
 		clr_global_flag = ADISCORD_nam_resource_war_started
 		ADISCORD_nam_resource_war_end_all_wars = yes
 		ADISCORD_nam_resource_war_clear_temporary_support = yes
-		VAL = { VAL_cancel_nam_concession = yes VAL_settle_resource_aid = yes }
+		VAL = {
+			VAL_cancel_nam_concession = yes
+			VAL_settle_resource_aid = yes
+		}
 	}
 }
 

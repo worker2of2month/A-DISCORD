@@ -90,28 +90,40 @@ ADISCORD_ai_army_needs_replacements = {
 			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
 			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
 			check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold }
-			stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+			stockpile_ratio = {
+				archetype = infantry_equipment
+				ratio < 0.05
+			}
 		}
 		AND = {
 			check_variable = { num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment > 0 }
 			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
 			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
 			check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold }
-			stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio < 0.05 }
+			stockpile_ratio = {
+				archetype = ADISCORD_squad_weapons_equipment
+				ratio < 0.05
+			}
 		}
 		AND = {
 			check_variable = { num_target_equipment_in_armies_k@support_equipment > 0 }
 			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@support_equipment }
 			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
 			check_variable = { num_equipment_in_armies_k@support_equipment < ADISCORD_ai_equipment_threshold }
-			stockpile_ratio = { archetype = support_equipment ratio < 0.05 }
+			stockpile_ratio = {
+				archetype = support_equipment
+				ratio < 0.05
+			}
 		}
 		AND = {
 			check_variable = { num_target_equipment_in_armies_k@artillery_equipment > 0 }
 			set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@artillery_equipment }
 			multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
 			check_variable = { num_equipment_in_armies_k@artillery_equipment < ADISCORD_ai_equipment_threshold }
-			stockpile_ratio = { archetype = artillery_equipment ratio < 0.05 }
+			stockpile_ratio = {
+				archetype = artillery_equipment
+				ratio < 0.05
+			}
 		}
 	}
 }
@@ -123,25 +135,45 @@ ADISCORD_ai_army_replacement_pressure_cleared = {
 	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
 	OR = {
 		NOT = { check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold } }
-		NOT = { stockpile_ratio = { archetype = infantry_equipment ratio < 0.10 } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = infantry_equipment
+				ratio < 0.10
+			}
+		}
 	}
 	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@ADISCORD_squad_weapons_equipment }
 	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
 	OR = {
 		NOT = { check_variable = { num_equipment_in_armies_k@ADISCORD_squad_weapons_equipment < ADISCORD_ai_equipment_threshold } }
-		NOT = { stockpile_ratio = { archetype = ADISCORD_squad_weapons_equipment ratio < 0.10 } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = ADISCORD_squad_weapons_equipment
+				ratio < 0.10
+			}
+		}
 	}
 	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@support_equipment }
 	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
 	OR = {
 		NOT = { check_variable = { num_equipment_in_armies_k@support_equipment < ADISCORD_ai_equipment_threshold } }
-		NOT = { stockpile_ratio = { archetype = support_equipment ratio < 0.10 } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = support_equipment
+				ratio < 0.10
+			}
+		}
 	}
 	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@artillery_equipment }
 	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.95 }
 	OR = {
 		NOT = { check_variable = { num_equipment_in_armies_k@artillery_equipment < ADISCORD_ai_equipment_threshold } }
-		NOT = { stockpile_ratio = { archetype = artillery_equipment ratio < 0.10 } }
+		NOT = {
+			stockpile_ratio = {
+				archetype = artillery_equipment
+				ratio < 0.10
+			}
+		}
 	}
 }
 
@@ -159,7 +191,10 @@ ADISCORD_ai_rifle_replacement_emergency = {
 	set_temp_variable = { ADISCORD_ai_equipment_threshold = num_target_equipment_in_armies_k@infantry_equipment }
 	multiply_temp_variable = { ADISCORD_ai_equipment_threshold = 0.85 }
 	check_variable = { num_equipment_in_armies_k@infantry_equipment < ADISCORD_ai_equipment_threshold }
-	stockpile_ratio = { archetype = infantry_equipment ratio < 0.05 }
+	stockpile_ratio = {
+		archetype = infantry_equipment
+		ratio < 0.05
+	}
 }
 
 ADISCORD_has_national_military_staff = {

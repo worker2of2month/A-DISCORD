@@ -316,48 +316,61 @@ VAL_military_operations = {
 		ai_will_do = { base = 40 }
 	}
 
-	VAL_operation_southern_federation = {
+	# The local wars can leave sector land with any closed-zone neighbour.
+	VAL_operation_reclaim_southern_sector = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
+		targets = { SCA IRT RZA MLR }
+		target_trigger = { FROM = { exists = yes } }
 		visible = {
 			has_completed_focus = VAL_Southern_Expansion
-			NOT = { has_war_with = SCA }
-			SCA = {
-				exists = yes
+			NOT = { has_war_with = FROM }
+			FROM = {
 				NOT = { is_subject_of = VAL }
-				any_owned_state = { VAL_is_southern_sector_state = yes }
+				VAL_is_southern_sector_holder = yes
 			}
 		}
-		available = { VAL_southern_federation_war_available = yes }
+		available = {
+			VAL_southern_sector_war_ready = yes
+			FROM = {
+				has_capitulated = no
+				is_subject = no
+				is_in_faction = no
+			}
+		}
 		cost = 0
 		days_re_enable = 30
 		complete_effect = {
-			custom_effect_tooltip = VAL_declares_war_sca_south_tt
-			declare_war_on = { target = SCA type = take_state_focus generator = { 167 170 171 184 185 203 } }
+			custom_effect_tooltip = VAL_declares_war_southern_sector_tt
+			declare_war_on = { target = FROM type = take_state_focus generator = { 167 170 171 184 185 203 } }
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
 		ai_will_do = { base = 20 }
 	}
 
-	VAL_operation_secure_southern_federation = {
+	VAL_operation_secure_southern_sector = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
+		targets = { SCA IRT RZA MLR }
+		target_trigger = { FROM = { exists = yes } }
+		# An eastern-belt war with IRT is not a sector war until IRT owns sector land.
 		visible = {
 			has_completed_focus = VAL_Southern_Expansion
-			has_war_with = SCA
+			has_war_with = FROM
+			FROM = { any_owned_state = { VAL_is_southern_sector_state = yes } }
 		}
 		available = {
 			has_capitulated = no
-			SCA = { has_capitulated = no }
+			FROM = { has_capitulated = no }
 			custom_trigger_tooltip = {
-				tooltip = VAL_southern_federation_sector_held_tt
-				VAL_southern_federation_sector_held = yes
+				tooltip = VAL_southern_sector_holdings_secured_tt
+				FROM = { VAL_southern_sector_holdings_secured = yes }
 			}
 		}
 		cost = 0
 		complete_effect = {
-			custom_effect_tooltip = VAL_secure_southern_federation_tt
-			hidden_effect = { VAL_settle_southern_federation_war = yes }
+			custom_effect_tooltip = VAL_secure_southern_sector_tt
+			hidden_effect = { FROM = { VAL_settle_southern_sector_war = yes } }
 		}
 		ai_will_do = { base = 50 }
 	}

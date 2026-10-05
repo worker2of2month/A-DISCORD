@@ -2059,30 +2059,32 @@ VAL_settle_perimeter_war = {
 	}
 }
 
-# COUNTRY VAL. Limited peace with SCA: its held sector states go to the
-# administration, then the Kefreyt side leaves the war.
-VAL_settle_southern_federation_war = {
+# COUNTRY sector holder. Limited peace: its held sector states go to the
+# administration, then the Kefreyt side leaves this war.
+VAL_settle_southern_sector_war = {
 	if = {
-		limit = { VAL_southern_federation_sector_held = yes }
-		SCA = {
-			every_owned_state = {
-				limit = {
-					VAL_is_southern_sector_state = yes
-					VAL_frontier_controlled = yes
-				}
-				VAL_transfer_southern_sector_state = yes
-			}
-			every_enemy_country = {
-				limit = { OR = { tag = VAL is_subject_of = VAL } }
-				white_peace = SCA
-			}
-			ADISCORD_economy_mark_dirty = yes
+		limit = {
+			has_war_with = VAL
+			VAL_southern_sector_holdings_secured = yes
 		}
-		VAL_assign_southern_sector_to_administration = yes
+		every_owned_state = {
+			limit = {
+				VAL_is_southern_sector_state = yes
+				VAL_frontier_controlled = yes
+			}
+			VAL_transfer_southern_sector_state = yes
+		}
+		every_enemy_country = {
+			limit = { OR = { tag = VAL is_subject_of = VAL } }
+			white_peace = PREV
+		}
+		ADISCORD_economy_mark_dirty = yes
+		VAL = { VAL_assign_southern_sector_to_administration = yes }
 	}
 }
 
-# COUNTRY defeated ERT/IRT/SCA. Settle only the current opponent and fixed map sector.
+# COUNTRY defeated ERT, IRT or another sector holder. Settle only the current
+# opponent and fixed map sectors.
 VAL_settle_wasteland_capitulation = {
 	set_global_flag = skip_default_capitulation
 	save_event_target_as = VAL_wasteland_defeated
@@ -2094,213 +2096,48 @@ VAL_settle_wasteland_capitulation = {
 		limit = { tag = ERT }
 		if = {
 			limit = { VAL = { has_completed_focus = VAL_Southern_Expansion VAL_wasteland_administration_ready = yes } }
-			167 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 167
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
-			}
+			# The whole fixed sector goes to the administration, including states a
+			# third party occupies; the tail below must not hand them to that occupier.
 			# Southern Tsaygen returns to Kefreyt itself, not to the administration.
 			168 = {
 				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
+					limit = { is_owned_by = ERT }
 					VAL = { transfer_state = 168 }
 					set_state_controller_to = VAL
 				}
 			}
-			169 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
+			every_owned_state = {
+				limit = {
+					OR = {
+						state = 169
+						VAL_is_southern_sector_state = yes
 					}
-					WCA = {
-						transfer_state = 169
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
 				}
-			}
-			170 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 170
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
-			}
-			171 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 171
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
-			}
-			184 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 184
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
-			}
-			185 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 185
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
-			}
-			203 = {
-				if = {
-					limit = {
-						is_owned_by = ERT
-						OR = {
-							is_controlled_by = ERT
-							controller = {
-								OR = {
-									tag = VAL
-									is_subject_of = VAL
-								}
-							}
-						}
-					}
-					WCA = {
-						transfer_state = 203
-					}
-					add_core_of = WCA
-					set_state_controller_to = WCA
-				}
+				VAL_transfer_southern_sector_state = yes
 			}
 			VAL = { VAL_assign_southern_sector_to_administration = yes }
 		}
 		else_if = {
 			limit = { VAL = { has_completed_focus = VAL_frontier_return_irem } }
-			169 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 169 } set_state_controller_to = VAL } }
+			169 = { if = { limit = { is_owned_by = ERT } VAL = { transfer_state = 169 } set_state_controller_to = VAL } }
 		}
 		else_if = {
 			limit = { VAL = { has_completed_focus = VAL_Return_Southern_Tsaygen } }
-			168 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 168 } set_state_controller_to = VAL } }
+			168 = { if = { limit = { is_owned_by = ERT } VAL = { transfer_state = 168 } set_state_controller_to = VAL } }
 		}
 	}
 	else_if = {
-		limit = { tag = SCA }
-		every_owned_state = {
-			limit = {
-				VAL_is_southern_sector_state = yes
-				OR = {
-					is_controlled_by = SCA
-					VAL_frontier_controlled = yes
-				}
+		limit = {
+			tag = IRT
+			VAL = {
+				has_completed_focus = VAL_Eastern_Expansion
+				VAL_wasteland_administration_ready = yes
 			}
-			VAL_transfer_southern_sector_state = yes
 		}
-		VAL = { VAL_assign_southern_sector_to_administration = yes }
-	}
-	else_if = {
-		limit = { tag = IRT }
+		# The fixed eastern sector ignores third-party occupation, as in the south.
 		178 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 178
 				}
@@ -2310,18 +2147,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		180 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 180
 				}
@@ -2331,18 +2157,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		181 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 181
 				}
@@ -2352,18 +2167,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		182 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 182
 				}
@@ -2373,18 +2177,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		183 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 183
 				}
@@ -2394,18 +2187,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		193 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 193
 				}
@@ -2415,18 +2197,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		206 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 206
 				}
@@ -2436,18 +2207,7 @@ VAL_settle_wasteland_capitulation = {
 		}
 		207 = {
 			if = {
-				limit = {
-					is_owned_by = IRT
-					OR = {
-						is_controlled_by = IRT
-						controller = {
-							OR = {
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-					}
-				}
+				limit = { is_owned_by = IRT }
 				WCA = {
 					transfer_state = 207
 				}
@@ -2456,9 +2216,22 @@ VAL_settle_wasteland_capitulation = {
 			}
 		}
 	}
+	# Any holder other than ERT, whose branch above settles the sector itself,
+	# yields all southern-sector land it owns, whoever occupies it.
+	if = {
+		limit = {
+			NOT = { tag = ERT }
+			VAL = { has_completed_focus = VAL_Southern_Expansion }
+		}
+		every_owned_state = {
+			limit = { VAL_is_southern_sector_state = yes }
+			VAL_transfer_southern_sector_state = yes
+		}
+		VAL = { VAL_assign_southern_sector_to_administration = yes }
+	}
 	# The same capitulation ends the defeated country's other wars. Kefreyt's
 	# claim is settled first; each third party then keeps only the defeated
-	# country's states it occupies, so no war is left open against a shell.
+	# country's remaining states it occupies, so no war is left open against a shell.
 	every_owned_state = {
 		limit = {
 			CONTROLLER = {
@@ -6951,6 +6724,14 @@ VAL_transfer_party_controlled_ainholm_to_frontier = {
 	}
 }
 
+# COUNTRY: release only defeat bookkeeping, preserving a committed settlement.
+VAL_clear_final_defeat_receipt = {
+	clr_country_flag = VAL_final_defeat_pending
+	clr_country_flag = VAL_final_capitulation_immediate
+	clr_country_flag = VAL_coalition_capitulation_current
+	clr_country_flag = VAL_final_party_controlled_ainholm
+}
+
 # COUNTRY VAL; event-driven, bounded to the three final-war recipients.
 VAL_finalize_reserved_settlements = {
 	# Snapshot every eligible coalition member before the first white peace or
@@ -6963,9 +6744,8 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
-			clr_country_flag = VAL_final_defeat_pending
-			clr_country_flag = VAL_final_party_controlled_ainholm
+			limit = { has_country_flag = VAL_final_defeat_pending VAL_final_defeat_reserved = no }
+			VAL_clear_final_defeat_receipt = yes
 		}
 	}
 	STS = {
@@ -6975,8 +6755,8 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
-			clr_country_flag = VAL_final_defeat_pending
+			limit = { has_country_flag = VAL_final_defeat_pending VAL_final_defeat_reserved = no }
+			VAL_clear_final_defeat_receipt = yes
 		}
 	}
 	NOD = {
@@ -6986,8 +6766,8 @@ VAL_finalize_reserved_settlements = {
 			set_country_flag = VAL_final_settlement_commit
 		}
 		else_if = {
-			limit = { has_country_flag = VAL_final_defeat_pending has_capitulated = no VAL_final_current_receipt = no }
-			clr_country_flag = VAL_final_defeat_pending
+			limit = { has_country_flag = VAL_final_defeat_pending VAL_final_defeat_reserved = no }
+			VAL_clear_final_defeat_receipt = yes
 		}
 	}
 
@@ -7004,6 +6784,7 @@ VAL_finalize_reserved_settlements = {
 			clr_country_flag = VAL_final_settlement_commit
 			clr_country_flag = VAL_final_defeat_pending
 			clr_country_flag = VAL_final_party_controlled_ainholm
+			log = "[VAL_PEACE] Installing STP administration from the coalition defeat snapshot"
 			VAL_install_stelander_administration = yes
 		}
 	}
@@ -7012,6 +6793,7 @@ VAL_finalize_reserved_settlements = {
 			limit = { has_country_flag = VAL_final_settlement_commit }
 			clr_country_flag = VAL_final_settlement_commit
 			clr_country_flag = VAL_final_defeat_pending
+			log = "[VAL_PEACE] Installing STS administration from the coalition defeat snapshot"
 			VAL_install_stelander_administration = yes
 		}
 	}
@@ -7020,6 +6802,7 @@ VAL_finalize_reserved_settlements = {
 			limit = { has_country_flag = VAL_final_settlement_commit }
 			clr_country_flag = VAL_final_defeat_pending
 			# white_peace dispatches on_peace before the subject is installed.
+			log = "[VAL_PEACE] Installing NOD administration from the coalition defeat snapshot"
 			VAL_install_nodrul_administration = yes
 			clr_country_flag = VAL_final_settlement_commit
 		}

@@ -113,7 +113,10 @@ SHL_conclave = {
 				factor = 0
 				FROM = { check_variable = { var = SHL_furnace_wear value = 30 compare = less_than } }
 			}
-			modifier = { factor = 10 FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } } }
+			modifier = {
+				factor = 10
+				FROM = { check_variable = { var = SHL_furnace_wear value = 60 compare = greater_than_or_equals } }
+			}
 		}
 	}
 
@@ -173,7 +176,10 @@ SHL_conclave = {
 				tooltip = SHL_site_available_tt
 				SHL_furnace_site_idle = yes
 			}
-				custom_trigger_tooltip = { tooltip = SHL_owner_settled_tt has_variable = SHL_restart_settled }
+				custom_trigger_tooltip = {
+					tooltip = SHL_owner_settled_tt
+					has_variable = SHL_restart_settled
+				}
 				check_variable = { var = SHL_furnace_running value = 0 compare = equals }
 				check_variable = { var = SHL_furnace_stock value = 1 compare = greater_than_or_equals }
 			}
@@ -545,9 +551,18 @@ SHL_tenth_project = {
 		}
 		available = {
 			SHL_project_idle = yes
-			custom_trigger_tooltip = { tooltip = SHL_transport_ready_tt NOT = { has_country_flag = SHL_transport_dispute } }
+			custom_trigger_tooltip = {
+				tooltip = SHL_transport_ready_tt
+				NOT = { has_country_flag = SHL_transport_dispute }
+			}
 			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
-			294 = { free_building_slots = { building = industrial_complex size = 1 include_locked = no } }
+			294 = {
+				free_building_slots = {
+					building = industrial_complex
+					size = 1
+					include_locked = no
+				}
+			}
 		}
 		cost = 0
 		custom_cost_text = SHL_cost_300
@@ -2030,6 +2045,7 @@ SHL_quarters_and_borders = {
 }
 
 # Shahrabad public campaigns. Slots come from the shared campaign pool.
+# Each campaign holds its own receipt; completion and cancellation return the slot once.
 SHL_public_campaigns = {
 	SHL_campaign_fire_never_sleeps = {
 		icon = ADISCORD_propaganda
@@ -2052,7 +2068,6 @@ SHL_public_campaigns = {
 			production_factory_efficiency_gain_factor = 0.05
 			stability_weekly = 0.001
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2114,7 +2129,6 @@ SHL_public_campaigns = {
 		modifier = {
 			stability_weekly = 0.002
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2183,7 +2197,6 @@ SHL_public_campaigns = {
 		modifier = {
 			political_power_gain = 0.10
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2236,7 +2249,10 @@ SHL_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = SHL }
 		visible = {
-			OR = { check_variable = { var = SHL_political_course value = 1 compare = equals } check_variable = { var = SHL_political_course value = 4 compare = equals } }
+			OR = {
+				check_variable = { var = SHL_political_course value = 1 compare = equals }
+				check_variable = { var = SHL_political_course value = 4 compare = equals }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -2253,7 +2269,6 @@ SHL_public_campaigns = {
 			ADISCORD_economy_trade_income_factor = 0.08
 			political_power_gain = 0.05
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2299,7 +2314,10 @@ SHL_public_campaigns = {
 		icon = ADISCORD_propaganda
 		allowed = { tag = SHL }
 		visible = {
-			OR = { check_variable = { var = SHL_political_course value = 2 compare = equals } check_variable = { var = SHL_political_course value = 5 compare = equals } }
+			OR = {
+				check_variable = { var = SHL_political_course value = 2 compare = equals }
+				check_variable = { var = SHL_political_course value = 5 compare = equals }
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -2316,7 +2334,6 @@ SHL_public_campaigns = {
 			stability_weekly = 0.003
 			conscription_factor = 0.03
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2379,7 +2396,6 @@ SHL_public_campaigns = {
 			industrial_capacity_factory = 0.05
 			war_support_weekly = 0.002
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
@@ -2426,7 +2442,10 @@ SHL_public_campaigns = {
 		allowed = { tag = SHL }
 		visible = {
 			has_completed_focus = SHL_quarter_listening
-			OR = { ADISCORD_south_crisis_open = yes ADISCORD_south_final_active = yes }
+			OR = {
+				ADISCORD_south_crisis_open = yes
+				ADISCORD_south_final_active = yes
+			}
 		}
 		available = {
 			SHL_country_operable = yes
@@ -2443,7 +2462,6 @@ SHL_public_campaigns = {
 			war_support_weekly = 0.003
 			army_org_factor = 0.03
 		}
-		# Each running campaign holds its own slot receipt; every exit returns it once.
 		complete_effect = {
 			hidden_effect = {
 				if = {
