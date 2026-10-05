@@ -1923,10 +1923,12 @@ SHL_sign_water_treaty = {
 				check_variable = { var = SHL_water_crisis value = 1 compare = equals }
 				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
 				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+				NOT = { has_war_with = KYZ }
 			}
 			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 			set_variable = { var = SHL_water_crisis value = 2 }
 			set_variable = { var = SHL_water_quota value = 1 }
+			KYZ = { SHL_reconcile_mzr_grievance = yes }
 			SHL_refresh_furnaces = yes
 			country_event = { id = ADISCORD_SHL.53 }
 		}
@@ -1939,8 +1941,12 @@ SHL_sign_water_brotherhood = {
 	SHL = {
 		clr_country_flag = SHL_water_offer_pending
 		if = {
-			limit = { check_variable = { var = SHL_war_kyz value = 0 compare = equals } }
+			limit = {
+				check_variable = { var = SHL_war_kyz value = 0 compare = equals }
+				NOT = { has_war_with = KYZ }
+			}
 			set_country_flag = SHL_kyz_brotherhood
+			KYZ = { SHL_reconcile_mzr_grievance = yes }
 			set_variable = { var = SHL_water_quota value = 0 }
 			if = {
 				limit = {
@@ -2024,6 +2030,7 @@ SHL_start_kyz_war = {
 	if = {
 		limit = { SHL_can_seize_qanats = yes }
 		KYZ = {
+			set_country_flag = SHL_mzr_border_grievance
 			ADISCORD_release_non_participating_minor_optimization = yes
 			add_war_support = 0.15
 			add_manpower = 6000
@@ -2131,8 +2138,12 @@ SHL_sign_veyr_union = {
 	SHL = {
 		clr_country_flag = SHL_veyr_offer_pending
 		if = {
-			limit = { check_variable = { var = SHL_war_glp value = 0 compare = equals } }
+			limit = {
+				check_variable = { var = SHL_war_glp value = 0 compare = equals }
+				NOT = { has_war_with = GLP }
+			}
 			set_country_flag = SHL_veyr_partner
+			GLP = { SHL_reconcile_mzr_grievance = yes }
 			if = {
 				limit = {
 					OR = {
@@ -2223,6 +2234,7 @@ SHL_start_glp_war = {
 	if = {
 		limit = { SHL_can_strike_veyr = yes }
 		GLP = {
+			set_country_flag = SHL_mzr_border_grievance
 			ADISCORD_release_non_participating_minor_optimization = yes
 			add_war_support = 0.15
 			add_manpower = 6000
@@ -2324,6 +2336,160 @@ SHL_glp_war_armistice = {
 
 # ----- Mazar ration and invasion (MZR) -----
 
+# COUNTRY KYZ/GLP. Reconciliation closes invitations, including unanswered events.
+SHL_reconcile_mzr_grievance = {
+	clr_country_flag = SHL_mzr_border_grievance
+	SHL_clear_mzr_partner_offer = yes
+}
+
+SHL_clear_mzr_partner_offer = {
+	clr_country_flag = SHL_mzr_pact_pending
+	clr_country_flag = SHL_mzr_pact_signed
+	clr_country_flag = SHL_mzr_neutrality_pending
+}
+
+# COUNTRY SHL. A single invitation per preparation period; refusal never replaces
+# the announced candidate with an unannounced neighbour.
+SHL_prepare_mzr_partner = {
+	if = {
+		limit = {
+			SHL_mzr_diplomacy_open = yes
+			NOT = { has_country_flag = SHL_mzr_diplomacy_started }
+		}
+		set_country_flag = SHL_mzr_diplomacy_started
+		if = {
+			limit = { KYZ = { SHL_mzr_partner_eligible = yes } }
+			KYZ = { SHL_invite_mzr_partner = yes }
+		}
+		else_if = {
+			limit = { GLP = { SHL_mzr_partner_eligible = yes } }
+			GLP = { SHL_invite_mzr_partner = yes }
+		}
+	}
+}
+
+# COUNTRY partner. Wake the existing army before its preparation window begins.
+SHL_invite_mzr_partner = {
+	ADISCORD_release_non_participating_minor_optimization = yes
+	set_country_flag = SHL_mzr_pact_pending
+	SHL = { country_event = { id = ADISCORD_SHL.124 } }
+	country_event = { id = ADISCORD_SHL.125 }
+}
+
+SHL_accept_mzr_pact = {
+	if = {
+		limit = {
+			SHL_mzr_partner_offer_current = yes
+			has_country_flag = SHL_mzr_pact_pending
+		}
+		clr_country_flag = SHL_mzr_pact_pending
+		set_country_flag = SHL_mzr_pact_signed
+	}
+}
+
+# COUNTRY SHL. Only the eventual agreement charges the quoted resources.
+SHL_request_mzr_neutrality = {
+	if = {
+		limit = {
+			SHL_mzr_diplomacy_open = yes
+			SHL_mzr_neutrality_affordable = yes
+			KYZ = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
+			GLP = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
+		}
+		if = {
+			limit = { KYZ = { SHL_mzr_partner_offer_current = yes } }
+			KYZ = {
+				set_country_flag = SHL_mzr_neutrality_pending
+				country_event = { id = ADISCORD_SHL.126 }
+			}
+		}
+		else_if = {
+			limit = { GLP = { SHL_mzr_partner_offer_current = yes } }
+			GLP = {
+				set_country_flag = SHL_mzr_neutrality_pending
+				country_event = { id = ADISCORD_SHL.126 }
+			}
+		}
+	}
+}
+
+# COUNTRY partner. The receipt is consumed before payment, so a stale offer
+# cannot debit SHL twice or deliver compensation after hostilities begin.
+SHL_accept_mzr_neutrality = {
+	if = {
+		limit = { SHL_mzr_neutrality_current = yes }
+		SHL_reconcile_mzr_grievance = yes
+		SHL = {
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+			add_political_power = -30
+			country_event = { id = ADISCORD_SHL.127 }
+		}
+		add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+	}
+	else = { SHL_decline_mzr_neutrality = yes }
+}
+
+SHL_decline_mzr_neutrality = {
+	if = {
+		limit = { has_country_flag = SHL_mzr_neutrality_pending }
+		clr_country_flag = SHL_mzr_neutrality_pending
+		SHL = { country_event = { id = ADISCORD_SHL.128 } }
+	}
+}
+
+SHL_clear_mzr_diplomacy = {
+	clr_country_flag = SHL_mzr_diplomacy_started
+	KYZ = { SHL_clear_mzr_partner_offer = yes }
+	GLP = { SHL_clear_mzr_partner_offer = yes }
+}
+
+# COUNTRY partner, after the SHL/MZR declaration. The pact covers this war only.
+SHL_join_mzr_side = {
+	if = {
+		limit = {
+			has_country_flag = SHL_mzr_pact_signed
+			SHL_mzr_partner_eligible = yes
+			SHL = { has_war_with = MZR }
+		}
+		MZR = {
+			create_faction_from_template = {
+				template = faction_template_ADISCORD_standard
+				name = SHL_mzr_border_pact_faction
+			}
+			set_country_flag = SHL_mzr_temporary_faction
+			add_to_faction = PREV
+		}
+		set_country_flag = SHL_mzr_war_partner
+		add_to_war = {
+			targeted_alliance = MZR
+			enemy = SHL
+			hostility_reason = asked_to_join
+		}
+	}
+}
+
+# COUNTRY SHL or its recorded ally. End only the scripted coalition's wars.
+SHL_peace_mzr_side = {
+	if = {
+		limit = { has_war_with = MZR }
+		white_peace = MZR
+	}
+	if = {
+		limit = {
+			KYZ = { has_country_flag = SHL_mzr_war_partner }
+			has_war_with = KYZ
+		}
+		white_peace = KYZ
+	}
+	if = {
+		limit = {
+			GLP = { has_country_flag = SHL_mzr_war_partner }
+			has_war_with = GLP
+		}
+		white_peace = GLP
+	}
+}
+
 SHL_mazar_pay_first = {
 	if = {
 		limit = {
@@ -2348,6 +2514,7 @@ SHL_mazar_pay_final = {
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
 		set_variable = { var = SHL_mazar_state value = 3 }
 		set_variable = { var = SHL_mzr_outcome value = 6 }
+		SHL_clear_mzr_diplomacy = yes
 		SHL_cancel_mzr_mobilization = yes
 		SHL_clean_campaign = yes
 	}
@@ -2358,6 +2525,7 @@ SHL_mazar_refuse = {
 		limit = { check_variable = { var = SHL_mazar_state value = 1 compare = equals } }
 		set_variable = { var = SHL_mazar_state value = 5 }
 		activate_mission = SHL_mazar_deadline
+		SHL_prepare_mzr_partner = yes
 	}
 }
 
@@ -2373,6 +2541,7 @@ SHL_mazar_buyout = {
 		add_political_power = -50
 		set_variable = { var = SHL_mazar_state value = 3 }
 		set_variable = { var = SHL_mzr_outcome value = 6 }
+		SHL_clear_mzr_diplomacy = yes
 		SHL_cancel_mzr_mobilization = yes
 		SHL_clean_campaign = yes
 		if = {
@@ -2450,7 +2619,7 @@ SHL_start_mzr_war = {
 			}
 		}
 		else = {
-		MZR = {
+			MZR = {
 				declare_war_on = {
 					target = SHL
 					type = take_state_focus
@@ -2458,6 +2627,8 @@ SHL_start_mzr_war = {
 				}
 			}
 		}
+		KYZ = { SHL_join_mzr_side = yes }
+		GLP = { SHL_join_mzr_side = yes }
 		KYZ = {
 			if = {
 				limit = {
@@ -2470,6 +2641,7 @@ SHL_start_mzr_war = {
 					enemy = MZR
 					hostility_reason = asked_to_join
 				}
+				set_country_flag = SHL_mzr_shl_partner
 			}
 		}
 		GLP = {
@@ -2484,13 +2656,16 @@ SHL_start_mzr_war = {
 					enemy = MZR
 					hostility_reason = asked_to_join
 				}
+				set_country_flag = SHL_mzr_shl_partner
 			}
 		}
+		SHL_clear_mzr_diplomacy = yes
 		country_event = { id = ADISCORD_SHL.71 }
 		country_event = { id = ADISCORD_SHL.72 days = 300 }
 	}
 	else_if = {
 		limit = { check_variable = { var = SHL_mazar_state value = 5 compare = equals } }
+		SHL_clear_mzr_diplomacy = yes
 		set_variable = { var = SHL_mazar_state value = 2 }
 		set_variable = { var = SHL_mazar_repeat_cycle value = SHL_cycle_number }
 		add_to_variable = { var = SHL_mazar_repeat_cycle value = 4 }
@@ -2498,29 +2673,60 @@ SHL_start_mzr_war = {
 }
 
 SHL_close_mzr_war = {
-	if = {
-		limit = { has_war_with = MZR }
-		white_peace = MZR
-	}
+	# Close the dispatcher guard before white peace can invoke on_peace.
+	set_variable = { var = SHL_war_mzr value = 0 }
+	SHL_peace_mzr_side = yes
 	KYZ = {
 		if = {
-			limit = { has_war_with = MZR }
-			white_peace = MZR
+			limit = { has_country_flag = SHL_mzr_shl_partner }
+			SHL_peace_mzr_side = yes
 		}
 	}
 	GLP = {
 		if = {
-			limit = { has_war_with = MZR }
-			white_peace = MZR
+			limit = { has_country_flag = SHL_mzr_shl_partner }
+			SHL_peace_mzr_side = yes
 		}
 	}
-	set_variable = { var = SHL_war_mzr value = 0 }
+	# Annexation can move leadership to the remaining signatory before on_annex.
+	KYZ = { SHL_dissolve_inherited_mzr_pact = yes }
+	GLP = { SHL_dissolve_inherited_mzr_pact = yes }
+	MZR = {
+		if = {
+			limit = { has_country_flag = SHL_mzr_temporary_faction }
+			if = {
+				limit = { is_faction_leader = yes }
+				dismantle_faction = yes
+			}
+			clr_country_flag = SHL_mzr_temporary_faction
+		}
+	}
+	KYZ = {
+		clr_country_flag = SHL_mzr_shl_partner
+		clr_country_flag = SHL_mzr_war_partner
+	}
+	GLP = {
+		clr_country_flag = SHL_mzr_shl_partner
+		clr_country_flag = SHL_mzr_war_partner
+	}
+	SHL_clear_mzr_diplomacy = yes
 	set_variable = { var = SHL_mazar_state value = 3 }
 	clr_country_flag = SHL_war_mzr_clock
 	clr_country_flag = SHL_mzr_offensive
 	SHL_clean_campaign = yes
 	SHL = { SHL_release_mzr_principal = yes }
 	MZR = { SHL_release_mzr_principal = yes }
+}
+
+SHL_dissolve_inherited_mzr_pact = {
+	if = {
+		limit = {
+			has_country_flag = SHL_mzr_war_partner
+			is_faction_leader = yes
+			MZR = { has_country_flag = SHL_mzr_temporary_faction }
+		}
+		dismantle_faction = yes
+	}
 }
 
 # COUNTRY principal; an allied capitulation must not end this limited war.
@@ -2620,6 +2826,7 @@ SHL_join_southern_compact = {
 			clr_country_flag = SHL_southern_alliance_pending
 			country_event = { id = ADISCORD_SHL.92 }
 		}
+		SHL_reconcile_mzr_grievance = yes
 		if = {
 			limit = {
 				SHL = { has_war_with = MZR }
@@ -2630,6 +2837,7 @@ SHL_join_southern_compact = {
 				enemy = MZR
 				hostility_reason = asked_to_join
 			}
+			set_country_flag = SHL_mzr_shl_partner
 		}
 	}
 	else = {
@@ -2664,6 +2872,7 @@ SHL_join_golden_gate = {
 			clr_country_flag = SHL_golden_alliance_pending
 			country_event = { id = ADISCORD_SHL.92 }
 		}
+		SHL_reconcile_mzr_grievance = yes
 		if = {
 			limit = {
 				SHL = { has_war_with = MZR }
@@ -2674,6 +2883,7 @@ SHL_join_golden_gate = {
 				enemy = MZR
 				hostility_reason = asked_to_join
 			}
+			set_country_flag = SHL_mzr_shl_partner
 		}
 	}
 	else = {
@@ -3620,6 +3830,7 @@ SHL_begin_mzr_mobilization = {
 	if = {
 		limit = { SHL_can_march_on_mazar = yes }
 		set_country_flag = SHL_mzr_mobilizing
+		SHL_prepare_mzr_partner = yes
 		MZR = { country_event = { id = ADISCORD_SHL.111 } }
 	}
 }
@@ -3640,7 +3851,13 @@ SHL_finish_mzr_mobilization = {
 			set_country_flag = SHL_mzr_offensive
 			SHL_start_mzr_war = yes
 		}
-		else = { add_political_power = 50 }
+		else = {
+			add_political_power = 50
+			if = {
+				limit = { SHL_mzr_diplomacy_open = no }
+				SHL_clear_mzr_diplomacy = yes
+			}
+		}
 	}
 }
 
@@ -3668,6 +3885,10 @@ SHL_cancel_mzr_mobilization = {
 		limit = { has_country_flag = SHL_mzr_mobilizing }
 		clr_country_flag = SHL_mzr_mobilizing
 		add_political_power = 50
+		if = {
+			limit = { SHL_mzr_diplomacy_open = no }
+			SHL_clear_mzr_diplomacy = yes
+		}
 	}
 }
 
@@ -4053,6 +4274,7 @@ SHL_close_lost_mazar_threat = {
 		}
 		set_variable = { var = SHL_mazar_state value = 3 }
 		set_variable = { var = SHL_mzr_outcome value = 7 }
+		SHL_clear_mzr_diplomacy = yes
 		if = {
 			limit = { has_active_mission = SHL_mazar_deadline }
 			remove_mission = SHL_mazar_deadline

@@ -2095,6 +2095,20 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         self.assertIn("ADISCORD_power_shield_equipment = 20", unit)
         self.assertIn("ADISCORD_power_shield_equipment", self.block(unit, "essential"))
 
+    def test_every_shield_generation_protects_and_improves_with_its_price(self):
+        equipment = validator.collect_equipment_blocks()
+        base = equipment["ADISCORD_power_shield_equipment"]
+        previous = {"defense": 0, "breakthrough": 0, "build_cost_ic": 0}
+        for tier in (1, 2, 3):
+            model = equipment[f"ADISCORD_power_shield_equipment_{tier}"]
+            for stat in previous:
+                pattern = rf"\b{stat} = ([0-9.]+)"
+                match = re.search(pattern, model) or re.search(pattern, base)
+                self.assertIsNotNone(match, (tier, stat))
+                current = float(match[1])
+                self.assertGreater(current, previous[stat], (tier, stat))
+                previous[stat] = current
+
     def test_infantry_roles_retain_cost_and_combat_tradeoffs(self):
         source = self.read("common/units/ADISCORD_land_units.txt")
         units = {name: self.block(source, name) for name in (
@@ -2118,7 +2132,7 @@ class InfantryRoleAndShieldTests(unittest.TestCase):
         source = self.read("common/units/ADISCORD_land_units.txt")
         units = parse_clausewitz(source)[0].value
         expected = {
-            "ADISCORD_urban_breacher": {"attack": 0.25, "defence": 0.20},
+            "ADISCORD_urban_breacher": {"attack": 0.35, "defence": 0.30},
             "ADISCORD_assault_infantry": {"attack": 0.10},
             "ADISCORD_mechanized_infantry": {"attack": -0.10},
             "ADISCORD_combat_platform": {"attack": -0.15},

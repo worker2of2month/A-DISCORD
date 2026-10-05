@@ -3352,6 +3352,35 @@ focus_tree = {
 		}
 	}
 
+	# Any one won campaign opens the fourth slot, so every exclusive war route keeps it.
+	focus = {
+		id = VAL_econ_captured_laboratories
+		icon = GFX_focus_research
+		x = 0
+		y = 15
+		cost = 5
+		search_filters = { FOCUS_FILTER_VAL_ECONOMY FOCUS_FILTER_VAL_EXPANSION }
+		available = {
+			is_subject = no
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = VAL_econ_captured_laboratories_available_tt
+				OR = {
+					VAL_occidia_secured = yes
+					VAL_northern_foothold_secured = yes
+					has_country_flag = ADISCORD_bezhaysk_settlement_completed
+					STP = { is_subject_of = VAL }
+					STS = { is_subject_of = VAL }
+				}
+			}
+		}
+		prerequisite = { focus = VAL_econ_computing }
+		ai_will_do = { base = 8 }
+		completion_reward = {
+			add_research_slot = 1
+		}
+	}
+
 	focus = {
 		id = VAL_econ_defense_orders
 		icon = GFX_goal_generic_production2

@@ -4,7 +4,7 @@ VAL_final_crisis_available = {
 	has_capitulated = no
 	NOT = { has_country_flag = VAL_stelander_equal_alliance }
 	has_completed_focus = VAL_Northern_Settlement
-	VAL_stelander_dominated = yes
+	VAL_nod_campaign_stelander_ready = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
 	NOD = {
 		exists = yes
@@ -1056,6 +1056,25 @@ VAL_stelander_dominated = {
 		} }
 	}
 }
+# COUNTRY VAL. Holding the agreed border award opens the next war, but
+# does not satisfy the final requirement to dominate all of Stelander.
+VAL_nod_campaign_stelander_ready = {
+	OR = {
+		VAL_stelander_dominated = yes
+		AND = {
+			has_country_flag = STP_val_nod_partition
+			46 = {
+				VAL_frontier_controlled = yes
+				owner = { OR = { tag = VAL is_subject_of = VAL } }
+			}
+			29 = {
+				VAL_frontier_controlled = yes
+				owner = { OR = { tag = VAL is_subject_of = VAL } }
+			}
+		}
+	}
+}
+
 VAL_campaign_objectives_met = {
 	has_capitulated = no is_subject = no has_war = no
 	VAL_cannibal_sphere_secured = yes
@@ -2054,6 +2073,60 @@ VAL_wasteland_administration_ready = {
 	is_subject = no
 	WCA = { exists = yes is_subject_of = VAL has_capitulated = no owns_state = 169 controls_state = 169 }
 }
+
+# STATE. The southern contract sector outside the 169 bridgehead; the same set
+# as the southern capitulation settlement and the operations map.
+VAL_is_southern_sector_state = {
+	OR = {
+		state = 167
+		state = 168
+		state = 170
+		state = 171
+		state = 184
+		state = 185
+		state = 203
+	}
+}
+
+# COUNTRY VAL. The perimeter war is limited to 169; holding it ends that war even
+# while ERT survives in its separate war with SCA.
+VAL_perimeter_settlement_ready = {
+	has_capitulated = no
+	has_war_with = ERT
+	ERT = { has_capitulated = no }
+	169 = { is_owned_by = ERT VAL_frontier_controlled = yes }
+}
+
+# COUNTRY VAL. SCA may hold southern-sector land taken from ERT in their local war.
+# Only a separate ERT campaign may run beside this declaration.
+VAL_southern_federation_war_available = {
+	has_capitulated = no
+	is_subject = no
+	VAL_wasteland_administration_ready = yes
+	NOT = { has_war_with = SCA }
+	NOT = { any_enemy_country = { NOT = { tag = ERT } } }
+	SCA = {
+		exists = yes
+		has_capitulated = no
+		is_subject = no
+		is_in_faction = no
+		any_owned_state = { VAL_is_southern_sector_state = yes }
+	}
+}
+
+# COUNTRY VAL. Every sector state SCA still owns is held by Kefreyt or its subject.
+VAL_southern_federation_sector_held = {
+	has_war_with = SCA
+	SCA = {
+		has_capitulated = no
+		NOT = {
+			any_owned_state = {
+				VAL_is_southern_sector_state = yes
+				NOT = { VAL_frontier_controlled = yes }
+			}
+		}
+	}
+}
 # COUNTRY capitulating opponent. Do not claim an unrelated victor's result.
 VAL_wasteland_capitulation_managed = {
 	has_war_with = VAL
@@ -2080,6 +2153,7 @@ VAL_wasteland_capitulation_managed = {
 			}
 		}
 		AND = { tag = IRT VAL = { has_completed_focus = VAL_Eastern_Expansion VAL_wasteland_administration_ready = yes } }
+		AND = { tag = SCA VAL = { has_completed_focus = VAL_Southern_Expansion } }
 	}
 }
 

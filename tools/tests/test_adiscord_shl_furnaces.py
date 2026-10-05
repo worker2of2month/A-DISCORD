@@ -64,6 +64,8 @@ class ScriptMachine:
         self.anti_air = 0
         self.free_slots = True
         self.capitulated = False
+        self.root_scope = "SHL"
+        self.neighbours = {"KYZ", "GLP", "MZR"}
         self.majors = set()
         self.scheduled = []
         self.values = {"political_power": 200.0, "stability": 0.0}
@@ -153,13 +155,19 @@ class ScriptMachine:
                     return name in self.flags[scope] and self.flag_days[scope].get(name, 0) > 27
                 return e.value in self.flags[scope]
             if e.key in ("ROOT", "SHL"):
-                return self.condition_scope(e.value, "SHL", scope, target)
+                country = self.root_scope if e.key == "ROOT" else "SHL"
+                return self.condition_scope(e.value, country, scope, target)
             if e.key in NEIGHBOURS:
                 return self.condition_scope(e.value, e.key, scope, target)
             if e.key == "exists" and scope in NEIGHBOURS:
                 return self.countries[scope]["exists"] == (e.value == "yes")
             if e.key in ("is_subject", "has_war") and scope in self.countries:
-                return self.countries[scope][e.key] == (e.value == "yes")
+                value = self.countries[scope][e.key]
+                if e.key == "has_war":
+                    value = value or any(scope in war for war in self.wars)
+                return value == (e.value == "yes")
+            if e.key == "is_neighbor_of":
+                return e.value == "SHL" and scope in self.neighbours
             if e.key == "is_subject" and scope == "SHL":
                 return e.value == "no"
             if e.key == "has_war" and scope == "SHL":
@@ -277,7 +285,8 @@ class ScriptMachine:
             elif e.key in ("hidden_effect",):
                 self.execute(e.value, scope, target)
             elif e.key in ("ROOT", "SHL"):
-                self.switch_scope(e.value, "SHL", scope, target)
+                country = self.root_scope if e.key == "ROOT" else "SHL"
+                self.switch_scope(e.value, country, scope, target)
             elif e.key == "PREV":
                 self.switch_scope(e.value, self.previous_scope, scope, target)
             elif e.key in NEIGHBOURS:
@@ -290,7 +299,14 @@ class ScriptMachine:
                 enemy = scalar(e.value, "enemy")
                 if frozenset((ally, enemy)) not in self.wars:
                     raise AssertionError("Cannot join a war that does not exist")
-                self.wars.add(frozenset((scope, enemy)))
+                # Joining the existing war includes opponents already fighting
+                # the requested side, including the other coalition member.
+                enemies = {enemy}
+                for war in self.wars:
+                    if ally in war:
+                        enemies.update(war - {ally})
+                for opponent in enemies:
+                    self.wars.add(frozenset((scope, opponent)))
                 self.calls.append(("add_to_war", scope))
             elif e.key == "white_peace":
                 self.wars.discard(frozenset((scope, e.value)))
@@ -333,6 +349,11 @@ class ScriptMachine:
             elif e.key == "add_to_faction":
                 member = self.previous_scope if e.value == "PREV" else e.value
                 self.factions[member] = self.factions.get(scope, scope)
+            elif e.key == "dismantle_faction":
+                leader = self.factions.get(scope)
+                if leader != scope:
+                    raise AssertionError("Only the faction leader can dissolve it")
+                self.factions = {tag: faction for tag, faction in self.factions.items() if faction != leader}
             elif e.key in (
                 "set_politics", "add_popularity", "promote_character", "retire_character",
                 "mark_focus_tree_layout_dirty", "damage_building", "add_war_support",
@@ -379,6 +400,8 @@ class ScriptMachine:
                 self.flag_days[scope][e.value] = 0
             elif e.key in ("clr_country_flag", "clr_state_flag"):
                 self.flags[scope].discard(e.value)
+            elif e.key == "set_global_flag":
+                self.global_flags.add(e.value)
             elif e.key == "add_building_construction":
                 self.state_buildings[(scope, scalar(e.value, "type"))] += int(scalar(e.value, "level"))
                 if scalar(e.value, "type") == "industrial_complex":
@@ -1405,6 +1428,283 @@ class CrisisLayerTests(unittest.TestCase):
             text += (ROOT / f"localisation/{language}/ADISCORD_south_final_war_l_{language}.yml").read_text(encoding="utf-8-sig")
             defined = set(re.findall(r"^ ([\w.]+):", text, re.M))
             self.assertEqual(sorted(keys - defined), [], language)
+
+
+class MazarBorderPactTests(unittest.TestCase):
+    setUp = CrisisLayerTests.setUp
+    country = CrisisLayerTests.country
+
+    def prepare(self, partner="KYZ"):
+        self.m.flags[partner].add("SHL_mzr_border_grievance")
+        self.country()["SHL_mazar_state"] = 1
+        self.m.run("SHL_mazar_refuse")
+
+    def start(self, partner="KYZ", ally=None):
+        self.prepare(partner)
+        self.m.run("SHL_accept_mzr_pact", scope=partner)
+        if ally:
+            self.m.factions.update({"SHL": "SHL", ally: "SHL"})
+        self.m.run("SHL_start_mzr_war")
+
+    def event(self, number):
+        events = parse_clausewitz((ROOT / "events/ADISCORD_SHL_events.txt").read_text(encoding="utf-8"))
+        return next(e.value for e in events if e.key == "country_event" and scalar(e.value, "id") == f"ADISCORD_SHL.{number}")
+
+    def capitulate(self, loser, winner):
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text(encoding="utf-8")
+        section = source.split("# BEGIN shahrabad:on_capitulation", 1)[1].split("# END shahrabad:on_capitulation", 1)[0]
+        self.m.root_scope = loser
+        self.m.execute(parse_clausewitz(section), loser, winner)
+
+    def test_only_actual_military_action_creates_a_grievance(self):
+        for partner, crisis, focus, start, armistice in (
+            ("KYZ", "SHL_water_crisis", "SHL_right_to_water", "SHL_start_kyz_war", "SHL_kyz_war_armistice"),
+            ("GLP", "SHL_veyr_crisis", "SHL_veyr_ultimatum", "SHL_start_glp_war", "SHL_glp_war_armistice"),
+        ):
+            with self.subTest(partner=partner):
+                self.setUp()
+                self.country()[crisis] = 1
+                self.m.focuses.add(focus)
+                self.country()["SHL_mazar_state"] = 1
+                self.m.run("SHL_mazar_refuse")
+                self.assertNotIn("ADISCORD_SHL.124", self.m.scheduled)
+                self.m.run(start)
+                self.m.run(armistice)
+                self.assertIn("SHL_mzr_border_grievance", self.m.flags[partner])
+                self.m.run("SHL_clear_mzr_diplomacy")
+                self.m.run("SHL_prepare_mzr_partner")
+                self.assertIn("SHL_mzr_pact_pending", self.m.flags[partner])
+
+    def test_at_most_one_announced_candidate_and_no_replacement_after_refusal(self):
+        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.prepare()
+        self.m.run("SHL_prepare_mzr_partner")
+        self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.124"), 1)
+        self.assertIn("SHL_mzr_pact_pending", self.m.flags["KYZ"])
+        self.assertNotIn("SHL_mzr_pact_pending", self.m.flags["GLP"])
+        first_option = block(self.event(125), "option")
+        self.m.execute(block(first_option, "hidden_effect"), "KYZ")
+        self.m.run("SHL_prepare_mzr_partner")
+        self.m.run("SHL_start_mzr_war")
+        self.assertNotIn(frozenset(("KYZ", "SHL")), self.m.wars)
+        self.assertNotIn(frozenset(("GLP", "SHL")), self.m.wars)
+
+    def test_subject_foreign_faction_war_or_lost_border_blocks_candidate(self):
+        for reason in ("subject", "faction", "war", "border", "absent", "mazar_faction"):
+            with self.subTest(reason=reason):
+                self.setUp()
+                if reason == "subject":
+                    self.m.countries["KYZ"]["is_subject"] = True
+                elif reason == "faction":
+                    self.m.factions["KYZ"] = "VAL"
+                elif reason == "war":
+                    self.m.wars.add(frozenset(("KYZ", "VAL")))
+                elif reason == "border":
+                    self.m.neighbours.remove("KYZ")
+                elif reason == "absent":
+                    self.m.countries["KYZ"]["exists"] = False
+                else:
+                    self.m.factions["MZR"] = "VAL"
+                self.prepare()
+                self.assertNotIn("ADISCORD_SHL.125", self.m.scheduled)
+
+    def test_both_candidates_join_the_existing_war_with_no_extra_declaration(self):
+        for partner, ally in (("KYZ", "GLP"), ("GLP", "KYZ")):
+            with self.subTest(partner=partner):
+                self.setUp()
+                self.start(partner, ally)
+                self.assertEqual(self.m.factions[partner], "MZR")
+                self.assertEqual(self.m.majors, {"SHL", "MZR"})
+                self.assertEqual(len([call for call in self.m.calls if call[0] == "declare_war_on"]), 1)
+                for opponent in ("MZR", partner):
+                    for friend in ("SHL", ally):
+                        self.assertIn(frozenset((opponent, friend)), self.m.wars)
+                self.assertNotIn("SHL_mzr_pact_pending", self.m.flags[partner])
+
+    def test_offensive_warns_during_the_existing_28_day_mobilization(self):
+        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.m.focuses.add("SHL_no_more_rations")
+        self.m.run("SHL_begin_mzr_mobilization")
+        self.assertIn("ADISCORD_SHL.124", self.m.scheduled)
+        self.assertFalse(self.m.wars)
+        self.m.run("SHL_accept_mzr_pact", scope="GLP")
+        self.m.run("SHL_finish_mzr_mobilization")
+        self.assertIn(("declare_war_on", "SHL", "MZR"), self.m.calls)
+        self.assertIn(frozenset(("GLP", "SHL")), self.m.wars)
+
+    def test_neutrality_payment_requires_choice_and_is_exactly_once(self):
+        for partner in ("KYZ", "GLP"):
+            with self.subTest(partner=partner):
+                self.setUp()
+                self.prepare(partner)
+                self.m.run("SHL_accept_mzr_pact", scope=partner)
+                self.country()["ADISCORD_economy_treasury"] = 100
+                self.m.values["political_power"] = 30
+                self.m.run("SHL_request_mzr_neutrality")
+                self.m.run("SHL_request_mzr_neutrality")
+                self.assertEqual(self.m.scheduled.count("ADISCORD_SHL.126"), 1)
+                self.assertEqual(self.country()["ADISCORD_economy_treasury"], 100)
+                self.m.run("SHL_accept_mzr_neutrality", scope=partner)
+                self.m.run("SHL_accept_mzr_neutrality", scope=partner)
+                self.assertEqual(self.country()["ADISCORD_economy_treasury"], 0)
+                self.assertEqual(self.m.values["political_power"], 0)
+                self.assertEqual(self.m.variables[partner]["ADISCORD_economy_treasury"], 100)
+                self.m.run("SHL_accept_mzr_pact", scope=partner)
+                self.m.run("SHL_start_mzr_war")
+                self.assertNotIn(frozenset((partner, "SHL")), self.m.wars)
+
+    def test_changed_funds_and_late_answers_never_charge_or_change_sides(self):
+        for reason in ("treasury", "political_power", "war", "peace", "faction", "subject"):
+            with self.subTest(reason=reason):
+                self.setUp()
+                self.prepare()
+                self.m.run("SHL_accept_mzr_pact", scope="KYZ")
+                self.m.run("SHL_request_mzr_neutrality")
+                if reason == "treasury":
+                    self.country()["ADISCORD_economy_treasury"] = 99.9
+                elif reason == "political_power":
+                    self.m.values["political_power"] = 29.9
+                elif reason == "war":
+                    self.m.run("SHL_start_mzr_war")
+                elif reason == "peace":
+                    self.m.run("SHL_mazar_buyout")
+                elif reason == "faction":
+                    self.m.factions["KYZ"] = "VAL"
+                else:
+                    self.m.countries["KYZ"]["is_subject"] = True
+                balances = (self.country()["ADISCORD_economy_treasury"], self.m.values["political_power"])
+                self.m.run("SHL_accept_mzr_neutrality", scope="KYZ")
+                self.assertEqual(balances, (self.country()["ADISCORD_economy_treasury"], self.m.values["political_power"]))
+                self.assertNotIn("ADISCORD_economy_treasury", self.m.variables["KYZ"])
+                if reason == "war":
+                    self.assertIn(frozenset(("KYZ", "SHL")), self.m.wars)
+
+    def test_existing_treaties_and_alliance_supersede_the_pact(self):
+        for partner, effect, course in (
+            ("KYZ", "SHL_sign_water_treaty", 0),
+            ("KYZ", "SHL_sign_water_brotherhood", 0),
+            ("GLP", "SHL_sign_veyr_union", 0),
+            ("KYZ", "SHL_join_southern_compact", 2),
+            ("GLP", "SHL_join_golden_gate", 1),
+        ):
+            with self.subTest(effect=effect):
+                self.setUp()
+                self.prepare(partner)
+                self.m.run("SHL_accept_mzr_pact", scope=partner)
+                self.country().update({"SHL_water_crisis": 1, "SHL_political_course": course})
+                self.m.flags["SHL"].update({"SHL_southern_alliance_pending", "SHL_golden_alliance_pending"})
+                self.m.run(effect, scope=partner)
+                self.assertNotIn("SHL_mzr_border_grievance", self.m.flags[partner])
+                self.m.run("SHL_start_mzr_war")
+                self.assertNotIn(frozenset((partner, "SHL")), self.m.wars)
+
+    def test_late_trade_offer_does_not_reconcile_an_active_enemy(self):
+        self.start("GLP")
+        self.m.run("SHL_sign_veyr_union", scope="GLP")
+        self.assertNotIn("SHL_veyr_partner", self.m.flags["SHL"])
+        self.assertIn("SHL_mzr_war_partner", self.m.flags["GLP"])
+
+    def test_every_settlement_closes_both_fronts_and_preserves_unrelated_wars(self):
+        for effect in ("SHL_mzr_war_victory", "SHL_mzr_war_defeat", "SHL_mzr_war_armistice", "SHL_close_external_mzr_war"):
+            with self.subTest(effect=effect):
+                self.setUp()
+                self.start("KYZ", "GLP")
+                foreign_war = frozenset(("KYZ", "VAL"))
+                self.m.wars.add(foreign_war)
+                if effect == "SHL_close_external_mzr_war":
+                    self.m.countries["MZR"]["is_subject"] = True
+                self.m.run(effect)
+                self.assertEqual(self.m.wars, {foreign_war})
+                self.assertNotIn("MZR", self.m.factions)
+                self.assertEqual(self.m.factions["GLP"], "SHL")
+                self.assertFalse(self.m.majors)
+                for tag in ("KYZ", "GLP"):
+                    self.assertFalse(self.m.flags[tag] & {"SHL_mzr_war_partner", "SHL_mzr_shl_partner", "SHL_mzr_neutrality_pending"})
+
+    def test_neighbour_capitulations_remain_occupied_until_principal_settlement(self):
+        for loser, winner in (("KYZ", "SHL"), ("KYZ", "GLP"), ("GLP", "KYZ")):
+            with self.subTest(loser=loser, winner=winner):
+                self.setUp()
+                self.start("KYZ", "GLP")
+                before = set(self.m.wars)
+                self.capitulate(loser, winner)
+                self.assertIn("skip_default_capitulation", self.m.global_flags)
+                self.assertEqual(self.m.wars, before)
+                self.assertEqual(self.country()["SHL_war_mzr"], 1)
+
+    def test_shahrabad_defeat_by_partner_uses_mazar_terms(self):
+        self.start()
+        self.capitulate("SHL", "KYZ")
+        self.assertEqual(self.country()["SHL_mzr_outcome"], 4)
+        self.assertEqual(self.country()["ADISCORD_economy_treasury"], 600)
+        self.assertFalse(self.m.wars)
+        self.assertEqual(self.m.ownership["707"], "SHL")
+
+    def test_mazar_defeat_by_shahrabad_ally_ends_partner_war(self):
+        self.start("KYZ", "GLP")
+        self.capitulate("MZR", "GLP")
+        self.assertEqual(self.country()["SHL_mzr_outcome"], 1)
+        self.assertFalse(self.m.wars)
+        self.assertEqual(self.m.ownership["269"], "SHL")
+        self.assertEqual(self.m.ownership["280"], "KYZ")
+
+    def test_absent_or_busy_partner_is_not_replaced_at_declaration(self):
+        self.m.flags["GLP"].add("SHL_mzr_border_grievance")
+        self.prepare()
+        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
+        self.m.countries["KYZ"]["is_subject"] = True
+        self.m.run("SHL_start_mzr_war")
+        self.assertEqual(self.m.wars, {frozenset(("SHL", "MZR"))})
+
+    def test_postponement_and_cancelled_preparation_clear_open_offers(self):
+        self.prepare()
+        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
+        self.m.countries["MZR"]["has_war"] = True
+        self.m.run("SHL_start_mzr_war")
+        self.assertNotIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
+        self.assertNotIn("SHL_mzr_diplomacy_started", self.m.flags["SHL"])
+        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
+        self.assertNotIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
+
+    def test_cancelled_offensive_clears_invitation_without_a_remaining_deadline(self):
+        self.m.flags["KYZ"].add("SHL_mzr_border_grievance")
+        self.m.focuses.add("SHL_no_more_rations")
+        self.m.run("SHL_begin_mzr_mobilization")
+        self.m.run("SHL_request_mzr_neutrality")
+        self.m.run("SHL_cancel_mzr_mobilization")
+        self.assertNotIn("SHL_mzr_diplomacy_started", self.m.flags["SHL"])
+        self.assertNotIn("SHL_mzr_pact_pending", self.m.flags["KYZ"])
+        self.assertNotIn("SHL_mzr_neutrality_pending", self.m.flags["KYZ"])
+
+    def test_annexed_mazar_cleans_up_the_pacts_successor_leader(self):
+        self.start()
+        self.m.countries["MZR"]["exists"] = False
+        self.m.factions.pop("MZR")
+        self.m.factions["KYZ"] = "KYZ"
+        self.m.run("SHL_close_external_mzr_war")
+        self.assertFalse(self.m.factions)
+        self.assertFalse(self.m.wars)
+        self.assertFalse(self.m.majors)
+
+    def test_nonparticipant_war_and_preexisting_major_are_preserved(self):
+        self.m.majors.add("MZR")
+        self.country()["SHL_mazar_state"] = 5
+        self.m.run("SHL_start_mzr_war")
+        foreign_war = frozenset(("KYZ", "MZR"))
+        self.m.wars.add(foreign_war)
+        self.m.run("SHL_mzr_war_armistice")
+        self.assertEqual(self.m.wars, {foreign_war})
+        self.assertEqual(self.m.majors, {"MZR"})
+
+    def test_neutrality_timeout_is_free_and_keeps_the_existing_pact(self):
+        self.prepare()
+        self.m.run("SHL_accept_mzr_pact", scope="KYZ")
+        self.m.run("SHL_request_mzr_neutrality")
+        self.m.execute(block(block(self.event(126), "option"), "hidden_effect"), "KYZ")
+        self.assertEqual(self.country()["ADISCORD_economy_treasury"], 1000)
+        self.assertEqual(self.m.values["political_power"], 200)
+        self.assertIn("SHL_mzr_pact_signed", self.m.flags["KYZ"])
+        self.assertNotIn("SHL_mzr_neutrality_pending", self.m.flags["KYZ"])
 
 
 class SouthernCampaignTests(unittest.TestCase):

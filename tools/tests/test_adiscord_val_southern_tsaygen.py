@@ -214,6 +214,86 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
             tail,
         )
 
+    def test_perimeter_war_ends_without_ert_capitulation(self) -> None:
+        # ERT can stay in its SCA war indefinitely; holding 169 must end Kefreyt's war.
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        military = named_block(decisions, "VAL_military_operations")
+        secure = named_block(military, "VAL_operation_secure_perimeter")
+        self.assertIn("has_completed_focus = VAL_frontier_return_irem", secure)
+        self.assertIn("169 = { VAL_frontier_controlled = yes }", secure)
+        self.assertIn("VAL_settle_perimeter_war = yes", secure)
+
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        settle = named_block(effects, "VAL_settle_perimeter_war")
+        self.assertLess(settle.index("transfer_state = 169"), settle.index("white_peace = ERT"))
+
+    def test_southern_federation_war_delivers_the_sector_to_the_administration(self) -> None:
+        triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
+        sector = named_block(triggers, "VAL_is_southern_sector_state")
+        for state in (167, 168, 170, 171, 184, 185, 203):
+            self.assertIn(f"state = {state}", sector)
+        self.assertNotIn("state = 169", sector)
+        gate = named_block(triggers, "VAL_southern_federation_war_available")
+        self.assertIn("VAL_wasteland_administration_ready = yes", gate)
+        self.assertIn("NOT = { any_enemy_country = { NOT = { tag = ERT } } }", gate)
+        managed = named_block(triggers, "VAL_wasteland_capitulation_managed")
+        self.assertIn("tag = SCA VAL = { has_completed_focus = VAL_Southern_Expansion }", managed)
+
+        decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
+        military = named_block(decisions, "VAL_military_operations")
+        war = named_block(military, "VAL_operation_southern_federation")
+        self.assertIn(
+            "declare_war_on = { target = SCA type = take_state_focus generator = { 167 170 171 184 185 203 } }",
+            war,
+        )
+        self.assertIn("VAL_call_subjects_to_wars = yes", war)
+        self.assertIn(
+            "VAL_settle_southern_federation_war = yes",
+            named_block(military, "VAL_operation_secure_southern_federation"),
+        )
+        self.assertIn(
+            "VAL_assign_southern_sector_to_administration = yes",
+            named_block(military, "VAL_operation_assign_southern_sector"),
+        )
+
+        effects = read("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        transfer = named_block(effects, "VAL_transfer_southern_sector_state")
+        self.assertIn("WCA = { transfer_state = PREV }", transfer)
+        self.assertIn("VAL = { transfer_state = PREV }", transfer)
+        limited = named_block(effects, "VAL_settle_southern_federation_war")
+        self.assertLess(
+            limited.index("VAL_transfer_southern_sector_state = yes"),
+            limited.index("white_peace = SCA"),
+        )
+        settle = named_block(effects, "VAL_settle_wasteland_capitulation")
+        self.assertIn("limit = { tag = SCA }", settle)
+        self.assertGreaterEqual(
+            settle.count("VAL = { VAL_assign_southern_sector_to_administration = yes }"), 2
+        )
+
+        for language in ("english", "russian"):
+            loc = read(
+                f"localisation/{language}/ADISCORD_VAL_decisions_l_{language}.yml"
+            )
+            for key in (
+                "VAL_operation_secure_perimeter",
+                "VAL_operation_secure_perimeter_desc",
+                "VAL_perimeter_held_tt",
+                "VAL_secure_perimeter_tt",
+                "VAL_operation_southern_federation",
+                "VAL_operation_southern_federation_desc",
+                "VAL_declares_war_sca_south_tt",
+                "VAL_operation_secure_southern_federation",
+                "VAL_operation_secure_southern_federation_desc",
+                "VAL_southern_federation_sector_held_tt",
+                "VAL_secure_southern_federation_tt",
+                "VAL_operation_assign_southern_sector",
+                "VAL_operation_assign_southern_sector_desc",
+                "VAL_southern_sector_held_tt",
+                "VAL_assign_southern_sector_tt",
+            ):
+                self.assertIn(f" {key}:0 \"", loc, f"{language}: {key}")
+
     def test_late_ultimatum_is_a_fallback_not_the_primary_claim(self) -> None:
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         demand = named_block(decisions, "VAL_frontier_demand_ERT")

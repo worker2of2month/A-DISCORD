@@ -11969,7 +11969,7 @@
         }
       ],
       "computed": {
-        "organization": 45.535714285714285,
+        "organization": 50.535714285714285,
         "manpower": 11300.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 200.0,
@@ -12015,7 +12015,7 @@
       ],
       "support": [],
       "computed": {
-        "organization": 58.75,
+        "organization": 65.75,
         "manpower": 1000.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 20.0,
@@ -12244,7 +12244,7 @@
         }
       ],
       "computed": {
-        "organization": 53.214285714285715,
+        "organization": 59.214285714285715,
         "manpower": 6300.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 120.0,

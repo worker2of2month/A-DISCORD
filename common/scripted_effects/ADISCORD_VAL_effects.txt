@@ -2009,7 +2009,80 @@ VAL_form_wasteland_administration = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
-# COUNTRY defeated ERT/IRT. Settle only the current opponent and fixed map sector.
+
+# STATE in the southern sector. The administration receives it while it remains
+# Kefreyt's functioning subject; otherwise Kefreyt keeps the claim itself.
+VAL_transfer_southern_sector_state = {
+	if = {
+		limit = { VAL = { VAL_wasteland_administration_ready = yes } }
+		WCA = { transfer_state = PREV }
+		add_core_of = WCA
+		set_state_controller_to = WCA
+	}
+	else = {
+		VAL = { transfer_state = PREV }
+		set_state_controller_to = VAL
+	}
+}
+
+# COUNTRY VAL. Sector land can reach Kefreyt through any peace route; only held
+# states move, so an enemy-occupied state stays with the current war.
+VAL_assign_southern_sector_to_administration = {
+	if = {
+		limit = { VAL_wasteland_administration_ready = yes }
+		every_owned_state = {
+			limit = {
+				VAL_is_southern_sector_state = yes
+				VAL_frontier_controlled = yes
+			}
+			VAL_transfer_southern_sector_state = yes
+		}
+		WCA = { ADISCORD_economy_mark_dirty = yes }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. Limited perimeter peace: ownership moves before white_peace
+# returns the remaining occupation to ERT.
+VAL_settle_perimeter_war = {
+	if = {
+		limit = { VAL_perimeter_settlement_ready = yes }
+		transfer_state = 169
+		169 = { set_state_controller_to = VAL }
+		ERT = {
+			every_enemy_country = {
+				limit = { OR = { tag = VAL is_subject_of = VAL } }
+				white_peace = ERT
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL. Limited peace with SCA: its held sector states go to the
+# administration, then the Kefreyt side leaves the war.
+VAL_settle_southern_federation_war = {
+	if = {
+		limit = { VAL_southern_federation_sector_held = yes }
+		SCA = {
+			every_owned_state = {
+				limit = {
+					VAL_is_southern_sector_state = yes
+					VAL_frontier_controlled = yes
+				}
+				VAL_transfer_southern_sector_state = yes
+			}
+			every_enemy_country = {
+				limit = { OR = { tag = VAL is_subject_of = VAL } }
+				white_peace = SCA
+			}
+			ADISCORD_economy_mark_dirty = yes
+		}
+		VAL_assign_southern_sector_to_administration = yes
+	}
+}
+
+# COUNTRY defeated ERT/IRT/SCA. Settle only the current opponent and fixed map sector.
 VAL_settle_wasteland_capitulation = {
 	set_global_flag = skip_default_capitulation
 	save_event_target_as = VAL_wasteland_defeated
@@ -2191,6 +2264,7 @@ VAL_settle_wasteland_capitulation = {
 					set_state_controller_to = WCA
 				}
 			}
+			VAL = { VAL_assign_southern_sector_to_administration = yes }
 		}
 		else_if = {
 			limit = { VAL = { has_completed_focus = VAL_frontier_return_irem } }
@@ -2200,6 +2274,20 @@ VAL_settle_wasteland_capitulation = {
 			limit = { VAL = { has_completed_focus = VAL_Return_Southern_Tsaygen } }
 			168 = { if = { limit = { is_owned_by = ERT OR = { is_controlled_by = ERT controller = { OR = { tag = VAL is_subject_of = VAL } } } } VAL = { transfer_state = 168 } set_state_controller_to = VAL } }
 		}
+	}
+	else_if = {
+		limit = { tag = SCA }
+		every_owned_state = {
+			limit = {
+				VAL_is_southern_sector_state = yes
+				OR = {
+					is_controlled_by = SCA
+					VAL_frontier_controlled = yes
+				}
+			}
+			VAL_transfer_southern_sector_state = yes
+		}
+		VAL = { VAL_assign_southern_sector_to_administration = yes }
 	}
 	else_if = {
 		limit = { tag = IRT }
@@ -7468,7 +7556,7 @@ VAL_final_crisis_reconcile = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
 			has_war = no
-			VAL_stelander_dominated = yes
+			VAL_nod_campaign_stelander_ready = yes
 			NOD = { exists = yes has_capitulated = no OR = { is_subject = no is_subject_of = STP } }
 			NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
 		}
@@ -7488,7 +7576,7 @@ VAL_final_crisis_reconcile = {
 	if = {
 		limit = {
 			check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
-			VAL_stelander_dominated = yes
+			NOD = { has_country_flag = VAL_final_war_member }
 			OR = {
 				has_war_with = NOD
 				NOD = { has_country_flag = VAL_final_war_member has_capitulated = yes }

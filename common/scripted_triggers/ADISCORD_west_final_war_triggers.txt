@@ -107,26 +107,6 @@ ADISCORD_west_ivn_emergency_course = {
 	has_completed_focus = IVN_emergency_order
 }
 
-# COUNTRY. The western suzerain has opened the integration of its subjects.
-ADISCORD_west_can_integrate = {
-	OR = {
-		AND = {
-			tag = IVN
-			has_global_flag = ADISCORD_west_hegemon_IVN
-			has_completed_focus = IVN_west_heritage
-		}
-		AND = {
-			tag = WRK
-			has_global_flag = ADISCORD_west_hegemon_WRK
-			OR = {
-				has_completed_focus = WRK_worker_west_confederate_charter
-				has_completed_focus = WRK_joint_west_imperial_settlement
-				has_completed_focus = WRK_utilitarian_west_technical_trusteeship
-			}
-		}
-	}
-}
-
 # COUNTRY invited state; ROOT is the inviting Itora.
 ADISCORD_west_league_target_valid = {
 	exists = yes

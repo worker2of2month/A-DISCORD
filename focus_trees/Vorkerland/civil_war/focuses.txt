@@ -7275,7 +7275,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 25
 			add_stability = 0.03
-			unlock_decision_tooltip = ADISCORD_west_integrate_subject
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -7762,7 +7761,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 25
 			add_stability = 0.03
-			unlock_decision_tooltip = ADISCORD_west_integrate_subject
 		}
 		ai_will_do = { base = 30 }
 	}
@@ -8254,7 +8252,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 25
 			add_stability = 0.03
-			unlock_decision_tooltip = ADISCORD_west_integrate_subject
 		}
 		ai_will_do = { base = 30 }
 	}

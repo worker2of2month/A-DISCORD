@@ -1563,7 +1563,8 @@ class WastelandCampaignTests(unittest.TestCase):
         def transfers(items):
             result = []
             for e in items:
-                if e.key == "transfer_state":
+                # PREV transfers run inside the bounded sweeps checked below.
+                if e.key == "transfer_state" and str(e.value).isdigit():
                     result.append(int(e.value))
                 if isinstance(e.value, list):
                     result += transfers(e.value)
@@ -1573,7 +1574,13 @@ class WastelandCampaignTests(unittest.TestCase):
         settlement = self.effects["VAL_settle_wasteland_capitulation"]
         from tools.tests.test_adiscord_stp_preparation import walk
 
-        self.assertNotIn("every_owned_state", {e.key for e in walk(settlement)})
+        # A state sweep may only cover the fixed sector or a third-party occupier.
+        for sweep in (e for e in walk(settlement) if e.key == "every_owned_state"):
+            limit = next(child.value for child in sweep.value if child.key == "limit")
+            keys = {child.key for child in walk(limit)}
+            self.assertTrue(
+                "VAL_is_southern_sector_state" in keys or "CONTROLLER" in keys, keys
+            )
         targets = set(transfers(settlement))
         self.assertIn(168, targets)
         self.assertNotIn(330, targets)

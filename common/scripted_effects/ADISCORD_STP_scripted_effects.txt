@@ -7695,6 +7695,71 @@ STP_ps_begin_return = {
 		}
 	}
 }
+
+# COUNTRY, native capitulation ROOT. Freeze ownership before peace changes
+# control; previously settled or third-party land never enters the border award.
+STP_settle_val_nod_partition = {
+	save_event_target_as = STP_partition_country
+	VAL = { clear_temp_array = STP_partition_border_states }
+	every_owned_state = {
+		limit = { STP_val_nod_partition_border = yes }
+		VAL = { add_to_temp_array = { array = STP_partition_border_states value = PREV } }
+	}
+	clr_country_flag = VAL_final_defeat_pending
+	clr_country_flag = VAL_final_capitulation_immediate
+	STP_cw_finish_mobilization = yes
+	STP_close_competing_ultimatum_wars_after_defeat = yes
+	ADISCORD_economy_mark_dirty = yes
+	VAL = {
+		for_each_scope_loop = {
+			array = STP_partition_border_states
+			VAL = { transfer_state = PREV }
+			set_state_controller_to = VAL
+		}
+		clear_temp_array = STP_partition_border_states
+	}
+	if = {
+		limit = {
+			tag = STS
+			STP = { exists = no }
+			NOD = { has_country_flag = STP_ps_return_campaign }
+		}
+		# The native defeat remains valid after white peace clears has_capitulated.
+		set_country_flag = STP_ps_return_capitulation_current
+		NOD = { STP_ps_settle_return = yes }
+		clr_country_flag = STP_ps_return_capitulation_current
+	}
+	else = {
+		if = {
+			limit = { is_in_faction = yes }
+			if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
+			else = { faction_leader = { remove_from_faction = event_target:STP_partition_country } }
+		}
+		NOD = {
+			set_autonomy = {
+				target = event_target:STP_partition_country
+				autonomy_state = autonomy_puppet
+				end_wars = no
+				end_civil_wars = no
+			}
+			if = {
+				limit = { OR = { has_country_flag = STP_ps_exile_received has_country_flag = STP_ps_return_campaign } }
+				STP_ps_close_exile = yes
+			}
+		}
+	}
+	VAL = {
+		set_country_flag = STP_val_nod_partition
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = ADISCORD_STP_pc.53 hours = 1 }
+	}
+	NOD = {
+		ADISCORD_economy_mark_dirty = yes
+		country_event = { id = ADISCORD_STP_pc.53 hours = 1 }
+	}
+	log = "[STP_PARTITION] Concurrent VAL/NOD victory: Kefreyt border award and Nodrul dependency"
+}
+
 STP_ps_settle_return = {
 	# Actual NOD victory, never a paid project's completion.
 	if = { limit = { tag = NOD has_country_flag = STP_ps_return_campaign STP = { exists = no } STS = { OR = { has_capitulated = yes AND = { tag = ROOT has_country_flag = STP_ps_return_capitulation_current } } } }
@@ -8951,7 +9016,7 @@ STP_pc_finalize_nod_client_subject = {
 }
 
 # STS: the final war imposes a provisional administration after the technical
-# peace. Full integration remains a separate paid operation.
+# peace. The defeated government remains a separate dependent administration.
 STP_heg_settle_kefreyt_final = {
 	if = {
 		limit = {

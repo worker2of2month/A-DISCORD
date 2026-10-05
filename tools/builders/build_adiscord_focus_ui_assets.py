@@ -55,8 +55,8 @@ def render_gui() -> str:
     ):
         text = replace_counted(text, old, f"GFX_ADISCORD_focus_{new}", count)
 
-    # The palette is empty. Keep native children addressable while clipping
-    # their contents to a zero-sized, non-rendering container.
+    # The palette is empty. Keep native children addressable and clipped.
+    # Remove the background: corner tiles remain visible even at zero size.
     text = replace_gui_block(
         text,
         "containerWindowType",
@@ -69,6 +69,11 @@ def render_gui() -> str:
                 "size = { width = 0 height = 0 }\n"
                 '\t\t\t\t\tdontRender = ""\n'
                 "\t\t\t\t\tclipping = yes",
+            ),
+            (
+                r'\s+background = \{\s+name = "Background"'
+                r'\s+quadTextureSprite ="GFX_ADISCORD_focus_window"\s+\}',
+                "",
             ),
         ),
     )

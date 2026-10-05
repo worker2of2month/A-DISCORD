@@ -5818,3 +5818,13 @@ country_event = {
 		name = ADISCORD_STP_ch.57.a
 	}
 }
+
+# The territorial settlement is immediate; this event only reports its outcome.
+country_event = {
+	id = ADISCORD_STP_pc.53
+	title = ADISCORD_STP_pc.53.t
+	desc = ADISCORD_STP_pc.53.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	option = { name = ADISCORD_STP_pc.53.a }
+}

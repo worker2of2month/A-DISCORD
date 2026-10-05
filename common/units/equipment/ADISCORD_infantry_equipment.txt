@@ -342,11 +342,13 @@ equipments = {
 		interface_category = interface_category_land
 		maximum_speed = 4
 		reliability = 0.80
+		defense = 6
+		breakthrough = 2
 		lend_lease_cost = 3
-		build_cost_ic = 3
+		build_cost_ic = 6
 		resources = {
-			rare_components = 1
-			rare_alloys = 1
+			rare_components = 2
+			rare_alloys = 2
 		}
 	}
 
@@ -361,13 +363,13 @@ equipments = {
 		archetype = ADISCORD_power_shield_equipment
 		parent = ADISCORD_power_shield_equipment_1
 		priority = 20
-		defense = 1.5
-		breakthrough = 0.5
+		defense = 9
+		breakthrough = 3
 		reliability = 0.84
-		build_cost_ic = 3.6
+		build_cost_ic = 7.2
 		resources = {
-			rare_components = 2
-			rare_alloys = 1
+			rare_components = 3
+			rare_alloys = 2
 		}
 	}
 
@@ -376,13 +378,13 @@ equipments = {
 		archetype = ADISCORD_power_shield_equipment
 		parent = ADISCORD_power_shield_equipment_2
 		priority = 30
-		defense = 3
-		breakthrough = 1
+		defense = 12
+		breakthrough = 4
 		reliability = 0.88
-		build_cost_ic = 4.2
+		build_cost_ic = 8.4
 		resources = {
-			rare_components = 2
-			rare_alloys = 2
+			rare_components = 3
+			rare_alloys = 3
 		}
 	}
 }

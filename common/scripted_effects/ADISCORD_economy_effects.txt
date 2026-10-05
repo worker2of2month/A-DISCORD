@@ -5305,8 +5305,8 @@ ADISCORD_economy_finish_logistics_contract = {
 		limit = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
 		if = {
 			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_logistics_contract_requirements = yes }
-			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 300 producer = ROOT }
-			add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 20 producer = ROOT }
+			add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 900 producer = ROOT }
+			add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 60 producer = ROOT }
 			ADISCORD_economy_release_project = yes
 		}
 		else = { ADISCORD_economy_cancel_project = yes }
@@ -5332,7 +5332,7 @@ ADISCORD_economy_finish_drone_contract = {
 		limit = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
 		if = {
 			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_drone_contract_requirements = yes }
-			add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 200 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 600 producer = ROOT }
 			ADISCORD_economy_release_project = yes
 		}
 		else = { ADISCORD_economy_cancel_project = yes }
@@ -5358,7 +5358,7 @@ ADISCORD_economy_finish_platform_contract = {
 		limit = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
 		if = {
 			limit = { ADISCORD_economy_project_can_continue = yes ADISCORD_economy_platform_contract_requirements = yes }
-			add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 240 producer = ROOT }
+			add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 720 producer = ROOT }
 			ADISCORD_economy_release_project = yes
 		}
 		else = { ADISCORD_economy_cancel_project = yes }

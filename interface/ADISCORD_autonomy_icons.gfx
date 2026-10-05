@@ -39,4 +39,54 @@ spriteTypes = {
 		name = "GFX_autonomy_island_administration_icon"
 		textureFile = "gfx/interface/autonomy/autonomy_island_administration_icon.png"
 	}
+
+	spriteType = {
+		name = "GFX_autonomy_contract_protectorate_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_contract_client_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_SHL_oil_concession_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_SHL_compact_charter_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_NAM_namestnik_office_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_district_in_Vorkerland_icon.dds"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_NAM_oil_charter_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_WRK_confederate_republic_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_republic_in_Vorkerland_icon.dds"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_WRK_technical_trusteeship_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_district_in_Vorkerland_icon.dds"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_IVN_guaranteed_confederation_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
+
+	spriteType = {
+		name = "GFX_autonomy_IVN_emergency_trusteeship_icon"
+		textureFile = "gfx/interface/autonomy/autonomy_VAL_contract_administration_icon.png"
+	}
 }

@@ -198,11 +198,6 @@ guiTypes = {
 					dontRender = ""
 					clipping = yes
 
-					background = {
-						name = "Background"
-						quadTextureSprite ="GFX_ADISCORD_focus_window"
-					}
-
 					instantTextboxType = {
 						name = "continuous_focus_title"
 						position = { x = 20 y = 8 }

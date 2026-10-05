@@ -578,7 +578,6 @@ focus_tree = {
 		completion_reward = {
 			add_political_power = 100
 			add_stability = 0.05
-			unlock_decision_tooltip = ADISCORD_west_integrate_subject
 		}
 		ai_will_do = {
 			base = 50

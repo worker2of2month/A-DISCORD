@@ -186,6 +186,197 @@ class TreatyFixture(GenericPeaceFixture):
                 super().execute([e], stack)
 
 
+class StelanderPartitionFixture(TreatyFixture):
+    """Execute the border award and both puppet routes across destructive peace."""
+
+    def __init__(self, winner="NOD", loser="STS", exile=True, livonn="VAL"):
+        super().__init__()
+        self.root, self.winner = loser, winner
+        self.load("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
+        self.load("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt", True)
+        self.load("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt", True)
+        self.stubs.update({
+            "STP_cw_finish_mobilization", "STP_refresh_apparatus_loyalty",
+            "STP_ps_exile_formation_refund", "STP_ps_exile_training_refund",
+        })
+        self.owners = {str(s): loser for s in (1, 2, 3, 28, 29, 46, 53)}
+        self.owners.update({"43": "VAL", "44": "VAL", "88": "VAL", "45": livonn})
+        self.controllers = {s: winner for s in self.owners}
+        self.existing.remove("STP" if loser == "STS" else "STS")
+        self.wars = {frozenset((loser, t)) for t in ("VAL", "NOD", "ZZZ")}
+        self.global_flags.add("STP_cw_union_wars_finished")
+        if exile:
+            self.flags["NOD"].update({"STP_ps_return_campaign", "STP_ps_exile_received"})
+        self.events = []
+
+    def resolve(self, token, stack):
+        if token.startswith("event_target:"):
+            return self.targets[token]
+        return super().resolve(token, stack)
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for e in rows:
+            k, v = e.key, e.value
+            if k == "OR":
+                result = any(self.matches([child], stack) for child in v)
+            elif k == "NOT":
+                result = not any(self.matches([child], stack) for child in v)
+            elif k in ("any_owned_state", "any_core_state"):
+                states = [s for s in self.owners if k == "any_core_state" or self.owners[s] == current]
+                result = any(self.matches(v, stack + [s]) for s in states)
+            elif k == "is_core_of":
+                result = current in self.owners and v == "STP"
+            elif k == "state":
+                result = current == v
+            elif k == "owner":
+                result = self.matches(v, stack + [self.owners[current]])
+            elif k == "is_owned_by":
+                result = self.owners.get(current) == v
+            elif k == "has_variable":
+                result = (current, v) in self.variables
+            elif k in ("has_template", "has_character", "has_active_mission", "has_completed_focus", "STP_ps_hedersett_available"):
+                result = False
+            elif k == "always":
+                result = v == "yes"
+            elif k == "is_ai":
+                result = v == "yes"
+            else:
+                result = super().matches([e], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        current = stack[-1]
+        taken = False
+        for e in rows:
+            k, v = e.key, e.value
+            if k in ("if", "else_if", "else"):
+                if k == "if":
+                    taken = False
+                limit = next((child.value for child in v if child.key == "limit"), [])
+                if not taken and self.matches(limit, stack):
+                    taken = True
+                    self.execute([child for child in v if child.key != "limit"], stack)
+            elif k == "save_event_target_as":
+                self.targets["event_target:" + v] = current
+            elif k == "every_owned_state":
+                limit = next((child.value for child in v if child.key == "limit"), [])
+                for state in list(self.owners):
+                    if self.owners[state] == current and self.matches(limit, stack + [state]):
+                        self.execute([child for child in v if child.key != "limit"], stack + [state])
+            elif k == "set_state_controller_to":
+                self.controllers[current] = v
+            elif k == "transfer_state":
+                state = self.resolve(v, stack)
+                old = self.owners[state]
+                self.owners[state] = current
+                self.existing.add(current)
+                if old not in self.owners.values():
+                    self.existing.discard(old)
+            elif k == "set_autonomy":
+                self.subjects[self.resolve(scalar(v, "target"), stack)] = current
+            elif k == "set_variable":
+                reference = scalar(v, "value")
+                value = self.variables.get(tuple(reference.split(".", 1)), 0) if "." in reference else float(reference)
+                self.variables[current, scalar(v, "var")] = value
+            elif k == "white_peace":
+                target = self.resolve(v, stack)
+                self.wars.discard(frozenset((current, target)))
+                self.capitulated.clear()
+                self.controllers = dict(self.owners)
+            elif k == "country_event":
+                self.events.append((current, scalar(v, "id")))
+            elif k in ("mark_focus_tree_layout_dirty", "create_country_leader", "set_division_template_lock"):
+                pass
+            else:
+                super().execute([e], stack)
+
+
+class StelanderPartitionTests(unittest.TestCase):
+    def test_either_victor_awards_border_before_restoring_nod_puppet(self):
+        for winner in ("VAL", "NOD"):
+            for livonn in ("VAL", "STS", "ZZZ"):
+                with self.subTest(winner=winner, livonn=livonn):
+                    f = StelanderPartitionFixture(winner, livonn=livonn)
+                    self.assertTrue(f.matches(f.triggers["STP_val_nod_partition_available"], ["STS"]))
+                    f.execute(f.effects["STP_settle_val_nod_partition"])
+                    self.assertEqual({f.owners[s] for s in ("46", "29")}, {"VAL"})
+                    self.assertEqual(f.owners["45"], "ZZZ" if livonn == "ZZZ" else "VAL")
+                    self.assertEqual({f.owners[s] for s in ("1", "2", "3", "28", "53")}, {"STP"})
+                    self.assertEqual(f.subjects["STP"], "NOD")
+                    self.assertNotIn("STP_ps_return_campaign", f.flags["NOD"])
+                    self.assertIn("STP_ps_return_closed", f.flags["NOD"])
+                    self.assertEqual(f.controllers["46"], "VAL")
+                    self.assertEqual(f.controllers["29"], "VAL")
+                    self.assertTrue(f.matches(f.triggers["VAL_nod_campaign_stelander_ready"], ["VAL"]))
+                    self.assertFalse(f.matches(f.triggers["VAL_stelander_dominated"], ["VAL"]))
+                    self.assertIn(frozenset(("STS", "ZZZ")), f.wars)
+                    self.assertNotIn(frozenset(("STS", "VAL")), f.wars)
+                    self.assertNotIn(frozenset(("STS", "NOD")), f.wars)
+                    self.assertFalse(any(f.arrays.values()))
+                    self.assertIn(("VAL", "ADISCORD_STP_pc.53"), f.events)
+
+    def test_without_exiles_the_surviving_government_becomes_nod_subject(self):
+        for loser in ("STP", "STS"):
+            f = StelanderPartitionFixture(loser=loser, exile=False)
+            f.execute(f.effects["STP_settle_val_nod_partition"])
+            self.assertEqual(f.subjects[loser], "NOD")
+            self.assertEqual(f.owners["28"], loser)
+            self.assertEqual(f.owners["46"], "VAL")
+
+    def test_single_front_foreign_victor_or_invaders_at_war_cannot_partition(self):
+        for case in ("single", "foreign", "mutual", "civil_war", "subject"):
+            f = StelanderPartitionFixture()
+            if case == "single":
+                f.wars.discard(frozenset(("STS", "VAL")))
+            elif case == "foreign":
+                f.winner = "ZZZ"
+            elif case == "mutual":
+                f.wars.add(frozenset(("VAL", "NOD")))
+            elif case == "civil_war":
+                f.global_flags.clear()
+            else:
+                f.subjects["STS"] = "VAL"
+            with self.subTest(case=case):
+                self.assertFalse(f.matches(f.triggers["STP_val_nod_partition_available"], ["STS"]))
+
+    def test_partition_history_alone_cannot_unlock_a_campaign_after_border_loss(self):
+        f = StelanderPartitionFixture(exile=False)
+        f.execute(f.effects["STP_settle_val_nod_partition"])
+        for state in ("46", "29"):
+            f.controllers[state] = "NOD"
+            self.assertFalse(f.matches(f.triggers["VAL_nod_campaign_stelander_ready"], ["VAL"]))
+            f.controllers[state] = "VAL"
+        f.flags["VAL"].discard("STP_val_nod_partition")
+        self.assertFalse(f.matches(f.triggers["VAL_nod_campaign_stelander_ready"], ["VAL"]))
+
+    def test_partition_reserves_late_callback_and_precedes_full_victory_handlers(self):
+        from tools.tests.test_scripted_peace_on_actions import native_hooks
+        from tools.tests.test_adiscord_stp_preparation import block, walk
+
+        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text(encoding="utf-8")
+        hooks = native_hooks(source)
+        immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
+        late = block(block(hooks, "on_capitulation"), "effect")
+        receipt = "STP_val_nod_partition_capitulation_reserved"
+        f = StelanderPartitionFixture()
+        f.flags["STS"].add(receipt)
+        f.execute(immediate[:1])
+        self.assertNotIn(receipt, f.flags["STS"])
+        route = next(e for e in immediate if any(x.key == "STP_settle_val_nod_partition" for x in walk([e])))
+        f.execute([route])
+        self.assertIn(receipt, f.flags["STS"])
+        reserve = next(e for e in late if e.key == "if" and receipt in repr(e))
+        f.execute([reserve])
+        self.assertIn("skip_default_capitulation", f.global_flags)
+        f.execute(late[-1:])
+        self.assertNotIn(receipt, f.flags["STS"])
+        self.assertLess(source.index("STP_settle_val_nod_partition = yes"), source.index("NOD = { STP_ps_settle_return = yes }"))
+
+
 class CoalitionLifecycleTests(unittest.TestCase):
     def val_northern(self):
         f = TreatyFixture()

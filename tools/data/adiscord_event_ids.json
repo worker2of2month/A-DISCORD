@@ -3901,6 +3901,14 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_STP_pc.53",
+      "namespace": "ADISCORD_STP_pc",
+      "number": 53,
+      "owner": "events/ADISCORD_STP_events.txt",
+      "subsystem": "stp_postwar",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_SLI.1",
       "namespace": "ADISCORD_SLI",
       "number": 1,
@@ -4568,6 +4576,46 @@
       "id": "ADISCORD_SHL.123",
       "namespace": "ADISCORD_SHL",
       "number": 123,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.124",
+      "namespace": "ADISCORD_SHL",
+      "number": 124,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.125",
+      "namespace": "ADISCORD_SHL",
+      "number": 125,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.126",
+      "namespace": "ADISCORD_SHL",
+      "number": 126,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.127",
+      "namespace": "ADISCORD_SHL",
+      "number": 127,
+      "owner": "events/ADISCORD_SHL_events.txt",
+      "subsystem": "shahrabad_furnaces",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_SHL.128",
+      "namespace": "ADISCORD_SHL",
+      "number": 128,
       "owner": "events/ADISCORD_SHL_events.txt",
       "subsystem": "shahrabad_furnaces",
       "status": "active"

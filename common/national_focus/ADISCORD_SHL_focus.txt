@@ -4495,7 +4495,6 @@ focus_tree = {
 				add_to_variable = { var = SHL_pow_political_power_gain value = 0.05 }
 				SHL_refresh_conclave_power = yes
 			}
-			unlock_decision_tooltip = ADISCORD_south_integrate_subject
 		}
 		ai_will_do = { base = 50 }
 	}

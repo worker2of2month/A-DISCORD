@@ -39,8 +39,6 @@
  ADISCORD_west_wrk_corridor_offensive_desc: "The confederation gathers its reserves for a blow at the northern corridor."
  ADISCORD_west_ivn_hold_the_marches: "Hold the Marches"
  ADISCORD_west_ivn_hold_the_marches_desc: "The committee puts the frontier marches into all-round defence."
- ADISCORD_west_integrate_subject: "Integrate a Subject"
- ADISCORD_west_integrate_subject_desc: "The suzerain of the West absorbs a subject. If the country is no longer subject at the end of the term, nothing happens."
 
  ADISCORD_west.1.t: "The West Cannot Be Shared"
  ADISCORD_west.1.d_wrk_worker: "The confederate congress offered Itora what the returning districts received: a place in the common house, its own government and a voice in the council of republics. The Itoran committee answered that it needs no one else's house.\n\nThe solidarity committees march to the Norvane corridor. If the mandate wins, Itora will remain Itora - but as a member of the confederation."

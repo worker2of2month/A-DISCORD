@@ -118,6 +118,4 @@ Neighbours send delegations to Khazar. Now they will learn what order Shahrabad 
  ADISCORD_south.45.t: "Uprising in Svetlogorye"
  ADISCORD_south.45.d: "On the first day of the War for the South, the oil workers of the Svetlogorsk District rose in revolt. Yaroslav Veter led the underground out of the workers' quarters with rifles smuggled in by Shahrabad's commune.\n\nSvetlogorye must fight on two fronts: against the furnaces in the south and against its own oil fields behind the lines."
  ADISCORD_south.45.a: "The fire has reached the wells."
- ADISCORD_south_integrate_subject: "Integrate Satellite"
- ADISCORD_south_integrate_subject_desc: "The suzerain of the south absorbs a satellite. If the country is no longer subject when the term ends, no annexation takes place."
- ADISCORD_south_status_resolved: "The south is unified. After the Heritage or Crown of the South focus, the suzerain can absorb its satellites through integration."
+ ADISCORD_south_status_resolved: "The war for the South is over. The region has one suzerain."

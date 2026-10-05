@@ -11,6 +11,7 @@ import re
 import unittest
 
 from tools.tests.test_adiscord_south_final_war import body, flatten, focus_blocks, scope_calls
+from tools.tests.test_adiscord_stp_preparation import block
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -148,21 +149,40 @@ class WestFinalWarContractTests(unittest.TestCase):
                 allow = repr(next(e.value for e in wrk[identifier] if e.key == "allow_branch"))
                 self.assertIn(f"ADISCORD_vorkerland_route_{route}", allow, identifier)
 
-    def test_heritage_focuses_open_integration(self):
+    def test_heritage_focuses_reward_the_western_settlement(self):
         heritage = {
-            "IVN_west_heritage": (IVN_TREE, "ADISCORD_west_hegemon_IVN"),
             "WRK_worker_west_confederate_charter": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
             "WRK_joint_west_imperial_settlement": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
             "WRK_utilitarian_west_technical_trusteeship": (WRK_TREE, "ADISCORD_west_hegemon_WRK"),
         }
-        trigger = body(TRIGGERS, "ADISCORD_west_can_integrate")
         for identifier, (path, flag) in heritage.items():
             focus = focus_blocks(path)[identifier]
             self.assertIn(flag, repr(next(e.value for e in focus if e.key == "available")), identifier)
-            self.assertIn("unlock_decision_tooltip", repr(focus), identifier)
-            self.assertIn(identifier, trigger, identifier)
+            self.assertNotIn("unlock_decision_tooltip", repr(focus), identifier)
+            self.assertTrue(block(focus, "completion_reward"), identifier)
             # Heritage follows the course, not the final war focus: the rival may declare first.
             self.assertNotIn("final_war_start", repr(focus), identifier)
+
+    def test_itora_keeps_only_the_northern_border_award(self):
+        victory = parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory"))
+        terms = [
+            {e.key: e.value for e in entry.value}
+            for entry in flatten(victory)
+            if entry.key == "set_global_variable"
+        ]
+        self.assertEqual(
+            [e["value"] for e in terms if e["var"] == "ADISCORD_west_terms"],
+            ["2"],
+        )
+        settlement = parse_clausewitz(body(EFFECTS, "ADISCORD_west_apply_settlement"))
+        corridor = block(settlement, "if")
+        self.assertEqual({e.key for e in corridor if e.key.isdigit()}, {"90", "91", "93", "94"})
+        self.assertIn("value='1'", repr(block(corridor, "limit")))
+        transfer = body(EFFECTS, "ADISCORD_west_transfer_to_root")
+        self.assertIn("owner = { has_country_flag = ADISCORD_west_settlement_pending }", transfer)
+        heritage = focus_blocks(IVN_TREE)["IVN_west_heritage"]
+        self.assertIn("ADISCORD_west_hegemon_IVN", repr(block(heritage, "available")))
+        self.assertNotIn("unlock_decision_tooltip", repr(block(heritage, "completion_reward")))
 
     def test_humanist_shield_requires_humanism(self):
         ivn = focus_blocks(IVN_TREE)
@@ -214,6 +234,62 @@ class WestFinalWarContractTests(unittest.TestCase):
     def test_gameplay_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS, IVN_TREE):
             self.assertFalse(path.read_bytes().startswith(b"\xef\xbb\xbf"), path.name)
+
+
+class SubjectIntegrationRemovalTests(unittest.TestCase):
+    def test_subject_annexation_decisions_are_absent_mod_wide(self):
+        annexing = set()
+        for path in (ROOT / "common/decisions").glob("*.txt"):
+            for category in parse_clausewitz(path.read_text(encoding="utf-8-sig")):
+                if not isinstance(category.value, list):
+                    continue
+                for decision in category.value:
+                    if not isinstance(decision.value, list):
+                        continue
+                    if any(e.key == "annex_country" for e in flatten(decision.value)):
+                        annexing.add(decision.key)
+        # The island treaty joins a sovereign country, not an existing subject.
+        self.assertEqual(annexing, {"VAL_Island_Treaty"})
+
+    def test_retired_integration_ids_have_no_runtime_or_focus_references(self):
+        retired = re.compile(
+            r"ADISCORD_(?:west|south)_(?:integrate_subject|can_integrate)"
+            r"|STP_heg_annex_"
+            r"|STP_heg_(?:nod|ypr|tff|val)_integrated"
+        )
+        for directory in ("common", "events", "focus_trees", "localisation"):
+            for path in (ROOT / directory).rglob("*"):
+                if path.suffix not in {".txt", ".yml"}:
+                    continue
+                self.assertIsNone(
+                    retired.search(path.read_text(encoding="utf-8-sig")),
+                    str(path.relative_to(ROOT)),
+                )
+
+    def test_native_autonomy_ladders_stop_before_annexation(self):
+        for filename in (
+            "integrated_puppet.txt",
+            "district_in_Vorkerland.txt",
+            "Feodal_Baronage.txt",
+            "supervised_state.txt",
+            "lar_collaboration_government.txt",
+        ):
+            with self.subTest(filename=filename):
+                path = ROOT / "common/autonomous_states" / filename
+                autonomy = block(parse_clausewitz(path.read_text(encoding="utf-8")), "autonomy_state")
+                gate = block(autonomy, "can_lose_level")
+                self.assertEqual([(e.key, e.value) for e in gate], [("always", "no")])
+
+    def test_southern_heritage_keeps_its_rewards_without_an_annexation_unlock(self):
+        for country, identifier in (
+            ("NAM", "NAM_south_heritage"),
+            ("SHL", "SHL_south_crown_of_the_south"),
+        ):
+            with self.subTest(country=country):
+                path = ROOT / f"focus_trees/{country}/main/focuses.txt"
+                reward = block(focus_blocks(path)[identifier], "completion_reward")
+                self.assertTrue(reward)
+                self.assertNotIn("unlock_decision_tooltip", repr(reward))
 
 
 class ItoranAggregateTests(unittest.TestCase):

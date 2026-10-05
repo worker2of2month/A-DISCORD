@@ -1178,6 +1178,37 @@ SHL_quarters_and_borders = {
 
 	# ----- Mazar -----
 
+	SHL_negotiate_mzr_neutrality = {
+		icon = generic_diplomatic_treaty
+		visible = {
+			SHL_mzr_diplomacy_open = yes
+			OR = {
+				KYZ = { SHL_mzr_partner_offer_current = yes }
+				GLP = { SHL_mzr_partner_offer_current = yes }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SHL_mzr_neutrality_funds_tt
+				check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			}
+			NOT = { has_political_power < 30 }
+			custom_trigger_tooltip = {
+				tooltip = SHL_mzr_neutrality_idle_tt
+				KYZ = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
+				GLP = { NOT = { has_country_flag = SHL_mzr_neutrality_pending } }
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 14
+		complete_effect = {
+			custom_effect_tooltip = SHL_mzr_neutrality_offer_tt
+			hidden_effect = { SHL_request_mzr_neutrality = yes }
+		}
+		ai_will_do = { base = 80 }
+	}
+
 	SHL_mazar_deadline = {
 		icon = generic_border_conflict
 		allowed = { tag = SHL }

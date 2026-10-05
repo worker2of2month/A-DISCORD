@@ -9,7 +9,7 @@ spriteTypes = {
 	}
 	spriteType = {
 		name = "GFX_portrait_WRK_Vlad_Petrichev"
-		texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev.png"
+		texturefile = "gfx/leaders/WRK/portrait_WRK_Vlad_Petrichev2.png"
 	}
 	spriteType = {
 		name = "GFX_portrait_WRK_Nikita_Worcker_civilwar"

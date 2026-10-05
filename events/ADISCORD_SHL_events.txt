@@ -795,6 +795,90 @@ country_event = {
 # ---------------------------------------------------------------------------
 
 country_event = {
+	id = ADISCORD_SHL.124
+	title = ADISCORD_SHL.124.t
+	desc = ADISCORD_SHL.124.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		tag = SHL
+		SHL_mzr_diplomacy_open = yes
+	}
+	option = {
+		name = ADISCORD_SHL.124.a
+		unlock_decision_tooltip = SHL_negotiate_mzr_neutrality
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.125
+	title = ADISCORD_SHL.125.t
+	desc = ADISCORD_SHL.125.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = {
+		SHL_mzr_partner_offer_current = yes
+		has_country_flag = SHL_mzr_pact_pending
+	}
+	option = {
+		name = ADISCORD_SHL.125.b
+		hidden_effect = { SHL_clear_mzr_partner_offer = yes }
+		ai_chance = { base = 15 }
+	}
+	option = {
+		name = ADISCORD_SHL.125.a
+		trigger = {
+			SHL_mzr_partner_offer_current = yes
+			has_country_flag = SHL_mzr_pact_pending
+		}
+		custom_effect_tooltip = SHL_mzr_pact_accept_tt
+		hidden_effect = { SHL_accept_mzr_pact = yes }
+		ai_chance = { base = 85 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.126
+	title = ADISCORD_SHL.126.t
+	desc = ADISCORD_SHL.126.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { has_country_flag = SHL_mzr_neutrality_pending }
+	option = {
+		name = ADISCORD_SHL.126.b
+		hidden_effect = { SHL_decline_mzr_neutrality = yes }
+		ai_chance = { base = 15 }
+	}
+	option = {
+		name = ADISCORD_SHL.126.a
+		trigger = { SHL_mzr_neutrality_current = yes }
+		custom_effect_tooltip = SHL_mzr_neutrality_accept_tt
+		hidden_effect = { SHL_accept_mzr_neutrality = yes }
+		ai_chance = { base = 85 }
+	}
+}
+
+country_event = {
+	id = ADISCORD_SHL.127
+	title = ADISCORD_SHL.127.t
+	desc = ADISCORD_SHL.127.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.127.a }
+}
+
+country_event = {
+	id = ADISCORD_SHL.128
+	title = ADISCORD_SHL.128.t
+	desc = ADISCORD_SHL.128.d
+	picture = GFX_event_adiscord_negotiation_table
+	is_triggered_only = yes
+	trigger = { tag = SHL }
+	option = { name = ADISCORD_SHL.128.a }
+}
+
+country_event = {
 	id = ADISCORD_SHL.90
 	title = ADISCORD_SHL.90.t
 	desc = ADISCORD_SHL.90.d

@@ -177,7 +177,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         self.assertCountEqual(fixture.installed, ("STP", "NOD"))
 
     def test_missed_final_capitulation_is_recovered(self) -> None:
-        self.assertIn("VAL_stelander_dominated = yes", self.reconcile)
+        self.assertIn("VAL_nod_campaign_stelander_ready = yes", self.reconcile)
         self.assertGreaterEqual(
             self.reconcile.count(
                 "has_country_flag = VAL_final_war_member has_capitulated = yes"

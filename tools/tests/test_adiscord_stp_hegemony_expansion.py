@@ -135,7 +135,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         for tag in ("NOD", "YPR", "TFF"):
             self.assertIn(f"NOT = {{ has_war_with = {tag} }}", resolved)
 
-    def test_nod_acceptance_creates_an_annexable_puppet(self) -> None:
+    def test_nod_acceptance_preserves_a_separate_puppet(self) -> None:
         events = read("events/ADISCORD_STP_events.txt")
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
         decisions = read("common/decisions/ADISCORD_STP_decisions.txt")
@@ -143,9 +143,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         finalizer = named_block(effects, "STP_pc_finalize_nod_client_subject")
         self.assertIn("puppet = NOD", finalizer)
         self.assertIn("autonomy_state = autonomy_puppet", finalizer)
-        annex = named_block(decisions, "STP_heg_annex_nod_administration")
-        self.assertIn("has_autonomy_state = autonomy_puppet", annex)
-        self.assertIn("annex_country = { target = NOD transfer_troops = yes }", annex)
+        self.assertNotIn("STP_heg_annex_nod_administration", decisions)
 
     def test_second_kefreyt_war_uses_distinct_scripted_peace(self) -> None:
         effects = read("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")
@@ -243,7 +241,7 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         self.assertIn("has_completed_focus = STP_pc_heg_administrations", nationalise)
         self.assertIn("has_completed_focus = STP_pw_regional_citizenship", nationalise)
 
-    def test_provisional_administrations_are_closed_and_annexable(self) -> None:
+    def test_provisional_administrations_keep_their_territory(self) -> None:
         autonomy = read(
             "common/autonomous_states/ADISCORD_STP_provisional_administration.txt"
         )
@@ -256,11 +254,10 @@ class ShabratHegemonyExpansionTests(unittest.TestCase):
         )
         for key in ("nod", "ypr", "tff", "val"):
             self.assertIn(f"STP_heg_establish_{key}_administration = {{", decisions)
-            self.assertIn(f"STP_heg_annex_{key}_administration = {{", decisions)
-        self.assertEqual(named_block(decisions, "STP_hegemony_administration").count("days_remove = 90"), 4)
-        self.assertEqual(
-            named_block(decisions, "STP_hegemony_administration").count("cost = 100"), 4
-        )
+            self.assertNotIn(f"STP_heg_annex_{key}_administration", decisions)
+            self.assertNotIn(f"STP_heg_{key}_integrated", decisions)
+        self.assertNotIn("annex_country", named_block(decisions, "STP_hegemony_administration"))
+        self.assertIn("can_lose_level = { always = no }", autonomy)
         self.assertGreaterEqual(
             effects.count("autonomy_STP_provisional_administration"), 8
         )

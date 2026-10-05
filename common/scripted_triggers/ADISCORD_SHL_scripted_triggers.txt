@@ -206,6 +206,54 @@ SHL_mazar_repeat_ready = {
 	SHL_mazar_can_threaten = yes
 }
 
+# COUNTRY SHL. Diplomacy ends at the actual declaration, including an early offensive.
+SHL_mzr_diplomacy_open = {
+	SHL_country_operable = yes
+	NOT = { has_war_with = MZR }
+	NOT = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }
+	OR = {
+		check_variable = { var = SHL_mazar_state value = 5 compare = equals }
+		has_country_flag = SHL_mzr_mobilizing
+	}
+	SHL_mazar_can_threaten = yes
+}
+
+# COUNTRY KYZ/GLP. A commercial dispute alone is not a military grievance.
+SHL_mzr_partner_eligible = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	is_in_faction = no
+	is_neighbor_of = SHL
+	has_country_flag = SHL_mzr_border_grievance
+	MZR = {
+		exists = yes
+		is_subject = no
+		is_in_faction = no
+	}
+}
+
+SHL_mzr_partner_offer_current = {
+	SHL_mzr_partner_eligible = yes
+	SHL = { SHL_mzr_diplomacy_open = yes }
+	OR = {
+		has_country_flag = SHL_mzr_pact_pending
+		has_country_flag = SHL_mzr_pact_signed
+	}
+}
+
+SHL_mzr_neutrality_affordable = {
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	NOT = { has_political_power < 30 }
+}
+
+SHL_mzr_neutrality_current = {
+	SHL_mzr_partner_offer_current = yes
+	has_country_flag = SHL_mzr_neutrality_pending
+	SHL = { SHL_mzr_neutrality_affordable = yes }
+}
+
 # Obligations occupy one national ledger; routine servicing keeps its own receipt.
 SHL_obligation_idle = {
 	SHL_country_operable = yes

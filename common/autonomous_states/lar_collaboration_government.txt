@@ -47,4 +47,6 @@ autonomy_state = {
 	allowed_levels_filter = {
 		autonomy_collaboration_government
 	}
+
+	can_lose_level = { always = no }
 }

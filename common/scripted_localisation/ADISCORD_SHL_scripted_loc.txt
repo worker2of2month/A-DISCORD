@@ -496,6 +496,64 @@ defined_text = {
 }
 
 defined_text = {
+	name = SHLGetMazarFlankStatus
+	text = {
+		trigger = { KYZ = { has_country_flag = SHL_mzr_war_partner } }
+		localization_key = SHL_mzr_flank_kyz_war
+	}
+	text = {
+		trigger = { GLP = { has_country_flag = SHL_mzr_war_partner } }
+		localization_key = SHL_mzr_flank_glp_war
+	}
+	text = {
+		trigger = {
+			OR = {
+				KYZ = { has_country_flag = SHL_mzr_neutrality_pending }
+				GLP = { has_country_flag = SHL_mzr_neutrality_pending }
+			}
+		}
+		localization_key = SHL_mzr_flank_negotiating
+	}
+	text = {
+		trigger = {
+			KYZ = {
+				SHL_mzr_partner_offer_current = yes
+				has_country_flag = SHL_mzr_pact_signed
+			}
+		}
+		localization_key = SHL_mzr_flank_kyz_signed
+	}
+	text = {
+		trigger = {
+			GLP = {
+				SHL_mzr_partner_offer_current = yes
+				has_country_flag = SHL_mzr_pact_signed
+			}
+		}
+		localization_key = SHL_mzr_flank_glp_signed
+	}
+	text = {
+		trigger = {
+			KYZ = {
+				SHL_mzr_partner_offer_current = yes
+				has_country_flag = SHL_mzr_pact_pending
+			}
+		}
+		localization_key = SHL_mzr_flank_kyz_pending
+	}
+	text = {
+		trigger = {
+			GLP = {
+				SHL_mzr_partner_offer_current = yes
+				has_country_flag = SHL_mzr_pact_pending
+			}
+		}
+		localization_key = SHL_mzr_flank_glp_pending
+	}
+	text = { localization_key = SHL_mzr_flank_none }
+}
+
+defined_text = {
 	name = SHLGetMazarStatus
 	text = {
 		trigger = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }

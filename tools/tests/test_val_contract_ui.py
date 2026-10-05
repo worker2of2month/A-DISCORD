@@ -2123,7 +2123,7 @@ class TestValProgressionChoices(unittest.TestCase):
 
         decisions = read("common/decisions/ADISCORD_VAL_decisions.txt")
         nod = named_block(decisions, "VAL_campaign_against_nod")
-        self.assertIn("VAL_stelander_dominated = yes", named_block(nod, "available"))
+        self.assertIn("VAL_nod_campaign_stelander_ready = yes", named_block(nod, "available"))
         self.assertIn(
             "VAL_nod_requires_stelander_victory_tt", named_block(nod, "available")
         )
@@ -2131,7 +2131,7 @@ class TestValProgressionChoices(unittest.TestCase):
             "VAL_northern_foothold_secured = yes", named_block(nod, "available")
         )
         self.assertIn(
-            "NOT = { VAL_stelander_dominated = yes }",
+            "NOT = { VAL_nod_campaign_stelander_ready = yes }",
             named_block(nod, "cancel_trigger"),
         )
         self.assertIn(
@@ -2139,14 +2139,14 @@ class TestValProgressionChoices(unittest.TestCase):
             named_block(nod, "cancel_trigger"),
         )
         self.assertIn(
-            "VAL_stelander_dominated = yes", named_block(nod, "remove_effect")
+            "VAL_nod_campaign_stelander_ready = yes", named_block(nod, "remove_effect")
         )
         self.assertIn(
             "VAL_northern_foothold_secured = yes", named_block(nod, "remove_effect")
         )
 
         final_crisis = named_block(triggers, "VAL_final_crisis_available")
-        self.assertIn("VAL_stelander_dominated = yes", final_crisis)
+        self.assertIn("VAL_nod_campaign_stelander_ready = yes", final_crisis)
 
         stelander = self.focus("VAL_Stelander_Ultimatum")
         if "available = {" in stelander:

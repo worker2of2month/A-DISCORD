@@ -272,6 +272,32 @@ VAL_military_operations = {
 		ai_will_do = { base = 30 }
 	}
 
+	# ERT may keep fighting SCA after losing 169, so the limited war cannot wait
+	# for its capitulation.
+	VAL_operation_secure_perimeter = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_frontier_return_irem
+			has_war_with = ERT
+			169 = { is_owned_by = ERT }
+		}
+		available = {
+			has_capitulated = no
+			ERT = { has_capitulated = no }
+			custom_trigger_tooltip = {
+				tooltip = VAL_perimeter_held_tt
+				169 = { VAL_frontier_controlled = yes }
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_secure_perimeter_tt
+			hidden_effect = { VAL_settle_perimeter_war = yes }
+		}
+		ai_will_do = { base = 50 }
+	}
+
 	VAL_operation_expand_southern_bridgehead = {
 		icon = generic_territory_or_war
 		allowed = { tag = VAL }
@@ -288,6 +314,78 @@ VAL_military_operations = {
 			hidden_effect = { VAL_call_subjects_to_wars = yes }
 		}
 		ai_will_do = { base = 40 }
+	}
+
+	VAL_operation_southern_federation = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Southern_Expansion
+			NOT = { has_war_with = SCA }
+			SCA = {
+				exists = yes
+				NOT = { is_subject_of = VAL }
+				any_owned_state = { VAL_is_southern_sector_state = yes }
+			}
+		}
+		available = { VAL_southern_federation_war_available = yes }
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_declares_war_sca_south_tt
+			declare_war_on = { target = SCA type = take_state_focus generator = { 167 170 171 184 185 203 } }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 20 }
+	}
+
+	VAL_operation_secure_southern_federation = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Southern_Expansion
+			has_war_with = SCA
+		}
+		available = {
+			has_capitulated = no
+			SCA = { has_capitulated = no }
+			custom_trigger_tooltip = {
+				tooltip = VAL_southern_federation_sector_held_tt
+				VAL_southern_federation_sector_held = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_secure_southern_federation_tt
+			hidden_effect = { VAL_settle_southern_federation_war = yes }
+		}
+		ai_will_do = { base = 50 }
+	}
+
+	# A native peace conference can award sector land to Kefreyt itself.
+	VAL_operation_assign_southern_sector = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Southern_Expansion
+			any_owned_state = { VAL_is_southern_sector_state = yes }
+		}
+		available = {
+			VAL_wasteland_administration_ready = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_southern_sector_held_tt
+				any_owned_state = {
+					VAL_is_southern_sector_state = yes
+					VAL_frontier_controlled = yes
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_assign_southern_sector_tt
+			hidden_effect = { VAL_assign_southern_sector_to_administration = yes }
+		}
+		ai_will_do = { base = 50 }
 	}
 
 	VAL_operation_eastern_security_belt = {
@@ -533,7 +631,7 @@ VAL_military_operations = {
 		target_trigger = { FROM = { exists = yes } }
 		visible = { has_completed_focus = VAL_Northern_Settlement NOT = { has_country_flag = VAL_stelander_defeated } FROM = { OR = { is_subject = no AND = { tag = NOD is_subject_of = STP } } NOT = { has_war_with = ROOT } } }
 		available = {
-			custom_trigger_tooltip = { tooltip = VAL_nod_requires_stelander_victory_tt VAL_stelander_dominated = yes }
+			custom_trigger_tooltip = { tooltip = VAL_nod_requires_stelander_victory_tt VAL_nod_campaign_stelander_ready = yes }
 			custom_trigger_tooltip = { tooltip = VAL_nod_campaign_foothold_tt VAL_northern_foothold_secured = yes }
 			VAL_can_launch_final_campaign = yes
 			NOT = { has_country_flag = VAL_campaign_mobilizing }
@@ -544,7 +642,7 @@ VAL_military_operations = {
 			custom_effect_tooltip = VAL_nod_victory_tt
 			hidden_effect = {
 				if = {
-					limit = { VAL_stelander_dominated = yes VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
+					limit = { VAL_nod_campaign_stelander_ready = yes VAL_can_launch_final_campaign = yes NOT = { has_country_flag = VAL_campaign_mobilizing } }
 					set_country_flag = VAL_campaign_mobilizing
 					FROM = { set_country_flag = VAL_campaign_target }
 					VAL_release_party_nodrul_for_final_campaign = yes
@@ -558,7 +656,7 @@ VAL_military_operations = {
 					has_capitulated = yes
 					is_subject = yes
 					has_country_flag = VAL_stelander_defeated
-					NOT = { VAL_stelander_dominated = yes }
+					NOT = { VAL_nod_campaign_stelander_ready = yes }
 					NOT = { VAL_northern_foothold_secured = yes }
 					FROM = {
 						OR = {
@@ -583,7 +681,7 @@ VAL_military_operations = {
 		}
 		remove_effect = {
 			if = {
-				limit = { has_country_flag = VAL_campaign_mobilizing VAL_stelander_dominated = yes VAL_northern_foothold_secured = yes VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
+				limit = { has_country_flag = VAL_campaign_mobilizing VAL_nod_campaign_stelander_ready = yes VAL_northern_foothold_secured = yes VAL_can_launch_final_campaign = yes FROM = { has_country_flag = VAL_campaign_target } }
 				if = {
 					limit = {
 						FROM = { tag = NOD }
@@ -598,7 +696,10 @@ VAL_military_operations = {
 					}
 					VAL_begin_joint_nod_shabrat_campaign = yes
 				}
-				else = { declare_war_on = { target = FROM type = annex_everything } }
+				else = {
+					declare_war_on = { target = FROM type = annex_everything }
+					VAL_final_crisis_join_war = yes
+				}
 				NOD = { if = { limit = { exists = yes } STP_cw_release_tff_to_northern_war = yes } }
 			}
 			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing clr_country_flag = VAL_final_party_nod_release_pending FROM = { clr_country_flag = VAL_campaign_target } }

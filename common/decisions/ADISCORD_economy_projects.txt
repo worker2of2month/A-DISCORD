@@ -158,19 +158,22 @@ ADISCORD_economy_projects = {
 			check_variable = { var = resource@rare_alloys value = 2 compare = greater_than_or_equals }
 		}
 		custom_cost_text = ADISCORD_economy_logistics_contract_cost
-		days_remove = 45
-		days_re_enable = 90
+		days_remove = 30
+		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_logistics_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 300 producer = ROOT }
-				add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 20 producer = ROOT } }
+			effect_tooltip = { add_equipment_to_stockpile = { type = motorized_equipment_1 amount = 900 producer = ROOT }
+				add_equipment_to_stockpile = { type = armored_train_equipment_1 amount = 60 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_logistics_contract = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_logistics_contract_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 4 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_logistics_contract_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
@@ -204,18 +207,21 @@ ADISCORD_economy_projects = {
 			check_variable = { var = resource@rare_alloys value = 1 compare = greater_than_or_equals }
 		}
 		custom_cost_text = ADISCORD_economy_drone_contract_cost
-		days_remove = 60
-		days_re_enable = 90
+		days_remove = 45
+		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_drone_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 200 producer = ROOT } }
+			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_recon_drone_carrier_2170 amount = 600 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_drone_contract = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_drone_contract_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 5 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_drone_contract_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
@@ -249,18 +255,21 @@ ADISCORD_economy_projects = {
 			check_variable = { var = resource@rare_alloys value = 3 compare = greater_than_or_equals }
 		}
 		custom_cost_text = ADISCORD_economy_platform_contract_cost
-		days_remove = 90
-		days_re_enable = 90
+		days_remove = 60
+		days_re_enable = 60
 		complete_effect = {
 			custom_effect_tooltip = ADISCORD_economy_platform_contract_delivery_tt
-			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 240 producer = ROOT } }
+			effect_tooltip = { add_equipment_to_stockpile = { type = ADISCORD_combat_platform_2170 amount = 720 producer = ROOT } }
 			hidden_effect = { ADISCORD_economy_start_platform_contract = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				NOT = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
-				ADISCORD_economy_project_can_continue = no
-				ADISCORD_economy_platform_contract_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_economy_contract_cancel_conditions_tt
+				OR = {
+					NOT = { check_variable = { var = ADISCORD_economy_project_id value = 6 compare = equals } }
+					ADISCORD_economy_project_can_continue = no
+					ADISCORD_economy_platform_contract_requirements = no
+				}
 			}
 		}
 		cancel_effect = {

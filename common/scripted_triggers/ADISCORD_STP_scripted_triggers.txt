@@ -2953,6 +2953,49 @@ STP_cw_tff_entry_deferred = {
 	}
 }
 
+# STATE. Kefreyt's border settlement; the remaining homeland is a Nodrul subject.
+STP_val_nod_partition_border = {
+	OR = {
+		state = 46
+		state = 29
+		state = 45
+	}
+}
+
+# COUNTRY, native capitulation ROOT. Both invaders must still be fighting this
+# government when military credit is recorded; an unrelated victor cannot divide it.
+STP_val_nod_partition_available = {
+	OR = { tag = STP tag = STS }
+	is_subject = no
+	has_global_flag = STP_cw_union_wars_finished
+	has_war_with = VAL
+	has_war_with = NOD
+	any_owned_state = {
+		is_core_of = STP
+		NOT = { STP_val_nod_partition_border = yes }
+	}
+	VAL = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+		NOT = { has_war_with = NOD }
+	}
+	NOD = {
+		exists = yes
+		is_subject = no
+		has_capitulated = no
+	}
+	FROM = {
+		has_war_with = ROOT
+		OR = {
+			tag = VAL
+			tag = NOD
+			is_subject_of = VAL
+			is_subject_of = NOD
+		}
+	}
+}
+
 STP_cw_northern_entry_complete = {
 	has_war_with = YPR
 	has_war_with = COF

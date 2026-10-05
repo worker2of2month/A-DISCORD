@@ -876,6 +876,62 @@
 		}
 	}
 
+	focus = {
+		id = STP_party_factory_laboratories
+		icon = GFX_goal_generic_scientific_exchange
+		x = -24
+		y = 5
+		cost = 5
+		prerequisite = { focus = STP_party_technical_institutes }
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_industry_delivered_tt
+				check_variable = { var = STP_pw_recovery_industry value = 1 compare = greater_than_or_equals }
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 4 }
+		completion_reward = {
+			add_research_slot = 1
+		}
+	}
+
+	# Any won external campaign counts; the conquest flags are never cleared.
+	focus = {
+		id = STP_party_captured_archives
+		icon = GFX_focus_research
+		x = -26
+		y = 6
+		cost = 5
+		prerequisite = { focus = STP_party_factory_laboratories }
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pw_can_reconstruct = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_party_captured_archives_available_tt
+				OR = {
+					has_country_flag = STP_pw_party_bezhaysk_victory
+					has_country_flag = STP_pw_party_kefreyt_victory
+					VAL = { is_subject_of = STP }
+					NOD = { is_subject_of = STP }
+				}
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = { base = 6 }
+		completion_reward = {
+			add_research_slot = 1
+		}
+	}
+
 	# Party postwar route capstones: four choices stay distinct until final settlement.
 
 	focus = {

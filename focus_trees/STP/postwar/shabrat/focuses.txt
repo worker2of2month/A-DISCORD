@@ -2705,6 +2705,35 @@
 		}
 	}
 
+	# Bezhaysk is annexed outright after an STS victory, so its capital records the conquest.
+	focus = {
+		id = STP_pc_development_captured_institutes
+		icon = GFX_focus_research
+		x = 38
+		y = 10
+		cost = 5
+		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_reconstruction_available_tt
+				STP_pc_focus_available = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pc_development_captured_institutes_available_tt
+				OR = {
+					41 = { is_owned_by = STS }
+					VAL = { is_subject_of = STS }
+					NOD = { is_subject_of = STS }
+				}
+			}
+		}
+		prerequisite = { focus = STP_pc_development_national_research_institutes }
+		ai_will_do = { base = 12 }
+		completion_reward = {
+			add_research_slot = 1
+		}
+	}
+
 
 # @section investment
 	focus = {

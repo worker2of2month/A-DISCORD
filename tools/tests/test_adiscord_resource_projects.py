@@ -16,9 +16,9 @@ PROJECTS = {
     'precision_tooling': (1, 500, 1, 2, 60),
     'automated_industry': (2, 700, 3, 2, 90),
     'national_computing': (3, 900, 4, 1, 90),
-    'logistics_contract': (4, 450, 1, 2, 45),
-    'drone_contract': (5, 600, 3, 1, 60),
-    'platform_contract': (6, 1000, 1, 3, 90),
+    'logistics_contract': (4, 450, 1, 2, 30),
+    'drone_contract': (5, 600, 3, 1, 45),
+    'platform_contract': (6, 1000, 1, 3, 60),
 }
 # One own plant of each type (4 components, 3 alloys) covers any single programme.
 PLANT_OUTPUT = (4, 3)
@@ -331,11 +331,11 @@ class ResourceProjectTransactions(unittest.TestCase):
     def test_delivery_uses_exact_existing_equipment_and_is_idempotent(self):
         expected = {
             'logistics_contract': {
-                'motorized_equipment_1': 300,
-                'armored_train_equipment_1': 20,
+                'motorized_equipment_1': 900,
+                'armored_train_equipment_1': 60,
             },
-            'drone_contract': {'ADISCORD_recon_drone_carrier_2170': 200},
-            'platform_contract': {'ADISCORD_combat_platform_2170': 240},
+            'drone_contract': {'ADISCORD_recon_drone_carrier_2170': 600},
+            'platform_contract': {'ADISCORD_combat_platform_2170': 720},
         }
         for name, items in expected.items():
             f = ProjectFixture()
@@ -466,8 +466,36 @@ class ResourceProjectSourceContracts(unittest.TestCase):
                 self.assertIn(f'{cost}§! £ADISCORD_economy_treasury_texticon', match[1])
                 self.assertIn(f'{c}§! £resources_strip|8', match[1])
                 self.assertIn(f'{a}§! £resources_strip|9', match[1])
-                self.assertIn(f'на {days} дней', match[1])
+                if name not in ('logistics_contract', 'drone_contract', 'platform_contract') or suffix == '_tooltip':
+                    self.assertIn(f'на {days} дней', match[1])
             self.assertIn('custom_cost_trigger', [n.key for n in nodes])
+
+    def test_repeatable_orders_show_one_cancellation_summary_and_exact_delivery(self):
+        for name in ('logistics_contract', 'drone_contract', 'platform_contract'):
+            with self.subTest(project=name):
+                f = ProjectFixture()
+                decision = f.decisions[P + name]
+                cancellation = direct(decision, 'cancel_trigger')
+                self.assertEqual([node.key for node in cancellation], ['custom_trigger_tooltip'])
+                summary = direct(cancellation, 'custom_trigger_tooltip')
+                key = direct(summary, 'tooltip')
+                self.assertEqual(direct(decision, 'days_re_enable'), '60')
+                preview = direct(direct(decision, 'complete_effect'), 'effect_tooltip')
+                expected = {
+                    direct(node.value, 'type'): float(direct(node.value, 'amount'))
+                    for node in preview
+                }
+                f.run(P + 'start_' + name)
+                self.assertFalse(f.equipment)
+                f.run(P + 'finish_' + name)
+                self.assertEqual(f.equipment, expected)
+                for language in ('russian', 'english'):
+                    loc = read(f'localisation/{language}/ADISCORD_economy_l_{language}.yml')
+                    self.assertIn(' ' + key + ':0', loc)
+                    delivery = next(line for line in loc.splitlines() if line.startswith(' ' + P + name + '_delivery_tt:'))
+                    self.assertNotIn('$ADISCORD_economy_project_terms_tt$', delivery)
+                    self.assertIn('75%', delivery)
+                    self.assertIn('60', delivery)
 
     def test_all_resource_costs_are_country_scoped_native_consumers(self):
         source = read(DYNAMIC)
