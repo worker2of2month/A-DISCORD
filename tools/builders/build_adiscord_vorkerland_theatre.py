@@ -10,6 +10,11 @@ from pathlib import Path
 
 from tools.builders import build_adiscord_strategic_regions as map_regions
 from tools.lib.paths import repository_root
+from tools.lib.vorkerland_collapse_manifest import (
+    DIRTY_GROUPS,
+    DIRTY_INITIAL_OWNER_OVERRIDES,
+    EXZ_REMAINDER_GROUPS,
+)
 
 
 ROOT = repository_root()
@@ -25,9 +30,31 @@ STARTING_SUPPLY_RAILS = {
 }
 # The western line must join the bunker without crossing a third country.
 # Hubs become available to RUS only after it captures the border objectives.
-KHAN_SUPPLY_RAIL = (2, (16531, 4870, 2298, 16544, 16546))
+KHAN_SUPPLY_RAIL = (2, (16546, 16544, 2298, 4486, 10563))
 KHAN_SUPPLY_STATES = frozenset({66, 49, 176})
 KHAN_SUPPLY_HUBS = (16531, 16639, 7445)
+# Forward depots use existing rail; capturing the corridor is still required.
+KHAN_CAMPAIGN_SUPPLY_HUB_STATES = {
+    # SLA: western front, southern approach and the northern rail corridor.
+    5032: 51,
+    12219: 51,
+    16630: 329,
+    # RZA.
+    7650: 220,
+    2768: 217,
+    11688: 214,
+    # MLR.
+    1707: 221,
+    876: 189,
+    # ERT.
+    8500: 184,
+    # IRT.
+    10421: 182,
+    16480: 207,
+    # SCA.
+    16334: 173,
+    16489: 211,
+}
 # Level-2 operational spines through the six Dirty Zone belts. These routes
 # already exist physically; the generator owns their throughput so future map
 # regeneration cannot silently drop the Khan campaign logistics upgrade.
@@ -85,6 +112,7 @@ KHAN_CAMPAIGN_RAIL_UPGRADES = (
     (2, (2741, 5194, 6220, 6652, 10726, 8655, 11688, 10888, 5210)),
 )
 VORKERLAND_SUPPLY_HUB_STATES = {
+    **KHAN_CAMPAIGN_SUPPLY_HUB_STATES,
     3728: 187,
     5637: 191,
     5780: 189,
@@ -150,13 +178,7 @@ def _rail_route(line: str) -> tuple[int, ...] | None:
 
 
 def update_source(source: str) -> str:
-    """Append exact owned rail records while preserving all other lines."""
-    upgraded_routes = {provinces for _, provinces in KHAN_CAMPAIGN_RAIL_UPGRADES}
-    lines = [
-        line
-        for line in source.replace("\r\n", "\n").splitlines()
-        if line not in RETIRED_MARKERS and _rail_route(line) not in upgraded_routes
-    ]
+    """Update owned rail records without rewriting equivalent Nudge records."""
     managed = [
         render_managed_line(),
         *(render_supply_connection(tag) for tag in STARTING_SUPPLY_RAILS),
@@ -166,9 +188,22 @@ def update_source(source: str) -> str:
             for level, provinces in KHAN_CAMPAIGN_RAIL_UPGRADES
         ),
     ]
-    managed_text = {line.strip() for line in managed}
-    lines = [line for line in lines if line.strip() not in managed_text]
-    lines.extend(managed)
+    managed_routes = {_rail_route(line): line for line in managed}
+    seen = set()
+    lines = []
+    for line in source.replace("\r\n", "\n").splitlines():
+        if line.strip() in RETIRED_MARKERS:
+            continue
+        route = _rail_route(line)
+        if route not in managed_routes:
+            lines.append(line)
+            continue
+        if route in seen:
+            continue
+        expected = managed_routes[route]
+        lines.append(line if line.split() == expected.split() else expected)
+        seen.add(route)
+    lines.extend(line for route, line in managed_routes.items() if route not in seen)
     return "\n".join(lines) + "\n"
 
 
@@ -177,15 +212,23 @@ def render_supply_node(province_id: int) -> str:
 
 
 def update_supply_source(source: str) -> str:
-    """Append exact generated hubs while preserving every unmanaged record."""
-    lines = source.replace("\r\n", "\n").splitlines()
+    """Append missing hubs and preserve the formatting of existing records."""
     managed = {
         render_supply_node(province_id) for province_id in VORKERLAND_SUPPLY_HUB_STATES
     }
-    lines = [line for line in lines if line.strip() not in managed]
+    seen = set()
+    lines = []
+    for line in source.replace("\r\n", "\n").splitlines():
+        record = line.strip()
+        if record in managed:
+            if record in seen:
+                continue
+            seen.add(record)
+        lines.append(line)
     lines.extend(
         render_supply_node(province_id)
         for province_id in sorted(VORKERLAND_SUPPLY_HUB_STATES)
+        if render_supply_node(province_id) not in seen
     )
     return "\n".join(lines) + "\n"
 
@@ -193,7 +236,7 @@ def update_supply_source(source: str) -> str:
 def validate() -> list[str]:
     issues: list[str] = []
     raw = RAILWAYS_PATH.read_bytes()
-    source = raw.decode("utf-8-sig").replace("\r\n", "\n")
+    source = "\n".join(line.strip() for line in raw.decode("utf-8-sig").splitlines())
     level, provinces = OSV_CAPITAL_RAIL
     expected_line = render_managed_line()
     if source.splitlines().count(expected_line) != 1:
@@ -376,6 +419,36 @@ def validate() -> list[str]:
                 )
             if supply_lines.count(render_supply_node(hub)) != 1:
                 issues.append(f"RUS border supply hub {hub} must occur exactly once")
+        campaign_states = {66}
+        for tag, core_states in DIRTY_GROUPS.items():
+            campaign_states.update(core_states)
+            campaign_states.update(EXZ_REMAINDER_GROUPS.get(tag, ()))
+        campaign_states.difference_update(DIRTY_INITIAL_OWNER_OVERRIDES)
+        supply_corridors = (
+            (
+                "Starolesye",
+                {66, *DIRTY_GROUPS["SLA"], *EXZ_REMAINDER_GROUPS["SLA"]},
+                (5032, 12219, 16630),
+            ),
+            ("campaign", campaign_states, tuple(KHAN_CAMPAIGN_SUPPLY_HUB_STATES)),
+        )
+        for corridor, allowed_states, hubs in supply_corridors:
+            pending = [KHAN_SUPPLY_HUBS[0]]
+            reached = set(pending)
+            while pending:
+                province = pending.pop()
+                for neighbour in rail_graph[province]:
+                    if (
+                        neighbour not in reached
+                        and state_by_province.get(neighbour) in allowed_states
+                    ):
+                        reached.add(neighbour)
+                        pending.append(neighbour)
+            for hub in hubs:
+                if hub not in reached:
+                    issues.append(
+                        f"RUS {corridor} supply hub {hub} is disconnected from the capital inside its campaign territory"
+                    )
     except (OSError, RuntimeError, ValueError, KeyError) as error:
         issues.append(f"cannot validate campaign rail geography: {error}")
     return issues
@@ -386,7 +459,8 @@ def apply() -> None:
     newline = "\r\n" if b"\r\n" in raw else "\n"
     source = raw.decode("utf-8-sig")
     updated = update_source(source).replace("\n", newline)
-    RAILWAYS_PATH.write_bytes(updated.encode("utf-8"))
+    if updated.encode("utf-8") != raw:
+        RAILWAYS_PATH.write_bytes(updated.encode("utf-8"))
 
     supply_raw = SUPPLY_NODES_PATH.read_bytes()
     supply_newline = "\r\n" if b"\r\n" in supply_raw else "\n"

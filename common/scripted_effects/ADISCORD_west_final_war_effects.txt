@@ -29,11 +29,14 @@ ADISCORD_west_crisis_month = {
 		set_global_flag = ADISCORD_west_final_resolved
 		set_global_flag = ADISCORD_west_hegemon_WRK
 		set_global_flag = ADISCORD_west_unopposed
-		set_global_variable = { var = ADISCORD_west_winner_side value = 1 }
+		set_variable = { var = global.ADISCORD_west_winner_side value = 1 }
 		news_event = { id = ADISCORD_west.31 hours = 1 }
 	}
 	else_if = {
-		limit = { ADISCORD_west_crisis_open = yes }
+		limit = {
+			ADISCORD_west_crisis_open = yes
+			ADISCORD_west_reconstruction_grace_elapsed = yes
+		}
 		add_to_variable = { var = global.ADISCORD_west_crisis value = 5 }
 		clamp_variable = { var = global.ADISCORD_west_crisis min = 0 max = 100 }
 		if = {
@@ -63,10 +66,10 @@ ADISCORD_west_final_war_start = {
 		set_global_flag = ADISCORD_west_final_started
 		if = {
 			limit = { tag = WRK }
-			set_global_variable = { var = ADISCORD_west_declarer_side value = 1 }
+			set_variable = { var = global.ADISCORD_west_declarer_side value = 1 }
 		}
 		else = {
-			set_global_variable = { var = ADISCORD_west_declarer_side value = 2 }
+			set_variable = { var = global.ADISCORD_west_declarer_side value = 2 }
 		}
 		WRK = {
 			ADISCORD_west_prepare_champion = yes
@@ -202,42 +205,90 @@ ADISCORD_west_offer_side_choice = {
 	}
 }
 
-# COUNTRY. Joins Vorkerland's faction when free and enters the current war.
+# COUNTRY. Record the choice before faction partners follow it. Diplomatic
+# changes run after all same-tick choices have entered the campaign roster.
 ADISCORD_west_join_wrk_side = {
 	set_variable = { var = ADISCORD_west_side value = 1 }
-	if = {
+	country_event = { id = ADISCORD_west.11 hours = 1 }
+}
+
+ADISCORD_west_join_ivn_side = {
+	set_variable = { var = ADISCORD_west_side value = 2 }
+	country_event = { id = ADISCORD_west.11 hours = 1 }
+}
+
+# COUNTRY participant. Earlier regional wars cannot survive between members
+# of the chosen side. Preserve wars against countries outside that side.
+ADISCORD_west_prepare_side_entry = {
+	every_enemy_country = {
 		limit = {
-			is_in_faction = no
-			is_subject = no
+			has_variable = ADISCORD_west_side
+			check_variable = { var = ADISCORD_west_side value = PREV.ADISCORD_west_side compare = equals }
 		}
-		WRK = { add_to_faction = PREV }
+		white_peace = PREV
 	}
 	if = {
-		limit = { NOT = { has_war_with = IVN } }
+		limit = {
+			is_in_faction = yes
+			is_subject = no
+			NOT = {
+				OR = {
+					AND = {
+						ADISCORD_west_on_wrk_side = yes
+						is_in_faction_with = WRK
+					}
+					AND = {
+						ADISCORD_west_on_ivn_side = yes
+						is_in_faction_with = IVN
+					}
+				}
+			}
+		}
+		if = {
+			limit = { is_faction_leader = yes }
+			dismantle_faction = yes
+		}
+		else = {
+			leave_faction = yes
+		}
+	}
+	# Peace and faction removal must reach the native diplomatic cache first.
+	country_event = { id = ADISCORD_west.12 hours = 1 }
+}
+
+# COUNTRY participant. Always join the champion's exact war, including when
+# a separate war against that enemy already exists. Do not import other wars.
+ADISCORD_west_complete_side_entry = {
+	if = {
+		limit = { ADISCORD_west_on_wrk_side = yes }
+		if = {
+			limit = {
+				is_in_faction = no
+				is_subject = no
+			}
+			WRK = { add_to_faction = PREV }
+		}
 		add_to_war = {
 			targeted_alliance = WRK
 			enemy = IVN
 			hostility_reason = asked_to_join
+			single_target_only = yes
 		}
 	}
-}
-
-# COUNTRY. Joins Itora's faction when free and enters the current war.
-ADISCORD_west_join_ivn_side = {
-	set_variable = { var = ADISCORD_west_side value = 2 }
-	if = {
-		limit = {
-			is_in_faction = no
-			is_subject = no
+	else_if = {
+		limit = { ADISCORD_west_on_ivn_side = yes }
+		if = {
+			limit = {
+				is_in_faction = no
+				is_subject = no
+			}
+			IVN = { add_to_faction = PREV }
 		}
-		IVN = { add_to_faction = PREV }
-	}
-	if = {
-		limit = { NOT = { has_war_with = WRK } }
 		add_to_war = {
 			targeted_alliance = IVN
 			enemy = WRK
 			hostility_reason = asked_to_join
+			single_target_only = yes
 		}
 	}
 }
@@ -328,21 +379,21 @@ ADISCORD_west_final_resolve_wrk_victory = {
 		# The resolved flag precedes white peace so on_peace cannot re-enter.
 		set_global_flag = ADISCORD_west_final_resolved
 		set_global_flag = ADISCORD_west_hegemon_WRK
-		set_global_variable = { var = ADISCORD_west_winner_side value = 1 }
-		set_global_variable = { var = ADISCORD_west_terms value = 2 }
-		set_global_variable = { var = ADISCORD_west_subject_type value = 0 }
-		set_global_variable = { var = ADISCORD_west_transfer value = 0 }
+		set_variable = { var = global.ADISCORD_west_winner_side value = 1 }
+		set_variable = { var = global.ADISCORD_west_terms value = 2 }
+		set_variable = { var = global.ADISCORD_west_subject_type value = 0 }
+		set_variable = { var = global.ADISCORD_west_transfer value = 0 }
 		if = {
 			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_worker } }
-			set_global_variable = { var = ADISCORD_west_subject_type value = 1 }
+			set_variable = { var = global.ADISCORD_west_subject_type value = 1 }
 		}
 		else_if = {
 			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_joint } }
-			set_global_variable = { var = ADISCORD_west_terms value = 1 }
+			set_variable = { var = global.ADISCORD_west_terms value = 1 }
 		}
 		else = {
-			set_global_variable = { var = ADISCORD_west_subject_type value = 2 }
-			set_global_variable = { var = ADISCORD_west_transfer value = 2 }
+			set_variable = { var = global.ADISCORD_west_subject_type value = 2 }
+			set_variable = { var = global.ADISCORD_west_transfer value = 2 }
 		}
 		ADISCORD_west_end_final_wars = yes
 		ADISCORD_west_mark_losers = yes
@@ -360,17 +411,17 @@ ADISCORD_west_final_resolve_ivn_victory = {
 		limit = { ADISCORD_west_final_active = yes }
 		set_global_flag = ADISCORD_west_final_resolved
 		set_global_flag = ADISCORD_west_hegemon_IVN
-		set_global_variable = { var = ADISCORD_west_winner_side value = 2 }
-		set_global_variable = { var = ADISCORD_west_terms value = 2 }
-		set_global_variable = { var = ADISCORD_west_subject_type value = 0 }
-		set_global_variable = { var = ADISCORD_west_transfer value = 1 }
+		set_variable = { var = global.ADISCORD_west_winner_side value = 2 }
+		set_variable = { var = global.ADISCORD_west_terms value = 2 }
+		set_variable = { var = global.ADISCORD_west_subject_type value = 0 }
+		set_variable = { var = global.ADISCORD_west_transfer value = 1 }
 		if = {
 			limit = { IVN = { ADISCORD_west_ivn_shield_course = yes } }
-			set_global_variable = { var = ADISCORD_west_subject_type value = 3 }
+			set_variable = { var = global.ADISCORD_west_subject_type value = 3 }
 		}
 		else_if = {
 			limit = { IVN = { ADISCORD_west_ivn_emergency_course = yes } }
-			set_global_variable = { var = ADISCORD_west_subject_type value = 4 }
+			set_variable = { var = global.ADISCORD_west_subject_type value = 4 }
 		}
 		ADISCORD_west_end_final_wars = yes
 		ADISCORD_west_mark_losers = yes

@@ -8,6 +8,11 @@ from unittest.mock import patch
 from tools.builders import build_adiscord_vorkerland_theatre as theatre
 
 
+def normalized_rail_source() -> str:
+    source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+    return "\n".join(line.strip() for line in source.splitlines()) + "\n"
+
+
 class VorkerlandTheatreBuilderTests(unittest.TestCase):
     def test_current_generated_rail_record_is_valid(self) -> None:
         self.assertEqual(theatre.validate(), [])
@@ -34,7 +39,7 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
 
     def test_starting_supply_routes_preserve_the_existing_network(self) -> None:
         self.assertTrue(hasattr(theatre, "STARTING_SUPPLY_RAILS"))
-        source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+        source = normalized_rail_source()
         updated = theatre.update_source(source)
         for tag in ("STP", "YPR"):
             line = theatre.render_supply_connection(tag)
@@ -46,7 +51,7 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
         )
 
     def test_khan_campaign_spines_are_level_two_and_idempotent(self) -> None:
-        source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+        source = normalized_rail_source()
         updated = theatre.update_source(source)
         self.assertEqual(theatre.update_source(updated), updated)
         for level, route in theatre.KHAN_CAMPAIGN_RAIL_UPGRADES:
@@ -77,7 +82,7 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             )
 
     def test_missing_supply_link_is_reported(self) -> None:
-        source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+        source = normalized_rail_source()
         for tag in ("STP", "YPR"):
             with self.subTest(tag=tag), tempfile.TemporaryDirectory() as directory:
                 line = theatre.render_supply_connection(tag)
@@ -111,7 +116,7 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             self.assertEqual(hubs.read_bytes(), source)
 
     def test_missing_khan_link_disconnects_the_border_hub(self) -> None:
-        source = theatre.RAILWAYS_PATH.read_text(encoding="utf-8")
+        source = normalized_rail_source()
         broken = source.replace(theatre.render_khan_connection() + "\n", "")
         self.assertNotEqual(broken, source)
         with tempfile.TemporaryDirectory() as directory:
@@ -123,6 +128,53 @@ class VorkerlandTheatreBuilderTests(unittest.TestCase):
             any("RUS" in issue and "7445 is disconnected" in issue for issue in issues),
             issues,
         )
+
+    def test_supply_only_apply_preserves_nudge_rail_bytes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            hubs = Path(directory) / "supply_nodes.txt"
+            source = (" \r\n".join(normalized_rail_source().splitlines()) + " \r\n").encode()
+            rails.write_bytes(source)
+            hubs.write_text("1 16531 \n", encoding="utf-8")
+            with (
+                patch.object(theatre, "RAILWAYS_PATH", rails),
+                patch.object(theatre, "SUPPLY_NODES_PATH", hubs),
+            ):
+                theatre.apply()
+                first = hubs.read_bytes()
+                theatre.apply()
+            self.assertEqual(rails.read_bytes(), source)
+            self.assertEqual(hubs.read_bytes(), first)
+
+    def test_forward_depots_require_a_connected_corridor(self) -> None:
+        source = normalized_rail_source()
+        broken = "\n".join(
+            line for line in source.splitlines()
+            if "5032" not in line.split()[2:]
+        ) + "\n"
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            rails = Path(directory) / "railways.txt"
+            rails.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "RAILWAYS_PATH", rails):
+                issues = theatre.validate()
+        self.assertTrue(
+            any("Starolesye supply hub 5032 is disconnected" in issue for issue in issues),
+            issues,
+        )
+
+    def test_missing_forward_depot_is_reported(self) -> None:
+        source = theatre.SUPPLY_NODES_PATH.read_text(encoding="utf-8")
+        broken = "\n".join(
+            line for line in source.splitlines() if line.strip() != "1 12219"
+        ) + "\n"
+        self.assertNotEqual(broken, source)
+        with tempfile.TemporaryDirectory() as directory:
+            hubs = Path(directory) / "supply_nodes.txt"
+            hubs.write_text(broken, encoding="utf-8")
+            with patch.object(theatre, "SUPPLY_NODES_PATH", hubs):
+                issues = theatre.validate()
+        self.assertIn("Vorkerland supply hub 12219 must occur exactly once", issues)
 
 
 if __name__ == "__main__":

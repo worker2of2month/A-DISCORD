@@ -303,6 +303,8 @@ ADISCORD_vorkerland_collapse_category = {
 			modifier = { factor = 3 has_country_flag = ADISCORD_vorkerland_compact_supply_received FROM = { tag = WKR } }
 			modifier = { factor = 0 ADISCORD_vorkerland_has_live_local_rival = yes }
 			modifier = { factor = 0 FROM = { tag = VAD } }
+			modifier = { factor = 0.25 FROM = { ADISCORD_vorkerland_is_central_control_leader = yes } }
+			modifier = { factor = 2 FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes } }
 			modifier = { factor = 2 num_divisions > 8 }
 		}
 	}
@@ -1501,6 +1503,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1520,6 +1523,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1539,6 +1543,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1558,6 +1563,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1577,6 +1583,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1596,6 +1603,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1615,6 +1623,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1634,6 +1643,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR
@@ -1653,6 +1663,7 @@ ADISCORD_vorkerland_focus_operations_category = {
 						exists = yes
 						is_subject = no
 						NOT = { has_capitulated = yes }
+						ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes
 						NOT = {
 							OR = {
 								has_war_with = WKR

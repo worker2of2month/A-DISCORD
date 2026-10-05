@@ -1921,7 +1921,8 @@ def validate_events(root: Path, issues: list[str]) -> None:
             f"{target} = {{ exists = yes is_subject = no is_in_faction = no "
             "NOT = { has_capitulated = yes } "
             "NOT = { OR = { has_war_with = WKR has_war_with = VAD "
-            "has_war_with = TVA } } } }"
+            "has_war_with = TVA } } } "
+            f"{target} = {{ ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes }} }}"
         )
         if viability_trigger.count(viability_clause) != 1:
             issues.append(

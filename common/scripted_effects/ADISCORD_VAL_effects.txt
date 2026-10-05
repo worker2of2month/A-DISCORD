@@ -2115,27 +2115,23 @@ VAL_settle_wasteland_capitulation = {
 					set_state_controller_to = WCA
 				}
 			}
+			# Southern Tsaygen returns to Kefreyt itself, not to the administration.
 			168 = {
 				if = {
 					limit = {
-						owner = {
-							OR = {
-								tag = ERT
-								tag = VAL
-								is_subject_of = VAL
-							}
-						}
-						controller = {
-							OR = {
-								tag = ERT
-								tag = VAL
-								is_subject_of = VAL
+						is_owned_by = ERT
+						OR = {
+							is_controlled_by = ERT
+							controller = {
+								OR = {
+									tag = VAL
+									is_subject_of = VAL
+								}
 							}
 						}
 					}
-					WCA = { transfer_state = 168 }
-					add_core_of = WCA
-					set_state_controller_to = WCA
+					VAL = { transfer_state = 168 }
+					set_state_controller_to = VAL
 				}
 			}
 			169 = {
@@ -5668,15 +5664,18 @@ VAL_settle_joint_nod_shabrat_victory = {
 VAL_install_stelander_administration = {
 	if = {
 		limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
-		save_event_target_as = VAL_settlement_country
 		VAL_settle_frontier_partner_war = yes
 		STP_close_competing_ultimatum_wars_after_defeat = yes
 		if = { limit = { has_war_with = VAL } white_peace = VAL }
-		VAL = { VAL_restore_stelander_conquered_administrations = yes }
+		if = {
+			limit = { tag = STS }
+			VAL = { VAL_restore_stelander_conquered_administrations = yes }
+		}
 		if = {
 			limit = { OR = { NOT = { is_subject_of = VAL } NOT = { has_autonomy_state = autonomy_VAL_contract_administration } } }
 			VAL = {
-				set_autonomy = { target = event_target:VAL_settlement_country autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
+				# PREV is the defeated country even in a native on_action context.
+				set_autonomy = { target = PREV autonomy_state = autonomy_VAL_contract_administration freedom_level = 0.10 end_wars = no end_civil_wars = no }
 				VAL = { VAL_call_subjects_to_wars = yes }
 			}
 		}
@@ -5697,14 +5696,16 @@ VAL_install_stelander_administration = {
 					}
 					add_country_leader_role = {
 						character = STP_VAL_Andrei_Rudnev
-						promote_leader = no
+						promote_leader = yes
 						country_leader = {
 							ideology = contractual_etatism
 							expire = "2200.1.1.1"
 						}
 					}
 				}
-				promote_character = { character = STP_VAL_Andrei_Rudnev ideology = contractual_etatism }
+				else = {
+					promote_character = { character = STP_VAL_Andrei_Rudnev ideology = contractual_etatism }
+				}
 			}
 			else = {
 				if = {
@@ -5718,14 +5719,16 @@ VAL_install_stelander_administration = {
 					}
 					add_country_leader_role = {
 						character = STS_VAL_Andrei_Rudnev
-						promote_leader = no
+						promote_leader = yes
 						country_leader = {
 							ideology = contractual_etatism
 							expire = "2200.1.1.1"
 						}
 					}
 				}
-				promote_character = { character = STS_VAL_Andrei_Rudnev ideology = contractual_etatism }
+				else = {
+					promote_character = { character = STS_VAL_Andrei_Rudnev ideology = contractual_etatism }
+				}
 			}
 			if = { limit = { has_power_balance = { id = STP_shabrat_election_legitimacy } } remove_power_balance = { id = STP_shabrat_election_legitimacy } }
 			load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
@@ -5741,10 +5744,10 @@ VAL_install_stelander_administration = {
 }
 
 # COUNTRY VAL. Return the northern and Bezhaysk cores absorbed by Stelander
-# before installing its new administration; only its captured states move.
+# before installing its new administration; PREV is the defeated country.
 VAL_restore_stelander_conquered_administrations = {
 	if = {
-		limit = { event_target:VAL_settlement_country = { tag = STS } }
+		limit = { PREV = { tag = STS } STS = { exists = yes } }
 		if = {
 			limit = { STS = { exists = yes } NOD = { exists = yes is_subject_of = STS } }
 			NOD = { VAL_install_nodrul_administration = yes }
@@ -6434,6 +6437,12 @@ VAL_install_nodrul_administration = {
 		limit = { tag = NOD VAL = { exists = yes has_capitulated = no is_subject = no } }
 		if = { limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } } set_cosmetic_tag = NOD_VAL_administration }
 		VAL = { VAL_snapshot_nodrul_settlement = yes }
+		# The minor colony follows this defeat before its final major leaves
+		# the war; only the autonomy handoff waits for the next diplomatic tick.
+		if = {
+			limit = { AIN = { exists = yes is_subject_of = NOD is_major = no } }
+			VAL = { VAL_queue_ainholm_colony = yes }
+		}
 		# Party-led Stelander can leave Nodrul as a nested subject inside the
 		# Kefreyt sphere. Break that obsolete dependency before the deferred
 		# contract-administration handoff.
@@ -6537,7 +6546,14 @@ VAL_finish_nodrul_administration = {
 		ADISCORD_economy_mark_dirty = yes
 		VAL = {
 			VAL_call_subjects_to_wars = yes
-			VAL_queue_ainholm_colony = yes
+			if = {
+				limit = {
+					AIN = {
+						NOT = { has_country_flag = VAL_ainholm_colony_pending is_subject_of = VAL }
+					}
+				}
+				VAL_queue_ainholm_colony = yes
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

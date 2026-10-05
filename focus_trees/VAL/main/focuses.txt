@@ -3366,6 +3366,9 @@ focus_tree = {
 					VAL_occidia_secured = yes
 					VAL_northern_foothold_secured = yes
 					has_country_flag = ADISCORD_bezhaysk_settlement_completed
+					VAL_wasteland_administration_ready = yes
+					ERT = { is_subject_of = VAL }
+					IRT = { is_subject_of = VAL }
 					STP = { is_subject_of = VAL }
 					STS = { is_subject_of = VAL }
 				}

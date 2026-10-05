@@ -425,6 +425,34 @@ ADISCORD_nam_resource_war_check_nam_victory = {
 	}
 }
 
+# COUNTRY native ROOT. Keep the receipt through both capitulation callbacks:
+# the final opponent may not expose has_capitulated before the treaty runs.
+ADISCORD_nam_resource_war_record_capitulation = {
+	if = {
+		limit = {
+			ADISCORD_nam_resource_war_defender_capitulation = yes
+			NOT = { has_country_flag = ADISCORD_nam_capitulation_reserved }
+		}
+		set_country_flag = {
+			flag = ADISCORD_nam_capitulation_reserved
+			value = 1
+			days = 2
+		}
+		if = {
+			limit = { tag = EFL }
+			NAM = { ADISCORD_nam_resource_war_mark_eflor_defeated = yes }
+		}
+		else_if = {
+			limit = { tag = AZH }
+			NAM = { ADISCORD_nam_resource_war_mark_azhar_defeated = yes }
+		}
+		else_if = {
+			limit = { tag = SLF }
+			NAM = { ADISCORD_nam_resource_war_mark_rebels_defeated = yes }
+		}
+	}
+}
+
 ADISCORD_nam_resource_war_mark_eflor_defeated = {
 	set_global_flag = ADISCORD_nam_resource_war_EFL_defeated
 	ADISCORD_nam_resource_war_check_nam_victory = yes

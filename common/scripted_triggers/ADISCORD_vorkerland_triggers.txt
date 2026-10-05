@@ -1307,6 +1307,53 @@ ADISCORD_vorkerland_is_live_claimant = {
 	NOT = { has_capitulated = yes }
 }
 
+# COUNTRY WKR/VAD/TVA: strictly more central-theatre states than every other
+# live claimant. A tie has no leader, so the comeback pressure never targets two
+# claimants at once.
+ADISCORD_vorkerland_is_central_control_leader = {
+	ADISCORD_vorkerland_is_live_claimant = yes
+	OR = {
+		AND = {
+			tag = WKR
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = WKR.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = WKR.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+		}
+		AND = {
+			tag = VAD
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = VAD.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = VAD.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+		}
+		AND = {
+			tag = TVA
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = TVA.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = TVA.ADISCORD_vorkerland_central_control_score compare = greater_than_or_equals } } }
+		}
+	}
+}
+
+# COUNTRY WKR/VAD/TVA: strictly fewer central-theatre states than every other
+# live claimant.
+ADISCORD_vorkerland_is_central_control_laggard = {
+	ADISCORD_vorkerland_is_live_claimant = yes
+	OR = {
+		AND = {
+			tag = WKR
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = WKR.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = WKR.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+		}
+		AND = {
+			tag = VAD
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = VAD.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+			NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = VAD.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+		}
+		AND = {
+			tag = TVA
+			NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = TVA.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+			NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes check_variable = { var = ADISCORD_vorkerland_central_control_score value = TVA.ADISCORD_vorkerland_central_control_score compare = less_than_or_equals } } }
+		}
+	}
+}
+
 # The nine district campaigns stay open through the central showdown. They are
 # the route to the 24 central districts required for reunification,
 # so restricting them to the preparation phase makes the war unwinnable once the
@@ -1318,20 +1365,51 @@ ADISCORD_vorkerland_central_minor_campaign_phase_available = {
 	}
 }
 
+# COUNTRY central minor, ROOT the claimant ordering a wave. TVA borders six of
+# the nine districts and WKR/VAD three each, so first-come conquest gave TVA
+# most of the theatre before the showdown. Each claimant consolidates its own
+# sphere (victory-point packages 113/119/114 with the home districts); a sphere
+# opens to every neighbour once its claimant is no longer a live claimant.
+ADISCORD_vorkerland_central_minor_is_open_to_ROOT = {
+	OR = {
+		AND = {
+			OR = { tag = RIV tag = NDN tag = SWB tag = VHV }
+			OR = {
+				ROOT = { OR = { tag = WKR tag = WRK } }
+				NOT = { WKR = { ADISCORD_vorkerland_is_live_claimant = yes } }
+			}
+		}
+		AND = {
+			OR = { tag = EYR tag = YOR }
+			OR = {
+				ROOT = { tag = VAD }
+				NOT = { VAD = { ADISCORD_vorkerland_is_live_claimant = yes } }
+			}
+		}
+		AND = {
+			OR = { tag = EGC tag = REV tag = OSV }
+			OR = {
+				ROOT = { tag = TVA }
+				NOT = { TVA = { ADISCORD_vorkerland_is_live_claimant = yes } }
+			}
+		}
+	}
+}
+
 # A consolidation wave is built from the real border on the day it is
 # ordered. The exact tag allowlist prevents unrelated neighbours from being
 # pulled into the civil-war controller.
 ADISCORD_vorkerland_has_adjacent_viable_central_minor = {
 	OR = {
-		AND = { any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
-		AND = { any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } }
+		AND = { any_neighbor_country = { tag = EYR } EYR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } EYR = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = EGC } EGC = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } EGC = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = RIV } RIV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } RIV = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = REV } REV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } REV = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = YOR } YOR = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } YOR = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = NDN } NDN = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } NDN = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = SWB } SWB = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } SWB = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = VHV } VHV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } VHV = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
+		AND = { any_neighbor_country = { tag = OSV } OSV = { exists = yes is_subject = no is_in_faction = no NOT = { has_capitulated = yes } NOT = { OR = { has_war_with = WKR has_war_with = VAD has_war_with = TVA } } } OSV = { ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes } }
 	}
 }
 

@@ -1556,4 +1556,23 @@ spriteTypes = {
 		name = "GFX_focus_VAL_Price_Of_Loyalty"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Price_Of_Loyalty.png"
 	}
+
+	spriteType = { name = "GFX_focus_WRK_worker_resettle_veteran_families" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_reopen_cooperative_workshops" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_coordinate_republic_supply" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_complete_workers_housing" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_empower_municipal_councils" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_worker_secure_social_guarantees" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_restore_civil_service" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_audit_district_arsenals" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_train_postwar_officers" texturefile = "gfx/interface/goals/focus_generic_military_academy.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_transfer_garrisons_to_civil_order" texturefile = "gfx/interface/goals/focus_generic_advisors.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_inspect_remaining_arsenals" texturefile = "gfx/interface/goals/focus_generic_military_mission.dds" }
+	spriteType = { name = "GFX_focus_WRK_joint_ratify_common_state_budget" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_equip_grid_repair_crews" texturefile = "gfx/interface/goals/focus_generic_electrification.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_standardize_civilian_production" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_school_technical_specialists" texturefile = "gfx/interface/goals/focus_research.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_prioritize_municipal_repairs" texturefile = "gfx/interface/goals/focus_generic_electrification.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_commission_automated_workshops" texturefile = "gfx/interface/goals/goal_generic_construct_civ_factory.dds" }
+	spriteType = { name = "GFX_focus_WRK_utilitarian_complete_reconstruction_programme" texturefile = "gfx/interface/goals/focus_generic_treaty.dds" }
 }

@@ -70,6 +70,10 @@ class TreatyFixture(GenericPeaceFixture):
         self.existing = set(self.countries)
         self.targets = {}
         self.capitals = {}
+        self.cores = {}
+        self.claims = {}
+        self.ideas = {t: set() for t in self.countries}
+        self.stability = {}
 
     def load(self, path, triggers=False):
         target = self.triggers if triggers else self.effects
@@ -83,6 +87,10 @@ class TreatyFixture(GenericPeaceFixture):
     def resolve(self, token, stack):
         if token == "OVERLORD":
             return self.subjects[stack[-1]]
+        if token == "OWNER":
+            return self.owners.get(stack[-1])
+        if token == "CONTROLLER":
+            return self.controllers.get(stack[-1])
         return super().resolve(token, stack)
 
     def matches(self, rows, stack):
@@ -103,7 +111,11 @@ class TreatyFixture(GenericPeaceFixture):
             if k == "exists":
                 return (current in self.existing) == (v == "yes")
             if k == "country_exists":
-                return v in self.existing
+                return self.resolve(v, stack) in self.existing
+            if k == "has_focus_tree":
+                return False
+            if k == "is_owned_by":
+                return self.owners.get(current) == self.resolve(v, stack)
             if k == "capital_scope":
                 return self.matches(v, stack + [self.capitals[current]])
             if k == "is_controlled_by":
@@ -159,6 +171,18 @@ class TreatyFixture(GenericPeaceFixture):
                 self.variables[current, scalar(v, "var")] = float(scalar(v, "value"))
             elif k == "set_major":
                 (self.majors.add if v == "yes" else self.majors.discard)(current)
+            elif k == "set_state_controller_to":
+                self.controllers[current] = self.resolve(v, stack)
+            elif k == "add_core_of":
+                self.cores.setdefault(current, set()).add(v)
+            elif k == "remove_core_of":
+                self.cores.setdefault(current, set()).discard(v)
+            elif k == "add_claim_by":
+                self.claims.setdefault(current, set()).add(v)
+            elif k == "add_ideas":
+                self.ideas[current].add(v)
+            elif k == "add_stability":
+                self.stability[current] = self.stability.get(current, 0) + float(v)
             elif k == "dismantle_faction":
                 self.factions.clear()
             elif k == "leave_faction":
@@ -574,9 +598,99 @@ class CoalitionLifecycleTests(unittest.TestCase):
         f.load("common/scripted_triggers/ADISCORD_nam_resource_war_triggers.txt", True)
         f.global_flags.add("ADISCORD_nam_resource_war_started")
         f.wars = {frozenset(("NAM", t)) for t in ("EFL", "AZH", "SLF")}
+        f.capitulated = set()
+        f.capitals = {"EFL": "70", "AZH": "69", "SLF": "688"}
+        f.owners = {
+            "67": "NAM", "688": "NAM", "689": "NAM",
+            "68": "EFL", "70": "EFL", "691": "EFL", "701": "EFL",
+            "69": "AZH", "692": "AZH",
+        }
+        f.controllers = dict(f.owners)
         # Observe dispatch into the final territorial outcome; its lifecycle is tested separately.
         f.stubs.add("ADISCORD_nam_resource_war_resolve_nam_victory")
         return f
+
+    def nam_callback(self, f, hook):
+        source = (
+            ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
+        ).read_text(encoding="utf-8")
+        section = source.split(f"# BEGIN nam:{hook}\n", 1)[1].split(
+            f"# END nam:{hook}", 1
+        )[0]
+        f.execute(parse_clausewitz(section))
+
+    def test_nam_capital_capture_reserves_defeat_with_different_native_recipient(self):
+        for tag in ("EFL", "AZH", "SLF"):
+            for controller in ("NAM", "SUB"):
+                with self.subTest(tag=tag, controller=controller):
+                    f = self.nam()
+                    f.root, f.winner = tag, "ZZZ"
+                    f.subjects["SUB"] = "NAM"
+                    f.controllers[f.capitals[tag]] = controller
+                    self.nam_callback(f, "on_capitulation_immediate")
+                    self.assertIn(f"ADISCORD_nam_resource_war_{tag}_defeated", f.global_flags)
+                    self.nam_callback(f, "on_capitulation")
+                    self.assertIn("skip_default_capitulation", f.global_flags)
+                    self.assertNotIn("ADISCORD_nam_capitulation_reserved", f.flags[tag])
+
+    def test_nam_late_callback_records_a_missing_immediate_defeat_before_fallback(self):
+        for tag in ("EFL", "AZH"):
+            with self.subTest(tag=tag):
+                f = self.nam()
+                f.root, f.winner = tag, "NAM"
+                self.nam_callback(f, "on_capitulation")
+                f.run()
+                self.assertIn(f"ADISCORD_nam_resource_war_{tag}_defeated", f.global_flags)
+                self.assertIn("skip_default_capitulation", f.global_flags)
+                self.assertFalse(f.annexed)
+                self.assertTrue(f.wars)
+
+    def test_nam_routing_does_not_claim_foreign_defeats_or_peacetime_capitals(self):
+        for tag in ("EFL", "AZH"):
+            for at_war, controller in ((True, "ZZZ"), (False, "NAM")):
+                with self.subTest(tag=tag, at_war=at_war, controller=controller):
+                    f = self.nam()
+                    f.root, f.winner = tag, "ZZZ"
+                    f.controllers[f.capitals[tag]] = controller
+                    if not at_war:
+                        f.wars.discard(frozenset(("NAM", tag)))
+                    self.nam_callback(f, "on_capitulation_immediate")
+                    self.nam_callback(f, "on_capitulation")
+                    self.assertNotIn(f"ADISCORD_nam_resource_war_{tag}_defeated", f.global_flags)
+                    self.assertNotIn("skip_default_capitulation", f.global_flags)
+
+    def test_nam_last_capitulation_executes_limited_treaty_in_either_order(self):
+        for first, last in (("EFL", "AZH"), ("AZH", "EFL")):
+            for last_hook in ("on_capitulation_immediate", "on_capitulation"):
+                with self.subTest(first=first, last_hook=last_hook):
+                    f = self.nam()
+                    f.stubs.remove("ADISCORD_nam_resource_war_resolve_nam_victory")
+                    f.stubs.add("VAL_deliver_nam_concession")
+                    f.existing.remove("SLF")
+                    f.wars.discard(frozenset(("NAM", "SLF")))
+                    f.factions = {"EFL": "restitution", "AZH": "restitution"}
+                    f.root = first
+                    self.nam_callback(f, "on_capitulation_immediate")
+                    f.capitulated.add(first)
+                    self.nam_callback(f, "on_capitulation")
+                    f.global_flags.discard("skip_default_capitulation")
+                    f.root, f.winner = last, "ZZZ"
+                    f.controllers[f.capitals[last]] = "NAM"
+                    self.nam_callback(f, last_hook)
+                    if last_hook == "on_capitulation_immediate":
+                        self.nam_callback(f, "on_capitulation")
+                    f.run()
+                    self.assertIn("ADISCORD_nam_resource_war_nam_victory", f.global_flags)
+                    self.assertIn("NAM_treaty_independence_recognised", f.flags["NAM"])
+                    self.assertEqual({f.owners[s] for s in ("68", "70")}, {"EFL"})
+                    self.assertEqual({f.owners[s] for s in ("69", "692")}, {"AZH"})
+                    self.assertEqual({f.owners[s] for s in ("691", "701")}, {"NAM"})
+                    self.assertEqual({f.controllers[s] for s in ("691", "701")}, {"NAM"})
+                    self.assertEqual(f.factions, {"EFL": "restitution", "AZH": "restitution"})
+                    self.assertFalse(f.annexed)
+                    self.assertFalse(f.wars)
+                    self.nam_callback(f, "on_capitulation")
+                    self.assertEqual(f.stability["NAM"], 0.15)
 
     def test_nam_waits_for_both_defeats_in_either_order(self):
         for first, last in (("EFL", "AZH"), ("AZH", "EFL")):
@@ -650,11 +764,8 @@ class CoalitionLifecycleTests(unittest.TestCase):
         gate = next(e.value for e in outer if e.key == "limit")
         nod = next(e.value for e in outer if e.key == "if")
         nod_gate = next(e.value for e in nod if e.key == "limit")
-        target = "event_target:VAL_settlement_country"
-        f.targets[target] = "STP"
-        self.assertFalse(f.matches(gate, ["VAL"]))
-        f.targets[target] = "STS"
-        self.assertTrue(f.matches(gate, ["VAL"]))
+        self.assertFalse(f.matches(gate, ["STP", "VAL"]))
+        self.assertTrue(f.matches(gate, ["STS", "VAL"]))
         self.assertFalse(f.matches(nod_gate, ["VAL"]))
         f.subjects["NOD"] = "STS"
         self.assertTrue(f.matches(nod_gate, ["VAL"]))

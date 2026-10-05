@@ -35,6 +35,24 @@ ADISCORD_nam_resource_war_active = {
 	NOT = { has_global_flag = ADISCORD_nam_resource_war_resolved }
 }
 
+# COUNTRY capitulating coalition member. A current enemy's occupied capital
+# also identifies NAM when the native callback credits another recipient.
+ADISCORD_nam_resource_war_defender_capitulation = {
+	ADISCORD_nam_resource_war_active = yes
+	OR = {
+		tag = EFL
+		tag = AZH
+		tag = SLF
+	}
+	has_war_with = NAM
+	OR = {
+		FROM = { OR = { tag = NAM is_subject_of = NAM } }
+		capital_scope = {
+			controller = { OR = { tag = NAM is_subject_of = NAM } }
+		}
+	}
+}
+
 ADISCORD_nam_victory_record_complete = {
 	has_global_flag = ADISCORD_nam_resource_war_EFL_defeated
 	has_global_flag = ADISCORD_nam_resource_war_AZH_defeated

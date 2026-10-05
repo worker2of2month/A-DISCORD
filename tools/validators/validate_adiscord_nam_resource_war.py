@@ -660,7 +660,8 @@ def main() -> int:
     )
     check(
         "skip_default_capitulation" in on_actions
-        and on_actions.count("on_capitulation") == 1,
+        and len(typed_blocks(on_actions, "on_capitulation")) == 1
+        and len(typed_blocks(on_actions, "on_capitulation_immediate")) == 1,
         "bespoke capitulation routing is incomplete",
     )
     check(
@@ -809,9 +810,9 @@ def main() -> int:
             f"obsolete surviving-SLF route remains: {token}",
         )
 
-    capitulation = named_block(on_actions, "on_capitulation")
+    capitulation = named_block(on_actions, "on_capitulation_immediate")
     coalition_route = re.search(
-        r"ROOT\s*=\s*\{\s*tag\s*=\s*NAM\s*\}.*?"
+        r"ROOT\s*=\s*\{\s*tag\s*=\s*NAM\b.*?"
         r"FROM\s*=\s*\{\s*OR\s*=\s*\{([^}]*)\}.*?"
         r"ADISCORD_nam_resource_war_resolve_coalition_victory\s*=\s*yes",
         capitulation,
@@ -824,6 +825,20 @@ def main() -> int:
         ),
         "NAM defeat by EFL, AZH, or SLF must use the coalition settlement",
     )
+    record_capitulation = named_block(
+        effects, "ADISCORD_nam_resource_war_record_capitulation"
+    )
+    check(
+        "ADISCORD_nam_resource_war_defender_capitulation = yes" in record_capitulation
+        and "flag = ADISCORD_nam_capitulation_reserved" in record_capitulation,
+        "NAM shared capitulation recorder lacks its current-war gate or receipt",
+    )
+    for hook in ("on_capitulation_immediate", "on_capitulation"):
+        check(
+            "ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }"
+            in named_block(on_actions, hook),
+            f"NAM {hook} does not dispatch the shared capitulation recorder",
+        )
 
     peaceful = named_block(
         effects, "ADISCORD_nam_resource_war_resolve_peaceful_withdrawal"

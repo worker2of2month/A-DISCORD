@@ -397,6 +397,10 @@ focus_tree = {
 			has_capitulated = no
 			has_war = no
 			custom_trigger_tooltip = {
+				tooltip = IVN_west_reconstruction_ready_tt
+				ADISCORD_west_reconstruction_grace_elapsed = yes
+			}
+			custom_trigger_tooltip = {
 				tooltip = IVN_west_final_ready_tt
 				ADISCORD_west_final_can_start = yes
 			}
@@ -544,6 +548,10 @@ focus_tree = {
 		available = {
 			has_capitulated = no
 			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = IVN_west_reconstruction_ready_tt
+				ADISCORD_west_reconstruction_grace_elapsed = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = IVN_west_final_ready_tt
 				ADISCORD_west_final_can_start = yes

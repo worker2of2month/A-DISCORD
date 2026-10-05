@@ -773,10 +773,10 @@ POSTWAR_ROUTE_FOCUSES = {
     ),
 }
 
-# The War for the West follows each route's Unity Tower in a separate band.
+# The War for the West follows each route's reconstruction in a separate band.
 # Its drop-in sprites resolve to existing native goal art rather than the
 # shared fallback, so they stay outside the drop-in texture manifest; the
-# lifecycle order inserts them after each tower.
+# lifecycle order inserts them after reconstruction.
 WEST_ROUTE_FOCUSES = {
     "ADISCORD_vorkerland_route_worker": (
         "WRK_worker_west_mandate_offices",
@@ -801,6 +801,9 @@ WEST_FOCUS_IDS = tuple(
     focus_id for focus_ids in WEST_ROUTE_FOCUSES.values() for focus_id in focus_ids
 )
 WEST_TOOLTIP_KEYS = (
+    "WRK_reconstruction_factory_site_tt",
+    "WRK_reconstruction_industry_bonus",
+    "WRK_west_reconstruction_ready_tt",
     "WRK_west_crisis_add_tt",
     "WRK_west_final_ready_tt",
     "WRK_worker_west_war_tt",
@@ -812,6 +815,36 @@ WEST_BAND_BY_ROUTE = {
     "ADISCORD_vorkerland_route_joint": "west_joint",
     "ADISCORD_vorkerland_route_utilitarian": "west_utilitarian",
 }
+
+RECONSTRUCTION_ROUTE_FOCUSES = {
+    "ADISCORD_vorkerland_route_worker": (
+        "WRK_worker_resettle_veteran_families",
+        "WRK_worker_reopen_cooperative_workshops",
+        "WRK_worker_coordinate_republic_supply",
+        "WRK_worker_complete_workers_housing",
+        "WRK_worker_empower_municipal_councils",
+        "WRK_worker_secure_social_guarantees",
+    ),
+    "ADISCORD_vorkerland_route_joint": (
+        "WRK_joint_restore_civil_service",
+        "WRK_joint_audit_district_arsenals",
+        "WRK_joint_train_postwar_officers",
+        "WRK_joint_transfer_garrisons_to_civil_order",
+        "WRK_joint_inspect_remaining_arsenals",
+        "WRK_joint_ratify_common_state_budget",
+    ),
+    "ADISCORD_vorkerland_route_utilitarian": (
+        "WRK_utilitarian_equip_grid_repair_crews",
+        "WRK_utilitarian_standardize_civilian_production",
+        "WRK_utilitarian_school_technical_specialists",
+        "WRK_utilitarian_prioritize_municipal_repairs",
+        "WRK_utilitarian_commission_automated_workshops",
+        "WRK_utilitarian_complete_reconstruction_programme",
+    ),
+}
+RECONSTRUCTION_FOCUS_IDS = tuple(
+    focus_id for focus_ids in RECONSTRUCTION_ROUTE_FOCUSES.values() for focus_id in focus_ids
+)
 
 # Prewar and reunified WRK focuses use dedicated drop-in sprite names. The
 # texture is a shared vanilla fallback until dedicated art is actually present;
@@ -1028,11 +1061,11 @@ POSTWAR_ROUTE_TERMINALS = {
 }
 
 def lifecycle_order() -> tuple[str, ...]:
-    """The drop-in manifest with each western chain after its Unity Tower."""
+    """Reconstruction and the western chain follow each Unity Tower."""
     order = list(FOCUS_IDS)
     for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
         index = order.index(POSTWAR_ROUTE_TERMINALS[route_flag]) + 1
-        order[index:index] = focus_ids
+        order[index:index] = (*RECONSTRUCTION_ROUTE_FOCUSES[route_flag], *focus_ids)
     return tuple(order)
 
 
@@ -2522,9 +2555,12 @@ LAYOUT_BANDS = {
     "postwar_worker": ((0, 10), (21, 29)),
     "postwar_joint": ((12, 22), (21, 29)),
     "postwar_utilitarian": ((24, 34), (21, 29)),
-    "west_worker": ((0, 10), (29, 33)),
-    "west_joint": ((12, 22), (29, 33)),
-    "west_utilitarian": ((24, 34), (29, 33)),
+    "reconstruction_worker": ((0, 10), (29, 34)),
+    "west_worker": ((0, 10), (34, 38)),
+    "reconstruction_joint": ((12, 22), (29, 34)),
+    "west_joint": ((12, 22), (34, 38)),
+    "reconstruction_utilitarian": ((24, 34), (29, 34)),
+    "west_utilitarian": ((24, 34), (34, 38)),
 }
 
 POSTWAR_BAND_BY_ROUTE = {
@@ -2755,6 +2791,8 @@ def expected_localisation_keys() -> set[str]:
     return {
         *FOCUS_IDS,
         *(f"{focus_id}_desc" for focus_id in FOCUS_IDS),
+        *RECONSTRUCTION_FOCUS_IDS,
+        *(f"{focus_id}_desc" for focus_id in RECONSTRUCTION_FOCUS_IDS),
         *WEST_FOCUS_IDS,
         *(f"{focus_id}_desc" for focus_id in WEST_FOCUS_IDS),
         *WEST_TOOLTIP_KEYS,
@@ -3388,6 +3426,9 @@ def collect_issues() -> list[str]:
     for route_flag, focus_ids in POSTWAR_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("postwar", route_flag)
+    for route_flag, focus_ids in RECONSTRUCTION_ROUTE_FOCUSES.items():
+        for focus_id in focus_ids:
+            category_by_focus[focus_id] = ("reconstruction", route_flag)
     for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("west", route_flag)
@@ -3529,7 +3570,7 @@ def collect_issues() -> list[str]:
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one idempotent showdown bypass")
-        elif category in {"postwar", "west"}:
+        elif category in {"postwar", "reconstruction", "west"}:
             if flags != {POSTWAR_PHASE}:
                 issues.append(
                     f"{focus_id} must be postwar-only, found phases {sorted(flags)}"
@@ -6104,6 +6145,9 @@ def _layout_band(focus_id: str, block: str) -> str:
     if flags == {PREWAR_PHASE}:
         return "prewar_VAD" if tag == "VAD" else "prewar_WRK"
     if flags == {POSTWAR_PHASE}:
+        for route_flag, focus_ids in RECONSTRUCTION_ROUTE_FOCUSES.items():
+            if focus_id in focus_ids:
+                return "reconstruction_" + route_flag.removeprefix("ADISCORD_vorkerland_route_")
         for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
             if focus_id in focus_ids:
                 return WEST_BAND_BY_ROUTE[route_flag]

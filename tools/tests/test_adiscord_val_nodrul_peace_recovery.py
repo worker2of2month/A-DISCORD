@@ -16,7 +16,7 @@ class FinalSettlementFixture:
     """Run the production finalizer with native capitulation visibility delayed."""
 
     def __init__(self, first, last):
-        self.tags = ("VAL", "NOD", "STP", "STS", "YPR")
+        self.tags = ("VAL", "NOD", "STP", "STS", "YPR", "AIN")
         self.flags = {tag: set() for tag in self.tags}
         self.flags[first].add("VAL_final_defeat_pending")
         self.flags[last].update(("VAL_final_defeat_pending", "VAL_final_capitulation_immediate"))
@@ -30,6 +30,8 @@ class FinalSettlementFixture:
         self.root = last
         self.previous = None
         self.neutral = set()
+        self.subjects = {}
+        self.majors = {"VAL", "NOD", "STP", "STS"}
 
     def matches(self, entries, scope):
         def match(entry):
@@ -62,6 +64,10 @@ class FinalSettlementFixture:
                 return (scope in self.capitulated) == (value == "yes")
             if key == "is_subject":
                 return (scope in self.installed) == (value == "yes")
+            if key == "is_subject_of":
+                return self.subjects.get(scope) == value
+            if key == "is_major":
+                return (scope in self.majors) == (value == "yes")
             if key == "is_in_faction_with":
                 target = self.previous if value == "PREV" else value
                 return scope in self.members and target in self.members
@@ -175,6 +181,103 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         fixture.neutral.add("YPR")
         fixture.late_callback()
         self.assertCountEqual(fixture.installed, ("STP", "NOD"))
+
+    def test_nodrul_colony_does_not_delay_settlement_until_native_conference(self):
+        for first, last in (("STP", "NOD"), ("NOD", "STP")):
+            for immediate in (True, False):
+                with self.subTest(last=last, immediate=immediate):
+                    fixture = FinalSettlementFixture(first, last)
+                    fixture.members.add("AIN")
+                    fixture.subjects["AIN"] = "NOD"
+                    if immediate:
+                        fixture.execute(fixture.effects["VAL_finalize_reserved_settlements"], "VAL")
+                    else:
+                        fixture.late_callback()
+                    self.assertCountEqual(fixture.installed, (first, last))
+
+    def test_independent_or_major_ainholm_still_requires_defeat(self):
+        for subject, major in ((False, False), (True, True)):
+            with self.subTest(subject=subject, major=major):
+                fixture = FinalSettlementFixture("STP", "NOD")
+                fixture.members.add("AIN")
+                if subject:
+                    fixture.subjects["AIN"] = "NOD"
+                if major:
+                    fixture.majors.add("AIN")
+                fixture.late_callback()
+                self.assertEqual(fixture.installed, [])
+
+    def test_nodrul_colony_exception_does_not_ignore_liberated_stelander(self):
+        fixture = FinalSettlementFixture("STP", "NOD")
+        fixture.members.add("AIN")
+        fixture.subjects["AIN"] = "NOD"
+        fixture.capitulated.clear()
+        fixture.late_callback()
+        self.assertEqual(fixture.installed, [])
+
+    def test_minor_colony_leaves_war_before_nodrul_autonomy_retry(self):
+        install = named_block(self.source, "VAL_install_nodrul_administration")
+        self.assertIn("AIN = { exists = yes is_subject_of = NOD is_major = no }", install)
+        queue = install.index("VAL_queue_ainholm_colony = yes")
+        self.assertLess(queue, install.index("white_peace = VAL"))
+        self.assertLess(queue, install.index("id = val_contract.353 days = 1"))
+        finish = named_block(self.source, "VAL_finish_nodrul_administration")
+        self.assertIn(
+            "NOT = { has_country_flag = VAL_ainholm_colony_pending is_subject_of = VAL }",
+            finish,
+        )
+
+    def test_stelander_handoff_uses_native_scope_without_event_targets(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar
+        from tools.tests.test_adiscord_val_campaign_contracts import selected_effects
+
+        install = named_block(self.source, "VAL_install_stelander_administration")
+        restore = named_block(self.source, "VAL_restore_stelander_conquered_administrations")
+        self.assertNotIn("event_target:", install + restore)
+        entries = block(parse_clausewitz(install), "VAL_install_stelander_administration")
+        for country in ("STP", "STS"):
+            with self.subTest(country=country):
+                facts = {
+                    (country, "tag", country): True,
+                    (country, "has_cosmetic_tag", "STL_VAL_administration"): True,
+                    ("VAL", "exists", "yes"): True,
+                    ("VAL", "has_capitulated", "no"): True,
+                    ("VAL", "is_subject", "no"): True,
+                }
+                calls = list(selected_effects(entries, facts, country))
+                autonomy = [(scope, scalar(e.value, "target")) for scope, e in calls if e.key == "set_autonomy"]
+                self.assertEqual(autonomy, [("VAL", "PREV")])
+                restoration = [scope for scope, e in calls if e.key == "VAL_restore_stelander_conquered_administrations"]
+                self.assertEqual(restoration, ["VAL"] if country == "STS" else [])
+
+    def test_new_stelander_leader_role_promotes_atomically(self):
+        from tools.tests.test_adiscord_stp_preparation import block, scalar, walk
+
+        install = block(parse_clausewitz(self.source), "VAL_install_stelander_administration")
+        for character in ("STP_VAL_Andrei_Rudnev", "STS_VAL_Andrei_Rudnev"):
+            with self.subTest(character=character):
+                branches = [
+                    e.value for e in walk(install)
+                    if e.key == "if" and any(
+                        child.key == "add_country_leader_role"
+                        and scalar(child.value, "character") == character
+                        for child in e.value
+                    )
+                ]
+                self.assertEqual(len(branches), 1)
+                role = block(branches[0], "add_country_leader_role")
+                self.assertEqual(scalar(role, "promote_leader"), "yes")
+                self.assertNotIn("promote_character", [e.key for e in walk(branches[0])])
+                parents = [
+                    e.value for e in walk(install)
+                    if isinstance(e.value, list) and any(
+                        child.key == "if" and child.value == branches[0]
+                        for child in e.value
+                    )
+                ]
+                self.assertEqual(len(parents), 1)
+                existing_role = block(block(parents[0], "else"), "promote_character")
+                self.assertEqual(scalar(existing_role, "character"), character)
 
     def test_missed_final_capitulation_is_recovered(self) -> None:
         self.assertIn("VAL_nod_campaign_stelander_ready = yes", self.reconcile)

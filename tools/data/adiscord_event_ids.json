@@ -5021,6 +5021,22 @@
       "status": "active"
     },
     {
+      "id": "ADISCORD_west.11",
+      "namespace": "ADISCORD_west",
+      "number": 11,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_west.12",
+      "namespace": "ADISCORD_west",
+      "number": 12,
+      "owner": "events/ADISCORD_west_final_war_events.txt",
+      "subsystem": "west_final_war",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_west.20",
       "namespace": "ADISCORD_west",
       "number": 20,

@@ -398,8 +398,9 @@ ADISCORD_vorkerland_recount_central_control = {
 	}
 }
 
-# Clear all coalition overlays first, then add at most one against a living
-# legitimacy leader who controls a strict majority of the central theatre.
+# Clear all coalition overlays first, then add at most one against the live
+# claimant holding strictly the most central-theatre states (more than eight).
+# Legitimacy ties fall back to WKR, so they cannot select the territorial leader.
 ADISCORD_vorkerland_refresh_claimant_coalition = {
 	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_wkr } remove_ideas = ADISCORD_vorkerland_coalition_against_wkr }
 	if = { limit = { has_idea = ADISCORD_vorkerland_coalition_against_vad } remove_ideas = ADISCORD_vorkerland_coalition_against_vad }
@@ -414,8 +415,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			NOT = { tag = WKR }
 			WKR = {
-				ADISCORD_vorkerland_is_live_claimant = yes
-				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				ADISCORD_vorkerland_is_central_control_leader = yes
 				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
@@ -430,8 +430,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			NOT = { tag = VAD }
 			VAD = {
-				ADISCORD_vorkerland_is_live_claimant = yes
-				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				ADISCORD_vorkerland_is_central_control_leader = yes
 				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}
@@ -446,8 +445,7 @@ ADISCORD_vorkerland_refresh_claimant_coalition = {
 			NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 			NOT = { tag = TVA }
 			TVA = {
-				ADISCORD_vorkerland_is_live_claimant = yes
-				has_country_flag = ADISCORD_vorkerland_legitimacy_leader
+				ADISCORD_vorkerland_is_central_control_leader = yes
 				check_variable = { var = ADISCORD_vorkerland_central_control_score value = 8 compare = greater_than }
 			}
 		}

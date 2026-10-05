@@ -2009,6 +2009,13 @@ ADISCORD_vorkerland_wrk_postwar_worker_plan = {
 		WRK_worker_authorize_homecoming_commissions
 		WRK_worker_ratify_republican_compact
 		WRK_worker_write_constitutional_guarantees
+		WRK_worker_restore_unity_tower
+		WRK_worker_resettle_veteran_families
+		WRK_worker_reopen_cooperative_workshops
+		WRK_worker_coordinate_republic_supply
+		WRK_worker_complete_workers_housing
+		WRK_worker_empower_municipal_councils
+		WRK_worker_secure_social_guarantees
 	}
 	weight = { factor = 4 }
 }
@@ -2038,6 +2045,13 @@ ADISCORD_vorkerland_wrk_postwar_joint_plan = {
 		WRK_joint_restore_central_chancery
 		WRK_joint_codify_single_chain_of_command
 		WRK_joint_impose_reunification_settlement
+		WRK_joint_restore_unity_tower
+		WRK_joint_restore_civil_service
+		WRK_joint_audit_district_arsenals
+		WRK_joint_train_postwar_officers
+		WRK_joint_transfer_garrisons_to_civil_order
+		WRK_joint_inspect_remaining_arsenals
+		WRK_joint_ratify_common_state_budget
 	}
 	weight = { factor = 4 }
 }
@@ -2065,6 +2079,13 @@ ADISCORD_vorkerland_wrk_postwar_utilitarian_plan = {
 		WRK_utilitarian_expand_national_laboratories
 		WRK_utilitarian_publish_integration_metrics
 		WRK_utilitarian_build_measurable_republic
+		WRK_utilitarian_restore_unity_tower
+		WRK_utilitarian_equip_grid_repair_crews
+		WRK_utilitarian_standardize_civilian_production
+		WRK_utilitarian_school_technical_specialists
+		WRK_utilitarian_prioritize_municipal_repairs
+		WRK_utilitarian_commission_automated_workshops
+		WRK_utilitarian_complete_reconstruction_programme
 	}
 	weight = { factor = 4 }
 }

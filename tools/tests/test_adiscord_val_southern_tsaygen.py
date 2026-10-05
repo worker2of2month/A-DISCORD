@@ -230,9 +230,11 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
     def test_southern_federation_war_delivers_the_sector_to_the_administration(self) -> None:
         triggers = read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")
         sector = named_block(triggers, "VAL_is_southern_sector_state")
-        for state in (167, 168, 170, 171, 184, 185, 203):
+        for state in (167, 170, 171, 184, 185, 203):
             self.assertIn(f"state = {state}", sector)
+        # 169 is the administration's own bridgehead; 168 is Kefreyt's core.
         self.assertNotIn("state = 169", sector)
+        self.assertNotIn("state = 168", sector)
         gate = named_block(triggers, "VAL_southern_federation_war_available")
         self.assertIn("VAL_wasteland_administration_ready = yes", gate)
         self.assertIn("NOT = { any_enemy_country = { NOT = { tag = ERT } } }", gate)
@@ -267,6 +269,9 @@ class SouthernTsaygenRevengeTests(unittest.TestCase):
         )
         settle = named_block(effects, "VAL_settle_wasteland_capitulation")
         self.assertIn("limit = { tag = SCA }", settle)
+        self.assertNotIn("WCA = { transfer_state = 168 }", settle)
+        southern = settle.split("has_completed_focus = VAL_Southern_Expansion", 1)[1]
+        self.assertIn("VAL = { transfer_state = 168 }", southern.split("else_if", 1)[0])
         self.assertGreaterEqual(
             settle.count("VAL = { VAL_assign_southern_sector_to_administration = yes }"), 2
         )

@@ -6,12 +6,14 @@ behaviour needs a game run.
 """
 
 from pathlib import Path
+from collections import Counter
+from dataclasses import replace
 import json
 import re
 import unittest
 
 from tools.tests.test_adiscord_south_final_war import body, flatten, focus_blocks, scope_calls
-from tools.tests.test_adiscord_stp_preparation import block
+from tools.tests.test_adiscord_stp_preparation import block, scalar, matches_conditions, selected_effects
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -64,6 +66,99 @@ class WestFinalWarContractTests(unittest.TestCase):
             )
             self.assertIn("ADISCORD_west_close_campaign_state = yes", source, name)
 
+    def test_settlement_variables_use_native_global_scope(self):
+        source = EFFECTS.read_text(encoding="utf-8")
+        self.assertNotIn("set_global_variable", source)
+        for winner, side in (("wrk", "1"), ("ivn", "2")):
+            with self.subTest(winner=winner):
+                entries = parse_clausewitz(
+                    body(EFFECTS, f"ADISCORD_west_final_resolve_{winner}_victory")
+                )
+                writes = [
+                    {item.key: item.value for item in entry.value}
+                    for entry in flatten(entries)
+                    if entry.key == "set_variable"
+                ]
+                self.assertTrue(writes)
+                self.assertTrue(all(w["var"].startswith("global.") for w in writes))
+                self.assertEqual(
+                    {w["var"] for w in writes},
+                    {
+                        "global.ADISCORD_west_winner_side",
+                        "global.ADISCORD_west_terms",
+                        "global.ADISCORD_west_subject_type",
+                        "global.ADISCORD_west_transfer",
+                    },
+                )
+                self.assertEqual(
+                    [w["value"] for w in writes if w["var"].endswith("winner_side")],
+                    [side],
+                )
+
+    def test_side_choices_precede_faction_teardown(self):
+        for side in ("wrk", "ivn"):
+            source = body(EFFECTS, f"ADISCORD_west_join_{side}_side")
+            self.assertIn("set_variable = { var = ADISCORD_west_side", source)
+            self.assertIn("country_event = { id = ADISCORD_west.11 hours = 1 }", source)
+            for premature in ("white_peace", "leave_faction", "dismantle_faction", "add_to_war"):
+                self.assertNotIn(premature, source)
+
+    def test_entry_armistice_preserves_opponents_and_outside_wars(self):
+        entries = parse_clausewitz(body(EFFECTS, "ADISCORD_west_prepare_side_entry"))
+        enemies = block(entries, "every_enemy_country")
+        limit = block(enemies, "limit")
+        self.assertIn("has_variable", {entry.key for entry in limit})
+        comparison = {entry.key: entry.value for entry in block(limit, "check_variable")}
+        self.assertEqual(
+            comparison,
+            {
+                "var": "ADISCORD_west_side",
+                "value": "PREV.ADISCORD_west_side",
+                "compare": "equals",
+            },
+        )
+        self.assertIn(("white_peace", "PREV"), [(e.key, e.value) for e in enemies])
+        source = body(EFFECTS, "ADISCORD_west_prepare_side_entry")
+        self.assertNotIn("add_to_faction", source)
+        self.assertNotIn("add_to_war", source)
+        self.assertTrue(source.strip().endswith("country_event = { id = ADISCORD_west.12 hours = 1 }"))
+
+    def test_entry_joins_exact_war_even_with_existing_enemy_relation(self):
+        source = body(EFFECTS, "ADISCORD_west_complete_side_entry")
+        self.assertNotIn("has_war_with", source)
+        entries = parse_clausewitz(source)
+        wars = [
+            {item.key: item.value for item in entry.value}
+            for entry in flatten(entries)
+            if entry.key == "add_to_war"
+        ]
+        self.assertEqual(
+            {(w["targeted_alliance"], w["enemy"]) for w in wars},
+            {("WRK", "IVN"), ("IVN", "WRK")},
+        )
+        self.assertTrue(all(w["single_target_only"] == "yes" for w in wars))
+
+    def test_delayed_entry_cannot_reopen_a_finished_campaign(self):
+        events = parse_clausewitz(EVENTS.read_text(encoding="utf-8"))
+        for number, effect in ((11, "prepare"), (12, "complete")):
+            event = next(
+                entry.value for entry in events
+                if entry.key == "country_event"
+                and any(e.key == "id" and e.value == f"ADISCORD_west.{number}" for e in entry.value)
+            )
+            trigger = block(event, "trigger")
+            required = {(e.key, e.value) for e in trigger if isinstance(e.value, str)}
+            self.assertTrue({
+                ("ADISCORD_west_final_active", "yes"),
+                ("exists", "yes"),
+                ("has_variable", "ADISCORD_west_side"),
+            }.issubset(required))
+            self.assertEqual([(e.key, e.value) for e in block(trigger, "WRK")], [("has_war_with", "IVN")])
+            self.assertEqual(
+                [(e.key, e.value) for e in block(event, "immediate")],
+                [(f"ADISCORD_west_{effect}_side_entry", "yes")],
+            )
+
     def test_every_terminal_path_releases_campaign_status(self):
         close = body(EFFECTS, "ADISCORD_west_close_member_state")
         self.assertIn("set_major = no", close)
@@ -81,12 +176,12 @@ class WestFinalWarContractTests(unittest.TestCase):
         wrk = body(EFFECTS, "ADISCORD_west_final_resolve_wrk_victory")
         for route in ROUTES[:2]:
             self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", wrk)
-        self.assertIn("var = ADISCORD_west_terms value = 1", wrk)
-        self.assertIn("var = ADISCORD_west_transfer value = 2", wrk)
+        self.assertIn("var = global.ADISCORD_west_terms value = 1", wrk)
+        self.assertIn("var = global.ADISCORD_west_transfer value = 2", wrk)
         ivn = body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory")
         self.assertIn("ADISCORD_west_ivn_shield_course = yes", ivn)
         self.assertIn("ADISCORD_west_ivn_emergency_course = yes", ivn)
-        self.assertIn("var = ADISCORD_west_transfer value = 1", ivn)
+        self.assertIn("var = global.ADISCORD_west_transfer value = 1", ivn)
         types = body(EFFECTS, "ADISCORD_west_apply_subject_type")
         autonomies = set(re.findall(r"autonomy_state = (\w+)", types))
         defined = set(re.findall(r"\bid = (\w+)", (ROOT / "common/autonomous_states/ADISCORD_west_final_war_subjects.txt").read_text(encoding="utf-8")))
@@ -168,10 +263,10 @@ class WestFinalWarContractTests(unittest.TestCase):
         terms = [
             {e.key: e.value for e in entry.value}
             for entry in flatten(victory)
-            if entry.key == "set_global_variable"
+            if entry.key == "set_variable"
         ]
         self.assertEqual(
-            [e["value"] for e in terms if e["var"] == "ADISCORD_west_terms"],
+            [e["value"] for e in terms if e["var"] == "global.ADISCORD_west_terms"],
             ["2"],
         )
         settlement = parse_clausewitz(body(EFFECTS, "ADISCORD_west_apply_settlement"))
@@ -339,6 +434,231 @@ class ItoranAggregateTests(unittest.TestCase):
         self.assertIn("force_update_dynamic_modifier = yes", source)
         self.assertIn("ADISCORD_economy_mark_dirty = yes", source)
         self.assertNotIn("set_variable", source)
+
+
+class WestReconstructionScenarios(unittest.TestCase):
+    """Parsed boundary and reward scenarios; this does not emulate the engine."""
+
+    @classmethod
+    def setUpClass(cls):
+        from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
+            RECONSTRUCTION_ROUTE_FOCUSES,
+            WEST_ROUTE_FOCUSES,
+        )
+
+        cls.routes = RECONSTRUCTION_ROUTE_FOCUSES
+        cls.west = WEST_ROUTE_FOCUSES
+        cls.focuses = focus_blocks(WRK_TREE)
+        cls.triggers = {
+            entry.key: entry.value
+            for entry in parse_clausewitz(TRIGGERS.read_text(encoding="utf-8"))
+        }
+
+    def expand(self, entries):
+        expanded = []
+        for entry in entries:
+            if entry.key in self.triggers:
+                self.assertIn(entry.value, ("yes", "no"))
+                expanded.append(replace(
+                    entry,
+                    key="AND" if entry.value == "yes" else "NOT",
+                    value=self.expand(self.triggers[entry.key]),
+                ))
+            elif isinstance(entry.value, list):
+                expanded.append(replace(entry, value=self.expand(entry.value)))
+            else:
+                expanded.append(entry)
+        return expanded
+
+    def crisis_facts(self, age, pressure=100):
+        facts = {}
+        for tag in CHAMPIONS:
+            for key, value in (
+                ("exists", "yes"), ("is_subject", "no"), ("has_capitulated", "no"),
+                ("has_war", "no"),
+                ("has_country_flag", "ADISCORD_vorkerland_central_unifier"),
+                ("has_global_flag", "ADISCORD_fresh_campaign_contract_v1"),
+                ("has_global_flag", "ADISCORD_vorkerland_collapse_finished"),
+                ("has_global_flag", "ADISCORD_vorkerland_phase_postwar_integration"),
+            ):
+                facts[(tag, key, value)] = True
+            facts[(tag, "flag_days", "ADISCORD_vorkerland_collapse_finished")] = age
+            facts[(tag, "variable", "global.ADISCORD_west_crisis")] = pressure
+        return facts
+
+    def test_day_179_blocks_every_declarer_and_day_180_opens_the_gate(self):
+        entry_guard = block(parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_war_start")), "if")
+        guard = self.expand(block(entry_guard, "limit"))
+        for tag in CHAMPIONS:
+            for age, expected in ((0, False), (179, False), (180, True), (181, True)):
+                with self.subTest(tag=tag, age=age):
+                    self.assertEqual(matches_conditions(guard, self.crisis_facts(age), tag), expected)
+            missing_flag = self.crisis_facts(900)
+            missing_flag[(tag, "has_global_flag", "ADISCORD_vorkerland_collapse_finished")] = False
+            self.assertFalse(matches_conditions(guard, missing_flag, tag))
+
+    def test_monthly_pressure_waits_even_at_the_war_threshold(self):
+        month = self.expand(parse_clausewitz(body(EFFECTS, "ADISCORD_west_crisis_month")))
+        for age, expected in ((179, []), (180, [5])):
+            effects = list(selected_effects(month, self.crisis_facts(age), "WRK"))
+            increments = [
+                int(scalar(entry.value, "value")) for _, entry in effects
+                if entry.key == "add_to_variable"
+            ]
+            self.assertEqual(increments, expected)
+            self.assertEqual(
+                any(entry.key == "ADISCORD_west_final_war_start" for _, entry in effects),
+                age >= 180,
+            )
+        facts = self.crisis_facts(180, pressure=50)
+        effects = list(selected_effects(month, facts, "WRK"))
+        self.assertFalse(any(entry.key == "ADISCORD_west_final_war_start" for _, entry in effects))
+
+    def test_existing_intervention_and_terminal_guards_survive_the_pause(self):
+        guard = self.expand(self.triggers["ADISCORD_west_final_can_start"])
+        for blocker in (
+            "ADISCORD_vorkerland_ivanland_intervention_active",
+            "ADISCORD_west_final_started", "ADISCORD_west_final_resolved",
+        ):
+            facts = self.crisis_facts(900)
+            facts[("WRK", "has_global_flag", blocker)] = True
+            self.assertFalse(matches_conditions(guard, facts, "WRK"), blocker)
+        for tag in CHAMPIONS:
+            facts = self.crisis_facts(900)
+            facts[(tag, "is_subject", "no")] = False
+            self.assertFalse(matches_conditions(guard, facts, "WRK"), tag)
+
+    def test_all_five_final_focuses_show_and_enforce_the_pause(self):
+        count = 0
+        for path, tag in ((WRK_TREE, "WRK"), (IVN_TREE, "IVN")):
+            for name, focus in focus_blocks(path).items():
+                if "ADISCORD_west_final_war_start" not in repr(focus):
+                    continue
+                count += 1
+                available = block(focus, "available")
+                self.assertIn(f"{tag}_west_reconstruction_ready_tt", repr(available))
+                for age, expected in ((179, False), (180, True)):
+                    self.assertEqual(
+                        matches_conditions(self.expand(available), self.crisis_facts(age), tag),
+                        expected, (name, age),
+                    )
+        self.assertEqual(count, 5)
+
+    def route_paths(self, names, completed):
+        if names[-1] in completed:
+            yield tuple(name for name in names if name in completed)
+            return
+        for name in names:
+            if name in completed:
+                continue
+            focus = self.focuses[name]
+            prerequisites = [entry.value for entry in focus if entry.key == "prerequisite"]
+            if not all(any(entry.value in completed for entry in group) for group in prerequisites):
+                continue
+            exclusions = [entry.value for entry in focus if entry.key == "mutually_exclusive"]
+            if any(entry.value in completed for group in exclusions for entry in group):
+                continue
+            yield from self.route_paths(names, completed | {name})
+
+    def test_each_route_adds_two_reachable_140_day_paths_before_the_west(self):
+        for route, names in self.routes.items():
+            self.assertEqual(len(names), 6)
+            tower = "WRK_" + route.removeprefix("ADISCORD_vorkerland_route_") + "_restore_unity_tower"
+            self.assertEqual(list(self.route_paths(names, set())), [])
+            paths = list(self.route_paths(names, {tower}))
+            self.assertEqual(len(paths), 2)
+            self.assertEqual(set().union(*(set(path) for path in paths)), set(names))
+            for path in paths:
+                self.assertEqual(len(path), 5)
+                self.assertEqual(sum(int(scalar(self.focuses[name], "cost")) * 7 for name in path), 140)
+            west_entry = self.focuses[self.west[route][0]]
+            self.assertEqual(scalar(block(west_entry, "prerequisite"), "focus"), names[-1])
+
+    def rewards(self, path):
+        facts = {}
+        totals = Counter()
+        for name in path:
+            reward = block(self.focuses[name], "completion_reward")
+            for scope, entry in selected_effects(reward, facts, "WRK"):
+                self.assertEqual(scope, "WRK")
+                if entry.key in ("add_political_power", "add_stability", "army_experience"):
+                    totals[entry.key] += float(entry.value)
+                elif entry.key == "add_equipment_to_stockpile":
+                    self.assertEqual(scalar(entry.value, "producer"), "WRK")
+                    totals[scalar(entry.value, "type")] += int(scalar(entry.value, "amount"))
+                elif entry.key == "random_owned_controlled_state":
+                    build = block(entry.value, "add_building_construction")
+                    self.assertEqual(scalar(build, "instant_build"), "yes")
+                    totals[scalar(build, "type")] += int(scalar(build, "level"))
+                elif entry.key == "add_tech_bonus":
+                    self.assertEqual(scalar(entry.value, "category"), "industry")
+                    self.assertEqual(scalar(entry.value, "bonus"), "0.5")
+                    totals["industry_bonus_50"] += int(scalar(entry.value, "uses"))
+                else:
+                    self.assertEqual((entry.key, entry.value), ("ADISCORD_economy_mark_dirty", "yes"))
+            facts[("WRK", "has_completed_focus", name)] = True
+        return totals
+
+    def test_both_choices_pay_the_exact_agreed_totals_without_double_awards(self):
+        expected = {
+            "worker": Counter(industrial_complex=1, add_stability=0.03, add_political_power=50),
+            "joint": Counter(industrial_complex=1, army_experience=20, infantry_equipment=1000),
+            "utilitarian": Counter(industrial_complex=1, industry_bonus_50=1, support_equipment=100),
+        }
+        for route, names in self.routes.items():
+            short = route.removeprefix("ADISCORD_vorkerland_route_")
+            paths = list(self.route_paths(names, {f"WRK_{short}_restore_unity_tower"}))
+            for path in paths:
+                self.assertEqual(self.rewards(path), expected[short], path)
+            # The choice changes when resources arrive, even though the final budget is equal.
+            self.assertNotEqual(self.rewards(paths[0][:-1]), self.rewards(paths[1][:-1]))
+
+    def test_factories_recheck_control_cores_and_slots_at_delivery(self):
+        for names in self.routes.values():
+            for name in names:
+                focus = self.focuses[name]
+                for entry in flatten(block(focus, "completion_reward")):
+                    if entry.key != "random_owned_controlled_state":
+                        continue
+                    condition = block(entry.value, "limit")
+                    self.assertEqual(scalar(condition, "is_core_of"), "ROOT")
+                    slots = block(condition, "free_building_slots")
+                    self.assertEqual(scalar(slots, "building"), "industrial_complex")
+                    self.assertEqual(scalar(slots, "include_locked"), "no")
+                    self.assertEqual([item.value for item in slots if not item.key], ["size", ">", "0"])
+                    available = block(focus, "available")
+                    self.assertIn("WRK_reconstruction_factory_site_tt", repr(available))
+                    self.assertIn("is_controlled_by", repr(available))
+
+    def test_technical_finish_needs_a_site_only_when_factory_is_still_owed(self):
+        names = self.routes["ADISCORD_vorkerland_route_utilitarian"]
+        finish = self.focuses[names[-1]]
+        alternatives = block(block(finish, "available"), "OR")
+        self.assertEqual(scalar(alternatives, "has_completed_focus"), names[4])
+        factory_condition = block(alternatives, "custom_trigger_tooltip")
+        self.assertEqual(scalar(factory_condition, "tooltip"), "WRK_reconstruction_factory_site_tt")
+        for selected in (names[3], names[4]):
+            effects = list(selected_effects(
+                block(finish, "completion_reward"),
+                {("WRK", "has_completed_focus", selected): True}, "WRK",
+            ))
+            factories = [entry for _, entry in effects if entry.key == "random_owned_controlled_state"]
+            self.assertEqual(len(factories), 1 if selected == names[3] else 0)
+
+    def test_reconstruction_is_route_scoped_and_ai_can_finish_either_choice(self):
+        plans = (ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt").read_text(encoding="utf-8")
+        for route, names in self.routes.items():
+            short = route.removeprefix("ADISCORD_vorkerland_route_")
+            plan = body(ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt", f"ADISCORD_vorkerland_wrk_postwar_{short}_plan")
+            self.assertIn(route, plan)
+            for name in names:
+                focus = self.focuses[name]
+                allow = block(focus, "allow_branch")
+                self.assertEqual(scalar(allow, "tag"), "WRK")
+                self.assertEqual(scalar(allow, "has_country_flag"), route)
+                self.assertEqual(scalar(allow, "has_global_flag"), "ADISCORD_vorkerland_phase_postwar_integration")
+                self.assertIn(name, plan)
+                self.assertEqual(plans.count("\n\t\t" + name + "\n"), 1)
 
 
 if __name__ == "__main__":

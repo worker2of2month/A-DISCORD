@@ -143,6 +143,46 @@ class VorkerlandClaimantOpeningBalanceTests(unittest.TestCase):
         ):
             self.assertIn(f"days_re_enable = {days}", named_block(decisions, decision))
 
+    def test_central_minor_spheres_partition_the_districts_evenly(self):
+        triggers = read("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
+        sphere = named_block(triggers, "ADISCORD_vorkerland_central_minor_is_open_to_ROOT")
+        owners = {}
+        for minors, claimant in re.findall(
+            r"OR = \{ ((?:tag = \w+ )+)\}\s*OR = \{\s*ROOT = \{ (?:OR = \{ )?tag = (\w+)", sphere
+        ):
+            for minor in re.findall(r"tag = (\w+)", minors):
+                self.assertNotIn(minor, owners)
+                owners[minor] = claimant
+        self.assertEqual(set(owners), {"EYR", "EGC", "RIV", "REV", "YOR", "NDN", "SWB", "VHV", "OSV"})
+        for claimant in ("WKR", "VAD", "TVA"):
+            self.assertIn(f"NOT = {{ {claimant} = {{ ADISCORD_vorkerland_is_live_claimant = yes }} }}", sphere)
+
+        from tools.lib.adiscord_vorkerland_theatre_manifest import (
+            VORKERLAND_THEATRE_PACKAGE_TOTALS as totals,
+        )
+        shares = {tag: totals[tag] for tag in ("WKR", "VAD", "TVA")}
+        for minor, claimant in owners.items():
+            shares[claimant] += totals[minor]
+        self.assertLessEqual(max(shares.values()) - min(shares.values()), 10, shares)
+
+        viability = named_block(triggers, "ADISCORD_vorkerland_has_adjacent_viable_central_minor")
+        decisions = read("common/decisions/ADISCORD_vorkerland_decisions.txt")
+        wave = named_block(decisions, "ADISCORD_vorkerland_launch_central_minor_wave")
+        for block in (viability, named_block(wave, "complete_effect")):
+            self.assertEqual(block.count("ADISCORD_vorkerland_central_minor_is_open_to_ROOT = yes"), 9)
+
+    def test_comeback_pressure_follows_the_territorial_leader(self):
+        coalition = named_block(self.effects, "ADISCORD_vorkerland_refresh_claimant_coalition")
+        self.assertEqual(coalition.count("ADISCORD_vorkerland_is_central_control_leader = yes"), 3)
+        self.assertNotIn("ADISCORD_vorkerland_legitimacy_leader", coalition)
+        join = named_block(
+            named_block(read("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+                        "ADISCORD_vorkerland_join_claimant_coalition"),
+            "ai_will_do",
+        )
+        self.assertIn("factor = 0.25 FROM = { ADISCORD_vorkerland_is_central_control_leader = yes }", join)
+        self.assertIn("factor = 2 FROM = { ADISCORD_vorkerland_is_central_control_laggard = yes }", join)
+
     def test_theatre_package_is_not_rewritten_as_a_balance_shortcut(self):
         manifest = read("tools/lib/adiscord_vorkerland_theatre_manifest.py")
         self.assertIn('"WKR": 62', manifest)

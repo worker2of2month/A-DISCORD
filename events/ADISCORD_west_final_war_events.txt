@@ -174,6 +174,39 @@ country_event = {
 	}
 }
 
+# The selected side owns both callbacks; peace or a completed settlement cancels entry.
+country_event = {
+	id = ADISCORD_west.11
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_west_final_active = yes
+		exists = yes
+		has_variable = ADISCORD_west_side
+		WRK = { has_war_with = IVN }
+	}
+
+	immediate = {
+		ADISCORD_west_prepare_side_entry = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_west.12
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		ADISCORD_west_final_active = yes
+		exists = yes
+		has_variable = ADISCORD_west_side
+		WRK = { has_war_with = IVN }
+	}
+
+	immediate = {
+		ADISCORD_west_complete_side_entry = yes
+	}
+}
+
 # Campaign deadline. The age of the campaign flag ignores a previous campaign's callback.
 country_event = {
 	id = ADISCORD_west.20

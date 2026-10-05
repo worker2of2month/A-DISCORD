@@ -74,6 +74,14 @@ existing checks without granting a victory or marking anyone defeated.
 
 ## Runtime matrix
 
+NAM records a current resource-war enemy's capitulation from either native
+recipient credit or occupation of that enemy's capital by NAM or its subject.
+Both native capitulation callbacks use the same recorder, with the late one
+running before generic annexation. Verify EFL-first and AZH-first defeats,
+different native recipient credit, liberation of the first defeated ally, and
+unrelated third-party victories. The treaty preserves EFL and AZH and their
+faction, awards only 691/701 to NAM, and adds its existing claim to 69.
+
 The final VAL capitulation receipt has an explicit nonzero value and remains
 valid through the late callback's settlement attempt. Native `has_capitulated`
 may still be false in both callbacks. An unfinished frontier offer does not

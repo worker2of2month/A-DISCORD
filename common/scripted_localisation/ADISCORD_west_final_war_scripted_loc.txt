@@ -12,6 +12,13 @@ defined_text = {
 		localization_key = ADISCORD_west_status_no_rival
 	}
 	text = {
+		trigger = {
+			ADISCORD_west_crisis_open = yes
+			ADISCORD_west_reconstruction_grace_elapsed = no
+		}
+		localization_key = ADISCORD_west_status_reconstruction
+	}
+	text = {
 		trigger = { ADISCORD_west_crisis_open = yes }
 		localization_key = ADISCORD_west_status_crisis
 	}

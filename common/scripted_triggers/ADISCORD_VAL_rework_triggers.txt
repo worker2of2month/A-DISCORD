@@ -1252,6 +1252,11 @@ VAL_final_faction_ally_still_fighting = {
 			is_in_faction_with = PREV
 			has_war_with = VAL
 			has_capitulated = no
+			# Nodrul's minor colony follows its overlord through the authored
+			# Ainholm handoff; native defeat may wait until the peace conference.
+			NOT = {
+				AND = { tag = AIN is_subject_of = NOD is_major = no }
+			}
 			NOT = { OR = { AND = { tag = ROOT has_country_flag = VAL_coalition_capitulation_current } VAL_final_current_receipt = yes } }
 		}
 		AND = {
@@ -2076,10 +2081,10 @@ VAL_wasteland_administration_ready = {
 
 # STATE. The southern contract sector outside the 169 bridgehead; the same set
 # as the southern capitulation settlement and the operations map.
+# Southern Tsaygen (168) is Kefreyt's own core and never belongs to the administration.
 VAL_is_southern_sector_state = {
 	OR = {
 		state = 167
-		state = 168
 		state = 170
 		state = 171
 		state = 184

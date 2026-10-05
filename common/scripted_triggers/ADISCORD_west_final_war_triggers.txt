@@ -30,9 +30,18 @@ ADISCORD_west_champion_viable = {
 	has_capitulated = no
 }
 
+# GLOBAL. The existing completion flag dates the verified reunification.
+ADISCORD_west_reconstruction_grace_elapsed = {
+	has_global_flag = {
+		flag = ADISCORD_vorkerland_collapse_finished
+		days > 179
+	}
+}
+
 # GLOBAL. The Itoran intervention keeps its own settlement; the final campaign waits for it.
 ADISCORD_west_final_can_start = {
 	ADISCORD_west_crisis_open = yes
+	ADISCORD_west_reconstruction_grace_elapsed = yes
 	WRK = { ADISCORD_west_champion_viable = yes }
 	IVN = {
 		ADISCORD_west_champion_viable = yes
