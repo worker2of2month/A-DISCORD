@@ -36,7 +36,14 @@ equipments = {
 		active = no
 		railway_gun_attack = 34
 		railway_gun_attack_range_index_in_define = 1
-		build_cost_ic = 980
-		resources = { steel = 5 tungsten = 3 chromium = 2 aluminium = 1 }
+		build_cost_ic = 1050
+		resources = {
+			steel = 5
+			tungsten = 3
+			chromium = 2
+			aluminium = 1
+			rare_components = 1
+			rare_alloys = 1
+		}
 	}
 }

@@ -1008,6 +1008,30 @@ VAL_contract_management = {
 }
 
 VAL_rework_debug = {
+	VAL_debug_spawn_zeppelin_trial = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
+		available = {
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+		}
+		cost = 0
+		fire_only_once = no
+		days_re_enable = 1
+		complete_effect = {
+			custom_effect_tooltip = VAL_spawn_zeppelin_trial_tt
+			hidden_effect = { VAL_spawn_zeppelin_trial = yes }
+		}
+		ai_will_do = { factor = 0 }
+	}
+
 	VAL_debug_spawn_crimson_trial = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }

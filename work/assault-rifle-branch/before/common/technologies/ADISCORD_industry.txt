@@ -1,0 +1,1900 @@
+technologies = {
+	ADISCORD_tech_standardized_machine_tools = {
+		special_project_specialization = { specialization_land }
+		production_factory_max_efficiency_factor = 0.03
+		production_factory_efficiency_gain_factor = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_interchangeable_components
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2150
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_interchangeable_components = {
+		special_project_specialization = { specialization_land }
+		production_factory_start_efficiency_factor = 0.03
+		line_change_production_efficiency_factor = 0.04
+		path = {
+			leads_to_tech = ADISCORD_tech_industrial_cluster_planning
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_industrial_cluster_planning = {
+		special_project_specialization = { specialization_land }
+		production_speed_industrial_complex_factor = 0.03
+		production_speed_arms_factory_factor = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_precision_metrology_recovery
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2158
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_precision_metrology_recovery = {
+		special_project_specialization = { specialization_land }
+		production_factory_max_efficiency_factor = 0.04
+		production_factory_efficiency_gain_factor = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_automated_assembly
+			research_cost_coeff = 1
+		}
+		research_cost = 1.3
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_automated_assembly = {
+		special_project_specialization = { specialization_land }
+		industrial_capacity_factory = 0.015
+		production_factory_efficiency_gain_factor = 0.03
+		ADISCORD_economy_civilian_factory_income_factor = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_digital_tooling_libraries
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_sensor_calibrated_machining
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.328
+		start_year = 2161
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_digital_tooling_libraries = {
+		special_project_specialization = { specialization_land }
+		production_factory_start_efficiency_factor = 0.05
+		line_change_production_efficiency_factor = 0.08
+		path = {
+			leads_to_tech = ADISCORD_tech_predictive_maintenance
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_sensor_calibrated_machining
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 10 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_stressed = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_sensor_calibrated_machining = {
+		special_project_specialization = { specialization_land }
+		production_factory_max_efficiency_factor = 0.06
+		production_factory_efficiency_gain_factor = 0.04
+		path = {
+			leads_to_tech = ADISCORD_tech_predictive_maintenance
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_digital_tooling_libraries
+		}
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 10 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_predictive_maintenance = {
+		special_project_specialization = { specialization_land }
+		production_factory_efficiency_gain_factor = 0.05
+		industry_repair_factor = 0.04
+		ADISCORD_economy_military_factory_expense_factor = -0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_autonomous_factory_cells
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			add_tech_bonus = {
+				bonus = 0.25
+				uses = 1
+				category = industry
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.493
+		start_year = 2167
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_autonomous_factory_cells = {
+		special_project_specialization = { specialization_land }
+		industrial_capacity_factory = 0.04
+		factory_energy_consumption = 0.06
+		production_factory_max_efficiency_factor = 0.06
+		ADISCORD_economy_civilian_factory_income_factor = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_distributed_manufacturing
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_predictive_maintenance = 1
+			ADISCORD_tech_predictive_logistics = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 2.4
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_distributed_manufacturing = {
+		special_project_specialization = { specialization_land }
+		industrial_capacity_factory = 0.10
+		industrial_capacity_dockyard = 0.07
+		factory_energy_consumption = 0.12
+		production_factory_max_efficiency_factor = 0.09
+		dependencies = {
+			ADISCORD_tech_autonomous_factory_cells = 1
+			ADISCORD_tech_strategic_digital_twins = 1
+		}
+		research_cost = 2.55
+		start_year = 2180
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_industrial_organization_baseline = {
+		production_factory_start_efficiency_factor = 0.02
+		production_factory_efficiency_gain_factor = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_concentrated_industrial_zones
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_distributed_workshop_networks
+			research_cost_coeff = 1
+		}
+		research_cost = 1.3
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_concentrated_industrial_zones = {
+		industrial_capacity_factory = 0.05
+		industrial_capacity_dockyard = 0.04
+		factory_energy_consumption = 0.10
+		industry_air_damage_factor = 0.07
+		path = {
+			leads_to_tech = ADISCORD_tech_megafactory_power_buses
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_distributed_workshop_networks
+		}
+		research_cost = 1.75
+		start_year = 2162
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.50
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 1.25
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 0.35
+				has_war = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_distributed_workshop_networks = {
+		industrial_capacity_factory = 0.03
+		factory_energy_consumption = 0.02
+		production_factory_start_efficiency_factor = 0.07
+		industry_air_damage_factor = -0.08
+		path = {
+			leads_to_tech = ADISCORD_tech_regional_spare_capacity
+			research_cost_coeff = 1
+		}
+		XOR = {
+			ADISCORD_tech_concentrated_industrial_zones
+		}
+		research_cost = 1.75
+		start_year = 2162
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.60
+				energy_ratio < 0.80
+			}
+			modifier = {
+				factor = 1.35
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_megafactory_power_buses = {
+		industrial_capacity_factory = 0.07
+		industrial_capacity_dockyard = 0.05
+		factory_energy_consumption = 0.15
+		line_change_production_efficiency_factor = -0.12
+		path = {
+			leads_to_tech = ADISCORD_tech_continuous_casting_lines
+			research_cost_coeff = 1
+		}
+		research_cost = 1.493
+		start_year = 2167
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.50
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 1.25
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 0.35
+				has_war = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_regional_spare_capacity = {
+		industrial_capacity_factory = 0.03
+		factory_energy_consumption = 0.02
+		line_change_production_efficiency_factor = 0.14
+		industry_repair_factor = 0.12
+		path = {
+			leads_to_tech = ADISCORD_tech_mobile_fabrication_convoys
+			research_cost_coeff = 1
+		}
+		research_cost = 1.493
+		start_year = 2167
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.60
+				energy_ratio < 0.80
+			}
+			modifier = {
+				factor = 1.35
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_continuous_casting_lines = {
+		industrial_capacity_factory = 0.09
+		production_factory_max_efficiency_factor = 0.07
+		factory_energy_consumption = 0.19
+		industry_air_damage_factor = 0.12
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_production_complexes
+			research_cost_coeff = 1
+		}
+		research_cost = 1.658
+		start_year = 2173
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 6 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.50
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 1.25
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 0.35
+				has_war = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_mobile_fabrication_convoys = {
+		industrial_capacity_factory = 0.04
+		factory_energy_consumption = 0.03
+		industry_air_damage_factor = -0.15
+		industry_repair_factor = 0.15
+		path = {
+			leads_to_tech = ADISCORD_tech_resilient_production_meshes
+			research_cost_coeff = 1
+		}
+		research_cost = 1.658
+		start_year = 2173
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 6 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.60
+				energy_ratio < 0.80
+			}
+			modifier = {
+				factor = 1.35
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_strategic_production_complexes = {
+		industrial_capacity_factory = 0.12
+		industrial_capacity_dockyard = 0.10
+		factory_energy_consumption = 0.24
+		industry_air_damage_factor = 0.20
+		line_change_production_efficiency_factor = -0.15
+		research_cost = 1.85
+		start_year = 2180
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 8 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.50
+				energy_ratio > 0.94
+			}
+			modifier = {
+				factor = 1.25
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 0.35
+				has_war = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_resilient_production_meshes = {
+		industrial_capacity_factory = 0.06
+		factory_energy_consumption = 0.04
+		production_factory_start_efficiency_factor = 0.10
+		line_change_production_efficiency_factor = 0.22
+		industry_air_damage_factor = -0.20
+		industry_repair_factor = 0.22
+		research_cost = 2.55
+		start_year = 2180
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 8 }
+		}
+		ai_will_do = {
+			factor = 30
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.60
+				energy_ratio < 0.80
+			}
+			modifier = {
+				factor = 1.35
+				has_war = yes
+			}
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry }
+	}
+
+	ADISCORD_tech_salvage_standards = {
+		production_speed_buildings_factor = 0.02
+		industry_repair_factor = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_ruin_workshops
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2150
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_ruin_workshops = {
+		production_speed_buildings_factor = 0.02
+		industry_repair_factor = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_reconstruction_bureaus
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_reconstruction_bureaus = {
+		production_speed_buildings_factor = 0.03
+		industry_repair_factor = 0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_drone_construction_cartography
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2158
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_drone_construction_cartography = {
+		production_speed_buildings_factor = 0.03
+		production_speed_infrastructure_factor = 0.04
+		global_building_slots_factor = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_modular_rebuilding
+			research_cost_coeff = 1
+		}
+		research_cost = 1.2
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 37.5
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_modular_rebuilding = {
+		production_speed_buildings_factor = 0.04
+		production_speed_industrial_complex_factor = 0.03
+		global_building_slots_factor = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_prefabricated_districts
+			research_cost_coeff = 1
+		}
+		research_cost = 1.337
+		start_year = 2165
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 30
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_prefabricated_districts = {
+		production_speed_buildings_factor = 0.04
+		consumer_goods_factor = -0.02
+		global_building_slots_factor = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_public_repair_corps
+			research_cost_coeff = 1
+		}
+		research_cost = 1.448
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 30
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_public_repair_corps = {
+		industry_repair_factor = 0.08
+		industry_air_damage_factor = -0.05
+		path = {
+			leads_to_tech = ADISCORD_tech_automated_civil_works
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			add_tech_bonus = {
+				bonus = 0.25
+				uses = 1
+				category = industry
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.502
+		start_year = 2171
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 12 }
+		}
+		ai_will_do = {
+			factor = 30
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_automated_civil_works = {
+		production_speed_buildings_factor = 0.06
+		production_speed_industrial_complex_factor = 0.05
+		path = {
+			leads_to_tech = ADISCORD_tech_civil_defense_networks
+			research_cost_coeff = 1
+		}
+		research_cost = 1.613
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 14 }
+		}
+		ai_will_do = {
+			factor = 30
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_civil_defense_networks = {
+		production_speed_buildings_factor = 0.06
+		production_speed_infrastructure_factor = 0.05
+		industry_repair_factor = 0.10
+		industry_air_damage_factor = -0.10
+		enable_building = {
+			building = stronghold_network
+			level = 1
+		}
+		research_cost = 2.55
+		start_year = 2180
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 16 }
+		}
+		ai_will_do = {
+			factor = 36
+		}
+		categories = { industry construction_tech }
+	}
+
+	ADISCORD_tech_salvage_metallurgy = {
+		local_resources_factor = 0.02
+		fuel_gain_factor = 0.012
+		path = {
+			leads_to_tech = ADISCORD_tech_grid_rationing
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_spectral_ore_sorting
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_logistics_hub_networks
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2150
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 35
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_grid_rationing = {
+		local_resources_factor = 0.021
+		fuel_gain_factor = 0.012
+		path = {
+			leads_to_tech = ADISCORD_tech_refinery_reclamation
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = fuel_silo
+			level = 3
+		}
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 42
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_refinery_reclamation = {
+		local_resources_factor = 0.021
+		fuel_gain_factor = 0.013
+		path = {
+			leads_to_tech = ADISCORD_tech_plasma_scrap_separation
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2158
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 35
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_spectral_ore_sorting = {
+		local_resources_factor = 0.022
+		fuel_gain_factor = 0.013
+		path = {
+			leads_to_tech = ADISCORD_tech_borehole_sensor_grids
+			research_cost_coeff = 1
+		}
+		research_cost = 1.35
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 35
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_logistics_hub_networks = {
+		local_resources_factor = 0.023
+		fuel_gain_factor = 0.013
+		path = {
+			leads_to_tech = ADISCORD_tech_microbial_tailings_leaching
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_thermal_power_complex
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2161
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 8 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_borehole_sensor_grids = {
+		local_resources_factor = 0.023
+		fuel_gain_factor = 0.014
+		path = {
+			leads_to_tech = ADISCORD_tech_automated_deep_mining
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_strategic_mining_complex
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2162
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_plasma_scrap_separation = {
+		production_lack_of_resource_penalty_factor = -0.024
+		industry_repair_factor = 0.014
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_resource_cycles
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_electrolysis_complex
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 12 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_microbial_tailings_leaching = {
+		local_resources_factor = 0.031
+		production_lack_of_resource_penalty_factor = -0.007
+		path = {
+			leads_to_tech = ADISCORD_tech_rare_earth_solvent_loops
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_metallurgical_complex
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2164
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 14 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_resource_cycles = {
+		local_resources_factor = 0.026
+		fuel_gain_factor = 0.015
+		path = {
+			leads_to_tech = ADISCORD_tech_carbon_feedstock_cracking
+			research_cost_coeff = 1
+		}
+		research_cost = 1.515
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 16 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_rare_earth_solvent_loops = {
+		local_resources_factor = 0.028
+		fuel_gain_factor = 0.016
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_element_reclamation
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_electrolysis_complex
+				resource = aluminium
+				amount = 2
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 18 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_automated_deep_mining = {
+		local_resources_factor = 0.036
+		production_lack_of_resource_penalty_factor = -0.008
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_material_recovery
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_strategic_mining_complex
+				resource = tungsten
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2171
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 20 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_carbon_feedstock_cracking = {
+		local_resources_factor = 0.017
+		fuel_gain_factor = 0.029
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_material_recovery
+			research_cost_coeff = 1
+		}
+		research_cost = 1.68
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 22 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_strategic_element_reclamation = {
+		local_resources_factor = 0.031
+		fuel_gain_factor = 0.018
+		path = {
+			leads_to_tech = ADISCORD_tech_strategic_material_recovery
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_electrolysis_complex
+				resource = aluminium
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.763
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 24 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_strategic_material_recovery = {
+		local_resources_factor = 0.046
+		fuel_gain_factor = 0.026
+		production_lack_of_resource_penalty_factor = -0.026
+		research_cost = 2.55
+		start_year = 2180
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 26 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_rubber_plants = {
+		path = {
+			leads_to_tech = ADISCORD_tech_emulsion_polymerization
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 1
+		}
+		research_cost = 2.05
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 42
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_emulsion_polymerization = {
+		path = {
+			leads_to_tech = ADISCORD_tech_rubber_production_lines
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_rubber_production_lines = {
+		path = {
+			leads_to_tech = ADISCORD_tech_selective_polymer_catalysts
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 2
+		}
+		research_cost = 2.05
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_selective_polymer_catalysts = {
+		path = {
+			leads_to_tech = ADISCORD_tech_integrated_rubber_complexes
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_integrated_rubber_complexes = {
+		path = {
+			leads_to_tech = ADISCORD_tech_closed_cycle_polymerization
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = synthetic_refinery
+			level = 3
+		}
+		research_cost = 2.05
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 33.6
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_closed_cycle_polymerization = {
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = rubber
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.763
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_feedstock_purification
+			research_cost_coeff = 1
+		}
+		dependencies = {
+			ADISCORD_tech_synthetic_rubber_plants = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2161
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_feedstock_purification = {
+		fuel_gain_factor_from_states = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_catalytic_oil_synthesis
+			research_cost_coeff = 1
+		}
+		research_cost = 1.433
+		start_year = 2163
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_catalytic_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_fuel_hydrocracking
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_fuel_hydrocracking = {
+		fuel_gain_factor_from_states = 0.10
+		path = {
+			leads_to_tech = ADISCORD_tech_closed_cycle_oil_synthesis
+			research_cost_coeff = 1
+		}
+		research_cost = 1.598
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_closed_cycle_oil_synthesis = {
+		path = {
+			leads_to_tech = ADISCORD_tech_synthetic_fuel_process_control
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = synthetic_refinery
+				resource = oil
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2172
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_synthetic_fuel_process_control = {
+		fuel_gain_factor_from_states = 0.10
+		research_cost = 1.763
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 0.30
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+			modifier = {
+				factor = 0.25
+				num_of_civilian_factories < 5
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_treasury_accounting = {
+		ADISCORD_economy_tax_collection_factor = 0.02
+		ADISCORD_economy_admin_expense_factor = -0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_public_procurement_standards
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 22.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_public_procurement_standards = {
+		ADISCORD_economy_construction_expense_factor = -0.03
+		ADISCORD_economy_military_factory_expense_factor = -0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_civilian_industrial_accounting
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.2
+		start_year = 2160
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 2 }
+		}
+		ai_will_do = {
+			factor = 22.5
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_civilian_industrial_accounting = {
+		ADISCORD_economy_civilian_factory_income_factor = 0.04
+		ADISCORD_economy_tax_collection_factor = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_administrative_digitization
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.255
+		start_year = 2162
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 4 }
+		}
+		ai_will_do = {
+			factor = 18
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_administrative_digitization = {
+		ADISCORD_economy_admin_expense_factor = -0.04
+		ADISCORD_economy_research_expense_factor = -0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_production_cost_accounting
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.365
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 18
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_production_cost_accounting = {
+		ADISCORD_economy_military_industry_income_factor = 0.04
+		ADISCORD_economy_military_factory_expense_factor = -0.03
+		path = {
+			leads_to_tech = ADISCORD_tech_automated_treasury_audit
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.448
+		start_year = 2169
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 8 }
+		}
+		ai_will_do = {
+			factor = 18
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_automated_treasury_audit = {
+		ADISCORD_economy_tax_collection_factor = 0.03
+		ADISCORD_economy_civilian_factory_income_factor = 0.04
+		on_research_complete = {
+			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.613
+		start_year = 2175
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 10 }
+		}
+		ai_will_do = {
+			factor = 18
+			modifier = {
+				factor = 1.20
+				ADISCORD_economy_ai_is_healthy = yes
+			}
+			modifier = {
+				factor = 1.40
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry computing_tech }
+	}
+
+	ADISCORD_tech_precision_material_standards = {
+		production_lack_of_resource_penalty_factor = -0.01
+		production_factory_efficiency_gain_factor = 0.01
+		path = {
+			leads_to_tech = ADISCORD_tech_rare_components_industry
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_rare_alloy_metallurgy
+			research_cost_coeff = 1
+		}
+		research_cost = 0.55
+		start_year = 2155
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 0 }
+		}
+		ai_will_do = {
+			factor = 35
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_rare_components_industry = {
+		production_factory_efficiency_gain_factor = 0.02
+		production_factory_max_efficiency_factor = 0.01
+		path = {
+			leads_to_tech = ADISCORD_tech_precision_component_fabrication
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_rare_components_plant
+			level = 1
+		}
+		research_cost = 0.55
+		start_year = 2158
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 42
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_rare_alloy_metallurgy = {
+		production_lack_of_resource_penalty_factor = -0.02
+		production_factory_max_efficiency_factor = 0.01
+		path = {
+			leads_to_tech = ADISCORD_tech_vacuum_alloy_refining
+			research_cost_coeff = 1
+		}
+		enable_building = {
+			building = ADISCORD_rare_alloy_foundry
+			level = 1
+		}
+		research_cost = 0.55
+		start_year = 2158
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 2 }
+		}
+		ai_will_do = {
+			factor = 42
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_precision_component_fabrication = {
+		production_factory_efficiency_gain_factor = 0.02
+		factory_energy_consumption = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_advanced_material_recycling
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_rare_components_plant
+				resource = rare_components
+				amount = 2
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = -3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_vacuum_alloy_refining = {
+		production_factory_max_efficiency_factor = 0.02
+		factory_energy_consumption = 0.02
+		path = {
+			leads_to_tech = ADISCORD_tech_advanced_material_recycling
+			research_cost_coeff = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_rare_alloy_foundry
+				resource = rare_alloys
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 1.75
+		start_year = 2166
+		folder = {
+			name = industry_folder
+			position = { x = 3 y = 4 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+
+	ADISCORD_tech_advanced_material_recycling = {
+		production_lack_of_resource_penalty_factor = -0.02
+		factory_energy_consumption = -0.02
+		dependencies = {
+			ADISCORD_tech_precision_component_fabrication = 1
+			ADISCORD_tech_vacuum_alloy_refining = 1
+		}
+		on_research_complete = {
+			modify_building_resources = {
+				building = ADISCORD_rare_components_plant
+				resource = rare_components
+				amount = 1
+			}
+			modify_building_resources = {
+				building = ADISCORD_rare_alloy_foundry
+				resource = rare_alloys
+				amount = 1
+			}
+		}
+		show_effect_as_desc = yes
+		research_cost = 2.4
+		start_year = 2173
+		folder = {
+			name = industry_folder
+			position = { x = 0 y = 6 }
+		}
+		ai_will_do = {
+			factor = 28
+			modifier = {
+				factor = 1.35
+				ADISCORD_economy_ai_is_crisis = yes
+			}
+		}
+		categories = { industry synth_resources }
+	}
+}

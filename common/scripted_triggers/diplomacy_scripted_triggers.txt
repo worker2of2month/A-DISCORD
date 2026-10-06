@@ -27,7 +27,13 @@ DIPLOMACY_WAR_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
 
 DIPLOMACY_EMBARGO_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
 
-DIPLOMACY_REVOKE_EMBARGO_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
+DIPLOMACY_REVOKE_EMBARGO_ENABLE_TRIGGER = {
+	ADISCORD_western_diplomacy_pair_open = yes
+	hidden_trigger = {
+		ROOT = { NOT = { original_tag = EXZ } }
+		FROM = { NOT = { original_tag = EXZ } }
+	}
+}
 
 DIPLOMACY_CANCEL_FOREIGN_MANPOWER_ENABLE_TRIGGER = { ADISCORD_western_diplomacy_pair_open = yes }
 

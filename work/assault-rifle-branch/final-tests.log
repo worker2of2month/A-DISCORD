@@ -1,0 +1,36 @@
+..............F.......................................................................F...........E................................................................
+======================================================================
+ERROR: test_new_icon_frames_are_different_in_every_supported_size (tools.tests.test_build_adiscord_technology_system.InfantryRoleAndShieldTests.test_new_icon_frames_are_different_in_every_supported_size)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_build_adiscord_technology_system.py", line 2250, in test_new_icon_frames_are_different_in_every_supported_size
+    for path, expected in icons.outputs().items():
+                          ^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\build_infantry_icons.py", line 28, in outputs
+    with Image.open(SOURCE / f"ADISCORD_{unit}.png") as source:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\PIL\Image.py", line 3635, in open
+    fp = builtins.open(filename, "rb")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\ADISCORD_hazard_infantry.png'
+
+======================================================================
+FAIL: test_country_uniform_sprites_resolve_to_regional_assets (tools.tests.test_build_adiscord_technology_system.CompactTechnologyTreeContractTests.test_country_uniform_sprites_resolve_to_regional_assets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_build_adiscord_technology_system.py", line 980, in test_country_uniform_sprites_resolve_to_regional_assets
+    self.assertEqual(len(regional), 9)
+AssertionError: 21 != 9
+
+======================================================================
+FAIL: test_model_has_native_bindings_at_every_weapon_level (tools.tests.test_build_adiscord_technology_system.HazardInfantryTests.test_model_has_native_bindings_at_every_weapon_level)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_build_adiscord_technology_system.py", line 2457, in test_model_has_native_bindings_at_every_weapon_level
+    self.assertTrue((ROOT / "tools/assets/source/ADISCORD_hazard_infantry.blend").is_file())
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 163 tests in 34.027s
+
+FAILED (failures=2, errors=1)

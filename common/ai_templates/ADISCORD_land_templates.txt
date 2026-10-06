@@ -168,7 +168,7 @@ ADISCORD_assault_templates = {
 		base = 0
 		modifier = {
 			add = 9
-			has_tech = ADISCORD_tech_remote_weapon_tripods
+			has_tech = ADISCORD_tech_assault_infantry_formations
 			num_of_military_factories > 9
 			ADISCORD_economy_ai_can_fund_advanced_forces = yes
 		}
@@ -176,7 +176,7 @@ ADISCORD_assault_templates = {
 
 	ADISCORD_assault_group = {
 		enable = {
-			has_tech = ADISCORD_tech_remote_weapon_tripods
+			has_tech = ADISCORD_tech_assault_infantry_formations
 			has_tech = ADISCORD_tech_standardized_field_tool_chests
 			has_tech = ADISCORD_tech_frequency_hopping_field_sets
 			num_of_military_factories > 9

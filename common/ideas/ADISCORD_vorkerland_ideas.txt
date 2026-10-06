@@ -2942,10 +2942,21 @@ ideas = {
 
 	}
 
-	# Mechanical civil-war normalization is deliberately invisible in the UI.
-	# Theatre priority helps all three claimants clear fragmented administrations;
-	# coalition ideas are AI-only brakes against a claimant holding a true majority.
 	hidden_ideas = {
+		EXZ_trade_isolation = {
+			allowed = { original_tag = EXZ }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { NOT = { original_tag = EXZ } }
+			modifier = {
+				min_export = -1.0
+			}
+			on_add = { ADISCORD_economy_mark_dirty = yes }
+			on_remove = { ADISCORD_economy_mark_dirty = yes }
+		}
+
+		# Theatre priority helps all three claimants clear fragmented administrations;
+		# coalition ideas are AI-only brakes against a claimant holding a true majority.
 		ADISCORD_vorkerland_theatre_priority = {
 			allowed = { always = no }
 			allowed_civil_war = { always = yes }

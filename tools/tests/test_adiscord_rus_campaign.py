@@ -49,7 +49,7 @@ class BunkerWorld:
         self.characters = {self.ruler, "RUS_Varlam_Oskol", "RUS_Pavel_Niva"}
         self.cores = set()
         self.claims = set()
-        self.ideology = "anarchism"
+        self.ideology = "etatism"
         self.bop_id = None
         self.bop = 0.0
         self.army_experience = 0.0
@@ -1826,7 +1826,7 @@ class RusCampaignTests(unittest.TestCase):
     def test_political_handoffs_preserve_paid_orders_and_current_balance(self):
         choices = {"RUS_reaffirm_khan", "RUS_army_mandate", "RUS_reconstruction_cabinet"}
         routes = (
-            ("RUS_reaffirm_khan", "RUS_Mark_Rustan", "anarchism", 0),
+            ("RUS_reaffirm_khan", "RUS_Mark_Rustan", "etatism", 0),
             ("RUS_army_mandate", "RUS_Varlam_Oskol", "etatism", 0.30),
             ("RUS_reconstruction_cabinet", "RUS_Pavel_Niva", "pragmatism", -0.30),
         )

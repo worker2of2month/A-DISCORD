@@ -25,6 +25,7 @@ from tools.validators.validate_adiscord_economy_ai import (
 from tools.validators.validate_adiscord_event_ids import (
     validate as validate_adiscord_event_ids,
 )
+from tools.validators.validate_adiscord_english_localisation import ENTRY as LOCALISATION_ENTRY
 from tools.validators.validate_adiscord_superevents import (
     collect_issues as validate_adiscord_superevents,
 )
@@ -541,6 +542,12 @@ def check_localisation(limit):
         first = next((line for line in text.splitlines() if line.strip()), "")
         if not header.match(first):
             issues.append(f"{rel(path)}: suspicious localisation header {first!r}")
+        if path.name.startswith("ADISCORD_"):
+            for number, line in enumerate(text.splitlines()[1:], 2):
+                if not line.strip() or line.lstrip().startswith("#"):
+                    continue
+                if not LOCALISATION_ENTRY.fullmatch(line):
+                    issues.append(f"{rel(path)}:{number}: malformed localisation entry")
     return issues[:limit], len(issues)
 
 

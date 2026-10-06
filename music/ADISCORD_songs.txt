@@ -200,3 +200,13 @@ music = {
 	song = "ADISCORD_3teeth_nihil"
 	chance = { base = 10 }
 }
+
+music = {
+	song = "ADISCORD_khan_theme"
+	chance = { base = 10 }
+}
+
+music = {
+	song = "ADISCORD_expedition_44_theme"
+	chance = { base = 10 }
+}

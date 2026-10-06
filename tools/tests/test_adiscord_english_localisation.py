@@ -3,8 +3,9 @@
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from tools.validators.validate_adiscord_english_localisation import audit
+from tools.validators.validate_adiscord_english_localisation import ENTRY, audit
 
 
 class EnglishLocalisationTests(unittest.TestCase):
@@ -60,6 +61,35 @@ class EnglishLocalisationTests(unittest.TestCase):
         issues = audit(self.root, self.game)['issues']
         self.assertTrue(any('missing UTF-8 BOM' in issue for issue in issues))
         self.assertTrue(any('malformed' in issue for issue in issues))
+
+    def test_total_conversion_validator_rejects_split_authored_values(self):
+        from tools.validators import validate_tc
+
+        path = self.write(self.root, 'russian', 'KEY: "unfinished\n prose"')
+        path.rename(path.with_name('ADISCORD_test_l_russian.yml'))
+        with patch.object(validate_tc, 'ROOT', self.root):
+            issues, count = validate_tc.check_localisation(100)
+        self.assertEqual(count, 2)
+        self.assertTrue(all('malformed localisation entry' in issue for issue in issues))
+
+    def test_campaign_briefing_and_southern_settlement_files_are_single_line(self):
+        root = Path(__file__).resolve().parents[2]
+        for language in ('russian', 'english'):
+            for stem in ('ADISCORD_VAL_decisions', 'ADISCORD_south_final_war'):
+                path = root / f'localisation/{language}/{stem}_l_{language}.yml'
+                self.assertTrue(path.read_bytes().startswith(b'\xef\xbb\xbf'))
+                entries = {}
+                for number, line in enumerate(path.read_text(encoding='utf-8-sig').splitlines()[1:], 2):
+                    if not line.strip() or line.lstrip().startswith('#'):
+                        continue
+                    match = ENTRY.fullmatch(line)
+                    self.assertIsNotNone(match, f'{path}:{number}')
+                    entries[match[1]] = match[2]
+                if stem == 'ADISCORD_VAL_decisions':
+                    self.assertGreater(len(entries['VAL_startup_country']), 500)
+                    self.assertIn(r'\n', entries['VAL_secure_perimeter_tt'])
+                else:
+                    self.assertIn(r'\n\n', entries['ADISCORD_south.31.d_shl_unopposed'])
 
     def test_closed_texticon_can_touch_translated_prose(self):
         self.write(self.root, 'russian', 'KEY: "£trigger_no£Недостаточно инициативы"')

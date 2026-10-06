@@ -504,7 +504,10 @@ sub_units = {
 		weight = 0.5
 		can_be_parachuted = yes
 		suppression = 1
-		need = { infantry_equipment = 540 }
+		need = {
+			infantry_equipment = 540
+			ADISCORD_squad_weapons_equipment = 36
+		}
 	}
 
 	hq_light_armor = {

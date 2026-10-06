@@ -1,0 +1,451 @@
+{
+  "ADISCORD_fighter_airframe_2161": {
+    "cost": null,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1
+    }
+  },
+  "ADISCORD_fighter_airframe_2166": {
+    "cost": 24,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 2
+    }
+  },
+  "ADISCORD_interceptor_airframe_2183": {
+    "cost": 27,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 2,
+      "tungsten": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_fighter_airframe_2170": {
+    "cost": 32,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 2,
+      "tungsten": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_fighter_airframe_2175": {
+    "cost": 38,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 2,
+      "tungsten": 1,
+      "rare_components": 2,
+      "rare_alloys": 2
+    }
+  },
+  "ADISCORD_attack_airframe_2170": {
+    "cost": 29,
+    "resources": {}
+  },
+  "ADISCORD_attack_airframe_2175": {
+    "cost": 36,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_bomber_2164": {
+    "cost": null,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 1
+    }
+  },
+  "ADISCORD_bomber_2172": {
+    "cost": 50,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 2,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_naval_aircraft_2164": {
+    "cost": null,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 1
+    }
+  },
+  "ADISCORD_naval_aircraft_2172": {
+    "cost": 50,
+    "resources": {
+      "aluminium": 5,
+      "rubber": 2,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_cv_fighter_2163": {
+    "cost": null,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1
+    }
+  },
+  "ADISCORD_cv_fighter_2170": {
+    "cost": 35,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_cv_fighter_2175": {
+    "cost": 43,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_cv_bomber_2163": {
+    "cost": null,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1
+    }
+  },
+  "ADISCORD_cv_bomber_2170": {
+    "cost": 35,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_cv_bomber_2175": {
+    "cost": 43,
+    "resources": {
+      "aluminium": 4,
+      "rubber": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_combat_platform_2183": {
+    "cost": 17,
+    "resources": {}
+  },
+  "ADISCORD_combat_platform_2200": {
+    "cost": 21,
+    "resources": {
+      "steel": 4,
+      "tungsten": 2,
+      "chromium": 1,
+      "aluminium": 1,
+      "rare_alloys": 2,
+      "rare_components": 2
+    }
+  },
+  "ADISCORD_heavy_combat_platform_2200": {
+    "cost": 30,
+    "resources": {
+      "steel": 6,
+      "tungsten": 3,
+      "chromium": 2,
+      "aluminium": 1,
+      "rare_alloys": 2,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_networked_ifv_2183": {
+    "cost": 14,
+    "resources": {
+      "steel": 3,
+      "aluminium": 2,
+      "tungsten": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_artillery_equipment_2170": {
+    "cost": 4.4,
+    "resources": {}
+  },
+  "ADISCORD_artillery_equipment_2183": {
+    "cost": 5.5,
+    "resources": {
+      "tungsten": 2,
+      "steel": 3,
+      "aluminium": 1,
+      "rare_alloys": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_anti_tank_equipment_2183": {
+    "cost": 6,
+    "resources": {
+      "tungsten": 2,
+      "steel": 3,
+      "chromium": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_anti_air_equipment_2183": {
+    "cost": 6,
+    "resources": {
+      "steel": 3,
+      "aluminium": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_escort_ship_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 3,
+      "chromium": 1
+    }
+  },
+  "ADISCORD_escort_ship_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 3,
+      "chromium": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_submarine_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 3
+    }
+  },
+  "ADISCORD_submarine_2170": {
+    "cost": null,
+    "resources": {
+      "steel": 3,
+      "chromium": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_submarine_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 3,
+      "chromium": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_light_cruiser_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 4,
+      "chromium": 1
+    }
+  },
+  "ADISCORD_light_cruiser_2170": {
+    "cost": null,
+    "resources": {
+      "steel": 4,
+      "chromium": 1,
+      "rare_alloys": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_light_cruiser_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 5,
+      "chromium": 1,
+      "rare_alloys": 2,
+      "rare_components": 2
+    }
+  },
+  "ADISCORD_cruiser_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 5,
+      "chromium": 2
+    }
+  },
+  "ADISCORD_cruiser_2170": {
+    "cost": null,
+    "resources": {
+      "steel": 5,
+      "chromium": 2,
+      "rare_alloys": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_cruiser_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 6,
+      "chromium": 2,
+      "rare_alloys": 2,
+      "rare_components": 2
+    }
+  },
+  "ADISCORD_battleship_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 7,
+      "chromium": 3
+    }
+  },
+  "ADISCORD_battleship_2170": {
+    "cost": null,
+    "resources": {
+      "steel": 7,
+      "chromium": 3,
+      "rare_alloys": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_battleship_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 8,
+      "chromium": 3,
+      "rare_alloys": 2,
+      "rare_components": 2
+    }
+  },
+  "ADISCORD_carrier_2163": {
+    "cost": null,
+    "resources": {
+      "steel": 6,
+      "chromium": 2
+    }
+  },
+  "ADISCORD_carrier_2170": {
+    "cost": null,
+    "resources": {
+      "steel": 6,
+      "chromium": 2,
+      "rare_alloys": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_carrier_2175": {
+    "cost": null,
+    "resources": {
+      "steel": 7,
+      "chromium": 2,
+      "rare_alloys": 2,
+      "rare_components": 2
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2156": {
+    "cost": 1.3,
+    "resources": {
+      "steel": 3
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2163": {
+    "cost": 1.4,
+    "resources": {
+      "steel": 3,
+      "aluminium": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2168": {
+    "cost": 1.55,
+    "resources": {
+      "steel": 3,
+      "aluminium": 1,
+      "tungsten": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2170": {
+    "cost": 1.7,
+    "resources": {
+      "steel": 4,
+      "aluminium": 1,
+      "tungsten": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2178": {
+    "cost": 1.9,
+    "resources": {
+      "steel": 4,
+      "aluminium": 2,
+      "tungsten": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2183": {
+    "cost": 2.15,
+    "resources": {
+      "steel": 4,
+      "aluminium": 2,
+      "tungsten": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2193": {
+    "cost": 2.45,
+    "resources": {
+      "steel": 4,
+      "aluminium": 2,
+      "tungsten": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_squad_weapons_equipment_2200": {
+    "cost": 2.8,
+    "resources": {
+      "steel": 4,
+      "aluminium": 2,
+      "tungsten": 1,
+      "rare_components": 2,
+      "rare_alloys": 2
+    }
+  },
+  "ADISCORD_railway_gun_equipment_2200": {
+    "cost": 1050,
+    "resources": {
+      "steel": 5,
+      "tungsten": 3,
+      "chromium": 2,
+      "aluminium": 1,
+      "rare_components": 1,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_support_equipment_2170": {
+    "cost": 5,
+    "resources": {}
+  },
+  "ADISCORD_support_equipment_2183": {
+    "cost": 6,
+    "resources": {
+      "aluminium": 2,
+      "steel": 2,
+      "tungsten": 1,
+      "rare_components": 1
+    }
+  },
+  "ADISCORD_support_equipment_2200": {
+    "cost": 7,
+    "resources": {
+      "aluminium": 3,
+      "steel": 2,
+      "tungsten": 1,
+      "rare_components": 2,
+      "rare_alloys": 1
+    }
+  },
+  "ADISCORD_hardened_train_equipment_2183": {
+    "cost": 140,
+    "resources": {}
+  }
+}

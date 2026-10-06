@@ -18,6 +18,103 @@ SOURCE_DIR = ROOT / "tools" / "assets" / "source" / "technology_weapons"
 FACADE = ROOT / "tools" / "build_adiscord_technology_icons.py"
 
 
+class ShabratUniformAssetTests(unittest.TestCase):
+    def test_shabrat_family_builds_only_three_current_transparent_cards(self):
+        from tools.builders import build_adiscord_technology_icons as builder
+
+        outputs = builder.render_outputs(ROOT, "service_STS")
+        self.assertEqual(set(outputs), {
+            Path(f"gfx/interface/technologies/ADISCORD_STS_weapon_{kind}.dds")
+            for kind in ("01_reclaimed_arsenal", "02_recovered_service_rifle", "03_standardized_battle_rifle")
+        })
+        self.assertEqual(outputs, builder.render_outputs(ROOT, "service_STS"))
+        specs = {
+            spec.output: spec for spec in builder.load_manifest(MANIFEST)
+            if spec.family == "service_STS"
+        }
+        for relative, content in outputs.items():
+            self.assertEqual((ROOT / relative).read_bytes(), content)
+            with Image.open(BytesIO(content)) as icon:
+                self.assertEqual(icon.format, "DDS")
+                self.assertEqual(icon.size, (176, 72))
+                self.assertEqual(icon.getchannel("A").getextrema(), (0, 255))
+                with Image.open(SOURCE_DIR / specs[relative.name].source) as source:
+                    self.assertEqual(icon.convert("RGBA").tobytes(), source.tobytes())
+
+    def test_family_apply_preserves_unrelated_connector_files(self):
+        from tools.builders import build_adiscord_technology_icons as builder
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            connector = root / builder.DEPRECATED_CONNECTOR_OUTPUTS[0]
+            connector.parent.mkdir(parents=True)
+            connector.write_bytes(b"unrelated artwork")
+            builder.apply({Path("new.dds"): b"new artwork"}, root, clean_connectors=False)
+            self.assertEqual(connector.read_bytes(), b"unrelated artwork")
+            self.assertEqual((root / "new.dds").read_bytes(), b"new artwork")
+
+
+class ProtectiveEquipmentIconTests(unittest.TestCase):
+    def test_selected_artwork_survives_lossless_dds_export(self):
+        from tools.builders import build_adiscord_technology_icons as builder
+
+        specs = [spec for spec in builder.load_manifest() if spec.family == "protection"]
+        self.assertEqual(len(specs), 7)
+        outputs = builder.render_outputs(ROOT, "protection")
+        self.assertEqual(outputs, builder.render_outputs(ROOT, "protection"))
+        self.assertEqual(len(outputs), 7)
+        for spec in specs:
+            relative = Path("gfx/interface/technologies") / spec.output
+            with self.subTest(icon=spec.key):
+                self.assertEqual((ROOT / relative).read_bytes(), outputs[relative])
+                with Image.open(SOURCE_DIR / spec.source) as source:
+                    with Image.open(BytesIO(outputs[relative])) as icon:
+                        self.assertEqual(icon.size, (72, 72))
+                        self.assertEqual(icon.crop((1, 1, 71, 71)).tobytes(), source.tobytes())
+                        alpha = icon.getchannel("A")
+                        for border in ((0, 0, 72, 1), (0, 71, 72, 72),
+                                       (0, 0, 1, 72), (71, 0, 72, 72)):
+                            self.assertEqual(alpha.crop(border).getextrema(), (0, 0))
+
+    def test_only_selected_protection_sprites_are_regenerated(self):
+        import re
+        from tools.builders import build_adiscord_technology_system as generator
+
+        expected = {
+            "composite_protection_kits": "body_armour",
+            "trauma_plates": "trauma_pads",
+            "ceramic_trauma_inserts": "ceramic_plates",
+            "sealed_combat_suits": "respirator",
+            "sealed_respirator_interfaces": "respirator",
+            "active_hearing_protection": "hearing",
+            "powered_load_bearing_harnesses": "exoskeleton",
+            "exoskeleton_load_frames": "exoskeleton",
+            "exosuit_joint_actuators": "exoskeleton",
+            "thermal_signature_liners": "camouflage",
+            "reactive_camouflage_textiles": "camouflage",
+            "adaptive_camouflage": "camouflage",
+        }
+        current = (ROOT / "interface/ADISCORD_technologies.gfx").read_text(encoding="utf-8")
+        generated = generator.weapon_category_gfx_output("protection")
+        self.assertEqual(current, generated)
+        branch = generator.BRANCH_BY_KEY["protection"]
+        remaining_current = current
+        remaining_generated = generated
+        for index, tech in enumerate(branch.techs):
+            if tech.key not in expected:
+                continue
+            icon = f"ADISCORD_equipment_protection_{expected[tech.key]}"
+            with self.subTest(technology=tech.key):
+                self.assertEqual(generator.icon_for_technology(branch, index), icon)
+                pattern = rf'\tSpriteType = \{{\s*name = "GFX_{tech.id}_medium"[^{{}}]*\}}'
+                sprite = re.search(pattern, generated)
+                self.assertIsNotNone(sprite)
+                self.assertIn(f'textureFile = "gfx/interface/technologies/{icon}.dds"', sprite[0])
+                remaining_current = re.sub(pattern, "", remaining_current)
+                remaining_generated = re.sub(pattern, "", remaining_generated)
+        self.assertEqual(remaining_current, remaining_generated)
+
+
 class TechnologyIconSourceTests(unittest.TestCase):
     def test_manifest_has_unique_ranked_weapon_sources(self) -> None:
         self.assertTrue(MANIFEST.is_file(), MANIFEST)
@@ -93,30 +190,57 @@ class TechnologyIconSourceTests(unittest.TestCase):
                 )
                 self.assertEqual(image.mode, "RGBA")
 
-    def test_night_icons_use_generated_complete_sprite_cells(self) -> None:
-        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        compact = [
-            entry
-            for entry in manifest["icons"]
-            if entry["kind"] == "compact" and entry.get("family", "night") == "night"
-        ]
+    def test_night_icons_preserve_selected_runtime_artwork(self) -> None:
+        from tools.builders import build_adiscord_technology_icons as builder
 
+        specs = [spec for spec in builder.load_manifest() if spec.family == "night"]
         self.assertEqual(
-            {entry["source"] for entry in compact},
-            {"night_operations_generated_sheet.png"},
+            {spec.source for spec in specs},
+            {f"night_{number:02}.png" for number in range(1, 5)},
         )
-        self.assertEqual(
-            [entry["crop"] for entry in compact],
-            [
-                [0, 0, 512, 512],
-                [512, 0, 1024, 512],
-                [1024, 0, 1536, 512],
-                [0, 512, 512, 1024],
-                [512, 512, 1024, 1024],
-                [1024, 512, 1536, 1024],
-            ],
-        )
-        self.assertTrue(all(entry["source_size"] == [1536, 1024] for entry in compact))
+        outputs = builder.render_outputs(ROOT, "night")
+        self.assertEqual(len(outputs), 6)
+        for spec in specs:
+            with self.subTest(icon=spec.key):
+                self.assertTrue(spec.runtime_master)
+                self.assertIsNone(spec.crop)
+                path = Path("gfx/interface/technologies") / spec.output
+                with Image.open(SOURCE_DIR / spec.source) as source:
+                    with Image.open(BytesIO(outputs[path])) as icon:
+                        self.assertEqual(icon.size, (72, 72))
+                        self.assertEqual(icon.crop((1, 1, 71, 71)).tobytes(), source.tobytes())
+                        alpha = icon.getchannel("A")
+                        for border in ((0, 0, 72, 1), (0, 71, 72, 72),
+                                       (0, 0, 1, 72), (71, 0, 72, 72)):
+                            self.assertEqual(alpha.crop(border).getextrema(), (0, 0))
+
+    def test_night_technology_sprites_resolve_to_selected_artwork(self) -> None:
+        from tools.builders import build_adiscord_technology_system as generator
+
+        branch = next(branch for branch in generator.BRANCHES if branch.key == "night_combat")
+        expected = {
+            "passive_intensifier_cells": "ADISCORD_night_01_passive_intensifier",
+            "sealed_night_mounts": "ADISCORD_night_01_passive_intensifier",
+            "fused_low_light_sights": "ADISCORD_night_01_passive_intensifier",
+            "nocturnal_sensor_discipline": "ADISCORD_night_01_passive_intensifier",
+            "thermal_observation_channels": "ADISCORD_night_02_thermal_channel",
+            "thermal_target_libraries": "ADISCORD_night_02_thermal_channel",
+            "low_signature_illumination": "ADISCORD_night_05_counter_illumination",
+            "counter_illumination_warnings": "ADISCORD_night_05_counter_illumination",
+            "squad_target_sharing": "ADISCORD_night_04_squad_target_sharing",
+            "distributed_night_engagements": "ADISCORD_night_04_squad_target_sharing",
+            "nocturnal_combat_mesh": "ADISCORD_night_04_squad_target_sharing",
+        }
+        gfx = (ROOT / "interface/ADISCORD_technologies.gfx").read_text(encoding="utf-8")
+        for index, tech in enumerate(branch.techs):
+            if tech.key not in expected:
+                continue
+            icon = expected[tech.key]
+            with self.subTest(technology=tech.key):
+                self.assertEqual(generator.icon_for_technology(branch, index), icon)
+                sprite = gfx.split(f'name = "GFX_{tech.id}_medium"', 1)[1].split("}", 1)[0]
+                self.assertIn(f'textureFile = "gfx/interface/technologies/{icon}.dds"', sprite)
+                self.assertTrue((ROOT / f"gfx/interface/technologies/{icon}.dds").is_file())
 
     def test_manifest_has_twelve_ranked_personal_antitank_icons(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))

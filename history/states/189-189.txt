@@ -8,6 +8,12 @@ state={
 	buildings_max_level_factor = 1.000
 	state_category = rural
 	local_supplies = 1.0
+	resources = {
+		steel = 120
+		aluminium = 60
+		rare_components = 12
+		rare_alloys = 6
+	}
 	history = {
 		owner = EXZ
 		add_core_of = EXZ

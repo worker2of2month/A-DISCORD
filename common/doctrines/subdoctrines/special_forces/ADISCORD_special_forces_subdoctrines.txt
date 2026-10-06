@@ -99,7 +99,7 @@ ADISCORD_special_forces_urban_assault_groups = {
 	xp_cost = 60
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_remote_weapon_tripods
+		has_tech = ADISCORD_tech_assault_infantry_formations
 	}
 	xor = {
 		ADISCORD_special_forces_mountain_companies

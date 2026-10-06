@@ -1,0 +1,290 @@
+{
+  "NOD_early_cas": {
+    "triangles": 2208,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.6720089488445335,
+      "loop_error": 3.371747880871523e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.760000228881836,
+      13.070000171661377,
+      3.6913347244262695
+    ],
+    "files": {
+      "NOD_early_cas.mesh": "c9ff583134ec52d1da4249e8e7854d758dcc60aba0ff6b85ae56e1f9f261bc5c",
+      "NOD_early_cas_idle.anim": "113a852afa8bf9df9cb023d155cf7c719412bc0e600b8846bc39dcf49f5c74a0",
+      "NOD_cas_diffuse.dds": "9a3e851651e1401893f45d4a1ae7a4180791f8d606555d1520081e534006dd70",
+      "NOD_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "NOD_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "e5d41dd5828dd9220e1a36da258bcee2a435a55622aa28b06f51c2ffbd7d6b7e"
+  },
+  "NOD_cas": {
+    "triangles": 2224,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.260000228881836,
+      12.75,
+      3.2699999809265137
+    ],
+    "files": {
+      "NOD_cas.mesh": "f87dc343b4b9609da6068b43fc03d1cebe084e7aff4566c8c96403203cf89eee",
+      "NOD_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NOD_cas_diffuse.dds": "9a3e851651e1401893f45d4a1ae7a4180791f8d606555d1520081e534006dd70",
+      "NOD_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "NOD_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "77ce92028cf20a5e80f12aac1e704ffb65620de9edbe7b1290b4eadccb4c15bf"
+  },
+  "NOD_future_cas": {
+    "triangles": 2044,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.760000228881836,
+      12.900000095367432,
+      3.2699999809265137
+    ],
+    "files": {
+      "NOD_future_cas.mesh": "1a24a5dcfd2edd25c1ec9606a42438f760a689274fdbb7c3586aaab380f1dabc",
+      "NOD_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NOD_cas_diffuse.dds": "9a3e851651e1401893f45d4a1ae7a4180791f8d606555d1520081e534006dd70",
+      "NOD_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "NOD_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "7299ed3d05a72cae98a9baa7dc95afc43317738585e5284cf459b505c9ed2a85"
+  },
+  "STP_early_cas": {
+    "triangles": 1984,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008918172336,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.460000038146973,
+      12.600000381469727,
+      3.571334958076477
+    ],
+    "files": {
+      "STP_early_cas.mesh": "4a13b15674ba10f1966876edb4a081fd7b987e915e224b24c3d8da95a64ea607",
+      "STP_early_cas_idle.anim": "4e2d1a4e296916cb074c60ab13433c538bf1b95a9ddc9fc8cc7d69b44bb90020",
+      "STP_cas_diffuse.dds": "bf67818eb69786ab9eb17a45e5bf422ec9870e0712460fa344f53b0b14410311",
+      "STP_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "STP_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "db3e0afcabe7152039436e53fe9d8024aab606604abc4c3c1c26ee6e6e350fdc"
+  },
+  "STP_cas": {
+    "triangles": 1976,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.460000038146973,
+      12.75,
+      3.3399999141693115
+    ],
+    "files": {
+      "STP_cas.mesh": "933c3a9cca87532d0c2fd214662db9aa2d1654651fac0ad96055a524860a327e",
+      "STP_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "STP_cas_diffuse.dds": "bf67818eb69786ab9eb17a45e5bf422ec9870e0712460fa344f53b0b14410311",
+      "STP_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "STP_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "9416287cacabf3b55f9a386239be24e17454083fae3cf48ba7e7c9db3ea53e5f"
+  },
+  "STP_future_cas": {
+    "triangles": 2316,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.460000038146973,
+      12.900000095367432,
+      3.4600000381469727
+    ],
+    "files": {
+      "STP_future_cas.mesh": "4eb87a0e59ca68c3a422b2ea2a2e19497053e971ba3b8d057a7832abcb8b5421",
+      "STP_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "STP_cas_diffuse.dds": "bf67818eb69786ab9eb17a45e5bf422ec9870e0712460fa344f53b0b14410311",
+      "STP_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "STP_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "f4babe0e326b46aa0a1a47299856a59d8ce54d7d83482167478f06e11863b8aa"
+  },
+  "VAL_early_cas": {
+    "triangles": 2372,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672009598537368,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.559999465942383,
+      13.430000305175781,
+      3.291334867477417
+    ],
+    "files": {
+      "VAL_early_cas.mesh": "7f8a006679cb0f6713f1eea90b24d995b86cb0d3262f97075d718dfdb164c076",
+      "VAL_early_cas_idle.anim": "818c5b388256dc5a498632d89d0ee19b53e4a48e330f90919f3123c17aef3b4b",
+      "VAL_cas_diffuse.dds": "bb8fea46e03c338ff0ee1bee7f34691c635bc94d95682f01cbb718bdd474d4a7",
+      "VAL_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "VAL_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "4286a5327ceab8001380afa068478a904044867e716e3a94287f50c1f18b9e9a"
+  },
+  "VAL_cas": {
+    "triangles": 2364,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      17.260000228881836,
+      13.579999923706055,
+      3.2200000286102295
+    ],
+    "files": {
+      "VAL_cas.mesh": "721a8e13a68939f0a909c4dda1d6764a80a4626087720260caa213dabfd60e45",
+      "VAL_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "VAL_cas_diffuse.dds": "bb8fea46e03c338ff0ee1bee7f34691c635bc94d95682f01cbb718bdd474d4a7",
+      "VAL_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "VAL_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "afca0d13efa39245faf418d7dbfe525212184288aeeaa9eefeb91a20c5a05a5e"
+  },
+  "VAL_future_cas": {
+    "triangles": 2456,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      17.959999084472656,
+      13.730000019073486,
+      3.2200000286102295
+    ],
+    "files": {
+      "VAL_future_cas.mesh": "6c167c145d44eab7c445edf62b76b563551a086fb4509ac80ec8edab7a12d78b",
+      "VAL_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "VAL_cas_diffuse.dds": "bb8fea46e03c338ff0ee1bee7f34691c635bc94d95682f01cbb718bdd474d4a7",
+      "VAL_cas_normal.dds": "0a3002221566e16183160343f428771d87ea78ae77710d2782b5706eed71ed7f",
+      "VAL_cas_specular.dds": "958d7d7b5f6439035bf353c32bc43ce96c67d824a18646c5badbbd27f42438cc"
+    },
+    "blend_sha256": "2254fd87a9fee563749489dc90b4d489c503137c704ec9c62590a6c991eadaff"
+  }
+}

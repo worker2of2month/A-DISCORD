@@ -150,6 +150,10 @@ def render_icon(spec: IconSpec, root: Path = ROOT) -> Image.Image:
     source = _source_image(spec, root)
     if spec.runtime_master:
         expected_size = WIDE_SIZE if spec.kind == "wide" else COMPACT_SIZE
+        if spec.kind == "compact" and source.size == (70, 70):
+            canvas = Image.new("RGBA", COMPACT_SIZE, (0, 0, 0, 0))
+            canvas.paste(source, (1, 1))
+            return canvas
         if source.size != expected_size:
             raise RuntimeError(
                 f"runtime master for {spec.key} must be {expected_size[0]}x{expected_size[1]}, got {source.size}"
@@ -162,9 +166,12 @@ def render_icon(spec: IconSpec, root: Path = ROOT) -> Image.Image:
     raise RuntimeError(f"unknown technology icon kind {spec.kind!r} for {spec.key}")
 
 
-def _dds_bytes(image: Image.Image) -> bytes:
+def _dds_bytes(image: Image.Image, *, lossless: bool = False) -> bytes:
     stream = BytesIO()
-    image.save(stream, format="DDS", pixel_format="DXT5")
+    if lossless:
+        image.save(stream, format="DDS")
+    else:
+        image.save(stream, format="DDS", pixel_format="DXT5")
     return stream.getvalue()
 
 
@@ -228,16 +235,22 @@ def _contact_sheet(rendered: tuple[tuple[IconSpec, Image.Image], ...]) -> Image.
     return sheet
 
 
-def render_outputs(root: Path = ROOT) -> dict[Path, bytes]:
+def render_outputs(root: Path = ROOT, family: str | None = None) -> dict[Path, bytes]:
     manifest = root / "tools" / "data" / "adiscord_technology_weapon_icons.json"
+    specs = tuple(
+        spec for spec in load_manifest(manifest)
+        if family is None or spec.family == family
+    )
+    if not specs:
+        raise ValueError(f"No technology icon sources for family {family!r}")
     rendered = tuple(
-        (spec, render_icon(spec, root)) for spec in load_manifest(manifest)
+        (spec, render_icon(spec, root)) for spec in specs
     )
     outputs: dict[Path, bytes] = {}
     for spec, icon in rendered:
         relative = Path("gfx") / "interface" / "technologies" / spec.output
         if spec.runtime_master:
-            outputs[relative] = (
+            source_data = (
                 root
                 / "tools"
                 / "assets"
@@ -245,9 +258,13 @@ def render_outputs(root: Path = ROOT) -> dict[Path, bytes]:
                 / "technology_weapons"
                 / spec.source
             ).read_bytes()
+            outputs[relative] = (
+                source_data if source_data.startswith(b"DDS ") else _dds_bytes(icon, lossless=True)
+            )
         else:
             outputs[relative] = _dds_bytes(icon)
-    outputs[CONTACT_SHEET.relative_to(ROOT)] = _png_bytes(_contact_sheet(rendered))
+    if family is None:
+        outputs[CONTACT_SHEET.relative_to(ROOT)] = _png_bytes(_contact_sheet(rendered))
     return outputs
 
 
@@ -267,8 +284,10 @@ def validate(outputs: dict[Path, bytes], root: Path = ROOT) -> list[str]:
     return issues
 
 
-def apply(outputs: dict[Path, bytes], root: Path = ROOT) -> None:
-    for relative in DEPRECATED_CONNECTOR_OUTPUTS:
+def apply(
+    outputs: dict[Path, bytes], root: Path = ROOT, *, clean_connectors: bool = True
+) -> None:
+    for relative in DEPRECATED_CONNECTOR_OUTPUTS if clean_connectors else ():
         path = root / relative
         if path.is_file():
             path.unlink()
@@ -288,11 +307,16 @@ def main() -> int:
     )
     actions.add_argument("--apply", action="store_true", help="write generated outputs")
     parser.add_argument(
+        "--family", help="build only one manifest family, preserving other artwork"
+    )
+    parser.add_argument(
         "--normalize-existing",
         action="store_true",
         help="losslessly encode existing technology artwork with DDS headers",
     )
     args = parser.parse_args()
+    if args.family and args.normalize_existing:
+        parser.error("--family cannot be combined with --normalize-existing")
 
     if args.normalize_existing:
         changed = []
@@ -315,12 +339,12 @@ def main() -> int:
         return int(bool(changed) and not args.apply)
 
     try:
-        outputs = render_outputs(ROOT)
+        outputs = render_outputs(ROOT, args.family)
     except (OSError, RuntimeError, ValueError, KeyError, json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}")
         return 1
     if args.apply:
-        apply(outputs, ROOT)
+        apply(outputs, ROOT, clean_connectors=args.family is None)
     issues = validate(outputs, ROOT)
     if issues:
         for issue in issues:
@@ -328,7 +352,8 @@ def main() -> int:
         return 1
     dds_count = sum(path.suffix == ".dds" for path in outputs)
     print(
-        f"A-Discord technology UI assets are current ({dds_count} DDS files and one contact sheet)."
+        f"A-Discord technology UI assets are current ({dds_count} DDS files"
+        + (" and one contact sheet" if args.family is None else "") + ")."
     )
     return 0
 

@@ -52,7 +52,7 @@ equipments = {
 		priority = 30
 		visual_level = 1
 		reliability = 0.86
-		build_cost_ic = 4.8
+		build_cost_ic = 5
 		resources = { aluminium = 2 steel = 2 rare_components = 1 }
 	}
 
@@ -63,8 +63,13 @@ equipments = {
 		priority = 40
 		visual_level = 2
 		reliability = 0.9
-		build_cost_ic = 5.6
-		resources = { aluminium = 2 steel = 2 tungsten = 1 }
+		build_cost_ic = 6
+		resources = {
+			aluminium = 2
+			steel = 2
+			tungsten = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_support_equipment_2200 = {
@@ -74,7 +79,13 @@ equipments = {
 		priority = 50
 		visual_level = 3
 		reliability = 0.82
-		build_cost_ic = 6.4
-		resources = { aluminium = 3 steel = 2 tungsten = 1 rare_components = 2 }
+		build_cost_ic = 7
+		resources = {
+			aluminium = 3
+			steel = 2
+			tungsten = 1
+			rare_components = 2
+			rare_alloys = 1
+		}
 	}
 }

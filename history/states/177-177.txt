@@ -9,7 +9,10 @@ state={
 	state_category = town
 	local_supplies = 2.5
 	resources = {
-		steel = 4
+		steel = 80
+		aluminium = 100
+		rare_components = 8
+		rare_alloys = 6
 	}
 	history={
 		owner = EXZ

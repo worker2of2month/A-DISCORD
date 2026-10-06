@@ -1312,6 +1312,9 @@ l_english:
  faction_vorkerland_free_republics_league: "League of Free Republics"
 
  # Civil war, regional governments and reunification.
+ ADISCORD_vorkerland_reactor_industrial_legacy: "Reactor Complex Legacy"
+ ADISCORD_vorkerland_reactor_industrial_legacy_desc: "The industrial heart of old Vorkerland surrounded the zero-point reactor. Factory frames, abandoned machinery and technical warehouses retain enormous stocks of steel, aluminium, tungsten and chromium. Small batches of rare alloys and surviving precision components can also be recovered from the ruins. Salvage and reprocessing supply the region with valuable industrial materials."
+ ADISCORD_vorkerland_reactor_industrial_legacy_tt: "$ADISCORD_vorkerland_reactor_industrial_legacy_desc$\n\nRecoverable metals, rare alloys and components are already included in the state's base resources. Contamination still restricts their recovery."
  ADISCORD_vorkerland_dirty_state: "Contaminated Territory"
  ADISCORD_vorkerland_dirty_state_desc: "This territory is contaminated and requires permanent restrictions on the use of its population, resources, construction and supply."
  ADISCORD_vorkerland_collapse_started: "Explosion in the Tower of Unity"

@@ -1,4 +1,10 @@
 # --- collapse_dynamic_modifiers ---
+ADISCORD_vorkerland_reactor_industrial_legacy = {
+	enable = { always = yes }
+	icon = GFX_modifiers_sabotaged_resource
+	custom_modifier_tooltip = ADISCORD_vorkerland_reactor_industrial_legacy_tt
+}
+
 ADISCORD_vorkerland_dirty_state = {
 	enable = { always = yes }
 	icon = GFX_modifiers_sabotaged_resource

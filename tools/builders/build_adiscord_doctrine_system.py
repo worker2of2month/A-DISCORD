@@ -1731,7 +1731,7 @@ SCHOOLS = (
         "Специализированные штурмовые группы вскрывают укреплённый участок и передают прорыв линейным частям.",
         "Specialized assault groups open fortified sectors for exploitation by line formations.",
         "GFX_doctrine_assault_infantry_medium",
-        "has_tech = ADISCORD_tech_remote_weapon_tripods",
+        "has_tech = ADISCORD_tech_assault_infantry_formations",
         (
             "ADISCORD_assault_infantry = { breakthrough = 0.03 }",
             "planning_speed = 0.02",
@@ -2332,7 +2332,7 @@ SCHOOLS = (
         "Малые штурмовые группы последовательно изолируют и зачищают вертикально организованную застройку.",
         "Small assault groups isolate and clear vertically organized urban terrain in sequence.",
         "GFX_marines_commandoes_medium",
-        "has_tech = ADISCORD_tech_remote_weapon_tripods",
+        "has_tech = ADISCORD_tech_assault_infantry_formations",
         ("ADISCORD_assault_infantry = { breakthrough = 0.04 soft_attack = 0.03 }",),
         "sf_urban",
         ("modifier = { factor = 1.7 has_war = yes }",),

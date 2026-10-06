@@ -441,7 +441,7 @@
         "organization": 52.291667,
         "manpower": 9780.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 90.0,
+          "ADISCORD_squad_weapons_equipment": 360.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 8640.0,
           "support_equipment": 35.0
@@ -3025,7 +3025,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -3074,7 +3074,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -3401,7 +3401,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -3450,7 +3450,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -4127,7 +4127,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -4176,7 +4176,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -5197,7 +5197,7 @@
         "organization": 49.038462,
         "manpower": 9900.0,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 114.0,
+          "ADISCORD_squad_weapons_equipment": 384.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 8640.0,
           "support_equipment": 50.0
@@ -6656,7 +6656,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -6705,7 +6705,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -6754,7 +6754,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -6803,7 +6803,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -6998,7 +6998,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 24,
+          "ADISCORD_squad_weapons_equipment": 72,
           "support_equipment": 40
         },
         "supply": 0.2
@@ -7047,7 +7047,7 @@
         "manpower": 3000,
         "equipment": {
           "infantry_equipment": 2700,
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 108,
           "support_equipment": 60
         },
         "supply": 0.24
@@ -11715,7 +11715,7 @@
         "organization": 59.214285714285715,
         "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 36,
+          "ADISCORD_squad_weapons_equipment": 216,
           "infantry_equipment": 5670,
           "support_equipment": 30
         },
@@ -11863,7 +11863,7 @@
         "organization": 59.214285714285715,
         "manpower": 6300,
         "equipment": {
-          "ADISCORD_squad_weapons_equipment": 48,
+          "ADISCORD_squad_weapons_equipment": 288,
           "infantry_equipment": 5670,
           "support_equipment": 30
         },
@@ -11973,7 +11973,7 @@
         "manpower": 11300.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 200.0,
-          "ADISCORD_squad_weapons_equipment": 180.0,
+          "ADISCORD_squad_weapons_equipment": 600.0,
           "artillery_equipment": 12.0,
           "infantry_equipment": 10170.0,
           "support_equipment": 395.0
@@ -12019,7 +12019,7 @@
         "manpower": 1000.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 20.0,
-          "ADISCORD_squad_weapons_equipment": 18.0,
+          "ADISCORD_squad_weapons_equipment": 60.0,
           "infantry_equipment": 900.0,
           "support_equipment": 30.0
         },
@@ -12248,7 +12248,7 @@
         "manpower": 6300.0,
         "equipment": {
           "ADISCORD_power_shield_equipment": 120.0,
-          "ADISCORD_squad_weapons_equipment": 108.0,
+          "ADISCORD_squad_weapons_equipment": 360.0,
           "infantry_equipment": 5670.0,
           "support_equipment": 210.0
         },
@@ -12784,6 +12784,44 @@
       "replacement_path": {
         "kind": "retain",
         "target": "oob_olr_territorial_brigade"
+      }
+    },
+    {
+      "key": "val_zeppelin_trial",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Kefreyt Zeppelin Trial",
+      "display_name": "Kefreyt Zeppelin Trial",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_zeppelin",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 40.0,
+        "manpower": 400.0,
+        "equipment": {
+          "ADISCORD_zeppelin_equipment": 1.0
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_zeppelin_equipment": true
+      },
+      "ai_role": "utility",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "val_zeppelin_trial"
+      },
+      "definition_metadata": {
+        "is_locked": true
       }
     }
   ],
@@ -15260,6 +15298,16 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
+      "count": 1
+    },
+    {
+      "key": "val_zeppelin_trial_spawn",
+      "path": "common/scripted_effects/ADISCORD_VAL_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Kefreyt Zeppelin Trial",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
       "count": 1
     }
   ]

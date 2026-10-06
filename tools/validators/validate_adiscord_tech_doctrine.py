@@ -40,6 +40,8 @@ try:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        technology_tree_root as generated_technology_tree_root,
+        technology_successors as generated_technology_successors,
         horizontal_year_columns as generated_horizontal_year_columns,
         render_folder as render_generated_technology_folder,
         effects_for as generated_effects_for,
@@ -84,6 +86,8 @@ except ModuleNotFoundError:
         YEARS as GENERATED_YEARS,
         YEAR_TO_Y as GENERATED_YEAR_TO_Y,
         technology_grid_position as generated_technology_grid_position,
+        technology_tree_root as generated_technology_tree_root,
+        technology_successors as generated_technology_successors,
         horizontal_year_columns as generated_horizontal_year_columns,
         render_folder as render_generated_technology_folder,
         effects_for as generated_effects_for,
@@ -1961,12 +1965,12 @@ def check_infantry_equipment_requirements() -> list[str]:
         },
         "ADISCORD_assault_infantry": {
             "infantry_equipment": 990,
-            "ADISCORD_squad_weapons_equipment": 24,
+            "ADISCORD_squad_weapons_equipment": 60,
             "support_equipment": 30,
         },
         "mountaineers": {
             "infantry_equipment": 900,
-            "ADISCORD_squad_weapons_equipment": 6,
+            "ADISCORD_squad_weapons_equipment": 36,
         },
     }
 
@@ -2409,7 +2413,7 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
             issues.append(f"{template} must retain a wide equipment container")
     expected_gridboxes_by_folder: dict[str, set[str]] = {
         folder: {
-            f"{branch.techs[0].id}_tree"
+            f"{generated_technology_tree_root(branch)}_tree"
             for branch in GENERATED_BRANCHES
             if folder in branch.folders
         }
@@ -2421,9 +2425,8 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
     for branch in GENERATED_BRANCHES:
         graph = GENERATED_BRANCH_GRAPHS[branch.key]
         expected_folders = set(branch.folders)
-        for targets in graph.successors:
-            for target in targets:
-                child = branch.techs[target].id
+        for index in range(len(branch.techs)):
+            for child in generated_technology_successors(branch, index):
                 expected_incoming_count[child] = (
                     expected_incoming_count.get(child, 0) + 1
                 )
@@ -2447,9 +2450,7 @@ def check_technology_gridboxes(tech_blocks: dict[str, str]) -> list[str]:
                 r"\bleads_to_tech\s*=\s*(ADISCORD_tech_[A-Za-z0-9_]+)", block
             )
             actual_leads = set(lead_entries)
-            expected_leads = {
-                branch.techs[target].id for target in graph.successors[index]
-            }
+            expected_leads = set(generated_technology_successors(branch, index))
             if actual_leads != expected_leads:
                 issues.append(
                     f"{tech_spec.id} leads to {sorted(actual_leads)}; "
@@ -3283,7 +3284,7 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 issues.append(f"{tech.id} has no numeric research_cost")
                 continue
             cost = float(match.group(1))
-            if branch.key == "small_arms":
+            if branch.key in {"small_arms", "assault_rifles"}:
                 small_arms_costs.append(cost)
             year = branch.years[index]
 
@@ -3317,7 +3318,7 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                     effect_prefix,
                 )
             )
-            weapon_modification = branch.key == "small_arms" and tech.id not in unlocks
+            weapon_modification = branch.key in {"small_arms", "assault_rifles"} and tech.id not in unlocks
             # A permanent plant-output upgrade is a complete production reward.
             # Read the actual callback so a missing or zero payload cannot pass.
             resource_upgrade = False
@@ -3349,9 +3350,23 @@ def check_post_2160_research_balance(tech_blocks: dict[str, str]) -> list[str]:
                 value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", effect_prefix)
                 if value and float(value[1]) * direction >= minimum:
                     invasion_upgrade = True
+            # Small dedicated assault upgrades are full rewards when their
+            # beneficial modifier is paid to the assault battalion itself.
+            assault_upgrade = False
+            assault_scope = re.search(r"\bADISCORD_assault_infantry\s*=\s*\{", effect_prefix)
+            if branch.key == "assault_infantry" and assault_scope:
+                payload = extract_block(effect_prefix, assault_scope.start())
+                for modifier, direction, minimum in (
+                    ("breakthrough", 1, 0.05),
+                    ("soft_attack", 1, 0.04),
+                    ("supply_consumption", -1, 0.05),
+                ):
+                    value = re.search(rf"\b{modifier}\s*=\s*(-?[0-9.]+)", payload)
+                    if value and float(value[1]) * direction >= minimum:
+                        assault_upgrade = True
             if tech.id in unlocks or resource_upgrade:
                 minimum_effects = 0
-            elif family_upgrade or weapon_modification or substantial_fuel_upgrade or invasion_upgrade:
+            elif family_upgrade or weapon_modification or substantial_fuel_upgrade or invasion_upgrade or assault_upgrade:
                 minimum_effects = 1
             else:
                 minimum_effects = 2

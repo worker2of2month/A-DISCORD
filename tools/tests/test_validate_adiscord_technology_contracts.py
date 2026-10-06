@@ -558,7 +558,8 @@ on_actions = {
 
     def test_weapon_research_rejects_instant_and_malformed_costs(self) -> None:
         branch = next(item for item in validator.GENERATED_BRANCHES if item.key == "small_arms")
-        for tech_id in (branch.techs[1].id, branch.techs[9].id):
+        rifles = next(item for item in validator.GENERATED_BRANCHES if item.key == "assault_rifles")
+        for tech_id in (branch.techs[1].id, rifles.techs[1].id):
             for cost in ("0", "0.35", "1.19", "-1.2", "1.2.5", "1.2oops", "nan", "inf"):
                 with self.subTest(technology=tech_id, cost=cost):
                     broken = dict(self.tech_blocks)

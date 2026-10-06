@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import dataclass, replace
+from io import BytesIO
 from pathlib import Path
 import json
 import re
@@ -103,6 +104,7 @@ YEAR_LABEL_HEIGHT = 22
 HORIZONTAL_LANE_SLOT_MULTIPLIER = 2
 LANE_SLOT_MULTIPLIER = 3
 BRANCH_GAP = 90
+INFANTRY_BRANCH_GAP = 30
 HORIZONTAL_YEAR_SLOT_MULTIPLIER = 3
 # A one-slot step puts a 72px icon 70px from its neighbour and leaves no room for
 # the connector, so vertical tabs spend two slots per rung exactly as vanilla
@@ -2316,6 +2318,16 @@ BRANCHES = (
                     "category_all_infantry = { defense = 0.012 }",
                 ),
             ),
+        ),
+    ),
+    research_branch(
+        "assault_rifles",
+        "ADISCORD_infantry.txt",
+        ("infantry_folder",),
+        "Штурмовые винтовки",
+        "Assault Rifles",
+        "infantry",
+        (
             (
                 "sealed_receiver_assemblies",
                 "Промежуточные патроны",
@@ -2738,16 +2750,16 @@ BRANCHES = (
         (
             (
                 "recovered_shaped_charge_cells",
-                "Бутылочные зажигательные смеси",
-                "Bottle Incendiary Mixtures",
+                "Бутылки с зажигательной смесью",
+                "Incendiary Bottles",
                 "ADISCORD_antitank_01_incendiary_bottle",
                 2150,
                 ("category_all_infantry = { hard_attack = 0.012 ap_attack = 0.008 }",),
             ),
             (
                 "disposable_launcher_standards",
-                "Динамитные и ранцевые подрывные заряды",
-                "Dynamite and Satchel Demolition Charges",
+                "Лёгкие противотанковые пушки",
+                "Light Anti-tank Guns",
                 "ADISCORD_antitank_02_satchel_charge",
                 2155,
                 (
@@ -2764,16 +2776,16 @@ BRANCHES = (
             ),
             (
                 "wire_guided_hunter_teams",
-                "Тяжёлые противотанковые ружья",
-                "Large-calibre Anti-tank Rifles",
+                "Станковое противотанковое оружие",
+                "Crew-served Anti-tank Weapons",
                 "ADISCORD_antitank_04_antitank_rifle",
                 2161,
                 ("category_all_infantry = { hard_attack = 0.028 ap_attack = 0.02 }",),
             ),
             (
                 "recoilless_overmatch_cells",
-                "Наведение ракет по проводам",
-                "Command Guidance over Wire",
+                "Противотанковые мины",
+                "Anti-tank Mines",
                 "ADISCORD_antitank_05_wire_guidance",
                 2161,
                 (
@@ -2783,8 +2795,8 @@ BRANCHES = (
             ),
             (
                 "fire_and_forget_seekers",
-                "Безоткатные противотанковые системы",
-                "Recoilless Anti-tank Systems",
+                "Станковые противотанковые пушки",
+                "Mounted Anti-tank Guns",
                 "ADISCORD_antitank_06_recoilless_launcher",
                 2164,
                 (
@@ -2793,8 +2805,8 @@ BRANCHES = (
             ),
             (
                 "programmable_anti_armor_fuzes",
-                "Полуавтоматическое наведение ракет",
-                "Semi-automatic Command to Line of Sight",
+                "Ручные противотанковые гранатомёты",
+                "Shoulder-fired Anti-tank Launchers",
                 "ADISCORD_antitank_07_saclos_guidance",
                 2164,
                 (
@@ -2804,16 +2816,16 @@ BRANCHES = (
             ),
             (
                 "top_attack_profiles",
-                "Кумулятивные реактивные гранатомёты",
-                "Shaped-charge Rocket Launchers",
+                "Переносные противотанковые ракетные комплексы",
+                "Portable Anti-tank Missile Systems",
                 "ADISCORD_antitank_08_rocket_launcher",
                 2168,
                 ("category_all_infantry = { hard_attack = 0.036 ap_attack = 0.032 }",),
             ),
             (
                 "loitering_armor_hunters",
-                "Самонаведение для атаки сверху",
-                "Imaging-infrared Top-attack Homing",
+                "Усовершенствованные противотанковые пушки",
+                "Improved Anti-tank Guns",
                 "ADISCORD_antitank_09_top_attack_seeker",
                 2168,
                 (
@@ -2823,16 +2835,16 @@ BRANCHES = (
             ),
             (
                 "cooperative_hunter_cells",
-                "Тандемные кумулятивные боевые части",
-                "Tandem Shaped-charge Warheads",
+                "Противотанковые ракеты",
+                "Anti-tank Missiles",
                 "ADISCORD_antitank_10_tandem_warhead",
                 2172,
                 ("category_all_infantry = { hard_attack = 0.04 ap_attack = 0.036 }",),
             ),
             (
                 "terminal_overmatch_packages",
-                "Барражирующие противотанковые боеприпасы",
-                "Loitering Anti-armor Munitions",
+                "Противотанковые гранатомёты нового поколения",
+                "Next-generation Anti-tank Launchers",
                 "ADISCORD_antitank_11_loitering_munition",
                 2172,
                 (
@@ -2842,8 +2854,8 @@ BRANCHES = (
             ),
             (
                 "distributed_anti_armor_net",
-                "Общее целеуказание по данным датчиков",
-                "Cooperative Multispectral Targeting",
+                "Противотанковые ракеты нового поколения",
+                "Next-generation Anti-tank Missiles",
                 "ADISCORD_antitank_12_multispectral_targeting",
                 2180,
                 (
@@ -3132,6 +3144,64 @@ BRANCHES = (
                 (
                     "category_all_infantry = { defense = 0.063 max_organisation = 1.432 }",
                 ),
+            ),
+        ),
+    ),
+    research_branch(
+        "assault_infantry",
+        "ADISCORD_infantry.txt",
+        ("infantry_folder",),
+        "Штурмовая пехота",
+        "Assault Infantry",
+        "special_forces",
+        (
+            (
+                "assault_infantry_formations",
+                "Штурмовые подразделения",
+                "Assault Infantry Formations",
+                "tech_advanced_special_forces_training",
+                2162,
+                (),
+            ),
+            (
+                "assault_group_coordination",
+                "Слаживание штурмовых групп",
+                "Assault Group Coordination",
+                "tech_advanced_special_forces_training",
+                2163,
+                ("ADISCORD_assault_infantry = { breakthrough = 0.05 }",),
+            ),
+            (
+                "assault_fire_suppression",
+                "Огневое подавление",
+                "Assault Fire Suppression",
+                "support_weapons2",
+                2164,
+                ("ADISCORD_assault_infantry = { soft_attack = 0.04 }",),
+            ),
+            (
+                "assault_battle_control",
+                "Управление штурмовым боем",
+                "Assault Battle Control",
+                "radio",
+                2166,
+                ("ADISCORD_assault_infantry = { max_organisation = 2 }",),
+            ),
+            (
+                "assault_forward_supply",
+                "Снабжение передовых групп",
+                "Forward Assault Group Supply",
+                "motorised_infantry",
+                2169,
+                ("ADISCORD_assault_infantry = { supply_consumption = -0.05 }",),
+            ),
+            (
+                "assault_coordinated_attack",
+                "Согласованный штурм",
+                "Coordinated Assault",
+                "tech_advanced_special_forces_training",
+                2172,
+                ("ADISCORD_assault_infantry = { breakthrough = 0.05 soft_attack = 0.04 }",),
             ),
         ),
     ),
@@ -5784,8 +5854,10 @@ MAIN_BRANCH_KEYS_BY_FOLDER = {
         'night_combat',
         'protection',
         'small_arms',
+        'assault_rifles',
         'squad_weapons',
         'special_forces',
+        'assault_infantry',
         'power_shields',
     ],
     "support_folder": [
@@ -6362,6 +6434,8 @@ LEGACY_MIGRATION_TARGET_BRANCH = {
 def closest_compact_technology(branch_key: str, year: int) -> str:
     target_branch = LEGACY_MIGRATION_TARGET_BRANCH.get(branch_key, branch_key)
     candidates = CURRENT_BRANCH_TECHS.get(target_branch)
+    if target_branch == "small_arms":
+        candidates += CURRENT_BRANCH_TECHS["assault_rifles"]
     if not candidates:
         raise ValueError(f"No compact migration target for legacy branch {branch_key}")
     tech, _ = min(
@@ -6566,6 +6640,7 @@ ENABLE_EQUIPMENT = {
 # between separate grid boxes is fragile in HOI4, while dependencies provide
 # the required AND gate in the technology tooltip and research logic.
 EXTRA_TECH_DEPENDENCIES = {
+    "ADISCORD_tech_sealed_receiver_assemblies": ("ADISCORD_tech_primer_consistency",),
     "ADISCORD_tech_heavy_cruiser_hull_2163": ("ADISCORD_tech_light_cruiser_hull_2155",),
     "ADISCORD_tech_battleship_hull_2163": ("ADISCORD_tech_heavy_cruiser_hull_2163",),
     "ADISCORD_tech_carrier_hull_2163": ("ADISCORD_tech_heavy_cruiser_hull_2155",),
@@ -6667,6 +6742,8 @@ COMMON_STARTING_ROOTS = tuple(
             "synthetic_rubber",
             "synthetic_oil",
             "power_shields",
+            "assault_infantry",
+            "assault_rifles",
             "amphibious_operations",
         }
         for tech in BRANCH_BY_KEY[branch_key].techs[:4 if branch_key == "small_arms" else 1]
@@ -6973,7 +7050,7 @@ ENABLE_SUBUNITS = {
     "ADISCORD_tech_radar_laying": ("ADISCORD_regimental_anti_air",),
     "ADISCORD_tech_urban_breaching": ("ADISCORD_regimental_pioneers",),
     "ADISCORD_tech_combat_recon_drones": ("ADISCORD_regimental_drone_observers",),
-    "ADISCORD_tech_remote_weapon_tripods": ("ADISCORD_assault_infantry",),
+    "ADISCORD_tech_assault_infantry_formations": ("ADISCORD_assault_infantry",),
     # Thunder at Our Gates Army HQ modules.  common/technologies is replaced,
     # so the vanilla unlocks must be attached to A-Discord's own technology
     # graph or every non-basic HQ component remains permanently inactive.
@@ -7551,11 +7628,26 @@ INFANTRY_COMPACT_ICONS = {
             "networked_weapon_sights",
             "integrated_target_designation",
         ),
+        "ADISCORD_night_01_passive_intensifier": (
+            "passive_intensifier_cells",
+            "sealed_night_mounts",
+            "fused_low_light_sights",
+            "nocturnal_sensor_discipline",
+        ),
+        "ADISCORD_night_02_thermal_channel": (
+            "thermal_observation_channels",
+            "thermal_target_libraries",
+        ),
         "ADISCORD_night_04_squad_target_sharing": (
+            "squad_target_sharing",
+            "distributed_night_engagements",
+            "nocturnal_combat_mesh",
             "deep_recon_cells",
             "predictive_patrol_evasion",
         ),
         "ADISCORD_night_05_counter_illumination": (
+            "low_signature_illumination",
+            "counter_illumination_warnings",
             "man_portable_sensor_masts",
             "distributed_recon_sensor_caches",
         ),
@@ -7611,15 +7703,33 @@ WEAPON_CATEGORY_ICONS.update(
 )
 
 
+PROTECTION_TECH_ICONS = {
+    "thermal_signature_liners": "ADISCORD_equipment_protection_camouflage",
+    "reactive_camouflage_textiles": "ADISCORD_equipment_protection_camouflage",
+    "adaptive_camouflage": "ADISCORD_equipment_protection_camouflage",
+    "composite_protection_kits": "ADISCORD_equipment_protection_body_armour",
+    "trauma_plates": "ADISCORD_equipment_protection_trauma_pads",
+    "ceramic_trauma_inserts": "ADISCORD_equipment_protection_ceramic_plates",
+    "sealed_combat_suits": "ADISCORD_equipment_protection_respirator",
+    "sealed_respirator_interfaces": "ADISCORD_equipment_protection_respirator",
+    "active_hearing_protection": "ADISCORD_equipment_protection_hearing",
+    "powered_load_bearing_harnesses": "ADISCORD_equipment_protection_exoskeleton",
+    "exoskeleton_load_frames": "ADISCORD_equipment_protection_exoskeleton",
+    "exosuit_joint_actuators": "ADISCORD_equipment_protection_exoskeleton",
+}
+
+
 def icon_for_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
+    if tech.key in PROTECTION_TECH_ICONS:
+        return PROTECTION_TECH_ICONS[tech.key]
     if tech.icon in NAVAL_HULL_ART:
         return tech.icon
     if tech.key in NAVAL_UPGRADE_ICONS:
         return NAVAL_UPGRADE_ICONS[tech.key]
     if tech.key in WEAPON_CATEGORY_ICONS:
         return WEAPON_CATEGORY_ICONS[tech.key]
-    if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
+    if branch.key in {"small_arms", "assault_rifles"} and tech.id in ENABLE_EQUIPMENT:
         generation = {
             "postwar_weapon_standardization": 1,
             "refurbished_receivers": 2,
@@ -7630,6 +7740,8 @@ def icon_for_technology(branch: Branch, index: int) -> str:
             "ADISCORD_weapon_03_standardized_battle_rifle",
         )[generation - 1]
     if branch.key == "night_combat":
+        if tech.key in INFANTRY_COMPACT_ICONS:
+            return INFANTRY_COMPACT_ICONS[tech.key]
         return (
             "night_vision"
             if tech.key
@@ -7738,6 +7850,30 @@ BRANCH_DESCRIPTION_EN = {
 
 
 TECHNICAL_TECH_DESCRIPTIONS = {
+    "assault_infantry_formations": (
+        "Специализированные батальоны объединяют усиленные стрелковые группы и расчёты тяжёлого оружия для прорыва подготовленных позиций",
+        "Specialized battalions combine reinforced rifle teams and heavy weapon crews to breach prepared positions",
+    ),
+    "assault_group_coordination": (
+        "Штурмовые группы отрабатывают смену огневых позиций и взаимное прикрытие при продвижении к противнику",
+        "Assault groups rehearse changes of firing position and mutual cover while advancing towards the enemy",
+    ),
+    "assault_fire_suppression": (
+        "Расчёты штурмовых батальонов сосредоточивают огонь на выявленных позициях пехоты, обеспечивая продвижение передовых групп",
+        "Assault battalion crews concentrate fire on identified infantry positions to support the advance of their forward groups",
+    ),
+    "assault_battle_control": (
+        "Единые сигналы и подготовленные заместители позволяют штурмовым подразделениям сохранять управление в ближнем бою",
+        "Common signals and trained deputies help assault units maintain command and cohesion in close combat",
+    ),
+    "assault_forward_supply": (
+        "Распределение переносимого боезапаса и согласованные пункты пополнения сокращают расход снабжения штурмовых батальонов",
+        "Distributed ammunition loads and coordinated replenishment points reduce assault battalion supply consumption",
+    ),
+    "assault_coordinated_attack": (
+        "Огневые расчёты и передовые группы действуют по общему порядку смены целей, сочетая подавление пехоты с непрерывным продвижением",
+        "Weapon crews and forward groups follow a shared target sequence, combining infantry suppression with a continuous advance",
+    ),
     "amphibious_formation_organization": (
         "Единые нормы распределения транспорта и боевых частей позволяют включать больше дивизий в один план высадки",
         "Common transport and troop allocation standards allow more divisions in a single landing plan",
@@ -8083,48 +8219,48 @@ TECHNICAL_TECH_DESCRIPTIONS = {
         "A glass vessel filled with thickened fuel breaks against armor and ignites external equipment, air intakes, and the engine deck",
     ),
     "disposable_launcher_standards": (
-        "Динамит или пластичный заряд в переносной сумке сосредотачивает взрыв у гусеницы, днища или неподвижного узла машины",
-        "Dynamite or plastic explosive carried in a satchel concentrates blast against a track, belly plate, or fixed vehicle component",
+        "Лёгкая буксируемая пушка на колёсном лафете даёт пехотному расчёту средство борьбы с бронетехникой",
+        "A light towed gun on a wheeled carriage gives infantry crews a weapon against armored vehicles",
     ),
     "tandem_penetrator_packages": (
         "Ручная граната с кумулятивной воронкой формирует направленную струю при подрыве на броне, не полагаясь на кинетическую скорость",
         "A hand-thrown grenade with a shaped-charge liner forms a focused jet on armor without relying on impact velocity",
     ),
     "wire_guided_hunter_teams": (
-        "Крупнокалиберный ствол и высокоскоростной бронебойный сердечник поражают раннюю бронетехнику прямым кинетическим пробитием",
-        "A large-calibre barrel and high-velocity armor-piercing core defeat early armored vehicles by direct kinetic penetration",
+        "Тяжёлое оружие на устойчивом станке усиливает огонь пехоты по лёгкой бронетехнике",
+        "A heavy weapon on a stable mount strengthens infantry fire against lightly armored vehicles",
     ),
     "recoilless_overmatch_cells": (
-        "Команды оператора передаются ракете по разматываемому проводу, устойчивому к радиопомехам и не требующему бортовой головки самонаведения",
-        "Operator commands reach the missile through a payed-out wire, resisting radio jamming without an onboard seeker",
+        "Противотанковые мины усиливают оборонительные заграждения и затрудняют продвижение бронетехники",
+        "Anti-tank mines reinforce defensive obstacles and hinder armored advances",
     ),
     "fire_and_forget_seekers": (
-        "Истечение части пороховых газов назад уравновешивает отдачу и позволяет переносному стволу метать боеприпас достаточного калибра",
-        "Rearward venting of propellant gas balances recoil and lets a portable tube fire a sufficiently large projectile",
+        "Противотанковая пушка с усиленным станком и прицелом поддерживает пехотные подразделения огнём по бронетехнике",
+        "An anti-tank gun with a reinforced mount and sight supports infantry against armored vehicles",
     ),
     "programmable_anti_armor_fuzes": (
-        "Оператор удерживает перекрестие на цели, а аппаратура автоматически вычисляет команды наведения ракеты относительно линии визирования",
-        "The operator keeps the sight on target while the control unit automatically computes missile corrections relative to the line of sight",
+        "Компактный ручной гранатомёт позволяет пехотинцу нести собственное противотанковое оружие",
+        "A compact shoulder-fired launcher gives individual infantry soldiers a portable anti-tank weapon",
     ),
     "top_attack_profiles": (
-        "Реактивный двигатель разгоняет гранату с кумулятивной боевой частью после выхода из пусковой трубы, сохраняя переносимость оружия",
-        "A rocket motor accelerates a shaped-charge grenade after it leaves the launch tube, preserving weapon portability",
+        "Переносная пусковая установка с прицелом и противотанковой ракетой усиливает возможности пехотного расчёта",
+        "A portable launcher with a sight and anti-tank missile strengthens the infantry crew's anti-armor capability",
     ),
     "loitering_armor_hunters": (
-        "Матричная инфракрасная головка распознаёт тепловой образ цели и направляет ракету в менее защищённую верхнюю полусферу",
-        "An imaging-infrared seeker recognizes the target heat signature and guides the missile into the less protected upper hemisphere",
+        "Усовершенствованные прицелы и боеприпасы повышают эффективность станковой противотанковой пушки",
+        "Improved sights and ammunition increase the effectiveness of mounted anti-tank guns",
     ),
     "cooperative_hunter_cells": (
-        "Предзаряд разрушает динамическую защиту, после чего основной кумулятивный заряд формирует струю против основной брони",
-        "A precursor charge disrupts reactive armor before the main shaped charge forms its jet against the base armor",
+        "Новые противотанковые ракеты расширяют возможности переносных пусковых установок против защищённых целей",
+        "New anti-tank missiles improve the capability of portable launchers against protected targets",
     ),
     "terminal_overmatch_packages": (
-        "Переносной беспилотный боеприпас длительно ищет цель, передаёт изображение оператору и атакует после подтверждения",
-        "A portable unmanned munition searches for a target, relays imagery to the operator, and attacks after confirmation",
+        "Ручной противотанковый гранатомёт нового поколения объединяет облегчённый корпус и встроенное прицельное оборудование",
+        "A next-generation shoulder-fired anti-tank launcher combines a lightweight body with integrated sighting equipment",
     ),
     "distributed_anti_armor_net": (
-        "Тепловизионные, телевизионные и лазерные наблюдатели передают единую координату разнесённым пусковым расчётам и барражирующим боеприпасам",
-        "Thermal, television, and laser observers pass one target solution to separated launch teams and loitering munitions",
+        "Противотанковые ракеты нового поколения дополняют перспективные пусковые комплексы пехоты",
+        "Next-generation anti-tank missiles equip advanced infantry launcher systems",
     ),
 }
 
@@ -8241,7 +8377,7 @@ def technology_description_notes(branch: Branch, index: int, is_ru: bool) -> lis
             if is_ru else
             "Carrier fighters and torpedo bombers are researched in separate branches. Produce aircraft in military factories and assign them to carrier air wings."
         )
-    if branch.key == "small_arms" and index % 4:
+    if branch.key in {"small_arms", "assault_rifles"} and index % 4:
         model = branch.techs[index - index % 4]
         equipment = ENABLE_EQUIPMENT[model.id][0]
         model_name = LAND_EQUIPMENT_LOCALISATION[equipment][2 if is_ru else 3]
@@ -8389,7 +8525,7 @@ def research_cost_for(
         return research_cost_for(origin, origin_index, dependencies, xor)
     if branch.profile.startswith("forbidden_"):
         return 2.60 + index * (0.18 if len(branch.techs) > 3 else 0.35)
-    if branch.key == "small_arms" and tech.id not in ENABLE_EQUIPMENT:
+    if branch.key in {"small_arms", "assault_rifles"} and tech.id not in ENABLE_EQUIPMENT:
         # Intermediate upgrades need room for saved research and focus bonuses.
         return 1.20
     if year <= 2158:
@@ -8581,8 +8717,8 @@ def folder_grid_format(folder: str) -> str:
 
 
 def technology_year_occurrence(branch: Branch, index: int) -> int:
-    """Parallel naval packages share a date column; dependent steps do not."""
-    if branch.key not in NAVAL_HULL_BRANCH_KEYS:
+    """Parallel infantry and naval nodes share dates; dependent steps do not."""
+    if branch.key not in NAVAL_HULL_BRANCH_KEYS and "infantry_folder" not in branch.folders:
         return branch.years[:index].count(branch.years[index])
     graph = BRANCH_GRAPHS[branch.key]
     depths = [0] * len(branch.techs)
@@ -8782,6 +8918,27 @@ def render_payload(payload: str, indent: int) -> list[str]:
     return lines
 
 
+BRANCH_CONTINUATIONS = {"assault_rifles": "small_arms"}
+
+
+def technology_tree_root(branch: Branch) -> str:
+    owner = BRANCH_BY_KEY[BRANCH_CONTINUATIONS.get(branch.key, branch.key)]
+    return owner.techs[0].id
+
+
+def technology_successors(branch: Branch, index: int) -> tuple[str, ...]:
+    targets = tuple(
+        branch.techs[target].id for target in BRANCH_GRAPHS[branch.key].successors[index]
+    )
+    if index == len(branch.techs) - 1:
+        targets += tuple(
+            BRANCH_BY_KEY[child].techs[0].id
+            for child, parent in BRANCH_CONTINUATIONS.items()
+            if parent == branch.key
+        )
+    return targets
+
+
 def render_technology(branch: Branch, index: int) -> str:
     tech = branch.techs[index]
     year = branch.years[index]
@@ -8803,11 +8960,11 @@ def render_technology(branch: Branch, index: int) -> str:
         # division caps, which retain their engine defaults.
         lines.append("\t\tnaval_invasion_capacity = 100")
     lines.extend(render_leader_training_effect(tech))
-    for target in graph.successors[index]:
+    for target in technology_successors(branch, index):
         lines.extend(
             (
                 "\t\tpath = {",
-                f"\t\t\tleads_to_tech = {branch.techs[target].id}",
+                f"\t\t\tleads_to_tech = {target}",
                 "\t\t\tresearch_cost_coeff = 1",
                 "\t\t}",
             )
@@ -9164,6 +9321,340 @@ def write_naval_hull_cards() -> None:
             card.save(target, format="DDS")
 
 
+COUNTRY_AIRCRAFT_CARD_FAMILIES = {
+    "VAL": "VAL",
+    "NOD": "party",
+    "STP": "party",
+    "STS": "STS",
+    "SRP": "STS",
+}
+
+# Rank by the research unlock, not by the older year suffix in an equipment ID.
+# The supplied third card also represents every subsequent production model.
+AIRCRAFT_CARD_TIERS = {
+    "ADISCORD_fighter_airframe_2163": 1,
+    "ADISCORD_fighter_airframe_2161": 2,
+    "ADISCORD_fighter_airframe_2166": 3,
+    "ADISCORD_interceptor_airframe_2183": 3,
+    "ADISCORD_fighter_airframe_2170": 3,
+    "ADISCORD_fighter_airframe_2175": 3,
+    "ADISCORD_cas_airframe_2170": 1,
+    "ADISCORD_vtol_airframe_2170": 2,
+    "ADISCORD_attack_airframe_2163": 3,
+    "ADISCORD_drone_airframe_2183": 3,
+    "ADISCORD_attack_airframe_2170": 3,
+    "ADISCORD_attack_airframe_2175": 3,
+}
+AIRCRAFT_CARDS_BEGIN = "\t# BEGIN ADISCORD country aircraft cards\n"
+AIRCRAFT_CARDS_END = "\t# END ADISCORD country aircraft cards\n"
+
+# The production card's second line uses the generic equipment name even
+# when its model name and picture have country-specific overrides.
+AIRCRAFT_TYPE_LOCALISATION = {
+    "ADISCORD_fighter_airframe_2163": (
+        "Винтовой истребитель", "Propeller Fighter",
+        "Восстановленный истребитель с поршневым двигателем и воздушным винтом.",
+        "A restored fighter powered by a piston engine and propeller.",
+    ),
+    "ADISCORD_cas_airframe_2170": (
+        "Винтовой штурмовик", "Propeller Attack Aircraft",
+        "Поршневой самолёт непосредственной поддержки наземных войск.",
+        "A piston-engine aircraft for close support of ground forces.",
+    ),
+    "ADISCORD_vtol_airframe_2170": (
+        "Реактивный штурмовик", "Jet Attack Aircraft",
+        "Реактивный самолёт непосредственной поддержки наземных войск.",
+        "A jet-powered aircraft for close support of ground forces.",
+    ),
+}
+
+
+def country_aircraft_names(language: str) -> dict[str, str]:
+    is_ru = language == "russian"
+    families = {
+        "VAL": ("В", "V", (("Сокол", "Falcon"), ("Беркут", "Eagle"), ("Грифон", "Griffin"))),
+        "party": ("Н", "N", (("Ворон", "Raven"), ("Кречет", "Gyrfalcon"), ("Фантом", "Phantom"))),
+        "STS": ("С", "S", (("Чайка", "Gull"), ("Стриж", "Swift"), ("Сапсан", "Peregrine"))),
+    }
+    unlocks = {
+        item: (tech.id, branch.years[index])
+        for branch in BRANCHES
+        for index, tech in enumerate(branch.techs)
+        for item in ENABLE_EQUIPMENT.get(tech.id, ())
+        if item in AIRCRAFT_CARD_TIERS
+    }
+    names = {}
+    for tag, family in COUNTRY_AIRCRAFT_CARD_FAMILIES.items():
+        prefix_ru, prefix_en, titles = families[family]
+        for equipment, tier in AIRCRAFT_CARD_TIERS.items():
+            tech, year = unlocks[equipment]
+            if "interceptor" in equipment:
+                role_ru, role_en = "П", "I"
+                kind_ru, kind_en = "Перехватчик нового поколения", "Next-generation interceptor"
+            elif "fighter" in equipment:
+                role_ru, role_en = "И", "F"
+                kind_ru = ("Винтовой истребитель", "Реактивный истребитель", "Истребитель нового поколения")[tier - 1]
+                kind_en = ("Propeller fighter", "Jet fighter", "Next-generation fighter")[tier - 1]
+            elif "drone" in equipment:
+                role_ru, role_en = "Б", "U"
+                kind_ru, kind_en = "Беспилотный ударный самолёт", "Unmanned strike aircraft"
+            else:
+                role_ru, role_en = "Ш", "A"
+                kind_ru = ("Винтовой штурмовик", "Реактивный штурмовик", "Ударный самолёт нового поколения")[tier - 1]
+                kind_en = ("Propeller attack aircraft", "Jet attack aircraft", "Next-generation strike aircraft")[tier - 1]
+            if is_ru:
+                short = f"{prefix_ru}{role_ru}-{year % 100:02d}"
+                name = f"{short} «{titles[tier - 1][0]}»"
+                description = f"{kind_ru} {name}."
+            else:
+                short = f"{prefix_en}{role_en}-{year % 100:02d}"
+                name = f"{short} “{titles[tier - 1][1]}”"
+                description = f"{kind_en} {name}."
+            names[f"{tag}_{tech}"] = name
+            names[f"{tag}_{tech}_desc"] = description
+            names[f"{tag}_{equipment}"] = name
+            names[f"{tag}_{equipment}_short"] = short
+            names[f"{tag}_{equipment}_desc"] = description
+    return names
+
+
+def country_aircraft_gfx_entries() -> str:
+    entries = [AIRCRAFT_CARDS_BEGIN]
+
+    def add(sprite: str, texture: str) -> None:
+        entries.append(
+            "\tSpriteType = {\n"
+            f'\t\tname = "{sprite}"\n'
+            f'\t\ttextureFile = "{texture}"\n'
+            "\t}\n\n"
+        )
+
+    for equipment in AIRCRAFT_CARD_TIERS:
+        kind = "fighter" if "fighter" in equipment or "interceptor" in equipment else "CAS"
+        add(
+            f"GFX_{equipment}_medium",
+            f"gfx/interface/archetypes/archetype_{kind}_equipment.dds",
+        )
+    cards = {
+        equipment: (tier, "fighter" if "fighter" in equipment or "interceptor" in equipment else "cas")
+        for equipment, tier in AIRCRAFT_CARD_TIERS.items()
+    }
+    cards["archetype_fighter_equipment"] = (1, "fighter")
+    cards["archetype_CAS_equipment"] = (1, "cas")
+    for tech_id, equipment in ENABLE_EQUIPMENT.items():
+        unlocked_cards = {cards[item] for item in equipment if item in AIRCRAFT_CARD_TIERS}
+        if unlocked_cards:
+            if len(unlocked_cards) != 1:
+                raise ValueError(f"Aircraft unlock spans several card roles or tiers: {tech_id}")
+            cards[tech_id] = unlocked_cards.pop()
+    for tag, family in COUNTRY_AIRCRAFT_CARD_FAMILIES.items():
+        for key, (tier, role) in cards.items():
+            prefix = "aircraft_cas" if role == "cas" else "aircraft"
+            add(
+                f"GFX_{tag}_{key}_medium",
+                f"gfx/interface/technologies/ADISCORD_{prefix}_{family}_{tier}.dds",
+            )
+    entries.append(AIRCRAFT_CARDS_END)
+    return "".join(entries)
+
+
+def aircraft_icon_outputs(role: str = "all") -> dict[Path, bytes]:
+    outputs = {}
+    roles = ("fighter", "cas") if role == "all" else (role,)
+    for selected_role in roles:
+        if selected_role not in {"fighter", "cas"}:
+            raise ValueError(f"Unknown aircraft card role: {selected_role}")
+        prefix = "aircraft_cas" if selected_role == "cas" else "aircraft"
+        directory = "country_cas" if selected_role == "cas" else "country_vehicles"
+        for family in sorted(set(COUNTRY_AIRCRAFT_CARD_FAMILIES.values())):
+            for tier in range(1, 4):
+                source = ROOT / "tools/assets/source" / directory / f"{prefix}_{family}_{tier}.png"
+                with Image.open(source) as image:
+                    if image.mode != "RGBA" or image.size != (176, 72):
+                        raise ValueError(f"Aircraft card must be 176x72 RGBA: {source}")
+                    pixels = image.tobytes()
+                    stream = BytesIO()
+                    image.save(stream, format="DDS")
+                content = stream.getvalue()
+                with Image.open(BytesIO(content)) as decoded:
+                    if decoded.convert("RGBA").tobytes() != pixels:
+                        raise ValueError(f"DDS encoding altered aircraft artwork: {source}")
+                target = ROOT / "gfx/interface/technologies" / f"ADISCORD_{prefix}_{family}_{tier}.dds"
+                outputs[target] = content
+    path = ROOT / "interface/ADISCORD_technologies.gfx"
+    original = path.read_bytes()
+    text = path.read_text(encoding="utf-8")
+    if AIRCRAFT_CARDS_BEGIN in text:
+        start = text.index(AIRCRAFT_CARDS_BEGIN)
+        end = text.index(AIRCRAFT_CARDS_END, start) + len(AIRCRAFT_CARDS_END)
+        text = text[:start] + country_aircraft_gfx_entries() + text[end:]
+    else:
+        last_brace = text.rfind("}")
+        text = text[:last_brace] + country_aircraft_gfx_entries() + text[last_brace:]
+    if b"\r\n" in original:
+        text = text.replace("\n", "\r\n")
+    outputs[path] = text.encode("utf-8")
+    return outputs
+
+
+UNIFORM_CARDS_BEGIN = "\t# BEGIN ADISCORD country uniform cards\n"
+UNIFORM_CARDS_END = "\t# END ADISCORD country uniform cards\n"
+
+
+def country_uniform_gfx_entries() -> str:
+    entries = [UNIFORM_CARDS_BEGIN]
+    early_families = {
+        "ADISCORD_tech_postwar_weapon_standardization": "01_reclaimed_arsenal",
+        "ADISCORD_tech_refurbished_receivers": "02_recovered_service_rifle",
+    }
+    for tech, icon in EQUIPMENT_UNLOCK_ICONS.items():
+        if not icon.startswith("ADISCORD_weapon_"):
+            continue
+        family = early_families.get(tech, "03_standardized_battle_rifle")
+        entries.append(
+            "\tSpriteType = {\n"
+            f'\t\tname = "GFX_STS_{tech}_medium"\n'
+            f'\t\ttextureFile = "gfx/interface/technologies/ADISCORD_STS_weapon_{family}.dds"\n'
+            "\t}\n"
+        )
+    entries.append(UNIFORM_CARDS_END)
+    return "".join(entries)
+
+
+def with_country_uniform_gfx(text: str) -> str:
+    if UNIFORM_CARDS_BEGIN in text:
+        start = text.index(UNIFORM_CARDS_BEGIN)
+        end = text.index(UNIFORM_CARDS_END, start) + len(UNIFORM_CARDS_END)
+        text = text[:start] + text[end:]
+    last_brace = text.rfind("}")
+    return text[:last_brace] + country_uniform_gfx_entries() + text[last_brace:]
+
+
+def country_uniform_names(language: str) -> dict[str, str]:
+    is_ru = language == "russian"
+    models = (
+        ("КП-50", "«Дозор»", "IK-50", "“Watch”"),
+        ("КП-55", "«Рубеж»", "IK-55", "“Frontier”"),
+        ("КП-62", "«Бастион»", "IK-62", "“Bastion”"),
+    )
+    names = {}
+    for tech, icon in EQUIPMENT_UNLOCK_ICONS.items():
+        if not icon.startswith("ADISCORD_weapon_"):
+            continue
+        generation = int(icon.split("_")[2])
+        model = models[min(generation, 3) - 1]
+        short, title = model[:2] if is_ru else model[2:]
+        modification = ""
+        if generation > 3:
+            modification = (" М" if is_ru else " M") + str(generation - 3)
+        name = f"{short} {title}{modification}"
+        equipment = ENABLE_EQUIPMENT[tech][0]
+        names[f"STS_{tech}"] = name
+        names[f"STS_{equipment}"] = name
+        names[f"STS_{equipment}_short"] = short + modification
+    return names
+
+
+def escape_localisation_value(value: str) -> str:
+    value = value.translate(str.maketrans({char: '"' for char in "«»“”„"}))
+    value = re.sub(r"(\b[A-Z][A-Z0-9]*-\d+\s+)'([^'\r\n]+)'", r'\1"\2"', value)
+    return re.sub(r'(?<!\\)"', r'\\"', value)
+
+
+def localisation_entry(key: str, value: str) -> str:
+    return f' {key}:0 "{escape_localisation_value(value)}"'
+
+
+def normalise_localisation_quotes(text: str) -> str:
+    return re.sub(
+        r'(?m)^([ \t]*[\w]+:\d*[ \t]*")((?:[^"\\\r\n]|\\.)*)(")',
+        lambda match: match[1] + escape_localisation_value(match[2]) + match[3],
+        text,
+    )
+
+
+def with_country_names(data: bytes, section: str, names: dict[str, str]) -> bytes:
+    text = data.decode("utf-8-sig")
+    newline = "\r\n" if "\r\n" in text else "\n"
+    begin = f" # BEGIN {section} generated by build_adiscord_technology_system.py" + newline
+    end = f" # END {section}" + newline
+    entries = newline.join(localisation_entry(key, value) for key, value in names.items())
+    block = begin + entries + newline + end
+    if begin in text:
+        start = text.index(begin)
+        stop = text.index(end, start) + len(end)
+        return (text[:start] + block + text[stop:]).encode("utf-8-sig")
+    if not text.endswith(newline):
+        text += newline
+    return (text + block).encode("utf-8-sig")
+
+
+def country_uniform_localisation_outputs() -> dict[Path, bytes]:
+    outputs = {}
+    for language in ("russian", "english"):
+        path = ROOT / f"localisation/{language}/ADISCORD_STP_l_{language}.yml"
+        outputs[path] = with_country_names(
+            path.read_bytes(), "STS uniform names", country_uniform_names(language)
+        )
+    return outputs
+
+
+def country_equipment_localisation_outputs() -> dict[Path, bytes]:
+    outputs = country_uniform_localisation_outputs()
+    updated_keys = {
+        tech.id + suffix
+        for branch in BRANCHES if branch.key in {"squad_weapons", "anti_tank_infantry"}
+        for tech in branch.techs
+        for suffix in ("", "_desc")
+    }
+    updated_keys.update(
+        equipment + suffix
+        for equipment in AIRCRAFT_TYPE_LOCALISATION
+        for suffix in ("", "_short", "_desc")
+    )
+    for language in ("russian", "english"):
+        names = country_aircraft_names(language)
+        for country_file in (True, False):
+            stem = "ADISCORD_STP" if country_file else "ADISCORD_technology_doctrine"
+            path = ROOT / f"localisation/{language}/{stem}_l_{language}.yml"
+            selected = {
+                key: value for key, value in names.items()
+                if (key.split("_", 1)[0] in {"STP", "STS", "SRP"}) == country_file
+            }
+            outputs[path] = with_country_names(
+                outputs.get(path, path.read_bytes()), "Country aircraft names", selected
+            )
+            if not country_file:
+                text = outputs[path].decode("utf-8-sig")
+                entries = {
+                    line.split(":", 1)[0].strip(): line
+                    for line in generated_localisation(language)
+                    if line.split(":", 1)[0].strip() in updated_keys
+                }
+                seen = set()
+
+                def replace_entry(match: re.Match[str]) -> str:
+                    key = match[1]
+                    if key not in entries:
+                        return match[0]
+                    if key in seen:
+                        raise ValueError(f"Duplicate technology localisation: {key}")
+                    seen.add(key)
+                    return entries[key]
+
+                text = re.sub(
+                    r'(?m)^[ \t]*([\w]+):\d*[ \t]*"(?:[^"\\\r\n]|\\.)*"',
+                    replace_entry, text,
+                )
+                missing = entries.keys() - seen
+                if missing:
+                    raise ValueError(f"Missing technology localisation: {sorted(missing)}")
+                # Preserved equipment names share the same display convention.
+                text = normalise_localisation_quotes(text)
+                outputs[path] = text.encode("utf-8-sig")
+    return outputs
+
+
 def write_gfx() -> None:
     entries = []
     for branch in BRANCHES:
@@ -9213,25 +9704,31 @@ def write_gfx() -> None:
                     + "\t}\n"
                 )
     content = (
-        "spriteTypes = {\n" + "\n".join(entries) + technology_tree_gfx_entries() + "}\n"
+        "spriteTypes = {\n" + "\n".join(entries) + technology_tree_gfx_entries()
+        + country_aircraft_gfx_entries() + country_uniform_gfx_entries() + "}\n"
     )
     (ROOT / "interface" / "ADISCORD_technologies.gfx").write_text(
         content, encoding="utf-8"
     )
 
 
-def weapon_category_gfx_output() -> str:
+def weapon_category_gfx_output(branch_key: str | None = None) -> str:
     """Regenerate category sprites without rebuilding unrelated UI declarations."""
     path = ROOT / "interface" / "ADISCORD_technologies.gfx"
     text = path.read_text(encoding="utf-8")
+    icons = INFANTRY_COMPACT_ICONS if branch_key == "night_combat" else WEAPON_CATEGORY_ICONS
+    if branch_key == "protection":
+        icons = PROTECTION_TECH_ICONS
     for branch in BRANCHES:
+        if branch_key is not None and branch.key != branch_key:
+            continue
         for tech in branch.techs:
-            if tech.key not in WEAPON_CATEGORY_ICONS:
+            if tech.key not in icons:
                 continue
             sprite = f"GFX_{tech.id}_medium"
             pattern = rf'\tSpriteType = \{{\s*name = "{re.escape(sprite)}"[^{{}}]*\}}'
             texture = (
-                f"gfx/interface/technologies/{WEAPON_CATEGORY_ICONS[tech.key]}.dds"
+                f"gfx/interface/technologies/{icons[tech.key]}.dds"
             )
             replacement = (
                 "\tSpriteType = {\n"
@@ -9740,10 +10237,13 @@ REGIMENTAL_SUPPORT_LOCALISATION = {
 }
 
 
+NAVAL_AIR_EQUIPMENT_LOCALISATION.update(AIRCRAFT_TYPE_LOCALISATION)
+
+
 def generated_localisation(language: str) -> list[str]:
     is_ru = language == "russian"
     lines = [
-        f' {key}:0 "{names[0 if is_ru else 1]}"'
+        localisation_entry(key, names[0 if is_ru else 1])
         for mapping in (
             ACCESS_REQUIREMENT_LOCALISATION,
             INFANTRY_FAMILY_LOCALISATION,
@@ -9766,9 +10266,9 @@ def generated_localisation(language: str) -> list[str]:
             short = ("Личн. " if is_ru else "Personal ") + short
         lines.extend(
             (
-                f' {equipment_id}:0 "{name}"',
-                f' {equipment_id}_short:0 "{short}"',
-                f' {equipment_id}_desc:0 "{description}"',
+                localisation_entry(equipment_id, name),
+                localisation_entry(f"{equipment_id}_short", short),
+                localisation_entry(f"{equipment_id}_desc", description),
             )
         )
     lines.append("")
@@ -9781,15 +10281,15 @@ def generated_localisation(language: str) -> list[str]:
         name, description = (ru, description_ru) if is_ru else (en, description_en)
         lines.extend(
             (
-                f' {equipment_id}:0 "{name}"',
-                f' {equipment_id}_short:0 "{name}"',
-                f' {equipment_id}_desc:0 "{description}"',
+                localisation_entry(equipment_id, name),
+                localisation_entry(f"{equipment_id}_short", name),
+                localisation_entry(f"{equipment_id}_desc", description),
             )
         )
     lines.append("")
     for branch in BRANCHES:
         key = f"ADISCORD_TECH_BRANCH_{branch.key.upper()}"
-        lines.append(f" {key}:0 \"{branch.ru if is_ru else branch.en}\"")
+        lines.append(localisation_entry(key, branch.ru if is_ru else branch.en))
     lines.append("")
     for branch in BRANCHES:
         if is_ru:
@@ -9802,7 +10302,7 @@ def generated_localisation(language: str) -> list[str]:
             )
         for index, tech in enumerate(branch.techs):
             name = tech.ru if is_ru else tech.en
-            if branch.key == "small_arms" and tech.id in ENABLE_EQUIPMENT:
+            if branch.key in {"small_arms", "assault_rifles", "squad_weapons"} and tech.id in ENABLE_EQUIPMENT:
                 equipment = ENABLE_EQUIPMENT[tech.id][0]
                 name = LAND_EQUIPMENT_LOCALISATION[equipment][0 if is_ru else 1]
             year = branch.years[index]
@@ -9817,8 +10317,8 @@ def generated_localisation(language: str) -> list[str]:
             notes = technology_description_notes(branch, index, is_ru)
             if notes:
                 desc += " " + " ".join(notes)
-            lines.append(f" {tech.id}:0 \"{name}\"")
-            lines.append(f" {tech.id}_desc:0 \"{desc}\"")
+            lines.append(localisation_entry(tech.id, name))
+            lines.append(localisation_entry(f"{tech.id}_desc", desc))
             training = LEADER_TRAINING.get(tech.key)
             if training:
                 attribute, count = training
@@ -9836,7 +10336,7 @@ def generated_localisation(language: str) -> list[str]:
                     tooltip = (
                         f"{count} random army leaders gain §G+1§! {attribute.title()}."
                     )
-                lines.append(f" {tech.id}_leader_effect_tt:0 \"{tooltip}\"")
+                lines.append(localisation_entry(f"{tech.id}_leader_effect_tt", tooltip))
     return lines
 
 
@@ -9879,7 +10379,7 @@ def write_localisation() -> None:
                 or key in generated_equipment_keys
             ):
                 continue
-            preserved.append(line)
+            preserved.append(normalise_localisation_quotes(line))
         while preserved and not preserved[-1].strip():
             preserved.pop()
         output = preserved + [""] + generated_localisation(language)
@@ -9928,6 +10428,13 @@ def render_folder(folder: str) -> str:
         ) * GRID_SLOT
         cursor_y = GRID_Y
         for branch in branches:
+            if branch.key in BRANCH_CONTINUATIONS:
+                # Connected native paths share their root grid; a separate grid
+                # would detach the continuation from its prerequisite row.
+                parent = BRANCH_CONTINUATIONS[branch.key]
+                layout = next(item for item in branch_layouts if item[0].key == parent)
+                branch_layouts.append((branch, *layout[1:]))
+                continue
             graph = BRANCH_GRAPHS[branch.key]
             grid_height = (
                 (max(graph.lanes) - min(graph.lanes) + 1)
@@ -9935,7 +10442,8 @@ def render_folder(folder: str) -> str:
                 * GRID_SLOT
             )
             branch_layouts.append((branch, GRID_X, cursor_y, grid_width, grid_height))
-            cursor_y += grid_height + BRANCH_GAP
+            branch_gap = INFANTRY_BRANCH_GAP if folder == "infantry_folder" else BRANCH_GAP
+            cursor_y += grid_height + branch_gap
         content_width = max(1180, GRID_X + grid_width + 80)
         height = max(700, cursor_y + 80)
     else:
@@ -10031,6 +10539,8 @@ def render_folder(folder: str) -> str:
     for branch, grid_x, grid_y, grid_width, grid_height in branch_layouts:
         if horizontal:
             title_x = grid_x
+            if branch.key in BRANCH_CONTINUATIONS:
+                title_x += technology_time_slot(branch, 0) * GRID_SLOT
             title_y = grid_y - 30
             title_width = min(900, grid_width)
             title_format = "left"
@@ -10051,6 +10561,12 @@ def render_folder(folder: str) -> str:
                 f"\t\t\t\tformat = {title_format}",
                 "\t\t\t\tOrientation = \"UPPER_LEFT\"",
                 "\t\t\t}",
+            )
+        )
+        if branch.key in BRANCH_CONTINUATIONS:
+            continue
+        lines.extend(
+            (
                 "\t\t\tgridboxtype = {",
                 f"\t\t\t\tname = \"{branch.techs[0].id}_tree\"",
                 f"\t\t\t\tposition = {{ x = {grid_x} y = {grid_y} }}",
@@ -10167,7 +10683,13 @@ def apply() -> None:
     write_starting_technology_effect()
     write_naval_hull_cards()
     write_gfx()
+    for path, content in aircraft_icon_outputs().items():
+        if not path.is_file() or path.read_bytes() != content:
+            path.write_bytes(content)
     write_localisation()
+    for path, content in country_equipment_localisation_outputs().items():
+        if path.read_bytes() != content:
+            path.write_bytes(content)
     write_gui()
     write_technology_migration_manifest()
     write_starting_technology_profile_manifest()
@@ -10203,11 +10725,104 @@ def main() -> int:
         help="check or apply technology scripts without regenerating UI, localisation or country history",
     )
     parser.add_argument(
+        "--aircraft-icons-only",
+        action="store_true",
+        help="check or apply supplied country aircraft cards and their GFX routes",
+    )
+    parser.add_argument(
+        "--aircraft-role", choices=("all", "fighter", "cas"), default="all",
+        help="limit aircraft card conversion to one role with --aircraft-icons-only",
+    )
+    parser.add_argument(
         "--weapon-icons-only",
         action="store_true",
         help="check or apply weapon category sprites without rebuilding other UI",
     )
+    parser.add_argument(
+        "--uniform-icons-only",
+        action="store_true",
+        help="check or apply country uniform sprites and names without rebuilding other UI",
+    )
+    parser.add_argument(
+        "--equipment-names-only", action="store_true",
+        help="check or apply equipment and technology localisation only",
+    )
+    parser.add_argument(
+        "--night-icons-only",
+        action="store_true",
+        help="check or apply night combat sprites without rebuilding other UI",
+    )
+    parser.add_argument(
+        "--protection-icons-only",
+        action="store_true",
+        help="check or apply protective equipment sprites without rebuilding other UI",
+    )
     args = parser.parse_args()
+    if args.aircraft_role != "all" and not args.aircraft_icons_only:
+        parser.error("--aircraft-role requires --aircraft-icons-only")
+    if args.night_icons_only or args.protection_icons_only:
+        if args.night_icons_only and args.protection_icons_only:
+            parser.error("select only one infantry icon branch")
+        if (args.weapon_icons_only or args.uniform_icons_only or args.aircraft_icons_only
+                or args.equipment_names_only or args.technology_data_only
+                or args.apply_starting_profiles):
+            parser.error("infantry icon branches cannot be combined with other partial output modes")
+        path = ROOT / "interface/ADISCORD_technologies.gfx"
+        branch_key = "protection" if args.protection_icons_only else "night_combat"
+        content = weapon_category_gfx_output(branch_key)
+        changed = path.read_text(encoding="utf-8") != content
+        if args.apply and changed:
+            path.write_text(content, encoding="utf-8")
+        print(f"{branch_key} sprites {'updated' if args.apply else 'different'}: {int(changed)}")
+        return int(changed and not args.apply)
+    if args.equipment_names_only:
+        if args.uniform_icons_only or args.aircraft_icons_only or args.weapon_icons_only or args.technology_data_only or args.apply_starting_profiles:
+            parser.error("--equipment-names-only cannot be combined with other partial output modes")
+        changed = []
+        for path, content in country_equipment_localisation_outputs().items():
+            if path.read_bytes() != content:
+                changed.append(path)
+                if args.apply:
+                    path.write_bytes(content)
+        print(f"Country equipment names {'updated' if args.apply else 'different'}: {len(changed)}")
+        for path in changed:
+            print(path.relative_to(ROOT))
+        return int(bool(changed) and not args.apply)
+    if args.uniform_icons_only:
+        if args.aircraft_icons_only or args.weapon_icons_only or args.technology_data_only or args.apply_starting_profiles:
+            parser.error("--uniform-icons-only cannot be combined with other partial output modes")
+        path = ROOT / "interface/ADISCORD_technologies.gfx"
+        original_bytes = path.read_bytes()
+        current = path.read_text(encoding="utf-8")
+        content = with_country_uniform_gfx(current)
+        outputs = country_uniform_localisation_outputs()
+        if b"\r\n" in original_bytes:
+            content = content.replace("\n", "\r\n")
+        outputs[path] = content.encode("utf-8")
+        changed = []
+        for path, content in outputs.items():
+            if path.read_bytes() != content:
+                changed.append(path)
+                if args.apply:
+                    path.write_bytes(content)
+        print(f"Country uniform outputs {'updated' if args.apply else 'different'}: {len(changed)}")
+        for path in changed:
+            print(path.relative_to(ROOT))
+        return int(bool(changed) and not args.apply)
+    if args.aircraft_icons_only:
+        if args.weapon_icons_only or args.technology_data_only or args.apply_starting_profiles:
+            parser.error("--aircraft-icons-only cannot be combined with other partial output modes")
+        changed = []
+        for path, content in aircraft_icon_outputs(args.aircraft_role).items():
+            if not path.is_file() or path.read_bytes() != content:
+                changed.append(path)
+                if args.apply:
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(content)
+        print(f"Aircraft card outputs {'updated' if args.apply else 'different'}: {len(changed)}")
+        for path in changed:
+            print(path.relative_to(ROOT))
+        return int(bool(changed) and not args.apply)
     if args.weapon_icons_only:
         if args.technology_data_only or args.apply_starting_profiles:
             parser.error(

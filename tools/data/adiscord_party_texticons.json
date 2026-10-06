@@ -553,7 +553,7 @@
     {"party_key": "EFL_chauvinism_party", "sprite": "GFX_EFL_primary_party_texticon"},
     {"party_key": "NAM_etatism_party", "sprite": "GFX_NAM_primary_party_texticon"},
     {"party_key": "PIV_hedonism_party", "sprite": "GFX_PIV_primary_party_texticon"},
-    {"party_key": "RUS_anarchism_party", "sprite": "GFX_RUS_primary_party_texticon"},
+    {"party_key": "RUS_etatism_party", "sprite": "GFX_RUS_primary_party_texticon"},
     {"party_key": "TFF_anarchism_party", "sprite": "GFX_TFF_primary_party_texticon"},
     {"party_key": "WIT_hedonism_party", "sprite": "GFX_WIT_primary_party_texticon"},
     {"party_key": "YPR_utilitarism_party", "sprite": "GFX_YPR_primary_party_texticon"}

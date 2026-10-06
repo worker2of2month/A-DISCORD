@@ -111,7 +111,10 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 14
 		build_cost_ic = 1150
-		resources = { steel = 2 chromium = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+		}
 	}
 
 	ADISCORD_escort_ship_2170 = {
@@ -153,7 +156,12 @@ equipments = {
 		manpower = 200
 		fuel_consumption = 16
 		build_cost_ic = 1900
-		resources = { steel = 3 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+			rare_components = 2
+			rare_alloys = 1
+		}
 	}
 
 	ADISCORD_cruiser_archetype = {
@@ -257,7 +265,10 @@ equipments = {
 		armor_value = 15
 		build_cost_ic = 4300
 		fuel_consumption = 36
-		resources = { steel = 4 chromium = 2 }
+		resources = {
+			steel = 5
+			chromium = 2
+		}
 	}
 
 	ADISCORD_cruiser_2170 = {
@@ -299,7 +310,12 @@ equipments = {
 		armor_value = 21
 		build_cost_ic = 6100
 		fuel_consumption = 44
-		resources = { steel = 5 chromium = 2 rare_alloys = 1 rare_components = 1 }
+		resources = {
+			steel = 6
+			chromium = 2
+			rare_alloys = 2
+			rare_components = 2
+		}
 	}
 
 	ADISCORD_submarine_2155 = {
@@ -332,7 +348,9 @@ equipments = {
 		naval_speed = 19
 		max_strength = 35
 		build_cost_ic = 1000
-		resources = { steel = 2 }
+		resources = {
+			steel = 3
+		}
 	}
 
 	ADISCORD_submarine_2170 = {
@@ -349,7 +367,11 @@ equipments = {
 		naval_speed = 21
 		max_strength = 40
 		build_cost_ic = 1350
-		resources = { steel = 2 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+			rare_components = 1
+		}
 	}
 
 	ADISCORD_submarine_2175 = {
@@ -366,7 +388,12 @@ equipments = {
 		naval_speed = 23
 		max_strength = 45
 		build_cost_ic = 1700
-		resources = { steel = 2 chromium = 1 rare_components = 1 }
+		resources = {
+			steel = 3
+			chromium = 1
+			rare_components = 2
+			rare_alloys = 1
+		}
 	}
 
 	ADISCORD_light_cruiser_archetype = {
@@ -433,7 +460,7 @@ equipments = {
 		build_cost_ic = 2600
 		fuel_consumption = 25
 		resources = {
-			steel = 3
+			steel = 4
 			chromium = 1
 		}
 	}
@@ -458,7 +485,7 @@ equipments = {
 		build_cost_ic = 3200
 		fuel_consumption = 28
 		resources = {
-			steel = 3
+			steel = 4
 			chromium = 1
 			rare_alloys = 1
 			rare_components = 1
@@ -485,10 +512,10 @@ equipments = {
 		build_cost_ic = 3800
 		fuel_consumption = 31
 		resources = {
-			steel = 3
+			steel = 5
 			chromium = 1
-			rare_alloys = 1
-			rare_components = 1
+			rare_alloys = 2
+			rare_components = 2
 		}
 	}
 
@@ -556,7 +583,7 @@ equipments = {
 		build_cost_ic = 9000
 		fuel_consumption = 68
 		resources = {
-			steel = 6
+			steel = 7
 			chromium = 3
 		}
 	}
@@ -581,7 +608,7 @@ equipments = {
 		build_cost_ic = 10500
 		fuel_consumption = 76
 		resources = {
-			steel = 6
+			steel = 7
 			chromium = 3
 			rare_alloys = 1
 			rare_components = 1
@@ -608,10 +635,10 @@ equipments = {
 		build_cost_ic = 12000
 		fuel_consumption = 84
 		resources = {
-			steel = 6
+			steel = 8
 			chromium = 3
-			rare_alloys = 1
-			rare_components = 1
+			rare_alloys = 2
+			rare_components = 2
 		}
 	}
 
@@ -682,7 +709,7 @@ equipments = {
 		fuel_consumption = 56
 		carrier_size = 6
 		resources = {
-			steel = 5
+			steel = 6
 			chromium = 2
 		}
 	}
@@ -708,7 +735,7 @@ equipments = {
 		fuel_consumption = 64
 		carrier_size = 8
 		resources = {
-			steel = 5
+			steel = 6
 			chromium = 2
 			rare_alloys = 1
 			rare_components = 1
@@ -736,10 +763,10 @@ equipments = {
 		fuel_consumption = 72
 		carrier_size = 10
 		resources = {
-			steel = 5
+			steel = 7
 			chromium = 2
-			rare_alloys = 1
-			rare_components = 1
+			rare_alloys = 2
+			rare_components = 2
 		}
 	}
 }

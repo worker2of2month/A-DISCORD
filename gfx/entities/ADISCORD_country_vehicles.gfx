@@ -60,4 +60,76 @@ objectTypes = {
 		scale = 1.0
 		animation = { id = "idle" type = "ADISCORD_STP_cas_idle_animation" }
 	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_early_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_early_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_VAL_early_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_early_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_early_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_VAL_early_cas_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_future_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_future_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_VAL_future_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_VAL_future_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/VAL_future_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_VAL_future_cas_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_early_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_early_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_NOD_early_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_early_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_early_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_NOD_early_cas_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_future_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_future_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_NOD_future_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_NOD_future_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/NOD_future_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_NOD_future_cas_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_early_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_early_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_STP_early_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_early_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_early_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_STP_early_cas_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_future_fighter_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_future_fighter.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_STP_future_fighter_idle_animation" }
+	}
+	pdxmesh = {
+		name = "ADISCORD_STP_future_cas_mesh"
+		file = "gfx/models/units/ADISCORD_country_vehicles/STP_future_cas.mesh"
+		scale = 1.0
+		animation = { id = "idle" type = "ADISCORD_STP_future_cas_idle_animation" }
+	}
 }

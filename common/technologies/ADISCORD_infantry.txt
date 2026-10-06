@@ -235,12 +235,15 @@ technologies = {
 			leads_to_tech = ADISCORD_tech_electrothermal_ignition
 			research_cost_coeff = 1
 		}
+		dependencies = {
+			ADISCORD_tech_primer_consistency = 1
+		}
 		enable_equipments = { ADISCORD_infantry_equipment_2163 }
 		research_cost = 2.05
 		start_year = 2162
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 27 }
+			position = { x = 0 y = 24 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -269,7 +272,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 30 }
+			position = { x = 0 y = 27 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -298,7 +301,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 33 }
+			position = { x = 0 y = 30 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -327,7 +330,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 36 }
+			position = { x = 0 y = 33 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -357,7 +360,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 39 }
+			position = { x = 0 y = 36 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -386,7 +389,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 42 }
+			position = { x = 0 y = 39 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -415,7 +418,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 45 }
+			position = { x = 0 y = 42 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -444,7 +447,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 48 }
+			position = { x = 0 y = 45 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -474,7 +477,7 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 51 }
+			position = { x = 0 y = 48 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -503,7 +506,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 54 }
+			position = { x = 0 y = 51 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -532,7 +535,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 57 }
+			position = { x = 0 y = 54 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -561,7 +564,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 60 }
+			position = { x = 0 y = 57 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -591,7 +594,7 @@ technologies = {
 		start_year = 2167
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 63 }
+			position = { x = 0 y = 60 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -620,7 +623,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 66 }
+			position = { x = 0 y = 63 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -647,7 +650,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 72 }
+			position = { x = 0 y = 66 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -676,7 +679,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 75 }
+			position = { x = 0 y = 69 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -706,7 +709,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 78 }
+			position = { x = 0 y = 72 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -735,7 +738,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 81 }
+			position = { x = 0 y = 75 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -764,7 +767,7 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 84 }
+			position = { x = 0 y = 78 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -793,7 +796,7 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 87 }
+			position = { x = 0 y = 81 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -823,7 +826,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 90 }
+			position = { x = 0 y = 84 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -852,7 +855,7 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 96 }
+			position = { x = 0 y = 87 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -881,7 +884,7 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 99 }
+			position = { x = 0 y = 90 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -910,7 +913,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 102 }
+			position = { x = 0 y = 93 }
 		}
 		ai_will_do = {
 			factor = 32
@@ -936,7 +939,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 105 }
+			position = { x = 0 y = 96 }
 		}
 		ai_will_do = {
 			factor = 43.2
@@ -1385,7 +1388,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 27 }
+			position = { x = -2 y = 24 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1412,7 +1415,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 30 }
+			position = { x = 2 y = 27 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1485,7 +1488,7 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 51 }
+			position = { x = 2 y = 48 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1558,7 +1561,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 54 }
+			position = { x = 2 y = 51 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1632,12 +1635,11 @@ technologies = {
 			ADISCORD_tech_modular_rifle_kits = 1
 		}
 		enable_equipments = { ADISCORD_squad_weapons_equipment_2178 }
-		enable_subunits = { ADISCORD_assault_infantry }
 		research_cost = 2.4
 		start_year = 2167
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 63 }
+			position = { x = -2 y = 60 }
 		}
 		ai_will_do = {
 			factor = 40.5
@@ -1664,7 +1666,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 72 }
+			position = { x = 2 y = 66 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1750,7 +1752,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 78 }
+			position = { x = -2 y = 72 }
 		}
 		ai_will_do = {
 			factor = 40.5
@@ -1823,7 +1825,7 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 84 }
+			position = { x = -2 y = 78 }
 		}
 		ai_will_do = {
 			factor = 30
@@ -1897,7 +1899,7 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 99 }
+			position = { x = -2 y = 90 }
 		}
 		ai_will_do = {
 			factor = 40.5
@@ -1984,7 +1986,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 105 }
+			position = { x = 0 y = 96 }
 		}
 		ai_will_do = {
 			factor = 40.5
@@ -2133,7 +2135,7 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 24 }
+			position = { x = 2 y = 21 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2162,7 +2164,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 39 }
+			position = { x = -2 y = 36 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2191,7 +2193,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 42 }
+			position = { x = 2 y = 36 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2220,7 +2222,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 66 }
+			position = { x = -2 y = 63 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2249,7 +2251,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 69 }
+			position = { x = 2 y = 63 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2278,7 +2280,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 90 }
+			position = { x = -2 y = 84 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2307,7 +2309,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 93 }
+			position = { x = 2 y = 84 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2338,7 +2340,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 105 }
+			position = { x = 0 y = 96 }
 		}
 		ai_will_do = {
 			factor = 20
@@ -2452,7 +2454,7 @@ technologies = {
 		start_year = 2161
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 24 }
+			position = { x = 2 y = 21 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2471,7 +2473,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 39 }
+			position = { x = -2 y = 36 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2492,7 +2494,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 42 }
+			position = { x = 2 y = 36 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2513,7 +2515,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 66 }
+			position = { x = -2 y = 63 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2534,7 +2536,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 69 }
+			position = { x = 2 y = 63 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2553,7 +2555,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 90 }
+			position = { x = -2 y = 84 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2574,7 +2576,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 93 }
+			position = { x = 2 y = 84 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2597,7 +2599,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 105 }
+			position = { x = 0 y = 96 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -2742,7 +2744,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 27 }
+			position = { x = 2 y = 24 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2771,7 +2773,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 30 }
+			position = { x = -2 y = 27 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2800,7 +2802,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 39 }
+			position = { x = 0 y = 36 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2829,7 +2831,7 @@ technologies = {
 		start_year = 2165
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 51 }
+			position = { x = -2 y = 48 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2858,7 +2860,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 54 }
+			position = { x = -2 y = 51 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2887,7 +2889,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 72 }
+			position = { x = 0 y = 66 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2916,7 +2918,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 78 }
+			position = { x = 0 y = 72 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2945,7 +2947,7 @@ technologies = {
 		start_year = 2171
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 84 }
+			position = { x = -2 y = 78 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -2974,7 +2976,7 @@ technologies = {
 		start_year = 2173
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 96 }
+			position = { x = 2 y = 87 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -3003,7 +3005,7 @@ technologies = {
 		start_year = 2174
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 99 }
+			position = { x = 2 y = 90 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -3028,7 +3030,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 102 }
+			position = { x = 0 y = 93 }
 		}
 		ai_will_do = {
 			factor = 24
@@ -3044,6 +3046,121 @@ technologies = {
 		categories = { infantry_weapons support_tech }
 	}
 
+	ADISCORD_tech_assault_infantry_formations = {
+		path = {
+			leads_to_tech = ADISCORD_tech_assault_group_coordination
+			research_cost_coeff = 1
+		}
+		enable_subunits = { ADISCORD_assault_infantry }
+		research_cost = 2.05
+		start_year = 2162
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 24 }
+		}
+		ai_will_do = {
+			factor = 18.9
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_group_coordination = {
+		ADISCORD_assault_infantry = {
+			breakthrough = 0.05
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_assault_fire_suppression
+			research_cost_coeff = 1
+		}
+		research_cost = 1.333
+		start_year = 2163
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 27 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_fire_suppression = {
+		ADISCORD_assault_infantry = {
+			soft_attack = 0.04
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_assault_battle_control
+			research_cost_coeff = 1
+		}
+		research_cost = 1.36
+		start_year = 2164
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 36 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_battle_control = {
+		ADISCORD_assault_infantry = {
+			max_organisation = 2
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_assault_forward_supply
+			research_cost_coeff = 1
+		}
+		research_cost = 1.415
+		start_year = 2166
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 51 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_forward_supply = {
+		ADISCORD_assault_infantry = {
+			supply_consumption = -0.05
+		}
+		path = {
+			leads_to_tech = ADISCORD_tech_assault_coordinated_attack
+			research_cost_coeff = 1
+		}
+		research_cost = 1.498
+		start_year = 2169
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 66 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
+	ADISCORD_tech_assault_coordinated_attack = {
+		ADISCORD_assault_infantry = {
+			breakthrough = 0.05
+			soft_attack = 0.04
+		}
+		research_cost = 1.58
+		start_year = 2172
+		folder = {
+			name = infantry_folder
+			position = { x = 0 y = 84 }
+		}
+		ai_will_do = {
+			factor = 14
+		}
+		categories = { infantry_weapons support_tech }
+	}
+
 	ADISCORD_tech_kefreyt_shield_special_forces = {
 		path = {
 			leads_to_tech = ADISCORD_tech_shield_assault_drills
@@ -3055,7 +3172,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 30 }
+			position = { x = 0 y = 27 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -3077,7 +3194,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 54 }
+			position = { x = 0 y = 51 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3095,7 +3212,7 @@ technologies = {
 		start_year = 2169
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 72 }
+			position = { x = 0 y = 66 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -3116,7 +3233,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 90 }
+			position = { x = 0 y = 84 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3130,7 +3247,7 @@ technologies = {
 		start_year = 2175
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 102 }
+			position = { x = 0 y = 93 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -3266,7 +3383,7 @@ technologies = {
 		start_year = 2162
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 27 }
+			position = { x = -2 y = 24 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3289,7 +3406,7 @@ technologies = {
 		start_year = 2163
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 30 }
+			position = { x = 2 y = 27 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3312,7 +3429,7 @@ technologies = {
 		start_year = 2164
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 39 }
+			position = { x = 2 y = 36 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3334,7 +3451,7 @@ technologies = {
 		start_year = 2166
 		folder = {
 			name = infantry_folder
-			position = { x = -2 y = 54 }
+			position = { x = -2 y = 51 }
 		}
 		ai_will_do = {
 			factor = 18.9
@@ -3357,7 +3474,7 @@ technologies = {
 		start_year = 2168
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 66 }
+			position = { x = 2 y = 63 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3380,7 +3497,7 @@ technologies = {
 		start_year = 2170
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 78 }
+			position = { x = 2 y = 72 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3403,7 +3520,7 @@ technologies = {
 		start_year = 2172
 		folder = {
 			name = infantry_folder
-			position = { x = 2 y = 90 }
+			position = { x = 2 y = 84 }
 		}
 		ai_will_do = {
 			factor = 14
@@ -3421,7 +3538,7 @@ technologies = {
 		start_year = 2180
 		folder = {
 			name = infantry_folder
-			position = { x = 0 y = 105 }
+			position = { x = 0 y = 96 }
 		}
 		ai_will_do = {
 			factor = 14

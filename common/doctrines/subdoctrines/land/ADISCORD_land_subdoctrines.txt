@@ -53,7 +53,7 @@ ADISCORD_doctrine_assault_detachments = {
 	xp_cost = 70
 	xp_type = army
 	available = {
-		has_tech = ADISCORD_tech_remote_weapon_tripods
+		has_tech = ADISCORD_tech_assault_infantry_formations
 	}
 	xor = {
 		ADISCORD_doctrine_mass_recruitment_bureaus

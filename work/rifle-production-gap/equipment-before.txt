@@ -1,0 +1,390 @@
+equipments = {
+	ADISCORD_combat_robot_equipment = {
+		year = 2161
+		is_archetype = yes
+		picture = ADISCORD_combat_robot_equipment
+		is_buildable = no
+		type = infantry
+		group_by = archetype
+		interface_category = interface_category_land
+		reliability = 0.75
+		maximum_speed = 4
+		hardness = 0.60
+		armor_value = 12
+		defense = 32
+		breakthrough = 18
+		soft_attack = 18
+		hard_attack = 6
+		ap_attack = 20
+		lend_lease_cost = 12
+		build_cost_ic = 12
+		resources = {
+			steel = 3
+			rare_components = 2
+			rare_alloys = 1
+		}
+	}
+
+	ADISCORD_combat_robot_equipment_1 = {
+		year = 2161
+		archetype = ADISCORD_combat_robot_equipment
+		active = no
+		priority = 20
+		visual_level = 0
+	}
+
+	infantry_equipment = {
+		year = 2100
+		is_archetype = yes
+		picture = archetype_infantry_equipment
+		is_buildable = no
+		type = infantry
+		group_by = archetype
+		interface_category = interface_category_land
+		active = yes
+		reliability = 0.82
+		maximum_speed = 4
+		defense = 18
+		breakthrough = 2
+		soft_attack = 4
+		hard_attack = 1
+		ap_attack = 3
+		lend_lease_cost = 0.1
+		build_cost_ic = 0.045
+		resources = { steel = 2 }
+	}
+
+	infantry_equipment_0 = {
+		year = 2140
+		archetype = infantry_equipment
+		active = yes
+		priority = 10
+		visual_level = 0
+		defense = 20
+		soft_attack = 5
+		ap_attack = 3
+		build_cost_ic = 0.048
+	}
+
+	ADISCORD_infantry_equipment_2156 = {
+		year = 2156
+		archetype = infantry_equipment
+		parent = infantry_equipment_0
+		priority = 12
+		visual_level = 0
+		defense = 22
+		soft_attack = 5.8
+		hard_attack = 1
+		ap_attack = 3.5
+		reliability = 0.84
+		build_cost_ic = 0.051
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_infantry_equipment_2163 = {
+		year = 2163
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2156
+		priority = 14
+		visual_level = 1
+		defense = 24
+		breakthrough = 2.5
+		soft_attack = 6.5
+		hard_attack = 1.1
+		ap_attack = 4
+		build_cost_ic = 0.055
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_infantry_equipment_2168 = {
+		year = 2168
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2163
+		priority = 17
+		visual_level = 2
+		defense = 26
+		breakthrough = 3
+		soft_attack = 7.2
+		hard_attack = 1.3
+		ap_attack = 4.5
+		reliability = 0.85
+		build_cost_ic = 0.059
+		resources = { steel = 2 aluminium = 1 }
+	}
+
+	ADISCORD_infantry_equipment_2170 = {
+		year = 2170
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2168
+		priority = 20
+		visual_level = 3
+		defense = 28
+		breakthrough = 4
+		soft_attack = 8
+		hard_attack = 1.5
+		ap_attack = 5
+		build_cost_ic = 0.062
+		resources = { steel = 3 }
+	}
+
+	ADISCORD_infantry_equipment_2178 = {
+		year = 2178
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2170
+		priority = 25
+		visual_level = 4
+		defense = 31
+		breakthrough = 5
+		soft_attack = 9.5
+		hard_attack = 1.8
+		ap_attack = 6.5
+		reliability = 0.86
+		build_cost_ic = 0.068
+		resources = { steel = 3 aluminium = 1 }
+	}
+
+	ADISCORD_infantry_equipment_2183 = {
+		year = 2183
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2178
+		priority = 30
+		visual_level = 5
+		defense = 34
+		breakthrough = 6
+		soft_attack = 11
+		hard_attack = 2
+		ap_attack = 8
+		reliability = 0.84
+		build_cost_ic = 0.076
+		resources = { steel = 3 aluminium = 1 }
+	}
+
+	ADISCORD_infantry_equipment_2193 = {
+		year = 2193
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2183
+		priority = 35
+		visual_level = 6
+		defense = 38
+		breakthrough = 7.5
+		soft_attack = 13
+		hard_attack = 2.5
+		ap_attack = 10
+		reliability = 0.82
+		build_cost_ic = 0.09
+		resources = { steel = 3 aluminium = 2 tungsten = 1 }
+	}
+
+	ADISCORD_infantry_equipment_2200 = {
+		year = 2200
+		archetype = infantry_equipment
+		parent = ADISCORD_infantry_equipment_2193
+		priority = 40
+		visual_level = 7
+		defense = 42
+		breakthrough = 9
+		soft_attack = 15
+		hard_attack = 3
+		ap_attack = 12
+		reliability = 0.78
+		build_cost_ic = 0.105
+		resources = { steel = 3 aluminium = 2 tungsten = 1 }
+	}
+
+	# Auxiliary squad weapons are deliberately separate from infantry_equipment.
+	# The latter remains the sole source of infantry visual_level and therefore
+	# continues to select the rifle/automatic weapon attached to the 3D model.
+	ADISCORD_squad_weapons_equipment = {
+		year = 2100
+		is_archetype = yes
+		picture = archetype_support_equipment
+		is_buildable = no
+		type = { infantry support }
+		group_by = archetype
+		interface_category = interface_category_land
+		active = yes
+		reliability = 0.76
+		soft_attack = 2
+		breakthrough = 0.5
+		hard_attack = 0.25
+		ap_attack = 5
+		lend_lease_cost = 2
+		build_cost_ic = 1.20
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_squad_weapons_equipment_0 = {
+		year = 2140
+		archetype = ADISCORD_squad_weapons_equipment
+		active = yes
+		priority = 10
+	}
+
+	ADISCORD_squad_weapons_equipment_2156 = {
+		year = 2156
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_0
+		priority = 12
+		reliability = 0.78
+		soft_attack = 2.5
+		breakthrough = 0.6
+		hard_attack = 0.3
+		ap_attack = 6
+		build_cost_ic = 1.28
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2163 = {
+		year = 2163
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2156
+		priority = 14
+		reliability = 0.80
+		soft_attack = 2.8
+		breakthrough = 0.75
+		hard_attack = 0.4
+		ap_attack = 7.5
+		build_cost_ic = 1.35
+		resources = { steel = 2 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2168 = {
+		year = 2168
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2163
+		priority = 17
+		reliability = 0.81
+		soft_attack = 3.1
+		breakthrough = 0.9
+		hard_attack = 0.45
+		ap_attack = 8.5
+		build_cost_ic = 1.42
+		resources = { steel = 2 aluminium = 1 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2170 = {
+		year = 2170
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2168
+		priority = 20
+		reliability = 0.82
+		soft_attack = 3.5
+		breakthrough = 1
+		hard_attack = 0.5
+		ap_attack = 10
+		build_cost_ic = 1.50
+		resources = { steel = 2 aluminium = 1 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2178 = {
+		year = 2178
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2170
+		priority = 25
+		reliability = 0.83
+		soft_attack = 4.2
+		breakthrough = 1.2
+		hard_attack = 0.75
+		ap_attack = 14
+		build_cost_ic = 1.62
+		resources = { steel = 2 aluminium = 1 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2183 = {
+		year = 2183
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2178
+		priority = 30
+		reliability = 0.80
+		soft_attack = 5
+		breakthrough = 1.5
+		hard_attack = 1
+		ap_attack = 20
+		build_cost_ic = 1.80
+		resources = { steel = 2 aluminium = 1 tungsten = 1 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2193 = {
+		year = 2193
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2183
+		priority = 35
+		reliability = 0.77
+		soft_attack = 6
+		breakthrough = 2
+		hard_attack = 1.5
+		ap_attack = 27
+		build_cost_ic = 2.05
+		resources = { steel = 2 aluminium = 2 tungsten = 1 }
+	}
+
+	ADISCORD_squad_weapons_equipment_2200 = {
+		year = 2200
+		archetype = ADISCORD_squad_weapons_equipment
+		parent = ADISCORD_squad_weapons_equipment_2193
+		priority = 40
+		reliability = 0.72
+		soft_attack = 7
+		breakthrough = 2.5
+		hard_attack = 2
+		ap_attack = 34
+		build_cost_ic = 2.30
+		resources = { steel = 2 aluminium = 2 tungsten = 1 }
+	}
+
+	ADISCORD_power_shield_equipment = {
+		year = 2163
+		is_archetype = yes
+		is_buildable = no
+		picture = ADISCORD_power_shield_equipment
+		type = { infantry support }
+		group_by = archetype
+		interface_category = interface_category_land
+		maximum_speed = 4
+		reliability = 0.80
+		defense = 6
+		breakthrough = 2
+		lend_lease_cost = 3
+		build_cost_ic = 6
+		resources = {
+			rare_components = 2
+			rare_alloys = 2
+		}
+	}
+
+	ADISCORD_power_shield_equipment_1 = {
+		year = 2163
+		archetype = ADISCORD_power_shield_equipment
+		priority = 10
+	}
+
+	ADISCORD_power_shield_equipment_2 = {
+		year = 2169
+		archetype = ADISCORD_power_shield_equipment
+		parent = ADISCORD_power_shield_equipment_1
+		priority = 20
+		defense = 9
+		breakthrough = 3
+		reliability = 0.84
+		build_cost_ic = 7.2
+		resources = {
+			rare_components = 3
+			rare_alloys = 2
+		}
+	}
+
+	ADISCORD_power_shield_equipment_3 = {
+		year = 2175
+		archetype = ADISCORD_power_shield_equipment
+		parent = ADISCORD_power_shield_equipment_2
+		priority = 30
+		defense = 12
+		breakthrough = 4
+		reliability = 0.88
+		build_cost_ic = 8.4
+		resources = {
+			rare_components = 3
+			rare_alloys = 3
+		}
+	}
+}

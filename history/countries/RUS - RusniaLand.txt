@@ -10,16 +10,21 @@ recruit_character = RUS_Pavel_Niva
 ####### Basic shit
 
 set_politics = {
-	ruling_party = anarchism
+	ruling_party = etatism
 	last_election = "2123.11.15"
 	elections_allowed = no
 }
 set_popularities = {
-	etatism = 27
+	etatism = 37
 	chauvinism = 33
-	anarchism = 37
+	anarchism = 27
 	pragmatism = 1
 	utilitarism = 2
+}
+
+promote_character = {
+	character = RUS_Mark_Rustan
+	ideology = etatism_ideology
 }
 
 set_stability = -0.15

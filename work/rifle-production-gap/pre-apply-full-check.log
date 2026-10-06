@@ -1,0 +1,22 @@
+A-DISCORD technology/doctrine validation: FAIL
+- ADISCORD_tech_primer_consistency leads to []; expected ['ADISCORD_tech_sealed_receiver_assemblies']
+- ADISCORD_tech_sealed_receiver_assemblies has 0 incoming paths; expected 1
+- ADISCORD_tech_sealed_receiver_assemblies_tree is in infantry_folder but no generated branch uses it
+- infantry_folder: ADISCORD_branch_anti_tank_infantry does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_assault_rifles does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_night_combat does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_power_shields does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_protection does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_special_forces does not match its generated text or geometry
+- infantry_folder: ADISCORD_branch_squad_weapons does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_belt_fed_recovery_tree does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_composite_protection_kits_tree does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_fieldcraft_manuals_tree does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_kefreyt_shield_special_forces_tree does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_passive_intensifier_cells_tree does not match its generated text or geometry
+- infantry_folder: ADISCORD_tech_recovered_shaped_charge_cells_tree does not match its generated text or geometry
+- infantry_folder has unexpected generated layout element ADISCORD_tech_sealed_receiver_assemblies_tree
+- ADISCORD_economy_stabilization_package does not subtract 100 treasury
+- ADISCORD_economy_invest_reserves does not subtract 50 treasury
+- ADISCORD_economy_civilian_investment_action does not subtract 50 treasury
+- ADISCORD_economy_military_investment_action does not subtract 50 treasury

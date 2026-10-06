@@ -482,6 +482,16 @@ ADISCORD_vorkerland_reconcile_campaign_state = {
 }
 
 # --- collapse_dirty_effects ---
+# Country relations retain the embargo when dormant tags later gain land.
+# This runs once during new-campaign setup, before the collapse is scheduled.
+ADISCORD_vorkerland_close_exz_trade = {
+	every_possible_country = {
+		limit = { NOT = { original_tag = EXZ } }
+		send_embargo = EXZ
+		EXZ = { send_embargo = PREV }
+	}
+}
+
 # Northern tribal land stays outside the contaminated belt regardless of its owner.
 ADISCORD_vorkerland_clear_northern_dirty_modifiers = {
 	58 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
@@ -503,6 +513,25 @@ ADISCORD_vorkerland_remove_dirty_state_modifier = {
 }
 
 ADISCORD_vorkerland_apply_dirty_modifiers = {
+	# Salvage deposits belong to the states and survive later ownership changes.
+	176 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
+	177 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
+	187 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
+	188 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
+	189 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
+	192 = {
+		add_dynamic_modifier = { modifier = ADISCORD_vorkerland_reactor_industrial_legacy }
+	}
 	23 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 	24 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 	49 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
@@ -10893,12 +10922,12 @@ RUS_choose_khan_course = {
 			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
 		}
 		set_politics = {
-			ruling_party = anarchism
+			ruling_party = etatism
 			elections_allowed = no
 		}
 		promote_character = {
 			character = RUS_Mark_Rustan
-			ideology = anarchism_ideology
+			ideology = etatism_ideology
 		}
 		RUS_black_army_refresh = yes
 		RUS_bunker_refresh = yes
@@ -10997,7 +11026,7 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 		else = {
 			set_cosmetic_tag = RUS_last_empire
 			set_politics = {
-				ruling_party = anarchism
+				ruling_party = etatism
 				elections_allowed = no
 			}
 			set_portraits = {
@@ -11005,7 +11034,7 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 				civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
 			}
 			set_country_leader_portrait = {
-				ideology = anarchism
+				ideology = etatism
 				portrait = GFX_portrait_RUS_Mark_Rustan_dictator
 			}
 		}

@@ -86,6 +86,38 @@ def _without_population(source: str) -> str:
     )
 
 
+class ReactorResourceTests(unittest.TestCase):
+    def test_resource_generation_is_scoped_and_idempotent(self):
+        self.assertTrue(callable(getattr(builder, "update_reactor_resources", None)))
+        state_ids = {176, 177, 187, 188, 189, 192}
+        with tempfile.TemporaryDirectory() as temporary:
+            state_dir = Path(temporary)
+            original = {}
+            for state_id in state_ids | {125}:
+                source = builder.state_path(state_id).read_text(encoding="utf-8-sig")
+                source = re.sub(r"\s*resources\s*=\s*\{[^}]*\}", "", source)
+                path = state_dir / f"{state_id}-fixture.txt"
+                path.write_text(source, encoding="utf-8", newline="\n")
+                original[path] = path.read_bytes()
+            with patch.object(builder, "STATE_DIR", state_dir):
+                self.assertEqual(builder.update_reactor_resources(False), 1)
+                self.assertEqual({p: p.read_bytes() for p in original}, original)
+                self.assertEqual(builder.update_reactor_resources(True), 0)
+                generated = {p: p.read_bytes() for p in original}
+                self.assertEqual(builder.update_reactor_resources(False), 0)
+                self.assertEqual(builder.update_reactor_resources(True), 0)
+                self.assertEqual({p: p.read_bytes() for p in original}, generated)
+            for path, source in original.items():
+                actual = path.read_text(encoding="utf-8")
+                without_resources = re.sub(r"\s*resources\s*=\s*\{[^}]*\}", "", actual)
+                self.assertEqual(without_resources, source.decode("utf-8"))
+                if path.name.startswith("125-"):
+                    self.assertEqual(path.read_bytes(), source)
+                else:
+                    resources = re.search(r"resources\s*=\s*\{([^}]*)\}", actual)[1]
+                    self.assertNotRegex(resources, r"\b(?:oil|rubber|coal)\s*=")
+
+
 class ShahrabadPopulationTests(unittest.TestCase):
     def test_all_starting_states_sum_to_twenty_million_and_plan_is_current(self):
         actual = {}

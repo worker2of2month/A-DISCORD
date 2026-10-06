@@ -76,7 +76,7 @@ bookmarks = {
 		"RUS" = {
 			minor = yes
 			history = "RUS_BOOKMARK_DESC"
-			ideology = anarchism
+			ideology = etatism
 			ideas = {
 				RUS_national_spirit
 				RUS_black_army_bookmark

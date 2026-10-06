@@ -1,0 +1,463 @@
+[io_pdx.updater] INFO:  Skipped update check. (already ran today)
+[io_pdx] INFO:  Running io_pdx_mesh from d:\steam\steamapps\common\blender\blender.exe ((5, 2, 2))
+[io_pdx] INFO:  C:\Users\Admin\AppData\Roaming\Blender Foundation\Blender\5.2\extensions\user_default\io_pdx_mesh
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NOD_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1984 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0067 sec)
+C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\build_country_cas.py:363: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  if not material.use_nodes:
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0586 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0149 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NOD_early_cas.blend"
+VERIFIED NOD_early_cas 2208
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0476 sec)
+C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\build_country_cas.py:490: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world.use_nodes = True
+00:04.109  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_early_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NOD_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2686 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0013 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0806 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0019 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NOD_cas.blend"
+VERIFIED NOD_cas 2224
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0540 sec)
+00:07.469  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NOD_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1969 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0013 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0432 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0015 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NOD_future_cas.blend"
+VERIFIED NOD_future_cas 2044
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NOD_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0455 sec)
+00:10.562  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\NOD_future_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - STP_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1822 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0060 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0517 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0178 sec)
+Info: Packed 3 file(s)
+Info: Saved as "STP_early_cas.blend"
+VERIFIED STP_early_cas 1984
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0570 sec)
+00:13.578  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_early_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - STP_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1732 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0013 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0417 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0016 sec)
+Info: Packed 3 file(s)
+Info: Saved as "STP_cas.blend"
+VERIFIED STP_cas 1976
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0415 sec)
+00:16.531  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - STP_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2313 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0014 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0481 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0014 sec)
+Info: Packed 3 file(s)
+Info: Saved as "STP_future_cas.blend"
+VERIFIED STP_future_cas 2316
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - STP_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0478 sec)
+00:19.703  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\STP_future_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - VAL_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2456 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0056 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0709 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0154 sec)
+Info: Packed 3 file(s)
+Info: Saved as "VAL_early_cas.blend"
+VERIFIED VAL_early_cas 2372
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0589 sec)
+00:22.984  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_early_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - VAL_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2247 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0013 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0523 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0016 sec)
+Info: Packed 3 file(s)
+Info: Saved as "VAL_cas.blend"
+VERIFIED VAL_cas 2364
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0520 sec)
+00:26.234  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_cas_preview.png'
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - VAL_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2712 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0014 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0624 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0018 sec)
+Info: Packed 3 file(s)
+Info: Saved as "VAL_future_cas.blend"
+VERIFIED VAL_future_cas 2456
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - VAL_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0672 sec)
+00:29.703  render           | Saved: 'C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\assets\source\country_cas\VAL_future_cas_preview.png'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit

@@ -14,3 +14,15 @@ animation = { name = "ADISCORD_STP_tank_move_animation" file = "STP_tank_move.an
 animation = { name = "ADISCORD_STP_tank_attack_animation" file = "STP_tank_attack.anim" }
 animation = { name = "ADISCORD_STP_fighter_idle_animation" file = "STP_fighter_idle.anim" }
 animation = { name = "ADISCORD_STP_cas_idle_animation" file = "STP_cas_idle.anim" }
+animation = { name = "ADISCORD_VAL_early_fighter_idle_animation" file = "VAL_early_fighter_idle.anim" }
+animation = { name = "ADISCORD_VAL_early_cas_idle_animation" file = "VAL_early_cas_idle.anim" }
+animation = { name = "ADISCORD_VAL_future_fighter_idle_animation" file = "VAL_future_fighter_idle.anim" }
+animation = { name = "ADISCORD_VAL_future_cas_idle_animation" file = "VAL_future_cas_idle.anim" }
+animation = { name = "ADISCORD_NOD_early_fighter_idle_animation" file = "NOD_early_fighter_idle.anim" }
+animation = { name = "ADISCORD_NOD_early_cas_idle_animation" file = "NOD_early_cas_idle.anim" }
+animation = { name = "ADISCORD_NOD_future_fighter_idle_animation" file = "NOD_future_fighter_idle.anim" }
+animation = { name = "ADISCORD_NOD_future_cas_idle_animation" file = "NOD_future_cas_idle.anim" }
+animation = { name = "ADISCORD_STP_early_fighter_idle_animation" file = "STP_early_fighter_idle.anim" }
+animation = { name = "ADISCORD_STP_early_cas_idle_animation" file = "STP_early_cas_idle.anim" }
+animation = { name = "ADISCORD_STP_future_fighter_idle_animation" file = "STP_future_fighter_idle.anim" }
+animation = { name = "ADISCORD_STP_future_cas_idle_animation" file = "STP_future_cas_idle.anim" }

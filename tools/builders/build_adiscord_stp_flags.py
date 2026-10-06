@@ -1,4 +1,4 @@
-"""Export Stelander's revolutionary state and dependent-government flags."""
+"""Export Stelander's political-route, island and dependent-government flags."""
 
 from __future__ import annotations
 
@@ -11,13 +11,13 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 SIZES = {"": (82, 52), "medium": (41, 26), "small": (10, 7)}
 SUBJECTS = ("NOD", "VAL", "BJK")
-ISLAND_FLAGS = ("SLI", "SLI_mandate")
+SOURCE_FLAGS = ("SLI", "SLI_mandate", "STS_hegemony")
 # Great Stelander keeps the revolutionary banner until it receives its own source.
 STP_IDENTITIES = ("STP_revolution_capital", "STP_great_stelander")
 
 
 def outputs():
-    for tag in ISLAND_FLAGS:
+    for tag in SOURCE_FLAGS:
         with Image.open(ROOT / "tools/assets/source" / f"{tag}_flag.png") as source:
             for folder, size in SIZES.items():
                 buffer = BytesIO()
@@ -55,7 +55,7 @@ def main():
     for path in changed:
         print(("Updated: " if args.apply else "Drift: ") + str(path.relative_to(ROOT)))
     if not changed:
-        print("Stelander flags are current (21 textures).")
+        print("Stelander flags are current (24 textures).")
     return int(bool(changed) and not args.apply)
 
 

@@ -4243,6 +4243,10 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { swap_ideas = { remove_idea = STP_pw_republic_dummy add_idea = STP_pc_hegemony_open_delta } }
 			hidden_effect = {
+				if = {
+					limit = { NOT = { has_country_flag = STP_imperial_union_proclaimed } }
+					set_cosmetic_tag = STS_hegemony
+				}
 				set_portraits = {
 					character = STP_maksim_shabrat
 					civilian = { large = GFX_portrait_STP_Maksim_Shabrat_hegemony }

@@ -17,6 +17,7 @@ on_actions = {
 					}
 					clr_country_flag = ADISCORD_vorkerland_fresh_start_collapse_pending_v1
 					set_global_flag = ADISCORD_vorkerland_collapse_scheduled
+					EXZ = { ADISCORD_vorkerland_close_exz_trade = yes }
 					if = {
 						limit = { RUS = { exists = yes } }
 						RUS = { ADISCORD_vorkerland_apply_dirty_modifiers = yes }

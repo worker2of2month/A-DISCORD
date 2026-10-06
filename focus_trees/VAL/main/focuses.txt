@@ -3709,7 +3709,11 @@ focus_tree = {
 		prerequisite = { focus = VAL_Marines_Of_The_Ledger }
 		available = { has_capitulated = no }
 		completion_reward = {
-			set_technology = { ADISCORD_tech_remote_weapon_tripods = 1 popup = yes }
+			set_technology = {
+				ADISCORD_tech_assault_infantry_formations = 1
+				ADISCORD_tech_remote_weapon_tripods = 1
+				popup = yes
+			}
 			army_experience = 20
 		}
 		ai_will_do = { base = 4 }

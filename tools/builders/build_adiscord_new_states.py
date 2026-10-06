@@ -244,6 +244,17 @@ DIRTY_STATE_RESOURCES = {
     for state_id in (49, 152, 169, 173, 177, 181)
 }
 
+# Recoverable industrial stock surrounds the sealed reactor; contamination
+# still reduces its usable output through the existing state modifier.
+REACTOR_STATE_RESOURCES = {
+    176: {"steel": 120, "tungsten": 60, "chromium": 40},
+    177: {"steel": 80, "aluminium": 100, "rare_components": 8, "rare_alloys": 6},
+    187: {"steel": 80, "aluminium": 40, "chromium": 40},
+    188: {"steel": 100, "tungsten": 60, "chromium": 80},
+    189: {"steel": 120, "aluminium": 60, "rare_components": 12, "rare_alloys": 6},
+    192: {"steel": 80, "aluminium": 60, "tungsten": 40, "rare_alloys": 8},
+}
+
 # The four states that will form the local Stelander separatist bloc use the
 # same resource package. Keeping the package exact makes every province worth
 # contesting without changing the character of the mining and port corridor.
@@ -259,6 +270,7 @@ REGIONAL_STATE_RESOURCES = {
     **IVANLAND_STATE_RESOURCES,
     **AFRELA_STATE_RESOURCES,
     **DIRTY_STATE_RESOURCES,
+    **REACTOR_STATE_RESOURCES,
     **STELANDER_REGIONAL_RESOURCES,
 }
 
@@ -2061,6 +2073,21 @@ def apply_nam_resource_war_states() -> None:
     apply_generated_state_name_localisation()
 
 
+def update_reactor_resources(apply_changes: bool = False) -> int:
+    """Update only the six reactor-perimeter resource blocks."""
+    changed = []
+    for state_id, resources in REACTOR_STATE_RESOURCES.items():
+        path = state_path(state_id)
+        source = path.read_text(encoding="utf-8-sig")
+        updated = ensure_state_resources(source, resources)
+        if updated != source:
+            changed.append(state_id)
+            if apply_changes:
+                path.write_text(updated, encoding="utf-8", newline="\n")
+    print(f"Reactor perimeter resource changes: {changed}")
+    return int(bool(changed) and not apply_changes)
+
+
 def update_val_resources(apply_changes: bool = False) -> int:
     """Own only resource blocks of the eight original Kefreyt states."""
     changed = []
@@ -2176,6 +2203,8 @@ def main() -> int:
                          help="apply only the prewar confederation owners and cores")
     actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
     actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
+    actions.add_argument("--apply-reactor-resources", action="store_true", help="apply only the reactor perimeter resource manifest")
+    actions.add_argument("--check-reactor-resources", action="store_true", help="check the reactor perimeter resource manifest")
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
     actions.add_argument("--apply-shahrabad-population", action="store_true")
@@ -2189,6 +2218,8 @@ def main() -> int:
     actions.add_argument("--check-state-metadata", action="append", type=int, metavar="STATE_ID")
     actions.add_argument("--apply-state-metadata", action="append", type=int, metavar="STATE_ID")
     args = parser.parse_args()
+    if args.check_reactor_resources or args.apply_reactor_resources:
+        return update_reactor_resources(args.apply_reactor_resources)
     if args.check_state_metadata or args.apply_state_metadata:
         return update_state_metadata(
             set(args.check_state_metadata or args.apply_state_metadata),

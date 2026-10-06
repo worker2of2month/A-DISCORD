@@ -1,0 +1,5 @@
+A-DISCORD technology/doctrine validation: FAIL
+- ADISCORD_economy_stabilization_package does not subtract 100 treasury
+- ADISCORD_economy_invest_reserves does not subtract 50 treasury
+- ADISCORD_economy_civilian_investment_action does not subtract 50 treasury
+- ADISCORD_economy_military_investment_action does not subtract 50 treasury

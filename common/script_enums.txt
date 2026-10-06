@@ -150,6 +150,8 @@ script_enum_equipment_category = {
 }
 
 script_enum_equipment_bonus_type = {
+	ADISCORD_zeppelin_equipment
+	ADISCORD_zeppelin_equipment_1
 	ADISCORD_combat_robot_equipment
 	ADISCORD_combat_robot_equipment_1
 	ADISCORD_attack_airframe_2163

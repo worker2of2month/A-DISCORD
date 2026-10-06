@@ -13914,7 +13914,7 @@ STP_pw_open_shield_corps = {
 		}
 		add_equipment_to_stockpile = {
 			type = ADISCORD_squad_weapons_equipment_0
-			amount = 108
+			amount = 360
 			producer = ROOT
 		}
 		add_equipment_to_stockpile = {

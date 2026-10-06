@@ -56,7 +56,7 @@ equipments = {
 		visual_level = 2
 		armor_value = 360
 		air_attack = 24
-		build_cost_ic = 130
+		build_cost_ic = 140
 		resources = { steel = 3 chromium = 1 rare_alloys = 1 }
 	}
 }

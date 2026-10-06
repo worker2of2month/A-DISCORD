@@ -250,117 +250,81 @@
     },
     {
       "key": "passive_intensifier",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_01.png",
+      "source_sha256": "f530eb7ffe305a441cbb208655ba61f14dd5edda46cec03c10e195e9de025861",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 1,
       "kind": "compact",
-      "crop": [
-        0,
-        0,
-        512,
-        512
-      ],
-      "output": "ADISCORD_night_01_passive_intensifier.dds"
+      "output": "ADISCORD_night_01_passive_intensifier.dds",
+      "runtime_master": true
     },
     {
       "key": "thermal_channel",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_02.png",
+      "source_sha256": "8f39e8beba3b602c5717f5b43272c1e52a380e3b89db4f8c4d62c61011ff2f85",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 2,
       "kind": "compact",
-      "crop": [
-        512,
-        0,
-        1024,
-        512
-      ],
-      "output": "ADISCORD_night_02_thermal_channel.dds"
+      "output": "ADISCORD_night_02_thermal_channel.dds",
+      "runtime_master": true
     },
     {
       "key": "fused_sight",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_01.png",
+      "source_sha256": "f530eb7ffe305a441cbb208655ba61f14dd5edda46cec03c10e195e9de025861",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 3,
       "kind": "compact",
-      "crop": [
-        1024,
-        0,
-        1536,
-        512
-      ],
-      "output": "ADISCORD_night_03_fused_sight.dds"
+      "output": "ADISCORD_night_03_fused_sight.dds",
+      "runtime_master": true
     },
     {
       "key": "squad_target_sharing",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_04.png",
+      "source_sha256": "09ef016b7e985468539d8485811d2a6357258c12ff133e6a1954c5808630b966",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 4,
       "kind": "compact",
-      "crop": [
-        0,
-        512,
-        512,
-        1024
-      ],
-      "output": "ADISCORD_night_04_squad_target_sharing.dds"
+      "output": "ADISCORD_night_04_squad_target_sharing.dds",
+      "runtime_master": true
     },
     {
       "key": "counter_illumination",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_03.png",
+      "source_sha256": "1bdd8f4ca0037ae2cceca887a59cc53dc30a746579c3219cc43e93d275b3bc8c",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 5,
       "kind": "compact",
-      "crop": [
-        512,
-        512,
-        1024,
-        1024
-      ],
-      "output": "ADISCORD_night_05_counter_illumination.dds"
+      "output": "ADISCORD_night_05_counter_illumination.dds",
+      "runtime_master": true
     },
     {
       "key": "distributed_night_engagement",
-      "source": "night_operations_generated_sheet.png",
-      "source_uuid": "imagegen:exec-5e9e5ec9-b8cf-4ef7-95bf-4277c8f5437f.png",
-      "source_sha256": "800ef614db6916e0ab7cdd8a87cb30164187cee845ffcfab5ffe1bd89bdc95fd",
+      "source": "night_04.png",
+      "source_sha256": "09ef016b7e985468539d8485811d2a6357258c12ff133e6a1954c5808630b966",
       "source_size": [
-        1536,
-        1024
+        70,
+        70
       ],
       "tier": 6,
       "kind": "compact",
-      "crop": [
-        1024,
-        512,
-        1536,
-        1024
-      ],
-      "output": "ADISCORD_night_06_distributed_engagement.dds"
+      "output": "ADISCORD_night_06_distributed_engagement.dds",
+      "runtime_master": true
     },
     {
       "key": "incendiary_bottle",
@@ -1163,6 +1127,152 @@
       "source_sha256": "c323a6d22e7a849e9a09218030cd56794ab4e5d6c6e0fd1caa1261bee37ad853",
       "source_uuid": "exec-2d8d878c-9ae5-43a0-848b-aa87f37b6329.png",
       "source_prompt": "Create ONE compact inventory icon for the A-Discord grounded science-fiction strategy game. Match the reference's painted realistic game-asset rendering, muted olive/khaki cloth, dark charcoal metal, restrained warm metal accents, fine materials and practical construction. Single clearly readable object grouping centered, 3/4 view, soft upper-left light, thin near-black outline. Occupy 80% of square canvas with empty margins. Must remain clear at 72x72 pixels. No person, no mannequin, no lettering, no logo, no frame, no floor or ground shadow. Genuine transparent background; if alpha is unavailable use perfectly flat pure magenta #ff00ff background, never checkerboard or white background. Do not reproduce the reference sheet. Subject: a man-portable counter-drone electronic warfare unit: rugged olive backpack radio housing with two short upward antenna rods and one small rectangular flat-panel antenna unfolded beside the top. Folded carrying straps and a compact battery module integrated underneath. Practical hardware, readable simple silhouette, no luminous rings, no lightning, no projected waves."
+    },
+    {
+      "key": "STS_reclaimed_arsenal",
+      "source": "STS_01_reclaimed_arsenal.png",
+      "source_sha256": "ff42da43992f114dba9f4634e6d1025a503104d319a889404af24f45597adccf",
+      "tier": 1,
+      "kind": "wide",
+      "output": "ADISCORD_STS_weapon_01_reclaimed_arsenal.dds",
+      "source_size": [
+        176,
+        72
+      ],
+      "family": "service_STS",
+      "runtime_master": true,
+      "source_origin": "user_supplied",
+      "source_filename": "1.png"
+    },
+    {
+      "key": "STS_recovered_service_rifle",
+      "source": "STS_02_recovered_service_rifle.png",
+      "source_sha256": "0c608998e306a36092cc6d2c84ce76dd04101f00777d3c82d1674754bf052914",
+      "tier": 2,
+      "kind": "wide",
+      "output": "ADISCORD_STS_weapon_02_recovered_service_rifle.dds",
+      "source_size": [
+        176,
+        72
+      ],
+      "family": "service_STS",
+      "runtime_master": true,
+      "source_origin": "user_supplied",
+      "source_filename": "2.png"
+    },
+    {
+      "key": "STS_standardized_battle_rifle",
+      "source": "STS_03_standardized_battle_rifle.png",
+      "source_sha256": "a671b5f42d1a8e0edd1f4d8ac24cb2bdc98fb67cb6f7f9580c79fb8866b49fb9",
+      "tier": 3,
+      "kind": "wide",
+      "output": "ADISCORD_STS_weapon_03_standardized_battle_rifle.dds",
+      "source_size": [
+        176,
+        72
+      ],
+      "family": "service_STS",
+      "runtime_master": true,
+      "source_origin": "user_supplied",
+      "source_filename": "3.png"
+    },
+    {
+      "key": "protection_body_armour",
+      "family": "protection",
+      "source": "protection_body_armour.png",
+      "source_sha256": "9587ee8862a4d0f36fe09e3495832354d8a57988886d7ecb0ded7747289041ed",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 1,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_body_armour.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_trauma_pads",
+      "family": "protection",
+      "source": "protection_trauma_pads.png",
+      "source_sha256": "4daf9783d5aa1ca7abb0fdf5664db4f5d07859ed7bde0be41293f75552b2d731",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 2,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_trauma_pads.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_ceramic_plates",
+      "family": "protection",
+      "source": "protection_ceramic_plates.png",
+      "source_sha256": "91229bed20c533e1aff9fa970c5978c062de4b3ad7d384b889cb4de2dda79823",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 3,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_ceramic_plates.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_respirator",
+      "family": "protection",
+      "source": "protection_respirator.png",
+      "source_sha256": "327e61c267db979b406c357c214fa08087a08665f4a165cda5f2ac43aa0351ae",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 4,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_respirator.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_hearing",
+      "family": "protection",
+      "source": "protection_hearing.png",
+      "source_sha256": "32a1b35de12dd27108c3b185843aa7fa6c389122bd9a6835fcb6ac12626c24bd",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 5,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_hearing.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_exoskeleton",
+      "family": "protection",
+      "source": "protection_exoskeleton.png",
+      "source_sha256": "96da313948b1429b73aa44b855e63b331cba3e5c198c1466c83d65c66f2a91fd",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 6,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_exoskeleton.dds",
+      "runtime_master": true
+    },
+    {
+      "key": "protection_camouflage",
+      "family": "protection",
+      "source": "protection_camouflage.png",
+      "source_sha256": "85b786ae098d74550cd652bccf189bf33f585923c46627bf5be7945a8f1ee667",
+      "source_size": [
+        70,
+        70
+      ],
+      "tier": 7,
+      "kind": "compact",
+      "output": "ADISCORD_equipment_protection_camouflage.dds",
+      "runtime_master": true
     }
   ],
   "alternates": [

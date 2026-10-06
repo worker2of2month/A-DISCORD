@@ -2647,6 +2647,42 @@ VAL_raise_shield_special_forces = {
 	}
 }
 
+VAL_spawn_zeppelin_trial = {
+	if = {
+		limit = {
+			tag = VAL
+			is_debug = yes
+			is_ai = no
+			has_capitulated = no
+			capital_scope = {
+				is_owned_by = VAL
+				is_controlled_by = VAL
+			}
+		}
+		if = {
+			limit = { NOT = { has_template = "Kefreyt Zeppelin Trial" } }
+			division_template = {
+				name = "Kefreyt Zeppelin Trial"
+				override_model = ADISCORD_zeppelin_entity
+				template_counter = 86
+				is_locked = yes
+				regiments = {
+					ADISCORD_zeppelin = { x = 0 y = 0 }
+				}
+			}
+		}
+		# Debug staffing and hull supply are independent of national reserves.
+		capital_scope = {
+			create_unit = {
+				division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Kefreyt Zeppelin Trial\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+				owner = VAL
+				allow_spawning_on_enemy_provs = no
+			}
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
 VAL_spawn_crimson_trial = {
 	if = {
 		limit = {

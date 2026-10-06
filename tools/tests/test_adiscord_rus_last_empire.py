@@ -112,7 +112,7 @@ class RusLastEmpireTests(unittest.TestCase):
         expected = (
             ("RUS_Varlam_Oskol", "etatism", "RUS_black_banner_empire"),
             ("RUS_Pavel_Niva", "pragmatism", "RUS_restoration_state"),
-            ("RUS_Mark_Rustan", "anarchism", "RUS_last_empire"),
+            ("RUS_Mark_Rustan", "etatism", "RUS_last_empire"),
         )
         self.assertEqual(len(branches), len(expected))
         for index, (branch, (ruler, ideology, cosmetic)) in enumerate(zip(branches, expected)):
@@ -127,7 +127,7 @@ class RusLastEmpireTests(unittest.TestCase):
         portraits = block(branches[-1], "set_portraits")
         self.assertEqual(scalar(portraits, "character"), "RUS_Mark_Rustan")
         self.assertEqual(scalar(block(portraits, "civilian"), "large"), "GFX_portrait_RUS_Mark_Rustan_dictator")
-        self.assertEqual(scalar(block(branches[-1], "set_country_leader_portrait"), "ideology"), "anarchism")
+        self.assertEqual(scalar(block(branches[-1], "set_country_leader_portrait"), "ideology"), "etatism")
         self.assertIn(
             "GFX_portrait_RUS_Mark_Rustan_dictator",
             read(ROOT / "interface/ADISCORD_leader_portraits.gfx"),

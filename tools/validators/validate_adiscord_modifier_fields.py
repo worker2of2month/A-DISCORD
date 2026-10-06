@@ -87,6 +87,10 @@ COUNTRY = "country"
 STATE = "state"
 
 DYNAMIC_MODIFIER_SCOPES: dict[str, tuple[str, str]] = {
+    "ADISCORD_vorkerland_reactor_industrial_legacy": (
+        STATE,
+        "applied to the six reactor-perimeter states during new-campaign setup",
+    ),
     "ADISCORD_vorkerland_dirty_state": (
         STATE,
         "applied per state by the collapse dirty-state effects to mark districts "
