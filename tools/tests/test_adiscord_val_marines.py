@@ -9,6 +9,8 @@ from tools.tests.test_adiscord_stp_preparation import block as parsed_block, sca
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 UNITS = ROOT / "common/units/ADISCORD_land_units.txt"
@@ -19,7 +21,7 @@ AUDIT = ROOT / "tools/data/division_template_audit.json"
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def block(source: str, marker: str) -> str:

@@ -2659,6 +2659,40 @@ ADISCORD_prepare_SRA_VAD = {
 
 # The crisis target is selected once; preparation does not expose ordinary diplomacy.
 
+RUS_crisis_prepare_NOD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:RUS_crisis_hegemon = { tag = NOD }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = NOD value = 200 }
+}
+
+NOD_crisis_prepare_RUS = {
+	allowed = { tag = NOD }
+	enable = {
+		is_ai = yes
+		tag = event_target:RUS_crisis_hegemon
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+RUS_crisis_conquer_NOD = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		NOD = { has_country_flag = RUS_crisis_defender }
+		has_war_with = NOD
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = NOD value = 200 }
+}
+
 RUS_crisis_prepare_VAL = {
 	allowed = { tag = RUS }
 	enable = {
@@ -2725,6 +2759,40 @@ RUS_crisis_conquer_STS = {
 	}
 	abort_when_not_enabled = yes
 	ai_strategy = { type = conquer id = STS value = 200 }
+}
+
+RUS_crisis_prepare_STP = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		event_target:RUS_crisis_hegemon = { tag = STP }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = STP value = 200 }
+}
+
+STP_crisis_prepare_RUS = {
+	allowed = { tag = STP }
+	enable = {
+		is_ai = yes
+		tag = event_target:RUS_crisis_hegemon
+		RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = prepare_for_war id = RUS value = 200 }
+}
+
+RUS_crisis_conquer_STP = {
+	allowed = { tag = RUS }
+	enable = {
+		is_ai = yes
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		STP = { has_country_flag = RUS_crisis_defender }
+		has_war_with = STP
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = conquer id = STP value = 200 }
 }
 
 ADISCORD_prepare_VAD_CSL = {

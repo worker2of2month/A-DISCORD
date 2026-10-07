@@ -2325,6 +2325,12 @@ TASK10_DISPLAY_CACHE_NAMES = (
     "ADISCORD_economy_weekly_inflation_change",
 )
 TASK10_DISPLAY_CACHE_OWNER = "ADISCORD_economy_calculate_weekly_budget"
+TASK10_RUNWAY_CACHE_OWNER = "ADISCORD_economy_refresh_deficit_runway"
+TASK10_DISPLAY_CACHE_OWNERS = {
+    "ADISCORD_economy_deficit_runway": TASK10_RUNWAY_CACHE_OWNER,
+    "ADISCORD_economy_inflation_expense_multiplier": TASK10_DISPLAY_CACHE_OWNER,
+    "ADISCORD_economy_weekly_inflation_change": TASK10_DISPLAY_CACHE_OWNER,
+}
 TASK10_EFFECTS_PATH = (
     ROOT / "common" / "scripted_effects" / "ADISCORD_economy_effects.txt"
 )
@@ -2554,9 +2560,22 @@ def task10_display_cache_producer_issues(effects_text):
     issues = []
     try:
         owner = _parsed_definition(effects_text, TASK10_DISPLAY_CACHE_OWNER)
+        runway_owner = _parsed_definition(effects_text, TASK10_RUNWAY_CACHE_OWNER)
     except AssertionError as error:
         return [str(error)]
-    direct = owner.value
+    runway_calls = [
+        entry
+        for entry in owner.value
+        if entry.key == TASK10_RUNWAY_CACHE_OWNER and entry.value == "yes"
+    ]
+    if len(runway_calls) != 1:
+        issues.append("weekly forecast must refresh the runway once unconditionally")
+    direct = []
+    for entry in owner.value:
+        if entry.key == TASK10_RUNWAY_CACHE_OWNER and entry.value == "yes":
+            direct.extend(runway_owner.value)
+        else:
+            direct.append(entry)
     all_definitions = parse_clausewitz(effects_text)
     for cache in TASK10_DISPLAY_CACHE_NAMES:
         owners = {
@@ -2569,7 +2588,7 @@ def task10_display_cache_producer_issues(effects_text):
                 if isinstance(entry.value, str)
             )
         }
-        if owners != {TASK10_DISPLAY_CACHE_OWNER}:
+        if owners != {TASK10_DISPLAY_CACHE_OWNERS[cache]}:
             issues.append(f"{cache} owners are {sorted(owners)}")
         expected_write_counts = {
             "ADISCORD_economy_deficit_runway": 4,
@@ -2578,7 +2597,7 @@ def task10_display_cache_producer_issues(effects_text):
         }
         writes = [
             entry
-            for _, entry in _walk_parsed(owner.value)
+            for _, entry in _walk_parsed(direct)
             if entry.key
             in {
                 "set_variable",
@@ -2773,7 +2792,7 @@ def task10_gameplay_cache_reference_issues(overrides=None):
                     continue
                 if not (
                     path == TASK10_EFFECTS_PATH.resolve()
-                    and definition.key == TASK10_DISPLAY_CACHE_OWNER
+                    and definition.key == TASK10_DISPLAY_CACHE_OWNERS[entry.value]
                 ):
                     issues.append(
                         f"{relative}:{definition.key}:{entry.key} consumes or writes {entry.value}"
@@ -7291,26 +7310,17 @@ ADISCORD_bad_assistance_owner = {
             r"NOT\s*=\s*\{\s*ADISCORD_economy_should_monthly_update\s*=\s*yes\s*\}",
         )
 
-        weekly = unique_block(EFFECTS, TASK10_DISPLAY_CACHE_OWNER)
-        start = weekly.index(
-            "\tset_variable = { var = ADISCORD_economy_deficit_runway value = 260 }"
-        )
-        end_token = (
-            "\tif = { limit = { check_variable = { var = ADISCORD_economy_inflation "
-            "value = 75 compare = greater_than_or_equals } } set_variable = { var = "
-            "ADISCORD_economy_inflation_expense_multiplier value = 1.15 } }"
-        )
-        end = weekly.index(end_token, start) + len(end_token)
-        dead_segment = weekly[start:end]
-        dead_wrapper = (
-            "\tif = {\n\t\tlimit = { always = no }\n"
-            + "\n".join("\t" + line for line in dead_segment.splitlines())
-            + "\n\t}"
-        )
-        dead_weekly = weekly[:start] + dead_wrapper + weekly[end:]
-        dead_mutation = EFFECTS.replace(weekly, dead_weekly, 1)
-        self.assertNotEqual(dead_mutation, EFFECTS)
-        self.assertTrue(task10_display_cache_producer_issues(dead_mutation))
+        for owner in (TASK10_DISPLAY_CACHE_OWNER, TASK10_RUNWAY_CACHE_OWNER):
+            with self.subTest(unreachable_cache_owner=owner):
+                body = unique_block(EFFECTS, owner)
+                dead_wrapper = (
+                    "\n\tif = {\n\t\tlimit = { always = no }\n"
+                    + "\n".join("\t" + line for line in body.splitlines())
+                    + "\n\t}\n"
+                )
+                dead_mutation = EFFECTS.replace(body, dead_wrapper, 1)
+                self.assertNotEqual(dead_mutation, EFFECTS)
+                self.assertTrue(task10_display_cache_producer_issues(dead_mutation))
 
         extra_producer_mutation = EFFECTS.replace(
             "\tdivide_variable = { var = ADISCORD_economy_weekly_inflation_change value = 13 }",
@@ -9909,6 +9919,11 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             ("BJK", 1000, 0, 0, 1, 130, 9),
             ("BJK", 100, 0, 0, 1, 13, 10),
         )
+        cases = [
+            (*case, inflation)
+            for case in cases
+            for inflation in (0, 9.99, 24.99, 49.99, 74.99)
+        ]
         for (
             tag,
             cash,
@@ -9917,8 +9932,14 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
             expense_passes,
             income,
             fund,
+            inflation,
         ) in cases:
-            with self.subTest(tag=tag, cash=cash, emergency_streak=emergency_streak):
+            with self.subTest(
+                tag=tag,
+                cash=cash,
+                emergency_streak=emergency_streak,
+                inflation=inflation,
+            ):
                 fixtures = [
                     EconomyScriptFixture(
                         texts=(MODIFIER_EFFECTS, development), stubs=stubs
@@ -9946,6 +9967,7 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                                 "accounting_period_treasury_start": cash,
                                 "treasury_cap": 1000,
                                 "monthly_income": income,
+                                "inflation": inflation,
                                 "cached_army_organization_factor": 1,
                                 "overflow_investment_fund": fund,
                                 "army_spending_mode": 3,
@@ -9971,10 +9993,47 @@ class EconomyAccountingRegressionTests(unittest.TestCase):
                 self.assertEqual(
                     live.calls.count(p + "calculate_expenses"), expense_passes
                 )
+                self.assertEqual(
+                    live.calls.count(p + "calculate_weekly_budget"), expense_passes
+                )
                 self.assertEqual(live.calls.count(p + "apply_weekly_balance"), 1)
                 if emergency_streak:
                     self.assertEqual(live.scopes["A"][p + "debt_state"], 3)
                     self.assertEqual(live.scopes["A"][p + "last_auto_borrowing"], 0)
+
+    def test_cash_runway_refresh_preserves_forecast_and_handles_deficit_boundaries(self):
+        p = self.PREFIX
+        cases = (
+            (100, 5, 260),
+            (100, 0, 260),
+            (100, -25, 4),
+            (0, -25, 0),
+            (-1, -25, 0),
+            (0.01, -0.001, 1),
+            (0.01, -0.01, 1),
+            (0.01, -0.02, 0.5),
+            (5000, -10000, 1),
+            (10000, -1, 260),
+        )
+        for cash, balance, expected in cases:
+            with self.subTest(cash=cash, balance=balance):
+                fixture = EconomyScriptFixture()
+                values = fixture.scopes["A"]
+                preserved = {
+                    p + "treasury": cash,
+                    p + "weekly_balance": balance,
+                    p + "weekly_income": 7,
+                    p + "weekly_expenses": 9,
+                    p + "safe_reserve": 50,
+                    p + "weekly_inflation_change": 0.3,
+                    p + "inflation_expense_multiplier": 1.04,
+                }
+                values.update(preserved)
+                values[p + "deficit_runway"] = 99
+                fixture.run(p + "refresh_deficit_runway")
+                self.assertAlmostEqual(values[p + "deficit_runway"], expected)
+                for key, value in preserved.items():
+                    self.assertEqual(values[key], value, key)
 
     def test_investment_programs_double_their_progress_and_preserve_cash_accounting(
         self,

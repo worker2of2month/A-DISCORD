@@ -2,6 +2,8 @@ from pathlib import Path
 import re
 import unittest
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 
 GUARDED_OFFER_BUTTONS = {
@@ -23,7 +25,7 @@ GUARDED_OFFER_BUTTONS = {
 
 
 def read(path: str) -> str:
-    return (ROOT / path).read_text(encoding="utf-8")
+    return read_focus_source(ROOT / path, encoding="utf-8")
 
 
 def named_block(text: str, name: str) -> str:
@@ -1942,7 +1944,7 @@ class KefreytOpeningThemeTests(unittest.TestCase):
         )
 
         tree = parse_clausewitz(
-            (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text()
+            read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt")
         )[0].value
         focus = next(
             e.value

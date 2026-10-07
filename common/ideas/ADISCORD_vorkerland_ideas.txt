@@ -1,5 +1,127 @@
 ideas = {
 	country = {
+		# Campaign planning bonuses apply only against the selected opponent.
+		RUS_crisis_nod_preparation_1 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_nod = no }
+			targeted_modifier = {
+				tag = NOD
+				attack_bonus_against = 0.03
+				defense_bonus_against = 0.06
+				breakthrough_bonus_against = 0.02
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_nod_preparation_2 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_nod = no }
+			targeted_modifier = {
+				tag = NOD
+				attack_bonus_against = 0.08
+				defense_bonus_against = 0.12
+				breakthrough_bonus_against = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_stp_preparation_1 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_stp = no }
+			targeted_modifier = {
+				tag = STP
+				attack_bonus_against = 0.05
+				defense_bonus_against = 0.02
+				breakthrough_bonus_against = 0.05
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_stp_preparation_2 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_stp = no }
+			targeted_modifier = {
+				tag = STP
+				attack_bonus_against = 0.12
+				defense_bonus_against = 0.04
+				breakthrough_bonus_against = 0.12
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_sts_preparation_1 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_sts = no }
+			targeted_modifier = {
+				tag = STS
+				attack_bonus_against = 0.04
+				defense_bonus_against = 0.03
+				breakthrough_bonus_against = 0.04
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_sts_preparation_2 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_sts = no }
+			targeted_modifier = {
+				tag = STS
+				attack_bonus_against = 0.10
+				defense_bonus_against = 0.06
+				breakthrough_bonus_against = 0.10
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_val_preparation_1 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_val = no }
+			targeted_modifier = {
+				tag = VAL
+				attack_bonus_against = 0.03
+				defense_bonus_against = 0.05
+				breakthrough_bonus_against = 0.03
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+		RUS_crisis_val_preparation_2 = {
+			picture = generic_war_preparation
+			allowed = { always = no }
+			allowed_civil_war = { always = no }
+			removal_cost = -1
+			cancel = { RUS_crisis_prepare_val = no }
+			targeted_modifier = {
+				tag = VAL
+				attack_bonus_against = 0.08
+				defense_bonus_against = 0.10
+				breakthrough_bonus_against = 0.08
+			}
+			ai_will_do = { factor = 0 }
+		}
+
+
 # --- collapse_ideas ---
 		# Only peer combat is affected; regional conquests and foreign wars keep
 		# their normal balance. A player takeover ends the AI-only advantage.

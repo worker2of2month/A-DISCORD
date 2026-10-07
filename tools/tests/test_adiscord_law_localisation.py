@@ -4,6 +4,8 @@ from collections import Counter
 from pathlib import Path
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 RU_LAWS = ROOT / "localisation/russian/ADISCORD_laws_l_russian.yml"
 EN_LAWS = ROOT / "localisation/english/ADISCORD_laws_l_english.yml"
@@ -702,9 +704,7 @@ class MilitaryStaffContracts(unittest.TestCase):
         ):
             tree = one(
                 parse_clausewitz(
-                    (ROOT / "common/national_focus" / filename).read_text(
-                        encoding="utf-8"
-                    )
+                    read_focus_source(ROOT / "common/national_focus" / filename, encoding="utf-8")
                 ),
                 "focus_tree",
             )

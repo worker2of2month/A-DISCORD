@@ -3174,3 +3174,547 @@ VAL_stelander_war_aid = {
 		ai_will_do = { base = 0 }
 	}
 }
+# --- new_world_contracts ---
+VAL_new_world_category = {
+
+	VAL_nw_supply_partner = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		visible = {
+			has_completed_focus = VAL_nw_guarantor
+			FROM = { has_country_flag = VAL_nw_concession }
+		}
+		available = {
+			VAL_nw_operational = yes
+			FROM = {
+				VAL_nw_concession_valid = yes
+				has_war = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_supply_partner_cost
+		custom_cost_trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+			NOT = { has_equipment = { infantry_equipment < 600 } }
+		}
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_supply_partner_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_nw_operational = yes
+						check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+						NOT = { has_equipment = { infantry_equipment < 600 } }
+						FROM = {
+							VAL_nw_concession_valid = yes
+							has_war = yes
+						}
+					}
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -600 }
+					ADISCORD_economy_mark_dirty = yes
+					FROM = {
+						add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+						add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+						add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+						ADISCORD_economy_mark_dirty = yes
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nw_restore_works = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 176 177 187 188 189 192 }
+		visible = {
+			OR = {
+				has_completed_focus = VAL_nw_inventory
+				has_completed_focus = VAL_nw_engineers
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_project_idle_tt
+				VAL_nw_project_idle = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_reactor_access_tt
+					VAL_nw_reactor_access = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_works_ruined_tt
+					NOT = { has_state_flag = RUS_reactor_works_restored }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_local_work_idle_tt
+					NOT = { has_state_flag = RUS_reactor_works_in_progress }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_restore_works_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		days_remove = 120
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_project_cancel_tt
+			hidden_effect = { VAL_nw_begin_restoration = yes }
+		}
+		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_restore_works_result_tt
+			hidden_effect = { VAL_nw_finish_project = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_expand_foundry = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 176 177 187 188 189 192 }
+		visible = { has_completed_focus = VAL_nw_foundries }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_project_idle_tt
+				VAL_nw_project_idle = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_reactor_access_tt
+					VAL_nw_reactor_access = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_works_restored_tt
+					has_state_flag = RUS_reactor_works_restored
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_foundry_missing_tt
+					NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_expand_foundry_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		days_remove = 90
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_project_cancel_tt
+			hidden_effect = { VAL_nw_begin_foundry = yes }
+		}
+		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_expand_foundry_result_tt
+			hidden_effect = { VAL_nw_finish_project = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_rebuild_roads = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		state_target = yes
+		targets = { 176 177 187 188 189 192 }
+		visible = { has_completed_focus = VAL_nw_roads }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_project_idle_tt
+				VAL_nw_project_idle = yes
+			}
+			FROM = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_reactor_access_tt
+					VAL_nw_reactor_access = yes
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_roads_missing_tt
+					NOT = { has_state_flag = VAL_nw_roads_restored }
+				}
+				infrastructure < 5
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_rebuild_roads_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		days_remove = 60
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_project_cancel_tt
+			hidden_effect = { VAL_nw_begin_roads = yes }
+		}
+		cancel_trigger = { FROM = { VAL_nw_project_current = no } }
+		cancel_effect = { hidden_effect = { VAL_nw_cancel_project = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_rebuild_roads_result_tt
+			hidden_effect = { VAL_nw_finish_project = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_emergency_arsenals = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { VAL_nw_khan_threat = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_threat_tt
+				VAL_nw_khan_threat = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_emergency_arsenals_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_emergency_arsenals_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_emergency_arsenals_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_nw_operational = no
+				VAL_nw_khan_threat = no
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_emergency_arsenals_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_emergency_arsenals_result_tt
+			hidden_effect = { VAL_nw_emergency_arsenals_finish = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAL_nw_emergency_reserve = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = VAL }
+		visible = { VAL_nw_khan_threat = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_threat_tt
+				VAL_nw_khan_threat = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_emergency_reserve_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_emergency_reserve_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_emergency_reserve_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_nw_operational = no
+				VAL_nw_khan_threat = no
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_emergency_reserve_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_emergency_reserve_result_tt
+			hidden_effect = { VAL_nw_emergency_reserve_finish = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAL_nw_survey = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_nw_perimeter }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_operational_tt
+				VAL_nw_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_survey_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_survey_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		days_remove = 30
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_survey_begin = yes }
+		}
+		cancel_trigger = {
+			VAL_nw_operational = no
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_survey_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_survey_result_tt
+			hidden_effect = { VAL_nw_survey_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_guard_caravans = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = {
+			OR = {
+				has_completed_focus = VAL_nw_caravans
+				has_completed_focus = VAL_nw_market
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_operational_tt
+				VAL_nw_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_guard_caravans_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_guard_caravans_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		days_remove = 21
+		days_re_enable = 180
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_guard_caravans_begin = yes }
+		}
+		cancel_trigger = {
+			VAL_nw_operational = no
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_guard_caravans_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_guard_caravans_result_tt
+			hidden_effect = { VAL_nw_guard_caravans_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_salvage_archives = {
+		icon = generic_construction
+		allowed = { tag = VAL }
+		visible = { has_completed_focus = VAL_nw_sanitary }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_has_reactor_access_tt
+				VAL_nw_has_reactor_access = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_order_idle_tt
+				NOT = { has_variable = VAL_nw_salvage_archives_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_salvage_archives_cost
+		custom_cost_trigger = {
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		days_remove = 45
+		fire_only_once = yes
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_paid_order_tt
+			hidden_effect = { VAL_nw_salvage_archives_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_nw_operational = no
+				VAL_nw_has_reactor_access = no
+			}
+		}
+		cancel_effect = { hidden_effect = { VAL_nw_salvage_archives_refund = yes } }
+		remove_effect = {
+			custom_effect_tooltip = VAL_nw_salvage_archives_result_tt
+			hidden_effect = { VAL_nw_salvage_archives_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	VAL_nw_offer_concession = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		visible = {
+			OR = {
+				has_completed_focus = VAL_nw_councils
+				has_completed_focus = VAL_nw_zones
+			}
+			FROM = {
+				exists = yes
+				NOT = { has_country_flag = VAL_nw_concession }
+			}
+		}
+		available = {
+			VAL_nw_operational = yes
+			FROM = {
+				VAL_nw_partner_eligible = yes
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_offer_idle_tt
+					NOT = { has_country_flag = VAL_nw_offer_pending }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_offer_ready_tt
+					NOT = { has_country_flag = VAL_nw_offer_cooldown }
+				}
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_nw_offer_concession_cost
+		custom_cost_trigger = { VAL_nw_offer_affordable = yes }
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_consent_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_nw_operational = yes
+						VAL_nw_offer_affordable = yes
+						FROM = {
+							VAL_nw_partner_eligible = yes
+							NOT = { has_country_flag = VAL_nw_concession }
+							NOT = { has_country_flag = VAL_nw_offer_pending }
+							NOT = { has_country_flag = VAL_nw_offer_cooldown }
+						}
+					}
+					FROM = {
+						set_country_flag = { flag = VAL_nw_offer_pending days = 15 }
+						set_country_flag = { flag = VAL_nw_offer_cooldown days = 60 }
+						country_event = { id = val_rework.125 }
+					}
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+
+	VAL_nw_defend_partner = {
+		icon = generic_attack
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		visible = {
+			FROM = {
+				has_country_flag = VAL_nw_concession
+				has_war_with = RUS
+			}
+			NOT = { has_war_with = RUS }
+		}
+		available = {
+			VAL_nw_operational = yes
+			FROM = { VAL_nw_concession_valid = yes }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_defend_partner_tt
+			hidden_effect = { VAL_nw_defend_partner = yes }
+		}
+		ai_will_do = { base = 100 }
+	}
+
+	VAL_nw_abandon_partner = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		visible = {
+			FROM = { has_country_flag = VAL_nw_defence_pending }
+			NOT = { has_war_with = RUS }
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_abandon_partner_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_war_with = RUS }
+						FROM = {
+							has_country_flag = VAL_nw_defence_pending
+							has_war_with = RUS
+						}
+					}
+					FROM = { VAL_nw_revoke_concession = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 0 }
+	}
+
+	VAL_nw_challenge_khan = {
+		icon = generic_attack
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_nw_khan
+			RUS = { exists = yes }
+		}
+		available = {
+			VAL_nw_operational = yes
+			RUS_crisis_potential_hegemon = yes
+			has_war = no
+			NOT = { is_in_faction_with = RUS }
+			RUS = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_nw_khan_ready_tt
+					RUS_crisis_can_begin = yes
+				}
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_nw_challenge_khan_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						VAL_nw_operational = yes
+						has_war = no
+						RUS_crisis_potential_hegemon = yes
+						NOT = { is_in_faction_with = RUS }
+						RUS = { RUS_crisis_can_begin = yes }
+					}
+					save_global_event_target_as = RUS_crisis_hegemon
+					RUS = { RUS_crisis_begin = yes }
+				}
+			}
+		}
+		ai_will_do = { base = 10 }
+	}
+}

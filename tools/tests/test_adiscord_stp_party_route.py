@@ -972,6 +972,53 @@ class PartyFactionContracts(unittest.TestCase):
             )
         }
 
+    def test_split_initializes_party_politics_after_either_prewar_choice(self):
+        for choice in ("Maksim", "the_party", None):
+            with self.subTest(choice=choice):
+                flags = {"STP_cw_participant"}
+                if choice:
+                    flags.add(f"STP_sided_with_{choice}_flag")
+                facts = {
+                    ("STP", "exists", "yes"): True,
+                    ("STS", "exists", "yes"): True,
+                    **{("STP", "has_country_flag", flag): True for flag in flags},
+                }
+                initialized = False
+                for scope, effect in selected_effects(
+                    self.effects["STP_cw_begin_hostilities"], facts
+                ):
+                    if scope != "STP":
+                        continue
+                    if effect.key in ("set_country_flag", "clr_country_flag"):
+                        enabled = effect.key == "set_country_flag"
+                        facts["STP", "has_country_flag", effect.value] = enabled
+                        if enabled:
+                            flags.add(effect.value)
+                        else:
+                            flags.discard(effect.value)
+                    elif effect.key == "STP_cw_init_apparatus_loyalty":
+                        self.assertTrue(
+                            matches_conditions(self.triggers["STP_pf_active"], facts)
+                        )
+                        _, flags = self.simulate("STP_pf_initialize", flags=flags)
+                        initialized = "STP_pf_initialized" in flags
+                    elif effect.key == "declare_war_on":
+                        self.assertTrue(
+                            initialized, "Party politics must exist before war callbacks"
+                        )
+                        break
+                self.assertTrue(initialized)
+                self.assertNotIn("STP_sided_with_Maksim_flag", flags)
+                self.assertIn("STP_sided_with_the_party_flag", flags)
+                facts["STP", "STP_pf_active", "yes"] = matches_conditions(
+                    self.triggers["STP_pf_active"], facts
+                )
+                facts["STP", "has_country_flag", "STP_cw_postwar"] = True
+                facts["STP", "variable", "STP_pv_outcome"] = 2
+                self.assertTrue(
+                    matches_conditions(self.triggers["STP_party_leader_2"], facts)
+                )
+
     def test_dominant_faction_can_recover_support_without_more_influence(self):
         for influence in (60, 64.999, 96, 99, 100):
             values, flags = self.simulate("STP_pf_initialize")
@@ -2628,6 +2675,119 @@ class PartyPeaceContracts(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = {e.key: e.value for e in parse_clausewitz(read(EFFECTS))}
         cls.peace = read(SCRIPTED_PEACE)
+
+    def kefreyt_capitulation_conditions(self, victor="STP"):
+        from dataclasses import replace
+
+        immediate = one(
+            one(one(parse_clausewitz(self.peace), "on_actions"), "on_capitulation_immediate"),
+            "effect",
+        )
+        route = next(
+            entry.value
+            for entry in immediate
+            if isinstance(entry.value, list)
+            and "STP_pw_party_settle_kefreyt_victory" in {e.key for e in walk(entry.value)}
+        )
+        native_scopes = {"ROOT": "VAL", "FROM": victor}
+        return [
+            replace(entry, key=native_scopes.get(entry.key, entry.key))
+            for entry in one(route, "limit")
+        ]
+
+    def test_kefreyt_defensive_victory_uses_party_treaty(self):
+        for campaign, postwar, war, victor, subject, expected in (
+            (False, True, True, "STP", False, True),
+            (True, True, True, "STP", False, True),
+            (False, True, True, "NOD", True, True),
+            (False, True, True, "NOD", False, False),
+            (True, True, False, "STP", False, False),
+            (False, False, True, "STP", False, False),
+        ):
+            facts = {
+                ("VAL", "has_war_with", "STP"): war,
+                ("STP", "exists", "yes"): True,
+                ("STP", "has_capitulated", "no"): True,
+                ("STP", "is_subject", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("STP", "has_country_flag", "STP_cw_postwar"): postwar,
+                ("STP", "has_country_flag", "STP_pw_party_kefreyt_campaign_active"): campaign,
+                (victor, "is_subject_of", "STP"): subject,
+            }
+            conditions = self.kefreyt_capitulation_conditions(victor)
+            with self.subTest(
+                campaign=campaign, postwar=postwar, war=war,
+                victor=victor, subject=subject,
+            ):
+                self.assertEqual(matches_conditions(conditions, facts), expected)
+
+    def test_defensive_settlement_requires_current_postwar_enemy(self):
+        for postwar, war, campaign, expected in (
+            (True, True, False, True),
+            (True, True, True, True),
+            (True, False, True, False),
+            (False, True, True, False),
+        ):
+            facts = {
+                ("STP", "has_country_flag", "STP_cw_postwar"): postwar,
+                ("STP", "has_war_with", "VAL"): war,
+                ("STP", "has_country_flag", "STP_pw_party_kefreyt_campaign_active"): campaign,
+                ("STP", "is_subject", "no"): True,
+                ("VAL", "is_subject", "no"): True,
+                ("STP", "STP_pw_can_reconstruct", "yes"): True,
+                ("VAL", "exists", "yes"): True,
+            }
+            effects = list(selected_effects(
+                self.effects["STP_pw_party_settle_kefreyt_victory"], facts
+            ))
+            pending = any(
+                scope == "STP" and e.key == "set_country_flag"
+                and e.value == "STP_pw_party_kefreyt_subject_pending"
+                for scope, e in effects
+            )
+            with self.subTest(postwar=postwar, war=war, campaign=campaign):
+                self.assertEqual(pending, expected)
+
+    def test_kefreyt_treaty_requires_eligible_countries_before_peace(self):
+        from itertools import product
+
+        conditions = self.kefreyt_capitulation_conditions()
+        settle = self.effects["STP_pw_party_settle_kefreyt_victory"]
+        finalize = self.effects["STP_pw_party_finalize_kefreyt_subject"]
+        for stp_independent, val_independent, reconstruction in product(
+            (False, True), repeat=3
+        ):
+            facts = {
+                ("STP", "exists", "yes"): True,
+                ("STP", "has_capitulated", "no"): True,
+                ("STP", "has_country_flag", "STP_cw_postwar"): True,
+                ("STP", "STP_pw_can_reconstruct", "yes"): reconstruction,
+                ("STP", "is_subject", "no"): stp_independent,
+                ("VAL", "is_subject", "no"): val_independent,
+                ("VAL", "exists", "yes"): True,
+                ("STP", "has_war_with", "VAL"): True,
+                ("VAL", "has_war_with", "STP"): True,
+            }
+            expected = stp_independent and val_independent and reconstruction
+            with self.subTest(
+                stp_independent=stp_independent,
+                val_independent=val_independent,
+                reconstruction=reconstruction,
+            ):
+                self.assertEqual(matches_conditions(conditions, facts), expected)
+                self.assertEqual(bool(list(selected_effects(settle, facts))), expected)
+                facts["STP", "has_war_with", "VAL"] = False
+                facts["STP", "has_country_flag", "STP_pw_party_kefreyt_subject_pending"] = True
+                final_effects = list(selected_effects(finalize, facts))
+                self.assertEqual(
+                    any(e.key == "puppet" for _, e in final_effects), expected
+                )
+                self.assertTrue(any(
+                    e.key == "clr_country_flag"
+                    and e.value == "STP_pw_party_kefreyt_subject_pending"
+                    for _, e in final_effects
+                ))
 
     def test_kefreyt_survives_and_stelander_territory_returns(self):
         settlement = self.effects["STP_pw_party_settle_kefreyt_victory"]

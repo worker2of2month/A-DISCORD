@@ -19,6 +19,8 @@ from tools.validators.validate_adiscord_division_templates import (
 )
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 VAL_ON_ACTIONS_FILE = "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
 FRESH_CAMPAIGN_FLAG = "ADISCORD_fresh_campaign_contract_v1"
@@ -30,7 +32,7 @@ def read(relative: str) -> str:
     path = ROOT / relative
     if not path.exists():
         return ""
-    return path.read_text(encoding="utf-8-sig", errors="replace")
+    return read_focus_source(path)
 
 
 def named_blocks(text: str, key: str) -> list[str]:
@@ -544,7 +546,7 @@ def validate_supplemental_rewards(
     for focus in (
         e
         for e in walk_script(parse_clausewitz(focus_text))
-        if e.key == "focus" and isinstance(e.value, list)
+        if e.key in {"focus", "shared_focus"} and isinstance(e.value, list)
     ):
         reward = script_children(focus.value, "completion_reward")
         changes = {}
@@ -616,9 +618,12 @@ def validate_val_preview_ideas(
         if names[idea] not in native_maps and names[idea] not in ideas:
             issues.append(f"preview {idea} has unknown native name {names[idea]}")
 
-    refresh = script_children(
-        parse_clausewitz(effects_text), "VAL_refresh_contract_modifier"
-    )
+    effects = {
+        entry.key: entry.value
+        for entry in parse_clausewitz(effects_text)
+        if isinstance(entry.value, list)
+    }
+    refresh = effects.get("VAL_refresh_contract_modifier", [])
     # Specialization tier templates must exactly match what the visible
     # VAL_contract_state dynamic modifier receives from the authoritative level.
     specialization_levels = {
@@ -826,18 +831,26 @@ def validate_val_preview_ideas(
                 return True
         return False
 
-    def numeric_reward_delta(items, native):
-        def country_sequence(children):
-            for entry in children:
-                if entry.key == "hidden_effect":
-                    yield from country_sequence(entry.value)
-                elif entry.key not in {
-                    "effect_tooltip",
-                    "custom_effect_tooltip",
-                    "unlock_decision_tooltip",
-                }:
-                    yield entry
+    def country_sequence(children, *, expand_helpers=False, seen=frozenset()):
+        for entry in children:
+            if entry.key == "hidden_effect":
+                yield from country_sequence(
+                    entry.value, expand_helpers=expand_helpers, seen=seen
+                )
+            elif expand_helpers and entry.key in effects and entry.value == "yes":
+                if entry.key in seen:
+                    raise ValueError("Recursive preview reward helper")
+                yield from country_sequence(
+                    effects[entry.key], expand_helpers=True, seen=seen | {entry.key}
+                )
+            elif entry.key not in {
+                "effect_tooltip",
+                "custom_effect_tooltip",
+                "unlock_decision_tooltip",
+            }:
+                yield entry
 
+    def numeric_reward_delta(items, native):
         pending, applied, invalid = {}, {}, set()
         for entry in country_sequence(items):
             if entry.key == "add_to_variable":
@@ -877,6 +890,63 @@ def validate_val_preview_ideas(
                     if modifier:
                         expected[modifier] = expected.get(modifier, 0) + amount
         return expected
+
+    def direct_dynamic_delta(items, native):
+        """Prove additive same-country outputs and both modifier-presence paths.
+
+        Assignments, other scopes and conditional arithmetic cannot establish a
+        fixed delta. The only accepted branch installs the missing modifier;
+        updates and economy invalidation must follow the final addition.
+        """
+        def modifier_clause(items, key):
+            return (
+                len(items) == 1
+                and items[0].key == key
+                and isinstance(items[0].value, list)
+                and script_fields(items[0].value) == {"modifier": native}
+                and len(items[0].value) == 1
+            )
+
+        expected = {}
+        installed = refreshed = dirty = False
+        try:
+            sequence = list(country_sequence(items, expand_helpers=True))
+        except ValueError:
+            return {}
+        for entry in sequence:
+            if entry.key == "add_to_variable":
+                fields = script_fields(entry.value)
+                modifier = native_maps[native].get(fields.get("var"))
+                if modifier:
+                    try:
+                        amount = float(fields["value"])
+                    except (KeyError, ValueError):
+                        return {}
+                    if not math.isfinite(amount):
+                        return {}
+                    expected[modifier] = expected.get(modifier, 0) + amount
+                    refreshed = dirty = False
+            elif entry.key == "if":
+                guard = script_children(entry.value, "limit")
+                payload = [item for item in entry.value if item.key != "limit"]
+                if (
+                    len(guard) != 1
+                    or guard[0].key != "NOT"
+                    or not isinstance(guard[0].value, list)
+                    or not modifier_clause(guard[0].value, "has_dynamic_modifier")
+                    or not modifier_clause(payload, "add_dynamic_modifier")
+                ):
+                    return {}
+                installed = True
+            elif entry.key == "force_update_dynamic_modifier":
+                refreshed = entry.value == "yes" and installed
+            elif entry.key == "ADISCORD_economy_mark_dirty":
+                dirty = entry.value == "yes" and refreshed
+            elif entry.key in {"clear_variable", "remove_dynamic_modifier"}:
+                return {}
+            elif isinstance(entry.value, list):
+                return {}
+        return expected if installed and refreshed and dirty else {}
 
     referenced, checked = set(), set()
 
@@ -968,7 +1038,7 @@ def validate_val_preview_ideas(
 
     def inspect(items, path, inside=False, reward=None, hidden=False):
         for entry in items:
-            if entry.key == "focus" and isinstance(entry.value, list):
+            if entry.key in {"focus", "shared_focus"} and isinstance(entry.value, list):
                 inspect(
                     entry.value,
                     path,
@@ -987,6 +1057,24 @@ def validate_val_preview_ideas(
                     issues.append(
                         f"preview {entry.value} is hidden from the player in {path}:{entry.line}"
                     )
+            if (
+                entry.key == "add_ideas"
+                and inside
+                and isinstance(entry.value, str)
+                and entry.value in candidates
+                and names[entry.value] in native_maps
+            ):
+                native = names[entry.value]
+                expected = (
+                    direct_dynamic_delta(reward, native)
+                    if native in native_maps and reward is not None
+                    else {}
+                )
+                if not expected:
+                    issues.append(
+                        f"preview {entry.value} has no proven additive native-variable reward"
+                    )
+                compare(entry.value, expected, native)
             if entry.key == "swap_ideas" and inside:
                 pair = script_fields(entry.value)
                 before, after = pair.get("remove_idea"), pair.get("add_idea")
@@ -1057,7 +1145,7 @@ def validate_val_preview_ideas(
         for focus in (
             e
             for e in walk_script(entries)
-            if e.key == "focus" and isinstance(e.value, list)
+            if e.key in {"focus", "shared_focus"} and isinstance(e.value, list)
         ):
             reward = script_children(focus.value, "completion_reward")
             tier_ids = {

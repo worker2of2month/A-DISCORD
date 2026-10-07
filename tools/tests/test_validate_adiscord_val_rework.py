@@ -9,6 +9,8 @@ from pathlib import Path
 from tools.lib.paths import source_section
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_effects.txt"
 IDEAS_PATH = ROOT / "common" / "ideas" / "ADISCORD_VAL_rework_ideas.txt"
@@ -359,6 +361,121 @@ class ValOrderLedgerTests(unittest.TestCase):
 
 
 class ValTradeMapTests(unittest.TestCase):
+    def test_route_frames_preserve_all_statuses_with_one_availability_read(self):
+        from collections import Counter
+        from tools.builders import build_adiscord_val_operations_map as builder
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            scalar,
+            selected_effects,
+        )
+
+        class RouteFacts(dict):
+            def __init__(self):
+                super().__init__()
+                self.availability_reads = Counter()
+
+            def get(self, key, default=None):
+                if key[1].startswith("VAL_trade_route_") and key[1].endswith("_open"):
+                    self.availability_reads[key[1]] += 1
+                return super().get(key, default)
+
+        routes = ("occidia", "west", "stelander", "vorkerland", "south", "north")
+        # Open, commissioned, safe frame, risky frame.
+        statuses = (
+            (False, False, 1, 1),
+            (False, True, 4, 4),
+            (True, False, 2, 3),
+            (True, True, 2, 3),
+        )
+        scenarios = (
+            (0, 0, False),
+            (49.99, 2.99, False),
+            (50, 2.99, True),
+            (50.01, 2.99, True),
+            (50, 3, False),
+            (50, 3.01, False),
+        )
+        cache = block(
+            parse_clausewitz(builder.operations_map_effects()),
+            "VAL_trade_routes_map_refresh_cache",
+        )
+        for offset in range(len(statuses)):
+            for pressure, security, risky in scenarios:
+                with self.subTest(offset=offset, pressure=pressure, security=security):
+                    facts = RouteFacts()
+                    facts["VAL", "variable", "VAL_black_market_pressure"] = pressure
+                    facts["VAL", "variable", "VAL_corridor_security"] = security
+                    expected = {}
+                    for index, route in enumerate(routes):
+                        opened, commissioned, safe_frame, risky_frame = statuses[
+                            (index + offset) % len(statuses)
+                        ]
+                        facts["VAL", f"VAL_trade_route_{route}_open", "yes"] = opened
+                        flag = f"VAL_route_{route}_commissioned"
+                        facts["VAL", "has_country_flag", flag] = commissioned
+                        expected[f"trade_{route}_map_frame"] = (
+                            risky_frame if risky else safe_frame
+                        )
+                    selected = list(selected_effects(cache, facts, "VAL"))
+                    actual = {}
+                    for scope, entry in selected:
+                        self.assertEqual(scope, "VAL")
+                        self.assertEqual(entry.key, "set_variable")
+                        variable = scalar(entry.value, "var")
+                        actual[variable] = int(scalar(entry.value, "value"))
+                    self.assertEqual(actual, expected)
+                    self.assertEqual(
+                        facts.availability_reads,
+                        {f"VAL_trade_route_{route}_open": 1 for route in routes},
+                    )
+                    self.assertEqual(len(selected), len(routes))
+
+    def test_effects_only_builder_preserves_existing_gui_and_art(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        from tools.builders import build_adiscord_val_operations_map as builder
+
+        relative = "common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"
+        routes = "common/scripted_triggers/ADISCORD_VAL_logistics_market_triggers.txt"
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            files = {
+                relative: b"old effects\n",
+                routes: (ROOT / routes).read_bytes(),
+                "common/scripted_guis/ADISCORD_VAL_operations_scripted_gui.txt": b"authored GUI\n",
+                "gfx/interface/VAL_operations/VAL_ops_state_59.png": b"preserve artwork",
+            }
+            for name, data in files.items():
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
+            with patch.object(builder, "ROOT", root), redirect_stdout(StringIO()):
+                with patch("sys.argv", ["builder", "--effects-only", "--check"]):
+                    self.assertEqual(builder.main(), 1)
+                self.assertEqual((root / relative).read_bytes(), files[relative])
+                with patch("sys.argv", ["builder", "--effects-only", "--apply"]):
+                    self.assertEqual(builder.main(), 0)
+                generated = (root / relative).read_bytes()
+                self.assertNotEqual(generated, files[relative])
+                with patch("sys.argv", ["builder", "--effects-only", "--check"]):
+                    self.assertEqual(builder.main(), 0)
+                with patch("sys.argv", ["builder", "--effects-only", "--apply"]):
+                    self.assertEqual(builder.main(), 0)
+                self.assertEqual((root / relative).read_bytes(), generated)
+            for name, data in files.items():
+                if name != relative:
+                    self.assertEqual((root / name).read_bytes(), data)
+            resulting_files = {
+                path.relative_to(root).as_posix()
+                for path in root.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(resulting_files, set(files))
+
     def test_rail_path_does_not_bridge_disconnected_nodes(self):
         from tools.builders import build_adiscord_val_operations_map as builder
 
@@ -481,7 +598,7 @@ class ValTierTransitionContractTests(unittest.TestCase):
             EFFECTS_PATH.read_text(encoding="utf-8-sig"), 'rework_effects'
         )
         cls.ideas = IDEAS_PATH.read_text(encoding="utf-8-sig")
-        cls.focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        cls.focuses = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         cls.on_actions = read_country_on_actions(ON_ACTIONS_PATH, 'kefreyt')
         cls.foreign_effects = source_section(
             FOREIGN_EFFECTS_PATH.read_text(encoding="utf-8-sig"),
@@ -882,7 +999,7 @@ class ValStelanderContractTests(unittest.TestCase):
         return next(
             item
             for item in named_blocks(
-                FOCUSES_PATH.read_text(encoding="utf-8-sig"), "focus"
+                read_focus_source(FOCUSES_PATH, encoding="utf-8-sig"), "focus"
             )
             if re.search(r"\bid\s*=\s*" + re.escape(focus_id) + r"\b", item)
         )
@@ -1501,7 +1618,8 @@ class ValRewardValidatorTests(unittest.TestCase):
 
     def preview_sources(self):
         return {
-            "focuses": FOCUSES_PATH.read_text(encoding="utf-8-sig"),
+            "focuses": read_focus_source(FOCUSES_PATH, encoding="utf-8-sig"),
+            "new_world": (ROOT / "common/national_focus/ADISCORD_VAL_new_world.txt").read_text(encoding="utf-8"),
             "effects": EFFECTS_PATH.read_text(encoding="utf-8-sig"),
         }
 
@@ -1555,6 +1673,90 @@ class ValRewardValidatorTests(unittest.TestCase):
         self.assertEqual(issues, [])
         self.assertIn("VAL_contract_delta_dummy", accepted)
         self.assertIn("VAL_industry_1_to_2_delta", accepted)
+
+    def test_new_world_previews_match_signed_native_variable_deltas(self):
+        accepted, issues = self.preview_issues()
+        self.assertEqual(issues, [])
+        previews = {"VAL_nw_industry_delta", "VAL_nw_trade_delta", "VAL_nw_admin_delta"}
+        self.assertLessEqual(previews, accepted)
+        sources = self.preview_sources()
+        for key, variable, amount in (
+            ("effects", "VAL_nw_factory_output", "0.05"),
+            ("effects", "VAL_nw_trade_income", "0.05"),
+            ("new_world", "VAL_nw_admin_expense", "-0.05"),
+        ):
+            original = f"add_to_variable = {{ var = {variable} value = {amount} }}"
+            for changed in (
+                original.replace(amount, str(float(amount) * 2)),
+                original.replace("add_to_variable", "set_variable"),
+                f"effect_tooltip = {{ {original} }}",
+                f"STS = {{ {original} }}",
+            ):
+                with self.subTest(variable=variable, mutation=changed):
+                    self.assertIn(original, sources[key])
+                    mutated = sources | {key: sources[key].replace(original, changed)}
+                    self.assertTrue(self.preview_issues(sources=mutated)[1])
+        missing = sources.copy()
+        del missing["new_world"]
+        accepted, issues = self.preview_issues(sources=missing)
+        self.assertTrue(issues)
+        self.assertTrue(previews.isdisjoint(accepted))
+
+    def test_new_world_direct_delta_requires_installation_refresh_and_budget_invalidation(self):
+        sources = self.preview_sources()
+        helper = named_blocks(sources["effects"], "VAL_nw_improve_industry")[0]
+        addition = "add_to_variable = { var = VAL_nw_factory_output value = 0.05 }"
+        for changed in (
+            helper.replace("modifier = VAL_nw_industrial_network", "modifier = VAL_wrong_network"),
+            helper.replace("force_update_dynamic_modifier = yes", "force_update_dynamic_modifier = no"),
+            helper.replace("ADISCORD_economy_mark_dirty = yes", "ADISCORD_economy_mark_dirty = no"),
+            helper.replace(addition, "")[:-1] + addition + " }",
+            helper.replace(addition, f"if = {{ limit = {{ always = no }} {addition} }}"),
+        ):
+            with self.subTest(helper=changed):
+                mutated = sources | {"effects": sources["effects"].replace(helper, changed)}
+                self.assertTrue(self.preview_issues(sources=mutated)[1])
+
+    def test_direct_preview_proof_uses_mapping_and_sum_without_named_allowlists(self):
+        from tools.validators.validate_adiscord_val_rework import validate_val_preview_ideas
+
+        ideas = """ideas = { country = {
+            probe_preview = { name = probe_network allowed = { always = no }
+                modifier = { industrial_capacity_factory = 0.10 } }
+        } }"""
+        dynamic = "probe_network = { industrial_capacity_factory = probe_output }"
+        focus = """focus_tree = { focus = { id = probe_focus completion_reward = {
+            effect_tooltip = { add_ideas = probe_preview }
+            hidden_effect = { probe_gain = yes }
+        } } }"""
+        gain = """probe_gain = {
+            add_to_variable = { var = probe_output value = 0.04 }
+            add_to_variable = { var = probe_output value = 0.06 }
+            if = { limit = { NOT = { has_dynamic_modifier = { modifier = probe_network } } }
+                add_dynamic_modifier = { modifier = probe_network } }
+            force_update_dynamic_modifier = yes
+            ADISCORD_economy_mark_dirty = yes
+        }"""
+
+        def check(effect, mapping=dynamic):
+            return validate_val_preview_ideas(
+                ideas, {"focus": focus, "effect": effect}, mapping, effect
+            )
+
+        accepted, issues = check(gain)
+        self.assertEqual(issues, [])
+        self.assertEqual(accepted, {"probe_preview"})
+        for changed in (
+            gain.replace("value = 0.04", "value = nan"),
+            gain.replace("value = 0.04", "value = 0.05"),
+            gain.replace("force_update_dynamic_modifier = yes", "clear_variable = probe_output force_update_dynamic_modifier = yes"),
+            gain.replace("force_update_dynamic_modifier = yes", "remove_dynamic_modifier = probe_network force_update_dynamic_modifier = yes"),
+            gain.replace("add_dynamic_modifier = { modifier = probe_network }", "add_dynamic_modifier = { modifier = probe_network scope = STS }"),
+            "probe_gain = { probe_gain = yes }",
+        ):
+            with self.subTest(effect=changed):
+                self.assertTrue(check(changed)[1])
+        self.assertTrue(check(gain, dynamic.replace("probe_output", "wrong_output"))[1])
 
     def test_dummy_installation_is_rejected_even_in_hidden_effect(self):
         for effect in (
@@ -1767,7 +1969,7 @@ class ValNativePreviewTests(unittest.TestCase):
                 {"ADISCORD_economy_trade_income_factor": 0.03},
             ),
         }
-        focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         for focus_id, (idea_id, expected) in cases.items():
             with self.subTest(focus=focus_id):
                 idea = block(ideas, idea_id)
@@ -2020,7 +2222,7 @@ class ValNativePreviewTests(unittest.TestCase):
             focus = next(
                 b
                 for b in named_blocks(
-                    FOCUSES_PATH.read_text(encoding="utf-8-sig"), "focus"
+                    read_focus_source(FOCUSES_PATH, encoding="utf-8-sig"), "focus"
                 )
                 if "id = " + focus_id in b
             )
@@ -2352,7 +2554,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
     def test_recovery_cannot_start_early_and_factory_grants_are_removed(self):
         self.run_effect("VAL_advance_economic_recovery")
         self.assertFalse(self.variables)
-        focuses = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        focuses = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         self.assertNotIn("add_offsite_building", focuses)
         self.assertEqual(focuses.count("VAL_advance_economic_recovery = yes"), 9)
         for focus_id in ("VAL_Mobilize_Machine_Shops", "VAL_Reserve_Accounting"):
@@ -2438,7 +2640,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         self.assertAlmostEqual(self.variables["VAL_arsenal_credit"], 0.025)
 
     def test_final_recovery_and_veterans_require_actual_victory(self):
-        text = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        text = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         for focus_id in (
             "VAL_Reopen_Trade_Routes",
             "VAL_Settle_Industrial_Debts",
@@ -2473,7 +2675,7 @@ class ValIndustrialRecoveryTests(unittest.TestCase):
         characters = (ROOT / "common/characters/VAL.txt").read_text(
             encoding="utf-8-sig"
         )
-        focus_text = FOCUSES_PATH.read_text(encoding="utf-8-sig")
+        focus_text = read_focus_source(FOCUSES_PATH, encoding="utf-8-sig")
         for name in ("Kirill_Voron", "Erika_Stahl", "Boris_Gromov", "Renata_Morn"):
             definition = only_named_block(self, characters, "VAL_" + name)
             self.assertRegex(definition, r"(?m)^\s*skill = 2$")
@@ -2684,7 +2886,7 @@ class ValNorthernExportTests(unittest.TestCase):
 
         focuses = {
             scalar(e.value, "id"): e.value
-            for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")))
+            for e in walk(parse_clausewitz(read_focus_source(FOCUSES_PATH, encoding="utf-8")))
             if e.key == "focus" and isinstance(e.value, list)
         }
         expectations = {
@@ -3676,7 +3878,7 @@ class ValContractFormationTests(unittest.TestCase):
         focus = next(
             e.value
             for e in walk(
-                parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8-sig"))
+                parse_clausewitz(read_focus_source(FOCUSES_PATH, encoding="utf-8-sig"))
             )
             if e.key == "focus"
             and isinstance(e.value, list)
@@ -4613,7 +4815,7 @@ class ValReclamationTests(unittest.TestCase):
 
         focuses = [
             e.value
-            for e in walk(parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")))
+            for e in walk(parse_clausewitz(read_focus_source(FOCUSES_PATH, encoding="utf-8")))
             if e.key == "focus" and isinstance(e.value, list)
         ]
         added = [f for f in focuses if scalar(f, "id").startswith("VAL_reclamation_")]
@@ -6606,9 +6808,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import matches_conditions, walk
 
         tree = self.parse(
-            (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(
-                encoding="utf-8"
-            )
+            read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt", encoding="utf-8")
         )
         focuses = {
             self.scalar(e.value, "id"): e.value
@@ -6679,9 +6879,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         from tools.tests.test_adiscord_stp_preparation import walk
 
         tree = self.parse(
-            (ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt").read_text(
-                encoding="utf-8"
-            )
+            read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt", encoding="utf-8")
         )
         focuses = {
             self.scalar(e.value, "id"): e.value
@@ -6729,9 +6927,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
         self.assertIn("VAL_begin_partner_contract_year = yes", nam_offer)
 
     def test_viceroy_support_has_no_new_scripted_effect_dependency(self):
-        focus_text = (
-            ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
-        ).read_text(encoding="utf-8")
+        focus_text = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt", encoding="utf-8")
         events_text = (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(
             encoding="utf-8"
         )
@@ -7427,6 +7623,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             block,
             scalar,
             matches_conditions,
+            selected_effects,
         )
         from tools.builders import build_adiscord_val_operations_map as builder
 
@@ -7460,51 +7657,37 @@ class ValExpandedCampaignTests(unittest.TestCase):
             self.assertEqual(gui_text.count(f'name = "{widget}"'), 1)
             self.assertIn(f'quadTextureSprite = "GFX_VAL_ops_state_{state}"', gui_text)
             self.assertNotIn(f'spriteType = "GFX_VAL_ops_state_{state}"', gui_text)
-            state_cache = next(
-                entry.value
-                for entry in cache
-                if entry.key == "set_variable"
-                and scalar(entry.value, "var") == frame_variable
-            )
             state_branches = [
                 entry
                 for entry in cache
-                if entry.key in ("if", "else_if")
-                and any(
-                    child.key == str(state) for child in block(entry.value, "limit")
-                )
+                if entry.key in ("if", "else_if", "else")
+                and scalar(block(entry.value, "set_variable"), "var") == frame_variable
             ]
-            for controller, cosmetic, expected in (
-                *((tag, None, frame) for tag, frame in expected_frames.items()),
-                ("STP", "STL_VAL_administration", expected_frames["STP"]),
-                ("UNKNOWN", None, builder.FRAME_COUNT),
+            for controller, cosmetic, overlord, expected in (
+                *((tag, None, None, frame) for tag, frame in expected_frames.items()),
+                ("STP", "STL_VAL_administration", None, expected_frames["STP"]),
+                ("UNKNOWN", None, None, builder.FRAME_COUNT),
+                *(
+                    (puppet, None, "BJK", expected_frames["BJK"])
+                    for puppet in ("BLD", "BHG", "BGT", "BBV", "BCM")
+                ),
             ):
                 facts = {(str(state), "controller"): controller}
                 if cosmetic:
                     facts[controller, "has_cosmetic_tag", cosmetic] = True
-                selected_frame = int(scalar(state_cache, "value"))
-                for branch in state_branches:
-                    if matches_conditions(block(branch.value, "limit"), facts, "VAL"):
-                        assignment = block(branch.value, "set_variable")
-                        selected_frame = int(scalar(assignment, "value"))
-                        break
+                if overlord:
+                    facts[controller, "is_subject_of", overlord] = True
+                selected = list(selected_effects(state_branches, facts, "VAL"))
+                context = (state, controller, cosmetic, overlord)
+                self.assertEqual(len(selected), 1, context)
+                scope, assignment = selected[0]
+                self.assertEqual(scope, "VAL", context)
+                self.assertEqual(assignment.key, "set_variable", context)
                 self.assertEqual(
-                    selected_frame, expected, (state, controller, cosmetic)
+                    scalar(assignment.value, "var"), frame_variable, context
                 )
-
-            for puppet in ("BLD", "BHG", "BGT", "BBV", "BCM"):
-                facts = {
-                    (str(state), "controller"): puppet,
-                    (puppet, "is_subject_of", "BJK"): True,
-                }
-                selected_frame = int(scalar(state_cache, "value"))
-                for branch in state_branches:
-                    if matches_conditions(block(branch.value, "limit"), facts, "VAL"):
-                        assignment = block(branch.value, "set_variable")
-                        selected_frame = int(scalar(assignment, "value"))
-                        break
                 self.assertEqual(
-                    selected_frame, expected_frames["BJK"], (state, puppet)
+                    int(scalar(assignment.value, "value")), expected, context
                 )
 
     def test_map_marks_partial_control_before_state_controller_changes(self):
@@ -8373,7 +8556,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
             )
         )
         tree = self.getblock(
-            self.parse(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree"
+            self.parse(read_focus_source(FOCUSES_PATH, encoding="utf-8")), "focus_tree"
         )
         focuses = {
             self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"
@@ -8578,7 +8761,7 @@ class ValExpandedCampaignTests(unittest.TestCase):
                 )
             )
         tree = self.getblock(
-            self.parse(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree"
+            self.parse(read_focus_source(FOCUSES_PATH, encoding="utf-8")), "focus_tree"
         )
         focuses = {
             self.scalar(e.value, "id"): e.value for e in tree if e.key == "focus"
@@ -8691,7 +8874,7 @@ class ValRegionalIntegrationTests(unittest.TestCase):
         trigger_text = (
             ROOT / "common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt"
         ).read_text(encoding="utf-8")
-        focus_text = FOCUSES_PATH.read_text(encoding="utf-8")
+        focus_text = read_focus_source(FOCUSES_PATH, encoding="utf-8")
 
         decision_block = only_named_block(
             self, decisions_text, "VAL_nationalise_region"
@@ -8942,7 +9125,7 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
 
         cls.effects = parse_clausewitz(EFFECTS_PATH.read_text(encoding="utf-8"))
         tree = block(
-            parse_clausewitz(FOCUSES_PATH.read_text(encoding="utf-8")), "focus_tree"
+            parse_clausewitz(read_focus_source(FOCUSES_PATH, encoding="utf-8")), "focus_tree"
         )
         cls.focuses = {scalar(e.value, "id"): e.value for e in tree if e.key == "focus"}
 
@@ -9198,7 +9381,7 @@ class ValFocusRewardBalanceTests(unittest.TestCase):
             )
             # One real caller, no bonus on each monthly pulse or country initializer.
             self.assertEqual(
-                FOCUSES_PATH.read_text().count(effect + " = yes"), 1, focus
+                read_focus_source(FOCUSES_PATH).count(effect + " = yes"), 1, focus
             )
 
     def test_mountain_reward_has_matching_persistent_special_forces_capacity(self):

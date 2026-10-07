@@ -10,6 +10,8 @@ from tools.validators.validate_adiscord_division_templates import (
     parse_clausewitz,
 )
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 P = 'ADISCORD_economy_'
 PROJECTS = {
@@ -34,7 +36,7 @@ DYNAMIC = ROOT / 'common/dynamic_modifiers/ADISCORD_economy_dynamic_modifiers.tx
 
 def read(path):
     path = ROOT / path
-    return path.read_text(encoding='utf-8-sig') if path.exists() else ''
+    return read_focus_source(path) if path.exists() else ''
 
 
 def direct(nodes, key):

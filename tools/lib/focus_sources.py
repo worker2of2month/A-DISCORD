@@ -1,9 +1,13 @@
-"""Read native focus outputs, including former combined country source views."""
+"""Read explicit authored focus views for tooling, separate from native assembly."""
 
 from pathlib import Path
 
 from tools.lib.paths import repository_root
-from tools.builders.build_adiscord_focus_trees import SOURCES
+from tools.builders.build_adiscord_focus_trees import (
+    SHARED_HISTORY_SOURCES,
+    SOURCES,
+    render_source,
+)
 
 
 FOCUS_SOURCE_GROUPS = {
@@ -17,10 +21,19 @@ FOCUS_SOURCE_GROUPS = {
 
 
 def read_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
-    """Read one focus file or aggregate a former multi-tree source path for tooling."""
+    """Read authored VAL structure or aggregate former multi-tree paths for tooling.
+
+    VAL's native output uses shared definitions to preserve completion history.
+    Existing semantic readers need the owning authored tree and its original
+    nesting. Native composition checks must use read_native_focus_source instead.
+    """
     resolved = Path(path)
     if not resolved.is_absolute():
         resolved = repository_root() / resolved
+    for source in SHARED_HISTORY_SOURCES:
+        output = repository_root() / "common/national_focus" / SOURCES[source]
+        if resolved.resolve() == output.resolve():
+            return render_source(source)
     if resolved.is_file():
         return resolved.read_text(encoding=encoding)
 
@@ -36,4 +49,12 @@ def read_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
     ]
     if not sources:
         raise FileNotFoundError(f"No focus sources found for {resolved}")
-    return "\n".join(source.read_text(encoding=encoding) for source in sources)
+    return "\n".join(read_focus_source(source, encoding=encoding) for source in sources)
+
+
+def read_native_focus_source(path: Path | str, encoding: str = "utf-8-sig") -> str:
+    """Read actual engine bytes as text, without authored-view substitution."""
+    resolved = Path(path)
+    if not resolved.is_absolute():
+        resolved = repository_root() / resolved
+    return resolved.read_text(encoding=encoding)

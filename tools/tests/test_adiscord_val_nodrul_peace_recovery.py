@@ -3,6 +3,8 @@ import unittest
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS = ROOT / "common/scripted_effects/ADISCORD_VAL_effects.txt"
 ON_ACTIONS = ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"
@@ -225,7 +227,9 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
                     self.assertEqual(entries[0].key, "FROM")
                     entries = entries[0].value
                     scope = "STP"
-                fixture.execute(entries[:1], scope)
+                receipts = [entry for entry in entries if entry.key == "VAL_clear_final_defeat_receipt"]
+                self.assertEqual(len(receipts), 1)
+                fixture.execute(receipts, scope)
                 self.assertNotIn("VAL_final_defeat_pending", fixture.flags["STP"])
                 self.assertIn("VAL_final_defeat_pending", fixture.flags["NOD"])
 
@@ -531,9 +535,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         )
 
     def test_northern_coalition_has_one_focus_and_one_scripted_settlement(self) -> None:
-        focuses = (
-            ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
-        ).read_text(encoding="utf-8")
+        focuses = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt", encoding="utf-8")
         triggers = TRIGGERS.read_text(encoding="utf-8")
         self.assertEqual(focuses.count("id = VAL_Break_The_Northern_Coalition"), 1)
 

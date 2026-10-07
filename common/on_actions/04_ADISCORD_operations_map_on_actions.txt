@@ -1,5 +1,5 @@
 # Event-driven cache owner for the shared Kefreyt/Stelander operations map.
-# Controller frames only change when a theatre actor gains or loses state control.
+# Refresh VAL before copying its shared controller frames to STS in this callback.
 # Controllers outside the authored theatre all use the same fallback frame, so
 # outsider-to-outsider changes do not require a cache rebuild.
 on_actions = {
@@ -14,7 +14,16 @@ on_actions = {
 			STS = {
 				if = {
 					limit = { exists = yes has_country_flag = STP_cw_postwar }
-					VAL_operations_map_refresh_cache = yes
+					if = {
+						limit = {
+							VAL = {
+								exists = yes
+								has_country_flag = VAL_operations_map_unlocked
+							}
+						}
+						VAL_operations_map_copy_val_cache = yes
+					}
+					else = { VAL_operations_map_refresh_cache = yes }
 				}
 			}
 		}
@@ -92,7 +101,16 @@ on_actions = {
 				STS = {
 					if = {
 						limit = { exists = yes has_country_flag = STP_cw_postwar }
-						VAL_operations_map_refresh_cache = yes
+						if = {
+							limit = {
+								VAL = {
+									exists = yes
+									has_country_flag = VAL_operations_map_unlocked
+								}
+							}
+							VAL_operations_map_copy_val_cache = yes
+						}
+						else = { VAL_operations_map_refresh_cache = yes }
 					}
 				}
 			}

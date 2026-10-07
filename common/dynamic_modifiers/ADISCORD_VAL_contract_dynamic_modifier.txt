@@ -1,3 +1,11 @@
+VAL_nw_industrial_network = {
+	enable = { tag = VAL }
+	icon = GFX_idea_VAL_contract_state
+	industrial_capacity_factory = VAL_nw_factory_output
+	ADISCORD_economy_trade_income_factor = VAL_nw_trade_income
+	ADISCORD_economy_admin_expense_factor = VAL_nw_admin_expense
+}
+
 # Independent Kefreyt contract-state modifier.
 
 VAL_contract_state = {

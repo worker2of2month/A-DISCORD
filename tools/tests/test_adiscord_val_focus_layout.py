@@ -4,12 +4,14 @@ import re
 import unittest
 from pathlib import Path
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative)
 
 
 def focus_block(source: str, focus_id: str) -> str:
@@ -51,7 +53,7 @@ def scalar(block: str, key: str) -> int:
 class KefreytFocusLayoutTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.focuses = FOCUS_PATH.read_text(encoding="utf-8")
+        cls.focuses = read_focus_source(FOCUS_PATH, encoding="utf-8")
 
     def position(self, focus_id: str) -> tuple[int, int]:
         block = focus_block(self.focuses, focus_id)
@@ -143,7 +145,7 @@ class KefreytFocusLayoutTests(unittest.TestCase):
 class KefreytWarTooltipTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.focuses = FOCUS_PATH.read_text(encoding="utf-8")
+        cls.focuses = read_focus_source(FOCUS_PATH, encoding="utf-8")
         cls.ru = read("localisation/russian/ADISCORD_VAL_decisions_l_russian.yml")
         cls.en = read("localisation/english/ADISCORD_VAL_decisions_l_english.yml")
 

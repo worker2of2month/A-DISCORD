@@ -1,3 +1,15 @@
+VAL_new_world_category = {
+	priority = 950
+	allowed = { tag = VAL }
+	visible = {
+		OR = {
+			has_completed_focus = VAL_Return_To_World_Market
+			VAL_nw_khan_threat = yes
+		}
+	}
+	visible_when_empty = yes
+}
+
 VAL_military_operations = {
 	priority = 1000
 	allowed = { tag = VAL }

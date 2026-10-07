@@ -426,7 +426,6 @@ def operations_map_effects() -> str:
     lines.append("VAL_operations_map_refresh_cache = {\n")
     for state in STATE_IDS:
         variable = f"operations_state_{state}_frame"
-        lines.append(f"\tset_variable = {{ var = {variable} value = {FRAME_COUNT} }}\n")
         for index, (condition_lines, frame) in enumerate(
             operations_controller_branches()
         ):
@@ -443,6 +442,16 @@ def operations_map_effects() -> str:
             lines.append("\t\t}\n")
             lines.append(f"\t\tset_variable = {{ var = {variable} value = {frame} }}\n")
             lines.append("\t}\n")
+        lines.append("\telse = {\n")
+        lines.append(f"\t\tset_variable = {{ var = {variable} value = {FRAME_COUNT} }}\n")
+        lines.append("\t}\n")
+    lines.append("}\n\n")
+
+    lines.append("# COUNTRY STS: call only after VAL refreshed its cache in the same callback.\n")
+    lines.append("VAL_operations_map_copy_val_cache = {\n")
+    for state in STATE_IDS:
+        variable = f"operations_state_{state}_frame"
+        lines.append(f"\tset_variable = {{ var = {variable} value = VAL.{variable} }}\n")
     lines.append("}\n\n")
 
     lines.append("VAL_trade_routes_map_refresh_cache = {\n")
@@ -452,39 +461,32 @@ def operations_map_effects() -> str:
     )
     for route in trade_route_states():
         variable = f"trade_{route}_map_frame"
-        status_conditions = (
+        lines.extend(
             (
-                f"NOT = {{ VAL_trade_route_{route}_open = yes }}",
-                f"NOT = {{ has_country_flag = VAL_route_{route}_commissioned }}",
-            ),
-            (
-                f"VAL_trade_route_{route}_open = yes",
-                "NOT = {",
-                "\tAND = {",
-                f"\t\t{pressure}",
-                f"\t\t{insecurity}",
-                "\t}",
-                "}",
-            ),
-            (f"VAL_trade_route_{route}_open = yes", pressure, insecurity),
-            (
-                f"NOT = {{ VAL_trade_route_{route}_open = yes }}",
-                f"has_country_flag = VAL_route_{route}_commissioned",
-            ),
+                "\tif = {\n",
+                f"\t\tlimit = {{ VAL_trade_route_{route}_open = yes }}\n",
+                "\t\tif = {\n",
+                "\t\t\tlimit = {\n",
+                f"\t\t\t\t{pressure}\n",
+                f"\t\t\t\t{insecurity}\n",
+                "\t\t\t}\n",
+                f"\t\t\tset_variable = {{ var = {variable} value = 3 }}\n",
+                "\t\t}\n",
+                "\t\telse = {\n",
+                f"\t\t\tset_variable = {{ var = {variable} value = 2 }}\n",
+                "\t\t}\n",
+                "\t}\n",
+                "\telse = {\n",
+                "\t\tif = {\n",
+                f"\t\t\tlimit = {{ has_country_flag = VAL_route_{route}_commissioned }}\n",
+                f"\t\t\tset_variable = {{ var = {variable} value = 4 }}\n",
+                "\t\t}\n",
+                "\t\telse = {\n",
+                f"\t\t\tset_variable = {{ var = {variable} value = 1 }}\n",
+                "\t\t}\n",
+                "\t}\n",
+            )
         )
-        lines.append(f"\tset_variable = {{ var = {variable} value = 1 }}\n")
-        for index, condition_lines in enumerate(status_conditions):
-            branch = "if" if index == 0 else "else_if"
-            lines.append(f"\t{branch} = {{\n")
-            lines.append("\t\tlimit = {\n")
-            lines.extend(
-                f"\t\t\t{condition_line}\n" for condition_line in condition_lines
-            )
-            lines.append("\t\t}\n")
-            lines.append(
-                f"\t\tset_variable = {{ var = {variable} value = {index + 1} }}\n"
-            )
-            lines.append("\t}\n")
     lines.append("}\n")
     return "".join(lines)
 
@@ -824,7 +826,22 @@ def main() -> int:
         action="store_true",
         help="write the deterministic operations-map PNGs",
     )
+    parser.add_argument(
+        "--effects-only",
+        action="store_true",
+        help="check or write only the cache effects, preserving GUI and image outputs",
+    )
     args = parser.parse_args()
+    if args.effects_only:
+        path = ROOT / "common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt"
+        source = operations_map_effects()
+        if args.apply:
+            path.write_text(source, encoding="utf-8")
+        if not path.exists() or path.read_text(encoding="utf-8") != source:
+            print(f"ERROR: generated effects differ: {path.relative_to(ROOT)}")
+            return 1
+        print("VAL operations-map effects validation passed.")
+        return 0
     outputs, box, size, offset = render_outputs()
     outputs, boxes = compact_overlays(outputs)
     outputs.update(render_trade_routes())

@@ -5,6 +5,8 @@ import unittest
 from pathlib import Path
 
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS_PATH = ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
 ON_ACTIONS_PATH = ROOT / "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt"
@@ -13,7 +15,7 @@ EN_LOC_PATH = ROOT / "localisation/english/ADISCORD_VAL_decisions_l_english.yml"
 
 
 def read(path: Path) -> str:
-    return path.read_text(encoding="utf-8-sig")
+    return read_focus_source(path)
 
 
 def brace_block(source: str, start: int) -> str:

@@ -5,6 +5,7 @@ VAL_expansion_priority_plan = {
 	desc = ""
 	allowed = { original_tag = VAL }
 	enable = {
+		NOT = { has_focus_tree = VAL_new_world_focus }
 		tag = VAL
 		is_ai = yes
 		is_subject = no
@@ -13,6 +14,7 @@ VAL_expansion_priority_plan = {
 	}
 	abort = {
 		OR = {
+			has_focus_tree = VAL_new_world_focus
 			NOT = { tag = VAL }
 			is_subject = yes
 			has_capitulated = yes
@@ -77,4 +79,51 @@ VAL_expansion_priority_plan = {
 		VAL_frontier_security_plan
 	}
 	weight = { factor = 20 }
+}
+
+VAL_new_world_plan = {
+	name = "Kefreyt new world programme"
+	desc = ""
+	allowed = { original_tag = VAL }
+	enable = {
+		is_ai = yes
+		has_focus_tree = VAL_new_world_focus
+		VAL_nw_operational = yes
+	}
+	abort = {
+		OR = {
+			NOT = { has_focus_tree = VAL_new_world_focus }
+			VAL_nw_operational = no
+		}
+	}
+	ai_national_focuses = {
+		VAL_nw_price
+		VAL_nw_khan
+		VAL_nw_defence
+		VAL_nw_arsenals
+		VAL_nw_reserve
+		VAL_nw_perimeter
+		VAL_nw_caravans
+		VAL_nw_councils
+		VAL_nw_register
+		VAL_nw_guarantor
+		VAL_nw_break_ring
+		VAL_nw_last_account
+		VAL_nw_inventory
+		VAL_nw_sanitary
+		VAL_nw_restart
+		VAL_nw_foundries
+		VAL_nw_archives
+		VAL_nw_alloys
+		VAL_nw_commission
+		VAL_nw_zones
+		VAL_nw_engineers
+		VAL_nw_roads
+		VAL_nw_market
+		VAL_nw_chains
+		VAL_nw_standard
+		VAL_nw_generation
+		VAL_nw_steel_peace
+	}
+	weight = { factor = 100 }
 }

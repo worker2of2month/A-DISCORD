@@ -10,11 +10,13 @@ from tools.tests.test_adiscord_stp_preparation import (
     scalar,
 )
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 def read(relative: str) -> str:
-    return (ROOT / relative).read_text(encoding="utf-8-sig")
+    return read_focus_source(ROOT / relative)
 
 
 def block(source: str, name: str) -> str:

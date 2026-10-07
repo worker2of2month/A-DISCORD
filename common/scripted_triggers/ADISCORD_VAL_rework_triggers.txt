@@ -1758,6 +1758,161 @@ VAL_economic_settlement_ready = {
 	}
 }
 
+# --- new_world_contracts ---
+
+VAL_nw_operational = {
+	exists = yes
+	tag = VAL
+	is_subject = no
+	has_capitulated = no
+}
+
+VAL_nw_khan_threat = {
+	VAL_nw_operational = yes
+	RUS = { exists = yes }
+	OR = {
+		has_war_with = RUS
+		AND = {
+			tag = event_target:RUS_crisis_hegemon
+			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
+		}
+	}
+}
+
+VAL_nw_khan_settled = {
+	NOT = { has_war_with = RUS }
+	OR = {
+		has_country_flag = RUS_crisis_settlement_rights
+		RUS = { exists = no }
+		RUS = { is_subject = yes }
+		RUS = { check_variable = { var = RUS_crisis_phase value = 5 compare = equals } }
+	}
+}
+
+# COUNTRY receiving an offer; the fixed roster excludes other countries' clients.
+VAL_nw_partner_eligible = {
+	exists = yes
+	has_capitulated = no
+	hidden_trigger = {
+		OR = {
+			tag = SLA
+			tag = RZA
+			tag = MLR
+			tag = ERT
+			tag = IRT
+			tag = SCA
+			tag = VEL
+			tag = RLY
+		}
+	}
+	OR = {
+		is_subject_of = VAL
+		AND = {
+			is_subject = no
+			OR = {
+				is_in_faction = no
+				is_in_faction_with = VAL
+			}
+		}
+	}
+	NOT = { has_war_with = VAL }
+	NOT = { is_in_faction_with = RUS }
+}
+
+VAL_nw_concession_valid = {
+	VAL_nw_partner_eligible = yes
+	custom_trigger_tooltip = {
+		tooltip = VAL_nw_concession_valid_tt
+		has_country_flag = VAL_nw_concession
+	}
+	VAL = { VAL_nw_operational = yes }
+}
+
+VAL_nw_offer_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+	NOT = { has_equipment = { infantry_equipment < 600 } }
+}
+
+# STATE. Civilian construction belongs to its current local owner.
+VAL_nw_reactor_access = {
+	OR = {
+		state = 176
+		state = 177
+		state = 187
+		state = 188
+		state = 189
+		state = 192
+	}
+	owner = {
+		OR = {
+			tag = VAL
+			VAL_nw_concession_valid = yes
+			is_subject_of = VAL
+		}
+	}
+	controller = {
+		OR = {
+			tag = VAL
+			VAL_nw_concession_valid = yes
+			is_subject_of = VAL
+		}
+	}
+	VAL = { VAL_nw_operational = yes }
+}
+
+VAL_nw_has_reactor_access = {
+	OR = {
+		176 = { VAL_nw_reactor_access = yes }
+		177 = { VAL_nw_reactor_access = yes }
+		187 = { VAL_nw_reactor_access = yes }
+		188 = { VAL_nw_reactor_access = yes }
+		189 = { VAL_nw_reactor_access = yes }
+		192 = { VAL_nw_reactor_access = yes }
+	}
+}
+
+VAL_nw_has_restored_works = {
+	OR = {
+		176 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+		177 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+		187 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+		188 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+		189 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+		192 = {
+			VAL_nw_reactor_access = yes
+			has_state_flag = RUS_reactor_works_restored
+		}
+	}
+}
+
+VAL_nw_project_idle = {
+	NOT = { has_variable = VAL_nw_project_deposit }
+}
+
+# STATE. A new owner must negotiate its own project even if access survives.
+VAL_nw_project_current = {
+	has_state_flag = VAL_nw_project_in_progress
+	VAL_nw_reactor_access = yes
+	owner = { tag = event_target:VAL_nw_project_owner }
+	VAL = { has_variable = VAL_nw_project_deposit }
+}
+
 # COUNTRY VAL: the first defeat stays recorded so inherited campaigns stay closed.
 VAL_council_can_prepare_revanche = {
 	tag = VAL

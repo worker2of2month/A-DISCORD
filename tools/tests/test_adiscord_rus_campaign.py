@@ -280,10 +280,11 @@ class BunkerWorld:
                 else:
                     self.modifiers.discard(name)
             elif key in ("add_ideas", "remove_ideas"):
+                names = [row.value for row in value] if isinstance(value, list) else [value]
                 if key.startswith("add"):
-                    self.ideas.add(value)
+                    self.ideas.update(names)
                 else:
-                    self.ideas.discard(value)
+                    self.ideas.difference_update(names)
             elif key == "country_event":
                 self.events.append(scalar(value, "id"))
             elif key == "activate_decision":
@@ -343,8 +344,8 @@ class RusCampaignTests(unittest.TestCase):
     def world(self):
         return BunkerWorld(self)
 
-    def test_generation_and_one_hundred_eleven_focuses(self):
-        self.assertEqual(len(self.focuses), 111)
+    def test_generation_and_one_hundred_twenty_seven_focuses(self):
+        self.assertEqual(len(self.focuses), 127)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 

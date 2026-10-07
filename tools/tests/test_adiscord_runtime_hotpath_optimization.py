@@ -29,6 +29,94 @@ def named_block(source: str, name: str) -> str:
 
 
 class RuntimeHotpathOptimizationTests(unittest.TestCase):
+    def test_operations_map_shares_fresh_frames_without_a_second_controller_pass(self):
+        from itertools import product
+        from tools.builders.build_adiscord_val_operations_map import STATE_IDS
+        from tools.tests.test_adiscord_stp_preparation import (
+            block,
+            parse_clausewitz,
+            scalar,
+            selected_effects,
+        )
+
+        effects = {
+            entry.key: entry.value
+            for entry in parse_clausewitz(
+                read("common/scripted_effects/ADISCORD_VAL_operations_map_effects.txt")
+            )
+        }
+        hooks = block(
+            parse_clausewitz(read("common/on_actions/04_ADISCORD_operations_map_on_actions.txt")),
+            "on_actions",
+        )
+        controllers = (("VAL", 1), ("STP", 2), ("STS", 3), ("BLD", 18), ("RZA", 25))
+        for hook, val_exists, val_unlocked, sts_exists, sts_unlocked, special in product(
+            ("on_startup", "on_state_control_changed"),
+            (False, True),
+            (False, True),
+            (False, True),
+            (False, True),
+            (False, True),
+        ):
+            with self.subTest(
+                hook=hook,
+                val=(val_exists, val_unlocked),
+                sts=(sts_exists, sts_unlocked),
+                special=special,
+            ):
+                facts = {
+                    ("VAL", "exists", "yes"): val_exists,
+                    ("VAL", "has_country_flag", "VAL_operations_map_unlocked"): val_unlocked,
+                    ("STS", "exists", "yes"): sts_exists,
+                    ("STS", "has_country_flag", "STP_cw_postwar"): sts_unlocked,
+                    ("BLD", "is_subject_of", "BJK"): special,
+                    ("RZA", "has_cosmetic_tag", "STL_VAL_administration"): special,
+                }
+                expected = {}
+                for index, state in enumerate(STATE_IDS):
+                    controller, frame = controllers[index % len(controllers)]
+                    facts[str(state), "controller"] = controller
+                    if special and controller in ("BLD", "RZA"):
+                        frame = {"BLD": 17, "RZA": 2}[controller]
+                    expected[f"operations_state_{state}_frame"] = frame
+                stale = {name: 99 for name in expected}
+                values = {tag: {**stale, "unrelated": 123} for tag in ("VAL", "STS")}
+                full_passes = []
+                writes = {"VAL": 0, "STS": 0}
+
+                def execute(body, scope="STP"):
+                    for current, entry in selected_effects(body, facts, scope):
+                        if entry.key in effects:
+                            self.assertEqual(entry.value, "yes")
+                            if entry.key == "VAL_operations_map_refresh_cache":
+                                full_passes.append(current)
+                            execute(effects[entry.key], current)
+                        elif entry.key == "set_variable":
+                            name = scalar(entry.value, "var")
+                            reference = scalar(entry.value, "value")
+                            if "." in reference:
+                                source, variable = reference.split(".", 1)
+                                amount = values[source][variable]
+                            else:
+                                amount = int(reference)
+                            values[current][name] = amount
+                            writes[current] += 1
+                        else:
+                            self.fail(f"Unsupported map-cache effect: {entry.key}")
+
+                execute(block(block(hooks, hook), "effect"))
+                ready = {
+                    "VAL": val_exists and val_unlocked,
+                    "STS": sts_exists and sts_unlocked,
+                }
+                for tag in ("VAL", "STS"):
+                    expected_values = expected if ready[tag] else stale
+                    self.assertEqual(
+                        values[tag], {**expected_values, "unrelated": 123}
+                    )
+                    self.assertEqual(writes[tag], len(expected) if ready[tag] else 0)
+                self.assertEqual(len(full_passes), int(any(ready.values())))
+
     def test_kefreyt_contract_monthly_hook_is_tag_scoped(self) -> None:
         source = read("common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt")
         self.assertIn("on_monthly_VAL = {", source)

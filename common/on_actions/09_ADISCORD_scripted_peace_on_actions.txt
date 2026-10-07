@@ -647,19 +647,21 @@ on_actions = {
 					ADISCORD_TFF_become_nod_subject = yes
 				}
 			}
-			# Party postwar Kefreyt campaign. The campaign receipt is authoritative;
-			# only the native victor relation is checked here before applying settlement.
+			# The Party's postwar treaty also covers a defeated Kefreyt invasion.
+			# The live war and native victor identify the settlement's recipient.
 			if = {
 				limit = {
 					ROOT = {
 						tag = VAL
 						has_war_with = STP
+						is_subject = no
 					}
 					STP = {
 						exists = yes
 						has_capitulated = no
 						has_country_flag = STP_cw_postwar
-						has_country_flag = STP_pw_party_kefreyt_campaign_active
+						STP_pw_can_reconstruct = yes
+						is_subject = no
 					}
 					FROM = { OR = { tag = STP is_subject_of = STP } }
 				}
@@ -1953,6 +1955,12 @@ on_actions = {
 			# END vorkerland_diplomacy:on_peace
 
 			# BEGIN kefreyt:on_peace
+			if = {
+				limit = { OR = { ROOT = { tag = RUS } FROM = { tag = RUS } } }
+				ROOT = { clr_country_flag = VAL_nw_defence_pending }
+				FROM = { clr_country_flag = VAL_nw_defence_pending }
+				VAL = { VAL_nw_reconcile_partners = yes }
+			}
 			VAL_clear_final_defeat_receipt = yes
 			VAL = { VAL_reconcile_northern_coalition_campaign = yes }
 			VAL = { VAL_council_reconcile_revanche = yes }
@@ -2055,6 +2063,11 @@ on_actions = {
 			if = { limit = { FROM = { tag = NOD } } STP_cw_poll_nod_intervention = yes }
 			# END stelander:on_annex
 			# BEGIN kefreyt:on_annex
+			if = {
+				limit = { FROM = { tag = VAL } }
+				FROM = { VAL_nw_refund_orders = yes }
+			}
+			VAL = { VAL_nw_reconcile_partners = yes }
 			FROM = { VAL_clear_final_defeat_receipt = yes }
 			if = { limit = { FROM = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
 			VAL_queue_frontier_reconciliation = yes

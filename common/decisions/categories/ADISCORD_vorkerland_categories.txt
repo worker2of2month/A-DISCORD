@@ -135,7 +135,7 @@ ADISCORD_vorkerland_rom_tru_category = {
 # --- rus_crisis_category ---
 RUS_last_empire_crisis = {
 	icon = generic_prepare_civil_war
-	allowed = { OR = { tag = RUS tag = VAL tag = STS } }
+	allowed = { OR = { tag = RUS tag = VAL tag = STS tag = STP tag = NOD } }
 	visible = {
 		OR = {
 			AND = {

@@ -13,6 +13,16 @@ including a liberated partner. An unrelated parallel enemy is not part of the
 award. The final transfer includes impassable owned remnants, not neighbours'
 cores or an unrestricted map scan. Arrays are temporary to the callback.
 
+The Party's postwar victory over Kefreyt uses the same subject treaty whether
+STP launched its own operation or defeated a Kefreyt invasion. The immediate
+callback requires the live STP-VAL war and victory credit for STP or its subject.
+Both STP and VAL must be independent, and STP must qualify for postwar
+reconstruction before the callback reserves the result or alters the peace.
+The delayed subject settlement rechecks these conditions.
+Its receipt protects VAL from generic annexation through the late callback;
+subject creation follows the technical peace after the faction cache advances.
+Test both initiators and an unrelated victor without granting STP that victory.
+
 Kefreyt's frontier uses its real selected-target war for all invitations. Native
 `on_war_relation_added` records entrants whose relation was not visible inside
 the requesting effect. One hidden, target-bound event confirms entry after an

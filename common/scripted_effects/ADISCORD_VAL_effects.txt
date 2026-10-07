@@ -1,3 +1,744 @@
+# Country VAL. Six state receipts retain the granting owner across control changes.
+VAL_nw_reconcile_rights = {
+	176 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_176 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_176
+			VAL = {
+				remove_resource_rights = 176
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_176
+				give_resource_rights = { receiver = VAL state = 176 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	177 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_177 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_177
+			VAL = {
+				remove_resource_rights = 177
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_177
+				give_resource_rights = { receiver = VAL state = 177 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	187 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_187 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_187
+			VAL = {
+				remove_resource_rights = 187
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_187
+				give_resource_rights = { receiver = VAL state = 187 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	188 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_188 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_188
+			VAL = {
+				remove_resource_rights = 188
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_188
+				give_resource_rights = { receiver = VAL state = 188 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	189 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_189 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_189
+			VAL = {
+				remove_resource_rights = 189
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_189
+				give_resource_rights = { receiver = VAL state = 189 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+	192 = {
+		if = {
+			limit = {
+				has_state_flag = VAL_nw_resource_rights
+				OR = {
+					owner = { VAL_nw_concession_valid = no }
+					owner = { NOT = { tag = event_target:VAL_nw_rights_owner_192 } }
+				}
+			}
+			clr_state_flag = VAL_nw_resource_rights
+			clear_global_event_target = VAL_nw_rights_owner_192
+			VAL = {
+				remove_resource_rights = 192
+				ADISCORD_economy_mark_dirty = yes
+			}
+			owner = { ADISCORD_economy_mark_dirty = yes }
+		}
+		if = {
+			limit = {
+				NOT = { has_state_flag = VAL_nw_resource_rights }
+				owner = { VAL_nw_concession_valid = yes }
+			}
+			set_state_flag = VAL_nw_resource_rights
+			owner = {
+				save_global_event_target_as = VAL_nw_rights_owner_192
+				give_resource_rights = { receiver = VAL state = 192 }
+				ADISCORD_economy_mark_dirty = yes
+			}
+			VAL = { ADISCORD_economy_mark_dirty = yes }
+		}
+	}
+}
+
+VAL_nw_emergency_arsenals_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_khan_threat = yes
+			NOT = { has_variable = VAL_nw_emergency_arsenals_deposit }
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_nw_emergency_arsenals_deposit value = 150 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_emergency_arsenals_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_emergency_arsenals_deposit }
+		clear_variable = VAL_nw_emergency_arsenals_deposit
+		add_political_power = 25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_emergency_arsenals_finish = {
+	if = {
+		limit = { has_variable = VAL_nw_emergency_arsenals_deposit }
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+				VAL_nw_khan_threat = yes
+			}
+			clear_variable = VAL_nw_emergency_arsenals_deposit
+			add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_nw_emergency_arsenals_refund = yes }
+	}
+}
+
+VAL_nw_emergency_reserve_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_khan_threat = yes
+			NOT = { has_variable = VAL_nw_emergency_reserve_deposit }
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_nw_emergency_reserve_deposit value = 200 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_emergency_reserve_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_emergency_reserve_deposit }
+		clear_variable = VAL_nw_emergency_reserve_deposit
+		add_political_power = 25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_emergency_reserve_finish = {
+	if = {
+		limit = { has_variable = VAL_nw_emergency_reserve_deposit }
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+				VAL_nw_khan_threat = yes
+			}
+			clear_variable = VAL_nw_emergency_reserve_deposit
+			add_manpower = 2000
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_nw_emergency_reserve_refund = yes }
+	}
+}
+
+VAL_nw_survey_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			NOT = { has_variable = VAL_nw_survey_deposit }
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_nw_survey_deposit value = 100 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_survey_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_survey_deposit }
+		clear_variable = VAL_nw_survey_deposit
+		add_political_power = 25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_survey_finish = {
+	if = {
+		limit = { has_variable = VAL_nw_survey_deposit }
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+			}
+			clear_variable = VAL_nw_survey_deposit
+			army_experience = 10
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_nw_survey_refund = yes }
+	}
+}
+
+VAL_nw_guard_caravans_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			NOT = { has_variable = VAL_nw_guard_caravans_deposit }
+			NOT = { has_political_power < 25 }
+			check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_nw_guard_caravans_deposit value = 100 }
+		add_political_power = -25
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_guard_caravans_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_guard_caravans_deposit }
+		clear_variable = VAL_nw_guard_caravans_deposit
+		add_political_power = 25
+		add_to_variable = { var = ADISCORD_economy_treasury value = 100 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 100 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_guard_caravans_finish = {
+	if = {
+		limit = { has_variable = VAL_nw_guard_caravans_deposit }
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+			}
+			clear_variable = VAL_nw_guard_caravans_deposit
+			add_timed_idea = { idea = VAL_nw_guarded_caravans days = 180 }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_nw_guard_caravans_refund = yes }
+	}
+}
+
+VAL_nw_salvage_archives_begin = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_has_reactor_access = yes
+			NOT = { has_variable = VAL_nw_salvage_archives_deposit }
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 150 compare = greater_than_or_equals }
+		}
+		set_variable = { var = VAL_nw_salvage_archives_deposit value = 150 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_salvage_archives_refund = {
+	if = {
+		limit = { has_variable = VAL_nw_salvage_archives_deposit }
+		clear_variable = VAL_nw_salvage_archives_deposit
+		add_political_power = 50
+		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_salvage_archives_finish = {
+	if = {
+		limit = { has_variable = VAL_nw_salvage_archives_deposit }
+		if = {
+			limit = {
+				VAL_nw_operational = yes
+				VAL_nw_has_reactor_access = yes
+			}
+			clear_variable = VAL_nw_salvage_archives_deposit
+			add_tech_bonus = { name = VAL_nw_archive_expedition bonus = 0.5 uses = 1 category = electronics }
+			ADISCORD_economy_mark_dirty = yes
+		}
+		else = { VAL_nw_salvage_archives_refund = yes }
+	}
+}
+
+# --- new_world_contracts ---
+# The event's immediate block also runs when its reading window is left open.
+VAL_nw_open_chapter = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			has_completed_focus = VAL_Return_To_World_Market
+			NOT = { has_focus_tree = VAL_new_world_focus }
+		}
+		load_focus_tree = { tree = VAL_new_world_focus keep_completed = yes }
+	}
+}
+
+VAL_nw_begin_restoration = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_project_idle = yes
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+			FROM = {
+				VAL_nw_reactor_access = yes
+				NOT = { has_state_flag = RUS_reactor_works_restored }
+				NOT = { has_state_flag = RUS_reactor_works_in_progress }
+			}
+		}
+		set_variable = { var = VAL_nw_project_deposit value = 400 }
+		set_variable = { var = VAL_nw_project_kind value = 1 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+		FROM = {
+			set_state_flag = VAL_nw_project_in_progress
+			owner = { save_global_event_target_as = VAL_nw_project_owner }
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_begin_foundry = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_project_idle = yes
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+			FROM = {
+				VAL_nw_reactor_access = yes
+				has_state_flag = RUS_reactor_works_restored
+				NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+			}
+		}
+		set_variable = { var = VAL_nw_project_deposit value = 300 }
+		set_variable = { var = VAL_nw_project_kind value = 2 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		FROM = {
+			set_state_flag = VAL_nw_project_in_progress
+			owner = { save_global_event_target_as = VAL_nw_project_owner }
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_nw_begin_roads = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			VAL_nw_project_idle = yes
+			NOT = { has_political_power < 50 }
+			check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+			FROM = {
+				VAL_nw_reactor_access = yes
+				NOT = { has_state_flag = VAL_nw_roads_restored }
+				infrastructure < 5
+			}
+		}
+		set_variable = { var = VAL_nw_project_deposit value = 200 }
+		set_variable = { var = VAL_nw_project_kind value = 3 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+		FROM = {
+			set_state_flag = VAL_nw_project_in_progress
+			owner = { save_global_event_target_as = VAL_nw_project_owner }
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY VAL; only the callback's own state can consume the shared receipt.
+VAL_nw_finish_project = {
+	if = {
+		limit = {
+			has_variable = VAL_nw_project_deposit
+			FROM = { has_state_flag = VAL_nw_project_in_progress }
+		}
+		if = {
+			limit = { FROM = { VAL_nw_project_current = yes } }
+			if = {
+				limit = {
+					check_variable = { var = VAL_nw_project_kind value = 1 compare = equals }
+					FROM = { NOT = { has_state_flag = RUS_reactor_works_restored } }
+				}
+				FROM = {
+					set_state_flag = RUS_reactor_works_restored
+					RUS_reactor_works_restore_resources = yes
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+				FROM = { owner = { ADISCORD_economy_mark_dirty = yes } }
+				VAL_nw_clear_project = yes
+			}
+			else_if = {
+				limit = {
+					check_variable = { var = VAL_nw_project_kind value = 2 compare = equals }
+					FROM = {
+						has_state_flag = RUS_reactor_works_restored
+						NOT = { has_state_flag = ADISCORD_reactor_foundry_restored }
+					}
+				}
+				FROM = { RUS_reactor_foundry_expand = yes }
+				FROM = { owner = { ADISCORD_economy_mark_dirty = yes } }
+				VAL_nw_clear_project = yes
+			}
+			else_if = {
+				limit = {
+					check_variable = { var = VAL_nw_project_kind value = 3 compare = equals }
+					FROM = {
+						NOT = { has_state_flag = VAL_nw_roads_restored }
+						infrastructure < 5
+					}
+				}
+				FROM = {
+					set_state_flag = VAL_nw_roads_restored
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+				FROM = { owner = { ADISCORD_economy_mark_dirty = yes } }
+				VAL_nw_clear_project = yes
+			}
+			else = { VAL_nw_refund_project = yes }
+		}
+		else = { VAL_nw_refund_project = yes }
+	}
+}
+
+VAL_nw_cancel_project = {
+	if = {
+		limit = { FROM = { has_state_flag = VAL_nw_project_in_progress } }
+		VAL_nw_refund_project = yes
+	}
+}
+
+VAL_nw_refund_project = {
+	if = {
+		limit = { has_variable = VAL_nw_project_deposit }
+		add_political_power = 50
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_nw_project_deposit }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_nw_project_deposit }
+		VAL_nw_clear_project = yes
+	}
+}
+
+VAL_nw_clear_project = {
+	clear_variable = VAL_nw_project_deposit
+	clear_variable = VAL_nw_project_kind
+	clear_global_event_target = VAL_nw_project_owner
+	176 = { clr_state_flag = VAL_nw_project_in_progress }
+	177 = { clr_state_flag = VAL_nw_project_in_progress }
+	187 = { clr_state_flag = VAL_nw_project_in_progress }
+	188 = { clr_state_flag = VAL_nw_project_in_progress }
+	189 = { clr_state_flag = VAL_nw_project_in_progress }
+	192 = { clr_state_flag = VAL_nw_project_in_progress }
+	ADISCORD_economy_mark_dirty = yes
+}
+
+# COUNTRY VAL. An annexed country no longer processes its decision callbacks.
+VAL_nw_refund_orders = {
+	VAL_nw_refund_project = yes
+	VAL_nw_emergency_arsenals_refund = yes
+	VAL_nw_emergency_reserve_refund = yes
+	VAL_nw_survey_refund = yes
+	VAL_nw_guard_caravans_refund = yes
+	VAL_nw_salvage_archives_refund = yes
+}
+
+# COUNTRY recipient; consent is rechecked before any VAL payment or delivery.
+VAL_nw_accept_concession = {
+	if = {
+		limit = {
+			has_country_flag = VAL_nw_offer_pending
+			NOT = { has_country_flag = VAL_nw_concession }
+			VAL_nw_partner_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_nw_offer_affordable = yes
+			}
+		}
+		clr_country_flag = VAL_nw_offer_pending
+		set_country_flag = VAL_nw_concession
+		ADISCORD_release_non_participating_minor_optimization = yes
+		add_equipment_to_stockpile = { type = infantry_equipment amount = 600 producer = VAL }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 200 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 200 }
+		VAL = {
+			add_political_power = -50
+			subtract_from_variable = { var = ADISCORD_economy_treasury value = 200 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 200 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -600 }
+			ADISCORD_economy_mark_dirty = yes
+			country_event = { id = val_rework.126 }
+		}
+		VAL_nw_grant_concession_rights = yes
+		VAL_nw_reconcile_partner = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# COUNTRY partner; access is registered on the actual state for precise revocation.
+VAL_nw_grant_concession_rights = {
+	VAL = { VAL_nw_reconcile_rights = yes }
+}
+
+VAL_nw_revoke_concession = {
+	if = {
+		limit = { has_country_flag = VAL_nw_concession }
+		clr_country_flag = VAL_nw_concession
+		clr_country_flag = VAL_nw_defence_pending
+		VAL = {
+			VAL_nw_reconcile_rights = yes
+			add_to_variable = { var = VAL_arsenal_reputation_stage value = -1 }
+			VAL_refresh_arsenal_reputation = yes
+			country_event = { id = val_rework.128 }
+		}
+	}
+}
+
+# COUNTRY partner. These eight calls run in VAL's monthly hook, not a world scan.
+VAL_nw_reconcile_partner = {
+	if = {
+		limit = { has_country_flag = VAL_nw_concession }
+		if = {
+			limit = { VAL_nw_concession_valid = no }
+			VAL_nw_revoke_concession = yes
+		}
+		else_if = {
+			limit = {
+				has_war_with = RUS
+				VAL = { NOT = { has_war_with = RUS } }
+				NOT = { has_country_flag = VAL_nw_defence_pending }
+			}
+			set_country_flag = VAL_nw_defence_pending
+			country_event = { id = val_rework.131 hours = 1 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					NOT = { has_war_with = RUS }
+					VAL = { has_war_with = RUS }
+				}
+			}
+			clr_country_flag = VAL_nw_defence_pending
+		}
+	}
+}
+
+VAL_nw_reconcile_partners = {
+	if = {
+		limit = { has_completed_focus = VAL_Return_To_World_Market }
+		SLA = { VAL_nw_reconcile_partner = yes }
+		RZA = { VAL_nw_reconcile_partner = yes }
+		MLR = { VAL_nw_reconcile_partner = yes }
+		ERT = { VAL_nw_reconcile_partner = yes }
+		IRT = { VAL_nw_reconcile_partner = yes }
+		SCA = { VAL_nw_reconcile_partner = yes }
+		VEL = { VAL_nw_reconcile_partner = yes }
+		RLY = { VAL_nw_reconcile_partner = yes }
+		VAL_nw_reconcile_rights = yes
+	}
+}
+
+# COUNTRY VAL with the threatened recipient in FROM.
+VAL_nw_defend_partner = {
+	if = {
+		limit = {
+			VAL_nw_operational = yes
+			FROM = {
+				VAL_nw_concession_valid = yes
+				has_war_with = RUS
+			}
+			NOT = { has_war_with = RUS }
+		}
+		add_to_war = {
+			targeted_alliance = FROM
+			enemy = RUS
+			hostility_reason = asked_to_join
+			single_target_only = yes
+		}
+		if = {
+			limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } } }
+			RUS_crisis_register_defender = yes
+		}
+		FROM = { clr_country_flag = VAL_nw_defence_pending }
+	}
+}
+
+VAL_nw_improve_industry = {
+	add_to_variable = { var = VAL_nw_factory_output value = 0.05 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } } }
+		add_dynamic_modifier = { modifier = VAL_nw_industrial_network }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
+VAL_nw_improve_trade = {
+	add_to_variable = { var = VAL_nw_trade_income value = 0.05 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = VAL_nw_industrial_network } } }
+		add_dynamic_modifier = { modifier = VAL_nw_industrial_network }
+	}
+	force_update_dynamic_modifier = yes
+	ADISCORD_economy_mark_dirty = yes
+}
+
 # --- contract_authority_effects ---
 # Kefreyt contract authority.
 

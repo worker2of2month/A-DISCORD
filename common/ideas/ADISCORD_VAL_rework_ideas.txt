@@ -1,5 +1,30 @@
 ideas = {
 	country = {
+		# Native delta previews; country variables own the actual modifier.
+		VAL_nw_industry_delta = {
+			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = { industrial_capacity_factory = 0.05 }
+		}
+
+		VAL_nw_trade_delta = {
+			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_trade_income_factor = 0.05 }
+		}
+
+		VAL_nw_admin_delta = {
+			name = VAL_nw_industrial_network
+			allowed = { always = no }
+			modifier = { ADISCORD_economy_admin_expense_factor = -0.05 }
+		}
+
+		VAL_nw_guarded_caravans = {
+			picture = VAL_contract_state
+			allowed = { tag = VAL }
+			removal_cost = -1
+			modifier = { supply_consumption_factor = -0.05 }
+		}
 
 		VAL_armor_serial_production = {
 			picture = generic_armor

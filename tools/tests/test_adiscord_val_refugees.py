@@ -6,6 +6,8 @@ from pathlib import Path
 from tools.tests.test_adiscord_stp_preparation import matches_conditions, scalar
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
+from tools.lib.focus_sources import read_focus_source
+
 ROOT = Path(__file__).resolve().parents[2]
 REGIONS = ("vorkerland", "stelander", "nodrul", "north")
 
@@ -13,7 +15,7 @@ REGIONS = ("vorkerland", "stelander", "nodrul", "north")
 def load(path):
     return {
         e.key: e.value
-        for e in parse_clausewitz((ROOT / path).read_text(encoding="utf-8-sig"))
+        for e in parse_clausewitz(read_focus_source(ROOT / path))
     }
 
 
@@ -1525,9 +1527,7 @@ class WastelandCampaignTests(unittest.TestCase):
         self.assertIn("has_completed_focus = VAL_Southern_Expansion", managed)
 
     def test_late_expansion_focuses_have_priority_and_terminal_bypass(self):
-        source = (
-            ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt"
-        ).read_text(encoding="utf-8-sig")
+        source = read_focus_source(ROOT / "common/national_focus/ADISCORD_national_focus_VAL.txt", encoding="utf-8-sig")
         for focus_id, target, priority in (
             ("VAL_Southern_Expansion", "ERT", 120),
             ("VAL_Eastern_Expansion", "IRT", 130),

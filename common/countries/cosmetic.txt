@@ -123,6 +123,6 @@ RUS_black_banner_empire = {
 }
 
 RUS_restoration_state = {
-	color = rgb { 118 133 105 }
-	color_ui = rgb { 118 133 105 }
+	color = rgb { 122 40 58 }
+	color_ui = rgb { 122 40 58 }
 }

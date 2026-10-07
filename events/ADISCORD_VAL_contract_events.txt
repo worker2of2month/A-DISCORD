@@ -2499,9 +2499,161 @@ country_event = {
 
 country_event = {
 	id = val_rework.124
+	immediate = { VAL_nw_open_chapter = yes }
 	title = val_rework.124.t
 	desc = val_rework.124.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	option = { name = val_rework.124.a }
+}
+
+# --- new_world_contracts ---
+country_event = {
+	id = val_rework.125
+	title = val_rework.125.t
+	desc = val_rework.125.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	timeout_days = 14
+	option = {
+		name = val_rework.125.a
+		ai_chance = { factor = 20 }
+		hidden_effect = { clr_country_flag = VAL_nw_offer_pending }
+	}
+	option = {
+		name = val_rework.125.b
+		trigger = {
+			has_country_flag = VAL_nw_offer_pending
+			NOT = { has_country_flag = VAL_nw_concession }
+			VAL_nw_partner_eligible = yes
+			VAL = {
+				VAL_nw_operational = yes
+				VAL_nw_offer_affordable = yes
+			}
+		}
+		ai_chance = { factor = 80 }
+		custom_effect_tooltip = VAL_nw_concession_receive_tt
+		hidden_effect = { VAL_nw_accept_concession = yes }
+	}
+}
+
+country_event = {
+	id = val_rework.126
+	title = val_rework.126.t
+	desc = val_rework.126.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	option = { name = val_rework.126.a }
+}
+
+country_event = {
+	id = val_rework.127
+	title = val_rework.127.t
+	desc = val_rework.127.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	timeout_days = 13
+	# An obsolete notice may close after a new war has started; only event 130 owns expiry.
+	option = {
+		name = val_rework.127.dismiss
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = val_rework.127.a
+		ai_chance = { factor = 0 }
+		custom_effect_tooltip = VAL_nw_abandon_partner_tt
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_war_with = RUS }
+					FROM = {
+						has_country_flag = VAL_nw_defence_pending
+						has_war_with = RUS
+					}
+				}
+				FROM = { VAL_nw_revoke_concession = yes }
+			}
+		}
+	}
+	option = {
+		name = val_rework.127.b
+		trigger = {
+			VAL_nw_operational = yes
+			NOT = { has_war_with = RUS }
+			FROM = {
+				VAL_nw_concession_valid = yes
+				has_war_with = RUS
+			}
+		}
+		ai_chance = { factor = 100 }
+		custom_effect_tooltip = VAL_nw_defend_partner_tt
+		hidden_effect = { VAL_nw_defend_partner = yes }
+	}
+	option = {
+		name = val_rework.127.c
+		trigger = {
+			OR = {
+				has_war_with = RUS
+				FROM = {
+					OR = {
+						NOT = { has_war_with = RUS }
+						NOT = { has_country_flag = VAL_nw_concession }
+					}
+				}
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = val_rework.128
+	title = val_rework.128.t
+	desc = val_rework.128.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	option = { name = val_rework.128.a }
+}
+
+country_event = {
+	id = val_rework.129
+	title = val_rework.129.t
+	desc = val_rework.129.d
+	picture = GFX_report_event_generic_factory
+	is_triggered_only = yes
+	option = { name = val_rework.129.a }
+}
+
+country_event = {
+	id = val_rework.130
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = { flag = VAL_nw_defence_pending days > 13 }
+				has_war_with = RUS
+				VAL = { NOT = { has_war_with = RUS } }
+			}
+			VAL_nw_revoke_concession = yes
+		}
+	}
+}
+
+# Re-root the notice in the partner so its visible offer has a stable FROM.
+country_event = {
+	id = val_rework.131
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				has_country_flag = VAL_nw_defence_pending
+				has_war_with = RUS
+				VAL = { NOT = { has_war_with = RUS } }
+			}
+			VAL = { country_event = { id = val_rework.127 } }
+			country_event = { id = val_rework.130 days = 14 }
+		}
+	}
 }

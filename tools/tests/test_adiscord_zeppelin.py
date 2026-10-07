@@ -104,7 +104,9 @@ class ValAirshipConstructionTests(unittest.TestCase):
             self.assertEqual(world.balances(), (100, 1000, 400))
         self.assertTrue(self.world.matches(value(self.decision, "visible")))
         for path in ("focus_trees/VAL/main/focuses.txt", "common/national_focus/ADISCORD_national_focus_VAL.txt"):
-            focus = next(rows for rows in children(value(read(path), "focus_tree"), "focus") if value(rows, "id") == "VAL_Eastern_Expansion")
+            native = read(path)
+            focuses = children(value(native, "focus_tree"), "focus") + children(native, "shared_focus")
+            focus = next(rows for rows in focuses if value(rows, "id") == "VAL_Eastern_Expansion")
             self.assertIn("VAL_build_zeppelin", children(value(focus, "completion_reward"), "unlock_decision_tooltip"))
 
     def test_exact_price_is_charged_once_and_save_load_delivers_one_val_ship(self):

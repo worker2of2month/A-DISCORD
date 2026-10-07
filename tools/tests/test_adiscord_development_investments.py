@@ -70,7 +70,7 @@ class RouteGatedDevelopmentProgrammeTests(unittest.TestCase):
         cls.generic_categories = GENERIC_CATEGORIES.read_text(encoding="utf-8")
         cls.val_decisions = VAL_DECISIONS.read_text(encoding="utf-8")
         cls.stp_decisions = STP_DECISIONS.read_text(encoding="utf-8")
-        cls.val_focus = VAL_FOCUS.read_text(encoding="utf-8")
+        cls.val_focus = read_focus_source(VAL_FOCUS, encoding="utf-8")
         cls.stp_focus = read_focus_source(STP_FOCUS, encoding="utf-8")
         cls.ideas = IDEAS.read_text(encoding="utf-8")
 

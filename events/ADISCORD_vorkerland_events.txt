@@ -53,10 +53,17 @@ country_event = {
 	}
 	desc = {
 		trigger = {
-			tag = STS
+			OR = { tag = STS tag = STP }
 			check_variable = { var = RUS_crisis_defeated_course value = 2 compare = less_than }
 		}
 		text = ADISCORD_rus_crisis.4.sts
+	}
+	desc = {
+		trigger = {
+			tag = NOD
+			check_variable = { var = RUS_crisis_defeated_course value = 2 compare = less_than }
+		}
+		text = ADISCORD_rus_crisis.4.nod
 	}
 	desc = {
 		trigger = { check_variable = { var = RUS_crisis_defeated_course value = 2 compare = equals } }

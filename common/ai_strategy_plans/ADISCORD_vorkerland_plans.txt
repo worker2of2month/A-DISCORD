@@ -2126,6 +2126,79 @@ ADISCORD_vorkerland_zao_plan = {
 }
 
 # --- rus_last_empire_plan ---
+ADISCORD_rus_crisis_nod_plan = {
+	name = "RUS NOD campaign preparation"
+	desc = ""
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_prepare_nod = yes
+	}
+	abort = { RUS_crisis_prepare_nod = no }
+	ai_national_focuses = {
+		RUS_crisis_nod_1
+		RUS_crisis_nod_2
+		RUS_crisis_nod_3
+		RUS_crisis_nod_4
+	}
+	weight = { factor = 1000 }
+}
+
+ADISCORD_rus_crisis_stp_plan = {
+	name = "RUS STP campaign preparation"
+	desc = ""
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_prepare_stp = yes
+	}
+	abort = { RUS_crisis_prepare_stp = no }
+	ai_national_focuses = {
+		RUS_crisis_stp_1
+		RUS_crisis_stp_2
+		RUS_crisis_stp_3
+		RUS_crisis_stp_4
+	}
+	weight = { factor = 1000 }
+}
+
+ADISCORD_rus_crisis_sts_plan = {
+	name = "RUS STS campaign preparation"
+	desc = ""
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_prepare_sts = yes
+	}
+	abort = { RUS_crisis_prepare_sts = no }
+	ai_national_focuses = {
+		RUS_crisis_sts_1
+		RUS_crisis_sts_2
+		RUS_crisis_sts_3
+		RUS_crisis_sts_4
+	}
+	weight = { factor = 1000 }
+}
+
+ADISCORD_rus_crisis_val_plan = {
+	name = "RUS VAL campaign preparation"
+	desc = ""
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_prepare_val = yes
+	}
+	abort = { RUS_crisis_prepare_val = no }
+	ai_national_focuses = {
+		RUS_crisis_val_1
+		RUS_crisis_val_2
+		RUS_crisis_val_3
+		RUS_crisis_val_4
+	}
+	weight = { factor = 1000 }
+}
+
+
 ADISCORD_vorkerland_rus_last_empire_plan = {
 	name = "RUS last empire"
 	desc = ""

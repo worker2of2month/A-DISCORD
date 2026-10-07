@@ -1888,22 +1888,67 @@ ADISCORD_vorkerland_has_live_solarino_war = {
 
 # --- rus_last_empire_triggers ---
 
+# COUNTRY. A regional settlement, not an intermediate campaign victory.
+RUS_crisis_final_victory = {
+	OR = {
+		AND = {
+			tag = VAL
+			OR = {
+				has_completed_focus = VAL_Campaign_Secured
+				has_completed_focus = VAL_nw_price
+			}
+			VAL_campaign_objectives_met = yes
+		}
+		AND = {
+			tag = STS
+			has_completed_focus = STP_pc_heg_final_kefreyt
+			STP_heg_northern_final_resolved = yes
+			OR = {
+				has_country_flag = STP_heg_kefreyt_final_won
+				VAL = { is_subject_of = STS }
+				NOT = { VAL = { exists = yes } }
+			}
+		}
+		AND = {
+			tag = STP
+			has_completed_focus = STP_pw_party_great_stelander
+			STP_pw_party_external_order_resolved = yes
+			STP_pw_party_northern_march_resolved = yes
+		}
+		AND = {
+			tag = NOD
+			check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+			VAL = {
+				OR = {
+					exists = no
+					is_subject_of = NOD
+				}
+			}
+			STP = { RUS_crisis_northern_order_member = yes }
+			STS = { RUS_crisis_northern_order_member = yes }
+		}
+	}
+}
+
+# COUNTRY regional rival. A northern expedition alone does not establish hegemony.
+RUS_crisis_northern_order_member = {
+	OR = {
+		exists = no
+		is_subject_of = NOD
+		AND = {
+			is_in_faction_with = NOD
+			NOD = { is_faction_leader = yes }
+		}
+	}
+}
+
 # COUNTRY. Victory and current sovereignty are separate requirements.
 RUS_crisis_is_hegemon = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	OR = {
-		AND = {
-			tag = VAL
-			VAL_campaign_objectives_met = yes
-		}
-		AND = {
-			tag = STS
-			has_country_flag = STP_heg_kefreyt_final_won
-			STP_heg_northern_final_resolved = yes
-		}
-	}
+	has_war = no
+	RUS_crisis_final_victory = yes
 }
 
 RUS_crisis_can_begin = {
@@ -1916,19 +1961,25 @@ RUS_crisis_can_begin = {
 	NOT = { has_variable = RUS_crisis_phase }
 }
 
-# COUNTRY target. A player may challenge either independent regional power;
-# automatic selection still requires that country's completed northern campaign.
+# COUNTRY target. Manual and automatic selection share the final-victory gate.
 RUS_crisis_potential_hegemon = {
 	hidden_trigger = {
 		OR = {
 			tag = VAL
 			tag = STS
+			tag = STP
+			tag = NOD
 		}
 	}
 	exists = yes
 	is_subject = no
 	has_capitulated = no
+	has_war = no
 	NOT = { is_in_faction_with = RUS }
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_final_victory_tt
+		RUS_crisis_final_victory = yes
+	}
 }
 
 RUS_crisis_can_choose_hegemon = {
@@ -1991,6 +2042,44 @@ RUS_crisis_target_valid = {
 		is_subject = no
 		has_capitulated = no
 	}
+}
+
+# RUS. Preparation remains tied to the selected campaign, including its war.
+RUS_crisis_preparation_open = {
+	tag = RUS
+	RUS_khan_governing = yes
+	is_subject = no
+	has_capitulated = no
+	OR = {
+		AND = {
+			check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+			RUS_crisis_target_valid = yes
+		}
+		AND = {
+			check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+			has_war_with = event_target:RUS_crisis_hegemon
+		}
+	}
+}
+
+RUS_crisis_prepare_nod = {
+	RUS_crisis_preparation_open = yes
+	event_target:RUS_crisis_hegemon = { tag = NOD }
+}
+
+RUS_crisis_prepare_stp = {
+	RUS_crisis_preparation_open = yes
+	event_target:RUS_crisis_hegemon = { tag = STP }
+}
+
+RUS_crisis_prepare_sts = {
+	RUS_crisis_preparation_open = yes
+	event_target:RUS_crisis_hegemon = { tag = STS }
+}
+
+RUS_crisis_prepare_val = {
+	RUS_crisis_preparation_open = yes
+	event_target:RUS_crisis_hegemon = { tag = VAL }
 }
 
 RUS_crisis_all_defenders_defeated = {

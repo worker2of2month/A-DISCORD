@@ -10101,6 +10101,16 @@ RUS_crisis_check_start = {
 			STS = { save_global_event_target_as = RUS_crisis_hegemon }
 			RUS_crisis_begin = yes
 		}
+		else_if = {
+			limit = { STP = { RUS_crisis_is_hegemon = yes } }
+			STP = { save_global_event_target_as = RUS_crisis_hegemon }
+			RUS_crisis_begin = yes
+		}
+		else_if = {
+			limit = { NOD = { RUS_crisis_is_hegemon = yes } }
+			NOD = { save_global_event_target_as = RUS_crisis_hegemon }
+			RUS_crisis_begin = yes
+		}
 	}
 }
 
@@ -10109,6 +10119,7 @@ RUS_crisis_begin = {
 		limit = {
 			RUS_crisis_can_begin = yes
 			RUS_crisis_target_valid = yes
+			event_target:RUS_crisis_hegemon = { RUS_crisis_potential_hegemon = yes }
 		}
 		set_variable = { var = RUS_crisis_phase value = 1 }
 		activate_mission = RUS_crisis_invasion_countdown
@@ -10185,7 +10196,21 @@ RUS_crisis_launch = {
 	}
 }
 
+RUS_crisis_clear_preparation = {
+	remove_ideas = {
+		RUS_crisis_nod_preparation_1
+		RUS_crisis_nod_preparation_2
+		RUS_crisis_stp_preparation_1
+		RUS_crisis_stp_preparation_2
+		RUS_crisis_sts_preparation_1
+		RUS_crisis_sts_preparation_2
+		RUS_crisis_val_preparation_1
+		RUS_crisis_val_preparation_2
+	}
+}
+
 RUS_crisis_clear_roster = {
+	RUS_crisis_clear_preparation = yes
 	for_each_scope_loop = {
 		array = global.RUS_crisis_defenders
 		clr_country_flag = RUS_crisis_defender
@@ -12235,6 +12260,7 @@ RUS_campaign_initialize = {
 }
 
 RUS_campaign_shutdown = {
+	RUS_crisis_clear_preparation = yes
 	if = {
 		limit = { has_power_balance = { id = RUS_state_balance } }
 		remove_power_balance = { id = RUS_state_balance }
@@ -12465,11 +12491,15 @@ RUS_reactor_works_restore_resources = {
 
 # STATE scope.
 RUS_reactor_foundry_expand = {
-	add_extra_state_shared_building_slots = 1
-	add_building_construction = {
-		type = arms_factory
-		level = 1
-		instant_build = yes
+	if = {
+		limit = { NOT = { has_state_flag = ADISCORD_reactor_foundry_restored } }
+		set_state_flag = ADISCORD_reactor_foundry_restored
+		add_extra_state_shared_building_slots = 1
+		add_building_construction = {
+			type = arms_factory
+			level = 1
+			instant_build = yes
+		}
 	}
 }
 
