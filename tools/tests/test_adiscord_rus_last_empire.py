@@ -250,7 +250,7 @@ class RusLastEmpireTests(unittest.TestCase):
         plan = read(PLAN_FILE)
         self.assertIn("# --- rus_last_empire_plan ---", plan)
         start = plan.index("ADISCORD_vorkerland_rus_last_empire_plan = {")
-        body = plan[start:]
+        body = plan[start:].split("ADISCORD_rus_last_sky_plan = {", 1)[0]
         ordered = tuple(re.findall(r"(?m)^\s*(RUS_[A-Za-z0-9_]+)\s*$", body))
         self.assertEqual(tuple(name for name in ordered if name in RUS_FOCUS_IDS), RUS_FOCUS_IDS)
         self.assertIn("is_ai = yes", body)
@@ -980,7 +980,7 @@ class RusCrisisFixture:
             for e in entries("common/scripted_triggers/ADISCORD_vorkerland_triggers.txt")
             if e.key.startswith(("RUS_crisis_", "RUS_imperial_frontier_")) or e.key == "RUS_lab_reactor_access"
         }
-        self.countries = {"RUS", "VAL", "STP", "STS", "NOD", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "WKR", "TMR", "VEL", "RLY", "SHL", "NAM", "WRK", "IVN"}
+        self.countries = {"RUS", "VAL", "STP", "STS", "NOD", "SLA", "RZA", "MLR", "ERT", "IRT", "SCA", "WKR", "TMR", "VEL", "RLY", "SHL", "NAM", "WRK", "IVN", "MON", "VLD"}
         self.owners = {
             "66": "RUS", "49": "RUS", "51": "RUS", "177": "RUS",
             "152": "RUS", "169": "RUS", "181": "RUS", "173": "RUS",
@@ -1074,6 +1074,20 @@ class RusCrisisFixture:
                 return result == (value == "yes")
             if key == "any_country":
                 return any(self.exists(tag) and self.matches(value, stack + [tag]) for tag in self.countries)
+            if key == "any_of_scopes":
+                name = self.array_key(scalar(value, "array"), current)
+                gate = [e for e in value if e.key != "array"]
+                return any(self.matches(gate, stack + [item]) for item in self.arrays.get(name, []))
+            if key == "capital_scope":
+                capital = next((s for s, owner in self.owners.items() if owner == current), None)
+                return capital is not None and self.matches(value, stack + [capital])
+            if key == "controller":
+                owner = self.controllers.get(current)
+                return owner is not None and self.matches(value, stack + [owner])
+            if key == "is_controlled_by":
+                return self.controllers.get(current) == self.resolve(value, stack)
+            if key == "has_event_target":
+                return "event_target:" + value in self.targets
             if key == "OVERLORD":
                 return current in self.subjects and self.matches(value, stack + [self.subjects[current]])
             if key == "is_in_array":
@@ -1187,7 +1201,7 @@ class RusCrisisFixture:
                 continue
             elif key == "ADISCORD_release_non_participating_minor_optimization":
                 self.released_minors.append(current)
-            elif key in ("VAL_frontier_close", "VAL_close_northern_coalition_campaign", "VAL_close_northern_aid", "VAL_close_stelander_support", "STP_khan_coalition_armistice") and key not in self.effects:
+            elif key in ("VAL_frontier_close", "VAL_close_northern_coalition_campaign", "VAL_close_northern_aid", "VAL_close_stelander_support", ) and key not in self.effects:
                 continue
             elif key in self.effects:
                 self.execute(self.effects[key], stack)
@@ -1195,11 +1209,12 @@ class RusCrisisFixture:
                 self.execute(value, stack + [self.resolve(key, stack)])
             elif key in ("overlord", "OVERLORD"):
                 self.execute(value, stack + [self.subjects[current]])
-            elif key in ("every_owned_state", "every_country", "every_subject_country", "every_enemy_country"):
+            elif key in ("every_owned_state", "every_country", "every_subject_country", "every_enemy_country", "every_allied_country"):
                 candidates = {
                     "every_owned_state": [s for s, owner in self.owners.items() if owner == current],
                     "every_country": [tag for tag in sorted(self.countries) if self.exists(tag)],
                     "every_subject_country": [tag for tag, owner in self.subjects.items() if owner == current],
+                    "every_allied_country": [tag for tag, faction in self.factions.items() if tag != current and faction == self.factions.get(current)],
                     "every_enemy_country": [
                         tag for tag in sorted(self.countries)
                         if frozenset((current, tag)) in self.wars
@@ -1218,6 +1233,11 @@ class RusCrisisFixture:
             elif key in ("add_to_array", "add_to_temp_array"):
                 name = self.array_key(scalar(value, "array"), current)
                 self.arrays.setdefault(name, []).append(self.resolve(scalar(value, "value"), stack))
+            elif key == "remove_from_array":
+                name = self.array_key(scalar(value, "array"), current)
+                self.arrays[name].remove(self.resolve(scalar(value, "value"), stack))
+            elif key == "clear_global_event_target":
+                self.targets.pop("event_target:" + value, None)
             elif key == "set_variable":
                 self.variables[self.variable_key(scalar(value, "var"), current)] = float(scalar(value, "value"))
             elif key == "add_to_variable":
@@ -1353,7 +1373,11 @@ class RusCrisisContracts(unittest.TestCase):
         world.run("RUS_crisis_clear_roster")
         world.variables.clear()
         world.wars.clear()
+        world.released_minors.clear()
         world.outside_predicates["RUS", "RUS_khan_governing"] = True
+        for tag in ("MON", "VLD", "TMR"):
+            world.owners[tag + "_capital"] = tag
+            world.controllers[tag + "_capital"] = tag
         return world
 
     def complete_hegemon_victory(self, world, target):
@@ -1391,7 +1415,7 @@ class RusCrisisContracts(unittest.TestCase):
         ))
 
     def test_ally_subject_is_mandatory_and_all_roster_members_are_annexed(self):
-        for target in ("VAL", "STS", "STP", "NOD", "SHL", "NAM", "WRK", "IVN"):
+        for target in ("VAL", "STS", "STP", "NOD", "SHL", "NAM", "MON", "VLD", "TMR"):
             for last in (target, "WKR", "RLY"):
                 with self.subTest(target=target, last=last):
                     world = self.peaceful_empire()
@@ -1400,23 +1424,30 @@ class RusCrisisContracts(unittest.TestCase):
                     world.owners["target"] = target
                     world.factions = {target: "defenders", "WKR": "defenders"}
                     world.subjects = {"RLY": "WKR", "VEL": target}
-                    world.targets["event_target:RUS_crisis_hegemon"] = target
+                    if target in ("VAL", "STS", "STP", "NOD"):
+                        self.complete_hegemon_victory(world, target)
+                    elif target in ("SHL", "NAM"):
+                        self.regional_victor(world, target)
                     world.variables["RUS", "RUS_crisis_phase"] = 1
                     world.run("RUS_crisis_launch")
-                    expected = {tag for tag in world.countries if world.exists(tag) and tag != "RUS"}
+                    expected = {"MON", "VLD", "TMR", target, "WKR", "RLY", "VEL"}
+                    if target == "NOD":
+                        expected.update(("VAL", "STP", "STS"))
                     self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), expected)
                     self.assertTrue(all(frozenset(("RUS", tag)) in world.wars for tag in expected))
                     world.capitulated.update(expected - {last})
+                    for state, owner in world.owners.items():
+                        if owner in expected - {last}:
+                            world.controllers[state] = "RUS"
                     world.run("RUS_crisis_resolve_capitulation")
                     self.assertFalse(world.annexed)
-                    world.root = last
-                    world.from_country = "RUS"
+                    world.root, world.from_country = last, "RUS"
                     world.run("RUS_crisis_record_capitulation", last)
                     self.assertEqual(set(world.annexed), {("RUS", tag) for tag in expected})
                     self.assertTrue(all(world.owners[state] == "RUS" for state in ("ally_subject", "main_subject", "target")))
                     self.assertFalse(world.majors - {"VAL"})
 
-    def test_project_exposure_stops_existing_wars_and_never_restarts_timers(self):
+    def test_project_exposure_preserves_wars_factions_and_never_restarts_timers(self):
         from copy import deepcopy
 
         world = self.peaceful_empire()
@@ -1424,17 +1455,12 @@ class RusCrisisContracts(unittest.TestCase):
         world.wars.update((frozenset(("VAL", "STP")), frozenset(("STS", "NOD"))))
         world.subjects["NOD"] = "VAL"
         world.factions = {"VAL": "old_east", "NOD": "old_east", "STS": "old_north"}
-        world.faction_leaders = {"VAL", "STS"}
-        owners = dict(world.owners)
+        before = dict(world.owners), set(world.wars), dict(world.factions), set(world.majors)
         world.run("RUS_crisis_check_start")
-        self.assertFalse(world.wars)
+        self.assertEqual((world.owners, world.wars, world.factions, world.majors), before)
         self.assertFalse(world.declarations)
-        self.assertEqual(world.owners, owners)
-        self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), {"VAL", "STP", "STS", "NOD", "WKR"})
-        self.assertEqual(len(set(world.factions.values())), 1)
-        self.assertEqual(world.subjects, {"NOD": "VAL"})
-        self.assertTrue({"VAL", "STP", "STS", "NOD", "WKR"} <= world.majors)
-        self.assertNotIn("RUS_crisis_truce_in_progress", world.global_flags)
+        self.assertFalse(world.arrays["global.RUS_crisis_defenders"])
+        self.assertEqual({tag for tag, flags in world.flags.items() if "RUS_crisis_warned" in flags}, {"MON", "VLD", "TMR"})
         missions = list(world.missions)
         loaded = deepcopy(world)
         loaded.run("RUS_crisis_check_start")
@@ -1442,18 +1468,22 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(loaded.missions, missions)
         self.assertEqual(loaded.variables["RUS", "RUS_crisis_phase"], 1)
 
-    def test_only_the_coalition_host_declares_and_every_ally_joins_that_war(self):
+    def test_only_one_host_declares_and_existing_blocs_share_the_war(self):
         world = self.peaceful_empire()
-        world.peace_mode = "pair"
+        world.factions = {"MON": "montar", "WKR": "montar", "VLD": "vald", "TMR": "timer"}
+        world.wars.add(frozenset(("VLD", "STS")))
+        factions, wars = dict(world.factions), set(world.wars)
         world.run("RUS_crisis_begin")
-        host = world.targets["event_target:RUS_crisis_hegemon"]
-        members = set(world.arrays["global.RUS_crisis_defenders"])
         world.run("RUS_crisis_launch")
-        self.assertEqual(world.declarations, [(host, "RUS")])
-        self.assertEqual(set(world.joins), {(tag, host, "RUS") for tag in members - {host}})
+        self.assertEqual(world.declarations, [("MON", "RUS")])
+        self.assertEqual(set(world.joins), {("VLD", "MON", "RUS"), ("TMR", "MON", "RUS"), ("WKR", "MON", "RUS")})
+        self.assertEqual(world.factions, factions)
+        self.assertTrue(wars <= world.wars)
         before = list(world.declarations), list(world.joins)
         world.run("RUS_crisis_launch")
         self.assertEqual((world.declarations, world.joins), before)
+        world.run("RUS_crisis_close")
+        self.assertEqual(world.factions, factions)
 
     def test_reactor_loss_is_permanent_but_does_not_end_the_coalition_war(self):
         world = self.peaceful_empire()
@@ -1498,39 +1528,31 @@ class RusCrisisContracts(unittest.TestCase):
         # actual regional war closure, major ownership and deferred deadlines.
         world.effects["SHL_clean_campaign"] = []
 
-    def test_regional_neutral_cleanup_precedes_new_major_ownership(self):
-        for region, tags in (("west", ("WRK", "IVN")), ("south", ("SHL", "NAM"))):
-            world = self.peaceful_empire()
-            self.load_regional_lifecycle(world, region)
-            world.peace_mode = "pair"
-            world.global_flags.add(f"ADISCORD_{region}_final_started")
-            for side, tag in enumerate(tags, 1):
-                world.owners[tag + "_capital"] = tag
-                world.flags[tag].add(f"ADISCORD_{region}_added_major")
-                world.variables[tag, f"ADISCORD_{region}_side"] = side
-                world.majors.add(tag)
-            world.wars.add(frozenset(tags))
-            owners = dict(world.owners)
-            world.run("RUS_crisis_begin")
-            self.assertEqual(world.owners, owners)
-            self.assertIn(f"ADISCORD_{region}_final_resolved", world.global_flags)
-            self.assertNotIn(f"ADISCORD_{region}_final_started", world.global_flags)
-            self.assertFalse(world.wars)
-            for tag in tags:
-                self.assertNotIn(f"ADISCORD_{region}_added_major", world.flags[tag])
-                self.assertIn("RUS_crisis_added_major", world.flags[tag])
-                self.assertIn(tag, world.majors)
-            event_rows = self.entries(f"events/ADISCORD_{region}_final_war_events.txt")
-            deadline = next(row.value for row in event_rows if row.key == "country_event" and self.scalar(row.value, "id") == f"ADISCORD_{region}.20")
-            self.assertFalse(world.matches(self.block(deadline, "trigger"), [tags[0]]))
-            self.assertEqual(world.owners, owners)
-            self.assertFalse(world.annexed)
-            world.run("RUS_crisis_launch")
-            self.assertTrue(set(tags) <= world.majors)
-            world.run("RUS_crisis_close")
-            self.assertFalse(set(tags) & world.majors)
+    def test_parallel_major_owners_release_in_every_order(self):
+        from itertools import permutations
 
-    def test_unstarted_regional_crises_wait_while_the_coalition_exists(self):
+        for order in permutations(("west", "south", "rus")):
+            world = self.peaceful_empire()
+            for region in ("west", "south"):
+                self.load_regional_lifecycle(world, region)
+            world.majors.discard("MON")
+            world.flags["MON"].add("ADISCORD_west_added_major")
+            world.majors.add("MON")
+            world.run("RUS_crisis_register_defender", "MON")
+            self.assertIn("RUS_crisis_added_major", world.flags["MON"])
+            register = world.effects["ADISCORD_south_prepare_champion"][-1]
+            world.execute([register], ["MON"])
+            self.assertIn("ADISCORD_south_added_major", world.flags["MON"])
+            for index, owner in enumerate(order):
+                if owner == "rus":
+                    world.run("RUS_crisis_clear_defender", "MON")
+                else:
+                    effect_name = "ADISCORD_" + owner + "_close_member_state"
+                    world.execute([world.effects[effect_name][0]], ["MON"])
+                self.assertEqual("MON" in world.majors, index < 2, order)
+            self.assertFalse(world.flags["MON"] & {"RUS_crisis_added_major", "ADISCORD_west_added_major", "ADISCORD_south_added_major"})
+
+    def test_independent_regional_crises_continue_until_the_epilogue(self):
         for region in ("west", "south"):
             world = self.peaceful_empire()
             self.load_regional_lifecycle(world, region)
@@ -1538,48 +1560,31 @@ class RusCrisisContracts(unittest.TestCase):
             world.owners["wrk_capital"] = "WRK"
             world.flags["WRK"].add("ADISCORD_vorkerland_central_unifier")
             gate = world.triggers[f"ADISCORD_{region}_crisis_open"]
-            self.assertTrue(world.matches(gate, ["RUS"]))
-            for phase in (1, 2):
+            for phase in (1, 2, 4):
                 world.variables["RUS", "RUS_crisis_phase"] = phase
-                self.assertFalse(world.matches(gate, ["RUS"]))
-            world.variables["RUS", "RUS_crisis_phase"] = 4
-            self.assertTrue(world.matches(gate, ["RUS"]))
+                self.assertTrue(world.matches(gate, ["RUS"]))
             world.global_flags.add("RUS_crisis_world_ended")
             self.assertFalse(world.matches(gate, ["RUS"]))
 
-    def test_delayed_nod_invasion_cannot_break_the_coalition(self):
-        world = self.peaceful_empire()
-        effects = {row.key: row.value for row in self.entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt")}
-        world.effects.update(effects)
-        world.flags["STP"].update(("RUS_crisis_defender", "STP_cw_postwar", "STP_pw_party_nod_threat_active", "STP_pw_party_nod_invasion_active"))
-        world.factions = {tag: "coalition" for tag in ("STP", "NOD")}
-        for effect in ("STP_pw_party_reconcile_nod_invasion", "STP_pw_party_start_nod_invasion_threat", "STP_pw_party_launch_nod_invasion"):
-            world.run(effect, "STP")
-        self.assertFalse(world.declarations)
-        self.assertEqual(world.factions, {tag: "coalition" for tag in ("STP", "NOD")})
-        world.run("STP_ch_close_pressure", "STP")
-        self.assertNotIn("STP_pw_party_nod_threat_active", world.flags["STP"])
-        self.assertNotIn("STP_pw_party_compact_pending", world.flags["STP"])
-        armistice = effects["STP_khan_coalition_armistice"]
-        world.triggers.update({row.key: row.value for row in self.entries("common/scripted_triggers/ADISCORD_STP_scripted_triggers.txt")})
-        world.countries.add("SRP")
-        world.flags["SRP"] = set()
-        world.flags["STP"].add("STP_pw_party_northern_march_active")
-        stp_cleanup = next(row.value for row in armistice if row.key == "STP")
-        world.execute(stp_cleanup, ["RUS", "STP"])
-        self.assertNotIn("STP_pw_party_northern_march_active", world.flags["STP"])
-        self.assertNotIn("STP_pw_party_nod_invasion_active", world.flags["STP"])
-        world.run("STP_pw_party_reconcile_northern_march", "STP")
-        self.assertNotIn("STP_hw_close_war", [row.key for row in stp_cleanup])
-        sts_cleanup = next(row.value for row in armistice if row.key == "STS")
-        world.dynamic_modifiers.add(("STS", "STP_hw_mandate_dynamic"))
-        world.dynamic_modifiers.add(("STS", "STP_hw_stall_dynamic"))
-        world.variables["STS", "STP_hw_mandate"] = 35
-        world.variables["STS", "STP_hw_stall_days"] = 40
-        world.execute(sts_cleanup, ["RUS", "STS"])
-        self.assertNotIn(("STS", "STP_hw_mandate_dynamic"), world.dynamic_modifiers)
-        self.assertNotIn(("STS", "STP_hw_stall_dynamic"), world.dynamic_modifiers)
-        self.assertNotIn(("STS", "STP_hw_mandate"), world.variables)
+    def test_eastern_hegemon_must_finish_its_wars_and_remain_sovereign_at_entry(self):
+        for target in ("VAL", "STP", "STS", "NOD"):
+            for invalidation in ("war", "subject", "capitulated", None):
+                with self.subTest(target=target, invalidation=invalidation):
+                    world = self.peaceful_empire()
+                    gate = world.triggers["RUS_crisis_coalition_candidate"]
+                    self.assertFalse(world.matches(gate, [target]))
+                    self.complete_hegemon_victory(world, target)
+                    self.assertTrue(world.matches(gate, [target]))
+                    world.run("RUS_crisis_begin")
+                    if invalidation == "war":
+                        world.wars.add(frozenset((target, "WKR")))
+                    elif invalidation == "subject":
+                        world.subjects[target] = "WKR"
+                    elif invalidation == "capitulated":
+                        world.capitulated.add(target)
+                    world.run("RUS_crisis_launch")
+                    self.assertEqual(frozenset((target, "RUS")) in world.wars, invalidation is None)
+                    self.assertEqual("RUS_crisis_defender" in world.flags[target], invalidation is None)
 
     def test_pending_ainholm_colony_keeps_the_shared_faction(self):
         world = self.peaceful_empire()
@@ -1596,7 +1601,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.factions, {tag: "coalition" for tag in ("AIN", "VAL", "STP")})
         self.assertNotIn("VAL_ainholm_colony_pending", world.flags["AIN"])
 
-    def test_delayed_peace_callbacks_do_not_reward_a_coalition_armistice(self):
+    def test_peace_callbacks_preserve_the_other_war_of_two_interveners(self):
         bus = self.block(self.entries("common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt"), "on_actions")
         world = self.peaceful_empire()
         world.root, world.from_country = "STP", "VAL"
@@ -1606,24 +1611,28 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertTrue(world.matches(gate, ["STP"]))
             world.flags["STP"].add("RUS_crisis_defender")
             world.flags["VAL"].add("RUS_crisis_defender")
-            self.assertFalse(world.matches(gate, ["STP"]))
+            self.assertTrue(world.matches(gate, ["STP"]))
             world.flags["STP"].clear()
             world.flags["VAL"].clear()
             world.global_flags.add("RUS_crisis_world_ended")
             self.assertFalse(world.matches(gate, ["STP"]))
             world.global_flags.clear()
 
-    def test_pending_treaty_blocks_exposure_without_consuming_start(self):
-        for flag in ("ADISCORD_south_settlement_pending", "ADISCORD_west_settlement_pending"):
-            world = self.peaceful_empire()
-            world.flags["VAL"].add(flag)
-            world.run("RUS_crisis_check_start")
-            self.assertNotIn(("RUS", "RUS_crisis_phase"), world.variables)
-            world.flags["VAL"].remove(flag)
-            world.run("RUS_crisis_check_start")
-            self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 1)
+    def test_unrelated_pending_treaty_and_empty_roster_do_not_stop_the_programme(self):
+        world = self.peaceful_empire()
+        for tag in ("MON", "VLD", "TMR"):
+            world.subjects[tag] = "WKR"
+        world.flags["VAL"].add("ADISCORD_south_settlement_pending")
+        world.run("RUS_crisis_check_start")
+        self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 1)
+        world.run("RUS_crisis_launch")
+        world.run("RUS_crisis_resolve_capitulation")
+        self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
+        self.assertFalse(world.annexed)
+        world.run("RUS_crisis_end_world")
+        self.assertIn("RUS_crisis_world_ended", world.global_flags)
 
-    def test_truce_rejects_delayed_friendly_war_but_keeps_war_against_khan(self):
+    def test_only_terminal_epilogue_rejects_new_wars(self):
         world = self.peaceful_empire()
         world.peace_mode = "pair"
         world.run("RUS_crisis_begin")
@@ -1631,8 +1640,11 @@ class RusCrisisContracts(unittest.TestCase):
         world.root, world.from_country = "VAL", "STP"
         world.wars.add(frozenset(("VAL", "STP")))
         world.run("RUS_crisis_enforce_truce", "VAL")
+        self.assertIn(frozenset(("VAL", "STP")), world.wars)
+        self.assertIn(frozenset(("MON", "RUS")), world.wars)
+        world.global_flags.add("RUS_crisis_world_ended")
+        world.run("RUS_crisis_enforce_truce", "VAL")
         self.assertNotIn(frozenset(("VAL", "STP")), world.wars)
-        self.assertIn(frozenset(("VAL", "RUS")), world.wars)
         self.assertNotIn("RUS_crisis_truce_in_progress", world.global_flags)
 
     def test_terminal_scene_preserves_map_ends_wars_and_cannot_fire_twice(self):
@@ -1724,6 +1736,7 @@ class RusCrisisContracts(unittest.TestCase):
     def test_restoring_conquests_does_not_take_foreign_owned_land(self):
         world = RusCrisisFixture()
         world.capitulated.update(("VAL", "NOD"))
+        world.controllers.update({"168": "RUS", "10": "RUS"})
         world.run("RUS_crisis_resolve_capitulation")
         world.owners["168"] = "WKR"
         world.controllers["168"] = "WKR"
@@ -1770,6 +1783,7 @@ class RusCrisisContracts(unittest.TestCase):
         for loser, victor in (("VAL", "RUS"), ("RUS", "VAL")):
             world = RusCrisisFixture()
             world.capitulated.add("NOD")
+            world.controllers.update({"168": "RUS", "10": "RUS"})
             world.root = loser
             world.from_country = victor
             world.execute(late, [loser])
@@ -1789,6 +1803,7 @@ class RusCrisisContracts(unittest.TestCase):
             world.execute(register, [world.root])
             self.assertEqual(world.arrays["global.RUS_crisis_defenders"].count("WKR"), 1)
             world.capitulated.update(("VAL", "NOD"))
+            world.controllers.update({"168": "RUS", "10": "RUS"})
             self.assertFalse(world.matches(world.triggers["RUS_crisis_all_defenders_defeated"], ["RUS"]))
 
     def test_dissolution_closes_subject_war_pairs_and_preserves_their_other_war(self):
@@ -1815,8 +1830,8 @@ class RusCrisisContracts(unittest.TestCase):
                 world = self.peaceful_empire()
                 if phase is not None:
                     world.variables["RUS", "RUS_crisis_phase"] = phase
-                self.assertEqual(world.matches(gate, ["RUS"]), phase in (None, 1, 2))
-                self.assertEqual(world.matches(self.block(focus, "bypass"), ["RUS"]), phase == 3)
+                self.assertEqual(world.matches(gate, ["RUS"]), phase in (None, 1, 2, 3))
+                self.assertNotIn("bypass", [row.key for row in focus])
         world = self.peaceful_empire()
         world.flags["RUS"].clear()
         self.assertFalse(world.matches(gate, ["RUS"]))
@@ -1842,12 +1857,14 @@ class RusCrisisContracts(unittest.TestCase):
                 world = self.peaceful_empire()
                 self.complete_hegemon_victory(world, target)
                 world.run("RUS_crisis_check_start")
-                self.assertCountEqual(enabled(world, "RUS", "prepare_for_war"), ("VAL", "STS", "STP", "NOD"))
+                self.assertCountEqual(enabled(world, "RUS", "prepare_for_war"), (target, "MON", "VLD", "TMR"))
                 self.assertEqual(enabled(world, target, "prepare_for_war"), ["RUS"])
                 for neutral in {"VAL", "STS", "STP", "NOD"} - {target}:
-                    self.assertEqual(enabled(world, neutral, "prepare_for_war"), ["RUS"])
+                    self.assertEqual(enabled(world, neutral, "prepare_for_war"), [])
                 world.run("RUS_crisis_launch")
-                enemies = {"VAL", "STS", "STP", "NOD"}
+                enemies = {target, "MON", "VLD", "TMR"}
+                if target == "NOD":
+                    enemies.update(("VAL", "STP", "STS"))
                 self.assertCountEqual(enabled(world, "RUS", "conquer"), enemies)
                 self.assertEqual(enabled(world, "RUS", "prepare_for_war"), [])
                 self.assertEqual(enabled(world, target, "prepare_for_war"), [])
@@ -1958,6 +1975,7 @@ class RusCrisisContracts(unittest.TestCase):
         world.variables["RUS", "RUS_crisis_phase"] = 1
         world.wars.clear()
         world.factions = {"VAL": "league", "NOD": "league"}
+        self.complete_hegemon_victory(world, "VAL")
         world.outside_predicates["RUS", "RUS_khan_governing"] = True
         category = self.block(self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"), "RUS_last_empire_crisis")
         mission = self.block(category, "RUS_crisis_invasion_countdown")
@@ -1965,7 +1983,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
         self.assertIn(frozenset(("RUS", "VAL")), world.wars)
         self.assertIn(frozenset(("RUS", "NOD")), world.wars)
-        self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), {"VAL", "NOD", "STP", "STS", "WKR"})
+        self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), {"VAL", "NOD"})
         before = list(world.events)
         world.execute(self.block(mission, "timeout_effect"), ["RUS"])
         self.assertEqual(world.events, before)
@@ -1977,6 +1995,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
         self.assertFalse(world.annexed)
         world.capitulated.add("NOD")
+        world.controllers.update({"168": "RUS", "10": "RUS"})
         self.assertTrue(world.matches(world.triggers["RUS_crisis_all_defenders_defeated"], ["RUS"]))
         world.capitulated.remove("NOD")
         self.assertFalse(world.matches(world.triggers["RUS_crisis_all_defenders_defeated"], ["RUS"]))
@@ -1990,6 +2009,7 @@ class RusCrisisContracts(unittest.TestCase):
         immediate = self.block(self.block(hooks, "on_capitulation_immediate"), "effect")
         world = RusCrisisFixture()
         world.capitulated.add("NOD")
+        world.controllers.update({"168": "RUS", "10": "RUS"})
         world.root = "VAL"
         world.from_country = "RUS"
         # The current native defeat may not yet be exposed by has_capitulated.
@@ -2006,6 +2026,7 @@ class RusCrisisContracts(unittest.TestCase):
         world = RusCrisisFixture()
         world.owners["330"] = "NOD"
         world.capitulated.update(("VAL", "NOD"))
+        world.controllers.update({"168": "RUS", "10": "RUS"})
         world.run("RUS_crisis_resolve_capitulation")
         for state in ("168", "10", "330"):
             self.assertEqual(world.owners[state], "RUS")

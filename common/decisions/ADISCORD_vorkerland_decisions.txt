@@ -2216,7 +2216,6 @@ ADISCORD_vorkerland_focus_operations_category = {
 		ai_will_do = { factor = 1200 }
 	}
 
-
 	# Ordinary Vlad route: restore the empire one surviving administration at a
 	# time instead of opening a dozen simultaneous AI wars. The decision becomes
 	# available again after each war ends, so the player/AI can roll the former
@@ -2643,121 +2642,6 @@ ADISCORD_vorkerland_rom_tru_category = {
 
 # --- rus_crisis_decisions ---
 RUS_last_empire_crisis = {
-	RUS_crisis_resupply_nod = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = RUS }
-		visible = {
-			has_completed_focus = RUS_crisis_nod_1
-			RUS_crisis_prepare_nod = yes
-		}
-		available = { RUS_crisis_prepare_nod = yes }
-		cost = 50
-		days_re_enable = 30
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { RUS_crisis_prepare_nod = yes } }
-				add_equipment_to_stockpile = {
-					type = motorized_equipment
-					amount = 60
-					producer = RUS
-				}
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 60
-					producer = RUS
-				}
-			}
-		}
-		ai_will_do = { base = 2 }
-	}
-
-	RUS_crisis_resupply_stp = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = RUS }
-		visible = {
-			has_completed_focus = RUS_crisis_stp_1
-			RUS_crisis_prepare_stp = yes
-		}
-		available = { RUS_crisis_prepare_stp = yes }
-		cost = 50
-		days_re_enable = 30
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { RUS_crisis_prepare_stp = yes } }
-				add_equipment_to_stockpile = {
-					type = artillery_equipment_1
-					amount = 40
-					producer = RUS
-				}
-				add_equipment_to_stockpile = {
-					type = support_equipment
-					amount = 60
-					producer = RUS
-				}
-			}
-		}
-		ai_will_do = { base = 2 }
-	}
-
-	RUS_crisis_resupply_sts = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = RUS }
-		visible = {
-			has_completed_focus = RUS_crisis_sts_1
-			RUS_crisis_prepare_sts = yes
-		}
-		available = { RUS_crisis_prepare_sts = yes }
-		cost = 50
-		days_re_enable = 30
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { RUS_crisis_prepare_sts = yes } }
-				add_equipment_to_stockpile = {
-					type = motorized_equipment
-					amount = 50
-					producer = RUS
-				}
-				add_equipment_to_stockpile = {
-					type = infantry_equipment_0
-					amount = 1000
-					producer = RUS
-				}
-			}
-		}
-		ai_will_do = { base = 2 }
-	}
-
-	RUS_crisis_resupply_val = {
-		icon = generic_prepare_civil_war
-		allowed = { tag = RUS }
-		visible = {
-			has_completed_focus = RUS_crisis_val_1
-			RUS_crisis_prepare_val = yes
-		}
-		available = { RUS_crisis_prepare_val = yes }
-		cost = 50
-		days_re_enable = 30
-		fire_only_once = no
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { RUS_crisis_prepare_val = yes } }
-				add_equipment_to_stockpile = {
-					type = ADISCORD_anti_tank_equipment_2163
-					amount = 50
-					producer = RUS
-				}
-				add_equipment_to_stockpile = {
-					type = ADISCORD_anti_air_equipment_2163
-					amount = 50
-					producer = RUS
-				}
-			}
-		}
-		ai_will_do = { base = 2 }
-	}
 
 	RUS_imperial_frontier_campaign = {
 		icon = generic_attack
@@ -2823,7 +2707,7 @@ RUS_last_empire_crisis = {
 		icon = generic_prepare_civil_war
 		allowed = { always = yes }
 		activation = { always = no }
-		visible = { has_country_flag = RUS_crisis_defender }
+		visible = { has_country_flag = RUS_crisis_warned }
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		is_good = no

@@ -2311,7 +2311,6 @@ STP_cw_create_territorial_brigade = {
 	}
 }
 
-
 # COUNTRY: equipment is debited across producers; a partial package is refunded
 # before returning. The escrow is a paid division, not an extra recruitment pool.
 STP_cw_pay_assault_division = {
@@ -4278,7 +4277,7 @@ STP_cw_check_union_wars_finished = {
 		set_global_flag = STP_cw_union_wars_finished
 		STP = { STP_cw_clear_wartime_modifiers = yes }
 		STS = { STP_cw_clear_wartime_modifiers = yes }
-		VAL = { if = { limit = { exists = yes NOT = { has_global_flag = RUS_crisis_truce_in_progress } } VAL_cw_stage_livonn_settlement = yes } }
+		VAL = { if = { limit = { exists = yes } VAL_cw_stage_livonn_settlement = yes } }
 		STS = { remove_mission = STP_cw_take_fada }
 		STP = {
 			remove_mission = STP_cw_hold_fada
@@ -4294,13 +4293,11 @@ STP_cw_check_union_wars_finished = {
 			}
 		}
 
-
 		VAL = { clr_country_flag = VAL_cw_volunteers_pending STP_ps_refund_val_supply = yes }
 		STS = { STP_cw_remove_kefreyt_volunteers = yes }
 		STP = { clr_country_flag = STP_cw_northern_strategy_evidence clr_country_flag = STP_cw_northern_strategy_supply clr_country_flag = STP_cw_northern_aid_open }
 		STS = { clr_country_flag = STP_cw_northern_strategy_evidence clr_country_flag = STP_cw_northern_strategy_supply clr_country_flag = STP_cw_northern_aid_open }
 	}
-
 
 }
 
@@ -4428,7 +4425,6 @@ STP_cw_settle_nod_victory = {
 		STP_cw_queue_peace_reconciliation = yes
 	}
 }
-
 
 # Only dismantle the alliance created from factionless northern members.
 # Leadership may have passed from YPR to another member during the campaign.
@@ -4842,7 +4838,6 @@ STP_pw_refresh_modifier = {
 	}
 	STP_ch_schedule_refresh = yes
 }
-
 
 # COUNTRY: 70 / 90 warnings and guaranteed arrest before the election closes.
 STP_pc_update_suspicion_crisis = {
@@ -6840,7 +6835,6 @@ STP_pw_party_reconcile_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
-			NOT = { has_country_flag = RUS_crisis_defender }
 			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
@@ -6862,7 +6856,6 @@ STP_pw_party_start_nod_invasion_threat = {
 	if = {
 		limit = {
 			tag = STP
-			NOT = { has_country_flag = RUS_crisis_defender }
 			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
@@ -6907,7 +6900,6 @@ STP_pw_party_launch_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
-			NOT = { has_country_flag = RUS_crisis_defender }
 			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			OR = {
@@ -7350,7 +7342,6 @@ STP_ps_build_radio_finish = {
 			clear_variable = STP_ps_build_radio_deposit
 			set_country_flag = STP_ps_build_radio_completed
 
-
 			ADISCORD_economy_mark_dirty = yes
 		}
 		else = { STP_ps_build_radio_refund = yes }
@@ -7371,7 +7362,6 @@ STP_ps_build_hq_finish = {
 		if = { limit = { tag = STP STP_cw_preparation_open = yes has_country_flag = STP_sided_with_the_party_flag }
 			clear_variable = STP_ps_build_hq_deposit
 			set_country_flag = STP_ps_build_hq_completed
-
 
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -7394,7 +7384,6 @@ STP_ps_prepare_evacuation_finish = {
 			clear_variable = STP_ps_prepare_evacuation_deposit
 			set_country_flag = STP_ps_prepare_evacuation_completed
 			STP_ps_request_asylum = yes
-
 
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -7597,7 +7586,6 @@ STP_ps_nod_rifle_purchase_finish = {
 		if = { limit = { tag = NOD STP_ps_northern_front_active = yes has_country_flag = STP_ps_nod_procurement_credit }
 			clear_variable = STP_ps_nod_rifle_purchase_deposit
 
-
 			clr_country_flag = STP_ps_nod_procurement_credit add_equipment_to_stockpile = { type = infantry_equipment amount = 20000 }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -7678,7 +7666,6 @@ STP_ps_accept_exile = {
 		country_event = { id = ADISCORD_STP_cw.202 }
 	}
 }
-
 
 STP_ps_begin_return = {
 	if = { limit = { STP_ps_can_launch_return = yes }
@@ -7849,7 +7836,6 @@ STP_ps_institution_payment_finish = {
 				}
 			}
 			clear_variable = STP_ps_institution_payment_deposit
-
 
 			add_to_variable = { var = STP_ps_institution_stage value = 1 }
 			ADISCORD_economy_mark_dirty = yes
@@ -8060,7 +8046,6 @@ STP_ps_val_intelligence_finish = {
 			}
 			clear_variable = STP_ps_val_intelligence_deposit
 
-
 			VAL = { set_variable = { var = STP_ps_val_known_sequence value = STP_ps_val_sequence } }
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -8101,7 +8086,6 @@ STP_ps_val_intercept_finish = {
 				}
 			}
 			clear_variable = STP_ps_val_intercept_deposit
-
 
 			VAL = { set_variable = { var = STP_ps_val_intercepted_sequence value = STP_ps_val_sequence } }
 			ADISCORD_economy_mark_dirty = yes
@@ -8638,7 +8622,6 @@ STP_occidia_reconcile_peace = {
 	}
 }
 
-
 # COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
 STP_ps_adjust_reorg_1 = {
 	if = {
@@ -8654,7 +8637,6 @@ STP_ps_adjust_reorg_1 = {
 	}
 }
 
-
 # COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
 STP_ps_adjust_reorg_2 = {
 	if = {
@@ -8669,7 +8651,6 @@ STP_ps_adjust_reorg_2 = {
 		}
 	}
 }
-
 
 # COUNTRY STP: snapshot institutional preparation and faction cooperation at payment.
 STP_ps_adjust_reorg_3 = {
@@ -8817,7 +8798,6 @@ STP_qol_initialize_party_leaders = {
 		}
 	}
 }
-
 
 # Shabrat hegemony endgame.
 # The first campaign clears independent northern governments. Kefreyt is kept
@@ -8986,7 +8966,6 @@ STP_heg_prepare_val_administration = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-
 # STS: the hegemony demand becomes a real subject relationship after Nodrul's
 # old faction has had one day to leave the diplomatic cache.
 STP_pc_finalize_nod_client_subject = {
@@ -9040,7 +9019,6 @@ STP_heg_settle_kefreyt_final = {
 		ADISCORD_economy_mark_dirty = yes
 	}
 }
-
 
 # COUNTRY STP: postwar victory over Kefreyt, including defensive wars.
 STP_pw_party_settle_kefreyt_victory = {
@@ -11832,7 +11810,6 @@ STP_ch_resume_crisis = {
 	}
 }
 
-
 # Read completed-focus markers after the reward transaction, once per mutation batch.
 STP_ch_schedule_refresh = {
 	if = {
@@ -11974,7 +11951,6 @@ STP_ch_select_ai_nominee = {
 		}
 	}
 }
-
 
 STP_ch_leader_1 = {
 	# The High Houses' civil-war victory gives their presidium a named chairman.
@@ -13497,7 +13473,6 @@ STP_party_refresh_policies = {
 	ADISCORD_economy_mark_dirty = yes
 }
 
-
 STP_pe_houses_cancel = {
 	if = {
 		limit = {
@@ -13865,10 +13840,10 @@ STP_pe_clear = {
 
 # COUNTRY northern participant. Release only major status owned by this campaign.
 STP_cw_reserve_northern_major = {
-	if = { limit = { is_major = no } set_country_flag = STP_cw_northern_added_major set_major = yes }
+	if = { limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } } set_country_flag = STP_cw_northern_added_major set_major = yes }
 }
 STP_cw_release_northern_major = {
-	if = { limit = { has_country_flag = STP_cw_northern_added_major } set_major = no clr_country_flag = STP_cw_northern_added_major }
+	if = { limit = { has_country_flag = STP_cw_northern_added_major } clr_country_flag = STP_cw_northern_added_major RUS_crisis_release_other_major = yes }
 }
 
 # The postwar recipient recruits normally from a funded six-battalion kit.
@@ -14005,59 +13980,4 @@ STP_cw_divide_navy = {
 
 # Country-agnostic. A common external threat closes the eastern wars without a
 # civil-war winner, military rewards or territorial settlement events.
-STP_khan_coalition_armistice = {
-	STP_cw_check_union_wars_finished = yes
-	STP = {
-		STP_ch_close_pressure = yes
-		clr_country_flag = STP_pw_party_nod_invasion_active
-		clr_country_flag = STP_pw_party_northern_march_active
-		STP_pw_party_close_northern_operations = yes
-		STP_occidia_cancel_preparation = yes
-		STP_occidia_reconcile_peace = yes
-		STP_pv_close_war = yes
-	}
-	STS = {
-		STP_hw_close_war = yes
-		STP_occidia_cancel_preparation = yes
-		STP_occidia_reconcile_peace = yes
-		STP_cw_close_last_banquet_technical = yes
-		STP_cw_cancel_pending_nod_intervention = yes
-	}
-	NOD = {
-		remove_ideas = STP_pw_nod_invasion_mandate
-		if = {
-			limit = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
-			clr_country_flag = NOD_cw_northern_war_started
-			STP_cw_end_northern_colonial_war = yes
-			STP_cw_dismantle_northern_alliance = yes
-			YPR = { STP_cw_release_northern_major = yes }
-			COF = { STP_cw_release_northern_major = yes }
-			TFF = { STP_cw_release_northern_major = yes }
-		}
-		if = {
-			limit = { has_country_flag = NOD_cw_entered }
-			clr_country_flag = NOD_cw_entered
-			clr_country_flag = NOD_cw_intervention_approved
-			clr_country_flag = NOD_cw_intervention_ready
-			clr_country_flag = STP_ps_expedition_ready
-			remove_ideas = STP_ps_expedition_idea
-			remove_mission = NOD_cw_intervention_preparation
-			remove_mission = NOD_cw_northern_redeployment
-			set_country_flag = NOD_cw_withdrew
-			ADISCORD_economy_update_postwar_demobilization = yes
-			ADISCORD_economy_mark_dirty = yes
-		}
-	}
-	STP = {
-		remove_mission = STP_cw_nod_warning
-		remove_mission = STP_cw_nod_redeployment
-		clr_country_flag = STP_cw_nod_warning_active
-	}
-	STS = {
-		remove_mission = STP_cw_nod_warning
-		remove_mission = STP_cw_nod_redeployment
-		clr_country_flag = STP_cw_nod_warning_active
-		clr_country_flag = STP_cw_nod_entered
-	}
-}
+

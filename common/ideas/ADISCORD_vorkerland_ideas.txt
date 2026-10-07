@@ -1,126 +1,17 @@
 ideas = {
 	country = {
+		RUS_crisis_reactor_guard = {
+			picture = ADISCORD_law_military_cadre_army
+			allowed = { original_tag = RUS }
+			removal_cost = -1
+			cancel = { RUS_crisis_project_active = no }
+			modifier = {
+				army_defence_factor = 0.12
+				max_dig_in = 5
+				supply_consumption_factor = -0.10
+			}
+		}
 		# Campaign planning bonuses apply only against the selected opponent.
-		RUS_crisis_nod_preparation_1 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_nod = no }
-			targeted_modifier = {
-				tag = NOD
-				attack_bonus_against = 0.03
-				defense_bonus_against = 0.06
-				breakthrough_bonus_against = 0.02
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_nod_preparation_2 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_nod = no }
-			targeted_modifier = {
-				tag = NOD
-				attack_bonus_against = 0.08
-				defense_bonus_against = 0.12
-				breakthrough_bonus_against = 0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_stp_preparation_1 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_stp = no }
-			targeted_modifier = {
-				tag = STP
-				attack_bonus_against = 0.05
-				defense_bonus_against = 0.02
-				breakthrough_bonus_against = 0.05
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_stp_preparation_2 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_stp = no }
-			targeted_modifier = {
-				tag = STP
-				attack_bonus_against = 0.12
-				defense_bonus_against = 0.04
-				breakthrough_bonus_against = 0.12
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_sts_preparation_1 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_sts = no }
-			targeted_modifier = {
-				tag = STS
-				attack_bonus_against = 0.04
-				defense_bonus_against = 0.03
-				breakthrough_bonus_against = 0.04
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_sts_preparation_2 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_sts = no }
-			targeted_modifier = {
-				tag = STS
-				attack_bonus_against = 0.10
-				defense_bonus_against = 0.06
-				breakthrough_bonus_against = 0.10
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_val_preparation_1 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_val = no }
-			targeted_modifier = {
-				tag = VAL
-				attack_bonus_against = 0.03
-				defense_bonus_against = 0.05
-				breakthrough_bonus_against = 0.03
-			}
-			ai_will_do = { factor = 0 }
-		}
-
-		RUS_crisis_val_preparation_2 = {
-			picture = generic_war_preparation
-			allowed = { always = no }
-			allowed_civil_war = { always = no }
-			removal_cost = -1
-			cancel = { RUS_crisis_prepare_val = no }
-			targeted_modifier = {
-				tag = VAL
-				attack_bonus_against = 0.08
-				defense_bonus_against = 0.10
-				breakthrough_bonus_against = 0.08
-			}
-			ai_will_do = { factor = 0 }
-		}
-
 
 # --- collapse_ideas ---
 		# Only peer combat is affected; regional conquests and foreign wars keep
@@ -209,7 +100,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
 
 		# Granted automatically to any claimant close to collapse and removed again
 		# when it recovers. The two thresholds differ on purpose: a single value
@@ -1249,7 +1139,6 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-
 # --- diplomacy_ideas ---
 		ADISCORD_vorkerland_solar_counter_preparation = {
 			allowed = { always = no }
@@ -1260,7 +1149,6 @@ ideas = {
 				army_org_factor = 0.05
 			}
 		}
-
 
 # --- focus_decision_ideas ---
 		ADISCORD_vorkerland_allied_supply_advisers = {
@@ -1275,7 +1163,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
 
 # --- focus_expansion_ideas ---
 		# Prewar preparations. Both are timed and exist only to carry a bounded
@@ -2372,8 +2259,6 @@ ideas = {
 			ai_will_do = { factor = 0 }
 		}
 
-
-
 # --- rom_tru_ideas ---
 		ADISCORD_vorkerland_rom_desert_eagle_staff = {
 			picture = generic_war_preparation
@@ -2490,7 +2375,6 @@ ideas = {
 			}
 			ai_will_do = { factor = 0 }
 		}
-
 
 # --- stalemate_ideas ---
 		# Granted only by the two AI-gated one-shot deadline effects and always
@@ -2806,7 +2690,6 @@ ideas = {
 				political_power_gain = -0.15
 			}
 		}
-
 
 # --- rus_campaign_ideas ---
 		# Bookmark previews use the initial values before country variables exist.

@@ -596,7 +596,6 @@ ADISCORD_vorkerland_tva_preservation_variant_plan = {
 	weight = { factor = 4 }
 }
 
-
 # ----------------------------------------------------------------------
 # Continuous mobilisation runs the grid at war load, attacks on a
 # schedule, replaces losses straight off the line, and spends the
@@ -1141,7 +1140,6 @@ ADISCORD_vorkerland_vad_joint_variant_plan = {
 
 	weight = { factor = 4 }
 }
-
 
 # ----------------------------------------------------------------------
 # The crowned restoration levies the estates, rebuilds an officer
@@ -1697,7 +1695,6 @@ ADISCORD_vorkerland_wkr_utilitarian_variant_plan = {
 	weight = { factor = 4 }
 }
 
-
 # ----------------------------------------------------------------------
 # The Chairman's republic strips the civil economy, raises the
 # largest and cheapest army it can, requisitions rather than
@@ -2216,77 +2213,7 @@ ADISCORD_vorkerland_zao_plan = {
 }
 
 # --- rus_last_empire_plan ---
-ADISCORD_rus_crisis_nod_plan = {
-	name = "RUS NOD campaign preparation"
-	desc = ""
-	allowed = { original_tag = RUS }
-	enable = {
-		is_ai = yes
-		RUS_crisis_prepare_nod = yes
-	}
-	abort = { RUS_crisis_prepare_nod = no }
-	ai_national_focuses = {
-		RUS_crisis_nod_1
-		RUS_crisis_nod_2
-		RUS_crisis_nod_3
-		RUS_crisis_nod_4
-	}
-	weight = { factor = 1000 }
-}
 
-ADISCORD_rus_crisis_stp_plan = {
-	name = "RUS STP campaign preparation"
-	desc = ""
-	allowed = { original_tag = RUS }
-	enable = {
-		is_ai = yes
-		RUS_crisis_prepare_stp = yes
-	}
-	abort = { RUS_crisis_prepare_stp = no }
-	ai_national_focuses = {
-		RUS_crisis_stp_1
-		RUS_crisis_stp_2
-		RUS_crisis_stp_3
-		RUS_crisis_stp_4
-	}
-	weight = { factor = 1000 }
-}
-
-ADISCORD_rus_crisis_sts_plan = {
-	name = "RUS STS campaign preparation"
-	desc = ""
-	allowed = { original_tag = RUS }
-	enable = {
-		is_ai = yes
-		RUS_crisis_prepare_sts = yes
-	}
-	abort = { RUS_crisis_prepare_sts = no }
-	ai_national_focuses = {
-		RUS_crisis_sts_1
-		RUS_crisis_sts_2
-		RUS_crisis_sts_3
-		RUS_crisis_sts_4
-	}
-	weight = { factor = 1000 }
-}
-
-ADISCORD_rus_crisis_val_plan = {
-	name = "RUS VAL campaign preparation"
-	desc = ""
-	allowed = { original_tag = RUS }
-	enable = {
-		is_ai = yes
-		RUS_crisis_prepare_val = yes
-	}
-	abort = { RUS_crisis_prepare_val = no }
-	ai_national_focuses = {
-		RUS_crisis_val_1
-		RUS_crisis_val_2
-		RUS_crisis_val_3
-		RUS_crisis_val_4
-	}
-	weight = { factor = 1000 }
-}
 
 
 ADISCORD_vorkerland_rus_last_empire_plan = {
@@ -2405,4 +2332,28 @@ ADISCORD_vorkerland_rus_last_empire_plan = {
 	}
 
 	weight = { factor = 5 }
+}
+
+ADISCORD_rus_last_sky_plan = {
+	name = "ADISCORD_rus_last_sky_plan"
+	desc = "ADISCORD_rus_last_sky_plan"
+	allowed = { original_tag = RUS }
+	enable = {
+		is_ai = yes
+		RUS_crisis_programme_focus_available = yes
+	}
+	abort = { RUS_crisis_programme_focus_available = no }
+	ai_national_focuses = {
+		RUS_imperial_general_staff
+		RUS_western_supply_lines
+		RUS_imperial_arsenals
+		RUS_aimaq_reserve
+		RUS_break_the_hegemon
+		RUS_register_conquered_lands
+		RUS_empire_without_rivals
+		RUS_postwar_roads
+		RUS_imperial_academy
+		RUS_tomorrow_above_ground
+	}
+	weight = { factor = 1000 }
 }

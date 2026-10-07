@@ -14,13 +14,13 @@ sub_units = {
 			category_army
 		}
 		combat_width = 6
-		max_strength = 65
-		max_organisation = 50
-		default_morale = 0.3
+		max_strength = 200
+		max_organisation = 80
+		default_morale = 0.6
 		manpower = 400
 		training_time = 180
 		weight = 12
-		supply_consumption = 0.6
+		supply_consumption = 1.2
 		essential = { ADISCORD_zeppelin_equipment }
 		need = { ADISCORD_zeppelin_equipment = 1 }
 	}

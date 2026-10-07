@@ -133,7 +133,7 @@ ADISCORD_west_prepare_champion = {
 		}
 	}
 	if = {
-		limit = { is_major = no }
+		limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 		set_country_flag = ADISCORD_west_added_major
 		set_major = yes
 	}
@@ -610,8 +610,8 @@ ADISCORD_west_close_campaign_state = {
 ADISCORD_west_close_member_state = {
 	if = {
 		limit = { has_country_flag = ADISCORD_west_added_major }
-		set_major = no
 		clr_country_flag = ADISCORD_west_added_major
+		RUS_crisis_release_other_major = yes
 	}
 	if = {
 		limit = { exists = yes }

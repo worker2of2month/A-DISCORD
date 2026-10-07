@@ -62,8 +62,8 @@ on_actions = {
 						FROM = { if = { limit = { has_war_with = PREV } white_peace = PREV } }
 						if = {
 							limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major }
-							set_major = no
 							clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+							RUS_crisis_release_other_major = yes
 							clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 						}
 						FROM = { annex_country = { target = PREV transfer_troops = no } }
@@ -111,8 +111,8 @@ on_actions = {
 									limit = {
 										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 									}
-									set_major = no
 									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									RUS_crisis_release_other_major = yes
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
@@ -135,8 +135,8 @@ on_actions = {
 									limit = {
 										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 									}
-									set_major = no
 									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									RUS_crisis_release_other_major = yes
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
@@ -161,8 +161,8 @@ on_actions = {
 									limit = {
 										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 									}
-									set_major = no
 									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									RUS_crisis_release_other_major = yes
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}
@@ -177,8 +177,8 @@ on_actions = {
 										limit = {
 											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 										}
-										set_major = no
 										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+										RUS_crisis_release_other_major = yes
 										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 									}
 								}
@@ -203,8 +203,8 @@ on_actions = {
 										limit = {
 											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 										}
-										set_major = no
 										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+										RUS_crisis_release_other_major = yes
 										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 									}
 								}
@@ -220,8 +220,8 @@ on_actions = {
 										limit = {
 											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 										}
-										set_major = no
 										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+										RUS_crisis_release_other_major = yes
 										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 									}
 								}
@@ -237,8 +237,8 @@ on_actions = {
 										limit = {
 											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 										}
-										set_major = no
 										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+										RUS_crisis_release_other_major = yes
 										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 									}
 								}
@@ -254,8 +254,8 @@ on_actions = {
 										limit = {
 											has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 										}
-										set_major = no
 										clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+										RUS_crisis_release_other_major = yes
 										clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 									}
 								}
@@ -277,8 +277,8 @@ on_actions = {
 									limit = {
 										has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 									}
-									set_major = no
 									clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+									RUS_crisis_release_other_major = yes
 									clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 								}
 							}

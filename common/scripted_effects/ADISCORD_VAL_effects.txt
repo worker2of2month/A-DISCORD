@@ -4528,26 +4528,26 @@ VAL_frontier_close = {
 	CIN = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
 	OSF = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
 	APH = { if = { limit = { has_country_flag = VAL_frontier_member has_war_with = VAL } white_peace = VAL } }
-	if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+	if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	NOD = {
 		clr_country_flag = VAL_frontier_guarantor
-		if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+		if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	}
 	STP = {
 		clr_country_flag = VAL_frontier_guarantor
-		if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+		if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	}
 	CIN = {
 		clr_country_flag = VAL_frontier_member
-		if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+		if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	}
 	OSF = {
 		clr_country_flag = VAL_frontier_member
-		if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+		if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	}
 	APH = {
 		clr_country_flag = VAL_frontier_member
-		if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+		if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 	}
 	VAL_frontier_release_coalition = yes
 	ADISCORD_economy_mark_dirty = yes
@@ -4629,7 +4629,7 @@ VAL_frontier_assemble_coalition = {
 }
 
 VAL_frontier_prepare_major = {
-	if = { limit = { is_major = no } set_country_flag = VAL_frontier_added_major set_major = yes }
+	if = { limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } } set_country_flag = VAL_frontier_added_major set_major = yes }
 }
 
 VAL_frontier_record_ultimatum = {
@@ -5350,7 +5350,7 @@ VAL_frontier_call_members = {
 		else_if = {
 			limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
 			clr_country_flag = VAL_frontier_member
-			if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+			if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 		}
 	}
 	OSF = {
@@ -5362,7 +5362,7 @@ VAL_frontier_call_members = {
 		else_if = {
 			limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
 			clr_country_flag = VAL_frontier_member
-			if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+			if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 		}
 	}
 	APH = {
@@ -5374,7 +5374,7 @@ VAL_frontier_call_members = {
 		else_if = {
 			limit = { has_country_flag = VAL_frontier_member NOT = { has_war_with = VAL } }
 			clr_country_flag = VAL_frontier_member
-			if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+			if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 		}
 	}
 }
@@ -6256,8 +6256,8 @@ VAL_settle_joint_nod_shabrat_victory = {
 		NOD = {
 			if = {
 				limit = { has_country_flag = VAL_final_war_added_major }
-				set_major = no
 				clr_country_flag = VAL_final_war_added_major
+				RUS_crisis_release_other_major = yes
 			}
 			clr_country_flag = VAL_final_war_member
 			set_country_flag = STP_pc_defeated_by_sts
@@ -6905,8 +6905,8 @@ VAL_close_northern_coalition_campaign = {
 	YPR = {
 		if = {
 			limit = { has_country_flag = VAL_northern_coalition_added_major }
-			set_major = no
 			clr_country_flag = VAL_northern_coalition_added_major
+			RUS_crisis_release_other_major = yes
 		}
 		clr_country_flag = VAL_northern_coalition_campaign_member
 		clr_country_flag = VAL_northern_coalition_capitulation_reserved
@@ -6914,8 +6914,8 @@ VAL_close_northern_coalition_campaign = {
 	COF = {
 		if = {
 			limit = { has_country_flag = VAL_northern_coalition_added_major }
-			set_major = no
 			clr_country_flag = VAL_northern_coalition_added_major
+			RUS_crisis_release_other_major = yes
 		}
 		clr_country_flag = VAL_northern_coalition_campaign_member
 		clr_country_flag = VAL_northern_coalition_capitulation_reserved
@@ -6923,8 +6923,8 @@ VAL_close_northern_coalition_campaign = {
 	TFF = {
 		if = {
 			limit = { has_country_flag = VAL_northern_coalition_added_major }
-			set_major = no
 			clr_country_flag = VAL_northern_coalition_added_major
+			RUS_crisis_release_other_major = yes
 		}
 		clr_country_flag = VAL_northern_coalition_campaign_member
 		clr_country_flag = VAL_northern_coalition_capitulation_reserved
@@ -6995,7 +6995,7 @@ VAL_adopt_northern_coalition_defensive_campaign = {
 		YPR = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -7003,7 +7003,7 @@ VAL_adopt_northern_coalition_defensive_campaign = {
 		COF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -7011,7 +7011,7 @@ VAL_adopt_northern_coalition_defensive_campaign = {
 		TFF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -7028,7 +7028,7 @@ VAL_begin_northern_coalition_campaign = {
 		YPR = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -7036,7 +7036,7 @@ VAL_begin_northern_coalition_campaign = {
 		COF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -7044,7 +7044,7 @@ VAL_begin_northern_coalition_campaign = {
 		TFF = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
-				limit = { is_major = no }
+				limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 				set_country_flag = VAL_northern_coalition_added_major
 				set_major = yes
 			}
@@ -8262,7 +8262,7 @@ VAL_final_crisis_initialize = {
 # COUNTRY participant. Preserve major status which belonged to another system.
 VAL_final_crisis_register_member = {
 	set_country_flag = VAL_final_war_member
-	if = { limit = { is_major = no } set_country_flag = VAL_final_war_added_major set_major = yes }
+	if = { limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } } set_country_flag = VAL_final_war_added_major set_major = yes }
 }
 
 VAL_final_crisis_join_war = {
@@ -8382,9 +8382,9 @@ VAL_final_crisis_close = {
 	if = { limit = { has_dynamic_modifier = { modifier = VAL_final_war_preparation } } remove_dynamic_modifier = { modifier = VAL_final_war_preparation } }
 	VAL_final_refund_supply_order = yes
 
-	NOD = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
-	STP = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
-	STS = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } set_major = no clr_country_flag = VAL_final_war_added_major } }
+	NOD = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } clr_country_flag = VAL_final_war_added_major RUS_crisis_release_other_major = yes } }
+	STP = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } clr_country_flag = VAL_final_war_added_major RUS_crisis_release_other_major = yes } }
+	STS = { clr_country_flag = VAL_final_war_member if = { limit = { has_country_flag = VAL_final_war_added_major } clr_country_flag = VAL_final_war_added_major RUS_crisis_release_other_major = yes } }
 }
 
 VAL_final_crisis_reconcile = {

@@ -535,12 +535,12 @@ on_actions = {
 					# A third-party victory is outside VAL's territorial settlement.
 					clr_country_flag = VAL_frontier_member
 					clr_country_flag = VAL_frontier_defeated
-					if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+					if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 				}
 				else_if = {
 					limit = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor }
 					clr_country_flag = VAL_frontier_guarantor
-					if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+					if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
 				}
 
 				# A shared NOD war has one settlement owner. Run it before VAL's
@@ -1887,12 +1887,6 @@ on_actions = {
 				limit = {
 					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
 					NOT = { has_global_flag = RUS_crisis_world_ended }
-					NOT = {
-						AND = {
-							ROOT = { has_country_flag = RUS_crisis_defender }
-							FROM = { has_country_flag = RUS_crisis_defender }
-						}
-					}
 				}
 				if = {
 					limit = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } }
@@ -2058,12 +2052,6 @@ on_actions = {
 				limit = {
 					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
 					NOT = { has_global_flag = RUS_crisis_world_ended }
-					NOT = {
-						AND = {
-							ROOT = { has_country_flag = RUS_crisis_defender }
-							FROM = { has_country_flag = RUS_crisis_defender }
-						}
-					}
 				}
 				if = {
 					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }

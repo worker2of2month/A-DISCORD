@@ -375,7 +375,7 @@ focus_tree = {
 		icon = GFX_focus_STP_Turn_The_Young_Officers
 		x = 20
 		y = 17
-		cost = 3
+		cost = 1
 		prerequisite = { focus = RUS_imperial_arsenals }
 		prerequisite = { focus = RUS_western_supply_lines }
 		prerequisite = { focus = RUS_aimaq_reserve }
@@ -396,10 +396,10 @@ focus_tree = {
 					NOT = { has_variable = RUS_crisis_phase }
 					check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
 					check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+					check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
 				}
 			}
 		}
-		bypass = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 25
@@ -427,487 +427,31 @@ focus_tree = {
 		icon = GFX_focus_VAL_Army_Of_The_Ledger
 		x = 18
 		y = 18
-		cost = 5
-		prerequisite = { focus = RUS_break_the_hegemon }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
-			}
-			is_subject = no
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_won_tt
-				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
-			}
-		}
+		cost = 3
 		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_break_the_hegemon }
+		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
-			every_owned_state = {
-				limit = { has_state_flag = RUS_crisis_conquered_state }
-				add_compliance = 20
-				hidden_effect = { clr_state_flag = RUS_crisis_conquered_state }
-			}
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = RUS }
+			add_equipment_to_stockpile = { type = train_equipment_1 amount = 40 producer = RUS }
 		}
 		ai_will_do = { base = 120 }
 	}
 
 	focus = {
 		id = RUS_empire_without_rivals
-		icon = GFX_focus_VAL_Count_The_Captains
+		icon = GFX_focus_STP_pw_party_civilian_retraining
 		x = 22
 		y = 18
-		cost = 5
-		prerequisite = { focus = RUS_break_the_hegemon }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
-			}
-			is_subject = no
-			has_capitulated = no
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_won_tt
-				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
-			}
-		}
+		cost = 4
 		cancel_if_invalid = yes
+		prerequisite = { focus = RUS_break_the_hegemon }
+		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
 			add_research_slot = 1
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 120 }
-	}
-
-	# Each participating army has a 77-day preparation route during coalition mobilization.
-
-	focus = {
-		id = RUS_crisis_nod_1
-		icon = GFX_focus_STP_cw_northern_dossier
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 34
-		y = 16
-		cost = 2
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_nod_tt
-				RUS_crisis_prepare_nod = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 15
-			add_command_power = 15
-			unlock_decision_tooltip = RUS_crisis_resupply_nod
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_nod_2
-		icon = GFX_focus_STP_party_war_transport
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 34
-		y = 17
-		cost = 3
-		prerequisite = { focus = RUS_crisis_nod_1 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_nod_tt
-				RUS_crisis_prepare_nod = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = train_equipment_1
-				amount = 25
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 150
-				producer = RUS
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_nod_3
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 34
-		y = 18
-		cost = 3
-		prerequisite = { focus = RUS_crisis_nod_2 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_nod_tt
-				RUS_crisis_prepare_nod = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = infantry_equipment_0
-				amount = 4000
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 160
-				producer = RUS
-			}
-			add_ideas = RUS_crisis_nod_preparation_1
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_nod_4
-		icon = GFX_focus_STP_ps_joint_staff
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 34
-		y = 19
-		cost = 3
-		prerequisite = { focus = RUS_crisis_nod_3 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_nod_tt
-				RUS_crisis_prepare_nod = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			swap_ideas = {
-				remove_idea = RUS_crisis_nod_preparation_1
-				add_idea = RUS_crisis_nod_preparation_2
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_stp_1
-		icon = GFX_focus_STP_cw_northern_dossier
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 38
-		y = 16
-		cost = 2
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_stp_tt
-				RUS_crisis_prepare_stp = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 15
-			add_command_power = 15
-			unlock_decision_tooltip = RUS_crisis_resupply_stp
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_stp_2
-		icon = GFX_focus_STP_party_war_transport
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 38
-		y = 17
-		cost = 3
-		prerequisite = { focus = RUS_crisis_stp_1 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_stp_tt
-				RUS_crisis_prepare_stp = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = artillery_equipment_1
-				amount = 120
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = ADISCORD_anti_tank_equipment_2163
-				amount = 120
-				producer = RUS
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_stp_3
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 38
-		y = 18
-		cost = 3
-		prerequisite = { focus = RUS_crisis_stp_2 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_stp_tt
-				RUS_crisis_prepare_stp = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = infantry_equipment_0
-				amount = 3000
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 250
-				producer = RUS
-			}
-			add_ideas = RUS_crisis_stp_preparation_1
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_stp_4
-		icon = GFX_focus_STP_ps_joint_staff
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 38
-		y = 19
-		cost = 3
-		prerequisite = { focus = RUS_crisis_stp_3 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_stp_tt
-				RUS_crisis_prepare_stp = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			swap_ideas = {
-				remove_idea = RUS_crisis_stp_preparation_1
-				add_idea = RUS_crisis_stp_preparation_2
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_sts_1
-		icon = GFX_focus_STP_cw_northern_dossier
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 42
-		y = 16
-		cost = 2
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_sts_tt
-				RUS_crisis_prepare_sts = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 15
-			add_command_power = 15
-			unlock_decision_tooltip = RUS_crisis_resupply_sts
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_sts_2
-		icon = GFX_focus_STP_party_war_transport
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 42
-		y = 17
-		cost = 3
-		prerequisite = { focus = RUS_crisis_sts_1 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_sts_tt
-				RUS_crisis_prepare_sts = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = 240
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = infantry_equipment_0
-				amount = 2500
-				producer = RUS
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_sts_3
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 42
-		y = 18
-		cost = 3
-		prerequisite = { focus = RUS_crisis_sts_2 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_sts_tt
-				RUS_crisis_prepare_sts = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 240
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = ADISCORD_anti_tank_equipment_2163
-				amount = 100
-				producer = RUS
-			}
-			add_ideas = RUS_crisis_sts_preparation_1
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_sts_4
-		icon = GFX_focus_STP_ps_joint_staff
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 42
-		y = 19
-		cost = 3
-		prerequisite = { focus = RUS_crisis_sts_3 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_sts_tt
-				RUS_crisis_prepare_sts = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			swap_ideas = {
-				remove_idea = RUS_crisis_sts_preparation_1
-				add_idea = RUS_crisis_sts_preparation_2
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_val_1
-		icon = GFX_focus_STP_cw_northern_dossier
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 46
-		y = 16
-		cost = 2
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_val_tt
-				RUS_crisis_prepare_val = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			army_experience = 15
-			add_command_power = 15
-			unlock_decision_tooltip = RUS_crisis_resupply_val
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_val_2
-		icon = GFX_focus_STP_party_war_transport
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 46
-		y = 17
-		cost = 3
-		prerequisite = { focus = RUS_crisis_val_1 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_val_tt
-				RUS_crisis_prepare_val = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = train_equipment_1
-				amount = 30
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = support_equipment
-				amount = 180
-				producer = RUS
-			}
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_val_3
-		icon = GFX_focus_VAL_Export_Rifles_Not_Promises
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 46
-		y = 18
-		cost = 3
-		prerequisite = { focus = RUS_crisis_val_2 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_val_tt
-				RUS_crisis_prepare_val = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			add_equipment_to_stockpile = {
-				type = ADISCORD_anti_tank_equipment_2163
-				amount = 180
-				producer = RUS
-			}
-			add_equipment_to_stockpile = {
-				type = ADISCORD_anti_air_equipment_2163
-				amount = 180
-				producer = RUS
-			}
-			add_ideas = RUS_crisis_val_preparation_1
-		}
-		ai_will_do = { base = 250 }
-	}
-
-	focus = {
-		id = RUS_crisis_val_4
-		icon = GFX_focus_STP_ps_joint_staff
-		search_filters = { FOCUS_FILTER_ARMY_XP FOCUS_FILTER_WAR_SUPPORT }
-		x = 46
-		y = 19
-		cost = 3
-		prerequisite = { focus = RUS_crisis_val_3 }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_preparation_val_tt
-				RUS_crisis_prepare_val = yes
-			}
-		}
-		cancel_if_invalid = yes
-		completion_reward = {
-			swap_ideas = {
-				remove_idea = RUS_crisis_val_preparation_1
-				add_idea = RUS_crisis_val_preparation_2
-			}
-		}
-		ai_will_do = { base = 250 }
 	}
 
 	# Civil government, surface economy, underground capital and army reform.
@@ -2318,102 +1862,53 @@ focus_tree = {
 	focus = {
 		id = RUS_postwar_roads
 		icon = GFX_focus_VAL_Reclamation_Road_Crews
-		search_filters = { FOCUS_FILTER_INDUSTRY }
 		x = 18
 		y = 19
-		cost = 4
+		cost = 3
 		cancel_if_invalid = yes
 		prerequisite = { focus = RUS_register_conquered_lands }
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
-			}
-			owns_state = 66
-			controls_state = 66
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_won_tt
-				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
-			}
-		}
+		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
-			66 = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
-			add_stability = 0.03
-			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
+			176 = { RUS_crisis_fortify_reactor_state = yes }
+			177 = { RUS_crisis_fortify_reactor_state = yes }
+			188 = { RUS_crisis_fortify_reactor_state = yes }
+			192 = { RUS_crisis_fortify_reactor_state = yes }
+			add_equipment_to_stockpile = { type = ADISCORD_anti_air_equipment_2163 amount = 240 producer = RUS }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 120 }
 	}
 
 	focus = {
 		id = RUS_imperial_academy
 		icon = GFX_focus_STP_pw_party_civilian_retraining
-		search_filters = { FOCUS_FILTER_RESEARCH }
 		x = 22
 		y = 19
-		cost = 4
+		cost = 3
 		cancel_if_invalid = yes
-		prerequisite = {
-			focus = RUS_empire_without_rivals
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_won_tt
-				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
-			}
-		}
+		prerequisite = { focus = RUS_empire_without_rivals }
+		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
 			add_tech_bonus = { name = RUS_imperial_academy bonus = 0.75 uses = 2 category = industry }
 			army_experience = 30
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 120 }
 	}
 
 	focus = {
 		id = RUS_tomorrow_above_ground
-		icon = GFX_focus_VAL_Reclamation_Return_Home
-		search_filters = { FOCUS_FILTER_POLITICAL }
+		icon = GFX_focus_STP_ps_permanent_security
 		x = 20
 		y = 20
-		cost = 4
+		cost = 1
 		cancel_if_invalid = yes
-		prerequisite = {
-			focus = RUS_postwar_roads
-		}
-		prerequisite = {
-			focus = RUS_imperial_academy
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = RUS_khan_governing_tt
-				RUS_khan_governing = yes
-			}
-			custom_trigger_tooltip = {
-				tooltip = RUS_crisis_won_tt
-				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
-			}
-		}
+		prerequisite = { focus = RUS_postwar_roads }
+		prerequisite = { focus = RUS_imperial_academy }
+		available = { RUS_crisis_programme_focus_available = yes }
 		completion_reward = {
-			add_stability = 0.05
-			custom_effect_tooltip = RUS_treasury_600_tt
-			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
-				ADISCORD_economy_mark_dirty = yes
-			}
+			add_ideas = RUS_crisis_reactor_guard
 			hidden_effect = { country_event = { id = ADISCORD_rus_campaign.11 } }
 		}
-		ai_will_do = { base = 8 }
+		ai_will_do = { base = 120 }
 	}
 
 	focus = {

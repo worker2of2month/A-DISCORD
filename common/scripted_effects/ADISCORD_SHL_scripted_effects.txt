@@ -2764,7 +2764,7 @@ SHL_dissolve_inherited_mzr_pact = {
 # COUNTRY principal; an allied capitulation must not end this limited war.
 SHL_reserve_mzr_principal = {
 	if = {
-		limit = { is_major = no }
+		limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
 		set_country_flag = SHL_mzr_added_major
 		set_major = yes
 	}
@@ -2773,8 +2773,8 @@ SHL_reserve_mzr_principal = {
 SHL_release_mzr_principal = {
 	if = {
 		limit = { has_country_flag = SHL_mzr_added_major }
-		set_major = no
 		clr_country_flag = SHL_mzr_added_major
+		RUS_crisis_release_other_major = yes
 	}
 }
 

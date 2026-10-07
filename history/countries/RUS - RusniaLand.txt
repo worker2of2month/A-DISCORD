@@ -8,6 +8,10 @@ oob = "RUS"
 
 recruit_character = RUS_Mark_Rustan
 recruit_character = RUS_Varlam_Oskol
+recruit_character = RUS_Pavel_Zorin
+recruit_character = RUS_Mikhail_Rakitin
+recruit_character = RUS_Viktor_Belov
+recruit_character = RUS_Aleksei_Tumanov
 
 ####### Basic shit
 

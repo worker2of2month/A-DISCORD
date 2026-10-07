@@ -23,6 +23,78 @@ characters = {
 		}
 	}
 
+	RUS_Pavel_Zorin = {
+		name = RUS_Pavel_Zorin
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Pavel_Zorin
+				small = GFX_portrait_RUS_Pavel_Zorin_small
+			}
+		}
+		corps_commander = {
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	RUS_Mikhail_Rakitin = {
+		name = RUS_Mikhail_Rakitin
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Mikhail_Rakitin
+				small = GFX_portrait_RUS_Mikhail_Rakitin_small
+			}
+		}
+		corps_commander = {
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	RUS_Viktor_Belov = {
+		name = RUS_Viktor_Belov
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Viktor_Belov
+				small = GFX_portrait_RUS_Viktor_Belov_small
+			}
+		}
+		corps_commander = {
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
+	RUS_Aleksei_Tumanov = {
+		name = RUS_Aleksei_Tumanov
+		portraits = {
+			army = {
+				large = GFX_portrait_RUS_Aleksei_Tumanov
+				small = GFX_portrait_RUS_Aleksei_Tumanov_small
+			}
+		}
+		corps_commander = {
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+			legacy_id = -1
+		}
+	}
+
 	RUS_Varlam_Oskol = {
 		name = RUS_Varlam_Oskol
 		portraits = {

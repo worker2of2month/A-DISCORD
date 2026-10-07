@@ -417,8 +417,8 @@ on_actions = {
 		effect = {
 			if = {
 				limit = { has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major }
-				set_major = no
 				clr_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
+				RUS_crisis_release_other_major = yes
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_retry_used
 				clr_country_flag = ADISCORD_vorkerland_regional_auxiliary_failed

@@ -452,6 +452,58 @@ spriteTypes = {
 	}
 	###RUS
 	spriteType = {
+		name = "GFX_portrait_RUS_Pavel_Zorin"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Pavel_Zorin.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Pavel_Zorin_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Pavel_Zorin.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Mikhail_Rakitin"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Mikhail_Rakitin.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Mikhail_Rakitin_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Mikhail_Rakitin.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Viktor_Belov"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Viktor_Belov.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Viktor_Belov_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Viktor_Belov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
+		name = "GFX_portrait_RUS_Aleksei_Tumanov"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Aleksei_Tumanov.png"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_portrait_RUS_Aleksei_Tumanov_small"
+		texturefile = "gfx/leaders/RUS/portrait_RUS_Aleksei_Tumanov.png"
+		size = { x = 50 y = 67 }
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+
+	spriteType = {
 		name = "GFX_portrait_RUS_Mark_Rustan"
 		texturefile = "gfx/leaders/RUS/portrait_RUS_Mark_Rustan.png"
 	}

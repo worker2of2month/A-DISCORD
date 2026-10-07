@@ -1665,7 +1665,6 @@ ADISCORD_vorkerland_central_districts_owned_and_controlled = {
 	NOT = { any_enemy_country = { NOT = { has_capitulated = yes } } }
 }
 
-
 # Before the claimant war starts, every integrated district must remain inside
 # the three-claimant ownership and control graph. This prevents an external
 # occupier or peace settlement from creating an unrecoverable postwar hole.
@@ -1761,7 +1760,6 @@ ADISCORD_vorkerland_reunification_verified = {
 	NOT = { country_exists = WTD }
 }
 
-
 ADISCORD_vorkerland_can_commit_to_showdown = {
 	has_global_flag = ADISCORD_vorkerland_phase_central_preparation
 	OR = {
@@ -1775,8 +1773,6 @@ ADISCORD_vorkerland_can_commit_to_showdown = {
 	NOT = { has_global_flag = ADISCORD_vorkerland_showdown_queue_initialized }
 	NOT = { has_global_flag = ADISCORD_vorkerland_central_showdown_started }
 }
-
-
 
 ADISCORD_vorkerland_coalition_victory_ready = {
 	OR = {
@@ -1806,8 +1802,6 @@ ADISCORD_vorkerland_coalition_victory_ready = {
 	}
 }
 
-
-
 ADISCORD_vorkerland_district_integration_available = {
 	OR = {
 		ADISCORD_vorkerland_central_minor_campaign_phase_available = yes
@@ -1819,8 +1813,6 @@ ADISCORD_vorkerland_has_surviving_coalition_partner = {
 	is_in_faction = yes
 	any_other_country = { is_in_faction_with = PREV NOT = { has_capitulated = yes } has_war_together_with = PREV }
 }
-
-
 
 ADISCORD_vorkerland_has_live_claimant_leader = {
 	is_in_faction = yes
@@ -1899,23 +1891,85 @@ RUS_crisis_can_begin = {
 	NOT = { has_variable = RUS_crisis_phase }
 	RUS_lab_reactor_access = yes
 	NOT = { has_global_flag = RUS_crisis_world_ended }
-	NOT = {
-		any_country = {
+
+}
+
+# COUNTRY. Regional winners retain their own alliances and settlements.
+RUS_crisis_eastern_hegemony = {
+	OR = {
+		AND = {
+			tag = VAL
 			OR = {
-				has_country_flag = ADISCORD_south_settlement_pending
-				has_country_flag = ADISCORD_west_settlement_pending
+				has_completed_focus = VAL_Campaign_Secured
+				has_completed_focus = VAL_nw_price
 			}
+			VAL_campaign_objectives_met = yes
+		}
+		AND = {
+			tag = STS
+			has_completed_focus = STP_pc_heg_final_kefreyt
+			STP_heg_northern_final_resolved = yes
+			OR = {
+				has_country_flag = STP_heg_kefreyt_final_won
+				VAL = { is_subject_of = STS }
+				NOT = { VAL = { exists = yes } }
+			}
+		}
+		AND = {
+			tag = STP
+			has_completed_focus = STP_pw_party_great_stelander
+			STP_pw_party_external_order_resolved = yes
+			STP_pw_party_northern_march_resolved = yes
+		}
+		AND = {
+			tag = NOD
+			check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
+			VAL = {
+				OR = {
+					exists = no
+					is_subject_of = NOD
+				}
+			}
+			STP = { RUS_crisis_northern_order_member = yes }
+			STS = { RUS_crisis_northern_order_member = yes }
 		}
 	}
 }
 
-# Existing countries, including subjects and civil-war participants. The sealed
-# territory is a technical map owner, not a coalition government.
+# COUNTRY regional rival. A northern expedition alone does not establish hegemony.
+RUS_crisis_northern_order_member = {
+	OR = {
+		exists = no
+		is_subject_of = NOD
+		AND = {
+			is_in_faction_with = NOD
+			NOD = { is_faction_leader = yes }
+		}
+	}
+}
+
 RUS_crisis_coalition_candidate = {
 	exists = yes
-	NOT = { tag = RUS }
-	NOT = { tag = EXZ }
-	NOT = { is_subject_of = RUS }
+	is_subject = no
+	has_capitulated = no
+	NOT = { is_in_faction_with = RUS }
+	OR = {
+		tag = MON
+		tag = VLD
+		tag = TMR
+		AND = {
+			has_war = no
+			has_global_flag = ADISCORD_south_final_resolved
+			OR = {
+				AND = { tag = SHL has_global_flag = ADISCORD_south_hegemon_SHL }
+				AND = { tag = NAM has_global_flag = ADISCORD_south_hegemon_NAM }
+			}
+		}
+		AND = {
+			has_war = no
+			RUS_crisis_eastern_hegemony = yes
+		}
+	}
 }
 
 RUS_crisis_project_active = {
@@ -1975,24 +2029,15 @@ RUS_imperial_frontier_target = {
 
 # COUNTRY. Coalition membership persists through capitulation and liberation.
 RUS_crisis_defending_bloc = {
-	RUS_crisis_coalition_candidate = yes
-	OR = {
-		has_country_flag = RUS_crisis_defender
-		is_in_faction_with = event_target:RUS_crisis_hegemon
-		AND = {
-			is_subject = yes
-			OVERLORD = { has_country_flag = RUS_crisis_defender }
-		}
-	}
+	exists = yes
+	NOT = { tag = RUS }
+	NOT = { is_subject_of = RUS }
+	has_war_with = RUS
 }
 
-# COUNTRY. Story diplomacy must keep the common coalition intact.
+# COUNTRY. The epilogue is terminal; earlier regional wars remain independent.
 RUS_crisis_regional_wars_available = {
-	custom_trigger_tooltip = {
-		tooltip = RUS_crisis_regional_wars_available_tt
-		NOT = { has_global_flag = RUS_crisis_world_ended }
-		NOT = { has_country_flag = RUS_crisis_defender }
-	}
+	NOT = { has_global_flag = RUS_crisis_world_ended }
 }
 
 RUS_crisis_strike_visible = {
@@ -2000,45 +2045,32 @@ RUS_crisis_strike_visible = {
 	NOT = { check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = greater_than } }
 }
 
-RUS_crisis_preparation_open = {
-	tag = RUS
-	RUS_khan_governing = yes
-	is_subject = no
-	has_capitulated = no
-	OR = {
-		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
-		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+RUS_crisis_programme_focus_available = {
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_programme_focus_available_tt
+		RUS_crisis_project_active = yes
+		RUS_lab_reactor_access = yes
+		NOT = { has_global_flag = RUS_crisis_world_ended }
 	}
 }
 
-RUS_crisis_prepare_nod = {
-	RUS_crisis_preparation_open = yes
-	NOD = { has_country_flag = RUS_crisis_defender }
-}
 
-RUS_crisis_prepare_stp = {
-	RUS_crisis_preparation_open = yes
-	STP = { has_country_flag = RUS_crisis_defender }
-}
-
-RUS_crisis_prepare_sts = {
-	RUS_crisis_preparation_open = yes
-	STS = { has_country_flag = RUS_crisis_defender }
-}
-
-RUS_crisis_prepare_val = {
-	RUS_crisis_preparation_open = yes
-	VAL = { has_country_flag = RUS_crisis_defender }
-}
 
 RUS_crisis_all_defenders_defeated = {
 	check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+	any_of_scopes = { array = global.RUS_crisis_defenders always = yes }
 	NOT = {
-		any_country = {
-			has_country_flag = RUS_crisis_defender
-			has_capitulated = no
-			NOT = { has_country_flag = RUS_crisis_capitulation_current }
+		any_of_scopes = {
+			array = global.RUS_crisis_defenders
+			exists = yes
 			NOT = { is_subject_of = RUS }
+			NOT = { has_country_flag = RUS_crisis_capitulation_current }
+			OR = {
+				has_capitulated = no
+				capital_scope = {
+					NOT = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS } } }
+				}
+			}
 		}
 	}
 }
@@ -2491,7 +2523,6 @@ ADISCORD_vorkerland_vad_ai_solar_preparation = {
 	ADISCORD_vorkerland_vad_has_solar_intervention_border = yes
 }
 
-
 # The capitulated country's allies can continue the same war and liberate it.
 
 # COUNTRY target: only the accepted native loser can precede engine capitulation state.
@@ -2686,7 +2717,6 @@ RUS_market_surplus_affordable = {
 	NOT = { has_equipment = { infantry_equipment < 2500 } }
 }
 
-
 RUS_bunker_upgrade_1_requirements = {
 	has_completed_focus = RUS_bunker_airlocks
 	check_variable = { var = RUS_bunker_depth value = 1 compare = greater_than_or_equals }
@@ -2773,7 +2803,6 @@ RUS_bunker_food_sale_available = {
 	RUS_bunker_operational = yes
 	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
 }
-
 
 RUS_bunker_guard_ui_available = {
 	RUS_bunker_operational = yes
@@ -3228,5 +3257,21 @@ ADISCORD_vorkerland_pw_expedition_won = {
 				}
 			}
 		}
+	}
+}
+
+# COUNTRY. Temporary major ownership may overlap independent campaigns.
+RUS_crisis_other_major_required = {
+	OR = {
+		has_country_flag = ADISCORD_nam_resource_war_added_major
+		has_country_flag = SHL_mzr_added_major
+		has_country_flag = ADISCORD_south_added_major
+		has_country_flag = ADISCORD_west_added_major
+		has_country_flag = STP_cw_northern_added_major
+		has_country_flag = VAL_frontier_added_major
+		has_country_flag = VAL_northern_coalition_added_major
+		has_country_flag = VAL_final_war_added_major
+		has_country_flag = ADISCORD_vorkerland_pw_added_major
+		has_country_flag = ADISCORD_vorkerland_coalition_mandatory_major
 	}
 }
