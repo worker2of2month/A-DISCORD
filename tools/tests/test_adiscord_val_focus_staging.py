@@ -557,10 +557,15 @@ class KefreytAIExpansionPriorityTests(unittest.TestCase):
             done.add(focus_id)
         for focus_id in (
             "VAL_Integrate_Occidia", "VAL_Contracts_Outlive_Kings",
+            "VAL_Foreign_Broker_Licences", "VAL_Return_Southern_Tsaygen",
             "VAL_frontier_security_plan",
         ):
             self.assertIn(focus_id, done)
         self.assertLess(order.index("VAL_Integrate_Occidia"), order.index("VAL_The_Weaponry_Baron"))
+        self.assertLess(
+            order.index("VAL_Return_Southern_Tsaygen"),
+            order.index("VAL_frontier_conference"),
+        )
         self.assertNotIn("VAL_Balchansk_Charter", done)
         self.assertNotIn("VAL_Returning_Buyers", done)
 

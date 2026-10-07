@@ -73,6 +73,8 @@ VAL_expansion_priority_plan = {
 		VAL_Reserve_Accounting
 		VAL_Industrial_Mobilization_Plan
 		VAL_Contracts_Outlive_Kings
+		VAL_Foreign_Broker_Licences
+		VAL_Return_Southern_Tsaygen
 		VAL_frontier_conference
 		VAL_frontier_logistics
 		VAL_frontier_provincial_offices

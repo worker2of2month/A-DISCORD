@@ -1293,7 +1293,7 @@
  RUS_campaign_irt_border_tt: "Requires a land border with the Inner Lands Republic."
  RUS_campaign_sca_border_tt: "Requires a land border with the Southern Federation."
  RUS_proclaim_the_last_empire_available_tt: "Requires at least three Dirty Zone neighbours held, or no independent republics left there."
- RUS_proclaim_last_empire_prepared_tt: "Complete the military preparation first: The Second Aimaq Muster and Arm the Border Hosts provide five and three rifle brigades before the crisis begins."
+ RUS_proclaim_the_last_empire_prepared_tt: "Complete the military preparation first: The Second Aimaq Muster and Arm the Border Hosts provide five and three rifle brigades before the crisis begins."
  RUS_last_empire_cosmetic_tt: "The Land of the Khan raises the second standard. A Black Army lead names it the §YEmpire of the Black Banner§!; a scientist lead or a balance names it the §YLast Empire§!."
  RUS_arm_the_border_hosts_tt: "Raises three rifle brigades in the capital from the mustered men and rifles."
  RUS_proclaim_the_last_empire_peace_tt: "Requires peace on every front, not only a closed Dirty Zone campaign."
