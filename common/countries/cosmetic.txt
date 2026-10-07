@@ -30,6 +30,11 @@ SOL_vorkerland_worker_protectorate = {
 	color_ui = rgb { 231 183 75 }
 }
 
+SOL_vorkerland_restoration_administration = {
+	color = rgb { 19 45 105 }
+	color_ui = rgb { 65 112 210 }
+}
+
 PWR_rimat_republic = {
 	color = rgb { 55 92 109 }
 	color_ui = rgb { 194 126 84 }

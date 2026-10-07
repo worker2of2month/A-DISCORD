@@ -34,7 +34,7 @@ def named_block(source: str, name: str) -> str:
 
 
 class VadPostwarContractTests(unittest.TestCase):
-    def test_restored_sol_remains_protectorate_but_voluntary_ally_is_sovereign(
+    def test_restored_and_voluntary_sol_remain_subjects_after_handoff(
         self,
     ) -> None:
         source = source_section(
@@ -61,8 +61,45 @@ class VadPostwarContractTests(unittest.TestCase):
             "has_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted", voluntary
         )
         self.assertIn("add_to_faction = SOL", voluntary)
-        self.assertNotIn("puppet = SOL", voluntary)
-        self.assertNotIn("autonomy_state = autonomy_puppet", voluntary)
+        self.assertIn("puppet = SOL", voluntary)
+        self.assertIn("autonomy_state = autonomy_puppet", voluntary)
+        detach = formation.index("autonomy_state = autonomy_free")
+        annex = formation.index("annex_country = { target = VAD")
+        rebind = formation.index("puppet = SOL")
+        self.assertLess(detach, annex)
+        self.assertLess(annex, rebind)
+
+    def test_destroyed_sol_returns_as_administration_with_velin_and_overlord_colour(self) -> None:
+        effects = read("common/scripted_effects/ADISCORD_vorkerland_effects.txt")
+        restoration = named_block(effects, "ADISCORD_vorkerland_restore_sol_as_vad_puppet")
+        self.assertIn("104 = { add_core_of = SOL }", restoration)
+        self.assertIn("transfer_state = 104", restoration)
+        self.assertIn("set_cosmetic_tag = SOL_vorkerland_restoration_administration", restoration)
+        self.assertIn("autonomy_state = autonomy_puppet", restoration)
+        self.assertIn("use_overlord_color = yes", read("common/autonomous_states/puppet.txt"))
+        verification = named_block(effects, "ADISCORD_vorkerland_verify_sol_restoration")
+        self.assertIn("owns_state = 104 controls_state = 104", verification)
+        self.assertIn("ADISCORD_vorkerland_sync_independence_cosmetic = yes", verification)
+        cosmetics = named_block(effects, "ADISCORD_vorkerland_sync_independence_cosmetic")
+        self.assertIn("is_subject_of = VAD", cosmetics)
+        self.assertIn("WRK = { has_country_flag = ADISCORD_vorkerland_route_joint }", cosmetics)
+        self.assertIn("has_country_flag = ADISCORD_vorkerland_restored_by_vad", cosmetics)
+        self.assertLess(
+            cosmetics.index("set_cosmetic_tag = SOL_vorkerland_restoration_administration"),
+            cosmetics.index("set_cosmetic_tag = SOL_vorkerland_worker_protectorate"),
+        )
+
+    def test_sol_acceptance_subordinates_only_with_its_choice(self) -> None:
+        events = read("events/ADISCORD_vorkerland_events.txt")
+        start = events.index("id = ADISCORD_vorkerland_diplomacy.2\n")
+        end = events.index("\ncountry_event = {", start)
+        event = events[start:end]
+        acceptance = named_block(event, "option")
+        self.assertIn("puppet = SOL", acceptance)
+        self.assertIn("autonomy_state = autonomy_puppet", acceptance)
+        decline = event[event.index("name = ADISCORD_vorkerland_diplomacy.2.b"):]
+        self.assertNotIn("puppet =", decline)
+        self.assertNotIn("set_autonomy", decline)
 
     def test_vlad_capstone_keeps_empire_while_joint_council_drops_temporary_cosmetic(
         self,
@@ -84,7 +121,9 @@ class VadPostwarContractTests(unittest.TestCase):
         )
         self.assertIn("set_cosmetic_tag = VAD_vorkerland_restoration", reward)
         self.assertIn("character = WRK_Vlad_Petrichev", reward)
-        self.assertIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", reward)
+        self.assertIn("civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }", reward)
+        self.assertIn("portrait = GFX_portrait_WRK_Vlad_Petrichev\n", reward)
+        self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", reward)
         self.assertIn(
             "add_ideas = ADISCORD_vorkerland_reunification_settlement", reward
         )
@@ -101,7 +140,7 @@ class VadPostwarContractTests(unittest.TestCase):
         self.assertIsNotNone(match)
         warrants = named_block(focuses[match.start() :], "focus")
         self.assertIn(
-            "decision = ADISCORD_vorkerland_vad_continue_imperial_reunification",
+            "unlock_decision_tooltip = ADISCORD_vorkerland_vad_continue_imperial_reunification",
             warrants,
         )
         self.assertIn(
@@ -145,7 +184,7 @@ class VadPostwarContractTests(unittest.TestCase):
             r"(?s)if\s*=\s*\{\s*limit\s*=\s*\{(?P<limit>[^{}]*)\}\s*"
             r"set_cosmetic_tag\s*=\s*WRK_vorkerland_joint_government\s*"
             r"ADISCORD_vorkerland_appoint_joint_council\s*=\s*yes\s*\}"
-            r"\s*else\s*=\s*\{(?P<else>.*?portrait\s*=\s*GFX_portrait_WRK_Vlad_Petrichev_civilwar)",
+            r"\s*else\s*=\s*\{(?P<else>.*?portrait\s*=\s*GFX_portrait_WRK_Vlad_Petrichev)\s",
             formation,
         )
         self.assertIsNotNone(identity)
@@ -165,6 +204,8 @@ class VadPostwarContractTests(unittest.TestCase):
         )
         self.assertIn("character = WRK_Vlad_Petrichev", formation)
         self.assertIn("character = WRK_Nikita_Worcker", formation)
+        self.assertIn("civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }", formation)
+        self.assertNotIn("GFX_portrait_WRK_Vlad_Petrichev_civilwar", formation)
 
     def test_joint_council_gets_specific_victory_text_before_vlad_fallback(
         self,

@@ -3758,6 +3758,22 @@ ADISCORD_vorkerland_sync_independence_cosmetic = {
 		if = {
 			limit = { tag = SOL }
 			if = {
+				limit = {
+					OR = {
+						is_subject_of = VAD
+						AND = {
+							is_subject_of = WRK
+							WRK = { has_country_flag = ADISCORD_vorkerland_route_joint }
+						}
+					}
+				}
+				if = {
+					limit = { has_country_flag = ADISCORD_vorkerland_restored_by_vad }
+					set_cosmetic_tag = SOL_vorkerland_restoration_administration
+				}
+				else = { drop_cosmetic_tag = yes }
+			}
+			else_if = {
 				limit = { OR = { is_subject_of = WKR is_subject_of = WRK } }
 				set_cosmetic_tag = SOL_vorkerland_worker_protectorate
 			}
@@ -4877,7 +4893,10 @@ ADISCORD_vorkerland_restore_sol_as_vad_puppet = {
 				autonomy_state = autonomy_puppet
 				freedom_level = 0.10
 			}
-			SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
+			SOL = {
+				set_cosmetic_tag = SOL_vorkerland_restoration_administration
+				ADISCORD_vorkerland_sync_party_identity = yes
+			}
 		}
 		else = {
 			SOL = {
@@ -4961,6 +4980,7 @@ ADISCORD_vorkerland_verify_sol_restoration = {
 		SOL = {
 			set_capital = { state = 76 }
 			set_country_flag = ADISCORD_vorkerland_restored_by_vad
+			ADISCORD_vorkerland_sync_independence_cosmetic = yes
 		}
 		set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		set_global_flag = ADISCORD_vorkerland_sol_restoration_verified
@@ -8667,6 +8687,17 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 		remove_ideas = ADISCORD_vorkerland_vad_restoration_war_cabinet_2
 		remove_ideas = ADISCORD_vorkerland_vad_dual_authority_protocol_2
 	}
+	# Preserve SOL as a country while its overlord is consumed, then bind it
+	# to WRK after the claimant's annexation and government transfer.
+	if = {
+		limit = { SOL = { exists = yes is_subject_of = VAD } }
+		VAD = {
+			set_autonomy = {
+				target = SOL
+				autonomy_state = autonomy_free
+			}
+		}
+	}
 	transfer_state = 32
 	32 = { set_state_controller_to = WRK }
 	set_capital = { state = 32 }
@@ -8724,15 +8755,17 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 			character = WRK_Vlad_Petrichev
 			ideology = imperial_restorationism
 		}
+		set_portraits = {
+			character = WRK_Vlad_Petrichev
+			civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }
+		}
 		set_country_leader_portrait = {
 			ideology = pragmatism
-			portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
+			portrait = GFX_portrait_WRK_Vlad_Petrichev
 		}
 	}
-	# A loyalist SOL restored by force remains a protectorate of the reunited
-	# state. A SOL that accepted Armi's invitation voluntarily remains sovereign.
-	# Normalize both relations explicitly after VAD is consumed so the outcome
-	# never depends on how annex_country treats the winner's former subjects.
+	# Both the restored administration and the accepted Solarino compact remain
+	# subject to the reunited country after the claimant handoff.
 	if = {
 		limit = {
 			has_global_flag = ADISCORD_vorkerland_sol_restoration_verified
@@ -8763,6 +8796,9 @@ ADISCORD_vorkerland_form_wrk_from_vad = {
 			}
 			if = { limit = { is_in_faction = yes } leave_faction = yes }
 		}
+		puppet = SOL
+		set_autonomy = { target = SOL autonomy_state = autonomy_puppet freedom_level = 0.10 }
+		SOL = { ADISCORD_vorkerland_sync_party_identity = yes }
 		create_faction_from_template = { template = faction_template_ADISCORD_standard name = ADISCORD_vorkerland_solar_restoration_alliance }
 		add_to_faction = SOL
 	}

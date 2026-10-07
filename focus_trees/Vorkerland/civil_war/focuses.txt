@@ -7861,8 +7861,7 @@ focus_tree = {
 			remove_ideas = ADISCORD_vorkerland_tva_doctrine_fewer_better_crews
 			add_ideas = ADISCORD_vorkerland_reunification_settlement
 			# The rare Worker-Vlad emergency council is temporary. Vlad's ordinary
-			# victory is not: the restored state remains the Vorkerland Empire and
-			# keeps the darker wartime portrait as its permanent visual identity.
+			# victory keeps the Vorkerland Empire and its civilian leader portrait.
 			if = {
 				limit = { has_global_flag = ADISCORD_vorkerland_joint_government_formed }
 				drop_cosmetic_tag = yes
@@ -7871,11 +7870,11 @@ focus_tree = {
 				set_cosmetic_tag = VAD_vorkerland_restoration
 				set_portraits = {
 					character = WRK_Vlad_Petrichev
-					civilian = { large = GFX_portrait_WRK_Vlad_Petrichev_civilwar }
+					civilian = { large = GFX_portrait_WRK_Vlad_Petrichev }
 				}
 				set_country_leader_portrait = {
 					ideology = pragmatism
-					portrait = GFX_portrait_WRK_Vlad_Petrichev_civilwar
+					portrait = GFX_portrait_WRK_Vlad_Petrichev
 				}
 			}
 			add_stability = 0.03

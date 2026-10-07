@@ -2166,6 +2166,12 @@ country_event = {
 		set_country_flag = ADISCORD_vorkerland_allied_with_vad
 		VAD = {
 			ADISCORD_vorkerland_leave_inherited_faction = yes
+			puppet = SOL
+			set_autonomy = {
+				target = SOL
+				autonomy_state = autonomy_puppet
+				freedom_level = 0.10
+			}
 			if = {
 				limit = { is_in_faction = no }
 				create_faction_from_template = {
@@ -2180,6 +2186,7 @@ country_event = {
 			set_country_flag = ADISCORD_vorkerland_preserve_wartime_faction
 		}
 		set_global_flag = ADISCORD_vorkerland_vad_sol_alliance_accepted
+		ADISCORD_vorkerland_sync_party_identity = yes
 		# If the three claimant wars are already verified, join only VAD's live
 		# edges. Before that point the normal phase verifier performs the same call.
 		ADISCORD_vorkerland_join_regional_allies_to_showdown = yes

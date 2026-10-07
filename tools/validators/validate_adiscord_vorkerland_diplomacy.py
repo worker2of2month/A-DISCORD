@@ -698,7 +698,17 @@ def validate_peaceful_invitations() -> list[str]:
                 issues.append(
                     f"{event_id} lacks bounded acceptance/decline token {token}"
                 )
-        for forbidden in ("declare_war_on", "add_to_war", "puppet =", "set_autonomy"):
+        forbidden_effects = ["declare_war_on", "add_to_war"]
+        if invitee == "SOL":
+            accepted_option = named_block(acceptance, "option")
+            for token in ("puppet = SOL", "autonomy_state = autonomy_puppet"):
+                if token not in accepted_option:
+                    issues.append(
+                        f"{event_id} must establish the accepted Solarino protectorate: {token}"
+                    )
+        else:
+            forbidden_effects.extend(("puppet =", "set_autonomy"))
+        for forbidden in forbidden_effects:
             if forbidden in acceptance:
                 issues.append(
                     f"{event_id} must not start or merge a war during acceptance; found {forbidden}"
