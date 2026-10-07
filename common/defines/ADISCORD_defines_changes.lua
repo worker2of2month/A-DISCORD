@@ -602,3 +602,7 @@ NDefines_Graphics.NGraphics.STRATEGIC_NAVY_COLOR_MISSION = {0.65, 0.65, 0.0, 1}
 NDefines_Graphics.NGraphics.STRATEGIC_NAVY_COLOR_NEUTRAL = {130.0/255, 130.0/255, 130.0/255, 1}
 
 NDefines_Graphics.NGraphics.ROOT_FRONT_OFFSET = 1.5
+
+-- Port-led landings keep the first wave within the local fleet's supply capacity.
+NDefines.NAI.INVASION_TARGET_NO_PORT_FACTOR = 0.1
+NDefines.NAI.MAX_INVASION_SIZE = 8

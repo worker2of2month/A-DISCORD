@@ -16,6 +16,9 @@ state={
 			infrastructure = 3
 			industrial_complex = 2
 			arms_factory = 1
+			16344 = {
+				naval_base = 2
+			}
 		}
 		add_core_of = STP
 

@@ -399,7 +399,6 @@ focus_tree = {
 		bypass = { check_variable = { var = RUS_crisis_phase value = 3 compare = equals } }
 		cancel_if_invalid = yes
 		completion_reward = {
-			unlock_decision_tooltip = RUS_crisis_challenge_hegemon
 			army_experience = 25
 			add_command_power = 25
 			add_manpower = 30000
@@ -478,7 +477,7 @@ focus_tree = {
 		ai_will_do = { base = 120 }
 	}
 
-	# Each target has a 77-day route available when its warning starts.
+	# Each participating army has a 77-day preparation route during coalition mobilization.
 
 	focus = {
 		id = RUS_crisis_nod_1

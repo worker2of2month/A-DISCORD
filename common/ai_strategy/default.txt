@@ -258,14 +258,21 @@ ADISCORD_coastal_invasion_planning = {
 		has_tech = ADISCORD_tech_restored_dockyards
 		num_divisions > 7
 		has_navy_size = { size > 19 type = convoy }
-		any_owned_state = { is_coastal = yes naval_base > 0 }
+		ADISCORD_has_operational_naval_base = yes
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = naval_invasion_focus value = 10 }
-	ai_strategy = { type = naval_invasion_dominance_weight value = 30 }
+	ai_strategy = { type = naval_invasion_focus value = 20 }
+	ai_strategy = { type = naval_invasion_dominance_weight value = 60 }
 	ai_strategy = {
 		type = invasion_unit_request
-		country_trigger = { has_war_with = FROM has_capitulated = no }
+		country_trigger = {
+			has_war_with = FROM
+			has_capitulated = no
+			any_controlled_state = {
+				is_coastal = yes
+				naval_base > 0
+			}
+		}
 		value = 50
 	}
 }
@@ -308,6 +315,7 @@ ADISCORD_coastal_patrol_replacement = {
 		}
 	}
 	enable = {
+		ADISCORD_is_regional_naval_power = no
 		is_ai = yes
 		has_capitulated = no
 		num_of_naval_factories > 0
@@ -470,4 +478,103 @@ ADISCORD_power_shield_replenishment = {
 		id = ADISCORD_power_shield_equipment
 		value = 30
 	}
+}
+
+# One convoy line plus one line per threshold never exceeds available dockyards.
+ADISCORD_regional_navy_escorts = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		num_of_naval_factories > 1
+		has_navy_size = { size < 12 unit = ADISCORD_coastal_patrol_vessel }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_coastal_patrol_ship
+		value = 1
+	}
+}
+
+ADISCORD_regional_navy_light_cruisers = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		num_of_naval_factories > 2
+		has_navy_size = { size < 4 unit = light_cruiser }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_light_cruiser_archetype
+		value = 1
+	}
+}
+
+ADISCORD_regional_navy_heavy_cruisers = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		num_of_naval_factories > 3
+		has_navy_size = { size < 2 unit = heavy_cruiser }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_cruiser_archetype
+		value = 1
+	}
+}
+
+ADISCORD_regional_navy_submarines = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		num_of_naval_factories > 4
+		has_navy_size = { size < 4 unit = submarine }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = ADISCORD_submarine_archetype
+		value = 1
+	}
+}
+
+ADISCORD_regional_navy_research = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_amphibious_formation_organization value = 80 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_amphibious_staff_sections value = 60 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_amphibious_embarkation_schedules value = 50 }
+	ai_strategy = { type = research_weight_factor id = ADISCORD_tech_destroyer_hull_2163 value = 40 }
+}
+
+ADISCORD_marine_recruitment = {
+	allowed = { ADISCORD_is_regional_naval_power = yes }
+	enable = {
+		is_ai = yes
+		has_capitulated = no
+		ADISCORD_has_operational_naval_base = yes
+		ADISCORD_has_marine_training = yes
+		num_divisions > 11
+		NOT = { has_manpower < 6000 }
+		NOT = { has_equipment = { infantry_equipment < 5400 } }
+		NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 288 } }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = { type = role_ratio id = marines value = 8 }
 }

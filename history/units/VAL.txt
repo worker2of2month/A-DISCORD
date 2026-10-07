@@ -54,15 +54,199 @@ division_template = {
 
 units = {
 	fleet = {
-		name = "Кефрейтская флотилия"
+		name = "Кефрейтский экспедиционный флот"
 		naval_base = 16535
 		task_force = {
-			name = "Охрана морских поставок"
+			name = "Экспедиционная эскадра"
 			location = 16535
-			ship = { name = "СК-301" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-302" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-303" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
-			ship = { name = "СК-304" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = VAL } } }
+			ship = {
+				name = "VAL-ТК-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЛК-01"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Крейсерский дозор"
+			location = 16535
+			ship = {
+				name = "VAL-ЛК-02"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЛК-03"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Сопровождение конвоев"
+			location = 16535
+			ship = {
+				name = "VAL-ЭМ-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ЭМ-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Подводная группа"
+			location = 16535
+			ship = {
+				name = "VAL-ПЛ-01"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ПЛ-02"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ПЛ-03"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
+			ship = {
+				name = "VAL-ПЛ-04"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = VAL
+					}
+				}
+			}
 		}
 	}
 	division = {

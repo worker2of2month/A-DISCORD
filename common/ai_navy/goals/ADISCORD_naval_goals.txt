@@ -4,8 +4,8 @@
 ADISCORD_naval_invasion_support = {
 	objective_type = naval_invasion_support
 	available_for = { AZH CHD COF EFL EVR EYR FLR IIA IVN LUR MRV NAM NOD OLR PIO PRR RIV RVN SFR SLI STP STS TFF ULV VAL WIT YPR }
-	min_priority = 4
-	max_priority = 14
+	min_priority = 8
+	max_priority = 24
 }
 
 ADISCORD_mine_sweeping = {

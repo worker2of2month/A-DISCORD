@@ -9,12 +9,13 @@ state={
 
 	history={
 		owner = NOD
+		add_extra_state_shared_building_slots = 2
 		buildings = {
 			air_base = 2
 			infrastructure = 5
 			industrial_complex = 2
 			arms_factory = 3
-			dockyard = 1
+			dockyard = 3
 			ADISCORD_industrial_cluster = 1
 			ADISCORD_business_center = 1
 			12434 = {

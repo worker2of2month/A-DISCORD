@@ -198,6 +198,13 @@ ADISCORD_grant_technology_profile_air = {
 	}
 }
 
+ADISCORD_grant_technology_profile_naval_taskforce = {
+	set_technology = {
+		ADISCORD_tech_light_cruiser_hull_2155 = 1
+		popup = no
+	}
+}
+
 ADISCORD_grant_technology_profile_naval = {
 	set_technology = {
 		ADISCORD_tech_coastal_patrols = 1
@@ -547,6 +554,7 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+		ADISCORD_grant_technology_profile_naval_taskforce = yes
 		ADISCORD_grant_technology_profile_armored_core = yes
 	}
 	if = {
@@ -659,6 +667,7 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+		ADISCORD_grant_technology_profile_naval_taskforce = yes
 		ADISCORD_grant_technology_profile_recon_platform = yes
 		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
@@ -696,6 +705,7 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_land = yes
 		ADISCORD_grant_technology_profile_air = yes
 		ADISCORD_grant_technology_profile_naval = yes
+		ADISCORD_grant_technology_profile_naval_taskforce = yes
 		ADISCORD_grant_technology_profile_field_air_defense = yes
 	}
 	if = {

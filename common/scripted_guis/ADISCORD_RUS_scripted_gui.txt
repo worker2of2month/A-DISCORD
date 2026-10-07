@@ -218,4 +218,36 @@ scripted_gui = {
 			RUS_bunker_resupply_button_click_enabled = { RUS_bunker_resupply_available = yes }
 		}
 	}
+
+	RUS_crisis_strike_panel = {
+		context_type = player_context
+		window_name = "RUS_crisis_strike_window"
+		visible = { RUS_crisis_strike_visible = yes }
+		ai_enabled = { always = no }
+		effects = {
+			epilogue_next_click = { RUS_crisis_epilogue_next = yes }
+		}
+	}
+
+	RUS_crisis_epilogue_panel = {
+		context_type = player_context
+		window_name = "RUS_crisis_epilogue_window"
+		visible = {
+			has_global_flag = RUS_crisis_world_ended
+			check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = greater_than }
+		}
+		ai_enabled = { always = no }
+		effects = {
+			epilogue_next_click = { RUS_crisis_epilogue_next = yes }
+			epilogue_finish_click = { RUS_crisis_epilogue_finish = yes }
+		}
+		triggers = {
+			epilogue_next_visible = {
+				check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = less_than }
+			}
+			epilogue_finish_visible = {
+				check_variable = { var = RUS_crisis_epilogue_page value = 5 compare = less_than }
+			}
+		}
+	}
 }

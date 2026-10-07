@@ -6,6 +6,7 @@ import unittest
 
 from tools.lib.paths import source_section
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
+    _can_share_view,
     ACTIVE_PHASE_FLAGS,
     CLAIMANT_EVENTS_FILE,
     CLAIMANT_FOCUS_EVENT_IDS,
@@ -187,9 +188,9 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
             self.assertEqual(selector.count(f"tag = {tag}"), 1)
         self.assertNotIn("original_tag", selector)
 
-    def test_manifest_has_two_hundred_seventeen_bounded_definitions(self) -> None:
+    def test_manifest_has_all_bounded_lifecycle_definitions(self) -> None:
         self.assertEqual(tuple(self.blocks), lifecycle_order())
-        self.assertEqual(len(self.blocks), 235)
+        self.assertEqual(len(self.blocks), 358)
         self.assertEqual(len(DEPTH_FOCUSES), 63)
         self.assertEqual(len(WKR_VARIANT_FOCUSES), 6)
         self.assertEqual(len(VAD_VARIANT_FOCUSES), 6)
@@ -305,7 +306,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     "ADISCORD_vorkerland_focus_central_minor_front_protracted",
                     block,
                 )
-        self.assertEqual(len(occupied), len(self.grid))
+        self.assertEqual(len(occupied), len(set(self.grid.values())))
 
     def test_vad_optional_depth_is_outcome_specific_and_capstone_neutral(self) -> None:
         optional = set(VAD_OPTIONAL_WARTIME_FOCUSES)
@@ -887,19 +888,16 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                     max(y for _x, y in positions) - min(y for _x, y in positions), 14
                 )
 
-    def test_no_two_focuses_are_drawn_on_the_same_grid_cell(self) -> None:
-        occupied: dict[tuple[int, int], str] = {}
+    def test_no_two_visible_focuses_are_drawn_on_the_same_grid_cell(self) -> None:
+        occupied: dict[tuple[int, int], list[str]] = {}
         for focus_id in sorted(self.blocks):
             cell = self.grid.get(focus_id)
             with self.subTest(focus_id=focus_id):
                 self.assertIsNotNone(cell, "focus position must resolve")
-                self.assertNotIn(
-                    cell,
-                    occupied,
-                    f"{focus_id} collides with {occupied.get(cell)} at {cell}",
-                )
-            occupied[cell] = focus_id
-        self.assertEqual(len(occupied), len(self.blocks))
+                for other in occupied.get(cell, []):
+                    self.assertFalse(_can_share_view(focus_id, other), f"{focus_id} collides with {other} at {cell}")
+            occupied.setdefault(cell, []).append(focus_id)
+        self.assertEqual(sum(map(len, occupied.values())), len(self.blocks))
 
     def test_layout_uses_one_absolute_anchor_per_lifecycle_block(self) -> None:
         absolute = sorted(

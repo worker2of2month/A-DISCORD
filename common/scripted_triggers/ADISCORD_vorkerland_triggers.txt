@@ -1888,107 +1888,51 @@ ADISCORD_vorkerland_has_live_solarino_war = {
 
 # --- rus_last_empire_triggers ---
 
-# COUNTRY. A regional settlement, not an intermediate campaign victory.
-RUS_crisis_final_victory = {
-	OR = {
-		AND = {
-			tag = VAL
-			OR = {
-				has_completed_focus = VAL_Campaign_Secured
-				has_completed_focus = VAL_nw_price
-			}
-			VAL_campaign_objectives_met = yes
-		}
-		AND = {
-			tag = STS
-			has_completed_focus = STP_pc_heg_final_kefreyt
-			STP_heg_northern_final_resolved = yes
-			OR = {
-				has_country_flag = STP_heg_kefreyt_final_won
-				VAL = { is_subject_of = STS }
-				NOT = { VAL = { exists = yes } }
-			}
-		}
-		AND = {
-			tag = STP
-			has_completed_focus = STP_pw_party_great_stelander
-			STP_pw_party_external_order_resolved = yes
-			STP_pw_party_northern_march_resolved = yes
-		}
-		AND = {
-			tag = NOD
-			check_variable = { var = STP_cw_northern_campaign_status value = 2 compare = equals }
-			VAL = {
-				OR = {
-					exists = no
-					is_subject_of = NOD
-				}
-			}
-			STP = { RUS_crisis_northern_order_member = yes }
-			STS = { RUS_crisis_northern_order_member = yes }
-		}
-	}
-}
-
-# COUNTRY regional rival. A northern expedition alone does not establish hegemony.
-RUS_crisis_northern_order_member = {
-	OR = {
-		exists = no
-		is_subject_of = NOD
-		AND = {
-			is_in_faction_with = NOD
-			NOD = { is_faction_leader = yes }
-		}
-	}
-}
-
-# COUNTRY. Victory and current sovereignty are separate requirements.
-RUS_crisis_is_hegemon = {
-	exists = yes
-	is_subject = no
-	has_capitulated = no
-	has_war = no
-	RUS_crisis_final_victory = yes
-}
-
+# RUS. The project starts once through the new-campaign imperial lifecycle.
 RUS_crisis_can_begin = {
 	tag = RUS
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	has_war = no
+	RUS_khan_governing = yes
 	has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
 	NOT = { has_variable = RUS_crisis_phase }
-}
-
-# COUNTRY target. Manual and automatic selection share the final-victory gate.
-RUS_crisis_potential_hegemon = {
-	hidden_trigger = {
-		OR = {
-			tag = VAL
-			tag = STS
-			tag = STP
-			tag = NOD
+	RUS_lab_reactor_access = yes
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	NOT = {
+		any_country = {
+			OR = {
+				has_country_flag = ADISCORD_south_settlement_pending
+				has_country_flag = ADISCORD_west_settlement_pending
+			}
 		}
 	}
+}
+
+# Existing countries, including subjects and civil-war participants. The sealed
+# territory is a technical map owner, not a coalition government.
+RUS_crisis_coalition_candidate = {
+	exists = yes
+	NOT = { tag = RUS }
+	NOT = { tag = EXZ }
+	NOT = { is_subject_of = RUS }
+}
+
+RUS_crisis_project_active = {
 	exists = yes
 	is_subject = no
 	has_capitulated = no
-	has_war = no
-	NOT = { is_in_faction_with = RUS }
-	custom_trigger_tooltip = {
-		tooltip = RUS_crisis_final_victory_tt
-		RUS_crisis_final_victory = yes
+	RUS_khan_governing = yes
+	NOT = { has_country_flag = RUS_crisis_laser_disabled }
+	OR = {
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+		check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
 	}
 }
 
-RUS_crisis_can_choose_hegemon = {
-	RUS_crisis_can_begin = yes
-	has_completed_focus = RUS_break_the_hegemon
-	FROM = { RUS_crisis_potential_hegemon = yes }
-}
-
 RUS_imperial_frontier_can_begin = {
+	NOT = { has_variable = RUS_crisis_phase }
 	hidden_trigger = { tag = RUS }
 	is_subject = no
 	has_capitulated = no
@@ -2013,6 +1957,7 @@ RUS_imperial_frontier_can_begin = {
 RUS_imperial_frontier_target = {
 	hidden_trigger = {
 		OR = {
+			tag = TMR
 			tag = VEL
 			tag = RLY
 			tag = IRT
@@ -2028,58 +1973,62 @@ RUS_imperial_frontier_target = {
 	NOT = { has_war_with = RUS }
 }
 
-# The victory gate is used only when choosing a target. Occupation during
-# the ensuing war must not invalidate the campaign against that target.
-RUS_crisis_target_valid = {
-	event_target:RUS_crisis_hegemon = {
-		exists = yes
-		is_subject = no
-		has_capitulated = no
-		NOT = { is_in_faction_with = RUS }
-	}
-	RUS = {
-		exists = yes
-		is_subject = no
-		has_capitulated = no
+# COUNTRY. Coalition membership persists through capitulation and liberation.
+RUS_crisis_defending_bloc = {
+	RUS_crisis_coalition_candidate = yes
+	OR = {
+		has_country_flag = RUS_crisis_defender
+		is_in_faction_with = event_target:RUS_crisis_hegemon
+		AND = {
+			is_subject = yes
+			OVERLORD = { has_country_flag = RUS_crisis_defender }
+		}
 	}
 }
 
-# RUS. Preparation remains tied to the selected campaign, including its war.
+# COUNTRY. Story diplomacy must keep the common coalition intact.
+RUS_crisis_regional_wars_available = {
+	custom_trigger_tooltip = {
+		tooltip = RUS_crisis_regional_wars_available_tt
+		NOT = { has_global_flag = RUS_crisis_world_ended }
+		NOT = { has_country_flag = RUS_crisis_defender }
+	}
+}
+
+RUS_crisis_strike_visible = {
+	has_global_flag = RUS_crisis_world_ended
+	NOT = { check_variable = { var = RUS_crisis_epilogue_page value = 1 compare = greater_than } }
+}
+
 RUS_crisis_preparation_open = {
 	tag = RUS
 	RUS_khan_governing = yes
 	is_subject = no
 	has_capitulated = no
 	OR = {
-		AND = {
-			check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
-			RUS_crisis_target_valid = yes
-		}
-		AND = {
-			check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
-			has_war_with = event_target:RUS_crisis_hegemon
-		}
+		check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+		check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
 	}
 }
 
 RUS_crisis_prepare_nod = {
 	RUS_crisis_preparation_open = yes
-	event_target:RUS_crisis_hegemon = { tag = NOD }
+	NOD = { has_country_flag = RUS_crisis_defender }
 }
 
 RUS_crisis_prepare_stp = {
 	RUS_crisis_preparation_open = yes
-	event_target:RUS_crisis_hegemon = { tag = STP }
+	STP = { has_country_flag = RUS_crisis_defender }
 }
 
 RUS_crisis_prepare_sts = {
 	RUS_crisis_preparation_open = yes
-	event_target:RUS_crisis_hegemon = { tag = STS }
+	STS = { has_country_flag = RUS_crisis_defender }
 }
 
 RUS_crisis_prepare_val = {
 	RUS_crisis_preparation_open = yes
-	event_target:RUS_crisis_hegemon = { tag = VAL }
+	VAL = { has_country_flag = RUS_crisis_defender }
 }
 
 RUS_crisis_all_defenders_defeated = {
@@ -3130,4 +3079,154 @@ RUS_workshop_training_ready = {
 	NOT = { ADISCORD_economic_development_at_least_5 = yes }
 	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = less_than }
 	ADISCORD_economy_can_upgrade_economic_development = yes
+}
+
+# --- postwar_expansion_triggers ---
+# Postwar programmes belong to the sovereign reunifier; subjugation suspends
+# new programmes without deleting reforms already completed in this campaign.
+ADISCORD_vorkerland_pw_sovereign = {
+	tag = WRK
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+}
+
+# COUNTRY target. Do not pull unrelated coalitions or outside wars into this expedition.
+ADISCORD_vorkerland_pw_expedition_target = {
+	exists = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+	NOT = { is_in_faction_with = WRK }
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_local_coalition_tt
+		NOT = {
+			any_allied_country = {
+				is_in_faction_with = PREV
+				NOT = {
+					OR = {
+						tag = EBA
+						tag = PIV
+					}
+				}
+			}
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_no_subjects_tt
+		NOT = { any_subject_country = { always = yes } }
+	}
+}
+
+ADISCORD_vorkerland_pw_expedition_available = {
+	hidden_trigger = { ADISCORD_vorkerland_pw_sovereign = yes }
+	has_war = no
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_independent_command_tt
+		OR = {
+			is_in_faction = no
+			is_faction_leader = yes
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_campaign_idle_tt
+		NOT = { has_country_flag = ADISCORD_vorkerland_pw_campaign_active }
+	}
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_settlement_complete_tt
+		NOT = { has_country_flag = ADISCORD_vorkerland_pw_settlement_scheduled }
+	}
+}
+
+ADISCORD_vorkerland_pw_can_attack_ebern = {
+	ADISCORD_vorkerland_pw_expedition_available = yes
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_ebern_target_tt
+		ADISCORD_vorkerland_volnograd_terminal_eba = yes
+		EBA = {
+			has_country_leader = {
+				character = EBA_Vlad_Mecra
+				ruling_only = yes
+			}
+		}
+	}
+	EBA = {
+		ADISCORD_vorkerland_pw_expedition_target = yes
+		is_neighbor_of = WRK
+	}
+	OR = {
+		NOT = { EBA = { is_in_faction_with = PIV } }
+		PIV = { ADISCORD_vorkerland_pw_expedition_target = yes }
+	}
+}
+
+# A completed territorial outcome is read from current ownership and subject status.
+ADISCORD_vorkerland_pw_ebern_settled = {
+	OR = {
+		EBA = { is_subject_of = WRK }
+		AND = {
+			WRK = {
+				owns_state = 74
+				controls_state = 74
+				owns_state = 105
+				controls_state = 105
+				owns_state = 197
+				controls_state = 197
+			}
+			NOT = { EBA = { exists = yes } }
+		}
+	}
+}
+
+ADISCORD_vorkerland_pw_afrela_settled = {
+	PIV = { is_subject_of = WRK }
+}
+
+ADISCORD_vorkerland_pw_can_attack_afrela = {
+	ADISCORD_vorkerland_pw_expedition_available = yes
+	custom_trigger_tooltip = {
+		tooltip = WRK_pw_afrela_target_tt
+		ADISCORD_vorkerland_pw_ebern_settled = yes
+	}
+	PIV = {
+		ADISCORD_vorkerland_pw_expedition_target = yes
+		OR = {
+			is_neighbor_of = WRK
+			EBA = { is_subject_of = WRK }
+		}
+	}
+}
+
+# Both coalition members must currently be defeated. Liberation clears the
+# immediate-callback receipt and therefore blocks settlement again.
+ADISCORD_vorkerland_pw_expedition_won = {
+	ADISCORD_vorkerland_pw_sovereign = yes
+	has_country_flag = ADISCORD_vorkerland_pw_campaign_active
+	EBA = {
+		OR = {
+			NOT = { has_country_flag = ADISCORD_vorkerland_pw_campaign_member }
+			AND = {
+				exists = yes
+				has_war_with = WRK
+				OR = {
+					has_capitulated = yes
+					has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
+				}
+			}
+		}
+	}
+	PIV = {
+		OR = {
+			NOT = { has_country_flag = ADISCORD_vorkerland_pw_campaign_member }
+			AND = {
+				exists = yes
+				has_war_with = WRK
+				OR = {
+					has_capitulated = yes
+					has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
+				}
+			}
+		}
+	}
 }

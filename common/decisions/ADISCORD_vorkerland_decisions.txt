@@ -2435,6 +2435,68 @@ ADISCORD_vorkerland_focus_operations_category = {
 		}
 		ai_will_do = { factor = 300 }
 	}
+
+	ADISCORD_vorkerland_pw_ebern_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = WRK }
+		visible = {
+			OR = {
+				has_completed_focus = WRK_worker_pw_ebern_campaign
+				has_completed_focus = WRK_joint_pw_ebern_campaign
+				has_completed_focus = WRK_utilitarian_pw_ebern_campaign
+			}
+			NOT = { ADISCORD_vorkerland_pw_ebern_settled = yes }
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			ADISCORD_vorkerland_pw_can_attack_ebern = yes
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = WRK_pw_ebern_war_tt
+			hidden_effect = { ADISCORD_vorkerland_pw_start_ebern_campaign = yes }
+		}
+		ai_will_do = {
+			base = 80
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
+			}
+		}
+	}
+
+	ADISCORD_vorkerland_pw_afrela_campaign = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = WRK }
+		visible = {
+			OR = {
+				has_completed_focus = WRK_worker_pw_afrela_campaign
+				has_completed_focus = WRK_joint_pw_afrela_campaign
+				has_completed_focus = WRK_utilitarian_pw_afrela_campaign
+			}
+			NOT = { ADISCORD_vorkerland_pw_afrela_settled = yes }
+		}
+		available = {
+			is_subject = no
+			has_capitulated = no
+			has_war = no
+			ADISCORD_vorkerland_pw_can_attack_afrela = yes
+		}
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = WRK_pw_afrela_war_tt
+			hidden_effect = { ADISCORD_vorkerland_pw_start_afrela_campaign = yes }
+		}
+		ai_will_do = {
+			base = 80
+			modifier = {
+				factor = 0
+				NOT = { has_global_flag = ADISCORD_west_hegemon_WRK }
+			}
+		}
+	}
 }
 
 # --- rom_tru_decisions ---
@@ -2697,36 +2759,10 @@ RUS_last_empire_crisis = {
 		ai_will_do = { base = 2 }
 	}
 
-
-	RUS_crisis_challenge_hegemon = {
-		icon = generic_attack
-		allowed = { tag = RUS }
-		targets = { VAL STS STP NOD }
-		target_root_trigger = { has_completed_focus = RUS_break_the_hegemon }
-		visible = {
-			has_completed_focus = RUS_break_the_hegemon
-			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
-			NOT = { has_variable = RUS_crisis_phase }
-			FROM = { exists = yes }
-		}
-		available = {
-			is_subject = no
-			has_capitulated = no
-			has_war = no
-			FROM = { RUS_crisis_potential_hegemon = yes }
-		}
-		cost = 0
-		complete_effect = {
-			custom_effect_tooltip = RUS_crisis_challenge_hegemon_tt
-			hidden_effect = { RUS_crisis_choose_hegemon = yes }
-		}
-		ai_will_do = { base = 0 }
-	}
-
 	RUS_imperial_frontier_campaign = {
 		icon = generic_attack
 		allowed = { tag = RUS }
-		targets = { VEL RLY IRT ERT SCA }
+		targets = { TMR VEL RLY IRT ERT SCA }
 		target_root_trigger = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 		visible = {
 			has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
@@ -2764,63 +2800,67 @@ RUS_last_empire_crisis = {
 	}
 
 	RUS_crisis_invasion_countdown = {
-		icon = generic_attack
+		icon = generic_prepare_civil_war
 		allowed = { tag = RUS }
 		activation = { always = no }
-		visible = {
-			tag = RUS
-			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
-		}
+		visible = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		is_good = no
 		days_mission_timeout = 90
 		cancel_trigger = {
 			OR = {
+				RUS = { RUS_crisis_project_active = no }
+				RUS = { RUS_lab_reactor_access = no }
 				RUS = { NOT = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
-				RUS_crisis_target_valid = no
 			}
 		}
-		cancel_effect = {
-			if = {
-				limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
-				RUS = { RUS_crisis_close = yes }
-			}
-		}
+		cancel_effect = { RUS = { RUS_crisis_disable_laser = yes } }
 		timeout_effect = { RUS = { RUS_crisis_launch = yes } }
 	}
 
 	RUS_crisis_defence_countdown = {
-		icon = generic_attack
-		allowed = { OR = { tag = VAL tag = STS tag = STP tag = NOD } }
+		icon = generic_prepare_civil_war
+		allowed = { always = yes }
 		activation = { always = no }
-		visible = {
-			tag = event_target:RUS_crisis_hegemon
-			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
-		}
+		visible = { has_country_flag = RUS_crisis_defender }
 		available = { hidden_trigger = { always = no } }
 		selectable_mission = no
 		is_good = no
-		days_mission_timeout = 90
+		days_mission_timeout = 455
 		cancel_trigger = {
 			OR = {
-				RUS = { NOT = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
-				RUS_crisis_target_valid = no
+				RUS = { RUS_crisis_project_active = no }
+				RUS = { RUS_lab_reactor_access = no }
 			}
 		}
-		cancel_effect = {
-			if = {
-				limit = { RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } } }
-				RUS = { RUS_crisis_close = yes }
+		cancel_effect = { RUS = { RUS_crisis_disable_laser = yes } }
+		timeout_effect = { RUS = { RUS_crisis_end_world = yes } }
+	}
+
+	RUS_crisis_laser_countdown = {
+		icon = generic_prepare_civil_war
+		allowed = { tag = RUS }
+		activation = { always = no }
+		visible = { tag = RUS }
+		available = { hidden_trigger = { always = no } }
+		selectable_mission = no
+		is_good = no
+		days_mission_timeout = 455
+		cancel_trigger = {
+			OR = {
+				RUS = { RUS_crisis_project_active = no }
+				RUS = { RUS_lab_reactor_access = no }
 			}
 		}
-		timeout_effect = { RUS = { RUS_crisis_launch = yes } }
+		cancel_effect = { RUS = { RUS_crisis_disable_laser = yes } }
+		timeout_effect = { RUS_crisis_end_world = yes }
 	}
 
 	RUS_crisis_establish_special_zone = {
 		icon = generic_political_pressure
-		allowed = { OR = { tag = VAL tag = STS tag = STP tag = NOD } }
-		targets = { SLA RZA MLR ERT IRT SCA VEL RLY }
+		allowed = { always = yes }
+		targets = { SLA RZA MLR ERT IRT SCA TMR VEL RLY }
 		target_root_trigger = { has_country_flag = RUS_crisis_settlement_rights }
 		visible = {
 			has_country_flag = RUS_crisis_settlement_rights

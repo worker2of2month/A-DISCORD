@@ -128,3 +128,30 @@ autonomy_state = {
 	can_take_level = { always = no }
 	can_lose_level = { always = no }
 }
+
+# Military administrations retain local manpower and production while the
+# restored central command controls their external policy and armed forces.
+autonomy_state = {
+	id = autonomy_WRK_military_administration
+	default = no
+	is_puppet = yes
+	min_freedom_level = 0.05
+	use_overlord_color = yes
+	rule = {
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		units_deployed_to_overlord = yes
+		can_be_spymaster = no
+	}
+	allowed_levels_filter = { autonomy_WRK_military_administration }
+	modifier = {
+		autonomy_manpower_share = 0.25
+		extra_trade_to_overlord_factor = 0.50
+		cic_to_overlord_factor = 0.10
+		mic_to_overlord_factor = 0.20
+	}
+	ai_subject_wants_higher = { factor = 0 }
+	ai_overlord_wants_lower = { factor = 0 }
+	can_take_level = { always = no }
+	can_lose_level = { always = no }
+}

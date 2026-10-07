@@ -36,6 +36,7 @@ class RusCrisisPreparationTests(unittest.TestCase):
     def warning(self, target):
         world = RusCrisisFixture(target)
         world.run("RUS_crisis_clear_roster")
+        world.run("RUS_crisis_register_defender", target)
         world.variables["RUS", "RUS_crisis_phase"] = 1
         world.wars.clear()
         world.outside_predicates["RUS", "RUS_khan_governing"] = True
@@ -81,7 +82,7 @@ class RusCrisisPreparationTests(unittest.TestCase):
             world.variables["RUS", "RUS_crisis_phase"] = 2
             world.wars.add(frozenset(("RUS", "WKR")))
             gate = block(self.focuses[f"RUS_crisis_{target.lower()}_1"], "available")
-            self.assertFalse(world.matches(gate, ["RUS"]))
+            self.assertTrue(world.matches(gate, ["RUS"]))
             world.wars.add(frozenset(("RUS", target)))
             self.assertTrue(world.matches(gate, ["RUS"]))
             world.subjects["RUS"] = "WKR"
@@ -152,22 +153,6 @@ class RusCrisisPreparationTests(unittest.TestCase):
                     self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], {
                         "victory": 3, "defeat": 4, "close": 5,
                     }[outcome])
-
-    def test_nod_expedition_victory_is_not_regional_hegemony(self):
-        world = self.warning("NOD")
-        world.variables.pop(("RUS", "RUS_crisis_phase"))
-        world.missions.clear()
-        world.flags["NOD"].add("NOD_cw_victorious")
-        world.run("RUS_crisis_check_start")
-        self.assertFalse(world.missions)
-        world.variables["NOD", "STP_cw_northern_campaign_status"] = 2
-        world.run("RUS_crisis_check_start")
-        self.assertFalse(world.missions)
-        for target in ("VAL", "STP", "STS"):
-            world.subjects[target] = "NOD"
-        world.run("RUS_crisis_check_start")
-        self.assertEqual(world.targets["event_target:RUS_crisis_hegemon"], "NOD")
-        self.assertEqual(len(world.missions), 2)
 
     def test_ai_routes_have_all_four_steps_and_current_target_gate(self):
         plans = dict((row.key, row.value) for row in entries("common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"))

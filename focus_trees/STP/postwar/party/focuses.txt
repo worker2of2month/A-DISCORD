@@ -8477,3 +8477,177 @@
 			}
 		}
 	}
+
+	focus = {
+		id = STP_pw_party_naval_staff
+		icon = GFX_goal_generic_navy_cruiser
+		x = -30
+		y = 3
+		cost = 2
+		prerequisite = { focus = STP_cw_restore_civil_authority }
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			navy_experience = 20
+			add_tech_bonus = {
+				name = ADISCORD_naval_program_bonus
+				bonus = 0.5
+				uses = 2
+				category = naval_equipment
+			}
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_naval_yards
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = -30
+		y = 4
+		cost = 5
+		prerequisite = { focus = STP_pw_party_naval_staff }
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_naval_yard_capacity_tt
+				ADISCORD_can_expand_naval_yards = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			ADISCORD_expand_naval_yards = yes
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_naval_escorts
+		icon = GFX_goal_generic_navy_cruiser
+		x = -30
+		y = 5
+		cost = 4
+		prerequisite = { focus = STP_pw_party_naval_yards }
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 4 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 40 }
+			add_fuel = 10000
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_battle_squadron
+		icon = GFX_goal_generic_navy_battleship
+		x = -31
+		y = 6
+		cost = 10
+		prerequisite = { focus = STP_pw_party_naval_escorts }
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			navy_experience = 20
+		}
+	}
+
+	focus = {
+		id = STP_pw_party_naval_fire_support
+		icon = GFX_goal_generic_navy_cruiser
+		x = -29
+		y = 6
+		cost = 5
+		prerequisite = { focus = STP_pw_party_naval_escorts }
+		allow_branch = {
+			tag = STP
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_light_cruiser_2155 amount = 2 }
+			set_technology = {
+				ADISCORD_tech_amphibious_formation_organization = 1
+				ADISCORD_tech_amphibious_staff_sections = 1
+				popup = no
+			}
+			army_experience = 20
+		}
+	}

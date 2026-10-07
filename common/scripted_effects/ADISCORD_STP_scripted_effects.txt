@@ -2799,6 +2799,7 @@ STP_cw_prepare_successor = {
 	ADISCORD_grant_technology_profile_land = yes
 	ADISCORD_grant_technology_profile_air = yes
 	ADISCORD_grant_technology_profile_naval = yes
+	ADISCORD_grant_technology_profile_naval_taskforce = yes
 	ADISCORD_grant_technology_profile_recon_platform = yes
 	ADISCORD_grant_technology_profile_field_air_defense = yes
 	if = {
@@ -3638,6 +3639,7 @@ STP_cw_start = {
 			transfer_units_fraction = { target = STS size = 0 stockpile_ratio = var:STP_cw_resistance_stockpile_ratio army_ratio = 0 navy_ratio = 0 air_ratio = 1 keep_unit_leaders_trigger = { always = yes } }
 		}
 		STP_cw_divide_air_reserves = yes
+		STP_cw_divide_navy = yes
 		log = "[STP_CW] STP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]"
 		STS = { log = "[STP_CW] STS proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
 		SRP = { log = "[STP_CW] SRP proportional allocation: manpower=[?manpower] rifles=[?num_equipment@infantry_equipment]" }
@@ -4276,7 +4278,7 @@ STP_cw_check_union_wars_finished = {
 		set_global_flag = STP_cw_union_wars_finished
 		STP = { STP_cw_clear_wartime_modifiers = yes }
 		STS = { STP_cw_clear_wartime_modifiers = yes }
-		VAL = { if = { limit = { exists = yes } VAL_cw_stage_livonn_settlement = yes } }
+		VAL = { if = { limit = { exists = yes NOT = { has_global_flag = RUS_crisis_truce_in_progress } } VAL_cw_stage_livonn_settlement = yes } }
 		STS = { remove_mission = STP_cw_take_fada }
 		STP = {
 			remove_mission = STP_cw_hold_fada
@@ -6838,6 +6840,8 @@ STP_pw_party_reconcile_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = RUS_crisis_defender }
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
 			NOT = { has_country_flag = STP_pw_party_nod_invasion_defeated has_country_flag = STP_pw_party_nod_invasion_lost }
@@ -6858,6 +6862,8 @@ STP_pw_party_start_nod_invasion_threat = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = RUS_crisis_defender }
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			has_country_flag = STP_cw_postwar
 			NOT = {
@@ -6901,6 +6907,8 @@ STP_pw_party_launch_nod_invasion = {
 	if = {
 		limit = {
 			tag = STP
+			NOT = { has_country_flag = RUS_crisis_defender }
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			NOT = { has_country_flag = STP_pw_party_nod_compact }
 			OR = {
 				has_country_flag = STP_pw_party_nod_threat_active
@@ -8817,6 +8825,7 @@ STP_qol_initialize_party_leaders = {
 STP_heg_start_northern_final_war = {
 	if = {
 		limit = {
+			RUS_crisis_regional_wars_available = yes
 			tag = STS
 			check_variable = { var = STP_pc_course value = 1 compare = equals }
 			NOT = { has_country_flag = STP_heg_northern_final_started }
@@ -8875,6 +8884,7 @@ STP_heg_start_northern_final_war = {
 STP_heg_start_kefreyt_final_war = {
 	if = {
 		limit = {
+			RUS_crisis_regional_wars_available = yes
 			tag = STS
 			check_variable = { var = STP_pc_course value = 1 compare = equals }
 			STP_heg_northern_final_resolved = yes
@@ -9406,6 +9416,8 @@ STP_pw_open_mountain_school = {
 STP_pw_open_marine_school = {
 	set_technology = {
 		ADISCORD_tech_stelander_marine_corps = 1
+		ADISCORD_tech_amphibious_formation_organization = 1
+		ADISCORD_tech_amphibious_staff_sections = 1
 		popup = no
 	}
 	custom_effect_tooltip = STP_pw_marine_template_tt
@@ -13969,5 +13981,83 @@ STP_taran_complete_project = {
 				}
 			}
 		}
+	}
+}
+
+# Fleet transfer has no stockpile, fuel, army or aircraft share. The government
+# keeps the fleet during a limited party revolt; a full split divides survivors.
+STP_cw_divide_navy = {
+	set_temp_variable = { var = STP_cw_navy_share value = 0.5 }
+	if = {
+		limit = { has_country_flag = STP_cw_limited_party_revolt }
+		set_temp_variable = { var = STP_cw_navy_share value = 1 }
+	}
+	transfer_units_fraction = {
+		target = STS
+		size = 0
+		stockpile_ratio = 0
+		army_ratio = 0
+		navy_ratio = var:STP_cw_navy_share
+		air_ratio = 0
+		keep_unit_leaders_trigger = { always = yes }
+	}
+}
+
+# Country-agnostic. A common external threat closes the eastern wars without a
+# civil-war winner, military rewards or territorial settlement events.
+STP_khan_coalition_armistice = {
+	STP_cw_check_union_wars_finished = yes
+	STP = {
+		STP_ch_close_pressure = yes
+		clr_country_flag = STP_pw_party_nod_invasion_active
+		clr_country_flag = STP_pw_party_northern_march_active
+		STP_pw_party_close_northern_operations = yes
+		STP_occidia_cancel_preparation = yes
+		STP_occidia_reconcile_peace = yes
+		STP_pv_close_war = yes
+	}
+	STS = {
+		STP_hw_close_war = yes
+		STP_occidia_cancel_preparation = yes
+		STP_occidia_reconcile_peace = yes
+		STP_cw_close_last_banquet_technical = yes
+		STP_cw_cancel_pending_nod_intervention = yes
+	}
+	NOD = {
+		remove_ideas = STP_pw_nod_invasion_mandate
+		if = {
+			limit = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
+			set_variable = { var = STP_cw_northern_campaign_status value = 4 }
+			clr_country_flag = NOD_cw_northern_war_started
+			STP_cw_end_northern_colonial_war = yes
+			STP_cw_dismantle_northern_alliance = yes
+			YPR = { STP_cw_release_northern_major = yes }
+			COF = { STP_cw_release_northern_major = yes }
+			TFF = { STP_cw_release_northern_major = yes }
+		}
+		if = {
+			limit = { has_country_flag = NOD_cw_entered }
+			clr_country_flag = NOD_cw_entered
+			clr_country_flag = NOD_cw_intervention_approved
+			clr_country_flag = NOD_cw_intervention_ready
+			clr_country_flag = STP_ps_expedition_ready
+			remove_ideas = STP_ps_expedition_idea
+			remove_mission = NOD_cw_intervention_preparation
+			remove_mission = NOD_cw_northern_redeployment
+			set_country_flag = NOD_cw_withdrew
+			ADISCORD_economy_update_postwar_demobilization = yes
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+	STP = {
+		remove_mission = STP_cw_nod_warning
+		remove_mission = STP_cw_nod_redeployment
+		clr_country_flag = STP_cw_nod_warning_active
+	}
+	STS = {
+		remove_mission = STP_cw_nod_warning
+		remove_mission = STP_cw_nod_redeployment
+		clr_country_flag = STP_cw_nod_warning_active
+		clr_country_flag = STP_cw_nod_entered
 	}
 }

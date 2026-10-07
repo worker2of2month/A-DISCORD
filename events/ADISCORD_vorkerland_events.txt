@@ -3,6 +3,7 @@ add_namespace = ADISCORD_rus_crisis
 
 country_event = {
 	id = ADISCORD_rus_crisis.1
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.1.t
 	desc = ADISCORD_rus_crisis.1.d
 	picture = GFX_event_adiscord_parliament_chamber
@@ -15,6 +16,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.2
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.2.t
 	desc = ADISCORD_rus_crisis.2.d
 	picture = GFX_event_adiscord_parliament_chamber
@@ -27,6 +29,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.3
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.3.t
 	desc = ADISCORD_rus_crisis.3.d
 	picture = GFX_event_adiscord_parliament_chamber
@@ -36,6 +39,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.4
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = {
 		trigger = { check_variable = { var = RUS_crisis_defeated_course value = 2 compare = less_than } }
 		text = ADISCORD_rus_crisis.4.t
@@ -66,6 +70,13 @@ country_event = {
 		text = ADISCORD_rus_crisis.4.nod
 	}
 	desc = {
+		trigger = {
+			NOT = { OR = { tag = VAL tag = STS tag = STP tag = NOD } }
+			check_variable = { var = RUS_crisis_defeated_course value = 2 compare = less_than }
+		}
+		text = ADISCORD_rus_crisis.4.other
+	}
+	desc = {
 		trigger = { check_variable = { var = RUS_crisis_defeated_course value = 2 compare = equals } }
 		text = ADISCORD_rus_crisis.4.army.d
 	}
@@ -83,6 +94,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.5
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.5.t
 	desc = ADISCORD_rus_crisis.5.d
 	picture = GFX_event_adiscord_parliament_chamber
@@ -92,6 +104,7 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.6
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
 	title = ADISCORD_rus_crisis.6.t
 	desc = ADISCORD_rus_crisis.6.d
 	picture = GFX_event_adiscord_parliament_chamber
@@ -104,6 +117,26 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 	immediate = { RUS = { RUS_crisis_check_external_end = yes } }
+}
+
+# The human recipient must be ROOT for the native camera effect.
+country_event = {
+	id = ADISCORD_rus_crisis.8
+	hidden = yes
+	is_triggered_only = yes
+	trigger = { RUS_crisis_strike_visible = yes }
+	immediate = { goto_province = 5228 }
+}
+
+country_event = {
+	id = ADISCORD_rus_crisis.10
+	title = ADISCORD_rus_crisis.10.t
+	desc = ADISCORD_rus_crisis.10.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = { NOT = { has_global_flag = RUS_crisis_world_ended } }
+	option = { name = ADISCORD_rus_crisis.10.a }
 }
 
 # --- dirty_zone_events ---
@@ -3267,11 +3300,74 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.11
 	title = ADISCORD_rus_campaign.11.t
-	desc = ADISCORD_rus_campaign.11.d
+	desc = {
+		trigger = { RUS_crisis_project_active = yes }
+		text = ADISCORD_rus_campaign.11.active_project
+	}
+	desc = {
+		trigger = { RUS_crisis_project_active = no }
+		text = ADISCORD_rus_campaign.11.d
+	}
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = {
 		RUS_khan_governing = yes
+		NOT = { has_global_flag = RUS_crisis_world_ended }
 	}
-	option = { name = ADISCORD_rus_campaign.11.a }
+	option = {
+		trigger = { RUS_crisis_project_active = yes }
+		name = ADISCORD_rus_campaign.11.active_project.a
+	}
+	option = {
+		trigger = { RUS_crisis_project_active = no }
+		name = ADISCORD_rus_campaign.11.a
+	}
+}
+
+# --- postwar_expansion_events ---
+add_namespace = ADISCORD_vorkerland_postwar
+
+# A single next-day verification releases campaign-only status if native
+# declaration or coalition entry failed. There is no periodic retry loop.
+country_event = {
+	id = ADISCORD_vorkerland_postwar.1
+	hidden = yes
+	is_triggered_only = yes
+	immediate = { ADISCORD_vorkerland_pw_close_external = yes }
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.2
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { has_country_flag = ADISCORD_vorkerland_pw_settlement_scheduled }
+			clr_country_flag = ADISCORD_vorkerland_pw_settlement_scheduled
+			EBA = { ADISCORD_vorkerland_pw_create_subject = yes }
+			PIV = { ADISCORD_vorkerland_pw_create_subject = yes }
+			if = {
+				limit = {
+					ADISCORD_vorkerland_pw_sovereign = yes
+					OR = {
+						EBA = { is_subject_of = WRK }
+						PIV = { is_subject_of = WRK }
+					}
+				}
+				country_event = {
+					id = ADISCORD_vorkerland_postwar.3
+					hours = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ADISCORD_vorkerland_postwar.3
+	title = ADISCORD_vorkerland_postwar.3.t
+	desc = ADISCORD_vorkerland_postwar.3.d
+	picture = GFX_event_adiscord_parliament_chamber
+	is_triggered_only = yes
+	option = { name = ADISCORD_vorkerland_postwar.3.a }
 }

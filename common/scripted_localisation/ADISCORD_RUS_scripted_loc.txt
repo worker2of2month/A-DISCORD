@@ -2735,3 +2735,37 @@ defined_text = {
 	}
 	text = { localization_key = RUS_bunker_unfitted }
 }
+
+defined_text = {
+	name = GetRUSCrisisEpilogueTitle
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 2 compare = equals } }
+		localization_key = RUS_crisis_epilogue_2_title
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 3 compare = equals } }
+		localization_key = RUS_crisis_epilogue_3_title
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 4 compare = equals } }
+		localization_key = RUS_crisis_epilogue_4_title
+	}
+	text = { localization_key = RUS_crisis_epilogue_5_title }
+}
+
+defined_text = {
+	name = GetRUSCrisisEpilogueBody
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 2 compare = equals } }
+		localization_key = RUS_crisis_epilogue_2_body
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 3 compare = equals } }
+		localization_key = RUS_crisis_epilogue_3_body
+	}
+	text = {
+		trigger = { check_variable = { var = RUS_crisis_epilogue_page value = 4 compare = equals } }
+		localization_key = RUS_crisis_epilogue_4_body
+	}
+	text = { localization_key = RUS_crisis_epilogue_5_body }
+}

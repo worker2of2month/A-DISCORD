@@ -1174,7 +1174,7 @@ class RusCampaignTests(unittest.TestCase):
         self.assertEqual(scalar(panel, "context_type"), "decision_category")
         self.assertFalse(any(e.key == "dirty" for e in panel))
         actions = block(panel, "effects")
-        window = block(block(parse("interface/ADISCORD_RUS.gui"), "guiTypes"), "containerWindowType")
+        window = next(row.value for row in block(parse("interface/ADISCORD_RUS.gui"), "guiTypes") if row.key == "containerWindowType" and scalar(row.value, "name") == "ADISCORD_RUS_bunker_window")
         self.assertEqual(scalar(window, "name"), scalar(panel, "window_name"))
         text_keys = [scalar(e.value, "text") for e in window if e.key == "instantTextBoxType"]
         for i in range(1, 6):
@@ -1552,7 +1552,7 @@ class RusCampaignTests(unittest.TestCase):
                 self.assertEqual(world.matches(self.triggers[trigger]), native, (name, layer_value, depth, pp, cash, equipment, power, busy))
 
     def test_order_text_rows_follow_the_selected_layer_without_overlap(self):
-        window = block(block(parse("interface/ADISCORD_RUS.gui"), "guiTypes"), "containerWindowType")
+        window = next(row.value for row in block(parse("interface/ADISCORD_RUS.gui"), "guiTypes") if row.key == "containerWindowType" and scalar(row.value, "name") == "ADISCORD_RUS_bunker_window")
         widgets = {scalar(child.value, "name"): child.value for child in window if child.key in ("buttonType", "instantTextBoxType")}
         panel = block(block(parse("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui"), "ADISCORD_RUS_bunker_panel")
         visibility = block(panel, "triggers")
@@ -1579,7 +1579,7 @@ class RusCampaignTests(unittest.TestCase):
                     self.assertEqual(world.matches(block(visibility, row_name + "_visible")), selected == layer, row_name)
 
     def test_panel_pictures_and_widgets_fit_declared_bounds(self):
-        window = block(block(parse("interface/ADISCORD_RUS.gui"), "guiTypes"), "containerWindowType")
+        window = next(row.value for row in block(parse("interface/ADISCORD_RUS.gui"), "guiTypes") if row.key == "containerWindowType" and scalar(row.value, "name") == "ADISCORD_RUS_bunker_window")
         dimensions = block(window, "size")
         width = float(scalar(dimensions, "width"))
         height = float(scalar(dimensions, "height"))
@@ -1708,8 +1708,10 @@ class RusCampaignTests(unittest.TestCase):
             registered = [row for row in registry if row["id"] == name]
             self.assertEqual(len(registered), 1)
             self.assertEqual(registered[0]["number"], int(name.rsplit(".", 1)[1]))
-            option = block(event, "option")
-            self.assertEqual([e.key for e in option], ["name"])
+            options = [row.value for row in event if row.key == "option"]
+            self.assertTrue(options)
+            for option in options:
+                self.assertEqual([row.key for row in option if row.key != "trigger"], ["name"])
 
     def test_lifecycle_hooks_and_independent_crisis_timer(self):
         on = block(parse("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")

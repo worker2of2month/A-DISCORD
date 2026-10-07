@@ -119,6 +119,8 @@ focus_tree = {
 	# Late-game Kefreyt branch: the expensive assault battalion is a national
 	# capability rather than a universally available line unit.
 
+	shared_focus = VAL_Naval_Contract_Office
+
 }
 
 shared_focus = {
@@ -3756,4 +3758,156 @@ shared_focus = {
 			army_experience = 20
 		}
 		ai_will_do = { base = 4 }
+	}
+
+shared_focus = {
+		id = VAL_Naval_Contract_Office
+		icon = GFX_goal_generic_navy_cruiser
+		x = 54
+		y = 0
+		cost = 2
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			navy_experience = 20
+			add_tech_bonus = {
+				name = ADISCORD_naval_program_bonus
+				bonus = 0.5
+				uses = 2
+				category = naval_equipment
+			}
+		}
+	}
+
+shared_focus = {
+		id = VAL_Depoitodron_Naval_Yards
+		icon = GFX_goal_generic_construct_naval_dockyard
+		x = 54
+		y = 1
+		cost = 5
+		prerequisite = { focus = VAL_Naval_Contract_Office }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_naval_yard_capacity_tt
+				ADISCORD_can_expand_naval_yards = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			ADISCORD_expand_naval_yards = yes
+		}
+	}
+
+shared_focus = {
+		id = VAL_Expedition_Escorts
+		icon = GFX_goal_generic_navy_cruiser
+		x = 54
+		y = 2
+		cost = 4
+		prerequisite = { focus = VAL_Depoitodron_Naval_Yards }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 4 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 40 }
+			add_fuel = 10000
+		}
+	}
+
+shared_focus = {
+		id = VAL_Expedition_Landing_Staff
+		icon = GFX_goal_generic_amphibious_assault
+		x = 55
+		y = 3
+		cost = 4
+		prerequisite = { focus = VAL_Expedition_Escorts }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			set_technology = {
+				ADISCORD_tech_amphibious_formation_organization = 1
+				ADISCORD_tech_amphibious_staff_sections = 1
+				popup = no
+			}
+			army_experience = 20
+		}
+	}
+
+shared_focus = {
+		id = VAL_Expedition_Cruisers
+		icon = GFX_goal_generic_navy_battleship
+		x = 53
+		y = 3
+		cost = 10
+		prerequisite = { focus = VAL_Expedition_Escorts }
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_cruiser_2155 amount = 1 }
+			create_ship = { type = ADISCORD_light_cruiser_2155 amount = 2 }
+		}
 	}

@@ -1060,12 +1060,72 @@ POSTWAR_ROUTE_TERMINALS = {
     "ADISCORD_vorkerland_route_utilitarian": "WRK_utilitarian_restore_unity_tower",
 }
 
+# Postwar extension is separate from the original settlement graph and its
+# wartime reward budget. Every route still has exactly one policy owner.
+POSTWAR_EXPANSION_SLUGS = (
+    "census",
+    "repair_crews",
+    "food_reserve",
+    "veteran_housing",
+    "municipal_network",
+    "recovery_complete",
+    "veteran_cadres",
+    "rearmament",
+    "officer_school",
+    "field_exercises",
+    "motor_pool",
+    "artillery",
+    "reserve",
+    "army_reform",
+    "arsenals",
+    "standards",
+    "defence_cluster",
+    "machine_tools",
+    "transport_works",
+    "production_board",
+    "territorial_council",
+    "service_charter",
+    "local_charters",
+    "procurement_audit",
+    "treasury",
+    "defence_compact",
+    "subject_charter",
+    "ebern_campaign",
+    "afrela_campaign",
+    "regional_settlement",
+)
+POSTWAR_EXPANSION_ROUTES = {
+    f"ADISCORD_vorkerland_route_{route}": tuple(
+        f"WRK_{route}_pw_{slug}" for slug in POSTWAR_EXPANSION_SLUGS
+    )
+    for route in ("worker", "joint", "utilitarian")
+}
+POSTWAR_EXPANSION_IDS = tuple(
+    focus_id for route_ids in POSTWAR_EXPANSION_ROUTES.values() for focus_id in route_ids
+)
+POSTWAR_EXPANSION_ICONS = {}
+for route_ids in POSTWAR_EXPANSION_ROUTES.values():
+    for index, focus_id in enumerate(route_ids):
+        if index < 6:
+            icon = "GFX_focus_WRK_worker_reopen_cooperative_workshops"
+        elif index < 14:
+            icon = "GFX_focus_WRK_joint_west_frontier_commands"
+        elif index < 20:
+            icon = "GFX_focus_WRK_utilitarian_west_engineer_battalions"
+        elif index < 26:
+            icon = "GFX_focus_WRK_joint_west_imperial_settlement"
+        else:
+            icon = "GFX_focus_WRK_worker_secure_social_guarantees"
+        POSTWAR_EXPANSION_ICONS[focus_id] = icon
+
 def lifecycle_order() -> tuple[str, ...]:
     """Reconstruction and the western chain follow each Unity Tower."""
     order = list(FOCUS_IDS)
     for route_flag, focus_ids in WEST_ROUTE_FOCUSES.items():
         index = order.index(POSTWAR_ROUTE_TERMINALS[route_flag]) + 1
         order[index:index] = (*RECONSTRUCTION_ROUTE_FOCUSES[route_flag], *focus_ids)
+    extension_index = order.index("WKR_convene_the_production_soviet")
+    order[extension_index:extension_index] = POSTWAR_EXPANSION_IDS
     return tuple(order)
 
 
@@ -2546,6 +2606,7 @@ DEPTH_AI_PLANS = {
 }
 
 LAYOUT_BANDS = {
+    "postwar_expansion": ((0, 60), (22, 45)),
     "prewar_WRK": ((0, 8), (0, 6)),
     "prewar_VAD": ((10, 18), (0, 6)),
     "retired": ((20, 24), (0, 6)),
@@ -2789,6 +2850,42 @@ def localisation_keys(text: str) -> list[str]:
 
 def expected_localisation_keys() -> set[str]:
     return {
+        *POSTWAR_EXPANSION_IDS,
+        *(f"{focus_id}_desc" for focus_id in POSTWAR_EXPANSION_IDS),
+        "ADISCORD_vorkerland_postwar_institutions",
+        "ADISCORD_vorkerland_postwar_institutions_desc",
+        "ADISCORD_vorkerland_pw_delta_repair",
+        "ADISCORD_vorkerland_pw_delta_civil_building",
+        "ADISCORD_vorkerland_pw_delta_cadres",
+        "ADISCORD_vorkerland_pw_delta_officers",
+        "ADISCORD_vorkerland_pw_delta_exercises",
+        "ADISCORD_vorkerland_pw_delta_logistics",
+        "ADISCORD_vorkerland_pw_delta_training",
+        "ADISCORD_vorkerland_pw_delta_worker_army",
+        "ADISCORD_vorkerland_pw_delta_standards",
+        "ADISCORD_vorkerland_pw_delta_tools",
+        "ADISCORD_vorkerland_pw_delta_output",
+        "ADISCORD_vorkerland_pw_delta_joint_army",
+        "ADISCORD_vorkerland_pw_delta_utilitarian_army",
+        "WRK_pw_subject_charter_tt",
+        "WRK_pw_ebern_war_tt",
+        "WRK_pw_afrela_war_tt",
+        "WRK_pw_no_other_war_tt",
+        "WRK_pw_local_coalition_tt",
+        "WRK_pw_no_subjects_tt",
+        "WRK_pw_independent_command_tt",
+        "WRK_pw_campaign_idle_tt",
+        "WRK_pw_settlement_complete_tt",
+        "WRK_pw_ebern_target_tt",
+        "WRK_pw_afrela_target_tt",
+        "autonomy_WRK_military_administration",
+        "ADISCORD_vorkerland_postwar.3.t",
+        "ADISCORD_vorkerland_postwar.3.d",
+        "ADISCORD_vorkerland_postwar.3.a",
+        "ADISCORD_vorkerland_pw_ebern_campaign",
+        "ADISCORD_vorkerland_pw_ebern_campaign_desc",
+        "ADISCORD_vorkerland_pw_afrela_campaign",
+        "ADISCORD_vorkerland_pw_afrela_campaign_desc",
         *FOCUS_IDS,
         *(f"{focus_id}_desc" for focus_id in FOCUS_IDS),
         *RECONSTRUCTION_FOCUS_IDS,
@@ -3433,6 +3530,10 @@ def collect_issues() -> list[str]:
         for focus_id in focus_ids:
             category_by_focus[focus_id] = ("west", route_flag)
 
+    for route_flag, focus_ids in POSTWAR_EXPANSION_ROUTES.items():
+        for focus_id in focus_ids:
+            category_by_focus[focus_id] = ("postwar_expansion", route_flag)
+
     for focus_id, block in blocks.items():
         if "cancel_if_invalid = yes" not in block:
             issues.append(
@@ -3570,7 +3671,7 @@ def collect_issues() -> list[str]:
             cost_expected = {2, 3, 4}
             if len(_blocks(block, "bypass")) != 1:
                 issues.append(f"{focus_id} must define one idempotent showdown bypass")
-        elif category in {"postwar", "reconstruction", "west"}:
+        elif category in {"postwar", "reconstruction", "west", "postwar_expansion"}:
             if flags != {POSTWAR_PHASE}:
                 issues.append(
                     f"{focus_id} must be postwar-only, found phases {sorted(flags)}"
@@ -3600,7 +3701,7 @@ def collect_issues() -> list[str]:
             )
 
         icon_matches = re.findall(r"(?m)^\s*icon\s*=\s*([A-Za-z0-9_]+)\s*$", block)
-        expected_drop_in_icon = focus_icon_name(focus_id)
+        expected_drop_in_icon = POSTWAR_EXPANSION_ICONS.get(focus_id, focus_icon_name(focus_id))
         if icon_matches != [expected_drop_in_icon]:
             issues.append(
                 f"{focus_id} must use drop-in icon {expected_drop_in_icon}, found {icon_matches}"
@@ -5888,8 +5989,21 @@ def collect_issues() -> list[str]:
             "add_war_support": 0.03,
         },
     }
+    ordinary_rewards = "\n".join(
+        block for focus_id, block in blocks.items() if focus_id not in POSTWAR_EXPANSION_IDS
+    )
+    postwar_rewards = "\n".join(blocks.get(focus_id, "") for focus_id in POSTWAR_EXPANSION_IDS)
+    bounded_values_by_source["postwar expansion"] = {
+        "add_political_power": 100.0,
+        "add_stability": 0.05,
+        "add_manpower": 16000.0,
+        "army_experience": 40.0,
+        "add_command_power": 20.0,
+        "add_war_support": 0.04,
+    }
     for reward_source_name, reward_source in (
-        ("focus", source),
+        ("focus", ordinary_rewards),
+        ("postwar expansion", postwar_rewards),
         ("claimant event", claimant_events),
     ):
         for effect, maximum in bounded_values_by_source[reward_source_name].items():
@@ -5909,7 +6023,9 @@ def collect_issues() -> list[str]:
             is_infantry = re.search(
                 r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment
             )
-            if reward_source_name == "focus":
+            if reward_source_name == "postwar expansion":
+                maximum = 12000 if is_infantry else 700
+            elif reward_source_name == "focus":
                 maximum = 9000 if is_infantry else 300
             else:
                 maximum = 1500 if is_infantry else 150
@@ -5933,12 +6049,17 @@ def collect_issues() -> list[str]:
             issues.append(
                 f"timed idea {idea_id} duration {raw} exceeds maximum {maximum} days"
             )
-    for construction in _blocks(source, "add_building_construction"):
+    for construction in _blocks(ordinary_rewards, "add_building_construction"):
         level = re.search(r"\blevel\s*=\s*(\d+)", construction)
         if not level or int(level.group(1)) != 1:
             issues.append(
                 f"focus construction must add exactly one level: {construction}"
             )
+
+    for construction in _blocks(postwar_rewards, "add_building_construction"):
+        level = re.search(r"\blevel\s*=\s*(\d+)", construction)
+        if not level or int(level.group(1)) not in {1, 2}:
+            issues.append("postwar construction must add one or two factory levels")
 
     for bonus in _blocks(source, "add_tech_bonus"):
         amount = re.search(r"\bbonus\s*=\s*(\d+(?:\.\d+)?)", bonus)
@@ -5954,13 +6075,14 @@ def collect_issues() -> list[str]:
             "industry",
             "electronics",
             "infantry_weapons",
+            "artillery",
         }:
             issues.append(
                 f"focus technology bonus uses an unsupported category: {bonus}"
             )
 
-    english = source_section(read(ENGLISH_LOCALISATION), 'civil_war_focus_l_english')
-    russian = source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian')
+    english = source_section(read(ENGLISH_LOCALISATION), 'civil_war_focus_l_english', 'postwar_expansion_l_english')
+    russian = source_section(read(RUSSIAN_LOCALISATION), 'civil_war_focus_l_russian', 'postwar_expansion_l_russian')
     english_collapse_loc = source_section(
         read(ENGLISH_COLLAPSE_LOCALISATION), 'collapse_l_english'
     )
@@ -6157,6 +6279,8 @@ def _layout_band(focus_id: str, block: str) -> str:
     if flags == {PREWAR_PHASE}:
         return "prewar_VAD" if tag == "VAD" else "prewar_WRK"
     if flags == {POSTWAR_PHASE}:
+        if focus_id in POSTWAR_EXPANSION_IDS:
+            return "postwar_expansion"
         for route_flag, focus_ids in RECONSTRUCTION_ROUTE_FOCUSES.items():
             if focus_id in focus_ids:
                 return "reconstruction_" + route_flag.removeprefix("ADISCORD_vorkerland_route_")
@@ -6573,6 +6697,19 @@ def _check_depth_ai_plans() -> list[str]:
     return issues
 
 
+def _postwar_route_of(focus_id: str) -> str | None:
+    for route in ("worker", "joint", "utilitarian"):
+        if focus_id.startswith(f"WRK_{route}_"):
+            return route
+    return None
+
+
+def _can_share_view(left: str, right: str) -> bool:
+    left_route = _postwar_route_of(left)
+    right_route = _postwar_route_of(right)
+    return not (left_route and right_route and left_route != right_route)
+
+
 def _check_layout(
     blocks: dict[str, str], grid: dict[str, tuple[int, int]]
 ) -> list[str]:
@@ -6626,7 +6763,11 @@ def _check_layout(
     for focus_id, cell in grid.items():
         occupied.setdefault(cell, []).append(focus_id)
     for cell, focus_ids in sorted(occupied.items()):
-        if len(focus_ids) > 1:
+        if any(
+            _can_share_view(left, right)
+            for index, left in enumerate(focus_ids)
+            for right in focus_ids[index + 1:]
+        ):
             issues.append(f"grid cell {cell} is shared by {sorted(focus_ids)}")
 
     for band, (x_range, y_range) in LAYOUT_BANDS.items():
@@ -6737,6 +6878,7 @@ def _check_layout_pitch(
             name
             for column in range(low + 1, high)
             for name in occupied.get((column, row), [])
+            if _can_share_view(name, child)
         )
         if crossed and (parent, child) not in LAYOUT_ROUTING_EXCEPTIONS:
             issues.append(

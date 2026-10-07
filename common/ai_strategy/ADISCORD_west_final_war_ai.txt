@@ -5,10 +5,114 @@ ADISCORD_west_wrk_front_ivn = {
 	enable = {
 		ADISCORD_west_final_active = yes
 		has_war_with = IVN
+		NOT = {
+			fighting_army_strength_ratio = {
+				tag = IVN
+				ratio < 0.67
+			}
+		}
 	}
 	abort_when_not_enabled = yes
-	ai_strategy = { type = front_unit_request tag = IVN value = 100 }
-	ai_strategy = { type = front_control tag = IVN ratio = 0.01 priority = 1500 ordertype = front execution_type = rush execute_order = yes manual_attack = yes }
+	ai_strategy = {
+		type = front_unit_request
+		tag = IVN
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = IVN
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
+}
+
+# A depleted army keeps native readiness checks while replenishing its front.
+ADISCORD_west_wrk_hold_ivn = {
+	allowed = { tag = WRK }
+	enable = {
+		ADISCORD_west_final_active = yes
+		has_war_with = IVN
+		fighting_army_strength_ratio = {
+			tag = IVN
+			ratio < 0.67
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		tag = IVN
+		value = 100
+	}
+	ai_strategy = {
+		type = front_control
+		tag = IVN
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = careful
+		execute_order = yes
+		manual_attack = no
+	}
+}
+
+# Production weights share the existing factory budget; no factory minimums
+# accumulate on top of the generic infantry and support-equipment guarantees.
+ADISCORD_wrk_postwar_production = {
+	allowed = { tag = WRK }
+	enable = {
+		is_ai = yes
+		ADISCORD_vorkerland_pw_sovereign = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 30
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = support
+		value = 15
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = artillery
+		value = 10
+	}
+}
+
+ADISCORD_wrk_postwar_expedition_front = {
+	allowed = { tag = WRK }
+	enable = {
+		is_ai = yes
+		has_country_flag = ADISCORD_vorkerland_pw_campaign_active
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		country_trigger = {
+			has_country_flag = ADISCORD_vorkerland_pw_campaign_member
+			has_war_with = FROM
+		}
+		value = 50
+	}
+	ai_strategy = {
+		type = front_control
+		country_trigger = {
+			has_country_flag = ADISCORD_vorkerland_pw_campaign_member
+			has_war_with = FROM
+		}
+		ratio = 0.01
+		priority = 1500
+		ordertype = front
+		execution_type = balanced
+		execute_order = yes
+		manual_attack = no
+	}
 }
 
 ADISCORD_west_ivn_front_wrk = {

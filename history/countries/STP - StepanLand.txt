@@ -100,6 +100,8 @@ ADISCORD_grant_technology_profile_recon_platform = yes
 ADISCORD_grant_technology_profile_air = yes
 ADISCORD_grant_technology_profile_field_air_defense = yes
 ADISCORD_grant_technology_profile_land = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "STP"
 
 # Starting technologies are granted by the generated STP profile on_startup.

@@ -12,6 +12,15 @@ ADISCORD_west_wrk_reunified = {
 
 # GLOBAL. The western clock runs from reunification to the final campaign.
 ADISCORD_west_crisis_open = {
+	NOT = { has_global_flag = RUS_crisis_world_ended }
+	RUS = {
+		NOT = {
+			OR = {
+				check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
+				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
+			}
+		}
+	}
 	has_global_flag = ADISCORD_fresh_campaign_contract_v1
 	ADISCORD_west_wrk_reunified = yes
 	NOT = { has_global_flag = ADISCORD_west_final_started }

@@ -3074,6 +3074,42 @@ def air_production_contract_issues(default_ai: str, economy_ai: str) -> list[str
     return issues
 
 
+def marine_recruitment_contract_issues(default_ai: str, templates: str) -> list[str]:
+    """A marine production request needs an unlocked, supplied native role."""
+    issues = []
+    request_count = 0
+    roles = [
+        row.value for row in parse_clausewitz(templates)
+        if isinstance(row.value, list) and _direct_scalar(row.value, "role") == "marines"
+    ]
+    for row in parse_clausewitz(default_ai):
+        if not isinstance(row.value, list):
+            continue
+        requests = [
+            child.value for child in row.value
+            if child.key == "ai_strategy" and isinstance(child.value, list)
+            and _direct_scalar(child.value, "id") == "marines"
+        ]
+        if not requests:
+            continue
+        request_count += len(requests)
+        for request in requests:
+            if _direct_scalar(request, "type") != "role_ratio":
+                issues.append(f"{row.key} must request the marine division role with role_ratio")
+        enable = next((child.value for child in row.value if child.key == "enable"), [])
+        if len(roles) != 1:
+            issues.append("marine recruitment needs exactly one native marine template role")
+        for guard in ("ADISCORD_has_marine_training", "ADISCORD_has_operational_naval_base"):
+            if _direct_scalar(enable, guard) != "yes":
+                issues.append(f"{row.key} lacks {guard}")
+        for stock in ("infantry_equipment", "ADISCORD_squad_weapons_equipment", "has_manpower"):
+            if stock not in _tokens_in(enable):
+                issues.append(f"{row.key} lacks marine resource gate {stock}")
+    if not request_count:
+        issues.append("generic AI has no marine division role request")
+    return issues
+
+
 def validate(root: Path = ROOT) -> list[str]:
     root = Path(root)
     issues: list[str] = []
@@ -4444,7 +4480,6 @@ def validate(root: Path = ROOT) -> list[str]:
         "capital_ship",
         "screen_ship",
         "submarine",
-        "marines",
         "paratroopers",
     )
     for role in unsupported_generic_roles:
@@ -4453,6 +4488,9 @@ def validate(root: Path = ROOT) -> list[str]:
             f"generic AI still desires unsupported role {role}",
         )
 
+    issues.extend(marine_recruitment_contract_issues(
+        default_ai, read_at_root("common/ai_templates/ADISCORD_land_templates.txt")
+    ))
     issues.extend(air_production_contract_issues(default_ai, economy_ai))
 
     require(

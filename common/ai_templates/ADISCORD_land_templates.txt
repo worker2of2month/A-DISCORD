@@ -464,3 +464,24 @@ ADISCORD_army_hq_templates = {
 		}
 	}
 }
+
+ADISCORD_marine_templates = {
+	available_for = { STP STS VAL NOD }
+	role = marines
+	upgrade_prio = { base = 3 }
+	ADISCORD_marine_brigade = {
+		enable = {
+			ADISCORD_has_marine_training = yes
+			ADISCORD_has_operational_naval_base = yes
+			NOT = { has_manpower < 6000 }
+			NOT = { has_equipment = { infantry_equipment < 5400 } }
+			NOT = { has_equipment = { ADISCORD_squad_weapons_equipment < 288 } }
+		}
+		reinforce_prio = 2
+		upgrade_prio = { base = 3 }
+		can_upgrade_in_field = { always = no }
+		target_template = {
+			regiments = { ADISCORD_marine_infantry = 6 }
+		}
+	}
+}

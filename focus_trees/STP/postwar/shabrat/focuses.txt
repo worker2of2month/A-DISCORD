@@ -739,8 +739,8 @@
 				ADISCORD_tech_coastal_patrols = 1
 				popup = no
 			}
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
-			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 2 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 			add_fuel = 10000
 		}
 	}
@@ -792,9 +792,13 @@
 		x = 3
 		y = 8
 		prerequisite = { focus = STP_pc_navy_ports }
-		cost = 3
+		cost = 5
 		allow_branch = { tag = STS }
 		available = {
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_naval_yard_capacity_tt
+				ADISCORD_can_expand_naval_yards = yes
+			}
 			custom_trigger_tooltip = {
 				tooltip = STP_kc_naval_program_available_tt
 				STP_kc_naval_program_available = yes
@@ -803,14 +807,7 @@
 		cancel_if_invalid = yes
 		ai_will_do = { base = 2 }
 		completion_reward = {
-			random_owned_controlled_state = {
-				limit = { naval_base > 0 }
-				add_extra_state_shared_building_slots = 2
-				add_building_construction = { type = dockyard level = 2 instant_build = yes }
-			}
-			create_ship = { type = ADISCORD_escort_ship_2155 amount = 3 }
-			add_equipment_to_stockpile = { type = convoy_1 amount = 30 }
-			add_fuel = 10000
+			ADISCORD_expand_naval_yards = yes
 		}
 	}
 
@@ -819,7 +816,7 @@
 		icon = GFX_goal_generic_navy_cruiser
 		x = 2
 		y = 9
-		cost = 2
+		cost = 4
 		allow_branch = { tag = STS }
 		available = {
 			custom_trigger_tooltip = {
@@ -836,9 +833,12 @@
 			add_tech_bonus = { name = STP_pc_naval_bonus bonus = 0.5 uses = 1 category = naval_equipment }
 			set_technology = {
 				ADISCORD_tech_modular_hull_standards = 1
+				ADISCORD_tech_light_cruiser_hull_2155 = 1
 				popup = no
 			}
-			create_ship = { type = ADISCORD_cruiser_2155 amount = 2 }
+			create_ship = { type = ADISCORD_light_cruiser_2155 amount = 2 }
+			create_ship = { type = ADISCORD_escort_ship_2155 amount = 2 }
+			add_equipment_to_stockpile = { type = convoy_1 amount = 20 }
 			add_fuel = 10000
 		}
 	}
@@ -1540,6 +1540,7 @@
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
+			RUS_crisis_regional_wars_available = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
@@ -1575,6 +1576,7 @@
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_hegemony_continues = yes }
 		available = {
+			RUS_crisis_regional_wars_available = yes
 			custom_trigger_tooltip = {
 				tooltip = STP_pw_reconstruction_available_tt
 				STP_pc_focus_available = yes
@@ -2919,3 +2921,35 @@
 
 
 	# Civil registration and integration for either postwar government.
+
+	focus = {
+		id = STP_pc_navy_capital
+		icon = GFX_goal_generic_navy_battleship
+		x = 0
+		y = 10
+		cost = 10
+		prerequisite = { focus = STP_pc_navy_escorts }
+		allow_branch = {
+			tag = STS
+			has_country_flag = STP_cw_postwar
+		}
+		available = {
+			has_capitulated = no
+			custom_trigger_tooltip = {
+				tooltip = ADISCORD_operational_naval_base_tt
+				ADISCORD_has_operational_naval_base = yes
+			}
+		}
+		cancel_if_invalid = yes
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+		completion_reward = {
+			create_ship = { type = ADISCORD_cruiser_2155 amount = 1 }
+			navy_experience = 30
+		}
+	}

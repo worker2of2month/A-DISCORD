@@ -98,3 +98,4 @@ ADISCORD_bomber_archetype
 ADISCORD_naval_aircraft_archetype
 RUS_crisis_invasion_countdown
 RUS_crisis_defence_countdown
+RUS_crisis_laser_countdown

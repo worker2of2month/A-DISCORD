@@ -291,6 +291,14 @@
         "ADISCORD_tech_standardized_airframes"
       ]
     },
+    "naval_taskforce": {
+      "seeds": [
+        "ADISCORD_tech_light_cruiser_hull_2155"
+      ],
+      "technologies": [
+        "ADISCORD_tech_light_cruiser_hull_2155"
+      ]
+    },
     "naval": {
       "seeds": [
         "ADISCORD_tech_restored_dockyards",
@@ -2102,13 +2110,13 @@
       "common_only": true,
       "rationale": "Exclusion-zone placeholder intentionally receives only the common base before its scripted breakup.",
       "evidence": {
-        "states": 57,
+        "states": 60,
         "civilian_factories": 17,
         "military_factories": 7,
         "dockyards": 0,
         "air_bases": 0,
         "power_sites": 0,
-        "infrastructure_levels": 48,
+        "infrastructure_levels": 60,
         "research_slots": 0,
         "convoys": 0,
         "oob_divisions": 0,
@@ -3491,6 +3499,7 @@
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "armored_core"
       ],
       "common_only": false,
@@ -3499,7 +3508,7 @@
         "states": 7,
         "civilian_factories": 10,
         "military_factories": 12,
-        "dockyards": 1,
+        "dockyards": 3,
         "air_bases": 4,
         "power_sites": 0,
         "infrastructure_levels": 18,
@@ -3540,6 +3549,7 @@
         "ADISCORD_tech_industrial_organization_baseline",
         "ADISCORD_tech_inertial_guidance",
         "ADISCORD_tech_interchangeable_components",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
@@ -5152,6 +5162,7 @@
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "recon_platform",
         "field_air_defense"
       ],
@@ -5205,6 +5216,7 @@
         "ADISCORD_tech_industrial_organization_baseline",
         "ADISCORD_tech_inertial_guidance",
         "ADISCORD_tech_interchangeable_components",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",
@@ -5672,6 +5684,7 @@
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "field_air_defense"
       ],
       "common_only": false,
@@ -5680,7 +5693,7 @@
         "states": 8,
         "civilian_factories": 11,
         "military_factories": 12,
-        "dockyards": 0,
+        "dockyards": 2,
         "air_bases": 4,
         "power_sites": 0,
         "infrastructure_levels": 19,
@@ -5719,6 +5732,7 @@
         "ADISCORD_tech_industrial_organization_baseline",
         "ADISCORD_tech_inertial_guidance",
         "ADISCORD_tech_interchangeable_components",
+        "ADISCORD_tech_light_cruiser_hull_2155",
         "ADISCORD_tech_light_suspension",
         "ADISCORD_tech_local_grid_restoration",
         "ADISCORD_tech_mesh_command_networks",

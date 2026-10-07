@@ -302,7 +302,9 @@ class GenericPeaceFixture:
         hook = block(
             native_hooks(GENERIC.read_text(encoding="utf-8")), "on_capitulation"
         )
-        self.execute([block(hook, "effect")[0]])
+        guard = block(hook, "effect")[0]
+        if self.matches(block(guard.value, "limit"), [self.root]):
+            self.execute([next(row for row in guard.value if row.key == "if")])
 
 
 class GenericPeaceRegressionTests(unittest.TestCase):

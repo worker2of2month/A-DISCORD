@@ -4,487 +4,475 @@
 on_actions = {
 	on_capitulation_immediate = {
 		effect = {
-			# A new native defeat cannot consume an omitted previous late callback.
-			ROOT = {
-				clr_country_flag = RUS_crisis_capitulation_reserved
-				clr_country_flag = VAL_nod_overlord_sts_peace_handled
-				clr_country_flag = ADISCORD_bezhaysk_capitulation_pending
-				clr_country_flag = ADISCORD_nam_capitulation_reserved
-				clr_country_flag = STP_cw_northern_capitulation_reserved
-				clr_country_flag = STP_nod_border_capitulation_reserved
-				clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
-				clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
-				clr_country_flag = TFF_nod_capitulation_reserved
-				clr_country_flag = VAL_coalition_capitulation_current
-				clr_country_flag = VAL_final_capitulation_immediate
-				clr_country_flag = VAL_frontier_capitulation_pending
-				clr_country_flag = VAL_nod_overlord_sts_capitulation_reserved
-				clr_country_flag = VAL_northern_coalition_capitulation_reserved
-				clr_country_flag = STP_val_nod_partition_capitulation_reserved
-			}
-			if = {
-				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
-				log = "VAL_PEACE_TRACE immediate_entry"
-				ROOT = { VAL_trace_scripted_peace_country = yes }
-				VAL = { VAL_trace_scripted_peace_country = yes }
-			}
-			if = {
-				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-				log = "[ADISCORD_PEACE] on_capitulation_immediate ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-				ROOT = { ADISCORD_debug_war_country_dump = yes }
-			}
-
-			ROOT = { clr_country_flag = VAL_coalition_capitulation_current }
-			if = {
-				limit = { ROOT = { has_war_with = VAL } OR = { FROM = { VAL_final_campaign_ally = yes } ROOT = { capital_scope = { controller = { VAL_final_campaign_ally = yes } } } } }
-				ROOT = { set_country_flag = { flag = VAL_coalition_capitulation_current value = 1 days = 2 } }
-			}
-			ROOT = { VAL_military_capture_result = yes }
 			if = {
 				limit = {
-					ROOT = {
-						OR = { tag = STP tag = STS tag = NOD }
-						has_war_with = VAL
-					}
+					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
+					NOT = { has_global_flag = RUS_crisis_world_ended }
 				}
-				log = "[VAL_PEACE] Native defeat: loser=[ROOT.GetTag] victor=[FROM.GetTag] frontier=[?VAL.VAL_frontier_stage] final_phase=[?VAL.VAL_final_crisis_phase]"
-			}
-			if = { limit = { ROOT = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
-
-			# BEGIN vorkerland_collapse:on_capitulation_immediate
-			if = {
-				limit = {
-					RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
-					OR = {
-						AND = {
-							ROOT = { tag = RUS }
-							FROM = { has_country_flag = RUS_crisis_defender }
-						}
-						AND = {
-							ROOT = { has_country_flag = RUS_crisis_defender }
-							FROM = { OR = { tag = RUS is_subject_of = RUS } }
-						}
-					}
-				}
-				ROOT = { set_country_flag = RUS_crisis_capitulation_current }
-				RUS = { RUS_crisis_resolve_capitulation = yes }
+				# A new native defeat cannot consume an omitted previous late callback.
 				ROOT = {
-					clr_country_flag = RUS_crisis_capitulation_current
-					set_country_flag = { flag = RUS_crisis_capitulation_reserved days = 2 }
+					clr_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
+					clr_country_flag = RUS_crisis_capitulation_reserved
+					clr_country_flag = VAL_nod_overlord_sts_peace_handled
+					clr_country_flag = ADISCORD_bezhaysk_capitulation_pending
+					clr_country_flag = ADISCORD_nam_capitulation_reserved
+					clr_country_flag = STP_cw_northern_capitulation_reserved
+					clr_country_flag = STP_nod_border_capitulation_reserved
+					clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
+					clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
+					clr_country_flag = TFF_nod_capitulation_reserved
+					clr_country_flag = VAL_coalition_capitulation_current
+					clr_country_flag = VAL_final_capitulation_immediate
+					clr_country_flag = VAL_frontier_capitulation_pending
+					clr_country_flag = VAL_nod_overlord_sts_capitulation_reserved
+					clr_country_flag = VAL_northern_coalition_capitulation_reserved
+					clr_country_flag = STP_val_nod_partition_capitulation_reserved
 				}
-			}
-			# END vorkerland_collapse:on_capitulation_immediate
-			# BEGIN kefreyt_northern_reservations:on_capitulation_immediate
-			# Kefreyt's dedicated northern-coalition war owns all three capitulations.
-			# Hold native peace until the last mandatory coalition member has fallen.
-			if = {
-				limit = {
-					ROOT = {
-						OR = { tag = YPR tag = COF tag = TFF }
-						has_country_flag = VAL_northern_coalition_campaign_member
-						has_war_with = VAL
-					}
-					VAL = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = VAL_northern_coalition_campaign_active
-					}
-					FROM = { OR = { tag = VAL is_subject_of = VAL } }
-				}
-				ROOT = {
-					set_country_flag = {
-						flag = VAL_northern_coalition_capitulation_reserved
-						value = 1
-						days = 2
-					}
-				}
-				set_global_flag = skip_default_capitulation
 				if = {
-					limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
-					VAL = { VAL_settle_northern_coalition_victory = yes }
+					limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
+					log = "VAL_PEACE_TRACE immediate_entry"
+					ROOT = { VAL_trace_scripted_peace_country = yes }
+					VAL = { VAL_trace_scripted_peace_country = yes }
 				}
-				# Settlement clears membership; preserve the receipt for the late callback.
-				ROOT = { set_country_flag = { flag = VAL_northern_coalition_capitulation_reserved value = 1 days = 2 } }
-				clr_global_flag = skip_default_capitulation
-			}
-
-			# END kefreyt_northern_reservations:on_capitulation_immediate
-
-			# NOD can inherit a war against Kefreyt when it intervenes against an STS
-			# administration. This front has its own limited peace in both directions.
-			if = {
-				limit = {
-					ROOT = {
-						tag = NOD
-						has_war_with = VAL
-						OR = {
-							has_country_flag = NOD_cw_entered
-							has_country_flag = VAL_nod_overlord_sts_war_active
-						}
-					}
-					VAL = { exists = yes has_capitulated = no }
-					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
-					FROM = { OR = { tag = VAL tag = STS is_subject_of = VAL } }
-				}
-				ROOT = {
-					set_country_flag = {
-						flag = VAL_nod_overlord_sts_capitulation_reserved
-						value = 1
-						days = 2
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				VAL = { VAL_settle_nod_overlord_sts_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = VAL has_war_with = NOD }
-					NOD = {
-						exists = yes
-						has_war_with = VAL
-						OR = {
-							has_country_flag = NOD_cw_entered
-							has_country_flag = VAL_nod_overlord_sts_war_active
-						}
-					}
-					STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
-					FROM = { OR = { tag = NOD is_subject_of = NOD } }
-				}
-				ROOT = {
-					set_country_flag = {
-						flag = VAL_nod_overlord_sts_capitulation_reserved
-						value = 1
-						days = 2
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				VAL = { VAL_settle_nod_overlord_sts_defeat = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-
-			# BEGIN stelander:on_capitulation_immediate
-			# Clear an unconsumed handoff so it cannot suppress another defeat.
-			ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
-			if = {
-				limit = {
-					ROOT = { STP_nod_border_war_active = yes }
-					FROM = { OR = { tag = STS is_subject_of = STS } }
-				}
-				ROOT = { set_country_flag = { flag = STP_nod_border_capitulation_reserved value = 1 days = 2 } }
-				set_global_flag = skip_default_capitulation
-				STS = {
-					set_variable = { var = STP_pc_cap_side value = 2 }
-					STP_pc_begin_settlement = yes
-				}
-				# White peace can omit the late callback; its receipt reserves that callback separately.
-				clr_global_flag = skip_default_capitulation
-			}
-			if = {
-				limit = {
-					# The campaign status selects the northern router. Exact live-war and
-					# military-credit checks belong to STP_cw_northern_capitulation_managed.
-					NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
-					ROOT = {
-						OR = { AND = { tag = NOD OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } AND = { OR = { tag = YPR tag = COF tag = TFF } has_war_with = NOD } }
-						NOT = { has_country_flag = STP_nod_border_capitulation_reserved }
-					}
-				}
-				ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
 				if = {
-					limit = { ROOT = { STP_cw_northern_capitulation_managed = yes } }
-					# The country marker hands off only this accepted defeat to the late hook.
-					ROOT = { set_country_flag = STP_cw_northern_capitulation_pending }
-					set_global_flag = skip_default_capitulation
-					if = { limit = { ROOT = { tag = NOD } } NOD = { STP_cw_settle_northern_defeat = yes } }
-					else = {
-						# 4 identifies an accepted NOD or allied military result.
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
-						NOD = {
-							log = "[STP_NORTH] Accepted coalition member defeat: [ROOT.GetTag]"
-							STP_cw_poll_northern_campaign = yes
-						}
-					}
-					# White peace can omit the late callback; release the global guard here.
-					clr_global_flag = skip_default_capitulation
+					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+					log = "[ADISCORD_PEACE] on_capitulation_immediate ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+					ROOT = { ADISCORD_debug_war_country_dump = yes }
 				}
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = {
-						NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled }
-						NOT = { has_country_flag = STP_nod_border_capitulation_reserved }
-						OR = {
-							tag = STP
-							tag = STS
-							tag = SRP
-							AND = {
-								tag = VAL
-								OR = {
-									has_country_flag = VAL_cw_entered
-									AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
-								}
-							}
-							AND = {
-								tag = NOD
-								OR = {
-									has_country_flag = NOD_cw_entered
-									AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
-								}
-							}
-						}
-					}
+
+				ROOT = { clr_country_flag = VAL_coalition_capitulation_current }
+				if = {
+					limit = { ROOT = { has_war_with = VAL } OR = { FROM = { VAL_final_campaign_ally = yes } ROOT = { capital_scope = { controller = { VAL_final_campaign_ally = yes } } } } }
+					ROOT = { set_country_flag = { flag = VAL_coalition_capitulation_current value = 1 days = 2 } }
 				}
-				ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
-				# Capitulation can precede the fall of the original capital. Accept
-				# the reported victor only inside the same isolated scripted front.
+				ROOT = { VAL_military_capture_result = yes }
 				if = {
 					limit = {
-						ROOT = { check_variable = { var = STP_cw_capitulation_occupier value = 0 compare = equals } }
-						FROM = { exists = yes has_capitulated = no has_war_with = ROOT }
+						ROOT = {
+							OR = { tag = STP tag = STS tag = NOD }
+							has_war_with = VAL
+						}
 					}
+					log = "[VAL_PEACE] Native defeat: loser=[ROOT.GetTag] victor=[FROM.GetTag] frontier=[?VAL.VAL_frontier_stage] final_phase=[?VAL.VAL_final_crisis_phase]"
+				}
+				if = { limit = { ROOT = { tag = VAL } } VAL = { VAL_close_northern_coalition_campaign = yes } }
+
+				# BEGIN vorkerland_collapse:on_capitulation_immediate
+				ADISCORD_vorkerland_pw_handle_capitulation = yes
+				RUS_crisis_record_capitulation = yes
+				# END vorkerland_collapse:on_capitulation_immediate
+				# BEGIN kefreyt_northern_reservations:on_capitulation_immediate
+				# Kefreyt's dedicated northern-coalition war owns all three capitulations.
+				# Hold native peace until the last mandatory coalition member has fallen.
+				if = {
+					limit = {
+						ROOT = {
+							OR = { tag = YPR tag = COF tag = TFF }
+							has_country_flag = VAL_northern_coalition_campaign_member
+							has_war_with = VAL
+						}
+						VAL = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = VAL_northern_coalition_campaign_active
+						}
+						FROM = { OR = { tag = VAL is_subject_of = VAL } }
+					}
+					ROOT = {
+						set_country_flag = {
+							flag = VAL_northern_coalition_capitulation_reserved
+							value = 1
+							days = 2
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
+						VAL = { VAL_settle_northern_coalition_victory = yes }
+					}
+					# Settlement clears membership; preserve the receipt for the late callback.
+					ROOT = { set_country_flag = { flag = VAL_northern_coalition_capitulation_reserved value = 1 days = 2 } }
+					clr_global_flag = skip_default_capitulation
+				}
+
+				# END kefreyt_northern_reservations:on_capitulation_immediate
+
+				# NOD can inherit a war against Kefreyt when it intervenes against an STS
+				# administration. This front has its own limited peace in both directions.
+				if = {
+					limit = {
+						ROOT = {
+							tag = NOD
+							has_war_with = VAL
+							OR = {
+								has_country_flag = NOD_cw_entered
+								has_country_flag = VAL_nod_overlord_sts_war_active
+							}
+						}
+						VAL = { exists = yes has_capitulated = no }
+						STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+						FROM = { OR = { tag = VAL tag = STS is_subject_of = VAL } }
+					}
+					ROOT = {
+						set_country_flag = {
+							flag = VAL_nod_overlord_sts_capitulation_reserved
+							value = 1
+							days = 2
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = { VAL_settle_nod_overlord_sts_victory = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = VAL has_war_with = NOD }
+						NOD = {
+							exists = yes
+							has_war_with = VAL
+							OR = {
+								has_country_flag = NOD_cw_entered
+								has_country_flag = VAL_nod_overlord_sts_war_active
+							}
+						}
+						STS = { exists = yes is_subject_of = VAL has_war_with = NOD }
+						FROM = { OR = { tag = NOD is_subject_of = NOD } }
+					}
+					ROOT = {
+						set_country_flag = {
+							flag = VAL_nod_overlord_sts_capitulation_reserved
+							value = 1
+							days = 2
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = { VAL_settle_nod_overlord_sts_defeat = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+
+				# BEGIN stelander:on_capitulation_immediate
+				# Clear an unconsumed handoff so it cannot suppress another defeat.
+				ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
+				if = {
+					limit = {
+						ROOT = { STP_nod_border_war_active = yes }
+						FROM = { OR = { tag = STS is_subject_of = STS } }
+					}
+					ROOT = { set_country_flag = { flag = STP_nod_border_capitulation_reserved value = 1 days = 2 } }
+					set_global_flag = skip_default_capitulation
+					STS = {
+						set_variable = { var = STP_pc_cap_side value = 2 }
+						STP_pc_begin_settlement = yes
+					}
+					# White peace can omit the late callback; its receipt reserves that callback separately.
+					clr_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = {
+						# The campaign status selects the northern router. Exact live-war and
+						# military-credit checks belong to STP_cw_northern_capitulation_managed.
+						NOD = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } }
+						ROOT = {
+							OR = { AND = { tag = NOD OR = { has_war_with = YPR has_war_with = COF has_war_with = TFF } } AND = { OR = { tag = YPR tag = COF tag = TFF } has_war_with = NOD } }
+							NOT = { has_country_flag = STP_nod_border_capitulation_reserved }
+						}
+					}
+					ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
+					if = {
+						limit = { ROOT = { STP_cw_northern_capitulation_managed = yes } }
+						# The country marker hands off only this accepted defeat to the late hook.
+						ROOT = { set_country_flag = STP_cw_northern_capitulation_pending }
+						set_global_flag = skip_default_capitulation
+						if = { limit = { ROOT = { tag = NOD } } NOD = { STP_cw_settle_northern_defeat = yes } }
+						else = {
+							# 4 identifies an accepted NOD or allied military result.
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
+							NOD = {
+								log = "[STP_NORTH] Accepted coalition member defeat: [ROOT.GetTag]"
+								STP_cw_poll_northern_campaign = yes
+							}
+						}
+						# White peace can omit the late callback; release the global guard here.
+						clr_global_flag = skip_default_capitulation
+					}
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						ROOT = {
+							NOT = { has_country_flag = VAL_nod_overlord_sts_peace_handled }
+							NOT = { has_country_flag = STP_nod_border_capitulation_reserved }
+							OR = {
+								tag = STP
+								tag = STS
+								tag = SRP
+								AND = {
+									tag = VAL
+									OR = {
+										has_country_flag = VAL_cw_entered
+										AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
+									}
+								}
+								AND = {
+									tag = NOD
+									OR = {
+										has_country_flag = NOD_cw_entered
+										AND = { has_global_flag = STP_cw_union_wars_finished has_war_with = STS }
+									}
+								}
+							}
+						}
+					}
+					ROOT = { STP_cw_snapshot_capitulation_occupier = yes }
+					# Capitulation can precede the fall of the original capital. Accept
+					# the reported victor only inside the same isolated scripted front.
 					if = {
 						limit = {
-							ROOT = {
-								tag = STS
-								NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+							ROOT = { check_variable = { var = STP_cw_capitulation_occupier value = 0 compare = equals } }
+							FROM = { exists = yes has_capitulated = no has_war_with = ROOT }
+						}
+						if = {
+							limit = {
+								ROOT = {
+									tag = STS
+									NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+								}
+								FROM = { tag = STP }
 							}
-							FROM = { tag = STP }
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 1 } }
-					}
-					else_if = {
-						limit = {
-							ROOT = {
-								tag = STS
-								NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+						else_if = {
+							limit = {
+								ROOT = {
+									tag = STS
+									NOT = { any_enemy_country = { NOT = { OR = { tag = STP AND = { tag = NOD has_country_flag = NOD_cw_entered } } } } }
+								}
+								FROM = { tag = NOD has_country_flag = NOD_cw_entered }
 							}
-							FROM = { tag = NOD has_country_flag = NOD_cw_entered }
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
-					}
-					else_if = {
-						limit = { ROOT = { tag = STP NOT = { any_enemy_country = { NOT = { tag = STS } } } } FROM = { tag = STS } }
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
-					}
-					else_if = {
-						limit = { ROOT = { tag = SRP NOT = { any_enemy_country = { NOT = { tag = VAL } } } } FROM = { tag = VAL has_country_flag = VAL_cw_entered } }
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
-					}
-					else_if = {
-						limit = { ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { any_enemy_country = { NOT = { tag = SRP } } } } FROM = { tag = SRP } }
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } }
-					}
-					# Postwar fronts are identified by the native war relation. FROM is
-					# accepted only when it is the actual STS opponent, so unrelated wars
-					# cannot receive Shabrat's settlement credit.
-					else_if = {
-						limit = {
-							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = VAL has_war_with = STS }
-							FROM = { tag = STS }
+						else_if = {
+							limit = { ROOT = { tag = STP NOT = { any_enemy_country = { NOT = { tag = STS } } } } FROM = { tag = STS } }
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
-					}
-					else_if = {
-						limit = {
-							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = NOD has_war_with = STS }
-							FROM = { tag = STS }
+						else_if = {
+							limit = { ROOT = { tag = SRP NOT = { any_enemy_country = { NOT = { tag = VAL } } } } FROM = { tag = VAL has_country_flag = VAL_cw_entered } }
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
-					}
-					else_if = {
-						limit = {
-							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = STS has_war_with = VAL }
-							FROM = { tag = VAL }
+						else_if = {
+							limit = { ROOT = { tag = VAL has_country_flag = VAL_cw_entered NOT = { any_enemy_country = { NOT = { tag = SRP } } } } FROM = { tag = SRP } }
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 3 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
-					}
-					else_if = {
-						limit = {
-							has_global_flag = STP_cw_union_wars_finished
-							ROOT = { tag = STS has_war_with = NOD }
-							FROM = { tag = NOD }
+						# Postwar fronts are identified by the native war relation. FROM is
+						# accepted only when it is the actual STS opponent, so unrelated wars
+						# cannot receive Shabrat's settlement credit.
+						else_if = {
+							limit = {
+								has_global_flag = STP_cw_union_wars_finished
+								ROOT = { tag = VAL has_war_with = STS }
+								FROM = { tag = STS }
+							}
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
 						}
-						ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
+						else_if = {
+							limit = {
+								has_global_flag = STP_cw_union_wars_finished
+								ROOT = { tag = NOD has_war_with = STS }
+								FROM = { tag = STS }
+							}
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 2 } }
+						}
+						else_if = {
+							limit = {
+								has_global_flag = STP_cw_union_wars_finished
+								ROOT = { tag = STS has_war_with = VAL }
+								FROM = { tag = VAL }
+							}
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 5 } }
+						}
+						else_if = {
+							limit = {
+								has_global_flag = STP_cw_union_wars_finished
+								ROOT = { tag = STS has_war_with = NOD }
+								FROM = { tag = NOD }
+							}
+							ROOT = { set_variable = { var = STP_cw_capitulation_occupier value = 4 } }
+						}
 					}
 				}
-			}
 
-			# Resolve the shared invasion before either exclusive victory route can
-			# restore the party or install one invader's administration everywhere.
-			if = {
-				limit = { ROOT = { STP_val_nod_partition_available = yes } }
-				ROOT = {
-					set_country_flag = { flag = STP_val_nod_partition_capitulation_reserved value = 1 days = 2 }
-					STP_settle_val_nod_partition = yes
+				# Resolve the shared invasion before either exclusive victory route can
+				# restore the party or install one invader's administration everywhere.
+				if = {
+					limit = { ROOT = { STP_val_nod_partition_available = yes } }
+					ROOT = {
+						set_country_flag = { flag = STP_val_nod_partition_capitulation_reserved value = 1 days = 2 }
+						STP_settle_val_nod_partition = yes
+					}
 				}
-			}
 
-			# END stelander:on_capitulation_immediate
+				# END stelander:on_capitulation_immediate
 
-			# BEGIN kefreyt:on_capitulation_immediate
-			if = { limit = { tag = VAL } clr_country_flag = VAL_occidian_settlement_pending }
-			if = { limit = { OR = { tag = CIN tag = OSF tag = APH } has_war_with = VAL } VAL = { VAL_frontier_reconcile_active_members = yes } }
-			clr_country_flag = VAL_frontier_capitulation_pending
-			if = {
-				limit = {
-					NOT = {
-						has_country_flag = VAL_nod_overlord_sts_peace_handled
-					}
-
-					VAL = {
-						check_variable = {
-							var = VAL_frontier_stage
-							value = 3
-							compare = equals
+				# BEGIN kefreyt:on_capitulation_immediate
+				if = { limit = { tag = VAL } clr_country_flag = VAL_occidian_settlement_pending }
+				if = { limit = { OR = { tag = CIN tag = OSF tag = APH } has_war_with = VAL } VAL = { VAL_frontier_reconcile_active_members = yes } }
+				clr_country_flag = VAL_frontier_capitulation_pending
+				if = {
+					limit = {
+						NOT = {
+							has_country_flag = VAL_nod_overlord_sts_peace_handled
 						}
-					}
 
-					OR = {
-						AND = {
-							tag = CIN
-							OR = {
-								has_country_flag = VAL_frontier_member
-								VAL = {
-									check_variable = {
-										var = VAL_frontier_target
-										value = 1
-										compare = equals
+						VAL = {
+							check_variable = {
+								var = VAL_frontier_stage
+								value = 3
+								compare = equals
+							}
+						}
+
+						OR = {
+							AND = {
+								tag = CIN
+								OR = {
+									has_country_flag = VAL_frontier_member
+									VAL = {
+										check_variable = {
+											var = VAL_frontier_target
+											value = 1
+											compare = equals
+										}
 									}
 								}
-							}
-							has_war_with = VAL
-							capital_scope = {
-								VAL_frontier_controlled = yes
-							}
-						}
-
-						AND = {
-							tag = OSF
-							OR = {
-								has_country_flag = VAL_frontier_member
-								VAL = {
-									check_variable = {
-										var = VAL_frontier_target
-										value = 2
-										compare = equals
-									}
-								}
-							}
-							has_war_with = VAL
-							capital_scope = {
-								VAL_frontier_controlled = yes
-							}
-						}
-
-						AND = {
-							tag = APH
-							OR = {
-								has_country_flag = VAL_frontier_member
-								VAL = {
-									check_variable = {
-										var = VAL_frontier_target
-										value = 3
-										compare = equals
-									}
-								}
-							}
-							has_war_with = VAL
-							capital_scope = {
-								VAL_frontier_controlled = yes
-							}
-						}
-
-						AND = {
-							tag = ERT
-							VAL = {
-								check_variable = {
-									var = VAL_frontier_target
-									value = 4
-									compare = equals
-								}
-								has_war_with = ERT
-							}
-							OR = {
+								has_war_with = VAL
 								capital_scope = {
 									VAL_frontier_controlled = yes
 								}
-								VAL = {
-									VAL_frontier_eastern_claim_ready = yes
+							}
+
+							AND = {
+								tag = OSF
+								OR = {
+									has_country_flag = VAL_frontier_member
+									VAL = {
+										check_variable = {
+											var = VAL_frontier_target
+											value = 2
+											compare = equals
+										}
+									}
+								}
+								has_war_with = VAL
+								capital_scope = {
+									VAL_frontier_controlled = yes
 								}
 							}
-						}
 
-						AND = {
-							OR = {
-								tag = NOD
-								tag = STP
-							}
-							has_country_flag = VAL_frontier_guarantor
-							has_war_with = VAL
-							capital_scope = {
-								VAL_frontier_controlled = yes
-							}
-						}
-
-						AND = {
-							tag = VAL
-							capital_scope = {
+							AND = {
+								tag = APH
 								OR = {
-									controller = {
-										has_country_flag = VAL_frontier_guarantor
-										has_war_with = VAL
+									has_country_flag = VAL_frontier_member
+									VAL = {
+										check_variable = {
+											var = VAL_frontier_target
+											value = 3
+											compare = equals
+										}
 									}
+								}
+								has_war_with = VAL
+								capital_scope = {
+									VAL_frontier_controlled = yes
+								}
+							}
 
-									controller = {
-										has_war_with = VAL
-										OR = {
-											has_country_flag = VAL_frontier_member
+							AND = {
+								tag = ERT
+								VAL = {
+									check_variable = {
+										var = VAL_frontier_target
+										value = 4
+										compare = equals
+									}
+									has_war_with = ERT
+								}
+								OR = {
+									capital_scope = {
+										VAL_frontier_controlled = yes
+									}
+									VAL = {
+										VAL_frontier_eastern_claim_ready = yes
+									}
+								}
+							}
 
-											AND = {
-												tag = CIN
-												VAL = {
-													check_variable = {
-														var = VAL_frontier_target
-														value = 1
-														compare = equals
+							AND = {
+								OR = {
+									tag = NOD
+									tag = STP
+								}
+								has_country_flag = VAL_frontier_guarantor
+								has_war_with = VAL
+								capital_scope = {
+									VAL_frontier_controlled = yes
+								}
+							}
+
+							AND = {
+								tag = VAL
+								capital_scope = {
+									OR = {
+										controller = {
+											has_country_flag = VAL_frontier_guarantor
+											has_war_with = VAL
+										}
+
+										controller = {
+											has_war_with = VAL
+											OR = {
+												has_country_flag = VAL_frontier_member
+
+												AND = {
+													tag = CIN
+													VAL = {
+														check_variable = {
+															var = VAL_frontier_target
+															value = 1
+															compare = equals
+														}
 													}
 												}
-											}
 
-											AND = {
-												tag = OSF
-												VAL = {
-													check_variable = {
-														var = VAL_frontier_target
-														value = 2
-														compare = equals
+												AND = {
+													tag = OSF
+													VAL = {
+														check_variable = {
+															var = VAL_frontier_target
+															value = 2
+															compare = equals
+														}
 													}
 												}
-											}
 
-											AND = {
-												tag = APH
-												VAL = {
-													check_variable = {
-														var = VAL_frontier_target
-														value = 3
-														compare = equals
+												AND = {
+													tag = APH
+													VAL = {
+														check_variable = {
+															var = VAL_frontier_target
+															value = 3
+															compare = equals
+														}
 													}
 												}
-											}
 
-											AND = {
-												tag = ERT
-												VAL = {
-													check_variable = {
-														var = VAL_frontier_target
-														value = 4
-														compare = equals
+												AND = {
+													tag = ERT
+													VAL = {
+														check_variable = {
+															var = VAL_frontier_target
+															value = 4
+															compare = equals
+														}
 													}
 												}
 											}
@@ -494,1379 +482,1395 @@ on_actions = {
 							}
 						}
 					}
-				}
 
-				if = {
-					limit = {
-						OR = {
-							tag = CIN
-							tag = OSF
-							tag = APH
-							tag = ERT
-						}
-					}
-					set_country_flag = VAL_frontier_defeated
-				}
-
-				set_country_flag = {
-					flag = VAL_frontier_capitulation_pending
-					value = 1
-					days = 1
-				}
-
-				set_global_flag = skip_default_capitulation
-
-				if = {
-					limit = { tag = VAL }
-					VAL_frontier_settle_defeat = yes
-				}
-				else = {
-					VAL = {
-						VAL_frontier_reconcile = yes
-					}
-				}
-
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					tag = VAL
-					NOT = {
-						has_country_flag = VAL_nod_overlord_sts_peace_handled
-					}
-					check_variable = {
-						var = VAL_frontier_stage
-						value = 0
-						compare = greater_than
-					}
-				}
-				# An unrelated winner keeps its own capitulation route.
-				VAL_frontier_close = yes
-			}
-			else_if = {
-				limit = { OR = { tag = CIN tag = OSF tag = APH } has_country_flag = VAL_frontier_member }
-				# A third-party victory is outside VAL's territorial settlement.
-				clr_country_flag = VAL_frontier_member
-				clr_country_flag = VAL_frontier_defeated
-				if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
-			}
-			else_if = {
-				limit = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor }
-				clr_country_flag = VAL_frontier_guarantor
-				if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
-			}
-
-			# A shared NOD war has one settlement owner. Run it before VAL's
-			# ordinary final-campaign reservation can claim the whole country.
-			if = {
-				limit = {
-					ROOT = {
-						tag = NOD
-						has_country_flag = VAL_joint_nod_campaign_target
-					}
-					VAL = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = VAL_joint_nod_campaign_with_sts
-						NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
-					}
-					STS = {
-						exists = yes
-						has_capitulated = no
-						has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
-					}
-					OR = {
-						FROM = {
+					if = {
+						limit = {
 							OR = {
-								VAL_final_campaign_ally = yes
-								tag = STS
-								is_subject_of = STS
+								tag = CIN
+								tag = OSF
+								tag = APH
+								tag = ERT
 							}
 						}
+						set_country_flag = VAL_frontier_defeated
+					}
+
+					set_country_flag = {
+						flag = VAL_frontier_capitulation_pending
+						value = 1
+						days = 1
+					}
+
+					set_global_flag = skip_default_capitulation
+
+					if = {
+						limit = { tag = VAL }
+						VAL_frontier_settle_defeat = yes
+					}
+					else = {
+						VAL = {
+							VAL_frontier_reconcile = yes
+						}
+					}
+
+					clr_global_flag = skip_default_capitulation
+				}
+				else_if = {
+					limit = {
+						tag = VAL
+						NOT = {
+							has_country_flag = VAL_nod_overlord_sts_peace_handled
+						}
+						check_variable = {
+							var = VAL_frontier_stage
+							value = 0
+							compare = greater_than
+						}
+					}
+					# An unrelated winner keeps its own capitulation route.
+					VAL_frontier_close = yes
+				}
+				else_if = {
+					limit = { OR = { tag = CIN tag = OSF tag = APH } has_country_flag = VAL_frontier_member }
+					# A third-party victory is outside VAL's territorial settlement.
+					clr_country_flag = VAL_frontier_member
+					clr_country_flag = VAL_frontier_defeated
+					if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+				}
+				else_if = {
+					limit = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor }
+					clr_country_flag = VAL_frontier_guarantor
+					if = { limit = { has_country_flag = VAL_frontier_added_major } set_major = no clr_country_flag = VAL_frontier_added_major }
+				}
+
+				# A shared NOD war has one settlement owner. Run it before VAL's
+				# ordinary final-campaign reservation can claim the whole country.
+				if = {
+					limit = {
 						ROOT = {
-							capital_scope = {
-								controller = {
-									OR = {
-										VAL_final_campaign_ally = yes
-										tag = STS
-										is_subject_of = STS
+							tag = NOD
+							has_country_flag = VAL_joint_nod_campaign_target
+						}
+						VAL = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = VAL_joint_nod_campaign_with_sts
+							NOT = { has_country_flag = VAL_joint_nod_settlement_completed }
+						}
+						STS = {
+							exists = yes
+							has_capitulated = no
+							has_country_leader = { character = STP_maksim_shabrat ruling_only = yes }
+						}
+						OR = {
+							FROM = {
+								OR = {
+									VAL_final_campaign_ally = yes
+									tag = STS
+									is_subject_of = STS
+								}
+							}
+							ROOT = {
+								capital_scope = {
+									controller = {
+										OR = {
+											VAL_final_campaign_ally = yes
+											tag = STS
+											is_subject_of = STS
+										}
 									}
 								}
 							}
 						}
 					}
+					set_global_flag = skip_default_capitulation
+					VAL = { VAL_settle_joint_nod_shabrat_victory = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				set_global_flag = skip_default_capitulation
-				VAL = { VAL_settle_joint_nod_shabrat_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
 
-			ROOT = {
+				ROOT = {
+					if = {
+						limit = {
+							OR = { tag = STP tag = STS tag = NOD }
+							has_war_with = VAL
+							VAL = { exists = yes has_capitulated = no }
+							OR = {
+								VAL = { VAL_frontier_idle = yes }
+								AND = {
+									tag = NOD
+									VAL = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } }
+								}
+								has_country_flag = VAL_final_war_member
+							}
+							NOT = {
+								AND = {
+									tag = NOD
+									has_country_flag = VAL_joint_nod_campaign_target
+									VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
+									STS = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
+								}
+							}
+							OR = {
+								FROM = { VAL_final_campaign_ally = yes }
+								capital_scope = {
+									controller = { VAL_final_campaign_ally = yes }
+								}
+							}
+						}
+						set_country_flag = VAL_final_defeat_pending
+						log = "[VAL_PEACE] Recorded coalition defeat: ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+						# The early peace can suppress the late callback; expire its reservation.
+						set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
+						VAL = { VAL_finalize_reserved_settlements = yes }
+					}
+				}
+
+				# END kefreyt:on_capitulation_immediate
+
+				# BEGIN frontier:on_capitulation_immediate
+				ROOT = { clr_country_flag = TFF_nod_capitulation_reserved }
 				if = {
 					limit = {
-						OR = { tag = STP tag = STS tag = NOD }
-						has_war_with = VAL
-						VAL = { exists = yes has_capitulated = no }
-						OR = {
-							VAL = { VAL_frontier_idle = yes }
-							AND = {
-								tag = NOD
-								VAL = { check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals } }
-							}
-							has_country_flag = VAL_final_war_member
-						}
-						NOT = {
-							AND = {
-								tag = NOD
-								has_country_flag = VAL_joint_nod_campaign_target
-								VAL = { has_country_flag = VAL_joint_nod_campaign_with_sts }
-								STS = { has_country_leader = { character = STP_maksim_shabrat ruling_only = yes } }
-							}
-						}
-						OR = {
-							FROM = { VAL_final_campaign_ally = yes }
-							capital_scope = {
-								controller = { VAL_final_campaign_ally = yes }
-							}
-						}
+						ROOT = { tag = TFF is_subject = no has_war_with = NOD }
+						NOD = { exists = yes is_subject = no has_capitulated = no NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
+						OR = { FROM = { OR = { tag = NOD AND = { is_subject_of = NOD has_war_with = ROOT } } } ROOT = { capital_scope = { controller = { OR = { tag = NOD AND = { is_subject_of = NOD has_war_with = ROOT } } } } } }
 					}
-					set_country_flag = VAL_final_defeat_pending
-					log = "[VAL_PEACE] Recorded coalition defeat: ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-					# The early peace can suppress the late callback; expire its reservation.
-					set_country_flag = { flag = VAL_final_capitulation_immediate value = 1 days = 1 }
-					VAL = { VAL_finalize_reserved_settlements = yes }
-				}
-			}
-
-			# END kefreyt:on_capitulation_immediate
-
-			# BEGIN frontier:on_capitulation_immediate
-			ROOT = { clr_country_flag = TFF_nod_capitulation_reserved }
-			if = {
-				limit = {
-					ROOT = { tag = TFF is_subject = no has_war_with = NOD }
-					NOD = { exists = yes is_subject = no has_capitulated = no NOT = { check_variable = { var = STP_cw_northern_campaign_status value = 1 compare = equals } } }
-					OR = { FROM = { OR = { tag = NOD AND = { is_subject_of = NOD has_war_with = ROOT } } } ROOT = { capital_scope = { controller = { OR = { tag = NOD AND = { is_subject_of = NOD has_war_with = ROOT } } } } } }
-				}
-				ROOT = {
-					set_country_flag = { flag = TFF_nod_capitulation_reserved value = 1 days = 1 }
-					ADISCORD_TFF_become_nod_subject = yes
-				}
-			}
-			# The Party's postwar treaty also covers a defeated Kefreyt invasion.
-			# The live war and native victor identify the settlement's recipient.
-			if = {
-				limit = {
 					ROOT = {
-						tag = VAL
-						has_war_with = STP
-						is_subject = no
-					}
-					STP = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = STP_cw_postwar
-						STP_pw_can_reconstruct = yes
-						is_subject = no
-					}
-					FROM = { OR = { tag = STP is_subject_of = STP } }
-				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved value = 1 days = 2 } }
-				STP = { STP_pw_party_settle_kefreyt_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			# Party final northern campaign: each defeated government becomes a
-			# subject; a defeated Party state leaves the war without annexation.
-			if = {
-				limit = {
-					ROOT = {
-						STP_pw_party_northern_march_target = yes
-						has_war_with = STP
-					}
-					STP = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = STP_pw_party_northern_march_active
-					}
-					FROM = { OR = { tag = STP is_subject_of = STP } }
-				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved value = 1 days = 2 } }
-				ROOT = { STP_pw_party_settle_northern_march_member = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						tag = STP
-						has_country_flag = STP_pw_party_northern_march_active
-					}
-					FROM = {
-						has_war_with = STP
-						OR = {
-							STP_pw_party_northern_march_target = yes
-							any_allied_country = { STP_pw_party_northern_march_target = yes }
-						}
+						set_country_flag = { flag = TFF_nod_capitulation_reserved value = 1 days = 1 }
+						ADISCORD_TFF_become_nod_subject = yes
 					}
 				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved value = 1 days = 2 } }
-				STP = { STP_pw_party_settle_northern_march_defeat = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			# END frontier:on_capitulation_immediate
-
-			# BEGIN bezhaysk:on_capitulation_immediate
-
-			# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
-			# the whole feudal bloc through the ordinary single-winner settlement.
-			if = {
-				limit = {
-					ROOT = {
-						tag = BJK
-						has_war_with = VAL
-						has_war_with = NOD
-						NOT = {
-							any_enemy_country = {
-								NOT = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
-							}
-						}
-					}
-					VAL = {
-						exists = yes
-						has_capitulated = no
-						has_war_together_with = NOD
-						has_country_flag = ADISCORD_bezhaysk_campaign_active
-					}
-					NOD = { exists = yes has_capitulated = no }					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
-				}
-				ROOT = {
-					clr_country_flag = ADISCORD_bezhaysk_joint_default_val
-					clr_country_flag = ADISCORD_bezhaysk_joint_default_nod
-				}
+				# The Party's postwar treaty also covers a defeated Kefreyt invasion.
+				# The live war and native victor identify the settlement's recipient.
 				if = {
-					limit = { FROM = { OR = { tag = NOD is_subject_of = NOD } } }
-					ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_nod }
-				}
-				else = { ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_val } }
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				VAL = { ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						tag = BJK
-						has_war_with = STP
-						NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+					limit = {
+						ROOT = {
+							tag = VAL
+							has_war_with = STP
+							is_subject = no
+						}
+						STP = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = STP_cw_postwar
+							STP_pw_can_reconstruct = yes
+							is_subject = no
+						}
+						FROM = { OR = { tag = STP is_subject_of = STP } }
 					}
-					STP = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = STP_cw_postwar
-						has_country_flag = ADISCORD_bezhaysk_campaign_active
-					}
-					FROM = { OR = { tag = STP is_subject_of = STP } }
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = { flag = STP_pw_party_kefreyt_capitulation_reserved value = 1 days = 2 } }
+					STP = { STP_pw_party_settle_kefreyt_victory = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				STP = { ADISCORD_bezhaysk_settle_stp_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = BJK has_war_with = STS }
-					STS = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = ADISCORD_bezhaysk_campaign_active
+				# Party final northern campaign: each defeated government becomes a
+				# subject; a defeated Party state leaves the war without annexation.
+				if = {
+					limit = {
+						ROOT = {
+							STP_pw_party_northern_march_target = yes
+							has_war_with = STP
+						}
+						STP = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = STP_pw_party_northern_march_active
+						}
+						FROM = { OR = { tag = STP is_subject_of = STP } }
 					}
-					FROM = { OR = { tag = STS is_subject_of = STS } }
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved value = 1 days = 2 } }
+					ROOT = { STP_pw_party_settle_northern_march_member = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				STS = { ADISCORD_bezhaysk_settle_sts_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = BJK has_war_with = VAL }
-					VAL = {
-						exists = yes
-						has_capitulated = no
-						has_country_flag = ADISCORD_bezhaysk_campaign_active
-					}
-					FROM = { OR = { tag = VAL is_subject_of = VAL } }
-				}
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				VAL = { ADISCORD_bezhaysk_settle_val_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-
-			if = {
-				limit = {
-					ROOT = {
-						tag = COF
-						has_war_with = VAL
-						NOT = {
-							any_enemy_country = {
-								NOT = { OR = { tag = VAL is_subject_of = VAL } }
+				else_if = {
+					limit = {
+						ROOT = {
+							tag = STP
+							has_country_flag = STP_pw_party_northern_march_active
+						}
+						FROM = {
+							has_war_with = STP
+							OR = {
+								STP_pw_party_northern_march_target = yes
+								any_allied_country = { STP_pw_party_northern_march_target = yes }
 							}
 						}
 					}
-					VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
-					FROM = { OR = { tag = VAL is_subject_of = VAL } }
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = { flag = STP_pw_party_northern_march_capitulation_reserved value = 1 days = 2 } }
+					STP = { STP_pw_party_settle_northern_march_defeat = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				VAL = { ADISCORD_bezhaysk_settle_forest_val_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						tag = COF
-						has_war_with = NOD
-						NOT = {
-							any_enemy_country = {
-								NOT = { OR = { tag = NOD is_subject_of = NOD } }
+				# END frontier:on_capitulation_immediate
+
+				# BEGIN bezhaysk:on_capitulation_immediate
+
+				# If Kefreyt and Nodrul fight the same Bezhaysk war, neither may consume
+				# the whole feudal bloc through the ordinary single-winner settlement.
+				if = {
+					limit = {
+						ROOT = {
+							tag = BJK
+							has_war_with = VAL
+							has_war_with = NOD
+							NOT = {
+								any_enemy_country = {
+									NOT = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
+								}
 							}
 						}
+						VAL = {
+							exists = yes
+							has_capitulated = no
+							has_war_together_with = NOD
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+						}
+						NOD = { exists = yes has_capitulated = no }					FROM = { OR = { tag = VAL tag = NOD is_subject_of = VAL is_subject_of = NOD } }
 					}
-					NOD = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
-					FROM = { OR = { tag = NOD is_subject_of = NOD } }
+					ROOT = {
+						clr_country_flag = ADISCORD_bezhaysk_joint_default_val
+						clr_country_flag = ADISCORD_bezhaysk_joint_default_nod
+					}
+					if = {
+						limit = { FROM = { OR = { tag = NOD is_subject_of = NOD } } }
+						ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_nod }
+					}
+					else = { ROOT = { set_country_flag = ADISCORD_bezhaysk_joint_default_val } }
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					VAL = { ADISCORD_bezhaysk_settle_val_nod_joint_victory = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
-				set_global_flag = skip_default_capitulation
-				NOD = { ADISCORD_bezhaysk_settle_forest_nod_victory = yes }
-				clr_global_flag = skip_default_capitulation
-			}
-			# END bezhaysk:on_capitulation_immediate
-
-			# BEGIN nam:on_capitulation_immediate
-			ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
-			if = {
-				limit = {
-					ADISCORD_nam_resource_war_active = yes
-					ROOT = { tag = NAM OR = { has_war_with = EFL has_war_with = AZH has_war_with = SLF } }
-					FROM = { OR = { tag = EFL tag = AZH tag = SLF is_subject_of = EFL is_subject_of = AZH is_subject_of = SLF } }
+				else_if = {
+					limit = {
+						ROOT = {
+							tag = BJK
+							has_war_with = STP
+							NOT = { any_enemy_country = { NOT = { OR = { tag = STP is_subject_of = STP } } } }
+						}
+						STP = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = STP_cw_postwar
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+						}
+						FROM = { OR = { tag = STP is_subject_of = STP } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					STP = { ADISCORD_bezhaysk_settle_stp_victory = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = { set_country_flag = { flag = ADISCORD_nam_capitulation_reserved value = 1 days = 2 } }
-				NAM = { ADISCORD_nam_resource_war_resolve_coalition_victory = yes }
-			}
-			ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
-
-			# END nam:on_capitulation_immediate
-
-			# BEGIN northern_reservation:on_capitulation_immediate
-			if = {
-				limit = {
-					ROOT = { has_country_flag = STP_cw_northern_capitulation_pending }
+				else_if = {
+					limit = {
+						ROOT = { tag = BJK has_war_with = STS }
+						STS = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+						}
+						FROM = { OR = { tag = STS is_subject_of = STS } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					STS = { ADISCORD_bezhaysk_settle_sts_victory = yes }
+					clr_global_flag = skip_default_capitulation
 				}
-				ROOT = {
-					set_country_flag = {
-						flag = STP_cw_northern_capitulation_reserved
-						value = 1
-						days = 2
+				else_if = {
+					limit = {
+						ROOT = { tag = BJK has_war_with = VAL }
+						VAL = {
+							exists = yes
+							has_capitulated = no
+							has_country_flag = ADISCORD_bezhaysk_campaign_active
+						}
+						FROM = { OR = { tag = VAL is_subject_of = VAL } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					VAL = { ADISCORD_bezhaysk_settle_val_victory = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+
+				if = {
+					limit = {
+						ROOT = {
+							tag = COF
+							has_war_with = VAL
+							NOT = {
+								any_enemy_country = {
+									NOT = { OR = { tag = VAL is_subject_of = VAL } }
+								}
+							}
+						}
+						VAL = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+						FROM = { OR = { tag = VAL is_subject_of = VAL } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					VAL = { ADISCORD_bezhaysk_settle_forest_val_victory = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							tag = COF
+							has_war_with = NOD
+							NOT = {
+								any_enemy_country = {
+									NOT = { OR = { tag = NOD is_subject_of = NOD } }
+								}
+							}
+						}
+						NOD = { exists = yes has_capitulated = no has_country_flag = ADISCORD_bezhaysk_forest_campaign_active }
+						FROM = { OR = { tag = NOD is_subject_of = NOD } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_bezhaysk_capitulation_pending value = 1 days = 1 } }
+					set_global_flag = skip_default_capitulation
+					NOD = { ADISCORD_bezhaysk_settle_forest_nod_victory = yes }
+					clr_global_flag = skip_default_capitulation
+				}
+				# END bezhaysk:on_capitulation_immediate
+
+				# BEGIN nam:on_capitulation_immediate
+				ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
+				if = {
+					limit = {
+						ADISCORD_nam_resource_war_active = yes
+						ROOT = { tag = NAM OR = { has_war_with = EFL has_war_with = AZH has_war_with = SLF } }
+						FROM = { OR = { tag = EFL tag = AZH tag = SLF is_subject_of = EFL is_subject_of = AZH is_subject_of = SLF } }
+					}
+					ROOT = { set_country_flag = { flag = ADISCORD_nam_capitulation_reserved value = 1 days = 2 } }
+					NAM = { ADISCORD_nam_resource_war_resolve_coalition_victory = yes }
+				}
+				ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
+
+				# END nam:on_capitulation_immediate
+
+				# BEGIN northern_reservation:on_capitulation_immediate
+				if = {
+					limit = {
+						ROOT = { has_country_flag = STP_cw_northern_capitulation_pending }
+					}
+					ROOT = {
+						set_country_flag = {
+							flag = STP_cw_northern_capitulation_reserved
+							value = 1
+							days = 2
+						}
 					}
 				}
+
+				# END northern_reservation:on_capitulation_immediate
+
 			}
-
-			# END northern_reservation:on_capitulation_immediate
-
 		}
 	}
 	on_capitulation = {
 		effect = {
 			if = {
-				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
-				log = "VAL_PEACE_TRACE late_entry"
-				ROOT = { VAL_trace_scripted_peace_country = yes }
-				VAL = { VAL_trace_scripted_peace_country = yes }
-			}
-			if = {
-				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-				log = "[ADISCORD_PEACE] on_capitulation ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-				ROOT = { ADISCORD_debug_war_country_dump = yes }
-			}
-
-			# BEGIN vorkerland_collapse:on_capitulation
-			if = {
-				limit = { ROOT = { has_country_flag = RUS_crisis_capitulation_reserved } }
-				ROOT = { clr_country_flag = RUS_crisis_capitulation_reserved }
-				set_global_flag = skip_default_capitulation
-			}
-			# Defer faction creation until the final annexation fallback settles
-			# the local war and transfers its states to the actual victor.
-			if = {
 				limit = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					OR = {
-						AND = { ROOT = { tag = DVA } FROM = { tag = ROM } }
-						AND = { ROOT = { tag = ZTA } FROM = { tag = TRU } }
-					}
+					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
+					NOT = { has_global_flag = RUS_crisis_world_ended }
 				}
-				FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }
-			}
-			# A peace conference can materialise dormant WRK as a free or
-			# puppeted shell. Reserve it from the generic annex fallback and
-			# fold its land back into a living claimant the same tick.
-			if = {
-				limit = { ROOT = { ADISCORD_vorkerland_is_premature_wrk = yes } }
-				set_global_flag = skip_default_capitulation
-				set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
+				if = {
+					limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
+					log = "VAL_PEACE_TRACE late_entry"
+					ROOT = { VAL_trace_scripted_peace_country = yes }
+					VAL = { VAL_trace_scripted_peace_country = yes }
+				}
+				if = {
+					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+					log = "[ADISCORD_PEACE] on_capitulation ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+					ROOT = { ADISCORD_debug_war_country_dump = yes }
+				}
+
+				# BEGIN vorkerland_collapse:on_capitulation
+				ADISCORD_vorkerland_pw_handle_capitulation = yes
+				if = {
+					limit = { ROOT = { has_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = { ROOT = { NOT = { has_country_flag = RUS_crisis_capitulation_reserved } } }
+					RUS_crisis_record_capitulation = yes
+				}
+				if = {
+					limit = { ROOT = { has_country_flag = RUS_crisis_capitulation_reserved } }
+					ROOT = { clr_country_flag = RUS_crisis_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+				# Defer faction creation until the final annexation fallback settles
+				# the local war and transfers its states to the actual victor.
 				if = {
 					limit = {
-						FROM = {
-							ADISCORD_vorkerland_is_main_claimant = yes
-							exists = yes
-							is_subject = no
-							NOT = { has_capitulated = yes }
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						OR = {
+							AND = { ROOT = { tag = DVA } FROM = { tag = ROM } }
+							AND = { ROOT = { tag = ZTA } FROM = { tag = TRU } }
 						}
 					}
-					FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+					FROM = { country_event = { id = ADISCORD_vorkerland_rom_tru.3 hours = 1 } }
 				}
-				else = {
-					ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
-				}
-			}
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
-					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
-					ROOT = { tag = ROM }
-				}
-				ADISCORD_vorkerland_rom_northern_intervention_failure = yes
-			}
-			else_if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
-					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
-				}
-				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
-			}
-			if = {
-				limit = {
-					ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				}
-				ROOT = { ADISCORD_vorkerland_update_civil_war_exhaustion = yes }
-			}
-			if = {
-				limit = { ROOT = { tag = EBA } }
-				PIV = {
+				# A peace conference can materialise dormant WRK as a free or
+				# puppeted shell. Reserve it from the generic annex fallback and
+				# fold its land back into a living claimant the same tick.
+				if = {
+					limit = { ROOT = { ADISCORD_vorkerland_is_premature_wrk = yes } }
+					set_global_flag = skip_default_capitulation
+					set_global_flag = ADISCORD_vorkerland_premature_wrk_release_intercepted_v1
 					if = {
 						limit = {
-							exists = yes
-							has_idea = ADISCORD_vorkerland_piv_macri_volunteer_mission
-						}
-						remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission
-					}
-				}
-			}
-			# Volnograd rejected WRK only because Worker was confirmed dead. A WRK
-			# victory ends the enforcement war immediately and installs the same
-			# special district autonomy used before the collapse.
-			if = {
-				limit = {
-					ROOT = { tag = VLA has_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement }
-					FROM = { tag = WRK }
-				}
-				set_global_flag = skip_default_capitulation
-				FROM = { ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = yes }
-			}
-			# No northern-front member may be consumed by the normal peace fallback.
-			# IVN must physically control the complete 90/91/93/94 objective package;
-			# the postwar client order is materialized only after this succeeds.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-					ROOT = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
-					FROM = { OR = { tag = IVN has_war_together_with = IVN } }
-				}
-				set_global_flag = skip_default_capitulation
-				if = {
-					limit = {
-						IVN = {
-							controls_state = 90
-							controls_state = 91
-							controls_state = 93
-							controls_state = 94
-						}
-					}
-					IVN = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
-				}
-			}
-			else_if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-					ROOT = { tag = IVN }
-					FROM = {
-						OR = {
-							tag = ZAO
-							tag = WPA
-							tag = WPS
-							tag = PWR
-							tag = PSD
-							has_war_together_with = PWR
-						}
-					}
-				}
-				# Do not reserve IVN from the generic capitulation fallback. A military
-				# defeat must annex the defeated attacker instead of white-peacing it home.
-				set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention
-				IVN = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
-			}
-			# A third party may still settle its own regional war normally. Remove
-			# IVN from that war first so the global fallback cannot award it land.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
-					ROOT = {
-						OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
-						has_war_with = IVN
-					}
-					FROM = { NOT = { OR = { tag = IVN has_war_together_with = IVN } } }
-				}
-				IVN = { white_peace = ROOT }
-			}
-			# Reserve every central defeat from the generic same-tick fallback, even
-			# when the engine credits a sovereign/subject co-belligerent. Normalise the
-			# settlement to that ally's live main claimant before preserving the shell.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_collapse_wars_started
-					OR = {
-						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-						AND = {
-							FROM = { tag = WRK }
-							has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-							has_global_flag = ADISCORD_vorkerland_reunification_verified
-						}
-					}
-					ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
-					FROM = {
-						OR = {
-							ADISCORD_vorkerland_has_live_claimant_leader = yes
-							AND = {
+							FROM = {
 								ADISCORD_vorkerland_is_main_claimant = yes
+								exists = yes
+								is_subject = no
 								NOT = { has_capitulated = yes }
 							}
+						}
+						FROM = { ADISCORD_vorkerland_dissolve_premature_wrk_as_claimant = yes }
+					}
+					else = {
+						ADISCORD_vorkerland_route_premature_wrk_release_to_living_claimant = yes
+					}
+				}
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+						NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+						ROOT = { tag = ROM }
+					}
+					ADISCORD_vorkerland_rom_northern_intervention_failure = yes
+				}
+				else_if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+						NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+					}
+					ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
+				}
+				if = {
+					limit = {
+						ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					}
+					ROOT = { ADISCORD_vorkerland_update_civil_war_exhaustion = yes }
+				}
+				if = {
+					limit = { ROOT = { tag = EBA } }
+					PIV = {
+						if = {
+							limit = {
+								exists = yes
+								has_idea = ADISCORD_vorkerland_piv_macri_volunteer_mission
+							}
+							remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission
+						}
+					}
+				}
+				# Volnograd rejected WRK only because Worker was confirmed dead. A WRK
+				# victory ends the enforcement war immediately and installs the same
+				# special district autonomy used before the collapse.
+				if = {
+					limit = {
+						ROOT = { tag = VLA has_country_flag = ADISCORD_vorkerland_wrk_protectorate_enforcement }
+						FROM = { tag = WRK }
+					}
+					set_global_flag = skip_default_capitulation
+					FROM = { ADISCORD_vorkerland_wrk_complete_protectorate_enforcement = yes }
+				}
+				# No northern-front member may be consumed by the normal peace fallback.
+				# IVN must physically control the complete 90/91/93/94 objective package;
+				# the postwar client order is materialized only after this succeeds.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+						ROOT = { OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD } }
+						FROM = { OR = { tag = IVN has_war_together_with = IVN } }
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = {
+							IVN = {
+								controls_state = 90
+								controls_state = 91
+								controls_state = 93
+								controls_state = 94
+							}
+						}
+						IVN = { ADISCORD_vorkerland_ivanland_intervention_success = yes }
+					}
+				}
+				else_if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+						ROOT = { tag = IVN }
+						FROM = {
+							OR = {
+								tag = ZAO
+								tag = WPA
+								tag = WPS
+								tag = PWR
+								tag = PSD
+								has_war_together_with = PWR
+							}
+						}
+					}
+					# Do not reserve IVN from the generic capitulation fallback. A military
+					# defeat must annex the defeated attacker instead of white-peacing it home.
+					set_global_flag = ADISCORD_vorkerland_ivanland_capitulated_in_intervention
+					IVN = { ADISCORD_vorkerland_ivanland_intervention_failure = yes }
+				}
+				# A third party may still settle its own regional war normally. Remove
+				# IVN from that war first so the global fallback cannot award it land.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_ivanland_intervention_active
+						ROOT = {
+							OR = { tag = ZAO tag = WPA tag = WPS tag = PWR tag = PSD }
+							has_war_with = IVN
+						}
+						FROM = { NOT = { OR = { tag = IVN has_war_together_with = IVN } } }
+					}
+					IVN = { white_peace = ROOT }
+				}
+				# Reserve every central defeat from the generic same-tick fallback, even
+				# when the engine credits a sovereign/subject co-belligerent. Normalise the
+				# settlement to that ally's live main claimant before preserving the shell.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_collapse_wars_started
+						OR = {
+							NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
 							AND = {
-								is_subject = yes
-								NOT = { has_capitulated = yes }
-								OVERLORD = {
-									exists = yes
+								FROM = { tag = WRK }
+								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+								has_global_flag = ADISCORD_vorkerland_reunification_verified
+							}
+						}
+						ROOT = { ADISCORD_vorkerland_is_main_claimant = yes }
+						FROM = {
+							OR = {
+								ADISCORD_vorkerland_has_live_claimant_leader = yes
+								AND = {
 									ADISCORD_vorkerland_is_main_claimant = yes
 									NOT = { has_capitulated = yes }
 								}
-							}
-							AND = {
-								tag = WTD
-								has_war_together_with = TVA
-								TVA = { exists = yes NOT = { has_capitulated = yes } }
-							}
-							AND = {
-								tag = VLA
-								has_war_together_with = WKR
-								WKR = { exists = yes NOT = { has_capitulated = yes } }
-							}
-							AND = {
-								tag = SOL
-								has_war_together_with = VAD
-								VAD = { exists = yes NOT = { has_capitulated = yes } }
-							}
-							AND = {
-								tag = WRK
-								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-								has_global_flag = ADISCORD_vorkerland_reunification_verified
-							}
-						}
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				# Keep occupation gains inside the central claimant graph before the
-				# defeated shell is reserved from the generic peace fallback.
-				ROOT = { ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes }
-				FROM = { ADISCORD_vorkerland_story_offer_first_claimant_command_choice = yes }
-				if = {
-					limit = { FROM = { NOT = { ADISCORD_vorkerland_is_main_claimant = yes } ADISCORD_vorkerland_has_live_claimant_leader = yes } }
-					FROM = { faction_leader = { ADISCORD_vorkerland_settle_central_capitulation = yes } }
-				}
-				else_if = {
-					limit = { FROM = { tag = WTD } }
-					TVA = { ADISCORD_vorkerland_settle_central_capitulation = yes }
-				}
-				else_if = {
-					limit = { FROM = { tag = VLA } }
-					WKR = { ADISCORD_vorkerland_settle_central_capitulation = yes }
-				}
-				else_if = {
-					limit = { FROM = { tag = SOL } }
-					VAD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
-				}
-				else = {
-					FROM = {
-						if = {
-							limit = {
-								tag = WRK
-								has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
-								has_global_flag = ADISCORD_vorkerland_reunification_verified
-							}
-							ADISCORD_vorkerland_settle_central_capitulation = yes
-						}
-						else_if = {
-							limit = { is_subject = yes }
-							OVERLORD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
-						}
-						else = { ADISCORD_vorkerland_settle_central_capitulation = yes }
-					}
-				}
-			}
-			# Dirty-zone neighbours use the generic fallback only when RUS is
-			# not already settling this front. Capitulation must not wait for
-			# the monthly pulse or a leftover impassable pocket.
-			if = {
-				limit = {
-					RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
-					ROOT = { capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ROOT } } } }
-					OR = {
-						AND = {
-							RUS = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
-							OR = {
-								AND = { ROOT = { tag = SLA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } } }
-								AND = { ROOT = { tag = RZA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } } }
-								AND = { ROOT = { tag = MLR } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } } }
-								AND = { ROOT = { tag = ERT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } } }
-								AND = { ROOT = { tag = IRT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } } }
-								AND = { ROOT = { tag = SCA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } } }
-							}
-						}
-						AND = {
-							ROOT = { tag = SLA }
-							has_global_flag = ADISCORD_vorkerland_khan_border_war_started
-							RUS = {
-								has_war_with = SLA
-								NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
-							}
-						}
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
-				RUS = {
-					ADISCORD_vorkerland_check_rus_dirty_campaign = yes
-					ADISCORD_vorkerland_check_khan_border_war = yes
-				}
-				ROOT = { clr_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
-			}
-			ADISCORD_vorkerland_check_central_outcome = yes
-
-			# END vorkerland_collapse:on_capitulation
-			# BEGIN stelander:on_capitulation
-			if = {
-				limit = { ROOT = { has_country_flag = STP_nod_border_capitulation_reserved } }
-				ROOT = { clr_country_flag = STP_nod_border_capitulation_reserved }
-				set_global_flag = skip_default_capitulation
-			}
-
-			# Hegemony final wars share the same native capitulation owner.
-			# Record defeated members before the ordinary STP settlement routing.
-			if = {
-				limit = {
-					STS = { exists = yes has_country_flag = STP_heg_northern_final_started }
-					ROOT = {
-						OR = { tag = NOD tag = YPR tag = TFF }
-						has_war_with = STS
-					}
-				}
-				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
-			}
-			if = {
-				limit = {
-					STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
-					ROOT = { tag = VAL has_war_with = STS }
-				}
-				ROOT = { set_country_flag = STP_heg_defeated_by_sts }
-			}
-
-			if = {
-				limit = {
-					ROOT = { tag = NOD is_subject = no has_war_with = STP }
-					FROM = { OR = { tag = STP is_subject_of = STP } }
-					STP = { STP_pw_party_revolution_current = yes has_completed_focus = STP_pw_party_nod_congress has_war_with = NOD }
-				}
-				set_global_flag = skip_default_capitulation
-				STP = { STP_pw_party_win_nod_campaign = yes }
-			}
-			if = {
-				limit = {
-					ROOT = { tag = STP has_country_flag = STP_pw_party_nod_campaign_active has_war_with = NOD }
-					FROM = { OR = { tag = NOD is_subject_of = NOD } }
-				}
-				set_global_flag = skip_default_capitulation
-				STP = {
-					STP_pw_party_close_northern_operations = yes
-					clr_country_flag = STP_pw_party_nod_subject_pending
-					set_country_flag = STP_pw_party_nod_invasion_active
-				}
-				NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
-			}
-			if = {
-				limit = { ROOT = { tag = STP has_completed_focus = STP_pw_party_revolution_capital } }
-				ROOT = {
-					STP_pw_party_close_northern_operations = yes
-					clr_country_flag = STP_pw_party_nod_subject_pending
-				}
-			}
-
-			if = {
-				limit = { ROOT = { tag = SRP } FROM = { STP_occidia_victory_ready = yes } }
-				set_global_flag = skip_default_capitulation
-				FROM = { STP_occidia_settle_victory = yes }
-			}
-			if = {
-				limit = { ROOT = { has_country_flag = STP_occidia_campaign_active } }
-				ROOT = { clr_country_flag = STP_occidia_campaign_active }
-			}
-			if = {
-				limit = {
-					ROOT = {
-						tag = STP
-						has_country_flag = STP_pw_party_nod_invasion_active
-						has_war_with = NOD
-					}
-					FROM = { tag = NOD }
-				}
-				set_global_flag = skip_default_capitulation
-				NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = NOD has_war_with = STP }
-					STP = { has_country_flag = STP_pw_party_nod_invasion_active has_war_with = NOD }
-					FROM = { OR = { tag = STP is_subject_of = STP } }
-				}
-				set_global_flag = skip_default_capitulation
-				STP = { STP_pw_party_settle_nod_invasion_defeat = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = NOD }
-					STP = { has_country_flag = STP_pw_party_nod_invasion_active }
-					FROM = { NOT = { OR = { tag = STP is_subject_of = STP } } }
-				}
-				STP = { STP_pw_party_close_nod_invasion_after_foreign_defeat = yes }
-			}
-			else_if = {
-				limit = { ROOT = { has_country_flag = STP_cw_northern_capitulation_pending } }
-				ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
-				# The existing ZZ router consumes this late reservation in the same hook.
-				set_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					NOT = { has_global_flag = STP_cw_union_wars_finished }
-					ROOT = {
-						OR = {
-							AND = { tag = STS has_war_with = STP check_variable = { var = STP_cw_capitulation_occupier value = 1 compare = equals } }
-							AND = { tag = STP has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } }
-						}
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				if = {
-					limit = { ROOT = { check_variable = { var = STP_cw_capitulation_occupier value = 1 compare = equals } } }
-					STP = { STP_cw_settle_union_victory = yes }
-				}
-				else = { STS = { STP_cw_settle_union_victory = yes } }
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					STP = { exists = yes }
-					NOT = { has_global_flag = STP_cw_union_wars_finished }
-					ROOT = { tag = STS check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } }
-					NOD = { has_country_flag = NOD_cw_entered }
-				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = STP_cw_nod_victory_current }
-				STP_cw_settle_nod_victory = yes
-				ROOT = { clr_country_flag = STP_cw_nod_victory_current }
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = { tag = SRP check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } }
-					VAL = { has_country_flag = VAL_cw_entered NOT = { has_country_flag = VAL_cw_settled } }
-				}
-				set_global_flag = skip_default_capitulation
-				VAL = { VAL_cw_settle_republics = yes }
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = {
-						tag = VAL
-						has_country_flag = VAL_cw_entered
-						NOT = {
-							has_country_flag = VAL_cw_settled
-						}
-						check_variable = {
-							var = STP_cw_capitulation_occupier
-							value = 3
-							compare = equals
-						}
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				VAL = {
-					if = { limit = { has_war_with = SRP } white_peace = SRP }
-					set_country_flag = VAL_cw_settled
-					set_country_flag = VAL_cw_defeated
-					clr_country_flag = VAL_cw_entered
-					clr_country_flag = VAL_cw_offer_pending
-					if = {
-						limit = { has_country_flag = VAL_cw_mobilizing }
-						clr_country_flag = VAL_cw_mobilizing
-						clr_country_flag = VAL_foreign_operation_active
-					}
-					set_temp_variable = { var = ADISCORD_VAL_effect_value value = -10 }
-					VAL_change_contract_authority = yes
-					country_event = { id = ADISCORD_STP_cw.23 }
-				}
-				SRP = { remove_ideas = STP_cw_republics_battle_spirit STP_cw_finish_mobilization = yes }
-				log = "[STP_CW] SRP repelled VAL; unrelated wars retained"
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = { tag = NOD has_country_flag = NOD_cw_entered check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } }
-				}
-				set_global_flag = skip_default_capitulation
-				NOD = {
-					if = { limit = { has_war_with = STS } white_peace = STS }
-					clr_country_flag = NOD_cw_entered
-					clr_country_flag = NOD_cw_intervention_approved
-					ADISCORD_economy_update_postwar_demobilization = yes
-					ADISCORD_economy_mark_dirty = yes
-					set_country_flag = NOD_cw_defeated
-					remove_mission = NOD_cw_intervention_preparation
-					remove_mission = NOD_cw_northern_redeployment
-					clr_country_flag = NOD_cw_intervention_ready
-					add_war_support = -0.05
-					country_event = { id = ADISCORD_STP_cw.43 }
-				}
-				STS = { clr_country_flag = STP_cw_nod_entered clr_country_flag = STP_cw_nod_warning_active remove_mission = STP_cw_nod_warning }
-				log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						tag = STS
-						has_war_with = NOD
-						check_variable = {
-							var = STP_cw_capitulation_occupier
-							value = 4
-							compare = equals
-						}
-					}
-					STP = { exists = no }
-					NOD = { exists = yes is_subject = no has_capitulated = no has_country_flag = STP_ps_return_campaign }
-				}
-				set_global_flag = skip_default_capitulation
-				ROOT = { set_country_flag = STP_ps_return_capitulation_current }
-				NOD = { STP_ps_settle_return = yes }
-				ROOT = { clr_country_flag = STP_ps_return_capitulation_current }
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						tag = NOD
-						has_war_with = STS
-						check_variable = {
-							var = STP_cw_capitulation_occupier
-							value = 2
-							compare = equals
-						}
-						has_country_flag = STP_ps_return_campaign
-					}
-				}
-				NOD = { STP_ps_close_exile = yes }
-				set_global_flag = skip_default_capitulation
-				STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
-			}
-			else_if = {
-				limit = {
-					has_global_flag = STP_cw_union_wars_finished
-					OR = {
-						AND = { ROOT = { tag = VAL has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
-						AND = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
-						AND = {
-							ROOT = {
-								tag = STS
-								has_war_with = VAL
-								NOT = {
-									has_country_flag = VAL_final_defeat_pending
+								AND = {
+									is_subject = yes
+									NOT = { has_capitulated = yes }
+									OVERLORD = {
+										exists = yes
+										ADISCORD_vorkerland_is_main_claimant = yes
+										NOT = { has_capitulated = yes }
+									}
 								}
-								check_variable = {
-									var = STP_cw_capitulation_occupier
-									value = 5
-									compare = equals
+								AND = {
+									tag = WTD
+									has_war_together_with = TVA
+									TVA = { exists = yes NOT = { has_capitulated = yes } }
+								}
+								AND = {
+									tag = VLA
+									has_war_together_with = WKR
+									WKR = { exists = yes NOT = { has_capitulated = yes } }
+								}
+								AND = {
+									tag = SOL
+									has_war_together_with = VAD
+									VAD = { exists = yes NOT = { has_capitulated = yes } }
+								}
+								AND = {
+									tag = WRK
+									has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+									has_global_flag = ADISCORD_vorkerland_reunification_verified
 								}
 							}
 						}
-						AND = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } }
 					}
-				}
-				set_global_flag = skip_default_capitulation
-				if = {
-					limit = { ROOT = { tag = VAL } }
+					set_global_flag = skip_default_capitulation
+					# Keep occupation gains inside the central claimant graph before the
+					# defeated shell is reserved from the generic peace fallback.
+					ROOT = { ADISCORD_vorkerland_distribute_central_states_to_cobelligerents = yes }
+					FROM = { ADISCORD_vorkerland_story_offer_first_claimant_command_choice = yes }
 					if = {
-						limit = { STS = { has_country_flag = STP_heg_kefreyt_final_started } }
-						STS = { STP_heg_settle_kefreyt_final = yes }
+						limit = { FROM = { NOT = { ADISCORD_vorkerland_is_main_claimant = yes } ADISCORD_vorkerland_has_live_claimant_leader = yes } }
+						FROM = { faction_leader = { ADISCORD_vorkerland_settle_central_capitulation = yes } }
+					}
+					else_if = {
+						limit = { FROM = { tag = WTD } }
+						TVA = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+					}
+					else_if = {
+						limit = { FROM = { tag = VLA } }
+						WKR = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+					}
+					else_if = {
+						limit = { FROM = { tag = SOL } }
+						VAD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
 					}
 					else = {
-						STS = { set_variable = { var = STP_pc_cap_side value = 1 } STP_pc_begin_settlement = yes }
+						FROM = {
+							if = {
+								limit = {
+									tag = WRK
+									has_global_flag = ADISCORD_vorkerland_phase_postwar_integration
+									has_global_flag = ADISCORD_vorkerland_reunification_verified
+								}
+								ADISCORD_vorkerland_settle_central_capitulation = yes
+							}
+							else_if = {
+								limit = { is_subject = yes }
+								OVERLORD = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+							}
+							else = { ADISCORD_vorkerland_settle_central_capitulation = yes }
+						}
 					}
 				}
+				# Dirty-zone neighbours use the generic fallback only when RUS is
+				# not already settling this front. Capitulation must not wait for
+				# the monthly pulse or a leftover impassable pocket.
+				if = {
+					limit = {
+						RUS = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
+						ROOT = { capital_scope = { OR = { is_controlled_by = RUS controller = { is_subject_of = RUS has_war_with = ROOT } } } }
+						OR = {
+							AND = {
+								RUS = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+								OR = {
+									AND = { ROOT = { tag = SLA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 1 compare = equals } } }
+									AND = { ROOT = { tag = RZA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 2 compare = equals } } }
+									AND = { ROOT = { tag = MLR } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 3 compare = equals } } }
+									AND = { ROOT = { tag = ERT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 4 compare = equals } } }
+									AND = { ROOT = { tag = IRT } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 5 compare = equals } } }
+									AND = { ROOT = { tag = SCA } RUS = { check_variable = { var = ADISCORD_vorkerland_rus_campaign_target value = 6 compare = equals } } }
+								}
+							}
+							AND = {
+								ROOT = { tag = SLA }
+								has_global_flag = ADISCORD_vorkerland_khan_border_war_started
+								RUS = {
+									has_war_with = SLA
+									NOT = { has_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active }
+								}
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
+					RUS = {
+						ADISCORD_vorkerland_check_rus_dirty_campaign = yes
+						ADISCORD_vorkerland_check_khan_border_war = yes
+					}
+					ROOT = { clr_country_flag = ADISCORD_vorkerland_rus_capitulation_current }
+				}
+				ADISCORD_vorkerland_check_central_outcome = yes
+
+				# END vorkerland_collapse:on_capitulation
+				# BEGIN stelander:on_capitulation
+				if = {
+					limit = { ROOT = { has_country_flag = STP_nod_border_capitulation_reserved } }
+					ROOT = { clr_country_flag = STP_nod_border_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+
+				# Hegemony final wars share the same native capitulation owner.
+				# Record defeated members before the ordinary STP settlement routing.
+				if = {
+					limit = {
+						STS = { exists = yes has_country_flag = STP_heg_northern_final_started }
+						ROOT = {
+							OR = { tag = NOD tag = YPR tag = TFF }
+							has_war_with = STS
+						}
+					}
+					ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+				}
+				if = {
+					limit = {
+						STS = { exists = yes has_country_flag = STP_heg_kefreyt_final_started }
+						ROOT = { tag = VAL has_war_with = STS }
+					}
+					ROOT = { set_country_flag = STP_heg_defeated_by_sts }
+				}
+
+				if = {
+					limit = {
+						ROOT = { tag = NOD is_subject = no has_war_with = STP }
+						FROM = { OR = { tag = STP is_subject_of = STP } }
+						STP = { STP_pw_party_revolution_current = yes has_completed_focus = STP_pw_party_nod_congress has_war_with = NOD }
+					}
+					set_global_flag = skip_default_capitulation
+					STP = { STP_pw_party_win_nod_campaign = yes }
+				}
+				if = {
+					limit = {
+						ROOT = { tag = STP has_country_flag = STP_pw_party_nod_campaign_active has_war_with = NOD }
+						FROM = { OR = { tag = NOD is_subject_of = NOD } }
+					}
+					set_global_flag = skip_default_capitulation
+					STP = {
+						STP_pw_party_close_northern_operations = yes
+						clr_country_flag = STP_pw_party_nod_subject_pending
+						set_country_flag = STP_pw_party_nod_invasion_active
+					}
+					NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
+				}
+				if = {
+					limit = { ROOT = { tag = STP has_completed_focus = STP_pw_party_revolution_capital } }
+					ROOT = {
+						STP_pw_party_close_northern_operations = yes
+						clr_country_flag = STP_pw_party_nod_subject_pending
+					}
+				}
+
+				if = {
+					limit = { ROOT = { tag = SRP } FROM = { STP_occidia_victory_ready = yes } }
+					set_global_flag = skip_default_capitulation
+					FROM = { STP_occidia_settle_victory = yes }
+				}
+				if = {
+					limit = { ROOT = { has_country_flag = STP_occidia_campaign_active } }
+					ROOT = { clr_country_flag = STP_occidia_campaign_active }
+				}
+				if = {
+					limit = {
+						ROOT = {
+							tag = STP
+							has_country_flag = STP_pw_party_nod_invasion_active
+							has_war_with = NOD
+						}
+						FROM = { tag = NOD }
+					}
+					set_global_flag = skip_default_capitulation
+					NOD = { STP_pw_party_settle_nod_invasion_victory = yes }
+				}
 				else_if = {
-					limit = { ROOT = { tag = NOD } }
+					limit = {
+						ROOT = { tag = NOD has_war_with = STP }
+						STP = { has_country_flag = STP_pw_party_nod_invasion_active has_war_with = NOD }
+						FROM = { OR = { tag = STP is_subject_of = STP } }
+					}
+					set_global_flag = skip_default_capitulation
+					STP = { STP_pw_party_settle_nod_invasion_defeat = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = NOD }
+						STP = { has_country_flag = STP_pw_party_nod_invasion_active }
+						FROM = { NOT = { OR = { tag = STP is_subject_of = STP } } }
+					}
+					STP = { STP_pw_party_close_nod_invasion_after_foreign_defeat = yes }
+				}
+				else_if = {
+					limit = { ROOT = { has_country_flag = STP_cw_northern_capitulation_pending } }
+					ROOT = { clr_country_flag = STP_cw_northern_capitulation_pending }
+					# The existing ZZ router consumes this late reservation in the same hook.
+					set_global_flag = skip_default_capitulation
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						NOT = { has_global_flag = STP_cw_union_wars_finished }
+						ROOT = {
+							OR = {
+								AND = { tag = STS has_war_with = STP check_variable = { var = STP_cw_capitulation_occupier value = 1 compare = equals } }
+								AND = { tag = STP has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } }
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { check_variable = { var = STP_cw_capitulation_occupier value = 1 compare = equals } } }
+						STP = { STP_cw_settle_union_victory = yes }
+					}
+					else = { STS = { STP_cw_settle_union_victory = yes } }
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						STP = { exists = yes }
+						NOT = { has_global_flag = STP_cw_union_wars_finished }
+						ROOT = { tag = STS check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } }
+						NOD = { has_country_flag = NOD_cw_entered }
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = STP_cw_nod_victory_current }
+					STP_cw_settle_nod_victory = yes
+					ROOT = { clr_country_flag = STP_cw_nod_victory_current }
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						ROOT = { tag = SRP check_variable = { var = STP_cw_capitulation_occupier value = 5 compare = equals } }
+						VAL = { has_country_flag = VAL_cw_entered NOT = { has_country_flag = VAL_cw_settled } }
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = { VAL_cw_settle_republics = yes }
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						ROOT = {
+							tag = VAL
+							has_country_flag = VAL_cw_entered
+							NOT = {
+								has_country_flag = VAL_cw_settled
+							}
+							check_variable = {
+								var = STP_cw_capitulation_occupier
+								value = 3
+								compare = equals
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					VAL = {
+						if = { limit = { has_war_with = SRP } white_peace = SRP }
+						set_country_flag = VAL_cw_settled
+						set_country_flag = VAL_cw_defeated
+						clr_country_flag = VAL_cw_entered
+						clr_country_flag = VAL_cw_offer_pending
+						if = {
+							limit = { has_country_flag = VAL_cw_mobilizing }
+							clr_country_flag = VAL_cw_mobilizing
+							clr_country_flag = VAL_foreign_operation_active
+						}
+						set_temp_variable = { var = ADISCORD_VAL_effect_value value = -10 }
+						VAL_change_contract_authority = yes
+						country_event = { id = ADISCORD_STP_cw.23 }
+					}
+					SRP = { remove_ideas = STP_cw_republics_battle_spirit STP_cw_finish_mobilization = yes }
+					log = "[STP_CW] SRP repelled VAL; unrelated wars retained"
+				}
+				else_if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						ROOT = { tag = NOD has_country_flag = NOD_cw_entered check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } }
+					}
+					set_global_flag = skip_default_capitulation
+					NOD = {
+						if = { limit = { has_war_with = STS } white_peace = STS }
+						clr_country_flag = NOD_cw_entered
+						clr_country_flag = NOD_cw_intervention_approved
+						ADISCORD_economy_update_postwar_demobilization = yes
+						ADISCORD_economy_mark_dirty = yes
+						set_country_flag = NOD_cw_defeated
+						remove_mission = NOD_cw_intervention_preparation
+						remove_mission = NOD_cw_northern_redeployment
+						clr_country_flag = NOD_cw_intervention_ready
+						add_war_support = -0.05
+						country_event = { id = ADISCORD_STP_cw.43 }
+					}
+					STS = { clr_country_flag = STP_cw_nod_entered clr_country_flag = STP_cw_nod_warning_active remove_mission = STP_cw_nod_warning }
+					log = "[STP_CW] STS defeated the NOD intervention; unrelated wars retained"
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							tag = STS
+							has_war_with = NOD
+							check_variable = {
+								var = STP_cw_capitulation_occupier
+								value = 4
+								compare = equals
+							}
+						}
+						STP = { exists = no }
+						NOD = { exists = yes is_subject = no has_capitulated = no has_country_flag = STP_ps_return_campaign }
+					}
+					set_global_flag = skip_default_capitulation
+					ROOT = { set_country_flag = STP_ps_return_capitulation_current }
+					NOD = { STP_ps_settle_return = yes }
+					ROOT = { clr_country_flag = STP_ps_return_capitulation_current }
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							tag = NOD
+							has_war_with = STS
+							check_variable = {
+								var = STP_cw_capitulation_occupier
+								value = 2
+								compare = equals
+							}
+							has_country_flag = STP_ps_return_campaign
+						}
+					}
+					NOD = { STP_ps_close_exile = yes }
+					set_global_flag = skip_default_capitulation
 					STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
 				}
 				else_if = {
-					limit = { ROOT = { tag = STS } }
-					STS = { set_variable = { var = STP_pc_cap_side value = 3 } STP_pc_begin_settlement = yes }
-				}
-				else = {
-					STS = { set_variable = { var = STP_pc_cap_side value = 0 } STP_pc_begin_settlement = yes }
-				}
-			}
-
-			if = {
-				limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
-				FROM = { STP_cw_queue_peace_reconciliation = yes }
-			}
-			# END stelander:on_capitulation
-
-			# BEGIN kefreyt:on_capitulation
-			if = { limit = { VAL_wasteland_capitulation_managed = yes } VAL_settle_wasteland_capitulation = yes }
-			if = {
-				limit = { has_country_flag = VAL_frontier_capitulation_pending }
-				clr_country_flag = VAL_frontier_capitulation_pending
-				set_global_flag = skip_default_capitulation
-			}
-
-			if = {
-				limit = { ROOT = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_capitulation_immediate } } }
-				set_global_flag = skip_default_capitulation
-			}
-			if = {
-				limit = {
-					VAL = { exists = yes }
-					OR = {
-						STP = { has_country_flag = VAL_final_defeat_pending }
-						STS = { has_country_flag = VAL_final_defeat_pending }
-						NOD = { has_country_flag = VAL_final_defeat_pending }
-					}
-				}
-				VAL = { VAL_finalize_reserved_settlements = yes }
-			}
-			# The native capitulated status can lag behind both callbacks.
-			# Keep the current defeat receipt until every reserved member is evaluated.
-			ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
-			ROOT = { clr_country_flag = VAL_coalition_capitulation_current }
-
-			VAL_queue_frontier_reconciliation = yes
-
-			# END kefreyt:on_capitulation
-
-			# BEGIN frontier:on_capitulation
-			if = {
-				limit = { ROOT = { has_country_flag = TFF_nod_capitulation_reserved } }
-				set_global_flag = skip_default_capitulation
-				ROOT = { clr_country_flag = TFF_nod_capitulation_reserved }
-			}
-			# White peace removes the war relation; consume the immediate callback's
-			# receipt so the generic fallback cannot annex the future subject.
-			if = {
-				limit = { ROOT = { has_country_flag = STP_pw_party_kefreyt_capitulation_reserved } }
-				ROOT = { clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved }
-				set_global_flag = skip_default_capitulation
-			}
-			if = {
-				limit = { ROOT = { has_country_flag = STP_pw_party_northern_march_capitulation_reserved } }
-				ROOT = { clr_country_flag = STP_pw_party_northern_march_capitulation_reserved }
-				set_global_flag = skip_default_capitulation
-			}
-			# END frontier:on_capitulation
-
-			# BEGIN rin:on_capitulation
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_rin_oath_crisis_active
-					ROOT = { has_country_flag = ADISCORD_rin_northern_crown_side }
-					FROM = { has_country_flag = ADISCORD_rin_southern_charter_side }
-				}
-				set_global_flag = skip_default_capitulation
-				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
-				FROM = {
-					if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-					annex_country = { target = ROOT transfer_troops = yes }
-					ADISCORD_rin_complete_southern_victory = yes
-				}
-			}
-			else_if = {
-				limit = {
-					has_global_flag = ADISCORD_rin_oath_crisis_active
-					ROOT = { has_country_flag = ADISCORD_rin_southern_charter_side }
-					FROM = { has_country_flag = ADISCORD_rin_northern_crown_side }
-				}
-				set_global_flag = skip_default_capitulation
-				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
-				FROM = {
-					if = { limit = { has_war_with = ROOT } white_peace = ROOT }
-					annex_country = { target = ROOT transfer_troops = yes }
-					ADISCORD_rin_complete_northern_victory = yes
-				}
-			}
-
-			# END rin:on_capitulation
-
-			# BEGIN nam:on_capitulation
-			# Recheck this native defeat before the generic annexation fallback.
-			ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
-			if = {
-				limit = { ROOT = { has_country_flag = ADISCORD_nam_capitulation_reserved } }
-				set_global_flag = skip_default_capitulation
-				NAM = { ADISCORD_nam_resource_war_check_nam_victory = yes }
-				ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
-			}
-			# END nam:on_capitulation
-
-			# BEGIN shahrabad:on_capitulation
-			# Shahrabad wars are limited: white peace and the listed regions, never annexation.
-			if = {
-				limit = {
-					ROOT = { tag = SHL }
-					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
-					FROM = {
+					limit = {
+						has_global_flag = STP_cw_union_wars_finished
 						OR = {
-							tag = MZR
-							has_country_flag = SHL_mzr_war_partner
+							AND = { ROOT = { tag = VAL has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+							AND = { ROOT = { tag = NOD has_war_with = STS check_variable = { var = STP_cw_capitulation_occupier value = 2 compare = equals } } }
+							AND = {
+								ROOT = {
+									tag = STS
+									has_war_with = VAL
+									NOT = {
+										has_country_flag = VAL_final_defeat_pending
+									}
+									check_variable = {
+										var = STP_cw_capitulation_occupier
+										value = 5
+										compare = equals
+									}
+								}
+							}
+							AND = { ROOT = { tag = STS has_war_with = NOD check_variable = { var = STP_cw_capitulation_occupier value = 4 compare = equals } } }
 						}
 					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = VAL } }
+						if = {
+							limit = { STS = { has_country_flag = STP_heg_kefreyt_final_started } }
+							STS = { STP_heg_settle_kefreyt_final = yes }
+						}
+						else = {
+							STS = { set_variable = { var = STP_pc_cap_side value = 1 } STP_pc_begin_settlement = yes }
+						}
+					}
+					else_if = {
+						limit = { ROOT = { tag = NOD } }
+						STS = { set_variable = { var = STP_pc_cap_side value = 2 } STP_pc_begin_settlement = yes }
+					}
+					else_if = {
+						limit = { ROOT = { tag = STS } }
+						STS = { set_variable = { var = STP_pc_cap_side value = 3 } STP_pc_begin_settlement = yes }
+					}
+					else = {
+						STS = { set_variable = { var = STP_pc_cap_side value = 0 } STP_pc_begin_settlement = yes }
+					}
 				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_mzr_war_defeat = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = SHL }
-					SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
-					FROM = { tag = KYZ }
+
+				if = {
+					limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
+					FROM = { STP_cw_queue_peace_reconciliation = yes }
 				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_kyz_war_defeat = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = SHL }
-					SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
-					FROM = { tag = GLP }
+				# END stelander:on_capitulation
+
+				# BEGIN kefreyt:on_capitulation
+				if = { limit = { VAL_wasteland_capitulation_managed = yes } VAL_settle_wasteland_capitulation = yes }
+				if = {
+					limit = { has_country_flag = VAL_frontier_capitulation_pending }
+					clr_country_flag = VAL_frontier_capitulation_pending
+					set_global_flag = skip_default_capitulation
 				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_glp_war_defeat = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = MZR }
-					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
-					FROM = {
+
+				if = {
+					limit = { ROOT = { OR = { has_country_flag = VAL_final_defeat_pending has_country_flag = VAL_final_capitulation_immediate } } }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = {
+						VAL = { exists = yes }
 						OR = {
-							tag = SHL
+							STP = { has_country_flag = VAL_final_defeat_pending }
+							STS = { has_country_flag = VAL_final_defeat_pending }
+							NOD = { has_country_flag = VAL_final_defeat_pending }
+						}
+					}
+					VAL = { VAL_finalize_reserved_settlements = yes }
+				}
+				# The native capitulated status can lag behind both callbacks.
+				# Keep the current defeat receipt until every reserved member is evaluated.
+				ROOT = { clr_country_flag = VAL_final_capitulation_immediate }
+				ROOT = { clr_country_flag = VAL_coalition_capitulation_current }
+
+				VAL_queue_frontier_reconciliation = yes
+
+				# END kefreyt:on_capitulation
+
+				# BEGIN frontier:on_capitulation
+				if = {
+					limit = { ROOT = { has_country_flag = TFF_nod_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+					ROOT = { clr_country_flag = TFF_nod_capitulation_reserved }
+				}
+				# White peace removes the war relation; consume the immediate callback's
+				# receipt so the generic fallback cannot annex the future subject.
+				if = {
+					limit = { ROOT = { has_country_flag = STP_pw_party_kefreyt_capitulation_reserved } }
+					ROOT = { clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+				if = {
+					limit = { ROOT = { has_country_flag = STP_pw_party_northern_march_capitulation_reserved } }
+					ROOT = { clr_country_flag = STP_pw_party_northern_march_capitulation_reserved }
+					set_global_flag = skip_default_capitulation
+				}
+				# END frontier:on_capitulation
+
+				# BEGIN rin:on_capitulation
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_rin_oath_crisis_active
+						ROOT = { has_country_flag = ADISCORD_rin_northern_crown_side }
+						FROM = { has_country_flag = ADISCORD_rin_southern_charter_side }
+					}
+					set_global_flag = skip_default_capitulation
+					set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+					FROM = {
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+						ADISCORD_rin_complete_southern_victory = yes
+					}
+				}
+				else_if = {
+					limit = {
+						has_global_flag = ADISCORD_rin_oath_crisis_active
+						ROOT = { has_country_flag = ADISCORD_rin_southern_charter_side }
+						FROM = { has_country_flag = ADISCORD_rin_northern_crown_side }
+					}
+					set_global_flag = skip_default_capitulation
+					set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+					FROM = {
+						if = { limit = { has_war_with = ROOT } white_peace = ROOT }
+						annex_country = { target = ROOT transfer_troops = yes }
+						ADISCORD_rin_complete_northern_victory = yes
+					}
+				}
+
+				# END rin:on_capitulation
+
+				# BEGIN nam:on_capitulation
+				# Recheck this native defeat before the generic annexation fallback.
+				ROOT = { ADISCORD_nam_resource_war_record_capitulation = yes }
+				if = {
+					limit = { ROOT = { has_country_flag = ADISCORD_nam_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+					NAM = { ADISCORD_nam_resource_war_check_nam_victory = yes }
+					ROOT = { clr_country_flag = ADISCORD_nam_capitulation_reserved }
+				}
+				# END nam:on_capitulation
+
+				# BEGIN shahrabad:on_capitulation
+				# Shahrabad wars are limited: white peace and the listed regions, never annexation.
+				if = {
+					limit = {
+						ROOT = { tag = SHL }
+						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						FROM = {
+							OR = {
+								tag = MZR
+								has_country_flag = SHL_mzr_war_partner
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_mzr_war_defeat = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = SHL }
+						SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+						FROM = { tag = KYZ }
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_kyz_war_defeat = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = SHL }
+						SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+						FROM = { tag = GLP }
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_glp_war_defeat = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = MZR }
+						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						FROM = {
+							OR = {
+								tag = SHL
+								is_in_faction_with = SHL
+							}
+						}
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_mzr_war_victory = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = KYZ }
+						SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
+						FROM = { tag = SHL }
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_kyz_war_victory = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = { tag = GLP }
+						SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
+						FROM = { tag = SHL }
+					}
+					set_global_flag = skip_default_capitulation
+					SHL = { SHL_glp_war_victory = yes }
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							OR = {
+								tag = KYZ
+								tag = GLP
+							}
 							is_in_faction_with = SHL
 						}
-					}
-				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_mzr_war_victory = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = KYZ }
-					SHL = { check_variable = { var = SHL_war_kyz value = 1 compare = equals } }
-					FROM = { tag = SHL }
-				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_kyz_war_victory = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = { tag = GLP }
-					SHL = { check_variable = { var = SHL_war_glp value = 1 compare = equals } }
-					FROM = { tag = SHL }
-				}
-				set_global_flag = skip_default_capitulation
-				SHL = { SHL_glp_war_victory = yes }
-			}
-			else_if = {
-				limit = {
-					ROOT = {
-						OR = {
-							tag = KYZ
-							tag = GLP
+						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						FROM = {
+							OR = {
+								tag = MZR
+								has_country_flag = SHL_mzr_war_partner
+							}
 						}
-						is_in_faction_with = SHL
 					}
-					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+					# Allied defeats remain occupied until the SHL/MZR settlement;
+					# white peace here could end the whole faction war prematurely.
+					set_global_flag = skip_default_capitulation
+				}
+				else_if = {
+					limit = {
+						ROOT = { has_country_flag = SHL_mzr_war_partner }
+						SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+						FROM = {
+							OR = {
+								tag = SHL
+								is_in_faction_with = SHL
+							}
+						}
+					}
+					# The border pact follows Mazar's settlement; a partner's defeat
+					# leaves its territory occupied until the principal war ends.
+					set_global_flag = skip_default_capitulation
+				}
+				# END shahrabad:on_capitulation
+
+				# BEGIN south_final:on_capitulation
+				# A champion's defeat settles the whole southern campaign; other
+				# participants stay occupied until that settlement.
+				if = {
+					limit = {
+						ADISCORD_south_final_active = yes
+						ROOT = { has_variable = ADISCORD_south_side }
+						FROM = { has_variable = ADISCORD_south_side }
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = SHL } }
+						ADISCORD_south_final_resolve_north_victory = yes
+					}
+					else_if = {
+						limit = { ROOT = { has_country_flag = ADISCORD_south_north_leader } }
+						ADISCORD_south_final_resolve_shl_victory = yes
+					}
+				}
+				# END south_final:on_capitulation
+
+				# BEGIN west_final:on_capitulation
+				# A champion's defeat settles the whole western campaign; other
+				# participants stay occupied until that settlement.
+				if = {
+					limit = {
+						ADISCORD_west_final_active = yes
+						ROOT = { has_variable = ADISCORD_west_side }
+						FROM = { has_variable = ADISCORD_west_side }
+					}
+					set_global_flag = skip_default_capitulation
+					if = {
+						limit = { ROOT = { tag = WRK } }
+						ADISCORD_west_final_resolve_ivn_victory = yes
+					}
+					else_if = {
+						limit = { ROOT = { tag = IVN } }
+						ADISCORD_west_final_resolve_wrk_victory = yes
+					}
+				}
+				# END west_final:on_capitulation
+
+				# BEGIN vorkerland_diplomacy:on_capitulation
+				if = {
+					limit = {
+						ROOT = { OR = { tag = SOL tag = SRA tag = CSL tag = VLA tag = EBA tag = TGD } }
+						NOT = { has_global_flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled }
+					}
+					set_global_flag = {
+						flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled
+						days = 3
+					}
+					if = {
+						limit = { country_exists = WKR }
+						WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+					}
+					else_if = {
+						limit = { country_exists = VAD }
+						VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+					}
+					else_if = {
+						limit = { country_exists = TVA }
+						TVA = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
+					}
+				}
+
+				# VAD's intervention has an exact settlement instead of a peace
+				# conference: only the five Solar states are rebuilt as loyalist SOL.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
+						ROOT = {
+							OR = {
+								AND = { tag = SRA has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra }
+								AND = { tag = CSL has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl }
+							}
+						}
+						FROM = { tag = VAD NOT = { has_capitulated = yes } }
+					}
+					set_global_flag = skip_default_capitulation
+					set_global_flag = ADISCORD_vorkerland_sol_restoration_pending
+					clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
+					clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
+					clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
+					clr_global_flag = ADISCORD_vorkerland_sol_restoration_failed
+					clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
 					FROM = {
-						OR = {
-							tag = MZR
-							has_country_flag = SHL_mzr_war_partner
-						}
+						clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
+						clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
+						annex_country = { target = ROOT transfer_troops = no }
+						transfer_state = 76
+						transfer_state = 104
+						transfer_state = 198
+						transfer_state = 307
+						transfer_state = 310
+						country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 }
 					}
 				}
-				# Allied defeats remain occupied until the SHL/MZR settlement;
-				# white peace here could end the whole faction war prematurely.
-				set_global_flag = skip_default_capitulation
-			}
-			else_if = {
-				limit = {
-					ROOT = { has_country_flag = SHL_mzr_war_partner }
-					SHL = { check_variable = { var = SHL_war_mzr value = 1 compare = equals } }
+
+				# WKR's selected Solarino shells bypass the native peace conference.
+				# Every defeated shell is annexed immediately; a guarded next-day event
+				# waits until all selected fronts are gone before building one SOL client.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+						FROM = { tag = WKR NOT = { has_capitulated = yes } }
+						OR = {
+							AND = { ROOT = { tag = SOL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol } }
+							AND = { ROOT = { tag = SRA } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra } }
+							AND = { ROOT = { tag = CSL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl } }
+						}
+					}
+					if = {
+						limit = { ROOT = { tag = SOL } }
+						ROOT = {
+							set_nationality = {
+								target_country = WKR
+								character = WRK_Richard_Gordon
+							}
+						}
+						FROM = { set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried }
+					}
+					set_global_flag = skip_default_capitulation
 					FROM = {
-						OR = {
-							tag = SHL
-							is_in_faction_with = SHL
+						annex_country = { target = ROOT transfer_troops = no }
+						ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes
+					}
+				}
+				ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+				ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+
+				# END vorkerland_diplomacy:on_capitulation
+
+				# BEGIN kefreyt_northern_reservations:on_capitulation
+				if = {
+					limit = {
+						ROOT = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+					}
+					set_global_flag = skip_default_capitulation
+					# on_capitulation_immediate can run before the final member's
+					# has_capitulated state is visible. Recheck after the native handoff.
+					if = {
+						limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
+						VAL = { VAL_settle_northern_coalition_victory = yes }
+					}
+				}
+				if = {
+					limit = {
+						ROOT = { has_country_flag = VAL_nod_overlord_sts_capitulation_reserved }
+					}
+					set_global_flag = skip_default_capitulation
+				}
+				# END kefreyt_northern_reservations:on_capitulation
+
+				# BEGIN bezhaysk:on_capitulation
+				# The immediate router is authoritative. If it accepted this defeat,
+				# it leaves a one-day receipt for the late native callback. Do not
+				# reconstruct campaign ownership from mutable faction/war relations.
+				if = {
+					limit = { ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending } }
+					ROOT = { clr_country_flag = ADISCORD_bezhaysk_capitulation_pending }
+					set_global_flag = skip_default_capitulation
+				}
+				# END bezhaysk:on_capitulation
+
+				# BEGIN northern_reservation:on_capitulation
+				if = {
+					limit = {
+						ROOT = { has_country_flag = STP_cw_northern_capitulation_reserved }
+					}
+					set_global_flag = skip_default_capitulation
+				}
+
+				# END northern_reservation:on_capitulation
+				if = {
+					limit = { ROOT = { has_country_flag = STP_val_nod_partition_capitulation_reserved } }
+					set_global_flag = skip_default_capitulation
+				}
+
+				# BEGIN livonn:on_capitulation
+				if = {
+					limit = {
+						has_global_flag = STP_cw_started
+						ROOT = { tag = SRP }
+						VAL = {
+							has_country_flag = VAL_cw_postwar
+							NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
 						}
 					}
+					VAL = { VAL_cw_stage_livonn_settlement = yes }
 				}
-				# The border pact follows Mazar's settlement; a partner's defeat
-				# leaves its territory occupied until the principal war ends.
-				set_global_flag = skip_default_capitulation
+
+				# END livonn:on_capitulation
+
+				# All owners have consumed this callback; only persistent campaign receipts remain.
+				ROOT = {
+					clr_country_flag = ADISCORD_bezhaysk_capitulation_pending
+					clr_country_flag = ADISCORD_nam_capitulation_reserved
+					clr_country_flag = STP_cw_northern_capitulation_reserved
+					clr_country_flag = STP_nod_border_capitulation_reserved
+					clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
+					clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
+					clr_country_flag = TFF_nod_capitulation_reserved
+					clr_country_flag = VAL_coalition_capitulation_current
+					clr_country_flag = VAL_final_capitulation_immediate
+					clr_country_flag = VAL_frontier_capitulation_pending
+					clr_country_flag = VAL_nod_overlord_sts_capitulation_reserved
+					clr_country_flag = VAL_northern_coalition_capitulation_reserved
+					clr_country_flag = STP_val_nod_partition_capitulation_reserved
+				}
+
 			}
-			# END shahrabad:on_capitulation
-
-			# BEGIN south_final:on_capitulation
-			# A champion's defeat settles the whole southern campaign; other
-			# participants stay occupied until that settlement.
-			if = {
-				limit = {
-					ADISCORD_south_final_active = yes
-					ROOT = { has_variable = ADISCORD_south_side }
-					FROM = { has_variable = ADISCORD_south_side }
-				}
-				set_global_flag = skip_default_capitulation
-				if = {
-					limit = { ROOT = { tag = SHL } }
-					ADISCORD_south_final_resolve_north_victory = yes
-				}
-				else_if = {
-					limit = { ROOT = { has_country_flag = ADISCORD_south_north_leader } }
-					ADISCORD_south_final_resolve_shl_victory = yes
-				}
-			}
-			# END south_final:on_capitulation
-
-			# BEGIN west_final:on_capitulation
-			# A champion's defeat settles the whole western campaign; other
-			# participants stay occupied until that settlement.
-			if = {
-				limit = {
-					ADISCORD_west_final_active = yes
-					ROOT = { has_variable = ADISCORD_west_side }
-					FROM = { has_variable = ADISCORD_west_side }
-				}
-				set_global_flag = skip_default_capitulation
-				if = {
-					limit = { ROOT = { tag = WRK } }
-					ADISCORD_west_final_resolve_ivn_victory = yes
-				}
-				else_if = {
-					limit = { ROOT = { tag = IVN } }
-					ADISCORD_west_final_resolve_wrk_victory = yes
-				}
-			}
-			# END west_final:on_capitulation
-
-			# BEGIN vorkerland_diplomacy:on_capitulation
-			if = {
-				limit = {
-					ROOT = { OR = { tag = SOL tag = SRA tag = CSL tag = VLA tag = EBA tag = TGD } }
-					NOT = { has_global_flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled }
-				}
-				set_global_flag = {
-					flag = ADISCORD_vorkerland_regional_diplomacy_check_scheduled
-					days = 3
-				}
-				if = {
-					limit = { country_exists = WKR }
-					WKR = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-				else_if = {
-					limit = { country_exists = VAD }
-					VAD = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-				else_if = {
-					limit = { country_exists = TVA }
-					TVA = { country_event = { id = ADISCORD_vorkerland_diplomacy.1 days = 1 } }
-				}
-			}
-
-			# VAD's intervention has an exact settlement instead of a peace
-			# conference: only the five Solar states are rebuilt as loyalist SOL.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_active
-					ROOT = {
-						OR = {
-							AND = { tag = SRA has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_sra }
-							AND = { tag = CSL has_global_flag = ADISCORD_vorkerland_vad_solar_intervention_target_csl }
-						}
-					}
-					FROM = { tag = VAD NOT = { has_capitulated = yes } }
-				}
-				set_global_flag = skip_default_capitulation
-				set_global_flag = ADISCORD_vorkerland_sol_restoration_pending
-				clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialized
-				clr_global_flag = ADISCORD_vorkerland_sol_restoration_materialization_retry
-				clr_global_flag = ADISCORD_vorkerland_sol_restoration_retry
-				clr_global_flag = ADISCORD_vorkerland_sol_restoration_failed
-				clr_global_flag = ADISCORD_vorkerland_sol_restoration_fresh_release
-				FROM = {
-					clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_pending
-					clr_country_flag = ADISCORD_vorkerland_vad_solar_intervention_verify_retry
-					annex_country = { target = ROOT transfer_troops = no }
-					transfer_state = 76
-					transfer_state = 104
-					transfer_state = 198
-					transfer_state = 307
-					transfer_state = 310
-					country_event = { id = ADISCORD_vorkerland_diplomacy.4 days = 1 }
-				}
-			}
-
-			# WKR's selected Solarino shells bypass the native peace conference.
-			# Every defeated shell is annexed immediately; a guarded next-day event
-			# waits until all selected fronts are gone before building one SOL client.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
-					FROM = { tag = WKR NOT = { has_capitulated = yes } }
-					OR = {
-						AND = { ROOT = { tag = SOL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sol } }
-						AND = { ROOT = { tag = SRA } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_sra } }
-						AND = { ROOT = { tag = CSL } WKR = { has_country_flag = ADISCORD_vorkerland_wkr_solyarino_target_csl } }
-					}
-				}
-				if = {
-					limit = { ROOT = { tag = SOL } }
-					ROOT = {
-						set_nationality = {
-							target_country = WKR
-							character = WRK_Richard_Gordon
-						}
-					}
-					FROM = { set_country_flag = ADISCORD_vorkerland_wkr_solyarino_gordon_carried }
-				}
-				set_global_flag = skip_default_capitulation
-				FROM = {
-					annex_country = { target = ROOT transfer_troops = no }
-					ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes
-				}
-			}
-			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
-			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
-
-			# END vorkerland_diplomacy:on_capitulation
-
-			# BEGIN kefreyt_northern_reservations:on_capitulation
-			if = {
-				limit = {
-					ROOT = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-				# on_capitulation_immediate can run before the final member's
-				# has_capitulated state is visible. Recheck after the native handoff.
-				if = {
-					limit = { VAL = { VAL_northern_coalition_campaign_victory_ready = yes } }
-					VAL = { VAL_settle_northern_coalition_victory = yes }
-				}
-			}
-			if = {
-				limit = {
-					ROOT = { has_country_flag = VAL_nod_overlord_sts_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-			}
-			# END kefreyt_northern_reservations:on_capitulation
-
-			# BEGIN bezhaysk:on_capitulation
-			# The immediate router is authoritative. If it accepted this defeat,
-			# it leaves a one-day receipt for the late native callback. Do not
-			# reconstruct campaign ownership from mutable faction/war relations.
-			if = {
-				limit = { ROOT = { has_country_flag = ADISCORD_bezhaysk_capitulation_pending } }
-				ROOT = { clr_country_flag = ADISCORD_bezhaysk_capitulation_pending }
-				set_global_flag = skip_default_capitulation
-			}
-			# END bezhaysk:on_capitulation
-
-			# BEGIN northern_reservation:on_capitulation
-			if = {
-				limit = {
-					ROOT = { has_country_flag = STP_cw_northern_capitulation_reserved }
-				}
-				set_global_flag = skip_default_capitulation
-			}
-
-			# END northern_reservation:on_capitulation
-			if = {
-				limit = { ROOT = { has_country_flag = STP_val_nod_partition_capitulation_reserved } }
-				set_global_flag = skip_default_capitulation
-			}
-
-			# BEGIN livonn:on_capitulation
-			if = {
-				limit = {
-					has_global_flag = STP_cw_started
-					ROOT = { tag = SRP }
-					VAL = {
-						has_country_flag = VAL_cw_postwar
-						NOT = { has_country_flag = VAL_cw_livonn_settlement_resolved }
-					}
-				}
-				VAL = { VAL_cw_stage_livonn_settlement = yes }
-			}
-
-			# END livonn:on_capitulation
-
-			# All owners have consumed this callback; only persistent campaign receipts remain.
-			ROOT = {
-				clr_country_flag = ADISCORD_bezhaysk_capitulation_pending
-				clr_country_flag = ADISCORD_nam_capitulation_reserved
-				clr_country_flag = STP_cw_northern_capitulation_reserved
-				clr_country_flag = STP_nod_border_capitulation_reserved
-				clr_country_flag = STP_pw_party_kefreyt_capitulation_reserved
-				clr_country_flag = STP_pw_party_northern_march_capitulation_reserved
-				clr_country_flag = TFF_nod_capitulation_reserved
-				clr_country_flag = VAL_coalition_capitulation_current
-				clr_country_flag = VAL_final_capitulation_immediate
-				clr_country_flag = VAL_frontier_capitulation_pending
-				clr_country_flag = VAL_nod_overlord_sts_capitulation_reserved
-				clr_country_flag = VAL_northern_coalition_capitulation_reserved
-				clr_country_flag = STP_val_nod_partition_capitulation_reserved
-			}
-
 		}
 	}
 	on_uncapitulation = {
 		effect = {
+			clr_country_flag = ADISCORD_vorkerland_pw_capitulation_reserved
 			# BEGIN kefreyt:on_uncapitulation
 			clr_country_flag = VAL_northern_coalition_capitulation_reserved
 			if = {
@@ -1880,136 +1884,149 @@ on_actions = {
 	on_peace = {
 		effect = {
 			if = {
-				limit = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } }
-				log = "VAL_PEACE_TRACE on_peace_entry"
-				VAL_trace_scripted_peace_country = yes
-			}
-			# BEGIN nam:on_peace
-			ADISCORD_nam_resource_war_close_external = yes
-			# END nam:on_peace
-			# BEGIN shahrabad:on_peace
-			SHL = { SHL_close_external_mzr_war = yes }
-			# END shahrabad:on_peace
-			# BEGIN south_final:on_peace
-			ADISCORD_south_final_close_external = yes
-			# END south_final:on_peace
-			# BEGIN west_final:on_peace
-			ADISCORD_west_final_close_external = yes
-			# END west_final:on_peace
-			if = {
-				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-				log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-				ROOT = { ADISCORD_debug_war_country_dump = yes }
-			}
-
-			# BEGIN vorkerland_collapse:on_peace
-			if = {
 				limit = {
-					RUS_crisis_callback_relevant = yes
-					RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
-				}
-				RUS = { country_event = { id = ADISCORD_rus_crisis.7 days = 1 } }
-			}
-			ADISCORD_vorkerland_reconcile_coalition_obligation = yes
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
-					NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
-				}
-				ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
-			}
-			if = {
-				limit = {
-					ADISCORD_vorkerland_is_main_claimant = yes
-					NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
-				}
-				ADISCORD_vorkerland_update_civil_war_exhaustion = yes
-				ADISCORD_vorkerland_reconcile_campaign_state = yes
-			}
-			if = {
-				limit = { tag = EBA has_war = no }
-				PIV = {
-					if = {
-						limit = {
-							exists = yes
-							has_idea = ADISCORD_vorkerland_piv_macri_volunteer_mission
+					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
+					NOT = { has_global_flag = RUS_crisis_world_ended }
+					NOT = {
+						AND = {
+							ROOT = { has_country_flag = RUS_crisis_defender }
+							FROM = { has_country_flag = RUS_crisis_defender }
 						}
-						remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission
 					}
 				}
-			}
-
-			# END vorkerland_collapse:on_peace
-
-			# BEGIN rin:on_peace
-			# Fallback for console peace or another external peace effect. Bespoke
-			# capitulation and mission timeout raise settlement_in_progress first.
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_rin_oath_crisis_active
-					NOT = { has_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress }
-					event_target:ADISCORD_rin_southern_charter = { exists = yes has_war = no }
-					event_target:ADISCORD_rin_northern_court = { exists = yes has_war = no }
+				if = {
+					limit = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } }
+					log = "VAL_PEACE_TRACE on_peace_entry"
+					VAL_trace_scripted_peace_country = yes
 				}
-				set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
-				event_target:ADISCORD_rin_southern_charter = {
-					ADISCORD_rin_complete_partition_armistice = yes
+				# BEGIN nam:on_peace
+				ADISCORD_nam_resource_war_close_external = yes
+				# END nam:on_peace
+				# BEGIN shahrabad:on_peace
+				SHL = { SHL_close_external_mzr_war = yes }
+				# END shahrabad:on_peace
+				# BEGIN south_final:on_peace
+				ADISCORD_south_final_close_external = yes
+				# END south_final:on_peace
+				# BEGIN west_final:on_peace
+				ADISCORD_west_final_close_external = yes
+				# END west_final:on_peace
+				if = {
+					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+					log = "[ADISCORD_PEACE] on_peace ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+					ROOT = { ADISCORD_debug_war_country_dump = yes }
 				}
-			}
 
-			# END rin:on_peace
-
-			# BEGIN vorkerland_diplomacy:on_peace
-			ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
-			if = {
-				limit = {
-					has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
-					country_exists = WKR
+				# BEGIN vorkerland_collapse:on_peace
+				ADISCORD_vorkerland_pw_close_external = yes
+				if = {
+					limit = {
+						RUS_crisis_callback_relevant = yes
+						RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+					}
+					RUS = { country_event = { id = ADISCORD_rus_crisis.7 days = 1 } }
 				}
-				WKR = { ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes }
-			}
-			ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
-
-			# END vorkerland_diplomacy:on_peace
-
-			# BEGIN kefreyt:on_peace
-			if = {
-				limit = { OR = { ROOT = { tag = RUS } FROM = { tag = RUS } } }
-				ROOT = { clr_country_flag = VAL_nw_defence_pending }
-				FROM = { clr_country_flag = VAL_nw_defence_pending }
-				VAL = { VAL_nw_reconcile_partners = yes }
-			}
-			VAL_clear_final_defeat_receipt = yes
-			VAL = { VAL_reconcile_northern_coalition_campaign = yes }
-			VAL = { VAL_council_reconcile_revanche = yes }
-			if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
-			if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
-			VAL_queue_frontier_reconciliation = yes
-			# END kefreyt:on_peace
-			# BEGIN stelander:on_peace
-			if = {
-				limit = {
-					OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
-					STP = { has_country_flag = STP_pw_party_nod_campaign_active }
+				ADISCORD_vorkerland_reconcile_coalition_obligation = yes
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_active
+						NOT = { has_global_flag = ADISCORD_vorkerland_rom_northern_intervention_resolved }
+					}
+					ADISCORD_vorkerland_schedule_rom_northern_intervention_check = yes
 				}
-				STP = { country_event = { id = ADISCORD_STP_pc.44 days = 1 } }
-			}
-			if = {
-				limit = {
-					OR = { ROOT = { tag = STP } FROM = { tag = STP } }
-					STP = { has_country_flag = STP_pw_party_northern_march_active }
+				if = {
+					limit = {
+						ADISCORD_vorkerland_is_main_claimant = yes
+						NOT = { has_global_flag = ADISCORD_vorkerland_central_war_finished }
+					}
+					ADISCORD_vorkerland_update_civil_war_exhaustion = yes
+					ADISCORD_vorkerland_reconcile_campaign_state = yes
 				}
-				STP = { country_event = { id = ADISCORD_STP_pc.51 days = 1 } }
-			}
-			STP = { STP_occidia_reconcile_peace = yes }
-			STS = { STP_occidia_reconcile_peace = yes }
-			if = {
-				limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# END stelander:on_peace
+				if = {
+					limit = { tag = EBA has_war = no }
+					PIV = {
+						if = {
+							limit = {
+								exists = yes
+								has_idea = ADISCORD_vorkerland_piv_macri_volunteer_mission
+							}
+							remove_ideas = ADISCORD_vorkerland_piv_macri_volunteer_mission
+						}
+					}
+				}
+
+				# END vorkerland_collapse:on_peace
+
+				# BEGIN rin:on_peace
+				# Fallback for console peace or another external peace effect. Bespoke
+				# capitulation and mission timeout raise settlement_in_progress first.
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_rin_oath_crisis_active
+						NOT = { has_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress }
+						event_target:ADISCORD_rin_southern_charter = { exists = yes has_war = no }
+						event_target:ADISCORD_rin_northern_court = { exists = yes has_war = no }
+					}
+					set_global_flag = ADISCORD_rin_oath_crisis_settlement_in_progress
+					event_target:ADISCORD_rin_southern_charter = {
+						ADISCORD_rin_complete_partition_armistice = yes
+					}
+				}
+
+				# END rin:on_peace
+
+				# BEGIN vorkerland_diplomacy:on_peace
+				ADISCORD_vorkerland_clear_failed_vad_solar_intervention = yes
+				if = {
+					limit = {
+						has_global_flag = ADISCORD_vorkerland_wkr_solyarino_intervention_active
+						country_exists = WKR
+					}
+					WKR = { ADISCORD_vorkerland_queue_wkr_solyarino_outcome_check = yes }
+				}
+				ADISCORD_vorkerland_clear_wkr_solyarino_intervention = yes
+
+				# END vorkerland_diplomacy:on_peace
+
+				# BEGIN kefreyt:on_peace
+				if = {
+					limit = { OR = { ROOT = { tag = RUS } FROM = { tag = RUS } } }
+					ROOT = { clr_country_flag = VAL_nw_defence_pending }
+					FROM = { clr_country_flag = VAL_nw_defence_pending }
+					VAL = { VAL_nw_reconcile_partners = yes }
+				}
+				VAL_clear_final_defeat_receipt = yes
+				VAL = { VAL_reconcile_northern_coalition_campaign = yes }
+				VAL = { VAL_council_reconcile_revanche = yes }
+				if = { limit = { STP = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STP = { VAL_cede_stelander_border = yes } }
+				if = { limit = { STS = { exists = yes has_cosmetic_tag = STL_VAL_administration is_subject_of = VAL } } STS = { VAL_cede_stelander_border = yes } }
+				VAL_queue_frontier_reconciliation = yes
+				# END kefreyt:on_peace
+				# BEGIN stelander:on_peace
+				if = {
+					limit = {
+						OR = { ROOT = { OR = { tag = STP tag = NOD } } FROM = { OR = { tag = STP tag = NOD } } }
+						STP = { has_country_flag = STP_pw_party_nod_campaign_active }
+					}
+					STP = { country_event = { id = ADISCORD_STP_pc.44 days = 1 } }
+				}
+				if = {
+					limit = {
+						OR = { ROOT = { tag = STP } FROM = { tag = STP } }
+						STP = { has_country_flag = STP_pw_party_northern_march_active }
+					}
+					STP = { country_event = { id = ADISCORD_STP_pc.51 days = 1 } }
+				}
+				STP = { STP_occidia_reconcile_peace = yes }
+				STS = { STP_occidia_reconcile_peace = yes }
+				if = {
+					limit = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } }
+					STP_cw_queue_peace_reconciliation = yes
+				}
+				# END stelander:on_peace
 
 
+			}
 		}
 	}
 	on_before_peace_conference_start = {
@@ -2038,32 +2055,45 @@ on_actions = {
 	on_peaceconference_ended = {
 		effect = {
 			if = {
-				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
-				log = "[ADISCORD_PEACE] on_peaceconference_ended ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
-				ROOT = { ADISCORD_debug_war_country_dump = yes }
-			}
+				limit = {
+					NOT = { has_global_flag = RUS_crisis_truce_in_progress }
+					NOT = { has_global_flag = RUS_crisis_world_ended }
+					NOT = {
+						AND = {
+							ROOT = { has_country_flag = RUS_crisis_defender }
+							FROM = { has_country_flag = RUS_crisis_defender }
+						}
+					}
+				}
+				if = {
+					limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
+					log = "[ADISCORD_PEACE] on_peaceconference_ended ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+					ROOT = { ADISCORD_debug_war_country_dump = yes }
+				}
 
-			# BEGIN stelander:on_peaceconference_ended
-			if = {
-				limit = { tag = NOD STP_cw_northern_conference_won = yes }
-				STP_cw_settle_northern_victory = yes
-			}
+				# BEGIN stelander:on_peaceconference_ended
+				if = {
+					limit = { tag = NOD STP_cw_northern_conference_won = yes }
+					STP_cw_settle_northern_victory = yes
+				}
 
-			if = {
-				limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
-				STP_cw_queue_peace_reconciliation = yes
-			}
-			# END stelander:on_peaceconference_ended
-			# BEGIN kefreyt:on_peaceconference_ended
-			VAL_queue_frontier_reconciliation = yes
-			VAL = { VAL_check_nam_concession = yes }
-			# END kefreyt:on_peaceconference_ended
+				if = {
+					limit = { OR = { ROOT = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } FROM = { OR = { tag = NOD tag = YPR tag = COF tag = TFF tag = STP tag = STS tag = SRP tag = VAL tag = OCA } } } }
+					STP_cw_queue_peace_reconciliation = yes
+				}
+				# END stelander:on_peaceconference_ended
+				# BEGIN kefreyt:on_peaceconference_ended
+				VAL_queue_frontier_reconciliation = yes
+				VAL = { VAL_check_nam_concession = yes }
+				# END kefreyt:on_peaceconference_ended
 
+			}
 		}
 	}
 	on_puppet = {
 		effect = {
 			# BEGIN vorkerland_collapse:on_puppet
+			ADISCORD_vorkerland_pw_close_external = yes
 			if = {
 				limit = { RUS_crisis_callback_relevant = yes }
 				RUS = { RUS_crisis_check_external_end = yes }
@@ -2086,6 +2116,7 @@ on_actions = {
 	on_annex = {
 		effect = {
 			# BEGIN vorkerland_collapse:on_annex
+			ADISCORD_vorkerland_pw_close_external = yes
 			if = {
 				limit = { RUS_crisis_callback_relevant = yes }
 				RUS = { RUS_crisis_check_external_end = yes }

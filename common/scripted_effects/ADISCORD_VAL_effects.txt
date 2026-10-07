@@ -6719,7 +6719,7 @@ VAL_queue_ainholm_colony = {
 				}
 			}
 			if = {
-				limit = { is_in_faction = yes }
+				limit = { is_in_faction = yes NOT = { is_in_faction_with = VAL } }
 				if = {
 					limit = { is_faction_leader = yes }
 					dismantle_faction = yes
@@ -6769,7 +6769,7 @@ VAL_complete_ainholm_colony = {
 			}
 		}
 		else_if = {
-			limit = { is_in_faction = yes }
+			limit = { is_in_faction = yes NOT = { is_in_faction_with = VAL } }
 			if = {
 				limit = { is_faction_leader = yes }
 				dismantle_faction = yes

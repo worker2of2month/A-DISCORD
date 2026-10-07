@@ -68,4 +68,11 @@ units = {
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 8 }
+		location = 2952
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
 }

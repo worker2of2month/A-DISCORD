@@ -21,6 +21,8 @@ recruit_character = VAL_Artem_Rask
 ADISCORD_grant_technology_profile_air = yes
 ADISCORD_grant_technology_profile_land = yes
 ADISCORD_grant_technology_profile_field_air_defense = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "VAL"
 
 set_politics = {

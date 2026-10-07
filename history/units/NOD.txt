@@ -108,17 +108,243 @@ division_template = {
 
 units = {
 	fleet = {
-		name = "Кассингтонская флотилия"
+		name = "Нодрульский морской флот"
 		naval_base = 12434
 		task_force = {
-			name = "Охрана торговых путей"
+			name = "Первая эскадра"
 			location = 12434
-			ship = { name = "СК-101" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-102" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-103" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-104" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-105" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
-			ship = { name = "СК-106" definition = ADISCORD_coastal_patrol_vessel start_experience_factor = 0.20 equipment = { ADISCORD_coastal_patrol_ship_1 = { amount = 1 owner = NOD } } }
+			ship = {
+				name = "NOD-ТК-01"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЛК-01"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЛК-02"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-01"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-02"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-03"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-04"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Вторая эскадра"
+			location = 12434
+			ship = {
+				name = "NOD-ТК-02"
+				definition = heavy_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЛК-03"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЛК-04"
+				definition = light_cruiser
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_light_cruiser_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-05"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-06"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-07"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-08"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Сопровождение конвоев"
+			location = 12434
+			ship = {
+				name = "NOD-ЭМ-09"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ЭМ-10"
+				definition = ADISCORD_coastal_patrol_vessel
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_escort_ship_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+		}
+		task_force = {
+			name = "Подводная группа"
+			location = 12434
+			ship = {
+				name = "NOD-ПЛ-01"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ПЛ-02"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ПЛ-03"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
+			ship = {
+				name = "NOD-ПЛ-04"
+				definition = submarine
+				start_experience_factor = 0.20
+				equipment = {
+					ADISCORD_submarine_2155 = {
+						amount = 1
+						owner = NOD
+					}
+				}
+			}
 		}
 	}
 	division = {

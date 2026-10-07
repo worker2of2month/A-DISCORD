@@ -2360,14 +2360,14 @@ class KefreytEmergencyContracts(unittest.TestCase):
         facts[("STS", "has_country_flag", "STP_pc_val_terms_accepted")] = True
         self.assertTrue(matches_conditions(cancel, facts, "STS"))
 
-    def test_navy_focuses_supply_eight_compatible_ships_and_invasion_capacity(self):
+    def test_navy_focuses_supply_six_compatible_ships_and_invasion_capacity(self):
         rewards = []
         for focus_id in (
             "STP_pc_navy_coast", "STP_pc_navy_yards", "STP_pc_navy_escorts"
         ):
             rewards.extend(walk(block(self.focuses[focus_id], "completion_reward")))
         ships = [entry.value for entry in rewards if entry.key == "create_ship"]
-        self.assertEqual(sum(int(scalar(ship, "amount")) for ship in ships), 8)
+        self.assertEqual(sum(int(scalar(ship, "amount")) for ship in ships), 6)
         equipment = block(
             relative_entries("common/units/equipment/ADISCORD_convoy_equipment.txt"),
             "equipments",
@@ -2384,7 +2384,7 @@ class KefreytEmergencyContracts(unittest.TestCase):
             if entry.key == "add_equipment_to_stockpile"
             and scalar(entry.value, "type") == "convoy_1"
         ]
-        self.assertEqual(sum(int(scalar(item, "amount")) for item in convoys), 60)
+        self.assertEqual(sum(int(scalar(item, "amount")) for item in convoys), 40)
         self.assertTrue(any(
             entry.key == "ADISCORD_tech_restored_dockyards" and entry.value == "1"
             for entry in rewards

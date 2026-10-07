@@ -871,13 +871,15 @@ class StartingCoastalFleetTests(unittest.TestCase):
             and scalar(e.value, "type") == "invasion_unit_request"
         )
         target = block(strategy, "country_trigger")
+        self.assertTrue(any(e.key == "any_controlled_state" for e in target))
+        diplomatic_target = [e for e in target if e.key != "any_controlled_state"]
         for enemy, capitulated in ((False, False), (True, False), (True, True)):
             facts = {
                 ("TARGET", "has_war_with", "FROM"): enemy,
                 ("TARGET", "has_capitulated", "no"): not capitulated,
             }
             self.assertEqual(
-                matches_conditions(target, facts, "TARGET"), enemy and not capitulated
+                matches_conditions(diplomatic_target, facts, "TARGET"), enemy and not capitulated
             )
         enable = named_block(
             named_block(
@@ -888,7 +890,7 @@ class StartingCoastalFleetTests(unittest.TestCase):
         )
         for condition in ("is_ai = yes", "has_war = yes", "has_capitulated = no"):
             self.assertIn(condition, enable)
-        self.assertIn("any_owned_state", enable)
+        self.assertIn("ADISCORD_has_operational_naval_base = yes", enable)
 
     def test_patrol_platform_is_available_before_startup_technology_grants(
         self,
@@ -931,9 +933,9 @@ class StartingCoastalFleetTests(unittest.TestCase):
 
     def test_starting_fleets_use_owned_coastal_ports_and_complete_hulls(self) -> None:
         countries = {
-            "NOD": (6, 12434, "30-Cussington.txt"),
-            "STP": (4, 16366, "28-Fada.txt"),
-            "VAL": (4, 16535, "48-Depoitodron.txt"),
+            "NOD": (20, 12434, "30-Cussington.txt"),
+            "STP": (20, 16366, "28-Fada.txt"),
+            "VAL": (16, 16535, "48-Depoitodron.txt"),
         }
         provinces = {
             row.split(";")[0]: row.split(";")
@@ -952,23 +954,29 @@ class StartingCoastalFleetTests(unittest.TestCase):
                 self.assertEqual(len(fleets), 1)
                 self.assertRegex(fleets[0], rf"naval_base\s*=\s*{port}\b")
                 forces = named_blocks(fleets[0], "task_force")
-                self.assertEqual(len(forces), 1)
-                self.assertRegex(forces[0], rf"location\s*=\s*{port}\b")
-                ships = named_blocks(forces[0], "ship")
+                self.assertEqual(len(forces), 4)
+                ships = []
+                for force in forces:
+                    self.assertRegex(force, rf"location\s*=\s*{port}\b")
+                    ships.extend(named_blocks(force, "ship"))
                 self.assertEqual(len(ships), count)
                 for ship in ships:
                     values = {
                         entry.key: entry.value for entry in parse_clausewitz(ship)
                     }
-                    self.assertEqual(
-                        values["definition"], "ADISCORD_coastal_patrol_vessel"
-                    )
+                    models = {
+                        "ADISCORD_coastal_patrol_vessel": "ADISCORD_escort_ship_2155",
+                        "heavy_cruiser": "ADISCORD_cruiser_2155",
+                        "light_cruiser": "ADISCORD_light_cruiser_2155",
+                        "submarine": "ADISCORD_submarine_2155",
+                    }
+                    self.assertIn(values["definition"], models)
                     self.assertNotIn(values["name"], names)
                     names.add(values["name"])
                     equipment = values["equipment"]
                     self.assertEqual(
                         [entry.key for entry in equipment],
-                        ["ADISCORD_coastal_patrol_ship_1"],
+                        [models[values["definition"]]],
                     )
                     hull = {entry.key: entry.value for entry in equipment[0].value}
                     self.assertEqual(hull, {"amount": "1", "owner": tag})

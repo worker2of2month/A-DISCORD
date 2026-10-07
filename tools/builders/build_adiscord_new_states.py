@@ -600,7 +600,7 @@ DIRTY_REPUBLIC_STATE_PROFILES = {
     176: {"population": 220_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
     187: {"population": 200_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
     191: {"population": 220_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
-    125: {"population": 120_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
+    125: {"population": 1, "category": "rural", "infrastructure": 2, "supplies": 1.5},
     177: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
     188: {"population": 170_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
     192: {"population": 170_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},

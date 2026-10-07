@@ -62,7 +62,7 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         self.assertIn("Native layout: shared focus history", self.native_text)
 
     def test_all_original_focus_bodies_and_tree_metadata_are_preserved(self):
-        self.assertEqual(len(self.old_focuses), 144)
+        self.assertEqual(len(self.old_focuses), 149)
         self.assertEqual(self.old_focuses.keys(), self.shared_focuses.keys())
         self.assertFalse(any(row.key == "focus" for row in self.tree))
         for focus_id, original in self.old_focuses.items():
@@ -76,9 +76,9 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
             semantic([row for row in self.tree if row.key != "shared_focus"]),
         )
 
-    def test_two_root_references_cover_every_original_focus(self):
+    def test_root_references_cover_every_original_focus(self):
         roots = [row.value for row in self.tree if row.key == "shared_focus"]
-        self.assertCountEqual(roots, ["VAL_The_Contract_State", "VAL_Stelander_Crisis_Opens"])
+        self.assertCountEqual(roots, ["VAL_The_Contract_State", "VAL_Stelander_Crisis_Opens", "VAL_Naval_Contract_Office"])
         prerequisites = {
             focus_id: {
                 child.value
@@ -112,7 +112,11 @@ class SharedFocusHistoryAssemblyTests(unittest.TestCase):
         new_ids = {one(row.value, "id") for row in new_tree if row.key == "focus"}
         self.assertEqual(len(new_ids), 27)
         self.assertTrue(new_ids.isdisjoint(self.old_focuses))
-        self.assertFalse(any(row.key == "shared_focus" for row in new_tree + new_native))
+        self.assertEqual(
+            [row.value for row in new_tree if row.key == "shared_focus"],
+            ["VAL_Naval_Contract_Office"],
+        )
+        self.assertFalse(any(row.key == "shared_focus" for row in new_native))
 
     def test_tooling_authored_view_is_explicitly_separate_from_native_bytes(self):
         self.assertEqual(read_focus_source(VAL_OUTPUT), self.authored_text)

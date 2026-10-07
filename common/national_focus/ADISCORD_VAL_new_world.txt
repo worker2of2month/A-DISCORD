@@ -5,6 +5,7 @@ focus_tree = {
 	id = VAL_new_world_focus
 	country = { factor = 0 }
 	continuous_focus_position = { x = 100 y = 555555 }
+	shared_focus = VAL_Naval_Contract_Office
 
 	focus = {
 		id = VAL_nw_price

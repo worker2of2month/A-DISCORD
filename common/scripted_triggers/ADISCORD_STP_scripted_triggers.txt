@@ -1929,6 +1929,7 @@ STP_pw_party_northern_march_targets_remain = {
 # COUNTRY STP: a pending Nodrul invasion or Nodrul's own northern war must be
 # resolved before this campaign; one lost campaign blocks the next for a year.
 STP_pw_party_can_launch_northern_march = {
+	RUS_crisis_regional_wars_available = yes
 	tag = STP
 	has_country_flag = STP_cw_postwar
 	STP_pw_can_reconstruct = yes

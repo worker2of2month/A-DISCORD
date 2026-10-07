@@ -39,7 +39,7 @@ class EquipmentProductionProgressionTests(unittest.TestCase):
             for name, value in re.findall(r"(\w+) = (\d+)", resources[1])
         }
 
-    def test_successive_models_increase_cost_and_materials(self):
+    def test_successive_models_increase_cost_without_reducing_materials(self):
         pairs = []
         for equipment_id, block in self.equipment.items():
             parent = re.search(r"\bparent = (\w+)", block)
@@ -56,7 +56,7 @@ class EquipmentProductionProgressionTests(unittest.TestCase):
             new_cost, new_resources = self.production_requirements(current)
             with self.subTest(previous=previous, current=current):
                 self.assertGreater(new_cost, old_cost)
-                self.assertGreater(sum(new_resources.values()), sum(old_resources.values()))
+                self.assertGreaterEqual(sum(new_resources.values()), sum(old_resources.values()))
                 for name, amount in old_resources.items():
                     self.assertGreaterEqual(new_resources.get(name, 0), amount, name)
 

@@ -176,7 +176,8 @@ class WestFinalWarContractTests(unittest.TestCase):
         wrk = body(EFFECTS, "ADISCORD_west_final_resolve_wrk_victory")
         for route in ROUTES[:2]:
             self.assertIn(f"has_country_flag = ADISCORD_vorkerland_route_{route}", wrk)
-        self.assertIn("var = global.ADISCORD_west_terms value = 1", wrk)
+        self.assertIn("var = global.ADISCORD_west_subject_type value = 5", wrk)
+        self.assertNotIn("var = global.ADISCORD_west_terms value = 1", wrk)
         self.assertIn("var = global.ADISCORD_west_transfer value = 2", wrk)
         ivn = body(EFFECTS, "ADISCORD_west_final_resolve_ivn_victory")
         self.assertIn("ADISCORD_west_ivn_shield_course = yes", ivn)
@@ -184,6 +185,8 @@ class WestFinalWarContractTests(unittest.TestCase):
         self.assertIn("var = global.ADISCORD_west_transfer value = 1", ivn)
         types = body(EFFECTS, "ADISCORD_west_apply_subject_type")
         autonomies = set(re.findall(r"autonomy_state = (\w+)", types))
+        subject_government = body(ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt", "ADISCORD_vorkerland_pw_apply_subject_government")
+        autonomies.update(re.findall(r"autonomy_state = (\w+)", subject_government))
         defined = set(re.findall(r"\bid = (\w+)", (ROOT / "common/autonomous_states/ADISCORD_west_final_war_subjects.txt").read_text(encoding="utf-8")))
         self.assertEqual(autonomies - {"autonomy_puppet"}, defined)
         transfer = body(EFFECTS, "ADISCORD_west_transfer_to_root")
@@ -324,7 +327,8 @@ class WestFinalWarContractTests(unittest.TestCase):
         source = (ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt").read_text(encoding="utf-8")
         self.assertIn("ADISCORD_west_wrk_front_ivn = {", source)
         self.assertIn("ADISCORD_west_ivn_front_wrk = {", source)
-        self.assertEqual(source.count("abort_when_not_enabled = yes"), 2)
+        for name in ("ADISCORD_west_wrk_front_ivn", "ADISCORD_west_wrk_hold_ivn", "ADISCORD_west_ivn_front_wrk"):
+            self.assertIn("abort_when_not_enabled = yes", body(ROOT / "common/ai_strategy/ADISCORD_west_final_war_ai.txt", name))
 
     def test_gameplay_files_have_no_bom(self):
         for path in (EFFECTS, TRIGGERS, EVENTS, IVN_TREE):
@@ -538,10 +542,17 @@ class WestReconstructionScenarios(unittest.TestCase):
                 available = block(focus, "available")
                 self.assertIn(f"{tag}_west_reconstruction_ready_tt", repr(available))
                 for age, expected in ((179, False), (180, True)):
+                    facts = self.crisis_facts(age)
+                    if tag == "WRK":
+                        route = name.split("_")[1]
+                        facts[("WRK", "has_completed_focus", f"WRK_{route}_pw_field_exercises")] = True
                     self.assertEqual(
-                        matches_conditions(self.expand(available), self.crisis_facts(age), tag),
+                        matches_conditions(self.expand(available), facts, tag),
                         expected, (name, age),
                     )
+                    if tag == "WRK":
+                        facts[("WRK", "has_completed_focus", f"WRK_{route}_pw_field_exercises")] = False
+                        self.assertFalse(matches_conditions(self.expand(available), facts, tag))
         self.assertEqual(count, 5)
 
     def route_paths(self, names, completed):

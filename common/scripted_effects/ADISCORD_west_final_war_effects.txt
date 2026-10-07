@@ -1,7 +1,8 @@
 # Western final war. Side numbers: 1 = Vorkerland (WRK), 2 = Itora (IVN).
 # Settlement terms: 1 = annexation, 2 = subjects. Subject types follow the
 # winner's path: 0 ordinary puppet, 1 confederate republic, 2 technical
-# trusteeship, 3 guaranteed confederation, 4 emergency trusteeship.
+# trusteeship, 3 guaranteed confederation, 4 emergency trusteeship,
+# 5 military administration.
 # Territorial transfer: 1 = northern corridor to Itora, 2 = Itoran frontier to WRK.
 
 # ----- Crisis clock -----
@@ -389,7 +390,7 @@ ADISCORD_west_final_resolve_wrk_victory = {
 		}
 		else_if = {
 			limit = { WRK = { has_country_flag = ADISCORD_vorkerland_route_joint } }
-			set_variable = { var = global.ADISCORD_west_terms value = 1 }
+			set_variable = { var = global.ADISCORD_west_subject_type value = 5 }
 		}
 		else = {
 			set_variable = { var = global.ADISCORD_west_subject_type value = 2 }
@@ -706,7 +707,11 @@ ADISCORD_west_settle_member = {
 					end_civil_wars = no
 				}
 			}
-			ADISCORD_west_apply_subject_type = yes
+			if = {
+				limit = { ROOT = { tag = WRK } }
+				ADISCORD_vorkerland_pw_apply_subject_government = yes
+			}
+			else = { ADISCORD_west_apply_subject_type = yes }
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

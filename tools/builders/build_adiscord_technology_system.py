@@ -6797,6 +6797,7 @@ STARTING_TECH_PROFILE_SEEDS = {
         for branch_key in ("fighter", "air_support", "strategic_air")
         for tech_id in branch_technology_ids_through(branch_key, 2158)
     ),
+    "naval_taskforce": ("ADISCORD_tech_light_cruiser_hull_2155",),
     "naval": tuple(
         tech_id
         for branch_key in (
@@ -6894,6 +6895,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "armored_core",
     ),
     "NVR": ("fragment_low_tech", "land"),
@@ -6918,6 +6920,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "recon_platform",
         "field_air_defense",
     ),
@@ -6932,6 +6935,7 @@ STARTING_COUNTRY_TECH_PROFILES = {
         "land",
         "air",
         "naval",
+        "naval_taskforce",
         "field_air_defense",
     ),
     "VES": ("fragment_low_tech", "land"),

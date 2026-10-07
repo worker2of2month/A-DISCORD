@@ -231,3 +231,41 @@ ADISCORD_has_national_military_staff = {
 		tag = SRP
 	}
 }
+
+ADISCORD_has_operational_naval_base = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		is_coastal = yes
+		naval_base > 0
+	}
+}
+
+ADISCORD_can_expand_naval_yards = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		is_coastal = yes
+		naval_base > 0
+		free_building_slots = {
+			building = dockyard
+			size > 1
+			include_locked = yes
+		}
+	}
+}
+
+ADISCORD_is_regional_naval_power = {
+	OR = {
+		original_tag = STP
+		original_tag = STS
+		original_tag = VAL
+		original_tag = NOD
+	}
+}
+
+ADISCORD_has_marine_training = {
+	OR = {
+		has_tech = ADISCORD_tech_stelander_marine_corps
+		has_tech = ADISCORD_tech_kefreyt_marine_corps
+		has_tech = ADISCORD_tech_nodrul_marine_corps
+	}
+}

@@ -14,6 +14,7 @@ ROOT = repository_root()
 SOURCE_ROOT = ROOT / "focus_trees"
 OUTPUT_ROOT = ROOT / "common/national_focus"
 SOURCES = {
+    "NOD/main/focuses.txt": "ADISCORD_NOD_focus.txt",
     "NAM/main/focuses.txt": "ADISCORD_NAM_focus.txt",
     "SHL/main/focuses.txt": "ADISCORD_SHL_focus.txt",
     "IVN/main/focuses.txt": "ADISCORD_IVN_focus.txt",

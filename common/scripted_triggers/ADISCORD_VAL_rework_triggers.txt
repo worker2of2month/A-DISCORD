@@ -1,4 +1,5 @@
 VAL_final_crisis_available = {
+	RUS_crisis_regional_wars_available = yes
 	tag = VAL
 	is_subject = no
 	has_capitulated = no
@@ -1105,6 +1106,7 @@ VAL_stelander_offer_current = {
 	VAL = { has_country_flag = VAL_stelander_offer_pending }
 }
 VAL_can_launch_final_campaign = {
+	RUS_crisis_regional_wars_available = yes
 	NOT = { has_country_flag = VAL_stelander_defeated }
 	OR = {
 		has_war = no

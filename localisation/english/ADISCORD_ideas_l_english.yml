@@ -119,3 +119,6 @@
  COF_national_spirit: "Blood of the Grove"
  BJK_nodrul_influence: "Nodrul Influence"
  BJK_nodrul_influence_desc: "Nodrul money, advisers and political intermediaries have worked their way into the Bezhaysk court and its governing circles. The kingdom remains formally sovereign, but important decisions are made under the shadow of a stronger northern patron. This influence lasts only while Nodrul itself remains an independent power."
+ ADISCORD_operational_naval_base_tt:0 "Own and control a coastal state with a naval base"
+ ADISCORD_naval_yard_capacity_tt:0 "An owned and controlled port can accommodate two more dockyards"
+ ADISCORD_naval_program_bonus:0 "Naval Construction Programme"

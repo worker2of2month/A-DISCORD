@@ -4,6 +4,8 @@ capital = 30
 ADISCORD_grant_technology_profile_air = yes
 ADISCORD_grant_technology_profile_land = yes
 ADISCORD_grant_technology_profile_armored_core = yes
+ADISCORD_grant_technology_profile_naval = yes
+ADISCORD_grant_technology_profile_naval_taskforce = yes
 oob = "NOD"
 ####### Characters
 

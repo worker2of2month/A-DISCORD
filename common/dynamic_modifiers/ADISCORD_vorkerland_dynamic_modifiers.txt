@@ -205,3 +205,21 @@ RUS_faction_support = {
 	political_power_gain = RUS_faction_political_power_gain
 	power_balance_weekly = RUS_faction_power_balance_weekly
 }
+
+# --- postwar_expansion_modifiers ---
+# Country variables accumulate only when a postwar programme completes.
+ADISCORD_vorkerland_postwar_institutions = {
+	icon = GFX_idea_generic_production_bonus
+	enable = { always = yes }
+	army_org_factor = ADISCORD_vorkerland_pw_org
+	army_morale_factor = ADISCORD_vorkerland_pw_recovery
+	army_defence_factor = ADISCORD_vorkerland_pw_defence
+	army_attack_factor = ADISCORD_vorkerland_pw_attack
+	supply_consumption_factor = ADISCORD_vorkerland_pw_supply
+	training_time_army_factor = ADISCORD_vorkerland_pw_training
+	industrial_capacity_factory = ADISCORD_vorkerland_pw_output
+	industry_repair_factor = ADISCORD_vorkerland_pw_repair
+	production_factory_max_efficiency_factor = ADISCORD_vorkerland_pw_efficiency
+	production_factory_efficiency_gain_factor = ADISCORD_vorkerland_pw_efficiency_gain
+	production_speed_buildings_factor = ADISCORD_vorkerland_pw_construction
+}

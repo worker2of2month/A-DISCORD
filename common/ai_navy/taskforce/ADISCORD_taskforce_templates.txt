@@ -156,12 +156,15 @@ ADISCORD_coastal_invasion_support = {
 		}
 	}
 	ai_will_do = { factor = 5 }
+	keep_updated = yes
 	mission = { naval_invasion_support }
 	min_composition = {
 		ADISCORD_coastal_patrol_vessel = { amount = 1 }
 	}
 	optimal_composition = {
-		ADISCORD_coastal_patrol_vessel = { amount = 2 }
+		ADISCORD_coastal_patrol_vessel = { amount = 4 }
+		light_cruiser = { amount = 1 }
+		heavy_cruiser = { amount = 1 }
 	}
 }
 
