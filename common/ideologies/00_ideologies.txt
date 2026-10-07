@@ -392,6 +392,10 @@ ideologies = {
 		types = {
 			etatism_ideology = {
 			}
+			appanage_revanchism = {
+				can_be_randomly_selected = no
+				color = { 112 58 38 }
+			}
 			contractual_etatism = {
 				can_be_randomly_selected = no
 				color = { 143 50 29 }

@@ -6733,12 +6733,17 @@
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
-				amount = 600
+				amount = 9000
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
 				producer = ROOT
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
-				amount = 60
+				amount = 180
 				producer = ROOT
 			}
 			army_experience = 15
@@ -8163,12 +8168,17 @@
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
-				amount = 900
+				amount = 18000
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 144
 				producer = ROOT
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
-				amount = 90
+				amount = 240
 				producer = ROOT
 			}
 		}

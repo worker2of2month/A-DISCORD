@@ -1,0 +1,45 @@
+[io_pdx.updater] INFO:  Skipped update check. (already ran today)
+[io_pdx] INFO:  Running io_pdx_mesh from d:\steam\steamapps\common\blender\blender.exe ((5, 2, 2))
+[io_pdx] INFO:  C:\Users\Admin\AppData\Roaming\Blender Foundation\Blender\5.2\extensions\user_default\io_pdx_mesh
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.2230 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0029 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0471 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 2
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0062 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_early_fighter.blend"
+VERIFIED DEF_early_fighter 1048
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit

@@ -75,12 +75,45 @@ class RuntimeCompatibilityTests(unittest.TestCase):
                 self.assertIn(entry.value, defined)
 
     def test_small_country_oobs_receive_common_equipment_before_loading(self):
-        for tag in ("IVN", "WIT", "BTL"):
+        for tag in ("IVN", "WIT", "BTL", "RUS"):
             path = next((ROOT / "history/countries").glob(f"{tag} - *.txt"))
             history = path.read_text(encoding="utf-8-sig")
             grant = "ADISCORD_grant_technology_profile_common = yes"
             self.assertIn(grant, history, tag)
             self.assertLess(history.index(grant), history.index("oob ="), tag)
+
+    def test_land_unit_map_icons_use_native_categories(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        path = ROOT / "common/units/ADISCORD_land_units.txt"
+        units = next(
+            entry.value for entry in parse_clausewitz(path.read_text(encoding="utf-8"))
+            if entry.key == "sub_units"
+        )
+        for unit in units:
+            for field in unit.value:
+                if field.key == "map_icon_category":
+                    self.assertIn(field.value, {"infantry", "armored", "other"}, unit.key)
+
+    def test_rus_starting_air_wings_have_an_owned_state_air_base(self):
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        air_bases = set()
+        for path in (ROOT / "history/states").glob("*.txt"):
+            state = next(
+                entry.value for entry in parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+                if entry.key == "state"
+            )
+            fields = {entry.key: entry.value for entry in state}
+            history = {entry.key: entry.value for entry in fields.get("history", [])}
+            buildings = {entry.key: entry.value for entry in history.get("buildings", [])}
+            if history.get("owner") == "RUS" and int(buildings.get("air_base", 0)) > 0:
+                air_bases.add(fields["id"])
+        source = (ROOT / "history/units/RUS.txt").read_text(encoding="utf-8")
+        wings = next(entry.value for entry in parse_clausewitz(source) if entry.key == "air_wings")
+        self.assertTrue(wings)
+        for location in wings:
+            self.assertIn(location.key, air_bases)
 
     def test_nam_starting_fleet_uses_a_built_nam_port(self):
         ports = set()

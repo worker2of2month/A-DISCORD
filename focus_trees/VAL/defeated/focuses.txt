@@ -49,8 +49,22 @@ focus_tree = {
 		cost = 4
 		prerequisite = { focus = VAL_defeat_Commanders_Take_The_Ledger }
 		completion_reward = {
-			army_experience = 15
-			add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = VAL }
+			army_experience = 20
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 9000
+				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 80
+				producer = VAL
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 60
+				producer = VAL
+			}
 		}
 		ai_will_do = { base = 10 }
 	}

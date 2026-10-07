@@ -13924,3 +13924,52 @@ STP_pw_open_shield_corps = {
 		}
 	}
 }
+
+# COUNTRY, native project completion. The prototype enters stock; recruitment
+# draws the remaining machines and the accompanying infantry from real supplies.
+STP_taran_complete_project = {
+	add_equipment_to_stockpile = {
+		type = STP_taran_equipment_1
+		amount = 1
+		producer = ROOT
+	}
+	custom_effect_tooltip = STP_taran_template_tt
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_template = "Taran Assault Group" } }
+			division_template = {
+				name = "Taran Assault Group"
+				template_counter = 3
+				is_locked = no
+				regiments = {
+					STP_taran = {
+						x = 0
+						y = 0
+					}
+					ADISCORD_urban_breacher = {
+						x = 1
+						y = 0
+					}
+					ADISCORD_urban_breacher = {
+						x = 1
+						y = 1
+					}
+					ADISCORD_urban_breacher = {
+						x = 1
+						y = 2
+					}
+					ADISCORD_urban_breacher = {
+						x = 1
+						y = 3
+					}
+				}
+				support = {
+					engineer = {
+						x = 0
+						y = 0
+					}
+				}
+			}
+		}
+	}
+}

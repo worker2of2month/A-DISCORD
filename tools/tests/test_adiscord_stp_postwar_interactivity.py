@@ -161,7 +161,7 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
         expected_costs = {
             "STP_pc_shabrat_cabinet": 4,
             "STP_pc_shabrat_politics": 4,
-            "STP_pc_two_borders": 4,
+            "STP_pc_two_borders": 2,
             "STP_pc_war_ledgers": 4,
             "STP_pc_shared_archive_policy": 4,
             "STP_pc_heg_unity": 4,
@@ -176,7 +176,7 @@ class ShabratPostwarInteractivityTests(unittest.TestCase):
             "STP_pc_lib_assembly": 4,
             "STP_pc_lib_institutions": 4,
             "STP_pc_lib_prepare_neighbors": 4,
-            "STP_pc_lib_local_contacts": 4,
+            "STP_pc_lib_local_contacts": 2,
             "STP_pc_lib_crisis": 4,
             "STP_pc_lib_war": 4,
             "STP_pc_development_reopen_universities": 4,

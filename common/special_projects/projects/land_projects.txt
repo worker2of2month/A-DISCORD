@@ -26,3 +26,37 @@ ADISCORD_sp_combat_robots = {
 	}
 	ai_will_do = { base = 1 }
 }
+
+STP_sp_taran = {
+	specialization = specialization_land
+	icon = GFX_STP_taran_project
+	blueprint_image = GFX_generic_tank_blueprint_background
+	allowed = { tag = STS }
+	visible = {
+		FROM = { has_completed_focus = STP_pw_republic_shield_corps }
+	}
+	available = {
+		FROM = {
+			has_capitulated = no
+			has_tech = ADISCORD_tech_hardened_computers
+			has_tech = ADISCORD_tech_automated_assembly
+			has_tech = ADISCORD_tech_heavy_composite_cores
+		}
+	}
+	breakthrough_cost = { specialization_land = 2 }
+	prototype_time = sp_time.prototype.long
+	complexity = sp_complexity.large
+	resource_cost = {
+		resources = {
+			steel = 10
+			rare_components = 2
+			rare_alloys = 3
+		}
+	}
+	project_output = {
+		enable_equipments = { STP_taran_equipment_1 }
+		enable_subunits = { STP_taran }
+		country_effects = { STP_taran_complete_project = yes }
+	}
+	ai_will_do = { base = 3 }
+}

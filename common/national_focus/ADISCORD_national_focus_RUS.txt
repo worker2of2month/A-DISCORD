@@ -35,7 +35,7 @@ focus_tree = {
 				amount = 50
 				producer = RUS
 			}
-			add_political_power = 25
+			add_political_power = 50
 			add_war_support = 0.05
 			custom_effect_tooltip = RUS_summon_the_aimaqs_tt
 		}
@@ -100,7 +100,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			add_war_support = 0.05
-			add_command_power = 10
+			add_command_power = 30
 			custom_effect_tooltip = RUS_watch_the_western_scar_tt
 		}
 		ai_will_do = { base = 13 }
@@ -665,7 +665,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_manpower = 1000
+			add_manpower = 2000
 			add_stability = 0.03
 		}
 		ai_will_do = { base = 8 }
@@ -1745,8 +1745,14 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			add_equipment_to_stockpile = { type = support_equipment amount = 120 producer = RUS }
+			add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = RUS }
 			army_experience = 10
+			add_tech_bonus = {
+				name = RUS_field_sappers
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -2032,7 +2038,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 60
+				amount = 240
 				producer = RUS
 			}
 			add_command_power = 10
@@ -2091,7 +2097,7 @@ focus_tree = {
 			add_stability = 0.05
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 60
+				amount = 150
 				producer = RUS
 			}
 		}
@@ -2242,7 +2248,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 100
+				amount = 180
 				producer = RUS
 			}
 			add_equipment_to_stockpile = {
@@ -2303,7 +2309,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = artillery_equipment_1
-				amount = 60
+				amount = 100
 				producer = RUS
 			}
 			army_experience = 15
@@ -2453,8 +2459,14 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 120
+				amount = 300
 				producer = RUS
+			}
+			custom_effect_tooltip = RUS_treasury_600_tt
+			hidden_effect = {
+				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
+				ADISCORD_economy_mark_dirty = yes
 			}
 		}
 		ai_will_do = { base = 6 }
@@ -2645,8 +2657,13 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 100
+				amount = 300
 				producer = RUS
+			}
+			effect_tooltip = { add_ideas = RUS_motor_pool_dispatch_delta }
+			hidden_effect = {
+				add_to_variable = { var = RUS_army_supply value = -0.05 }
+				RUS_black_army_refresh = yes
 			}
 		}
 		ai_will_do = { base = 8 }
@@ -2715,10 +2732,10 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
-			custom_effect_tooltip = RUS_treasury_400_tt
+			custom_effect_tooltip = RUS_treasury_600_tt
 			hidden_effect = {
-				add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
-				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+				add_to_variable = { var = ADISCORD_economy_treasury value = 600 }
+				add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 600 }
 				ADISCORD_economy_mark_dirty = yes
 			}
 		}
@@ -2798,7 +2815,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 60
+				amount = 180
 				producer = RUS
 			}
 			custom_effect_tooltip = RUS_treasury_300_tt
@@ -2829,7 +2846,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = motorized_equipment
-				amount = 80
+				amount = 150
 				producer = RUS
 			}
 			add_equipment_to_stockpile = {
@@ -2884,7 +2901,7 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = train_equipment_1
-				amount = 8
+				amount = 12
 				producer = RUS
 			}
 			add_equipment_to_stockpile = {
@@ -2970,8 +2987,14 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = support_equipment
-				amount = 100
+				amount = 300
 				producer = RUS
+			}
+			add_tech_bonus = {
+				name = RUS_bunker_layer_service_school
+				bonus = 0.5
+				uses = 2
+				category = support_tech
 			}
 		}
 		ai_will_do = { base = 8 }

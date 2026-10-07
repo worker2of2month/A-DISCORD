@@ -2707,7 +2707,7 @@ focus_tree = {
 	}
 	focus = {
 		id = VAL_Return_Southern_Tsaygen
-		icon = GFX_goal_generic_territory_or_war
+		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 19
@@ -2731,7 +2731,7 @@ focus_tree = {
 
 	focus = {
 		id = VAL_frontier_return_irem
-		icon = GFX_goal_generic_national_unity
+		icon = GFX_focus_VAL_Frontier_Assault
 		search_filters = { FOCUS_FILTER_VAL_EXPANSION }
 		x = 34
 		y = 20
@@ -2821,6 +2821,7 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			unlock_decision_tooltip = VAL_operation_eastern_security_belt
+			unlock_decision_tooltip = VAL_build_zeppelin
 		}
 		ai_will_do = { base = 130 }
 	}

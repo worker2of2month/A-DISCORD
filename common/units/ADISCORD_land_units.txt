@@ -3,7 +3,7 @@ sub_units = {
 	ADISCORD_zeppelin = {
 		abbreviation = "ZEP"
 		sprite = ADISCORD_zeppelin
-		map_icon_category = armor
+		map_icon_category = armored
 		priority = 3000
 		ai_priority = 0
 		active = no
@@ -766,6 +766,71 @@ sub_units = {
 		vorkernsberg = { attack = -0.15 }
 		river = { attack = -0.25 movement = -0.20 }
 		amphibious = { attack = -0.70 }
+	}
+
+	STP_taran = {
+		abbreviation = "TRN"
+		sprite = STP_taran
+		map_icon_category = armored
+		priority = 3500
+		ai_priority = 0
+		active = no
+		type = { armor }
+		group = armor
+		categories = {
+			category_tanks
+			category_front_line
+			category_all_armor
+			category_army
+		}
+		combat_width = 3
+		essential = { STP_taran_equipment }
+		need = {
+			STP_taran_equipment = 24
+			support_equipment = 30
+		}
+		manpower = 480
+		max_organisation = 10
+		max_strength = 10
+		default_morale = 0.25
+		training_time = 200
+		weight = 3
+		supply_consumption = 0.60
+		suppression = 1
+		forest = {
+			attack = -0.40
+			movement = -0.40
+		}
+		hills = {
+			attack = -0.25
+			movement = -0.30
+		}
+		mountain = {
+			attack = -0.65
+			movement = -0.60
+		}
+		jungle = {
+			attack = -0.55
+			movement = -0.50
+		}
+		marsh = {
+			attack = -0.65
+			movement = -0.60
+		}
+		urban = {
+			attack = 0.20
+			movement = -0.20
+		}
+		vorkernsberg = {
+			attack = 0.20
+			movement = -0.20
+		}
+		river = {
+			attack = -0.45
+			movement = -0.40
+		}
+		amphibious = { attack = -0.85 }
+		fort = { attack = 0.40 }
 	}
 
 	ADISCORD_heavy_platform = {

@@ -41,6 +41,9 @@ from tools.validators.validate_adiscord_ivn_overhaul import (
 from tools.validators.validate_adiscord_vorkerland_civil_war_focus import (
     collect_issues as validate_adiscord_vorkerland_civil_war_focus,
 )
+from tools.validators.validate_focus_rewards import (
+    collect_issues as validate_focus_rewards,
+)
 from tools.validators.validate_adiscord_vorkerland_diplomacy import (
     collect_issues as validate_adiscord_vorkerland_diplomacy,
 )
@@ -1342,6 +1345,13 @@ def main():
         "Vorkerland civil-war focus skeleton",
         vorkerland_focus_issues[: args.limit],
         len(vorkerland_focus_issues),
+    )
+
+    focus_reward_issues = validate_focus_rewards()
+    print_section(
+        "Standalone focus reward floor",
+        focus_reward_issues[: args.limit],
+        len(focus_reward_issues),
     )
 
     vorkerland_focus_decision_issues = validate_adiscord_vorkerland_focus_decisions()

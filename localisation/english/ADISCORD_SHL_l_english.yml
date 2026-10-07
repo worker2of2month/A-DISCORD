@@ -264,7 +264,7 @@
  SHL_state_furnaces: "State Furnaces"
  SHL_state_furnaces_desc: "The industrial directorate takes control of the enterprises. It must deliver working industry rather than a new form of personal ownership."
  SHL_railway_guard: "Railway Guard"
- SHL_railway_guard_desc: "Protect stations and trains. Prepare communications and supplies for existing formations without turning every house into a private army."
+ SHL_railway_guard_desc: "Protect stations and trains. Prepare communications and supplies for existing formations without turning every house into a private army. The railway service receives ten additional trains."
  SHL_factory_air_defence: "Factory City Air Defence"
  SHL_factory_air_defence_desc: "Dense settlements around the furnaces require air protection. Deploy industrial batteries and train their crews to defend the industrial district."
  SHL_industrial_evacuation: "Industrial Evacuation Service"

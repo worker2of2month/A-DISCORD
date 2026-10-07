@@ -562,6 +562,19 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSBunkerFoodCash
+	text = {
+		trigger = {
+			check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
+		}
+		localization_key = RUS_bunker_food_cost_cash_ok
+	}
+	text = {
+		localization_key = RUS_bunker_food_cost_cash_low
+	}
+}
+
+defined_text = {
 	name = GetRUSBunker31equipment
 	text = {
 		trigger = {
@@ -1924,4 +1937,801 @@ defined_text = {
 defined_text = {
 	name = GetRUSBunkerRecipe1
 	text = { localization_key = RUS_bunker_airlocks }
+}
+
+# Состояние комплекса и последствия заказов при текущей планировке.
+defined_text = {
+	name = GetRUSBunkerIntegrityState
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_integrity_danger
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 60 compare = less_than_or_equals }
+		}
+		localization_key = RUS_bunker_integrity_low
+	}
+	text = {
+		localization_key = RUS_bunker_integrity_safe
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFoodState
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_fitted value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_food_state_empty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_state value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_food_state_hungry
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_state value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_food_state_fed
+	}
+	text = {
+		localization_key = RUS_bunker_food_state_normal
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerFoodBadge
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_food_badge_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_fitted value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_food_badge_empty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_state value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_food_badge_hungry
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_state value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_food_badge_fed
+	}
+	text = {
+		localization_key = RUS_bunker_food_badge_normal
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerPriority
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_priority_integrity
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than }
+			check_variable = { var = RUS_bunker_food value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_priority_hungry
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_balance value = 0 compare = less_than }
+		}
+		localization_key = RUS_bunker_priority_food
+	}
+	text = {
+		trigger = {
+			has_variable = RUS_bunker_project
+		}
+		localization_key = RUS_bunker_priority_busy
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_priority_excavate
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_free_power value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_priority_power
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_fitted value = RUS_bunker_depth compare = less_than }
+		}
+		localization_key = RUS_bunker_priority_fit
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 60 compare = less_than }
+		}
+		localization_key = RUS_bunker_priority_reinforce
+	}
+	text = {
+		localization_key = RUS_bunker_priority_ready
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerBenefits
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		localization_key = RUS_bunker_benefits_active
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerBenefitDetails
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		localization_key = RUS_bunker_benefits_details_active
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerIntegrityEffect
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_integrity_effect_danger
+	}
+	text = {
+		localization_key = RUS_bunker_integrity_effect_safe
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastguard
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 1 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_guard
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastshelter
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 1 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_shelter
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastwater
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 2 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_water
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastsignals
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 2 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_signals
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastworkshop
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 3 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_workshop
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastgranary
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 3 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_granary
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastclinic
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 4 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_clinic
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastlaboratory
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 4 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_laboratory
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastarchive
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 5 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_archive
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastcommand
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = greater_than }
+		}
+		localization_key = RUS_bunker_forecast_installed
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_depth value = 5 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_hidden
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_command
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastUpgrade1
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_unfitted
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_1 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgraded
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_upgrade_1
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastUpgrade2
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_unfitted
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_2 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgraded
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_upgrade_2
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastUpgrade3
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_unfitted
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_3 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgraded
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgrade_granary
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_upgrade_3
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastUpgrade4
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_unfitted
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_4 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgraded
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_upgrade_4
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastUpgrade5
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 0 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_unfitted
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_upgrade_5 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_forecast_upgraded
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_upgrade_5
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastexcavate
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_excavate_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_preview_excavate value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_excavate_danger
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_excavate_safe
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerForecastrush
+	text = {
+		trigger = {
+			RUS_bunker_operational = no
+		}
+		localization_key = RUS_bunker_feedback_offline
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_integrity value = 55 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_rush_blocked
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_preview_rush value = 40 compare = less_than }
+		}
+		localization_key = RUS_bunker_forecast_rush_danger
+	}
+	text = {
+		localization_key = RUS_bunker_forecast_rush_safe
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerConvoyAmount
+	text = {
+		trigger = {
+			has_completed_focus = RUS_strategic_freight_reserve
+		}
+		localization_key = RUS_bunker_convoy_large
+	}
+	text = {
+		localization_key = RUS_bunker_convoy_small
+	}
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeReward1
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_1_reward_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_1_reward_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeBenefit1
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_1_benefit_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_1 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_1_benefit_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeReward2
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_2_reward_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_2_reward_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeBenefit2
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_2_benefit_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_2 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_2_benefit_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeReward3
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_3_reward_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_3_reward_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeBenefit3
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_3_benefit_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_3 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_3_benefit_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeReward4
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_4_reward_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_4_reward_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeBenefit4
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_4_benefit_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_4 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_4_benefit_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeReward5
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_5_reward_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_5_reward_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
+}
+
+defined_text = {
+	name = GetRUSBunkerUpgradeBenefit5
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 1 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_5_benefit_1
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_layer_5 value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_upgrade_5_benefit_2
+	}
+	text = { localization_key = RUS_bunker_unfitted }
 }

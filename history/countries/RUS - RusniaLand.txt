@@ -1,5 +1,8 @@
 capital = 66
 
+# Starting equipment must be unlocked before the army and production lines load.
+ADISCORD_grant_technology_profile_common = yes
+
 oob = "RUS"
 ####### Characters
 
@@ -23,7 +26,7 @@ set_popularities = {
 
 promote_character = {
 	character = RUS_Mark_Rustan
-	ideology = etatism_ideology
+	ideology = appanage_revanchism
 }
 
 set_stability = -0.15

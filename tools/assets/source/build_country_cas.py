@@ -370,14 +370,15 @@ def preview_materials():
                 shader.inputs[label].default_value = value
 
 
-def export_model(tag, tier):
+def export_model(tag, tier, role="cas", model=None):
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    name = f"{tag}_{PREFIXES[tier]}cas"
+    name = f"{tag}_{PREFIXES[tier]}{role}"
     material = pdx.create_shader(SimpleNamespace(
-        shader=["PdxMeshAdvanced"], diff=[f"{tag}_cas_diffuse.dds"],
-        n=[f"{tag}_cas_normal.dds"], spec=[f"{tag}_cas_specular.dds"],
+        shader=["PdxMeshAdvanced"], diff=[f"{tag}_{role}_diffuse.dds"],
+        n=[f"{tag}_{role}_normal.dds"], spec=[f"{tag}_{role}_specular.dds"],
     ), name, str(SOURCE))
-    model = aircraft(tag, tier)
+    if model is None:
+        model = aircraft(tag, tier)
     obj, rig = model.object(material)
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
@@ -470,7 +471,8 @@ def verify(name):
     report["hoi4_runtime_verified"] = False
     report["dimensions"] = [max(p[i] for p in samples[0]) - min(p[i] for p in samples[0]) for i in range(3)]
     filenames = [f"{name}.mesh", f"{name}_idle.anim"]
-    filenames += [f"{name[:3]}_cas_{channel}.dds" for channel in ("diffuse", "normal", "specular")]
+    role = name.rsplit("_", 1)[1]
+    filenames += [f"{name[:3]}_{role}_{channel}.dds" for channel in ("diffuse", "normal", "specular")]
     report["files"] = {filename: digest(SOURCE / filename) for filename in filenames}
     report["blend_sha256"] = digest(SOURCE / f"{name}.blend")
     return report

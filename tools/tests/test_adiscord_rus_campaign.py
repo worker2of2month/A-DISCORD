@@ -348,6 +348,94 @@ class RusCampaignTests(unittest.TestCase):
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
+    def test_engineering_and_transport_focuses_fund_work_and_keep_reforms(self):
+        world = self.world()
+        equipment = world.equipment["support_equipment"]
+        school = block(self.focuses["RUS_bunker_layer_service_school"], "completion_reward")
+        world.execute(school)
+        self.assertEqual(world.equipment["support_equipment"] - equipment, 300)
+        bonus = block(school, "add_tech_bonus")
+        self.assertEqual((scalar(bonus, "category"), scalar(bonus, "uses"), scalar(bonus, "bonus")), ("support_tech", "2", "0.5"))
+        equipment = world.equipment["support_equipment"]
+        cash = world.value("ADISCORD_economy_treasury")
+        income = world.value("ADISCORD_economy_current_month_action_income")
+        dirty = world.dirty
+        world.execute(block(self.focuses["RUS_bunker_machine_depot"], "completion_reward"))
+        self.assertEqual(world.equipment["support_equipment"] - equipment, 300)
+        self.assertEqual(world.value("ADISCORD_economy_treasury") - cash, 600)
+        self.assertEqual(world.value("ADISCORD_economy_current_month_action_income") - income, 600)
+        self.assertGreater(world.dirty, dirty)
+        trucks = world.equipment.get("motorized_equipment", 0)
+        supply = world.value("RUS_army_supply")
+        world.execute(block(self.focuses["RUS_motor_pool_dispatch"], "completion_reward"))
+        self.assertEqual(world.equipment["motorized_equipment"] - trucks, 300)
+        self.assertAlmostEqual(world.value("RUS_army_supply") - supply, -0.05)
+        world.controller = False
+        world.run("RUS_bunker_refresh")
+        world.run("RUS_campaign_initialize")
+        self.assertAlmostEqual(world.value("RUS_army_supply") - supply, -0.05)
+        preview = block(self.ideas["RUS_motor_pool_dispatch_delta"], "modifier")
+        self.assertEqual(scalar(preview, "supply_consumption_factor"), "-0.05")
+        self.assertNotIn("RUS_motor_pool_dispatch_delta", world.ideas)
+
+    def test_food_trade_prices_and_fractional_affordability_prevent_resale_profit(self):
+        for freight in (False, True):
+            with self.subTest(freight=freight):
+                world = self.world()
+                if not freight:
+                    world.focuses.discard("RUS_strategic_freight_reserve")
+                world.variables["RUS_bunker_food"] = 0
+                world.variables["ADISCORD_economy_treasury"] = 499.99
+                world.run("RUS_bunker_refresh")
+                before = world.balances()
+                world.run("RUS_bunker_resupply")
+                self.assertEqual(world.balances(), before)
+                self.assertEqual(world.value("RUS_bunker_food"), 0)
+                world.variables["ADISCORD_economy_treasury"] = 1500
+                total_bought = 0
+                for _ in range(3):
+                    world.variables["RUS_bunker_food"] = 0
+                    world.run("RUS_bunker_refresh")
+                    world.run("RUS_bunker_resupply")
+                    total_bought += world.value("RUS_bunker_food")
+                self.assertEqual(world.value("ADISCORD_economy_treasury"), 0)
+                for _ in range(int(total_bought // 40)):
+                    world.variables["RUS_bunker_food"] = 40
+                    world.run("RUS_bunker_refresh")
+                    world.run("RUS_bunker_food_sale")
+                proceeds = int(total_bought // 40) * 300
+                self.assertEqual(world.value("ADISCORD_economy_treasury"), proceeds)
+                self.assertLess(proceeds, 1500)
+
+    def test_food_price_labels_match_debit_in_both_languages_and_keep_repair_price(self):
+        definitions = {
+            scalar(entry.value, "name"): entry.value
+            for entry in parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")
+            if entry.key == "defined_text"
+        }
+        for language in ("russian", "english"):
+            loc = dict(re.findall(
+                r'^\s+([A-Za-z0-9_.]+):(?:\d+)?\s+"(.*)"\s*$',
+                read(f"localisation/{language}/{BASE}_l_{language}.yml"), re.M,
+            ))
+            for key in ("RUS_bunker_resupply_label", "RUS_bunker_food_cost", "RUS_bunker_food_cost_blocked", "RUS_bunker_food_cost_tooltip", "RUS_bunker_food_ui_tt"):
+                self.assertIn("[GetRUSBunkerFoodCash]", loc[key], (language, key))
+                self.assertNotIn("[GetRUSBunker31cash]", loc[key], (language, key))
+            self.assertIn("[GetRUSBunkerConvoyAmount]", loc["RUS_bunker_resupply_label"])
+            self.assertIn("40", loc["RUS_bunker_convoy_small"])
+            self.assertIn("60", loc["RUS_bunker_convoy_large"])
+            for name, amount in (("GetRUSBunkerFoodCash", 500), ("GetRUSBunker31cash", 100)):
+                choices = [entry.value for entry in definitions[name] if entry.key == "text"]
+                world = self.world()
+                for treasury, expected in ((amount - 0.01, 1), (amount, 0)):
+                    world.variables["ADISCORD_economy_treasury"] = treasury
+                    choice = next(
+                        rows for rows in choices
+                        if world.matches(next((entry.value for entry in rows if entry.key == "trigger"), []))
+                    )
+                    self.assertEqual(choice, choices[expected], (language, name, treasury))
+                    self.assertIn(str(amount), loc[scalar(choice, "localization_key")])
+
     def test_pre_crisis_muster_reaches_ten_ready_brigades_before_proclamation(self):
         world = self.world()
         self.assertIn(("49", "RUS"), world.cores)
@@ -895,6 +983,106 @@ class RusCampaignTests(unittest.TestCase):
                 declared = re.search(r"Продовольствие: §G\+([0-9]+)§!", self.loc[name + "_ui_tt"])
                 self.assertEqual(world.value("RUS_bunker_food_output") - before, int(declared[1]))
 
+    def bunker_text(self, world, name):
+        functions = {
+            scalar(row.value, "name"): row.value
+            for row in parse("common/scripted_localisation/ADISCORD_RUS_scripted_loc.txt")
+            if row.key == "defined_text"
+        }
+        self.assertTrue(name in functions, name)
+        for entry in functions[name]:
+            if entry.key != "text":
+                continue
+            gate = next((child.value for child in entry.value if child.key == "trigger"), [])
+            if world.matches(gate):
+                return scalar(entry.value, "localization_key")
+        self.fail(f"No text selected for {name}")
+
+    def test_room_forecasts_match_settled_power_and_net_food(self):
+        rooms = (
+            ("guard", 2, "room"), ("shelter", 1, "room"),
+            ("water", 1, "water"), ("signals", 2, "room"),
+            ("workshop", 3, "room"), ("granary", 1, "granary"),
+            ("clinic", 2, "room"), ("laboratory", 3, "room"),
+            ("archive", 1, "room"), ("command", 2, "room"),
+        )
+        for room, power, food in rooms:
+            with self.subTest(room=room):
+                world = self.world()
+                world.variables["RUS_bunker_depth"] = 5
+                world.variables["RUS_bunker_generators"] = 1
+                world.run("RUS_bunker_refresh")
+                power_after = world.value(f"RUS_bunker_preview_power_{power}")
+                food_after = world.value(f"RUS_bunker_preview_food_{food}")
+                self.assertEqual(power_after, 8 - power)
+                self.assertEqual(food_after, {"room": 1, "water": 3, "granary": 6}[food])
+                world.begin(f"RUS_bunker_{room}")
+                world.finish(f"RUS_bunker_{room}")
+                self.assertEqual(world.value("RUS_bunker_free_power"), power_after)
+                self.assertEqual(world.value("RUS_bunker_food_balance"), food_after)
+                self.assertEqual(
+                    self.bunker_text(world, f"GetRUSBunkerForecast{room}"),
+                    "RUS_bunker_forecast_installed",
+                )
+
+    def test_integrity_forecast_matches_settlement_and_emergency_boundary(self):
+        for operation, integrity in (("excavate", 59), ("excavate", 60), ("rush", 74), ("rush", 75), ("reinforce", 60)):
+            with self.subTest(operation=operation, integrity=integrity):
+                world = self.world()
+                world.variables["RUS_bunker_integrity"] = integrity
+                world.run("RUS_bunker_refresh")
+                predicted = world.value(f"RUS_bunker_preview_{operation}")
+                self.assertEqual(predicted, integrity + {"excavate": -20, "rush": -35, "reinforce": 40}[operation])
+                if operation != "reinforce":
+                    suffix = "danger" if predicted < 40 else "safe"
+                    self.assertEqual(
+                        self.bunker_text(world, f"GetRUSBunkerForecast{operation}"),
+                        f"RUS_bunker_forecast_{operation}_{suffix}",
+                    )
+                world.begin(f"RUS_bunker_{operation}")
+                world.finish(f"RUS_bunker_{operation}")
+                self.assertEqual(world.value("RUS_bunker_integrity"), predicted)
+
+    def test_feedback_distinguishes_empty_fed_hungry_and_offline_complex(self):
+        world = self.world()
+        world.variables["RUS_bunker_food"] = 100
+        world.run("RUS_bunker_refresh")
+        self.assertEqual(self.bunker_text(world, "GetRUSBunkerPriority"), "RUS_bunker_priority_excavate")
+        world.variables["RUS_bunker_layer_1"] = 1
+        world.variables["RUS_bunker_depth"] = 1
+        for stock, expected in ((0, "hungry"), (74, "normal"), (75, "fed")):
+            world.variables["RUS_bunker_food"] = stock
+            world.run("RUS_bunker_refresh")
+            self.assertEqual(self.bunker_text(world, "GetRUSBunkerFoodState"), f"RUS_bunker_food_state_{expected}")
+        world.variables["RUS_bunker_integrity"] = 39
+        world.run("RUS_bunker_refresh")
+        self.assertEqual(self.bunker_text(world, "GetRUSBunkerIntegrityState"), "RUS_bunker_integrity_danger")
+        world.variables["RUS_bunker_integrity"] = 40
+        world.run("RUS_bunker_refresh")
+        self.assertEqual(self.bunker_text(world, "GetRUSBunkerIntegrityState"), "RUS_bunker_integrity_low")
+        world.controller = False
+        world.run("RUS_bunker_refresh")
+        for function in ("GetRUSBunkerPriority", "GetRUSBunkerBenefits", "GetRUSBunkerBenefitDetails", "GetRUSBunkerFoodState"):
+            self.assertEqual(self.bunker_text(world, function), "RUS_bunker_feedback_offline")
+
+    def test_upgrade_forecasts_preserve_room_upkeep_and_include_extra_power(self):
+        for layer, variant in ((3, 1), (3, 2), (4, 1), (4, 2)):
+            with self.subTest(layer=layer, variant=variant):
+                world = self.world()
+                world.variables["RUS_bunker_depth"] = 5
+                world.variables["RUS_bunker_generators"] = 2
+                world.variables[f"RUS_bunker_layer_{layer}"] = variant
+                world.run("RUS_bunker_refresh")
+                power_after = world.value("RUS_bunker_preview_power_1")
+                food_after = world.value("RUS_bunker_preview_food_upgrade_granary") if (layer, variant) == (3, 2) else world.value("RUS_bunker_food_balance")
+                world.begin(f"RUS_bunker_upgrade_{layer}")
+                world.finish(f"RUS_bunker_upgrade_{layer}")
+                self.assertEqual(world.value("RUS_bunker_free_power"), power_after)
+                self.assertEqual(world.value("RUS_bunker_food_balance"), food_after)
+                world.execute(block(self.decisions[f"RUS_bunker_strip_{layer}"], "complete_effect"))
+                self.assertEqual(world.value("RUS_bunker_preview_power_3"), 9)
+                self.assertEqual(world.value("RUS_bunker_preview_food_room"), 1)
+
     def test_procurement_cannot_arbitrage_money(self):
         world = self.world()
         cash = world.value("ADISCORD_economy_treasury")
@@ -1161,7 +1349,7 @@ class RusCampaignTests(unittest.TestCase):
         before = world.balances()
         world.run("RUS_bunker_resupply")
         self.assertEqual(world.value("RUS_bunker_food"), 40)
-        self.assertEqual(world.balances(), (before[0] - 15, before[1] - 100, before[2]))
+        self.assertEqual(world.balances(), (before[0] - 15, before[1] - 500, before[2]))
         self.assertAlmostEqual(world.value("RUS_bunker_army_org_factor"), org)
         world.variables["RUS_bunker_layer_2"] = 1
         world.variables["RUS_bunker_layer_3"] = 2
@@ -1178,7 +1366,7 @@ class RusCampaignTests(unittest.TestCase):
         world = self.world()
         world.focuses.discard("RUS_strategic_freight_reserve")
         world.pp = 15
-        world.variables["ADISCORD_economy_treasury"] = 100
+        world.variables["ADISCORD_economy_treasury"] = 500
         world.variables["RUS_bunker_food"] = 60.01
         world.run("RUS_bunker_refresh")
         before = world.balances()
@@ -1227,7 +1415,13 @@ class RusCampaignTests(unittest.TestCase):
         world.variables["RUS_bunker_food"] = 100
         world.run("RUS_bunker_refresh")
         self.assertEqual(world.value("RUS_bunker_food_state"), 1, "An unfitted bunker has nobody to feed")
-        self.assertIn("reinforce_rate", {entry.key for entry in block(parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"), "RUS_bunker_complex")})
+        bunker_modifier = block(
+            parse(f"common/dynamic_modifiers/{BASE}_dynamic_modifiers.txt"),
+            "RUS_bunker_complex",
+        )
+        self.assertEqual(
+            scalar(bunker_modifier, "land_reinforce_rate"), "RUS_bunker_reinforce_rate"
+        )
 
     def test_freight_reserve_convoy_and_surplus_sale_settle_exact_amounts(self):
         world = self.world()
@@ -1241,12 +1435,12 @@ class RusCampaignTests(unittest.TestCase):
         world.run("RUS_bunker_refresh")
         world.run("RUS_bunker_resupply")
         self.assertEqual(world.value("RUS_bunker_food"), 140)
-        self.assertEqual(world.balances(), (before[0] - 15, before[1] - 100, before[2]))
+        self.assertEqual(world.balances(), (before[0] - 15, before[1] - 500, before[2]))
         income = world.value("ADISCORD_economy_current_month_action_income")
         world.run("RUS_bunker_food_sale")
         self.assertEqual(world.value("RUS_bunker_food"), 100)
-        self.assertEqual(world.value("ADISCORD_economy_treasury"), before[1] - 100 + 70)
-        self.assertEqual(world.value("ADISCORD_economy_current_month_action_income") - income, 70)
+        self.assertEqual(world.value("ADISCORD_economy_treasury"), before[1] - 500 + 300)
+        self.assertEqual(world.value("ADISCORD_economy_current_month_action_income") - income, 300)
         world.variables["RUS_bunker_food"] = 39.99
         cash = world.value("ADISCORD_economy_treasury")
         world.run("RUS_bunker_food_sale")
@@ -1300,6 +1494,33 @@ class RusCampaignTests(unittest.TestCase):
                     world.variables["RUS_bunker_project"] = 1
                 native = all(world.matches(block(self.decisions[name], gate)) for gate in ("visible", "available", "custom_cost_trigger"))
                 self.assertEqual(world.matches(self.triggers[trigger]), native, (name, layer_value, depth, pp, cash, equipment, power, busy))
+
+    def test_order_text_rows_follow_the_selected_layer_without_overlap(self):
+        window = block(block(parse("interface/ADISCORD_RUS.gui"), "guiTypes"), "containerWindowType")
+        widgets = {scalar(child.value, "name"): child.value for child in window if child.key in ("buttonType", "instantTextBoxType")}
+        panel = block(block(parse("common/scripted_guis/ADISCORD_RUS_scripted_gui.txt"), "scripted_gui"), "ADISCORD_RUS_bunker_panel")
+        visibility = block(panel, "triggers")
+        actions = (("guard", 1), ("shelter", 1), ("water", 2), ("signals", 2), ("workshop", 3), ("granary", 3), ("clinic", 4), ("laboratory", 4), ("archive", 5), ("command", 5))
+        actions += tuple((f"upgrade_{layer}", layer) for layer in range(1, 6))
+        world = self.world()
+        for action, layer in actions:
+            name = f"RUS_bunker_{action}_button"
+            button = widgets[name]
+            top = float(scalar(block(button, "position"), "y"))
+            bottom = top + float(scalar(block(button, "size"), "y"))
+            previous_bottom = top
+            for suffix in ("label", "benefit", "status"):
+                row_name = f"{name}_{suffix}"
+                self.assertTrue(row_name in widgets, row_name)
+                row = widgets[row_name]
+                y = float(scalar(block(row, "position"), "y"))
+                end = y + float(scalar(row, "maxHeight"))
+                self.assertGreaterEqual(y, previous_bottom, row_name)
+                self.assertLessEqual(end, bottom, row_name)
+                previous_bottom = end
+                for selected in range(1, 6):
+                    world.variables["RUS_bunker_selected_layer"] = selected
+                    self.assertEqual(world.matches(block(visibility, row_name + "_visible")), selected == layer, row_name)
 
     def test_panel_pictures_and_widgets_fit_declared_bounds(self):
         window = block(block(parse("interface/ADISCORD_RUS.gui"), "guiTypes"), "containerWindowType")
@@ -1754,7 +1975,7 @@ class RusCampaignTests(unittest.TestCase):
         names = {
             "RUS_patient_doctrine_delta", "RUS_swift_doctrine_delta",
             "RUS_professional_service_delta", "RUS_army_organization_delta",
-            "RUS_army_empire_delta", "RUS_black_army_banner_delta",
+            "RUS_army_empire_delta", "RUS_black_army_banner_delta", "RUS_motor_pool_dispatch_delta",
         }
         previews = set()
 

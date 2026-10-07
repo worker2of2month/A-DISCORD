@@ -61,6 +61,12 @@ guiTypes = {
 			pdx_tooltip = "contractual_etatism_desc"
 		}
 		iconType = {
+			name = "ideology_icon_appanage_revanchism"
+			position = { x = 0 y = 0 }
+			spriteType = "GFX_ideology_appanage_revanchism_countryview"
+			pdx_tooltip = "appanage_revanchism_desc"
+		}
+		iconType = {
 			name = "ideology_icon_etatism"
 			position = { x = 5 y = -3 }
 			spriteType = "GFX_ideology_etatism_countryview_group"

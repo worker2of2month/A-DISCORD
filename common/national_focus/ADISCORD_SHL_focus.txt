@@ -17,7 +17,7 @@ focus_tree = {
 		icon = GFX_goal_generic_construct_civ_factory
 		x = 12
 		y = 0
-		cost = 4
+		cost = 1
 		search_filters = { FOCUS_FILTER_INDUSTRY FOCUS_FILTER_POLITICAL }
 		available = {
 			SHL_country_operable = yes
@@ -709,7 +709,16 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 10
-			add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = SHL }
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 150
+				producer = SHL
+			}
+			add_equipment_to_stockpile = {
+				type = train_equipment_1
+				amount = 10
+				producer = SHL
+			}
 		}
 		ai_will_do = { base = 5 }
 	}

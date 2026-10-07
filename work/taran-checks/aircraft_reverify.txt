@@ -1,0 +1,1156 @@
+[io_pdx.updater] INFO:  Skipped update check. (already ran today)
+[io_pdx] INFO:  Running bl_ext.user_default.io_pdx_mesh from d:\steam\steamapps\common\blender\blender.exe ((5, 2, 2))
+[io_pdx] INFO:  C:\Users\Admin\AppData\Roaming\Blender Foundation\Blender\5.2\extensions\user_default\io_pdx_mesh
+[io_pdx] INFO:  Loading Blender UI.
+[io_pdx.updater] INFO:  Skipped update check. (already ran today)
+[io_pdx] INFO:  Running io_pdx_mesh from d:\steam\steamapps\common\blender\blender.exe ((5, 2, 2))
+[io_pdx] INFO:  C:\Users\Admin\AppData\Roaming\Blender Foundation\Blender\5.2\extensions\user_default\io_pdx_mesh
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0790 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0026 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0327 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 2
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0092 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_early_fighter.blend"
+VERIFIED DEF_early_fighter 1048
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1564 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0035 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0435 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0155 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_early_cas.blend"
+VERIFIED DEF_early_cas 1780
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0971 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0010 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0283 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_fighter.blend"
+VERIFIED DEF_fighter 1352
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1843 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0012 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0547 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0013 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_cas.blend"
+VERIFIED DEF_cas 1784
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_future_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1035 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0012 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_future_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0283 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_future_fighter.blend"
+VERIFIED DEF_future_fighter 1328
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - DEF_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1536 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0011 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - DEF_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0413 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\DEF_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0017 sec)
+Info: Packed 3 file(s)
+Info: Saved as "DEF_future_cas.blend"
+VERIFIED DEF_future_cas 1808
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0836 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0031 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0284 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 2
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0053 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_early_fighter.blend"
+VERIFIED ARB_early_fighter 1048
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1743 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0049 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0411 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0116 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_early_cas.blend"
+VERIFIED ARB_early_cas 1780
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1027 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0010 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0382 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0011 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_fighter.blend"
+VERIFIED ARB_fighter 1352
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1419 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0369 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_cas.blend"
+VERIFIED ARB_cas 1784
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_future_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1065 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_future_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0352 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0011 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_future_fighter.blend"
+VERIFIED ARB_future_fighter 1328
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - ARB_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1435 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - ARB_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0384 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\ARB_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "ARB_future_cas.blend"
+VERIFIED ARB_future_cas 1808
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0980 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0039 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0292 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0105 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_early_fighter.blend"
+VERIFIED WRK_early_fighter 1372
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1740 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0046 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0540 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0111 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_early_cas.blend"
+VERIFIED WRK_early_cas 2052
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1001 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0010 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0280 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_fighter.blend"
+VERIFIED WRK_fighter 1376
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1743 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0494 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_cas.blend"
+VERIFIED WRK_cas 2056
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_future_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0980 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0011 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_future_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0338 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0011 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_future_fighter.blend"
+VERIFIED WRK_future_fighter 1352
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - WRK_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1732 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0012 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - WRK_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0623 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\WRK_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0017 sec)
+Info: Packed 3 file(s)
+Info: Saved as "WRK_future_cas.blend"
+VERIFIED WRK_future_cas 2104
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1001 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0034 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0323 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0101 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_early_fighter.blend"
+VERIFIED RUS_early_fighter 1372
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1447 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0038 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0357 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0100 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_early_cas.blend"
+VERIFIED RUS_early_cas 1804
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.0973 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0294 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0011 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_fighter.blend"
+VERIFIED RUS_fighter 1376
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1467 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0010 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0385 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0013 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_cas.blend"
+VERIFIED RUS_cas 1808
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_future_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1062 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0009 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_future_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0415 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_future_fighter.blend"
+VERIFIED RUS_future_fighter 1408
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - RUS_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1912 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0011 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - RUS_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0446 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\RUS_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0013 sec)
+Info: Packed 3 file(s)
+Info: Saved as "RUS_future_cas.blend"
+VERIFIED RUS_future_cas 1888
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_early_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1204 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0032 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_early_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0285 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0097 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_early_fighter.blend"
+VERIFIED NAM_early_fighter 1348
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_early_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1741 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_left
+[io_pdx] INFO:  gathering q,s keyframes for bone - prop_right
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0035 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_early_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0366 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_early_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,31)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 3
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_left
+[io_pdx] INFO:  setting q,s keyframes on bone - prop_right
+[io_pdx] INFO:  import finished! (0.0102 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_early_cas.blend"
+VERIFIED NAM_early_cas 1896
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1030 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0010 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0303 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0013 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_fighter.blend"
+VERIFIED NAM_fighter 1376
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1587 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0012 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0426 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_cas.blend"
+VERIFIED NAM_cas 1900
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_fighter.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_future_fighter
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1047 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_fighter_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0012 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_fighter.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_future_fighter
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0331 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_fighter_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0012 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_future_fighter.blend"
+VERIFIED NAM_future_fighter 1408
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_cas.mesh
+[io_pdx] INFO:  writing node 1/1 - NAM_future_cas
+[io_pdx] INFO:  writing mesh - 0
+[io_pdx] INFO:  writing material -
+[io_pdx] INFO:  writing skinning data -
+[io_pdx] INFO:  writing skeleton -
+[io_pdx] INFO:  writing locators -
+[io_pdx] INFO:  writing .mesh file -
+[io_pdx] INFO:  export finished! (0.1758 sec)
+[io_pdx] INFO:  exporting - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_cas_idle.anim
+[io_pdx] INFO:  gathering animation info -
+[io_pdx] INFO:  gathering initial bone transforms -
+[io_pdx] INFO:  gathering keyframes -
+[io_pdx] INFO:  writing .anim file
+[io_pdx] INFO:  export finished! (0.0011 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_cas.mesh
+[io_pdx] INFO:  creating node 1/1 - NAM_future_cas
+[io_pdx] INFO:  creating skeleton -
+[io_pdx] INFO:  creating mesh -
+[io_pdx] INFO:  creating material - PdxMeshAdvanced
+[io_pdx] INFO:  creating skinning data -
+[io_pdx] INFO:  creating locator 1/4 - root
+[io_pdx] INFO:  creating locator 2/4 - gun1
+[io_pdx] INFO:  creating locator 3/4 - gun2
+[io_pdx] INFO:  creating locator 4/4 - bomb
+[io_pdx] INFO:  import finished! (0.0617 sec)
+[io_pdx] INFO:  importing - C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\work\country-aircraft\NAM_future_cas_idle.anim
+[io_pdx] INFO:  setting playback speed - 30
+[io_pdx] INFO:  setting playback range - (1,2)
+[io_pdx] INFO:  finding armature -
+[io_pdx] INFO:  finding bones -
+[io_pdx] INFO:  animation supports uniform scale -
+[io_pdx] INFO:  setting initial pose on bones - 1
+[io_pdx] INFO:  import finished! (0.0013 sec)
+Info: Packed 3 file(s)
+Info: Saved as "NAM_future_cas.blend"
+VERIFIED NAM_future_cas 1980
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+
+Blender quit

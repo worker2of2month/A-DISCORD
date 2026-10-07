@@ -2078,6 +2078,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 20
+			add_tech_bonus = {
+				name = STP_pw_local_officer_courses
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
 			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
 		}
 		ai_will_do = { base = 10 }

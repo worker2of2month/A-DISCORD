@@ -105,6 +105,10 @@ defined_text = {
 defined_text = {
 	name = GetSubIdeologyEtatism
 	text = {
+		trigger = { has_country_leader_ideology = appanage_revanchism }
+		localization_key = appanage_revanchism
+	}
+	text = {
 		trigger = { has_country_leader_ideology = contractual_etatism }
 		localization_key = contractual_etatism
 	}

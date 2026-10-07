@@ -59,6 +59,20 @@ def flatten(items):
 
 
 class SouthFinalWarContractTests(unittest.TestCase):
+    def test_shared_settlement_variables_have_native_global_writers(self):
+        entries = list(flatten(parse_clausewitz(EFFECTS.read_text(encoding="utf-8"))))
+        self.assertFalse(any(entry.key == "set_global_variable" for entry in entries))
+        written = {
+            field.value
+            for entry in entries
+            if entry.key == "set_variable"
+            for field in entry.value
+            if field.key == "var"
+        }
+        for name in ("crisis", "declarer_side", "winner_side", "terms", "subject_type"):
+            self.assertIn(f"global.ADISCORD_south_{name}", written)
+            self.assertNotIn(f"ADISCORD_south_{name}", written)
+
     def test_every_regional_state_is_woken_bound_offered_and_settled(self):
         for name in (
             "ADISCORD_south_wake_regional_countries",

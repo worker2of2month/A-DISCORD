@@ -29,7 +29,7 @@ ADISCORD_south_crisis_cycle = {
 		set_global_flag = ADISCORD_south_final_resolved
 		set_global_flag = ADISCORD_south_hegemon_SHL
 		set_global_flag = ADISCORD_south_unopposed
-		set_global_variable = { var = ADISCORD_south_winner_side value = 1 }
+		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
 		news_event = { id = ADISCORD_south.31 hours = 1 }
 	}
 	else_if = {
@@ -84,10 +84,10 @@ ADISCORD_south_final_war_start = {
 		ADISCORD_south_select_north_leader = yes
 		if = {
 			limit = { tag = SHL }
-			set_global_variable = { var = ADISCORD_south_declarer_side value = 1 }
+			set_variable = { var = global.ADISCORD_south_declarer_side value = 1 }
 		}
 		else = {
-			set_global_variable = { var = ADISCORD_south_declarer_side value = 2 }
+			set_variable = { var = global.ADISCORD_south_declarer_side value = 2 }
 		}
 		ADISCORD_south_wake_regional_countries = yes
 
@@ -491,18 +491,18 @@ ADISCORD_south_final_resolve_shl_victory = {
 		# The resolved flag precedes white peace so on_peace cannot re-enter.
 		set_global_flag = ADISCORD_south_final_resolved
 		set_global_flag = ADISCORD_south_hegemon_SHL
-		set_global_variable = { var = ADISCORD_south_winner_side value = 1 }
-		set_global_variable = { var = ADISCORD_south_terms value = 1 }
-		set_global_variable = { var = ADISCORD_south_subject_type value = 0 }
+		set_variable = { var = global.ADISCORD_south_winner_side value = 1 }
+		set_variable = { var = global.ADISCORD_south_terms value = 1 }
+		set_variable = { var = global.ADISCORD_south_subject_type value = 0 }
 		if = {
 			limit = { SHL = { check_variable = { var = SHL_political_course value = 1 compare = equals } } }
-			set_global_variable = { var = ADISCORD_south_terms value = 2 }
-			set_global_variable = { var = ADISCORD_south_subject_type value = 1 }
+			set_variable = { var = global.ADISCORD_south_terms value = 2 }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 1 }
 		}
 		else_if = {
 			limit = { SHL = { check_variable = { var = SHL_political_course value = 2 compare = equals } } }
-			set_global_variable = { var = ADISCORD_south_terms value = 2 }
-			set_global_variable = { var = ADISCORD_south_subject_type value = 2 }
+			set_variable = { var = global.ADISCORD_south_terms value = 2 }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 2 }
 		}
 		ADISCORD_south_end_final_wars = yes
 		ADISCORD_south_mark_losers = yes
@@ -524,16 +524,16 @@ ADISCORD_south_final_resolve_north_victory = {
 		}
 		set_global_flag = ADISCORD_south_final_resolved
 		set_global_flag = ADISCORD_south_hegemon_NAM
-		set_global_variable = { var = ADISCORD_south_winner_side value = 2 }
-		set_global_variable = { var = ADISCORD_south_terms value = 2 }
-		set_global_variable = { var = ADISCORD_south_subject_type value = 0 }
+		set_variable = { var = global.ADISCORD_south_winner_side value = 2 }
+		set_variable = { var = global.ADISCORD_south_terms value = 2 }
+		set_variable = { var = global.ADISCORD_south_subject_type value = 0 }
 		if = {
 			limit = { NAM = { has_completed_focus = NAM_service_state } }
-			set_global_variable = { var = ADISCORD_south_subject_type value = 3 }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 3 }
 		}
 		else_if = {
 			limit = { NAM = { has_completed_focus = NAM_federal_charter } }
-			set_global_variable = { var = ADISCORD_south_subject_type value = 4 }
+			set_variable = { var = global.ADISCORD_south_subject_type value = 4 }
 		}
 		ADISCORD_south_end_final_wars = yes
 		ADISCORD_south_mark_losers = yes
@@ -553,7 +553,7 @@ ADISCORD_south_final_resolve_north_victory = {
 # crisis refills from half.
 ADISCORD_south_final_repel = {
 	clr_global_flag = ADISCORD_south_final_started
-	set_global_variable = { var = ADISCORD_south_crisis value = 50 }
+	set_variable = { var = global.ADISCORD_south_crisis value = 50 }
 	ADISCORD_south_end_final_wars = yes
 	ADISCORD_south_close_campaign_state = yes
 	ADISCORD_south_clear_participants = yes

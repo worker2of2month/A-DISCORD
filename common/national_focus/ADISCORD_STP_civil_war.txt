@@ -2151,6 +2151,7 @@ focus_tree = {
 		completion_reward = {
 			effect_tooltip = { STP_pw_open_shield_corps = yes }
 			hidden_effect = { STP_pw_open_shield_corps = yes }
+			custom_effect_tooltip = STP_taran_project_unlocked_tt
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -3718,7 +3719,7 @@ focus_tree = {
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 24
 		y = 4
-		cost = 4
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
 			custom_trigger_tooltip = {
@@ -5053,7 +5054,7 @@ focus_tree = {
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 24
 		y = 11
-		cost = 4
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -5204,7 +5205,7 @@ focus_tree = {
 		icon = GFX_focus_STP_bookmark_support_party
 		x = 16
 		y = 4
-		cost = 5
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
 		available = {
 			custom_trigger_tooltip = {
@@ -5299,7 +5300,7 @@ focus_tree = {
 		icon = GFX_goal_generic_territory_or_war
 		x = 18
 		y = 8
-		cost = 5
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
 		available = {
 			custom_trigger_tooltip = {
@@ -10862,12 +10863,17 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
-				amount = 600
+				amount = 9000
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 96
 				producer = ROOT
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
-				amount = 60
+				amount = 180
 				producer = ROOT
 			}
 			army_experience = 15
@@ -12292,12 +12298,17 @@ focus_tree = {
 		completion_reward = {
 			add_equipment_to_stockpile = {
 				type = ADISCORD_infantry_equipment_2156
-				amount = 900
+				amount = 18000
+				producer = ROOT
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 144
 				producer = ROOT
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment_1
-				amount = 90
+				amount = 240
 				producer = ROOT
 			}
 		}
@@ -13458,6 +13469,12 @@ focus_tree = {
 		cancel_if_invalid = yes
 		completion_reward = {
 			army_experience = 20
+			add_tech_bonus = {
+				name = STP_pw_local_officer_courses
+				bonus = 0.5
+				uses = 1
+				category = support_tech
+			}
 			add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = ROOT }
 		}
 		ai_will_do = { base = 10 }

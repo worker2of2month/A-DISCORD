@@ -1,0 +1,43 @@
+.F....EE.......
+======================================================================
+ERROR: test_new_native_aircraft_have_distinct_verified_meshes_and_spinning_props (tools.tests.test_adiscord_country_vehicles.CountryVehicleTests.test_new_native_aircraft_have_distinct_verified_meshes_and_spinning_props)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_country_vehicles.py", line 42, in test_new_native_aircraft_have_distinct_verified_meshes_and_spinning_props
+    report = json.loads((SOURCE / "verification.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\country_vehicles\\verification.json'
+
+======================================================================
+ERROR: test_nine_distinct_native_meshes_have_current_verification (tools.tests.test_adiscord_country_vehicles.CountryVehicleTests.test_nine_distinct_native_meshes_have_current_verification)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_country_vehicles.py", line 123, in test_nine_distinct_native_meshes_have_current_verification
+    report = json.loads((SOURCE / "verification.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Admin\\Documents\\Paradox Interactive\\Hearts of Iron IV\\mod\\A-Discord\\tools\\assets\\source\\country_vehicles\\verification.json'
+
+======================================================================
+FAIL: test_nine_cas_exports_and_editable_sources_are_verified (tools.tests.test_adiscord_country_vehicles.CasProgressionTests.test_nine_cas_exports_and_editable_sources_are_verified)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_country_vehicles.py", line 227, in test_nine_cas_exports_and_editable_sources_are_verified
+    self.assertTrue(manifest.is_file(), "Three-tier CAS package has not been built")
+AssertionError: False is not true : Three-tier CAS package has not been built
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.280s
+
+FAILED (failures=1, errors=2)

@@ -2050,6 +2050,38 @@ VAL_partner_strategic_can_accept = {
 	VAL_partner_strategic_terms_valid = yes
 }
 
+VAL_zeppelin_unlocked = {
+	has_completed_focus = VAL_Return_Southern_Tsaygen
+	has_completed_focus = VAL_frontier_return_irem
+	has_completed_focus = VAL_Wasteland_Charter
+	has_completed_focus = VAL_Southern_Expansion
+	has_completed_focus = VAL_Eastern_Expansion
+}
+
+VAL_zeppelin_operational = {
+	tag = VAL
+	has_capitulated = no
+	owns_state = 168
+	controls_state = 168
+	custom_trigger_tooltip = {
+		tooltip = VAL_zeppelin_capital_secured_tt
+		capital_scope = {
+			is_owned_by = VAL
+			is_controlled_by = VAL
+		}
+	}
+}
+
+VAL_zeppelin_affordable = {
+	NOT = { has_political_power < 100 }
+	check_variable = {
+		var = ADISCORD_economy_treasury
+		value = 1000
+		compare = greater_than_or_equals
+	}
+	NOT = { has_manpower < 400 }
+}
+
 VAL_southern_tsaygen_revenge_available = {
 	custom_trigger_tooltip = { tooltip = VAL_perimeter_open_tt has_global_flag = ADISCORD_vorkerland_dirty_opened }
 	has_capitulated = no

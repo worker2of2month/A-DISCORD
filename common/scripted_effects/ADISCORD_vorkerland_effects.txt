@@ -7503,42 +7503,42 @@ ADISCORD_vorkerland_inherit_wrk_prewar_preparations = {
 		}
 		if = {
 			limit = { has_completed_focus = WRK_measure_confederation_fault_lines }
-			add_political_power = 10
-			add_stability = 0.01
+			add_political_power = 40
+			add_stability = 0.03
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_fault_lines_measured
 		}
 		if = {
 			limit = { has_completed_focus = WRK_convene_council_of_republics }
-			add_political_power = 20
+			add_political_power = 75
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_republics_consulted
 		}
 		if = {
 			limit = { has_completed_focus = WRK_inventory_emergency_stores }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1000 producer = WKR }
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 9000 producer = WKR }
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_emergency_stores_counted
 		}
 		if = {
 			limit = { has_completed_focus = WRK_bind_districts_to_charter }
-			add_stability = 0.02
-			add_command_power = 5
+			add_stability = 0.04
+			add_command_power = 10
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_charter_reaffirmed
 		}
 		if = {
 			limit = { has_completed_focus = WRK_disperse_railway_reserves }
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
-			army_experience = 3
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
+			army_experience = 20
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_distributed
 		}
 		if = {
 			limit = { has_completed_focus = WRK_issue_continuity_orders }
-			add_command_power = 10
-			army_experience = 5
+			add_command_power = 20
+			army_experience = 15
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_continuity_orders
 		}
 		if = {
 			limit = { has_completed_focus = WRK_place_reserves_under_worker }
-			add_manpower = 250
-			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 1500 producer = WKR }
+			add_manpower = 1000
+			add_equipment_to_stockpile = { type = infantry_equipment_0 amount = 5400 producer = WKR }
 			add_timed_idea = { idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70 }
 			set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed
 			set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker
@@ -12071,8 +12071,35 @@ RUS_bunker_refresh = {
 		add_to_variable = { var = RUS_bunker_stability_factor value = 0.05 }
 		add_to_variable = { var = RUS_bunker_reinforce_rate value = 0.05 }
 	}
+	RUS_bunker_refresh_previews = yes
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# Прогнозы используют текущую планировку и недельный баланс, а не запас пищи.
+# Недельное изменение запаса не требует их пересчёта; GUI не меняет симуляцию.
+RUS_bunker_refresh_previews = {
+	set_variable = { var = RUS_bunker_preview_power_1 value = RUS_bunker_free_power }
+	subtract_from_variable = { var = RUS_bunker_preview_power_1 value = 1 }
+	set_variable = { var = RUS_bunker_preview_power_2 value = RUS_bunker_free_power }
+	subtract_from_variable = { var = RUS_bunker_preview_power_2 value = 2 }
+	set_variable = { var = RUS_bunker_preview_power_3 value = RUS_bunker_free_power }
+	subtract_from_variable = { var = RUS_bunker_preview_power_3 value = 3 }
+	set_variable = { var = RUS_bunker_preview_food_room value = RUS_bunker_food_balance }
+	subtract_from_variable = { var = RUS_bunker_preview_food_room value = 1 }
+	set_variable = { var = RUS_bunker_preview_food_water value = RUS_bunker_food_balance }
+	add_to_variable = { var = RUS_bunker_preview_food_water value = 1 }
+	set_variable = { var = RUS_bunker_preview_food_granary value = RUS_bunker_food_balance }
+	add_to_variable = { var = RUS_bunker_preview_food_granary value = 4 }
+	set_variable = { var = RUS_bunker_preview_food_upgrade_granary value = RUS_bunker_food_balance }
+	add_to_variable = { var = RUS_bunker_preview_food_upgrade_granary value = 2 }
+	set_variable = { var = RUS_bunker_preview_excavate value = RUS_bunker_integrity }
+	subtract_from_variable = { var = RUS_bunker_preview_excavate value = 20 }
+	set_variable = { var = RUS_bunker_preview_rush value = RUS_bunker_integrity }
+	subtract_from_variable = { var = RUS_bunker_preview_rush value = 35 }
+	set_variable = { var = RUS_bunker_preview_reinforce value = RUS_bunker_integrity }
+	add_to_variable = { var = RUS_bunker_preview_reinforce value = 40 }
+	clamp_variable = { var = RUS_bunker_preview_reinforce min = 0 max = 100 }
 }
 
 # Output: temp RUS_bunker_food_state_now. 0 = hungry fitted rooms,
@@ -12885,8 +12912,8 @@ RUS_bunker_resupply = {
 	if = {
 		limit = { RUS_bunker_resupply_available = yes }
 		add_political_power = -15
-		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 500 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 500 }
 		if = {
 			limit = { has_completed_focus = RUS_strategic_freight_reserve }
 			add_to_variable = { var = RUS_bunker_food value = 60 }
@@ -12902,8 +12929,8 @@ RUS_bunker_food_sale = {
 	if = {
 		limit = { RUS_bunker_food_sale_available = yes }
 		subtract_from_variable = { var = RUS_bunker_food value = 40 }
-		add_to_variable = { var = ADISCORD_economy_treasury value = 70 }
-		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 70 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 300 }
 		RUS_bunker_refresh = yes
 	}
 }

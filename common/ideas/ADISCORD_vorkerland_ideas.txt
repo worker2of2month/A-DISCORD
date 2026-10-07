@@ -2884,6 +2884,13 @@ ideas = {
 			}
 		}
 
+		RUS_motor_pool_dispatch_delta = {
+			picture = ADISCORD_military_organization_cadre_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = { supply_consumption_factor = -0.05 }
+		}
+
 		RUS_professional_service_delta = {
 			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }

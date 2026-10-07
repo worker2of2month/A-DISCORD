@@ -205,7 +205,7 @@ class CountryVehicleTests(unittest.TestCase):
             )[0]
             self.assertIn("sprite = ADISCORD_" + role, block)
             self.assertIn(
-                'clone = "light_plane_entity" name = "ADISCORD_' + role + '_entity"',
+                'clone = "ADISCORD_DEF_early_' + role + '_entity"',
                 assets,
             )
 
@@ -263,6 +263,96 @@ class CasProgressionTests(unittest.TestCase):
             for level, prefix in enumerate(("early_", "", "future_")):
                 self.assertEqual(routes[f"{tag}_ADISCORD_cas_{level}_entity"],
                                  f"ADISCORD_{source}_{prefix}cas_entity")
+
+
+class SharedAircraftTests(unittest.TestCase):
+    def routes(self):
+        text = (ROOT / "gfx/entities/zz_ADISCORD_country_vehicles.asset").read_text()
+        return {
+            name: parent
+            for parent, name in re.findall(
+                r'entity\s*=\s*\{\s*clone\s*=\s*"([^"]+)"\s*name\s*=\s*"([^"]+)"\s*\}', text
+            )
+        }
+
+    def test_default_and_regional_families_cover_all_visual_levels(self):
+        routes = self.routes()
+        groups = {
+            "": "DEF",
+            "SHL": "ARB", "AZH": "ARB", "GLP": "ARB", "KDR": "ARB",
+            "KYZ": "ARB", "MZR": "ARB", "RHM": "ARB", "SDR": "ARB", "SLF": "ARB",
+            "WRK": "WRK", "DAN": "WRK", "EYR": "WRK", "EGC": "WRK",
+            "RIV": "WRK", "YOR": "WRK", "ZAO": "WRK", "PWR": "WRK",
+            "VLA": "WRK", "ROM": "WRK", "SOL": "WRK", "TRU": "WRK",
+            "WCG": "WRK", "VAD": "WRK", "WKR": "WRK", "TVA": "WRK", "IBA": "WRK",
+            "RUS": "RUS", "NAM": "NAM",
+        }
+        for tag, family in groups.items():
+            for role in ("fighter", "cas"):
+                for level, prefix in enumerate(("early_", "", "future_")):
+                    name = f"{tag + '_' if tag else ''}ADISCORD_{role}_{level}_entity"
+                    with self.subTest(name=name):
+                        self.assertEqual(routes.get(name), f"ADISCORD_{family}_{prefix}{role}_entity")
+
+    def test_cosmetic_names_preserve_the_regional_family(self):
+        routes = self.routes()
+        for tag in (
+            "WRK_confederation", "WRK_vorkerland_technocracy",
+            "VAD_vorkerland_restoration", "SOL_vorkerland_worker_protectorate",
+            "ZAO_zaozersk_republic", "SLF_svetlogorsk_republic",
+        ):
+            family = "ARB" if tag.startswith("SLF_") else "WRK"
+            self.assertEqual(
+                routes.get(f"{tag}_ADISCORD_fighter_2_entity"),
+                f"ADISCORD_{family}_future_fighter_entity",
+            )
+        for tag, family in (
+            ("RUS_last_empire", "RUS"), ("RUS_black_banner_empire", "RUS"),
+            ("RUS_restoration_state", "RUS"), ("NAM_confederation", "NAM"),
+        ):
+            self.assertEqual(routes.get(f"{tag}_ADISCORD_fighter_2_entity"),
+                             f"ADISCORD_{family}_future_fighter_entity")
+
+    def test_registered_minors_and_native_air_sprites_have_a_complete_fallback(self):
+        from tools.assets.source.country_vehicles import package_vehicles as package
+        from tools.assets.source.build_northern_infantry import ARAB_TAGS
+
+        self.assertEqual(set(package.ARAB_TAGS), {"SHL", *ARAB_TAGS})
+        routes = self.routes()
+        families = package.country_families()
+        history = (ROOT / "history/countries/WRK - WorkerLand.txt").read_text()
+        subjects = re.findall(r'set_autonomy\s*=\s*\{\s*target\s*=\s*(\w+)', history)
+        for tag in subjects:
+            self.assertEqual(families[tag], "NAM" if tag == "NAM" else "WRK")
+        self.assertEqual(families["BJK"], "DEF")
+        self.assertEqual(families["APH"], "DEF")
+        for tag, family in families.items():
+            for sprite, role in (("light_plane", "fighter"), ("medium_plane", "cas")):
+                for tier, prefix in enumerate(("early_", "", "future_")):
+                    self.assertEqual(routes.get(f"{tag}_{sprite}_{tier}_entity"),
+                                     f"ADISCORD_{family}_{prefix}{role}_entity")
+
+    def test_shared_native_exports_match_the_installed_verification(self):
+        path = DEST / "aircraft_verification.json"
+        self.assertTrue(path.is_file(), "Shared aircraft package has not been built")
+        report = json.loads(path.read_text())
+        hashes = set()
+        for family in ("DEF", "ARB", "WRK", "RUS", "NAM"):
+            for role in ("fighter", "cas"):
+                for prefix in ("early_", "", "future_"):
+                    name = f"{family}_{prefix}{role}"
+                    row = report[name]
+                    self.assertTrue(row["native_reimport"])
+                    self.assertTrue(row["rigid_skin_slots_validated"])
+                    self.assertLess(row["triangles"], 16000)
+                    self.assertEqual(row["materials"], 1)
+                    self.assertLess(row["animation"]["loop_error"], .001)
+                    if prefix == "early_":
+                        self.assertGreater(row["animation"]["max_vertex_motion"], .1)
+                    for filename, expected in row["files"].items():
+                        self.assertEqual(hashlib.sha256((DEST / filename).read_bytes()).hexdigest(), expected)
+                    hashes.add(row["files"][name + ".mesh"])
+        self.assertEqual(len(hashes), 30)
 
 
 if __name__ == "__main__":

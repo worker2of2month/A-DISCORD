@@ -1519,6 +1519,11 @@ spriteTypes = {
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_destroy_nodrul.png"
 	}
 	spriteType = {
+		name = "GFX_focus_VAL_Frontier_Assault"
+		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Frontier_Assault.png"
+	}
+
+	spriteType = {
 		name = "GFX_focus_VAL_Marine_Contract_Corps"
 		texturefile = "gfx/interface/goals/VAL/GFX_focus_VAL_Marine_Contract_Corps.png"
 	}

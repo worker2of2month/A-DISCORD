@@ -1170,9 +1170,9 @@ VAD_LATE_WAR_BRIDGE_PREREQUISITES = {
 
 VAD_LATE_WAR_BRIDGE_REWARDS = {
     "VAD_reconcile_emergency_district_rolls": (
-        "add_manpower = 400",
-        "add_stability = 0.01",
-        "add_political_power = 5",
+        "add_manpower = 2000",
+        "add_stability = 0.02",
+        "add_political_power = 25",
         "set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_rolls_reconciled",
     ),
     "VAD_restore_eastern_supply_corridors": (
@@ -1191,10 +1191,10 @@ VAD_LATE_WAR_BRIDGE_REWARDS = {
         "set_country_flag = ADISCORD_vorkerland_focus_vad_emergency_workshops_converted",
     ),
     "VAD_publish_interim_restoration_register": (
-        "add_command_power = 10",
-        "army_experience = 5",
-        "add_political_power = 15",
-        "add_stability = 0.01",
+        "add_command_power = 15",
+        "army_experience = 15",
+        "add_political_power = 50",
+        "add_stability = 0.03",
         "set_country_flag = ADISCORD_vorkerland_focus_vad_interim_restoration_register",
     ),
 }
@@ -3692,14 +3692,14 @@ def collect_issues() -> list[str]:
 
     hardline_rewards = {
         "WRK_place_reserves_under_worker": (
-            "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 1500 producer = WRK",
+            "add_manpower = 1000",
+            "type = infantry_equipment_0 amount = 5400 producer = WRK",
             "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
             "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
         ),
         "VAD_seal_district_arsenals": (
-            "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 1500 producer = ROOT",
+            "add_manpower = 1000",
+            "type = infantry_equipment_0 amount = 5400 producer = ROOT",
             "idea = ADISCORD_vorkerland_vad_eastern_mandate days = 140",
             "set_country_flag = ADISCORD_vorkerland_district_hardline_committed",
         ),
@@ -3708,7 +3708,7 @@ def collect_issues() -> list[str]:
         reward_blocks = _blocks(blocks.get(focus_id, ""), "completion_reward")
         reward = reward_blocks[0] if len(reward_blocks) == 1 else ""
         for token in tokens:
-            if reward.count(token) != 1:
+            if re.sub(r"\s+", " ", reward).count(token) != 1:
                 issues.append(
                     f"{focus_id} must contain hardline reward {token} exactly once"
                 )
@@ -3726,13 +3726,13 @@ def collect_issues() -> list[str]:
             )
         else:
             for token in (
-                "add_manpower = 250",
-                "type = infantry_equipment_0 amount = 1500 producer = WKR",
+                "add_manpower = 1000",
+                "type = infantry_equipment_0 amount = 5400 producer = WKR",
                 "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
                 "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
                 "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
             ):
-                if hardline_scopes[0].count(token) != 1:
+                if re.sub(r"\s+", " ", hardline_scopes[0]).count(token) != 1:
                     issues.append(
                         f"WRK hardline carryover must contain {token} exactly once"
                     )
@@ -4681,7 +4681,7 @@ def collect_issues() -> list[str]:
 
     for focus_id, tokens in {
         "VAD_inventory_eastern_works": (
-            "type = support_equipment amount = 50 producer = VAD",
+            "type = support_equipment amount = 200 producer = VAD",
             "bonus = 0.50 uses = 1 category = industry",
         ),
         "VAD_standardize_district_logistics": (
@@ -4689,12 +4689,12 @@ def collect_issues() -> list[str]:
             "ADISCORD_vorkerland_vad_standardized_logistics days = 70",
         ),
         "VAD_reconstitute_district_guard": (
-            "type = infantry_equipment_0 amount = 1000 producer = VAD",
-            "type = support_equipment amount = 40 producer = VAD",
+            "type = infantry_equipment_0 amount = 5400 producer = VAD",
+            "type = support_equipment amount = 100 producer = VAD",
         ),
     }.items():
         for token in tokens:
-            if token not in blocks.get(focus_id, ""):
+            if token not in re.sub(r"\s+", " ", blocks.get(focus_id, "")):
                 issues.append(f"{focus_id} lacks strengthened VAD payload {token}")
 
     armament_depots = blocks.get("VAD_reopen_armament_depots", "")
@@ -5870,19 +5870,29 @@ def collect_issues() -> list[str]:
                 f"claimant focus events contain forbidden lifecycle/controller effect {token}"
             )
 
-    bounded_values = {
-        "add_political_power": 25.0,
-        "add_stability": 0.03,
-        "add_manpower": 600.0,
-        "army_experience": 10.0,
-        "add_command_power": 10.0,
-        "add_war_support": 0.03,
+    bounded_values_by_source = {
+        "focus": {
+            "add_political_power": 75.0,
+            "add_stability": 0.05,
+            "add_manpower": 4000.0,
+            "army_experience": 40.0,
+            "add_command_power": 20.0,
+            "add_war_support": 0.03,
+        },
+        "claimant event": {
+            "add_political_power": 25.0,
+            "add_stability": 0.03,
+            "add_manpower": 600.0,
+            "army_experience": 10.0,
+            "add_command_power": 10.0,
+            "add_war_support": 0.03,
+        },
     }
     for reward_source_name, reward_source in (
         ("focus", source),
         ("claimant event", claimant_events),
     ):
-        for effect, maximum in bounded_values.items():
+        for effect, maximum in bounded_values_by_source[reward_source_name].items():
             for raw in re.findall(
                 rf"\b{effect}\s*=\s*(-?\d+(?:\.\d+)?)", reward_source
             ):
@@ -5896,11 +5906,13 @@ def collect_issues() -> list[str]:
             amount = re.search(r"\bamount\s*=\s*(-?\d+(?:\.\d+)?)", shipment)
             if amount is None:
                 continue
-            maximum = (
-                1500
-                if re.search(r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment)
-                else 150
+            is_infantry = re.search(
+                r"\btype\s*=\s*infantry_equipment(?:_0)?\b", shipment
             )
+            if reward_source_name == "focus":
+                maximum = 9000 if is_infantry else 300
+            else:
+                maximum = 1500 if is_infantry else 150
             if float(amount[1]) > maximum:
                 issues.append(
                     f"{reward_source_name} equipment reward {amount[1]} exceeds maximum {maximum}"

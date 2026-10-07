@@ -1483,6 +1483,49 @@ VAL_reclamation = {
 
 VAL_frontier = {
 
+	VAL_build_zeppelin = {
+		icon = generic_air
+		allowed = { tag = VAL }
+		visible = {
+			VAL_zeppelin_unlocked = yes
+			NOT = { has_country_flag = VAL_zeppelin_delivered }
+		}
+		available = {
+			VAL_zeppelin_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_zeppelin_slot_free_tt
+				NOT = { has_variable = VAL_zeppelin_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_zeppelin_cost
+		custom_cost_trigger = { VAL_zeppelin_affordable = yes }
+		fire_only_once = no
+		days_remove = 150
+		complete_effect = {
+			custom_effect_tooltip = VAL_zeppelin_project_tt
+			hidden_effect = { VAL_zeppelin_start = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_zeppelin_operational = no
+				NOT = { has_variable = VAL_zeppelin_deposit }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_variable = VAL_zeppelin_deposit }
+				custom_effect_tooltip = VAL_zeppelin_refund_tt
+				hidden_effect = { VAL_zeppelin_refund = yes }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_zeppelin_result_tt
+			hidden_effect = { VAL_zeppelin_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
 	VAL_Island_Treaty = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }

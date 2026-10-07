@@ -1,0 +1,314 @@
+category = {
+	name = "Voices"
+	soundeffects = {
+		RUS_infantry_idle
+		RUS_infantry_retreat
+		RUS_infantry_neutral_combat
+		RUS_infantry_positive_combat
+		RUS_infantry_move_out
+	}
+	compressor = {
+		enabled = yes
+		pregain = 0.0
+		postgain = 2.0
+		ratio = 10.0
+		threshold = -10.0
+		attacktime = 0.030
+		releasetime = 1.2
+	}
+}
+
+soundeffect = {
+	name = "RUS_infantry_idle"
+	sounds = {
+		sound = "RUS_idle_001"
+		sound = "RUS_idle_002"
+		sound = "RUS_idle_003"
+		sound = "RUS_idle_004"
+		sound = "RUS_idle_005"
+		sound = "RUS_idle_006"
+		sound = "RUS_idle_007"
+		sound = "RUS_idle_008"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "RUS_infantry_retreat"
+	sounds = {
+		sound = "RUS_retreat_001"
+		sound = "RUS_retreat_002"
+		sound = "RUS_retreat_003"
+		sound = "RUS_retreat_004"
+		sound = "RUS_retreat_005"
+		sound = "RUS_retreat_006"
+		sound = "RUS_retreat_007"
+		sound = "RUS_retreat_008"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "RUS_infantry_neutral_combat"
+	sounds = {
+		sound = "RUS_attack_001"
+		sound = "RUS_attack_002"
+		sound = "RUS_attack_003"
+		sound = "RUS_attack_004"
+		sound = "RUS_attack_005"
+		sound = "RUS_attack_006"
+		sound = "RUS_attack_007"
+		sound = "RUS_attack_008"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "RUS_infantry_positive_combat"
+	sounds = {
+		sound = "RUS_positive_001"
+		sound = "RUS_positive_002"
+		sound = "RUS_positive_003"
+		sound = "RUS_positive_004"
+		sound = "RUS_positive_005"
+		sound = "RUS_positive_006"
+		sound = "RUS_positive_007"
+		sound = "RUS_positive_008"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+soundeffect = {
+	name = "RUS_infantry_move_out"
+	sounds = {
+		sound = "RUS_moving_001"
+		sound = "RUS_moving_002"
+		sound = "RUS_moving_003"
+		sound = "RUS_moving_004"
+		sound = "RUS_moving_005"
+		sound = "RUS_moving_006"
+		sound = "RUS_moving_007"
+		sound = "RUS_moving_008"
+	}
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.00
+	volume_random_offset = { 0.0 0.0 }
+	playbackrate_random_offset = { 0.0 0.0 }
+}
+
+sound = {
+	name = "RUS_idle_001"
+	file = "RUS/RUS_idle_001.wav"
+}
+
+sound = {
+	name = "RUS_idle_002"
+	file = "RUS/RUS_idle_002.wav"
+}
+
+sound = {
+	name = "RUS_idle_003"
+	file = "RUS/RUS_idle_003.wav"
+}
+
+sound = {
+	name = "RUS_idle_004"
+	file = "RUS/RUS_idle_004.wav"
+}
+
+sound = {
+	name = "RUS_idle_005"
+	file = "RUS/RUS_idle_005.wav"
+}
+
+sound = {
+	name = "RUS_idle_006"
+	file = "RUS/RUS_idle_006.wav"
+}
+
+sound = {
+	name = "RUS_idle_007"
+	file = "RUS/RUS_idle_007.wav"
+}
+
+sound = {
+	name = "RUS_idle_008"
+	file = "RUS/RUS_idle_008.wav"
+}
+
+sound = {
+	name = "RUS_retreat_001"
+	file = "RUS/RUS_retreat_001.wav"
+}
+
+sound = {
+	name = "RUS_retreat_002"
+	file = "RUS/RUS_retreat_002.wav"
+}
+
+sound = {
+	name = "RUS_retreat_003"
+	file = "RUS/RUS_retreat_003.wav"
+}
+
+sound = {
+	name = "RUS_retreat_004"
+	file = "RUS/RUS_retreat_004.wav"
+}
+
+sound = {
+	name = "RUS_retreat_005"
+	file = "RUS/RUS_retreat_005.wav"
+}
+
+sound = {
+	name = "RUS_retreat_006"
+	file = "RUS/RUS_retreat_006.wav"
+}
+
+sound = {
+	name = "RUS_retreat_007"
+	file = "RUS/RUS_retreat_007.wav"
+}
+
+sound = {
+	name = "RUS_retreat_008"
+	file = "RUS/RUS_retreat_008.wav"
+}
+
+sound = {
+	name = "RUS_attack_001"
+	file = "RUS/RUS_attack_001.wav"
+}
+
+sound = {
+	name = "RUS_attack_002"
+	file = "RUS/RUS_attack_002.wav"
+}
+
+sound = {
+	name = "RUS_attack_003"
+	file = "RUS/RUS_attack_003.wav"
+}
+
+sound = {
+	name = "RUS_attack_004"
+	file = "RUS/RUS_attack_004.wav"
+}
+
+sound = {
+	name = "RUS_attack_005"
+	file = "RUS/RUS_attack_005.wav"
+}
+
+sound = {
+	name = "RUS_attack_006"
+	file = "RUS/RUS_attack_006.wav"
+}
+
+sound = {
+	name = "RUS_attack_007"
+	file = "RUS/RUS_attack_007.wav"
+}
+
+sound = {
+	name = "RUS_attack_008"
+	file = "RUS/RUS_attack_008.wav"
+}
+
+sound = {
+	name = "RUS_positive_001"
+	file = "RUS/RUS_positive_001.wav"
+}
+
+sound = {
+	name = "RUS_positive_002"
+	file = "RUS/RUS_positive_002.wav"
+}
+
+sound = {
+	name = "RUS_positive_003"
+	file = "RUS/RUS_positive_003.wav"
+}
+
+sound = {
+	name = "RUS_positive_004"
+	file = "RUS/RUS_positive_004.wav"
+}
+
+sound = {
+	name = "RUS_positive_005"
+	file = "RUS/RUS_positive_005.wav"
+}
+
+sound = {
+	name = "RUS_positive_006"
+	file = "RUS/RUS_positive_006.wav"
+}
+
+sound = {
+	name = "RUS_positive_007"
+	file = "RUS/RUS_positive_007.wav"
+}
+
+sound = {
+	name = "RUS_positive_008"
+	file = "RUS/RUS_positive_008.wav"
+}
+
+sound = {
+	name = "RUS_moving_001"
+	file = "RUS/RUS_moving_001.wav"
+}
+
+sound = {
+	name = "RUS_moving_002"
+	file = "RUS/RUS_moving_002.wav"
+}
+
+sound = {
+	name = "RUS_moving_003"
+	file = "RUS/RUS_moving_003.wav"
+}
+
+sound = {
+	name = "RUS_moving_004"
+	file = "RUS/RUS_moving_004.wav"
+}
+
+sound = {
+	name = "RUS_moving_005"
+	file = "RUS/RUS_moving_005.wav"
+}
+
+sound = {
+	name = "RUS_moving_006"
+	file = "RUS/RUS_moving_006.wav"
+}
+
+sound = {
+	name = "RUS_moving_007"
+	file = "RUS/RUS_moving_007.wav"
+}
+
+sound = {
+	name = "RUS_moving_008"
+	file = "RUS/RUS_moving_008.wav"
+}

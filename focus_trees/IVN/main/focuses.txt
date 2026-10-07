@@ -1019,6 +1019,12 @@ focus_tree = {
 		continue_if_invalid = no
 		completion_reward = {
 			navy_experience = 25
+			add_tech_bonus = {
+				name = IVN_coastal_flotilla
+				bonus = 0.5
+				uses = 1
+				category = naval_equipment
+			}
 		}
 		ai_will_do = {
 			base = 10

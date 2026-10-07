@@ -28,9 +28,28 @@ focus_tree = {
 	focus = {
 		id = VAL_admin_local_guard
 		icon = GFX_goal_generic_allies_build_infantry
-		x = 8 y = 1 cost = 3
+		x = 8
+		y = 1
+		cost = 3
 		prerequisite = { focus = VAL_admin_restore_offices }
-		completion_reward = { army_experience = 15 add_equipment_to_stockpile = { type = infantry_equipment amount = 5000 producer = THIS } }
+		completion_reward = {
+			army_experience = 15
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 5670
+				producer = THIS
+			}
+			add_equipment_to_stockpile = {
+				type = ADISCORD_squad_weapons_equipment
+				amount = 48
+				producer = THIS
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 30
+				producer = THIS
+			}
+		}
 		ai_will_do = { base = 15 }
 	}
 	focus = {
@@ -48,9 +67,12 @@ focus_tree = {
 		icon = GFX_goal_generic_army_doctrines
 		x = 8
 		y = 2
-		cost = 3
+		cost = 2
 		prerequisite = { focus = VAL_admin_local_guard }
-		completion_reward = { add_command_power = 20 army_experience = 15 }
+		completion_reward = {
+			add_command_power = 20
+			army_experience = 15
+		}
 		ai_will_do = { base = 10 }
 	}
 	focus = {

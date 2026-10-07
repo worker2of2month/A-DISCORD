@@ -68,7 +68,7 @@ units = {
 }
 
 air_wings = {
-	16531 = {
+	66 = {
 		ADISCORD_fighter_airframe_2163 = { owner = "RUS" amount = 120 }
 	}
 }

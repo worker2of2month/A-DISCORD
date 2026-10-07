@@ -1,0 +1,1112 @@
+{
+  "DEF_early_fighter": {
+    "triangles": 1048,
+    "materials": 1,
+    "bones": 2,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.6720086727947403,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      11.75,
+      12.279999732971191,
+      3.791334867477417
+    ],
+    "files": {
+      "DEF_early_fighter.mesh": "12d5bba305f3096fc90db0cf04b50df15bfe0ccbcdbe8ad2170b4353bdac423f",
+      "DEF_early_fighter_idle.anim": "e7d6d1e3144a45d113451dc44ebccec71305baf35eacf5296d39c0f3a8dab7c2",
+      "DEF_fighter_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "d87e050181d021404f1b671874f28e5d9a378572b92ddc3e044e0f36410c0cf4",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "DEF_early_cas": {
+    "triangles": 1780,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.549999237060547,
+      11.829999923706055,
+      3.741334915161133
+    ],
+    "files": {
+      "DEF_early_cas.mesh": "e666a2d81effeb68cd48b1f8bf402a780446f048d34fb0b3499ef9e0b7889239",
+      "DEF_early_cas_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "DEF_cas_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "c7f8176d9a868626b460af45da7d09a7435df61f4a5c02b34f27f52c7ad0c82b",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "DEF_fighter": {
+    "triangles": 1352,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      12.229999542236328,
+      11.829999923706055,
+      3.240000009536743
+    ],
+    "files": {
+      "DEF_fighter.mesh": "204ceeba84ab76dce57f854b1db87ec8c6daf5a13edf3ba7fded929e289088b2",
+      "DEF_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "DEF_fighter_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "d2cd25448dab8e873612c8c8aec7493ddf5f687a4be45ce903a458e5b55e8659",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "DEF_cas": {
+    "triangles": 1784,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.029999732971191,
+      11.829999923706055,
+      3.5199999809265137
+    ],
+    "files": {
+      "DEF_cas.mesh": "b4765e1c0176d4fa93d60e63ea4c0fb291ffcf1c3715604db7e77226f5f70bf5",
+      "DEF_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "DEF_cas_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "25981fcfdc2129af1809249cc0c2c1543d5ec7c01f3e45564e9320512ecb46d5",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "DEF_future_fighter": {
+    "triangles": 1328,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      12.710000038146973,
+      11.829999923706055,
+      3.240000009536743
+    ],
+    "files": {
+      "DEF_future_fighter.mesh": "113c5d62223c00d56ebba8f49cd96d6df159ca4a5a75ea81c845ee26a0268d5b",
+      "DEF_future_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "DEF_fighter_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "829796307f9181b87c6f648a33123a89801e7bac5b392c10c02e974ae6d63c04",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "DEF_future_cas": {
+    "triangles": 1808,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.50999927520752,
+      11.829999923706055,
+      3.5199999809265137
+    ],
+    "files": {
+      "DEF_future_cas.mesh": "5fc89c9e90d65ab079cc231f05abbe48132bdfcb17e011a45c849d661bf1a5fb",
+      "DEF_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "DEF_cas_diffuse.dds": "8c03e0f0bfc2fe55d61f64d479fa37a25361b4d5b3fff651bd499d0e22fee1ac",
+      "DEF_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "DEF_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "53b917d92b66cd2487749d0c2522461f6c22dff0ed042f5986da3fe368c7c65d",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_early_fighter": {
+    "triangles": 1048,
+    "materials": 1,
+    "bones": 2,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.6720086727947403,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.549999237060547,
+      12.279999732971191,
+      3.791334867477417
+    ],
+    "files": {
+      "ARB_early_fighter.mesh": "6f4cde09d2026f9a1366e6d4602edd9ea51d030839ea27e2420e2935f42fa8f0",
+      "ARB_early_fighter_idle.anim": "e7d6d1e3144a45d113451dc44ebccec71305baf35eacf5296d39c0f3a8dab7c2",
+      "ARB_fighter_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "96e2df0c71ba3ec9fa9e59d8df18b9e721914be399fefc52915fc78a89ca1769",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_early_cas": {
+    "triangles": 1780,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008932114244,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.350000381469727,
+      11.829999923706055,
+      3.741334915161133
+    ],
+    "files": {
+      "ARB_early_cas.mesh": "9c2ccc783769b220e11d2edb9f9523569105bf63a30566080988168f8d0d46cb",
+      "ARB_early_cas_idle.anim": "789ed6f9ad2eebb336bbb42210abaabd88df31a20de06317232ba90092b1de1d",
+      "ARB_cas_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "076e469ef1245c0a81cdcebbecd6890ccfb624eb28515c0ab2ec7b131e67923a",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_fighter": {
+    "triangles": 1352,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.029999732971191,
+      11.829999923706055,
+      3.240000009536743
+    ],
+    "files": {
+      "ARB_fighter.mesh": "a3b7fa4e79f4e80ea60be55eb0879f7d3cfd0fa8b0cdd28c7a17bace93dd8bc3",
+      "ARB_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "ARB_fighter_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "c296b7639ed760e981b8a48435455fc1c61305839ea17ce1e04fa90573c0a8bf",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_cas": {
+    "triangles": 1784,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.829999923706055,
+      11.829999923706055,
+      3.5199999809265137
+    ],
+    "files": {
+      "ARB_cas.mesh": "bd08ef3409f1cdbcca9f665adf4d50834680eeb79bbef169c4a119a455ba285d",
+      "ARB_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "ARB_cas_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "02c3a7dece2374726ca4bd65adef761e924a39b8ac79f3655eb3fe5766fe41a8",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_future_fighter": {
+    "triangles": 1328,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.50999927520752,
+      11.829999923706055,
+      3.240000009536743
+    ],
+    "files": {
+      "ARB_future_fighter.mesh": "c597554a57d525ec7cacd361604dc148f53243f145beecf3c690b5d2e3e02d8b",
+      "ARB_future_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "ARB_fighter_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "69fe8f37f77fc32e96c4ad088d05ca025dfcccd4c0be7a4365034dc13f3e35ed",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "ARB_future_cas": {
+    "triangles": 1808,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      17.309999465942383,
+      11.829999923706055,
+      3.5199999809265137
+    ],
+    "files": {
+      "ARB_future_cas.mesh": "56763940165f89c49de54bf4fa1397d7e8d6f4bf1179cef93b7b59e0f940995e",
+      "ARB_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "ARB_cas_diffuse.dds": "874812132f15ad93ba2c36d02af388ef5a4dcb221a662a4fb41833b19cf0d1be",
+      "ARB_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "ARB_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "2f62cd213ae27681f217ba0c754a5c94e38995952b70bef357facdc90df1fb64",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_early_fighter": {
+    "triangles": 1372,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.449999809265137,
+      11.65999984741211,
+      3.431334972381592
+    ],
+    "files": {
+      "WRK_early_fighter.mesh": "98299be5fecfbc8bdb5633e1064a526de520129f97b69532e2bbf36c588b2131",
+      "WRK_early_fighter_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "WRK_fighter_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "4ee969251dc4c1fcea6f6598c95559728cf46643268bdf657580c9d1435d18e9",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_early_cas": {
+    "triangles": 2052,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.25,
+      11.65999984741211,
+      3.431334972381592
+    ],
+    "files": {
+      "WRK_early_cas.mesh": "49d1905b4c0c9eb2e78a63f6f82884c80c6d85c7bae7bc3861604baf1482a61c",
+      "WRK_early_cas_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "WRK_cas_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "6ece30123b5aa420d7779043a7430da4afbf1b6af227c4febaf2f96a89cd6a99",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_fighter": {
+    "triangles": 1376,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.929999351501465,
+      11.65999984741211,
+      2.930000066757202
+    ],
+    "files": {
+      "WRK_fighter.mesh": "39689b38db44a432572511eac7008f5f2a718a605290bdcb868d7ce462aa021d",
+      "WRK_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "WRK_fighter_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "a3162dbd4eadf1a23d0be28afe949ecf1aeca85f162f969d261bac9129fff88f",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_cas": {
+    "triangles": 2056,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.729999542236328,
+      11.65999984741211,
+      3.2100000381469727
+    ],
+    "files": {
+      "WRK_cas.mesh": "96a76030c3751db431df58ff7f4c420ee1147b17d95d4f8bb9a5096719ad64c2",
+      "WRK_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "WRK_cas_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "9592fe1a0f627fe9668f804dcf75b89faa25355c062cdb2008d1880a01e3de83",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_future_fighter": {
+    "triangles": 1352,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.40999984741211,
+      11.65999984741211,
+      2.930000066757202
+    ],
+    "files": {
+      "WRK_future_fighter.mesh": "2d94d37cb992e61d503aa3d6a001e2bd6bbefaa3e3557ee927fd3e4e1ec7acd8",
+      "WRK_future_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "WRK_fighter_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "074e8de0d87373f2070e1ae6348a120d93842e1c6ec8f01087fc8c23d1148621",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "WRK_future_cas": {
+    "triangles": 2104,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      16.209999084472656,
+      11.65999984741211,
+      3.2100000381469727
+    ],
+    "files": {
+      "WRK_future_cas.mesh": "659d091d200b81e71f386b73a3171127d3e4869a56b638aa20c0a638e40f4782",
+      "WRK_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "WRK_cas_diffuse.dds": "cdd851f09ac2b517b23b8564b37eb3eeeb7454b405b069061299524d86576ff8",
+      "WRK_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "WRK_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "e891f878e841ebfbc1fe727469102315da980673bf5542764d765affc4f3838c",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_early_fighter": {
+    "triangles": 1372,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      12.75,
+      12.460000038146973,
+      3.431334972381592
+    ],
+    "files": {
+      "RUS_early_fighter.mesh": "cacb1442b5cf7cc20c57d2da626b1c34cbda61788c6c15f856f42d21d89aeb6f",
+      "RUS_early_fighter_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "RUS_fighter_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "77dfca3805be8acee2106f787889ca4b101dd49c8ad745fa2c6b54538209145c",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_early_cas": {
+    "triangles": 1804,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.549999237060547,
+      12.460000038146973,
+      3.431334972381592
+    ],
+    "files": {
+      "RUS_early_cas.mesh": "adadad8b1a5b7984f0f30e57ab9c0973d74e5ac1fb34d7608531306baa060ce6",
+      "RUS_early_cas_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "RUS_cas_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "0b749103393ba335673064172673c6f4334d169ce9b16257f79e1709084b200b",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_fighter": {
+    "triangles": 1376,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.229999542236328,
+      12.460000038146973,
+      2.930000066757202
+    ],
+    "files": {
+      "RUS_fighter.mesh": "6fb2f46b084ac48428c98d567e112cb4eebc8b5e18efd9ea8c9a9d02ea57a822",
+      "RUS_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "RUS_fighter_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "b15696d206eb0163d9025932e281115c76558d52aa3cd73dd38ede9efed39579",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_cas": {
+    "triangles": 1808,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.029999732971191,
+      12.460000038146973,
+      3.2100000381469727
+    ],
+    "files": {
+      "RUS_cas.mesh": "8ca1f8d51b106574eca6b77c004e68faba6970903d96255ee3a73dad30309be6",
+      "RUS_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "RUS_cas_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "defce0acb3cd8e521ba60fefe89ca05b675c9d6fb52c1d4081b1e5c165638924",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_future_fighter": {
+    "triangles": 1408,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.710000038146973,
+      12.460000038146973,
+      2.930000066757202
+    ],
+    "files": {
+      "RUS_future_fighter.mesh": "5b0f996d21eca1e28f34b482467b9bf1fd59449fdc377a589bbed8ae5ab25672",
+      "RUS_future_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "RUS_fighter_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "5bb61943c5d03e9ffb74c36699902c35ce22fff83709b0bd9dfc506c5b6aa6e4",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "RUS_future_cas": {
+    "triangles": 1888,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      15.50999927520752,
+      12.460000038146973,
+      3.2100000381469727
+    ],
+    "files": {
+      "RUS_future_cas.mesh": "43404a94579f3ebdd39d45914f48a7170e6b406151023b0404e42cc1255a4d4e",
+      "RUS_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "RUS_cas_diffuse.dds": "a9d44306abf4709d4d3d14c6d79243d19da5d5b180180cad3e248612ed5a48d8",
+      "RUS_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "RUS_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "b78647d0b7a46afa0f817ae30161b11482bd2c9f7a33f17d9064f772e19222ff",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_early_fighter": {
+    "triangles": 1348,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      12.149999618530273,
+      11.829999923706055,
+      3.741334915161133
+    ],
+    "files": {
+      "NAM_early_fighter.mesh": "8409c15ea99233b6ab22fc6adf63d49e6edfd1d5d2b61d2967ab8f73429ab9ec",
+      "NAM_early_fighter_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "NAM_fighter_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "9fcd0e6012a8e8f91c8558d8687e2c515de68abffd27c5d75f7a82c294ac3d99",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_early_cas": {
+    "triangles": 1896,
+    "materials": 1,
+    "bones": 3,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 5,
+      "max_vertex_motion": 2.672008937691007,
+      "loop_error": 2.6656007498500226e-07
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.949999809265137,
+      12.010000228881836,
+      3.291334867477417
+    ],
+    "files": {
+      "NAM_early_cas.mesh": "9941ca2acb46e5f198fcfb1176495c69c25012549e986acd32857b1ed37cd95b",
+      "NAM_early_cas_idle.anim": "0b057c7f813dcce1bc13a4faf07df643d7b1bc89c7e82a99bc393499ee74efe7",
+      "NAM_cas_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "b808bc404d40c4abe3b255c8d465c2d1e5e80fe039421a611e1ed6b7980ad585",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_fighter": {
+    "triangles": 1376,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      12.629999160766602,
+      11.65999984741211,
+      2.930000066757202
+    ],
+    "files": {
+      "NAM_fighter.mesh": "aa76f2105295503cce0d9f9251a9ca89c77387a9b4a7c26a01c5cb3290b9adae",
+      "NAM_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NAM_fighter_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "c36da8bc4d0615f5eee1a6c51e86cc454ef24fcf0798445673f3072cb0283b44",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_cas": {
+    "triangles": 1900,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.429999351501465,
+      12.010000228881836,
+      3.069999933242798
+    ],
+    "files": {
+      "NAM_cas.mesh": "524bc7d38baaceeba7ac29171811ed5ef1b910f8dbdfb069e5b4594d3bfdcbf4",
+      "NAM_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NAM_cas_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "dc8eb15f85e2589cfe618bb567c2fae93c38c0c78ccda9a21593c58c4052d39c",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_future_fighter": {
+    "triangles": 1408,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      13.109999656677246,
+      11.65999984741211,
+      2.930000066757202
+    ],
+    "files": {
+      "NAM_future_fighter.mesh": "15db89caa542f0173912f61ea78490ff8253747821ff1bc07889fcb580ad3067",
+      "NAM_future_fighter_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NAM_fighter_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_fighter_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_fighter_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "02cf37ed23b5f8c21efb8bac5471192cd1936dcbf2e2ecc02ff18ade81872562",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  },
+  "NAM_future_cas": {
+    "triangles": 1980,
+    "materials": 1,
+    "bones": 1,
+    "rigid_skin_slots_validated": true,
+    "locators": [
+      "root",
+      "gun1",
+      "gun2",
+      "bomb"
+    ],
+    "animation": {
+      "samples": 2,
+      "max_vertex_motion": 0.0,
+      "loop_error": 0.0
+    },
+    "native_reimport": true,
+    "hoi4_runtime_verified": false,
+    "dimensions": [
+      14.90999984741211,
+      12.010000228881836,
+      3.069999933242798
+    ],
+    "files": {
+      "NAM_future_cas.mesh": "e753be17beae86416e67c1fbc883620d5a8c0671e198037ae3b6df88f081a609",
+      "NAM_future_cas_idle.anim": "02e671ae2613323414f88d4591c468f7a0396c3a4356ef1719848f45535b0868",
+      "NAM_cas_diffuse.dds": "e498b9c84b7d13fd9b98502b66c8444b588e12d06d811a74f0d8b9ffc91c562e",
+      "NAM_cas_normal.dds": "a18d563636f959134857c267c642b032614aab83e4e37ed1e4e15d92aa824810",
+      "NAM_cas_specular.dds": "a4a9d64948bd10de896a5175e198904ba4f130b5926cf5cc7b657a57f0f97fe6"
+    },
+    "blend_sha256": "3f3749b83e64790645dcd3fa510309a963f363945db6384fbb083d46e01d77f4",
+    "source_hashes": {
+      "tools/assets/source/build_country_aircraft.py": "5a154ca75111c858a5393a31de3f23d1a3de8c5b092159f04721c0610b437254",
+      "tools/assets/source/build_country_cas.py": "9e8fa5b934d9cc56f24d9ff7eccdfc9c9552cd5a8b4ee1f4c9ebc06dfc39999b",
+      "tools/assets/source/country_vehicles/package_vehicles.py": "4b0cbff047cfa7641cb6e02c06e58261815c4b1835eec3879fed1d0afff1a453"
+    }
+  }
+}

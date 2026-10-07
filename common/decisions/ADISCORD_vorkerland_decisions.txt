@@ -3231,23 +3231,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_excavate_affordable = yes }
 		days_remove = 42
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_excavate_requirements_tt
+			custom_effect_tooltip = RUS_bunker_excavate_result_tt
 			hidden_effect = { RUS_bunker_excavate_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 1 compare = equals } }
-				RUS_bunker_excavate_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 1 compare = equals } }
+					RUS_bunker_excavate_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 1 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_excavate_finish = yes } }
@@ -3280,23 +3284,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_rush_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_rush_requirements_tt
+			custom_effect_tooltip = RUS_bunker_rush_result_tt
 			hidden_effect = { RUS_bunker_rush_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 2 compare = equals } }
-				RUS_bunker_rush_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 2 compare = equals } }
+					RUS_bunker_rush_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 2 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_rush_finish = yes } }
@@ -3329,24 +3337,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_guard_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_guard_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_guard_delta }
 			hidden_effect = { RUS_bunker_guard_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 11 compare = equals } }
-				RUS_bunker_guard_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 11 compare = equals } }
+					RUS_bunker_guard_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 11 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_guard_finish = yes } }
@@ -3379,24 +3391,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_shelter_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_shelter_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_shelter_delta }
 			hidden_effect = { RUS_bunker_shelter_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 12 compare = equals } }
-				RUS_bunker_shelter_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 12 compare = equals } }
+					RUS_bunker_shelter_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 12 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_shelter_finish = yes } }
@@ -3430,24 +3446,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_water_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_water_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_water_delta }
 			hidden_effect = { RUS_bunker_water_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 13 compare = equals } }
-				RUS_bunker_water_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 13 compare = equals } }
+					RUS_bunker_water_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 13 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_water_finish = yes } }
@@ -3481,24 +3501,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_signals_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_signals_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_signals_delta }
 			hidden_effect = { RUS_bunker_signals_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 14 compare = equals } }
-				RUS_bunker_signals_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 14 compare = equals } }
+					RUS_bunker_signals_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 14 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_signals_finish = yes } }
@@ -3532,24 +3556,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_workshop_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_workshop_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_workshop_delta }
 			hidden_effect = { RUS_bunker_workshop_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 15 compare = equals } }
-				RUS_bunker_workshop_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 15 compare = equals } }
+					RUS_bunker_workshop_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 15 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_workshop_finish = yes } }
@@ -3583,24 +3611,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_granary_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_granary_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_granary_delta }
 			hidden_effect = { RUS_bunker_granary_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 16 compare = equals } }
-				RUS_bunker_granary_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 16 compare = equals } }
+					RUS_bunker_granary_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 16 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_granary_finish = yes } }
@@ -3634,24 +3666,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_clinic_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_clinic_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_clinic_delta }
 			hidden_effect = { RUS_bunker_clinic_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 17 compare = equals } }
-				RUS_bunker_clinic_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 17 compare = equals } }
+					RUS_bunker_clinic_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 17 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_clinic_finish = yes } }
@@ -3685,24 +3721,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_laboratory_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_laboratory_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_laboratory_delta }
 			hidden_effect = { RUS_bunker_laboratory_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 18 compare = equals } }
-				RUS_bunker_laboratory_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 18 compare = equals } }
+					RUS_bunker_laboratory_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 18 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_laboratory_finish = yes } }
@@ -3736,24 +3776,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_archive_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_archive_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_archive_delta }
 			hidden_effect = { RUS_bunker_archive_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 19 compare = equals } }
-				RUS_bunker_archive_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 19 compare = equals } }
+					RUS_bunker_archive_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 19 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_archive_finish = yes } }
@@ -3787,24 +3831,28 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_command_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_command_requirements_tt
+			custom_effect_tooltip = RUS_bunker_room_completion_tt
 			effect_tooltip = { add_ideas = RUS_bunker_command_delta }
 			hidden_effect = { RUS_bunker_command_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 20 compare = equals } }
-				RUS_bunker_command_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 20 compare = equals } }
+					RUS_bunker_command_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 20 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_command_finish = yes } }
@@ -3837,23 +3885,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_generator_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_generator_requirements_tt
+			custom_effect_tooltip = RUS_bunker_generator_result_tt
 			hidden_effect = { RUS_bunker_generator_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 30 compare = equals } }
-				RUS_bunker_generator_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 30 compare = equals } }
+					RUS_bunker_generator_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 30 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_generator_finish = yes } }
@@ -3885,23 +3937,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_reinforce_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_reinforce_requirements_tt
+			custom_effect_tooltip = RUS_bunker_reinforce_result_tt
 			hidden_effect = { RUS_bunker_reinforce_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 31 compare = equals } }
-				RUS_bunker_reinforce_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 31 compare = equals } }
+					RUS_bunker_reinforce_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 31 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_reinforce_finish = yes } }
@@ -4209,23 +4265,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_upgrade_1_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_upgrade_1_requirements_tt
+			custom_effect_tooltip = RUS_bunker_upgrade_1_result_tt
 			hidden_effect = { RUS_bunker_upgrade_1_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 40 compare = equals } }
-				RUS_bunker_upgrade_1_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 40 compare = equals } }
+					RUS_bunker_upgrade_1_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 40 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_1_finish = yes } }
@@ -4259,23 +4319,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_upgrade_2_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_upgrade_2_requirements_tt
+			custom_effect_tooltip = RUS_bunker_upgrade_2_result_tt
 			hidden_effect = { RUS_bunker_upgrade_2_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 41 compare = equals } }
-				RUS_bunker_upgrade_2_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 41 compare = equals } }
+					RUS_bunker_upgrade_2_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 41 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_2_finish = yes } }
@@ -4309,23 +4373,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_upgrade_3_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_upgrade_3_requirements_tt
+			custom_effect_tooltip = RUS_bunker_upgrade_3_result_tt
 			hidden_effect = { RUS_bunker_upgrade_3_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 42 compare = equals } }
-				RUS_bunker_upgrade_3_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 42 compare = equals } }
+					RUS_bunker_upgrade_3_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 42 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_3_finish = yes } }
@@ -4366,23 +4434,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_upgrade_4_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_upgrade_4_requirements_tt
+			custom_effect_tooltip = RUS_bunker_upgrade_4_result_tt
 			hidden_effect = { RUS_bunker_upgrade_4_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 43 compare = equals } }
-				RUS_bunker_upgrade_4_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 43 compare = equals } }
+					RUS_bunker_upgrade_4_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 43 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_4_finish = yes } }
@@ -4423,23 +4495,27 @@ RUS_bunker_construction = {
 		custom_cost_trigger = { RUS_bunker_upgrade_5_affordable = yes }
 		days_remove = 21
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_upgrade_5_requirements_tt
+			custom_effect_tooltip = RUS_bunker_upgrade_5_result_tt
 			hidden_effect = { RUS_bunker_upgrade_5_start = yes }
 		}
 		cancel_trigger = {
-			OR = {
-				RUS_bunker_operational = no
-				NOT = { check_variable = { var = RUS_bunker_project value = 44 compare = equals } }
-				RUS_bunker_upgrade_5_requirements = no
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_order_cancel_tt
+				OR = {
+					RUS_bunker_operational = no
+					NOT = { check_variable = { var = RUS_bunker_project value = 44 compare = equals } }
+					RUS_bunker_upgrade_5_requirements = no
+				}
 			}
 		}
 		cancel_effect = {
-			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = { var = RUS_bunker_project value = 44 compare = equals }
+					}
+					RUS_bunker_refund = yes
 				}
-				custom_effect_tooltip = RUS_bunker_refunded_tt
-				hidden_effect = { RUS_bunker_refund = yes }
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_5_finish = yes } }

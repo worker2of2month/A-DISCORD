@@ -2647,6 +2647,77 @@ VAL_raise_shield_special_forces = {
 	}
 }
 
+# The deposit reserves the paid hull and crew through the native decision timer.
+# Settlement clears it before delivery or refund so callbacks cannot pay twice.
+VAL_zeppelin_start = {
+	if = {
+		limit = {
+			VAL_zeppelin_unlocked = yes
+			VAL_zeppelin_operational = yes
+			VAL_zeppelin_affordable = yes
+			NOT = { has_country_flag = VAL_zeppelin_delivered }
+			NOT = { has_variable = VAL_zeppelin_deposit }
+		}
+		set_variable = { var = VAL_zeppelin_deposit value = 1000 }
+		add_political_power = -100
+		add_manpower = -400
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_zeppelin_refund = {
+	if = {
+		limit = { has_variable = VAL_zeppelin_deposit }
+		set_temp_variable = { var = VAL_zeppelin_refund_cash value = VAL_zeppelin_deposit }
+		clear_variable = VAL_zeppelin_deposit
+		if = {
+			limit = { has_decision = VAL_build_zeppelin }
+			remove_decision = VAL_build_zeppelin
+		}
+		add_political_power = 100
+		add_manpower = 400
+		add_to_variable = { var = ADISCORD_economy_treasury value = VAL_zeppelin_refund_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = VAL_zeppelin_refund_cash }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+VAL_zeppelin_finish = {
+	if = {
+		limit = { has_variable = VAL_zeppelin_deposit }
+		if = {
+			limit = {
+				VAL_zeppelin_operational = yes
+				NOT = { has_country_flag = VAL_zeppelin_delivered }
+			}
+			clear_variable = VAL_zeppelin_deposit
+			set_country_flag = VAL_zeppelin_delivered
+			if = {
+				limit = { NOT = { has_template = "Kefreyt Airship" } }
+				division_template = {
+					name = "Kefreyt Airship"
+					override_model = ADISCORD_zeppelin_entity
+					is_locked = yes
+					regiments = {
+						ADISCORD_zeppelin = { x = 0 y = 0 }
+					}
+				}
+			}
+			# The paid crew is already outside the national recruit pool.
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Воздушный линкор «Кефрейт»\" division_template = \"Kefreyt Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+					owner = VAL
+					allow_spawning_on_enemy_provs = no
+				}
+			}
+		}
+		else = { VAL_zeppelin_refund = yes }
+	}
+}
+
 VAL_spawn_zeppelin_trial = {
 	if = {
 		limit = {

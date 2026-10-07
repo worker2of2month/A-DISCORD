@@ -47,10 +47,14 @@ scripted_gui = {
 			ideology_icon_contractual_etatism_visible = {
 				has_country_leader_ideology = contractual_etatism
 			}
+			ideology_icon_appanage_revanchism_visible = {
+				has_country_leader_ideology = appanage_revanchism
+			}
 			ideology_icon_etatism_visible = {
 				AND = {
 					has_government = etatism
 					NOT = { has_country_leader_ideology = contractual_etatism }
+					NOT = { has_country_leader_ideology = appanage_revanchism }
 				}
 			}
 			ideology_icon_vorkerism_visible = {

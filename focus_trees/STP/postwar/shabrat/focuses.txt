@@ -426,6 +426,7 @@
 		completion_reward = {
 			effect_tooltip = { STP_pw_open_shield_corps = yes }
 			hidden_effect = { STP_pw_open_shield_corps = yes }
+			custom_effect_tooltip = STP_taran_project_unlocked_tt
 		}
 		ai_will_do = { base = 3 }
 	}
@@ -525,7 +526,7 @@
 		icon = GFX_focus_generic_diplomatic_treaty
 		x = 24
 		y = 4
-		cost = 4
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STS }
 		available = {
 			custom_trigger_tooltip = {
@@ -1860,7 +1861,7 @@
 		icon = GFX_goal_generic_intelligence_exchange
 		x = 24
 		y = 11
-		cost = 4
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar STP_pc_freedom_continues = yes }
 		available = {
 			custom_trigger_tooltip = {
@@ -2011,7 +2012,7 @@
 		icon = GFX_focus_STP_bookmark_support_party
 		x = 16
 		y = 4
-		cost = 5
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
 		available = {
 			custom_trigger_tooltip = {
@@ -2106,7 +2107,7 @@
 		icon = GFX_goal_generic_territory_or_war
 		x = 18
 		y = 8
-		cost = 5
+		cost = 2
 		allow_branch = { has_country_flag = STP_cw_postwar OR = { has_country_leader = { character = STP_grigory_sotnikov ruling_only = yes } has_country_leader = { character = STP_Leonid_Barchel ruling_only = yes } } }
 		available = {
 			custom_trigger_tooltip = {

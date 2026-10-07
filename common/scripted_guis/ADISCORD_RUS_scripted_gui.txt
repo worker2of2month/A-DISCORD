@@ -138,52 +138,82 @@ scripted_gui = {
 			RUS_bunker_details_1_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_guard_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_guard_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_guard_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_guard_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_guard_button_click_enabled = { RUS_bunker_guard_ui_available = yes }
 			RUS_bunker_shelter_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_shelter_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_shelter_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_shelter_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_shelter_button_click_enabled = { RUS_bunker_shelter_ui_available = yes }
 			RUS_bunker_upgrade_1_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_upgrade_1_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_upgrade_1_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
+			RUS_bunker_upgrade_1_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 1 compare = equals } }
 			RUS_bunker_upgrade_1_button_click_enabled = { RUS_bunker_upgrade_1_ui_available = yes }
 			RUS_bunker_details_2_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_water_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_water_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_water_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_water_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_water_button_click_enabled = { RUS_bunker_water_ui_available = yes }
 			RUS_bunker_signals_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_signals_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_signals_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_signals_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_signals_button_click_enabled = { RUS_bunker_signals_ui_available = yes }
 			RUS_bunker_upgrade_2_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_upgrade_2_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_upgrade_2_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
+			RUS_bunker_upgrade_2_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 2 compare = equals } }
 			RUS_bunker_upgrade_2_button_click_enabled = { RUS_bunker_upgrade_2_ui_available = yes }
 			RUS_bunker_details_3_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_workshop_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_workshop_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_workshop_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_workshop_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_workshop_button_click_enabled = { RUS_bunker_workshop_ui_available = yes }
 			RUS_bunker_granary_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_granary_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_granary_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_granary_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_granary_button_click_enabled = { RUS_bunker_granary_ui_available = yes }
 			RUS_bunker_upgrade_3_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_upgrade_3_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_upgrade_3_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
+			RUS_bunker_upgrade_3_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 3 compare = equals } }
 			RUS_bunker_upgrade_3_button_click_enabled = { RUS_bunker_upgrade_3_ui_available = yes }
 			RUS_bunker_details_4_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_clinic_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_clinic_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_clinic_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_clinic_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_clinic_button_click_enabled = { RUS_bunker_clinic_ui_available = yes }
 			RUS_bunker_laboratory_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_laboratory_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_laboratory_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_laboratory_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_laboratory_button_click_enabled = { RUS_bunker_laboratory_ui_available = yes }
 			RUS_bunker_upgrade_4_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_upgrade_4_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_upgrade_4_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
+			RUS_bunker_upgrade_4_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 4 compare = equals } }
 			RUS_bunker_upgrade_4_button_click_enabled = { RUS_bunker_upgrade_4_ui_available = yes }
 			RUS_bunker_details_5_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_archive_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_archive_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_archive_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_archive_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_archive_button_click_enabled = { RUS_bunker_archive_ui_available = yes }
 			RUS_bunker_command_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_command_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_command_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_command_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_command_button_click_enabled = { RUS_bunker_command_ui_available = yes }
 			RUS_bunker_upgrade_5_button_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_upgrade_5_button_label_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_upgrade_5_button_benefit_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
+			RUS_bunker_upgrade_5_button_status_visible = { check_variable = { var = RUS_bunker_selected_layer value = 5 compare = equals } }
 			RUS_bunker_upgrade_5_button_click_enabled = { RUS_bunker_upgrade_5_ui_available = yes }
 			RUS_bunker_resupply_button_click_enabled = { RUS_bunker_resupply_available = yes }
 		}

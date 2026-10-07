@@ -57,6 +57,15 @@ spriteTypes = {
 		}
 	}
 	corneredTileSpriteType = {
+		name = "GFX_ideology_appanage_revanchism"
+		texturefile = "gfx/interface/ideologies/appanage_revanchism_group.png"
+		size = {
+			x = 70
+			y = 70
+		}
+	}
+
+	corneredTileSpriteType = {
 		name = "GFX_ideology_contractual_etatism"
 		texturefile = "gfx/interface/ideologies/condottierism_group.png"
 		size = {
@@ -128,6 +137,15 @@ spriteTypes = {
 			y = 125
 		}
 	}
+	corneredTileSpriteType = {
+		name = "GFX_ideology_appanage_revanchism_countryview"
+		texturefile = "gfx/interface/ideologies/appanage_revanchism_group.png"
+		size = {
+			x = 125
+			y = 125
+		}
+	}
+
 	corneredTileSpriteType = {
 		name = "GFX_ideology_contractual_etatism_countryview"
 		texturefile = "gfx/interface/ideologies/condottierism_group.png"

@@ -478,7 +478,7 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
 
         strengthened = {
             "VAD_inventory_eastern_works": (
-                "type = support_equipment amount = 50 producer = VAD",
+                "type = support_equipment amount = 200 producer = VAD",
                 "bonus = 0.50 uses = 1 category = industry",
             ),
             "VAD_standardize_district_logistics": (
@@ -486,13 +486,15 @@ class VorkerlandLifecycleFocusTests(unittest.TestCase):
                 "ADISCORD_vorkerland_vad_standardized_logistics days = 70",
             ),
             "VAD_reconstitute_district_guard": (
-                "type = infantry_equipment_0 amount = 100 producer = VAD",
-                "type = support_equipment amount = 40 producer = VAD",
+                "type = infantry_equipment_0 amount = 5400 producer = VAD",
+                "type = support_equipment amount = 100 producer = VAD",
             ),
         }
         for focus_id, tokens in strengthened.items():
             for token in tokens:
-                self.assertIn(token, self.blocks[focus_id])
+                self.assertIn(
+                    token, re.sub(r"\s+", " ", self.blocks[focus_id])
+                )
 
     def test_tva_optional_depth_is_six_focus_outcome_specific_and_capstone_neutral(
         self,
@@ -1566,14 +1568,14 @@ focus = {
             and scope.count("has_completed_focus = ") == 1
         )
         for token in (
-            "add_manpower = 250",
-            "type = infantry_equipment_0 amount = 150 producer = WKR",
+            "add_manpower = 1000",
+            "type = infantry_equipment_0 amount = 5400 producer = WKR",
             "idea = ADISCORD_vorkerland_wrk_loyal_republics_mobilized days = 70",
             "set_country_flag = ADISCORD_vorkerland_wrk_hardline_committed",
             "set_country_flag = ADISCORD_vorkerland_focus_wrk_reserves_under_worker",
         ):
             with self.subTest(hardline_token=token):
-                self.assertEqual(hardline.count(token), 1)
+                self.assertEqual(re.sub(r"\s+", " ", hardline).count(token), 1)
 
         verify = _blocks(
             self.phase_effects, "ADISCORD_vorkerland_verify_collapse_materialized"
@@ -1583,6 +1585,38 @@ focus = {
         ]
         self.assertEqual(len(wkr_tree_scopes), 1)
         self.assertIn(f"{PREWAR_CARRYOVER_EFFECT} = yes", wkr_tree_scopes[0])
+
+    def test_prewar_wrk_native_grants_match_successor_carryover(self) -> None:
+        carryover = _blocks(self.phase_effects, PREWAR_CARRYOVER_EFFECT)[0]
+
+        def native_grants(source: str) -> Counter:
+            grants = Counter(
+                re.findall(
+                    r"\b(add_political_power|add_stability|add_command_power|"
+                    r"army_experience|add_manpower)\s*=\s*(-?[0-9.]+)",
+                    source,
+                )
+            )
+            for equipment in _blocks(source, "add_equipment_to_stockpile"):
+                equipment_type = re.search(r"\btype\s*=\s*(\w+)", equipment).group(1)
+                amount = re.search(r"\bamount\s*=\s*([0-9.]+)", equipment).group(1)
+                grants[(equipment_type, amount)] += 1
+            for timed in _blocks(source, "add_timed_idea"):
+                idea = re.search(r"\bidea\s*=\s*(\w+)", timed).group(1)
+                days = re.search(r"\bdays\s*=\s*(\d+)", timed).group(1)
+                grants[(idea, days)] += 1
+            return grants
+
+        for focus_id in PREWAR_WRK_CARRYOVER_FOCUSES:
+            inherited = next(
+                scope
+                for scope in _blocks(carryover, "if")
+                if f"has_completed_focus = {focus_id}" in scope
+                and scope.count("has_completed_focus = ") == 1
+            )
+            reward = _blocks(self.blocks[focus_id], "completion_reward")[0]
+            with self.subTest(focus_id=focus_id):
+                self.assertEqual(native_grants(reward), native_grants(inherited))
 
     def test_all_winner_formations_normalize_the_dormant_wrk_before_annex(self) -> None:
         scrub = _blocks(self.phase_effects, DORMANT_WRK_SCRUB_EFFECT)[0]

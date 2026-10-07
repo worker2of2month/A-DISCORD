@@ -2700,7 +2700,7 @@ RUS_bunker_upgrade_5_affordable = {
 
 RUS_bunker_resupply_affordable = {
 	NOT = { has_political_power < 15 }
-	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+	check_variable = { var = ADISCORD_economy_treasury value = 500 compare = greater_than_or_equals }
 }
 
 RUS_bunker_resupply_available = {
