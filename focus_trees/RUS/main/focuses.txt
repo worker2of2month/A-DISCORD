@@ -1142,6 +1142,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = RUS_district_health_programme
 			add_manpower = 2000
 			add_stability = 0.03
 		}
@@ -1255,6 +1256,7 @@ focus_tree = {
 			}
 		}
 		completion_reward = {
+			unlock_decision_tooltip = RUS_workshop_training
 			add_tech_bonus = { name = RUS_machine_school bonus = 0.5 uses = 1 category = industry }
 			add_equipment_to_stockpile = { type = support_equipment amount = 80 producer = RUS }
 		}
@@ -3777,6 +3779,58 @@ focus_tree = {
 				set_temp_variable = { var = RUS_scientists_support_delta value = 0 }
 				RUS_faction_support_change = yes
 			}
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_aimaq_service_charter
+		icon = GFX_focus_STP_party_personnel_commissions
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 5
+		y = 9
+		cost = 3
+		prerequisite = { focus = RUS_regional_self_help }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = RUS_civil_service_growth_tt
+			hidden_effect = {
+				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_civil_service_training
+		}
+		ai_will_do = { base = 8 }
+	}
+
+	focus = {
+		id = RUS_civil_service_examinations
+		icon = GFX_focus_STP_party_personnel_commissions
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		x = 17
+		y = 9
+		cost = 3
+		prerequisite = { focus = RUS_provincial_commissioners }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+		}
+		cancel_if_invalid = yes
+		completion_reward = {
+			custom_effect_tooltip = RUS_civil_service_growth_tt
+			hidden_effect = {
+				ADISCORD_increase_state_development_monthly_growth = yes
+				ADISCORD_economy_mark_dirty = yes
+			}
+			unlock_decision_tooltip = RUS_civil_service_training
 		}
 		ai_will_do = { base = 8 }
 	}

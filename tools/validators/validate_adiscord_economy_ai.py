@@ -1654,7 +1654,7 @@ def research_policy_flow_issues(text: str) -> list[str]:
     effect = definitions.get("ADISCORD_economy_calculate_research_expenses")
     if effect is None or not isinstance(effect.value, list):
         return ["missing research expense calculation"]
-    expected = {"1": 0.30, "2": 0.65, "3": 1.00, "4": 1.30, "5": 1.60}
+    expected = {"1": 0.30, "2": 0.65, "3": 1.00, "4": 2.00, "5": 3.00}
     found: dict[str, list[float]] = {}
     all_multipliers = [
         entry
@@ -1712,7 +1712,7 @@ def research_policy_flow_issues(text: str) -> list[str]:
         and sum(
             _direct_scalar(item.value, "value") == "2.00" for item in all_multipliers
         )
-        == 1
+        == 2
         and sum(len(values) for values in found.values()) == 5
         and exact_found == expected
         else [f"research multipliers are not bound one-to-one to levels: {found}"]
@@ -3832,7 +3832,7 @@ def validate(root: Path = ROOT) -> list[str]:
     )
 
     social_expenses = block(effects, "ADISCORD_economy_calculate_social_expenses")
-    for multiplier in ("0.25", "0.60", "1.00", "1.35", "1.80"):
+    for multiplier in ("0.25", "0.60", "1.00", "1.50", "2.00"):
         require(
             f"value = {multiplier}" in social_expenses,
             f"social budget lacks the distinct {multiplier} cost multiplier",

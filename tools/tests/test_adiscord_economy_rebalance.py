@@ -933,6 +933,71 @@ class PostwarProgramPriceTests(unittest.TestCase):
 
 
 class BudgetAndLawBalanceTests(unittest.TestCase):
+    def test_rus_budget_costs_scale_and_science_growth_does_not_stack(self):
+        f = income_fixture()
+        v = f.scopes["A"]
+        v.update({P + "cached_research_slots": 1, P + "cached_core_population_k": 1532.123,
+                  "ADISCORD_social_system_development_level": 1})
+        costs = []
+        for mode in (3, 4, 5):
+            v[P + "research_spending_mode"] = mode
+            v[P + "social_spending_mode"] = mode
+            f.run(P + "calculate_research_expenses")
+            f.run(P + "calculate_social_expenses")
+            costs.append((v[P + "research_expenses"], v[P + "social_expenses"]))
+        self.assertEqual([c[0] for c in costs], [2.5, 5.0, 7.5])
+        self.assertAlmostEqual(costs[1][1] / costs[0][1], 1.5)
+        self.assertAlmostEqual(costs[2][1] / costs[0][1], 2)
+        development = block(EFFECTS, P + "calculate_development_multiplier")
+        f.facts.update({name: False for name in re.findall(r"(ADISCORD_\w+) = yes", development)})
+        f.facts[P + "can_upgrade_economic_development"] = True
+        v["ADISCORD_economic_development_progress"] = 37
+        v[P + "treasury"] = 137
+        baseline = None
+        for mode, expected_base in ((3, 1), (4, 1.5), (5, 2), (5, 2), (3, 1)):
+            v[P + "research_spending_mode"] = mode
+            f.run(P + "calculate_development_multiplier")
+            self.assertEqual(v[P + "base_monthly_development_gain"], expected_base)
+            if baseline is None:
+                baseline = v[P + "monthly_development_gain"]
+            self.assertAlmostEqual(v[P + "monthly_development_gain"], baseline * expected_base)
+            self.assertEqual(v["ADISCORD_economic_development_progress"], 37)
+            self.assertEqual(v[P + "treasury"], 137)
+
+    def test_social_funding_adds_monthly_progress_and_stops_when_cut(self):
+        source = (ROOT / "common/scripted_effects/ADISCORD_society_development_effects.txt").read_text(encoding="utf-8")
+        f = EconomyScriptFixture(texts=(source,), facts={
+            "ADISCORD_social_system_development_at_least_5": False,
+            "ADISCORD_social_system_development_at_most_1": True,
+        }, stubs=("ADISCORD_increase_social_system_development",))
+        v = f.scopes["A"]
+        v.update({"ADISCORD_country_development_final_global_growth_factor_bp": 100,
+                  "ADISCORD_country_development_final_social_system_growth_factor_bp": 100})
+        for mode, expected in ((3, 0), (4, 1), (5, 3), (3, 3)):
+            v[P + "social_spending_mode"] = mode
+            f.run("ADISCORD_tick_social_system_development_monthly")
+            self.assertEqual(v["ADISCORD_social_system_development_progress"], expected)
+        v["ADISCORD_social_system_development_progress"] = 98
+        v[P + "social_spending_mode"] = 5
+        f.run("ADISCORD_tick_social_system_development_monthly")
+        self.assertEqual(v["ADISCORD_social_system_development_progress"], 0)
+        self.assertEqual(f.calls.count("ADISCORD_increase_social_system_development"), 1)
+
+    def test_population_cache_reads_each_state_after_country_scope_switch(self):
+        from copy import deepcopy
+
+        f = EconomyScriptFixture(countries={
+            "A": {"states": ["S1", "S2"], "state_population_k": 999},
+            "S1": {"state_population_k": 1000},
+            "S2": {"state_population_k": 2000},
+        }, facts={"is_core_of": True})
+        recount = f.definitions[P + "recount_economic_buildings"]
+        owned = deepcopy(next(node for node in recount if node.key == "every_owned_state"))
+        # Isolate the actual population branch from unrelated building arithmetic.
+        owned.value = owned.value[:1]
+        f.execute([owned], "A", None, "A")
+        self.assertEqual(f.scopes["A"][P + "cached_core_population_k"], 3000)
+
     def test_budget_switching_replaces_the_bonus_without_stacking_or_paying_cash(self):
         for budget in ("army", "research", "social"):
             f = EconomyScriptFixture()

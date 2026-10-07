@@ -5115,6 +5115,156 @@ RUS_development_programmes = {
 			}
 		}
 	}
+
+	RUS_civil_service_training = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+		OR = {
+			has_completed_focus = RUS_aimaq_service_charter
+			has_completed_focus = RUS_civil_service_examinations
+		}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_civil_service_training_ready_tt
+				RUS_civil_service_training_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_civil_service_training_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_civil_service_training_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_state_development_progress value = 25 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	RUS_district_health_programme = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+		has_completed_focus = RUS_roadside_clinics
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_district_health_programme_ready_tt
+				RUS_district_health_programme_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_district_health_programme_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_district_health_programme_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_social_system_development_progress value = 25 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
+
+	RUS_workshop_training = {
+		icon = generic_industry
+		allowed = { tag = RUS }
+		visible = {
+		has_completed_focus = RUS_machine_school
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_workshop_training_ready_tt
+				RUS_workshop_training_ready = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_development_programme_cost
+		custom_cost_trigger = { RUS_development_programme_affordable = yes }
+		days_re_enable = 180
+		complete_effect = {
+			if = {
+				limit = {
+					RUS_workshop_training_ready = yes
+					RUS_development_programme_affordable = yes
+				}
+				custom_effect_tooltip = RUS_workshop_training_result_tt
+				hidden_effect = {
+					add_political_power = -25
+					subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
+					add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
+					add_to_variable = { var = ADISCORD_economic_development_progress value = 25 }
+					ADISCORD_economy_mark_dirty = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+			modifier = {
+				factor = 0
+				check_variable = { var = ADISCORD_economy_treasury value = 300 compare = less_than }
+			}
+		}
+	}
 }
 
 # --- rus_public_campaigns ---

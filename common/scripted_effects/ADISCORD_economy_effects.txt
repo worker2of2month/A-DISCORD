@@ -1509,9 +1509,8 @@ ADISCORD_economy_calculate_social_expenses = {
 		if = { limit = { ADISCORD_economy_cached_has_welfare_social_insurance = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = 1.5 } }
 		if = { limit = { ADISCORD_economy_cached_has_welfare_universal_provision = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = 3.5 } }
 		if = { limit = { ADISCORD_economy_cached_has_welfare_rationed_support = yes } add_to_variable = { var = ADISCORD_economy_social_expenses value = -1.0 } }
-		# The Darkest Hour makes social spending population-scaled. Keep the
-		# population source in the bounded full-refresh cache so weekly accounting
-		# does not scan states; zero keeps old save/test fixtures on the old base.
+		# Population is cached by the bounded full refresh; weekly accounting
+		# reads that country aggregate without scanning states.
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_cached_core_population_k value = 0 compare = greater_than } }
 			set_temp_variable = { var = ADISCORD_economy_social_population_temp value = ADISCORD_economy_cached_core_population_k }
@@ -1526,8 +1525,14 @@ ADISCORD_economy_calculate_social_expenses = {
 	if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 1 compare = equals } } multiply_variable = { var = ADISCORD_economy_social_expenses value = 0.25 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 2 compare = equals } } multiply_variable = { var = ADISCORD_economy_social_expenses value = 0.60 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 3 compare = equals } } multiply_variable = { var = ADISCORD_economy_social_expenses value = 1.00 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 4 compare = equals } } multiply_variable = { var = ADISCORD_economy_social_expenses value = 1.35 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 5 compare = equals } } multiply_variable = { var = ADISCORD_economy_social_expenses value = 1.80 } }
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 4 compare = equals } }
+		multiply_variable = { var = ADISCORD_economy_social_expenses value = 1.50 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 5 compare = equals } }
+		multiply_variable = { var = ADISCORD_economy_social_expenses value = 2.00 }
+	}
 	clamp_variable = { var = ADISCORD_economy_social_expenses min = 0 max = 5000 }
 }
 
@@ -1547,8 +1552,7 @@ ADISCORD_economy_calculate_research_expenses = {
 		multiply_temp_variable = { var = ADISCORD_economy_research_building_temp value = 0.35 }
 		add_to_variable = { var = ADISCORD_economy_research_expenses value = ADISCORD_economy_research_building_temp }
 		if = { limit = { ADISCORD_economy_model_is_technocratic = yes } add_to_variable = { var = ADISCORD_economy_research_expenses value = 1.5 } }
-		# Research spending follows the number of research slots, as in The
-		# Darkest Hour. This is refreshed with the same bounded source pass.
+		# Research slots are refreshed with the bounded building-source pass.
 		if = {
 			limit = { check_variable = { var = ADISCORD_economy_cached_research_slots value = 0 compare = greater_than } }
 			set_temp_variable = { var = ADISCORD_economy_research_slots_temp value = ADISCORD_economy_cached_research_slots }
@@ -1563,8 +1567,14 @@ ADISCORD_economy_calculate_research_expenses = {
 	if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 1 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.30 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 2 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 0.65 } }
 	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 3 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.00 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.30 } }
-	else_if = { limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = equals } } multiply_variable = { var = ADISCORD_economy_research_expenses value = 1.60 } }
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = equals } }
+		multiply_variable = { var = ADISCORD_economy_research_expenses value = 2.00 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = equals } }
+		multiply_variable = { var = ADISCORD_economy_research_expenses value = 3.00 }
+	}
 	clamp_variable = { var = ADISCORD_economy_research_expenses min = 0 max = 5000 }
 }
 
@@ -2511,11 +2521,47 @@ ADISCORD_economy_clamp_treasury = {
 		set_variable = { var = ADISCORD_economy_treasury value = ADISCORD_economy_treasury_cap }
 	}
 }
+ADISCORD_economy_calculate_social_development_gain = {
+	set_variable = {
+		var = ADISCORD_social_system_development_monthly_gain
+		value = ADISCORD_social_system_development_monthly_growth
+	}
+	# Budget funding adds progress before country growth modifiers are applied.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 4 compare = equals } }
+		add_to_variable = { var = ADISCORD_social_system_development_monthly_gain value = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_social_spending_mode value = 5 compare = equals } }
+		add_to_variable = { var = ADISCORD_social_system_development_monthly_gain value = 2 }
+	}
+	multiply_variable = {
+		var = ADISCORD_social_system_development_monthly_gain
+		value = ADISCORD_country_development_final_global_growth_factor_bp
+	}
+	divide_variable = { var = ADISCORD_social_system_development_monthly_gain value = 100 }
+	multiply_variable = {
+		var = ADISCORD_social_system_development_monthly_gain
+		value = ADISCORD_country_development_final_social_system_growth_factor_bp
+	}
+	divide_variable = { var = ADISCORD_social_system_development_monthly_gain value = 100 }
+}
+
 ADISCORD_economy_calculate_development_multiplier = {
+	ADISCORD_economy_calculate_social_development_gain = yes
 	# Every functioning economy has slow organic development. Content may add
 	# positive or negative monthly growth, but it must not erase the base point.
 	set_variable = { var = ADISCORD_economy_base_monthly_development_gain value = 1 }
 	add_to_variable = { var = ADISCORD_economy_base_monthly_development_gain value = ADISCORD_economic_development_monthly_growth }
+	# Recompute from the active budget so switching never accumulates a bonus.
+	if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 4 compare = equals } }
+		add_to_variable = { var = ADISCORD_economy_base_monthly_development_gain value = 0.5 }
+	}
+	else_if = {
+		limit = { check_variable = { var = ADISCORD_economy_research_spending_mode value = 5 compare = equals } }
+		add_to_variable = { var = ADISCORD_economy_base_monthly_development_gain value = 1 }
+	}
 	clamp_variable = { var = ADISCORD_economy_base_monthly_development_gain min = 0.25 max = 5 }
 	set_variable = { var = ADISCORD_economy_monthly_development_multiplier value = 100 }
 	# Early economies receive modest catch-up instead of a double income/growth
@@ -3345,7 +3391,7 @@ ADISCORD_economy_recount_economic_buildings = {
 			PREV = {
 				add_to_variable = {
 					var = ADISCORD_economy_cached_core_population_k
-					value = state_population_k
+					value = PREV.state_population_k
 				}
 			}
 		}
@@ -4100,6 +4146,7 @@ ADISCORD_economy_refresh_social_policy = {
 	multiply_variable = { var = ADISCORD_economy_social_expenses value = ADISCORD_economy_final_social_expense_factor_bp }
 	divide_variable = { var = ADISCORD_economy_social_expenses value = 100 }
 	ADISCORD_economy_refresh_social_policy_idea = yes
+	ADISCORD_economy_calculate_social_development_gain = yes
 	ADISCORD_economy_finish_targeted_policy_refresh = yes
 }
 

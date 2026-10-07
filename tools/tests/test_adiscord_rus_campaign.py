@@ -332,6 +332,8 @@ class RusCampaignTests(unittest.TestCase):
     def setUpClass(cls):
         cls.effects = {e.key: e.value for e in parse(f"common/scripted_effects/{BASE}_effects.txt")}
         cls.triggers = {e.key: e.value for e in parse(f"common/scripted_triggers/{BASE}_triggers.txt")}
+        for source in ("ADISCORD_society_development_triggers", "ADISCORD_economy_triggers"):
+            cls.triggers.update({e.key: e.value for e in parse(f"common/scripted_triggers/{source}.txt")})
         cls.effects.update({e.key: e.value for e in parse("common/scripted_effects/ADISCORD_shared_action_effects.txt") if e.key.startswith("ADISCORD_campaign_slot_")})
         cls.triggers.update({e.key: e.value for e in parse("common/scripted_triggers/ADISCORD_shared_action_triggers.txt") if e.key == "ADISCORD_has_campaign_slot"})
         cls.decisions = {e.key: e.value for e in block(parse(f"common/decisions/{BASE}_decisions.txt"), "RUS_bunker_construction")}
@@ -349,8 +351,8 @@ class RusCampaignTests(unittest.TestCase):
     def world(self):
         return BunkerWorld(self)
 
-    def test_generation_and_one_hundred_twenty_seven_focuses(self):
-        self.assertEqual(len(self.focuses), 127)
+    def test_generation_and_political_development_focuses(self):
+        self.assertEqual(len(self.focuses), 129)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -673,6 +675,50 @@ class RusCampaignTests(unittest.TestCase):
         self.assertFalse(world.matches(block(rows, "available")))
         self.assertTrue(world.matches(block(rows, "cancel_trigger")))
 
+    def test_development_programmes_settle_exact_payment_and_persistent_progress(self):
+        specs = {
+            "RUS_civil_service_training": "state",
+            "RUS_district_health_programme": "social_system",
+            "RUS_workshop_training": "economic",
+        }
+        for name, direction in specs.items():
+            rows = self.programmes[name]
+            for pp, cash, permitted in ((25, 100, True), (24.999, 100, False), (25, 99.999, False)):
+                world = self.world()
+                world.owner = world.controller = False
+                world.pp = pp
+                world.variables["ADISCORD_economy_treasury"] = cash
+                progress = f"ADISCORD_{direction}_development_progress"
+                world.variables[progress] = 10
+                spent = world.value("ADISCORD_economy_current_month_action_costs")
+                self.assertEqual(world.matches(block(rows, "custom_cost_trigger")), permitted)
+                world.execute(block(rows, "complete_effect"))
+                self.assertEqual(world.pp, pp - (25 if permitted else 0))
+                self.assertEqual(world.value("ADISCORD_economy_treasury"), cash - (100 if permitted else 0))
+                self.assertEqual(world.value(progress), 35 if permitted else 10)
+                self.assertEqual(world.value("ADISCORD_economy_current_month_action_costs") - spent, 100 if permitted else 0)
+            for variable, value in ((f"ADISCORD_{direction}_development_level", 5), (progress, 100)):
+                world = self.world()
+                world.variables[variable] = value
+                before = world.balances(), deepcopy(world.variables)
+                world.execute(block(rows, "complete_effect"))
+                self.assertEqual((world.balances(), world.variables), before)
+            self.assertEqual(scalar(rows, "cost"), "0")
+            self.assertEqual(scalar(rows, "days_re_enable"), "180")
+            for suffix in ("", "_blocked", "_tooltip"):
+                self.assertIn("RUS_development_programme_cost" + suffix, self.loc)
+
+    def test_both_political_routes_unlock_the_same_civil_service_programme(self):
+        for focus in ("RUS_aimaq_service_charter", "RUS_civil_service_examinations"):
+            world = self.world()
+            world.focuses = {focus}
+            rows = self.programmes["RUS_civil_service_training"]
+            self.assertTrue(world.matches(block(rows, "visible")))
+            self.assertTrue(world.matches(block(rows, "available")))
+            reward = block(self.focuses[focus], "completion_reward")
+            self.assertIn("RUS_civil_service_training", [e.value for e in reward if e.key == "unlock_decision_tooltip"])
+            self.assertTrue(any(e.key == "ADISCORD_increase_state_development_monthly_growth" for e in walk(reward)))
+
     def test_programmes_charge_exact_prices_and_deliver_material_results(self):
         prices = {
             "defensive_preparation": (25, 250, 35),
@@ -721,7 +767,11 @@ class RusCampaignTests(unittest.TestCase):
 
     def test_programmes_recheck_current_ownership_unlocks_and_capacity(self):
         for name, rows in self.programmes.items():
-            for changed in ("owner", "controller", "subject", "ruler", "focus"):
+            national_training = name in {
+                "RUS_civil_service_training", "RUS_district_health_programme", "RUS_workshop_training"
+            }
+            changes = ("subject", "ruler", "focus") if national_training else ("owner", "controller", "subject", "ruler", "focus")
+            for changed in changes:
                 world = self.world()
                 if changed in ("owner", "controller"):
                     setattr(world, changed, False)

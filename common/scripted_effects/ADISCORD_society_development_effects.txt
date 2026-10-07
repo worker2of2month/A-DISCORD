@@ -902,23 +902,10 @@ ADISCORD_tick_society_development_monthly = {
 }
 
 ADISCORD_tick_social_system_development_monthly = {
-	set_variable = {
-		var = ADISCORD_country_development_growth_temp
-		value = ADISCORD_social_system_development_monthly_growth
-	}
-	multiply_variable = {
-		var = ADISCORD_country_development_growth_temp
-		value = ADISCORD_country_development_final_global_growth_factor_bp
-	}
-	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
-	multiply_variable = {
-		var = ADISCORD_country_development_growth_temp
-		value = ADISCORD_country_development_final_social_system_growth_factor_bp
-	}
-	divide_variable = { var = ADISCORD_country_development_growth_temp value = 100 }
+	ADISCORD_economy_calculate_social_development_gain = yes
 	add_to_variable = {
 		var = ADISCORD_social_system_development_progress
-		value = ADISCORD_country_development_growth_temp
+		value = ADISCORD_social_system_development_monthly_gain
 	}
 	if = {
 		limit = {

@@ -3100,3 +3100,34 @@ RUS_lab_zeppelin_affordable = {
 	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
 	NOT = { has_manpower < 400 }
 }
+
+# Civil development programmes settle payment and progress together.
+RUS_development_programme_affordable = {
+	NOT = { has_political_power < 25 }
+	check_variable = { var = ADISCORD_economy_treasury value = 100 compare = greater_than_or_equals }
+}
+
+RUS_civil_service_training_ready = {
+	RUS_khan_governing = yes
+	OR = {
+		has_completed_focus = RUS_aimaq_service_charter
+		has_completed_focus = RUS_civil_service_examinations
+	}
+	NOT = { ADISCORD_state_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_state_development_progress value = 100 compare = less_than }
+}
+
+RUS_district_health_programme_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_roadside_clinics
+	NOT = { ADISCORD_social_system_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_social_system_development_progress value = 100 compare = less_than }
+}
+
+RUS_workshop_training_ready = {
+	RUS_khan_governing = yes
+	has_completed_focus = RUS_machine_school
+	NOT = { ADISCORD_economic_development_at_least_5 = yes }
+	check_variable = { var = ADISCORD_economic_development_progress value = 100 compare = less_than }
+	ADISCORD_economy_can_upgrade_economic_development = yes
+}

@@ -71,7 +71,7 @@
  ADISCORD_society_development_interface_growth: "Рост [?ADISCORD_society_development_monthly_growth|=+0]/мес."
  ADISCORD_social_system_development_interface_name: "Социальная система"
  ADISCORD_social_system_development_interface_level: "Ур. [?ADISCORD_social_system_development_level|0]/5 ([?ADISCORD_social_system_development_progress|=+0]/100)"
- ADISCORD_social_system_development_interface_growth: "Рост [?ADISCORD_social_system_development_monthly_growth|=+0]/мес."
+ ADISCORD_social_system_development_interface_growth: "Рост [?ADISCORD_social_system_development_monthly_gain|=+1]/мес."
  ADISCORD_army_development_interface_name: "Развитие армии"
  ADISCORD_army_development_interface_level: "Ур. [?ADISCORD_army_development_level|0]/5 ([?ADISCORD_army_development_progress|=+0]/100)"
  ADISCORD_army_development_interface_growth: "Рост [?ADISCORD_army_development_monthly_growth|=+0]/мес."
@@ -84,14 +84,14 @@
 
  ADISCORD_economic_development_interface_name: "Экономическое развитие"
  ADISCORD_economic_development_interface_level: "Ур. [?ADISCORD_economic_development_level|0]/5 ([?ADISCORD_economic_development_progress|=+0]/100)"
- ADISCORD_economic_development_interface_growth: "Рост [?ADISCORD_economic_development_monthly_growth|=+0]/мес."
+ ADISCORD_economic_development_interface_growth: "Рост [?ADISCORD_economy_monthly_development_gain|=+1]/мес."
 
  ADISCORD_society_development_growth_tt: "§YМесячный прирост общества§!\nИтого: [?ADISCORD_society_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_society_development_progress|0]/100."
- ADISCORD_social_system_development_growth_tt: "§YМесячный прирост социальной системы§!\nИтого: [?ADISCORD_social_system_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_social_system_development_progress|0]/100."
+ ADISCORD_social_system_development_growth_tt: "§YМесячный прирост социальной системы§!\nИтого: [?ADISCORD_social_system_development_monthly_gain|=+1] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_social_system_development_progress|0]/100."
  ADISCORD_army_development_growth_tt: "§YМесячный прирост армии§!\nИтого: [?ADISCORD_army_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_army_development_progress|0]/100."
  ADISCORD_cultural_development_growth_tt: "§YМесячный прирост культуры§!\nИтого: [?ADISCORD_cultural_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_cultural_development_progress|0]/100."
  ADISCORD_state_development_growth_tt: "§YМесячный прирост государства§!\nИтого: [?ADISCORD_state_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_state_development_progress|0]/100."
- ADISCORD_economic_development_growth_tt: "§YМесячный прирост экономического развития§!\nИтого: [?ADISCORD_economic_development_monthly_growth|=+0] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_economic_development_progress|0]/100."
+ ADISCORD_economic_development_growth_tt: "§YМесячный прирост экономического развития§!\nИтого: [?ADISCORD_economy_monthly_development_gain|=+1] очк./мес.\nПрогресс до следующего уровня: [?ADISCORD_economic_development_progress|0]/100."
 
  ADISCORD_society_development_1_tt: "§YРазорванное общество§!\nЛюди не доверяют институтам, соседям и коллективному действию. Население выживает поодиночке, а не как единое общество.\n\n§YЭффекты:§!\nСтабильность: §R-6%§!\n§R-0.05§! £political_power_texticon"
  ADISCORD_society_development_2_tt: "§YУсталое общество§!\nОбщество ещё функционирует, но оно истощено, пассивно и политически онемело.\n\n§YЭффекты:§!\nСтабильность: §R-3%§!"

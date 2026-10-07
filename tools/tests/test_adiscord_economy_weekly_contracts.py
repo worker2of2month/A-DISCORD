@@ -3575,7 +3575,7 @@ ADISCORD_economy_ai_monthly_policy = {
             + [
                 f"if = {{ limit = {{ check_variable = {{ var = ADISCORD_economy_research_spending_mode value = {level} compare = equals }} }} multiply_variable = {{ var = ADISCORD_economy_research_expenses value = {factor} }} }}"
                 for level, factor in enumerate(
-                    ("0.30", "0.65", "1.00", "1.30", "1.60"), 1
+                    ("0.30", "0.65", "1.00", "2.00", "3.00"), 1
                 )
             ]
             + ["}"]
@@ -4436,8 +4436,8 @@ class WeeklyEconomyContracts(unittest.TestCase):
             1: ("§G-70%§!", "§R-8%§!"),
             2: ("§G-35%§!", "§R-3%§!"),
             3: ("§Y0%§!", "§Y0%§!"),
-            4: ("§R+30%§!", "§G+8%§!"),
-            5: ("§R+60%§!", "§G+15%§!"),
+            4: ("§R+100%§!", "§G+8%§!"),
+            5: ("§R+200%§!", "§G+15%§!"),
         }
         for expense, research_speed in expected.values():
             self.assertIn(expense, controls)
@@ -4513,7 +4513,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                 research,
             )
         }
-        self.assertEqual(multipliers, {0.30, 0.65, 1.00, 1.30, 1.60, 2.00})
+        self.assertEqual(multipliers, {0.30, 0.65, 1.00, 2.00, 3.00})
         self.assertRegex(
             EFFECTS,
             r"clamp_variable\s*=\s*\{\s*var\s*=\s*ADISCORD_economy_research_spending_mode"
@@ -4594,7 +4594,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                             factor,
                         ),
                     )
-                    for level, factor in enumerate((0.30, 0.65, 1.00, 1.30, 1.60), 1)
+                    for level, factor in enumerate((0.30, 0.65, 1.00, 2.00, 3.00), 1)
                 },
             ),
             "social": (
@@ -4609,7 +4609,7 @@ class WeeklyEconomyContracts(unittest.TestCase):
                             factor,
                         ),
                     )
-                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.35, 1.80), 1)
+                    for level, factor in enumerate((0.25, 0.60, 1.00, 1.50, 2.00), 1)
                 },
             ),
         }
