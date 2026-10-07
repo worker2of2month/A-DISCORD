@@ -15347,6 +15347,16 @@
       "start_experience_factor": 0.3,
       "start_equipment_factor": 1,
       "count": 1
+    },
+    {
+      "key": "rus_lab_airship_spawn",
+      "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+      "kind": "create_unit",
+      "technical_name": "Rusnian Airship",
+      "legacy_names": [],
+      "start_experience_factor": 0.3,
+      "start_equipment_factor": 1,
+      "count": 1
     }
   ]
 }
