@@ -581,7 +581,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         victory = named_block(triggers, "VAL_northern_coalition_campaign_victory_ready")
         for tag in ("YPR", "COF", "TFF"):
             self.assertIn(
-                f"{tag} = {{ tag = ROOT has_country_flag = VAL_northern_coalition_capitulation_reserved }}",
+                f"{tag} = {{ VAL_northern_coalition_defeat_reserved = yes }}",
                 victory,
             )
         immediate_start = router.index(

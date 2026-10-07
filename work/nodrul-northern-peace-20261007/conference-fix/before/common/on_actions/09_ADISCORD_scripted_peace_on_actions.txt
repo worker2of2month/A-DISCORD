@@ -4,6 +4,12 @@
 on_actions = {
 	on_capitulation_immediate = {
 		effect = {
+			if = {
+				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
+				log = "VAL_PEACE_TRACE immediate_entry"
+				ROOT = { VAL_trace_scripted_peace_country = yes }
+				VAL = { VAL_trace_scripted_peace_country = yes }
+			}
 			# A new native defeat cannot consume an omitted previous late callback.
 			ROOT = {
 				clr_country_flag = RUS_crisis_capitulation_reserved
@@ -21,12 +27,6 @@ on_actions = {
 				clr_country_flag = VAL_nod_overlord_sts_capitulation_reserved
 				clr_country_flag = VAL_northern_coalition_capitulation_reserved
 				clr_country_flag = STP_val_nod_partition_capitulation_reserved
-			}
-			if = {
-				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
-				log = "VAL_PEACE_TRACE immediate_entry"
-				ROOT = { VAL_trace_scripted_peace_country = yes }
-				VAL = { VAL_trace_scripted_peace_country = yes }
 			}
 			if = {
 				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
@@ -1868,7 +1868,6 @@ on_actions = {
 	on_uncapitulation = {
 		effect = {
 			# BEGIN kefreyt:on_uncapitulation
-			clr_country_flag = VAL_northern_coalition_capitulation_reserved
 			if = {
 				limit = { has_country_flag = VAL_final_defeat_pending }
 				log = "[VAL_PEACE] Native liberation clears coalition defeat: [ROOT.GetTag]"
@@ -2030,7 +2029,6 @@ on_actions = {
 				YPR = { VAL_trace_scripted_peace_country = yes }
 				COF = { VAL_trace_scripted_peace_country = yes }
 				TFF = { VAL_trace_scripted_peace_country = yes }
-				FROM = { VAL_record_conference_defeat = yes }
 			}
 			# END kefreyt:on_before_peace_conference_start
 		}

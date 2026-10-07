@@ -40,13 +40,7 @@ Each country snapshot prints true predicates only; omitted booleans are false.
 Conference callbacks use winner ROOT and loser FROM, the reverse of capitulation.
 Capture the trace before applying manual administration decisions: those use
 the settlement effects directly and cannot prove the automatic route ran.
-The before-conference hook also records the native named loser for an active
-Kefreyt final or northern campaign, then calls its ordinary treaty. It does not
-infer defeats from a completed focus or from peace with an unrelated victor.
-Test missing capitulation callbacks as well as ordinary capitulation, both
-conference loser orders, and liberation before the remaining member falls.
-Script execution in this hook alone does not prove the engine cancels the UI;
-the cold-run check must also confirm that no ordinary conference opens.
+These records observe the failure; they do not suppress a native conference.
 
 The Party's postwar victory over Kefreyt uses the same subject treaty whether
 STP launched its own operation or defeated a Kefreyt invasion. The immediate

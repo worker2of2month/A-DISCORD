@@ -649,8 +649,6 @@ class KefreytSubjectPeaceFixture(NorthernWarEntryFixture):
                 faction = self.factions[stack[-1]]
                 leader = next(tag for tag, side in self.factions.items() if side == faction)
                 self.execute(entry.value, stack + [leader])
-            elif entry.key == "remove_from_faction":
-                self.factions.pop(self.resolve(entry.value, stack), None)
             elif entry.key == "set_autonomy":
                 target = self.resolve(scalar(entry.value, "target"), stack)
                 if scalar(entry.value, "autonomy_state") != "autonomy_free":
@@ -731,91 +729,6 @@ class KefreytSubjectPeaceTests(unittest.TestCase):
         for tag in ("YPR", "COF", "TFF"):
             self.assertEqual(fixture.subjects[tag], "VAL")
             self.assertEqual(fixture.enemies(tag), {"ZZZ"})
-
-
-class KefreytConferenceDefeatTests(unittest.TestCase):
-    def prepare(self, targets):
-        fixture = KefreytSubjectPeaceTests().prepare(targets)
-        fixture.stubs.add("VAL_trace_scripted_peace_country")
-        fixture.variables["VAL", "VAL_final_crisis_phase"] = 2
-        fixture.flags["VAL"].add("VAL_northern_coalition_campaign_active")
-        for tag in targets:
-            flag = (
-                "VAL_final_war_member" if tag in ("STP", "STS", "NOD")
-                else "VAL_northern_coalition_campaign_member"
-            )
-            fixture.flags[tag].add(flag)
-        return fixture
-
-    def defeat(self, fixture, loser, winner="VAL"):
-        from tools.tests.test_scripted_peace_on_actions import native_hooks
-        from tools.tests.test_adiscord_stp_preparation import block
-
-        fixture.root = winner
-        fixture.winner = loser  # Generic fixture's FROM field; reversed in this hook.
-        source = (ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text(encoding="utf-8")
-        hook = block(block(native_hooks(source), "on_before_peace_conference_start"), "effect")
-        fixture.execute(hook)
-
-    def test_nodrul_conference_without_capitulation_reaches_both_treaties(self):
-        for order in (("STP", "NOD"), ("NOD", "STP")):
-            with self.subTest(order=order):
-                fixture = self.prepare(order)
-                self.defeat(fixture, order[0])
-                self.assertNotIn("VAL_nodrul_administration_pending", fixture.flags["NOD"])
-                self.assertNotIn("STP", fixture.subjects)
-                self.defeat(fixture, order[1])
-                self.assertEqual(fixture.subjects["STP"], "VAL")
-                self.assertIn("VAL_nodrul_administration_pending", fixture.flags["NOD"])
-                self.assertEqual(fixture.enemies("NOD"), {"ZZZ"})
-                self.assertEqual(fixture.enemies("STP"), {"ZZZ"})
-                events = list(fixture.events)
-                self.defeat(fixture, order[1])
-                self.assertEqual(fixture.events, events)
-
-    def test_northern_conference_accumulates_only_named_losers(self):
-        from itertools import permutations
-
-        for order in permutations(("YPR", "COF", "TFF")):
-            with self.subTest(order=order):
-                fixture = self.prepare(order)
-                for loser in order[:2]:
-                    self.defeat(fixture, loser)
-                    self.assertNotIn("YPR", fixture.subjects)
-                self.defeat(fixture, order[2])
-                for tag in order:
-                    self.assertEqual(fixture.subjects[tag], "VAL")
-                    self.assertEqual(fixture.enemies(tag), {"ZZZ"})
-                self.assertNotIn("VAL_northern_coalition_campaign_active", fixture.flags["VAL"])
-
-    def test_foreign_victor_inactive_campaign_and_unrelated_loser_grant_nothing(self):
-        for case in ("foreign", "inactive", "unrelated", "peace"):
-            with self.subTest(case=case):
-                fixture = self.prepare(("NOD",))
-                winner = "ZZZ" if case == "foreign" else "VAL"
-                if case == "inactive":
-                    fixture.variables["VAL", "VAL_final_crisis_phase"] = 3
-                elif case == "unrelated":
-                    fixture.flags["NOD"].clear()
-                elif case == "peace":
-                    fixture.wars.discard(frozenset(("VAL", "NOD")))
-                self.defeat(fixture, "NOD", winner)
-                self.assertNotIn("VAL_final_defeat_pending", fixture.flags["NOD"])
-                self.assertNotIn("VAL_nodrul_administration_pending", fixture.flags["NOD"])
-
-    def test_liberation_invalidates_northern_conference_receipt(self):
-        from tools.tests.test_scripted_peace_on_actions import native_hooks
-        from tools.tests.test_adiscord_stp_preparation import block
-
-        fixture = self.prepare(("YPR", "COF", "TFF"))
-        self.defeat(fixture, "YPR")
-        fixture.root = "YPR"
-        hooks = native_hooks((ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt").read_text(encoding="utf-8"))
-        fixture.execute(block(block(hooks, "on_uncapitulation"), "effect"), ["YPR"])
-        self.defeat(fixture, "COF")
-        self.defeat(fixture, "TFF")
-        self.assertNotIn("YPR", fixture.subjects)
-        self.assertNotIn("VAL_northern_coalition_capitulation_reserved", fixture.flags["YPR"])
 
 
 class CoalitionLifecycleTests(unittest.TestCase):

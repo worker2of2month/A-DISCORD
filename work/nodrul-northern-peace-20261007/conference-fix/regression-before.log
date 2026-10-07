@@ -1,0 +1,89 @@
+test_foreign_victor_inactive_campaign_and_unrelated_loser_grant_nothing (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_foreign_victor_inactive_campaign_and_unrelated_loser_grant_nothing) ... ok
+test_liberation_invalidates_northern_conference_receipt (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_liberation_invalidates_northern_conference_receipt) ... ok
+test_nodrul_conference_without_capitulation_reaches_both_treaties (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_nodrul_conference_without_capitulation_reaches_both_treaties) ... 
+  test_nodrul_conference_without_capitulation_reaches_both_treaties (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_nodrul_conference_without_capitulation_reaches_both_treaties) (order=('STP', 'NOD')) ... ERROR
+  test_nodrul_conference_without_capitulation_reaches_both_treaties (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_nodrul_conference_without_capitulation_reaches_both_treaties) (order=('NOD', 'STP')) ... ERROR
+test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) ... 
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('YPR', 'COF', 'TFF')) ... ERROR
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('YPR', 'TFF', 'COF')) ... ERROR
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('COF', 'YPR', 'TFF')) ... ERROR
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('COF', 'TFF', 'YPR')) ... ERROR
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('TFF', 'YPR', 'COF')) ... ERROR
+  test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('TFF', 'COF', 'YPR')) ... ERROR
+
+======================================================================
+ERROR: test_nodrul_conference_without_capitulation_reaches_both_treaties (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_nodrul_conference_without_capitulation_reaches_both_treaties) (order=('STP', 'NOD'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 768, in test_nodrul_conference_without_capitulation_reaches_both_treaties
+    self.assertEqual(fixture.subjects["STP"], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'STP'
+
+======================================================================
+ERROR: test_nodrul_conference_without_capitulation_reaches_both_treaties (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_nodrul_conference_without_capitulation_reaches_both_treaties) (order=('NOD', 'STP'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 768, in test_nodrul_conference_without_capitulation_reaches_both_treaties
+    self.assertEqual(fixture.subjects["STP"], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^^^
+KeyError: 'STP'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('YPR', 'COF', 'TFF'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'YPR'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('YPR', 'TFF', 'COF'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'YPR'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('COF', 'YPR', 'TFF'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'COF'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('COF', 'TFF', 'YPR'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'COF'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('TFF', 'YPR', 'COF'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'TFF'
+
+======================================================================
+ERROR: test_northern_conference_accumulates_only_named_losers (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytConferenceDefeatTests.test_northern_conference_accumulates_only_named_losers) (order=('TFF', 'COF', 'YPR'))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 787, in test_northern_conference_accumulates_only_named_losers
+    self.assertEqual(fixture.subjects[tag], "VAL")
+                     ~~~~~~~~~~~~~~~~^^^^^
+KeyError: 'TFF'
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.498s
+
+FAILED (errors=8)

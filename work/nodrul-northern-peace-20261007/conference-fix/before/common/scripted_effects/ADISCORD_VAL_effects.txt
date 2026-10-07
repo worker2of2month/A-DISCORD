@@ -6287,51 +6287,6 @@ VAL_settle_joint_nod_shabrat_victory = {
 }
 
 # --- final_campaign_administrations ---
-# COUNTRY loser, native ROOT winner. A conference can name a defeated country
-# without dispatching its capitulation callbacks. Record only this campaign's
-# named loser while its war relation still exists, then use the ordinary treaty.
-VAL_record_conference_defeat = {
-	if = {
-		limit = {
-			ROOT = {
-				tag = VAL
-				exists = yes
-				has_capitulated = no
-				is_subject = no
-			}
-			tag = FROM
-			has_war_with = VAL
-		}
-		if = {
-			limit = {
-				OR = { tag = STP tag = STS tag = NOD }
-				has_country_flag = VAL_final_war_member
-				VAL = {
-					check_variable = { var = VAL_final_crisis_phase value = 2 compare = equals }
-					NOT = { has_country_flag = VAL_joint_nod_campaign_with_sts }
-				}
-			}
-			set_country_flag = VAL_final_defeat_pending
-			log = "VAL_PEACE_TRACE recorded_conference_defeat=[THIS.GetTag]"
-			VAL = { VAL_finalize_reserved_settlements = yes }
-		}
-		else_if = {
-			limit = {
-				OR = { tag = YPR tag = COF tag = TFF }
-				has_country_flag = VAL_northern_coalition_campaign_member
-				VAL = { has_country_flag = VAL_northern_coalition_campaign_active }
-			}
-			set_country_flag = {
-				flag = VAL_northern_coalition_capitulation_reserved
-				value = 1
-				days = 2
-			}
-			log = "VAL_PEACE_TRACE recorded_northern_conference_defeat=[THIS.GetTag]"
-			VAL = { VAL_settle_northern_coalition_victory = yes }
-		}
-	}
-}
-
 # Event-only diagnostics. Missing boolean lines mean false; no campaign state
 # is written, so the snapshot can also run before a native conference.
 VAL_trace_scripted_peace_country = {
