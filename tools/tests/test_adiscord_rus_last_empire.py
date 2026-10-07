@@ -95,7 +95,7 @@ def localisation_entries(text: str) -> dict[str, str]:
 
 
 class RusLastEmpireTests(unittest.TestCase):
-    def test_proclamation_preserves_each_selected_ruler_and_ideology(self):
+    def test_proclamation_names_the_empire_after_the_leading_faction(self):
         from tools.tests.test_adiscord_stp_preparation import block, entries, scalar
 
         effect = block(
@@ -104,30 +104,31 @@ class RusLastEmpireTests(unittest.TestCase):
         )
         payload = block(effect, "if")
         branches = [
-            entry.value
+            entry
             for entry in payload
             if isinstance(entry.value, list)
             and any(child.key == "set_cosmetic_tag" for child in entry.value)
         ]
         expected = (
-            ("RUS_Varlam_Oskol", "etatism", "RUS_black_banner_empire"),
-            ("RUS_Pavel_Niva", "pragmatism", "RUS_restoration_state"),
-            ("RUS_Mark_Rustan", "etatism", "RUS_last_empire"),
+            ("if", ">", "0.10", "RUS_black_banner_empire"),
+            ("else_if", "<", "-0.10", "RUS_restoration_state"),
+            ("else", None, None, "RUS_last_empire"),
         )
         self.assertEqual(len(branches), len(expected))
-        for index, (branch, (ruler, ideology, cosmetic)) in enumerate(zip(branches, expected)):
-            with self.subTest(ruler=ruler):
-                if index < 2:
-                    leader = block(block(branch, "limit"), "has_country_leader")
-                    self.assertEqual(scalar(leader, "character"), ruler)
-                    self.assertEqual(scalar(leader, "ruling_only"), "yes")
-                self.assertEqual(scalar(block(branch, "set_politics"), "ruling_party"), ideology)
-                self.assertEqual(scalar(branch, "set_cosmetic_tag"), cosmetic)
-                self.assertFalse(any(entry.key in ("promote_character", "retire_character", "add_country_leader_role") for entry in branch))
-        portraits = block(branches[-1], "set_portraits")
+        for branch, (key, operator, threshold, cosmetic) in zip(branches, expected):
+            with self.subTest(cosmetic=cosmetic):
+                self.assertEqual(branch.key, key)
+                self.assertEqual(scalar(branch.value, "set_cosmetic_tag"), cosmetic)
+                self.assertFalse(any(entry.key in ("set_politics", "promote_character", "retire_character") for entry in branch.value))
+                if operator:
+                    balance = block(block(branch.value, "limit"), "power_balance_value")
+                    self.assertEqual(scalar(balance, "id"), "RUS_state_balance")
+                    self.assertEqual([row.value for row in balance if not row.key][1:], [operator, threshold])
+        self.assertEqual(scalar(block(payload, "set_politics"), "ruling_party"), "etatism")
+        portraits = block(payload, "set_portraits")
         self.assertEqual(scalar(portraits, "character"), "RUS_Mark_Rustan")
         self.assertEqual(scalar(block(portraits, "civilian"), "large"), "GFX_portrait_RUS_Mark_Rustan_dictator")
-        self.assertEqual(scalar(block(branches[-1], "set_country_leader_portrait"), "ideology"), "etatism")
+        self.assertEqual(scalar(block(payload, "set_country_leader_portrait"), "ideology"), "etatism")
         self.assertIn(
             "GFX_portrait_RUS_Mark_Rustan_dictator",
             read(ROOT / "interface/ADISCORD_leader_portraits.gfx"),
@@ -837,7 +838,7 @@ class RusCrisisFixture:
     assertion about native callback timing or game UI behaviour.
     """
 
-    def __init__(self, hegemon="VAL", ruler="RUS_Mark_Rustan"):
+    def __init__(self, hegemon="VAL", ruler="RUS_Mark_Rustan", cosmetic="RUS_last_empire"):
         from tools.tests.test_adiscord_stp_preparation import entries
 
         self.effects = {e.key: e.value for e in entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt")}
@@ -884,6 +885,7 @@ class RusCrisisFixture:
         self.annexed = []
         self.retired = []
         self.rulers = {"RUS": ruler}
+        self.cosmetic_tags = {"RUS": cosmetic}
         self.power_balances = {"RUS": "RUS_state_balance"}
         self.dynamic_modifiers = {("RUS", "RUS_black_army"), ("RUS", "RUS_bunker_complex")}
         self.autonomy = {}
@@ -948,6 +950,8 @@ class RusCrisisFixture:
                 assert isinstance(value, list), value
                 assert scalar(value, "ruling_only") == "yes", value
                 return self.rulers.get(current) == scalar(value, "character")
+            if key == "has_cosmetic_tag":
+                return self.cosmetic_tags.get(current) == value
             if key == "has_country_flag":
                 return value in self.flags[current]
             if key == "has_decision":
@@ -1424,11 +1428,12 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(len(world.annexed), 2)
 
     def test_khan_defeat_restores_only_imperial_lands_for_either_winner(self):
-        rulers = ("RUS_Mark_Rustan", "RUS_Varlam_Oskol", "RUS_Pavel_Niva")
+        forms = ("RUS_last_empire", "RUS_black_banner_empire", "RUS_restoration_state")
+        ruler = "RUS_Mark_Rustan"
         for hegemon in ("VAL", "STS"):
-            for course, ruler in enumerate(rulers, 1):
-                with self.subTest(hegemon=hegemon, ruler=ruler):
-                    world = RusCrisisFixture(hegemon, ruler)
+            for course, cosmetic in enumerate(forms, 1):
+                with self.subTest(hegemon=hegemon, cosmetic=cosmetic):
+                    world = RusCrisisFixture(hegemon, ruler, cosmetic)
                     world.capitulated.add("RUS")
                     world.run("RUS_crisis_resolve_capitulation")
                     self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 4)

@@ -54,6 +54,12 @@ class EnglishLocalisationTests(unittest.TestCase):
             )
         )
 
+    def test_debug_content_also_requires_english_translation(self):
+        self.write(self.root, 'russian', 'ADISCORD_debug_action: "Проверка"')
+        self.assertIn(
+            'ADISCORD_debug_action', audit(self.root, self.game)['missing']
+        )
+
     def test_bom_and_physical_line_syntax_are_checked(self):
         self.write(self.root, 'russian', 'KEY: "Абилия"')
         path = self.write(self.root, 'english', 'KEY: "Abilia"')
@@ -154,15 +160,16 @@ class EnglishCatalogueCompletenessTests(unittest.TestCase):
         )
 
     def test_every_russian_key_has_an_english_entry(self):
+        import os
         from tools.validators.validate_adiscord_english_localisation import (
-            EXCLUDED_KEYS,
-            read_entries,
+            audit,
         )
 
-        root = Path(__file__).resolve().parents[2] / 'localisation'
-        russian, _ = read_entries(root, 'russian')
-        english, _ = read_entries(root, 'english')
-        missing = sorted(set(russian) - set(english) - EXCLUDED_KEYS)
+        game_root = os.environ.get('HOI4_GAME_DIR')
+        if not game_root:
+            self.skipTest('Set HOI4_GAME_DIR to check inherited vanilla translations')
+        root = Path(__file__).resolve().parents[2]
+        missing = sorted(audit(root, Path(game_root))['missing'])
         self.assertEqual(missing, [], '\n'.join(missing))
 
     def test_all_english_catalogues_are_well_formed_and_translated(self):

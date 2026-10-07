@@ -4954,7 +4954,7 @@
       "number": 12,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "rus_campaign",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_rus_campaign.13",
@@ -4962,7 +4962,7 @@
       "number": 13,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "rus_campaign",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_rus_campaign.14",
@@ -4970,7 +4970,7 @@
       "number": 14,
       "owner": "events/ADISCORD_vorkerland_events.txt",
       "subsystem": "rus_campaign",
-      "status": "active"
+      "status": "reserved"
     },
     {
       "id": "ADISCORD_superevent.11",

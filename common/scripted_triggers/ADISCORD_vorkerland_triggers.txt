@@ -2934,9 +2934,9 @@ RUS_lab_operational = {
 	RUS_lab_reactor_access = yes
 }
 
+# The paid receipt, not the native timer, occupies the laboratory slot.
 RUS_lab_slot_free = {
-	NOT = { has_decision = RUS_lab_reactor_alloys }
-	NOT = { has_decision = RUS_lab_zeppelin }
+	NOT = { has_variable = RUS_lab_project }
 }
 
 RUS_lab_not_under_black_army = {

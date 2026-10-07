@@ -12823,6 +12823,44 @@
       "definition_metadata": {
         "is_locked": true
       }
+    },
+    {
+      "key": "rus_lab_airship",
+      "source": {
+        "kind": "script",
+        "path": "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+        "owner": "script"
+      },
+      "technical_name": "Rusnian Airship",
+      "display_name": "Rusnian Airship",
+      "legacy_names": [],
+      "regiments": [
+        {
+          "type": "ADISCORD_zeppelin",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "support": [],
+      "computed": {
+        "organization": 50.0,
+        "manpower": 400.0,
+        "equipment": {
+          "ADISCORD_zeppelin_equipment": 1.0
+        },
+        "supply": 0.6
+      },
+      "equipment_availability": {
+        "ADISCORD_zeppelin_equipment": true
+      },
+      "ai_role": "utility",
+      "replacement_path": {
+        "kind": "retain",
+        "target": "rus_lab_airship"
+      },
+      "definition_metadata": {
+        "is_locked": true
+      }
     }
   ],
   "references": [

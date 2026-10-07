@@ -61,8 +61,6 @@ def audit(root: Path, game_root: Path) -> dict:
     inherited = 0
     excluded = []
     for key, entry in russian.items():
-        if 'debug' in key.lower() or 'scenario_debug' in entry['file']:
-            continue
         if key in EXCLUDED_KEYS:
             excluded.append(key)
             continue
