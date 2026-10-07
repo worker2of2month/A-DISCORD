@@ -2982,6 +2982,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 
 # --- rus_experimental_laboratories ---
 RUS_experimental_labs_category = {
+	RUS_lab_reactor_alloys = {
 		icon = generic_research
 		allowed = { tag = RUS }
 		visible = {
