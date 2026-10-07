@@ -3,22 +3,8 @@ add_namespace = ADISCORD_rus_crisis
 
 country_event = {
 	id = ADISCORD_rus_crisis.1
-	title = {
-		trigger = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.1.t
-	}
-	title = {
-		trigger = { NOT = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } } }
-		text = ADISCORD_rus_crisis.1.government.t
-	}
-	desc = {
-		trigger = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.1.d
-	}
-	desc = {
-		trigger = { NOT = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } } }
-		text = ADISCORD_rus_crisis.1.government.d
-	}
+	title = ADISCORD_rus_crisis.1.t
+	desc = ADISCORD_rus_crisis.1.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = {
@@ -29,22 +15,8 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.2
-	title = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_crisis.2.t
-	}
-	title = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.2.government.t
-	}
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_crisis.2.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.2.government.d
-	}
+	title = ADISCORD_rus_crisis.2.t
+	desc = ADISCORD_rus_crisis.2.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = {
@@ -55,22 +27,8 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.3
-	title = {
-		trigger = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.3.t
-	}
-	title = {
-		trigger = { NOT = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } } }
-		text = ADISCORD_rus_crisis.3.government.t
-	}
-	desc = {
-		trigger = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.3.d
-	}
-	desc = {
-		trigger = { NOT = { RUS = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } } }
-		text = ADISCORD_rus_crisis.3.government.d
-	}
+	title = ADISCORD_rus_crisis.3.t
+	desc = ADISCORD_rus_crisis.3.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = { name = ADISCORD_rus_crisis.3.a }
@@ -118,22 +76,8 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_crisis.5
-	title = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_crisis.5.t
-	}
-	title = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.5.government.t
-	}
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_crisis.5.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_crisis.5.government.d
-	}
+	title = ADISCORD_rus_crisis.5.t
+	desc = ADISCORD_rus_crisis.5.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	option = { name = ADISCORD_rus_crisis.5.a }
@@ -3213,14 +3157,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.3
 	title = ADISCORD_rus_campaign.3.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.3.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.3.government.d
-	}
+	desc = ADISCORD_rus_campaign.3.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = {
@@ -3232,14 +3169,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.4
 	title = ADISCORD_rus_campaign.4.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.4.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.4.government.d
-	}
+	desc = ADISCORD_rus_campaign.4.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = {
@@ -3251,14 +3181,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.5
 	title = ADISCORD_rus_campaign.5.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.5.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.5.government.d
-	}
+	desc = ADISCORD_rus_campaign.5.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = {
@@ -3270,14 +3193,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.6
 	title = ADISCORD_rus_campaign.6.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.6.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.6.government.d
-	}
+	desc = ADISCORD_rus_campaign.6.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = {
@@ -3289,14 +3205,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.7
 	title = ADISCORD_rus_campaign.7.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.7.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.7.government.d
-	}
+	desc = ADISCORD_rus_campaign.7.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = {
@@ -3308,14 +3217,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.8
 	title = ADISCORD_rus_campaign.8.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.8.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.8.government.d
-	}
+	desc = ADISCORD_rus_campaign.8.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = {
@@ -3327,14 +3229,7 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.9
 	title = ADISCORD_rus_campaign.9.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.9.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.9.government.d
-	}
+	desc = ADISCORD_rus_campaign.9.d
 	picture = GFX_event_adiscord_negotiation_table
 	is_triggered_only = yes
 	trigger = {
@@ -3345,22 +3240,8 @@ country_event = {
 
 country_event = {
 	id = ADISCORD_rus_campaign.10
-	title = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.10.t
-	}
-	title = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.10.government.t
-	}
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.10.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.10.government.d
-	}
+	title = ADISCORD_rus_campaign.10.t
+	desc = ADISCORD_rus_campaign.10.d
 	picture = GFX_event_adiscord_military_headquarters
 	is_triggered_only = yes
 	trigger = {
@@ -3372,45 +3253,11 @@ country_event = {
 country_event = {
 	id = ADISCORD_rus_campaign.11
 	title = ADISCORD_rus_campaign.11.t
-	desc = {
-		trigger = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
-		text = ADISCORD_rus_campaign.11.d
-	}
-	desc = {
-		trigger = { NOT = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } } }
-		text = ADISCORD_rus_campaign.11.government.d
-	}
+	desc = ADISCORD_rus_campaign.11.d
 	picture = GFX_event_adiscord_parliament_chamber
 	is_triggered_only = yes
 	trigger = {
 		RUS_khan_governing = yes
 	}
 	option = { name = ADISCORD_rus_campaign.11.a }
-}
-
-country_event = {
-	id = ADISCORD_rus_campaign.12
-	title = ADISCORD_rus_campaign.12.t
-	desc = ADISCORD_rus_campaign.12.d
-	picture = GFX_event_adiscord_negotiation_table
-	is_triggered_only = yes
-	option = { name = ADISCORD_rus_campaign.12.a }
-}
-
-country_event = {
-	id = ADISCORD_rus_campaign.13
-	title = ADISCORD_rus_campaign.13.t
-	desc = ADISCORD_rus_campaign.13.d
-	picture = GFX_event_adiscord_negotiation_table
-	is_triggered_only = yes
-	option = { name = ADISCORD_rus_campaign.13.a }
-}
-
-country_event = {
-	id = ADISCORD_rus_campaign.14
-	title = ADISCORD_rus_campaign.14.t
-	desc = ADISCORD_rus_campaign.14.d
-	picture = GFX_event_adiscord_negotiation_table
-	is_triggered_only = yes
-	option = { name = ADISCORD_rus_campaign.14.a }
 }

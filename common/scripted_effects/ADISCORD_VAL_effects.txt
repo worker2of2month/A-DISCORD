@@ -2687,11 +2687,18 @@ VAL_spawn_crimson_trial = {
 	if = {
 		limit = {
 			tag = VAL
+			is_debug = yes
+			is_ai = no
 			has_capitulated = no
 			capital_scope = {
 				is_owned_by = VAL
 				is_controlled_by = VAL
 			}
+		}
+		# The spawn can fill only equipment unlocked for its owner.
+		if = {
+			limit = { NOT = { is_special_project_completed = sp:ADISCORD_sp_combat_robots } }
+			complete_special_project = sp:ADISCORD_sp_combat_robots
 		}
 		if = {
 			limit = { NOT = { has_template = "Kefreyt Assault Trial" } }

@@ -18,6 +18,5 @@ set_research_slots = 0
 set_political_power = 0
 add_ideas = closed_economy
 add_ideas = EXZ_trade_isolation
-set_rule = { can_access_market = no }
 set_country_flag = ADISCORD_vorkerland_dirty_zone_placeholder
 country_lock_all_division_template = yes

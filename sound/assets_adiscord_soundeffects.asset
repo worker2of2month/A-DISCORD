@@ -26,21 +26,67 @@ soundeffect = {
 }
 
 category = {
-	name = "Voices"
+	name = "Battle"
 	soundeffects = {
-		ADISCORD_crimson_metal_scrape
+		ADISCORD_robot_idle
+		ADISCORD_robot_start
+		ADISCORD_robot_step
+		ADISCORD_robot_burst
 	}
 }
 
 soundeffect = {
-	name = "ADISCORD_crimson_metal_scrape"
+	name = "ADISCORD_robot_idle"
 	sounds = {
-		sound = "ADISCORD_crimson_metal_scrape_1"
-		sound = "ADISCORD_crimson_metal_scrape_2"
+		sound = "ADISCORD_robot_idle_sample"
+	}
+	volume = 0.04
+	falloff = "falloff_80"
+	max_audible = 4
+	max_audible_behaviour = fail
+	is3d = yes
+	loop = yes
+	random_sound_when_looping = no
+	fade_in = 0.15
+	fade_out = 0.20
+}
+
+soundeffect = {
+	name = "ADISCORD_robot_start"
+	sounds = {
+		sound = "ADISCORD_robot_start_sample"
+	}
+	volume = 0.45
+	falloff = "falloff_80"
+	max_audible = 4
+	max_audible_behaviour = fail
+	is3d = yes
+	loop = no
+}
+
+soundeffect = {
+	name = "ADISCORD_robot_step"
+	sounds = {
+		sound = "ADISCORD_robot_step_1_sample"
+		sound = "ADISCORD_robot_step_2_sample"
+	}
+	volume = 0.65
+	falloff = "falloff_80"
+	max_audible = 4
+	max_audible_behaviour = fail
+	is3d = yes
+	loop = no
+}
+
+soundeffect = {
+	name = "ADISCORD_robot_burst"
+	sounds = {
+		sound = "ADISCORD_robot_burst_sample"
 	}
 	volume = 0.80
-	max_audible = 1
+	falloff = "falloff_100"
+	max_audible = 4
 	max_audible_behaviour = fail
-	is3d = no
+	is3d = yes
 	loop = no
 }

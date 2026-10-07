@@ -482,16 +482,6 @@ ADISCORD_vorkerland_reconcile_campaign_state = {
 }
 
 # --- collapse_dirty_effects ---
-# Country relations retain the embargo when dormant tags later gain land.
-# This runs once during new-campaign setup, before the collapse is scheduled.
-ADISCORD_vorkerland_close_exz_trade = {
-	every_possible_country = {
-		limit = { NOT = { original_tag = EXZ } }
-		send_embargo = EXZ
-		EXZ = { send_embargo = PREV }
-	}
-}
-
 # Northern tribal land stays outside the contaminated belt regardless of its owner.
 ADISCORD_vorkerland_clear_northern_dirty_modifiers = {
 	58 = { ADISCORD_vorkerland_remove_dirty_state_modifier = yes }
@@ -10420,14 +10410,6 @@ RUS_crisis_prepare_restored_fragment = {
 
 RUS_retire_current_ruler = {
 	if = {
-		limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
-		retire_character = RUS_Varlam_Oskol
-	}
-	else_if = {
-		limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
-		retire_character = RUS_Pavel_Niva
-	}
-	else_if = {
 		limit = { has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes } }
 		retire_character = RUS_Mark_Rustan
 	}
@@ -10439,13 +10421,14 @@ RUS_crisis_dissolve_empire = {
 	# Only the selected hegemon receives this choice, even if an ally took the capital.
 	event_target:RUS_crisis_hegemon = {
 		set_country_flag = RUS_crisis_settlement_rights
+		# The proclaimed imperial form selects the settlement narrative.
 		set_variable = { var = RUS_crisis_defeated_course value = 1 }
 		if = {
-			limit = { RUS = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } } }
+			limit = { RUS = { has_cosmetic_tag = RUS_black_banner_empire } }
 			set_variable = { var = RUS_crisis_defeated_course value = 2 }
 		}
 		else_if = {
-			limit = { RUS = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } } }
+			limit = { RUS = { has_cosmetic_tag = RUS_restoration_state } }
 			set_variable = { var = RUS_crisis_defeated_course value = 3 }
 		}
 		country_event = { id = ADISCORD_rus_crisis.4 }
@@ -10912,81 +10895,6 @@ ADISCORD_vorkerland_check_rus_dirty_campaign = {
 	}
 }
 
-# Political succession changes the government inside RUS. Construction
-# receipts, propaganda slots and the imperial threat keep their current state.
-RUS_choose_khan_course = {
-	if = {
-		limit = {
-			RUS_political_choice_open = yes
-			NOT = { has_completed_focus = RUS_army_mandate }
-			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
-		}
-		set_politics = {
-			ruling_party = etatism
-			elections_allowed = no
-		}
-		promote_character = {
-			character = RUS_Mark_Rustan
-			ideology = etatism_ideology
-		}
-		RUS_black_army_refresh = yes
-		RUS_bunker_refresh = yes
-		country_event = { id = ADISCORD_rus_campaign.12 }
-	}
-}
-
-RUS_choose_army_course = {
-	if = {
-		limit = {
-			RUS_political_choice_open = yes
-			NOT = { has_completed_focus = RUS_reaffirm_khan }
-			NOT = { has_completed_focus = RUS_reconstruction_cabinet }
-			NOT = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
-		}
-		set_politics = {
-			ruling_party = etatism
-			elections_allowed = no
-		}
-		promote_character = {
-			character = RUS_Varlam_Oskol
-			ideology = etatism_ideology
-		}
-		add_power_balance_value = {
-			id = RUS_state_balance
-			value = 0.30
-		}
-		RUS_black_army_refresh = yes
-		RUS_bunker_refresh = yes
-		country_event = { id = ADISCORD_rus_campaign.13 }
-	}
-}
-
-RUS_choose_reconstruction_course = {
-	if = {
-		limit = {
-			RUS_political_choice_open = yes
-			NOT = { has_completed_focus = RUS_reaffirm_khan }
-			NOT = { has_completed_focus = RUS_army_mandate }
-			NOT = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
-		}
-		set_politics = {
-			ruling_party = pragmatism
-			elections_allowed = no
-		}
-		promote_character = {
-			character = RUS_Pavel_Niva
-			ideology = pragmatism_ideology
-		}
-		add_power_balance_value = {
-			id = RUS_state_balance
-			value = -0.30
-		}
-		RUS_black_army_refresh = yes
-		RUS_bunker_refresh = yes
-		country_event = { id = ADISCORD_rus_campaign.14 }
-	}
-}
-
 ADISCORD_vorkerland_rus_proclaim_last_empire = {
 	if = {
 		limit = {
@@ -10994,7 +10902,6 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 			NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 			ADISCORD_vorkerland_rus_has_empire_territory = yes
 			RUS_khan_governing = yes
-			RUS_political_course_chosen = yes
 		}
 		set_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed
 		clr_country_flag = ADISCORD_vorkerland_rus_dirty_campaign_active
@@ -11007,36 +10914,29 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 			limit = { NOT = { has_idea = RUS_last_empire_spirit } }
 			add_ideas = RUS_last_empire_spirit
 		}
+		# The faction that outweighs the compromise range names the empire.
 		if = {
-			limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+			limit = { power_balance_value = { id = RUS_state_balance value > 0.10 } }
 			set_cosmetic_tag = RUS_black_banner_empire
-			set_politics = {
-				ruling_party = etatism
-				elections_allowed = no
-			}
 		}
 		else_if = {
-			limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+			limit = { power_balance_value = { id = RUS_state_balance value < -0.10 } }
 			set_cosmetic_tag = RUS_restoration_state
-			set_politics = {
-				ruling_party = pragmatism
-				elections_allowed = no
-			}
 		}
 		else = {
 			set_cosmetic_tag = RUS_last_empire
-			set_politics = {
-				ruling_party = etatism
-				elections_allowed = no
-			}
-			set_portraits = {
-				character = RUS_Mark_Rustan
-				civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
-			}
-			set_country_leader_portrait = {
-				ideology = etatism
-				portrait = GFX_portrait_RUS_Mark_Rustan_dictator
-			}
+		}
+		set_politics = {
+			ruling_party = etatism
+			elections_allowed = no
+		}
+		set_portraits = {
+			character = RUS_Mark_Rustan
+			civilian = { large = GFX_portrait_RUS_Mark_Rustan_dictator }
+		}
+		set_country_leader_portrait = {
+			ideology = etatism
+			portrait = GFX_portrait_RUS_Mark_Rustan_dictator
 		}
 		RUS_black_army_empire_reform = yes
 		# Relyn must be able to prepare as soon as imperial frontier wars unlock.
@@ -11054,7 +10954,7 @@ ADISCORD_vorkerland_rus_proclaim_last_empire = {
 
 ADISCORD_vorkerland_show_last_empire_superevent = {
 	if = {
-		limit = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+		limit = { has_cosmetic_tag = RUS_black_banner_empire }
 		if = {
 			limit = { any_country = { is_ai = no } }
 			random_country = {
@@ -11067,7 +10967,7 @@ ADISCORD_vorkerland_show_last_empire_superevent = {
 		}
 	}
 	else_if = {
-		limit = { has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes } }
+		limit = { has_cosmetic_tag = RUS_restoration_state }
 		if = {
 			limit = { any_country = { is_ai = no } }
 			random_country = {
@@ -12166,6 +12066,45 @@ RUS_black_army_refresh = {
 	force_update_dynamic_modifier = yes
 }
 
+# COUNTRY RUS. Inputs: temp RUS_black_army_support_delta and
+# RUS_scientists_support_delta; an unset input leaves that faction unchanged.
+RUS_faction_support_change = {
+	add_to_variable = { var = RUS_black_army_support value = RUS_black_army_support_delta }
+	add_to_variable = { var = RUS_scientists_support value = RUS_scientists_support_delta }
+	clamp_variable = { var = RUS_black_army_support min = 0 max = 1 }
+	clamp_variable = { var = RUS_scientists_support min = 0 max = 1 }
+	RUS_faction_support_refresh = yes
+}
+
+# Support above 50% pays political power and pulls the balance weekly toward
+# that faction; support below 50% costs political power without a pull.
+RUS_faction_support_refresh = {
+	set_variable = { var = RUS_faction_political_power_gain value = RUS_black_army_support }
+	add_to_variable = { var = RUS_faction_political_power_gain value = RUS_scientists_support }
+	subtract_from_variable = { var = RUS_faction_political_power_gain value = 1 }
+	multiply_variable = { var = RUS_faction_political_power_gain value = 0.2 }
+	set_variable = { var = RUS_faction_power_balance_weekly value = 0 }
+	if = {
+		limit = { check_variable = { var = RUS_black_army_support value = 0.5 compare = greater_than } }
+		add_to_variable = { var = RUS_faction_power_balance_weekly value = RUS_black_army_support }
+		subtract_from_variable = { var = RUS_faction_power_balance_weekly value = 0.5 }
+	}
+	if = {
+		limit = { check_variable = { var = RUS_scientists_support value = 0.5 compare = greater_than } }
+		subtract_from_variable = { var = RUS_faction_power_balance_weekly value = RUS_scientists_support }
+		add_to_variable = { var = RUS_faction_power_balance_weekly value = 0.5 }
+	}
+	multiply_variable = { var = RUS_faction_power_balance_weekly value = 0.03 }
+	if = {
+		limit = {
+			RUS_state_balance_operational = yes
+			NOT = { has_dynamic_modifier = { modifier = RUS_faction_support } }
+		}
+		add_dynamic_modifier = { modifier = RUS_faction_support }
+	}
+	force_update_dynamic_modifier = yes
+}
+
 # The proclamation's one-time guard owns this delta; later ruler changes only refresh.
 RUS_black_army_empire_reform = {
 	add_to_variable = { var = RUS_army_org value = 0.02 }
@@ -12190,6 +12129,8 @@ RUS_campaign_initialize = {
 		ADISCORD_vorkerland_rus_core_dirty_irt = yes
 		ADISCORD_vorkerland_rus_core_dirty_sca = yes
 		set_power_balance = { id = RUS_state_balance set_value = 0 }
+		set_variable = { var = RUS_black_army_support value = 0.5 }
+		set_variable = { var = RUS_scientists_support value = 0.5 }
 		add_political_power = 20
 		add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
@@ -12220,6 +12161,7 @@ RUS_campaign_initialize = {
 		set_variable = { var = RUS_army_planning value = 0 }
 		set_variable = { var = RUS_army_training value = 0 }
 		RUS_black_army_refresh = yes
+		RUS_faction_support_refresh = yes
 		RUS_bunker_refresh = yes
 		country_event = { id = ADISCORD_rus_campaign.1 days = 2 }
 	}
@@ -12232,6 +12174,7 @@ RUS_campaign_shutdown = {
 	}
 	RUS_public_campaigns_shutdown = yes
 	RUS_bunker_refund = yes
+	RUS_lab_refund = yes
 	remove_ideas = RUS_council_mandate
 	remove_ideas = RUS_chancery_mandate
 	remove_ideas = RUS_paid_administration
@@ -12250,7 +12193,148 @@ RUS_campaign_shutdown = {
 		}
 		remove_dynamic_modifier = { modifier = RUS_bunker_complex }
 	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = RUS_faction_support } }
+		remove_dynamic_modifier = { modifier = RUS_faction_support }
+	}
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# --- rus_experimental_laboratories ---
+# RUS_lab_project holds one paid receipt: 1 = reactor alloys, 2 = airship.
+# Clearing it before settlement keeps a late native callback from paying or
+# refunding the same project twice.
+RUS_lab_clear_receipt = {
+	clear_variable = RUS_lab_project
+	clear_variable = RUS_lab_escrow_pp
+	clear_variable = RUS_lab_escrow_cash
+}
+
+RUS_lab_refund = {
+	if = {
+		limit = { has_variable = RUS_lab_project }
+		set_temp_variable = { var = RUS_lab_refund_pp value = RUS_lab_escrow_pp }
+		set_temp_variable = { var = RUS_lab_refund_cash value = RUS_lab_escrow_cash }
+		set_temp_variable = { var = RUS_lab_refund_project value = RUS_lab_project }
+		RUS_lab_clear_receipt = yes
+		if = {
+			limit = { has_decision = RUS_lab_reactor_alloys }
+			remove_decision = RUS_lab_reactor_alloys
+		}
+		if = {
+			limit = { has_decision = RUS_lab_zeppelin }
+			remove_decision = RUS_lab_zeppelin
+		}
+		add_political_power = RUS_lab_refund_pp
+		add_to_variable = { var = ADISCORD_economy_treasury value = RUS_lab_refund_cash }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = RUS_lab_refund_cash }
+		# The airship crew returns to the recruit pool.
+		if = {
+			limit = { check_variable = { var = RUS_lab_refund_project value = 2 compare = equals } }
+			add_manpower = 400
+		}
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_lab_reactor_alloys_start = {
+	if = {
+		limit = {
+			RUS_lab_operational = yes
+			RUS_lab_slot_free = yes
+			RUS_lab_not_under_black_army = yes
+			NOT = { has_country_flag = RUS_lab_reactor_alloys_completed }
+			RUS_lab_reactor_alloys_affordable = yes
+		}
+		set_variable = { var = RUS_lab_project value = 1 }
+		set_variable = { var = RUS_lab_escrow_pp value = 50 }
+		set_variable = { var = RUS_lab_escrow_cash value = 300 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 300 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 300 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_lab_reactor_alloys_finish = {
+	if = {
+		limit = { check_variable = { var = RUS_lab_project value = 1 compare = equals } }
+		if = {
+			limit = { RUS_lab_operational = yes }
+			RUS_lab_clear_receipt = yes
+			set_country_flag = RUS_lab_reactor_alloys_completed
+			add_tech_bonus = {
+				name = RUS_lab_reactor_alloys
+				bonus = 1
+				uses = 1
+				category = industry
+			}
+			set_temp_variable = { var = RUS_black_army_support_delta value = -0.05 }
+			set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
+			RUS_faction_support_change = yes
+		}
+		else = { RUS_lab_refund = yes }
+	}
+}
+
+RUS_lab_zeppelin_start = {
+	if = {
+		limit = {
+			RUS_lab_operational = yes
+			RUS_lab_slot_free = yes
+			RUS_lab_not_under_black_army = yes
+			has_country_flag = RUS_lab_reactor_alloys_completed
+			NOT = { has_country_flag = RUS_lab_zeppelin_delivered }
+			RUS_lab_zeppelin_affordable = yes
+		}
+		set_variable = { var = RUS_lab_project value = 2 }
+		set_variable = { var = RUS_lab_escrow_pp value = 100 }
+		set_variable = { var = RUS_lab_escrow_cash value = 1000 }
+		add_political_power = -100
+		add_manpower = -400
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 1000 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 1000 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_lab_zeppelin_finish = {
+	if = {
+		limit = { check_variable = { var = RUS_lab_project value = 2 compare = equals } }
+		if = {
+			limit = { RUS_lab_operational = yes }
+			RUS_lab_clear_receipt = yes
+			set_country_flag = RUS_lab_zeppelin_delivered
+			RUS_lab_spawn_zeppelin = yes
+			set_temp_variable = { var = RUS_black_army_support_delta value = 0.10 }
+			set_temp_variable = { var = RUS_scientists_support_delta value = 0.10 }
+			RUS_faction_support_change = yes
+		}
+		else = { RUS_lab_refund = yes }
+	}
+}
+
+# The only hull is unique: its equipment cannot be produced for replacement.
+# The crew was taken from the recruit pool when the project was paid.
+RUS_lab_spawn_zeppelin = {
+	if = {
+		limit = { NOT = { has_template = "Rusnian Airship" } }
+		division_template = {
+			name = "Rusnian Airship"
+			override_model = ADISCORD_zeppelin_entity
+			is_locked = yes
+			regiments = {
+				ADISCORD_zeppelin = { x = 0 y = 0 }
+			}
+		}
+	}
+	capital_scope = {
+		create_unit = {
+			division = "name = \"Воздушный линкор «Цепелин»\" division_template = \"Rusnian Airship\" start_experience_factor = 0.3 start_equipment_factor = 1.0 start_manpower_factor = 1.0"
+			owner = RUS
+			allow_spawning_on_enemy_provs = no
+		}
+	}
 }
 
 

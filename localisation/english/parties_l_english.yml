@@ -572,8 +572,6 @@
  steland_military_directory_desc: "The general staff holds the state together for a fixed term. This is neither a return to party rule nor the founder's hegemony."
  national_legitimism: "National Legitimism"
  national_legitimism_desc: "Authority rests on the founder's name and the continuity of his mandate, rather than the party apparatus."
- tff_emergency_war_coordinator: "Emergency Military Coordinator"
- tff_emergency_war_coordinator_desc: "A limited wartime mandate within the Frontier's anarchist system. The coordinator organises supply and defence without declaring himself head of state or abolishing the assembly."
  # BEGIN GENERATED: tools.builders.build_adiscord_ainholm_mandate
  AIN_hedonism_party: "Licensing Chamber"
  AIN_hedonism_party_long: "Chamber of Nodrul Licences and Local Concessionaires"

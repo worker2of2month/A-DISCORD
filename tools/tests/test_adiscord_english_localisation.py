@@ -127,6 +127,32 @@ class EnglishLocalisationTests(unittest.TestCase):
 class EnglishCatalogueCompletenessTests(unittest.TestCase):
     """The distributed mod must not depend on vanilla for authored Russian text."""
 
+    def test_ordinary_catalogues_do_not_disagree_on_duplicate_keys(self):
+        from collections import defaultdict
+
+        root = Path(__file__).resolve().parents[2] / 'localisation'
+        values = defaultdict(set)
+        for path in root.rglob('*_l_english.yml'):
+            if 'replace' in path.relative_to(root).parts:
+                continue
+            for line in path.read_text(encoding='utf-8-sig').splitlines():
+                match = ENTRY.fullmatch(line)
+                if match:
+                    values[match[1]].add(match[2])
+        conflicts = sorted(key for key, variants in values.items() if len(variants) > 1)
+        self.assertEqual(conflicts, [])
+
+    def test_generated_new_state_english_names_are_current(self):
+        from tools.lib.localisation import sync_builder_english_localisation
+
+        root = Path(__file__).resolve().parents[2]
+        self.assertEqual(
+            sync_builder_english_localisation(
+                root, 'tools.builders.build_adiscord_new_states', apply=False
+            ),
+            0,
+        )
+
     def test_every_russian_key_has_an_english_entry(self):
         from tools.validators.validate_adiscord_english_localisation import (
             EXCLUDED_KEYS,

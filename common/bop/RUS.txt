@@ -1,7 +1,7 @@
 RUS_state_balance = {
 	initial_value = 0
-	left_side = RUS_aimaqs_side
-	right_side = RUS_headquarters_side
+	left_side = RUS_scientists_side
+	right_side = RUS_black_army_side
 	decision_category = RUS_state_balance_category
 	range = {
 		id = RUS_state_balance_compromise
@@ -12,39 +12,40 @@ RUS_state_balance = {
 		on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 	}
 	side = {
-		id = RUS_aimaqs_side
-		icon = GFX_idea_ADISCORD_internal_security_civilian_oversight
+		id = RUS_scientists_side
+		icon = GFX_idea_ADISCORD_law_education_technical_institutes
 		range = {
-			id = RUS_aimaqs_influence
+			id = RUS_scientists_influence
 			min = -0.60
 			max = -0.10
 			modifier = {
+				research_speed_factor = 0.04
 				production_factory_efficiency_gain_factor = 0.03
-				stability_factor = 0.02
 				conscription_factor = -0.02
 			}
 			on_activate = { ADISCORD_economy_mark_dirty = yes }
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
 		range = {
-			id = RUS_aimaqs_dominance
+			id = RUS_scientists_dominance
 			min = -1.00
 			max = -0.60
 			modifier = {
+				research_speed_factor = 0.08
 				production_factory_efficiency_gain_factor = 0.05
-				consumer_goods_factor = -0.03
 				conscription_factor = -0.05
-				political_power_gain = -0.10
+				army_org_factor = -0.03
+				stability_factor = -0.03
 			}
 			on_activate = { ADISCORD_economy_mark_dirty = yes }
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
 	}
 	side = {
-		id = RUS_headquarters_side
+		id = RUS_black_army_side
 		icon = GFX_idea_ADISCORD_military_organization_cadre_army
 		range = {
-			id = RUS_headquarters_influence
+			id = RUS_black_army_influence
 			min = 0.10
 			max = 0.60
 			modifier = {
@@ -56,7 +57,7 @@ RUS_state_balance = {
 			on_deactivate = { ADISCORD_economy_mark_dirty = yes }
 		}
 		range = {
-			id = RUS_headquarters_dominance
+			id = RUS_black_army_dominance
 			min = 0.60
 			max = 1.00
 			modifier = {
@@ -64,6 +65,7 @@ RUS_state_balance = {
 				max_planning_factor = 0.05
 				supply_consumption_factor = 0.05
 				ADISCORD_economy_admin_expense_factor = 0.10
+				research_speed_factor = -0.05
 				stability_factor = -0.03
 			}
 			on_activate = { ADISCORD_economy_mark_dirty = yes }

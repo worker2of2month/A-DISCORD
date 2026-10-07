@@ -217,6 +217,15 @@ RUS_state_balance_category = {
 	visible_when_empty = yes
 }
 
+# --- rus_experimental_laboratories ---
+RUS_experimental_labs_category = {
+	icon = ADISCORD_science
+	allowed = { tag = RUS }
+	visible = { has_completed_focus = RUS_experimental_laboratories }
+	visible_when_empty = yes
+	priority = 23
+}
+
 # --- rus_public_campaigns ---
 RUS_public_campaigns = {
 	icon = generic_political_pressure

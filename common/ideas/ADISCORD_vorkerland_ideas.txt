@@ -2892,18 +2892,12 @@ ideas = {
 			}
 		}
 
-		RUS_khan_course_delta = {
-			picture = ADISCORD_military_organization_cadre_army
-			allowed = { always = no }
-			removal_cost = -1
-			modifier = { army_org_factor = 0.03 }
-		}
-
-		RUS_army_course_delta = {
+		RUS_black_army_banner_delta = {
 			picture = ADISCORD_military_organization_cadre_army
 			allowed = { always = no }
 			removal_cost = -1
 			modifier = {
+				army_org_factor = 0.03
 				army_defence_factor = 0.05
 				planning_speed = 0.03
 			}

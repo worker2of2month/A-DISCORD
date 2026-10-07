@@ -57,6 +57,7 @@ from tools.validators.validate_adiscord_stp_shabrat_ai import (
     collect_issues as validate_adiscord_stp_shabrat_ai,
 )
 from tools.validators.validate_adiscord_division_templates import (
+    parse_clausewitz,
     validate as validate_adiscord_division_templates,
 )
 from tools.builders.build_adiscord_map_buildings import (
@@ -553,6 +554,15 @@ def check_localisation(limit):
 
 def check_special_project_leftovers(limit):
     issues = []
+    projects = {
+        entry.key
+        for path in iter_files("common/special_projects/projects")
+        for entry in parse_clausewitz(strip_comments(read_text(path)))
+        if isinstance(entry.value, list)
+    }
+    supported_reference = re.compile(
+        r"\b(?:complete_special_project|is_special_project_completed)\s*=\s*sp:([A-Za-z0-9_]+)\b"
+    )
     patterns = [
         re.compile(r"\b(?:PROJECT|EXTRA_PROJECT)\s*=\s*sp_[A-Za-z0-9_]+"),
         re.compile(r"\bsp:[A-Za-z0-9_]+"),
@@ -569,7 +579,10 @@ def check_special_project_leftovers(limit):
                     line,
                 )
             )
-            if any(pattern.search(line) for pattern in patterns) or (
+            remainder = supported_reference.sub(
+                lambda match: "" if match[1] in projects else match[0], line
+            )
+            if any(pattern.search(remainder) for pattern in patterns) or (
                 specialization and not supported_specialization
             ):
                 issues.append(f"{rel(path)}:{lineno}: {line.strip()[:160]}")

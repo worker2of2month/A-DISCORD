@@ -35,11 +35,6 @@ characters = {
 				small = GFX_Portrait_Forul_Generic_2_small
 			}
 		}
-		country_leader = {
-			ideology = etatism_ideology
-			expire = "2200.1.1.1"
-			id = -1
-		}
 		corps_commander = {
 			skill = 3
 			attack_skill = 2
@@ -47,18 +42,6 @@ characters = {
 			planning_skill = 3
 			logistics_skill = 3
 			legacy_id = -1
-		}
-	}
-
-	RUS_Pavel_Niva = {
-		name = RUS_Pavel_Niva
-		portraits = {
-			civilian = { large = GFX_Portrait_Forul_Generic_7 }
-		}
-		country_leader = {
-			ideology = pragmatism_ideology
-			expire = "2200.1.1.1"
-			id = -1
 		}
 	}
 }

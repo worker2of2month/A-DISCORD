@@ -2310,7 +2310,6 @@ ADISCORD_vorkerland_rus_has_empire_territory = {
 ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
 	tag = RUS
 	RUS_khan_governing = yes
-	RUS_political_course_chosen = yes
 	has_completed_focus = RUS_seat_the_khan_chancery
 	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
 	ADISCORD_vorkerland_rus_has_empire_territory = yes
@@ -2454,27 +2453,10 @@ ADISCORD_vorkerland_rus_target_defeated = {
 # --- rus_campaign_triggers ---
 RUS_khan_governing = {
 	tag = RUS
-	OR = {
-		has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
-		has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
-		has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes }
-	}
+	has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
 	NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
 	has_capitulated = no
 	is_subject = no
-}
-
-RUS_political_choice_open = {
-	RUS_khan_governing = yes
-	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
-}
-
-RUS_political_course_chosen = {
-	OR = {
-		has_completed_focus = RUS_reaffirm_khan
-		has_completed_focus = RUS_army_mandate
-		has_completed_focus = RUS_reconstruction_cabinet
-	}
 }
 
 RUS_bunker_operational = {
@@ -2931,4 +2913,43 @@ RUS_bop_mediation_available = {
 RUS_bop_mediation_affordable = {
 	NOT = { has_political_power < 40 }
 	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
+# --- rus_experimental_laboratories ---
+# State 125 is the impassable reactor core; the four walkable reactor zones
+# around it supply the samples. Any one of them keeps the laboratories open.
+RUS_lab_reactor_access = {
+	OR = {
+		controls_state = 176
+		controls_state = 177
+		controls_state = 188
+		controls_state = 192
+	}
+}
+
+# Running projects are cancelled and refunded when this stops holding.
+RUS_lab_operational = {
+	RUS_bunker_operational = yes
+	has_completed_focus = RUS_experimental_laboratories
+	RUS_lab_reactor_access = yes
+}
+
+RUS_lab_slot_free = {
+	NOT = { has_decision = RUS_lab_reactor_alloys }
+	NOT = { has_decision = RUS_lab_zeppelin }
+}
+
+RUS_lab_not_under_black_army = {
+	NOT = { power_balance_value = { id = RUS_state_balance value > 0.60 } }
+}
+
+RUS_lab_reactor_alloys_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 300 compare = greater_than_or_equals }
+}
+
+RUS_lab_zeppelin_affordable = {
+	NOT = { has_political_power < 100 }
+	check_variable = { var = ADISCORD_economy_treasury value = 1000 compare = greater_than_or_equals }
+	NOT = { has_manpower < 400 }
 }

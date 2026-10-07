@@ -1035,6 +1035,10 @@ VAL_rework_debug = {
 	VAL_debug_spawn_crimson_trial = {
 		icon = generic_prepare_civil_war
 		allowed = { tag = VAL }
+		visible = {
+			is_debug = yes
+			is_ai = no
+		}
 		available = {
 			has_capitulated = no
 			capital_scope = {

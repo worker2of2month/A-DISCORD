@@ -12084,7 +12084,7 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.0,
+        "organization": 50.0,
         "manpower": 1500.0,
         "equipment": {
           "ADISCORD_combat_robot_equipment": 600.0,
@@ -12805,7 +12805,7 @@
       ],
       "support": [],
       "computed": {
-        "organization": 40.0,
+        "organization": 50.0,
         "manpower": 400.0,
         "equipment": {
           "ADISCORD_zeppelin_equipment": 1.0

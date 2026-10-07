@@ -701,3 +701,15 @@
  STATE_686: "Southwestern Evenor"
  STATE_687: "Southeastern Evenor"
  # END GENERATED: tools.builders.build_adiscord_remainder_states
+ # BEGIN GENERATED: tools.builders.build_adiscord_new_states
+ STATE_699: "Khazar"
+ STATE_700: "South Harbour"
+ STATE_701: "Middle Loren City"
+ STATE_702: "Kadir District"
+ STATE_703: "Rahma District"
+ STATE_704: "Sardan District"
+ STATE_705: "Mazar District"
+ STATE_706: "Keyzan District"
+ STATE_707: "Shahrabad District"
+ STATE_708: "Veyr District"
+ # END GENERATED: tools.builders.build_adiscord_new_states

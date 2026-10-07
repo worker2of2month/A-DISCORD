@@ -6,15 +6,16 @@ entity = {
 	pdxmesh = "ADISCORD_combat_robots_mesh"
 	default_state = "idle"
 	scale = 0.8
-	# State-entry sounds must not repeat on every animation loop.
+	# Drive loops start once; footsteps and firing repeat with their animation.
 	state = {
 		name = "idle"
 		animation = "idle"
 		animation_blend_time = 0.3
 		looping = yes
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
 		}
 	}
 	state = {
@@ -22,10 +23,26 @@ entity = {
 		animation = "move"
 		animation_blend_time = 0.3
 		looping = yes
-		event = { sound = { soundeffect = "infantry_move_animation" } }
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
+		event = {
+			time = 0
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_robot_start" }
+		}
+		# Foot plants in the 40/24-second movement cycle.
+		event = {
+			time = 0.208333
+			node = "left_foot"
+			sound = { soundeffect = "ADISCORD_robot_step" }
+		}
+		event = {
+			time = 0.958333
+			node = "right_foot"
+			sound = { soundeffect = "ADISCORD_robot_step" }
 		}
 	}
 	state = {
@@ -34,8 +51,13 @@ entity = {
 		animation_blend_time = 0.3
 		looping = yes
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
+		event = {
+			time = 0.5
+			sound = { soundeffect = "ADISCORD_robot_burst" }
 		}
 	}
 	state = {
@@ -44,8 +66,13 @@ entity = {
 		animation_blend_time = 0.3
 		looping = yes
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
+		event = {
+			time = 0.5
+			sound = { soundeffect = "ADISCORD_robot_burst" }
 		}
 	}
 	state = {
@@ -54,8 +81,13 @@ entity = {
 		animation_blend_time = 0.3
 		looping = yes
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
+		event = {
+			time = 0.5
+			sound = { soundeffect = "ADISCORD_robot_burst" }
 		}
 	}
 	state = {
@@ -64,8 +96,24 @@ entity = {
 		animation_blend_time = 0.3
 		looping = yes
 		event = {
+			time = 0
 			trigger_once = yes
-			sound = { soundeffect = "ADISCORD_crimson_metal_scrape" }
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
+		event = {
+			time = 0
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_robot_start" }
+		}
+		event = {
+			time = 0.208333
+			node = "left_foot"
+			sound = { soundeffect = "ADISCORD_robot_step" }
+		}
+		event = {
+			time = 0.958333
+			node = "right_foot"
+			sound = { soundeffect = "ADISCORD_robot_step" }
 		}
 	}
 	state = {
@@ -73,6 +121,11 @@ entity = {
 		animation = "idle"
 		animation_blend_time = 0.3
 		looping = yes
+		event = {
+			time = 0
+			trigger_once = yes
+			sound = { soundeffect = "ADISCORD_robot_idle" }
+		}
 	}
 	state = {
 		name = "death"
@@ -82,11 +135,85 @@ entity = {
 	}
 	attach = {
 		name = "rifle1"
-		Right_Hand_node = "western_european_infantry_weapon_mg_right_entity"
+		Right_Hand_node = "ADISCORD_combat_robot_weapon_entity"
 	}
 	attach = {
 		name = "rifle2"
 		Left_Hand_node = "western_european_infantry_weapon_mg_left_entity"
+	}
+}
+
+entity = {
+	name = "ADISCORD_combat_robot_weapon_entity"
+	pdxmesh = "ADISCORD_combat_robot_weapon_mesh"
+	scale = 1.0
+	get_state_from_parent = yes
+	default_state = "idle"
+	state = { name = "idle" }
+	state = { name = "move" }
+	state = { name = "retreat" }
+	state = { name = "training" }
+	state = { name = "death" }
+	# The robot parent owns firing audio; this attachment supplies only muzzle effects.
+	state = {
+		name = "attack"
+		state_time = 3.2
+		looping = yes
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_particle"
+			keep_particle = yes
+			light = "mg_muzzle_flash"
+		}
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_smoke_particle"
+			keep_particle = yes
+		}
+		event = {
+			time = 0.5
+			node = "cartridge"
+			particle = "mg_cartridge_particle"
+			keep_particle = yes
+		}
+	}
+	state = {
+		name = "defend"
+		state_time = 3.2
+		looping = yes
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_particle"
+			keep_particle = yes
+			light = "mg_muzzle_flash"
+		}
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_smoke_particle"
+			keep_particle = yes
+		}
+	}
+	state = {
+		name = "support_attack"
+		state_time = 3.2
+		looping = yes
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_particle"
+			keep_particle = yes
+			light = "mg_muzzle_flash"
+		}
+		event = {
+			time = 0.5
+			node = "muzzle"
+			particle = "mg_muzzle_smoke_particle"
+			keep_particle = yes
+		}
 	}
 }
 

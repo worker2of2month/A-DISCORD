@@ -12,11 +12,26 @@ sound = {
 }
 
 sound = {
-	name = "ADISCORD_crimson_metal_scrape_1"
-	file = "special units/special_1.wav"
+	name = "ADISCORD_robot_idle_sample"
+	file = "combat_robots/ADISCORD_robot_idle.wav"
 }
 
 sound = {
-	name = "ADISCORD_crimson_metal_scrape_2"
-	file = "special units/special_2.wav"
+	name = "ADISCORD_robot_start_sample"
+	file = "combat_robots/ADISCORD_robot_start.wav"
+}
+
+sound = {
+	name = "ADISCORD_robot_step_1_sample"
+	file = "combat_robots/ADISCORD_robot_step_1.wav"
+}
+
+sound = {
+	name = "ADISCORD_robot_step_2_sample"
+	file = "combat_robots/ADISCORD_robot_step_2.wav"
+}
+
+sound = {
+	name = "ADISCORD_robot_burst_sample"
+	file = "combat_robots/ADISCORD_robot_burst.wav"
 }

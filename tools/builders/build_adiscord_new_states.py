@@ -2159,6 +2159,11 @@ def update_state_metadata(state_ids: set[int], apply: bool) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate A-Discord state metadata.")
+    parser.add_argument(
+        "--english-localisation",
+        action="store_true",
+        help="synchronize only the reviewed English state and settlement names",
+    )
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument("--check", action="store_true", help="validate current generated outputs (default)")
     actions.add_argument("--apply", action="store_true", help="write generated state metadata and localisation")
@@ -2218,6 +2223,12 @@ def main() -> int:
     actions.add_argument("--check-state-metadata", action="append", type=int, metavar="STATE_ID")
     actions.add_argument("--apply-state-metadata", action="append", type=int, metavar="STATE_ID")
     args = parser.parse_args()
+    if args.english_localisation:
+        from tools.lib.localisation import sync_builder_english_localisation
+
+        return sync_builder_english_localisation(
+            ROOT, "tools.builders.build_adiscord_new_states", apply=args.apply
+        )
     if args.check_reactor_resources or args.apply_reactor_resources:
         return update_reactor_resources(args.apply_reactor_resources)
     if args.check_state_metadata or args.apply_state_metadata:

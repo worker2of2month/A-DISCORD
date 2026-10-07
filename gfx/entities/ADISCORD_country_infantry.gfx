@@ -20,6 +20,12 @@ objectTypes = {
 			type = "VAL_crimson_death_animation"
 		}
 	}
+
+	pdxmesh = {
+		name = "ADISCORD_combat_robot_weapon_mesh"
+		file = "gfx/models/units/western_european_infantry_weapon_mg.mesh"
+	}
+
 	pdxmesh = {
 		name = "STP_shabrat_infantry_mesh"
 		file = "gfx/models/units/STP_shabrat/STP_shabrat_infantry.mesh"

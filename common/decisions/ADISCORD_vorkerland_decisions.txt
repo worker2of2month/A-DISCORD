@@ -2953,10 +2953,6 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 		}
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = RUS_political_course_chosen_tt
-				RUS_political_course_chosen = yes
-			}
-			custom_trigger_tooltip = {
 				tooltip = RUS_proclaim_the_last_empire_prepared_tt
 				has_completed_focus = RUS_aimaq_reserve
 				has_completed_focus = RUS_arm_the_border_hosts
@@ -2981,6 +2977,123 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			hidden_effect = { ADISCORD_vorkerland_rus_proclaim_last_empire = yes }
 		}
 		ai_will_do = { base = 500 }
+	}
+}
+
+# --- rus_experimental_laboratories ---
+RUS_experimental_labs_category = {
+		icon = generic_research
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_experimental_laboratories
+			NOT = { has_country_flag = RUS_lab_reactor_alloys_completed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_reactor_access_tt
+				RUS_lab_reactor_access = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_slot_free_tt
+				RUS_lab_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_not_under_black_army_tt
+				RUS_lab_not_under_black_army = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_lab_reactor_alloys_cost
+		custom_cost_trigger = { RUS_lab_reactor_alloys_affordable = yes }
+		days_remove = 60
+		complete_effect = {
+			custom_effect_tooltip = RUS_lab_cancel_warning_tt
+			hidden_effect = { RUS_lab_reactor_alloys_start = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				RUS_lab_operational = no
+				NOT = { check_variable = { var = RUS_lab_project value = 1 compare = equals } }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = RUS_lab_project value = 1 compare = equals } }
+				custom_effect_tooltip = RUS_lab_refunded_tt
+				hidden_effect = { RUS_lab_refund = yes }
+			}
+		}
+		remove_effect = {
+			effect_tooltip = {
+				add_tech_bonus = {
+					name = RUS_lab_reactor_alloys
+					bonus = 1
+					uses = 1
+					category = industry
+				}
+			}
+			custom_effect_tooltip = RUS_lab_reactor_alloys_support_tt
+			hidden_effect = { RUS_lab_reactor_alloys_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	RUS_lab_zeppelin = {
+		icon = generic_air
+		allowed = { tag = RUS }
+		visible = {
+			has_completed_focus = RUS_experimental_laboratories
+			has_country_flag = RUS_lab_reactor_alloys_completed
+			NOT = { has_country_flag = RUS_lab_zeppelin_delivered }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_operational_tt
+				RUS_bunker_operational = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_reactor_access_tt
+				RUS_lab_reactor_access = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_slot_free_tt
+				RUS_lab_slot_free = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_not_under_black_army_tt
+				RUS_lab_not_under_black_army = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_lab_zeppelin_cost
+		custom_cost_trigger = { RUS_lab_zeppelin_affordable = yes }
+		days_remove = 150
+		complete_effect = {
+			custom_effect_tooltip = RUS_lab_cancel_warning_tt
+			hidden_effect = { RUS_lab_zeppelin_start = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				RUS_lab_operational = no
+				NOT = { check_variable = { var = RUS_lab_project value = 2 compare = equals } }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { check_variable = { var = RUS_lab_project value = 2 compare = equals } }
+				custom_effect_tooltip = RUS_lab_refunded_tt
+				hidden_effect = { RUS_lab_refund = yes }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = RUS_lab_zeppelin_result_tt
+			hidden_effect = { RUS_lab_zeppelin_finish = yes }
+		}
+		ai_will_do = { base = 5 }
 	}
 }
 
@@ -4740,6 +4853,12 @@ RUS_state_balance_category = {
 				}
 				add_stability = 0.02
 				add_power_balance_value = { id = RUS_state_balance value = -0.15 }
+				custom_effect_tooltip = RUS_bop_relief_support_tt
+				hidden_effect = {
+					set_temp_variable = { var = RUS_black_army_support_delta value = -0.10 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0.15 }
+					RUS_faction_support_change = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -4748,7 +4867,7 @@ RUS_state_balance_category = {
 				add = 2
 				check_variable = { var = RUS_bunker_food value = 70 compare = greater_than_or_equals }
 				power_balance_value = { id = RUS_state_balance value > -0.60 }
-				NOT = { has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes } }
+				has_war = no
 			}
 		}
 	}
@@ -4790,6 +4909,12 @@ RUS_state_balance_category = {
 				}
 				add_manpower = 1000
 				add_power_balance_value = { id = RUS_state_balance value = 0.15 }
+				custom_effect_tooltip = RUS_bop_reserve_support_tt
+				hidden_effect = {
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0.15 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = -0.10 }
+					RUS_faction_support_change = yes
+				}
 			}
 		}
 		ai_will_do = {
@@ -4798,10 +4923,7 @@ RUS_state_balance_category = {
 				add = 2
 				check_variable = { var = RUS_bunker_food value = 80 compare = greater_than_or_equals }
 				power_balance_value = { id = RUS_state_balance value < 0.60 }
-				OR = {
-					has_war = yes
-					has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
-				}
+				has_war = yes
 			}
 		}
 	}
@@ -4844,6 +4966,9 @@ RUS_state_balance_category = {
 						add_power_balance_value = { id = RUS_state_balance value = 0.15 }
 					}
 					else = { add_power_balance_value = { id = RUS_state_balance value = -0.15 } }
+					set_temp_variable = { var = RUS_black_army_support_delta value = 0.05 }
+					set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+					RUS_faction_support_change = yes
 					ADISCORD_economy_mark_dirty = yes
 				}
 				custom_effect_tooltip = RUS_bop_mediation_result_tt

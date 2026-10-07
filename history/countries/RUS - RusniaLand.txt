@@ -5,7 +5,6 @@ oob = "RUS"
 
 recruit_character = RUS_Mark_Rustan
 recruit_character = RUS_Varlam_Oskol
-recruit_character = RUS_Pavel_Niva
 
 ####### Basic shit
 

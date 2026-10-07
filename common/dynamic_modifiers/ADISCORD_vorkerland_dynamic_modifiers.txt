@@ -182,11 +182,7 @@ RUS_black_army = {
 		tag = RUS
 		has_country_flag = RUS_bunker_initialized
 		NOT = { check_variable = { var = RUS_crisis_phase value = 4 compare = equals } }
-		OR = {
-			has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
-			has_country_leader = { character = RUS_Varlam_Oskol ruling_only = yes }
-			has_country_leader = { character = RUS_Pavel_Niva ruling_only = yes }
-		}
+		has_country_leader = { character = RUS_Mark_Rustan ruling_only = yes }
 	}
 	custom_modifier_tooltip = RUS_black_army_state_tt
 	army_org_factor = RUS_army_org
@@ -198,4 +194,13 @@ RUS_black_army = {
 	army_speed_factor = RUS_army_speed
 	planning_speed = RUS_army_planning
 	training_time_army_factor = RUS_army_training
+}
+
+# Inputs are refreshed only when faction support changes.
+RUS_faction_support = {
+	icon = GFX_idea_ADISCORD_law_education_technical_institutes
+	enable = { RUS_state_balance_operational = yes }
+	custom_modifier_tooltip = RUS_faction_support_state_tt
+	political_power_gain = RUS_faction_political_power_gain
+	power_balance_weekly = RUS_faction_power_balance_weekly
 }
