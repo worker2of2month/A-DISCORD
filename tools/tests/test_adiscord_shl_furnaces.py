@@ -240,6 +240,7 @@ class ScriptMachine:
                     "has_manpower": self.manpower,
                     "infrastructure": self.infrastructure,
                     "anti_air_building": self.anti_air,
+                    "industrial_complex": self.state_buildings[(scope, "industrial_complex")],
                 }
                 if comparison[0] not in native or comparison[1] not in ("<", ">"):
                     raise AssertionError("Unsupported native comparison: " + repr(comparison))
@@ -354,9 +355,13 @@ class ScriptMachine:
                 if leader != scope:
                     raise AssertionError("Only the faction leader can dissolve it")
                 self.factions = {tag: faction for tag, faction in self.factions.items() if faction != leader}
+            elif e.key == "damage_building":
+                building = scalar(e.value, "type")
+                assert self.state_buildings[(scope, building)] > 0, "Cannot damage an absent building"
+                self.calls.append((e.key, scope))
             elif e.key in (
                 "set_politics", "add_popularity", "promote_character", "retire_character",
-                "mark_focus_tree_layout_dirty", "damage_building", "add_war_support",
+                "mark_focus_tree_layout_dirty", "add_war_support",
                 "ADISCORD_release_non_participating_minor_optimization",
                 "ADISCORD_south_crisis_add_campaign", "ADISCORD_south_crisis_cycle",
                 "SHL_fire_cycle", "SHL_crisis_draw", "SHL_fire_refresh", "SHL_fire_transfer", "SHL_fire_align", "SHL_fire_settle",
@@ -1191,6 +1196,7 @@ class CrisisLayerTests(unittest.TestCase):
 
     def test_accident_extinguishes_only_the_flagged_site(self):
         c = self.country()
+        self.m.state_buildings[("288", "industrial_complex")] = 1
         self.m.variables["288"]["SHL_furnace_wear"] = 86
         self.m.run("SHL_produce_period")
         self.assertIn("ADISCORD_SHL.40", self.m.scheduled)
@@ -1203,6 +1209,20 @@ class CrisisLayerTests(unittest.TestCase):
         self.assertEqual(self.m.variables["287"]["SHL_furnace_running"], 1)
         self.assertEqual(c["SHL_accident_ready_cycle"], 9)
         self.assertNotIn("SHL_accident_pending", self.m.flags["SHL"])
+        self.assertIn(("damage_building", "288"), self.m.calls)
+
+    def test_accident_without_a_factory_still_closes_the_furnace_and_settles(self):
+        self.m.flags["287"].add("SHL_accident_site")
+        self.m.flags["SHL"].update({"SHL_accident_pending", "SHL_accident_commission"})
+        self.country()["SHL_cycle_number"] = 3
+        self.m.run("SHL_resolve_accident")
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_running"], 0)
+        self.assertEqual(self.m.variables["287"]["SHL_furnace_training"], 1)
+        self.assertNotIn(("damage_building", "287"), self.m.calls)
+        self.assertNotIn("SHL_accident_site", self.m.flags["287"])
+        self.assertNotIn("SHL_accident_pending", self.m.flags["SHL"])
+        self.assertNotIn("SHL_accident_commission", self.m.flags["SHL"])
+        self.assertEqual(self.country()["SHL_accident_ready_cycle"], 9)
 
     def test_water_crisis_wakes_keyzan_and_wears_only_border_furnaces(self):
         c = self.country()

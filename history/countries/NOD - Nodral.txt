@@ -81,9 +81,6 @@ set_autonomy = {
 	autonomous_state = autonomy_colony
 }
 
-# The administration effect activates this dormant political role.
-recruit_character = NOD_VAL_Contract_Council
-
 set_autonomy = {
 	target = SLI
 	autonomy_state = autonomy_NOD_protected_administration

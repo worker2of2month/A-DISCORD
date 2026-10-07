@@ -327,7 +327,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
                 "common/decisions/ADISCORD_VAL_logistics_market_decisions.txt"
             )["VAL_population_markets"]
         }
-        self.facts = {}
+        self.facts = {("VAL", "ADISCORD_economy_can_spend_100", "yes"): True}
         self.windows = {}
 
     def run_effect(self, items):
@@ -397,14 +397,14 @@ class RefugeeAdmissionTests(unittest.TestCase):
                 self.assertTrue(self.visible(region))
                 self.assertFalse(self.facts[("VAL", "has_country_flag", flag)])
 
-    def test_expired_direction_stays_visible_but_cannot_take_payment(self):
+    def test_inactive_direction_is_hidden_and_cannot_take_payment(self):
         for region in (*REGIONS, "perimeter"):
             with self.subTest(region=region):
                 self.facts = {
                     ("VAL", "has_country_flag", f"VAL_refugee_{region}_seen"): True,
                     ("VAL", "ADISCORD_economy_can_spend_100", "yes"): True,
                 }
-                self.assertTrue(self.visible(region))
+                self.assertFalse(self.visible(region))
                 available = next(
                     e.value
                     for e in self.decisions[f"VAL_accept_{region}_refugees"]
@@ -412,11 +412,13 @@ class RefugeeAdmissionTests(unittest.TestCase):
                 )
                 self.assertFalse(matches_conditions(available, self.facts, "VAL"))
 
-    def test_opened_offer_remains_visible_after_the_war_ends(self):
+    def test_opened_offer_is_hidden_after_the_war_ends(self):
         self.facts[("VAL", "has_country_flag", "VAL_refugee_stelander_seen")] = True
-        self.assertTrue(self.visible("stelander"))
+        self.assertFalse(self.visible("stelander"))
         self.facts[("VAL", "VAL_refugee_stelander_war", "yes")] = True
         self.assertTrue(self.visible("stelander"))
+        self.facts[("VAL", "VAL_refugee_stelander_war", "yes")] = False
+        self.assertFalse(self.visible("stelander"))
 
     def test_refugee_windows_require_actual_outbreaks(self):
         vorkerland = self.triggers["VAL_refugee_vorkerland_war"]
@@ -668,7 +670,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
             with self.subTest(region=region):
                 self.assertFalse(self.visible(region))
 
-    def test_expired_admission_rows_show_reason_without_renewal(self):
+    def test_inactive_admission_rows_stay_hidden_without_renewal(self):
         self.facts[("VAL", "has_completed_focus", "VAL_The_Contract_State")] = True
         self.facts[("VAL", "ADISCORD_economy_can_spend_100", "yes")] = True
         for region in (*REGIONS, "perimeter"):
@@ -677,7 +679,7 @@ class RefugeeAdmissionTests(unittest.TestCase):
                     ("VAL", "has_country_flag", f"VAL_refugee_{region}_seen")
                 ] = True
                 self.run_effect(self.effects["VAL_open_refugee_waves"])
-                self.assertTrue(self.visible(region))
+                self.assertFalse(self.visible(region))
                 available = next(
                     e.value
                     for e in self.decisions[f"VAL_accept_{region}_refugees"]

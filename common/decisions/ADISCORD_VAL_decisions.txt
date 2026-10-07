@@ -591,6 +591,43 @@ VAL_military_operations = {
 		timeout_effect = { hidden_effect = { if = { limit = { check_variable = { var = VAL_frontier_stage value = 1 compare = equals } } VAL_frontier_show_refusal = yes } } }
 	}
 
+	VAL_defer_northern_expansion = {
+		icon = generic_political_pressure
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_frontier_security_plan
+			NOT = { has_country_flag = VAL_frontier_expansion_deferred }
+			NOT = { has_country_flag = VAL_frontier_treaty_signed }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_defer_northern_expansion_ready_tt
+				VAL_can_defer_northern_expansion = yes
+			}
+		}
+		cost = 0
+		complete_effect = {
+			custom_effect_tooltip = VAL_defer_northern_expansion_tt
+			hidden_effect = {
+				if = {
+					limit = { VAL_can_defer_northern_expansion = yes }
+					set_country_flag = VAL_frontier_expansion_deferred
+				}
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				OR = {
+					CIN = { VAL_frontier_bloc_target_eligible = yes }
+					OSF = { VAL_frontier_bloc_target_eligible = yes }
+					APH = { VAL_frontier_bloc_target_eligible = yes }
+				}
+			}
+		}
+	}
+
 	VAL_frontier_demand_CIN = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
@@ -636,6 +673,31 @@ VAL_military_operations = {
 			hidden_effect = { set_variable = { var = VAL_frontier_target value = 4 } VAL_frontier_record_ultimatum = yes ERT = { country_event = { id = val_rework.110 } } }
 		}
 		ai_will_do = { base = 20 modifier = { factor = 0 VAL_ai_frontier_force_ready = no } }
+	}
+
+	VAL_negotiate_yubora = {
+		icon = generic_diplomatic_treaty
+		allowed = { tag = VAL }
+		visible = { VAL_frontier_decisions_visible = yes
+			has_completed_focus = VAL_Northern_Settlement
+			TFF = { exists = yes } NOD = { exists = yes is_subject = no }
+			NOT = { has_country_flag = VAL_nod_frontier_agreement }
+		}
+		available = {
+			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }
+			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
+		}
+		cost = 0
+		days_re_enable = 30
+		complete_effect = {
+			if = {
+				limit = { hidden_trigger = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } } }
+				custom_effect_tooltip = VAL_nod_frontier_limited_terms_tt
+			}
+			else = { custom_effect_tooltip = VAL_nod_frontier_terms_tt }
+			hidden_effect = { VAL_open_nod_frontier_offer = yes }
+		}
+		ai_will_do = { base = 20 }
 	}
 
 	VAL_campaign_against_nod = {
@@ -718,6 +780,85 @@ VAL_military_operations = {
 			hidden_effect = { clr_country_flag = VAL_campaign_mobilizing clr_country_flag = VAL_final_party_nod_release_pending FROM = { clr_country_flag = VAL_campaign_target } }
 		}
 		ai_will_do = { base = 8 }
+	}
+
+	VAL_build_zeppelin = {
+		icon = generic_air
+		allowed = { tag = VAL }
+		visible = {
+			VAL_zeppelin_unlocked = yes
+			NOT = { has_country_flag = VAL_zeppelin_delivered }
+			OR = {
+				has_variable = VAL_zeppelin_deposit
+				AND = {
+					VAL_zeppelin_operational = yes
+					VAL_zeppelin_affordable = yes
+				}
+			}
+		}
+		available = {
+			VAL_zeppelin_operational = yes
+			custom_trigger_tooltip = {
+				tooltip = VAL_zeppelin_slot_free_tt
+				NOT = { has_variable = VAL_zeppelin_deposit }
+			}
+		}
+		cost = 0
+		custom_cost_text = VAL_zeppelin_cost
+		custom_cost_trigger = { VAL_zeppelin_affordable = yes }
+		fire_only_once = no
+		days_remove = 150
+		complete_effect = {
+			custom_effect_tooltip = VAL_zeppelin_project_tt
+			hidden_effect = { VAL_zeppelin_start = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				VAL_zeppelin_operational = no
+				NOT = { has_variable = VAL_zeppelin_deposit }
+			}
+		}
+		cancel_effect = {
+			if = {
+				limit = { has_variable = VAL_zeppelin_deposit }
+				custom_effect_tooltip = VAL_zeppelin_refund_tt
+				hidden_effect = { VAL_zeppelin_refund = yes }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = VAL_zeppelin_result_tt
+			hidden_effect = { VAL_zeppelin_finish = yes }
+		}
+		ai_will_do = { base = 5 }
+	}
+
+	ADISCORD_bezhaysk_subjugate_forest_val = {
+		icon = generic_territory_or_war
+		allowed = { tag = VAL }
+		visible = {
+			has_completed_focus = VAL_Bezhaysk_Operation
+			COF = { exists = yes NOT = { is_subject_of = VAL } }
+		}
+		available = {
+			has_capitulated = no
+			is_subject = no
+			has_war = no
+			COF = {
+				exists = yes
+				has_capitulated = no
+				has_war = no
+				is_subject = no
+				NOT = { is_in_faction_with = VAL }
+			}
+		}
+		cost = 50
+		complete_effect = {
+			set_country_flag = ADISCORD_bezhaysk_forest_campaign_active
+			COF = { ADISCORD_release_non_participating_minor_optimization = yes }
+			declare_war_on = { target = COF type = annex_everything }
+			hidden_effect = { VAL_call_subjects_to_wars = yes }
+		}
+		ai_will_do = { base = 2 }
 	}
 
 	VAL_campaign_against_stelander = {
@@ -1483,49 +1624,6 @@ VAL_reclamation = {
 
 VAL_frontier = {
 
-	VAL_build_zeppelin = {
-		icon = generic_air
-		allowed = { tag = VAL }
-		visible = {
-			VAL_zeppelin_unlocked = yes
-			NOT = { has_country_flag = VAL_zeppelin_delivered }
-		}
-		available = {
-			VAL_zeppelin_operational = yes
-			custom_trigger_tooltip = {
-				tooltip = VAL_zeppelin_slot_free_tt
-				NOT = { has_variable = VAL_zeppelin_deposit }
-			}
-		}
-		cost = 0
-		custom_cost_text = VAL_zeppelin_cost
-		custom_cost_trigger = { VAL_zeppelin_affordable = yes }
-		fire_only_once = no
-		days_remove = 150
-		complete_effect = {
-			custom_effect_tooltip = VAL_zeppelin_project_tt
-			hidden_effect = { VAL_zeppelin_start = yes }
-		}
-		cancel_trigger = {
-			OR = {
-				VAL_zeppelin_operational = no
-				NOT = { has_variable = VAL_zeppelin_deposit }
-			}
-		}
-		cancel_effect = {
-			if = {
-				limit = { has_variable = VAL_zeppelin_deposit }
-				custom_effect_tooltip = VAL_zeppelin_refund_tt
-				hidden_effect = { VAL_zeppelin_refund = yes }
-			}
-		}
-		remove_effect = {
-			custom_effect_tooltip = VAL_zeppelin_result_tt
-			hidden_effect = { VAL_zeppelin_finish = yes }
-		}
-		ai_will_do = { base = 5 }
-	}
-
 	VAL_Island_Treaty = {
 		icon = generic_political_pressure
 		allowed = { tag = VAL }
@@ -1553,68 +1651,6 @@ VAL_frontier = {
 			}
 		}
 		ai_will_do = { base = 100 }
-	}
-
-	VAL_negotiate_yubora = {
-		icon = generic_diplomatic_treaty
-		allowed = { tag = VAL }
-		visible = { VAL_frontier_decisions_visible = yes
-			has_completed_focus = VAL_Northern_Settlement
-			TFF = { exists = yes } NOD = { exists = yes is_subject = no }
-			NOT = { has_country_flag = VAL_nod_frontier_agreement }
-		}
-		available = {
-			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_offer_possible_tt VAL_nod_frontier_offer_current = yes }
-			custom_trigger_tooltip = { tooltip = VAL_nod_frontier_no_pending_tt NOT = { has_country_flag = VAL_nod_frontier_offer_pending has_country_flag = VAL_campaign_mobilizing } }
-		}
-		cost = 0
-		days_re_enable = 30
-		complete_effect = {
-			if = {
-				limit = { hidden_trigger = { has_country_flag = { flag = VAL_tff_freedom_policy value > 1 } } }
-				custom_effect_tooltip = VAL_nod_frontier_limited_terms_tt
-			}
-			else = { custom_effect_tooltip = VAL_nod_frontier_terms_tt }
-			hidden_effect = { VAL_open_nod_frontier_offer = yes }
-		}
-		ai_will_do = { base = 20 }
-	}
-
-	VAL_defer_northern_expansion = {
-		icon = generic_political_pressure
-		allowed = { tag = VAL }
-		visible = {
-			has_completed_focus = VAL_frontier_security_plan
-			NOT = { has_country_flag = VAL_frontier_expansion_deferred }
-			NOT = { has_country_flag = VAL_frontier_treaty_signed }
-		}
-		available = {
-			custom_trigger_tooltip = {
-				tooltip = VAL_defer_northern_expansion_ready_tt
-				VAL_can_defer_northern_expansion = yes
-			}
-		}
-		cost = 0
-		complete_effect = {
-			custom_effect_tooltip = VAL_defer_northern_expansion_tt
-			hidden_effect = {
-				if = {
-					limit = { VAL_can_defer_northern_expansion = yes }
-					set_country_flag = VAL_frontier_expansion_deferred
-				}
-			}
-		}
-		ai_will_do = {
-			base = 5
-			modifier = {
-				factor = 0
-				OR = {
-					CIN = { VAL_frontier_bloc_target_eligible = yes }
-					OSF = { VAL_frontier_bloc_target_eligible = yes }
-					APH = { VAL_frontier_bloc_target_eligible = yes }
-				}
-			}
-		}
 	}
 
 	VAL_ratify_postwar_administration = {
@@ -1656,9 +1692,14 @@ VAL_frontier = {
 		targets = { 58 59 60 61 62 63 64 65 }
 		target_trigger = { FROM = { is_owned_by = ROOT is_controlled_by = ROOT } }
 		visible = {
-			FROM = { NOT = { check_variable = { var = VAL_frontier_workshop_stage value = 2 compare = greater_than_or_equals } } }
 			has_completed_focus = VAL_frontier_treaty_offices
-			FROM = { is_owned_by = ROOT is_controlled_by = ROOT }
+			OR = {
+				FROM = { has_variable = VAL_frontier_workshop_deposit }
+				AND = {
+					VAL_frontier_workshop_target_valid = yes
+					VAL_frontier_workshop_affordable = yes
+				}
+			}
 		}
 		available = {
 			VAL_frontier_workshop_target_valid = yes

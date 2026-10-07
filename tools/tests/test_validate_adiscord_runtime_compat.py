@@ -7,6 +7,15 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RuntimeCompatibilityTests(unittest.TestCase):
+    def test_character_recruitment_is_not_used_in_runtime_scripts(self):
+        invalid = []
+        for folder in ("common", "events"):
+            for path in (ROOT / folder).rglob("*.txt"):
+                text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+                if re.search(r"\brecruit_character\s*=", text):
+                    invalid.append(str(path.relative_to(ROOT)))
+        self.assertFalse(invalid, invalid)
+
     def test_civil_war_relative_positions_resolve_in_load_order(self):
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 

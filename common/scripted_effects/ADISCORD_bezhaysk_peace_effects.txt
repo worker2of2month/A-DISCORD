@@ -2,6 +2,24 @@
 # The campaign is against the feudal bloc as it exists when BJK falls.
 # Each settlement snapshots its participants before changing their relations.
 
+# COUNTRY holding Gornin; the recipient is saved by the unification effect.
+ADISCORD_bezhaysk_transfer_gornin = {
+	if = {
+		limit = { has_character = STP_ilya_gornin }
+		# A live country-leader office prevents the engine from moving its holder.
+		STP_ilya_gornin = {
+			if = {
+				limit = { has_ideology = steland_liberationism }
+				remove_country_leader_role = { ideology = steland_liberationism }
+			}
+		}
+		set_nationality = {
+			character = STP_ilya_gornin
+			target_country = event_target:ADISCORD_bezhaysk_unified_administration
+		}
+	}
+}
+
 # COUNTRY VAL, after the settlement has assigned overlords and before clearing
 # ADISCORD_bezhaysk_settlement_members. Only VAL's awarded holdings are merged.
 ADISCORD_bezhaysk_unify_val_administration = {
@@ -72,6 +90,33 @@ ADISCORD_bezhaysk_unify_val_administration = {
 		if = {
 			limit = { is_subject_of = VAL }
 			set_cosmetic_tag = BJK_VAL_administration
+			STP = { ADISCORD_bezhaysk_transfer_gornin = yes }
+			STS = { ADISCORD_bezhaysk_transfer_gornin = yes }
+			if = {
+				limit = {
+					has_character = STP_ilya_gornin
+					STP_ilya_gornin = { NOT = { has_ideology = contractual_etatism } }
+				}
+				add_country_leader_role = {
+					character = STP_ilya_gornin
+					promote_leader = yes
+					country_leader = {
+						ideology = contractual_etatism
+						expire = "2200.1.1.1"
+					}
+				}
+			}
+			set_politics = {
+				ruling_party = etatism
+				elections_allowed = no
+			}
+			if = {
+				limit = { has_character = STP_ilya_gornin }
+				promote_character = {
+					character = STP_ilya_gornin
+					ideology = contractual_etatism
+				}
+			}
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}

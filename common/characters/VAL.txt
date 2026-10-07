@@ -241,10 +241,6 @@ characters = {
 		name = VAL_Andrei_Rudnev
 		portraits = { civilian = { large = GFX_portrait_VAL_Andrei_Rudnev } }
 	}
-	NOD_VAL_Contract_Council = {
-		name = NOD_VAL_Contract_Council
-		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }
-	}
 	ECA_Contract_Council = {
 		name = ECA_Contract_Council
 		portraits = { civilian = { large = GFX_Portrait_Forul_Generic_4 } }

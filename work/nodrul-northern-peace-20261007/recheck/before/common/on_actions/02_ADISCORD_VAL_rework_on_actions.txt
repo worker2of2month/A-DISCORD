@@ -1,0 +1,294 @@
+on_actions = {
+	on_daily_VAL = {
+		effect = {
+			VAL_contract_reconcile = yes
+			VAL_resource_aid_daily = yes
+			VAL_northern_aid_daily = yes
+			VAL_reconcile_northern_coalition_campaign = yes
+			if = {
+				limit = { has_war = yes has_capitulated = no is_subject = no }
+				VAL_call_subjects_to_wars = yes # daily subject-war reconciliation
+			}
+		}
+	}
+
+	on_startup = {
+		effect = {
+			VAL = { VAL_qol_initialize_staff = yes VAL_qol_initialize_party_leaders = yes }
+
+			OCA = { VAL_initialize_balchansk_administration = yes }
+			if = {
+				limit = { VAL = { exists = yes } }
+				VAL = {
+					VAL_restore_fulfilled_northern_aid = yes
+					# Rebuild contract income from authoritative annual-contract flags.
+					VAL_recalculate_market_contract_income = yes
+					VAL_migrate_mercenary_payroll = yes
+					VAL_initialize_contract_authority = yes
+					VAL_initialize_command_balance = yes
+					VAL_initialize_arsenal_recovery = yes
+					VAL_grant_contract_warlord = yes
+					VAL_sync_solgalov_portrait = yes
+					VAL_reveal_stelander_focus_branch = yes
+					if = { limit = { has_focus_tree = VAL_focus } mark_focus_tree_layout_dirty = yes }
+					VAL_call_subjects_to_wars = yes
+					VAL_check_nam_concession = yes VAL_check_efl_concession = yes
+				}
+			}
+			if = {
+				limit = {
+					has_global_flag = ADISCORD_fresh_campaign_contract_v1
+					NOT = { has_global_flag = ADISCORD_val_rework_fresh_campaign_v1 }
+					VAL = { exists = yes }
+				}
+				set_global_flag = ADISCORD_val_rework_fresh_campaign_v1
+				VAL = {
+					VAL_initialize_rework = yes
+				}
+			}
+		}
+	}
+
+	on_war_relation_added = {
+		effect = {
+			if = {
+				limit = { OR = { ROOT = { tag = RUS } FROM = { tag = RUS } } }
+				VAL = { VAL_nw_reconcile_partners = yes }
+			}
+			VAL_queue_frontier_reconciliation = yes
+			if = {
+				limit = { OR = { ROOT = { tag = VAL } FROM = { tag = VAL } } }
+				VAL = { VAL_reconcile_market_contract_lifecycle = yes }
+			}
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = TFF }
+						FROM = { tag = TFF }
+					}
+				}
+				TFF = { VAL_call_frontier_administrations = yes }
+			}
+			if = {
+				limit = { ROOT = { tag = VAL } }
+				FROM = { VAL_frontier_register_war_participant = yes }
+			}
+			else_if = {
+				limit = { FROM = { tag = VAL } }
+				ROOT = { VAL_frontier_register_war_participant = yes }
+			}
+			if = {
+				limit = {
+					OR = {
+						AND = { ROOT = { tag = STP } FROM = { tag = STS } }
+						AND = { ROOT = { tag = STS } FROM = { tag = STP } }
+					}
+				}
+				VAL = { VAL_reveal_stelander_focus_branch = yes }
+			}
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = VAL }
+						FROM = { tag = VAL }
+					}
+				}
+				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
+			}
+			if = {
+				limit = {
+					VAL = { exists = yes has_capitulated = no is_subject = no }
+					OR = {
+						ROOT = { is_subject_of = VAL }
+						FROM = { is_subject_of = VAL }
+					}
+				}
+				VAL = { VAL_call_subjects_to_wars = yes }
+			}
+			if = {
+				limit = {
+					OR = {
+						ROOT = { tag = VAL }
+						FROM = { tag = VAL }
+					}
+				}
+				VAL = {
+					VAL_adopt_northern_coalition_defensive_campaign = yes
+					VAL_call_subjects_to_wars = yes
+					VAL_final_crisis_initialize = yes
+					VAL_final_crisis_reconcile = yes
+					VAL_call_frontier_partner = yes
+					VAL_call_stelander_partner_to_wars = yes
+				}
+			}
+		}
+	}
+
+	on_puppet = {
+		effect = {
+			VAL = { VAL_nw_reconcile_partners = yes }
+			VAL = { VAL_reconcile_northern_coalition_campaign = yes }
+			VAL_queue_frontier_reconciliation = yes
+			if = {
+				limit = { FROM = { tag = VAL } }
+				VAL = { VAL_call_subjects_to_wars = yes }
+				OCA = { VAL_reconcile_balchansk_income = yes }
+			}
+		}
+	}
+
+	on_release_as_puppet = {
+		effect = {
+			if = {
+				limit = { FROM = { tag = VAL } }
+				VAL = { VAL_call_subjects_to_wars = yes }
+			}
+		}
+	}
+
+	on_monthly_VAL = {
+		effect = {
+			VAL_nw_reconcile_partners = yes
+			# Bounded fallback for partner capitulation or disappearance without a VAL war callback.
+			VAL_reconcile_market_contract_lifecycle = yes
+			if = {
+				limit = { has_country_flag = VAL_quarterly_contract_active }
+				add_to_variable = { var = VAL_quarterly_contract_months_elapsed value = 1 }
+				if = {
+					limit = {
+						is_ai = yes
+						check_variable = { var = VAL_quarterly_contract_months_elapsed value = 2 compare = greater_than_or_equals }
+						NOT = { has_country_flag = VAL_quarterly_contract_paid }
+						NOT = { ADISCORD_has_4000_infantry_equipment = yes }
+						NOT = { has_country_flag = VAL_ai_emergency_quartermaster_used }
+					}
+					add_equipment_to_stockpile = { type = infantry_equipment amount = 8000 producer = VAL }
+					set_country_flag = VAL_ai_emergency_quartermaster_used
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					VAL = { has_completed_focus = VAL_Return_To_World_Market }
+					FROM.FROM = {
+						OR = {
+							state = 176
+							state = 177
+							state = 187
+							state = 188
+							state = 189
+							state = 192
+						}
+					}
+				}
+				VAL = { VAL_nw_reconcile_rights = yes }
+			}
+			# ROOT is the new controller, FROM the previous controller, FROM.FROM the state.
+			if = {
+				limit = {
+					FROM = { tag = VAL has_power_balance = { id = VAL_command_balance } has_war_with = ROOT }
+					FROM.FROM = { is_owned_by = VAL is_core_of = VAL NOT = { has_state_flag = VAL_bop_core_lost } }
+				}
+				FROM = { add_power_balance_value = { id = VAL_command_balance value = -0.10 } }
+				FROM.FROM = { set_state_flag = VAL_bop_core_lost }
+			}
+			else_if = {
+				limit = { ROOT = { tag = VAL } FROM.FROM = { has_state_flag = VAL_bop_core_lost } }
+				ROOT = {
+					if = {
+						limit = { has_power_balance = { id = VAL_command_balance } }
+						add_power_balance_value = { id = VAL_command_balance value = 0.05 }
+					}
+				}
+				FROM.FROM = { clr_state_flag = VAL_bop_core_lost }
+			}
+
+			if = {
+				limit = { FROM.FROM = { OR = { state = 44 state = 88 } } OCA = { exists = yes } }
+				OCA = { VAL_reconcile_balchansk_income = yes }
+			}
+
+			if = {
+				limit = {
+					FROM.FROM = { OR = { state = 43 state = 44 state = 45 state = 46 state = 88 } }
+					VAL = { exists = yes }
+				}
+				VAL = { VAL_reconcile_occidian_resource_rights = yes }
+			}
+
+			if = {
+				limit = {
+					ROOT = { tag = VAL has_idea = VAL_harvest_of_ash }
+					FROM.FROM = { OR = { state = 24 state = 42 state = 48 state = 54 state = 55 state = 56 state = 57 } }
+				}
+				ROOT = { VAL_complete_reclamation = yes }
+			}
+
+			if = {
+				limit = { FROM.FROM = { state = 230 } }
+				VAL = { VAL_check_nam_concession = yes VAL_check_efl_concession = yes }
+			}
+			if = {
+				limit = {
+					FROM.FROM = { state = 33 }
+					VAL = {
+						exists = yes
+						has_country_flag = VAL_vorkerland_resource_access_active
+					}
+					33 = { NOT = { is_controlled_by = WRK } }
+				}
+				VAL = { VAL_end_vorkerland_resource_access = yes }
+			}
+			if = {
+				limit = {
+					FROM.FROM = { state = 38 }
+					VAL = {
+						exists = yes
+						has_country_flag = VAL_westerholm_resource_rights_active
+					}
+					38 = { NOT = { controller = { tag = WRK } } }
+				}
+				VAL = { VAL_handle_westerholm_loss = yes }
+			}
+		}
+	}
+
+
+	on_weekly_VAL = {
+		effect = {
+			VAL_reclamation_reconcile_project = yes
+			VAL_final_crisis_weekly = yes
+			# Save-safe AI fallback: authorize the named NOD-war volunteer mission
+			# as soon as a valid front exists. Human VAL still uses the 50 PP decision.
+			if = {
+				limit = {
+					is_ai = yes
+					has_war = no
+					has_capitulated = no
+					is_subject = no
+					VAL_northern_volunteer_front_open = yes
+					NOT = { has_idea = VAL_northern_volunteer_mandate }
+				}
+				add_ideas = VAL_northern_volunteer_mandate
+			}
+			# Runtime fallback if another transition dropped the dynamic-modifier consumer.
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = VAL_contract_state } } }
+				VAL_initialize_contract_authority = yes
+			}
+			if = {
+				limit = { has_idea = VAL_northern_volunteer_mandate }
+				VAL_reconcile_northern_volunteers = yes
+			}
+			VAL_stelander_support_weekly = yes
+			if = {
+				limit = { check_variable = { var = VAL_frontier_stage value = 0 compare = greater_than } }
+				VAL_frontier_weekly = yes
+			}
+		}
+	}
+}

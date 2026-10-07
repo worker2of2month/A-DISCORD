@@ -1,0 +1,58 @@
+[18:53:32][no_game_date][dlc.cpp:142]: incorrect checksum for DLC
+[18:53:32][no_game_date][dlc.cpp:218]: Invalid supported_version in  file: mod/ugc_3307069423.mod line: 10
+[18:53:35][no_game_date][pdx_audio_sdl.cpp:963]: Sound with name 'sfx_ui_sd_module_turret_01' already added
+[18:53:35][no_game_date][assetfactory_audio.cpp:467]: Could not load sound file 'sound/menu/sfx_ui_sd_module_turrent_01.wav' in  file: sound/sound.asset line: 730
+[18:53:35][no_game_date][pdx_audio_sdl.cpp:963]: Sound with name 'sfx_ui_sd_module_sonar_01' already added
+[18:53:35][no_game_date][assetfactory_audio.cpp:467]: Could not load sound file 'sound/menu/sfx_ui_sd_module_sonar_01.wav' in  file: sound/sound.asset line: 734
+[18:53:35][no_game_date][pdx_audio_sdl.cpp:963]: Sound with name 'sfx_ui_sd_module_misc_01' already added
+[18:53:35][no_game_date][assetfactory_audio.cpp:467]: Could not load sound file 'sound/menu/sfx_ui_sd_module_misc_01.wav' in  file: sound/sound.asset line: 738
+[18:53:35][no_game_date][pdx_audio_sdl.cpp:963]: Sound with name 'sfx_ui_sd_module_engine_01' already added
+[18:53:35][no_game_date][assetfactory_audio.cpp:467]: Could not load sound file 'sound/menu/sfx_ui_sd_module_engine_01.wav' in  file: sound/sound.asset line: 742
+[18:53:35][no_game_date][pdx_audio.cpp:960]: Sound effect with name 'sfx_ui_sd_module_turret' already added
+[18:53:35][no_game_date][pdx_audio.cpp:960]: Sound effect with name 'sfx_ui_sd_module_sonar' already added
+[18:53:35][no_game_date][pdx_audio.cpp:960]: Sound effect with name 'sfx_ui_sd_module_default' already added
+[18:53:35][no_game_date][pdx_audio.cpp:960]: Sound effect with name 'sfx_ui_sd_module_engine' already added
+[18:53:35][no_game_date][pdx_audio.cpp:1118]: SoundEffect 'sfx_ui_sd_module_turret' already has category 'UI', old category will be overwritten
+[18:53:35][no_game_date][pdx_audio.cpp:1118]: SoundEffect 'sfx_ui_sd_module_sonar' already has category 'UI', old category will be overwritten
+[18:53:35][no_game_date][pdx_audio.cpp:1118]: SoundEffect 'sfx_ui_sd_module_default' already has category 'UI', old category will be overwritten
+[18:53:35][no_game_date][pdx_audio.cpp:1118]: SoundEffect 'sfx_ui_sd_module_engine' already has category 'UI', old category will be overwritten
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_infantry_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_cavalry_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_cavalry_rifle_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_infantry_mg_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_cavalry_mg_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of HOL_cavalry_2_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_infantry_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_cavalry_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_cavalry_rifle_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_infantry_mg_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_cavalry_mg_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of INS_cavalry_2_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_infantry_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_cavalry_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_cavalry_rifle_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_infantry_mg_rider_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_cavalry_mg_combined_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of MEX_cavalry_2_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of JAP_light_plane_1_entity added to entity system
+[18:53:45][no_game_date][pdx_entity.cpp:2172]: Duplicate of JAP_light_plane_3_entity added to entity system
+[18:53:46][no_game_date][pdx_entity.cpp:2277]: Duplicate of ADISCORD_WRK_early_fighter_entity added to entity system
+[18:53:46][no_game_date][pdx_entity.cpp:2277]: Duplicate of ADISCORD_WRK_early_cas_entity added to entity system
+[18:53:46][no_game_date][pdx_entity.cpp:324]: Failed to find entity "INS_bicycle_vehicle_entity" for attachment in bicycle
+[18:53:46][no_game_date][pdx_entity.cpp:324]: Failed to find entity "INS_bicycle_vehicle_entity" for attachment in bicycle
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:57][2160.01.01.12][gamelobby.cpp:1779]: Exception in: C:\mnt\gsg\hoi4\hoi4_merged\clausewitz\clausewitzlib\remotefile.cpp, line: 238. Description: Failed allocate data buffer.
+[18:53:59][2160.01.01.12][pdx_audiosound_sdl.cpp:136]: For best performance and quality sound files should be in 44.1kHz (amb_neutral_wind_01)
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:17][2167.03.03.22][orderscommands.cpp:532]: Failed to create orders group
+[18:54:48][2167.03.31.03][pdx_audiosound_sdl.cpp:136]: For best performance and quality sound files should be in 44.1kHz (superevent_rus_last_empire_sound)

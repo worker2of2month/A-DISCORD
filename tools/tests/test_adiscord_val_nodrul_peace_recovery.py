@@ -292,7 +292,7 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
         install = named_block(self.source, "VAL_install_nodrul_administration")
         self.assertIn("AIN = { exists = yes is_subject_of = NOD is_major = no }", install)
         queue = install.index("VAL_queue_ainholm_colony = yes")
-        self.assertLess(queue, install.index("white_peace = VAL"))
+        self.assertLess(queue, install.index("VAL_end_administration_wars = yes"))
         self.assertLess(queue, install.index("id = val_contract.353 days = 1"))
         finish = named_block(self.source, "VAL_finish_nodrul_administration")
         self.assertIn(
@@ -558,7 +558,8 @@ class KefreytNodrulPeaceRecoveryTests(unittest.TestCase):
             settlement.count("autonomy_state = autonomy_VAL_contract_administration"), 3
         )
         self.assertIn("target = YPR", start_effect)
-        self.assertIn("targeted_alliance = YPR", start_effect)
+        join_effect = named_block(self.source, "VAL_join_northern_coalition_war")
+        self.assertIn("targeted_alliance = YPR", join_effect)
 
         router = ON_ACTIONS.read_text(encoding="utf-8")
         self.assertIn("VAL_northern_coalition_campaign_member", router)

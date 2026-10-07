@@ -48,6 +48,7 @@ ORDER = {
         'kefreyt',
         'stelander',
     ],
+    'on_before_peace_conference_start': ['kefreyt'],
     'on_peaceconference_ended': ['stelander', 'kefreyt'],
     'on_annex': ['vorkerland_collapse', 'nam', 'stelander', 'kefreyt', 'shahrabad', 'south_final', 'west_final'],
     'on_puppet': ['vorkerland_collapse', 'nam', 'shahrabad', 'south_final', 'west_final'],
@@ -155,6 +156,7 @@ class GenericPeaceFixture:
         self.arrays = {}
         self.flags = {t: set() for t in self.countries}
         self.global_flags = set()
+        self.subjects = {}
         self.annexed = []
         self.log = []
 
@@ -164,6 +166,7 @@ class GenericPeaceFixture:
             "PREV": stack[-2] if len(stack) > 1 else None,
             "ROOT": self.root,
             "FROM": self.winner,
+            "OVERLORD": self.subjects.get(stack[-1]),
         }.get(token, token)
 
     def allied(self, a, b):
@@ -185,7 +188,7 @@ class GenericPeaceFixture:
                 return any(one(x) for x in value)
             if key == "NOT":
                 return not any(one(x) for x in value)
-            if key in ("ROOT", "FROM", "PREV"):
+            if key in ("ROOT", "FROM", "PREV", "OVERLORD"):
                 return self.matches(value, stack + [self.resolve(key, stack)])
             if key == "any_other_country":
                 return any(
@@ -212,8 +215,10 @@ class GenericPeaceFixture:
                 return current == self.resolve(value, stack)
             if key == "exists":
                 return (current in self.countries) == (value == "yes")
+            if key == "is_subject":
+                return (current in self.subjects) == (value == "yes")
             if key == "is_puppet_of":
-                return False
+                return self.subjects.get(current) == self.resolve(value, stack)
             if key == "ADISCORD_vorkerland_is_main_claimant":
                 return False
             raise AssertionError("Unsupported generic condition: " + key)
@@ -301,6 +306,39 @@ class GenericPeaceFixture:
 
 
 class GenericPeaceRegressionTests(unittest.TestCase):
+    def subject_war(self):
+        model = GenericPeaceFixture(root="NOD")
+        model.winner = "COF"
+        model.countries = ["VAL", "NOD", "COF"]
+        model.factions = {}
+        model.subjects = {"NOD": "VAL"}
+        model.capitulated = {"NOD"}
+        model.wars = {frozenset(("COF", tag)) for tag in ("VAL", "NOD")}
+        model.owners = {10: "NOD", 48: "VAL"}
+        return model
+
+    def test_cult_cannot_annex_a_subject_while_its_overlord_still_fights(self):
+        model = self.subject_war()
+        before = dict(model.owners), set(model.wars)
+        model.run()
+        self.assertFalse(model.annexed)
+        self.assertEqual(before, (model.owners, model.wars))
+
+    def test_neutral_overlord_does_not_block_subject_settlement(self):
+        model = self.subject_war()
+        model.wars.discard(frozenset(("COF", "VAL")))
+        model.run()
+        self.assertEqual(model.annexed, ["NOD"])
+        self.assertEqual(model.owners, {10: "COF", 48: "VAL"})
+
+    def test_overlord_final_defeat_includes_its_previously_defeated_subject(self):
+        model = self.subject_war()
+        model.root = "VAL"
+        model.capitulated.add("VAL")
+        model.run()
+        self.assertEqual(set(model.annexed), {"VAL", "NOD"})
+        self.assertEqual(model.owners, {10: "COF", 48: "COF"})
+
     def test_neutral_faction_member_does_not_block_the_defeated_war(self):
         model = GenericPeaceFixture(neutral=True)
         model.run()

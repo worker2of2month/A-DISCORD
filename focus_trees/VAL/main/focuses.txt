@@ -2625,6 +2625,16 @@ focus_tree = {
 
 		completion_reward = {
 			unlock_decision_tooltip = VAL_nationalise_region
+			if = {
+				limit = {
+					is_subject = no
+					is_in_faction = no
+				}
+				create_faction_from_template = {
+					template = faction_template_ADISCORD_standard
+					name = VAL_northern_expansion_faction
+				}
+			}
 			add_political_power = 75
 			add_intel = { target = NOD army_intel = 15 }
 		}

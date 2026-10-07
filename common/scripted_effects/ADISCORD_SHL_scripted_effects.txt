@@ -1766,9 +1766,12 @@ SHL_close_accident_site = {
 				check_variable = { var = SHL_furnace_running value = 1 compare = equals }
 			}
 			SHL_extinguish_site = yes
-			damage_building = {
-				type = industrial_complex
-				damage = 1
+			if = {
+				limit = { industrial_complex > 0 }
+				damage_building = {
+					type = industrial_complex
+					damage = 1
+				}
 			}
 			if = {
 				limit = { SHL = { has_country_flag = SHL_accident_commission } }

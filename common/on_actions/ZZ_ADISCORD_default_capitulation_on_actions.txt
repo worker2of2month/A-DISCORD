@@ -7,6 +7,18 @@ on_actions = {
 				limit = {
 					NOT = { has_global_flag = skip_default_capitulation }
 					FROM = { exists = yes has_capitulated = no }
+					# A subject stays occupied while its living overlord fights this victor,
+					# including administrations outside the overlord's faction.
+					NOT = {
+						ROOT = {
+							is_subject = yes
+							OVERLORD = {
+								exists = yes
+								has_capitulated = no
+								has_war_with = FROM
+							}
+						}
+					}
 					# Neutral faction members cannot veto a war they never joined.
 					NOT = {
 						ROOT = {

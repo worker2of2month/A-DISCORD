@@ -1,0 +1,7 @@
+{
+  "common/scripted_effects/ADISCORD_VAL_effects.txt": "f7d089b2a11828e39347d21a16e552293fc11b7cfc3aa5333c520439dfe0200f",
+  "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt": "0bd6b6f1a85a89533a9facab60eee032d0d32e1e5e764dfab73871a51fc86c11",
+  "common/on_actions/02_ADISCORD_VAL_rework_on_actions.txt": "552a5212a925c165cf20382334fda9dbc8ba6992d9a0d51f230a52fdb24ebb30",
+  "tools/tests/test_scripted_peace_on_actions.py": "8027ffe09126b969a7f4c2ff73d634120c41088eb629c88a12e89b6d366fbd68",
+  "docs/development/scripted-peace-testing.md": "f40bbe111476923ea57817e7840c4b48f76119b551650a3bd05acf2020ad01c6"
+}

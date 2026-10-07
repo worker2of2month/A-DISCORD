@@ -4,6 +4,12 @@
 on_actions = {
 	on_capitulation_immediate = {
 		effect = {
+			if = {
+				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
+				log = "VAL_PEACE_TRACE immediate_entry"
+				ROOT = { VAL_trace_scripted_peace_country = yes }
+				VAL = { VAL_trace_scripted_peace_country = yes }
+			}
 			# A new native defeat cannot consume an omitted previous late callback.
 			ROOT = {
 				clr_country_flag = RUS_crisis_capitulation_reserved
@@ -875,6 +881,12 @@ on_actions = {
 	}
 	on_capitulation = {
 		effect = {
+			if = {
+				limit = { ROOT = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } } }
+				log = "VAL_PEACE_TRACE late_entry"
+				ROOT = { VAL_trace_scripted_peace_country = yes }
+				VAL = { VAL_trace_scripted_peace_country = yes }
+			}
 			if = {
 				limit = { is_debug = yes has_global_flag = ADISCORD_war_debug_logging }
 				log = "[ADISCORD_PEACE] on_capitulation ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
@@ -1866,6 +1878,11 @@ on_actions = {
 	}
 	on_peace = {
 		effect = {
+			if = {
+				limit = { OR = { tag = VAL tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } }
+				log = "VAL_PEACE_TRACE on_peace_entry"
+				VAL_trace_scripted_peace_country = yes
+			}
 			# BEGIN nam:on_peace
 			ADISCORD_nam_resource_war_close_external = yes
 			# END nam:on_peace
@@ -1992,6 +2009,28 @@ on_actions = {
 			# END stelander:on_peace
 
 
+		}
+	}
+	on_before_peace_conference_start = {
+		effect = {
+			# BEGIN kefreyt:on_before_peace_conference_start
+			# Conference scopes reverse the capitulation hook's winner and loser.
+			if = {
+				limit = {
+					ROOT = { tag = VAL }
+					FROM = { OR = { tag = STP tag = STS tag = NOD tag = YPR tag = COF tag = TFF } }
+				}
+				log = "VAL_PEACE_TRACE before_conference winner=[ROOT.GetTag] loser=[FROM.GetTag]"
+				VAL = { VAL_trace_scripted_peace_country = yes }
+				STP = { VAL_trace_scripted_peace_country = yes }
+				STS = { VAL_trace_scripted_peace_country = yes }
+				NOD = { VAL_trace_scripted_peace_country = yes }
+				AIN = { VAL_trace_scripted_peace_country = yes }
+				YPR = { VAL_trace_scripted_peace_country = yes }
+				COF = { VAL_trace_scripted_peace_country = yes }
+				TFF = { VAL_trace_scripted_peace_country = yes }
+			}
+			# END kefreyt:on_before_peace_conference_start
 		}
 	}
 	on_peaceconference_ended = {

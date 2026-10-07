@@ -9,7 +9,7 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-FLAGS = ("OCA", "OSF_VAL_commissariat")
+FLAGS = ("OCA", "OSF_VAL_commissariat", "BJK_VAL_administration")
 # Regional councils retain the heraldry of their parent administration.
 FLAG_ALIASES = {
     "ECA": "NOD_VAL_administration",

@@ -792,6 +792,134 @@ class RusDirtyCampaignRoutes(unittest.TestCase):
             "NOT = { has_country_flag = ADISCORD_vorkerland_rus_rza_absorbed }", rza
         )
 
+    def _proclamation_facts(self) -> dict:
+        facts = {
+            ("RUS", "is_ai", "yes"): True,
+            ("RUS", "has_war", "no"): True,
+            ("RUS", "is_subject", "no"): True,
+            ("RUS", "has_capitulated", "no"): True,
+            ("RUS", "ruling_leader"): "RUS_Mark_Rustan",
+        }
+        for focus in (
+            "RUS_seat_the_khan_chancery",
+            "RUS_arm_the_border_hosts",
+            "RUS_aimaq_reserve",
+        ):
+            facts[("RUS", "has_completed_focus", focus)] = True
+        for tag in ("SLA", "RZA", "MLR", "ERT", "IRT", "SCA"):
+            facts[("RUS", "country_exists", tag)] = True
+            belt = self.block(
+                self.triggers,
+                f"ADISCORD_vorkerland_rus_holds_{tag.lower()}_playable",
+            )
+            for entry in belt:
+                facts[("RUS", "controls_state", entry.value)] = tag in (
+                    "SLA", "MLR", "IRT"
+                )
+        return facts
+
+    def test_ai_saves_for_proclamation_only_while_its_live_conditions_hold(self):
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        gate = self.expand(self.block(self.triggers, "RUS_ai_proclamation_pending"))
+        category = self.block(
+            self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+            "ADISCORD_vorkerland_rus_dirty_campaign_category",
+        )
+        decision = self.block(category, "RUS_proclaim_the_last_empire")
+        available = self.expand(self.block(decision, "available"))
+        ready = self._proclamation_facts()
+        self.assertEqual(scalar(decision, "cost"), "75")
+        for power in (0, 21.75066, 74.999, 75, 200):
+            facts = {**ready, ("RUS", "numeric", "has_political_power"): power}
+            with self.subTest(power=power):
+                self.assertTrue(self.matches(gate, facts, "RUS"))
+                self.assertTrue(self.matches(available, facts, "RUS"))
+        blockers = {
+            ("RUS", "has_war", "no"): False,
+            ("RUS", "is_subject", "no"): False,
+            ("RUS", "has_capitulated", "no"): False,
+            ("RUS", "ruling_leader"): "RUS_Varlam_Oskol",
+            ("RUS", "controls_state", "49"): False,
+            ("RUS", "has_completed_focus", "RUS_seat_the_khan_chancery"): False,
+            ("RUS", "has_completed_focus", "RUS_arm_the_border_hosts"): False,
+            ("RUS", "has_completed_focus", "RUS_aimaq_reserve"): False,
+            ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_last_empire_proclaimed"): True,
+        }
+        for key, value in blockers.items():
+            with self.subTest(blocker=key):
+                facts = {**ready, key: value}
+                self.assertFalse(self.matches(gate, facts, "RUS"))
+                self.assertFalse(self.matches(available, facts, "RUS"))
+        human = {**ready, ("RUS", "is_ai", "yes"): False}
+        self.assertFalse(self.matches(gate, human, "RUS"))
+        self.assertTrue(self.matches(available, human, "RUS"))
+
+    def test_paid_ai_projects_yield_to_proclamation_and_resume_afterwards(self):
+        from tools.tests.test_adiscord_stp_preparation import walk
+
+        effects = {entry.key: entry.value for entry in self.effects}
+
+        def field(rows, name, default=None):
+            return next((entry.value for entry in rows if entry.key == name), default)
+
+        def spends_power(rows, seen=None):
+            seen = set() if seen is None else seen
+            for entry in walk(rows):
+                if entry.key == "add_political_power":
+                    try:
+                        if float(entry.value) < 0:
+                            return True
+                    except ValueError:
+                        pass
+                if entry.key in effects and entry.key not in seen:
+                    seen.add(entry.key)
+                    if spends_power(effects[entry.key], seen):
+                        return True
+            return False
+
+        ready = self._proclamation_facts()
+        proclaimed = {
+            **ready,
+            ("RUS", "has_country_flag", "ADISCORD_vorkerland_rus_last_empire_proclaimed"): True,
+        }
+        guarded = set()
+        for category in self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"):
+            for decision in category.value:
+                name, rows = decision.key, decision.value
+                if not name.startswith("RUS_") or name.startswith("RUS_crisis_"):
+                    continue
+                if name in ("RUS_proclaim_the_last_empire", "RUS_imperial_frontier_campaign"):
+                    continue
+                ai = field(rows, "ai_will_do", [])
+                positive_weight = float(field(ai, "base", field(ai, "factor", "0"))) > 0
+                positive_weight |= any(
+                    entry.key == "add" and float(entry.value) > 0 for entry in walk(ai)
+                )
+                paid = float(field(rows, "cost", "0")) > 0 or spends_power(
+                    field(rows, "complete_effect", [])
+                )
+                if not positive_weight or not paid:
+                    continue
+                with self.subTest(decision=name):
+                    reservations = [
+                        entry.value for entry in ai
+                        if entry.key == "modifier"
+                        and field(entry.value, "RUS_ai_proclamation_pending") == "yes"
+                    ]
+                    self.assertEqual(len(reservations), 1)
+                    self.assertEqual(field(reservations[0], "factor"), "0")
+                    conditions = self.expand([
+                        entry for entry in reservations[0] if entry.key != "factor"
+                    ])
+                    self.assertTrue(self.matches(conditions, ready, "RUS"))
+                    self.assertFalse(self.matches(conditions, proclaimed, "RUS"))
+                    guarded.add(name)
+        self.assertTrue({
+            "RUS_engineering_order", "RUS_market_surplus", "RUS_bop_relief",
+            "RUS_bop_mediation", "RUS_campaign_sca", "RUS_restore_reactor_works",
+        }.issubset(guarded))
+
     def test_empire_gate_accepts_three_held_belts_or_no_independent_republics(
         self,
     ) -> None:

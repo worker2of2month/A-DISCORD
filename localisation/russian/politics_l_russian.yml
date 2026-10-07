@@ -16,7 +16,6 @@
  POLITICS_LEADER: "§TЛидер партии: $LEADER|H$§!"
  POLITICS_POPULARITY: "§TПопулярность: §H$VALUE|2$%§!§!"
  POLITICS_POPULARITY_INCREASE_SPY: "$SPY|H$ увеличивает популярность (§H$VALUE|2$%§! еженедельно)"
- POLITICS_IDEOLOGY_POPULARITY_CHANGE: "Изменение популярности идеологии «$IDEOLOGY$» - $VALUE|+2%$"
  POLITICS_SCORE: "§TОбщий счет: $VALUE|0H$§!"
  POLITICS_IDEA_WINDOW: "Управление правительством"
  POLITICS_ADD_IDEA: "§GЩелкните, чтобы добавить $GROUP|H$§!"

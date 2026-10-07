@@ -6287,6 +6287,91 @@ VAL_settle_joint_nod_shabrat_victory = {
 }
 
 # --- final_campaign_administrations ---
+# Event-only diagnostics. Missing boolean lines mean false; no campaign state
+# is written, so the snapshot can also run before a native conference.
+VAL_trace_scripted_peace_country = {
+	log = "VAL_PEACE_TRACE country=[THIS.GetTag] ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+	if = {
+		limit = { exists = yes }
+		log = "VAL_PEACE_TRACE exists=yes"
+	}
+	if = {
+		limit = { has_war_with = VAL }
+		log = "VAL_PEACE_TRACE war_with_VAL=yes"
+	}
+	if = {
+		limit = { has_capitulated = yes }
+		log = "VAL_PEACE_TRACE capitulated=yes"
+	}
+	if = {
+		limit = { is_major = yes }
+		log = "VAL_PEACE_TRACE major=yes"
+	}
+	if = {
+		limit = { is_subject = yes }
+		OVERLORD = { log = "VAL_PEACE_TRACE overlord=[THIS.GetTag]" }
+	}
+	if = {
+		limit = { is_in_faction = yes }
+		faction_leader = { log = "VAL_PEACE_TRACE faction_leader=[THIS.GetTag]" }
+	}
+	if = {
+		limit = { has_country_flag = VAL_final_war_member }
+		log = "VAL_PEACE_TRACE final_member=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_final_defeat_pending }
+		log = "VAL_PEACE_TRACE final_pending=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_final_capitulation_immediate }
+		log = "VAL_PEACE_TRACE final_immediate=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_final_settlement_commit }
+		log = "VAL_PEACE_TRACE final_commit=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_northern_coalition_campaign_member }
+		log = "VAL_PEACE_TRACE northern_member=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_northern_coalition_capitulation_reserved }
+		log = "VAL_PEACE_TRACE northern_reserved=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_northern_coalition_campaign_active }
+		log = "VAL_PEACE_TRACE northern_active=yes"
+	}
+	if = {
+		limit = { has_country_flag = VAL_northern_coalition_entry_pending }
+		log = "VAL_PEACE_TRACE northern_entry_pending=yes"
+	}
+	if = {
+		limit = { tag = VAL }
+		log = "VAL_PEACE_TRACE final_phase=[?VAL_final_crisis_phase] frontier_stage=[?VAL_frontier_stage]"
+	}
+	if = {
+		limit = { exists = yes }
+		capital_scope = {
+			controller = { log = "VAL_PEACE_TRACE capital_controller=[THIS.GetTag]" }
+		}
+	}
+}
+
+# COUNTRY defeated recipient. Client war relations can survive peace with VAL.
+# Close them before changing factions or autonomy; unrelated enemies stay at war.
+VAL_end_administration_wars = {
+	every_enemy_country = {
+		limit = { is_subject_of = VAL }
+		white_peace = PREV
+	}
+	if = {
+		limit = { has_war_with = VAL }
+		VAL = { white_peace = PREV }
+	}
+}
+
 # COUNTRY STP/STS. Reuse the surviving country so armies, technology and the
 # player's seat remain intact. Only owned, uncontested border states are ceded.
 VAL_install_stelander_administration = {
@@ -6294,7 +6379,7 @@ VAL_install_stelander_administration = {
 		limit = { OR = { tag = STP tag = STS } VAL = { exists = yes has_capitulated = no is_subject = no } }
 		VAL_settle_frontier_partner_war = yes
 		STP_close_competing_ultimatum_wars_after_defeat = yes
-		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		VAL_end_administration_wars = yes
 		if = {
 			limit = { tag = STS }
 			VAL = { VAL_restore_stelander_conquered_administrations = yes }
@@ -6766,7 +6851,12 @@ VAL_settle_nod_overlord_sts_defeat = {
 }
 
 VAL_close_northern_coalition_campaign = {
+	if = {
+		limit = { has_country_flag = VAL_northern_coalition_campaign_active }
+		log = "VAL_PEACE_TRACE northern_close ROOT=[ROOT.GetTag] FROM=[FROM.GetTag]"
+	}
 	clr_country_flag = VAL_northern_coalition_campaign_active
+	clr_country_flag = VAL_northern_coalition_entry_pending
 	YPR = {
 		if = {
 			limit = { has_country_flag = VAL_northern_coalition_added_major }
@@ -6805,14 +6895,20 @@ VAL_reconcile_northern_coalition_campaign = {
 				has_capitulated = yes
 				is_subject = yes
 				has_country_flag = VAL_stelander_defeated
-				YPR = { VAL_northern_coalition_member_withdrawn = yes }
-				COF = { VAL_northern_coalition_member_withdrawn = yes }
-				TFF = { VAL_northern_coalition_member_withdrawn = yes }
 				AND = {
-					NOT = { has_war_with = YPR }
-					NOT = { has_war_with = COF }
-					NOT = { has_war_with = TFF }
-					NOT = { VAL_northern_coalition_campaign_victory_ready = yes }
+					# The bounded entry callbacks own incomplete native war relations.
+					NOT = { has_country_flag = VAL_northern_coalition_entry_pending }
+					OR = {
+						YPR = { VAL_northern_coalition_member_withdrawn = yes }
+						COF = { VAL_northern_coalition_member_withdrawn = yes }
+						TFF = { VAL_northern_coalition_member_withdrawn = yes }
+						AND = {
+							NOT = { has_war_with = YPR }
+							NOT = { has_war_with = COF }
+							NOT = { has_war_with = TFF }
+							NOT = { VAL_northern_coalition_campaign_victory_ready = yes }
+						}
+					}
 				}
 			}
 		}
@@ -6883,6 +6979,7 @@ VAL_begin_northern_coalition_campaign = {
 	if = {
 		limit = { VAL_can_attack_northern_coalition = yes }
 		set_country_flag = VAL_northern_coalition_campaign_active
+		set_country_flag = VAL_northern_coalition_entry_pending
 		YPR = {
 			set_country_flag = VAL_northern_coalition_campaign_member
 			if = {
@@ -6923,10 +7020,30 @@ VAL_begin_northern_coalition_campaign = {
 			}
 		}
 		declare_war_on = { target = YPR type = annex_everything }
+		VAL_join_northern_coalition_war = yes
+		# Declaration and invitations may each enqueue their native relations.
+		# Keep the campaign reserved across both diplomatic ticks.
+		country_event = { id = val_rework.132 hours = 1 }
+	}
+}
+
+VAL_join_northern_coalition_war = {
+	if = {
+		limit = {
+			has_country_flag = VAL_northern_coalition_campaign_active
+			has_country_flag = VAL_northern_coalition_entry_pending
+			has_capitulated = no
+			is_subject = no
+			has_war_with = YPR
+		}
 		if = {
 			limit = {
-				has_war_with = YPR
-				COF = { NOT = { has_war_with = VAL } }
+				COF = {
+					exists = yes
+					has_capitulated = no
+					is_subject = no
+					NOT = { has_war_with = VAL }
+				}
 			}
 			COF = {
 				add_to_war = {
@@ -6939,8 +7056,12 @@ VAL_begin_northern_coalition_campaign = {
 		}
 		if = {
 			limit = {
-				has_war_with = YPR
-				TFF = { NOT = { has_war_with = VAL } }
+				TFF = {
+					exists = yes
+					has_capitulated = no
+					is_subject = no
+					NOT = { has_war_with = VAL }
+				}
 			}
 			TFF = {
 				add_to_war = {
@@ -6951,20 +7072,7 @@ VAL_begin_northern_coalition_campaign = {
 				}
 			}
 		}
-		if = {
-			limit = {
-				has_war_with = YPR
-				COF = { has_war_with = VAL }
-				TFF = { has_war_with = VAL }
-			}
-			VAL_call_subjects_to_wars = yes
-		}
-		else = {
-			if = { limit = { has_war_with = YPR } white_peace = YPR }
-			if = { limit = { has_war_with = COF } white_peace = COF }
-			if = { limit = { has_war_with = TFF } white_peace = TFF }
-			VAL_close_northern_coalition_campaign = yes
-		}
+		VAL_call_subjects_to_wars = yes
 	}
 }
 
@@ -6977,7 +7085,7 @@ VAL_settle_northern_coalition_victory = {
 		}
 		clr_country_flag = VAL_northern_coalition_campaign_active
 		YPR = {
-			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = { limit = { exists = yes } VAL_end_administration_wars = yes }
 			if = {
 				limit = { exists = yes is_in_faction = yes }
 				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
@@ -6985,7 +7093,7 @@ VAL_settle_northern_coalition_victory = {
 			}
 		}
 		COF = {
-			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = { limit = { exists = yes } VAL_end_administration_wars = yes }
 			if = {
 				limit = { exists = yes is_in_faction = yes }
 				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
@@ -6993,7 +7101,7 @@ VAL_settle_northern_coalition_victory = {
 			}
 		}
 		TFF = {
-			if = { limit = { exists = yes has_war_with = VAL } white_peace = VAL }
+			if = { limit = { exists = yes } VAL_end_administration_wars = yes }
 			if = {
 				limit = { exists = yes is_in_faction = yes }
 				if = { limit = { is_faction_leader = yes } dismantle_faction = yes }
@@ -7090,7 +7198,7 @@ VAL_install_nodrul_administration = {
 		}
 		VAL_settle_nodrul_bezhaysk_war = yes
 		VAL_settle_frontier_partner_war = yes
-		if = { limit = { has_war_with = VAL } white_peace = VAL }
+		VAL_end_administration_wars = yes
 		VAL = { VAL_partition_nodrul_settlement = yes }
 
 		# Nodrul starts as the leader of the old Consortium. A faction leader
@@ -7098,7 +7206,10 @@ VAL_install_nodrul_administration = {
 		# Detach that alliance first, then retry the autonomy conversion after
 		# the diplomatic cache has advanced by one day.
 		if = {
-			limit = { is_in_faction = yes }
+			limit = {
+				is_in_faction = yes
+				NOT = { is_in_faction_with = VAL }
+			}
 			if = {
 				limit = { is_faction_leader = yes }
 				faction_leader = { dismantle_faction = yes }
@@ -7136,22 +7247,46 @@ VAL_finish_nodrul_administration = {
 			is_subject_of = VAL
 			VAL = { exists = yes has_capitulated = no is_subject = no }
 		}
+		# Autonomy and faction membership are separate parts of the handoff.
+		if = {
+			limit = {
+				is_in_faction = no
+				VAL = { is_in_faction = yes }
+			}
+			VAL = { faction_leader = { add_to_faction = NOD } }
+		}
 		if = {
 			limit = { NOT = { has_cosmetic_tag = NOD_VAL_administration } }
 			set_cosmetic_tag = NOD_VAL_administration
 		}
 		set_politics = { ruling_party = etatism elections_allowed = no }
+		STP = {
+			if = {
+				limit = { has_character = STP_Pavel_Lanskoy }
+				# A live party office prevents the engine from moving its holder.
+				STP_Pavel_Lanskoy = {
+					if = {
+						limit = { has_ideology = hedonism_ideology }
+						remove_country_leader_role = { ideology = hedonism_ideology }
+					}
+				}
+				set_nationality = {
+					character = STP_Pavel_Lanskoy
+					target_country = NOD
+				}
+			}
+		}
 		if = {
 			limit = {
-				has_character = NOD_VAL_Contract_Council
-				NOD_VAL_Contract_Council = {
+				has_character = STP_Pavel_Lanskoy
+				STP_Pavel_Lanskoy = {
 					NOT = {
 						has_ideology = contractual_etatism
 					}
 				}
 			}
 			add_country_leader_role = {
-				character = NOD_VAL_Contract_Council
+				character = STP_Pavel_Lanskoy
 				promote_leader = no
 				country_leader = {
 					ideology = contractual_etatism
@@ -7159,7 +7294,7 @@ VAL_finish_nodrul_administration = {
 				}
 			}
 		}
-		promote_character = { character = NOD_VAL_Contract_Council ideology = contractual_etatism }
+		promote_character = { character = STP_Pavel_Lanskoy ideology = contractual_etatism }
 		load_focus_tree = { tree = VAL_administration_focus keep_completed = no }
 		mark_focus_tree_layout_dirty = yes
 		VAL = { country_event = { id = val_contract.348 } }
@@ -7199,7 +7334,10 @@ VAL_complete_nodrul_administration = {
 			VAL_finish_nodrul_administration = yes
 		}
 		else_if = {
-			limit = { is_in_faction = yes }
+			limit = {
+				is_in_faction = yes
+				NOT = { is_in_faction_with = VAL }
+			}
 			if = {
 				limit = { is_faction_leader = yes }
 				faction_leader = { dismantle_faction = yes }
@@ -8177,6 +8315,7 @@ VAL_final_refund_supply_order = {
 }
 
 VAL_final_crisis_close = {
+	log = "VAL_PEACE_TRACE final_close ROOT=[ROOT.GetTag] FROM=[FROM.GetTag] phase=[?VAL_final_crisis_phase]"
 	set_variable = { var = VAL_final_crisis_phase value = 4 }
 	if = {
 		limit = {

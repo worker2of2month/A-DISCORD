@@ -87,6 +87,7 @@ class World:
         self.focuses = set(focuses)
         self.characters = set()
         self.recruited = []
+        self.transferred = []
         self.commissioned = []
         history = next((ROOT / 'history/countries').glob(tag + ' - *.txt'))
         reserves = set(GENERALS.get(tag, ()))
@@ -192,6 +193,12 @@ class World:
             elif k == 'recruit_character':
                 self.characters.add(v)
                 self.recruited.append(v)
+            elif k == 'set_nationality':
+                target = scalar(v, 'character')
+                assert target in self.characters
+                assert not self.roles.get(target), 'A live office prevents native transfer'
+                self.characters.remove(target)
+                self.transferred.append((target, scalar(v, 'target_country')))
             elif k == 'add_corps_commander_role':
                 target = scalar(v, 'character')
                 if target not in self.characters:
@@ -530,16 +537,21 @@ class PlayableStaffTests(unittest.TestCase):
             self.assertEqual(history.count('recruit_character = ' + name), 1)
 
     def test_administrators_are_dormant_until_the_settlement_grants_the_role(self):
-        chars = block(parse('common/characters/VAL.txt'), 'characters')
-        effects = World('VAL').scripts
+        effects = {
+            name: body for name, body in World('VAL').scripts.items()
+            if name.startswith('VAL_')
+        }
         for tag, token in (
             ('STP', 'STP_VAL_Andrei_Rudnev'),
             ('STS', 'STS_VAL_Andrei_Rudnev'),
-            ('NOD', 'NOD_VAL_Contract_Council'),
+            ('NOD', 'STP_Pavel_Lanskoy'),
             ('YPR', 'YPR_Contract_Council'),
         ):
+            registry = 'STP' if tag == 'NOD' else 'VAL'
+            chars = block(parse('common/characters/' + registry + '.txt'), 'characters')
+            home = 'STP' if tag == 'NOD' else tag
             history = next(
-                (ROOT / 'history/countries').glob(tag + ' - *.txt')
+                (ROOT / 'history/countries').glob(home + ' - *.txt')
             ).read_text(encoding='utf-8-sig')
             self.assertEqual(history.count('recruit_character = ' + token), 1)
             self.assertFalse(optional_block(block(chars, token), 'country_leader'))
@@ -573,6 +585,25 @@ class PlayableStaffTests(unittest.TestCase):
             self.assertEqual(w.roles[token], {'contractual_etatism'})
             w.execute(guards)
             self.assertEqual(w.role_writes, [(token, 'contractual_etatism')])
+
+    def test_nodrul_appointment_transfers_lanskoy_after_releasing_his_party_office(self):
+        effects = World('VAL').scripts
+        finalizer = block(effects['VAL_finish_nodrul_administration'], 'if')
+        self.assertEqual(scalar(block(finalizer, 'limit'), 'is_subject_of'), 'VAL')
+        promotion = block(finalizer, 'promote_character')
+        self.assertEqual(scalar(promotion, 'character'), 'STP_Pavel_Lanskoy')
+        self.assertEqual(scalar(promotion, 'ideology'), 'contractual_etatism')
+        donor = block(finalizer, 'STP')
+        for roles in (set(), {'hedonism_ideology'}):
+            with self.subTest(roles=roles):
+                world = World('STP')
+                world.characters.add('STP_Pavel_Lanskoy')
+                world.roles['STP_Pavel_Lanskoy'] = set(roles)
+                world.execute(donor)
+                self.assertNotIn('STP_Pavel_Lanskoy', world.characters)
+                self.assertEqual(world.transferred, [('STP_Pavel_Lanskoy', 'NOD')])
+                world.execute(donor)
+                self.assertEqual(len(world.transferred), 1)
 
     def test_successor_reserves_do_not_depend_on_the_other_claimant(self):
         for tag in ('STP', 'STS'):

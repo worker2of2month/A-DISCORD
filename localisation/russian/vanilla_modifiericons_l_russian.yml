@@ -1446,7 +1446,6 @@
  cat_fleet_in_being_cost_factor:0 "£navy_doctrine_cost_texticon  Стоимость доктрины воздействия флотом"
  cat_trade_interdiction_cost_factor:0 "£navy_doctrine_cost_texticon  Стоимость доктрины заграждения морских путей"
  cat_base_strike_cost_factor:0 "£navy_doctrine_cost_texticon  Стоимость доктрины ударов по базам"
- modifier_army_sub_unit_cavalry_speed_factor:0 "£speed_cavalry_texticon  £speed_cavalry_texticon  Скорость кавалерии"
  MODIFIER_CHOOSE_PREFERRED_TACTIC_COST:0 "£tactics_cost_texticon  Стоимость выбора предпочитаемой тактики"
  MODIFIER_RAILWAY_GUN_BOMBARDMENT_FACTOR:0 "£railway_gun_texticon  Бомбардировка с моря"
  MODIFIER_UNIT_LEADER_AS_ADVISOR_CP_COST_FACTOR:0 "£leader_promotion_cost_texticon  Затраты на командира-советника"
@@ -1590,7 +1589,6 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  air_spirit_category_type_cost_factor: "£air_spirit_texticon  Затраты боевого духа командования ВВС"
  navy_spirit_category_type_cost_factor: "£navy_spirit_texticon  Затраты боевого духа командования ВМФ"
  large_plane_airframe_design_cost_factor: "£air_design_cost_texticon  Стоимость проекта большого самолета"
- modifier_army_sub_unit_category_special_forces_max_org_factor: "£organisation_specops_texticon  Организация войск спец. назначения"
 
   naval_armor_research: "£research_speed_naval_armor_texticon  Темпы исследований схем корабельной брони"
  naval_artillery_research: "£research_speed_naval_artillery_texticon  Темпы исследований корабельной артиллерии"
@@ -1764,7 +1762,6 @@ modifier_army_sub_unit_long_range_patrol_support_defence_factor: "£defence_long
  specialization_naval_speed_factor: "£spec_naval_texticon  Скорость специального проекта ($specialization_naval$)"
  specialization_nuclear_speed_factor: "£spec_nuclear_texticon  Скорость специального проекта ($specialization_nuclear$)"
 
- MODIFIER_CONSUMER_GOODS_EXPECTED_VALUE: "£civ_factory_consumer_texticon  Ожидаемое количество заводов, перепрофилированных на товары народного потребления"
 
 
  #plane_designer_l_russian

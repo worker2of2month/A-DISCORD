@@ -30,7 +30,9 @@ TRACK_HALF = 2.9
 TRACK_RADIUS = 0.78
 TRACK_CENTER = 0.89
 TRACK_LENGTH = TRACK_HALF * 4 + math.tau * TRACK_RADIUS
-TRACK_LINKS = 42
+# Hull, gun, root and seven wheel joints leave forty joints for both tracks.
+MAX_JOINTS = 50
+TRACK_LINKS = 40
 NATIVE_FILES = [f"{NAME}.mesh"]
 NATIVE_FILES += [f"{NAME}_{clip}.anim" for clip in CLIPS]
 NATIVE_FILES += [f"{NAME}_{channel}.dds" for channel in ("diffuse", "normal", "specular")]
@@ -339,7 +341,7 @@ def verify():
     for shape in tree.find("object"):
         bones = list(shape.find("skeleton"))
         report["bones"] = len(bones)
-        assert len(bones) <= 64
+        assert len(bones) <= MAX_JOINTS, (len(bones), MAX_JOINTS)
         for mesh in shape.findall("mesh"):
             data = pdx_data.PDXData(mesh)
             count = len(data.p) // 3
@@ -490,6 +492,7 @@ def package(apply=False):
         print(json.dumps({"missing": str(report_path.relative_to(ROOT)), "applied": False}))
         return [str(report_path.relative_to(ROOT))]
     report = json.loads(report_path.read_text())
+    assert report["bones"] <= MAX_JOINTS
     assert digest(Path(__file__)) == report["generator_sha256"], "Rebuild after editing the generator"
     assert digest(STAGE / f"{NAME}.blend") == report["blend_sha256"]
     assert digest(STAGE / f"{NAME}_portrait.png") == report["portrait_sha256"]

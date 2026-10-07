@@ -48,7 +48,7 @@ class ValAirshipWorld(BunkerWorld):
         campaign = SimpleNamespace(
             effects={entry.key: entry.value for entry in read("common/scripted_effects/ADISCORD_VAL_effects.txt")},
             triggers={entry.key: entry.value for entry in read("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt")},
-            decisions={entry.key: entry.value for entry in value(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")},
+            decisions={entry.key: entry.value for entry in value(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_military_operations")},
             focuses=WASTELAND_FOCUSES,
         )
         super().__init__(campaign)
@@ -93,7 +93,7 @@ class ValAirshipWorld(BunkerWorld):
 class ValAirshipConstructionTests(unittest.TestCase):
     def setUp(self):
         self.world = ValAirshipWorld()
-        self.decision = value(value(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier"), "VAL_build_zeppelin")
+        self.decision = value(value(read("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_military_operations"), "VAL_build_zeppelin")
 
     def test_every_wasteland_focus_is_required_and_capstone_announces_unlock(self):
         for focus in WASTELAND_FOCUSES:

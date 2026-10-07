@@ -2903,6 +2903,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 200
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_sla_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -2934,6 +2938,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 180
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -2965,6 +2973,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 180
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -2996,6 +3008,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 160
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -3027,6 +3043,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 160
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -3058,6 +3078,10 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 			base = 160
 			modifier = { factor = 0 ADISCORD_vorkerland_rus_can_open_free_front = no }
 			modifier = { factor = 0 num_divisions < 2 }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -3155,6 +3179,10 @@ RUS_reactor_belt_category = {
 		ai_will_do = {
 			base = 5
 			modifier = { factor = 0 has_war = yes }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -3199,6 +3227,10 @@ RUS_reactor_belt_category = {
 		ai_will_do = {
 			base = 3
 			modifier = { factor = 0 has_war = yes }
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 }
@@ -3263,7 +3295,13 @@ RUS_experimental_labs_category = {
 			custom_effect_tooltip = RUS_lab_reactor_alloys_support_tt
 			hidden_effect = { RUS_lab_reactor_alloys_finish = yes }
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_lab_zeppelin = {
@@ -3317,7 +3355,13 @@ RUS_experimental_labs_category = {
 			custom_effect_tooltip = RUS_lab_zeppelin_result_tt
 			hidden_effect = { RUS_lab_zeppelin_finish = yes }
 		}
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 }
 
@@ -3372,7 +3416,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_excavate_finish = yes } }
-		ai_will_do = { base = 12 }
+		ai_will_do = {
+			base = 12
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_rush = {
@@ -3479,7 +3529,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_guard_finish = yes } }
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_shelter = {
@@ -3533,7 +3589,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_shelter_finish = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_water = {
@@ -3588,7 +3650,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_water_finish = yes } }
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_signals = {
@@ -3643,7 +3711,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_signals_finish = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_workshop = {
@@ -3698,7 +3772,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_workshop_finish = yes } }
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_granary = {
@@ -3753,7 +3833,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_granary_finish = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_clinic = {
@@ -3808,7 +3894,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_clinic_finish = yes } }
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_laboratory = {
@@ -3863,7 +3955,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_laboratory_finish = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_archive = {
@@ -3918,7 +4016,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_archive_finish = yes } }
-		ai_will_do = { base = 8 }
+		ai_will_do = {
+			base = 8
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_command = {
@@ -3973,7 +4077,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_command_finish = yes } }
-		ai_will_do = { base = 5 }
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_generator = {
@@ -4026,7 +4136,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_generator_finish = yes } }
-		ai_will_do = { base = 9 }
+		ai_will_do = {
+			base = 9
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_reinforce = {
@@ -4078,7 +4194,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_reinforce_finish = yes } }
-		ai_will_do = { base = 25 }
+		ai_will_do = {
+			base = 25
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_strip_1 = {
@@ -4284,7 +4406,13 @@ RUS_bunker_construction = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_rifle_order = {
@@ -4315,7 +4443,13 @@ RUS_bunker_construction = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_market_surplus = {
@@ -4352,7 +4486,13 @@ RUS_bunker_construction = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 4 }
+		ai_will_do = {
+			base = 4
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_upgrade_1 = {
@@ -4406,7 +4546,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_1_finish = yes } }
-		ai_will_do = { base = 3 }
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_upgrade_2 = {
@@ -4460,7 +4606,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_2_finish = yes } }
-		ai_will_do = { base = 3 }
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_upgrade_3 = {
@@ -4520,6 +4672,10 @@ RUS_bunker_construction = {
 			modifier = {
 				factor = 0
 				NOT = { has_completed_focus = RUS_bunker_commission }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
 			}
 		}
 	}
@@ -4582,6 +4738,10 @@ RUS_bunker_construction = {
 				factor = 0
 				NOT = { has_completed_focus = RUS_bunker_commission }
 			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -4636,7 +4796,13 @@ RUS_bunker_construction = {
 			}
 		}
 		remove_effect = { hidden_effect = { RUS_bunker_upgrade_5_finish = yes } }
-		ai_will_do = { base = 3 }
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_bunker_food_convoy = {
@@ -4668,6 +4834,10 @@ RUS_bunker_construction = {
 			modifier = {
 				add = 100
 				check_variable = { var = RUS_bunker_food value = 25 compare = less_than }
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
 			}
 		}
 	}
@@ -4731,7 +4901,13 @@ RUS_development_programmes = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_mobile_preparation = {
@@ -4764,7 +4940,13 @@ RUS_development_programmes = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_aimaq_public_works = {
@@ -4803,7 +4985,13 @@ RUS_development_programmes = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_chancery_reconstruction = {
@@ -4836,7 +5024,13 @@ RUS_development_programmes = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_surface_industrial_contract = {
@@ -4869,7 +5063,13 @@ RUS_development_programmes = {
 				hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 
 	RUS_subterranean_supply_contract = {
@@ -4907,7 +5107,13 @@ RUS_development_programmes = {
 				}
 			}
 		}
-		ai_will_do = { base = 2 }
+		ai_will_do = {
+			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
+		}
 	}
 }
 
@@ -4949,6 +5155,10 @@ RUS_public_campaigns = {
 				factor = 2
 				has_stability < 0.60
 			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -4987,6 +5197,10 @@ RUS_public_campaigns = {
 			modifier = {
 				factor = 2
 				has_stability < 0.60
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
 			}
 		}
 	}
@@ -5028,6 +5242,10 @@ RUS_public_campaigns = {
 				factor = 2
 				has_war = yes
 			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -5067,6 +5285,10 @@ RUS_public_campaigns = {
 				factor = 2
 				has_stability < 0.55
 			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -5102,6 +5324,10 @@ RUS_public_campaigns = {
 		remove_effect = { RUS_campaign_surface_trade_settle = yes }
 		ai_will_do = {
 			base = 2
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -5142,6 +5368,10 @@ RUS_public_campaigns = {
 		remove_effect = { RUS_campaign_last_order_settle = yes }
 		ai_will_do = {
 			base = 4
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -5202,6 +5432,10 @@ RUS_state_balance_category = {
 				power_balance_value = { id = RUS_state_balance value > -0.60 }
 				has_war = no
 			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
+			}
 		}
 	}
 
@@ -5257,6 +5491,10 @@ RUS_state_balance_category = {
 				check_variable = { var = RUS_bunker_food value = 80 compare = greater_than_or_equals }
 				power_balance_value = { id = RUS_state_balance value < 0.60 }
 				has_war = yes
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
 			}
 		}
 	}
@@ -5315,6 +5553,10 @@ RUS_state_balance_category = {
 					power_balance_value = { id = RUS_state_balance value < -0.60 }
 					power_balance_value = { id = RUS_state_balance value > 0.60 }
 				}
+			}
+			modifier = {
+				factor = 0
+				RUS_ai_proclamation_pending = yes
 			}
 		}
 	}

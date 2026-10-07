@@ -567,7 +567,7 @@ class KefreytAIExpansionPriorityTests(unittest.TestCase):
     def test_trade_route_does_not_permanently_defer_an_available_northern_target(self):
         from tools.tests.test_adiscord_stp_preparation import block, entries
 
-        category = block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_frontier")
+        category = block(entries("common/decisions/ADISCORD_VAL_decisions.txt"), "VAL_military_operations")
         decision = block(category, "VAL_defer_northern_expansion")
         self.assertTrue(decision)
         for trade in (False, True):

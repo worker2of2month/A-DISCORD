@@ -1,5 +1,7 @@
 """Shabrat's native siege-project, production and presentation contracts."""
 
+import hashlib
+import json
 from pathlib import Path
 import re
 import unittest
@@ -122,6 +124,19 @@ class TaranTests(unittest.TestCase):
                     self.assertNotIn(key[1], matches)
                     matches[key[1]] = line
             self.assertEqual(set(matches), required)
+
+    def test_native_skeleton_fits_the_engine_limit_and_matches_its_animations(self):
+        folder = ROOT / "gfx/models/units/ADISCORD_country_vehicles"
+        report = json.loads((folder / "STS_taran_verification.json").read_text())
+        self.assertLessEqual(report["bones"], 50)
+        self.assertTrue(report["native_reimport"])
+        self.assertEqual(set(report["animations"]), {"idle", "move", "attack"})
+        for clip, metrics in report["animations"].items():
+            self.assertLess(metrics["loop_error"], .001, clip)
+            if clip != "idle":
+                self.assertGreater(metrics["max_vertex_motion"], .10, clip)
+        for name, expected in report["files"].items():
+            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), expected)
 
     def test_native_model_and_ui_icons_exist(self):
         entities = named_blocks(read_script("gfx/entities/zz_ADISCORD_country_vehicles.asset"), "entity")

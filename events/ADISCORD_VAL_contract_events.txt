@@ -1374,6 +1374,56 @@ country_event = {
 	}
 }
 
+# The declaration must reach native diplomacy before the coalition invitations.
+country_event = {
+	id = val_rework.132
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		has_country_flag = VAL_northern_coalition_campaign_active
+		has_country_flag = VAL_northern_coalition_entry_pending
+	}
+	immediate = {
+		VAL_join_northern_coalition_war = yes
+		country_event = { id = val_rework.133 hours = 1 }
+	}
+}
+
+# Invitations get their own native tick; only then can a partial entry fail.
+country_event = {
+	id = val_rework.133
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = VAL
+		has_country_flag = VAL_northern_coalition_campaign_active
+		has_country_flag = VAL_northern_coalition_entry_pending
+	}
+	immediate = {
+		clr_country_flag = VAL_northern_coalition_entry_pending
+		if = {
+			limit = {
+				has_capitulated = no
+				is_subject = no
+				has_war_with = YPR
+				has_war_with = COF
+				has_war_with = TFF
+				NOT = { YPR = { is_subject = yes } }
+				NOT = { COF = { is_subject = yes } }
+				NOT = { TFF = { is_subject = yes } }
+			}
+			VAL_call_subjects_to_wars = yes
+		}
+		else = {
+			VAL_close_northern_coalition_campaign = yes
+			if = { limit = { has_war_with = YPR } white_peace = YPR }
+			if = { limit = { has_war_with = COF } white_peace = COF }
+			if = { limit = { has_war_with = TFF } white_peace = TFF }
+		}
+	}
+}
+
 # Debug preset handoff: STS must own a live NOD war before VAL can join
 # the same native war. This mirrors the real joint-campaign add_to_war path.
 country_event = {

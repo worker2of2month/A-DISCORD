@@ -2404,6 +2404,17 @@ ADISCORD_vorkerland_rus_can_proclaim_last_empire = {
 	ADISCORD_vorkerland_rus_has_empire_territory = yes
 }
 
+# Custom-cost projects debit political power outside the native decision budget.
+# Keep their AI weights at zero until the ready proclamation has been paid.
+RUS_ai_proclamation_pending = {
+	is_ai = yes
+	has_war = no
+	NOT = { has_country_flag = ADISCORD_vorkerland_rus_last_empire_proclaimed }
+	has_completed_focus = RUS_aimaq_reserve
+	has_completed_focus = RUS_arm_the_border_hosts
+	ADISCORD_vorkerland_rus_can_proclaim_last_empire = yes
+}
+
 ADISCORD_vorkerland_rus_borders_dirty_sla = {
 	SLA = { exists = yes is_subject = no NOT = { has_capitulated = yes } }
 	any_owned_state = { any_neighbor_state = { is_owned_by = SLA } }

@@ -1,33 +1,43 @@
 from pathlib import Path
+import unittest
+
 from tools.lib.on_actions import read_scripted_peace
 from tools.tests.test_scripted_peace_on_actions import GenericPeaceFixture
 from tools.tests.test_adiscord_stp_preparation import scalar
 from tools.tests.test_adiscord_val_refugees import load
-import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 REALM = ("BLD", "BHG", "BGT", "BBV", "BCM", "BJK")
 ADMIN_FLAG = "ADISCORD_bezhaysk_val_administration"
+GORNIN = "STP_ilya_gornin"
 
 
 class BezhayskUnificationFixture(GenericPeaceFixture):
     """Execute the merge after diplomacy is settled; annex may leave state 999."""
 
-    def __init__(self, val_awards=REALM):
+    def __init__(self, val_awards=REALM, gornin_home="STP"):
         super().__init__()
-        self.countries = ["VAL", "NOD", "COF", *REALM]
+        self.countries = ["VAL", "NOD", "COF", "STP", "STS", *REALM]
         self.owners = dict(zip((31, 5, 4, 7, 9, 41), REALM))
         self.owners.update({6: "BLD", 999: "BLD", 14: "COF"})
         self.controllers = dict(self.owners)
         self.cores = {state: {owner} for state, owner in self.owners.items()}
         self.overlords = {tag: "VAL" if tag in val_awards else "NOD" for tag in REALM}
         self.overlords["COF"] = "VAL"
-        self.flags = {tag: {ADMIN_FLAG} if tag in val_awards else set() for tag in self.countries}
+        self.flags = {
+            tag: {ADMIN_FLAG} if tag in val_awards else set()
+            for tag in self.countries
+        }
         self.troops = {tag: 10 for tag in self.countries}
         self.targets = {}
         self.cosmetics = {}
         self.dirty = set()
         self.arrays = {"ADISCORD_bezhaysk_settlement_members": list(REALM)}
+        self.gornin_home = gornin_home
+        self.gornin_roles = {"steland_liberationism"}
+        self.leaders = {}
+        self.politics = {}
+        self.effects = load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")
 
     def resolve(self, token, stack):
         if token.startswith("event_target:"):
@@ -42,8 +52,12 @@ class BezhayskUnificationFixture(GenericPeaceFixture):
                 result = any(self.matches([child], stack) for child in value)
             elif key == "NOT":
                 result = not any(self.matches([child], stack) for child in value)
-            elif key in self.countries or key.startswith("event_target:"):
+            elif key in (*self.countries, GORNIN) or key.startswith("event_target:"):
                 result = self.matches(value, stack + [self.resolve(key, stack)])
+            elif key == "has_character":
+                result = value == GORNIN and self.gornin_home == current
+            elif key == "has_ideology":
+                result = value in self.gornin_roles
             elif key == "is_subject_of":
                 result = self.overlords.get(current) == self.resolve(value, stack)
             elif key == "is_in_array":
@@ -73,8 +87,10 @@ class BezhayskUnificationFixture(GenericPeaceFixture):
                 if not taken and self.matches(guard, stack):
                     taken = True
                     self.execute([child for child in value if child.key != "limit"], stack)
-            elif key in self.countries or key.startswith("event_target:"):
+            elif key in (*self.countries, GORNIN) or key.startswith("event_target:"):
                 self.execute(value, stack + [self.resolve(key, stack)])
+            elif key in self.effects:
+                self.execute(self.effects[key], stack)
             elif key == "save_event_target_as":
                 self.targets[value] = current
             elif key == "add_core_of":
@@ -94,13 +110,32 @@ class BezhayskUnificationFixture(GenericPeaceFixture):
                 self.cosmetics[current] = value
             elif key == "ADISCORD_economy_mark_dirty":
                 self.dirty.add(current)
+            elif key == "remove_country_leader_role":
+                self.gornin_roles.discard(scalar(value, "ideology"))
+            elif key == "set_nationality":
+                assert scalar(value, "character") == GORNIN
+                assert self.gornin_home == current
+                assert not self.gornin_roles, "An active office prevents native transfer"
+                self.gornin_home = self.resolve(scalar(value, "target_country"), stack)
+            elif key == "recruit_character":
+                raise AssertionError("Character recruitment is only valid in history")
+            elif key == "add_country_leader_role":
+                assert scalar(value, "character") == GORNIN
+                assert self.gornin_home == current
+                role = next(child.value for child in value if child.key == "country_leader")
+                self.gornin_roles.add(scalar(role, "ideology"))
+            elif key == "promote_character":
+                assert scalar(value, "character") == GORNIN
+                assert self.gornin_home == current
+                assert scalar(value, "ideology") in self.gornin_roles
+                self.leaders[current] = GORNIN
+            elif key == "set_politics":
+                self.politics[current] = scalar(value, "ruling_party")
             else:
                 super().execute([row], stack)
 
     def run(self):
-        self.execute(load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")[
-            "ADISCORD_bezhaysk_unify_val_administration"
-        ])
+        self.execute(self.effects["ADISCORD_bezhaysk_unify_val_administration"])
 
 
 class BezhayskUnificationTests(unittest.TestCase):
@@ -145,15 +180,37 @@ class BezhayskUnificationTests(unittest.TestCase):
         self.assertEqual(model.controllers[999], "NOD")
         self.assertEqual(model.cores[999], {"COF"})
 
+    def test_gornin_transfers_from_either_successor_and_leads_the_awarded_client(self):
+        for donor in ("STP", "STS"):
+            for awards, recipient in ((REALM, "BJK"), (("BLD", "BHG"), "BLD")):
+                with self.subTest(donor=donor, recipient=recipient):
+                    model = BezhayskUnificationFixture(awards, gornin_home=donor)
+                    model.run()
+                    self.assertEqual(model.gornin_home, recipient)
+                    self.assertEqual(model.leaders, {recipient: GORNIN})
+                    self.assertEqual(model.politics[recipient], "etatism")
+
+    def test_missing_gornin_does_not_interrupt_settlement_or_recreate_him(self):
+        model = BezhayskUnificationFixture(gornin_home=None)
+        model.run()
+        self.assertIsNone(model.gornin_home)
+        self.assertEqual(model.leaders, {})
+        self.assertEqual(model.troops["BJK"], 60)
+        self.assertEqual(model.cosmetics, {"BJK": "BJK_VAL_administration"})
+        self.assertIn("BJK", model.dirty)
+
+    def test_without_val_land_gornin_stays_in_his_country(self):
+        model = BezhayskUnificationFixture(val_awards=(), gornin_home="STS")
+        model.run()
+        self.assertEqual(model.gornin_home, "STS")
+        self.assertEqual(model.leaders, {})
+
 
 class BezhayskPeaceTests(unittest.TestCase):
     def read(self, path: str) -> str:
         return (ROOT / path).read_text(encoding="utf-8-sig")
 
     def test_val_explicitly_calls_every_current_vassal_on_the_defensive_side(self):
-        from tools.tests.test_adiscord_val_refugees import load
-        from tools.tests.test_adiscord_stp_preparation import scalar
-
         effect = load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")[
             "ADISCORD_bezhaysk_join_val_campaign"
         ]
@@ -329,12 +386,15 @@ class BezhayskPeaceTests(unittest.TestCase):
     def test_grandfather_lishay_can_be_taken_in_a_separate_late_campaign(self) -> None:
         state = self.read("history/states/14-Flaem-Prana.txt")
         decisions = self.read("common/decisions/ADISCORD_bezhaysk_decisions.txt")
+        val_decisions = self.read("common/decisions/ADISCORD_VAL_decisions.txt")
         self.assertIn("victory_points = { 75 5 }", state)
         self.assertIn("owner = COF", state)
-        self.assertIn("ADISCORD_bezhaysk_subjugate_forest_val", decisions)
+        self.assertIn("ADISCORD_bezhaysk_subjugate_forest_val", val_decisions)
+        self.assertNotIn("ADISCORD_bezhaysk_subjugate_forest_val", decisions)
         self.assertIn("ADISCORD_bezhaysk_subjugate_forest_nod", decisions)
+        self.assertNotIn("ADISCORD_bezhaysk_subjugate_forest_nod", val_decisions)
         self.assertEqual(
-            decisions.count(
+            (decisions + val_decisions).count(
                 "declare_war_on = { target = COF type = annex_everything }"
             ),
             2,

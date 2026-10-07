@@ -1,0 +1,51 @@
+FFF
+======================================================================
+FAIL: test_nodrul_handoff_ends_client_wars_before_the_autonomy_retry (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytSubjectPeaceTests.test_nodrul_handoff_ends_client_wars_before_the_autonomy_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 684, in test_nodrul_handoff_ends_client_wars_before_the_autonomy_retry
+    self.assertEqual(fixture.enemies("NOD"), {"ZZZ"})
+AssertionError: Items in the first set but not the second:
+'SUB'
+'BJK'
+
+======================================================================
+FAIL: test_northern_treaty_closes_every_client_pair_before_creating_subjects (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytSubjectPeaceTests.test_northern_treaty_closes_every_client_pair_before_creating_subjects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 675, in test_northern_treaty_closes_every_client_pair_before_creating_subjects
+    fixture.execute(fixture.effects["VAL_settle_northern_coalition_victory"], ["VAL"])
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 627, in execute
+    self.execute([e for e in entry.value if e.key != "limit"], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 627, in execute
+    self.execute([e for e in entry.value if e.key != "limit"], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 647, in execute
+    assert not self.enemies(target) & sphere, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ("Administration still fights Kefreyt's subjects", 'YPR')
+
+======================================================================
+FAIL: test_stelander_handoff_ends_client_wars_before_changing_sides (tools.tests.test_adiscord_peace_coalition_lifecycle.KefreytSubjectPeaceTests.test_stelander_handoff_ends_client_wars_before_changing_sides)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 690, in test_stelander_handoff_ends_client_wars_before_changing_sides
+    fixture.execute(fixture.effects["VAL_install_stelander_administration"], ["STP"])
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 627, in execute
+    self.execute([e for e in entry.value if e.key != "limit"], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 627, in execute
+    self.execute([e for e in entry.value if e.key != "limit"], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 656, in execute
+    super().execute([entry], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 472, in execute
+    super().execute([e], stack)
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 159, in execute
+    self.execute(v, stack + [self.resolve(k, stack)])
+  File "C:\Users\Admin\Documents\Paradox Interactive\Hearts of Iron IV\mod\A-Discord\tools\tests\test_adiscord_peace_coalition_lifecycle.py", line 647, in execute
+    assert not self.enemies(target) & sphere, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ("Administration still fights Kefreyt's subjects", 'STP')
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.319s
+
+FAILED (failures=3)

@@ -62,6 +62,7 @@ class BunkerWorld:
         self.subject = False
         self.capitulated = False
         self.war = True
+        self.ai = True
         self.owner = True
         self.controller = True
         self.divisions = 2
@@ -130,6 +131,8 @@ class BunkerWorld:
                 result = {"is_subject": self.subject, "has_capitulated": self.capitulated}[key] == (value == "yes")
             elif key == "has_war":
                 result = self.war == (value == "yes")
+            elif key == "is_ai":
+                result = self.ai == (value == "yes")
             elif key == "tag":
                 result = value == "RUS"
             elif key == "has_variable":
@@ -164,6 +167,8 @@ class BunkerWorld:
             else:
                 raise AssertionError(f"Unsupported condition: {entry}")
             results.append(result)
+            if not result:
+                return False
         return all(results)
 
     def execute(self, rows):

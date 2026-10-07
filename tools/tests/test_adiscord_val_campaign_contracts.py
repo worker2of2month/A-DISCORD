@@ -297,6 +297,81 @@ class ValCampaignContractsTests(unittest.TestCase):
                 settled[("NOD", "has_country_flag", "VAL_nodrul_administration_pending")] = False
                 self.assertFalse(any(all(matches_conditions(gate, settled, "NOD") for gate in path) for path in paths))
 
+    def test_nodrul_handoff_detaches_foreign_factions_but_preserves_val_membership(self):
+        effects = entries(EFFECTS)
+        scenarios = (
+            ("old faction leader", True, False, True, "dismantle_faction"),
+            ("old faction member", True, False, False, "remove_from_faction"),
+            ("native join already applied", True, True, False, None),
+            ("no faction", False, False, False, None),
+        )
+        for effect in ("VAL_install_nodrul_administration", "VAL_complete_nodrul_administration"):
+            for name, in_faction, allied, leader, expected in scenarios:
+                with self.subTest(effect=effect, scenario=name):
+                    facts = {
+                        ("VAL", "exists", "yes"): True,
+                        ("VAL", "has_capitulated", "no"): True,
+                        ("VAL", "is_subject", "no"): True,
+                        ("NOD", "has_country_flag", "VAL_nodrul_administration_pending"): True,
+                        ("NOD", "is_in_faction", "yes"): in_faction,
+                        ("NOD", "is_in_faction_with", "VAL"): allied,
+                        ("NOD", "is_faction_leader", "yes"): leader,
+                    }
+                    selected = list(selected_effects(block(effects, effect), facts, "NOD"))
+                    detachments = [
+                        item.key
+                        for _, entry in selected if entry.key == "faction_leader"
+                        for item in walk(entry.value)
+                        if item.key in ("dismantle_faction", "remove_from_faction")
+                    ]
+                    self.assertEqual(detachments, [expected] if expected else [])
+                    if effect == "VAL_complete_nodrul_administration":
+                        autonomy = [
+                            scalar(entry.value, "target")
+                            for scope, entry in selected
+                            if scope == "VAL" and entry.key == "set_autonomy"
+                        ]
+                        self.assertEqual(autonomy, [] if expected else ["NOD"])
+
+    def test_nodrul_finalizer_joins_overlord_faction_before_announcing_settlement(self):
+        finish = block(entries(EFFECTS), "VAL_finish_nodrul_administration")
+        scenarios = (
+            ("puppet outside existing pact", True, False, True, True),
+            ("puppet already in pact", True, True, True, False),
+            ("overlord without faction", True, False, False, False),
+            ("foreign puppet", False, False, True, False),
+        )
+        for name, subject, in_faction, val_faction, expected in scenarios:
+            with self.subTest(scenario=name):
+                facts = {
+                    ("VAL", "exists", "yes"): True,
+                    ("VAL", "has_capitulated", "no"): True,
+                    ("VAL", "is_subject", "no"): True,
+                    ("VAL", "is_in_faction", "yes"): val_faction,
+                    ("NOD", "is_subject_of", "VAL"): subject,
+                    ("NOD", "is_in_faction", "no"): not in_faction,
+                    ("NOD", "has_country_flag", "VAL_nodrul_administration_pending"): True,
+                }
+                selected = list(selected_effects(finish, facts, "NOD"))
+                joins = [
+                    (scope, item.value)
+                    for scope, entry in selected if entry.key == "faction_leader"
+                    for item in walk(entry.value) if item.key == "add_to_faction"
+                ]
+                self.assertEqual(joins, [("VAL", "NOD")] if expected else [])
+                if expected:
+                    join = next(i for i, (_, entry) in enumerate(selected) if entry.key == "faction_leader")
+                    announcement = next(
+                        i for i, (_, entry) in enumerate(selected)
+                        if entry.key == "country_event" and scalar(entry.value, "id") == "val_contract.348"
+                    )
+                    completion = next(
+                        i for i, (_, entry) in enumerate(selected)
+                        if entry.key == "clr_country_flag" and entry.value == "VAL_nodrul_administration_pending"
+                    )
+                    self.assertLess(join, announcement)
+                    self.assertLess(join, completion)
+
     def test_restored_countries_release_from_the_actual_owner_then_join_val(self):
         restoration = block(entries(EFFECTS), "VAL_restore_stelander_conquered_administrations")
 

@@ -1743,6 +1743,10 @@ class TestValExpansionRoute(unittest.TestCase):
         military = named_block(decisions, "VAL_military_operations")
         frontier = named_block(decisions, "VAL_frontier")
         for name in (
+            "ADISCORD_bezhaysk_subjugate_forest_val",
+            "VAL_build_zeppelin",
+            "VAL_defer_northern_expansion",
+            "VAL_negotiate_yubora",
             "VAL_frontier_demand_CIN",
             "VAL_frontier_demand_ERT",
             "VAL_frontier_begin_offensive",

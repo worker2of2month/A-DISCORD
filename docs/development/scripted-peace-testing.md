@@ -13,6 +13,35 @@ including a liberated partner. An unrelated parallel enemy is not part of the
 award. The final transfer includes impassable owned remnants, not neighbours'
 cores or an unrestricted map scan. Arrays are temporary to the callback.
 
+A capitulated subject remains occupied while its living overlord is at war with
+the credited victor, even outside a shared faction. A neutral overlord does not
+block settlement. The overlord's final defeat includes its already defeated
+subjects in the generic snapshot.
+
+Kefreyt's war against YPR, COF and TFF reserves the campaign before declaring on
+YPR. Two one-shot hourly callbacks let the declaration and then the invitations
+reach native diplomacy before confirming entry. Daily reconciliation preserves
+this pending entry. Failed entry ends the partial campaign without awards and
+clears only major status added by this campaign. All three defenders must fall
+before the common administration treaty, including when COF capitulates last.
+
+Kefreyt's Nodrul, Stelander and northern-coalition administrations close each
+participating VAL subject's war relation before the relation with VAL itself.
+The victors execute the white peace so native callbacks retain the correct side.
+Faction removal and autonomy changes follow this cleanup. Separate enemies stay
+at war. Verify both pairwise peace and peace that ends a whole merged war;
+assuming every white peace removes all client relations can hide a conference
+left open for the clients.
+
+`VAL_PEACE_TRACE diagnostics_loaded` confirms the diagnostic hooks were loaded.
+The event-only trace records native immediate/late capitulation, loss of the
+last war, campaign closure and the boundary before a VAL peace conference.
+Each country snapshot prints true predicates only; omitted booleans are false.
+Conference callbacks use winner ROOT and loser FROM, the reverse of capitulation.
+Capture the trace before applying manual administration decisions: those use
+the settlement effects directly and cannot prove the automatic route ran.
+These records observe the failure; they do not suppress a native conference.
+
 The Party's postwar victory over Kefreyt uses the same subject treaty whether
 STP launched its own operation or defeated a Kefreyt invasion. The immediate
 callback requires the live STP-VAL war and victory credit for STP or its subject.
@@ -137,6 +166,8 @@ comparing outcomes. Source checks do not substitute for a cold-load campaign.
 | Neutral state / unrelated war with another enemy | No ownership award or war termination from the generic snapshot. |
 | Remote or impassable owned state | Included in the generic full-annex award. |
 | Real VAL frontier coalition | All requested entrants appear on the selected target's war, not parallel wars. |
+| VAL focus war against YPR/COF/TFF, every defeat order | All three join the same war and become contract administrations after the last defeat, without a native conference. |
+| COF defeats a VAL subject outside VAL's faction | The subject remains occupied while VAL fights; no separate annexation or peace. |
 | VAL claims 168 while RUS defeats ERT | Existing bounded claim and foreign occupation guards remain effective. |
 | Explicit VAL abort / externally ended war | No victory reward; campaign memberships/temporary majors clean up. |
 

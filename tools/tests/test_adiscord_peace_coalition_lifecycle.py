@@ -401,6 +401,336 @@ class StelanderPartitionTests(unittest.TestCase):
         self.assertLess(source.index("STP_settle_val_nod_partition = yes"), source.index("NOD = { STP_ps_settle_return = yes }"))
 
 
+class NorthernWarEntryFixture(TreatyFixture):
+    """Native declarations and invitations become visible on the next tick."""
+
+    def __init__(self):
+        super().__init__()
+        self.root = "VAL"
+        self.capitulated = set()
+        self.load("common/scripted_effects/ADISCORD_VAL_effects.txt")
+        self.load("common/scripted_triggers/ADISCORD_VAL_rework_triggers.txt", True)
+        self.stubs.update({"VAL_call_subjects_to_wars", "VAL_queue_ainholm_colony"})
+        self.factions = {tag: "north" for tag in ("YPR", "COF", "TFF")}
+        self.majors = {"TFF"}
+        self.queued_wars = set()
+        self.rejected = set()
+        self.events = []
+        self.hour = 0
+        self.event_definitions = {
+            scalar(e.value, "id"): e.value
+            for e in parse_clausewitz(
+                (ROOT / "events/ADISCORD_VAL_contract_events.txt").read_text(
+                    encoding="utf-8"
+                )
+            )
+            if e.key == "country_event"
+        }
+
+    def matches(self, rows, stack):
+        for e in rows:
+            if e.key == "has_completed_focus":
+                matched = stack[-1] == "VAL" and e.value == "VAL_Northern_Settlement"
+            elif e.key == "has_war":
+                matched = bool(self.enemies(stack[-1])) == (e.value == "yes")
+            elif e.key == "any_neighbor_country":
+                matched = self.matches(e.value, stack + ["VAL"])
+            else:
+                matched = super().matches([e], stack)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        taken = False
+        for e in rows:
+            if e.key in ("if", "else_if", "else"):
+                if e.key == "if":
+                    taken = False
+                limit = next((x.value for x in e.value if x.key == "limit"), [])
+                if not taken and self.matches(limit, stack):
+                    taken = True
+                    self.execute([x for x in e.value if x.key != "limit"], stack)
+            elif e.key == "declare_war_on":
+                self.queued_wars.add(frozenset((stack[-1], scalar(e.value, "target"))))
+            elif e.key == "add_to_war":
+                anchor = scalar(e.value, "targeted_alliance")
+                enemy = scalar(e.value, "enemy")
+                if frozenset((anchor, enemy)) not in self.wars:
+                    raise AssertionError("Invited an ally before the target war exists")
+                self.queued_wars.add(frozenset((stack[-1], enemy)))
+            elif e.key == "country_event":
+                self.events.append((
+                    self.hour + int(scalar(e.value, "hours") or 0),
+                    scalar(e.value, "id"),
+                    stack[-1],
+                ))
+            elif e.key == "hidden_effect":
+                self.execute(e.value, stack)
+            else:
+                super().execute([e], stack)
+
+    def tick(self):
+        from tools.tests.test_adiscord_stp_preparation import block
+
+        self.hour += 1
+        self.wars.update(w for w in self.queued_wars if not w & self.rejected)
+        self.queued_wars.clear()
+        due = [event for event in self.events if event[0] <= self.hour]
+        self.events = [event for event in self.events if event[0] > self.hour]
+        for _, event_id, tag in due:
+            event = self.event_definitions[event_id]
+            trigger = next((e.value for e in event if e.key == "trigger"), [])
+            if self.matches(trigger, [tag]):
+                self.execute(block(event, "immediate"), [tag])
+
+
+class NorthernWarEntryTests(unittest.TestCase):
+    def test_queued_declaration_and_invitations_retain_the_scripted_campaign(self):
+        f = NorthernWarEntryFixture()
+        f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+        f.execute(f.effects["VAL_reconcile_northern_coalition_campaign"])
+        self.assertIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+        self.assertEqual(f.majors, {"YPR", "COF", "TFF"})
+        f.tick()
+        f.execute(f.effects["VAL_reconcile_northern_coalition_campaign"])
+        self.assertIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+        f.tick()
+        self.assertEqual(f.enemies("VAL"), {"YPR", "COF", "TFF"})
+        self.assertIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+        self.assertNotIn("VAL_northern_coalition_entry_pending", f.flags["VAL"])
+        self.assertFalse(f.events)
+
+    def test_failed_entry_cleans_partial_war_and_only_campaign_added_majors(self):
+        for rejected in ("YPR", "COF", "TFF"):
+            with self.subTest(rejected=rejected):
+                f = NorthernWarEntryFixture()
+                f.rejected.add(rejected)
+                f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+                f.tick()
+                f.tick()
+                self.assertFalse(f.wars)
+                self.assertEqual(f.majors, {"TFF"})
+                self.assertNotIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+                self.assertNotIn("VAL_northern_coalition_entry_pending", f.flags["VAL"])
+                self.assertFalse(f.subjects)
+                self.assertFalse(f.events)
+
+    def test_entry_callbacks_cannot_reopen_a_cancelled_campaign(self):
+        f = NorthernWarEntryFixture()
+        f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+        f.execute(f.effects["VAL_close_northern_coalition_campaign"])
+        f.queued_wars.clear()
+        f.tick()
+        f.tick()
+        self.assertFalse(f.wars)
+        self.assertFalse(f.events)
+        self.assertNotIn("VAL_northern_coalition_campaign_active", f.flags["VAL"])
+
+    def test_every_final_defender_settles_all_three_administrations(self):
+        from itertools import permutations
+        from tools.lib.on_actions import read_scripted_peace
+        from tools.tests.test_adiscord_stp_preparation import block
+        from tools.tests.test_scripted_peace_on_actions import native_hooks
+
+        source = read_scripted_peace(
+            ROOT / "common/on_actions/09_ADISCORD_scripted_peace_on_actions.txt",
+            "kefreyt_northern_reservations",
+        )
+        hooks = native_hooks(source)
+        immediate = block(block(hooks, "on_capitulation_immediate"), "effect")
+        for order in permutations(("YPR", "COF", "TFF")):
+            with self.subTest(order=order):
+                f = NorthernWarEntryFixture()
+                f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+                f.tick()
+                f.tick()
+                for index, tag in enumerate(order):
+                    f.root = tag
+                    f.execute(immediate)
+                    if index < 2:
+                        self.assertFalse(f.subjects)
+                        f.capitulated.add(tag)
+                self.assertEqual(f.subjects, {"YPR": "VAL", "COF": "VAL", "TFF": "VAL"})
+                self.assertFalse(f.wars)
+                self.assertEqual(f.majors, {"TFF"})
+                self.assertIn("VAL_northern_coalition_settlement_completed", f.flags["VAL"])
+
+    def test_liberated_member_blocks_the_treaty_until_defeated_again(self):
+        f = NorthernWarEntryFixture()
+        f.execute(f.effects["VAL_begin_northern_coalition_campaign"])
+        f.tick()
+        f.tick()
+        f.root = "COF"
+        f.capitulated = {"YPR", "TFF"}
+        f.flags["COF"].add("VAL_northern_coalition_capitulation_reserved")
+        f.flags["YPR"].add("VAL_northern_coalition_capitulation_reserved")
+        f.capitulated.remove("YPR")
+        f.execute(f.effects["VAL_settle_northern_coalition_victory"], ["VAL"])
+        self.assertFalse(f.subjects)
+        self.assertEqual(f.enemies("VAL"), {"YPR", "COF", "TFF"})
+        f.capitulated.add("YPR")
+        f.execute(f.effects["VAL_settle_northern_coalition_victory"], ["VAL"])
+        self.assertEqual(f.subjects, {"YPR": "VAL", "COF": "VAL", "TFF": "VAL"})
+
+
+class KefreytSubjectPeaceFixture(NorthernWarEntryFixture):
+    """White peace removes one pair; VAL's clients retain their own relations."""
+
+    def __init__(self):
+        super().__init__()
+        self.countries.append("AIN")
+        self.flags["AIN"] = set()
+        self.stubs.discard("VAL_install_nodrul_administration")
+        self.stubs.update({
+            "VAL_snapshot_nodrul_settlement",
+            "VAL_partition_nodrul_settlement",
+            "STP_close_competing_ultimatum_wars_after_defeat",
+            "VAL_cede_stelander_border",
+        })
+        self.subjects = {"SUB": "VAL", "BJK": "VAL"}
+        self.peaces = []
+        self.merged_peace = False
+
+    def matches(self, rows, stack):
+        for entry in rows:
+            if entry.key == "NOT":
+                matched = not any(self.matches([e], stack) for e in entry.value)
+            elif entry.key == "OR":
+                matched = any(self.matches([e], stack) for e in entry.value)
+            elif entry.key in ("AND", "limit"):
+                matched = self.matches(entry.value, stack)
+            elif entry.key == "has_cosmetic_tag":
+                matched = entry.value == "STL_VAL_administration"
+            elif entry.key == "is_faction_leader":
+                faction = self.factions.get(stack[-1])
+                leader = next(
+                    (tag for tag, side in self.factions.items() if side == faction), None
+                )
+                matched = (stack[-1] == leader) == (entry.value == "yes")
+            else:
+                matched = super().matches([entry], stack)
+            if not matched:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or [self.root]
+        taken = False
+        for entry in rows:
+            if entry.key in ("if", "else_if", "else"):
+                if entry.key == "if":
+                    taken = False
+                limit = next((e.value for e in entry.value if e.key == "limit"), [])
+                if not taken and self.matches(limit, stack):
+                    taken = True
+                    self.execute([e for e in entry.value if e.key != "limit"], stack)
+            elif entry.key == "white_peace":
+                target = self.resolve(entry.value, stack)
+                self.peaces.append((stack[-1], target))
+                self.wars.discard(frozenset((stack[-1], target)))
+                if self.merged_peace:
+                    victors = {"VAL"} | {
+                        tag for tag, overlord in self.subjects.items() if overlord == "VAL"
+                    }
+                    defeated = {target} | {
+                        tag for tag in self.countries if self.allied(tag, target)
+                    }
+                    self.wars = {
+                        pair for pair in self.wars if not (pair & victors and pair & defeated)
+                    }
+            elif entry.key == "dismantle_faction":
+                faction = self.factions.get(stack[-1])
+                self.factions = {
+                    tag: side for tag, side in self.factions.items() if side != faction
+                }
+            elif entry.key == "faction_leader":
+                faction = self.factions[stack[-1]]
+                leader = next(tag for tag, side in self.factions.items() if side == faction)
+                self.execute(entry.value, stack + [leader])
+            elif entry.key == "set_autonomy":
+                target = self.resolve(scalar(entry.value, "target"), stack)
+                if scalar(entry.value, "autonomy_state") != "autonomy_free":
+                    sphere = {"VAL"} | {
+                        tag for tag, overlord in self.subjects.items() if overlord == "VAL"
+                    }
+                    assert not self.enemies(target) & sphere, (
+                        "Administration still fights Kefreyt's subjects", target
+                    )
+                    self.subjects[target] = stack[-1]
+            elif entry.key == "set_cosmetic_tag":
+                pass
+            elif entry.key == "country_event":
+                self.events.append((stack[-1], scalar(entry.value, "id")))
+            else:
+                super().execute([entry], stack)
+
+
+class KefreytSubjectPeaceTests(unittest.TestCase):
+    def prepare(self, targets):
+        fixture = KefreytSubjectPeaceFixture()
+        fixture.wars = {
+            frozenset((target, winner))
+            for target in targets for winner in ("VAL", "SUB", "BJK", "ZZZ")
+        }
+        fixture.factions = {tag: "defenders" for tag in targets}
+        return fixture
+
+    def test_northern_treaty_closes_every_client_pair_before_creating_subjects(self):
+        fixture = self.prepare(("YPR", "COF", "TFF"))
+        fixture.flags["VAL"].add("VAL_northern_coalition_campaign_active")
+        fixture.capitulated.update(("YPR", "COF", "TFF"))
+        for tag in ("YPR", "COF", "TFF"):
+            fixture.flags[tag].add("VAL_northern_coalition_campaign_member")
+        fixture.execute(fixture.effects["VAL_settle_northern_coalition_victory"], ["VAL"])
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertEqual(fixture.subjects[tag], "VAL")
+            self.assertEqual(fixture.enemies(tag), {"ZZZ"})
+
+    def test_nodrul_handoff_ends_client_wars_before_the_autonomy_retry(self):
+        fixture = self.prepare(("NOD",))
+        fixture.root = "NOD"
+        fixture.execute(fixture.effects["VAL_install_nodrul_administration"], ["NOD"])
+        self.assertEqual(fixture.enemies("NOD"), {"ZZZ"})
+        self.assertIn("VAL_nodrul_administration_pending", fixture.flags["NOD"])
+
+    def test_stelander_handoff_ends_client_wars_before_changing_sides(self):
+        fixture = self.prepare(("STP",))
+        fixture.root = "STP"
+        fixture.execute(fixture.effects["VAL_install_stelander_administration"], ["STP"])
+        self.assertEqual(fixture.subjects["STP"], "VAL")
+        self.assertEqual(fixture.enemies("STP"), {"ZZZ"})
+
+    def test_subject_pairs_are_closed_even_when_val_already_left_the_war(self):
+        fixture = self.prepare(("NOD",))
+        fixture.wars.discard(frozenset(("VAL", "NOD")))
+        fixture.execute(fixture.effects["VAL_end_administration_wars"], ["NOD"])
+        self.assertEqual(fixture.enemies("NOD"), {"ZZZ"})
+        self.assertCountEqual(fixture.peaces, [("SUB", "NOD"), ("BJK", "NOD")])
+
+    def test_repeated_cleanup_does_not_touch_a_separate_enemy(self):
+        fixture = self.prepare(("NOD",))
+        fixture.execute(fixture.effects["VAL_end_administration_wars"], ["NOD"])
+        self.assertEqual(fixture.peaces[-1], ("VAL", "NOD"))
+        before = list(fixture.peaces)
+        fixture.execute(fixture.effects["VAL_end_administration_wars"], ["NOD"])
+        self.assertEqual(fixture.peaces, before)
+        self.assertEqual(fixture.enemies("NOD"), {"ZZZ"})
+
+    def test_merged_peace_can_remove_the_remaining_pairs_during_iteration(self):
+        fixture = self.prepare(("YPR", "COF", "TFF"))
+        fixture.merged_peace = True
+        fixture.flags["VAL"].add("VAL_northern_coalition_campaign_active")
+        fixture.capitulated.update(("YPR", "COF", "TFF"))
+        for tag in ("YPR", "COF", "TFF"):
+            fixture.flags[tag].add("VAL_northern_coalition_campaign_member")
+        fixture.execute(fixture.effects["VAL_settle_northern_coalition_victory"], ["VAL"])
+        for tag in ("YPR", "COF", "TFF"):
+            self.assertEqual(fixture.subjects[tag], "VAL")
+            self.assertEqual(fixture.enemies(tag), {"ZZZ"})
+
+
 class CoalitionLifecycleTests(unittest.TestCase):
     def val_northern(self):
         f = TreatyFixture()

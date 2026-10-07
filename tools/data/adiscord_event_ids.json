@@ -5,6 +5,22 @@
   ],
   "events": [
     {
+      "id": "val_rework.132",
+      "namespace": "val_rework",
+      "number": 132,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
+      "id": "val_rework.133",
+      "namespace": "val_rework",
+      "number": 133,
+      "owner": "events/ADISCORD_VAL_contract_events.txt",
+      "subsystem": "val_rework",
+      "status": "active"
+    },
+    {
       "id": "ADISCORD_nam_resource_war.10",
       "namespace": "ADISCORD_nam_resource_war",
       "number": 10,
