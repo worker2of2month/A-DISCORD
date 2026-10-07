@@ -38,15 +38,24 @@ set_popularities = {
 
 add_ideas = {
 	VAL_contract_service
+	low_economic_mobilisation
+	export_focus
 	ADISCORD_society_type_industrial
 	ADISCORD_information_state_bulletins
+	ADISCORD_taxation_balanced_register
 	ADISCORD_military_organization_contract_brigades
+	ADISCORD_welfare_basic_services
 	ADISCORD_education_apprenticeship
+	ADISCORD_healthcare_basic_clinics
+	ADISCORD_cultural_policy_heritage_protection
 	ADISCORD_industrial_policy_military_prioritization
+	ADISCORD_labor_policy_regulated_shifts
+	ADISCORD_infrastructure_regional_roadworks
 	ADISCORD_officer_corps_field_commissions
 	ADISCORD_logistics_regional_warehouses
 	ADISCORD_training_standardized_program
 	ADISCORD_internal_security_investigative_bureaus
+	STP_law_drug_prohibition
 	ADISCORD_justice_military_immunity
 
 	VAL_harvest_of_ash

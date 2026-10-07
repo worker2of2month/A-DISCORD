@@ -1,0 +1,449 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[left=20mm,right=20mm,top=18mm,bottom=19mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{babel,arrows.meta,patterns}
+\pgfplotsset{compat=1.18}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlength{\abovedisplayskip}{8pt}
+\setlength{\belowdisplayskip}{8pt}
+\raggedbottom
+\pagestyle{plain}
+\newcommand{\R}{\mathbb R}
+\newcommand{\task}[1]{\section*{Задача #1}}
+
+\begin{document}
+
+\begin{center}
+    {\Large\bfseries Домашнее задание 1}\\[4pt]
+    Математический анализ --- 2
+\end{center}
+
+\task{0}
+Дата рождения: 23 ноября. Значит, $D=23$, $M=11$.
+\[
+D+M=34=5\cdot6+4,\qquad D\cdot M=253=7\cdot36+1.
+\]
+Поэтому
+\[
+\boxed{a=1+4=5,\qquad b=2+1=3.}
+\]
+Во всех следующих задачах подставляем эти значения.
+
+\task{1}
+Прямая $l$ проходит через $(1,1)$ и имеет направляющий вектор
+$v=(5,3)$. Поэтому её параметрическое задание:
+\[
+\boxed{l:\quad x=1+5t,\qquad y=1+3t,\qquad t\in\R.}
+\]
+Вектор $n=(3,-5)$ перпендикулярен $v$, так как
+$5\cdot3+3\cdot(-5)=0$. Значит, уравнение прямой имеет вид
+\[
+3(x-1)-5(y-1)=0,
+\qquad\boxed{3x-5y+2=0.}
+\]
+
+Параллельная прямая через начало координат имеет тот же
+направляющий вектор $(5,3)$:
+\[
+\boxed{l_{\parallel}:\quad x=5t,\qquad y=3t,\qquad t\in\R.}
+\]
+Исключая параметр, получаем
+\[
+\boxed{l_{\parallel}:\quad 3x-5y=0.}
+\]
+
+Для перпендикулярной прямой возьмём направляющий вектор $(3,-5)$.
+Тогда
+\[
+\boxed{l_{\perp}:\quad x=3t,\qquad y=-5t,\qquad t\in\R,}
+\]
+а её уравнение:
+\[
+\boxed{l_{\perp}:\quad 5x+3y=0.}
+\]
+
+Осталось найти расстояние от точки
+$P=(1-b,3+a)=(-2,8)$ до $l$. По формуле расстояния от точки
+до прямой:
+\[
+\rho(P,l)=\frac{|3\cdot(-2)-5\cdot8+2|}{\sqrt{3^2+(-5)^2}}
+=\boxed{\frac{44}{\sqrt{34}}}.
+\]
+
+\newpage
+\task{2}
+Нормальный вектор плоскости равен $n=(b,a,1)=(3,5,1)$.
+Плоскость проходит через $A=(1,1,1)$, поэтому
+\[
+3(x-1)+5(y-1)+(z-1)=0,
+\qquad\boxed{\Pi:\quad 3x+5y+z-9=0.}
+\]
+Выберем два вектора, перпендикулярных $n$:
+\[
+u=(1,0,-3),\qquad v=(0,1,-5).
+\]
+Действительно, $n\cdot u=3-3=0$ и $n\cdot v=5-5=0$.
+Эти векторы неколлинеарны, поэтому параметрически плоскость
+можно задать так:
+\[
+(x,y,z)=(1,1,1)+s(1,0,-3)+t(0,1,-5),\qquad s,t\in\R,
+\]
+то есть
+\[
+\boxed{x=1+s,\qquad y=1+t,\qquad z=1-3s-5t,\qquad s,t\in\R.}
+\]
+
+У плоскости $OXY$ нормаль $n_0=(0,0,1)$. Для острого угла
+$\varphi$ между плоскостями имеем
+\[
+\cos\varphi=\frac{|n\cdot n_0|}{\lVert n\rVert\lVert n_0\rVert}
+=\frac{1}{\sqrt{3^2+5^2+1^2}}=\frac{1}{\sqrt{35}}.
+\]
+Следовательно,
+\[
+\boxed{\varphi=\arccos\frac{1}{\sqrt{35}}.}
+\]
+
+Прямая через $(0,0,0)$, перпендикулярная $\Pi$, направлена вдоль $n$.
+Её параметрическое задание и система уравнений:
+\[
+\boxed{x=3t,\quad y=5t,\quad z=t,\quad t\in\R;}
+\qquad
+\boxed{\begin{cases}x-3z=0,\\y-5z=0.\end{cases}}
+\]
+
+Для точки $Q=(b+1,0,a+1)=(4,0,6)$ получаем
+\[
+\rho(Q,\Pi)=\frac{|3\cdot4+5\cdot0+6-9|}{\sqrt{3^2+5^2+1^2}}
+=\boxed{\frac{9}{\sqrt{35}}}.
+\]
+
+\task{3}
+Даны плоскости
+\[
+\alpha:\ 5x+3y+2z+1=0,\qquad
+\beta:\ 5x+3y+2z-2=0.
+\]
+Они параллельны и различны. Значит, в них лежат противоположные
+грани куба, а расстояние между ними равно длине ребра $h$:
+\[
+h=\frac{|1-(-2)|}{\sqrt{5^2+3^2+2^2}}=\frac{3}{\sqrt{38}}.
+\]
+Отсюда объём куба:
+\[
+\boxed{V=h^3=\left(\frac{3}{\sqrt{38}}\right)^3
+=\frac{27}{38\sqrt{38}}.}
+\]
+
+\newpage
+\task{4}
+После подстановки параметров функция имеет вид
+\[
+f(x,y)=\sqrt{5x+3y+2}\,\ln(5-3x+5y)+\frac{1}{1-xy}.
+\]
+Подкоренное выражение должно быть неотрицательным, аргумент
+логарифма --- положительным, а знаменатель --- отличным от нуля.
+Поэтому
+\[
+\begin{cases}
+5x+3y+2\geqslant0,\\
+5-3x+5y>0,\\
+xy\neq1.
+\end{cases}
+\]
+Таким образом,
+\[
+\boxed{D_f=\left\{(x,y)\in\R^2:
+ y\geqslant-\frac53x-\frac23,\quad
+ y>\frac35x-1,\quad xy\neq1\right\}.}
+\]
+
+Нужно взять пересечение двух полуплоскостей над прямыми
+$y=-\frac53x-\frac23$ и $y=\frac35x-1$, а затем убрать
+из него гиперболу $xy=1$.
+
+Найдём точку пересечения прямых:
+\[
+-\frac53x-\frac23=\frac35x-1
+\quad\Longrightarrow\quad
+x=\frac5{34},\qquad y=-\frac{31}{34}.
+\]
+Точка $K=\left(\frac5{34},-\frac{31}{34}\right)$ не входит в область:
+в ней аргумент логарифма равен нулю. Слева от $K$ нижняя граница
+области идёт по первой прямой и включается, справа --- по второй
+прямой и не включается.
+
+\begin{center}
+\begin{tikzpicture}[x=1.38cm,y=1.08cm,>=Stealth,font=\small]
+  \begin{scope}
+    \clip (-3,-2.2) rectangle (4.6,5.3);
+    \fill[pattern=north east lines,pattern color=black!25]
+      (-3,5.3)--(4.6,5.3)--(4.6,1.76)
+      --({5/34},{-31/34})--(-3,{13/3})--cycle;
+    \draw[->] (-3,0)--(4.55,0);
+    \draw[->] (0,-2.2)--(0,5.25);
+    \foreach \x in {-2,-1,1,2,3,4} {
+      \draw (\x,0.055)--(\x,-0.055);
+      \node[below,fill=white,inner sep=1pt] at (\x,-0.08) {$\x$};
+    }
+    \foreach \y in {-2,-1,1,2,3,4,5} {
+      \draw (0.045,\y)--(-0.045,\y);
+      \node[left,fill=white,inner sep=1pt] at (-0.07,\y) {$\y$};
+    }
+    \draw[thick] (-3,{13/3})--({5/34},{-31/34});
+    \draw[thick,dashed] ({5/34},{-31/34})--(4.6,1.76);
+    \draw[thick,densely dashed,preaction={draw=white,line width=2.7pt}]
+      plot[domain=0.19:4.6,samples=160] (\x,{1/\x});
+    \draw[thick,densely dashed]
+      plot[domain=-3:-0.46,samples=100] (\x,{1/\x});
+    \filldraw[fill=white,draw=black,thick]
+      ({5/34},{-31/34}) circle[radius=2.3pt];
+    \node[fill=white,inner sep=2pt] at (2.5,3.8) {$D_f$};
+    \node[fill=white,inner sep=1.5pt,rotate=-53] at (-1.9,2.5)
+      {$5x+3y+2=0$};
+    \node[fill=white,inner sep=1.5pt,rotate=25] at (3.0,1.05)
+      {$5-3x+5y=0$};
+    \node[fill=white,inner sep=1.5pt] at (1.05,2.1) {$xy=1$};
+    \draw[->,thin] (0.93,1.95)--(0.61,1.64);
+    \node[below right] at (0.35,-1.05)
+      {$K\!\left(\frac5{34},-\frac{31}{34}\right)$};
+    \node[below left,fill=white,inner sep=1pt] at (0,0) {$0$};
+  \end{scope}
+  \node[right] at (4.55,0) {$x$};
+  \node[above] at (0,5.25) {$y$};
+\end{tikzpicture}
+
+\small Штриховка показывает область. Пунктирные кривые и точка $K$
+исключены; сплошной наклонный луч включён.
+\end{center}
+
+\newpage
+\task{5}
+Обозначим значение уровня через $c$.
+
+\textbf{(a)} $f(x,y)=|x-5|+|y-3|$.
+
+При $c<0$ множество уровня пусто. При $c=0$ получаем одну точку
+$(5,3)$. При $c>0$ уравнение
+\[
+|x-5|+|y-3|=c
+\]
+задаёт границу квадрата с центром $(5,3)$ и вершинами
+\[
+\boxed{(5+c,3),\quad(5-c,3),\quad(5,3+c),\quad(5,3-c).}
+\]
+\begin{center}
+\begin{tikzpicture}[scale=0.67,>=Stealth,font=\small]
+  \draw[->] (-0.35,0)--(9,0) node[right] {$x$};
+  \draw[->] (0,-0.4)--(0,6.7) node[above] {$y$};
+  \draw[densely dotted] (5,0)--(5,3)--(0,3);
+  \draw[thick] (5,4)--(6,3)--(5,2)--(4,3)--cycle;
+  \draw[thick,dashed] (5,5)--(7,3)--(5,1)--(3,3)--cycle;
+  \draw[thick,dash pattern=on 5pt off 2pt] (5,6)--(8,3)--(5,0)--(2,3)--cycle;
+  \fill (5,3) circle[radius=2.2pt];
+  \foreach \x in {2,3,4,5,6,7,8} {
+    \draw (\x,0.055)--(\x,-0.055);
+    \node[below] at (\x,-0.06) {$\x$};
+  }
+  \foreach \y in {1,2,3,4,5,6} {
+    \draw (0.055,\y)--(-0.055,\y);
+    \node[left] at (-0.06,\y) {$\y$};
+  }
+  \node[above right,fill=white,inner sep=1pt] at (5,4) {$c=1$};
+  \node[above right,fill=white,inner sep=1pt] at (5,5) {$c=2$};
+  \node[above right,fill=white,inner sep=1pt] at (5,6) {$c=3$};
+  \node[below left] at (0,0) {$0$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{(b)} $f(x,y)=(x-3)^5|y|$.
+
+Если $c=0$, то $x=3$ или $y=0$, то есть множество уровня ---
+объединение двух прямых. Если $c\neq0$, то $y\neq0$, и знак
+$(x-3)^5|y|$ совпадает со знаком $x-3$. Поэтому
+\[
+\boxed{
+\begin{array}{ll}
+ c>0:& y=\displaystyle\pm\frac{c}{(x-3)^5},\quad x>3,\\[8pt]
+ c<0:& y=\displaystyle\pm\frac{c}{(x-3)^5},\quad x<3.
+\end{array}}
+\]
+При каждом ненулевом $c$ это две ветви, симметричные относительно
+$Ox$, с асимптотами $x=3$ и $y=0$.
+\begin{center}
+\begin{tikzpicture}[x=1.08cm,y=0.65cm,>=Stealth,font=\small]
+  \draw[->,thick] (-0.25,0)--(6.45,0) node[right] {$x$};
+  \draw[->] (0,-3.1)--(0,3.2) node[above] {$y$};
+  \draw[thick] (3,-3.05)--(3,3.05);
+  \foreach \x in {1,2,3,4,5,6} {
+    \draw (\x,0.07)--(\x,-0.07);
+    \node[below,fill=white,inner sep=0.8pt] at (\x,-0.13) {$\x$};
+  }
+  \foreach \y in {-2,-1,1,2} {
+    \draw (0.04,\y)--(-0.04,\y);
+    \node[left] at (-0.07,\y) {$\y$};
+  }
+  \draw[thick] plot[domain=3.815:6.2,samples=140] (\x,{1/(\x-3)^5});
+  \draw[thick] plot[domain=3.815:6.2,samples=140] (\x,{-1/(\x-3)^5});
+  \draw[thick,dashed] plot[domain=0.25:2.185,samples=140] (\x,{-1/(\x-3)^5});
+  \draw[thick,dashed] plot[domain=0.25:2.185,samples=140] (\x,{1/(\x-3)^5});
+  \node at (1.3,2.4) {$c=-1$};
+  \node at (4.8,2.4) {$c=1$};
+  \node[above] at (3,3.05) {$x=3$};
+\end{tikzpicture}
+
+\small Прямые $x=3$ и $y=0$ вместе образуют уровень $c=0$.
+\end{center}
+
+\newpage
+\section*{Задача 5 (продолжение)}
+\textbf{(c)} $f(x,y)=2^{\frac{x^5}{y^3}}$, где $y\neq0$.
+
+Значения функции положительны, поэтому при $c\leqslant0$
+множество уровня пусто. Для $c>0$ логарифмируем равенство $f(x,y)=c$:
+\[
+\frac{x^5}{y^3}=\log_2 c
+\quad\Longleftrightarrow\quad x^5=(\log_2 c)y^3.
+\]
+При $c=1$ получаем $x=0$, но $y\neq0$. Это ось $Oy$
+без начала координат. Если $c>0$ и $c\neq1$, то
+\[
+\boxed{y=\sqrt[3]{\frac{x^5}{\log_2 c}},\qquad x\neq0.}
+\]
+Здесь кубический корень берётся в вещественном смысле.
+При $c>1$ координаты $x,y$ одного знака, а при $0<c<1$ ---
+разных знаков. Начало координат исключено на всех рисунках уровней.
+\begin{center}
+\begin{tikzpicture}[x=1.35cm,y=0.62cm,>=Stealth,font=\small]
+  \draw[->] (-2.15,0)--(2.2,0) node[right] {$x$};
+  \draw[->,thick] (0,-3.45)--(0,3.5) node[above] {$y$};
+  \foreach \x in {-2,-1,1,2} {
+    \draw (\x,0.065)--(\x,-0.065);
+    \node[below,fill=white,inner sep=1pt] at (\x,-0.1) {$\x$};
+  }
+  \foreach \y in {-3,-2,-1,1,2,3} {
+    \draw (0.035,\y)--(-0.035,\y);
+    \node[left,fill=white,inner sep=1pt] at (-0.05,\y) {$\y$};
+  }
+  \draw[thick] plot[domain=-2:2,samples=161] (\x,{\x*abs(\x)^(2/3)});
+  \draw[thick,dashed] plot[domain=-2:2,samples=161] (\x,{-\x*abs(\x)^(2/3)});
+  \filldraw[fill=white,draw=black,thick] (0,0) circle[radius=2.7pt];
+  \node[above left] at (1.85,2.85) {$c=2$};
+  \node[below left] at (1.85,-2.85) {$c=\frac12$};
+  \node[right] at (0.08,3.2) {$c=1$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{(d)} $f(x,y,z)=y-3z^5$.
+
+Для любого $c\in\R$ уравнение уровня имеет вид
+\[
+y-3z^5=c
+\quad\Longleftrightarrow\quad\boxed{y=c+3z^5,\qquad x\in\R.}
+\]
+Координата $x$ свободна. Поэтому в плоскости $OYZ$ строим кривую
+$y=c+3z^5$ и через каждую её точку проводим прямую, параллельную
+$Ox$. Получается цилиндрическая поверхность. Параметрически:
+\[
+\boxed{(x,y,z)=(s,c+3t^5,t),\qquad s,t\in\R.}
+\]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=9cm,height=5.3cm,
+  view={125}{22},
+  xlabel={$x$},ylabel={$y$},zlabel={$z$},
+  xmin=-2.3,xmax=2.3,ymin=-3.4,ymax=3.4,zmin=-1.1,zmax=1.1,
+  xtick={-2,0,2},ytick={-3,0,3},ztick={-1,0,1},
+  tick label style={font=\footnotesize},
+  label style={font=\small},
+  axis lines=box,
+  colormap={surfacegray}{gray(0cm)=(0.93);gray(1cm)=(0.83)},
+  grid=none,
+]
+\addplot3[
+  surf,shader=flat,draw=black!45,line width=0.25pt,
+  domain=-2:2,domain y=-1:1,samples=7,samples y=29,
+] ({x},{3*y^5},{y});
+\end{axis}
+\end{tikzpicture}
+
+\small Уровень $c=0$. Другие поверхности получаются сдвигом на $c$ вдоль $Oy$.
+\end{center}
+
+\newpage
+\task{6}
+Нужно проверить непрерывность функции
+\[
+f(x,y)=\frac{x^5y^5}{|x|^3+|y|^3},\qquad (x,y)\neq(0,0),
+\qquad f(0,0)=0.
+\]
+Положим $r=\max\{|x|,|y|\}$. Вне начала координат $r>0$, причём
+\[
+|x|^5|y|^5\leqslant r^{10},\qquad |x|^3+|y|^3\geqslant r^3.
+\]
+Отсюда
+\[
+0\leqslant|f(x,y)|\leqslant\frac{r^{10}}{r^3}=r^7
+\longrightarrow0\qquad\text{при }(x,y)\to(0,0).
+\]
+Значит,
+\[
+\boxed{\lim_{(x,y)\to(0,0)}f(x,y)=0=f(0,0).}
+\]
+Функция непрерывна в точке $(0,0)$.
+
+\task{7}
+В нашем случае
+\[
+f(x,y)=
+\begin{cases}
+3+5x\cos\frac1x+5y\cos\frac1y,&xy\neq0,\\[3pt]
+A,&xy=0.
+\end{cases}
+\]
+При $x=y=t\neq0$ имеем
+\[
+f(t,t)=3+10t\cos\frac1t\longrightarrow3.
+\]
+Так как $f(0,0)=A$, для непрерывности необходимо $A=3$.
+Проверим, что этого достаточно. Если $A=3$, то при $xy\neq0$
+\[
+|f(x,y)-3|\leqslant5|x|+5|y|\longrightarrow0.
+\]
+На осях $f(x,y)-3=0$. Значит, оценка верна для всех $(x,y)$,
+и двойной предел равен $3$. Итак,
+\[
+\boxed{f\text{ непрерывна в }(0,0)\ \Longleftrightarrow\ A=3.}
+\]
+
+Теперь найдём повторные пределы. Для фиксированного $x\neq0$
+слагаемое $5y\cos(1/y)$ стремится к нулю, поэтому
+\[
+\lim_{y\to0}f(x,y)=3+5x\cos\frac1x.
+\]
+При $x=0$ этот внутренний предел равен $A$, но значение в одной
+точке не влияет на следующий предел при $x\to0$. Следовательно,
+\[
+\boxed{\lim_{x\to0}\left(\lim_{y\to0}f(x,y)\right)=3.}
+\]
+Аналогично, при фиксированном $y\neq0$ получаем
+$\lim_{x\to0}f(x,y)=3+5y\cos(1/y)$, откуда
+\[
+\boxed{\lim_{y\to0}\left(\lim_{x\to0}f(x,y)\right)=3.}
+\]
+Оба повторных предела существуют и равны $3$ \textbf{при любом $A$}.
+При $A\neq3$ двойного предела нет: вдоль осей значения равны $A$,
+а вдоль $x=y$ предел равен $3$.
+
+\end{document}

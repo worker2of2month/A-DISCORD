@@ -2823,10 +2823,25 @@ STP_cw_prepare_successor = {
 	if = {
 		limit = { tag = STS }
 		add_ideas = {
+			partial_economic_mobilisation
+			limited_exports
+			ADISCORD_economic_system_state_coordinated
+			ADISCORD_society_type_industrial
+			ADISCORD_information_wartime_censorship
+			ADISCORD_taxation_balanced_register
 			ADISCORD_military_organization_militia_autonomy
+			ADISCORD_welfare_rationed_support
+			ADISCORD_education_basic_schools
+			ADISCORD_healthcare_military_medical_service
+			ADISCORD_cultural_policy_national_mythmaking
+			ADISCORD_industrial_policy_military_prioritization
+			ADISCORD_labor_policy_regulated_shifts
+			ADISCORD_infrastructure_patchwork_roads
 			ADISCORD_officer_corps_field_commissions
 			ADISCORD_training_basic_drills
 			ADISCORD_logistics_local_foraging
+			ADISCORD_internal_security_emergency_patrols
+			STP_law_drug_prohibition
 			ADISCORD_justice_field_courts
 		}
 	}

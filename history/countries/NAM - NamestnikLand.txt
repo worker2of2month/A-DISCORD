@@ -19,6 +19,28 @@ set_popularities = {
 set_stability = -0.15
 
 add_ideas = {
+	limited_conscription
+	civilian_economy
+	export_focus
+	ADISCORD_economic_system_planned_bureaucratic
+	ADISCORD_society_type_industrial
+	ADISCORD_information_state_bulletins
+	ADISCORD_taxation_balanced_register
+	ADISCORD_military_organization_cadre_army
+	ADISCORD_welfare_basic_services
+	ADISCORD_education_basic_schools
+	ADISCORD_healthcare_basic_clinics
+	ADISCORD_cultural_policy_heritage_protection
+	ADISCORD_industrial_policy_state_planning_boards
+	ADISCORD_labor_policy_regulated_shifts
+	ADISCORD_infrastructure_regional_roadworks
+	ADISCORD_officer_corps_political_commissars
+	ADISCORD_logistics_centralized_depots
+	ADISCORD_training_basic_drills
+	ADISCORD_internal_security_internal_directorate
+	STP_law_drug_prohibition
+	ADISCORD_justice_regular_tribunals
+
 	NAM_national_spirit
 	minister_NAM_Kirill_Vykup
 	minister_NAM_Mara_Kluch

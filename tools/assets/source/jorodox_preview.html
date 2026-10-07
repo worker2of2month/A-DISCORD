@@ -12,7 +12,7 @@ window.angular={module:()=>({factory(n,d){services[n]=d.at(-1)(...d.slice(0,-1).
 </script>
 <script src="/joro/bower_components/three.js/three.min.js"></script><script src="/joro/bower_components/DDSLoader/index.js"></script><script src="/joro/js/pdxDataService.js"></script><script src="/joro/js/rendererService.js"></script>
 <script>
-const names={city:['tower_admin','tower_business','tower_residential','quarter_business','quarter_mixed','quarter_residential','stelander_spire','stelander_twin','stelander_arcology'],weapon:Array.from({length:8},(_,i)=>'infantry_'+i),infantry:['STP_party','STS_regular','VAL_regular','WRK_line','TVA_technical','VAD_line','WRK_fragment','IVN_line','NOD_line','SRP_highland'],hq:['STP_hq','STS_hq','VAL_hq','NOD_hq','generic_hq']};
+const names={city:['tower_admin','tower_business','tower_residential','quarter_business','quarter_mixed','quarter_residential','stelander_spire','stelander_twin','stelander_arcology'],weapon:Array.from({length:8},(_,i)=>'infantry_'+i),infantry:['STP_party','STS_regular','VAL_regular','WRK_line','TVA_technical','VAD_line','WRK_fragment','IVN_line','NOD_line','SRP_highland'],hq:['STP_hq','STS_hq','VAL_hq','NOD_hq','RUS_hq','generic_hq']};
 const family=document.getElementById('family'),model=document.getElementById('model'),status=document.getElementById('status');
 const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
 renderer.setSize(1100,740);renderer.setClearColor(0x26323d);document.getElementById('viewport').appendChild(renderer.domElement);

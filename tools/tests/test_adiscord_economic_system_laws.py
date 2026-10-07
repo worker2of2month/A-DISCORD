@@ -53,6 +53,9 @@ EXPECTED_SYNDICALIST_MODIFIERS = {
     "ADISCORD_country_development_economic_growth_factor": "0.05",
 }
 STARTING_SYSTEMS = {
+    "NAM - NamestnikLand.txt": "ADISCORD_economic_system_planned_bureaucratic",
+    "RUS - RusniaLand.txt": "ADISCORD_economic_system_agrarian",
+    "SHL - Shahrabad League.txt": "ADISCORD_economic_system_oligarchic_clan",
     "STP - StepanLand.txt": "ADISCORD_economic_system_oligarchic_clan",
     "NOD - Nodral.txt": "ADISCORD_economic_system_oligarchic_clan",
     "VAL - ValeraLand.txt": "ADISCORD_economic_system_state_coordinated",
@@ -284,6 +287,41 @@ class EconomicSystemLawContracts(unittest.TestCase):
                     and entry.value in SYSTEM_IDS
                 ]
                 self.assertEqual([expected], assigned)
+
+    def test_playable_starting_profiles_cover_each_law_category_once(self):
+        categories = {}
+        for filename in (
+            "ADISCORD_laws.txt",
+            "_economic.txt",
+            "_manpower.txt",
+            "ADISCORD_VAL_rework_ideas.txt",
+        ):
+            path = ROOT / "common" / "ideas" / filename
+            parsed = parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+            ideas = unique_child(parsed, "ideas")
+            for category in ideas:
+                if not isinstance(category.value, list):
+                    continue
+                if category.key not in categories and not any(
+                    entry.key == "law" and entry.value == "yes"
+                    for entry in category.value
+                ):
+                    continue
+                categories.setdefault(category.key, set()).update(
+                    entry.key for entry in category.value if isinstance(entry.value, list)
+                )
+
+        for tag in ("NAM", "STP", "VAL", "RUS", "SHL"):
+            (path,) = (ROOT / "history" / "countries").glob(f"{tag} - *.txt")
+            parsed = parse_clausewitz(path.read_text(encoding="utf-8-sig"))
+            assigned = unique_child(parsed, "add_ideas")
+            for category, laws in categories.items():
+                with self.subTest(tag=tag, category=category):
+                    selected = [
+                        entry.value for entry in assigned
+                        if isinstance(entry.value, str) and entry.value in laws
+                    ]
+                    self.assertEqual(len(selected), 1, selected)
 
 
 if __name__ == "__main__":

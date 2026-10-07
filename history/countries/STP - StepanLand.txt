@@ -54,10 +54,14 @@ set_research_slots = 1
 ####### Ideas
 
 add_ideas = {
+	volunteer_only
+	ADISCORD_civilian_oriented_economy
+	export_focus
 	ADISCORD_society_type_post_industrial
 	ADISCORD_information_licensed_press
 	ADISCORD_taxation_light_dues
 	ADISCORD_welfare_employer_insurance
+	ADISCORD_education_basic_schools
 	ADISCORD_healthcare_private_care
 	ADISCORD_cultural_policy_public_entertainment
 	ADISCORD_industrial_policy_export_contracts
@@ -67,6 +71,7 @@ add_ideas = {
 	ADISCORD_officer_corps_local_seniority
 	ADISCORD_training_irregular_exercises
 	ADISCORD_logistics_civilian_contracts
+	ADISCORD_internal_security_local_garrisons
 	ADISCORD_justice_regular_tribunals
 
 	STP_hedonism_with_no_bondaries

@@ -21,6 +21,28 @@ set_stability = 0.54
 set_war_support = 0.27
 set_research_slots = 2
 add_ideas = {
+	volunteer_only
+	civilian_economy
+	export_focus
+	ADISCORD_economic_system_oligarchic_clan
+	ADISCORD_society_type_industrial
+	ADISCORD_information_licensed_press
+	ADISCORD_taxation_corporate_assessment
+	ADISCORD_military_organization_contract_brigades
+	ADISCORD_welfare_employer_insurance
+	ADISCORD_education_apprenticeship
+	ADISCORD_healthcare_private_care
+	ADISCORD_cultural_policy_public_entertainment
+	ADISCORD_industrial_policy_export_contracts
+	ADISCORD_labor_policy_guild_protections
+	ADISCORD_infrastructure_regional_roadworks
+	ADISCORD_officer_corps_local_seniority
+	ADISCORD_logistics_civilian_contracts
+	ADISCORD_training_basic_drills
+	ADISCORD_internal_security_local_garrisons
+	STP_law_drug_prohibition
+	ADISCORD_justice_regular_tribunals
+
 	SHL_nine_furnaces_compact
 	SHL_hereditary_seats
 	SHL_divided_guard

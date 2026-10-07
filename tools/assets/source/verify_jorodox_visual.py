@@ -17,7 +17,7 @@ groups = {
     'city': ('WRK_city', 'gfx/models/buildings/ADISCORD_city', 9),
     'weapon': ('infantry_weapons_3d', 'gfx/models/units/ADISCORD_weapons', 8),
     'infantry': ('STP_regulars', 'gfx/models/units/ADISCORD_regulars', 10),
-    'hq': ('STP_regulars', 'gfx/models/units/ADISCORD_headquarters', 5),
+    'hq': ('STP_regulars', 'gfx/models/units/ADISCORD_headquarters', 6),
 }
 report = {}
 for family, (source, runtime, count) in groups.items():

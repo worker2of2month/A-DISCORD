@@ -84,6 +84,8 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
             ("STS", "STS_hq"),
             ("VAL", "VAL_hq"),
             ("NOD", "NOD_hq"),
+            ("RUS", "RUS_hq"),
+            ("RUS_last_empire", "RUS_hq"),
             ("", "generic_hq"),
         ):
             name = (tag + "_" if tag else "") + "army_headquarters_entity"
@@ -102,7 +104,7 @@ class ArmyHeadquartersContractTests(unittest.TestCase):
             path.is_file(), 'The replaced graphic_db needs an HQ model pool'
         )
         text = path.read_text(encoding='utf-8')
-        for scope in ('default', 'STP', 'STS', 'VAL', 'NOD'):
+        for scope in ('default', 'STP', 'STS', 'VAL', 'NOD', 'RUS'):
             block = named_block(text, scope)
             entity = (
                 scope + '_' if scope != 'default' else ''

@@ -32,6 +32,28 @@ promote_character = {
 set_stability = -0.15
 
 add_ideas = {
+	volunteer_only
+	civilian_economy
+	limited_exports
+	ADISCORD_economic_system_agrarian
+	ADISCORD_society_type_traditional
+	ADISCORD_information_licensed_press
+	ADISCORD_taxation_light_dues
+	ADISCORD_military_organization_militia_autonomy
+	ADISCORD_welfare_charity_relief
+	ADISCORD_education_informal_instruction
+	ADISCORD_healthcare_private_care
+	ADISCORD_cultural_policy_heritage_protection
+	ADISCORD_industrial_policy_artisan_markets
+	ADISCORD_labor_policy_guild_protections
+	ADISCORD_infrastructure_patchwork_roads
+	ADISCORD_officer_corps_local_seniority
+	ADISCORD_logistics_local_foraging
+	ADISCORD_training_irregular_exercises
+	ADISCORD_internal_security_neighborhood_watch
+	STP_law_drug_prohibition
+	ADISCORD_justice_regular_tribunals
+
 	RUS_national_spirit
 	minister_RUS_Arkady_Sever
 	minister_RUS_Varlam_Oskol
