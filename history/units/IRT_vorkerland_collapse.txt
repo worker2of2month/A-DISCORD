@@ -26,4 +26,39 @@ units = {
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 16516
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 2601
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 11403
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 5 }
+		location = 16636
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 2895
+		division_template = "IRT Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
 }

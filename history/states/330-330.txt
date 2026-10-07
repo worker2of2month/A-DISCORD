@@ -1,11 +1,15 @@
 state = {
 	id = 330
 	name = "STATE_330"
-	manpower = 1
+	manpower = 150000
 	state_category = wasteland
 	history = {
 		owner = EXZ
 		add_core_of = EXZ
+		buildings = {
+			infrastructure = 1
+		}
+		victory_points = { 2714 1 }
 	}
 	provinces = {
 		192 874 1399 1417 2287 2522 2714 2772 3327 4064 5044 5085
@@ -13,5 +17,5 @@ state = {
 		10579 11053 11733 12774
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 0.0
+	local_supplies = 0.5
 }

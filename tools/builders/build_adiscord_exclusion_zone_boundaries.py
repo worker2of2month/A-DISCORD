@@ -55,7 +55,23 @@ CITY_EXCEPTION_STATES = {
 # massifs stay with their original EXZ states.  Cutting access corridors through
 # neighbouring countries for these pockets produces worse borders than leaving
 # the compact geographic exception inside the wasteland.
-GEOGRAPHIC_EXCEPTION_STATES = {51, 206, 329}
+GEOGRAPHIC_EXCEPTION_STATES = {51, 206, 329, 710, 711, 712}
+
+# State 51 was the zone's largest carrier. It is cut into four connected
+# districts grown breadth-first from fixed seed provinces. State 51 keeps the
+# district on the Starolesye border, so the state 461 follow-owner rule and the
+# existing state indexes stay valid.
+ABANDONED_TERRITORY_SEEDS = {
+    51: 4530,
+    710: 1132,
+    711: 399,
+    712: 3126,
+}
+ABANDONED_TERRITORY_FILENAMES = {
+    710: "710-Northern-Waste.txt",
+    711: "711-Western-Waste.txt",
+    712: "712-Southern-Waste.txt",
+}
 
 # State 461 is intentionally admitted to EXZ as a complete mountain/forest
 # carrier state instead of being split a second time along terrain borders.
@@ -182,6 +198,57 @@ def seeded_partition(
         }
         for target in seeds
     }
+
+
+def partition_abandoned_territories(
+    provinces: set[int], adjacency: dict[int, set[int]]
+) -> dict[int, set[int]]:
+    """Grow the state 51 districts from their seeds; ties go to the lower id."""
+    missing = sorted(seed for seed in ABANDONED_TERRITORY_SEEDS.values() if seed not in provinces)
+    if missing:
+        raise RuntimeError(f"abandoned-territory seeds left state 51: {missing}")
+    assignment = {seed: state_id for state_id, seed in ABANDONED_TERRITORY_SEEDS.items()}
+    queue = deque(sorted(assignment, key=lambda province_id: assignment[province_id]))
+    while queue:
+        province_id = queue.popleft()
+        for neighbour in sorted(adjacency[province_id]):
+            if neighbour in provinces and neighbour not in assignment:
+                assignment[neighbour] = assignment[province_id]
+                queue.append(neighbour)
+    if set(assignment) != provinces:
+        raise RuntimeError("abandoned-territory partition left provinces unassigned")
+    return {
+        state_id: {province_id for province_id, owner in assignment.items() if owner == state_id}
+        for state_id in ABANDONED_TERRITORY_SEEDS
+    }
+
+
+def ensure_state_shell(state_id: int) -> None:
+    """Create a minimal EXZ shell; the state-history builder fills its profile."""
+    if sorted(STATE_DIR.glob(f"{state_id}-*.txt")):
+        return
+    shell = (
+        "state={\n"
+        f"\tid={state_id}\n"
+        f"\tname=\"STATE_{state_id}\"\n"
+        "\thistory={\n"
+        "\t\towner = EXZ\n"
+        "\t\tadd_core_of = EXZ\n"
+        "\t\tbuildings = {\n"
+        "\t\t\tinfrastructure = 2\n"
+        "\t\t}\n"
+        "\t}\n"
+        "\tprovinces={\n"
+        "\t}\n"
+        "\tmanpower = 1\n"
+        "\tbuildings_max_level_factor = 1.000\n"
+        "\tstate_category = rural\n"
+        "\tlocal_supplies = 1.5\n"
+        "}\n"
+    )
+    (STATE_DIR / ABANDONED_TERRITORY_FILENAMES[state_id]).write_text(
+        shell, encoding="utf-8", newline="\n"
+    )
 
 
 def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
@@ -315,8 +382,13 @@ def plan_boundaries() -> tuple[dict[int, set[int]], set[int], dict[int, str]]:
         planned[source_state].difference_update(component)
         planned[target_state].update(component)
 
+    planned.update(
+        partition_abandoned_territories(planned[51], adjacency)
+    )
+
     final_owners = {state_id: "EXZ" for state_id in original_exz}
     final_owners.update(NEW_OWNERS)
+    final_owners.update({state_id: "EXZ" for state_id in ABANDONED_TERRITORY_FILENAMES})
 
     expected_union = set().union(*source.values())
     actual_union = set().union(*planned.values())
@@ -426,6 +498,8 @@ def reactor_terrain_output() -> bytes:
 
 def apply() -> None:
     planned, _original_exz, final_owners = plan_boundaries()
+    for state_id in ABANDONED_TERRITORY_FILENAMES:
+        ensure_state_shell(state_id)
     current_owners = load_current_owners()
     for state_id, provinces in sorted(planned.items()):
         path = state_path(state_id)

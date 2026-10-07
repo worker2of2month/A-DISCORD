@@ -1,0 +1,19 @@
+state={
+	id=710
+	name="STATE_710"
+	history={
+		owner = EXZ
+		add_core_of = EXZ
+		buildings = {
+			infrastructure = 2
+		}
+		victory_points = { 3783 1 }
+	}
+	provinces={
+		766 813 1132 3305 3783 6342 6687 8472 9263 11091 11256 11464 11751 12467
+	}
+	manpower = 70000
+	buildings_max_level_factor = 1.000
+	state_category = rural
+	local_supplies = 1.0
+}

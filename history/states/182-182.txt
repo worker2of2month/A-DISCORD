@@ -13,5 +13,6 @@ state={
 		add_core_of = EXZ
 		buildings = {
 		}
+		victory_points = { 11403 1 }
 	}
 }

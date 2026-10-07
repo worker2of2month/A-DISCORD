@@ -25,7 +25,10 @@ from tools.validators import validate_adiscord_new_states as validator
 
 EXPECTED_DIRTY_REPUBLIC_POPULATION = {
     49: 650_000,
-    51: 380_000,
+    51: 140_000,
+    710: 70_000,
+    711: 120_000,
+    712: 130_000,
     125: 120_000,
     152: 650_000,
     153: 300_000,
@@ -152,7 +155,7 @@ class DirtyRepublicPopulationTests(unittest.TestCase):
             set(builder.DIRTY_REPUBLIC_STATE_PROFILES),
             set(EXPECTED_DIRTY_REPUBLIC_POPULATION),
         )
-        self.assertEqual(sum(EXPECTED_DIRTY_REPUBLIC_POPULATION.values()), 11_930_000)
+        self.assertEqual(sum(EXPECTED_DIRTY_REPUBLIC_POPULATION.values()), 12_010_000)
         self.assertEqual(
             builder.DIRTY_REPUBLIC_STATE_PROFILES[125]["population"], 120_000
         )

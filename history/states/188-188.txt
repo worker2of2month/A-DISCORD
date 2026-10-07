@@ -9,9 +9,9 @@ state={
 	state_category = rural
 	local_supplies = 1.0
 	resources = {
-		steel = 100
-		tungsten = 60
-		chromium = 80
+		steel = 35
+		tungsten = 20
+		chromium = 25
 	}
 	history = {
 		owner = EXZ
@@ -19,5 +19,6 @@ state={
 		buildings = {
 			infrastructure = 1
 		}
+		victory_points = { 10415 1 }
 	}
 }

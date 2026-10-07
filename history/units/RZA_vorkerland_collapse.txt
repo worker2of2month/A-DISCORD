@@ -26,4 +26,46 @@ units = {
 		start_experience_factor = 0.10
 		start_equipment_factor = 0.70
 	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 2 }
+		location = 10415
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 3 }
+		location = 9032
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 4 }
+		location = 7593
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 5 }
+		location = 10533
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 6 }
+		location = 4871
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
+	division = {
+		division_name = { is_name_ordered = yes name_order = 7 }
+		location = 10571
+		division_template = "RZA Collapse Militia"
+		start_experience_factor = 0.10
+		start_equipment_factor = 0.70
+	}
 }

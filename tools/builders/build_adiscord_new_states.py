@@ -244,15 +244,16 @@ DIRTY_STATE_RESOURCES = {
     for state_id in (49, 152, 169, 173, 177, 181)
 }
 
-# Recoverable industrial stock surrounds the sealed reactor; contamination
-# still reduces its usable output through the existing state modifier.
+# Only surface scrap around the sealed reactor is worked at the start. The
+# RUS restoration decision (RUS_reactor_works_restore_resources) adds the
+# buried remainder to each state; keep both tables in step.
 REACTOR_STATE_RESOURCES = {
-    176: {"steel": 120, "tungsten": 60, "chromium": 40},
-    177: {"steel": 80, "aluminium": 100, "rare_components": 8, "rare_alloys": 6},
-    187: {"steel": 80, "aluminium": 40, "chromium": 40},
-    188: {"steel": 100, "tungsten": 60, "chromium": 80},
-    189: {"steel": 120, "aluminium": 60, "rare_components": 12, "rare_alloys": 6},
-    192: {"steel": 80, "aluminium": 60, "tungsten": 40, "rare_alloys": 8},
+    176: {"steel": 40, "tungsten": 20, "chromium": 15},
+    177: {"steel": 30, "aluminium": 35, "rare_components": 3, "rare_alloys": 2},
+    187: {"steel": 30, "aluminium": 15, "chromium": 15},
+    188: {"steel": 35, "tungsten": 20, "chromium": 25},
+    189: {"steel": 40, "aluminium": 20, "rare_components": 4, "rare_alloys": 2},
+    192: {"steel": 30, "aluminium": 20, "tungsten": 15, "rare_alloys": 3},
 }
 
 # The four states that will form the local Stelander separatist bloc use the
@@ -591,7 +592,10 @@ AFRELA_STATE_PROFILES = {
 # city. The sealed reactor and EXZ remainder states stay outside this uplift.
 DIRTY_REPUBLIC_STATE_PROFILES = {
     49: {"population": 650_000, "category": "town", "infrastructure": 3, "civilian": 2, "military": 1, "supplies": 2.5},
-    51: {"population": 380_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
+    51: {"population": 140_000, "category": "rural", "infrastructure": 2, "supplies": 1.5},
+    710: {"population": 70_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
+    711: {"population": 120_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
+    712: {"population": 130_000, "category": "rural", "infrastructure": 2, "supplies": 1.0},
     155: {"population": 300_000, "category": "rural", "infrastructure": 2, "civilian": 1, "supplies": 1.5},
     176: {"population": 220_000, "category": "rural", "infrastructure": 1, "supplies": 1.0},
     187: {"population": 200_000, "category": "rural", "infrastructure": 0, "supplies": 0.5},
@@ -771,12 +775,122 @@ NAM_VICTORY_POINT_NAMES = {
     2038: "Южная гавань",
 }
 
+# Every playable dirty-zone state is a war objective of its republic. Capitals
+# carry ten points, other states one or two by population, and existing urban
+# VPs keep their values. These contaminated-terrain settlements are approved
+# VP provinces even though their terrain is not urban.
+DIRTY_ZONE_VICTORY_POINTS = {
+    49: ((16639, 10), (16546, 5)),
+    51: ((12219, 2),),
+    155: ((9785, 2),),
+    176: ((774, 2),),
+    187: ((4899, 2),),
+    191: ((12550, 2),),
+    710: ((3783, 1),),
+    711: ((7452, 1),),
+    712: ((3126, 1),),
+    177: ((2952, 10),),
+    188: ((10415, 1),),
+    192: ((9032, 1),),
+    208: ((6180, 1),),
+    213: ((7593, 2),),
+    214: ((10888, 1),),
+    215: ((10533, 1),),
+    216: ((12428, 1),),
+    217: ((4871, 1),),
+    220: ((10571, 2),),
+    152: ((9806, 10),),
+    153: ((5534, 2),),
+    154: ((12867, 2),),
+    190: ((5215, 1),),
+    219: ((2955, 1),),
+    221: ((9786, 1),),
+    222: ((12744, 2),),
+    224: ((9846, 2),),
+    167: ((3481, 2),),
+    169: ((10693, 10),),
+    185: ((3130, 1),),
+    180: ((2601, 1),),
+    181: ((2226, 10), (16518, 1)),
+    182: ((11403, 1),),
+    183: ((8687, 1),),
+    206: ((726, 1),),
+    207: ((2895, 1),),
+    330: ((2714, 1),),
+    165: ((4436, 1),),
+    166: ((3331, 1),),
+    172: ((4767, 1),),
+    173: ((6015, 10),),
+    205: ((1193, 1),),
+    209: ((12863, 1),),
+    210: ((2137, 1),),
+    212: ((2427, 1),),
+}
+
+DIRTY_ZONE_VICTORY_POINT_NAMES = {
+    12219: "Пустоград",
+    9785: "Ольшанка",
+    774: "Северный пост",
+    4899: "Серый Брод",
+    12550: "Глухово",
+    3783: "Кальтен",
+    7452: "Вешки",
+    3126: "Тиховодье",
+    10415: "Западный пост",
+    9032: "Южный пост",
+    6180: "Ржавец",
+    7593: "Литейный",
+    10888: "Пепелище",
+    10533: "Равнинск",
+    12428: "Шлаковка",
+    4871: "Мёртвый Цех",
+    10571: "Хольм",
+    5534: "Камышин",
+    12867: "Заливное",
+    5215: "Низовье",
+    2955: "Бродок",
+    9786: "Ветлуга",
+    12744: "Осока",
+    9846: "Луговина",
+    3481: "Восточный пост",
+    3130: "Крайний",
+    2601: "Ирмень",
+    11403: "Сторожевой",
+    8687: "Межевое",
+    726: "Холмогорье",
+    2895: "Дальний Ирим",
+    2714: "Кордон",
+    4436: "Южный Брод",
+    3331: "Каменка",
+    4767: "Засека",
+    1193: "Перевоз",
+    12863: "Горный пост",
+    2137: "Сухобалка",
+    2427: "Коридорный",
+}
+
+# Former EXZ remainder carriers keep a small census; the impassable mountain
+# shells 50 and 233 stay closed to movement.
+EXZ_REMAINDER_STATE_PROFILES = {
+    50: {"population": 15_000, "category": "wasteland", "infrastructure": 0, "supplies": 0.0},
+    233: {"population": 15_000, "category": "wasteland", "infrastructure": 0, "supplies": 0.0},
+    329: {"population": 120_000, "category": "wasteland", "infrastructure": 1, "supplies": 0.5},
+    186: {"population": 180_000, "category": "town", "infrastructure": 2, "supplies": 1.0},
+    170: {"population": 160_000, "category": "town", "infrastructure": 2, "supplies": 1.0},
+    330: {"population": 150_000, "category": "wasteland", "infrastructure": 1, "supplies": 0.5},
+}
+
+DIRTY_ZONE_STATE_IDS = frozenset(
+    set(DIRTY_REPUBLIC_STATE_PROFILES) | set(EXZ_REMAINDER_STATE_PROFILES)
+)
+
 GENERATED_LEGACY_VICTORY_POINTS = {
     **VORKERLAND_LEGACY_VICTORY_POINTS,
     **AFRELA_LEGACY_VICTORY_POINTS,
     **NAM_LEGACY_VICTORY_POINTS,
     **IVANLAND_OVERHAUL_VICTORY_POINTS,
     **SETTLEMENT_CLUSTER_VICTORY_POINTS,
+    **DIRTY_ZONE_VICTORY_POINTS,
 }
 
 IVANLAND_VICTORY_POINT_NAMES = {
@@ -815,6 +929,7 @@ GENERATED_VICTORY_POINT_NAMES = {
     **IVANLAND_VICTORY_POINT_NAMES,
     **SETTLEMENT_CLUSTER_VICTORY_POINT_NAMES,
     **VORKERLAND_THEATRE_VP_NAME_OVERRIDES,
+    **DIRTY_ZONE_VICTORY_POINT_NAMES,
     11: "$STATE_15$",
     4: "$STATE_19$",
     30: "$STATE_83$",
@@ -858,6 +973,9 @@ GENERATED_STATE_NAMES = {
     706: "Кейзанский округ",
     707: "Шахрабадский округ",
     708: "Вейрский округ",
+    710: "Северная пустошь",
+    711: "Западная пустошь",
+    712: "Южная пустошь",
 }
 
 COASTAL_CITY_POINTS = {
@@ -904,6 +1022,7 @@ LEGACY_STATE_PROFILES = {
     **IVANLAND_STATE_PROFILES,
     **VORKERLAND_INITIAL_MAP_LEGACY_PROFILES,
     **DIRTY_REPUBLIC_STATE_PROFILES,
+    **EXZ_REMAINDER_STATE_PROFILES,
     **STELANDER_REGIONAL_PROFILES,
     # Afrela owns 113-114, which were also covered by the broad 106-124
     # theatre audit. Country-specific profiles intentionally take precedence.
@@ -913,7 +1032,7 @@ LEGACY_STATE_PROFILES = {
 # Sealed landmarks remain physically impassable even when their surrounding
 # legacy-state metadata is refreshed. State 125 is the reactor exclusion zone;
 # RZA uses state 177, not the sealed reactor site, as its capital.
-IMPASSABLE_LEGACY_STATE_IDS = frozenset({40, 125})
+IMPASSABLE_LEGACY_STATE_IDS = frozenset({40, 50, 125, 233})
 
 # These dense legacy states already contain other slot-sharing buildings.  Their
 # factory values are exact budgets, not minima: retaining higher historical
@@ -2209,6 +2328,7 @@ def main() -> int:
     actions.add_argument("--apply-val-resources", action="store_true", help="apply the Kefreyt homeland resource manifest")
     actions.add_argument("--check-val-resources", action="store_true", help="check the Kefreyt homeland resource manifest")
     actions.add_argument("--apply-reactor-resources", action="store_true", help="apply only the reactor perimeter resource manifest")
+    actions.add_argument("--apply-dirty-zone", action="store_true", help="apply dirty-zone state profiles, VPs and their Russian names")
     actions.add_argument("--check-reactor-resources", action="store_true", help="check the reactor perimeter resource manifest")
     actions.add_argument("--check-coastal-cities", action="store_true")
     actions.add_argument("--check-shahrabad-population", action="store_true")
@@ -2282,6 +2402,12 @@ def main() -> int:
     if args.check_ivn_overhaul:
         validate_ivanland_split_inputs()
         print("Ivanland split inputs match the reviewed province manifest.")
+        return 0
+    if args.apply_dirty_zone:
+        apply_legacy_state_profiles(set(DIRTY_ZONE_STATE_IDS))
+        apply_generated_victory_point_localisation()
+        apply_generated_state_name_localisation()
+        print(f"Applied {len(DIRTY_ZONE_STATE_IDS)} dirty-zone state profiles and VP names.")
         return 0
     if args.apply_legacy_state:
         state_ids = set(args.apply_legacy_state)

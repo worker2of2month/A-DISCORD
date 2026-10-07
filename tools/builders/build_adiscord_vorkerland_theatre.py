@@ -36,7 +36,7 @@ KHAN_SUPPLY_HUBS = (16531, 16639, 7445)
 # Forward depots use existing rail; capturing the corridor is still required.
 KHAN_CAMPAIGN_SUPPLY_HUB_STATES = {
     # SLA: western front, southern approach and the northern rail corridor.
-    5032: 51,
+    5032: 712,
     12219: 51,
     16630: 329,
     # RZA.
@@ -111,8 +111,37 @@ KHAN_CAMPAIGN_RAIL_UPGRADES = (
     (2, (2741, 7650, 2743, 12231, 8535, 6669, 10977, 8259, 9031, 11334)),
     (2, (2741, 5194, 6220, 6652, 10726, 8655, 11688, 10888, 5210)),
 )
+# Level-1 feeders join every dirty-zone state that had no railway, or lay far
+# from one, to the nearest existing line. Each route stays inside zone states
+# and runs between adjacent provinces from the junction to the state's VP.
+DIRTY_ZONE_FEEDER_RAILS = (
+    (1, (650, 3165, 12727, 9806)),  # state 152
+    (1, (12727, 607, 3574, 5534)),  # state 153
+    (1, (5534, 3217, 3781, 12867)),  # state 154
+    (1, (1707, 11215, 12744)),  # state 222
+    (1, (12867, 11199, 9785)),  # state 155
+    (1, (12219, 6036, 1481, 9519, 813, 1132, 3783)),  # state 710
+    (1, (9626, 7666, 7448, 3542, 7452)),  # state 711
+    (1, (1112, 9740, 4513, 10415)),  # state 188
+    (1, (2743, 5922, 10533)),  # state 215
+    (1, (12231, 11099, 4945, 12428)),  # state 216
+    (1, (6669, 2370, 16528)),  # state 204
+    (1, (12581, 7409, 1193)),  # state 205
+    (1, (10533, 9021, 12863)),  # state 209
+    (1, (12863, 2838, 2137)),  # state 210
+    (1, (2137, 7177, 2958, 2427)),  # state 212
+    (1, (6151, 8687)),  # state 183
+    (1, (12428, 599, 726)),  # state 206
+    (1, (874, 2522, 2714)),  # state 330
+    (1, (8687, 2617, 3130)),  # state 185
+)
 VORKERLAND_SUPPLY_HUB_STATES = {
     **KHAN_CAMPAIGN_SUPPLY_HUB_STATES,
+    2427: 212,
+    3783: 710,
+    7452: 711,
+    9806: 152,
+    10533: 215,
     3728: 187,
     5637: 191,
     5780: 189,
@@ -187,6 +216,10 @@ def update_source(source: str) -> str:
             render_khan_campaign_rail(level, provinces)
             for level, provinces in KHAN_CAMPAIGN_RAIL_UPGRADES
         ),
+        *(
+            render_rail_line(level, provinces)
+            for level, provinces in DIRTY_ZONE_FEEDER_RAILS
+        ),
     ]
     managed_routes = {_rail_route(line): line for line in managed}
     seen = set()
@@ -244,7 +277,7 @@ def validate() -> list[str]:
     for marker in RETIRED_MARKERS:
         if marker in source:
             issues.append("map/railways.txt must remain numeric-only")
-    for rail_level, rail_route in KHAN_CAMPAIGN_RAIL_UPGRADES:
+    for rail_level, rail_route in (*KHAN_CAMPAIGN_RAIL_UPGRADES, *DIRTY_ZONE_FEEDER_RAILS):
         expected_rail = render_khan_campaign_rail(rail_level, rail_route)
         if source.splitlines().count(expected_rail) != 1:
             issues.append(

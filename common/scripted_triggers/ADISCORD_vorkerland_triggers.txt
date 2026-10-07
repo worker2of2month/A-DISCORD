@@ -2352,6 +2352,9 @@ ADISCORD_vorkerland_rus_holds_sla_playable = {
 	controls_state = 176
 	controls_state = 187
 	controls_state = 191
+	controls_state = 710
+	controls_state = 711
+	controls_state = 712
 }
 
 ADISCORD_vorkerland_rus_holds_rza_playable = {
@@ -2702,8 +2705,24 @@ RUS_bunker_resupply_affordable = {
 
 RUS_bunker_resupply_available = {
 	RUS_bunker_operational = yes
-	check_variable = { var = RUS_bunker_food_space value = 40 compare = greater_than_or_equals }
+	RUS_bunker_convoy_fits = yes
 	RUS_bunker_resupply_affordable = yes
+}
+
+# The freight reserve enlarges the convoy; storage must hold the whole delivery.
+RUS_bunker_convoy_fits = {
+	OR = {
+		AND = {
+			NOT = { has_completed_focus = RUS_strategic_freight_reserve }
+			check_variable = { var = RUS_bunker_food_space value = 40 compare = greater_than_or_equals }
+		}
+		check_variable = { var = RUS_bunker_food_space value = 60 compare = greater_than_or_equals }
+	}
+}
+
+RUS_bunker_food_sale_available = {
+	RUS_bunker_operational = yes
+	check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals }
 }
 
 
@@ -2913,6 +2932,34 @@ RUS_bop_mediation_available = {
 RUS_bop_mediation_affordable = {
 	NOT = { has_political_power < 40 }
 	check_variable = { var = ADISCORD_economy_treasury value = 200 compare = greater_than_or_equals }
+}
+
+# --- rus_reactor_belt ---
+# STATE scope.
+RUS_reactor_works_target_valid = {
+	is_owned_by = RUS
+	is_controlled_by = RUS
+	NOT = { has_state_flag = RUS_reactor_works_restored }
+}
+
+RUS_reactor_works_idle = {
+	NOT = { has_variable = RUS_reactor_works_deposit }
+}
+
+RUS_reactor_works_affordable = {
+	NOT = { has_political_power < 50 }
+	check_variable = { var = ADISCORD_economy_treasury value = 400 compare = greater_than_or_equals }
+}
+
+RUS_reactor_sortie_affordable = {
+	NOT = { has_political_power < 25 }
+	OR = {
+		AND = {
+			has_completed_focus = RUS_reactor_decontamination
+			NOT = { has_manpower < 500 }
+		}
+		NOT = { has_manpower < 1000 }
+	}
 }
 
 # --- rus_experimental_laboratories ---

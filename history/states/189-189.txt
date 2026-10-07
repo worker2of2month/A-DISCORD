@@ -9,10 +9,10 @@ state={
 	state_category = rural
 	local_supplies = 1.0
 	resources = {
-		steel = 120
-		aluminium = 60
-		rare_components = 12
-		rare_alloys = 6
+		steel = 40
+		aluminium = 20
+		rare_components = 4
+		rare_alloys = 2
 	}
 	history = {
 		owner = EXZ

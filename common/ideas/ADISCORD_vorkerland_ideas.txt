@@ -2820,6 +2820,26 @@ ideas = {
 			}
 		}
 
+		# Successor administrations of the opened zone hold scattered posts
+		# rather than a defended state; losing them breaks the republic early.
+		ADISCORD_vorkerland_zone_fragile_administration = {
+			picture = generic_disjointed_gov
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				surrender_limit = -0.25
+			}
+		}
+
+		RUS_repair_depots_spirit = {
+			picture = generic_production_bonus
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				production_factory_max_efficiency_factor = 0.05
+			}
+		}
+
 		RUS_open_city_policy = {
 			picture = generic_central_management
 			allowed = { always = no }

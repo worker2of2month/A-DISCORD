@@ -86,13 +86,16 @@ CONTAMINATED_STATES = {
     221,
     222,
     224,
+    710,
+    711,
+    712,
 }
 
 # State 168 remains part of the ERT collapse partition, but starts under VAL.
 DIRTY_INITIAL_OWNER_OVERRIDES = {168: "VAL"}
 
 DIRTY_GROUPS = {
-    "SLA": (49, 51, 155, 176, 187, 191),
+    "SLA": (49, 51, 155, 176, 187, 191, 710, 711, 712),
     "RZA": (125, 177, 188, 192, 208, 213, 214, 215, 216, 217, 220),
     "MLR": (152, 153, 154, 189, 190, 219, 221, 222, 224),
     "ERT": (167, 168, 169, 171, 184, 185, 203),

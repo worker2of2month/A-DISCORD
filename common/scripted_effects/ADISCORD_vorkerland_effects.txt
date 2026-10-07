@@ -576,6 +576,9 @@ ADISCORD_vorkerland_apply_dirty_modifiers = {
 	221 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 	222 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 	224 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	710 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	711 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
+	712 = { ADISCORD_vorkerland_apply_dirty_state_modifier = yes }
 }
 
 ADISCORD_vorkerland_apply_dirty_state_modifier = {
@@ -601,8 +604,12 @@ ADISCORD_vorkerland_setup_sla = {
 	233 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	329 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	461 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	710 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	711 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
+	712 = { add_core_of = SLA set_state_owner_to = SLA set_state_controller_to = SLA }
 	log = "[ADISCORD Vorkerland] SLA state ownership assigned"
 	SLA = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 49 }
 		build_railway = { level = 2 fallback = yes start_state = 49 target_state = 191 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -641,6 +648,7 @@ ADISCORD_vorkerland_setup_rza = {
 	220 = { add_core_of = RZA set_state_owner_to = RZA set_state_controller_to = RZA }
 	log = "[ADISCORD Vorkerland] RZA state ownership assigned"
 	RZA = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 177 }
 		build_railway = { level = 2 fallback = yes start_state = 177 target_state = 220 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -676,6 +684,7 @@ ADISCORD_vorkerland_setup_mlr = {
 	224 = { add_core_of = MLR set_state_owner_to = MLR set_state_controller_to = MLR }
 	log = "[ADISCORD Vorkerland] MLR state ownership assigned"
 	MLR = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 152 }
 		build_railway = { level = 2 fallback = yes start_state = 152 target_state = 189 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -710,6 +719,7 @@ ADISCORD_vorkerland_setup_ert = {
 	203 = { add_core_of = ERT set_state_owner_to = ERT set_state_controller_to = ERT }
 	log = "[ADISCORD Vorkerland] ERT state ownership assigned"
 	ERT = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 169 }
 		build_railway = { level = 2 fallback = yes start_state = 169 target_state = 171 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -745,6 +755,7 @@ ADISCORD_vorkerland_setup_irt = {
 	330 = { add_core_of = IRT set_state_owner_to = IRT set_state_controller_to = IRT }
 	log = "[ADISCORD Vorkerland] IRT state ownership assigned"
 	IRT = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 181 }
 		build_railway = { level = 2 fallback = yes start_state = 181 target_state = 178 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -781,6 +792,7 @@ ADISCORD_vorkerland_setup_sca = {
 	212 = { add_core_of = SCA set_state_owner_to = SCA set_state_controller_to = SCA }
 	log = "[ADISCORD Vorkerland] SCA state ownership assigned"
 	SCA = {
+		add_ideas = ADISCORD_vorkerland_zone_fragile_administration
 		set_capital = { state = 173 }
 		build_railway = { level = 2 fallback = yes start_state = 173 target_state = 211 }
 		ADISCORD_grant_2150_technology_baseline = yes
@@ -10502,6 +10514,9 @@ ADISCORD_vorkerland_rus_core_dirty_sla = {
 	233 = { add_core_of = RUS }
 	329 = { add_core_of = RUS }
 	461 = { add_core_of = RUS }
+	710 = { add_core_of = RUS add_claim_by = RUS }
+	711 = { add_core_of = RUS add_claim_by = RUS }
+	712 = { add_core_of = RUS add_claim_by = RUS }
 }
 
 ADISCORD_vorkerland_rus_core_dirty_rza = {
@@ -11822,6 +11837,7 @@ RUS_bunker_refresh = {
 	set_variable = { var = RUS_bunker_stability_factor value = 0 }
 	set_variable = { var = RUS_bunker_surrender_limit value = 0 }
 	set_variable = { var = RUS_bunker_training_time_army_factor value = 0 }
+	set_variable = { var = RUS_bunker_reinforce_rate value = 0 }
 	set_variable = { var = RUS_bunker_surrender_limit value = RUS_bunker_depth }
 	multiply_variable = { var = RUS_bunker_surrender_limit value = 0.01 }
 	if = {
@@ -12041,16 +12057,40 @@ RUS_bunker_refresh = {
 	subtract_from_variable = { var = RUS_bunker_food_balance value = RUS_bunker_food_use }
 	set_variable = { var = RUS_bunker_food_space value = RUS_bunker_food_capacity }
 	subtract_from_variable = { var = RUS_bunker_food_space value = RUS_bunker_food }
+	set_variable = { var = RUS_bunker_food_fed_line value = RUS_bunker_food_capacity }
+	multiply_variable = { var = RUS_bunker_food_fed_line value = 0.75 }
+	RUS_bunker_classify_food = yes
+	set_variable = { var = RUS_bunker_food_state value = RUS_bunker_food_state_now }
 	if = {
-		limit = {
-			check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than }
-			check_variable = { var = RUS_bunker_food value = 0 compare = equals }
-		}
+		limit = { check_variable = { var = RUS_bunker_food_state value = 0 compare = equals } }
 		add_to_variable = { var = RUS_bunker_army_org_factor value = -0.05 }
 		add_to_variable = { var = RUS_bunker_stability_factor value = -0.05 }
 	}
+	else_if = {
+		limit = { check_variable = { var = RUS_bunker_food_state value = 2 compare = equals } }
+		add_to_variable = { var = RUS_bunker_stability_factor value = 0.05 }
+		add_to_variable = { var = RUS_bunker_reinforce_rate value = 0.05 }
+	}
 	force_update_dynamic_modifier = yes
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# Output: temp RUS_bunker_food_state_now. 0 = hungry fitted rooms,
+# 1 = ordinary rations, 2 = fed (stock at least 75% of capacity). Rooms must be
+# fitted for either extreme; an empty complex has nobody to feed.
+RUS_bunker_classify_food = {
+	set_temp_variable = { var = RUS_bunker_food_state_now value = 1 }
+	if = {
+		limit = { check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than } }
+		if = {
+			limit = { check_variable = { var = RUS_bunker_food value = 0 compare = equals } }
+			set_temp_variable = { var = RUS_bunker_food_state_now value = 0 }
+		}
+		else_if = {
+			limit = { check_variable = { var = RUS_bunker_food value = RUS_bunker_food_fed_line compare = greater_than_or_equals } }
+			set_temp_variable = { var = RUS_bunker_food_state_now value = 2 }
+		}
+	}
 }
 
 RUS_black_army_refresh = {
@@ -12175,9 +12215,15 @@ RUS_campaign_shutdown = {
 	RUS_public_campaigns_shutdown = yes
 	RUS_bunker_refund = yes
 	RUS_lab_refund = yes
+	RUS_reactor_works_refund = yes
+	if = {
+		limit = { has_variable = RUS_reactor_sortie_receipt }
+		clear_variable = RUS_reactor_sortie_receipt
+	}
 	remove_ideas = RUS_council_mandate
 	remove_ideas = RUS_chancery_mandate
 	remove_ideas = RUS_paid_administration
+	remove_ideas = RUS_repair_depots_spirit
 	remove_ideas = RUS_open_city_policy
 	remove_ideas = RUS_sealed_throne_policy
 	remove_ideas = RUS_defensive_preparation_spirit
@@ -12198,6 +12244,247 @@ RUS_campaign_shutdown = {
 		remove_dynamic_modifier = { modifier = RUS_faction_support }
 	}
 	ADISCORD_economy_mark_dirty = yes
+}
+
+# --- rus_reactor_belt ---
+# One country deposit covers a restoration from payment to settlement; the
+# target keeps RUS_reactor_works_in_progress for the same span, so a late
+# callback cannot restore or refund twice.
+RUS_reactor_works_begin = {
+	if = {
+		limit = {
+			RUS_khan_governing = yes
+			RUS_reactor_works_idle = yes
+			RUS_reactor_works_affordable = yes
+			FROM = { RUS_reactor_works_target_valid = yes }
+		}
+		set_variable = { var = RUS_reactor_works_deposit value = 400 }
+		add_political_power = -50
+		subtract_from_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 400 }
+		FROM = { set_state_flag = RUS_reactor_works_in_progress }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+RUS_reactor_works_finish = {
+	if = {
+		limit = { has_variable = RUS_reactor_works_deposit }
+		176 = { RUS_reactor_works_finish_state = yes }
+		177 = { RUS_reactor_works_finish_state = yes }
+		187 = { RUS_reactor_works_finish_state = yes }
+		188 = { RUS_reactor_works_finish_state = yes }
+		189 = { RUS_reactor_works_finish_state = yes }
+		192 = { RUS_reactor_works_finish_state = yes }
+	}
+}
+
+# STATE scope. Ownership is checked again at delivery.
+RUS_reactor_works_finish_state = {
+	if = {
+		limit = { has_state_flag = RUS_reactor_works_in_progress }
+		if = {
+			limit = {
+				RUS_reactor_works_target_valid = yes
+				RUS = { RUS_khan_governing = yes }
+			}
+			clr_state_flag = RUS_reactor_works_in_progress
+			RUS = {
+				clear_variable = RUS_reactor_works_deposit
+				ADISCORD_economy_mark_dirty = yes
+			}
+			set_state_flag = RUS_reactor_works_restored
+			RUS_reactor_works_restore_resources = yes
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			if = {
+				limit = { RUS = { has_completed_focus = RUS_reactor_foundries } }
+				RUS_reactor_foundry_expand = yes
+			}
+		}
+		else = {
+			RUS = { RUS_reactor_works_refund = yes }
+		}
+	}
+}
+
+RUS_reactor_works_refund = {
+	if = {
+		limit = { has_variable = RUS_reactor_works_deposit }
+		clear_variable = RUS_reactor_works_deposit
+		176 = { clr_state_flag = RUS_reactor_works_in_progress }
+		177 = { clr_state_flag = RUS_reactor_works_in_progress }
+		187 = { clr_state_flag = RUS_reactor_works_in_progress }
+		188 = { clr_state_flag = RUS_reactor_works_in_progress }
+		189 = { clr_state_flag = RUS_reactor_works_in_progress }
+		192 = { clr_state_flag = RUS_reactor_works_in_progress }
+		add_political_power = 50
+		add_to_variable = { var = ADISCORD_economy_treasury value = 400 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 400 }
+		ADISCORD_economy_mark_dirty = yes
+	}
+}
+
+# STATE scope. Adds the deposits that the state history leaves buried; the
+# map builder's REACTOR_STATE_RESOURCES holds the surface share.
+RUS_reactor_works_restore_resources = {
+	if = {
+		limit = { state = 176 }
+		add_resource = {
+			type = steel
+			amount = 80
+		}
+		add_resource = {
+			type = tungsten
+			amount = 40
+		}
+		add_resource = {
+			type = chromium
+			amount = 25
+		}
+	}
+	else_if = {
+		limit = { state = 177 }
+		add_resource = {
+			type = steel
+			amount = 50
+		}
+		add_resource = {
+			type = aluminium
+			amount = 65
+		}
+		add_resource = {
+			type = rare_components
+			amount = 5
+		}
+		add_resource = {
+			type = rare_alloys
+			amount = 4
+		}
+	}
+	else_if = {
+		limit = { state = 187 }
+		add_resource = {
+			type = steel
+			amount = 50
+		}
+		add_resource = {
+			type = aluminium
+			amount = 25
+		}
+		add_resource = {
+			type = chromium
+			amount = 25
+		}
+	}
+	else_if = {
+		limit = { state = 188 }
+		add_resource = {
+			type = steel
+			amount = 65
+		}
+		add_resource = {
+			type = tungsten
+			amount = 40
+		}
+		add_resource = {
+			type = chromium
+			amount = 55
+		}
+	}
+	else_if = {
+		limit = { state = 189 }
+		add_resource = {
+			type = steel
+			amount = 80
+		}
+		add_resource = {
+			type = aluminium
+			amount = 40
+		}
+		add_resource = {
+			type = rare_components
+			amount = 8
+		}
+		add_resource = {
+			type = rare_alloys
+			amount = 4
+		}
+	}
+	else_if = {
+		limit = { state = 192 }
+		add_resource = {
+			type = steel
+			amount = 50
+		}
+		add_resource = {
+			type = aluminium
+			amount = 40
+		}
+		add_resource = {
+			type = tungsten
+			amount = 25
+		}
+		add_resource = {
+			type = rare_alloys
+			amount = 5
+		}
+	}
+}
+
+# STATE scope.
+RUS_reactor_foundry_expand = {
+	add_extra_state_shared_building_slots = 1
+	add_building_construction = {
+		type = arms_factory
+		level = 1
+		instant_build = yes
+	}
+}
+
+# The crew is lost to radiation when the sortie departs; the receipt only
+# guards the loot.
+RUS_reactor_sortie_begin = {
+	if = {
+		limit = {
+			RUS_khan_governing = yes
+			RUS_lab_reactor_access = yes
+			RUS_reactor_sortie_affordable = yes
+		}
+		set_variable = { var = RUS_reactor_sortie_receipt value = 1 }
+		add_political_power = -25
+		if = {
+			limit = { has_completed_focus = RUS_reactor_decontamination }
+			add_manpower = -500
+		}
+		else = {
+			add_manpower = -1000
+		}
+	}
+}
+
+RUS_reactor_sortie_finish = {
+	if = {
+		limit = { has_variable = RUS_reactor_sortie_receipt }
+		clear_variable = RUS_reactor_sortie_receipt
+		if = {
+			limit = { has_completed_focus = RUS_reactor_decontamination }
+			add_to_variable = { var = ADISCORD_economy_treasury value = 250 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 250 }
+		}
+		else = {
+			add_to_variable = { var = ADISCORD_economy_treasury value = 150 }
+			add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 150 }
+		}
+		set_temp_variable = { var = RUS_black_army_support_delta value = 0 }
+		set_temp_variable = { var = RUS_scientists_support_delta value = 0.05 }
+		RUS_faction_support_change = yes
+		ADISCORD_economy_mark_dirty = yes
+	}
 }
 
 # --- rus_experimental_laboratories ---
@@ -12550,7 +12837,6 @@ RUS_bunker_weekly_supply = {
 				limit = { NOT = { has_dynamic_modifier = { modifier = RUS_bunker_complex } } }
 				RUS_bunker_refresh = yes
 			}
-			set_temp_variable = { var = RUS_bunker_food_before_tick value = RUS_bunker_food }
 			add_to_variable = { var = RUS_bunker_food value = RUS_bunker_food_balance }
 			clamp_variable = { var = RUS_bunker_food min = 0 max = 100000 }
 			if = {
@@ -12559,21 +12845,10 @@ RUS_bunker_weekly_supply = {
 			}
 			set_variable = { var = RUS_bunker_food_space value = RUS_bunker_food_capacity }
 			subtract_from_variable = { var = RUS_bunker_food_space value = RUS_bunker_food }
-			# Stock changes affect national bonuses only when fitted rooms enter or leave hunger.
+			# Stock changes affect national bonuses only when the ration state changes.
+			RUS_bunker_classify_food = yes
 			if = {
-				limit = {
-					check_variable = { var = RUS_bunker_fitted value = 0 compare = greater_than }
-					OR = {
-						AND = {
-							check_variable = { var = RUS_bunker_food_before_tick value = 0 compare = equals }
-							check_variable = { var = RUS_bunker_food value = 0 compare = greater_than }
-						}
-						AND = {
-							check_variable = { var = RUS_bunker_food_before_tick value = 0 compare = greater_than }
-							check_variable = { var = RUS_bunker_food value = 0 compare = equals }
-						}
-					}
-				}
+				limit = { NOT = { check_variable = { var = RUS_bunker_food_state value = RUS_bunker_food_state_now compare = equals } } }
 				RUS_bunker_refresh = yes
 			}
 			if = {
@@ -12612,7 +12887,23 @@ RUS_bunker_resupply = {
 		add_political_power = -15
 		subtract_from_variable = { var = ADISCORD_economy_treasury value = 100 }
 		add_to_variable = { var = ADISCORD_economy_current_month_action_costs value = 100 }
-		add_to_variable = { var = RUS_bunker_food value = 40 }
+		if = {
+			limit = { has_completed_focus = RUS_strategic_freight_reserve }
+			add_to_variable = { var = RUS_bunker_food value = 60 }
+		}
+		else = {
+			add_to_variable = { var = RUS_bunker_food value = 40 }
+		}
+		RUS_bunker_refresh = yes
+	}
+}
+
+RUS_bunker_food_sale = {
+	if = {
+		limit = { RUS_bunker_food_sale_available = yes }
+		subtract_from_variable = { var = RUS_bunker_food value = 40 }
+		add_to_variable = { var = ADISCORD_economy_treasury value = 70 }
+		add_to_variable = { var = ADISCORD_economy_current_month_action_income value = 70 }
 		RUS_bunker_refresh = yes
 	}
 }

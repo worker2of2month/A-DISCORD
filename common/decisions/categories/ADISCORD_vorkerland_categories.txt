@@ -217,6 +217,15 @@ RUS_state_balance_category = {
 	visible_when_empty = yes
 }
 
+# --- rus_reactor_belt ---
+RUS_reactor_belt_category = {
+	icon = generic_industry
+	allowed = { tag = RUS }
+	visible = { has_completed_focus = RUS_reactor_belt_inventory }
+	visible_when_empty = yes
+	priority = 22
+}
+
 # --- rus_experimental_laboratories ---
 RUS_experimental_labs_category = {
 	icon = ADISCORD_science

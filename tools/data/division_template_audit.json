@@ -13550,7 +13550,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 5
     },
     {
       "key": "eyr_vorkerland_collapse_oob_eyr_collapse_militia_xp_0_1_eq_0_7",
@@ -13654,7 +13654,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 6
     },
     {
       "key": "iia_oob_island_garrison_xp_0_12_eq_0_72",
@@ -13854,7 +13854,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 6
     },
     {
       "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_0_9",
@@ -14292,7 +14292,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 7
     },
     {
       "key": "sca_vorkerland_collapse_oob_sca_collapse_militia_xp_0_1_eq_0_7",
@@ -14302,7 +14302,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 6
     },
     {
       "key": "sdr_oob_dry_river_patrol_xp_0_2_eq_0_5",
@@ -14354,7 +14354,7 @@
       "legacy_names": [],
       "start_experience_factor": 0.1,
       "start_equipment_factor": 0.7,
-      "count": 1
+      "count": 7
     },
     {
       "key": "slf_nam_resource_war_oob_svetlogorsk_insurgent_corps_xp_0_3_eq_0_9",

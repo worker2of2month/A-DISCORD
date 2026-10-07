@@ -395,7 +395,7 @@ class RusLastEmpireTests(unittest.TestCase):
         self.assertIn("ADISCORD_vorkerland_iba_plan", plans)
 
 
-SLA_STATES = (49, 51, 155, 176, 187, 191)
+SLA_STATES = (49, 51, 155, 176, 187, 191, 710, 711, 712)
 
 
 class RusDirtyCampaignRoutes(unittest.TestCase):

@@ -1667,6 +1667,15 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetRUSReactorSortieCrew
+	text = {
+		trigger = { has_completed_focus = RUS_reactor_decontamination }
+		localization_key = RUS_reactor_sortie_crew_decontaminated
+	}
+	text = { localization_key = RUS_reactor_sortie_crew_full }
+}
+
+defined_text = {
 	name = GetRUSBunkerRations
 	text = {
 		trigger = {
@@ -1680,6 +1689,12 @@ defined_text = {
 			check_variable = { var = RUS_bunker_food value = 0 compare = equals }
 		}
 		localization_key = RUS_bunker_rations_empty
+	}
+	text = {
+		trigger = {
+			check_variable = { var = RUS_bunker_food_state value = 2 compare = equals }
+		}
+		localization_key = RUS_bunker_rations_fed
 	}
 	text = { localization_key = RUS_bunker_rations_ok }
 }

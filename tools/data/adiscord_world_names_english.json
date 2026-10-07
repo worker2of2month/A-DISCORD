@@ -2731,6 +2731,18 @@
         "STATE_708": {
           "russian": "Вейрский округ",
           "english": "Veyr District"
+        },
+        "STATE_710": {
+          "russian": "Северная пустошь",
+          "english": "Northern Waste"
+        },
+        "STATE_711": {
+          "russian": "Западная пустошь",
+          "english": "Western Waste"
+        },
+        "STATE_712": {
+          "russian": "Южная пустошь",
+          "english": "Southern Waste"
         }
       }
     },
@@ -3099,6 +3111,162 @@
         "VICTORY_POINTS_16802": {
           "russian": "Восточный Стеланд",
           "english": "East Steland"
+        },
+        "VICTORY_POINTS_12219": {
+          "russian": "Пустоград",
+          "english": "Pustograd"
+        },
+        "VICTORY_POINTS_9785": {
+          "russian": "Ольшанка",
+          "english": "Olshanka"
+        },
+        "VICTORY_POINTS_774": {
+          "russian": "Северный пост",
+          "english": "Northern Post"
+        },
+        "VICTORY_POINTS_4899": {
+          "russian": "Серый Брод",
+          "english": "Grey Ford"
+        },
+        "VICTORY_POINTS_12550": {
+          "russian": "Глухово",
+          "english": "Glukhovo"
+        },
+        "VICTORY_POINTS_3783": {
+          "russian": "Кальтен",
+          "english": "Kalten"
+        },
+        "VICTORY_POINTS_7452": {
+          "russian": "Вешки",
+          "english": "Veshki"
+        },
+        "VICTORY_POINTS_3126": {
+          "russian": "Тиховодье",
+          "english": "Tikhovodye"
+        },
+        "VICTORY_POINTS_10415": {
+          "russian": "Западный пост",
+          "english": "Western Post"
+        },
+        "VICTORY_POINTS_9032": {
+          "russian": "Южный пост",
+          "english": "Southern Post"
+        },
+        "VICTORY_POINTS_6180": {
+          "russian": "Ржавец",
+          "english": "Rzhavets"
+        },
+        "VICTORY_POINTS_7593": {
+          "russian": "Литейный",
+          "english": "Liteyny"
+        },
+        "VICTORY_POINTS_10888": {
+          "russian": "Пепелище",
+          "english": "Pepelishche"
+        },
+        "VICTORY_POINTS_10533": {
+          "russian": "Равнинск",
+          "english": "Ravninsk"
+        },
+        "VICTORY_POINTS_12428": {
+          "russian": "Шлаковка",
+          "english": "Shlakovka"
+        },
+        "VICTORY_POINTS_4871": {
+          "russian": "Мёртвый Цех",
+          "english": "Dead Works"
+        },
+        "VICTORY_POINTS_10571": {
+          "russian": "Хольм",
+          "english": "Kholm"
+        },
+        "VICTORY_POINTS_5534": {
+          "russian": "Камышин",
+          "english": "Kamyshin"
+        },
+        "VICTORY_POINTS_12867": {
+          "russian": "Заливное",
+          "english": "Zalivnoye"
+        },
+        "VICTORY_POINTS_5215": {
+          "russian": "Низовье",
+          "english": "Nizovye"
+        },
+        "VICTORY_POINTS_2955": {
+          "russian": "Бродок",
+          "english": "Brodok"
+        },
+        "VICTORY_POINTS_9786": {
+          "russian": "Ветлуга",
+          "english": "Vetluga"
+        },
+        "VICTORY_POINTS_12744": {
+          "russian": "Осока",
+          "english": "Osoka"
+        },
+        "VICTORY_POINTS_9846": {
+          "russian": "Луговина",
+          "english": "Lugovina"
+        },
+        "VICTORY_POINTS_3481": {
+          "russian": "Восточный пост",
+          "english": "Eastern Post"
+        },
+        "VICTORY_POINTS_3130": {
+          "russian": "Крайний",
+          "english": "Krainy"
+        },
+        "VICTORY_POINTS_2601": {
+          "russian": "Ирмень",
+          "english": "Irmen"
+        },
+        "VICTORY_POINTS_11403": {
+          "russian": "Сторожевой",
+          "english": "Storozhevoy"
+        },
+        "VICTORY_POINTS_8687": {
+          "russian": "Межевое",
+          "english": "Mezhevoye"
+        },
+        "VICTORY_POINTS_726": {
+          "russian": "Холмогорье",
+          "english": "Kholmogorye"
+        },
+        "VICTORY_POINTS_2895": {
+          "russian": "Дальний Ирим",
+          "english": "Far Irim"
+        },
+        "VICTORY_POINTS_2714": {
+          "russian": "Кордон",
+          "english": "Kordon"
+        },
+        "VICTORY_POINTS_4436": {
+          "russian": "Южный Брод",
+          "english": "Southern Ford"
+        },
+        "VICTORY_POINTS_3331": {
+          "russian": "Каменка",
+          "english": "Kamenka"
+        },
+        "VICTORY_POINTS_4767": {
+          "russian": "Засека",
+          "english": "Zaseka"
+        },
+        "VICTORY_POINTS_1193": {
+          "russian": "Перевоз",
+          "english": "Perevoz"
+        },
+        "VICTORY_POINTS_12863": {
+          "russian": "Горный пост",
+          "english": "Mountain Post"
+        },
+        "VICTORY_POINTS_2137": {
+          "russian": "Сухобалка",
+          "english": "Sukhobalka"
+        },
+        "VICTORY_POINTS_2427": {
+          "russian": "Коридорный",
+          "english": "Koridorny"
         }
       }
     }

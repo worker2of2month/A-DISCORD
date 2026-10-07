@@ -13,6 +13,7 @@ if str(_REPOSITORY_ROOT) not in sys.path:
 
 try:
     from tools.builders.build_adiscord_exclusion_zone_boundaries import (
+        ABANDONED_TERRITORY_SEEDS,
         CITY_EXCEPTION_STATES,
         CONTAMINATED_FRINGE_STATES,
         FOREST_EXCEPTION_STATES,
@@ -32,6 +33,7 @@ try:
     )
 except ModuleNotFoundError:
     from builders.build_adiscord_exclusion_zone_boundaries import (
+        ABANDONED_TERRITORY_SEEDS,
         CITY_EXCEPTION_STATES,
         CONTAMINATED_FRINGE_STATES,
         FOREST_EXCEPTION_STATES,
@@ -130,9 +132,14 @@ def validate() -> list[str]:
     planned_exz = {
         state_id for state_id, owner in final_owners.items() if owner == "EXZ"
     }
-    if len(planned_exz) != 57 or 461 not in planned_exz:
+    if (
+        len(planned_exz) != 60
+        or 461 not in planned_exz
+        or not set(ABANDONED_TERRITORY_SEEDS) <= planned_exz
+    ):
         issues.append(
-            "EXZ must contain its 56 terrain-aligned core states plus state 461"
+            "EXZ must contain its 56 terrain-aligned core states, state 461 "
+            "and the three districts split from state 51"
         )
     unassigned = planned_exz - dirty_successors - dirty_remainders
     if unassigned:
@@ -193,7 +200,7 @@ def main() -> int:
             print(f"- {issue}")
         return 1
     print(
-        "Exclusion Zone boundary validation passed: 57 EXZ states, no contaminated state outside EXZ, and a blank EXZ map label."
+        "Exclusion Zone boundary validation passed: 60 EXZ states, no contaminated state outside EXZ, and a blank EXZ map label."
     )
     return 0
 

@@ -116,7 +116,8 @@
         "history/states/330-*.txt",
         "history/states/45[4-5]-*.txt",
         "history/states/46[0-1]-*.txt",
-        "history/states/472-*.txt"
+        "history/states/472-*.txt",
+        "history/states/71[0-2]-*.txt"
       ],
       "source_inputs": [
         "tools/data/adiscord_exclusion_zone_boundary_source.json",
@@ -273,6 +274,7 @@
         "history/states/68[8-9]-*.txt",
         "history/states/69[0-9]-*.txt",
         "history/states/70[0-9]-*.txt",
+        "history/states/71[0-2]-*.txt",
         "localisation/russian/victory_points_l_russian.yml",
         "localisation/russian/state_names_l_russian.yml",
         "map/buildings.txt"

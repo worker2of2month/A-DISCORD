@@ -712,4 +712,7 @@
  STATE_706: "Keyzan District"
  STATE_707: "Shahrabad District"
  STATE_708: "Veyr District"
+ STATE_710: "Northern Waste"
+ STATE_711: "Western Waste"
+ STATE_712: "Southern Waste"
  # END GENERATED: tools.builders.build_adiscord_new_states

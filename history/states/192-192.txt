@@ -9,15 +9,16 @@ state={
 	state_category = rural
 	local_supplies = 0.5
 	resources = {
-		steel = 80
-		aluminium = 60
-		tungsten = 40
-		rare_alloys = 8
+		steel = 30
+		aluminium = 20
+		tungsten = 15
+		rare_alloys = 3
 	}
 	history = {
 		owner = EXZ
 		add_core_of = EXZ
 		buildings = {
 		}
+		victory_points = { 9032 1 }
 	}
 }

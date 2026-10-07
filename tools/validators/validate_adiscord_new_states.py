@@ -28,6 +28,7 @@ from tools.lib.adiscord_vorkerland_theatre_manifest import (
 )
 from tools.builders.build_adiscord_new_states import (
     AFRELA_LEGACY_VICTORY_POINTS,
+    DIRTY_ZONE_VICTORY_POINTS,
     CAPITALS,
     EXACT_LEGACY_FACTORY_STATE_IDS,
     IVANLAND_OVERHAUL_VICTORY_POINTS,
@@ -94,6 +95,7 @@ APPROVED_NON_URBAN_SETTLEMENT_VPS = (
         province_id
         for points in (
             *AFRELA_LEGACY_VICTORY_POINTS.values(),
+            *DIRTY_ZONE_VICTORY_POINTS.values(),
             *IVANLAND_OVERHAUL_VICTORY_POINTS.values(),
             *NAM_LEGACY_VICTORY_POINTS.values(),
             *(profile["victory_points"] for profile in AINHOLM_STATE_PROFILES.values()),

@@ -2980,6 +2980,112 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 	}
 }
 
+# --- rus_reactor_belt ---
+RUS_reactor_belt_category = {
+	RUS_restore_reactor_works = {
+		icon = generic_construction
+		allowed = { tag = RUS }
+		state_target = yes
+		targets = { 176 177 187 188 189 192 }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { has_state_flag = RUS_reactor_works_restored }
+			}
+		}
+		visible = { has_completed_focus = RUS_reactor_belt_inventory }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = RUS_reactor_works_idle_tt
+				RUS_reactor_works_idle = yes
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		highlight_states = { highlight_state_targets = { state = FROM } }
+		cost = 0
+		custom_cost_text = RUS_restore_reactor_works_cost
+		custom_cost_trigger = { RUS_reactor_works_affordable = yes }
+		days_remove = 120
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = RUS_reactor_works_cancel_tt
+			hidden_effect = { RUS_reactor_works_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				RUS_khan_governing = no
+				FROM = {
+					OR = {
+						NOT = { is_owned_by = ROOT }
+						NOT = { is_controlled_by = ROOT }
+					}
+				}
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = RUS_reactor_works_refund_tt
+			hidden_effect = { RUS_reactor_works_refund = yes }
+		}
+		remove_effect = {
+			custom_effect_tooltip = RUS_reactor_works_result_tt
+			hidden_effect = { RUS_reactor_works_finish = yes }
+		}
+		ai_will_do = {
+			base = 5
+			modifier = { factor = 0 has_war = yes }
+		}
+	}
+
+	RUS_reactor_sortie = {
+		icon = generic_operation
+		allowed = { tag = RUS }
+		visible = { has_completed_focus = RUS_reactor_sorties }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_khan_governing_tt
+				RUS_khan_governing = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = RUS_lab_reactor_access_tt
+				RUS_lab_reactor_access = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_reactor_sortie_cost
+		custom_cost_trigger = { RUS_reactor_sortie_affordable = yes }
+		days_remove = 30
+		days_re_enable = 60
+		fire_only_once = no
+		complete_effect = {
+			custom_effect_tooltip = RUS_reactor_sortie_losses_tt
+			hidden_effect = { RUS_reactor_sortie_begin = yes }
+		}
+		cancel_trigger = {
+			OR = {
+				RUS_khan_governing = no
+				RUS_lab_reactor_access = no
+			}
+		}
+		cancel_effect = {
+			custom_effect_tooltip = RUS_reactor_sortie_cancel_tt
+			hidden_effect = { clear_variable = RUS_reactor_sortie_receipt }
+		}
+		remove_effect = {
+			custom_effect_tooltip = RUS_reactor_sortie_result_tt
+			hidden_effect = { RUS_reactor_sortie_finish = yes }
+		}
+		ai_will_do = {
+			base = 3
+			modifier = { factor = 0 has_war = yes }
+		}
+	}
+}
+
 # --- rus_experimental_laboratories ---
 RUS_experimental_labs_category = {
 	RUS_lab_reactor_alloys = {
@@ -4348,14 +4454,20 @@ RUS_bunker_construction = {
 			custom_trigger_tooltip = {
 				tooltip = RUS_bunker_food_convoy_available_tt
 				RUS_bunker_operational = yes
-				check_variable = { var = RUS_bunker_food_space value = 40 compare = greater_than_or_equals }
+				RUS_bunker_convoy_fits = yes
 			}
 		}
 		cost = 0
 		custom_cost_text = RUS_bunker_food_cost
 		custom_cost_trigger = { RUS_bunker_resupply_affordable = yes }
 		complete_effect = {
-			custom_effect_tooltip = RUS_bunker_food_convoy_tt
+			if = {
+				limit = { has_completed_focus = RUS_strategic_freight_reserve }
+				custom_effect_tooltip = RUS_bunker_food_convoy_large_tt
+			}
+			else = {
+				custom_effect_tooltip = RUS_bunker_food_convoy_tt
+			}
 			hidden_effect = { RUS_bunker_resupply = yes }
 		}
 		ai_will_do = {
@@ -4363,6 +4475,33 @@ RUS_bunker_construction = {
 			modifier = {
 				add = 100
 				check_variable = { var = RUS_bunker_food value = 25 compare = less_than }
+			}
+		}
+	}
+
+	RUS_bunker_food_sale = {
+		icon = generic_trade
+		allowed = { tag = RUS }
+		visible = { has_country_flag = RUS_bunker_initialized }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RUS_bunker_food_sale_available_tt
+				RUS_bunker_food_sale_available = yes
+			}
+		}
+		cost = 0
+		custom_cost_text = RUS_bunker_food_sale_cost
+		custom_cost_trigger = { check_variable = { var = RUS_bunker_food value = 40 compare = greater_than_or_equals } }
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = RUS_bunker_food_sale_tt
+			hidden_effect = { RUS_bunker_food_sale = yes }
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				check_variable = { var = RUS_bunker_food_space value = 10 compare = less_than }
 			}
 		}
 	}
