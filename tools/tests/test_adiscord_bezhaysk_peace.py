@@ -1,8 +1,149 @@
 from pathlib import Path
 from tools.lib.on_actions import read_scripted_peace
+from tools.tests.test_scripted_peace_on_actions import GenericPeaceFixture
+from tools.tests.test_adiscord_stp_preparation import scalar
+from tools.tests.test_adiscord_val_refugees import load
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+REALM = ("BLD", "BHG", "BGT", "BBV", "BCM", "BJK")
+ADMIN_FLAG = "ADISCORD_bezhaysk_val_administration"
+
+
+class BezhayskUnificationFixture(GenericPeaceFixture):
+    """Execute the merge after diplomacy is settled; annex may leave state 999."""
+
+    def __init__(self, val_awards=REALM):
+        super().__init__()
+        self.countries = ["VAL", "NOD", "COF", *REALM]
+        self.owners = dict(zip((31, 5, 4, 7, 9, 41), REALM))
+        self.owners.update({6: "BLD", 999: "BLD", 14: "COF"})
+        self.controllers = dict(self.owners)
+        self.cores = {state: {owner} for state, owner in self.owners.items()}
+        self.overlords = {tag: "VAL" if tag in val_awards else "NOD" for tag in REALM}
+        self.overlords["COF"] = "VAL"
+        self.flags = {tag: {ADMIN_FLAG} if tag in val_awards else set() for tag in self.countries}
+        self.troops = {tag: 10 for tag in self.countries}
+        self.targets = {}
+        self.cosmetics = {}
+        self.dirty = set()
+        self.arrays = {"ADISCORD_bezhaysk_settlement_members": list(REALM)}
+
+    def resolve(self, token, stack):
+        if token.startswith("event_target:"):
+            return self.targets[token.split(":", 1)[1]]
+        return super().resolve(token, stack)
+
+    def matches(self, rows, stack):
+        current = stack[-1]
+        for row in rows:
+            key, value = row.key, row.value
+            if key == "OR":
+                result = any(self.matches([child], stack) for child in value)
+            elif key == "NOT":
+                result = not any(self.matches([child], stack) for child in value)
+            elif key in self.countries or key.startswith("event_target:"):
+                result = self.matches(value, stack + [self.resolve(key, stack)])
+            elif key == "is_subject_of":
+                result = self.overlords.get(current) == self.resolve(value, stack)
+            elif key == "is_in_array":
+                result = scalar(value, "value") in self.arrays[scalar(value, "array")]
+            elif key == "is_core_of":
+                result = self.resolve(value, stack) in self.cores[current]
+            elif key == "is_controlled_by":
+                result = self.controllers[current] == self.resolve(value, stack)
+            elif key == "controller":
+                result = self.matches(value, stack + [self.controllers[current]])
+            else:
+                result = super().matches([row], stack)
+            if not result:
+                return False
+        return True
+
+    def execute(self, rows, stack=None):
+        stack = stack or ["VAL"]
+        current = stack[-1]
+        taken = False
+        for row in rows:
+            key, value = row.key, row.value
+            if key in ("if", "else_if", "else"):
+                if key == "if":
+                    taken = False
+                guard = next((child.value for child in value if child.key == "limit"), [])
+                if not taken and self.matches(guard, stack):
+                    taken = True
+                    self.execute([child for child in value if child.key != "limit"], stack)
+            elif key in self.countries or key.startswith("event_target:"):
+                self.execute(value, stack + [self.resolve(key, stack)])
+            elif key == "save_event_target_as":
+                self.targets[value] = current
+            elif key == "add_core_of":
+                self.cores[current].add(self.resolve(value, stack))
+            elif key == "set_state_controller_to":
+                self.controllers[current] = self.resolve(value, stack)
+            elif key == "annex_country":
+                target = self.resolve(scalar(value, "target"), stack)
+                if scalar(value, "transfer_troops") == "yes":
+                    self.troops[current] += self.troops[target]
+                    self.troops[target] = 0
+                super().execute([row], stack)
+                for state, owner in self.owners.items():
+                    if owner == current and self.controllers[state] == target:
+                        self.controllers[state] = current
+            elif key == "set_cosmetic_tag":
+                self.cosmetics[current] = value
+            elif key == "ADISCORD_economy_mark_dirty":
+                self.dirty.add(current)
+            else:
+                super().execute([row], stack)
+
+    def run(self):
+        self.execute(load("common/scripted_effects/ADISCORD_bezhaysk_peace_effects.txt")[
+            "ADISCORD_bezhaysk_unify_val_administration"
+        ])
+
+
+class BezhayskUnificationTests(unittest.TestCase):
+    def test_single_victory_preserves_all_land_cores_and_troops_in_one_client(self):
+        model = BezhayskUnificationFixture()
+        model.run()
+        for state in (31, 5, 4, 7, 9, 41, 6, 999):
+            self.assertEqual(model.owners[state], "BJK")
+            self.assertEqual(model.controllers[state], "BJK")
+            self.assertIn("BJK", model.cores[state])
+        self.assertEqual(model.troops["BJK"], 60)
+        self.assertEqual(model.overlords["BJK"], "VAL")
+        self.assertEqual(model.cosmetics, {"BJK": "BJK_VAL_administration"})
+        self.assertIn("BJK", model.dirty)
+        self.assertEqual(model.owners[14], "COF")
+
+    def test_joint_victory_preserves_nodrul_awards_when_it_gets_the_capital(self):
+        model = BezhayskUnificationFixture(val_awards=("BLD", "BHG", "BGT"))
+        model.run()
+        self.assertEqual({model.owners[state] for state in (31, 5, 4, 6, 999)}, {"BLD"})
+        self.assertEqual(model.troops["BLD"], 30)
+        for state, tag in ((41, "BJK"), (7, "BBV"), (9, "BCM")):
+            self.assertEqual(model.owners[state], tag)
+            self.assertEqual(model.overlords[tag], "NOD")
+            self.assertEqual(model.troops[tag], 10)
+        self.assertEqual(model.cosmetics, {"BLD": "BJK_VAL_administration"})
+
+    def test_no_val_awards_does_not_rename_or_annex_any_country(self):
+        model = BezhayskUnificationFixture(val_awards=())
+        before = dict(model.owners)
+        model.run()
+        self.assertEqual(model.owners, before)
+        self.assertEqual(model.cosmetics, {})
+        self.assertEqual(model.annexed, [])
+
+    def test_unrelated_occupation_and_noncore_land_keep_their_status(self):
+        model = BezhayskUnificationFixture()
+        model.controllers[999] = "NOD"
+        model.cores[999] = {"COF"}
+        model.run()
+        self.assertEqual(model.owners[999], "BJK")
+        self.assertEqual(model.controllers[999], "NOD")
+        self.assertEqual(model.cores[999], {"COF"})
 
 
 class BezhayskPeaceTests(unittest.TestCase):
@@ -105,9 +246,8 @@ class BezhayskPeaceTests(unittest.TestCase):
         end = effects.index("ADISCORD_bezhaysk_settle_val_nod_joint_victory = {")
         settlement = effects[start:end]
         self.assertNotIn("annex_country", settlement)
-        self.assertGreaterEqual(
-            settlement.count("autonomy_state = autonomy_VAL_contract_administration"),
-            6,
+        self.assertIn(
+            "ADISCORD_bezhaysk_unify_val_administration = yes", settlement
         )
 
     def test_joint_kefreyt_nodrul_settlement_is_prioritized(self) -> None:
@@ -135,6 +275,7 @@ class BezhayskPeaceTests(unittest.TestCase):
             self.assertIn(f"{capital} = {{ controller =", joint)
         self.assertIn("autonomy_state = autonomy_VAL_contract_administration", joint)
         self.assertIn("autonomy_state = autonomy_NOD_protected_administration", joint)
+        self.assertIn("ADISCORD_bezhaysk_unify_val_administration = yes", joint)
         self.assertGreaterEqual(
             joint.count("set_country_flag = ADISCORD_bezhaysk_joint_settlement"), 2
         )

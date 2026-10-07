@@ -6,3 +6,7 @@
  ADISCORD_bezhaysk_subjugate_forest_nod: "Subordinate the Children of the Forest"
  ADISCORD_bezhaysk_subjugate_forest_nod_desc: "The old limited northern campaign was not designed to eliminate the Cult. After the Bezhaysk settlement, Nodrul can wage a separate war and place Flaem Prana under permanent protection."
  autonomy_NOD_protected_administration: "Nodrul Protected Administration"
+
+ BJK_VAL_administration:0 "Bezhaysk Contract Administration"
+ BJK_VAL_administration_DEF:0 "the Bezhaysk Contract Administration"
+ BJK_VAL_administration_ADJ:0 "Bezhaysk"

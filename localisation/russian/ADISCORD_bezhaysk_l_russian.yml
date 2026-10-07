@@ -6,3 +6,7 @@
  ADISCORD_bezhaysk_subjugate_forest_nod:0 "Подчинить Культ Детей Леса"
  ADISCORD_bezhaysk_subjugate_forest_nod_desc:0 "Старая ограниченная северная кампания не предполагала ликвидацию Культа. После бежайского урегулирования Нодрул может начать отдельную войну и установить над Флаем Праной постоянное попечительство."
  autonomy_NOD_protected_administration:0 "Нодрульское попечительство"
+
+ BJK_VAL_administration:0 "Бежайская договорная администрация"
+ BJK_VAL_administration_DEF:0 "Бежайская договорная администрация"
+ BJK_VAL_administration_ADJ:0 "Бежайск."

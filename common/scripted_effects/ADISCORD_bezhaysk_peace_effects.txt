@@ -1,6 +1,81 @@
 # Scripted settlement for the Bezhaysk campaign.
 # The campaign is against the feudal bloc as it exists when BJK falls.
-# Only members that are still tied to BJK and fighting the winner are annexed.
+# Each settlement snapshots its participants before changing their relations.
+
+# COUNTRY VAL, after the settlement has assigned overlords and before clearing
+# ADISCORD_bezhaysk_settlement_members. Only VAL's awarded holdings are merged.
+ADISCORD_bezhaysk_unify_val_administration = {
+	# VAL is the empty-recipient sentinel. Prefer the capital domain when awarded;
+	# otherwise the first VAL holding becomes the centre of the joint settlement.
+	save_event_target_as = ADISCORD_bezhaysk_unified_administration
+	if = {
+		limit = {
+			is_in_array = { array = ADISCORD_bezhaysk_settlement_members value = BJK }
+			BJK = {
+				exists = yes
+				is_subject_of = VAL
+				has_country_flag = ADISCORD_bezhaysk_val_administration
+			}
+		}
+		BJK = { save_event_target_as = ADISCORD_bezhaysk_unified_administration }
+	}
+	for_each_scope_loop = {
+		array = ADISCORD_bezhaysk_settlement_members
+		if = {
+			limit = {
+				exists = yes
+				is_subject_of = VAL
+				has_country_flag = ADISCORD_bezhaysk_val_administration
+			}
+			if = {
+				limit = { event_target:ADISCORD_bezhaysk_unified_administration = { tag = VAL } }
+				save_event_target_as = ADISCORD_bezhaysk_unified_administration
+			}
+			else_if = {
+				limit = { NOT = { tag = event_target:ADISCORD_bezhaysk_unified_administration } }
+				# Preserve the holdings' existing core status without coring foreign conquests.
+				every_owned_state = {
+					if = {
+						limit = { is_core_of = PREV }
+						add_core_of = event_target:ADISCORD_bezhaysk_unified_administration
+					}
+				}
+				clr_country_flag = ADISCORD_bezhaysk_val_administration
+				event_target:ADISCORD_bezhaysk_unified_administration = {
+					annex_country = {
+						target = PREV
+						transfer_troops = yes
+					}
+				}
+				# Native annexation can leave impassable owned states behind.
+				every_owned_state = {
+					if = {
+						limit = {
+							OR = {
+								is_controlled_by = PREV
+								controller = {
+									OR = {
+										tag = VAL
+										is_subject_of = VAL
+									}
+								}
+							}
+						}
+						set_state_controller_to = event_target:ADISCORD_bezhaysk_unified_administration
+					}
+					event_target:ADISCORD_bezhaysk_unified_administration = { transfer_state = PREV }
+				}
+			}
+		}
+	}
+	event_target:ADISCORD_bezhaysk_unified_administration = {
+		if = {
+			limit = { is_subject_of = VAL }
+			set_cosmetic_tag = BJK_VAL_administration
+			ADISCORD_economy_mark_dirty = yes
+		}
+	}
+}
 
 ADISCORD_bezhaysk_settle_sts_victory = {
 	# Snapshot every recipient before faction changes or white peace alter the coalition.
@@ -128,8 +203,7 @@ ADISCORD_bezhaysk_settle_stp_victory = {
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 }
 
-# Kefreyt keeps the historical feudal map instead of painting the entire realm.
-# Every surviving Bezhaysk holding becomes a contract administration.
+# Award the surviving holdings before merging them into one contract administration.
 ADISCORD_bezhaysk_settle_val_victory = {
 	# Snapshot every recipient before faction changes or white peace alter the coalition.
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
@@ -303,24 +377,16 @@ ADISCORD_bezhaysk_settle_val_victory = {
 			ADISCORD_economy_mark_dirty = yes
 		}
 	}
+	ADISCORD_bezhaysk_unify_val_administration = yes
 	clr_country_flag = ADISCORD_bezhaysk_campaign_active
 	set_country_flag = ADISCORD_bezhaysk_settlement_completed
 	ADISCORD_economy_mark_dirty = yes
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
 }
 
-
-
-# Joint Kefreyt-Nodrul settlement.
-# Each feudal holding remains an indivisible package. The side controlling its
-# capital receives the whole holding. If neither partner controls the capital,
-# the side credited with BJK's capitulation receives the unresolved package.
-# Joint Kefreyt-Nodrul settlement.
-# Historical feudal borders stay intact. Control of each holding's capital
-# decides its overlord, while unresolved holdings follow the credited victor.
-# Joint Kefreyt-Nodrul settlement.
-# Historical feudal borders stay intact. Capital control is evaluated before
-# white peace so the occupation line cannot disappear before the award is chosen.
+# Capital control is evaluated before white peace to award each whole holding.
+# Unresolved holdings follow the credited victor. VAL's awards then merge;
+# NOD's awards retain their separate protected administrations.
 ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 	# Snapshot every recipient before faction changes or white peace alter the coalition.
 	clear_temp_array = ADISCORD_bezhaysk_settlement_members
@@ -1038,6 +1104,7 @@ ADISCORD_bezhaysk_settle_val_nod_joint_victory = {
 			}
 		}
 	}
+	ADISCORD_bezhaysk_unify_val_administration = yes
 	VAL = {
 		clr_country_flag = ADISCORD_bezhaysk_campaign_active
 		ADISCORD_economy_mark_dirty = yes
