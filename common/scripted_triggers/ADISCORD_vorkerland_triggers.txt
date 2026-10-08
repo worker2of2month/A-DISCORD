@@ -1991,8 +1991,11 @@ RUS_crisis_project_active = {
 }
 
 RUS_imperial_frontier_can_begin = {
-	NOT = { has_variable = RUS_crisis_phase }
 	hidden_trigger = { tag = RUS }
+	custom_trigger_tooltip = {
+		tooltip = RUS_khan_governing_tt
+		RUS_khan_governing = yes
+	}
 	is_subject = no
 	has_capitulated = no
 	has_war = no
@@ -2002,11 +2005,12 @@ RUS_imperial_frontier_can_begin = {
 	}
 	custom_trigger_tooltip = {
 		tooltip = RUS_imperial_frontier_not_crisis_tt
-		NOT = {
-			OR = {
-				check_variable = { var = RUS_crisis_phase value = 1 compare = equals }
-				check_variable = { var = RUS_crisis_phase value = 2 compare = equals }
-				check_variable = { var = RUS_crisis_phase value = 4 compare = equals }
+		OR = {
+			NOT = { has_variable = RUS_crisis_phase }
+			check_variable = { var = RUS_crisis_phase value = 5 compare = equals }
+			AND = {
+				check_variable = { var = RUS_crisis_phase value = 3 compare = equals }
+				has_country_flag = RUS_crisis_laser_disabled
 			}
 		}
 	}

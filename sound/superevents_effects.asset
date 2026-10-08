@@ -165,3 +165,27 @@ soundeffect = {
 	max_audible_behaviour = fail
 	volume = 1.0
 }
+
+soundeffect = {
+	name = superevent_itora_civilwar_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_itora_civilwar_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}
+
+soundeffect = {
+	name = superevent_rus_khan_defeated_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_rus_khan_defeated_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}

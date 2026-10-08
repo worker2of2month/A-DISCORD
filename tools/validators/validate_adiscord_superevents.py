@@ -61,6 +61,8 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.11",
     "ADISCORD_superevent.12",
     "ADISCORD_superevent.13",
+    "ADISCORD_superevent.14",
+    "ADISCORD_superevent.15",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -139,6 +141,17 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_itora_vorkerland_war",
         "superevent_itora_vorkerland_war_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_itora_civilwar",
+        "superevent_itora_civilwar_sound_e",
+        legacy_music_asset=False,
+    ),
+
+    SupereventPresentation(
+        "superevent_rus_khan_defeated",
+        "superevent_rus_khan_defeated_sound_e",
         legacy_music_asset=False,
     ),
 )

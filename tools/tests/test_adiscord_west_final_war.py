@@ -519,6 +519,25 @@ class WestReconstructionScenarios(unittest.TestCase):
         effects = list(selected_effects(month, facts, "WRK"))
         self.assertFalse(any(entry.key == "ADISCORD_west_final_war_start" for _, entry in effects))
 
+    def test_war_presentation_follows_either_declarer_and_requires_new_campaign_start(self):
+        start = self.expand(parse_clausewitz(body(EFFECTS, "ADISCORD_west_final_war_start")))
+        presentation = "ADISCORD_vorkerland_show_itora_war_superevent"
+        for declarer in CHAMPIONS:
+            with self.subTest(declarer=declarer):
+                facts = self.crisis_facts(180)
+                facts[(declarer, "tag", declarer)] = True
+                selected = list(selected_effects(start, facts, declarer))
+                war = [(scope, row) for scope, row in selected if row.key == "declare_war_on"]
+                shown = [(scope, row) for scope, row in selected if row.key == presentation]
+                self.assertEqual(len(war), 1)
+                self.assertEqual(scalar(war[0][1].value, "target"), "IVN" if declarer == "WRK" else "WRK")
+                self.assertEqual([scope for scope, _ in shown], ["WRK"])
+                self.assertLess(selected.index(war[0]), selected.index(shown[0]))
+                for flag in ("ADISCORD_west_final_started", "ADISCORD_west_final_resolved"):
+                    blocked = {**facts, (declarer, "has_global_flag", flag): True}
+                    self.assertFalse(any(row.key == presentation for _, row in selected_effects(start, blocked, declarer)))
+                self.assertFalse(any(row.key == presentation for _, row in selected_effects(start, self.crisis_facts(179), declarer)))
+
     def test_existing_intervention_and_terminal_guards_survive_the_pause(self):
         guard = self.expand(self.triggers["ADISCORD_west_final_can_start"])
         for blocker in (

@@ -55,12 +55,6 @@ objectTypes = {
 	}
 
 	pdxparticle = {
-		name = "ADISCORD_orbital_laser_world_ash_particle"
-		type = "ADISCORD_orbital_laser_world_ash_file"
-		scale = 1
-	}
-
-	pdxparticle = {
 		name = "ADISCORD_strongest_current_east_particle"
 		type = "ADISCORD_strongest_current_east_file"
 		scale = 1

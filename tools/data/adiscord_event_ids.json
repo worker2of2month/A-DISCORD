@@ -4941,14 +4941,6 @@
       "status": "active"
     },
     {
-      "id": "ADISCORD_rus_crisis.14",
-      "namespace": "ADISCORD_rus_crisis",
-      "number": 14,
-      "owner": "events/ADISCORD_vorkerland_events.txt",
-      "subsystem": "rus_last_empire_crisis",
-      "status": "active"
-    },
-    {
       "id": "ADISCORD_rus_campaign.1",
       "namespace": "ADISCORD_rus_campaign",
       "number": 1,
@@ -5360,6 +5352,22 @@
       "id": "ADISCORD_superevent.13",
       "namespace": "ADISCORD_superevent",
       "number": 13,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.14",
+      "namespace": "ADISCORD_superevent",
+      "number": 14,
+      "owner": "events/ADISCORD_superevents.txt",
+      "subsystem": "superevents",
+      "status": "active"
+    },
+    {
+      "id": "ADISCORD_superevent.15",
+      "namespace": "ADISCORD_superevent",
+      "number": 15,
       "owner": "events/ADISCORD_superevents.txt",
       "subsystem": "superevents",
       "status": "active"

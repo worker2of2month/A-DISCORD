@@ -70,3 +70,16 @@ sound = {
 	name = "superevent_itora_vorkerland_war_sound"
 	file = "superevents/superevent_itora_vorkerland_war_sound.wav"
 }
+
+# Beethoven, Coriolan Overture, Op. 62; Czech National Symphony Orchestra, Musopen (2012).
+# Source: https://commons.wikimedia.org/wiki/File:Ouvert%C3%BCre_%22Coriolan%22_(c-moll,_op._62).ogg
+# Excerpt 00:00-00:55.5; CC0 gunshots by Tabasco, radio by xhunterko, impacts by NenadSimic.
+sound = {
+	name = "superevent_itora_civilwar_sound"
+	file = "superevents/superevent_itora_civilwar_sound.wav"
+}
+
+sound = {
+	name = "superevent_rus_khan_defeated_sound"
+	file = "superevents/superevent_rus_khan_defeated_sound.wav"
+}

@@ -77,6 +77,17 @@ on_actions = {
 			}
 		}
 	}
+	on_daily_RUS = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = RUS_crisis_world_ended
+					NOT = { has_global_flag = RUS_crisis_world_ruins_complete }
+				}
+				RUS_crisis_ruin_next_wave = yes
+			}
+		}
+	}
 	on_weekly_RUS = {
 		effect = { RUS_bunker_weekly_supply = yes }
 	}

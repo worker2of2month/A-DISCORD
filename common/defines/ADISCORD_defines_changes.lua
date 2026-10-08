@@ -548,6 +548,11 @@ NDefines.NGraphics.COUNTRY_FLAG_LARGE_STRIPE_MAX_HEIGHT = 16384
 NDefines_Graphics.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_TOP = 135.0
 NDefines_Graphics.NGraphics.CAMERA_OUTSIDE_MAP_DISTANCE_BOTTOM = 102.0
 NDefines_Graphics.NFrontend.CAMERA_MAX_HEIGHT = 2780.0
+-- Atmosphere shares one altitude envelope for wind, weather, ocean and distant battles.
+NDefines_Graphics.NSound.HEIGHT_SOUND_MIN_ALTITUDE = 500.0
+NDefines_Graphics.NSound.HEIGHT_SOUND_MAX_ALTITUDE = 1600.0
+NDefines_Graphics.NSound.HEIGHT_SOUND_MIN_VOLUME = 0.02
+NDefines_Graphics.NSound.HEIGHT_SOUND_MAX_VOLUME = 1.0
 NDefines.NGraphics.CAMERA_ZOOM_KEY_SCALE = 0.01
 NDefines.NGraphics.CAMERA_ZOOM_SPEED_DISTANCE_MULT = 25.0
 

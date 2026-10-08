@@ -3052,6 +3052,7 @@ ADISCORD_vorkerland_rus_dirty_campaign_category = {
 				add_ideas = RUS_army_empire_delta
 			}
 			custom_effect_tooltip = RUS_last_empire_cosmetic_tt
+			custom_effect_tooltip = RUS_proclaim_programme_tt
 			hidden_effect = { ADISCORD_vorkerland_rus_proclaim_last_empire = yes }
 		}
 		ai_will_do = { base = 500 }
@@ -3107,7 +3108,12 @@ RUS_reactor_belt_category = {
 		}
 		cancel_effect = {
 			custom_effect_tooltip = RUS_reactor_works_refund_tt
-			hidden_effect = { RUS_reactor_works_refund = yes }
+			hidden_effect = {
+				if = {
+					limit = { FROM = { has_state_flag = RUS_reactor_works_in_progress } }
+					RUS_reactor_works_refund = yes
+				}
+			}
 		}
 		remove_effect = {
 			custom_effect_tooltip = RUS_reactor_works_result_tt

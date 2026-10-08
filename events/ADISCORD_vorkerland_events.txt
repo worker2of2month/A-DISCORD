@@ -163,25 +163,6 @@ country_event = {
 	immediate = { RUS_crisis_cancel_pending_intervention = yes }
 }
 
-# The delayed event persists through ordinary save/load and stops with the queues.
-country_event = {
-	id = ADISCORD_rus_crisis.14
-	hidden = yes
-	is_triggered_only = yes
-	trigger = {
-		tag = RUS
-		has_global_flag = RUS_crisis_world_ended
-		NOT = { has_global_flag = RUS_crisis_world_ruins_complete }
-	}
-	immediate = {
-		RUS_crisis_ruin_next_wave = yes
-		if = {
-			limit = { NOT = { has_global_flag = RUS_crisis_world_ruins_complete } }
-			country_event = { id = ADISCORD_rus_crisis.14 hours = 1 }
-		}
-	}
-}
-
 # --- dirty_zone_events ---
 add_namespace = ADISCORD_vorkerland_dirty_zone
 

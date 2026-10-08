@@ -187,7 +187,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 18, 17, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -200,7 +200,7 @@ class SupereventContractTests(unittest.TestCase):
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
         # A closed presentation can be replayed; no permanent deduplication lock.
-        request(16)
+        request(18)
         self.assertEqual(len(played), len(order) + 1)
 
     def test_requests_do_not_replace_an_active_presentation(self) -> None:
@@ -314,6 +314,30 @@ class SupereventContractTests(unittest.TestCase):
     def test_repository_contract_is_clean(self) -> None:
         self.assertEqual(collect_issues(), [])
 
+    def test_itora_war_dispatch_reaches_human_and_observer(self) -> None:
+        from tools.tests.test_adiscord_rus_last_empire import RusCrisisFixture
+        from tools.tests.test_adiscord_south_final_war import flatten
+        from tools.tests.test_adiscord_stp_preparation import scalar
+
+        for human in (None, "WKR"):
+            world = RusCrisisFixture()
+            if human:
+                world.ai_countries.discard(human)
+            world.run("ADISCORD_vorkerland_show_itora_war_superevent", "VAL")
+            self.assertEqual(world.events, [(human or "VAL", "ADISCORD_superevent.13")])
+            calls = [row.value for row in flatten(world.effects["ADISCORD_vorkerland_show_itora_war_superevent"]) if row.key == "country_event"]
+            self.assertEqual(len(calls), 2)
+            self.assertTrue(all(scalar(call, "hours") == "1" for call in calls))
+
+    def test_itora_civilwar_remains_console_only(self) -> None:
+        references = []
+        for directory in ("common", "events", "focus_trees"):
+            for path in (ROOT / directory).rglob("*.txt"):
+                source = path.read_text(encoding="utf-8-sig")
+                if re.search(r"\bADISCORD_superevent\.14\b", source):
+                    references.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(references, ["events/ADISCORD_superevents.txt"])
+
     def test_itora_war_console_presentation_has_no_campaign_effects(self) -> None:
         from tools.validators.validate_adiscord_superevents import _event_block, blocks
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -344,6 +368,68 @@ class SupereventContractTests(unittest.TestCase):
         timeout = blocks(effects, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
         self.assertIn("flag = superevent_itora_vorkerland_war days > 6", timeout)
         self.assertIn("clr_global_flag = superevent_itora_vorkerland_war", timeout)
+
+    def test_itora_civilwar_console_presentation_has_no_campaign_effects(self) -> None:
+        from tools.validators.validate_adiscord_superevents import _event_block, blocks
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = _event_block(source, "ADISCORD_superevent.14")
+        fields = {entry.key: entry.value for entry in parse_clausewitz(event)[0].value}
+        self.assertEqual(set(fields), {"id", "hidden", "is_triggered_only", "immediate"})
+        self.assertEqual(fields["hidden"], "yes")
+        self.assertEqual(fields["is_triggered_only"], "yes")
+        self.assertEqual(
+            [entry.key for entry in fields["immediate"]],
+            ["set_temp_variable", "ADISCORD_superevent_enqueue"],
+        )
+        self.assertIn("ADISCORD_superevent_request = 17", event)
+
+        gfx = (ROOT / GFX).read_text(encoding="utf-8")
+        sprite = next(
+            block
+            for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
+            if 'name = "GFX_superevent_itora_civilwar"' in block
+        )
+        texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
+        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertTrue((ROOT / texture).is_file())
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        timeout = blocks(effects, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
+        self.assertIn("flag = superevent_itora_civilwar days > 6", timeout)
+        self.assertIn("clr_global_flag = superevent_itora_civilwar", timeout)
+
+    def test_khan_defeat_console_presentation_has_no_campaign_effects(self) -> None:
+        from tools.validators.validate_adiscord_superevents import _event_block, blocks
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = _event_block(source, "ADISCORD_superevent.15")
+        fields = {entry.key: entry.value for entry in parse_clausewitz(event)[0].value}
+        self.assertEqual(set(fields), {"id", "hidden", "is_triggered_only", "immediate"})
+        self.assertEqual(fields["hidden"], "yes")
+        self.assertEqual(fields["is_triggered_only"], "yes")
+        self.assertEqual(
+            [entry.key for entry in fields["immediate"]],
+            ["set_temp_variable", "ADISCORD_superevent_enqueue"],
+        )
+        self.assertIn("ADISCORD_superevent_request = 18", event)
+
+        gfx = (ROOT / GFX).read_text(encoding="utf-8")
+        sprite = next(
+            block
+            for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
+            if 'name = "GFX_superevent_rus_khan_defeated"' in block
+        )
+        texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
+        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertTrue((ROOT / texture).is_file())
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        timeout = blocks(effects, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
+        self.assertIn("flag = superevent_rus_khan_defeated days > 6", timeout)
+        self.assertIn("clr_global_flag = superevent_rus_khan_defeated", timeout)
 
     def test_itora_war_quote_follows_the_recorded_civil_war_winner(self) -> None:
         from tools.validators.validate_adiscord_division_templates import parse_clausewitz
@@ -435,6 +521,8 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_rus_black_banner",
                 "superevent_rus_restoration",
                 "superevent_itora_vorkerland_war",
+                "superevent_itora_civilwar",
+                "superevent_rus_khan_defeated",
             ),
         )
 

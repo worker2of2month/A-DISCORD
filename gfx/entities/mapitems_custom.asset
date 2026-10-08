@@ -400,24 +400,6 @@ entity = {
 	state = { name = "spent" }
 }
 
-# Пепельная пелена над всей картой. Актор стоит в центре карты; радиус
-# отсечения покрывает её целиком, а задержки нарастания заданы в частице.
-entity = {
-	name = "ADISCORD_orbital_laser_world_ash_entity"
-	pdxmesh = "ADISCORD_orbital_laser_mesh"
-	cull_radius = 6000
-	locator = { name = "veil" position = { 0.0 0.0 0.0 } }
-	default_state = "veil"
-	state = {
-		name = "veil"
-		event = {
-			time = 0
-			node = "veil"
-			particle = "ADISCORD_orbital_laser_world_ash_particle"
-			keep_particle = yes
-		}
-	}
-}
 # END ADISCORD orbital laser test
 
 # BEGIN ADISCORD strongest current

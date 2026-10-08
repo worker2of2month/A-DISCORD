@@ -15,10 +15,9 @@ CATEGORY_FILE = ROOT / "common/decisions/categories/ADISCORD_vorkerland_categori
 EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
 PLAN_FILE = ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
-# The strike stands on the reactor landmark; the ash veil stands at the map centre.
+# The strike actor stands on the reactor landmark.
 ORBITAL_ACTOR_POSITIONS = {
     "ADISCORD_orbital_laser_strike_entity": ("3536.24", "906.55"),
-    "ADISCORD_orbital_laser_world_ash_entity": ("2816", "1024"),
 }
 AI_FILE = ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
 ON_ACTIONS = ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
@@ -1108,6 +1107,8 @@ class RusCrisisFixture:
                 return result == (value == "yes")
             if key == "any_country":
                 return any(self.exists(tag) and self.matches(value, stack + [tag]) for tag in self.countries)
+            if key == "any_owned_state":
+                return any(owner == current and self.matches(value, stack + [state]) for state, owner in self.owners.items())
             if key == "any_of_scopes":
                 name = self.array_key(scalar(value, "array"), current)
                 gate = [e for e in value if e.key != "array"]
@@ -1263,6 +1264,11 @@ class RusCrisisFixture:
                 self.execute(value, stack + [self.resolve(key, stack)])
             elif key in ("overlord", "OVERLORD"):
                 self.execute(value, stack + [self.subjects[current]])
+            elif key == "random_country":
+                gate = next((e.value for e in value if e.key == "limit"), [])
+                candidates = [tag for tag in sorted(self.countries) if self.exists(tag) and self.matches(gate, stack + [tag])]
+                if candidates:
+                    self.execute([e for e in value if e.key != "limit"], stack + [candidates[0]])
             elif key in ("every_state", "every_neighbor_state", "every_owned_state", "every_country", "every_subject_country", "every_enemy_country", "every_allied_country"):
                 candidates = {
                     "every_state": list(self.owners),
@@ -1800,6 +1806,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def test_reactor_loss_is_permanent_but_does_not_end_the_coalition_war(self):
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         world.run("RUS_crisis_begin")
         world.run("RUS_crisis_launch")
         wars = set(world.wars)
@@ -1911,6 +1918,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def test_last_remaining_reactor_zone_is_enough_and_timeout_rechecks_capture(self):
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         world.run("RUS_crisis_begin")
         world.run("RUS_crisis_disable_laser")
         self.assertNotIn("RUS_crisis_laser_disabled", world.flags["RUS"])
@@ -2023,8 +2031,45 @@ class RusCrisisContracts(unittest.TestCase):
             self.assertFalse(world.matches(gate, ["STP"]))
             world.global_flags.clear()
 
+    def test_ai_khan_keeps_local_war_without_world_destruction(self):
+        for player in (None, "VAL", "STS"):
+            for human_at_start in (False, True):
+                with self.subTest(player=player, human_at_start=human_at_start):
+                    world = self.peaceful_empire()
+                    if player:
+                        world.ai_countries.discard(player)
+                    if human_at_start:
+                        world.ai_countries.discard("RUS")
+                    world.run("RUS_crisis_begin")
+                    world.run("RUS_crisis_launch")
+                    self.assertTrue(world.wars)
+                    world.ai_countries.add("RUS")
+                    wars = set(world.wars)
+                    owners = dict(world.owners)
+                    events = list(world.events)
+                    category = self.block(
+                        self.entries("common/decisions/ADISCORD_vorkerland_decisions.txt"),
+                        "RUS_last_empire_crisis",
+                    )
+                    for mission, country in (
+                        ("RUS_crisis_laser_countdown", "RUS"),
+                        ("RUS_crisis_defence_countdown", "VAL"),
+                    ):
+                        timeout = self.block(self.block(category, mission), "timeout_effect")
+                        world.execute(timeout, [country])
+                    world.run("RUS_crisis_end_world")
+                    self.assertNotIn("RUS_crisis_world_ended", world.global_flags)
+                    self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
+                    self.assertEqual(world.wars, wars)
+                    self.assertEqual(world.owners, owners)
+                    self.assertEqual(world.events, events)
+                    self.assertFalse(world.player_handoffs)
+                    self.assertFalse(world.demilitarized)
+                    self.assertNotIn("global.RUS_world_state_queue", world.arrays)
+
     def test_unrelated_pending_treaty_and_empty_roster_do_not_stop_the_programme(self):
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         for tag in ("MON", "VLD", "TMR"):
             world.subjects[tag] = "WKR"
         world.flags["VAL"].add("ADISCORD_south_settlement_pending")
@@ -2054,6 +2099,7 @@ class RusCrisisContracts(unittest.TestCase):
 
     def test_terminal_scene_leaves_only_bunker_and_anarchy_and_cannot_fire_twice(self):
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         world.peace_mode = "pair"
         world.ai_countries.remove("VAL")
         world.run("RUS_crisis_begin")
@@ -2089,7 +2135,7 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertFalse(world.arrays["global.RUS_crisis_defenders"])
         self.assertEqual(world.majors, {"VAL"})
         self.assertIn(("EXZ", "ADISCORD_rus_crisis.8"), world.events)
-        self.assertEqual(len([row for row in world.visuals if row[1] == "create_entity"]), 2)
+        self.assertEqual(len([row for row in world.visuals if row[1] == "create_entity"]), 1)
         before = list(world.visuals), list(world.events)
         world.run("RUS_crisis_end_world")
         self.assertEqual((world.visuals, world.events), before)
@@ -2104,6 +2150,7 @@ class RusCrisisContracts(unittest.TestCase):
         from copy import deepcopy
 
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         for state in range(500, 600):
             key = str(state)
             world.owners[key] = "WKR"
@@ -2147,59 +2194,54 @@ class RusCrisisContracts(unittest.TestCase):
         world.run("RUS_crisis_ruin_next_wave")
         self.assertEqual(world.events, scheduled)
 
-    def test_destruction_dispatch_has_one_hourly_event_chain_and_stops_when_complete(self):
+    def test_destruction_dispatch_has_one_daily_tag_hook_and_no_event_chain(self):
         from tools.tests.test_adiscord_stp_preparation import walk
 
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         hooks = self.block(self.entries("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")
-        self.assertFalse([row for row in walk(hooks) if row.key == "RUS_crisis_ruin_next_wave"])
-        event_id = "ADISCORD_rus_crisis.14"
-        events = self.entries("events/ADISCORD_vorkerland_events.txt")
-        event = next(row.value for row in events if row.key == "country_event" and self.scalar(row.value, "id") == event_id)
-        payload = self.block(event, "immediate")
-        gate = self.block(event, "trigger")
-        self.assertEqual(self.scalar(event, "hidden"), "yes")
-        self.assertEqual(self.scalar(event, "is_triggered_only"), "yes")
-        self.assertEqual(self.scalar(gate, "tag"), "RUS")
-        for source in (world.effects["RUS_crisis_reduce_world_to_ruins"], payload):
-            calls = [row.value for row in walk(source) if row.key == "country_event"]
-            self.assertEqual(len(calls), 1)
-            self.assertEqual(self.scalar(calls[0], "id"), event_id)
-            self.assertEqual(self.scalar(calls[0], "hours"), "1")
-            self.assertNotIn("days", {row.key for row in calls[0]})
-        for effect in ("RUS_crisis_ruin_next_wave", "RUS_crisis_ruin_next_state", "RUS_crisis_enqueue_ruin_neighbors"):
+        daily = self.block(self.block(hooks, "on_daily_RUS"), "effect")
+        self.assertEqual(len([row for row in walk(hooks) if row.key == "RUS_crisis_ruin_next_wave"]), 1)
+        self.assertEqual(len([row for row in walk(daily) if row.key == "RUS_crisis_ruin_next_wave"]), 1)
+        for effect in ("RUS_crisis_reduce_world_to_ruins", "RUS_crisis_ruin_next_wave", "RUS_crisis_ruin_next_state", "RUS_crisis_enqueue_ruin_neighbors"):
             self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("country_event", "for_loop_effect")])
-            self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("every_state", "every_country")])
-        self.assertFalse(world.matches(gate, ["RUS"]))
-        world.run("RUS_crisis_ruin_next_wave")
+            if effect != "RUS_crisis_reduce_world_to_ruins":
+                self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("every_state", "every_country")])
+        events = self.entries("events/ADISCORD_vorkerland_events.txt")
+        self.assertFalse([row for row in walk(events) if row.key == "RUS_crisis_ruin_next_wave"])
+        world.execute(daily, ["RUS"])
         self.assertFalse(world.events)
         self.assertFalse(world.demilitarized)
         world.run("RUS_crisis_begin")
         world.run("RUS_crisis_end_world")
-        self.assertEqual(world.events.count(("RUS", event_id)), 1)
-        self.assertFalse(world.matches(gate, ["EXZ"]))
         before = len(world.arrays["global.RUS_world_state_queue"])
-        self.assertTrue(world.matches(gate, ["RUS"]))
-        world.events.remove(("RUS", event_id))
-        world.execute(payload, ["RUS"])
+        world.execute(daily, ["RUS"])
         self.assertEqual(len(world.arrays["global.RUS_world_state_queue"]), before - 1)
         for _ in range(60):
-            if not world.matches(gate, ["RUS"]):
-                break
-            self.assertEqual(world.events.count(("RUS", event_id)), 1)
-            world.events.remove(("RUS", event_id))
-            world.execute(payload, ["RUS"])
+            world.execute(daily, ["RUS"])
         self.assertIn("RUS_crisis_world_ruins_complete", world.global_flags)
-        self.assertNotIn(("RUS", event_id), world.events)
         mutations = list(world.building_mutations)
-        world.execute(payload, ["RUS"])
+        scheduled = list(world.events)
+        world.execute(daily, ["RUS"])
         self.assertEqual(world.building_mutations, mutations)
-        self.assertNotIn(("RUS", event_id), world.events)
+        self.assertEqual(world.events, scheduled)
+
+    def test_terminal_cleanup_cannot_annex_a_country_with_remaining_land(self):
+        world = self.peaceful_empire()
+        world.global_flags.add("RUS_crisis_world_ended")
+        world.arrays["global.RUS_world_country_queue"] = []
+        world.arrays["global.RUS_world_state_queue"] = []
+        world.arrays["global.RUS_world_cleanup_queue"] = ["VAL"]
+        owners = dict(world.owners)
+        world.run("RUS_crisis_ruin_next_wave")
+        self.assertEqual(world.owners, owners)
+        self.assertFalse(world.annexed)
 
     def test_destruction_spreads_from_reactor_without_duplicates_and_reaches_islands(self):
         from copy import deepcopy
 
         world = self.peaceful_empire()
+        world.ai_countries.discard("RUS")
         # A diamond and a cycle meet at 169; 40 is an isolated island.
         edges = (("125", "49"), ("125", "51"), ("49", "169"), ("51", "169"), ("169", "177"), ("177", "49"), ("125", "66"))
         for first, second in edges:
@@ -2279,7 +2321,7 @@ class RusCrisisContracts(unittest.TestCase):
         source = read(EFFECT_FILE)
         scene = self.block(self.entries(str(EFFECT_FILE.relative_to(ROOT))), "RUS_crisis_play_strike")
         actors = [row.value for row in self.block(scene, "125") if row.key == "create_entity"]
-        self.assertEqual([self.scalar(row, "id") for row in actors], ["610792", "610793"])
+        self.assertEqual([self.scalar(row, "id") for row in actors], ["610792"])
         for actor in actors:
             self.assertEqual(ORBITAL_ACTOR_POSITIONS[self.scalar(actor, "entity")], (self.scalar(actor, "x"), self.scalar(actor, "y")))
             self.assertEqual(self.scalar(actor, "z"), "0")
@@ -2582,7 +2624,7 @@ class RusCrisisContracts(unittest.TestCase):
         for phase in (3, 5):
             world = self.frontier_world("TMR")
             world.variables["RUS", "RUS_crisis_phase"] = phase
-            self.assertFalse(world.matches(self.block(decision, "available"), ["RUS"]))
+            self.assertEqual(world.matches(self.block(decision, "available"), ["RUS"]), phase == 5)
 
     def test_mission_timeout_starts_war_without_responding_to_events(self):
         world = RusCrisisFixture()
@@ -2663,6 +2705,7 @@ class RusCrisisContracts(unittest.TestCase):
                     world.run("RUS_crisis_resolve_capitulation")
                     self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 4)
                     self.assertEqual(world.variables[hegemon, "RUS_crisis_defeated_course"], course)
+                    self.assertEqual(world.events.count((hegemon, "ADISCORD_superevent.15")), 1)
                     self.assertNotIn("RUS", world.owners.values())
                     self.assertEqual(world.retired, [ruler])
                     self.assertNotIn("RUS", world.rulers)
@@ -2682,6 +2725,28 @@ class RusCrisisContracts(unittest.TestCase):
                     snapshot = dict(world.owners), list(world.retired), list(world.events)
                     world.run("RUS_crisis_resolve_capitulation")
                     self.assertEqual((world.owners, world.retired, world.events), snapshot)
+
+    def test_defeat_presentation_survives_rus_annexation_and_targets_one_client(self):
+        from tools.tests.test_adiscord_south_final_war import flatten
+
+        for humans in ((), ("RUS",), ("WKR",), ("RUS", "WKR"), ("VAL", "WKR")):
+            with self.subTest(humans=humans):
+                world = RusCrisisFixture()
+                world.ai_countries.difference_update(humans)
+                world.capitulated.add("RUS")
+                world.run("RUS_crisis_resolve_capitulation")
+                recipients = [tag for tag, event in world.events if event == "ADISCORD_superevent.15"]
+                self.assertEqual(len(recipients), 1)
+                surviving_humans = set(humans) - {"RUS"}
+                self.assertIn(recipients[0], surviving_humans or {"VAL"})
+                self.assertTrue(world.exists(recipients[0]))
+                self.assertFalse(world.exists("RUS"))
+                snapshot = list(world.events)
+                world.run("RUS_crisis_resolve_capitulation")
+                self.assertEqual(world.events, snapshot)
+                calls = [row.value for row in flatten(world.effects["ADISCORD_vorkerland_show_khan_defeated_superevent"]) if row.key == "country_event"]
+                self.assertEqual(len(calls), 2)
+                self.assertTrue(all(self.scalar(call, "hours") == "1" for call in calls))
 
     def test_full_authored_partition_keeps_every_peripheral_state_and_val_claim(self):
         from tools.lib.vorkerland_collapse_manifest import DIRTY_GROUPS, EXZ_REMAINDER_GROUPS
@@ -3040,37 +3105,6 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
         self.assertLess(abs(height(stem) + base(stem, "velocity") * base(stem, "life") - height(cap)), 10)
         self.assertLessEqual(height(cap) + base(cap, "size"), float(self.scalar(actor, "cull_radius")))
         self.assertLessEqual(sum(int(self.scalar(system, "max_amount")) for system in systems.values()), 60)
-
-    def test_world_ash_veil_covers_the_map_and_thickens_after_the_strike(self):
-        from PIL import Image
-        from tools.assets.source.build_rus_crisis_audio import IMPACT_START
-
-        actor = self.named_block(self.entries("gfx/entities/mapitems_custom.asset"), "entity", "ADISCORD_orbital_laser_world_ash_entity")
-        veil = self.named_block(actor, "state", self.scalar(actor, "default_state"))
-        events = [row.value for row in veil if row.key == "event"]
-        self.assertEqual([self.scalar(event, "particle") for event in events], ["ADISCORD_orbital_laser_world_ash_particle"])
-        self.assertEqual(self.scalar(events[0], "keep_particle"), "yes")
-        definitions = self.block(self.entries("gfx/entities/particles_custom.gfx"), "objectTypes")
-        binding = self.named_block(definitions, "pdxparticle", "ADISCORD_orbital_laser_world_ash_particle")
-        self.assertEqual(self.scalar(binding, "scale"), "1")
-        particle = self.named_block(self.entries("gfx/particles/environment/ADISCORD_orbital_laser_strike.asset"), "particle", self.scalar(binding, "type"))
-        layers = [row.value for row in particle if row.key == "subsystem"]
-        starts = [float(self.scalar(layer, "start")) for layer in layers]
-        self.assertEqual(len(layers), 3)
-        self.assertEqual(starts, sorted(starts))
-        self.assertGreater(starts[0], IMPACT_START)
-        self.assertTrue(all(float(self.scalar(row.value, "start")) == 0 for row in particle if row.key == "animation"))
-        self.assertLessEqual(sum(int(self.scalar(layer, "max_amount")) for layer in layers), 150)
-        centre_x, centre_y = (float(value) for value in ORBITAL_ACTOR_POSITIONS["ADISCORD_orbital_laser_world_ash_entity"])
-        with Image.open(ROOT / "map/provinces.bmp") as provinces:
-            width, height = provinces.size
-        self.assertEqual((centre_x, centre_y), (width / 2, height / 2))
-        self.assertGreaterEqual(float(self.scalar(actor, "cull_radius")), (width ** 2 + height ** 2) ** 0.5 / 2)
-        for layer in layers:
-            self.assertEqual(float(self.scalar(layer, "duration")), -1)
-            self.assertEqual(self.scalar(layer, "local_space"), "no")
-            self.assertEqual(float(self.block(layer, "box_emitter_x")[1].value), width / 2)
-            self.assertEqual(float(self.block(layer, "box_emitter_z")[1].value), height / 2)
 
     def test_debug_laser_does_not_cancel_real_time_scene_after_one_game_hour(self):
         events = self.entries("events/ADISCORD_scenario_debug_events.txt")

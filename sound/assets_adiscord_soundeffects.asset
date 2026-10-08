@@ -1,3 +1,12 @@
+soundeffect = {
+	name = "amb_neutral_wind"
+	volume = 0.35
+	sounds = {
+		sound = amb_neutral_wind_01
+	}
+	loop = yes
+}
+
 # V19: keep only supported soundeffect declarations in this asset.
 category = {
 	name = ADISCORD_UI

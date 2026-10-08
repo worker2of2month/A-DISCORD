@@ -278,6 +278,7 @@ focus_tree = {
 			add_command_power = 15
 			add_political_power = 35
 			unlock_decision_tooltip = RUS_campaign_last_order
+			custom_effect_tooltip = RUS_campaign_broadcast_required_tt
 		}
 		ai_will_do = { base = 120 }
 	}
@@ -571,6 +572,7 @@ focus_tree = {
 			add_stability = 0.03
 			add_political_power = 40
 			unlock_decision_tooltip = RUS_campaign_the_khan_keeps_his_word
+			custom_effect_tooltip = RUS_campaign_broadcast_required_tt
 		}
 		ai_will_do = { base = 8 }
 	}
@@ -760,6 +762,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = RUS }
 			add_political_power = 35
 			unlock_decision_tooltip = RUS_campaign_surface_trade
+			custom_effect_tooltip = RUS_campaign_broadcast_required_tt
 			hidden_effect = { ADISCORD_economy_mark_dirty = yes }
 		}
 		ai_will_do = { base = 8 }
@@ -1641,6 +1644,7 @@ focus_tree = {
 			add_equipment_to_stockpile = { type = ADISCORD_squad_weapons_equipment_0 amount = 96 producer = RUS }
 			add_equipment_to_stockpile = { type = support_equipment amount = 60 producer = RUS }
 			unlock_decision_tooltip = RUS_campaign_rifles_protect_home
+			custom_effect_tooltip = RUS_campaign_broadcast_required_tt
 			effect_tooltip = { add_ideas = RUS_army_organization_delta }
 			hidden_effect = {
 				add_to_variable = { var = RUS_army_org value = 0.02 }

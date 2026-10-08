@@ -4322,6 +4322,15 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 16 }
 						has_global_flag = superevent_itora_vorkerland_war
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 17 }
+						has_global_flag = superevent_itora_civilwar
+					}
+
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 18 }
+						has_global_flag = superevent_rus_khan_defeated
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4350,6 +4359,8 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_rus_restoration
 					has_global_flag = superevent_rus_black_banner
 					has_global_flag = superevent_itora_vorkerland_war
+					has_global_flag = superevent_itora_civilwar
+					has_global_flag = superevent_rus_khan_defeated
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4418,12 +4429,23 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 16 } }
 			set_global_flag = superevent_itora_vorkerland_war
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 17 } }
+			set_global_flag = superevent_itora_civilwar
+		}
+
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 18 } }
+			set_global_flag = superevent_rus_khan_defeated
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 
 ADISCORD_vorkerland_clear_superevent_flags = {
 	clr_global_flag = superevent_itora_vorkerland_war
+	clr_global_flag = superevent_itora_civilwar
+	clr_global_flag = superevent_rus_khan_defeated
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
@@ -4481,6 +4503,42 @@ ADISCORD_vorkerland_show_dirty_opening_superevent = {
 	}
 	else = {
 		country_event = { id = ADISCORD_superevent.4 }
+	}
+}
+
+ADISCORD_vorkerland_show_itora_war_superevent = {
+	if = {
+		limit = { any_country = { is_ai = no } }
+		random_country = {
+			limit = { is_ai = no }
+			country_event = { id = ADISCORD_superevent.13 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.13 hours = 1 }
+	}
+}
+
+# The defeated RUS country disappears during settlement; deliver the delayed
+# presentation to a surviving human country or the credited victor.
+ADISCORD_vorkerland_show_khan_defeated_superevent = {
+	if = {
+		limit = {
+			any_country = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+		}
+		random_country = {
+			limit = {
+				is_ai = no
+				NOT = { tag = RUS }
+			}
+			country_event = { id = ADISCORD_superevent.15 hours = 1 }
+		}
+	}
+	else = {
+		country_event = { id = ADISCORD_superevent.15 hours = 1 }
 	}
 }
 
@@ -10900,6 +10958,7 @@ RUS_crisis_dissolve_empire = {
 			set_variable = { var = RUS_crisis_defeated_course value = 3 }
 		}
 		country_event = { id = ADISCORD_rus_crisis.4 }
+		ADISCORD_vorkerland_show_khan_defeated_superevent = yes
 	}
 	for_each_scope_loop = {
 		array = global.RUS_crisis_defenders
@@ -10997,6 +11056,7 @@ RUS_crisis_disable_laser = {
 RUS_crisis_end_world = {
 	if = {
 		limit = {
+			is_ai = no
 			RUS_crisis_project_active = yes
 			RUS_lab_reactor_access = yes
 			NOT = { has_global_flag = RUS_crisis_world_ended }
@@ -11070,11 +11130,10 @@ RUS_crisis_reduce_world_to_ruins = {
 		set_cosmetic_tag = RUS_last_bunker
 		set_capital = { state = 66 }
 		every_enemy_country = { white_peace = PREV }
-		country_event = { id = ADISCORD_rus_crisis.14 hours = 1 }
 	}
 }
 
-# RUS. Each hourly event drains fixed-size portions of persistent queues.
+# RUS. Each native daily callback drains fixed-size portions of persistent queues.
 # The last queue removes countries only after all state transfers are complete,
 # so annexing one large country cannot bypass the territorial wave budget.
 RUS_crisis_ruin_next_wave = {
@@ -11100,7 +11159,10 @@ RUS_crisis_ruin_next_wave = {
 			remove_from_array = { array = global.RUS_world_cleanup_queue index = 0 }
 			var:RUS_world_next_country = {
 				if = {
-					limit = { exists = yes }
+					limit = {
+						exists = yes
+						NOT = { any_owned_state = { always = yes } }
+					}
 					EXZ = { annex_country = { target = PREV transfer_troops = no } }
 				}
 			}
@@ -11272,17 +11334,6 @@ RUS_crisis_play_strike = {
 			min_zoom = 10000
 		}
 		set_entity_animation = { id = 610792 animation = "strike" }
-		# Map-centre actor; the ash veil gathers over the whole world after the strike.
-		create_entity = {
-			entity = ADISCORD_orbital_laser_world_ash_entity
-			id = 610793
-			x = 2816
-			y = 1024
-			z = 0
-			rotation = 0
-			scale = 1
-			min_zoom = 10000
-		}
 	}
 }
 
@@ -11845,6 +11896,8 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_rus_restoration days > 6 }
 					has_global_flag = { flag = superevent_rus_black_banner days > 6 }
 					has_global_flag = { flag = superevent_itora_vorkerland_war days > 6 }
+					has_global_flag = { flag = superevent_itora_civilwar days > 6 }
+					has_global_flag = { flag = superevent_rus_khan_defeated days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -11872,6 +11925,15 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_itora_vorkerland_war days > 6 } }
 				clr_global_flag = superevent_itora_vorkerland_war
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_itora_civilwar days > 6 } }
+				clr_global_flag = superevent_itora_civilwar
+			}
+
+			if = {
+				limit = { has_global_flag = { flag = superevent_rus_khan_defeated days > 6 } }
+				clr_global_flag = superevent_rus_khan_defeated
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}
@@ -13139,13 +13201,11 @@ RUS_reactor_works_begin = {
 
 RUS_reactor_works_finish = {
 	if = {
-		limit = { has_variable = RUS_reactor_works_deposit }
-		176 = { RUS_reactor_works_finish_state = yes }
-		177 = { RUS_reactor_works_finish_state = yes }
-		187 = { RUS_reactor_works_finish_state = yes }
-		188 = { RUS_reactor_works_finish_state = yes }
-		189 = { RUS_reactor_works_finish_state = yes }
-		192 = { RUS_reactor_works_finish_state = yes }
+		limit = {
+			has_variable = RUS_reactor_works_deposit
+			FROM = { has_state_flag = RUS_reactor_works_in_progress }
+		}
+		FROM = { RUS_reactor_works_finish_state = yes }
 	}
 }
 

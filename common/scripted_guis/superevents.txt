@@ -259,4 +259,36 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_itora_civilwar = {
+		window_name = "superevent_itora_civilwar"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_itora_civilwar
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_itora_civilwar
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
+
+	superevent_rus_khan_defeated = {
+		window_name = "superevent_rus_khan_defeated"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_rus_khan_defeated
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_rus_khan_defeated
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

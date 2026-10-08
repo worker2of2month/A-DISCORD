@@ -159,6 +159,15 @@ defined_text = {
 		localization_key = superevent_itora_vorkerland_war_quote
 	}
 	text = {
+		trigger = { has_global_flag = superevent_itora_civilwar }
+		localization_key = superevent_itora_civilwar_quote
+	}
+
+	text = {
+		trigger = { has_global_flag = superevent_rus_khan_defeated }
+		localization_key = superevent_rus_khan_defeated_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -301,6 +310,15 @@ defined_text = {
 		localization_key = superevent_itora_vorkerland_war_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_itora_civilwar }
+		localization_key = superevent_itora_civilwar_title
+	}
+
+	text = {
+		trigger = { has_global_flag = superevent_rus_khan_defeated }
+		localization_key = superevent_rus_khan_defeated_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -441,6 +459,15 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_itora_vorkerland_war }
 		localization_key = superevent_itora_vorkerland_war_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_civilwar }
+		localization_key = superevent_itora_civilwar_comment
+	}
+
+	text = {
+		trigger = { has_global_flag = superevent_rus_khan_defeated }
+		localization_key = superevent_rus_khan_defeated_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

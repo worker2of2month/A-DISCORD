@@ -248,3 +248,25 @@ country_event = {
 		ADISCORD_superevent_enqueue = yes
 	}
 }
+
+country_event = {
+	id = ADISCORD_superevent.14
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 17 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}
+
+country_event = {
+	id = ADISCORD_superevent.15
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_temp_variable = { ADISCORD_superevent_request = 18 }
+		ADISCORD_superevent_enqueue = yes
+	}
+}

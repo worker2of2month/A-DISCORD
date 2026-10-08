@@ -248,7 +248,15 @@ RUS_experimental_labs_category = {
 RUS_public_campaigns = {
 	icon = generic_political_pressure
 	allowed = { tag = RUS }
-	visible = { has_completed_focus = RUS_khan_broadcast_service }
+	visible = {
+		OR = {
+			has_completed_focus = RUS_khan_broadcast_service
+			has_completed_focus = RUS_muster_books
+			has_completed_focus = RUS_written_oaths
+			has_completed_focus = RUS_surface_workshops
+			has_completed_focus = RUS_imperial_general_staff
+		}
+	}
 	visible_when_empty = yes
 	priority = 24
 }

@@ -66,6 +66,29 @@ class RusCrisisPreparationTests(unittest.TestCase):
             for name in PROGRAMME:
                 self.assertFalse(world.matches(block(self.focuses[name], "available"), ["RUS"]), (name, invalidation))
 
+    def test_frontier_campaigns_resume_only_after_the_programme_is_closed(self):
+        decision = self.decisions["RUS_imperial_frontier_campaign"]
+        for phase, disabled, expected in (
+            (None, False, True), (1, False, False), (2, False, False),
+            (2, True, False), (3, False, False), (3, True, True),
+            (4, True, False), (5, True, True), (6, True, False),
+        ):
+            with self.subTest(phase=phase, disabled=disabled):
+                world = self.programme(phase)
+                if phase is None:
+                    world.variables.pop(("RUS", "RUS_crisis_phase"))
+                world.wars.clear()
+                world.owners["frontier"] = "RLY"
+                world.neighbours.add(frozenset(("RUS", "RLY")))
+                world.from_country = "RLY"
+                if disabled:
+                    world.flags["RUS"].add("RUS_crisis_laser_disabled")
+                self.assertEqual(world.matches(block(decision, "available"), ["RUS"]), expected)
+                if expected:
+                    world.execute(block(decision, "complete_effect"), ["RUS"])
+                    self.assertIn(frozenset(("RUS", "RLY")), world.wars)
+                    self.assertEqual(world.variables.get(("RUS", "RUS_crisis_phase")), phase)
+
     def test_inventory_delivers_equipment_without_restarting_timers(self):
         world = self.programme()
         world.missions = [("RUS", "RUS_crisis_laser_countdown")]

@@ -32,3 +32,26 @@ Source: https://opengameart.org/content/muffled-distant-explosion
 File: NenadSimic_Muffled_Distant_Explosion.wav
 Download: https://opengameart.org/sites/default/files/NenadSimic%20-%20Muffled%20Distant%20Explosion.wav
 Used for the filtered reverse charge, strike echoes and receding collapses.
+
+The Khan Has Fallen - superevent_rus_khan_defeated_sound.wav
+59.5-second mix. The music excerpt starts at 08:08 in the source recording
+and enters the mix at 00:04.5. Gunshots, radio static and distant explosions
+recede during the opening. All four imported sources are listed as CC0.
+
+Ludwig van Beethoven - Egmont Overture, Op. 84
+Recording: Czech National Symphony Orchestra, 2012, Musopen collection.
+Source: https://commons.wikimedia.org/wiki/File:Beethoven_EgmontOvertureOp.84_LudwigVanBeethoven-EgmontOvertureOp.84.ogg
+Download: https://upload.wikimedia.org/wikipedia/commons/2/20/Beethoven_EgmontOvertureOp.84_LudwigVanBeethoven-EgmontOvertureOp.84.ogg
+
+Tabasco - Gunshot Sounds
+Source: https://opengameart.org/content/gunshot-sounds
+Download: https://opengameart.org/sites/default/files/sounds.zip
+The mix uses a trimmed, filtered Mosin rifle shot from sounds/mosin.wav.
+
+xhunterko - Static
+Source: https://opengameart.org/content/static
+Download: https://opengameart.org/sites/default/files/ScatterNoise1.mp3
+The opening uses a faded excerpt of the radio noise.
+
+NenadSimic - Muffled Distant Explosion
+The same CC0 source credited above supplies the opening distant impacts.

@@ -647,6 +647,44 @@ class RusCampaignTests(unittest.TestCase):
                 },
             )
 
+    def test_every_public_campaign_unlock_reveals_its_category(self):
+        category = block(parse(f"common/decisions/categories/{BASE}_categories.txt"), "RUS_public_campaigns")
+        for campaign, rows in self.campaigns.items():
+            world = self.world()
+            world.focuses = {
+                entry.value for entry in walk(block(rows, "visible"))
+                if entry.key == "has_completed_focus"
+            }
+            self.assertTrue(world.matches(block(category, "visible")), campaign)
+            self.assertTrue(world.matches(block(rows, "visible")), campaign)
+            self.assertFalse(world.matches(block(rows, "available")), "Unlocking a campaign does not grant a free slot")
+
+    def test_reactor_callbacks_are_bound_to_their_paid_target(self):
+        from tools.tests.test_adiscord_rus_last_empire import RusCrisisFixture
+
+        decision = self.belt["RUS_restore_reactor_works"]
+        for callback, effect, marker in (
+            ("remove_effect", "RUS_reactor_works_finish_state", "set_state_flag = callback_delivered"),
+            ("cancel_effect", "RUS_reactor_works_refund", "set_country_flag = callback_refunded"),
+        ):
+            with self.subTest(callback=callback):
+                world = RusCrisisFixture()
+                world.variables["RUS", "RUS_reactor_works_deposit"] = 400
+                world.state_flags["177"] = {"RUS_reactor_works_in_progress"}
+                # Observe dispatch independently of the already tested reward payload.
+                world.effects[effect] = parse_clausewitz(marker)
+                world.from_country = "176"
+                world.execute(block(decision, callback), ["RUS"])
+                self.assertFalse(any("callback_delivered" in flags for flags in world.state_flags.values()))
+                self.assertNotIn("callback_refunded", world.flags["RUS"])
+                self.assertEqual(world.variables["RUS", "RUS_reactor_works_deposit"], 400)
+                world.from_country = "177"
+                world.execute(block(decision, callback), ["RUS"])
+                if callback == "remove_effect":
+                    self.assertIn("callback_delivered", world.state_flags["177"])
+                else:
+                    self.assertIn("callback_refunded", world.flags["RUS"])
+
     def test_propaganda_consumes_and_releases_only_its_own_slots(self):
         for name, rows in self.campaigns.items():
             world = self.world()
@@ -2339,7 +2377,11 @@ class RusCampaignTests(unittest.TestCase):
         defeat = self.effects["RUS_crisis_dissolve_empire"]
         self.assertTrue(any(entry.key == "RUS_retire_current_ruler" for entry in defeat))
         winner = next(entry.value for entry in defeat if entry.key == "event_target:RUS_crisis_hegemon")
-        self.assertEqual(scalar(winner[-1].value, "id"), "ADISCORD_rus_crisis.4")
+        settlement_events = [
+            entry for entry in walk(winner)
+            if entry.key == "country_event" and scalar(entry.value, "id") == "ADISCORD_rus_crisis.4"
+        ]
+        self.assertEqual(len(settlement_events), 1)
         receipts = [entry.value for entry in walk(winner) if entry.key == "set_variable" and scalar(entry.value, "var") == "RUS_crisis_defeated_course"]
         self.assertEqual({scalar(rows, "value") for rows in receipts}, {"1", "2", "3"})
 

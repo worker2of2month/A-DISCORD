@@ -812,7 +812,6 @@ ADISCORD_scenario_debug_category = {
 			log = "ADISCORD_ORBITAL_LASER clear"
 			125 = {
 				destroy_entity = 610790
-				destroy_entity = 610791
 			}
 		}
 		ai_will_do = { factor = 0 }

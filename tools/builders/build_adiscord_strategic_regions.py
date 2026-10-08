@@ -439,7 +439,25 @@ BASE_REGIONS = (
         "grey-belt",
         "Серая полоса",
         "arid_highland",
-        (49, 50, 51, 66, 125, 176, 180, 181, 191, 192, 193, 233, 329, 330),
+        (
+            49,
+            50,
+            51,
+            66,
+            125,
+            176,
+            180,
+            181,
+            191,
+            192,
+            193,
+            233,
+            329,
+            330,
+            710,
+            711,
+            712,
+        ),
     ),
     Region(
         20,
@@ -1120,19 +1138,21 @@ TEMPERATURES = {
         (17, 28),
         (16, 27),
     ),
+    # The polar belt never thaws: weather.txt melts ground snow only above 0
+    # degrees, so even the summer maximum stays at freezing point.
     "polar": (
-        (-32, -15),
-        (-30, -13),
-        (-25, -8),
-        (-16, 0),
-        (-8, 6),
-        (-2, 11),
-        (1, 14),
-        (0, 12),
-        (-5, 7),
-        (-13, 1),
-        (-22, -7),
-        (-29, -12),
+        (-34, -18),
+        (-33, -17),
+        (-30, -14),
+        (-25, -10),
+        (-18, -5),
+        (-11, -2),
+        (-8, 0),
+        (-9, -1),
+        (-14, -4),
+        (-21, -9),
+        (-28, -14),
+        (-32, -16),
     ),
     "subarctic_maritime": (
         (-21, -6),
@@ -1451,8 +1471,8 @@ def phenomenon(
         if winter:
             return (0.32, 0.05, 0.01, 0.55, 0.30, 0.35, 0.0)
         if shoulder:
-            return (0.40, 0.15, 0.05, 0.35, 0.15, 0.55, 0.0)
-        return (0.45, 0.25, 0.08, 0.12, 0.03, 0.45, 0.0)
+            return (0.36, 0.03, 0.0, 0.50, 0.22, 0.20, 0.0)
+        return (0.42, 0.05, 0.0, 0.40, 0.12, 0.10, 0.0)
     if climate == "subarctic_maritime":
         if winter:
             return (0.36, 0.20, 0.08, 0.45, 0.18, 0.60, 0.0)
@@ -1562,13 +1582,14 @@ def minimum_snow_level(climate: str, month: int) -> float:
     This value is not a deterministic initial snow layer.  Raising it above
     vanilla's usual 0.1-0.3 range only distorts weather after a snowy state has
     already been selected, while leaving the initial region-shaped gaps intact.
+    The polar belt keeps the full floor in every month as permanent snow cover.
     """
     winter = month in (11, 0, 1)
     shoulder = month in (2, 3, 9, 10)
     if climate in ("polar_ocean", "current_ice"):
         return 0.20 if winter else 0.10 if shoulder else 0.0
     if climate == "polar":
-        return 0.30 if winter else 0.20 if shoulder else 0.0
+        return 0.30
     if climate == "subpolar_ocean":
         return 0.10 if winter else 0.03 if shoulder else 0.0
     if climate in ("subarctic_maritime", "subarctic_continental"):
