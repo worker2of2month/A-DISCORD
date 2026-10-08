@@ -15,6 +15,11 @@ CATEGORY_FILE = ROOT / "common/decisions/categories/ADISCORD_vorkerland_categori
 EFFECT_FILE = ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt"
 TRIGGER_FILE = ROOT / "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt"
 PLAN_FILE = ROOT / "common/ai_strategy_plans/ADISCORD_vorkerland_plans.txt"
+# The strike stands on the reactor landmark; the ash veil stands at the map centre.
+ORBITAL_ACTOR_POSITIONS = {
+    "ADISCORD_orbital_laser_strike_entity": ("3536.24", "906.55"),
+    "ADISCORD_orbital_laser_world_ash_entity": ("2816", "1024"),
+}
 AI_FILE = ROOT / "common/ai_strategy/ADISCORD_vorkerland_ai.txt"
 ON_ACTIONS = ROOT / "common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"
 IDEA_FILE = ROOT / "common/ideas/ADISCORD_country_unique_ideas.txt"
@@ -1024,6 +1029,7 @@ class RusCrisisFixture:
         self.active_decisions = set()
         self.completed_focuses = set()
         self.neighbours = set()
+        self.state_neighbours = {}
         self.released_minors = []
         self.annexed = []
         self.declarations = []
@@ -1257,9 +1263,10 @@ class RusCrisisFixture:
                 self.execute(value, stack + [self.resolve(key, stack)])
             elif key in ("overlord", "OVERLORD"):
                 self.execute(value, stack + [self.subjects[current]])
-            elif key in ("every_state", "every_owned_state", "every_country", "every_subject_country", "every_enemy_country", "every_allied_country"):
+            elif key in ("every_state", "every_neighbor_state", "every_owned_state", "every_country", "every_subject_country", "every_enemy_country", "every_allied_country"):
                 candidates = {
                     "every_state": list(self.owners),
+                    "every_neighbor_state": self.state_neighbours.get(current, []),
                     "every_owned_state": [s for s, owner in self.owners.items() if owner == current],
                     "every_country": [tag for tag in sorted(self.countries) if self.exists(tag)],
                     "every_subject_country": [tag for tag, owner in self.subjects.items() if owner == current],
@@ -2110,12 +2117,12 @@ class RusCrisisContracts(unittest.TestCase):
         country_queue = "global.RUS_world_country_queue"
         cleanup_queue = "global.RUS_world_cleanup_queue"
         initial_states = len(world.arrays[state_queue])
-        for wave in range(60):
+        for wave in range(initial_states + len(world.arrays[country_queue]) + len(world.arrays[cleanup_queue])):
             states_before = set(world.demilitarized)
             countries_before = len(world.arrays[country_queue])
             cleanup_before = len(world.arrays[cleanup_queue])
             world.run("RUS_crisis_ruin_next_wave")
-            self.assertLessEqual(len(world.demilitarized - states_before), 8)
+            self.assertLessEqual(len(world.demilitarized - states_before), 1)
             self.assertLessEqual(countries_before - len(world.arrays[country_queue]), 1)
             self.assertLessEqual(cleanup_before - len(world.arrays[cleanup_queue]), 1)
             self.assertEqual(world.owners["66"], "RUS")
@@ -2123,7 +2130,7 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertEqual(len(world.arrays[cleanup_queue]), cleanup_before)
                 self.assertFalse(world.annexed)
             if wave == 0:
-                self.assertEqual(len(world.arrays[state_queue]), initial_states - 8)
+                self.assertEqual(len(world.arrays[state_queue]), initial_states - 1)
                 queues = deepcopy(world.arrays)
                 world.run("RUS_crisis_end_world")
                 self.assertEqual(world.arrays, queues)
@@ -2140,30 +2147,88 @@ class RusCrisisContracts(unittest.TestCase):
         world.run("RUS_crisis_ruin_next_wave")
         self.assertEqual(world.events, scheduled)
 
-    def test_destruction_dispatch_has_one_daily_tag_hook_and_no_event_chain(self):
+    def test_destruction_dispatch_has_one_hourly_event_chain_and_stops_when_complete(self):
         from tools.tests.test_adiscord_stp_preparation import walk
 
         world = self.peaceful_empire()
         hooks = self.block(self.entries("common/on_actions/01_ADISCORD_vorkerland_collapse_on_actions.txt"), "on_actions")
-        daily = self.block(self.block(hooks, "on_daily_RUS"), "effect")
-        self.assertEqual(len([row for row in walk(daily) if row.key == "RUS_crisis_ruin_next_wave"]), 1)
-        for effect in ("RUS_crisis_reduce_world_to_ruins", "RUS_crisis_ruin_next_wave", "RUS_crisis_ruin_next_state"):
+        self.assertFalse([row for row in walk(hooks) if row.key == "RUS_crisis_ruin_next_wave"])
+        event_id = "ADISCORD_rus_crisis.14"
+        events = self.entries("events/ADISCORD_vorkerland_events.txt")
+        event = next(row.value for row in events if row.key == "country_event" and self.scalar(row.value, "id") == event_id)
+        payload = self.block(event, "immediate")
+        gate = self.block(event, "trigger")
+        self.assertEqual(self.scalar(event, "hidden"), "yes")
+        self.assertEqual(self.scalar(event, "is_triggered_only"), "yes")
+        self.assertEqual(self.scalar(gate, "tag"), "RUS")
+        for source in (world.effects["RUS_crisis_reduce_world_to_ruins"], payload):
+            calls = [row.value for row in walk(source) if row.key == "country_event"]
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(self.scalar(calls[0], "id"), event_id)
+            self.assertEqual(self.scalar(calls[0], "hours"), "1")
+            self.assertNotIn("days", {row.key for row in calls[0]})
+        for effect in ("RUS_crisis_ruin_next_wave", "RUS_crisis_ruin_next_state", "RUS_crisis_enqueue_ruin_neighbors"):
             self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("country_event", "for_loop_effect")])
-        world.execute(daily, ["RUS"])
+            self.assertFalse([row for row in walk(world.effects[effect]) if row.key in ("every_state", "every_country")])
+        self.assertFalse(world.matches(gate, ["RUS"]))
         world.run("RUS_crisis_ruin_next_wave")
         self.assertFalse(world.events)
         self.assertFalse(world.demilitarized)
         world.run("RUS_crisis_begin")
         world.run("RUS_crisis_end_world")
+        self.assertEqual(world.events.count(("RUS", event_id)), 1)
+        self.assertFalse(world.matches(gate, ["EXZ"]))
         before = len(world.arrays["global.RUS_world_state_queue"])
-        world.execute(daily, ["RUS"])
-        self.assertEqual(len(world.arrays["global.RUS_world_state_queue"]), before - 8)
+        self.assertTrue(world.matches(gate, ["RUS"]))
+        world.events.remove(("RUS", event_id))
+        world.execute(payload, ["RUS"])
+        self.assertEqual(len(world.arrays["global.RUS_world_state_queue"]), before - 1)
         for _ in range(60):
-            world.execute(daily, ["RUS"])
+            if not world.matches(gate, ["RUS"]):
+                break
+            self.assertEqual(world.events.count(("RUS", event_id)), 1)
+            world.events.remove(("RUS", event_id))
+            world.execute(payload, ["RUS"])
         self.assertIn("RUS_crisis_world_ruins_complete", world.global_flags)
+        self.assertNotIn(("RUS", event_id), world.events)
         mutations = list(world.building_mutations)
-        world.execute(daily, ["RUS"])
+        world.execute(payload, ["RUS"])
         self.assertEqual(world.building_mutations, mutations)
+        self.assertNotIn(("RUS", event_id), world.events)
+
+    def test_destruction_spreads_from_reactor_without_duplicates_and_reaches_islands(self):
+        from copy import deepcopy
+
+        world = self.peaceful_empire()
+        # A diamond and a cycle meet at 169; 40 is an isolated island.
+        edges = (("125", "49"), ("125", "51"), ("49", "169"), ("51", "169"), ("169", "177"), ("177", "49"), ("125", "66"))
+        for first, second in edges:
+            world.state_neighbours.setdefault(first, []).append(second)
+            world.state_neighbours.setdefault(second, []).append(first)
+        world.run("RUS_crisis_begin")
+        world.owners["49"] = "EXZ"
+        world.controllers["49"] = "EXZ"
+        world.run("RUS_crisis_end_world")
+        self.assertEqual(world.arrays["global.RUS_world_frontier_queue"], ["49", "51"])
+        order = []
+        total = len(world.arrays["global.RUS_world_state_queue"])
+        for index in range(total):
+            before = set(world.demilitarized)
+            world.run("RUS_crisis_ruin_next_wave")
+            added = world.demilitarized - before
+            self.assertEqual(len(added), 1)
+            order.extend(added)
+            frontier = world.arrays["global.RUS_world_frontier_queue"]
+            self.assertEqual(len(frontier), len(set(frontier)))
+            self.assertTrue(set(frontier).issubset(world.arrays["global.RUS_world_state_queue"]))
+            self.assertNotIn("66", frontier)
+            if index == 1:
+                world = deepcopy(world)
+        self.assertEqual(order[:4], ["49", "51", "169", "177"])
+        self.assertGreater(order.index("40"), 3)
+        self.assertEqual(len(order), len(set(order)))
+        self.assertFalse(world.arrays["global.RUS_world_frontier_queue"])
+        self.assertEqual(world.owners["66"], "RUS")
 
     def test_ruin_state_clears_existing_buildings_and_every_port_without_creating_any(self):
         world = self.peaceful_empire()
@@ -2214,14 +2279,11 @@ class RusCrisisContracts(unittest.TestCase):
         source = read(EFFECT_FILE)
         scene = self.block(self.entries(str(EFFECT_FILE.relative_to(ROOT))), "RUS_crisis_play_strike")
         actors = [row.value for row in self.block(scene, "125") if row.key == "create_entity"]
-        self.assertEqual({self.scalar(row, "id") for row in actors}, {"610792", "610793"})
+        self.assertEqual([self.scalar(row, "id") for row in actors], ["610792", "610793"])
         for actor in actors:
-            self.assertEqual(self.scalar(actor, "x"), "3536.24")
-            self.assertEqual(self.scalar(actor, "y"), "906.55")
-            if self.scalar(actor, "id") == "610792":
-                self.assertEqual(self.scalar(actor, "visible"), "RUS_crisis_strike_visible")
-            else:
-                self.assertFalse([row for row in actor if row.key == "visible"])
+            self.assertEqual(ORBITAL_ACTOR_POSITIONS[self.scalar(actor, "entity")], (self.scalar(actor, "x"), self.scalar(actor, "y")))
+            self.assertEqual(self.scalar(actor, "z"), "0")
+            self.assertFalse([row for row in actor if row.key == "visible"])
         event = next(row.value for row in self.entries("events/ADISCORD_vorkerland_events.txt") if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_rus_crisis.8")
         self.assertEqual(self.scalar(self.block(event, "immediate"), "goto_province"), "5228")
         self.assertNotIn("goto_province", source[source.index("RUS_crisis_end_world = {"):source.index("RUS_crisis_play_strike = {")])
@@ -2762,6 +2824,35 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             ]
             self.assertTrue(all("alwaystransparent" not in {row.key for row in container} for container in containers))
 
+    def test_epilogue_button_enters_its_viewport_only_after_impact(self):
+        from tools.assets.source.build_rus_crisis_audio import IMPACT_START, STRIKE_DURATION
+
+        gui = self.block(self.entries("interface/ADISCORD_RUS.gui"), "guiTypes")
+        strike = self.named_block(gui, "containerWindowType", "RUS_crisis_strike_window")
+        viewport = self.named_block(strike, "containerWindowType", "epilogue_button_viewport")
+        reveal = self.named_block(viewport, "containerWindowType", "epilogue_button_reveal")
+        button = self.named_block(reveal, "buttonType", "epilogue_next")
+        self.assertEqual(self.scalar(viewport, "clipping"), "yes")
+        self.assertEqual(self.scalar(reveal, "show_animation_type"), "linear")
+        self.assertFalse([row for row in self.walk(button) if row.key == "shortcut"])
+
+        duration = float(self.scalar(reveal, "animation_time")) / 1000
+        start_y = float(self.scalar(self.block(reveal, "position"), "y"))
+        end_y = float(self.scalar(self.block(reveal, "show_position"), "y"))
+        button_y = float(self.scalar(self.block(button, "position"), "y"))
+        height = float(self.scalar(self.block(viewport, "size"), "height"))
+        self.assertGreater(start_y + button_y, height)
+        self.assertGreater(start_y, end_y)
+        first_visible = duration * (start_y + button_y - height) / (start_y - end_y)
+        self.assertGreater(first_visible, IMPACT_START + 1)
+        self.assertLess(first_visible, duration)
+        self.assertLess(duration, STRIKE_DURATION)
+        self.assertGreaterEqual(end_y + button_y, 0)
+        self.assertLessEqual(
+            end_y + button_y + float(self.scalar(self.block(button, "size"), "y")),
+            height,
+        )
+
     def test_ending_audio_runs_once_per_scene_not_per_story_page(self):
         gui = self.block(self.entries("interface/ADISCORD_RUS.gui"), "guiTypes")
         windows = {
@@ -2776,7 +2867,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
         entities = self.entries("gfx/entities/mapitems_custom.asset")
         actor = self.named_block(entities, "entity", "ADISCORD_orbital_laser_strike_entity")
         state = self.named_block(actor, "state", "strike")
-        cues = [row.value for row in state if row.key == "event"]
+        cues = [row.value for row in state if row.key == "event" and any(child.key == "sound" for child in row.value)]
         self.assertEqual(len(cues), 2)
         effects = self.entries("sound/assets_adiscord_soundeffects.asset")
         samples = self.entries("sound/assets_adiscord_sounds.asset")
@@ -2868,19 +2959,31 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
                 self.assertNotIn(token, source, relative)
 
     def test_reactor_fire_has_separate_persistent_ignitions_across_the_site(self):
-        from tools.assets.source.build_rus_crisis_audio import IMPACT_START
+        from tools.assets.source.build_rus_crisis_audio import IMPACT_START, STRIKE_DURATION
 
-        actor = self.named_block(self.entries("gfx/entities/mapitems_custom.asset"), "entity", "ADISCORD_orbital_laser_aftermath_entity")
-        self.assertEqual(self.scalar(actor, "default_state"), "burn")
-        self.assertEqual([self.scalar(row.value, "name") for row in actor if row.key == "state"], ["burn"])
+        actor = self.named_block(self.entries("gfx/entities/mapitems_custom.asset"), "entity", "ADISCORD_orbital_laser_strike_entity")
+        self.assertEqual(self.scalar(actor, "default_state"), "spent")
+        self.assertFalse([row for row in self.named_block(actor, "state", "spent") if row.key == "event"])
+        strike = self.named_block(actor, "state", "strike")
+        self.assertEqual(self.scalar(strike, "next_state"), "burn")
+        self.assertEqual(float(self.scalar(strike, "state_time")), STRIKE_DURATION)
         burning = self.named_block(actor, "state", "burn")
-        self.assertFalse([row for row in burning if row.key in {"next_state", "state_time"}])
+        self.assertFalse([row for row in burning if row.key == "next_state"])
+        self.assertEqual(self.scalar(burning, "looping"), "no")
         fires = [row.value for row in burning if row.key == "event" and self.scalar(row.value, "particle") == "ADISCORD_orbital_laser_fire_particle"]
+        ignitions = [row.value for row in strike if row.key == "event" and self.scalar(row.value, "particle") == "ADISCORD_orbital_laser_fire_particle"]
         self.assertEqual(len(fires), 5)
+        self.assertEqual(len(ignitions), 5)
         locators = {self.scalar(row.value, "name") for row in actor if row.key == "locator"}
         nodes = {self.scalar(fire, "node") for fire in fires}
         self.assertEqual(len(nodes), 5)
         self.assertTrue(nodes <= locators)
+        self.assertEqual({self.scalar(fire, "node") for fire in ignitions}, nodes)
+        for ignition in ignitions:
+            self.assertGreater(float(self.scalar(ignition, "time")), IMPACT_START)
+            self.assertLess(float(self.scalar(ignition, "time")), IMPACT_START + 1)
+            self.assertEqual(self.scalar(ignition, "keep_particle"), "no")
+            self.assertEqual(self.scalar(ignition, "trigger_once"), "yes")
         for fire in fires:
             self.assertEqual(float(self.scalar(fire, "time")), 0)
             self.assertEqual(self.scalar(fire, "keep_particle"), "yes")
@@ -2888,24 +2991,96 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             self.assertFalse([row for row in fire if row.key == "sound"])
         definitions = self.block(self.entries("gfx/entities/particles_custom.gfx"), "objectTypes")
         binding = self.named_block(definitions, "pdxparticle", "ADISCORD_orbital_laser_fire_particle")
-        particle = self.named_block(self.entries("gfx/particles/environment/ADISCORD_orbital_laser_aftermath.asset"), "particle", self.scalar(binding, "type"))
+        self.assertEqual(self.scalar(binding, "type"), "ADISCORD_orbital_laser_fire_file")
+        self.assertEqual(self.scalar(binding, "scale"), "1")
+        particle = self.named_block(self.entries("gfx/particles/environment/ADISCORD_orbital_laser_strike.asset"), "particle", self.scalar(binding, "type"))
         systems = [row.value for row in particle if row.key == "subsystem"]
-        self.assertEqual({self.scalar(system, "name") for system in systems}, {"reactor_flames", "embers", "smoke_column"})
+        self.assertEqual({self.scalar(system, "name") for system in systems}, {"fire", "bright_fire", "flare", "smoke"})
         for system in systems:
-            self.assertGreater(float(self.scalar(system, "start")), IMPACT_START)
-            self.assertLess(float(self.scalar(system, "start")), IMPACT_START + 2)
+            self.assertLessEqual(float(self.scalar(system, "start")), 0.1)
         self.assertTrue(all(float(self.scalar(system, "duration")) == -1 for system in systems))
         self.assertTrue(all(float(self.scalar(system, "emission")) > 0 for system in systems))
         textures = {self.scalar(self.block(system, "texture"), "file") for system in systems}
-        self.assertEqual(textures, {"gfx/particles/flame.dds", "gfx/particles/cloud_6.dds"})
-        self.assertLessEqual(sum(int(self.scalar(system, "max_amount")) for system in systems) * len(fires), 250)
-        for source, actor_id in ((EFFECT_FILE, "610793"), (ROOT / "events/ADISCORD_scenario_debug_events.txt", "610791")):
-            commands = [row.value for row in self.walk(self.entries(str(source.relative_to(ROOT)))) if row.key == "set_entity_animation"]
-            self.assertFalse([command for command in commands if self.scalar(command, "id") == actor_id])
+        self.assertIn("gfx/particles/fire_08.dds", textures)
+        self.assertLessEqual(sum(int(self.scalar(system, "max_amount")) for system in systems) * len(fires), 270)
+        self.assertLessEqual(sum(float(self.scalar(system, "emission")) for system in systems) * len(fires), 76)
+        for source in (EFFECT_FILE, ROOT / "events/ADISCORD_scenario_debug_events.txt"):
+            self.assertNotIn("ADISCORD_orbital_laser_aftermath_entity", read(source))
+
+    def test_reactor_cloud_column_rises_once_into_a_persistent_canopy(self):
+        from tools.assets.source.build_rus_crisis_audio import IMPACT_START
+
+        actor = self.named_block(self.entries("gfx/entities/mapitems_custom.asset"), "entity", "ADISCORD_orbital_laser_strike_entity")
+        columns = [
+            (state_name, row.value)
+            for state_name in ("strike", "burn", "spent")
+            for row in self.named_block(actor, "state", state_name)
+            if row.key == "event" and self.scalar(row.value, "particle") == "ADISCORD_orbital_laser_column_particle"
+        ]
+        self.assertEqual([state_name for state_name, _ in columns], ["strike"])
+        column = columns[0][1]
+        self.assertEqual(self.scalar(column, "node"), "impact")
+        self.assertGreater(float(self.scalar(column, "time")), IMPACT_START)
+        self.assertEqual(self.scalar(column, "keep_particle"), "yes")
+        self.assertEqual(self.scalar(column, "trigger_once"), "yes")
+        definitions = self.block(self.entries("gfx/entities/particles_custom.gfx"), "objectTypes")
+        binding = self.named_block(definitions, "pdxparticle", "ADISCORD_orbital_laser_column_particle")
+        particle = self.named_block(self.entries("gfx/particles/environment/ADISCORD_orbital_laser_strike.asset"), "particle", self.scalar(binding, "type"))
+        systems = {self.scalar(row.value, "name"): row.value for row in particle if row.key == "subsystem"}
+        self.assertEqual(set(systems), {"column_stem", "column_cap", "column_glow"})
+        self.assertTrue(all(float(self.scalar(system, "duration")) == -1 for system in systems.values()))
+        def base(system, name):
+            return float(self.block(system, name)[0].value.split(",")[0])
+
+        def height(system):
+            return float(self.scalar(self.block(system, "position"), "y"))
+
+        stem = systems["column_stem"]
+        cap = systems["column_cap"]
+        self.assertLess(abs(height(stem) + base(stem, "velocity") * base(stem, "life") - height(cap)), 10)
+        self.assertLessEqual(height(cap) + base(cap, "size"), float(self.scalar(actor, "cull_radius")))
+        self.assertLessEqual(sum(int(self.scalar(system, "max_amount")) for system in systems.values()), 60)
+
+    def test_world_ash_veil_covers_the_map_and_thickens_after_the_strike(self):
+        from PIL import Image
+        from tools.assets.source.build_rus_crisis_audio import IMPACT_START
+
+        actor = self.named_block(self.entries("gfx/entities/mapitems_custom.asset"), "entity", "ADISCORD_orbital_laser_world_ash_entity")
+        veil = self.named_block(actor, "state", self.scalar(actor, "default_state"))
+        events = [row.value for row in veil if row.key == "event"]
+        self.assertEqual([self.scalar(event, "particle") for event in events], ["ADISCORD_orbital_laser_world_ash_particle"])
+        self.assertEqual(self.scalar(events[0], "keep_particle"), "yes")
+        definitions = self.block(self.entries("gfx/entities/particles_custom.gfx"), "objectTypes")
+        binding = self.named_block(definitions, "pdxparticle", "ADISCORD_orbital_laser_world_ash_particle")
+        self.assertEqual(self.scalar(binding, "scale"), "1")
+        particle = self.named_block(self.entries("gfx/particles/environment/ADISCORD_orbital_laser_strike.asset"), "particle", self.scalar(binding, "type"))
+        layers = [row.value for row in particle if row.key == "subsystem"]
+        starts = [float(self.scalar(layer, "start")) for layer in layers]
+        self.assertEqual(len(layers), 3)
+        self.assertEqual(starts, sorted(starts))
+        self.assertGreater(starts[0], IMPACT_START)
+        self.assertTrue(all(float(self.scalar(row.value, "start")) == 0 for row in particle if row.key == "animation"))
+        self.assertLessEqual(sum(int(self.scalar(layer, "max_amount")) for layer in layers), 150)
+        centre_x, centre_y = (float(value) for value in ORBITAL_ACTOR_POSITIONS["ADISCORD_orbital_laser_world_ash_entity"])
+        with Image.open(ROOT / "map/provinces.bmp") as provinces:
+            width, height = provinces.size
+        self.assertEqual((centre_x, centre_y), (width / 2, height / 2))
+        self.assertGreaterEqual(float(self.scalar(actor, "cull_radius")), (width ** 2 + height ** 2) ** 0.5 / 2)
+        for layer in layers:
+            self.assertEqual(float(self.scalar(layer, "duration")), -1)
+            self.assertEqual(self.scalar(layer, "local_space"), "no")
+            self.assertEqual(float(self.block(layer, "box_emitter_x")[1].value), width / 2)
+            self.assertEqual(float(self.block(layer, "box_emitter_z")[1].value), height / 2)
 
     def test_debug_laser_does_not_cancel_real_time_scene_after_one_game_hour(self):
         events = self.entries("events/ADISCORD_scenario_debug_events.txt")
         launch = next(row.value for row in events if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_orbital_laser_test.1")
+        actors = [row.value for row in self.walk(launch) if row.key == "create_entity"]
+        self.assertTrue(actors)
+        self.assertTrue(all(self.scalar(actor, "z") == "0" for actor in actors))
+        self.assertEqual([self.scalar(actor, "entity") for actor in actors], list(ORBITAL_ACTOR_POSITIONS))
+        self.assertTrue(all(ORBITAL_ACTOR_POSITIONS[self.scalar(actor, "entity")] == (self.scalar(actor, "x"), self.scalar(actor, "y")) for actor in actors))
+        self.assertEqual(self.scalar(self.block(launch, "immediate"), "goto_province"), "5228")
         self.assertFalse([row for row in self.walk(launch) if row.key == "country_event"])
         self.assertFalse([row for row in events if row.key == "country_event" and self.scalar(row.value, "id") == "ADISCORD_orbital_laser_test.2"])
 
@@ -2932,7 +3107,7 @@ class RusWorldEndingPresentationContracts(unittest.TestCase):
             if row.key == "state" and self.scalar(row.value, "name") == "strike"
         )
         self.assertEqual(self.scalar(strike_state, "looping"), "no")
-        self.assertEqual(self.scalar(strike_state, "next_state"), "spent")
+        self.assertEqual(self.scalar(strike_state, "next_state"), "burn")
         self.assertTrue(all(self.scalar(row.value, "trigger_once") == "yes" for row in strike_state if row.key == "event"))
         scene = self.block(self.entries("common/scripted_effects/ADISCORD_vorkerland_effects.txt"), "RUS_crisis_play_strike")
         actors = [row.value for row in self.block(scene, "125") if row.key == "create_entity"]

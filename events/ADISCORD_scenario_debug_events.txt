@@ -142,9 +142,9 @@ country_event = {
 # BEGIN ADISCORD orbital laser test
 add_namespace = ADISCORD_orbital_laser_test
 
-# Orbital laser strike 25 map px east of the Unity Tower (state 40; terrain
-# height there is ~12.8-13.0 in map/buildings.txt). Re-firing replaces both
-# actors. Sizes are in map units (pdxparticle scale 1).
+# Orbital laser strike at the reactor landmark (state 125).
+# Zero height offset keeps the actor on terrain. Re-firing replaces its fire
+# and restarts the world ash veil.
 country_event = {
 	id = ADISCORD_orbital_laser_test.1
 	hidden = yes
@@ -152,32 +152,32 @@ country_event = {
 
 	immediate = {
 		log = "ADISCORD_ORBITAL_LASER fire"
-		40 = {
+		125 = {
 			destroy_entity = 610790
 			destroy_entity = 610791
 			create_entity = {
 				entity = ADISCORD_orbital_laser_strike_entity
 				id = 610790
-				x = 3185.0
-				y = 725.68
-				z = 13.0
+				x = 3536.24
+				y = 906.55
+				z = 0
 				rotation = 0
 				scale = 1
 				min_zoom = 10000
 			}
 			set_entity_animation = { id = 610790 animation = "strike" }
 			create_entity = {
-				entity = ADISCORD_orbital_laser_aftermath_entity
+				entity = ADISCORD_orbital_laser_world_ash_entity
 				id = 610791
-				x = 3185.0
-				y = 725.68
-				z = 13.0
+				x = 2816
+				y = 1024
+				z = 0
 				rotation = 0
 				scale = 1
 				min_zoom = 10000
 			}
 		}
-		goto_province = 16428
+		goto_province = 5228
 	}
 }
 

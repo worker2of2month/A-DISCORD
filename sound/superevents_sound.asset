@@ -62,3 +62,11 @@ sound = {
 	name = "superevent_val_commonwealth_sound"
 	file = "superevents/superevent_val_commonwealth.wav"
 }
+
+# Gustav Holst, Mars, The Bringer of War; US Air Force Band, Frontiers (1998).
+# Source and public-domain recording information: https://commons.wikimedia.org/wiki/File:Holst-_mars.ogg
+# Excerpt 00:48-01:28 with radio, engine and impact effects.
+sound = {
+	name = "superevent_itora_vorkerland_war_sound"
+	file = "superevents/superevent_itora_vorkerland_war_sound.wav"
+}

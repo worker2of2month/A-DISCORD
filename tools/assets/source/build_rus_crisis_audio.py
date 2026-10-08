@@ -19,7 +19,7 @@ import subprocess
 import wave
 
 import numpy as np
-from scipy.signal import butter, resample, sosfilt
+from scipy.signal import butter, fftconvolve, resample, sosfilt
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -30,6 +30,7 @@ BEAM_START = 6.0
 IMPACT_START = 10.0
 STRIKE_DURATION = 26
 AFTERMATH_SILENCE = 300
+RUINED_WORLD_DURATION = 48
 HASHES = {
     "explosionCrunch_004.ogg": "9c3a1c73cadf0de5d5a578b31a264f20b1ac7cb6ec9bbd34a203f58402ea5390",
     "computerNoise_000.ogg": "1527944e16eb14b48ee03fe3e7ce6aae94262833a4e1f83928d451a7414fe4e1",
@@ -149,17 +150,72 @@ def reactor_strike(source):
     return result
 
 
+def organ_note(midi, duration):
+    time = timeline(duration)
+    frequency = 440 * 2 ** ((midi - 69) / 12)
+    result = np.zeros_like(time)
+    for harmonic, gain in ((1, 1), (2, 0.3), (3, 0.14), (4, 0.055), (6, 0.02)):
+        result += gain * np.sin(2 * np.pi * frequency * harmonic * time)
+    return fade(result / 1.515, 0.65, 1.8)
+
+
+def funeral_bell(midi, duration):
+    time = timeline(duration)
+    frequency = 440 * 2 ** ((midi - 69) / 12)
+    result = np.zeros_like(time)
+    for ratio, gain, decay in ((0.5, 0.3, 5), (1, 1, 4), (2.01, 0.35, 2.8), (2.76, 0.14, 1.6), (4.07, 0.07, 0.8)):
+        result += gain * np.sin(2 * np.pi * frequency * ratio * time) * np.exp(-time / decay)
+    return fade(result, 0.008, 2)
+
+
+def last_sky_theme():
+    result = np.zeros((RUINED_WORLD_DURATION * RATE, 2))
+    # Sustained voices leave room for the existing detonation tail when the
+    # player opens the epilogue before the map animation has finished.
+    progression = (
+        (0.8, (38, 50, 57, 65), 0.19),
+        (8.0, (34, 50, 58, 65), 0.22),
+        (15.2, (31, 50, 58, 62), 0.25),
+        (22.4, (33, 49, 55, 64), 0.28),
+        (29.6, (38, 50, 57, 65), 0.23),
+        (36.8, (38, 50, 57, 64), 0.16),
+    )
+    for start, chord, gain in progression:
+        for voice, midi in enumerate(chord):
+            pan = (-0.15, -0.55, 0.55, 0.2)[voice]
+            add_layer(result, organ_note(midi, 9), start, gain, pan)
+    melody = (
+        (3.2, 74, 3.6), (6.0, 72, 3.2), (8.8, 69, 5.6),
+        (15.8, 70, 4.2), (19.0, 69, 4.2), (23.0, 67, 4.2),
+        (26.2, 73, 4.4), (30.4, 74, 6.2), (36.8, 69, 7.6),
+    )
+    for start, midi, duration in melody:
+        add_layer(result, organ_note(midi, duration), start, 0.12, 0.15)
+    for start, midi, gain, pan in ((0.8, 50, 0.2, -0.25), (15.2, 46, 0.18, 0.3), (29.6, 50, 0.17, -0.2)):
+        add_layer(result, funeral_bell(midi, 12), start, gain, pan)
+    # Separate deterministic room responses widen the sustained instruments.
+    room_time = timeline(3.8)
+    for channel in range(2):
+        room = noise(3.8, 150, 4200, 2163200 + channel)
+        room *= np.exp(-room_time / 0.7)
+        room[:round(0.05 * RATE)] = 0
+        room /= np.sqrt(np.sum(room ** 2))
+        wet = fftconvolve(result[:, channel], room)[:len(result)]
+        result[:, channel] += wet * 0.3
+    return fade(result, 1.8, 9)
+
+
 def ruined_world(source):
-    result = np.zeros((32 * RATE, 2))
-    time = timeline(32)
+    result = last_sky_theme()
+    time = timeline(RUINED_WORLD_DURATION)
     decay = np.exp(-time / 15)
     # A dead receiver, wind and distant collapses recede into silence.
     for pan, seed in ((-0.8, 2163101), (0.8, 2163102)):
-        wind = noise(32, 45, 1200, seed)
+        wind = noise(RUINED_WORLD_DURATION, 45, 1200, seed)
         wind *= decay * (0.75 + 0.25 * np.sin(time * 0.9 + pan))
-        add_layer(result, fade(wind, 1.8, 7), gain=0.12, pan=pan)
+        add_layer(result, fade(wind, 1.8, 7), gain=0.045, pan=pan)
     hum = (np.sin(2 * np.pi * 49 * time) + 0.2 * np.sin(2 * np.pi * 98 * time))
-    add_layer(result, fade(hum * decay, 0.3, 8), gain=0.09)
+    add_layer(result, fade(hum * decay, 0.3, 8), gain=0.035)
     dead_receiver = fade(source["computerNoise_000.ogg"], 0.05, 3.5)
     add_layer(result, dead_receiver, 0, 0.075, -0.2)
     for start, pan, seed in ((0.35, -0.3, 2163103), (2.2, 0.4, 2163104), (6.1, -0.5, 2163105)):
@@ -216,7 +272,7 @@ def sound_samples():
     return {
         "ADISCORD_rus_reactor_charge.wav": charge,
         "ADISCORD_rus_reactor_impact.wav": impact,
-        "ADISCORD_rus_ruined_world.wav": wav_bytes(ruined_world(source), -9.0),
+        "ADISCORD_rus_ruined_world.wav": wav_bytes(ruined_world(source), -7.0),
     }
 
 

@@ -32,57 +32,44 @@
   superevent_stelander_empire_comment: "Стеландер снова поднимает голову"
 
   superevent_stelander_party_victory_title: "Победа партии в Стеландере"
-# Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
   superevent_stelander_party_victory_quote: "Цель власти - власть.\n\n- Джордж Оруэлл, «1984»"
   superevent_stelander_party_victory_comment: "Партийная власть сохранена"
   superevent_stelander_party_victory_houses_title: "Высшие Дома правят Стеландером"
-# Quote source: Giuseppe Tomasi di Lampedusa, Il Gattopardo, part 1
   superevent_stelander_party_victory_houses_quote: "Если мы хотим, чтобы всё осталось как есть, нужно, чтобы всё изменилось.\n\n- Джузеппе Томази ди Лампедуза, «Леопард»"
   superevent_stelander_party_victory_houses_comment: "Сайан Кроу и Палата получают победу"
   superevent_stelander_party_victory_festival_title: "Праздник продолжается!"
-# Quote source: Juvenal, Satire X, line 81
   superevent_stelander_party_victory_festival_quote: "Хлеба и зрелищ.\n\n- Ювенал, «Сатиры»"
   superevent_stelander_party_victory_festival_comment: "Руфус Хедерсетт празднует победу"
   superevent_stelander_party_victory_staff_title: "Генералы Стеландера берут власть"
-# Quote source: Vegetius, Epitoma rei militaris, book 3, preface
   superevent_stelander_party_victory_staff_quote: "Кто желает мира, пусть готовится к войне.\n\n- Флавий Вегеций Ренат, «Краткое изложение военного дела»"
   superevent_stelander_party_victory_staff_comment: "Август Вейль вводит мир по уставу"
   superevent_stelander_party_victory_wallets_title: "Стеландская витрина снова открыта"
-# Quote source: Cicero, Philippicae V.5
   superevent_stelander_party_victory_wallets_quote: "Бесконечные деньги - нерв войны.\n\n- Марк Туллий Цицерон, «Филиппики»"
   superevent_stelander_party_victory_wallets_comment: "Павел Ланской открывает сезон"
   superevent_stelander_party_victory_silence_title: "Тишина над Стеландером"
-# Quote source: Tacitus, Agricola 30
   superevent_stelander_party_victory_silence_quote: "Они создают пустыню и называют это миром.\n\n- Публий Корнелий Тацит, «Агрикола»"
   superevent_stelander_party_victory_silence_comment: "Вера Корвина хранит тишину"
   superevent_stelander_party_victory_regent_title: "Нодрул празднует стеландскую победу"
-# Quote source: Thucydides, History of the Peloponnesian War V.89
   superevent_stelander_party_victory_regent_quote: "Сильные делают то, что могут, а слабые терпят то, что должны.\n\n- Фукидид, «История»"
   superevent_stelander_party_victory_regent_comment: "Эдгар Реннер подписывает за Стеландер"
 
   superevent_stelander_shabrat_victory_title: "Победа Шабрата в Стеландере"
-# Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
   superevent_stelander_shabrat_victory_quote: "Всё прошлое - лишь пролог.\n\n- Уильям Шекспир, «Буря»"
   superevent_stelander_shabrat_victory_comment: "Гражданская война окончена"
   superevent_stelander_shabrat_victory_staff_title: "Штаб Шабрата берёт Стеландер"
-# Quote source: Carl von Clausewitz, On War, book 1, chapter 1, section 24
   superevent_stelander_shabrat_victory_staff_quote: "Война есть лишь продолжение политики иными средствами.\n\n- Карл фон Клаузевиц, «О войне»"
   superevent_stelander_shabrat_victory_staff_comment: "Директория офицеров обещает порядок"
   superevent_stelander_shabrat_victory_councils_title: "Горные советы входят в Фаду"
-# Quote source: Jean-Jacques Rousseau, The Social Contract, book 1, chapter 1
   superevent_stelander_shabrat_victory_councils_quote: "Человек рождается свободным, а между тем он везде в оковах.\n\n- Жан-Жак Руссо, «Об общественном договоре»"
   superevent_stelander_shabrat_victory_councils_comment: "Перевалы получают голос"
   superevent_stelander_shabrat_victory_truth_title: "Суд правды в Фаде"
-# Quote source: The Gospel of John, 8:32 (King James Version)
   superevent_stelander_shabrat_victory_truth_quote: "И познаете истину, и истина сделает вас свободными.\n\n- Евангелие от Иоанна, 8:32"
   superevent_stelander_shabrat_victory_truth_comment: "Архивы Нижнего рынка выносят на площадь"
 
-# Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
   superevent_nam_resource_war_title: "Ресурсная война"
   superevent_nam_resource_war_quote: "Немногие наживаются - многие платят.\n\n- Смедли Батлер, «Война - это рэкет»"
   superevent_nam_resource_war_comment: "За месторождения платят кровью"
 
-# Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
   superevent_rus_last_empire_title: "Последняя империя"
   superevent_rus_last_empire_quote: "Соглашения без меча - лишь слова.\n\n- Томас Гоббс, «Левиафан»"
   superevent_rus_last_empire_comment: "Хан занял императорский престол"
@@ -104,3 +91,10 @@
  superevent_rus_restoration_title:0 "ПОСЛЕДНЯЯ ИМПЕРИЯ"
  superevent_rus_restoration_quote:0 "«Страна начинается там, где завтрашний хлеб перестают считать чудом».\n- Марк Рустан"
  superevent_rus_restoration_comment:0 "Открыть мастерские."
+
+ superevent_itora_vorkerland_war_title:0 "Вторая Иторско-Воркерландская война"
+ superevent_itora_vorkerland_war_quote:0 "Мы ведём войну, чтобы жить в мире.\n\n- Аристотель, «Никомахова этика»"
+ superevent_itora_vorkerland_war_vlad_quote:0 "Войны нельзя избежать, можно лишь оттянуть её - к выгоде противника.\n\n- Никколо Макиавелли, «Государь»"
+ superevent_itora_vorkerland_war_dorian_quote:0 "Итак, война - это акт насилия, имеющий целью заставить противника выполнить нашу волю.\n\n- Карл фон Клаузевиц, «О войне»"
+ superevent_itora_vorkerland_war_anton_quote:0 "Война за правое дело - не величайшее зло, какое может постигнуть народ.\n\n- Джон Стюарт Милль, 1862"
+ superevent_itora_vorkerland_war_comment:0 "На западном фронте снова война"

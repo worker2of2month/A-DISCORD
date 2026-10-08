@@ -8,6 +8,12 @@ sounds with original synthesized charge, beam, rumble and wind textures.
 Charge and impact are consecutive parts of one normalized mix. The entity
 starts the charge at 0 seconds and the impact at 10 seconds with the detonation.
 
+Last Sky - original synthesized epilogue theme
+The 48-second ADISCORD_rus_ruined_world cue combines a D-minor organ lament,
+inharmonic funeral bells and stereo room reflections with synthesized wind
+and the credited receiver and distant collapse layers. The score and instruments are defined
+in build_rus_crisis_audio.py; no external music recording is used.
+
 unfa - Huge Explosion
 Source: https://freesound.org/people/unfa/sounds/259300/
 File: unfa_huge_explosion_hq.mp3

@@ -153,3 +153,15 @@ soundeffect = {
 	max_audible_behaviour = fail
 	volume = 1.0
 }
+
+soundeffect = {
+	name = superevent_itora_vorkerland_war_sound_e
+	loop = no
+	sounds = {
+		sound = superevent_itora_vorkerland_war_sound
+	}
+	is3d = no
+	max_audible = 1
+	max_audible_behaviour = fail
+	volume = 1.0
+}

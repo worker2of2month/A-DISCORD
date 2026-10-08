@@ -4318,6 +4318,10 @@ ADISCORD_superevent_enqueue = {
 						check_variable = { ADISCORD_superevent_request = 14 }
 						has_global_flag = superevent_rus_black_banner
 					}
+					AND = {
+						check_variable = { ADISCORD_superevent_request = 16 }
+						has_global_flag = superevent_itora_vorkerland_war
+					}
 			} }
 		}
 		add_to_array = { array = global.ADISCORD_superevent_queue value = ADISCORD_superevent_request }
@@ -4345,6 +4349,7 @@ ADISCORD_superevent_dispatch_next = {
 					has_global_flag = superevent_stelander_great
 					has_global_flag = superevent_rus_restoration
 					has_global_flag = superevent_rus_black_banner
+					has_global_flag = superevent_itora_vorkerland_war
 			} }
 		}
 		set_temp_variable = { ADISCORD_superevent_next = global.ADISCORD_superevent_queue^0 }
@@ -4409,11 +4414,16 @@ ADISCORD_superevent_dispatch_next = {
 			limit = { check_variable = { ADISCORD_superevent_next = 15 } }
 			set_global_flag = superevent_rus_restoration
 		}
+		else_if = {
+			limit = { check_variable = { ADISCORD_superevent_next = 16 } }
+			set_global_flag = superevent_itora_vorkerland_war
+		}
 		ADISCORD_vorkerland_play_superevent_sound = yes
 	}
 }
 
 ADISCORD_vorkerland_clear_superevent_flags = {
+	clr_global_flag = superevent_itora_vorkerland_war
 	clr_global_flag = superevent_stelander_empire
 	clr_global_flag = superevent_stelander_party_victory
 	clr_global_flag = superevent_stelander_shabrat_victory
@@ -4435,8 +4445,19 @@ ADISCORD_vorkerland_clear_superevent_flags = {
 # human-only dispatch never reaches the local client.
 ADISCORD_vorkerland_play_superevent_sound = {
 	# GUI show_sound owns presentation audio. Reserve the music channel with a
-	# silent track so normal radio music cannot bleed underneath a superevent.
-	play_song = "one_minute_of_silence"
+	# silent track: 60 seconds for short compositions, 120 for those over a minute.
+	if = {
+		limit = {
+			OR = {
+				has_global_flag = superevent_val_commonwealth
+				has_global_flag = superevent_stelander_great
+			}
+		}
+		play_song = "two_minutes_of_silence"
+	}
+	else = {
+		play_song = "one_minute_of_silence"
+	}
 }
 
 ADISCORD_vorkerland_play_collapse_superevent_audio = {
@@ -11012,6 +11033,7 @@ RUS_crisis_reduce_world_to_ruins = {
 	}
 	clear_array = global.RUS_world_country_queue
 	clear_array = global.RUS_world_state_queue
+	clear_array = global.RUS_world_frontier_queue
 	clear_array = global.RUS_world_cleanup_queue
 	every_country = {
 		add_to_array = { array = global.RUS_world_country_queue value = THIS }
@@ -11034,6 +11056,7 @@ RUS_crisis_reduce_world_to_ruins = {
 		}
 		add_to_array = { array = global.RUS_world_state_queue value = THIS }
 	}
+	125 = { RUS_crisis_enqueue_ruin_neighbors = yes }
 	EXZ = {
 		set_cosmetic_tag = RUS_world_anarchy
 		set_capital = { state = 125 }
@@ -11047,10 +11070,11 @@ RUS_crisis_reduce_world_to_ruins = {
 		set_cosmetic_tag = RUS_last_bunker
 		set_capital = { state = 66 }
 		every_enemy_country = { white_peace = PREV }
+		country_event = { id = ADISCORD_rus_crisis.14 hours = 1 }
 	}
 }
 
-# RUS. Each daily callback drains fixed-size portions of persistent queues.
+# RUS. Each hourly event drains fixed-size portions of persistent queues.
 # The last queue removes countries only after all state transfers are complete,
 # so annexing one large country cannot bypass the territorial wave budget.
 RUS_crisis_ruin_next_wave = {
@@ -11065,13 +11089,6 @@ RUS_crisis_ruin_next_wave = {
 			remove_from_array = { array = global.RUS_world_country_queue index = 0 }
 			var:RUS_world_next_country = { RUS_crisis_destroy_country_assets = yes }
 		}
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
-		RUS_crisis_ruin_next_state = yes
 		RUS_crisis_ruin_next_state = yes
 		if = {
 			limit = {
@@ -11097,8 +11114,21 @@ RUS_crisis_ruin_next_wave = {
 			set_global_flag = RUS_crisis_world_ruins_complete
 			clear_array = global.RUS_world_country_queue
 			clear_array = global.RUS_world_state_queue
+			clear_array = global.RUS_world_frontier_queue
 			clear_array = global.RUS_world_cleanup_queue
 		}
+	}
+}
+
+# FIFO neighbours spread outward from the reactor. A disconnected landmass
+# starts only when the current frontier is exhausted. The bunker is never queued.
+RUS_crisis_enqueue_ruin_neighbors = {
+	every_neighbor_state = {
+		limit = {
+			is_in_array = { array = global.RUS_world_state_queue value = THIS }
+			NOT = { is_in_array = { array = global.RUS_world_frontier_queue value = THIS } }
+		}
+		add_to_array = { array = global.RUS_world_frontier_queue value = THIS }
 	}
 }
 
@@ -11106,9 +11136,19 @@ RUS_crisis_ruin_next_wave = {
 RUS_crisis_ruin_next_state = {
 	if = {
 		limit = { check_variable = { var = global.RUS_world_state_queue^num value = 0 compare = greater_than } }
-		set_temp_variable = { var = RUS_world_next_state value = global.RUS_world_state_queue^0 }
-		remove_from_array = { array = global.RUS_world_state_queue index = 0 }
-		var:RUS_world_next_state = { RUS_crisis_ruin_state = yes }
+		if = {
+			limit = { check_variable = { var = global.RUS_world_frontier_queue^num value = 0 compare = greater_than } }
+			set_temp_variable = { var = RUS_world_next_state value = global.RUS_world_frontier_queue^0 }
+			remove_from_array = { array = global.RUS_world_frontier_queue index = 0 }
+		}
+		else = {
+			set_temp_variable = { var = RUS_world_next_state value = global.RUS_world_state_queue^0 }
+		}
+		var:RUS_world_next_state = {
+			remove_from_array = { array = global.RUS_world_state_queue value = THIS }
+			RUS_crisis_ruin_state = yes
+			RUS_crisis_enqueue_ruin_neighbors = yes
+		}
 	}
 }
 
@@ -11216,8 +11256,9 @@ RUS_crisis_ruin_state = {
 }
 
 # Coordinates match the central reactor landmark, in province 5228 of state 125.
-# The single strike actor is separate from the aftermath, so persistent fire
-# cannot replay the beam. Only the strike follows each player's reading page.
+# create_entity z is a terrain-relative offset, not the landmark's absolute Y.
+# One actor owns the strike timeline and the terminal fire state.
+# Reading pages never control its visibility or restart its animation.
 RUS_crisis_play_strike = {
 	125 = {
 		create_entity = {
@@ -11225,19 +11266,19 @@ RUS_crisis_play_strike = {
 			id = 610792
 			x = 3536.24
 			y = 906.55
-			z = 14.21
+			z = 0
 			rotation = 0
 			scale = 1
 			min_zoom = 10000
-			visible = RUS_crisis_strike_visible
 		}
 		set_entity_animation = { id = 610792 animation = "strike" }
+		# Map-centre actor; the ash veil gathers over the whole world after the strike.
 		create_entity = {
-			entity = ADISCORD_orbital_laser_aftermath_entity
+			entity = ADISCORD_orbital_laser_world_ash_entity
 			id = 610793
-			x = 3536.24
-			y = 906.55
-			z = 14.21
+			x = 2816
+			y = 1024
+			z = 0
 			rotation = 0
 			scale = 1
 			min_zoom = 10000
@@ -11803,6 +11844,7 @@ ADISCORD_superevent_observer_tick = {
 					has_global_flag = { flag = superevent_stelander_great days > 6 }
 					has_global_flag = { flag = superevent_rus_restoration days > 6 }
 					has_global_flag = { flag = superevent_rus_black_banner days > 6 }
+					has_global_flag = { flag = superevent_itora_vorkerland_war days > 6 }
 				}
 				NOT = { any_country = { is_ai = no } }
 			}
@@ -11826,6 +11868,10 @@ ADISCORD_superevent_observer_tick = {
 			if = {
 				limit = { has_global_flag = { flag = superevent_rus_black_banner days > 6 } }
 				clr_global_flag = superevent_rus_black_banner
+			}
+			if = {
+				limit = { has_global_flag = { flag = superevent_itora_vorkerland_war days > 6 } }
+				clr_global_flag = superevent_itora_vorkerland_war
 			}
 			ADISCORD_superevent_dispatch_next = yes
 		}

@@ -132,6 +132,33 @@ defined_text = {
 		localization_key = superevent_rus_restoration_quote
 	}
 	text = {
+		trigger = {
+			has_global_flag = superevent_itora_vorkerland_war
+			has_global_flag = ADISCORD_vorkerland_vlad_won
+		}
+		localization_key = superevent_itora_vorkerland_war_vlad_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_itora_vorkerland_war
+			has_global_flag = ADISCORD_vorkerland_dorian_won
+		}
+		localization_key = superevent_itora_vorkerland_war_dorian_quote
+	}
+	text = {
+		trigger = {
+			has_global_flag = superevent_itora_vorkerland_war
+			has_global_flag = ADISCORD_vorkerland_worker_won
+			WRK = { has_country_flag = ADISCORD_vorkerland_worker_utilitarian_outcome }
+		}
+		localization_key = superevent_itora_vorkerland_war_anton_quote
+	}
+	# Worker is also the console preview before a central winner is recorded.
+	text = {
+		trigger = { has_global_flag = superevent_itora_vorkerland_war }
+		localization_key = superevent_itora_vorkerland_war_quote
+	}
+	text = {
 		localization_key = superevent_inactive_quote
 	}
 }
@@ -270,6 +297,10 @@ defined_text = {
 		localization_key = superevent_rus_restoration_title
 	}
 	text = {
+		trigger = { has_global_flag = superevent_itora_vorkerland_war }
+		localization_key = superevent_itora_vorkerland_war_title
+	}
+	text = {
 		localization_key = superevent_inactive_title
 	}
 }
@@ -406,6 +437,10 @@ defined_text = {
 	text = {
 		trigger = { has_global_flag = superevent_rus_restoration }
 		localization_key = superevent_rus_restoration_comment
+	}
+	text = {
+		trigger = { has_global_flag = superevent_itora_vorkerland_war }
+		localization_key = superevent_itora_vorkerland_war_comment
 	}
 	text = {
 		localization_key = superevent_inactive_comment

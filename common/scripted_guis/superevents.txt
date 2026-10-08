@@ -243,4 +243,20 @@ scripted_gui = {
 			}
 		}
 	}
+
+	superevent_itora_vorkerland_war = {
+		window_name = "superevent_itora_vorkerland_war"
+		context_type = player_context
+
+		visible = {
+			has_global_flag = superevent_itora_vorkerland_war
+		}
+
+		effects = {
+			superevents_button_click = {
+				clr_global_flag = superevent_itora_vorkerland_war
+				ADISCORD_superevent_dispatch_next = yes
+			}
+		}
+	}
 }

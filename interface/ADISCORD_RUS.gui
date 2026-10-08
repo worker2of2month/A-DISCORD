@@ -856,13 +856,28 @@ guiTypes = {
 			maxHeight = 44
 			alwaystransparent = yes
 		}
-		buttonType = {
-			name = "epilogue_next"
+		containerWindowType = {
+			name = "epilogue_button_viewport"
 			position = { x = 280 y = 66 }
-			size = { x = 200 y = 32 }
-			quadTextureSprite = "GFX_RUS_bunker_button"
-			buttonText = "RUS_crisis_watch_epilogue"
-			buttonFont = "hoi_16mbs"
+			size = { width = 200 height = 32 }
+			clipping = yes
+			# GUI time advances on pause. The button enters the viewport at 11.8s, after the 10s impact.
+			containerWindowType = {
+				name = "epilogue_button_reveal"
+				position = { x = 0 y = 1920 }
+				show_position = { x = 0 y = 0 }
+				show_animation_type = linear
+				animation_time = 12000
+				size = { width = 200 height = 32 }
+				buttonType = {
+					name = "epilogue_next"
+					position = { x = 0 y = 0 }
+					size = { x = 200 y = 32 }
+					quadTextureSprite = "GFX_RUS_bunker_button"
+					buttonText = "RUS_crisis_watch_epilogue"
+					buttonFont = "hoi_16mbs"
+				}
+			}
 		}
 	}
 

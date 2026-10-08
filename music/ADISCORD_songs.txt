@@ -12,6 +12,13 @@ music = {
 }
 
 music = {
+	song = "two_minutes_of_silence"
+	chance = {
+		modifier = { factor = 0 }
+	}
+}
+
+music = {
 	song = "ADISCORD_rus_aftermath_silence"
 	chance = {
 		modifier = { factor = 0 }

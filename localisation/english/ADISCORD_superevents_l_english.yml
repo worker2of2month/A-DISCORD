@@ -8,17 +8,14 @@
   superevent_vorkerland_dirty_opening_comment: "The silent zone fractured into new territories"
 
   superevent_vorkerland_worker_victory_title: "Restoration of the Confederation"
-# Quote source: https://scaife.perseus.org/reader/urn:cts:latinLit:phi0631.phi002.perseus-eng2:10/
   superevent_vorkerland_worker_victory_quote: "By concord even small states are increased, but by discord, even the greatest fall to nothing.\n\n- Sallust, The Jugurthine War"
   superevent_vorkerland_worker_victory_comment: "Worcker preserved a federal Vorkerland"
 
   superevent_vorkerland_utilitarian_victory_title: "The Utilitarian Restoration of Vorkerland"
-# Quote source: https://constitution.org/2-Authors/jb/frag_gov.htm
   superevent_vorkerland_utilitarian_victory_quote: "It is the greatest happiness of the greatest number that is the measure of right and wrong.\n\n- Jeremy Bentham, A Fragment on Government"
   superevent_vorkerland_utilitarian_victory_comment: "Anton Bagley held Vorkerland as a measurable republic"
 
   superevent_vorkerland_vlad_victory_title: "The Military Restoration of Vorkerland"
-# Quote source: https://upload.wikimedia.org/wikipedia/commons/b/ba/Tacitus%2C_the_Agricola_and_Germania_%28IA_tacitusagricolag00taciiala%29.pdf
   superevent_vorkerland_vlad_victory_quote: "Where they make a desert they call it peace.\n\n- Tacitus, Agricola"
   superevent_vorkerland_vlad_victory_comment: "Vlad Petrichev imposed an imperial order"
 
@@ -27,7 +24,6 @@
   superevent_vorkerland_joint_victory_comment: "The emergency council held Vorkerland together"
 
   superevent_vorkerland_dorian_victory_title: "The Technical Reconstruction of Vorkerland"
-# Quote source: https://www.marxists.org/archive/marx/works/1877/anti-duhring/ch24.htm
   superevent_vorkerland_dorian_victory_quote: "The government of persons is replaced by the administration of things, and by the conduct of processes of production.\n\n- Friedrich Engels, Anti-Duhring"
   superevent_vorkerland_dorian_victory_comment: "Dorian Worx entrusted the country to specialist administrations"
 
@@ -36,57 +32,44 @@
   superevent_stelander_empire_comment: "Stelander raises its head again"
 
   superevent_stelander_party_victory_title: "Party Victory in Stelander"
-# Quote source: https://www.rjgeib.com/thoughts/1984/1984.html
   superevent_stelander_party_victory_quote: "The object of power is power.\n\n- George Orwell, Nineteen Eighty-Four"
   superevent_stelander_party_victory_comment: "The Party retains power"
   superevent_stelander_party_victory_houses_title: "The High Houses Rule Stelander"
-# Quote source: Giuseppe Tomasi di Lampedusa, Il Gattopardo, part 1
   superevent_stelander_party_victory_houses_quote: "If we want things to stay as they are, things will have to change.\n\n- Giuseppe Tomasi di Lampedusa, The Leopard"
   superevent_stelander_party_victory_houses_comment: "Cyan Crowe and the Chamber take the victory"
   superevent_stelander_party_victory_festival_title: "The Festival Goes On!"
-# Quote source: Juvenal, Satire X, line 81
   superevent_stelander_party_victory_festival_quote: "Bread and circuses.\n\n- Juvenal, Satires"
   superevent_stelander_party_victory_festival_comment: "Rufus Hedersett celebrates the victory"
   superevent_stelander_party_victory_staff_title: "Stelander's Generals Take Power"
-# Quote source: Vegetius, Epitoma rei militaris, book 3, preface
   superevent_stelander_party_victory_staff_quote: "Let him who desires peace prepare for war.\n\n- Vegetius, Epitoma rei militaris"
   superevent_stelander_party_victory_staff_comment: "August Veil imposes peace by regulation"
   superevent_stelander_party_victory_wallets_title: "The Stelander Showcase Reopens"
-# Quote source: Cicero, Philippicae V.5
   superevent_stelander_party_victory_wallets_quote: "Endless money forms the sinews of war.\n\n- Cicero, Philippics"
   superevent_stelander_party_victory_wallets_comment: "Pavel Lanskoy opens the season"
   superevent_stelander_party_victory_silence_title: "Silence over Stelander"
-# Quote source: Tacitus, Agricola 30
   superevent_stelander_party_victory_silence_quote: "They make a desert and call it peace.\n\n- Tacitus, Agricola"
   superevent_stelander_party_victory_silence_comment: "Vera Korvina keeps the silence"
   superevent_stelander_party_victory_regent_title: "Nodrul Celebrates a Stelander Victory"
-# Quote source: Thucydides, History of the Peloponnesian War V.89
   superevent_stelander_party_victory_regent_quote: "The strong do what they can and the weak suffer what they must.\n\n- Thucydides, History of the Peloponnesian War"
   superevent_stelander_party_victory_regent_comment: "Edgar Renner signs for Stelander"
 
   superevent_stelander_shabrat_victory_title: "Shabrat's Victory in Stelander"
-# Quote source: https://www.folger.edu/explore/shakespeares-works/the-tempest/read/2/1/
   superevent_stelander_shabrat_victory_quote: "What's past is prologue.\n\n- William Shakespeare, The Tempest"
   superevent_stelander_shabrat_victory_comment: "The civil war is over"
   superevent_stelander_shabrat_victory_staff_title: "Shabrat's Staff Takes Stelander"
-# Quote source: Carl von Clausewitz, On War, book 1, chapter 1, section 24
   superevent_stelander_shabrat_victory_staff_quote: "War is a mere continuation of policy by other means.\n\n- Carl von Clausewitz, On War"
   superevent_stelander_shabrat_victory_staff_comment: "The Officers' Directory promises order"
   superevent_stelander_shabrat_victory_councils_title: "The Mountain Councils Enter Fada"
-# Quote source: Jean-Jacques Rousseau, The Social Contract, book 1, chapter 1
   superevent_stelander_shabrat_victory_councils_quote: "Man is born free, and everywhere he is in chains.\n\n- Jean-Jacques Rousseau, The Social Contract"
   superevent_stelander_shabrat_victory_councils_comment: "The passes gain a voice"
   superevent_stelander_shabrat_victory_truth_title: "A Court of Truth in Fada"
-# Quote source: The Gospel of John, 8:32 (King James Version)
   superevent_stelander_shabrat_victory_truth_quote: "And ye shall know the truth, and the truth shall make you free.\n\n- The Gospel of John, 8:32"
   superevent_stelander_shabrat_victory_truth_comment: "The Lower Market archives go on public display"
 
-# Quote source: https://gutenberg.ca/ebooks/butlersd-warisaracket/butlersd-warisaracket-00-e.html
   superevent_nam_resource_war_title: "The Resource War"
   superevent_nam_resource_war_quote: "A few profit - and the many pay.\n\n- Smedley Butler, War Is a Racket"
   superevent_nam_resource_war_comment: "The price of the deposits is paid in blood"
 
-# Quote source: https://www.gutenberg.org/files/3207/3207-h/3207-h.htm#chap17
   superevent_rus_last_empire_title: "The Last Empire"
   superevent_rus_last_empire_quote: "Covenants, without the sword, are but words.\n\n- Thomas Hobbes, Leviathan"
   superevent_rus_last_empire_comment: "The Khan has taken the imperial throne"
@@ -108,3 +91,10 @@
  superevent_rus_restoration_title:0 "THE LAST EMPIRE"
  superevent_rus_restoration_quote:0 "A country begins where tomorrow's bread ceases to be a miracle.\n- Mark Rustan"
  superevent_rus_restoration_comment:0 "Open the workshops."
+
+ superevent_itora_vorkerland_war_title:0 "Second Itora-Vorkerland War"
+ superevent_itora_vorkerland_war_quote:0 "We make war that we may live in peace.\n\n- Aristotle, Nicomachean Ethics"
+ superevent_itora_vorkerland_war_vlad_quote:0 "War is not to be avoided, but is only to be put off to the advantage of others.\n\n- Niccolo Machiavelli, The Prince"
+ superevent_itora_vorkerland_war_dorian_quote:0 "War therefore is an act of violence intended to compel our opponent to fulfil our will.\n\n- Carl von Clausewitz, On War"
+ superevent_itora_vorkerland_war_anton_quote:0 "But war, in a good cause, is not the greatest evil which a nation can suffer.\n\n- John Stuart Mill, 1862"
+ superevent_itora_vorkerland_war_comment:0 "War returns to the western front"

@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import re
 import shutil
+import subprocess
 import tempfile
 import unittest
+import wave
 from pathlib import Path
 from tools.lib.focus_sources import read_focus_source
 
@@ -48,6 +50,7 @@ class SupereventContractTests(unittest.TestCase):
         # The silent carrier is the one exception: play_song requires a station
         # registration, while factor 0 keeps it out of weighted shuffle.
         self.assertEqual(songs.count('song = "one_minute_of_silence"'), 1)
+        self.assertEqual(songs.count('song = "two_minutes_of_silence"'), 1)
         self.assertNotIn('_after_superevent', songs)
         self.assertEqual(songs.count('song = "ADISCORD_stp_civil_war_end"'), 1)
         self.assertIn('music_station = "adiscord_music"', songs)
@@ -184,7 +187,7 @@ class SupereventContractTests(unittest.TestCase):
 
         gui = parse_clausewitz((ROOT / SCRIPTED_GUI).read_text(encoding="utf-8"))[0].value
         windows = fields(gui)
-        order = (6, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
+        order = (6, 16, 10, 11, 9, 14, 1, 12, 15, 13, 2, 3, 4, 5, 7, 8)
         self.assertEqual(set(order), set(range(1, len(PRESENTATIONS) + 1)))
         for index in order + order:
             request(index)
@@ -197,7 +200,7 @@ class SupereventContractTests(unittest.TestCase):
         self.assertEqual(queue, [])
         self.assertEqual(flags, set())
         # A closed presentation can be replayed; no permanent deduplication lock.
-        request(13)
+        request(16)
         self.assertEqual(len(played), len(order) + 1)
 
     def test_requests_do_not_replace_an_active_presentation(self) -> None:
@@ -227,6 +230,7 @@ class SupereventContractTests(unittest.TestCase):
         )[0]
         self.assertNotIn("scoped_sound_effect", playback)
         self.assertEqual(playback.count('play_song = "one_minute_of_silence"'), 1)
+        self.assertEqual(playback.count('play_song = "two_minutes_of_silence"'), 1)
         self.assertNotIn('play_song = "superevent_', playback)
 
         sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8-sig")
@@ -259,8 +263,157 @@ class SupereventContractTests(unittest.TestCase):
         for item in PRESENTATIONS:
             self.assertNotIn(f'song = "{item.name}"', playlists, item.name)
 
+    def test_silence_selection_covers_actual_gui_audio_duration(self) -> None:
+        from tools.validators.validate_adiscord_superevents import blocks
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        playback = blocks(effects, r"^\s*ADISCORD_vorkerland_play_superevent_sound\s*=\s*\{")[0]
+        long_branch = blocks(playback, r"^\s*if\s*=\s*\{")[0]
+        short_branch = blocks(playback, r"^\s*else\s*=\s*\{")[0]
+        self.assertIn('play_song = "two_minutes_of_silence"', long_branch)
+        self.assertIn('play_song = "one_minute_of_silence"', short_branch)
+        selected_long = set(re.findall(r"has_global_flag\s*=\s*(\w+)", long_branch))
+
+        sounds = (ROOT / "sound/superevents_sound.asset").read_text(encoding="utf-8")
+        sound_paths = dict(re.findall(r'name = "(\w+)"\s+file = "([^"]+)"', sounds))
+        sound_effects = (ROOT / "sound/superevents_effects.asset").read_text(encoding="utf-8")
+        effect_sounds = {}
+        for block in blocks(sound_effects, r"^\s*soundeffect\s*=\s*\{"):
+            name = re.search(r"\bname\s*=\s*(\w+)", block)[1]
+            effect_sounds[name] = re.search(r"\bsound\s*=\s*(\w+)", block)[1]
+
+        gui = (ROOT / "interface/superevents.gui").read_text(encoding="utf-8")
+        expected_long = set()
+        for window in blocks(gui, r"^\s*containerWindowType\s*=\s*\{"):
+            name = re.search(r'name\s*=\s*"([^"]+)"', window)[1]
+            sound_effect = re.search(r"show_sound\s*=\s*(\w+)", window)[1]
+            path = ROOT / "sound" / sound_paths[effect_sounds[sound_effect]]
+            with wave.open(str(path)) as audio:
+                duration = audio.getnframes() / audio.getframerate()
+            self.assertLessEqual(duration, 120, name)
+            if duration > 60:
+                expected_long.add(name)
+        self.assertEqual(selected_long, expected_long)
+
+    @unittest.skipUnless(shutil.which("ffprobe") and shutil.which("ffmpeg"), "requires FFmpeg")
+    def test_silent_carriers_have_exact_duration_and_zero_samples(self) -> None:
+        for name, duration in (("one_minute_of_silence", 60), ("two_minutes_of_silence", 120)):
+            with self.subTest(name=name):
+                path = ROOT / "music" / f"{name}.ogg"
+                probe = subprocess.check_output([
+                    "ffprobe", "-v", "error", "-show_entries", "format=duration",
+                    "-of", "default=noprint_wrappers=1:nokey=1", str(path),
+                ], text=True)
+                self.assertAlmostEqual(float(probe), duration, places=3)
+                samples = subprocess.check_output([
+                    "ffmpeg", "-v", "error", "-i", str(path), "-f", "s16le", "-",
+                ])
+                self.assertTrue(samples)
+                self.assertFalse(any(samples))
+
     def test_repository_contract_is_clean(self) -> None:
         self.assertEqual(collect_issues(), [])
+
+    def test_itora_war_console_presentation_has_no_campaign_effects(self) -> None:
+        from tools.validators.validate_adiscord_superevents import _event_block, blocks
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        source = (ROOT / "events/ADISCORD_superevents.txt").read_text(encoding="utf-8")
+        event = _event_block(source, "ADISCORD_superevent.13")
+        fields = {entry.key: entry.value for entry in parse_clausewitz(event)[0].value}
+        self.assertEqual(set(fields), {"id", "hidden", "is_triggered_only", "immediate"})
+        self.assertEqual(fields["hidden"], "yes")
+        self.assertEqual(fields["is_triggered_only"], "yes")
+        self.assertEqual(
+            [entry.key for entry in fields["immediate"]],
+            ["set_temp_variable", "ADISCORD_superevent_enqueue"],
+        )
+        self.assertIn("ADISCORD_superevent_request = 16", event)
+
+        gfx = (ROOT / GFX).read_text(encoding="utf-8")
+        sprite = next(
+            block
+            for block in blocks(gfx, r"^\s*spriteType\s*=\s*\{")
+            if 'name = "GFX_superevent_itora_vorkerland_war"' in block
+        )
+        texture = re.search(r'textureFile = "([^"]+)"', sprite)[1]
+        self.assertEqual(texture, "gfx/interface/superevents/NAM/namestnik lost.png")
+        self.assertTrue((ROOT / texture).is_file())
+
+        effects = (ROOT / "common/scripted_effects/ADISCORD_vorkerland_effects.txt").read_text(encoding="utf-8")
+        timeout = blocks(effects, r"^ADISCORD_superevent_observer_tick\s*=\s*\{")[0]
+        self.assertIn("flag = superevent_itora_vorkerland_war days > 6", timeout)
+        self.assertIn("clr_global_flag = superevent_itora_vorkerland_war", timeout)
+
+    def test_itora_war_quote_follows_the_recorded_civil_war_winner(self) -> None:
+        from tools.validators.validate_adiscord_division_templates import parse_clausewitz
+
+        name = "superevent_itora_vorkerland_war"
+        path = ROOT / "common/scripted_localisation/ADISCORD_scripted_loc_superevents.txt"
+        getters = parse_clausewitz(path.read_text(encoding="utf-8"))
+        getter = next(
+            entry.value
+            for entry in getters
+            if any(child.key == "name" and child.value == "GetSupereventQuote" for child in entry.value)
+        )
+        choices = []
+        for entry in getter:
+            if entry.key != "text":
+                continue
+            fields = {child.key: child.value for child in entry.value}
+            key = fields["localization_key"]
+            if not key.startswith(name) and key != "superevent_inactive_quote":
+                continue
+            conditions = fields.get("trigger", [])
+            choices.append((key, conditions))
+
+        def matches(conditions, flags, country_flags):
+            for child in conditions:
+                if child.key == "has_global_flag":
+                    if child.value not in flags:
+                        return False
+                elif child.key == "WRK":
+                    for scoped in child.value:
+                        self.assertEqual(scoped.key, "has_country_flag")
+                        if scoped.value not in country_flags.get("WRK", set()):
+                            return False
+                else:
+                    self.fail(f"Unsupported quote condition: {child.key}")
+            return True
+
+        anton_outcome = "ADISCORD_vorkerland_worker_utilitarian_outcome"
+        cases = (
+            ("worker", {}, ""),
+            ("worker", {"WRK": {anton_outcome}}, "_anton"),
+            ("worker", {"IVN": {anton_outcome}}, ""),
+            ("vlad", {}, "_vlad"),
+            ("dorian", {}, "_dorian"),
+            ("vlad", {"WRK": {anton_outcome}}, "_vlad"),
+            ("dorian", {"WRK": {anton_outcome}}, "_dorian"),
+            (None, {}, ""),
+            (None, {"WRK": {anton_outcome}}, ""),
+        )
+        for winner, country_flags, suffix in cases:
+            with self.subTest(winner=winner, country_flags=country_flags):
+                flags = {f"ADISCORD_vorkerland_{winner}_won"} if winner else set()
+                inactive = next(key for key, conditions in choices if matches(conditions, flags, country_flags))
+                self.assertEqual(inactive, "superevent_inactive_quote")
+                flags.add(name)
+                selected = next(key for key, conditions in choices if matches(conditions, flags, country_flags))
+                self.assertEqual(selected, f"{name}{suffix}_quote")
+
+        quote_keys = {key for key, _ in choices if key.startswith(name)}
+        self.assertEqual(len(quote_keys), 4)
+        for language in ("russian", "english"):
+            localisation = ROOT / f"localisation/{language}/ADISCORD_superevents_l_{language}.yml"
+            contents = localisation.read_text(encoding="utf-8-sig")
+            values = []
+            for key in quote_keys:
+                matches = re.findall(rf'^\s*{key}:\d* "([^"\r\n]+)"$', contents, re.MULTILINE)
+                self.assertEqual(len(matches), 1, (language, key))
+                self.assertIn(r"\n\n- ", matches[0])
+                values.append(matches[0])
+            self.assertEqual(len(set(values)), 4)
 
     def test_inventory_order_is_canonical(self) -> None:
         self.assertEqual(
@@ -281,6 +434,7 @@ class SupereventContractTests(unittest.TestCase):
                 "superevent_stelander_great",
                 "superevent_rus_black_banner",
                 "superevent_rus_restoration",
+                "superevent_itora_vorkerland_war",
             ),
         )
 

@@ -277,18 +277,24 @@ entity = {
 
 # BEGIN ADISCORD orbital laser test
 # The empty mesh has no particle bounds. This radius covers the beam, blast
-# and smoke while their emitters remain at the ground-level impact locator.
+# and smoke above the reactor.
 # A newly visible actor starts inert; only the scripted strike command fires it.
 entity = {
 	name = "ADISCORD_orbital_laser_strike_entity"
 	pdxmesh = "ADISCORD_orbital_laser_mesh"
 	cull_radius = 1000
 	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
+	# Локаторы следуют основаниям трёх корпусов и краям центральной площадки.
+	locator = { name = "fire_core" position = { 0.0 3.3 0.0 } }
+	locator = { name = "fire_west" position = { -6.24992 1.2 -2.03 } }
+	locator = { name = "fire_east" position = { 9.72 0.9 -2.92 } }
+	locator = { name = "fire_north" position = { -1.0 1.5 4.0 } }
+	locator = { name = "fire_south" position = { 2.0 1.0 -5.0 } }
 	default_state = "spent"
 	state = { name = "strike"
 		state_time = 26.0
 		looping = no
-		next_state = "spent"
+		next_state = "burn"
 		event = {
 			time = 0
 			node = "impact"
@@ -305,28 +311,59 @@ entity = {
 			trigger_once = yes
 			sound = { soundeffect = "ADISCORD_rus_reactor_impact" }
 		}
+		# Столб облака переходит в конечное состояние без перезапуска.
+		event = {
+			time = 10.5
+			node = "impact"
+			particle = "ADISCORD_orbital_laser_column_particle"
+			keep_particle = yes
+			trigger_once = yes
+		}
+		# Первые очаги принадлежат сцене; постоянное состояние заменит их.
+		event = {
+			time = 10.5
+			node = "fire_core"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 10.5
+			node = "fire_west"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 10.5
+			node = "fire_east"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 10.5
+			node = "fire_north"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
+		event = {
+			time = 10.5
+			node = "fire_south"
+			particle = "ADISCORD_orbital_laser_fire_particle"
+			keep_particle = no
+			trigger_once = yes
+		}
 	}
-	state = { name = "spent" }
-}
-
-# Persistent fire, embers and smoke across the reactor site.
-entity = {
-	name = "ADISCORD_orbital_laser_aftermath_entity"
-	pdxmesh = "ADISCORD_orbital_laser_mesh"
-	cull_radius = 1000
-	locator = { name = "impact" position = { 0.0 0.0 0.0 } }
-	locator = { name = "fire_west" position = { -8.0 0.0 -3.0 } }
-	locator = { name = "fire_east" position = { 10.0 0.0 -3.0 } }
-	locator = { name = "fire_north" position = { -3.0 -1.0 7.0 } }
-	locator = { name = "fire_south" position = { 4.0 -1.0 -9.0 } }
-	# Эмиттеры создаются сразу; задержка до удара задана в самих частицах.
-	# Горение остаётся основным состоянием при повторном появлении объекта в кадре.
-	default_state = "burn"
+	# Конечное состояние не повторяет луч или звук и сохраняет эмиттеры пожара.
 	state = {
 		name = "burn"
+		state_time = 2
+		looping = no
 		event = {
 			time = 0
-			node = "impact"
+			node = "fire_core"
 			particle = "ADISCORD_orbital_laser_fire_particle"
 			keep_particle = yes
 			trigger_once = yes
@@ -358,6 +395,26 @@ entity = {
 			particle = "ADISCORD_orbital_laser_fire_particle"
 			keep_particle = yes
 			trigger_once = yes
+		}
+	}
+	state = { name = "spent" }
+}
+
+# Пепельная пелена над всей картой. Актор стоит в центре карты; радиус
+# отсечения покрывает её целиком, а задержки нарастания заданы в частице.
+entity = {
+	name = "ADISCORD_orbital_laser_world_ash_entity"
+	pdxmesh = "ADISCORD_orbital_laser_mesh"
+	cull_radius = 6000
+	locator = { name = "veil" position = { 0.0 0.0 0.0 } }
+	default_state = "veil"
+	state = {
+		name = "veil"
+		event = {
+			time = 0
+			node = "veil"
+			particle = "ADISCORD_orbital_laser_world_ash_particle"
+			keep_particle = yes
 		}
 	}
 }

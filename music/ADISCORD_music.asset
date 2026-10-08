@@ -6,9 +6,16 @@ music = {
 
 # Silent music-channel carrier for super-events. The actual presentation audio
 # remains GUI show_sound; this track only interrupts ordinary radio music.
+# Audio owner: tools/builders/build_adiscord_superevent_music.py.
 music = {
 	name = "one_minute_of_silence"
 	file = "one_minute_of_silence.ogg"
+	volume = 0.0
+}
+
+music = {
+	name = "two_minutes_of_silence"
+	file = "two_minutes_of_silence.ogg"
 	volume = 0.0
 }
 

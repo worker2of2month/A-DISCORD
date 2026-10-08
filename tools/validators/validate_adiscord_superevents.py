@@ -60,6 +60,7 @@ SUPEREVENT_IDS = (
     "ADISCORD_superevent.10",
     "ADISCORD_superevent.11",
     "ADISCORD_superevent.12",
+    "ADISCORD_superevent.13",
     "ADISCORD_superevent_audio.1",
     "ADISCORD_superevent_audio.2",
     "ADISCORD_superevent_news.1",
@@ -133,6 +134,11 @@ PRESENTATIONS = (
     SupereventPresentation(
         "superevent_rus_restoration",
         "superevent_rus_last_empire_sound_e",
+        legacy_music_asset=False,
+    ),
+    SupereventPresentation(
+        "superevent_itora_vorkerland_war",
+        "superevent_itora_vorkerland_war_sound_e",
         legacy_music_asset=False,
     ),
 )
@@ -455,28 +461,27 @@ def collect_issues(root: Path = ROOT) -> list[str]:
     # play_song resolves through the music database. Keep the silence carrier in
     # the real station with zero random chance so a super-event can reliably
     # interrupt whatever radio track is already playing without entering shuffle.
-    silence_assets = [
-        block
-        for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
-        if 'name = "one_minute_of_silence"' in block
-    ]
-    if (
-        len(silence_assets) != 1
-        or 'file = "one_minute_of_silence.ogg"' not in silence_assets[0]
-    ):
-        issues.append("super-event silence carrier must have exactly one music asset")
+    for carrier in ("one_minute_of_silence", "two_minutes_of_silence"):
+        silence_assets = [
+            block
+            for block in blocks(source[MUSIC], r"^\s*music\s*=\s*\{")
+            if f'name = "{carrier}"' in block
+        ]
+        if (
+            len(silence_assets) != 1
+            or f'file = "{carrier}.ogg"' not in silence_assets[0]
+        ):
+            issues.append(f"{carrier}: must have exactly one music asset")
 
-    silence_registrations = [
-        block
-        for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
-        if 'song = "one_minute_of_silence"' in block
-    ]
-    if len(silence_registrations) != 1:
-        issues.append(
-            "super-event silence carrier must be registered exactly once in ADISCORD_songs.txt"
-        )
-    elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
-        issues.append("super-event silence carrier must have zero random-play chance")
+        silence_registrations = [
+            block
+            for block in blocks(source[SONGS], r"^\s*music\s*=\s*\{")
+            if f'song = "{carrier}"' in block
+        ]
+        if len(silence_registrations) != 1:
+            issues.append(f"{carrier}: must be registered exactly once in ADISCORD_songs.txt")
+        elif not re.search(r"\bfactor\s*=\s*0(?:\.0+)?\b", silence_registrations[0]):
+            issues.append(f"{carrier}: must have zero random-play chance")
 
     for item, effect in zip(sound_items, sound_effect_names):
         song = effect.removesuffix("_sound_e")

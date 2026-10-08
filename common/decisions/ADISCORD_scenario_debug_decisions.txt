@@ -810,7 +810,7 @@ ADISCORD_scenario_debug_category = {
 		complete_effect = {
 			clr_global_flag = ADISCORD_debug_orbital_laser_active
 			log = "ADISCORD_ORBITAL_LASER clear"
-			40 = {
+			125 = {
 				destroy_entity = 610790
 				destroy_entity = 610791
 			}
