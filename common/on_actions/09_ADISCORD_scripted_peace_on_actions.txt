@@ -535,12 +535,24 @@ on_actions = {
 					# A third-party victory is outside VAL's territorial settlement.
 					clr_country_flag = VAL_frontier_member
 					clr_country_flag = VAL_frontier_defeated
-					if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
+					if = {
+						limit = {
+							has_country_flag = VAL_frontier_added_major
+						}
+						clr_country_flag = VAL_frontier_added_major
+						RUS_crisis_release_other_major = yes
+					}
 				}
 				else_if = {
 					limit = { OR = { tag = NOD tag = STP } has_country_flag = VAL_frontier_guarantor }
 					clr_country_flag = VAL_frontier_guarantor
-					if = { limit = { has_country_flag = VAL_frontier_added_major } clr_country_flag = VAL_frontier_added_major RUS_crisis_release_other_major = yes }
+					if = {
+						limit = {
+							has_country_flag = VAL_frontier_added_major
+						}
+						clr_country_flag = VAL_frontier_added_major
+						RUS_crisis_release_other_major = yes
+					}
 				}
 
 				# A shared NOD war has one settlement owner. Run it before VAL's

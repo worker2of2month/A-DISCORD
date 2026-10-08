@@ -13840,10 +13840,26 @@ STP_pe_clear = {
 
 # COUNTRY northern participant. Release only major status owned by this campaign.
 STP_cw_reserve_northern_major = {
-	if = { limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } } set_country_flag = STP_cw_northern_added_major set_major = yes }
+	if = {
+		limit = {
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
+		set_country_flag = STP_cw_northern_added_major
+		set_major = yes
+	}
 }
 STP_cw_release_northern_major = {
-	if = { limit = { has_country_flag = STP_cw_northern_added_major } clr_country_flag = STP_cw_northern_added_major RUS_crisis_release_other_major = yes }
+	if = {
+		limit = {
+			has_country_flag = STP_cw_northern_added_major
+		}
+		clr_country_flag = STP_cw_northern_added_major
+		RUS_crisis_release_other_major = yes
+	}
 }
 
 # The postwar recipient recruits normally from a funded six-battalion kit.

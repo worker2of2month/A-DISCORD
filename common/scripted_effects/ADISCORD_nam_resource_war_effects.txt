@@ -735,7 +735,13 @@ NAM_close_war_programmes = {
 # COUNTRY principal. Preserve major status owned by another campaign.
 ADISCORD_nam_resource_war_reserve_major = {
 	if = {
-		limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
+		limit = {
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
 		set_country_flag = ADISCORD_nam_resource_war_added_major
 		set_major = yes
 	}

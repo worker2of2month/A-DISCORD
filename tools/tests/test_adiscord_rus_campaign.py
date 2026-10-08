@@ -352,7 +352,7 @@ class RusCampaignTests(unittest.TestCase):
         return BunkerWorld(self)
 
     def test_generation_and_political_development_focuses(self):
-        self.assertEqual(len(self.focuses), 129)
+        self.assertEqual(len(self.focuses), 113)
         path = ROOT / "common/national_focus/ADISCORD_national_focus_RUS.txt"
         self.assertEqual(path.read_bytes(), expected_outputs()[path])
 
@@ -873,7 +873,7 @@ class RusCampaignTests(unittest.TestCase):
             (("district_ledger", "courier_stations", "district_paramedics"), "covenant_of_service", 3, 91),
             (("field_evacuation_service", "rifle_inspection_board", "artillery_observers"), "staff_field_exercise", 6, 91),
             (("recovery_depots", "interchangeable_parts", "second_arsenal_shift"), "strategic_freight_reserve", 3, 105),
-            (("register_conquered_lands", "empire_without_rivals", "postwar_roads", "imperial_academy"), "tomorrow_above_ground", 6, 154),
+            (("register_conquered_lands", "empire_without_rivals", "postwar_roads", "imperial_academy"), "tomorrow_above_ground", 6, 98),
         )
 
         def ready(name, done):

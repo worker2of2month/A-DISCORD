@@ -10,6 +10,9 @@ from tools.lib.paths import source_section
 
 
 from tools.lib.focus_sources import read_focus_source
+from tools.tests.test_adiscord_peace_coalition_lifecycle import (
+    shared_major_ownership_scripts,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 EFFECTS_PATH = ROOT / "common" / "scripted_effects" / "ADISCORD_VAL_effects.txt"
@@ -5199,7 +5202,10 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 )
             )
             self.assertTrue(
-                any(e.key == "set_major" and e.value == "no" for e in walk(tagged))
+                any(
+                    e.key == "RUS_crisis_release_other_major" and e.value == "yes"
+                    for e in walk(tagged)
+                )
             )
 
     def test_ai_tribes_refuse_but_eastern_territory_can_negotiate(self):
@@ -5294,6 +5300,9 @@ class ValFrontierCampaignTests(unittest.TestCase):
             ).read_text(encoding="utf-8")
         )
         definitions.update({e.key: e.value for e in minor_effects})
+        major_effects, major_triggers = shared_major_ownership_scripts()
+        definitions.update(major_effects)
+        triggers.update(major_triggers)
 
         def exercise(initial, *, subject=None, external_join=False, recover=False):
             factions = {name: list(members) for name, members in initial.items()}
@@ -5606,7 +5615,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         close = list(walk(block(definitions, "VAL_frontier_close")))
         last_peace = max(i for i, e in enumerate(close) if e.key == "white_peace")
         first_major_cleanup = min(
-            i for i, e in enumerate(close) if e.key == "set_major" and e.value == "no"
+            i for i, e in enumerate(close) if e.key == "RUS_crisis_release_other_major"
         )
         coalition_cleanup = next(
             i for i, e in enumerate(close) if e.key == "VAL_frontier_release_coalition"
@@ -5791,6 +5800,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
         effects["ADISCORD_vorkerland_rus_annex_dirty_target"] = block(
             rus, "ADISCORD_vorkerland_rus_annex_dirty_target"
         )
+        effects.update(shared_major_ownership_scripts()[0])
 
         def facts():
             result = {}
@@ -6022,6 +6032,7 @@ class ValFrontierCampaignTests(unittest.TestCase):
                 ).read_text(encoding="utf-8")
             )
         }
+        triggers.update(shared_major_ownership_scripts()[1])
 
         def groups(items):
             index = 0

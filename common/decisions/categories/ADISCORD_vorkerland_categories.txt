@@ -136,6 +136,7 @@ ADISCORD_vorkerland_rom_tru_category = {
 RUS_last_empire_crisis = {
 	icon = generic_prepare_civil_war
 	allowed = { always = yes }
+	visible_when_empty = yes
 	visible = {
 		NOT = { has_global_flag = RUS_crisis_world_ended }
 		OR = {

@@ -11,7 +11,6 @@ ideas = {
 				supply_consumption_factor = -0.10
 			}
 		}
-		# Campaign planning bonuses apply only against the selected opponent.
 
 # --- collapse_ideas ---
 		# Only peer combat is affected; regional conquests and foreign wars keep

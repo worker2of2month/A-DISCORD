@@ -2068,12 +2068,6 @@ ADISCORD_vorkerland_open_local_bracket_wars = {
 				ADISCORD_vorkerland_is_staged_local_belligerent = yes
 				ADISCORD_vorkerland_is_local_attacker_of_PREV = yes
 				NOT = { has_war_with = PREV }
-			NOT = {
-				any_country = {
-					has_country_flag = RUS_crisis_defender
-					has_war_with = PREV
-				}
-			}
 			}
 			# An inherited confederation pact would otherwise refuse the
 			# declaration for the whole first year of the collapse.
@@ -10209,27 +10203,18 @@ RUS_crisis_launch = {
 # COUNTRY sovereign intervener. Keep one native war without merging factions.
 # Register before callbacks; enemies of the existing war side cannot join it.
 RUS_crisis_start_intervention = {
+	RUS_crisis_refresh_war_anchor = yes
 	if = {
-		limit = { NOT = { has_event_target = RUS_crisis_war_anchor } }
-		save_global_event_target_as = RUS_crisis_war_anchor
-		RUS_crisis_register_defender = yes
+		limit = { RUS_crisis_can_enter_common_war = yes }
 		if = {
-			limit = { NOT = { has_war_with = RUS } }
+			limit = { NOT = { has_event_target = RUS_crisis_war_anchor } }
+			save_global_event_target_as = RUS_crisis_war_anchor
+			RUS_crisis_register_defender = yes
 			declare_war_on = { target = RUS type = annex_everything }
 		}
-	}
-	else_if = {
-		limit = {
-			NOT = {
-				any_country = {
-					has_country_flag = RUS_crisis_defender
-					has_war_with = PREV
-				}
-			}
-		}
-		RUS_crisis_register_defender = yes
-		if = {
+		else_if = {
 			limit = { NOT = { has_war_with = RUS } }
+			RUS_crisis_register_defender = yes
 			add_to_war = {
 				targeted_alliance = event_target:RUS_crisis_war_anchor
 				enemy = RUS
@@ -10237,14 +10222,21 @@ RUS_crisis_start_intervention = {
 				single_target_only = yes
 			}
 		}
-	}
-	if = {
-		limit = { has_war_with = RUS }
-		every_allied_country = {
-			limit = { NOT = { tag = PREV } }
-			RUS_crisis_join_intervention = yes
+		if = {
+			limit = { has_war_with = RUS }
+			every_allied_country = {
+				limit = { NOT = { tag = PREV } }
+				RUS_crisis_join_intervention = yes
+			}
+			RUS_crisis_join_subjects = yes
 		}
-		RUS_crisis_join_subjects = yes
+		else = {
+			RUS_crisis_remove_defender = yes
+			if = {
+				limit = { tag = event_target:RUS_crisis_war_anchor }
+				clear_global_event_target = RUS_crisis_war_anchor
+			}
+		}
 	}
 }
 
@@ -10258,6 +10250,8 @@ RUS_crisis_join_intervention = {
 			NOT = { is_subject_of = RUS }
 			NOT = { is_in_faction_with = RUS }
 			NOT = { has_war_with = PREV }
+			RUS_crisis_can_enter_common_war = yes
+			PREV = { has_war_with = RUS }
 		}
 		RUS_crisis_register_defender = yes
 		if = {
@@ -10269,7 +10263,11 @@ RUS_crisis_join_intervention = {
 				single_target_only = yes
 			}
 		}
-		RUS_crisis_join_subjects = yes
+		if = {
+			limit = { has_war_with = RUS }
+			RUS_crisis_join_subjects = yes
+		}
+		else = { RUS_crisis_remove_defender = yes }
 	}
 }
 
@@ -10279,14 +10277,14 @@ RUS_crisis_join_subjects = {
 }
 
 RUS_crisis_clear_preparation = {
-	if = {
-		limit = { RUS_crisis_project_active = no }
-		remove_ideas = RUS_crisis_reactor_guard
-	}
+	remove_ideas = RUS_crisis_reactor_guard
 }
 
 RUS_crisis_clear_roster = {
-	RUS_crisis_clear_preparation = yes
+	if = {
+		limit = { RUS_crisis_project_active = no }
+		RUS_crisis_clear_preparation = yes
+	}
 	for_each_scope_loop = {
 		array = global.RUS_crisis_defenders
 		RUS_crisis_clear_defender = yes
@@ -10297,6 +10295,43 @@ RUS_crisis_clear_roster = {
 		limit = { has_country_flag = RUS_crisis_warned }
 		clr_country_flag = RUS_crisis_warned
 		remove_mission = RUS_crisis_defence_countdown
+	}
+}
+
+# COUNTRY. Removal happens outside an active iteration over the same array.
+RUS_crisis_remove_defender = {
+	RUS_crisis_clear_defender = yes
+	remove_from_array = { array = global.RUS_crisis_defenders value = THIS }
+	RUS_crisis_refresh_war_anchor = yes
+}
+
+# The native war can outlive its first declarer. Rebind only within its roster.
+RUS_crisis_refresh_war_anchor = {
+	if = {
+		limit = {
+			NOT = {
+				event_target:RUS_crisis_war_anchor = {
+					exists = yes
+					has_country_flag = RUS_crisis_defender
+					has_war_with = RUS
+					has_capitulated = no
+				}
+			}
+		}
+		clear_global_event_target = RUS_crisis_war_anchor
+		for_each_scope_loop = {
+			array = global.RUS_crisis_defenders
+			if = {
+				limit = {
+					NOT = { has_event_target = RUS_crisis_war_anchor }
+					exists = yes
+					has_country_flag = RUS_crisis_defender
+					has_war_with = RUS
+					has_capitulated = no
+				}
+				save_global_event_target_as = RUS_crisis_war_anchor
+			}
+		}
 	}
 }
 
@@ -10374,6 +10409,7 @@ RUS_crisis_check_external_end = {
 				remove_from_array = { array = global.RUS_crisis_defenders value = THIS }
 			}
 			clear_temp_array = RUS_crisis_departures
+			RUS_crisis_refresh_war_anchor = yes
 			RUS_crisis_resolve_capitulation = yes
 		}
 	}
@@ -10427,6 +10463,16 @@ RUS_crisis_record_capitulation = {
 			clr_country_flag = RUS_crisis_capitulation_current
 			set_country_flag = { flag = RUS_crisis_capitulation_reserved days = 2 }
 		}
+	}
+	else_if = {
+		limit = {
+			RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+			ROOT = { has_country_flag = RUS_crisis_defender }
+			FROM = { NOT = { OR = { tag = RUS is_subject_of = RUS } } }
+		}
+		# A foreign victory leaves this country to its own war settlement.
+		ROOT = { RUS_crisis_remove_defender = yes }
+		RUS = { RUS_crisis_resolve_capitulation = yes }
 	}
 }
 
@@ -10655,7 +10701,7 @@ RUS_crisis_dissolve_empire = {
 	set_country_flag = RUS_crisis_laser_disabled
 	set_variable = { var = RUS_crisis_phase value = 4 }
 	RUS_campaign_shutdown = yes
-	# Only the selected hegemon receives this choice, even if an ally took the capital.
+	# The credited victor receives the choice after the Khan's empire dissolves.
 	event_target:RUS_crisis_hegemon = {
 		set_country_flag = RUS_crisis_settlement_rights
 		# The proclaimed imperial form selects the settlement narrative.
@@ -13457,7 +13503,13 @@ ADISCORD_vorkerland_pw_ensure_institutions = {
 ADISCORD_vorkerland_pw_prepare_member = {
 	set_country_flag = ADISCORD_vorkerland_pw_campaign_member
 	if = {
-		limit = { is_major = no }
+		limit = {
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
 		set_major = yes
 		set_country_flag = ADISCORD_vorkerland_pw_added_major
 	}

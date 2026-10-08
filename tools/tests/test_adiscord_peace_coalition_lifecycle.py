@@ -5,6 +5,7 @@ Unknown instructions fail; unrelated presentation/economy calls are explicit stu
 """
 
 from pathlib import Path
+from functools import lru_cache
 import unittest
 
 from tools.tests.test_scripted_peace_on_actions import GenericPeaceFixture
@@ -12,6 +13,24 @@ from tools.tests.test_adiscord_stp_preparation import scalar
 from tools.validators.validate_adiscord_division_templates import parse_clausewitz
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+@lru_cache(maxsize=1)
+def shared_major_ownership_scripts():
+    definitions = []
+    for path, name in (
+        (
+            "common/scripted_effects/ADISCORD_vorkerland_effects.txt",
+            "RUS_crisis_release_other_major",
+        ),
+        (
+            "common/scripted_triggers/ADISCORD_vorkerland_triggers.txt",
+            "RUS_crisis_other_major_required",
+        ),
+    ):
+        entries = parse_clausewitz((ROOT / path).read_text(encoding="utf-8"))
+        definitions.append({e.key: e.value for e in entries if e.key == name})
+    return tuple(definitions)
 
 
 class TreatyFixture(GenericPeaceFixture):
@@ -58,7 +77,8 @@ class TreatyFixture(GenericPeaceFixture):
         self.calls = []
         self.factions = {}
         self.wars = set()
-        self.effects, self.triggers = {}, {}
+        effects, triggers = shared_major_ownership_scripts()
+        self.effects, self.triggers = dict(effects), dict(triggers)
         self.stubs = {
             "ADISCORD_economy_mark_dirty",
             "ADISCORD_release_non_participating_minor_optimization",

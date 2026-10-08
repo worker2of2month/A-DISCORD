@@ -1891,7 +1891,6 @@ RUS_crisis_can_begin = {
 	NOT = { has_variable = RUS_crisis_phase }
 	RUS_lab_reactor_access = yes
 	NOT = { has_global_flag = RUS_crisis_world_ended }
-
 }
 
 # COUNTRY. Regional winners retain their own alliances and settlements.
@@ -1961,8 +1960,14 @@ RUS_crisis_coalition_candidate = {
 			has_war = no
 			has_global_flag = ADISCORD_south_final_resolved
 			OR = {
-				AND = { tag = SHL has_global_flag = ADISCORD_south_hegemon_SHL }
-				AND = { tag = NAM has_global_flag = ADISCORD_south_hegemon_NAM }
+				AND = {
+					tag = SHL
+					has_global_flag = ADISCORD_south_hegemon_SHL
+				}
+				AND = {
+					tag = NAM
+					has_global_flag = ADISCORD_south_hegemon_NAM
+				}
 			}
 		}
 		AND = {
@@ -2027,12 +2032,35 @@ RUS_imperial_frontier_target = {
 	NOT = { has_war_with = RUS }
 }
 
-# COUNTRY. Coalition membership persists through capitulation and liberation.
+# COUNTRY. Native late entry must share the intervention's actual war side.
 RUS_crisis_defending_bloc = {
 	exists = yes
 	NOT = { tag = RUS }
 	NOT = { is_subject_of = RUS }
 	has_war_with = RUS
+	has_event_target = RUS_crisis_war_anchor
+	has_war_together_with = event_target:RUS_crisis_war_anchor
+	RUS_crisis_side_compatible = yes
+}
+
+# COUNTRY. Joining this war must not settle a conflict against its current side.
+RUS_crisis_side_compatible = {
+	NOT = { is_in_faction_with = RUS }
+	NOT = {
+		any_of_scopes = {
+			array = global.RUS_crisis_defenders
+			has_war_with = PREV
+		}
+	}
+}
+
+# COUNTRY. A prior independent war retains its own scripted settlement.
+RUS_crisis_can_enter_common_war = {
+	RUS_crisis_side_compatible = yes
+	OR = {
+		NOT = { has_war_with = RUS }
+		has_country_flag = RUS_crisis_defender
+	}
 }
 
 # COUNTRY. The epilogue is terminal; earlier regional wars remain independent.

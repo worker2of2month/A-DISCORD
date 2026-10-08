@@ -1784,7 +1784,7 @@ VAL_nw_khan_threat = {
 	OR = {
 		has_war_with = RUS
 		AND = {
-			tag = event_target:RUS_crisis_hegemon
+			has_country_flag = RUS_crisis_warned
 			RUS = { check_variable = { var = RUS_crisis_phase value = 1 compare = equals } }
 		}
 	}
@@ -2964,4 +2964,12 @@ VAL_island_treaty_available = {
 		owns_state = 709
 		controls_state = 709
 	}
+}
+
+VAL_nw_can_join_khan_intervention = {
+	VAL_nw_operational = yes
+	RUS_crisis_coalition_candidate = yes
+	RUS_crisis_can_enter_common_war = yes
+	RUS = { check_variable = { var = RUS_crisis_phase value = 2 compare = equals } }
+	NOT = { has_global_flag = RUS_crisis_world_ended }
 }

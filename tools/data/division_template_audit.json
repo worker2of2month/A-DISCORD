@@ -12877,12 +12877,12 @@
       ],
       "support": [],
       "computed": {
-        "organization": 50.0,
+        "organization": 80.0,
         "manpower": 400.0,
         "equipment": {
           "ADISCORD_zeppelin_equipment": 1.0
         },
-        "supply": 0.6
+        "supply": 1.2
       },
       "equipment_availability": {
         "ADISCORD_zeppelin_equipment": true
@@ -12915,12 +12915,12 @@
       ],
       "support": [],
       "computed": {
-        "organization": 50.0,
+        "organization": 80.0,
         "manpower": 400.0,
         "equipment": {
           "ADISCORD_zeppelin_equipment": 1.0
         },
-        "supply": 0.6
+        "supply": 1.2
       },
       "equipment_availability": {
         "ADISCORD_zeppelin_equipment": true
@@ -12953,12 +12953,12 @@
       ],
       "support": [],
       "computed": {
-        "organization": 50.0,
+        "organization": 80.0,
         "manpower": 400.0,
         "equipment": {
           "ADISCORD_zeppelin_equipment": 1.0
         },
-        "supply": 0.6
+        "supply": 1.2
       },
       "equipment_availability": {
         "ADISCORD_zeppelin_equipment": true

@@ -3726,17 +3726,12 @@ VAL_new_world_category = {
 		visible = {
 			has_completed_focus = VAL_nw_khan
 			RUS = { exists = yes }
+			NOT = { has_war_with = RUS }
 		}
 		available = {
-			VAL_nw_operational = yes
-			RUS_crisis_potential_hegemon = yes
-			has_war = no
-			NOT = { is_in_faction_with = RUS }
-			RUS = {
-				custom_trigger_tooltip = {
-					tooltip = VAL_nw_khan_ready_tt
-					RUS_crisis_can_begin = yes
-				}
+			custom_trigger_tooltip = {
+				tooltip = VAL_nw_khan_ready_tt
+				VAL_nw_can_join_khan_intervention = yes
 			}
 		}
 		cost = 0
@@ -3744,15 +3739,8 @@ VAL_new_world_category = {
 			custom_effect_tooltip = VAL_nw_challenge_khan_tt
 			hidden_effect = {
 				if = {
-					limit = {
-						VAL_nw_operational = yes
-						has_war = no
-						RUS_crisis_potential_hegemon = yes
-						NOT = { is_in_faction_with = RUS }
-						RUS = { RUS_crisis_can_begin = yes }
-					}
-					save_global_event_target_as = RUS_crisis_hegemon
-					RUS = { RUS_crisis_begin = yes }
+					limit = { VAL_nw_can_join_khan_intervention = yes }
+					RUS_crisis_start_intervention = yes
 				}
 			}
 		}

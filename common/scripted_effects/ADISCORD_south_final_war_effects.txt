@@ -219,7 +219,13 @@ ADISCORD_south_prepare_champion = {
 		}
 	}
 	if = {
-		limit = { OR = { is_major = no has_country_flag = RUS_crisis_added_major RUS_crisis_other_major_required = yes } }
+		limit = {
+			OR = {
+				is_major = no
+				has_country_flag = RUS_crisis_added_major
+				RUS_crisis_other_major_required = yes
+			}
+		}
 		set_country_flag = ADISCORD_south_added_major
 		set_major = yes
 	}

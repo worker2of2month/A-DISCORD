@@ -1,4 +1,18 @@
 defined_text = {
+	name = GetRUSCrisisLaunchClock
+	text = {
+		trigger = {
+			RUS = {
+				RUS_crisis_project_active = yes
+				has_active_mission = RUS_crisis_laser_countdown
+			}
+		}
+		localization_key = RUS_crisis_launch_clock_active
+	}
+	text = { localization_key = RUS_crisis_launch_clock_inactive }
+}
+
+defined_text = {
 	name = GetRUSArmyDoctrine
 	text = {
 		trigger = { has_completed_focus = RUS_patient_war }

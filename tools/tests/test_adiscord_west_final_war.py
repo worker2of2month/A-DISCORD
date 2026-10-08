@@ -161,7 +161,8 @@ class WestFinalWarContractTests(unittest.TestCase):
 
     def test_every_terminal_path_releases_campaign_status(self):
         close = body(EFFECTS, "ADISCORD_west_close_member_state")
-        self.assertIn("set_major = no", close)
+        self.assertIn("RUS_crisis_release_other_major = yes", close)
+        self.assertLess(close.index("clr_country_flag = ADISCORD_west_added_major"), close.index("RUS_crisis_release_other_major = yes"))
         self.assertIn("ADISCORD_west_remove_path_spirit = yes", close)
         self.assertEqual(
             scope_calls(body(EFFECTS, "ADISCORD_west_close_campaign_state"), "ADISCORD_west_close_member_state"),

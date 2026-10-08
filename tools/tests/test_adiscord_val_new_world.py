@@ -222,7 +222,7 @@ class NewWorldAccountingTests(unittest.TestCase):
     def test_emergency_orders_deliver_during_the_warning_and_refund_when_it_ends(self):
         for name in ("emergency_arsenals", "emergency_reserve"):
             world = ContractWorld()
-            world.targets["RUS_crisis_hegemon"] = "VAL"
+            world.data["VAL"]["flags"].add("RUS_crisis_warned")
             world.data["RUS"]["vars"]["RUS_crisis_phase"] = 1
             world.run(f"VAL_nw_{name}_begin")
             self.assertIn(f"VAL_nw_{name}_deposit", world.data["VAL"]["vars"])
@@ -232,7 +232,7 @@ class NewWorldAccountingTests(unittest.TestCase):
             expected = (5600, 0) if name == "emergency_arsenals" else (5000, 2000)
             self.assertEqual((sum(world.data["VAL"]["rifles"].values()), world.data["VAL"]["manpower"]), expected)
             ended = ContractWorld()
-            ended.targets["RUS_crisis_hegemon"] = "VAL"
+            ended.data["VAL"]["flags"].add("RUS_crisis_warned")
             ended.data["RUS"]["vars"]["RUS_crisis_phase"] = 1
             ended.run(f"VAL_nw_{name}_begin")
             ended.data["RUS"]["vars"]["RUS_crisis_phase"] = 5

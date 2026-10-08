@@ -115,7 +115,8 @@ class SouthFinalWarContractTests(unittest.TestCase):
         ):
             self.assertIn("ADISCORD_south_close_campaign_state = yes", body(EFFECTS, name), name)
         close = body(EFFECTS, "ADISCORD_south_close_member_state")
-        self.assertIn("set_major = no", close)
+        self.assertIn("RUS_crisis_release_other_major = yes", close)
+        self.assertLess(close.index("clr_country_flag = ADISCORD_south_added_major"), close.index("RUS_crisis_release_other_major = yes"))
         self.assertIn("ADISCORD_south_remove_path_spirit = yes", close)
         self.assertEqual(scope_calls(body(EFFECTS, "ADISCORD_south_close_campaign_state"), "ADISCORD_south_close_member_state"), {"NAM", "SHL", "EFL", "AZH"})
         spirits = set(re.findall(r"add_ideas = (ADISCORD_south_\w+)", body(EFFECTS, "ADISCORD_south_add_path_spirit")))
