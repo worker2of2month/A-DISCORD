@@ -35,3 +35,13 @@ sound = {
 	name = "ADISCORD_robot_burst_sample"
 	file = "combat_robots/ADISCORD_robot_burst.wav"
 }
+
+sound = {
+	name = "ADISCORD_rus_reactor_strike_sample"
+	file = "RUS/ADISCORD_rus_reactor_strike.wav"
+}
+
+sound = {
+	name = "ADISCORD_rus_ruined_world_sample"
+	file = "RUS/ADISCORD_rus_ruined_world.wav"
+}

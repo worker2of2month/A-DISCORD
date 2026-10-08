@@ -545,7 +545,7 @@ ADISCORD_vorkerland_is_reunification_target_for_ROOT = {
 }
 
 ADISCORD_vorkerland_worker_victory_candidate = {
-	tag = WRK
+	tag = WKR
 	NOT = { has_capitulated = yes }
 	ADISCORD_vorkerland_vad_defeated = yes
 	ADISCORD_vorkerland_tva_defeated = yes

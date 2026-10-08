@@ -32,11 +32,12 @@ characters = {
 			}
 		}
 		corps_commander = {
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 1
+			traits = { infantry_leader }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
 			legacy_id = -1
 		}
 	}
@@ -49,12 +50,13 @@ characters = {
 				small = GFX_portrait_RUS_Mikhail_Rakitin_small
 			}
 		}
-		corps_commander = {
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 1
+		field_marshal = {
+			traits = { offensive_doctrine logistics_wizard }
+			skill = 4
+			attack_skill = 3
+			defense_skill = 3
+			planning_skill = 4
+			logistics_skill = 3
 			legacy_id = -1
 		}
 	}
@@ -68,11 +70,12 @@ characters = {
 			}
 		}
 		corps_commander = {
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 1
+			traits = { infantry_leader ambusher }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 2
+			logistics_skill = 2
 			legacy_id = -1
 		}
 	}
@@ -86,11 +89,12 @@ characters = {
 			}
 		}
 		corps_commander = {
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 1
+			traits = { organizer }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
 			legacy_id = -1
 		}
 	}
@@ -102,18 +106,6 @@ characters = {
 				large = GFX_Portrait_Forul_Generic_2
 				small = GFX_Portrait_Forul_Generic_2_small
 			}
-			army = {
-				large = GFX_Portrait_Forul_Generic_2
-				small = GFX_Portrait_Forul_Generic_2_small
-			}
-		}
-		corps_commander = {
-			skill = 3
-			attack_skill = 2
-			defense_skill = 4
-			planning_skill = 3
-			logistics_skill = 3
-			legacy_id = -1
 		}
 	}
 }

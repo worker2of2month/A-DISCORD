@@ -53,6 +53,35 @@ class ReunifiedWrkDestinationScopeTests(unittest.TestCase):
         cls.events = source_section(read(PHASE_EVENTS), 'phase_events')
         cls.triggers = read(PHASE_TRIGGERS)
 
+    def test_worker_victory_is_checked_on_the_living_claimant(self) -> None:
+        candidate = named_block(
+            self.triggers, "ADISCORD_vorkerland_worker_victory_candidate"
+        )
+        self.assertRegex(candidate, r"(?m)^\s*tag = WKR\s*$")
+        self.assertNotRegex(candidate, r"(?m)^\s*tag = WRK\s*$")
+
+    def test_reunification_dispatch_does_not_use_the_callback_country(self) -> None:
+        dispatch = named_block(
+            self.effects, "ADISCORD_vorkerland_begin_reunification"
+        )
+        outer = named_block(dispatch, "if")
+        gate = named_block(outer, "limit")
+        self.assertIn(
+            "NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }",
+            gate,
+        )
+        event = "country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }"
+        branches = re.findall(r"\b(?:if|else_if)\s*=\s*\{", outer)
+        self.assertEqual(len(branches), 3)
+        normalized = " ".join(outer.split())
+        for tag in ("WKR", "VAD", "TVA"):
+            self.assertIn(
+                f"{tag} = {{ exists = yes is_subject = no NOT = {{ has_capitulated = yes }} }}",
+                normalized,
+            )
+            self.assertIn(f"{tag} = {{ {event} }}", outer)
+        self.assertEqual(outer.count(event), 3)
+
     def test_each_winner_is_consumed_by_materialized_wrk(self) -> None:
         contracts = (
             ("wkr", "WKR", "WRK_Nikita_Worcker"),

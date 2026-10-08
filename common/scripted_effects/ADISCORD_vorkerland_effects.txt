@@ -8314,9 +8314,57 @@ ADISCORD_vorkerland_verify_central_showdown = {
 }
 ADISCORD_vorkerland_begin_reunification = {
 	if = {
-		limit = { ADISCORD_vorkerland_coalition_victory_ready = yes }
-		ADISCORD_vorkerland_set_phase_reunification = yes
-		country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 }
+		limit = {
+			NOT = { has_global_flag = ADISCORD_vorkerland_phase_reunification }
+			ADISCORD_vorkerland_coalition_victory_ready = yes
+		}
+		# State-control and peace callbacks can run on a defeated country.
+		# The surviving claimant must own the delayed event until WRK exists.
+		if = {
+			limit = {
+				WKR = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
+				OR = {
+					WKR = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
+			ADISCORD_vorkerland_set_phase_reunification = yes
+			WKR = { country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 } }
+		}
+		else_if = {
+			limit = {
+				VAD = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
+				OR = {
+					VAD = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
+			ADISCORD_vorkerland_set_phase_reunification = yes
+			VAD = { country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 } }
+		}
+		else_if = {
+			limit = {
+				TVA = {
+					exists = yes
+					is_subject = no
+					NOT = { has_capitulated = yes }
+				}
+				OR = {
+					TVA = { has_country_flag = ADISCORD_vorkerland_central_unifier }
+					ADISCORD_vorkerland_has_live_marked_central_unifier = no
+				}
+			}
+			ADISCORD_vorkerland_set_phase_reunification = yes
+			TVA = { country_event = { id = ADISCORD_vorkerland_phase.6 days = 1 } }
+		}
 	}
 }
 
