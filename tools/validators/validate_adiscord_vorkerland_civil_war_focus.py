@@ -2069,8 +2069,8 @@ DEPTH_POSITIONS = {
     "TVA_certify_the_completed_programmes": (70, 12),
     "TVA_publish_the_reconstruction_index": (69, 13),
     "TVA_divert_the_research_budget": (71, 13),
-    "TVA_open_the_technical_exchange": (76, 11),
-    "TVA_hire_the_bracket_victors": (78, 11),
+    "TVA_open_the_technical_exchange": (82, 9),
+    "TVA_hire_the_bracket_victors": (84, 9),
     "TVA_stand_up_the_grid_air_staff": (63, 8),
     "TVA_print_unattended_strike_packages": (62, 9),
     "TVA_keep_the_interdictors_on_station": (64, 9),
@@ -2674,14 +2674,6 @@ LAYOUT_WIDE_DROPS = {
     ("TVA_network_observation_posts", "TVA_print_interchangeable_repair_modules"): (
         2,
         "documented routing exception; see LAYOUT_ROUTING_EXCEPTIONS",
-    ),
-    ("TVA_publish_operational_metrics", "TVA_hire_the_bracket_victors"): (
-        3,
-        "odd drop keeps the diplomacy pair below the specialist cadre row",
-    ),
-    ("TVA_publish_operational_metrics", "TVA_open_the_technical_exchange"): (
-        3,
-        "odd drop keeps the diplomacy pair below the specialist cadre row",
     ),
     ("TVA_standardize_assault_teams", "TVA_print_interchangeable_repair_modules"): (
         2,

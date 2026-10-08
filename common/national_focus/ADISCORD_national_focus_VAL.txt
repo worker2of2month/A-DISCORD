@@ -1429,7 +1429,7 @@ shared_focus = {
 		id = VAL_Ministry_Auditors
 		icon = GFX_focus_generic_secret_service_agency
 		search_filters = { FOCUS_FILTER_VAL_AUTHORITY FOCUS_FILTER_VAL_ECONOMY }
-		x = 14
+		x = 16
 		y = 2
 		cost = 3
 		prerequisite = { focus = VAL_Operational_Directorate }

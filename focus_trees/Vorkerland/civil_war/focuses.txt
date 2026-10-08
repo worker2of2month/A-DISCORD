@@ -15260,8 +15260,8 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_RESEARCH
 		}
-		x = 2
-		y = 3
+		x = 8
+		y = 1
 		relative_position_id = TVA_publish_operational_metrics
 		cost = 3
 		prerequisite = { focus = TVA_publish_operational_metrics }
@@ -15307,8 +15307,8 @@ focus_tree = {
 			FOCUS_FILTER_INTERNATIONAL_TRADE
 			FOCUS_FILTER_MANPOWER
 		}
-		x = 4
-		y = 3
+		x = 10
+		y = 1
 		relative_position_id = TVA_publish_operational_metrics
 		cost = 3
 		prerequisite = { focus = TVA_publish_operational_metrics }

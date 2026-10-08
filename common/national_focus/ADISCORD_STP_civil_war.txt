@@ -3307,8 +3307,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_joint_defence_board
 		icon = GFX_focus_STP_ps_joint_staff
-		x = 14
-		y = 10
+		x = 26
+		y = 4
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_nod_military_mission }
@@ -3339,8 +3339,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_armed_neutrality
 		icon = GFX_focus_STP_ps_asylum_protocol
-		x = 18
-		y = 10
+		x = 30
+		y = 4
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_domestic_pattern }
@@ -5711,8 +5711,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_nod_military_mission
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = 14
-		y = 9
+		x = 26
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -5736,8 +5736,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_domestic_pattern
 		icon = GFX_focus_STP_pw_party_domestic_pattern
-		x = 18
-		y = 9
+		x = 30
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -5857,8 +5857,8 @@ focus_tree = {
 	focus = {
 		id = STP_pw_party_former_patron
 		icon = GFX_focus_STP_cw_northern_desk
-		x = 22
-		y = 9
+		x = 34
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -13183,8 +13183,8 @@ focus_tree = {
 		id = STP_ps_route_security
 		prerequisite = { focus = STP_cw_unified_headquarters }
 		icon = GFX_focus_STP_cw_security_collegium
-		x = 13
-		y = 2
+		x = 25
+		y = 1
 		cost = 2
 
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
@@ -13284,8 +13284,8 @@ focus_tree = {
 		id = STP_ps_retake_congress
 		prerequisite = { focus = STP_ps_restore_couriers focus = STP_cw_congress_in_session }
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS
-		x = 15
-		y = 4
+		x = 27
+		y = 2
 		cost = 1
 
 		allow_branch = { tag = STP NOT = { has_country_flag = STP_cw_postwar } }
@@ -13311,8 +13311,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_permanent_security
 		icon = GFX_focus_STP_ps_permanent_security
-		x = -14
-		y = 9
+		x = -20
+		y = 8
 
 		cost = 3
 		prerequisite = { focus = STP_party_chain_of_command }
@@ -13330,8 +13330,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_presidium_authority
 		icon = GFX_focus_STP_GUARANTEE_MINISTERS_cabinet
-		x = -14
-		y = 10
+		x = -20
+		y = 9
 
 		cost = 3
 		prerequisite = { focus = STP_ps_permanent_security }
@@ -13346,8 +13346,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_district_fund
 		icon = GFX_focus_STP_ps_northern_credit
-		x = -18
-		y = 9
+		x = -24
+		y = 8
 
 		cost = 3
 		prerequisite = { focus = STP_party_local_cadres }
@@ -13367,8 +13367,8 @@ focus_tree = {
 	focus = {
 		id = STP_ps_cells_agreement
 		icon = GFX_focus_STP_party_district_compact
-		x = -18
-		y = 10
+		x = -24
+		y = 9
 
 		cost = 3
 		prerequisite = { focus = STP_ps_district_fund }

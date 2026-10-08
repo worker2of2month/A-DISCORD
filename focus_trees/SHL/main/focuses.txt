@@ -1781,7 +1781,7 @@ focus_tree = {
 	focus = {
 		id = SHL_house_war_mandate
 		icon = GFX_goal_generic_trade
-		x = 6
+		x = 4
 		y = 8
 		cost = 2
 		prerequisite = { focus = SHL_house_compromise }
@@ -1889,8 +1889,8 @@ focus_tree = {
 	focus = {
 		id = SHL_no_more_rations
 		icon = GFX_goal_generic_demand_territory
-		x = 24
-		y = 6
+		x = 26
+		y = 5
 		cost = 2
 		prerequisite = { focus = SHL_southern_watch }
 		bypass = { check_variable = { var = SHL_mazar_state value = 3 compare = equals } }

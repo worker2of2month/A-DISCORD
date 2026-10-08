@@ -1150,8 +1150,8 @@
 	focus = {
 		id = STP_pw_party_joint_defence_board
 		icon = GFX_focus_STP_ps_joint_staff
-		x = 14
-		y = 10
+		x = 26
+		y = 4
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_nod_military_mission }
@@ -1182,8 +1182,8 @@
 	focus = {
 		id = STP_pw_party_armed_neutrality
 		icon = GFX_focus_STP_ps_asylum_protocol
-		x = 18
-		y = 10
+		x = 30
+		y = 4
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_domestic_pattern }
@@ -1560,8 +1560,8 @@
 	focus = {
 		id = STP_pw_party_nod_military_mission
 		icon = GFX_focus_STP_cw_arm_the_north
-		x = 14
-		y = 9
+		x = 26
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -1585,8 +1585,8 @@
 	focus = {
 		id = STP_pw_party_domestic_pattern
 		icon = GFX_focus_STP_pw_party_domestic_pattern
-		x = 18
-		y = 9
+		x = 30
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
@@ -1706,8 +1706,8 @@
 	focus = {
 		id = STP_pw_party_former_patron
 		icon = GFX_focus_STP_cw_northern_desk
-		x = 22
-		y = 9
+		x = 34
+		y = 3
 		cost = 4
 		allow_branch = { has_country_flag = STP_cw_postwar tag = STP }
 		prerequisite = { focus = STP_pw_party_new_republic }
