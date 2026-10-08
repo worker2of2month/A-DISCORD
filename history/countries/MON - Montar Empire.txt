@@ -1,4 +1,5 @@
 capital = 469
+ADISCORD_grant_technology_profile_land = yes
 oob = "MON"
 
 recruit_character = MON_Marius_II_Arken
@@ -16,6 +17,22 @@ set_popularities = {
 set_stability = 0.76
 set_war_support = 0.82
 set_research_slots = 4
+add_manpower = 200000
+add_equipment_to_stockpile = {
+	type = infantry_equipment
+	amount = 80000
+	producer = MON
+}
+add_equipment_to_stockpile = {
+	type = ADISCORD_squad_weapons_equipment
+	amount = 1200
+	producer = MON
+}
+add_equipment_to_stockpile = {
+	type = artillery_equipment
+	amount = 720
+	producer = MON
+}
 add_ideas = {
 	MON_throne_of_fifteen_crowns
 	MON_imperial_general_staff

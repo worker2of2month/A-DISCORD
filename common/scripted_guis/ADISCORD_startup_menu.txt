@@ -144,10 +144,10 @@ scripted_gui = {
 				tag = VAL
 				check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals }
 			}
-			ADISCORD_startup_country_body_visible = {
+			ADISCORD_startup_country_panel_visible = {
 				check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals }
 			}
-			ADISCORD_startup_body_visible = {
+			ADISCORD_startup_body_panel_visible = {
 				NOT = {
 					check_variable = { var = ADISCORD_startup_tab value = 0 compare = equals }
 				}

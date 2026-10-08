@@ -43,7 +43,7 @@ class GeneratorDivisionTemplateNameTests(unittest.TestCase):
             inner.render_oob("BOR", infantry, principal_provinces),
             inner.render_oob("DOL", militia, principal_provinces),
             northern.render_oob(
-                "MON", {**infantry, "divisions": 14}, principal_provinces
+                "MON", {**infantry, "divisions": 36, "line_divisions": 28}, principal_provinces
             ),
             northern.render_oob("BRN", infantry, principal_provinces),
             northern.render_oob("VRA", militia, principal_provinces),

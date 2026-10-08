@@ -320,17 +320,18 @@ COUNTRIES: dict[str, dict[str, object]] = {
         "unit_type": "ADISCORD_militia",
         "colors": ((124, 92, 67), (218, 207, 173), (58, 84, 92)),
     },
+    # Coastal cores retain the releasable tag; MON owns its starting territory.
     "VLD": {
-        "states": (460, 467, 472),
+        "states": (),
         "capital": 460,
         "capital_name": "Вальд",
-        "population": 691_468,
-        "civilian": 1,
-        "military": 1,
+        "population": 0,
+        "civilian": 0,
+        "military": 0,
         "infrastructure": 3,
         "air_bases": 0,
-        "resources": {"oil": 4},
-        "divisions": 1,
+        "resources": {},
+        "divisions": 0,
         "unit_type": "ADISCORD_militia",
         "colors": ((76, 104, 83), (214, 199, 152), (111, 58, 54)),
     },
@@ -345,32 +346,36 @@ COUNTRIES: dict[str, dict[str, object]] = {
             453,
             456,
             459,
+            460,
             462,
             464,
             466,
+            467,
             468,
             469,
             470,
             471,
+            472,
             473,
         ),
         "capital": 469,
         "capital_name": "Монтера",
-        "secondary_vps": ((459, "Аркен", 5), (471, "Валтор", 3)),
-        "population": 12_370_582,
-        "civilian": 28,
-        "military": 18,
+        "secondary_vps": ((459, "Аркен", 5), (471, "Валтор", 3), (460, "Вальд", 5)),
+        "population": 24_000_000,
+        "civilian": 48,
+        "military": 36,
         "infrastructure": 4,
         "air_bases": 3,
         "resources": {
             "steel": 26,
             "coal": 20,
-            "oil": 8,
+            "oil": 12,
             "aluminium": 10,
             "tungsten": 6,
             "chromium": 4,
         },
-        "divisions": 14,
+        "divisions": 36,
+        "line_divisions": 28,
         "unit_type": "infantry",
         "colors": ((32, 82, 48), (224, 202, 115), (108, 32, 38)),
     },
@@ -596,6 +601,8 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
     profiles: dict[int, dict[str, object]] = {}
     for tag, country in COUNTRIES.items():
         states = list(country["states"])
+        if not states:
+            continue
         capital = int(country["capital"])
         population_weights: dict[int, float] = {}
         for state_id in states:
@@ -650,7 +657,9 @@ def build_profiles() -> tuple[dict[int, dict[str, object]], dict[int, int]]:
         for state_id in states:
             population = populations[state_id]
             factory_total = civilians[state_id] + military[state_id]
-            if state_id == capital:
+            if factory_total > 4:
+                category = "large_town"
+            elif state_id == capital:
                 category = "large_town" if population >= 750_000 else "town"
             elif population >= 700_000 or factory_total > 2:
                 # Rural states have only two shared slots, even after population shifts.
@@ -697,6 +706,8 @@ def render_state(state_id: int, profile: dict[str, object]) -> str:
     ]
     if state_id in (426, 436, 454, 455):
         history.append("\t\tadd_core_of = ORV")
+    if state_id in (460, 467, 472):
+        history.append("\t\tadd_core_of = VLD")
     if profile["vp"]:
         _name, value = profile["vp"]
         history.append(f"\t\tvictory_points = {{ {profile['vp_province']} {value} }}")
@@ -761,6 +772,7 @@ def render_oob(
     divisions = int(country["divisions"])
     unit_type = str(country["unit_type"])
     if tag == "MON":
+        line_divisions = int(country["line_divisions"])
         lines = [
             "division_template = {",
             f'\tname = "{IMPERIAL_LINE_TEMPLATE}"',
@@ -781,12 +793,12 @@ def render_oob(
         ]
         for index in range(divisions):
             template = (
-                IMPERIAL_LINE_TEMPLATE if index < 9 else IMPERIAL_FRONTIER_TEMPLATE
+                IMPERIAL_LINE_TEMPLATE if index < line_divisions else IMPERIAL_FRONTIER_TEMPLATE
             )
             lines.append(
                 f'\tdivision = {{ division_name = {{ is_name_ordered = yes name_order = {index+1} }} '
                 f'location = {principal_provinces[states[index % len(states)]]} division_template = "{template}" '
-                f"start_experience_factor = {0.30 if index < 9 else 0.20:.2f} start_equipment_factor = 0.90 }}"
+                f"start_experience_factor = {0.30 if index < line_divisions else 0.20:.2f} start_equipment_factor = 1.00 }}"
             )
         lines.extend(("}", ""))
         return "\n".join(lines)

@@ -2561,15 +2561,51 @@ class StartupGuideContractTests(unittest.TestCase):
         self.assertGreaterEqual(y, 325)
         self.assertLessEqual(y + h, 445)
 
-    def test_briefing_text_uses_native_scrollable_text_viewports(self):
+    def test_briefing_text_scrolls_inside_wheel_containers(self):
+        from tools.tests.test_adiscord_stp_preparation import matches_conditions
+
         gui = self.read('interface/ADISCORD_startup_menu.gui')
-        for name in ('ADISCORD_startup_country_body', 'ADISCORD_startup_body'):
+        nodes = {name: parents for _, name, parents in named_gui_nodes(gui)}
+        menu = _unique_direct_block(self.scripts(), 'ADISCORDStartupMenu')
+        triggers = _unique_direct_block(menu, 'triggers')
+        for panel, container, name, tabs, position in (
+            (
+                'ADISCORD_startup_country_panel',
+                'ADISCORD_startup_country_scroll',
+                'ADISCORD_startup_country_body',
+                (0,),
+                (34, 138),
+            ),
+            (
+                'ADISCORD_startup_body_panel',
+                'ADISCORD_startup_body_scroll',
+                'ADISCORD_startup_body',
+                (1, 2),
+                (460, 152),
+            ),
+        ):
             with self.subTest(name=name):
+                self.assertEqual(nodes[container], ('ADISCORD_startup_window', panel))
+                self.assertEqual(nodes[name], nodes[container] + (container,))
+                self.assertEqual(_gui_position(gui_node_body(gui, panel)), position)
+                viewport = gui_node_body(gui, container)
+                self.assertEqual(_gui_position(viewport), (0, 0))
+                self.assertIn('verticalScrollbar = "right_vertical_slider"', viewport)
+                self.assertIn('clipping = yes', viewport)
+                self.assertIn('GFX_tiled_window_transparent', viewport)
+                self.assertIn(f'name = "{name}"', viewport)
                 body = gui_node_body(gui, name)
                 self.assertNotIn('fixedsize = yes', body)
-                self.assertIn('scrollbarType = standardtext_slider', body)
-                self.assertRegex(body, r'maxHeight\s*=\s*(?:388|407)')
+                self.assertNotIn('scrollbarType', body)
                 self.assertNotIn('alwaystransparent = yes', body)
+                visible = _unique_direct_block(triggers, f'{panel}_visible')
+                self.assertFalse(_direct_clausewitz(triggers, f'{container}_visible'))
+                for tag in ('STP', 'VAL'):
+                    for tab in (0, 1, 2):
+                        facts = {(tag, 'variable', 'ADISCORD_startup_tab'): tab}
+                        self.assertEqual(
+                            matches_conditions(visible, facts, tag), tab in tabs
+                        )
 
     def test_stelander_intro_explains_shabrat_before_path_spoilers(self):
         russian = self.read('localisation/russian/ADISCORD_STP_l_russian.yml')

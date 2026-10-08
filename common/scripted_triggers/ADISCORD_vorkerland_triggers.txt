@@ -2051,9 +2051,8 @@ RUS_crisis_defending_bloc = {
 RUS_crisis_side_compatible = {
 	NOT = { is_in_faction_with = RUS }
 	NOT = {
-		any_of_scopes = {
-			array = global.RUS_crisis_defenders
-			has_war_with = PREV
+		any_enemy_country = {
+			has_country_flag = RUS_crisis_defender
 		}
 	}
 }

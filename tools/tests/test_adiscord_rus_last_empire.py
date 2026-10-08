@@ -1107,6 +1107,12 @@ class RusCrisisFixture:
                 return result == (value == "yes")
             if key == "any_country":
                 return any(self.exists(tag) and self.matches(value, stack + [tag]) for tag in self.countries)
+            if key == "any_enemy_country":
+                return any(
+                    frozenset((current, tag)) in self.wars
+                    and self.matches(value, stack + [tag])
+                    for tag in self.countries
+                )
             if key == "any_owned_state":
                 return any(owner == current and self.matches(value, stack + [state]) for state, owner in self.owners.items())
             if key == "any_of_scopes":
@@ -1480,6 +1486,7 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
     def __init__(self):
         self.hour = 0
         self.delayed_declaration = True
+        self.native_delay = 0
         self.queued_relations = []
         self.entry_events = []
         self.rejected = set()
@@ -1508,27 +1515,32 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
             elif key == "declare_war_on" and self.delayed_declaration:
                 enemy = self.resolve(scalar(value, "target"), stack)
                 self.declarations.append((stack[-1], enemy))
-                self.queued_relations.append((stack[-1], enemy, None))
+                self.queued_relations.append((stack[-1], enemy, None, self.hour + self.native_delay))
             elif key == "add_to_war":
                 host = self.resolve(scalar(value, "targeted_alliance"), stack)
                 enemy = self.resolve(scalar(value, "enemy"), stack)
                 if frozenset((host, enemy)) not in self.wars:
                     raise AssertionError("Invitation before its native war exists")
                 self.joins.append((stack[-1], host, enemy))
-                self.queued_relations.append((stack[-1], enemy, host))
+                self.queued_relations.append((stack[-1], enemy, host, self.hour + self.native_delay))
             elif key == "country_event" and scalar(value, "id") in (
                 "ADISCORD_rus_crisis.9", "ADISCORD_rus_crisis.11", "ADISCORD_rus_crisis.13",
             ):
+                delay = sum(int(row.value) * (24 if row.key == "days" else 1) for row in value if row.key in ("hours", "days"))
                 self.entry_events.append((
-                    self.hour + int(scalar(value, "hours")),
+                    self.hour + delay,
                     stack[-1], scalar(value, "id"),
                 ))
             else:
                 super().execute([entry], stack)
 
-    def tick(self):
-        self.hour += 1
-        for country, enemy, host in self.queued_relations:
+    def tick(self, hours=24):
+        self.hour += hours
+        pending = []
+        for country, enemy, host, due_hour in self.queued_relations:
+            if due_hour > self.hour:
+                pending.append((country, enemy, host, due_hour))
+                continue
             if country in self.rejected or not self.exists(country):
                 continue
             self.wars.add(frozenset((country, enemy)))
@@ -1536,7 +1548,7 @@ class QueuedRusCrisisFixture(RusCrisisFixture):
                 self.war_sides.append({country})
             else:
                 next(side for side in self.war_sides if host in side).add(country)
-        self.queued_relations.clear()
+        self.queued_relations = pending
         due = [event for event in self.entry_events if event[0] <= self.hour]
         self.entry_events = [event for event in self.entry_events if event[0] > self.hour]
         for _, country, event in due:
@@ -1626,6 +1638,22 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertFalse(world.entry_events)
         self.assertTrue(all("RUS_crisis_entry_pending" not in world.flags[tag] for tag in expected))
         self.assertTrue(expected <= world.majors)
+
+    def test_slow_native_entries_survive_hourly_checks_and_join_one_war(self):
+        world = self.peaceful_empire(QueuedRusCrisisFixture)
+        world.native_delay = 12
+        world.run("RUS_crisis_begin")
+        world.run("RUS_crisis_launch")
+        expected = {"MON", "TMR", "VLD"}
+        for _ in range(72):
+            world.tick(hours=1)
+            world.run("RUS_crisis_check_external_end")
+            self.assertEqual(set(world.arrays["global.RUS_crisis_defenders"]), expected)
+            self.assertEqual(world.variables["RUS", "RUS_crisis_phase"], 2)
+        self.assertEqual(world.war_sides, [expected])
+        self.assertEqual(world.declarations, [("MON", "RUS")])
+        self.assertFalse(world.entry_events)
+        self.assertTrue(all("RUS_crisis_entry_pending" not in world.flags[tag] for tag in expected))
 
     def test_first_defeat_cannot_settle_before_delayed_invitations(self):
         world = self.peaceful_empire(QueuedRusCrisisFixture)
@@ -2169,7 +2197,7 @@ class RusCrisisContracts(unittest.TestCase):
             countries_before = len(world.arrays[country_queue])
             cleanup_before = len(world.arrays[cleanup_queue])
             world.run("RUS_crisis_ruin_next_wave")
-            self.assertLessEqual(len(world.demilitarized - states_before), 1)
+            self.assertLessEqual(len(world.demilitarized - states_before), 3)
             self.assertLessEqual(countries_before - len(world.arrays[country_queue]), 1)
             self.assertLessEqual(cleanup_before - len(world.arrays[cleanup_queue]), 1)
             self.assertEqual(world.owners["66"], "RUS")
@@ -2177,7 +2205,7 @@ class RusCrisisContracts(unittest.TestCase):
                 self.assertEqual(len(world.arrays[cleanup_queue]), cleanup_before)
                 self.assertFalse(world.annexed)
             if wave == 0:
-                self.assertEqual(len(world.arrays[state_queue]), initial_states - 1)
+                self.assertEqual(len(world.arrays[state_queue]), initial_states - 3)
                 queues = deepcopy(world.arrays)
                 world.run("RUS_crisis_end_world")
                 self.assertEqual(world.arrays, queues)
@@ -2216,7 +2244,7 @@ class RusCrisisContracts(unittest.TestCase):
         world.run("RUS_crisis_end_world")
         before = len(world.arrays["global.RUS_world_state_queue"])
         world.execute(daily, ["RUS"])
-        self.assertEqual(len(world.arrays["global.RUS_world_state_queue"]), before - 1)
+        self.assertEqual(len(world.arrays["global.RUS_world_state_queue"]), before - 3)
         for _ in range(60):
             world.execute(daily, ["RUS"])
         self.assertIn("RUS_crisis_world_ruins_complete", world.global_flags)
@@ -2254,12 +2282,15 @@ class RusCrisisContracts(unittest.TestCase):
         self.assertEqual(world.arrays["global.RUS_world_frontier_queue"], ["49", "51"])
         order = []
         total = len(world.arrays["global.RUS_world_state_queue"])
-        for index in range(total):
+        for index in range((total + 2) // 3):
             before = set(world.demilitarized)
+            mutations_before = len(world.building_mutations)
             world.run("RUS_crisis_ruin_next_wave")
             added = world.demilitarized - before
-            self.assertEqual(len(added), 1)
-            order.extend(added)
+            self.assertEqual(len(added), min(3, total - 3 * index))
+            for state, *_ in world.building_mutations[mutations_before:]:
+                if state in added and state not in order:
+                    order.append(state)
             frontier = world.arrays["global.RUS_world_frontier_queue"]
             self.assertEqual(len(frontier), len(set(frontier)))
             self.assertTrue(set(frontier).issubset(world.arrays["global.RUS_world_state_queue"]))

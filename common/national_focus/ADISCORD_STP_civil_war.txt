@@ -13740,13 +13740,20 @@ focus_tree = {
 		prerequisite = { focus = STP_pw_common_market }
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = STP_pw_kefreyt_settlement_available_tt
+				tooltip = STP_pw_reconstruction_available_tt
 				STP_pw_can_reconstruct = yes
-				is_subject = no
-				has_war = no
-				VAL = {
-					exists = no
+			}
+			is_subject = no
+			has_war = no
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_kefreyt_settlement_available_tt
+				OR = {
+					NOT = { VAL = { exists = yes } }
+					VAL = { is_subject_of = ROOT }
 				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = STP_pw_kefreyt_settlement_territory_tt
 				any_owned_state = {
 					is_core_of = VAL
 					is_controlled_by = ROOT

@@ -4,7 +4,7 @@
 state = {
 	id = 469
 	name = "STATE_469"
-	manpower = 1491551
+	manpower = 2525258
 	state_category = large_town
 	history = {
 		owner = MON
@@ -12,7 +12,7 @@ state = {
 		victory_points = { 2845 10 }
 		buildings = {
 			infrastructure = 5
-			industrial_complex = 2
+			industrial_complex = 3
 			arms_factory = 2
 			air_base = 1
 		}
@@ -22,5 +22,5 @@ state = {
 		10983 11145 11261 11523 11973 12044 12285 12396 12806 12891
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 4.2
+	local_supplies = 4.4
 }

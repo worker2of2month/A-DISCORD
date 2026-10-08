@@ -253,6 +253,23 @@ class CivilWarContracts(unittest.TestCase):
         )
         self.assertIn("ADISCORD_economy_mark_dirty = yes", transfer[debt_copy:])
 
+    def test_terminal_world_cannot_restart_either_civil_war_side(self):
+        hostilities = ast_block(
+            entries("common/scripted_effects/ADISCORD_STP_scripted_effects.txt"),
+            "STP_cw_begin_hostilities",
+        )
+        for tag, rival, branch in (("STP", "STS", "if"), ("STS", "STP", "else_if")):
+            gate = ast_block(ast_block(hostilities, branch), "limit")
+            facts = {
+                (tag, "tag", tag): True,
+                (tag, "has_country_flag", "STP_cw_participant"): True,
+                (rival, "exists", "yes"): True,
+            }
+            self.assertTrue(matches_conditions(gate, facts, tag))
+            facts[tag, "has_global_flag", "RUS_crisis_world_ended"] = True
+            for _ in range(3):
+                self.assertFalse(matches_conditions(gate, facts, tag))
+
     def test_party_hostilities_clear_prewar_regime_spirits(self):
         hostilities = block(self.effects, "STP_cw_begin_hostilities")
         prewar_spirits = (

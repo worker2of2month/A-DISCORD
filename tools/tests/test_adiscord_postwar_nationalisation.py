@@ -98,6 +98,22 @@ class PostwarNationalisationTests(unittest.TestCase):
                         e.line,
                     )
                 )
+            elif e.key == 'any_owned_state':
+                result.append(
+                    Entry(
+                        'OR',
+                        [
+                            Entry(
+                                state,
+                                [Entry('is_owned_by', scope, e.line)]
+                                + self.expand(e.value, country, target, state),
+                                e.line,
+                            )
+                            for state in self.adjacency
+                        ],
+                        e.line,
+                    )
+                )
             else:
                 key = {'ROOT': country, 'FROM': target}.get(e.key, e.key)
                 if isinstance(e.value, list):
@@ -344,6 +360,61 @@ class PostwarNationalisationTests(unittest.TestCase):
             'add_core_of',
             {e.key for e in walk(block(fs[STP_NEW[-1]], 'completion_reward'))},
         )
+
+    def test_kefreyt_settlement_accepts_annexation_or_our_subject(self):
+        focus = focuses(STP_FOCUS, 'STP_cw_focus')['STP_pw_kefreyt_settlement']
+        for country, status, owned, controlled, core in product(
+            ('STP', 'STS'),
+            ('annexed', 'our_subject', 'foreign_subject', 'independent'),
+            (False, True),
+            (False, True),
+            (False, True),
+        ):
+            with self.subTest(
+                country=country, status=status, owned=owned,
+                controlled=controlled, core=core,
+            ):
+                facts = self.facts(country)
+                facts['VAL', 'exists', 'yes'] = status != 'annexed'
+                facts['VAL', 'is_subject_of', country] = status == 'our_subject'
+                facts['VAL', 'is_subject_of', 'NOD'] = status == 'foreign_subject'
+                facts['2', 'is_owned_by', country] = owned
+                facts['2', 'is_controlled_by', country] = controlled
+                facts['2', 'is_core_of', 'VAL'] = core
+                available = self.expand(block(focus, 'available'), country)
+                self.assertEqual(
+                    matches_conditions(available, facts, country),
+                    status in ('annexed', 'our_subject') and owned and controlled and core,
+                )
+
+    def test_kefreyt_settlement_keeps_each_remaining_blocker_visible(self):
+        focus = focuses(STP_FOCUS, 'STP_cw_focus')['STP_pw_kefreyt_settlement']
+        conditions = block(focus, 'available')
+        self.assertEqual(
+            [entry.key for entry in conditions],
+            ['custom_trigger_tooltip', 'is_subject', 'has_war',
+             'custom_trigger_tooltip', 'custom_trigger_tooltip'],
+        )
+        self.assertEqual(scalar(focus, 'cancel_if_invalid'), 'yes')
+        for country in ('STP', 'STS'):
+            available = self.expand(conditions, country)
+            facts = self.facts(country)
+            facts['VAL', 'exists', 'yes'] = True
+            facts['VAL', 'is_subject_of', country] = True
+            facts['2', 'is_core_of', 'VAL'] = True
+            self.assertTrue(matches_conditions(available, facts, country))
+            for condition, value in (
+                ('has_capitulated', 'no'),
+                ('is_subject', 'no'),
+                ('has_war', 'no'),
+                ('has_country_flag', 'STP_cw_won_union_battle'),
+                ('has_country_flag', 'STP_cw_postwar'),
+                ('has_global_flag', 'STP_cw_union_wars_finished'),
+            ):
+                with self.subTest(country=country, condition=condition, value=value):
+                    blocked = dict(facts)
+                    blocked[country, condition, value] = False
+                    self.assertFalse(matches_conditions(available, blocked, country))
 
 
 class CouncilExpansionTests(unittest.TestCase):

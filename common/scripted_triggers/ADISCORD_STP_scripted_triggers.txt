@@ -184,6 +184,7 @@ STP_cw_can_rearm = {
 
 STP_cw_can_start = {
 	tag = STP
+	NOT = { has_global_flag = RUS_crisis_world_ended }
 	NOT = { has_global_flag = STP_cw_started }
 	NOT = { has_country_flag = STP_cw_participant }
 	# Election expiry always resolves succession. An early military move uses

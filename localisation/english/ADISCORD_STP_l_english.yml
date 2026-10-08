@@ -2494,7 +2494,7 @@
  STP_pw_common_market: "A Common Domestic Market"
  STP_pw_common_market_desc: "Unify land records, transport and production into one economic system. Additional political resources allow further regional integration without replacing its paid programmes with automatic citizenship."
  STP_pw_kefreyt_settlement: "Administer Former Kefreyt"
- STP_pw_kefreyt_settlement_desc: "Independent Kefreyt no longer exists, but its industry and population still require a settlement. Restore military production in directly held Kefreyt territory; coring continues through the ordinary regional programmes."
+ STP_pw_kefreyt_settlement_desc: "Kefreyt has lost its independence, but its industry and population still require a settlement. Restore military production in Kefreyt territory directly owned and controlled by us; coring continues through the ordinary regional programmes."
  STP_postwar_administration: "Citizenship and Regional Integration"
  STP_postwar_administration_desc: "New borders require a common citizenship system. Integrate multiple eligible neighbouring regions simultaneously, each for §Y50§! £political_power_texticon over §Y120 days§!. Peace, independence, direct ownership and control, and a border with a directly held core are required. Cancellation refunds the payment."
  STP_pw_nationalise_region: "Integrate Region: [FROM.GetName]"
@@ -2504,7 +2504,8 @@
  STP_pw_integration_complete_tt: "The region is now a §Ycore state§!. Its directly held neighbours may now become available for further integration."
  STP_pw_integration_chain_tt: "Unlocks repeatable map integration: §Y50§! £political_power_texticon, §Y120 days§!, per directly held non-core bordering a directly held core. Multiple eligible regions may be integrated simultaneously. Peace is required; cancellation refunds the payment."
  STP_pw_integration_government_tt: "The civil war ended in our victory; the country is independent and has an operational postwar government."
- STP_pw_kefreyt_settlement_available_tt: "The country is independent and at peace after the civil war. Kefreyt no longer exists; at least one of its core states is directly owned and controlled by us."
+ STP_pw_kefreyt_settlement_available_tt: "Kefreyt no longer exists or is our subject."
+ STP_pw_kefreyt_settlement_territory_tt: "At least one of Kefreyt's core states is directly owned and controlled by us."
 
 # Faction programs and live card effects
  STP_pf_conservatives_effect_value: "[?STP_pf_conservatives_effect|=-1%]"

@@ -3148,6 +3148,7 @@ STP_cw_establish_resistance_command = {
 STP_cw_begin_hostilities = {
 	if = {
 		limit = {
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			tag = STP has_country_flag = STP_cw_participant
 			STS = { exists = yes }
 			NOT = { has_war_with = STS }
@@ -3233,6 +3234,7 @@ STP_cw_begin_hostilities = {
 	}
 	else_if = {
 		limit = {
+			NOT = { has_global_flag = RUS_crisis_world_ended }
 			tag = STS has_country_flag = STP_cw_participant
 			STP = { exists = yes }
 			NOT = { has_war_with = STP }
@@ -8554,7 +8556,10 @@ STP_pw_party_finalize_nod_subject = {
 			ADISCORD_economy_mark_dirty = yes
 			mark_focus_tree_layout_dirty = yes
 			STP_ch_open_congress = yes
-			NOD = { STP_pw_party_sync_revolution_subject = yes }
+			NOD = {
+				STP_pw_party_restore_subject_control = yes
+				STP_pw_party_sync_revolution_subject = yes
+			}
 			country_event = { id = ADISCORD_STP_pc.42 hours = 1 }
 		}
 	}
@@ -9125,7 +9130,10 @@ STP_pw_party_finalize_kefreyt_subject = {
 				end_civil_wars = no
 			}
 			set_country_flag = STP_pw_party_kefreyt_victory
-			VAL = { STP_pw_party_sync_revolution_subject = yes }
+			VAL = {
+				STP_pw_party_restore_subject_control = yes
+				STP_pw_party_sync_revolution_subject = yes
+			}
 			add_political_power = 75
 			add_war_support = 0.03
 			VAL = { ADISCORD_economy_mark_dirty = yes }
@@ -9279,6 +9287,7 @@ STP_pw_party_finalize_northern_march = {
 					end_civil_wars = no
 				}
 			}
+			STP_pw_party_restore_subject_control = yes
 			STP_pw_party_sync_revolution_subject = yes
 			ADISCORD_economy_mark_dirty = yes
 		}
@@ -9503,6 +9512,24 @@ STP_pw_party_sync_revolution_identity = {
 
 # Subject scope: apply only to the independent revolutionary centre's dependants.
 # The autonomy guard prevents a repeated on_puppet callback from reapplying it.
+# COUNTRY: a new Party subject. White peace with a capitulated government in a
+# continuing war leaves its occupied land under the Party side; return that
+# control so the subject is not reported as resisting its overlord.
+STP_pw_party_restore_subject_control = {
+	every_owned_state = {
+		limit = {
+			NOT = { is_controlled_by = PREV }
+			controller = {
+				OR = {
+					tag = STP
+					is_subject_of = STP
+				}
+			}
+		}
+		set_state_controller_to = PREV
+	}
+}
+
 STP_pw_party_sync_revolution_subject = {
 	if = {
 		limit = {

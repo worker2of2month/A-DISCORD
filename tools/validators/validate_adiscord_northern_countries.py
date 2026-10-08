@@ -140,7 +140,8 @@ def validate() -> list[str]:
         "DRV": {440, 450, 451, 458, 463, 465},
         "VEL": {414, 417, 418, 421, 428, 434},
         "ARS": {441, 449},
-        "VLD": {460, 467, 472},
+        "VLD": set(),
+        "MON": {425, 438, 439, 444, 445, 448, 453, 456, 459, 460, 462, 464, 466, 467, 468, 469, 470, 471, 472, 473},
     }
     for tag, expected_states in expected_split_territories.items():
         actual_states = set(COUNTRIES[tag]["states"])
@@ -154,8 +155,10 @@ def validate() -> list[str]:
         ("HON", "SVL"): (4_200_000, 8, 4, 5),
         ("KHV", "SRV"): (2_400_000, 4, 3, 3),
         ("LYS", "KDL"): (3_500_000, 7, 3, 4),
-        ("TMR", "ARS", "VLD"): (5_255_204, 10, 5, 6),
-        ("DRV", "VEL", "MON"): (14_600_000, 32, 20, 17),
+        ("TMR", "ARS"): (4_563_736, 9, 4, 5),
+        ("DRV", "VEL"): (2_229_418, 4, 2, 3),
+        ("MON",): (24_000_000, 48, 36, 36),
+        ("VLD",): (0, 0, 0, 0),
     }
     for tags, expected in preserved_split_totals.items():
         actual = (
@@ -182,7 +185,7 @@ def validate() -> list[str]:
     if regional_resources != {
         "steel": 31,
         "coal": 32,
-        "oil": 8,
+        "oil": 12,
         "aluminium": 14,
         "tungsten": 9,
         "chromium": 4,
@@ -191,6 +194,12 @@ def validate() -> list[str]:
     for state_id in (426, 436, 454, 455):
         if "add_core_of = ORV" not in state_path(state_id).read_text(encoding="utf-8"):
             issues.append(f"state {state_id} must preserve its ORV core")
+    for state_id in (460, 467, 472):
+        source = state_path(state_id).read_text(encoding="utf-8")
+        if "owner = MON" not in source or "add_core_of = VLD" not in source:
+            issues.append(f"state {state_id} must start in MON with its VLD core")
+    if owner_totals("VLD") != (0, 0, 0):
+        issues.append("VLD must not own starting territory")
 
     tags_source = read("common/country_tags/04_ADISCORD_northern_countries_tags.txt")
     characters = read("common/characters/ADISCORD_northern_characters.txt")
@@ -316,7 +325,7 @@ def validate() -> list[str]:
                 rf"(?m)^\s*{re.escape(localisation_key)}:\s*\"", country_loc
             ):
                 issues.append(f"missing Russian localisation key {localisation_key}")
-        if f'"{tag}"' not in tech_data or f'"{tag}":' not in tech_builder:
+        if country["states"] and (f'"{tag}"' not in tech_data or f'"{tag}":' not in tech_builder):
             issues.append(f"starting technology profile is missing for {tag}")
 
         for directory, size in (
@@ -368,9 +377,9 @@ def validate() -> list[str]:
     if mon_population != int(COUNTRIES["MON"]["population"]) or (
         mon_civilian,
         mon_military,
-    ) != (28, 18):
+    ) != (48, 36):
         issues.append(
-            "MON must match its population manifest and retain 28+18 factories"
+            "MON must match its population manifest and retain 48+36 factories"
         )
     for tag in set(COUNTRIES) - {"MON"}:
         population, civilian, military = owner_totals(tag)
@@ -379,16 +388,24 @@ def validate() -> list[str]:
             or mon_civilian + mon_military <= civilian + military
         ):
             issues.append(f"MON is not stronger than northern peer {tag}")
-    for stronger in ("WRK", "IVN"):
-        population, civilian, military = owner_totals(stronger)
-        if (
-            population <= mon_population
-            or civilian + military <= mon_civilian + mon_military
-        ):
-            issues.append(
-                f"MON must remain below {stronger} in raw population and factory totals"
-            )
+    if mon_population >= owner_totals("WRK")[0]:
+        issues.append("MON must retain a smaller population than united WRK")
     mon_history = named_history("MON")
+    mon_oob = read("history/units/MON.txt")
+    for template, expected in (("Imperial Line Division", 28), ("Imperial Frontier Brigade", 8)):
+        deployed = mon_oob.count(f'division_template = "{template}"')
+        if deployed != expected:
+            issues.append(f"MON must deploy {expected} formations of {template}, found {deployed}")
+    if mon_oob.count("start_equipment_factor = 1.00") != 36:
+        issues.append("MON must start with 36 fully equipped divisions")
+    if mon_history:
+        history = mon_history.read_text(encoding="utf-8")
+        for equipment, amount in (("infantry_equipment", 80000), ("ADISCORD_squad_weapons_equipment", 1200), ("artillery_equipment", 720)):
+            pattern = rf"type\s*=\s*{equipment}\s+amount\s*=\s*{amount}\b"
+            if not re.search(pattern, history):
+                issues.append(f"MON must reserve {amount} {equipment} for reinforcement")
+        if "add_manpower = 200000" not in history:
+            issues.append("MON must start with its 200000-person manpower reserve")
     if mon_history and len(EXPECTED_IDEAS["MON"]) != 4:
         issues.append("MON must start with exactly four bespoke national spirits")
     if "????" in country_loc or "????" in vp_loc:

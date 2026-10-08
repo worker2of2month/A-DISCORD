@@ -4,14 +4,14 @@
 state = {
 	id = 453
 	name = "STATE_453"
-	manpower = 665846
-	state_category = rural
+	manpower = 1127305
+	state_category = town
 	history = {
 		owner = MON
 		add_core_of = MON
 		buildings = {
 			infrastructure = 4
-			industrial_complex = 1
+			industrial_complex = 2
 			arms_factory = 1
 		}
 	}
@@ -20,5 +20,5 @@ state = {
 		11601 16302 16304
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 3.3
+	local_supplies = 3.5
 }

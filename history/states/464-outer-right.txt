@@ -4,7 +4,7 @@
 state = {
 	id = 464
 	name = "STATE_464"
-	manpower = 683818
+	manpower = 1157731
 	state_category = town
 	history = {
 		owner = MON
@@ -12,7 +12,7 @@ state = {
 		buildings = {
 			infrastructure = 4
 			industrial_complex = 2
-			arms_factory = 1
+			arms_factory = 2
 		}
 	}
 	provinces = {
@@ -20,5 +20,5 @@ state = {
 		9157 9254 9353 9851 10048 10076 10504 12453 12616 12706
 	}
 	buildings_max_level_factor = 1.000
-	local_supplies = 3.5
+	local_supplies = 3.7
 }

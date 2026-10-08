@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "campaign_start": "2160.1.1",
-  "active_country_count": 85,
+  "active_country_count": 84,
   "profiles": {
     "common": {
       "seeds": [
@@ -3181,18 +3181,18 @@
         "air"
       ],
       "common_only": false,
-      "rationale": "Third-ranked starting power combines a large arsenal belt, four research slots, a modern army, and operating airfields.",
+      "rationale": "Northern imperial power combines the Vald coast, a large arsenal belt, four research slots, a modern army, and operating airfields.",
       "evidence": {
-        "states": 17,
-        "civilian_factories": 28,
-        "military_factories": 18,
+        "states": 20,
+        "civilian_factories": 48,
+        "military_factories": 36,
         "dockyards": 0,
         "air_bases": 3,
         "power_sites": 0,
-        "infrastructure_levels": 69,
+        "infrastructure_levels": 81,
         "research_slots": 4,
         "convoys": 0,
-        "oob_divisions": 14,
+        "oob_divisions": 36,
         "starting_doctrines": []
       },
       "technologies_2160": [
@@ -6034,70 +6034,6 @@
         "ADISCORD_tech_trauma_plates",
         "ADISCORD_tech_treasury_accounting",
         "ADISCORD_tech_urban_breaching"
-      ]
-    },
-    "VLD": {
-      "profiles": [
-        "common",
-        "fragment_low_tech"
-      ],
-      "common_only": false,
-      "rationale": "Small southern coastal union protects an inherited oil field with militia and a fragmentary workshop base.",
-      "evidence": {
-        "states": 3,
-        "civilian_factories": 1,
-        "military_factories": 1,
-        "dockyards": 0,
-        "air_bases": 0,
-        "power_sites": 0,
-        "infrastructure_levels": 10,
-        "research_slots": 2,
-        "convoys": 0,
-        "oob_divisions": 1,
-        "starting_doctrines": []
-      },
-      "technologies_2160": [
-        "ADISCORD_tech_armored_carrier_program",
-        "ADISCORD_tech_battlefield_attack_aircraft",
-        "ADISCORD_tech_belt_fed_recovery",
-        "ADISCORD_tech_bolt_head_fitting",
-        "ADISCORD_tech_chamber_polishing",
-        "ADISCORD_tech_composite_protection_kits",
-        "ADISCORD_tech_electromechanical_relays",
-        "ADISCORD_tech_field_workshop_tools",
-        "ADISCORD_tech_fieldcraft_manuals",
-        "ADISCORD_tech_heavy_recovery_frames",
-        "ADISCORD_tech_improvised_air_defense",
-        "ADISCORD_tech_industrial_organization_baseline",
-        "ADISCORD_tech_light_suspension",
-        "ADISCORD_tech_local_grid_restoration",
-        "ADISCORD_tech_mesh_command_networks",
-        "ADISCORD_tech_modular_recon_chassis",
-        "ADISCORD_tech_pack_transport",
-        "ADISCORD_tech_passive_intensifier_cells",
-        "ADISCORD_tech_postwar_weapon_standardization",
-        "ADISCORD_tech_precision_material_standards",
-        "ADISCORD_tech_reclaimed_jet_platforms",
-        "ADISCORD_tech_recovered_fire_control",
-        "ADISCORD_tech_recovered_medium_chassis",
-        "ADISCORD_tech_recovered_shaped_charge_cells",
-        "ADISCORD_tech_refurbished_receivers",
-        "ADISCORD_tech_remote_weapon_stations",
-        "ADISCORD_tech_restored_armored_chassis",
-        "ADISCORD_tech_restored_dockyards",
-        "ADISCORD_tech_restored_field_artillery",
-        "ADISCORD_tech_restored_rail_stock",
-        "ADISCORD_tech_restored_truck_fleets",
-        "ADISCORD_tech_rifling_alignment",
-        "ADISCORD_tech_rocket_test_stands",
-        "ADISCORD_tech_ruin_workshops",
-        "ADISCORD_tech_salvage_metallurgy",
-        "ADISCORD_tech_salvage_standards",
-        "ADISCORD_tech_salvaged_at_guns",
-        "ADISCORD_tech_sealed_electric_scout_drives",
-        "ADISCORD_tech_sonar_archives",
-        "ADISCORD_tech_standardized_machine_tools",
-        "ADISCORD_tech_treasury_accounting"
       ]
     },
     "VRA": {

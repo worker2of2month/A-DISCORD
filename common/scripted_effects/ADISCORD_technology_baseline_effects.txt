@@ -724,10 +724,6 @@ ADISCORD_grant_starting_technology_profile = {
 		ADISCORD_grant_technology_profile_air = yes
 	}
 	if = {
-		limit = { tag = VLD }
-		ADISCORD_grant_technology_profile_fragment_low_tech = yes
-	}
-	if = {
 		limit = { tag = VRA }
 		ADISCORD_grant_technology_profile_fragment_low_tech = yes
 	}

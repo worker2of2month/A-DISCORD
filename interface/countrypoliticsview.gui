@@ -712,12 +712,13 @@ guiTypes = {
 			smooth_scrolling = yes
 			margin = { top = 0 bottom = 0}
 		
+			# The wheel scrolls this list only over a textured hit area; without
+			# one, input between law icons falls through to the map zoom.
 			background = {
 				name = "Background"
-				#quadTextureSprite ="GFX_tiled_window_2b_border"
-				#quadTextureSprite ="GFX_tiled_window_1b_border"
+				quadTextureSprite ="GFX_tiled_window_transparent"
 			}
-			
+
 			gridBoxType = {
 				name = "idea_categories_grid"
 				position = { x = 17 y = 0 }

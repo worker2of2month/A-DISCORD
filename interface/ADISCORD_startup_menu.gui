@@ -157,25 +157,57 @@ guiTypes = {
 			format = left
 			alwaystransparent = yes
 		}
-		instantTextboxType = {
-			name = "ADISCORD_startup_country_body"
+		# Long pages scroll as a container: an expanding textbox reports its
+		# rendered height, while a textbox slider can clip text without moving.
+		# The transparent background is the wheel hit area between lines.
+		# Hide the outer panel so the viewport's native scrollbar hides with it.
+		containerWindowType = {
+			name = "ADISCORD_startup_country_panel"
 			position = { x = 34 y = 138 }
-			font = "hoi_18mbs"
-			text = "[ADISCORDGetStartupBody]"
-			maxWidth = 675
-			maxHeight = 407
-			format = left
-			scrollbarType = standardtext_slider
+			size = { width = 695 height = 407 }
+			containerWindowType = {
+				name = "ADISCORD_startup_country_scroll"
+				position = { x = 0 y = 0 }
+				size = { width = 695 height = 407 }
+				clipping = yes
+				verticalScrollbar = "right_vertical_slider"
+				scroll_wheel_factor = 40
+				smooth_scrolling = yes
+				background = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }
+				instantTextboxType = {
+					name = "ADISCORD_startup_country_body"
+					position = { x = 0 y = 0 }
+					font = "hoi_18mbs"
+					text = "[ADISCORDGetStartupBody]"
+					maxWidth = 675
+					maxHeight = 2400
+					format = left
+				}
+			}
 		}
-		instantTextboxType = {
-			name = "ADISCORD_startup_body"
+		containerWindowType = {
+			name = "ADISCORD_startup_body_panel"
 			position = { x = 460 y = 152 }
-			font = "hoi_18mbs"
-			text = "[ADISCORDGetStartupBody]"
-			maxWidth = 500
-			maxHeight = 388
-			format = left
-			scrollbarType = standardtext_slider
+			size = { width = 520 height = 388 }
+			containerWindowType = {
+				name = "ADISCORD_startup_body_scroll"
+				position = { x = 0 y = 0 }
+				size = { width = 520 height = 388 }
+				clipping = yes
+				verticalScrollbar = "right_vertical_slider"
+				scroll_wheel_factor = 40
+				smooth_scrolling = yes
+				background = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }
+				instantTextboxType = {
+					name = "ADISCORD_startup_body"
+					position = { x = 0 y = 0 }
+					font = "hoi_18mbs"
+					text = "[ADISCORDGetStartupBody]"
+					maxWidth = 500
+					maxHeight = 2400
+					format = left
+				}
+			}
 		}
 		buttonType = {
 			name = "ADISCORD_startup_spoilers"

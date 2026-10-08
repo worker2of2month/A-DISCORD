@@ -14019,7 +14019,7 @@
       "count": 7
     },
     {
-      "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_0_9",
+      "key": "mon_oob_imperial_frontier_brigade_xp_0_2_eq_1",
       "path": "history/units/MON.txt",
       "kind": "oob",
       "technical_name": "Imperial Frontier Brigade",
@@ -14027,11 +14027,11 @@
         "Имперская пограничная бригада"
       ],
       "start_experience_factor": 0.2,
-      "start_equipment_factor": 0.9,
-      "count": 5
+      "start_equipment_factor": 1.0,
+      "count": 8
     },
     {
-      "key": "mon_oob_imperial_line_division_xp_0_3_eq_0_9",
+      "key": "mon_oob_imperial_line_division_xp_0_3_eq_1",
       "path": "history/units/MON.txt",
       "kind": "oob",
       "technical_name": "Imperial Line Division",
@@ -14039,8 +14039,8 @@
         "Имперская линейная дивизия"
       ],
       "start_experience_factor": 0.3,
-      "start_equipment_factor": 0.9,
-      "count": 9
+      "start_equipment_factor": 1.0,
+      "count": 28
     },
     {
       "key": "mzr_oob_cistern_watch_xp_0_1_eq_0_45",
@@ -15151,16 +15151,6 @@
     {
       "key": "svl_oob_northern_militia_xp_0_15_eq_0_72",
       "path": "history/units/SVL.txt",
-      "kind": "oob",
-      "technical_name": "Northern Militia",
-      "legacy_names": [],
-      "start_experience_factor": 0.15,
-      "start_equipment_factor": 0.72,
-      "count": 1
-    },
-    {
-      "key": "vld_oob_northern_militia_xp_0_15_eq_0_72",
-      "path": "history/units/VLD.txt",
       "kind": "oob",
       "technical_name": "Northern Militia",
       "legacy_names": [],

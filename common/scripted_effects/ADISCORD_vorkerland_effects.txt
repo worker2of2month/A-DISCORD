@@ -10312,6 +10312,12 @@ RUS_crisis_launch = {
 			limit = { RUS_crisis_project_active = yes RUS_lab_reactor_access = yes }
 			set_variable = { var = RUS_crisis_phase value = 2 }
 			clear_global_event_target = RUS_crisis_war_anchor
+			MON = {
+				if = {
+					limit = { RUS_crisis_coalition_candidate = yes }
+					RUS_crisis_start_intervention = yes
+				}
+			}
 			every_country = {
 				limit = { RUS_crisis_coalition_candidate = yes }
 				RUS_crisis_start_intervention = yes
@@ -10360,7 +10366,7 @@ RUS_crisis_start_intervention = {
 			RUS_crisis_confirm_intervention_entry = yes
 		}
 		else = {
-			country_event = { id = ADISCORD_rus_crisis.9 hours = 1 }
+			country_event = { id = ADISCORD_rus_crisis.9 days = 1 }
 		}
 	}
 }
@@ -10395,13 +10401,13 @@ RUS_crisis_join_intervention = {
 			RUS_crisis_confirm_intervention_entry = yes
 		}
 		else = {
-			country_event = { id = ADISCORD_rus_crisis.9 hours = 1 }
+			country_event = { id = ADISCORD_rus_crisis.9 days = 1 }
 		}
 	}
 }
 
-# A declaration and its invitations may settle on separate native ticks.
-# Each candidate gets one delayed invitation attempt and one final check.
+# Native war entry can settle after hourly events. Allow a full daily tick
+# before the bounded retry and again before checking its result.
 RUS_crisis_retry_intervention_entry = {
 	if = {
 		limit = { has_country_flag = RUS_crisis_entry_pending }
@@ -10425,7 +10431,7 @@ RUS_crisis_retry_intervention_entry = {
 						}
 					}
 				}
-				country_event = { id = ADISCORD_rus_crisis.11 hours = 1 }
+				country_event = { id = ADISCORD_rus_crisis.11 days = 1 }
 			}
 		}
 		else = { RUS_crisis_remove_defender = yes }
@@ -11148,6 +11154,8 @@ RUS_crisis_ruin_next_wave = {
 			remove_from_array = { array = global.RUS_world_country_queue index = 0 }
 			var:RUS_world_next_country = { RUS_crisis_destroy_country_assets = yes }
 		}
+		RUS_crisis_ruin_next_state = yes
+		RUS_crisis_ruin_next_state = yes
 		RUS_crisis_ruin_next_state = yes
 		if = {
 			limit = {
